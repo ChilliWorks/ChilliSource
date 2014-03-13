@@ -98,7 +98,6 @@ public class HttpConnectionNativeInterface
 	{
 		boolean bRetry = false;
 
-			
 		outadwResultLength[0] = 0;
 		outadwResultCode[0] = 0; //HRRC_SUCCESS
 		outadwHttpResponseCode[0] = -1;
@@ -110,145 +109,127 @@ public class HttpConnectionNativeInterface
 			outadwResultCode[0] = 0; //HRRC_SUCCESS
 			outadwHttpResponseCode[0] = -1;
 			abyOutputData = null;
-			
-		try
-		{	
-			System.setProperty("http.keepAlive", "true");
-			
-			// In 2.2 and below keep-alive is bugged, so force it off.
-			// Otherwise keep-alives are enabled by default
-			if (!inbKeepAlive || (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD))
+
+			try
+			{	
+				System.setProperty("http.keepAlive", "true");
+
+				// In 2.2 and below keep-alive is bugged, so force it off.
+				// Otherwise keep-alives are enabled by default
+				if (!inbKeepAlive || (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD))
+				{
+					System.setProperty("http.keepAlive", "false");
+				}
+
+				HttpURLConnection urlConnection = (HttpURLConnection) new URL(instrUrl).openConnection();
+
+				try 
+				{	        	
+					HttpURLConnection.setFollowRedirects(false);
+					urlConnection.setReadTimeout(kdwTimeoutInMilliseconds);
+					urlConnection.setConnectTimeout(kdwTimeoutInMilliseconds);
+
+					//if the protocol is HTTPS then set that up.
+					if (instrUrl.startsWith("https") == true)
+					{
+						SSLContext context = SSLContext.getInstance("TLS");
+						context.init(null, msTrustManagers, null);
+						((HttpsURLConnection)urlConnection).setSSLSocketFactory(context.getSocketFactory());
+						((HttpsURLConnection)urlConnection).setHostnameVerifier(msHostnameVerifier);
+					}
+
+					//If we are posting we need to set up the post before opening the connection
+					if (inbIsPost == true)
+					{
+						urlConnection.setDoOutput(true);
+						urlConnection.setFixedLengthStreamingMode(instrBody.getBytes().length);
+					}
+
+					//--Set headers
+					if((inastrHeaderKeys != null) && (inastrHeaderValues != null) && (inastrHeaderKeys.length == inastrHeaderValues.length))
+					{
+						// Headers are passed in as a key/value strings array
+						for(int i = 0; i < inastrHeaderKeys.length; i++)
+						{	
+							urlConnection.setRequestProperty(inastrHeaderKeys[i], inastrHeaderValues[i]);
+						}
+					}
+
+					urlConnection.connect();
+
+					//if this is a post request then set the body
+					if (inbIsPost == true)
+					{
+						byte[] abyOutData = instrBody.getBytes();
+						OutputStream writer = new BufferedOutputStream(urlConnection.getOutputStream());
+						writer.write(abyOutData);
+						writer.flush();
+						writer.close();
+					}
+
+					int dwResponseCode = urlConnection.getResponseCode();
+					if (dwResponseCode == -1)
+					{
+						//If we've got this far and the response code is -1 then we've encountered the dreaded 2.2 bug! 
+						//In order to get around this, we should return a fake 503 error to force the client to try the call again.
+						outadwHttpResponseCode[0] = 503;
+					}
+					else 
+					{
+						// Get the response (either by InputStream or ErrorStream)
+						abyOutputData = ReadStream(dwResponseCode, urlConnection, outadwResultLength);
+					}
+
+					if(dwResponseCode == HttpsURLConnection.HTTP_MOVED_TEMP)
+					{
+						String strLocation = urlConnection.getHeaderField("Location");
+						outstrRedirectionLocation[0] = strLocation;
+					}
+				}
+				catch (UnknownHostException eUnknownHostException)
+				{
+					outadwResultCode[0] = 2; //HRRC_TIMEOUT
+					Log.e("MoFlowHTTP", eUnknownHostException.getMessage());
+				}
+				catch (SocketTimeoutException timeoutException)
+				{
+					outadwResultCode[0] = 2; //HRRC_TIMEOUT
+					Log.e("MoFlowHTTP", timeoutException.getMessage());
+				}
+				catch (EOFException eofException)
+				{
+					outadwResultCode[0] = 2; //HRRC_TIMEOUT
+					Log.e("MoFlowHTTP", eofException.getMessage());
+				}
+				catch (Exception eConnectionException)
+				{
+					outadwResultCode[0] = 1;//HRRC_COULDNOTCONNECT
+					Log.e("MoFlowHTTP", eConnectionException.getMessage());
+				}
+				finally 
+				{
+					//get the response code
+					if (outadwHttpResponseCode[0] == -1 && outadwResultCode[0] != 2)
+					{
+						outadwHttpResponseCode[0] = urlConnection.getResponseCode();
+					}
+
+					//Disconnect the url connection. Note, this does not necessarily close the connection, possibly simply returning it to a pool of open connections for reuse.
+					urlConnection.disconnect();
+				}
+			}
+			catch(Exception eUrlException)
 			{
-				System.setProperty("http.keepAlive", "false");
+				if(eUrlException.getMessage().contains("ECONNRESET"))
+				{
+					bRetry = true;
+					continue;
+				}
+
+				outadwResultCode[0] = 1;//HRRC_COULDNOTCONNECT
+				Log.e("MoFlowHTTP", eUrlException.getMessage());
 			}
 
-			HttpURLConnection urlConnection = (HttpURLConnection) new URL(instrUrl).openConnection();
-			
-	        try 
-	        {	        	
-	        	HttpURLConnection.setFollowRedirects(false);
-	        	urlConnection.setReadTimeout(kdwTimeoutInMilliseconds);
-	        	urlConnection.setConnectTimeout(kdwTimeoutInMilliseconds);
-	        	
-	        	//if the protocol is HTTPS then set that up.
-	        	if (instrUrl.startsWith("https") == true)
-	        	{
-	        		SSLContext context = SSLContext.getInstance("TLS");
-	        		context.init(null, msTrustManagers, null);
-	        		((HttpsURLConnection)urlConnection).setSSLSocketFactory(context.getSocketFactory());
-	        		((HttpsURLConnection)urlConnection).setHostnameVerifier(msHostnameVerifier);
-	        	}
-	        	
-	        	//If we are posting we need to set up the post before opening the connection
-	        	if (inbIsPost == true)
-	        	{
-	        		urlConnection.setDoOutput(true);
-	        	    urlConnection.setFixedLengthStreamingMode(instrBody.getBytes().length);
-	        	}
-	        	
-	        	//--Set headers
-	        	if((inastrHeaderKeys != null) && (inastrHeaderValues != null) && (inastrHeaderKeys.length == inastrHeaderValues.length))
-	        	{
-	        		// Headers are passed in as a key/value strings array
-	        		for(int i = 0; i < inastrHeaderKeys.length; i++)
-	        		{	
-	        			urlConnection.setRequestProperty(inastrHeaderKeys[i], inastrHeaderValues[i]);
-	        		}
-	        	}
-	        	
-	        	urlConnection.connect();
-	        	
-	        	//if this is a post request then set the body
-	        	if (inbIsPost == true)
-	        	{
-	        		byte[] abyOutData = instrBody.getBytes();
-	        	    OutputStream writer = new BufferedOutputStream(urlConnection.getOutputStream());
-	        	    writer.write(abyOutData);
-	        	    writer.flush();
-	        	    writer.close();
-	        	}
-	        	
-	        	int dwResponseCode = urlConnection.getResponseCode();
-	        	if (dwResponseCode == -1)
-	        	{
-	        		//If we've got this far and the response code is -1 then we've encountered the dreaded 2.2 bug! 
-	        		//In order to get around this, we should return a fake 503 error to force the client to try the call again.
-	        		outadwHttpResponseCode[0] = 503;
-	        	}
-	        	else 
-	        	{
-	        		// Get the response (either by InputStream or ErrorStream)
-	        		abyOutputData = ReadStream(dwResponseCode, urlConnection, outadwResultLength);
-	        	}
-	        	
-	        	 if(dwResponseCode == HttpsURLConnection.HTTP_MOVED_TEMP)
-	         	{
-	         		String strLocation = urlConnection.getHeaderField("Location");
-	         		outstrRedirectionLocation[0] = strLocation;
-	         	}
-	        	
-	        }
-	        catch (UnknownHostException eUnknownHostException)
-	        {
-	        	outadwResultCode[0] = 2; //HRRC_TIMEOUT
-	        	Log.e("MoFlowHTTP", eUnknownHostException.getMessage());
-	        }
-	        catch (SocketTimeoutException timeoutException)
-	        {
-	        	outadwResultCode[0] = 2; //HRRC_TIMEOUT
-	        	Log.e("MoFlowHTTP", timeoutException.getMessage());
-	        }
-	        catch (EOFException eofException)
-	        {
-	        	outadwResultCode[0] = 2; //HRRC_TIMEOUT
-	        	Log.e("MoFlowHTTP", eofException.getMessage());
-	        }
-	        catch (Exception eConnectionException)
-	        {
-	        	outadwResultCode[0] = 1;//HRRC_COULDNOTCONNECT
-	        	Log.e("MoFlowHTTP", eConnectionException.getMessage());
-	        }
-	        finally 
-	        {
-	        	//get the response code
-	        	if (outadwHttpResponseCode[0] == -1 && outadwResultCode[0] != 2)
-	        	{
-	        		outadwHttpResponseCode[0] = urlConnection.getResponseCode();
-	        	}
-	        	
-	    		if(outadwHttpResponseCode[0] == -1)
-	    		{
-	    			int b = 5;
-	    			b = b + 2;
-	    		}
-	        	
-	        	//Disconnect the url connection. Note, this does not necessarily close the connection, possibly simply returning it to a pool of open connections for reuse.
-	        	urlConnection.disconnect();
-	        }
-		}
-		catch(Exception eUrlException)
-		{
-    		if(outadwHttpResponseCode[0] == -1)
-    		{
-    			int b = 5;
-    			b = b + 2;
-    		}
-    		
-    		if(eUrlException.getMessage().contains("ECONNRESET"))
-    		{
-    			bRetry = true;
-    			continue;
-    		}
-    		
-			outadwResultCode[0] = 1;//HRRC_COULDNOTCONNECT
-			Log.e("MoFlowHTTP", eUrlException.getMessage());
-		}
-		
-		if(outadwHttpResponseCode[0] == -1)
-		{
-			int b = 5;
-			b = b + 2;
-		}
 		} while(bRetry);
 		return abyOutputData;
 	}
@@ -260,38 +241,38 @@ public class HttpConnectionNativeInterface
     	byte[] abyOutputData = null;
 		
     	int dwAmountRead = 0;
-		InputStream reader = null;
-		try
-		{
-    	// Check for http 200 or 301
-		if (indwResponseCode == HttpURLConnection.HTTP_OK || indwResponseCode == HttpURLConnection.HTTP_MOVED_PERM)
-		{
-			dwAmountRead = inurlConnection.getInputStream().read(byDataBlock);
-			reader = new BufferedInputStream(inurlConnection.getInputStream());
-		}
-    	// Check for http 500
-    	else if(indwResponseCode == HttpsURLConnection.HTTP_INTERNAL_ERROR || indwResponseCode == HttpsURLConnection.HTTP_UNAVAILABLE)
-		{
-			dwAmountRead = inurlConnection.getErrorStream().read(byDataBlock);
-			reader = new BufferedInputStream(inurlConnection.getErrorStream());
-		}
-		
-		if(reader != null)
-		{			
-			// Keep reading until the end has been found
-			while (dwAmountRead != -1)
-			{
-				byteContainer.AddBytes(byDataBlock, 0, dwAmountRead);
-				dwAmountRead = reader.read(byDataBlock);
-			}
-			
-			reader.close();
-			
-			abyOutputData = byteContainer.GetBytes();
-			outadwResultLength[0] = byteContainer.GetSize();
-		}
-		return abyOutputData;
-		}
+    	InputStream reader = null;
+    	try
+    	{
+    		// Check for http 200 or 301
+    		if (indwResponseCode == HttpURLConnection.HTTP_OK || indwResponseCode == HttpURLConnection.HTTP_MOVED_PERM)
+    		{
+    			dwAmountRead = inurlConnection.getInputStream().read(byDataBlock);
+    			reader = new BufferedInputStream(inurlConnection.getInputStream());
+    		}
+    		// Check for http 500
+    		else if(indwResponseCode == HttpsURLConnection.HTTP_INTERNAL_ERROR || indwResponseCode == HttpsURLConnection.HTTP_UNAVAILABLE)
+    		{
+    			dwAmountRead = inurlConnection.getErrorStream().read(byDataBlock);
+    			reader = new BufferedInputStream(inurlConnection.getErrorStream());
+    		}
+
+    		if(reader != null)
+    		{			
+    			// Keep reading until the end has been found
+    			while (dwAmountRead != -1)
+    			{
+    				byteContainer.AddBytes(byDataBlock, 0, dwAmountRead);
+    				dwAmountRead = reader.read(byDataBlock);
+    			}
+
+    			reader.close();
+
+    			abyOutputData = byteContainer.GetBytes();
+    			outadwResultLength[0] = byteContainer.GetSize();
+    		}
+    		return abyOutputData;
+    	}
 		catch(IOException eIOException)
 		{
 			if(reader != null)

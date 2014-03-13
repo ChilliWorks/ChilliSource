@@ -1,7 +1,7 @@
 package com.chillisource.core;
 
 import com.chillisource.core.ResourceHelper;
-import com.chillisource.core.ChilliSourceActivity;
+import com.chillisource.core.CSActivity;
 
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -9,8 +9,8 @@ import android.widget.ImageView;
 
 public class LoadingView 
 {
-	private static final String kstrDefaultImage = "com_taggames_default";
-	private ChilliSourceActivity mActivity = null;
+	private static final String kstrDefaultImage = "com_chillisource_default";
+	private CSActivity mActivity = null;
 	private volatile ImageView mLoadingView = null;
 	private volatile boolean mbIsPresented = false;
 	//---------------------------------------------------
@@ -18,7 +18,7 @@ public class LoadingView
 	///
 	/// @param The moFlow activity.
 	//---------------------------------------------------
-	public LoadingView(ChilliSourceActivity inActivity)
+	public LoadingView(CSActivity inActivity)
 	{
 		mActivity = inActivity;
 	}
@@ -29,7 +29,7 @@ public class LoadingView
 	///
 	/// @param The name of the resource to be presented
 	/// if the resource does not exist the default
-	/// com_taggames_default will be displayed instead.
+	/// com_chillisource_default will be displayed instead.
 	//---------------------------------------------------
 	public void Present(final String instrResource)
 	{
@@ -38,7 +38,7 @@ public class LoadingView
 		
 		mbIsPresented = true;
 		
-		mActivity.runOnUiThread(new Runnable()
+		CSApplication.get().scheduleUIThreadTask(new Runnable()
 		{
 			@Override 
 			public void run() 
@@ -54,7 +54,7 @@ public class LoadingView
 					mLoadingView.setImageResource(ResourceHelper.GetDynamicResourceIDForField(mActivity, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, kstrDefaultImage));
 				}
 				mLoadingView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				mActivity.GetViewContainer().addView(mLoadingView);
+				CSApplication.get().addView(mLoadingView);
 				mLoadingView.bringToFront();
 			}
 		});
@@ -79,12 +79,12 @@ public class LoadingView
 		if(mLoadingView == null)
 			return;
 		
-		mActivity.runOnUiThread(new Runnable()
+		CSApplication.get().scheduleUIThreadTask(new Runnable()
 		{
 			@Override 
 			public void run() 
 			{
-				mActivity.GetViewContainer().removeView(mLoadingView);
+				CSApplication.get().removeView(mLoadingView);
 				mLoadingView = null;
 				mbIsPresented = false;
 			}

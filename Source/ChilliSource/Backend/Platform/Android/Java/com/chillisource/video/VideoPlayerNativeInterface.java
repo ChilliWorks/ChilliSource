@@ -11,6 +11,7 @@ package com.chillisource.video;
 
 import android.content.Intent;
 
+import com.chillisource.core.CSApplication;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.INativeInterface;
 import com.chillisource.video.SubtitlesView;
@@ -54,8 +55,8 @@ public class VideoPlayerNativeInterface extends INativeInterface
 	public void Present(boolean inbInAPK, String instrFilename, boolean inbCanDimissWithTap, boolean inbHasSubtitles, float fR, float fB, float fG, float fA) 
 	{
 		VideoPlayerActivity.SetupVideo(inbInAPK, instrFilename, inbCanDimissWithTap, inbHasSubtitles, fR, fG, fB, fA);
-		Intent mediaPlayerIntent = new Intent(mActivity, VideoPlayerActivity.class);
-		mActivity.startActivity(mediaPlayerIntent); 
+		Intent mediaPlayerIntent = new Intent(CSApplication.get().getActivityContext(), VideoPlayerActivity.class);
+		CSApplication.get().getActivityContext().startActivity(mediaPlayerIntent); 
 	}
 	//--------------------------------------------------------------
 	/// Is Playing

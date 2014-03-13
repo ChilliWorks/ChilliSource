@@ -10,14 +10,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.chillisource.core.ChilliSourceActivity;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.LocalNotificationReceiver;
 import com.chillisource.core.LocalNotificationService;
 
 public class LocalNotificationNativeInterface extends INativeInterface
 {
-	private static Context msContext;
 	private static Intent msCreateNotificationIntent;
 	private static AlarmManager msAlarmManager;
 	
@@ -43,12 +41,10 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	{
 		super();
 		
-		msContext = ChilliSourceActivity.GetActivity();
-		
-		msCreateNotificationIntent = new Intent(msContext,LocalNotificationReceiver.class);
+		msCreateNotificationIntent = new Intent(CSApplication.get().getActivityContext(), LocalNotificationReceiver.class);
 		msCreateNotificationIntent.setAction("com.chillisource.nativeInterface.ALARM_NOTIFICATION_INTENT");
 		
-		msAlarmManager = (AlarmManager)msContext.getSystemService(Context.ALARM_SERVICE);
+		msAlarmManager = (AlarmManager)CSApplication.get().getActivityContext().getSystemService(Context.ALARM_SERVICE);
 	}
 	//--------------------------------------------------------------
 	/// Is A
@@ -60,8 +56,6 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	{
 		return (inInterfaceType.Equals(InterfaceID));
 	}
-
-	
 	//-------------------------------------------------------------------
 	/// Schedule Notification
 	/// 
@@ -76,7 +70,6 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	//-------------------------------------------------------------------
 	public void ScheduleNotification(long inqwTriggerTime, String instrBody, int indwNotificationID, int inePriority,String[] inastrKey, String[] inastrValue)
 	{
-		
 		FreeOutOfDateIntentIDs();		
 		
 		//Pass any data to the intent so that it can be used when the Alarm is triggered
@@ -100,7 +93,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 		//Send this along with the intent so that it can be removed on the other end
 		msCreateNotificationIntent.putExtra("IntentID", dwUniqueIntentID);
 
-		PendingIntent sPendingIntent = PendingIntent.getBroadcast(mActivity, dwUniqueIntentID , msCreateNotificationIntent	, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent sPendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), dwUniqueIntentID , msCreateNotificationIntent	, PendingIntent.FLAG_UPDATE_CURRENT);
 	
         //set alarm to time of trigger
 		msAlarmManager.set(AlarmManager.RTC_WAKEUP, inqwTriggerTime, sPendingIntent);
@@ -118,7 +111,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	public void CancelByID(int inID)
 	{
 		
-		SharedPreferences sSharedPreferences = mActivity.getSharedPreferences(kstrIntentToNotificationMapName, 0);
+		SharedPreferences sSharedPreferences = CSApplication.get().getActivityContext().getSharedPreferences(kstrIntentToNotificationMapName, 0);
 		Map<String, ?> sIntentIDMap = sSharedPreferences.getAll();
 		
 		List<Integer> aIntentIDsToBeRemoved = new ArrayList<Integer>();
@@ -132,7 +125,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 		}
 		for(int dwID = 0; dwID < aIntentIDsToBeRemoved.size(); ++dwID)
 		{
-			PendingIntent sPendingIntent = PendingIntent.getBroadcast(msContext, aIntentIDsToBeRemoved.get(dwID) , msCreateNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			PendingIntent sPendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), aIntentIDsToBeRemoved.get(dwID) , msCreateNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			msAlarmManager.cancel(sPendingIntent);
 			SharedPreferencesNativeInterface.RemoveKey(kstrIntentToTriggerMapName, Integer.toString(aIntentIDsToBeRemoved.get(dwID)));
 			SharedPreferencesNativeInterface.RemoveKey(kstrIntentToNotificationMapName, Integer.toString(aIntentIDsToBeRemoved.get(dwID)));
@@ -149,7 +142,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	//-------------------------------------------------------------------
 	public void CancelAll()
 	{
-		SharedPreferences sSharedPreferences = mActivity.getSharedPreferences(kstrIntentToTriggerMapName, 0);
+		SharedPreferences sSharedPreferences = CSApplication.get().getActivityContext().getSharedPreferences(kstrIntentToTriggerMapName, 0);
 		Map<String, ?> sPendingIntentIDMap = sSharedPreferences.getAll();
 		
 		List<Integer> aIntentIDsToBeRemoved = new ArrayList<Integer>();
@@ -160,7 +153,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 		}
 		for(int dwID = 0; dwID < aIntentIDsToBeRemoved.size(); ++dwID)
 		{
-			PendingIntent sPendingIntent = PendingIntent.getBroadcast(msContext, aIntentIDsToBeRemoved.get(dwID) , msCreateNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			PendingIntent sPendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), aIntentIDsToBeRemoved.get(dwID) , msCreateNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			msAlarmManager.cancel(sPendingIntent);
 			SharedPreferencesNativeInterface.RemoveKey(kstrIntentToTriggerMapName, Integer.toString(aIntentIDsToBeRemoved.get(dwID)));
 			SharedPreferencesNativeInterface.RemoveKey(kstrIntentToNotificationMapName, Integer.toString(aIntentIDsToBeRemoved.get(dwID)));
@@ -206,7 +199,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	//-------------------------------------------------------------------
 	private void FreeOutOfDateIntentIDs()
 	{
-		SharedPreferences sSharedPreferences = mActivity.getSharedPreferences(kstrIntentToTriggerMapName, 0);
+		SharedPreferences sSharedPreferences = CSApplication.get().getActivityContext().getSharedPreferences(kstrIntentToTriggerMapName, 0);
 		
 		Map<String, ?> sIntentIDMap = sSharedPreferences.getAll();
 		List<String> aKeysToRemove = new ArrayList<String>();

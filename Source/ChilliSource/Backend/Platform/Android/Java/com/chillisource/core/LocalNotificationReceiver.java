@@ -11,7 +11,7 @@ package com.chillisource.core;
 
 import java.util.Iterator;
 
-import com.chillisource.core.ChilliSourceActivity;
+import com.chillisource.core.CSActivity;
 import com.chillisource.core.ResourceHelper;
 
 import android.app.Notification;
@@ -56,8 +56,7 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 	{
 		boolean bAppInForeground = false;
 		
-        ChilliSourceActivity moFlowActivity = ChilliSourceActivity.GetActivity();
-        if (moFlowActivity != null && moFlowActivity.IsActive() == true)
+        if (CSApplication.get() != null && CSApplication.get().isActive() == true)
         {
         	bAppInForeground = true;
         }
@@ -106,7 +105,7 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 				++udwParamNumber;
 			}	
 	
-			Intent sOpenAppIntent = new Intent(inContext,ChilliSourceActivity.class);
+			Intent sOpenAppIntent = new Intent(inContext,CSActivity.class);
 			sOpenAppIntent.setAction("android.intent.action.MAIN");
 			sOpenAppIntent.addCategory("android.intent.category.LAUNCHER");
 			sOpenAppIntent.putExtra(kstrAppOpenedFromNotification, true);

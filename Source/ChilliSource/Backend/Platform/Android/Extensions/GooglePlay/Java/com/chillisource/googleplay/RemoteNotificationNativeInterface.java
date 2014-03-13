@@ -1,6 +1,6 @@
 package com.chillisource.googleplay;
 
-import com.chillisource.core.ChilliSourceActivity;
+import com.chillisource.core.CSApplication;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.ResourceHelper;
 import com.chillisource.core.INativeInterface;
@@ -42,10 +42,10 @@ public class RemoteNotificationNativeInterface extends INativeInterface
 	public void Register()
 	{
 		String strProjectID = "";
-		int keyStringID = ResourceHelper.GetDynamicResourceIDForField(mActivity, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "GoogleProjectID");
+		int keyStringID = ResourceHelper.GetDynamicResourceIDForField(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "GoogleProjectID");
 		if(keyStringID > 0)
 		{
-			strProjectID = mActivity.getString(keyStringID);
+			strProjectID = CSApplication.get().getActivityContext().getString(keyStringID);
 		}
 		else
 		{
@@ -55,9 +55,9 @@ public class RemoteNotificationNativeInterface extends INativeInterface
 		
 		// Make sure the device has the proper dependencies.
 		GCMService.SetSenderID(strProjectID);
-        GCMRegistrar.checkDevice(ChilliSourceActivity.GetActivity());
-        GCMRegistrar.checkManifest(ChilliSourceActivity.GetActivity());
-        GCMRegistrar.register(ChilliSourceActivity.GetActivity(), strProjectID);
+        GCMRegistrar.checkDevice(CSApplication.get().getActivityContext());
+        GCMRegistrar.checkManifest(CSApplication.get().getActivityContext());
+        GCMRegistrar.register(CSApplication.get().getActivityContext(), strProjectID);
 	}
 	//---------------------------------------------------------------------
 	/// Unregister
@@ -68,7 +68,7 @@ public class RemoteNotificationNativeInterface extends INativeInterface
 	public void Unregister()
 	{
 		Intent unregIntent = new Intent("com.google.android.c2dm.intent.UNREGISTER");
-		unregIntent.putExtra("app", PendingIntent.getBroadcast(ChilliSourceActivity.GetActivity(), 0, new Intent(), 0));
-		ChilliSourceActivity.GetActivity().startService(unregIntent);
+		unregIntent.putExtra("app", PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), 0, new Intent(), 0));
+		CSApplication.get().getActivityContext().startService(unregIntent);
 	}
 }

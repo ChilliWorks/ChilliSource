@@ -9,7 +9,7 @@
 
 package com.chillisource.video;
 import com.chillisource.video.VideoPlayerNativeInterface;
-import com.chillisource.core.NativeInterfaceManager;
+import com.chillisource.core.CSApplication;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
@@ -115,7 +115,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 		{
 			@Override public void run() 
 			{
-				VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)NativeInterfaceManager.GetSingleton().GetNativeInterface(VideoPlayerNativeInterface.InterfaceID);
+				VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
 				if (mediaPlayerNI != null)
 				{
 					mediaPlayerNI.Dismissed();
@@ -129,16 +129,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 			}
 		};
 		
-		//run this task on the activities UI thread.
-		VideoPlayerActivity activity = null;
-		synchronized (this)
-		{
-			activity = mActivity;
-		}
-		if (activity != null)
-		{
-			activity.runOnUiThread(task);
-		}
+		CSApplication.get().scheduleUIThreadTask(task);
 		
 		//wait for this task to finish
 		try
@@ -350,7 +341,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 		if (mMediaPlayer == inMediaPlayer)
 		{
 			Cleanup();
-			VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)NativeInterfaceManager.GetSingleton().GetNativeInterface(VideoPlayerNativeInterface.InterfaceID);
+			VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
 			if (mediaPlayerNI != null)
 			{
 				mediaPlayerNI.Stopped();
@@ -382,7 +373,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 			{
 				if (System.currentTimeMillis() - mqwTapTime <= kqwTapLengthInMS)
 				{
-					VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)NativeInterfaceManager.GetSingleton().GetNativeInterface(VideoPlayerNativeInterface.InterfaceID);
+					VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
 					if (mediaPlayerNI != null)
 					{
 						mediaPlayerNI.Dismissed();
@@ -404,7 +395,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	{
 		if (mbCanDismissWithTap == true)
 		{
-			VideoPlayerNativeInterface videoPlayerNI = (VideoPlayerNativeInterface)NativeInterfaceManager.GetSingleton().GetNativeInterface(VideoPlayerNativeInterface.InterfaceID);
+			VideoPlayerNativeInterface videoPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
 			if (videoPlayerNI != null)
 			{
 				videoPlayerNI.Dismissed();

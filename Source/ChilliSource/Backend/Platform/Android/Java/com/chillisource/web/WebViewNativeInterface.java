@@ -12,7 +12,8 @@ import android.view.Gravity;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
 
-import com.chillisource.core.ChilliSourceActivity;
+import com.chillisource.core.CSActivity;
+import com.chillisource.core.CSApplication;
 import com.chillisource.core.ResourceHelper;
 import com.chillisource.web.CSWebView;
 import com.chillisource.web.CSWebViewClient;
@@ -22,7 +23,7 @@ public class WebViewNativeInterface
 {
 	native public static void OnWebviewDismissed(int inudwIndex);
 	
-	private static ChilliSourceActivity msActivity;
+	private static CSActivity msActivity;
 	private static RelativeLayout msWebviewHolder;
 	private static ProgressDialog mActivityIndicator;
 	private static Map<Integer,WebViewCloseButton> mDismissButtonMap;
@@ -36,7 +37,7 @@ public class WebViewNativeInterface
 	/// @param the gl surface to attach the webview
 	//---------------------------------------------------------------------
 	@SuppressLint("UseSparseArrays")
-	public static void Setup(ChilliSourceActivity inActivity)
+	public static void Setup(CSActivity inActivity)
 	{
 		msActivity = inActivity;	
 		mDismissButtonMap = new HashMap<Integer,WebViewCloseButton>();
@@ -45,7 +46,7 @@ public class WebViewNativeInterface
 		msWebviewHolder.setLayoutParams(params);
 		msWebviewHolder.setGravity(Gravity.CENTER);
 		
-		msActivity.GetViewContainer().addView(msWebviewHolder);	
+		CSApplication.get().addView(msWebviewHolder);	
 	}
 	//---------------------------------------------------------------------
 	/// Present
@@ -63,7 +64,7 @@ public class WebViewNativeInterface
 		final int udwYAbsolute = inudwYAbsolute;		
     	final int udwIndex = inudwIndex;
     	
-		msActivity.runOnUiThread(new Runnable() 
+    	CSApplication.get().scheduleUIThreadTask(new Runnable() 
         {
 		    public void run() 
 		    {		
@@ -161,7 +162,7 @@ public class WebViewNativeInterface
 			return;
 		
 		mActivityIndicator = new ProgressDialog(msActivity);
-		int LoadingTextID = ResourceHelper.GetDynamicResourceIDForField(msActivity, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "com_taggames_webview_loading");
+		int LoadingTextID = ResourceHelper.GetDynamicResourceIDForField(msActivity, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "com_chillisource_webview_loading");
 		if(LoadingTextID > 0)
 		{
 			String strMessage = msActivity.getString(LoadingTextID);

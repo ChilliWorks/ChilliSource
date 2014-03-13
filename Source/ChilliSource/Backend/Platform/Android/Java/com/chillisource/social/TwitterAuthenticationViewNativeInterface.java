@@ -9,6 +9,7 @@
 
 package com.chillisource.social;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,6 +31,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import com.chillisource.core.CSApplication;
 import com.chillisource.core.Screen;
 
 public class TwitterAuthenticationViewNativeInterface
@@ -67,7 +69,7 @@ public class TwitterAuthenticationViewNativeInterface
 		    	msActivity.addContentView(mLayout, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT));
 		    }
 		};
-		msActivity.runOnUiThread(task);
+		CSApplication.get().scheduleUIThreadTask(task);
 		
 		try
 		{
@@ -176,6 +178,7 @@ public class TwitterAuthenticationViewNativeInterface
 			OnPINError();
 	}
 	
+	@SuppressLint("SetJavaScriptEnabled")
 	public static RelativeLayout CreateLayout()
 	{
 		LayoutParams Params = null;

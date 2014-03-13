@@ -33,12 +33,12 @@ import com.facebook.internal.Utility;
 import com.facebook.widget.WebDialog;
 import com.facebook.FacebookException;
 import com.taggames.CTagResourceHelper;
+import com.chillisource.core.CSApplication;
 import com.chillisource.core.INativeInterface;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.ResourceHelper;
-import com.chillisource.core.IActivityResults;
 
-public class FacebookNativeInterface extends INativeInterface implements IActivityResults
+public class FacebookNativeInterface extends INativeInterface
 {
 	private static final InterfaceIDType InterfaceID = new InterfaceIDType("CFacebookNativeInterface");
 	
@@ -50,7 +50,7 @@ public class FacebookNativeInterface extends INativeInterface implements IActivi
 	
 	public FacebookNativeInterface()
 	{
-		CTagResourceHelper.SetPackageName(mActivity.getPackageName());
+		CTagResourceHelper.SetPackageName(CSApplication.get().getActivityContext().getPackageName());
 	}
 	
 	@Override
@@ -68,11 +68,11 @@ public class FacebookNativeInterface extends INativeInterface implements IActivi
 	/// @param Result Code
 	/// @param Intent
 	//------------------------------------------------------
-	public void OnActivityResult(int requestCode, int resultCode, Intent data)
+	@Override public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		if(Session.getActiveSession() != null)
 		{
-			Session.getActiveSession().onActivityResult(mActivity, requestCode, resultCode, data);
+			Session.getActiveSession().onActivityResult(CSApplication.get().getActivity(), requestCode, resultCode, data);
 		}
 	}
 	//--------------------------------------------------------------
@@ -99,7 +99,7 @@ public class FacebookNativeInterface extends INativeInterface implements IActivi
 		};
 		
 		// Run the task.
-		mActivity.runOnUiThread(task);
+		CSApplication.get().scheduleUIThreadTask(task);
 		
 		// Wait for the task to finish before pausing the rendering thread.
 		try
@@ -133,7 +133,7 @@ public class FacebookNativeInterface extends INativeInterface implements IActivi
 	//--------------------------------------------------------------------------------------
 	private boolean OpenSession(boolean inbShowLogin, final List<String> inaReadPermissions)
 	{	
-    	SessionTracker Tracker = new SessionTracker(mActivity, new Session.StatusCallback() 
+    	SessionTracker Tracker = new SessionTracker(CSApplication.get().getActivityContext(), new Session.StatusCallback() 
 	{
 	    @Override
 	    public void call(Session session, SessionState state, Exception exception) 
@@ -146,17 +146,17 @@ public class FacebookNativeInterface extends INativeInterface implements IActivi
     	
 	    if (existingSession == null || existingSession.getState().isClosed())
 	    {
-	    	String applicationId = Utility.getMetadataApplicationId(mActivity);
+	    	String applicationId = Utility.getMetadataApplicationId(CSApplication.get().getActivityContext());
 	    	
 	    	Session.setActiveSession(null);
-	        Session session = new Session.Builder(mActivity).setApplicationId(applicationId).build();
+	        Session session = new Session.Builder(CSApplication.get().getActivityContext()).setApplicationId(applicationId).build();
 	        Session.setActiveSession(session);
 	        existingSession = session;
 	    }
 	    
 	    if(existingSession != null && !existingSession.isOpened())
 		{
-	        Session.OpenRequest openRequest = new Session.OpenRequest(mActivity);
+	        Session.OpenRequest openRequest = new Session.OpenRequest(CSApplication.get().getActivity());
 
 	            openRequest.setDefaultAudience(SessionDefaultAudience.FRIENDS);
 	            openRequest.setPermissions(inaReadPermissions);
@@ -273,7 +273,7 @@ public class FacebookNativeInterface extends INativeInterface implements IActivi
 			@Override 
 			public void run() 
 			{
-		    	NewPermissionsRequest request = new NewPermissionsRequest(mActivity, Arrays.asList(aReadPerms));
+		    	NewPermissionsRequest request = new NewPermissionsRequest(CSApplication.get().getActivity(), Arrays.asList(aReadPerms));
 		    	request.setCallback(new StatusCallback()
 		    	{
 		    	    @Override
@@ -294,7 +294,7 @@ public class FacebookNativeInterface extends INativeInterface implements IActivi
 		};
 		
 		// Run the task.
-		mActivity.runOnUiThread(task);
+		CSApplication.get().scheduleUIThreadTask(task);
 		
 		// Wait for the task to finish before pausing the rendering thread.
 		try
@@ -328,7 +328,7 @@ public class FacebookNativeInterface extends INativeInterface implements IActivi
 			@Override 
 			public void run() 
 			{
-				NewPermissionsRequest request = new NewPermissionsRequest(mActivity, Arrays.asList(aWritePerms));
+				NewPermissionsRequest request = new NewPermissionsRequest(CSApplication.get().getActivity(), Arrays.asList(aWritePerms));
 		    	request.setCallback(new StatusCallback()
 		    	{
 		    	    @Override
@@ -349,7 +349,7 @@ public class FacebookNativeInterface extends INativeInterface implements IActivi
 		};
 		
 		// Run the task.
-		mActivity.runOnUiThread(task);
+		CSApplication.get().scheduleUIThreadTask(task);
 		
 		// Wait for the task to finish before pausing the rendering thread.
 		try
@@ -401,19 +401,19 @@ public class FacebookNativeInterface extends INativeInterface implements IActivi
     
     private void ShowDialogWithoutNotificationBar(final String action, final Bundle params)
     {
-    	mActivity.runOnUiThread(new Runnable()
+    	CSApplication.get().scheduleUIThreadTask(new Runnable()
     	{
     		@Override
     		public void run()
     		{
-		    	Dialog dialog = new WebDialog.Builder(mActivity, Session.getActiveSession(), action, params).setOnCompleteListener(new WebDialog.OnCompleteListener()
+		    	Dialog dialog = new WebDialog.Builder(CSApplication.get().getActivityContext(), Session.getActiveSession(), action, params).setOnCompleteListener(new WebDialog.OnCompleteListener()
     		    {
 	    		    @Override
 	    		    public void onComplete(Bundle values, FacebookException error)
 	    		    {
 	    		        if (error != null && !(error instanceof FacebookOperationCanceledException))
 	    		        {	
-		    		    	mActivity.GetSurface().queueEvent(new Runnable()
+	    		        	CSApplication.get().scheduleMainThreadTask(new Runnable()
 		    		    	{
 					    		@Override
 					    		public void run()
@@ -427,7 +427,7 @@ public class FacebookNativeInterface extends INativeInterface implements IActivi
 	    		        }
 	    		        else
 	    		        {
-	        		    	mActivity.GetSurface().queueEvent(new Runnable()
+	    		        	CSApplication.get().scheduleMainThreadTask(new Runnable()
 	        		    	{
 	        		    		@Override
 	        		    		public void run()
@@ -475,11 +475,11 @@ public class FacebookNativeInterface extends INativeInterface implements IActivi
 			@SuppressWarnings("deprecation")
 			@Override public void run() 
 			{
-		    	String strAppID = mActivity.getString(ResourceHelper.GetDynamicResourceIDForField(mActivity, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "app_id"));
+		    	String strAppID = CSApplication.get().getActivityContext().getString(ResourceHelper.GetDynamicResourceIDForField(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "app_id"));
 				android.util.Log.d("FBNativeInterface", strAppID);
-		    	Settings.publishInstallAsync(mActivity, strAppID);				
+		    	Settings.publishInstallAsync(CSApplication.get().getActivityContext(), strAppID);				
 			}
 		};
-		mActivity.runOnUiThread(task);    	
+		CSApplication.get().scheduleUIThreadTask(task);    	
     }
 }

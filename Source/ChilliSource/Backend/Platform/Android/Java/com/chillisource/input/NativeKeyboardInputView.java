@@ -8,7 +8,7 @@
 
 package com.chillisource.input;
 
-import com.chillisource.core.ChilliSourceActivity;
+import com.chillisource.core.CSApplication;
 
 import android.content.Context;
 import android.text.InputType;
@@ -68,9 +68,9 @@ public class NativeKeyboardInputView extends View
 	/// @param The moflow activity.
 	/// @param The moflow surface.
 	//------------------------------------------------------
-	public NativeKeyboardInputView(ChilliSourceActivity inActivity, KeyboardNativeInterface inKeyboardNativeInterface, KeyboardType ineKeyboardType, KeyboardCapitalisation ineKeyboardCapitalisation) 
+	public NativeKeyboardInputView(KeyboardNativeInterface inKeyboardNativeInterface, KeyboardType ineKeyboardType, KeyboardCapitalisation ineKeyboardCapitalisation) 
 	{
-		super(inActivity);
+		super(CSApplication.get().getActivityContext());
 		
 		mKeyboardNativeInterface = inKeyboardNativeInterface;
 		meKeyboardType = ineKeyboardType;

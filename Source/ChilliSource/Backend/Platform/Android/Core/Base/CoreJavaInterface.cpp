@@ -34,30 +34,31 @@ ChilliSource::Core::Application* (*BootFunctionPtr)() = nullptr;
 //--------------------------------------------------------------------------------------
 extern "C"
 {
-	void Java_com_chillisource_core_CoreNativeInterface_SetupCoreJavaNativeInterface(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_Initialise(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_Resume(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_Suspend(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_DestroyApplication(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_FrameBegin(JNIEnv* inpEnv, jobject inThis, f32 infDeltaTime, s64 inddwTimestamp);
-	void Java_com_chillisource_core_CoreNativeInterface_MemoryWarning(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_OrientationChanged(JNIEnv* inpEnv, jobject inThis, s32 indwOrientation);
-	void Java_com_chillisource_core_CoreNativeInterface_OnBackPressed(JNIEnv* inpEnv, jobject inThis);
-    void Java_com_chillisource_core_CoreNativeInterface_ApplicationDidReceiveLaunchingURL(JNIEnv* inpEnv, jobject inThis, jstring instrURL);
+	void Java_com_chillisource_core_CoreNativeInterface_create(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_core_CoreNativeInterface_resume(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_core_CoreNativeInterface_foreground(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_core_CoreNativeInterface_background(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_core_CoreNativeInterface_suspend(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_core_CoreNativeInterface_destroy(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_core_CoreNativeInterface_update(JNIEnv* inpEnv, jobject inThis, f32 infDeltaTime, s64 inddwTimestamp);
+	void Java_com_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_core_CoreNativeInterface_orientationChanged(JNIEnv* inpEnv, jobject inThis, s32 indwOrientation);
+	void Java_com_chillisource_core_CoreNativeInterface_onBackPressed(JNIEnv* inpEnv, jobject inThis);
+    void Java_com_chillisource_core_CoreNativeInterface_applicationDidReceiveLaunchingURL(JNIEnv* inpEnv, jobject inThis, jstring instrURL);
 }
 //--------------------------------------------------------------------------------------
-/// Setup Core Java Native Interface
-///
-/// Setups the Core Java and Native Interfaces.
+/// Interface function called from java that forces creation of the core interface
 ///
 /// @param JNIEnv - The jni environment.
 /// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_SetupCoreJavaNativeInterface(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_create(JNIEnv* inpEnv, jobject inThis)
 {
 	//get the java VM and init the Java Interface Manager
 	JavaVM * pJavaVM;
 	inpEnv->GetJavaVM(&pJavaVM);
+
 	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->Initialise(pJavaVM);
 
 	//add the core native interface
@@ -71,15 +72,17 @@ void Java_com_chillisource_core_CoreNativeInterface_SetupCoreJavaNativeInterface
 /// @param JNIEnv - The jni environment.
 /// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_Initialise(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* inpEnv, jobject inThis)
 {
+	//get the java VM and init the Java Interface Manager
+	JavaVM * pJavaVM;
+	inpEnv->GetJavaVM(&pJavaVM);
+
 	//create the application
 	ChilliSource::Core::Application* pApplication = BootFunctionPtr();
 	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CoreJavaInterface>()->SetApplication(pApplication);
 
 	//setup other interfaces
-	JavaVM * pJavaVM;
-	inpEnv->GetJavaVM(&pJavaVM);
 	ChilliSource::Android::TouchInputJavaInterface::SetupJavaInterface(pJavaVM);
 	ChilliSource::Android::HttpConnectionJavaInterface::SetupJavaInterface(pJavaVM);
 	ChilliSource::Android::SharedPreferencesJavaInterface::SetupJavaInterface(pJavaVM);
@@ -100,9 +103,35 @@ void Java_com_chillisource_core_CoreNativeInterface_Initialise(JNIEnv* inpEnv, j
 /// @param JNIEnv - The jni environment.
 /// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_Resume(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_resume(JNIEnv* inpEnv, jobject inThis)
 {
 	ChilliSource::Core::Application::Get()->Resume();
+}
+//--------------------------------------------------------------------------------------
+/// Interface function called from java. This is called when the application is pushed
+/// to the foreground
+///
+/// @author S Downie
+///
+/// @param JNIEnv - The jni environment.
+/// @param jobject - the java object calling the function
+//--------------------------------------------------------------------------------------
+void Java_com_chillisource_core_CoreNativeInterface_foreground(JNIEnv* inpEnv, jobject inThis)
+{
+	ChilliSource::Core::Application::Get()->Foreground();
+}
+//--------------------------------------------------------------------------------------
+/// Interface function called from java. This is called when the application is pushed
+/// to the background
+///
+/// @author S Downie
+///
+/// @param JNIEnv - The jni environment.
+/// @param jobject - the java object calling the function
+//--------------------------------------------------------------------------------------
+void Java_com_chillisource_core_CoreNativeInterface_background(JNIEnv* inpEnv, jobject inThis)
+{
+	ChilliSource::Core::Application::Get()->Background();
 }
 //--------------------------------------------------------------------------------------
 /// Suspend
@@ -112,7 +141,7 @@ void Java_com_chillisource_core_CoreNativeInterface_Resume(JNIEnv* inpEnv, jobje
 /// @param JNIEnv - The jni environment.
 /// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_Suspend(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_suspend(JNIEnv* inpEnv, jobject inThis)
 {
 	ChilliSource::Core::Application::Get()->Suspend();
 }
@@ -124,7 +153,7 @@ void Java_com_chillisource_core_CoreNativeInterface_Suspend(JNIEnv* inpEnv, jobj
 /// @param JNIEnv - The jni environment.
 /// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_DestroyApplication(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_destroy(JNIEnv* inpEnv, jobject inThis)
 {
 	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CoreJavaInterface>()->DestroyApplication();
 }
@@ -136,7 +165,7 @@ void Java_com_chillisource_core_CoreNativeInterface_DestroyApplication(JNIEnv* i
 /// @param jobject - the java object calling the function
 /// @param the delta time.
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_FrameBegin(JNIEnv* inpEnv, jobject inThis, f32 infDeltaTime, s64 inddwTimestamp)
+void Java_com_chillisource_core_CoreNativeInterface_update(JNIEnv* inpEnv, jobject inThis, f32 infDeltaTime, s64 inddwTimestamp)
 {
 	//Create the message with the time between frames
 	ChilliSource::Core::Application::Get()->Update((f32)infDeltaTime, (u64)inddwTimestamp);
@@ -150,7 +179,7 @@ void Java_com_chillisource_core_CoreNativeInterface_FrameBegin(JNIEnv* inpEnv, j
 /// @param JNIEnv - The jni environment.
 /// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_MemoryWarning(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* inpEnv, jobject inThis)
 {
 	ChilliSource::Core::Application::Get()->ApplicationMemoryWarning();
 }
@@ -163,7 +192,7 @@ void Java_com_chillisource_core_CoreNativeInterface_MemoryWarning(JNIEnv* inpEnv
 /// @param jobject - the java object calling the function
 /// @param the new orientation as an int that maps to the orientation enum.
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_OrientationChanged(JNIEnv* inpEnv, jobject thiz, s32 indwOrientation)
+void Java_com_chillisource_core_CoreNativeInterface_orientationChanged(JNIEnv* inpEnv, jobject thiz, s32 indwOrientation)
 {
 	ChilliSource::Core::ScreenOrientation eScreenOrientation;
 
@@ -189,7 +218,7 @@ void Java_com_chillisource_core_CoreNativeInterface_OrientationChanged(JNIEnv* i
 /// @param JNIEnv - The jni environment.
 /// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_OnBackPressed(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_onBackPressed(JNIEnv* inpEnv, jobject inThis)
 {
 	ChilliSource::Core::Application::Get()->GoBack();
 }
@@ -201,7 +230,7 @@ void Java_com_chillisource_core_CoreNativeInterface_OnBackPressed(JNIEnv* inpEnv
 /// @param jobject - the java object calling the function
 /// @param URL
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_ApplicationDidReceiveLaunchingURL(JNIEnv* inpEnv, jobject inThis, jstring instrURL)
+void Java_com_chillisource_core_CoreNativeInterface_applicationDidReceiveLaunchingURL(JNIEnv* inpEnv, jobject inThis, jstring instrURL)
 {
 	CSCore::LaunchingActions::ApplicationDidReceiveLaunchingURL(ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrURL));
 }

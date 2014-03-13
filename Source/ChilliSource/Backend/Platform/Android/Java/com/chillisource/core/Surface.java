@@ -1,6 +1,6 @@
-/*
- *  CMoFlowSurface.java
- *  moFlow
+/**
+ *  Surface.java
+ *  ChilliSource
  *
  *  Created by Ian Copland on 14/08/2012.
  *  Copyright 2012 Tag Games. All rights reserved.
@@ -8,112 +8,91 @@
  */
 
 package com.chillisource.core;
-import com.chillisource.core.CoreNativeInterface;
-import com.chillisource.core.NativeInterfaceManager;
 import com.chillisource.input.TouchInputNativeInterface;
 
+import android.app.Activity;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.MotionEvent;
 
+/**
+ * A surface is composited into the android view hierarchy and manages
+ * Open GL and input events.
+ *
+ * @author I Copland
+ */
 public class Surface extends GLSurfaceView 
 {
-	//-----------------------------------------------------------------
-	/// Constructor
-	//-----------------------------------------------------------------
-	public Surface(ChilliSourceActivity inActivity, Renderer inRenderer) 
+	/**
+	 * Constructor
+	 *
+	 * @author I Copland
+	 * 
+	 * @param Activity
+	 * @param GL renderer
+	 */
+	public Surface(Activity in_activity, Renderer in_renderer) 
 	{
-		super(inActivity);
+		super(in_activity);
         
-		int dwDepthBufferSize = 16;
-		int dwStencilBufferSize = 0;
+		int depthBufferSize = 16;
+		int stencilBufferSize = 0;
 		
 		//create the context factory
 		setEGLContextFactory(new ContextFactory());
 		
 		//set the config
-		setEGLConfigChooser(new ConfigChooser(5, 6, 5, 0, dwDepthBufferSize, dwStencilBufferSize));
+		setEGLConfigChooser(new ConfigChooser(5, 6, 5, 0, depthBufferSize, stencilBufferSize));
 		
 		//create renderer
-		setRenderer(inRenderer);
+		setRenderer(in_renderer);
     }
-	//-----------------------------------------------------------------
-	/// On Pause
-	///
-	/// Pauses the surface, suspending moFlow.
-	//-----------------------------------------------------------------
+	/**
+	 * Triggered when the surface is paused i.e. when it is no
+	 * longer visible. This suspends the application
+	 *
+	 * @author I Copland
+	 */
 	@Override public void onPause() 
 	{
-		//create the task to be run on the rendering thread
-		Runnable task = new Runnable()
-		{
-			@Override public void run() 
-			{
-				((CoreNativeInterface)NativeInterfaceManager.GetSingleton().GetNativeInterface(CoreNativeInterface.InterfaceID)).Suspend();
-				
-				synchronized(this)
-				{
-					notifyAll();
-				}
-			}
-		};
-		
-		//run the task.
-		this.queueEvent(task);
-		
-		//wait for the task to finish before pausing the rendering thread.
-		try
-		{
-			synchronized(task)
-			{
-				task.wait();
-			}
-		}
-		catch (Exception e)
-		{
-			Log.e("moFlow", e.getMessage());
-			e.printStackTrace();
-		}
-		
 		super.onPause();
 	};
-	//-----------------------------------------------------------------
-	/// On Touch Event 
-	///
-	/// This records all touch events that occur.
-	///
-	/// @param the motion event.
-	/// @return whether or not this view wants to pass the touch event
-	///			on to the next applicable view.
-	//-----------------------------------------------------------------
+	/**
+	 * Triggered when the surface receives a touch input event
+	 *
+	 * @author I Copland
+	 * 
+	 * @param Input event
+	 * 
+	 * @return Whether or not the surface consumes the event or
+	 * allows it to filter through to the next surface
+	 */
 	@Override public boolean onTouchEvent(final MotionEvent event) 
 	{	
 		//get the action data.
-		int dwActionData = event.getAction();
-		int dwActionEvent = dwActionData & MotionEvent.ACTION_MASK;
+		int actionData = event.getAction();
+		int actionEvent = actionData & MotionEvent.ACTION_MASK;
 
 		//ACTION_POINTER_ID_MASK and ACTION_POINTER_ID_SHIFT are now depreciated and have been replaced with ACTION_POINTER_INDEX_SHIFT
 		//and ACTION_POINTER_INDEX_MASK in order to match the data they are used to retrieve. They are only available in API lv8 however, 
 		//so this will need to be updated when lv8 is our minimum target.
-		int dwPointerIndex = (dwActionData & MotionEvent.ACTION_POINTER_ID_MASK) >> MotionEvent.ACTION_POINTER_ID_SHIFT;
-		final int dwPointerID = event.getPointerId(dwPointerIndex);
+		int pointerIndex = (actionData & MotionEvent.ACTION_POINTER_ID_MASK) >> MotionEvent.ACTION_POINTER_ID_SHIFT;
+		final int pointerID = event.getPointerId(pointerIndex);
 
 		//get the x and y positions of the touch if possible
-		float fX = -1.0f;
-		float fY = -1.0f;
-		if (dwPointerIndex != -1)
+		float xPos = -1.0f;
+		float yPos = -1.0f;
+		if (pointerIndex != -1)
 		{
-			fX = event.getX(dwPointerIndex);
-			fY = event.getY(dwPointerIndex);
+			xPos = event.getX(pointerIndex);
+			yPos = event.getY(pointerIndex);
 		}
 
-		final float fTouchX = fX;
-		final float fTouchY = fY;
-
+		final float touchX = xPos;
+		final float touchY = yPos;
 
 		Runnable task = null;
 		//pass the touch events on to MoFlow
-		switch (dwActionEvent)
+		switch (actionEvent)
 		{
 		case MotionEvent.ACTION_POINTER_DOWN:
 		case MotionEvent.ACTION_DOWN:
@@ -121,7 +100,7 @@ public class Surface extends GLSurfaceView
 			{
 				@Override public void run() 
 				{
-					TouchInputNativeInterface.TouchDown(dwPointerID, fTouchX, fTouchY);
+					TouchInputNativeInterface.TouchDown(pointerID, touchX, touchY);
 				}
 			};
 			queueEvent(task);
@@ -134,7 +113,7 @@ public class Surface extends GLSurfaceView
 			{
 				@Override public void run() 
 				{
-					TouchInputNativeInterface.TouchUp(dwPointerID, fTouchX, fTouchY);
+					TouchInputNativeInterface.TouchUp(pointerID, touchX, touchY);
 				}
 			};
 			queueEvent(task);
@@ -143,19 +122,19 @@ public class Surface extends GLSurfaceView
 			//in the case of moved events all touches need to be updated.
 			for (int i = 0; i < event.getPointerCount(); i++)
 			{
-				dwPointerIndex = i;
-				final int dwMovedPointerID = event.getPointerId(dwPointerIndex);
-				fX = event.getX(dwPointerIndex);
-				fY = event.getY(dwPointerIndex);
+				pointerIndex = i;
+				final int movedPointerID = event.getPointerId(pointerIndex);
+				xPos = event.getX(pointerIndex);
+				yPos = event.getY(pointerIndex);
 
-				final float fMovedTouchX = fX;
-				final float fMovedTouchY = fY;
+				final float movedTouchX = xPos;
+				final float movedTouchY = yPos;
 
 				task = new Runnable()
 				{
 					@Override public void run() 
 					{
-						TouchInputNativeInterface.TouchMoved(dwMovedPointerID, fMovedTouchX, fMovedTouchY);
+						TouchInputNativeInterface.TouchMoved(movedPointerID, movedTouchX, movedTouchY);
 					}
 				};
 				queueEvent(task);

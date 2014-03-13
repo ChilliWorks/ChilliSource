@@ -25,6 +25,7 @@ import com.google.android.vending.expansion.downloader.Helpers;
 import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
+import com.chillisource.core.CSApplication;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.ResourceHelper;
 import com.chillisource.googleplay.GooglePlayDownloaderService;
@@ -73,13 +74,13 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
 	public void Init()
 	{	
 		//Construct this projects resource file package name and set it in the downloader library 
-		String strPackage = mActivity.getPackageName() + ".R";
+		String strPackage = CSApplication.get().getActivityContext().getPackageName() + ".R";
 		Helpers.REMOTE_PACKAGE_NAME = strPackage;
 		
-		int keyStringID = ResourceHelper.GetDynamicResourceIDForField(mActivity, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "GooglePlayPublicKey");
+		int keyStringID = ResourceHelper.GetDynamicResourceIDForField(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "GooglePlayPublicKey");
 		if(keyStringID > 0)
 		{
-			String strPublicKey = mActivity.getString(keyStringID);
+			String strPublicKey = CSApplication.get().getActivityContext().getString(keyStringID);
 			GooglePlayDownloaderService.SetMarketPublicKey(strPublicKey);
 		}
 		else
@@ -93,7 +94,7 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
 			int versionCode = 0;
 			try 
 			{
-				versionCode = mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), 0).versionCode;
+				versionCode = CSApplication.get().getActivityContext().getPackageManager().getPackageInfo(CSApplication.get().getActivityContext().getPackageName(), 0).versionCode;
 			} 
 			catch (NameNotFoundException e) 
 			{
@@ -113,8 +114,8 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
 	{
 		try 
 		{
-			Intent launchIntent = mActivity.getIntent();
-			Intent intentToLaunchThisActivityFromNotification = new Intent(mActivity, mActivity.getClass());
+			Intent launchIntent = CSApplication.get().getActivity().getIntent();
+			Intent intentToLaunchThisActivityFromNotification = new Intent(CSApplication.get().getActivity(), CSApplication.get().getActivity().getClass());
 			intentToLaunchThisActivityFromNotification.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intentToLaunchThisActivityFromNotification.setAction(launchIntent.getAction());
 
@@ -126,8 +127,8 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
 				}
 			}
 
-			PendingIntent pendingIntent = PendingIntent.getActivity(mActivity, 0, intentToLaunchThisActivityFromNotification, PendingIntent.FLAG_UPDATE_CURRENT);
-			int Result = DownloaderClientMarshaller.startDownloadServiceIfRequired(mActivity, pendingIntent, GooglePlayDownloaderService.class);
+			PendingIntent pendingIntent = PendingIntent.getActivity(CSApplication.get().getActivityContext(), 0, intentToLaunchThisActivityFromNotification, PendingIntent.FLAG_UPDATE_CURRENT);
+			int Result = DownloaderClientMarshaller.startDownloadServiceIfRequired(CSApplication.get().getActivityContext(), pendingIntent, GooglePlayDownloaderService.class);
 			if(Result == DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
 			{
 				OnDownloadStateChangedComplete();
@@ -165,8 +166,8 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
 			return "";
 		}
 			   
-		String SavePath = Helpers.getSaveFilePath(mActivity);
-		String FileName = Helpers.getExpansionAPKFileName(mActivity, true, expansion.GetVersionCode());
+		String SavePath = Helpers.getSaveFilePath(CSApplication.get().getActivityContext());
+		String FileName = Helpers.getExpansionAPKFileName(CSApplication.get().getActivityContext(), true, expansion.GetVersionCode());
 
 		return SavePath + "/" + FileName; 
 	}
@@ -210,7 +211,7 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
     public void Download()
     {
     	final ExpansionDownloaderNativeInterface actualThis = this;
-    	mActivity.runOnUiThread(new Runnable()
+    	CSApplication.get().scheduleUIThreadTask(new Runnable()
     	{
     		@Override public void run() 
     		{
@@ -219,7 +220,7 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
     				mDownloaderClientStub = DownloaderClientMarshaller.CreateStub(actualThis, GooglePlayDownloaderService.class);
     			}
 
-		        mDownloaderClientStub.connect(mActivity);
+		        mDownloaderClientStub.connect(CSApplication.get().getActivityContext());
 		        
 		        LaunchDownloadIntent();
     		}
@@ -348,13 +349,13 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
 	//--------------------------------------------------------------
     public void ResumeDownload() 
     {
-    	mActivity.runOnUiThread(new Runnable()
+    	CSApplication.get().scheduleUIThreadTask(new Runnable()
     	{
 			@Override public void run() 
 			{
 		        if (null != mDownloaderClientStub) 
 		        {
-		            mDownloaderClientStub.connect(mActivity);
+		            mDownloaderClientStub.connect(CSApplication.get().getActivityContext());
 		        }
 			}
     	});
@@ -366,13 +367,13 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
 	//--------------------------------------------------------------
     public void PauseDownload() 
     {
-    	mActivity.runOnUiThread(new Runnable()
+    	CSApplication.get().scheduleUIThreadTask(new Runnable()
     	{
 			@Override public void run() 
 			{
 		        if (null != mDownloaderClientStub) 
 		        {
-		            mDownloaderClientStub.disconnect(mActivity);
+		            mDownloaderClientStub.disconnect(CSApplication.get().getActivityContext());
 		        }
 			}
     	});

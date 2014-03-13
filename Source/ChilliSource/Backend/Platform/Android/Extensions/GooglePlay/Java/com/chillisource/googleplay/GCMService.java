@@ -22,7 +22,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
-import com.chillisource.core.ChilliSourceActivity;
+import com.chillisource.core.CSActivity;
+import com.chillisource.core.CSApplication;
 import com.chillisource.core.ResourceHelper;
 import com.chillisource.googleplay.GooglePlayRemoteNotificationNativeInterface;
 import com.chillisource.googleplay.GCMBaseIntentService;
@@ -143,8 +144,7 @@ public class GCMService extends GCMBaseIntentService
     private void generateNotification(Context context, HashMap<String, String> inParams) 
     {
     	//if the application is active then pass this information on to the application.
-        ChilliSourceActivity moFlowActivity = ChilliSourceActivity.GetActivity();
-        if(moFlowActivity != null && moFlowActivity.IsActive() == true)
+        if(CSApplication.get() != null && CSApplication.get().isActive() == true)
         {
         	//build the array of keys and values
     		int dwNumEntries = inParams.size();
@@ -167,7 +167,7 @@ public class GCMService extends GCMBaseIntentService
         	String strTitle = context.getString(ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "app_name"));
         	String strMessage = inParams.get("message");
         	
-            Intent notificationIntent = new Intent(context, ChilliSourceActivity.class);
+            Intent notificationIntent = new Intent(context, CSActivity.class);
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
             

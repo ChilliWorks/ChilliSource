@@ -116,7 +116,9 @@ namespace ChilliSource
                 [EAGLContext setCurrentContext:mContext];
             }
 #endif
+            CS_LOG_DEBUG("+++++++PRE RESTORE CONTEXT");
             RestoreContext();
+            CS_LOG_DEBUG("+++++++POST RESTORE CONTEXT");
         }
         //----------------------------------------------------------
         /// Suspend
@@ -142,12 +144,18 @@ namespace ChilliSource
 		void RenderSystem::RestoreContext()
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
+            CS_LOG_DEBUG("+++++++RESTORE CONTEXT 1");
             ForceRefreshRenderStates();
+            CS_LOG_DEBUG("+++++++RESTORE CONTEXT 2");
             RestoreMeshBuffers();
+            CS_LOG_DEBUG("+++++++RESTORE CONTEXT 3");
             mGLCurrentShaderProgram = 0;
             mShaderManager.Restore();
+            CS_LOG_DEBUG("+++++++RESTORE CONTEXT 4");
             mTexManager.Restore();
+            CS_LOG_DEBUG("+++++++RESTORE CONTEXT 5");
             mCubemapManager.Restore();
+            CS_LOG_DEBUG("+++++++RESTORE CONTEXT 6");
 #endif
 		}
         //----------------------------------------------------------

@@ -12,7 +12,7 @@ package com.chillisource.video;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.chillisource.core.NativeInterfaceManager;
+import com.chillisource.core.CSApplication;
 import com.chillisource.video.VideoPlayerNativeInterface;
 
 import android.content.Context;
@@ -56,10 +56,10 @@ public class SubtitlesView extends ViewGroup
 	public SubtitlesView(Context context) 
 	{
 		super(context);
-		mVideoPlayerNativeInterface = (VideoPlayerNativeInterface)NativeInterfaceManager.GetSingleton().GetNativeInterface(VideoPlayerNativeInterface.InterfaceID);
+		mVideoPlayerNativeInterface = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
 		if (mVideoPlayerNativeInterface == null)
 		{
-			android.util.Log.e("MoFlow","Could not get the video player native interface!");
+			android.util.Log.e("ChilliSource","Could not get the video player native interface!");
 		}
 		
 		setWillNotDraw(false);

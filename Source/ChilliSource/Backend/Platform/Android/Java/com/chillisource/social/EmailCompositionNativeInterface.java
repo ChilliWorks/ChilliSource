@@ -2,8 +2,8 @@ package com.chillisource.social;
 
 import java.io.File;
 
+import com.chillisource.core.CSApplication;
 import com.chillisource.core.InterfaceIDType;
-import com.chillisource.core.IActivityResults;
 import com.chillisource.core.INativeInterface;
 
 import android.app.Activity;
@@ -18,7 +18,7 @@ import android.text.Html;
 /// of sending emails to multiple recipients and sending 
 /// multiple attachments.
 //=============================================================
-public class EmailCompositionNativeInterface extends INativeInterface implements IActivityResults
+public class EmailCompositionNativeInterface extends INativeInterface
 {
 	//--------------------------------------------------------------
 	/// Member Data
@@ -88,7 +88,7 @@ public class EmailCompositionNativeInterface extends INativeInterface implements
 				}
 			}
 			
-			mActivity.startActivityForResult(emailIntent, EMAIL_RETURN_REQUEST);
+			CSApplication.get().getActivity().startActivityForResult(emailIntent, EMAIL_RETURN_REQUEST);
 		}
 	}
 	//------------------------------------------------------
@@ -101,7 +101,7 @@ public class EmailCompositionNativeInterface extends INativeInterface implements
 	/// @param Result Code
 	/// @param Intent
 	//------------------------------------------------------
-	public void OnActivityResult(int indwRequestCode, int indwResultCode, Intent inData)
+	@Override public void onActivityResult(int indwRequestCode, int indwResultCode, Intent inData)
 	{
 		if (mbActive == true && indwRequestCode == EmailCompositionNativeInterface.EMAIL_RETURN_REQUEST)
 		{

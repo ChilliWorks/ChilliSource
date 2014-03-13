@@ -16,6 +16,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.view.WindowManager;
 
+import com.chillisource.core.CSApplication;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.INativeInterface;
 
@@ -63,7 +64,7 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 	//-----------------------------------------------------
 	public AccelerometerNativeInterface()
 	{
-		PackageManager manager = mActivity.getPackageManager();
+		PackageManager manager = CSApplication.get().getActivityContext().getPackageManager();
 		mbHasAccelerometer = manager.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER);
 		
 		//calculate the axis swap
@@ -75,7 +76,7 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 			new AxisSwap( 1, 1, 1, 0) 		// ROTATION_270
 		}; 
 		
-		WindowManager windowManager = (WindowManager)mActivity.getSystemService(Activity.WINDOW_SERVICE);
+		WindowManager windowManager = (WindowManager)CSApplication.get().getActivityContext().getSystemService(Activity.WINDOW_SERVICE);
 		int rotationIndex = windowManager.getDefaultDisplay().getRotation();
 		mAxisSwap = adwAxisSwapPossibilities[rotationIndex];
 	}
@@ -115,11 +116,11 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 			{ 
 				@Override public void run() 
 				{
-					SensorManager sensorManager = (SensorManager)mActivity.getSystemService(Activity.SENSOR_SERVICE);
+					SensorManager sensorManager = (SensorManager)CSApplication.get().getActivityContext().getSystemService(Activity.SENSOR_SERVICE);
 					sensorManager.registerListener(accelerometerNI, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);	
 				}
 			};
-			mActivity.runOnUiThread(task);
+			CSApplication.get().scheduleUIThreadTask(task);
 		};
 	}
 	//---------------------------------------------------
@@ -173,7 +174,7 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 				}
 			};
 			
-			mActivity.GetSurface().queueEvent(task);
+			CSApplication.get().scheduleMainThreadTask(task);
 		}
 	}
 	//---------------------------------------------------
@@ -202,11 +203,11 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 			{ 
 				@Override public void run() 
 				{
-					SensorManager sensorManager = (SensorManager)mActivity.getSystemService(Activity.SENSOR_SERVICE);
+					SensorManager sensorManager = (SensorManager)CSApplication.get().getActivityContext().getSystemService(Activity.SENSOR_SERVICE);
 					sensorManager.unregisterListener(accelerometerNI);
 				}
 			};
-			mActivity.runOnUiThread(task);
+			CSApplication.get().scheduleUIThreadTask(task);
 		}
 	}
 }

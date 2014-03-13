@@ -8,7 +8,6 @@
 
 package com.chillisource.core;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.Toast;
@@ -49,11 +48,11 @@ public class DialogueBoxNativeInterface extends INativeInterface
 	 */
     public void makeToast(final String in_text)
     {
-    	mActivity.runOnUiThread(new Runnable() 
+    	CSApplication.get().scheduleUIThreadTask(new Runnable() 
         {
 		    public void run() 
 		    {
-                Toast.makeText(mActivity.getApplicationContext(), in_text, Toast.LENGTH_LONG).show();
+                Toast.makeText(CSApplication.get().getAppContext(), in_text, Toast.LENGTH_LONG).show();
 		    }
 		});
     }
@@ -70,13 +69,12 @@ public class DialogueBoxNativeInterface extends INativeInterface
      */
     public void showSystemConfirmDialogue(final int in_dialogID, final String in_title, final String in_message, final String in_confirm, final String in_cancel)		
     {
-    	final Activity activity = mActivity;
     	final DialogueBoxNativeInterface dialogueBoxNativeInterface = this;
-    	mActivity.runOnUiThread(new Runnable() 
+    	CSApplication.get().scheduleUIThreadTask(new Runnable() 
         {
         	public void run()
         	{
-        		new AlertDialog.Builder(activity)
+        		new AlertDialog.Builder(CSApplication.get().getActivityContext())
         		.setIcon(android.R.drawable.ic_dialog_alert)
         		.setTitle(in_title)
         		.setMessage(in_message)
@@ -110,13 +108,12 @@ public class DialogueBoxNativeInterface extends INativeInterface
      */
     public void showSystemDialogue(final int in_dialogID, final String in_title, final String in_message, final String in_confirm)		
     {
-    	final Activity activity = mActivity;
     	final DialogueBoxNativeInterface dialogueBoxNativeInterface = this;
-        mActivity.runOnUiThread(new Runnable() 
+    	CSApplication.get().scheduleUIThreadTask(new Runnable() 
         {
         	public void run()
         	{
-        		new AlertDialog.Builder(activity)
+        		new AlertDialog.Builder(CSApplication.get().getActivityContext())
         		.setIcon(android.R.drawable.ic_dialog_alert)
         		.setTitle(in_title)
         		.setMessage(in_title)

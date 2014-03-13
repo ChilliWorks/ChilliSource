@@ -26,11 +26,11 @@ import com.amazon.inapp.purchasing.PurchaseUpdatesResponse;
 import com.amazon.inapp.purchasing.PurchasingManager;
 import com.amazon.inapp.purchasing.Receipt;
 import com.chillisource.amazon.PurchaseTransaction.ProductType;
+import com.chillisource.core.CSApplication;
 import com.chillisource.core.ExceptionUtils;
 import com.chillisource.core.HashCRC32;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.StringUtils;
-import com.chillisource.core.IResumeable;
 import com.chillisource.core.INativeInterface;
 
 //===========================================================
@@ -38,7 +38,7 @@ import com.chillisource.core.INativeInterface;
 ///
 /// A native interface for the Amazon IAP system. 
 //===========================================================
-public class AmazonIAPNativeInterface extends INativeInterface implements IResumeable
+public class AmazonIAPNativeInterface extends INativeInterface
 {
 	//-----------------------------------------------------
 	/// State
@@ -117,12 +117,12 @@ public class AmazonIAPNativeInterface extends INativeInterface implements IResum
 				if (meState == State.UNINITIALISED)
 				{
 					meState = State.REGISTERING_OBSERVER;
-					PurchasingManager.registerObserver(new PurchasingObserver(mActivity, thisClass));
+					PurchasingManager.registerObserver(new PurchasingObserver(CSApplication.get().getActivityContext(), thisClass));
 				}
 			}
 		};
 		
-		mActivity.runOnUiThread(task);
+		CSApplication.get().scheduleUIThreadTask(task);
 	}
 	//-----------------------------------------------------
 	/// On Resume
@@ -131,7 +131,7 @@ public class AmazonIAPNativeInterface extends INativeInterface implements IResum
 	/// foreground. This requests an update to the users
 	/// ID.
 	//-----------------------------------------------------
-	@Override synchronized public void OnResume() 
+	@Override synchronized public void onActivityResume() 
 	{
 		//if a user ID has already been requested it may now be out of date, so update it.
 		if (meState != State.UNINITIALISED && meState != State.REGISTERING_OBSERVER)

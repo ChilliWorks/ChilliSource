@@ -13,8 +13,6 @@ import java.lang.reflect.Field;
 
 import android.content.Context;
 
-import com.chillisource.core.ChilliSourceActivity;
-
 //===============================================================================
 /// MoFlow Resource Helper
 ///
@@ -62,7 +60,7 @@ public class ResourceHelper
   	//---------------------------------------------------------
     static public boolean DoesResourceExist(RESOURCE_SUBCLASS ineResourceSubClass, String inField) 
     {
-    	return DoesResourceExist(ChilliSourceActivity.GetActivity(), ineResourceSubClass, inField);
+    	return DoesResourceExist(CSApplication.get().getAppContext(), ineResourceSubClass, inField);
     }
     //---------------------------------------------------------
   	/// Resource Subclass
@@ -77,7 +75,7 @@ public class ResourceHelper
   	//---------------------------------------------------------
     static public int GetDynamicResourceIDForField(RESOURCE_SUBCLASS ineResourceSubClass, String inField) 
     {
-    	return GetDynamicResourceIDForField(ChilliSourceActivity.GetActivity(), ineResourceSubClass, inField);
+    	return GetDynamicResourceIDForField(CSApplication.get().getAppContext(), ineResourceSubClass, inField);
     }
     //---------------------------------------------------------
   	/// Does Resource Exist

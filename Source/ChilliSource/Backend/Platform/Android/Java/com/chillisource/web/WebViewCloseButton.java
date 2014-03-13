@@ -37,9 +37,9 @@ public class WebViewCloseButton extends Button
 		
 		mudwIndex = inudwIndex;
 		
-		if (ResourceHelper.DoesResourceExist(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "com_taggames_close_button") == true)
+		if (ResourceHelper.DoesResourceExist(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "com_chillisource_close_button") == true)
 		{
-			setBackgroundResource(ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "com_taggames_close_button"));
+			setBackgroundResource(ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "com_chillisource_close_button"));
 		}
 		else
 		{

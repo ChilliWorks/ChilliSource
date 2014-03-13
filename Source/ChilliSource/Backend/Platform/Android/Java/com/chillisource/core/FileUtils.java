@@ -16,7 +16,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.chillisource.core.ChilliSourceActivity;
+import com.chillisource.core.CSActivity;
 
 import android.os.Environment;
 
@@ -330,7 +330,7 @@ public class FileUtils
 	//-----------------------------------------------
 	private static boolean DoesFileExistInternal(final String instrFilepath)
 	{
-		File file = ChilliSourceActivity.GetActivity().getBaseContext().getFileStreamPath(instrFilepath);
+		File file = CSApplication.get().getAppContext().getFileStreamPath(instrFilepath);
 	    if (file.exists() == true && file.isFile() == true)
 	    {
 	    	return true;
@@ -359,9 +359,9 @@ public class FileUtils
 				InputStream stream = null;
 				try
 				{
-					File file = ChilliSourceActivity.GetActivity().getBaseContext().getFileStreamPath(instrFilename);
+					File file = CSApplication.get().getAppContext().getFileStreamPath(instrFilename);
 					abyOutput = new byte[(int)file.length()];
-					stream = new BufferedInputStream(ChilliSourceActivity.GetActivity().openFileInput(instrFilename));
+					stream = new BufferedInputStream(CSApplication.get().getAppContext().openFileInput(instrFilename));
 					int dwTotalRead = 0;
 					while(dwTotalRead < abyOutput.length)
 					{
@@ -413,7 +413,7 @@ public class FileUtils
 			OutputStream stream = null;
 			try
 			{
-				stream = new BufferedOutputStream(ChilliSourceActivity.GetActivity().openFileOutput(instrFilename, ChilliSourceActivity.MODE_PRIVATE));
+				stream = new BufferedOutputStream(CSApplication.get().getAppContext().openFileOutput(instrFilename, CSActivity.MODE_PRIVATE));
 				stream.write(instrFileContents);
 				bSuccess = true;
 			}
@@ -452,7 +452,7 @@ public class FileUtils
 	{
 		if (DoesFileExistInternal(instrFilename) == true)
 		{
-			return ChilliSourceActivity.GetActivity().deleteFile(instrFilename);
+			return CSApplication.get().getAppContext().deleteFile(instrFilename);
 		}
 		
 		return true;

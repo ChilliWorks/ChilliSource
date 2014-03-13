@@ -10,6 +10,7 @@ package com.chillisource.input;
 
 import android.view.ViewGroup;
 
+import com.chillisource.core.CSApplication;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.input.NativeKeyboardInputView.KeyboardCapitalisation;
 import com.chillisource.input.NativeKeyboardInputView.KeyboardType;
@@ -63,8 +64,8 @@ public class KeyboardNativeInterface extends INativeInterface
 			{
 				if (mKeyboardView == null)
 				{
-					mKeyboardView = new NativeKeyboardInputView(mActivity, thisKeyboardNativeInterface, meKeyboardType, meKeyboardCapitalisation);
-					mActivity.GetViewContainer().addView(mKeyboardView);
+					mKeyboardView = new NativeKeyboardInputView(thisKeyboardNativeInterface, meKeyboardType, meKeyboardCapitalisation);
+					CSApplication.get().addView(mKeyboardView);
 					
 					if (mbHardwareKeyboardOpen == true)
 					{
@@ -79,7 +80,7 @@ public class KeyboardNativeInterface extends INativeInterface
 				}
 			}
 		};
-		mActivity.runOnUiThread(task);
+		CSApplication.get().scheduleUIThreadTask(task);
 	}
 	//-------------------------------------------------
 	/// Deactivate
@@ -107,7 +108,7 @@ public class KeyboardNativeInterface extends INativeInterface
 				}
 			}
 		};
-		mActivity.runOnUiThread(task);
+		CSApplication.get().scheduleUIThreadTask(task);
 	}
 	//-------------------------------------------------
 	/// Set Keyboard Type
@@ -154,7 +155,7 @@ public class KeyboardNativeInterface extends INativeInterface
 				}
 			}
 		};
-		mActivity.runOnUiThread(task);
+		CSApplication.get().scheduleUIThreadTask(task);
 	}
 	//----------------------------------------------------
 	/// Set Hardware Keyboard Closed
@@ -175,7 +176,7 @@ public class KeyboardNativeInterface extends INativeInterface
 				}
 			}
 		};
-		mActivity.runOnUiThread(task);
+		CSApplication.get().scheduleUIThreadTask(task);
 	}
 	//---------------------------------------------------
 	/// On Text Added
@@ -232,7 +233,7 @@ public class KeyboardNativeInterface extends INativeInterface
 				}
 			}
 		};
-		mActivity.runOnUiThread(task);
+		CSApplication.get().scheduleUIThreadTask(task);
 		
 		//Call this on any thread as this native side of the engine
 		//will create a "main thread" task for it.

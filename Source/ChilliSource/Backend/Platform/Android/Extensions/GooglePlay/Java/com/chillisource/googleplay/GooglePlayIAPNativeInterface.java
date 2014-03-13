@@ -18,15 +18,14 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.util.Log;
 
+import com.chillisource.core.CSApplication;
 import com.chillisource.core.InterfaceIDType;
-import com.chillisource.core.IActivityResults;
-import com.chillisource.core.IDestroyable;
 import com.chillisource.core.INativeInterface;
 import com.chillisource.networking.IAPProductDescription;
 import com.chillisource.networking.IAPTransactionDescription;
 
 
-public class GooglePlayIAPNativeInterface  extends INativeInterface implements IDestroyable, IActivityResults
+public class GooglePlayIAPNativeInterface  extends INativeInterface
 {
 	//--------------------------------------------------------------
 	/// Member data
@@ -73,7 +72,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface implements I
 	//---------------------------------------------------------------------
 	public void Init(final String instrPublicKey)
 	{
-		mIABHelper = new IabHelper(mActivity, instrPublicKey);
+		mIABHelper = new IabHelper(CSApplication.get().getActivityContext(), instrPublicKey);
 		mIABHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
 		{
 			@Override public void onIabSetupFinished(IabResult result) 
@@ -120,7 +119,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface implements I
 		mbCancelProductDescRequest = false;
 		mbRequestDescriptionsInProgress = true;
 			
-		mActivity.runOnUiThread(new Runnable()
+		CSApplication.get().scheduleUIThreadTask(new Runnable()
 		{
 			@Override public void run() 
 			{
@@ -239,7 +238,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface implements I
 	//---------------------------------------------------------------------
 	public void RequestProductPurchase(final String inProductID, final int inType)
 	{
-		mActivity.runOnUiThread(new Runnable()
+		CSApplication.get().scheduleUIThreadTask(new Runnable()
 		{
 			@Override public void run() 
 			{
@@ -299,7 +298,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface implements I
 						break;
 				}
 				
-				mIABHelper.launchPurchaseFlow(mActivity, inProductID, 250102680, listener, payload);
+				mIABHelper.launchPurchaseFlow(CSApplication.get().getActivity(), inProductID, 250102680, listener, payload);
 			}
 		});
 	}
@@ -350,7 +349,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface implements I
 	//---------------------------------------------------------------------
 	public void CloseTransaction(final String inProductID, final String inTransactionID)
 	{
-		mActivity.runOnUiThread(new Runnable()
+		CSApplication.get().scheduleUIThreadTask(new Runnable()
 		{
 			@Override public void run() 
 			{
@@ -498,7 +497,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface implements I
 	///
 	/// Called when the moFlow activity is destroyed.
 	//---------------------------------------------------------------------
-	@Override public void OnDestroy() 
+	@Override public void onActivityDestroy() 
 	{
 		if(mIABHelper != null)
 		{
@@ -511,7 +510,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface implements I
 	///
 	/// Called when the moFlow activity is "onActivityResult" is called.
 	//---------------------------------------------------------------------
-	@Override public void OnActivityResult(int requestCode, int resultCode, Intent data)
+	@Override public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		if(mIABHelper != null)
 		{

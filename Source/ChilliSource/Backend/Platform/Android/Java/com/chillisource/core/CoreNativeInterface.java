@@ -48,23 +48,73 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	//--------------------------------------------------------------
 	/// Native methods
 	//--------------------------------------------------------------
-	public static native void CreateApplication();
-	public static native void SetupCoreJavaNativeInterface();
-	public native void Initialise();
-	public native void Resume();
-	public native void Suspend();
-	public native void DestroyApplication();
-	public native void FrameBegin(float infDeltaTime, long indwTimestamp);
-	public native void MemoryWarning();
-	public native void OrientationChanged(int indwOrientation);
-	public native void OnBackPressed();
-	public native void ApplicationDidReceiveLaunchingURL(String instrURL);
+	public native void update(float in_timeSinceLastUpdate, long in_appElapsedTime);
+	public native void memoryWarning();
+	public native void orientationChanged(int indwOrientation);
+	public native void onBackPressed();
+	public native void applicationDidReceiveLaunchingURL(String instrURL);
+	/**
+	 * Force the native interface to create this system
+	 * 
+	 * @author S Downie
+	 */
+	public static native void create();
+	/**
+	 * Triggered when the application is launched
+	 * This doesn't override from INativeInterface in
+	 * order to ensure that core is called after all other interfaces
+	 * 
+	 * @author S Downie
+	 */
+	public native void init();
+	/**
+	 * Triggered when the application is resumed after launch or suspension.
+	 * This doesn't override from INativeInterface in
+	 * order to ensure that core is called before all other interfaces
+	 * 
+	 * @author S Downie
+	 */
+	public native void resume();
+	/**
+	 * Triggered when the application is brought
+	 * to the foreground after being in the background.
+	 * This doesn't override from INativeInterface in
+	 * order to ensure that core is called before all other interfaces
+	 * 
+	 * @author S Downie
+	 */
+	public native void foreground();
+	/**
+	 * Triggered when the application is sent
+	 * to the background after being in the foreground
+	 * This doesn't override from INativeInterface in
+	 * order to ensure that core is called after all other interfaces
+	 * 
+	 * @author S Downie
+	 */
+	public native void background();
+	/**
+	 * Triggered when the application is suspended
+	 * This doesn't override from INativeInterface in
+	 * order to ensure that core is called after all other interfaces
+	 * 
+	 * @author S Downie
+	 */
+	public native void suspend();
+	/**
+	 * Triggered when the application is terminated
+	 * This doesn't override from INativeInterface in
+	 * order to ensure that core is called after all other interfaces
+	 * 
+	 * @author S Downie
+	 */
+	public native void destroy();
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
 	public CoreNativeInterface() throws NameNotFoundException
 	{
-		mPackageInfo = mActivity.getApplicationContext().getPackageManager().getPackageInfo(mActivity.getPackageName(), PackageManager.GET_ACTIVITIES);
+		mPackageInfo = CSApplication.get().getAppContext().getPackageManager().getPackageInfo(CSApplication.get().getActivityContext().getPackageName(), PackageManager.GET_ACTIVITIES);
 	}
 	//--------------------------------------------------------------
 	/// Is A
@@ -92,7 +142,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
     		
     		if(strUri != null)
     		{
-    			ApplicationDidReceiveLaunchingURL(strUri);
+    			applicationDidReceiveLaunchingURL(strUri);
     		}
     	}
 	}
@@ -120,7 +170,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	{
 		if (mPackageInfo.applicationInfo != null)
 		{
-			return mActivity.getPackageManager().getApplicationLabel(mPackageInfo.applicationInfo).toString();
+			return CSApplication.get().getActivityContext().getPackageManager().getApplicationLabel(mPackageInfo.applicationInfo).toString();
 		}
 		else
 		{
@@ -139,7 +189,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	{
 		try 
 		{
-			return mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), 0).versionCode;
+			return CSApplication.get().getActivityContext().getPackageManager().getPackageInfo(CSApplication.get().getActivityContext().getPackageName(), 0).versionCode;
 		} 
 		catch (NameNotFoundException e) 
 		{
@@ -158,7 +208,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	{
 		try 
 		{
-			return mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), 0).versionName;
+			return CSApplication.get().getActivityContext().getPackageManager().getPackageInfo(CSApplication.get().getActivityContext().getPackageName(), 0).versionName;
 		} 
 		catch (NameNotFoundException e) 
 		{
@@ -175,7 +225,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	//--------------------------------------------------------------
 	public String GetPackageName()
 	{
-		return mActivity.getPackageName();
+		return CSApplication.get().getActivityContext().getPackageName();
 	}
 	//--------------------------------------------------------------
 	/// Get APK Directory
@@ -199,7 +249,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	//--------------------------------------------------------------
 	public int GetOrientation()
 	{
-		return mActivity.getResources().getConfiguration().orientation;
+		return CSApplication.get().getActivityContext().getResources().getConfiguration().orientation;
 	}
 	//--------------------------------------------------------------
 	/// Returns the constant value for Landscape Orientation
@@ -235,7 +285,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	//--------------------------------------------------------------
 	public int GetScreenWidth()
 	{
-		return mActivity.getWindowManager().getDefaultDisplay().getWidth();
+		return CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getWidth();
 	}
 	//--------------------------------------------------------------
 	/// Get Screen Height
@@ -247,7 +297,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	//--------------------------------------------------------------
 	public int GetScreenHeight()
 	{
-		return mActivity.getWindowManager().getDefaultDisplay().getHeight();
+		return CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getHeight();
 	}
 	//--------------------------------------------------------------
 	/// Get Default Locale Code
@@ -334,7 +384,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	public float GetScreenDensity()
 	{
 		DisplayMetrics metrics = new DisplayMetrics();
-		mActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		return metrics.density;
 	}
 	//--------------------------------------------------------------
@@ -352,7 +402,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	//--------------------------------------------------------------
 	public String GetTelephonyDeviceID()
 	{
-		TelephonyManager phoneManager = (TelephonyManager) mActivity.getSystemService(Context.TELEPHONY_SERVICE);
+		TelephonyManager phoneManager = (TelephonyManager) CSApplication.get().getActivityContext().getSystemService(Context.TELEPHONY_SERVICE);
 		String strId = phoneManager.getDeviceId();
 		
 		if (strId == null)
@@ -370,7 +420,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	//--------------------------------------------------------------
 	public String GetMacAddress()
 	{
-		WifiManager wifiManager = (WifiManager)mActivity.getSystemService(Context.WIFI_SERVICE);
+		WifiManager wifiManager = (WifiManager)CSApplication.get().getActivityContext().getSystemService(Context.WIFI_SERVICE);
 		String strMacAddress = wifiManager.getConnectionInfo().getMacAddress();
 		
 		if (strMacAddress == null)
@@ -392,7 +442,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	//--------------------------------------------------------------
 	public String GetAndroidID()
 	{
-		String strID = Settings.Secure.getString(mActivity.getContentResolver(), Settings.Secure.ANDROID_ID);
+		String strID = Settings.Secure.getString(CSApplication.get().getActivityContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 		
 		if (strID == null || strID.equalsIgnoreCase("9774d56d682e549c"))
 			return "";
@@ -404,9 +454,9 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	///
 	/// @param Max FPS to clamp to
 	//------------------------------------------------------------------
-	public void SetMaxFPS(int inMaxFPS)
+	public void SetMaxFPS(int in_maxFPS)
 	{
-		mActivity.SetMaxFPS(inMaxFPS);
+		CSApplication.get().setMaxFPS(in_maxFPS);
 	}
     //-----------------------------------------------------------------------------------------------------
     /// Force Quit
@@ -415,27 +465,7 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
     //-----------------------------------------------------------------------------------------------------
     public void ForceQuit()
     {
-    	Runnable task = new Runnable()
-    	{
-    		@Override public void run()
-    		{
-		        //Stop the activity
-		    	mActivity.onPause();
-		    	mActivity.onStop();
-		    	mActivity.onDestroy();
-		        android.os.Process.killProcess(android.os.Process.myPid());
-    		}
-    	};
-    	
-    	mActivity.runOnUiThread(task);
-    	
-    	try
-    	{
-    		task.wait();
-    	}
-    	catch(Exception e)
-    	{
-    	}
+    	CSApplication.get().quit();
     }
     //-----------------------------------------------------------------------------------------------------
     /// GetSystemTimeInMilliseconds
@@ -455,11 +485,11 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
     {
     	//get the display metrics
     	DisplayMetrics displayMetrics = new DisplayMetrics();
-    	mActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    	CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
     	
     	//calculate the diagonal physical size from dpi and resolution.
-    	float fSizeX = GetScreenWidth() / displayMetrics.xdpi;
-    	float fSizeY = GetScreenHeight() / displayMetrics.ydpi;
-    	return (float)FloatMath.sqrt((fSizeX * fSizeX) + (fSizeY * fSizeY));
+    	float sizeX = GetScreenWidth() / displayMetrics.xdpi;
+    	float sizeY = GetScreenHeight() / displayMetrics.ydpi;
+    	return (float)FloatMath.sqrt((sizeX * sizeX) + (sizeY * sizeY));
     }
 }
