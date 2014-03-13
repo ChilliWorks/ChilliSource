@@ -121,9 +121,10 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Notifications
         //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(LocalNotificationScheduler);
-        CS_FORWARDDECLARE_CLASS(NotificationScheduler);
-		CS_FORWARDDECLARE_STRUCT(Notification);
+        CS_FORWARDDECLARE_STRUCT(Notification);
+		CS_FORWARDDECLARE_CLASS(NotificationManager);
+        CS_FORWARDDECLARE_CLASS(AppNotificationSystem);
+        CS_FORWARDDECLARE_CLASS(LocalNotificationSystem);
         CS_FORWARDDECLARE_CLASS(RemoteNotificationSystem);
         //---------------------------------------------------------
         /// Resource

@@ -42,21 +42,21 @@
 //------------------------------------------------------------
 #define CS_FORWARDDECLARE_CLASS(in_className)							\
 	class in_className;													\
-	typedef std::unique_ptr<in_className> in_className##UPtr;           \
-	typedef std::shared_ptr<in_className> in_className##SPtr;           \
-	typedef std::weak_ptr<in_className> in_className##WPtr;             \
-	typedef std::unique_ptr<const in_className> in_className##CUPtr;    \
-	typedef std::shared_ptr<const in_className> in_className##CSPtr;    \
-	typedef std::weak_ptr<const in_className> in_className##CWPtr;
+    using in_className##UPtr = std::unique_ptr<in_className>;           \
+    using in_className##SPtr = std::shared_ptr<in_className>;           \
+    using in_className##WPtr = std::weak_ptr<in_className>;             \
+    using in_className##CUPtr = std::unique_ptr<const in_className>;    \
+    using in_className##CSPtr = std::shared_ptr<const in_className>;    \
+    using in_className##CWPtr = std::weak_ptr<const in_className>;
 
 #define CS_FORWARDDECLARE_STRUCT(in_structName)							\
-	struct in_structName;												\
-	typedef std::unique_ptr<in_structName> in_structName##UPtr;			\
-	typedef std::shared_ptr<in_structName> in_structName##SPtr;			\
-	typedef std::weak_ptr<in_structName> in_structName##WPtr;			\
-	typedef std::unique_ptr<const in_structName> in_structName##CUPtr;	\
-	typedef std::shared_ptr<const in_structName> in_structName##CSPtr;	\
-	typedef std::weak_ptr<const in_structName> in_structName##CWPtr;
+    struct in_structName;                                               \
+    using in_structName##UPtr = std::unique_ptr<in_structName>;         \
+    using in_structName##SPtr = std::shared_ptr<in_structName>;         \
+    using in_structName##WPtr = std::weak_ptr<in_structName>;           \
+    using in_structName##CUPtr = std::unique_ptr<const in_structName>;  \
+    using in_structName##CSPtr = std::shared_ptr<const in_structName>;  \
+    using in_structName##CWPtr = std::weak_ptr<const in_structName>;
 //------------------------------------------------------------
 /// Standard input and output macros. As windows has its own
 /// "safe" versions of some standard io functions, these macros 

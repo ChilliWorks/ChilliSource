@@ -27,8 +27,6 @@
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
-#include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
 #include <ChilliSource/Core/Resource/ResourceGroupManager.h>
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
@@ -510,8 +508,6 @@ namespace ChilliSource
             AddSystem_Old(ImageResourceProvider::Create());
             AddSystem_Old(MoImageProvider::Create());
             AddSystem_Old(DialogueBoxSystem::Create());
-            
-            NotificationScheduler::Initialise(LocalNotificationScheduler::Create());
 
             //Audio
             Audio::AudioSystemUPtr audioSystem(Audio::AudioSystem::Create());
@@ -684,8 +680,6 @@ namespace ChilliSource
             in_deltaTime *= m_updateSpeed;
             
 			CoreTimer::Update(in_deltaTime);
-            
-            NotificationScheduler::Update(in_deltaTime);
             
 			//Update sub systems
             for(std::vector<IUpdateable*>::iterator it = m_updateableSystems.begin(); it != m_updateableSystems.end(); ++it)
