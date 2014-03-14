@@ -211,7 +211,7 @@ namespace ChilliSource
         {
             Core::LocalNotificationSystem::OnInit();
             
-            CS_ASSERT(g_localNotificationSystem == false, "Cannot create more than 1 Local Notification System!");
+            CS_ASSERT(g_localNotificationSystem == nullptr, "Cannot create more than 1 Local Notification System!");
             g_localNotificationSystem = this;
             
             for (const Core::NotificationSPtr& notification : g_queuedNotifications)

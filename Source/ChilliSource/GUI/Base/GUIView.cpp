@@ -1728,7 +1728,7 @@ namespace ChilliSource
 				bool bContains = Contains(insTouchInfo.vLocation);
 				if(IsAcceptTouchesOutsideOfBoundsEnabled() || bContains)
 				{
-					mInputEvents.OnTouchBegan(this, insTouchInfo);
+					mInputEvents.OnTouchBegan(this, insTouchInfo, bContains);
                     mTouchBeganEvent.NotifyConnections(insTouchInfo);
 					//We consume this touch as it is within us
 					if(IsTouchConsumptionEnabled(TouchType::k_began) && bContains)

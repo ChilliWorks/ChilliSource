@@ -18,7 +18,6 @@ namespace ChilliSource
         namespace
         {
             const u8 gcstrPVRTexIdentifier[4] = {'P', 'V', 'R', '!'};
-            const u32 kPVRTextureFlagTypeRGBA4444 = 16;
             const u32 kPVRTextureFlagTypePVRTC_2 = 24;
             const u32 kPVRTextureFlagTypePVRTC_4 = 25;
             const u32 k_pvrTextureFlagTypeMask = 0xff;

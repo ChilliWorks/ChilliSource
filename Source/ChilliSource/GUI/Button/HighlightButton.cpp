@@ -15,6 +15,7 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 #include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
@@ -67,6 +68,7 @@ namespace ChilliSource
             m_pressedInsideConnection = mInputEvents.GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonSelect));
             m_releasedInsideConnection = mInputEvents.GetReleasedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonActivated));
             m_movedWithinConnection = mInputEvents.GetMovedWithinEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonDeselectThreshold));
+            m_movedOutsideConnection = mInputEvents.GetMovedOutsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonDeselect));
         }
         //------------------------------------------------------------
         /// Constructor
@@ -236,6 +238,7 @@ namespace ChilliSource
             m_pressedInsideConnection = mInputEvents.GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonSelect));
             m_releasedInsideConnection = mInputEvents.GetReleasedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonActivated));
             m_movedWithinConnection = mInputEvents.GetMovedWithinEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonDeselectThreshold));
+            m_movedOutsideConnection = mInputEvents.GetMovedOutsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonDeselect));
         }
         //-----------------------------------------------------------
         /// Get Background Image View
@@ -534,6 +537,8 @@ namespace ChilliSource
         {
 			if(!mbSelected)
 			{
+                mvSelectedPos = insTouchInfo.vLocation;
+                
 				mbSelected = true;
 				
 				if(mpSelectAudioEffect && !mpSelectAudioEffect->IsPlaying())
@@ -597,8 +602,10 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void HighlightButton::OnButtonDeselectThreshold(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
-            const f32 kfThreshold = 5.0f;
-			if(std::abs(insTouchInfo.vLocation.x - insTouchInfo.vPreviousLocation.x) > kfThreshold || std::abs(insTouchInfo.vLocation.y - insTouchInfo.vPreviousLocation.y) > kfThreshold)
+            const f32 kfThreshold = (f32)(Core::Screen::GetOrientedWidth()) * 0.02f;
+            f32 fDistX = std::abs(insTouchInfo.vLocation.x - mvSelectedPos.x);
+            f32 fDisty = std::abs(insTouchInfo.vLocation.y - mvSelectedPos.y);
+			if(fDistX >= kfThreshold || fDisty >= kfThreshold)
 			{
                 OnButtonDeselect(inpButton, insTouchInfo);
 			}

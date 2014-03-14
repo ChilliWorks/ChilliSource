@@ -11,6 +11,9 @@ package com.chillisource.core;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import com.chillisource.core.CSApplication.LifecycleState;
+
 import android.opengl.GLSurfaceView;
 
 /**
@@ -22,6 +25,9 @@ import android.opengl.GLSurfaceView;
  */
 public class Renderer implements GLSurfaceView.Renderer 
 {
+	private LoadingView m_loadingView = null;
+	private int m_prepareFrameCount = 0;
+	
 	/**
 	 * Triggered every frame by the surface in order to render the GL context.
 	 * This actually runs the application update and render loop
@@ -32,16 +38,21 @@ public class Renderer implements GLSurfaceView.Renderer
 	 */
     @Override public void onDrawFrame(GL10 in_GlContext) 
     {	
-    	if (CSApplication.get() != null && CSApplication.get().isActive() == true)
-    	{
-    		CSApplication.get().update();
-    	}
-    	else
-    	{
+		//Hacky state to allow the loading image to actually appear. Android seems to require that you draw
+		//a few frames in order for this to appear
+		if(m_prepareFrameCount > 0)
+		{
     		//The surface must issue at least one draw command per draw frame call. Even if 
     		//the application isn't active
     		in_GlContext.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     		in_GlContext.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+    		
+			m_prepareFrameCount--;
+		}
+		else if (CSApplication.get() != null && CSApplication.get().isActive() == true)
+    	{
+    		CSApplication.get().update();
+    		m_loadingView.Dismiss();
     	}
     }
 	/**
@@ -68,7 +79,24 @@ public class Renderer implements GLSurfaceView.Renderer
 	 */
     @Override public void onSurfaceCreated(GL10 in_GlContext, EGLConfig in_config) 
     {	
-    	//App cannot be initialised prior to this point as OpenGL is not ready til now
-    	CSApplication.get().init();
+    	m_prepareFrameCount = 5;
+    	
+    	if(m_loadingView == null)
+    	{
+    		m_loadingView = new LoadingView();
+    	}
+    	
+    	boolean isInitialised = CSApplication.get().hasReceivedInit();
+    	
+    	if(isInitialised == false)
+    	{
+    		m_loadingView.Present("com_chillisource_default");
+    		//App cannot be initialised prior to this point as OpenGL is not ready til now
+    		CSApplication.get().init();
+    	}
+    	else
+    	{
+    		m_loadingView.Present("com_chillisource_resume");
+    	}
     }
 }

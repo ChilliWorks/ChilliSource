@@ -38,7 +38,7 @@ namespace ChilliSource
                 CS_ASSERT(instrPrivateKey.size() == 16, "AES Encryption keys must be 16 bytes");
                 
                 AES_KEY sKey;
-                if(!AES_set_encrypt_key((const u8*)instrPrivateKey.data(), 128, &sKey) == 0)
+                if(AES_set_encrypt_key((const u8*)instrPrivateKey.data(), 128, &sKey) != 0)
                 {
                     CS_LOG_FATAL("AES: Cannot set decryption key");
                 }
@@ -63,7 +63,7 @@ namespace ChilliSource
                 CS_ASSERT(instrPrivateKey.size() == 16, "AES Encryption keys must be 16 bytes");
                 
                 AES_KEY sKey;
-                if(!AES_set_decrypt_key((const u8*)instrPrivateKey.data(), 128, &sKey) == 0)
+                if(AES_set_decrypt_key((const u8*)instrPrivateKey.data(), 128, &sKey) != 0)
                 {
                     CS_LOG_FATAL("AES: Cannot set decryption key");
                 }

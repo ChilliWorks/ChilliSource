@@ -89,22 +89,18 @@ namespace ChilliSource
         }
         //---Touch Delegates
         //-----------------------------------------------------------
-        /// On Touch Began
-        ///
-        /// Called when the window receives cursor/touch input
-        ///
-        /// @param Touch data
-        /// @return Whether the view contains the touch
         //-----------------------------------------------------------
-        bool InputEvents::OnTouchBegan(GUIView* inpView, const Input::TouchInfo & insTouchInfo)
+        void InputEvents::OnTouchBegan(GUIView* inpView, const Input::TouchInfo & insTouchInfo, bool in_containsTouch)
         {
             //We must contain this point to be notified so we can trigger an event
             //Events: PressedInside
             //Possible: Released outside, Moved Outside, Moved Within
-            mTouchPressedInside.NotifyConnections(inpView, insTouchInfo);
-            mOpenTouches.push_back(insTouchInfo.ID);
+            if(in_containsTouch == true)
+            {
+                mTouchPressedInside.NotifyConnections(inpView, insTouchInfo);
+            }
             
-            return true;
+            mOpenTouches.push_back(insTouchInfo.ID);
         }
         //-----------------------------------------------------------
         /// On Touch Moved

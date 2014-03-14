@@ -130,7 +130,7 @@ namespace ChilliSource
 			
 			mSubviewsCopy = mSubviews;
             
-			mInputEvents.OnTouchBegan(this, insTouchInfo);
+			mInputEvents.OnTouchBegan(this, insTouchInfo, true);
 			
 			//We need to notify any subviews they get first dibs
 			for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)

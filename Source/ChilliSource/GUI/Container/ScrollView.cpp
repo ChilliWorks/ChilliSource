@@ -28,7 +28,6 @@ namespace ChilliSource
 		DEFINE_PROPERTY(ScrollVertically);
 
         const f32 kfScrollDeceleration = 0.9f;
-		const f32 kfScrollTouchTravelToIgnoreChildrenSqrd = 64.0f;
         
         //--------------------------------------------
         /// Constructor

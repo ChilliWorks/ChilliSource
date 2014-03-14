@@ -1,7 +1,6 @@
 package com.chillisource.core;
 
 import com.chillisource.core.ResourceHelper;
-import com.chillisource.core.CSActivity;
 
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -10,18 +9,9 @@ import android.widget.ImageView;
 public class LoadingView 
 {
 	private static final String kstrDefaultImage = "com_chillisource_default";
-	private CSActivity mActivity = null;
 	private volatile ImageView mLoadingView = null;
 	private volatile boolean mbIsPresented = false;
-	//---------------------------------------------------
-	/// Constructor
-	///
-	/// @param The moFlow activity.
-	//---------------------------------------------------
-	public LoadingView(CSActivity inActivity)
-	{
-		mActivity = inActivity;
-	}
+
 	//---------------------------------------------------
 	/// Present
 	///
@@ -43,15 +33,15 @@ public class LoadingView
 			@Override 
 			public void run() 
 			{
-				mLoadingView = new ImageView(mActivity);
+				mLoadingView = new ImageView(CSApplication.get().getActivityContext());
 				mLoadingView.setLayoutParams(new ViewGroup.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT));
-				if (ResourceHelper.DoesResourceExist(mActivity, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, instrResource) == true)
+				if (ResourceHelper.DoesResourceExist(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, instrResource) == true)
 				{
-					mLoadingView.setImageResource(ResourceHelper.GetDynamicResourceIDForField(mActivity, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, instrResource));
+					mLoadingView.setImageResource(ResourceHelper.GetDynamicResourceIDForField(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, instrResource));
 				}
 				else
 				{
-					mLoadingView.setImageResource(ResourceHelper.GetDynamicResourceIDForField(mActivity, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, kstrDefaultImage));
+					mLoadingView.setImageResource(ResourceHelper.GetDynamicResourceIDForField(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, kstrDefaultImage));
 				}
 				mLoadingView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 				CSApplication.get().addView(mLoadingView);

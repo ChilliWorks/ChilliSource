@@ -360,9 +360,12 @@ namespace ChilliSource
             Core::ConnectionUPtr m_pressedInsideConnection;
             Core::ConnectionUPtr m_releasedInsideConnection;
             Core::ConnectionUPtr m_movedWithinConnection;
+            Core::ConnectionUPtr m_movedOutsideConnection;
 			
             Core::Rectangle msOnUVs;
             Core::Rectangle msOffUVs;
+            
+            Core::Vector2 mvSelectedPos;
             
 			bool mbSelected;
             bool mbToggledOn;

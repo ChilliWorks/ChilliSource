@@ -35,12 +35,13 @@ public class CSApplication
 	private CSActivity m_activeActivity;
 	private RelativeLayout m_rootViewContainer;
 	private CoreNativeInterface m_coreSystem;
-	private LoadingView m_loadingView = null;
 	private long m_milliSecsPerUpdate = 33;
 	private long m_previousUpdateTime = 0;
 	private long m_elapsedAppTime = 0;
 	private boolean m_resetTimeSinceLastUpdate = false;
 	private boolean m_isActive = false;
+	
+	private Object m_backgroundSuspendLock = new Object();
 	
 	private boolean m_initLifecycleEventOccurred = false;
 	private boolean m_resumeLifecycleEventOccurred = false;
@@ -78,6 +79,17 @@ public class CSApplication
 		return m_singleton;
 	}
 	/**
+	 * @author S Downie
+	 * 
+	 * @return Whether the application has been initialised
+	 * or has been scheduled to do so
+	 */
+	public boolean hasReceivedInit()
+	{
+		return 	m_initLifecycleEventOccurred || 
+				(m_currentAppLifecycleState != LifecycleState.k_none && m_currentAppLifecycleState != LifecycleState.k_destroy);
+	}
+	/**
 	 * Triggered when the app is created
 	 * 
 	 * @author S Downie
@@ -101,10 +113,6 @@ public class CSApplication
 		m_rootViewContainer = new RelativeLayout(m_activeActivity);
 		m_activeActivity.setContentView(m_rootViewContainer);
 		m_rootViewContainer.addView(m_activeActivity.getSurface());
-		m_loadingView = new LoadingView(m_activeActivity);
-		
-		//Present the "default" image
-		m_loadingView.Present("com_chillisource_default");
 		
 		m_currentAppLifecycleState = LifecycleState.k_none;
 		
@@ -126,12 +134,8 @@ public class CSApplication
 	 */
 	public void resume()
 	{
-		//Present the "resuming" image
-    	if(!m_loadingView.IsPresented())
-    	{
-    		m_loadingView.Present("com_chillisource_resume");
-    	}
-    	
+		m_isActive = true;
+		
 		m_resetTimeSinceLastUpdate = true;
 		m_resumeLifecycleEventOccurred = true;
 		
@@ -147,7 +151,6 @@ public class CSApplication
 	 */
 	public void foreground()
 	{
-		m_isActive = true;
 		m_foregroundLifecycleEventOccurred = true;
 		
 		for (INativeInterface system : m_systems)
@@ -193,12 +196,7 @@ public class CSApplication
     	m_elapsedAppTime += deltaTime;
     	m_previousUpdateTime = currentTime;
     	
-    	ProcessAppLifecycleEvents();
-    	
-		//Make sure the core system is handled last
-		m_coreSystem.update(deltaTime, m_elapsedAppTime);
-		
-		m_loadingView.Dismiss();
+    	ProcessAppLifecycleEvents(deltaTime, m_elapsedAppTime);
 	}
 	/**
 	 * Application lifecycle events are deferred to the main thread and are
@@ -206,7 +204,7 @@ public class CSApplication
 	 * 
 	 * @author S Downie
 	 */
-	private void ProcessAppLifecycleEvents()
+	private void ProcessAppLifecycleEvents(float in_timeSinceLastUpdate, long in_appElapsedTime)
 	{
 		if(m_initLifecycleEventOccurred == true && (m_currentAppLifecycleState == LifecycleState.k_none || m_currentAppLifecycleState == LifecycleState.k_destroy))
 		{
@@ -246,6 +244,8 @@ public class CSApplication
 			m_backgroundLifecycleEventOccurred = false;
 			m_currentAppLifecycleState = LifecycleState.k_background;
 		}
+		
+		m_coreSystem.update(in_timeSinceLastUpdate, in_appElapsedTime);
 	}
 	/**
 	 * Triggered when the app is pushed back after being in the foreground
@@ -254,14 +254,19 @@ public class CSApplication
 	 */
 	public void background()
 	{
-		for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+		synchronized(m_backgroundSuspendLock)
 		{
-			INativeInterface system = iterator.previous();
-			system.onActivityBackground();
+			if(m_currentAppLifecycleState != LifecycleState.k_suspend)
+			{
+				for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+				{
+					INativeInterface system = iterator.previous();
+					system.onActivityBackground();
+				}
+
+				m_backgroundLifecycleEventOccurred = true;
+			}
 		}
-		
-		m_isActive = false;
-		m_backgroundLifecycleEventOccurred = true;
 	}
 	/**
 	 * Triggered when the app is no longer the active one
@@ -275,7 +280,17 @@ public class CSApplication
 		{
 			@Override public void run() 
 			{
-				//Make sure the core system is handled first
+				//Often suspend is triggered by Android before background. We need to ensure it is not!
+				if(m_currentAppLifecycleState != LifecycleState.k_background)
+				{
+					synchronized(m_backgroundSuspendLock)
+					{
+						m_coreSystem.background();
+						m_backgroundLifecycleEventOccurred = false;
+						m_currentAppLifecycleState = LifecycleState.k_background;
+					}
+				}
+				
 				m_coreSystem.suspend();
 				m_currentAppLifecycleState = LifecycleState.k_suspend;
 				
@@ -308,6 +323,8 @@ public class CSApplication
 			INativeInterface system = iterator.previous();
 			system.onActivitySuspend();
 		}
+		
+		m_isActive = false;
 	}
 	/**
 	 * Triggered when the app is terminated. This will destroy the singleton application
@@ -328,7 +345,6 @@ public class CSApplication
 		
 		m_rootViewContainer = null;
 		m_activeActivity = null;
-		m_loadingView = null;
 		m_systems = null;
 		m_receivedIntent = null;
 		m_singleton = null;

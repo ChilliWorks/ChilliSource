@@ -80,14 +80,14 @@ namespace ChilliSource
             
             //---Touch Delegates
             //-----------------------------------------------------------
-            /// On Touch Began
-            ///
             /// Called when the window receives cursor/touch input
             ///
+            /// @author S Downie
+            ///
             /// @param Touch data
-            /// @return Whether the view contains the touch
+            /// @param Whether the view contains the touch
             //-----------------------------------------------------------
-            bool OnTouchBegan(GUIView* inpView, const Input::TouchInfo & insTouchInfo);
+            void OnTouchBegan(GUIView* inpView, const Input::TouchInfo & insTouchInfo, bool in_containsTouch);
             //-----------------------------------------------------------
             /// On Touch Moved
             ///

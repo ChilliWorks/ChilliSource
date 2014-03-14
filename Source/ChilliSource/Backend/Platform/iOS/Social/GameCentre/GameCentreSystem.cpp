@@ -25,8 +25,6 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		const f32 kfGameCentreMinOSVersion          = 4.0f;
-        
         const u32 kudwGameCentreRequestAttemptLimit = 5;
         const u32 kudwGameCentreMaxOpenRequests     = 25;
 		

@@ -23,9 +23,6 @@ namespace ChilliSource
 
         EditableLabel* EditableLabel::pKeyboardListener = nullptr;
         
-        //Res density of iPhone 4, used to normalise text spacing
-        const f32 kfScalableFontResDensity = 2.0f;
-        
         //-------------------------------------------------
         /// Constructor
         ///

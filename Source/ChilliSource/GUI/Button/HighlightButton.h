@@ -440,9 +440,12 @@ namespace ChilliSource
             Core::ConnectionUPtr m_pressedInsideConnection;
             Core::ConnectionUPtr m_releasedInsideConnection;
             Core::ConnectionUPtr m_movedWithinConnection;
+            Core::ConnectionUPtr m_movedOutsideConnection;
 			
             Core::Rectangle msDefaultUVs;
             Core::Rectangle msHighlightUVs;
+            
+            Core::Vector2 mvSelectedPos;
             
 			bool mbSelected;
             

@@ -288,9 +288,12 @@ namespace ChilliSource
             Core::Colour mCurrentColour;
 			bool mbSelected;
             
+            Core::Vector2 mvSelectedPos;
+            
             Core::ConnectionUPtr m_pressedInsideConnection;
             Core::ConnectionUPtr m_releasedInsideConnection;
             Core::ConnectionUPtr m_movedWithinConnection;
+            Core::ConnectionUPtr m_movedOutsideConnection;
             
             //---Properties
 			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, NormalSpriteSheet, SetNormalSpriteSheet, GetNormalSpriteSheet);
