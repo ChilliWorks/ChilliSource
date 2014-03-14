@@ -12,8 +12,6 @@ package com.chillisource.core;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.chillisource.core.CSApplication.LifecycleState;
-
 import android.opengl.GLSurfaceView;
 
 /**
