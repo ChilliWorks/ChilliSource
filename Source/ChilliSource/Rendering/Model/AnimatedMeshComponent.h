@@ -379,7 +379,8 @@ namespace ChilliSource
             ///
             /// @param The delta time.
 			//----------------------------------------------------------
-			void Update(f32 infDeltaTime);
+			void OnUpdate(f32 infDeltaTime) override;
+            
 		private:
 			//----------------------------------------------------
 			/// On Added To Entity

@@ -51,7 +51,6 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialLoader.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
 #include <ChilliSource/Rendering/Sprite/XMLSpriteSheetLoader.h>
@@ -532,7 +531,6 @@ namespace ChilliSource
 			AddSystem_Old(Rendering::SpriteSheetLoader::Create());
 			AddSystem_Old(Rendering::XMLSpriteSheetLoader::Create());
 			AddSystem_Old(Rendering::FontLoader::Create());
-            AddSystem_Old(Rendering::AnimatedMeshComponentUpdater::Create());
             
             m_renderer = Rendering::Renderer::Create(renderSystem);
         }

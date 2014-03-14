@@ -8,7 +8,6 @@
  */
 
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
-#include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
@@ -589,7 +588,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Update
         //----------------------------------------------------------
-        void AnimatedMeshComponent::Update(f32 infDeltaTime)
+        void AnimatedMeshComponent::OnUpdate(f32 infDeltaTime)
         {
             UpdateAnimation(infDeltaTime);
         }
@@ -604,14 +603,12 @@ namespace ChilliSource
 		void AnimatedMeshComponent::OnAddedToScene()
 		{
             SetPlaybackPosition(0.0f);
-            Core::Application::Get()->GetSystem_Old<AnimatedMeshComponentUpdater>()->AddComponent(this);
 		}
         //----------------------------------------------------
         //----------------------------------------------------
         void AnimatedMeshComponent::OnRemovedFromScene()
         {
             DetatchAllEntities();
-            Core::Application::Get()->GetSystem_Old<AnimatedMeshComponentUpdater>()->RemoveComponent(this);
         }
 		//----------------------------------------------------------
         /// Render

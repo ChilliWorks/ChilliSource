@@ -66,7 +66,6 @@ namespace ChilliSource
         /// Model
         //------------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(AnimatedMeshComponent);
-        CS_FORWARDDECLARE_CLASS(AnimatedMeshComponentUpdater);
         CS_FORWARDDECLARE_CLASS(Mesh);
         CS_FORWARDDECLARE_STRUCT(MeshFeatureDescriptor);
         CS_FORWARDDECLARE_STRUCT(SubMeshDescriptor);
