@@ -10,6 +10,7 @@
 package com.chillisource.core;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 
 import com.chillisource.core.IQueryableInterface;
 
@@ -113,4 +114,16 @@ public abstract class INativeInterface extends IQueryableInterface
 	{
 
 	}
+	/**
+	 * Triggered when the activity config changes such as orientation,
+	 * hardware keyboards, etc.
+	 * 
+	 * @author S Downie
+	 * 
+	 * @param New config
+	 */
+    public void onActivityConfigurationChanged(Configuration in_config)
+    {
+    	
+    }
 }

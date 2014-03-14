@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -393,11 +394,32 @@ public class CSApplication
 	 */
 	public void activityResult(int in_requestCode, int in_resultCode, Intent in_data)
 	{
-		for (INativeInterface system : m_systems)
+		synchronized(m_systems)
 		{
-			system.onActivityResult(in_requestCode, in_resultCode, in_data);
+			for (INativeInterface system : m_systems)
+			{
+				system.onActivityResult(in_requestCode, in_resultCode, in_data);
+			}
 		}
 	}
+	/**
+	 * Triggered when the activity config changes such as orientation,
+	 * hardware keyboards, etc.
+	 * 
+	 * @author S Downie
+	 * 
+	 * @param New config
+	 */
+    public void activityConfigurationChanged(Configuration in_config)
+    {
+		synchronized(m_systems)
+		{
+			for (INativeInterface system : m_systems)
+			{
+				system.onActivityConfigurationChanged(in_config);
+			}
+		}
+    }
 	/**
 	 * Triggered when the activity receives an intent
 	 * 

@@ -14,7 +14,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-import com.chillisource.input.KeyboardNativeInterface;
 import com.chillisource.social.ContactInformationProviderNativeInterface;
 import com.chillisource.networking.HttpConnectionNativeInterface;
 import com.chillisource.social.SMSCompositionNativeInterface;
@@ -171,6 +170,7 @@ public class CSActivity extends Activity
     @Override protected void onActivityResult(int in_requestCode, int in_resultCode, Intent in_data) 
     {
     	CSApplication.get().activityResult(in_requestCode, in_resultCode, in_data);
+    	super.onActivityResult(in_requestCode, in_resultCode, in_data);
 	}
 	/**
 	 * Triggered when the activity config changes such as orientation,
@@ -181,26 +181,9 @@ public class CSActivity extends Activity
 	 * @param New config
 	 */
     @Override public void onConfigurationChanged(Configuration in_config) 
-    {     
+    {    
+    	CSApplication.get().activityConfigurationChanged(in_config);
     	super.onConfigurationChanged(in_config);
-    	
-    	// Checks whether a hardware keyboard is available    
-    	if (in_config.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) 
-    	{   
-    		KeyboardNativeInterface keyboardNI = (KeyboardNativeInterface)CSApplication.get().getSystem(KeyboardNativeInterface.InterfaceID);
-    		if (keyboardNI != null)
-    		{
-    			keyboardNI.SetHardwareKeyboardOpen();
-    		}
-    	} 
-    	else if (in_config.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) 
-    	{
-    		KeyboardNativeInterface keyboardNI = (KeyboardNativeInterface)CSApplication.get().getSystem(KeyboardNativeInterface.InterfaceID);
-    		if (keyboardNI != null)
-    		{
-    			keyboardNI.SetHardwareKeyboardClosed();
-    		}
-    	}
     }
 	/**
 	 * Triggered when the activity receives an event from the hard-key back button.

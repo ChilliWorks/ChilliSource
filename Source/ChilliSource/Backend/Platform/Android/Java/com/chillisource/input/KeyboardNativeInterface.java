@@ -8,6 +8,7 @@
 
 package com.chillisource.input;
 
+import android.content.res.Configuration;
 import android.view.ViewGroup;
 
 import com.chillisource.core.CSApplication;
@@ -289,6 +290,26 @@ public class KeyboardNativeInterface extends INativeInterface
 				return KeyboardCapitalisation.NONE;
 		}
 	}
+	/**
+	 * Triggered when the activity config changes such as orientation,
+	 * hardware keyboards, etc.
+	 * 
+	 * @author S Downie
+	 * 
+	 * @param New config
+	 */
+    @Override public void onActivityConfigurationChanged(Configuration in_config)
+    {
+    	// Checks whether a hardware keyboard is available    
+    	if (in_config.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) 
+    	{   
+    		SetHardwareKeyboardOpen();
+    	} 
+    	else if (in_config.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) 
+    	{
+    		SetHardwareKeyboardClosed();
+    	}
+    }
 	//-------------------------------------------------
 	/// Native On Text Added
 	///
