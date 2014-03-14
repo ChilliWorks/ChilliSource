@@ -3,6 +3,7 @@ package com.chillisource.social;
 import java.io.File;
 
 import com.chillisource.core.CSApplication;
+import com.chillisource.core.CSLogging;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.INativeInterface;
 
@@ -84,7 +85,7 @@ public class EmailCompositionNativeInterface extends INativeInterface
 				}
 				catch (Exception e)
 				{
-					android.util.Log.e("moFlow","Failed to attach file '" + instrAttachmentFilename + "' to Send intent!");
+					CSLogging.logError("Failed to attach file '" + instrAttachmentFilename + "' to Send intent!");
 				}
 			}
 			

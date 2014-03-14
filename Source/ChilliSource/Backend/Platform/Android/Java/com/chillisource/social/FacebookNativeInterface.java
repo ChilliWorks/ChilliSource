@@ -16,7 +16,6 @@ import java.util.List;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -34,6 +33,7 @@ import com.facebook.widget.WebDialog;
 import com.facebook.FacebookException;
 import com.taggames.CTagResourceHelper;
 import com.chillisource.core.CSApplication;
+import com.chillisource.core.CSLogging;
 import com.chillisource.core.INativeInterface;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.ResourceHelper;
@@ -111,7 +111,7 @@ public class FacebookNativeInterface extends INativeInterface
 		}
 		catch(Exception e)
 		{
-			Log.e("MoFlow", e.getMessage());
+			CSLogging.logError(e.getMessage());
 		}
 	}
 	//--------------------------------------------------------------------------------------
@@ -220,7 +220,7 @@ public class FacebookNativeInterface extends INativeInterface
     {
 		if(exception != null)
 		{
-			Log.e("Facebook", exception.getMessage());
+			CSLogging.logError(exception.getMessage());
 		}
 		
 		Session.setActiveSession(session);
@@ -476,7 +476,6 @@ public class FacebookNativeInterface extends INativeInterface
 			@Override public void run() 
 			{
 		    	String strAppID = CSApplication.get().getActivityContext().getString(ResourceHelper.GetDynamicResourceIDForField(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "app_id"));
-				android.util.Log.d("FBNativeInterface", strAppID);
 		    	Settings.publishInstallAsync(CSApplication.get().getActivityContext(), strAppID);				
 			}
 		};

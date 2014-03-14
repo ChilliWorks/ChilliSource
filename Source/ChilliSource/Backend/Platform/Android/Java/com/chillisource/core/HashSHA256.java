@@ -37,7 +37,7 @@ public class HashSHA256
 	    }
 	    catch (Exception e)
 	    {
-	    	android.util.Log.e("MoFlow", ExceptionUtils.ConvertToString(e));
+	    	CSLogging.logError(ExceptionUtils.ConvertToString(e));
 	    }
 	    
 	    return abyOutput;

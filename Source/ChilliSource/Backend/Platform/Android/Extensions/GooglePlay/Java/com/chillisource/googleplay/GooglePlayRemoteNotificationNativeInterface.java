@@ -9,6 +9,7 @@
 package com.chillisource.googleplay;
 
 import com.chillisource.core.CSApplication;
+import com.chillisource.core.CSLogging;
 import com.chillisource.core.ResourceHelper;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.INativeInterface;
@@ -64,11 +65,10 @@ public class GooglePlayRemoteNotificationNativeInterface extends INativeInterfac
 		if(keyStringID > 0)
 		{
 			strProjectID = CSApplication.get().getActivityContext().getString(keyStringID);
-			android.util.Log.e("moFlow", "CRemoteNotificationNativeInterface::RequestRemoteToken - Got strProjectID:"+strProjectID);
 		}
 		else
 		{
-			android.util.Log.e("moFlow", "CRemoteNotificationNativeInterface: Failed to get 'GoogleProjectID' from the Values resource");
+			CSLogging.logError("CRemoteNotificationNativeInterface: Failed to get 'GoogleProjectID' from the Values resource");
 			return;
 		}
 		

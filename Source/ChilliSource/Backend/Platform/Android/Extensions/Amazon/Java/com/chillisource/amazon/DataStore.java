@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import com.amazon.inapp.purchasing.Offset;
 import com.chillisource.amazon.PurchaseTransaction.ProductType;
 import com.chillisource.core.AESEncryption;
+import com.chillisource.core.CSLogging;
 import com.chillisource.core.ExceptionUtils;
 import com.chillisource.core.FileUtils;
 import com.chillisource.core.HashSHA256;
@@ -309,7 +310,7 @@ public class DataStore
 			}
 			else
 			{
-				android.util.Log.e("MoFlow", "Purchase Transaction Cache: Failed to write encrpyted cache.");
+				CSLogging.logError("Purchase Transaction Cache: Failed to write encrpyted cache.");
 			}
 		}
 		catch (Exception e)

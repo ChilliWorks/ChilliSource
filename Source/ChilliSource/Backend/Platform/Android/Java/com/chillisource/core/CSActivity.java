@@ -72,7 +72,7 @@ public class CSActivity extends Activity
         }
         catch (Exception e)
         {
-        	android.util.Log.e("MoFlow", "Activity.onCreate has thrown an exception:");
+        	CSLogging.logError("Activity.onCreate has thrown an exception: " + e.toString());
         	e.printStackTrace();
         }
     }

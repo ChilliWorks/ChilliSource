@@ -11,6 +11,7 @@ package com.chillisource.input;
 import android.view.ViewGroup;
 
 import com.chillisource.core.CSApplication;
+import com.chillisource.core.CSLogging;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.input.NativeKeyboardInputView.KeyboardCapitalisation;
 import com.chillisource.input.NativeKeyboardInputView.KeyboardType;
@@ -257,7 +258,7 @@ public class KeyboardNativeInterface extends INativeInterface
 			case 1:
 				return KeyboardType.NUMERIC;
 			default:
-				android.util.Log.e("moFlow", "Invalid keyboard type integer, cannot be converted.");
+				CSLogging.logError("Invalid keyboard type integer, cannot be converted.");
 				return KeyboardType.TEXT;
 		}
 	}
@@ -284,7 +285,7 @@ public class KeyboardNativeInterface extends INativeInterface
 			case 3:
 				return KeyboardCapitalisation.ALL;
 			default:
-				android.util.Log.e("moFlow", "Invalid keyboard capitalisation integer, cannot be converted.");
+				CSLogging.logError("Invalid keyboard capitalisation integer, cannot be converted.");
 				return KeyboardCapitalisation.NONE;
 		}
 	}

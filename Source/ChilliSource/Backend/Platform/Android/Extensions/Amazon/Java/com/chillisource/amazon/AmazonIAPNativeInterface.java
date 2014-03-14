@@ -27,6 +27,7 @@ import com.amazon.inapp.purchasing.PurchasingManager;
 import com.amazon.inapp.purchasing.Receipt;
 import com.chillisource.amazon.PurchaseTransaction.ProductType;
 import com.chillisource.core.CSApplication;
+import com.chillisource.core.CSLogging;
 import com.chillisource.core.ExceptionUtils;
 import com.chillisource.core.HashCRC32;
 import com.chillisource.core.InterfaceIDType;
@@ -361,12 +362,12 @@ public class AmazonIAPNativeInterface extends INativeInterface
 			}
 			else 
 			{ 
-				android.util.Log.e("MoFlow", "Amazon IAP System: failed to get the user ID.");
+				CSLogging.logError("Amazon IAP System: failed to get the user ID.");
 			}
 		}
 		else
 		{
-			android.util.Log.e("MoFlow", "Amazon IAP System: User Id response received while not listening for one.");
+			CSLogging.logError("Amazon IAP System: User Id response received while not listening for one.");
 		}
 	}
 	//-----------------------------------------------------
@@ -389,7 +390,7 @@ public class AmazonIAPNativeInterface extends INativeInterface
 		        {
 		            for (final String strSKU : inResponse.getUnavailableSkus()) 
 		            { 
-		                android.util.Log.e("MoFlow", "Amazon IAP System: unavailable SKU '" + strSKU + "'");
+		            	CSLogging.logError("Amazon IAP System: unavailable SKU '" + strSKU + "'");
 		            }
 		            
 		            //Fall through to the "Successful" block to pass down the valid SKUs.
@@ -424,7 +425,7 @@ public class AmazonIAPNativeInterface extends INativeInterface
 		        {
 		        	//The Amazon IAP documentation suggests that the application should disable IAPs if this fails. As the in app purchasing 
 		        	//system requires this to send an event to proceed we can silently disable it by simply not firing it.
-		        	android.util.Log.e("MoFlow", "Amazon IAP System: Request for item data failed! IAPs are now disabled.");
+		        	CSLogging.logError("Amazon IAP System: Request for item data failed! IAPs are now disabled.");
 		            break;
 		        }
 			}
@@ -518,7 +519,7 @@ public class AmazonIAPNativeInterface extends INativeInterface
 			}
 			case FAILED:
 			{
-				android.util.Log.e("MoFlow", "Amazon IAP System: Failed to receive purchase updates response.");
+				CSLogging.logError("Amazon IAP System: Failed to receive purchase updates response.");
 				break;
 			}
 		}
@@ -557,7 +558,7 @@ public class AmazonIAPNativeInterface extends INativeInterface
 		}
 		catch (Exception e)
 		{
-			android.util.Log.e("MoFlow", ExceptionUtils.ConvertToString(e));
+			CSLogging.logError(ExceptionUtils.ConvertToString(e));
 		}
 		return strReceipt;
 	}
@@ -622,7 +623,7 @@ public class AmazonIAPNativeInterface extends INativeInterface
 					eProductType = ProductType.ENTITLEMENT;
 					break;
 				default:
-					android.util.Log.e("MoFlow", "Amazon IAP System: Cannot process purchase, item type is unknown.");
+					CSLogging.logError("Amazon IAP System: Cannot process purchase, item type is unknown.");
 					return;
 			}
 	         
@@ -682,7 +683,7 @@ public class AmazonIAPNativeInterface extends INativeInterface
 					eProductType = ProductType.ENTITLEMENT;
 					break;
 				default:
-					android.util.Log.e("MoFlow", "Amazon IAP System: Cannot process purchase, item type is unknown.");
+					CSLogging.logError("Amazon IAP System: Cannot process purchase, item type is unknown.");
 					return;
 			}
 			

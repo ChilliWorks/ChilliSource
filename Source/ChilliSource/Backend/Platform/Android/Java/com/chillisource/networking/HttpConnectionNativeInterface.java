@@ -17,6 +17,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
 
+import com.chillisource.core.CSLogging;
 import com.chillisource.networking.InsecureHostnameVerifier;
 import com.chillisource.networking.InsecureTrustManager;
 import com.chillisource.networking.DynamicByteContainer;
@@ -26,8 +27,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.util.Log;
-
 
 public class HttpConnectionNativeInterface 
 {
@@ -189,22 +188,22 @@ public class HttpConnectionNativeInterface
 				catch (UnknownHostException eUnknownHostException)
 				{
 					outadwResultCode[0] = 2; //HRRC_TIMEOUT
-					Log.e("MoFlowHTTP", eUnknownHostException.getMessage());
+					CSLogging.logError(eUnknownHostException.getMessage());
 				}
 				catch (SocketTimeoutException timeoutException)
 				{
 					outadwResultCode[0] = 2; //HRRC_TIMEOUT
-					Log.e("MoFlowHTTP", timeoutException.getMessage());
+					CSLogging.logError(timeoutException.getMessage());
 				}
 				catch (EOFException eofException)
 				{
 					outadwResultCode[0] = 2; //HRRC_TIMEOUT
-					Log.e("MoFlowHTTP", eofException.getMessage());
+					CSLogging.logError(eofException.getMessage());
 				}
 				catch (Exception eConnectionException)
 				{
 					outadwResultCode[0] = 1;//HRRC_COULDNOTCONNECT
-					Log.e("MoFlowHTTP", eConnectionException.getMessage());
+					CSLogging.logError(eConnectionException.getMessage());
 				}
 				finally 
 				{
@@ -227,7 +226,7 @@ public class HttpConnectionNativeInterface
 				}
 
 				outadwResultCode[0] = 1;//HRRC_COULDNOTCONNECT
-				Log.e("MoFlowHTTP", eUrlException.getMessage());
+				CSLogging.logError(eUrlException.getMessage());
 			}
 
 		} while(bRetry);

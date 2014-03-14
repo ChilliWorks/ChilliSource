@@ -17,7 +17,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -107,6 +106,8 @@ public class CSApplication
 		//Present the "default" image
 		m_loadingView.Present("com_chillisource_default");
 		
+		m_currentAppLifecycleState = LifecycleState.k_none;
+		
 		LoadSharedLibraries();
 	}
 	/**
@@ -117,7 +118,6 @@ public class CSApplication
 	public void init()
 	{
 		m_initLifecycleEventOccurred = true;
-		m_currentAppLifecycleState = LifecycleState.k_none;
 	}
 	/**
 	 * Triggered when the app is resumed after being invisible
@@ -208,7 +208,7 @@ public class CSApplication
 	 */
 	private void ProcessAppLifecycleEvents()
 	{
-		if(m_initLifecycleEventOccurred == true && m_currentAppLifecycleState == LifecycleState.k_none)
+		if(m_initLifecycleEventOccurred == true && (m_currentAppLifecycleState == LifecycleState.k_none || m_currentAppLifecycleState == LifecycleState.k_destroy))
 		{
 			createApplication();
 			CoreNativeInterface.create();
@@ -219,13 +219,13 @@ public class CSApplication
 			m_initLifecycleEventOccurred = false;
 			m_currentAppLifecycleState = LifecycleState.k_init;
 		}
-		if(m_resumeLifecycleEventOccurred == true && m_currentAppLifecycleState == LifecycleState.k_init)
+		if(m_resumeLifecycleEventOccurred == true && (m_currentAppLifecycleState == LifecycleState.k_init || m_currentAppLifecycleState == LifecycleState.k_suspend))
 		{
 			m_coreSystem.resume();
 			m_resumeLifecycleEventOccurred = false;
 			m_currentAppLifecycleState = LifecycleState.k_resume;
 		}
-		if(m_foregroundLifecycleEventOccurred == true && m_currentAppLifecycleState == LifecycleState.k_resume)
+		if(m_foregroundLifecycleEventOccurred == true && (m_currentAppLifecycleState == LifecycleState.k_resume || m_currentAppLifecycleState == LifecycleState.k_background))
 		{
 			m_coreSystem.foreground();
 			m_foregroundLifecycleEventOccurred = false;
@@ -299,7 +299,7 @@ public class CSApplication
 		}
 		catch (Exception e)
 		{
-			Log.e("ChilliSource", e.getMessage());
+			CSLogging.logError(e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -545,7 +545,7 @@ public class CSApplication
 		}
 		catch (Exception e)
 		{
-			Log.e("ChilliSource", "Could not load additional libraries!");
+			CSLogging.logError("Could not load additional libraries!");
 		}
 		
 		//load the default libraries

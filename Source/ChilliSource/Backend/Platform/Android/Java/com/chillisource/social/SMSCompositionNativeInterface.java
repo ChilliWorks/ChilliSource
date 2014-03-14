@@ -2,7 +2,6 @@ package com.chillisource.social;
 
 import android.app.Activity;
 import android.telephony.SmsManager;
-import android.util.Log;
 
 public class SMSCompositionNativeInterface 
 {
@@ -39,12 +38,9 @@ public class SMSCompositionNativeInterface
 	public static void PresentSMS(String[] inastrRecipientNumbers, //Vector of email addresses
 								String instrContents)
 	{  
-		Log.d("MoFlow","<<<<<<<<<<<<<<<<<<< PresentSMS 1 >>>>>>>>>>>>>>>>>>");
 		for(int udwNumber =0 ; udwNumber < inastrRecipientNumbers.length; ++udwNumber)
 		{
-			Log.d("MoFlow","<<<<<<<<<<<<<<<<<<< PresentSMS 2 >>>>>>>>>>>>>>>>>>");
 			mSMSManager.sendTextMessage(inastrRecipientNumbers[udwNumber], null, instrContents, null, null);
-			Log.d("MoFlow","<<<<<<<<<<<<<<<<<<< PresentSMS 3 >>>>>>>>>>>>>>>>>>");
 		}
 		
 	}

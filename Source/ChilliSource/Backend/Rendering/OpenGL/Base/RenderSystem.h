@@ -576,6 +576,8 @@ namespace ChilliSource
             bool mbBlendFunctionLocked;
             bool mbInvalidateLigthingCache;
             
+            bool m_hasContextBeenBackedUp;
+            
             Rendering::AlphaBlend mSrcBlendFunc;
             Rendering::AlphaBlend mDstBlendFunc;
             Rendering::CullFace meCurrentCullFace;

@@ -43,10 +43,6 @@ public class TwitterAuthenticationViewNativeInterface
 	private static Activity msActivity;
 	private static RelativeLayout mLayout;
 	
-	
-	// Debug
-	private static final boolean ENABLE_PRINTS = false;
-	
 	//---------------------------------------------------------------------
 	/// Initialise
 	///
@@ -82,7 +78,6 @@ public class TwitterAuthenticationViewNativeInterface
 	{
 		if(mWebview != null)
 		{
-			DEBUG_LOG("TwitterAuthViewPresentURL()", "Loading URL:\""+instrURL+"\"");
 			mWebview.loadUrl(instrURL);
 		}
 	}
@@ -108,7 +103,6 @@ public class TwitterAuthenticationViewNativeInterface
 	public static void SetPIN(final String instrText)
 	{
 		mstrPIN = instrText;
-		DEBUG_LOG("SetPIN", "Set PIN to:"+mstrPIN);
 	}
 	
 	public static void OnPINError()
@@ -318,11 +312,4 @@ public class TwitterAuthenticationViewNativeInterface
 	private static EditText 		mPINEntry;
 	private static WebView			mWebview;
 	private static String			mstrPIN;
-	
-	// Debug
-	private static void DEBUG_LOG(String instrMethodName, String instrMessage)
-	{
-		if(ENABLE_PRINTS)
-			android.util.Log.d("CTwitterAuthenticationViewNativeInterface."+instrMethodName, instrMessage);
-	}
 }

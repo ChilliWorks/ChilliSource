@@ -251,7 +251,7 @@ public class FileUtils
 		}
 		catch (Exception e)
 		{
-			android.util.Log.e("MoFlow", ExceptionUtils.ConvertToString(e));
+			CSLogging.logError(ExceptionUtils.ConvertToString(e));
 		}
 		
 		return abyOutput;
@@ -293,7 +293,7 @@ public class FileUtils
 		}
 		catch (Exception e)
 		{
-			android.util.Log.e("MoFlow", ExceptionUtils.ConvertToString(e));
+			CSLogging.logError(ExceptionUtils.ConvertToString(e));
 		}
 		return bSuccess;
 	}
@@ -388,7 +388,7 @@ public class FileUtils
 		}
 		catch (Exception e)
 		{
-			android.util.Log.e("MoFlow", ExceptionUtils.ConvertToString(e));
+			CSLogging.logError(ExceptionUtils.ConvertToString(e));
 		}
 		
 		return abyOutput;
@@ -431,7 +431,7 @@ public class FileUtils
 		}
 		catch (Exception e)
 		{
-			android.util.Log.e("MoFlow", ExceptionUtils.ConvertToString(e));
+			CSLogging.logError(ExceptionUtils.ConvertToString(e));
 		}
 		return bSuccess;
 	}

@@ -115,8 +115,8 @@ namespace ChilliSource
             mfCurrentTime += infDT;
             
             const Core::Vector3& vCurrentPos = mpOwningComponent->GetEntity()->GetTransform().GetWorldPosition();
-            const f32 kfTimeSinceLastEmission = mfCurrentTime - mfLastEmissionTime;
-			u32 udwNumEmits = (u32)(kfTimeSinceLastEmission / mfEmissionFreq);
+            const f32 kfTimeSinceLastEmission = Core::MathUtils::Min(mfCurrentTime - mfLastEmissionTime, mfTimeToLive);
+            u32 udwNumEmits = kfTimeSinceLastEmission/mfEmissionFreq;
             
             //If we force a burst emit then we override the frequency
             if(mudwBurstCounter > 0)
@@ -130,23 +130,34 @@ namespace ChilliSource
             }
             
             u32 udwNumParticleToEmit = mudwMaxNumParticlesPerEmission * udwNumEmits;
-            f32 fEmissionStep = mfEmissionFreq;
+            u32 udwNumParticlesEmittedThisStep = 0;
+            f32 fEmissionStep = 0.0f;
             bool bParticlesActive = false;
             
             for(u32 i=0; i<mudwMaxNumParticles; ++i)
             {
+                // allow active particle to die if time elapsed so it can be recycled
+                if(mParticles.fEnergy[i] > 0.0f)
+                {
+                    UpdateParticle(i, infDT);
+                    mudwNumUsed = (mParticles.fEnergy[i] <= 0.0f) ? mudwNumUsed-1 : mudwNumUsed;
+                }
+                
                 //If time to emit and we have some left in our quota...or we are a looping emitter then we need to emit
                 bool bEmit = (mbIsEmitting && (mudwNumUsed < mudwMaxNumParticles) && udwNumParticleToEmit > 0 && mParticles.fEnergy[i] <= 0.0f);
                 if(bEmit)
                 {
                     mudwNumUsed++;
                     udwNumParticleToEmit--;
-                    bParticlesActive = true;
+                    udwNumParticlesEmittedThisStep++;
                     
                     f32 fLerpFactor = fEmissionStep/kfTimeSinceLastEmission;
                     Core::Vector3 vPosition = Core::MathUtils::Lerp(fLerpFactor, mvLastEmissionPos, vCurrentPos) - vCurrentPos;
-                    fEmissionStep += mfEmissionFreq;
-                    
+                    if(udwNumParticlesEmittedThisStep >= mudwMaxNumParticlesPerEmission)
+                    {
+                        fEmissionStep += mfEmissionFreq;
+                        udwNumParticlesEmittedThisStep = 0;
+                    }
                     Core::Quaternion qOrientation;
                     Core::Vector3 vScale(Core::Vector3::ONE);
                     
@@ -161,7 +172,7 @@ namespace ChilliSource
                     mParticles.Col[i] = mInitialColour;
                     mParticles.vTranslation[i] = vPosition;
                     mParticles.vScale[i] = vScale;
-                    mParticles.fAngularRotation[0] = 0.0f;
+                    mParticles.fAngularRotation[i] = 0.0f;
                     
                     //We will emit a particle and pass it through the effector
                     Emit(&mParticles, i);
@@ -177,15 +188,13 @@ namespace ChilliSource
                         (*itEffector)->Init(&mParticles, i);
                     }
                     
-                    for(u32 udwUpdateCount=0; udwUpdateCount<udwNumEmits; ++udwUpdateCount)
-                    {
-                        UpdateParticle(i, infDT);
-                    }
+                    UpdateParticle(i, kfTimeSinceLastEmission - fEmissionStep);
+                    mudwNumUsed = (mParticles.fEnergy[i] <= 0.0f) ? mudwNumUsed-1 : mudwNumUsed;
                 }
-                else if(mParticles.fEnergy[i] > 0.0f)
+                // test particles for activity
+                if(mParticles.fEnergy[i] > 0.0f)
                 {
                     bParticlesActive = true;
-                    UpdateParticle(i, infDT);
                 }
             }
             

@@ -46,7 +46,7 @@ namespace ChilliSource
 		: mpDefaultRenderTarget(nullptr), mpCurrentMaterial(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0), mpVertexAttribs(nullptr),
         mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mSrcBlendFunc(Rendering::AlphaBlend::k_unknown), mDstBlendFunc(Rendering::AlphaBlend::k_unknown),
         meCurrentCullFace(Rendering::CullFace::k_front), meDepthFunc(Rendering::DepthFunction::k_less), mpLightComponent(nullptr), mbBlendFunctionLocked(false), mpaTextureHandles(nullptr), mbInvalidateLigthingCache(true),
-        mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities))
+        mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities)), m_hasContextBeenBackedUp(false)
 		{
 			//Register the GL texture and shader managers
             Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mTexManager);
@@ -101,6 +101,8 @@ namespace ChilliSource
             mudwViewWidth = inudwWidth;
             mudwViewHeight = inudwHeight;
             
+            m_hasContextBeenBackedUp = false;
+            
             return true;
 		}
         //----------------------------------------------------------
@@ -131,9 +133,13 @@ namespace ChilliSource
         void RenderSystem::BackupContext()
         {
 #ifdef CS_TARGETPLATFORM_ANDROID
-        	//Context is about to be lost do a data backup
-        	BackupMeshBuffers();
-        	mTexManager.Backup();
+            if(m_hasContextBeenBackedUp == false)
+            {
+                //Context is about to be lost do a data backup
+                BackupMeshBuffers();
+                mTexManager.Backup();
+                m_hasContextBeenBackedUp = true;
+            }
 #endif
         }
         //----------------------------------------------------------
@@ -142,12 +148,16 @@ namespace ChilliSource
 		void RenderSystem::RestoreContext()
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
-            ForceRefreshRenderStates();
-            RestoreMeshBuffers();
-            mGLCurrentShaderProgram = 0;
-            mShaderManager.Restore();
-            mTexManager.Restore();
-            mCubemapManager.Restore();
+            if(m_hasContextBeenBackedUp == true)
+            {
+                ForceRefreshRenderStates();
+                RestoreMeshBuffers();
+                mGLCurrentShaderProgram = 0;
+                mShaderManager.Restore();
+                mTexManager.Restore();
+                mCubemapManager.Restore();
+                m_hasContextBeenBackedUp = false;
+            }
 #endif
 		}
         //----------------------------------------------------------

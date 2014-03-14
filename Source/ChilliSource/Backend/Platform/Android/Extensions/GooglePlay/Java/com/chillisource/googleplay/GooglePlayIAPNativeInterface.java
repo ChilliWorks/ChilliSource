@@ -16,14 +16,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
-import android.util.Log;
 
 import com.chillisource.core.CSApplication;
+import com.chillisource.core.CSLogging;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.INativeInterface;
 import com.chillisource.networking.IAPProductDescription;
 import com.chillisource.networking.IAPTransactionDescription;
-
 
 public class GooglePlayIAPNativeInterface  extends INativeInterface
 {
@@ -84,7 +83,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 				else
 				{
 					mbIsPurchasingEnabled = false;
-					Log.e("MoFlow", "Cannot setup Google Play IAB: " + result.getMessage());
+					CSLogging.logError("Cannot setup Google Play IAB: " + result.getMessage());
 				}
 			}
 		});
@@ -138,7 +137,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 						
 						if(result.isFailure())
 						{
-							Log.e("MoFlow", "Cannot query Google IAB inventory: " + result.getMessage());
+							CSLogging.logError("Cannot query Google IAB inventory: " + result.getMessage());
 							OnProductsRequestComplete(null, inProductIDs);
 							return;
 						}
@@ -250,7 +249,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 
 						if(result.isFailure())
 						{
-							Log.e("MoFlow", "Google IAB purchase error: " + result.getMessage() + " for product: " + inProductID);
+							CSLogging.logError("Google IAB purchase error: " + result.getMessage() + " for product: " + inProductID);
 
 							switch(result.getResponse())
 							{
@@ -367,7 +366,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 								{
 									if(result.isFailure())
 									{
-										Log.e("MoFlow", "Google IAB consume error: " + result.getMessage() + " for product: " + purchase.getSku());
+										CSLogging.logError("Google IAB consume error: " + result.getMessage() + " for product: " + purchase.getSku());
 									}
 									
 									NativeOnTransactionClosed(inProductID, inTransactionID);
@@ -466,7 +465,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 		//Loop through the purchase list and pass on any managed products as new transactions but with the original receipts
 		if(mInventory == null)
 		{
-			Log.e("moFlow", "IAPSystem: Products must be registered and requested before any other actions");
+			CSLogging.logError("IAPSystem: Products must be registered and requested before any other actions");
 			throw new NullPointerException("Products must be registered and requested before any other actions");
 		}
 		

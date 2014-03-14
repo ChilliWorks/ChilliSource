@@ -249,12 +249,7 @@ namespace ChilliSource
         {
 			if(!mpDefaultTexture)
             {
-				mpDefaultTexture = CreateTextureResource();
-				
 				CreateDefaultTexture();
-				
-				mpDefaultTexture->SetLoaded(true);
-				mpDefaultTexture->SetName("MoFlowDefaultTexture");
 			}
 			
 			return mpDefaultTexture;
@@ -267,6 +262,9 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void TextureManager::CreateDefaultTexture()
 		{
+            mpDefaultTexture = CreateTextureResource();
+            mpDefaultTexture->SetName("CSDefaultTexture");
+            
 			u32 numPixels = 4;
 			u32 numBytesPerPixel = 4;
 
@@ -283,6 +281,8 @@ namespace ChilliSource
 			CreateTextureFromImage(pImage, false, mpDefaultTexture);
 
 			CS_SAFEDELETE(pImage);
+            
+            mpDefaultTexture->SetLoaded(true);
 		}
 	}
 }
