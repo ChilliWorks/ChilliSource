@@ -1,6 +1,6 @@
 /**
  *  CSApplication.java
- *  ChilliSource
+ *  Chilli Source
  *
  *  Created by Scott Downie on 12/03/2014.
  *  Copyright 2014 Tag Games. All rights reserved.
@@ -150,9 +150,12 @@ public class CSApplication
 		m_resetTimeSinceLastUpdate = true;
 		m_resumeLifecycleEventOccurred = true;
 		
-		for (INativeInterface system : m_systems)
+		synchronized(m_systems)
 		{
-			system.onActivityResume();
+			for (INativeInterface system : m_systems)
+			{
+				system.onActivityResume();
+			}
 		}
 	}
 	/**
@@ -164,9 +167,12 @@ public class CSApplication
 	{
 		m_foregroundLifecycleEventOccurred = true;
 		
-		for (INativeInterface system : m_systems)
+		synchronized(m_systems)
 		{
-			system.onActivityForeground();
+			for (INativeInterface system : m_systems)
+			{
+				system.onActivityForeground();
+			}
 		}
 	}
 	/**
@@ -241,9 +247,12 @@ public class CSApplication
 		}
 		if(m_receivedIntent != null && m_currentAppLifecycleState == LifecycleState.k_foreground)
 		{
-			for (INativeInterface system : m_systems)
+			synchronized(m_systems)
 			{
-				system.onLaunchIntentReceived(m_receivedIntent);
+				for (INativeInterface system : m_systems)
+				{
+					system.onLaunchIntentReceived(m_receivedIntent);
+				}
 			}
 			
 			m_receivedIntent = null;
@@ -267,10 +276,13 @@ public class CSApplication
 	{
 		if(m_currentAppLifecycleState != LifecycleState.k_suspend)
 		{
-			for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+			synchronized(m_systems)
 			{
-				INativeInterface system = iterator.previous();
-				system.onActivityBackground();
+				for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+				{
+					INativeInterface system = iterator.previous();
+					system.onActivityBackground();
+				}
 			}
 
 			m_backgroundLifecycleEventOccurred = true;
@@ -287,10 +299,13 @@ public class CSApplication
 		
 		if(shouldBackground == true)
 		{
-			for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+			synchronized(m_systems)
 			{
-				INativeInterface system = iterator.previous();
-				system.onActivityBackground();
+				for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+				{
+					INativeInterface system = iterator.previous();
+					system.onActivityBackground();
+				}
 			}
 		}
 		
@@ -334,10 +349,13 @@ public class CSApplication
 			e.printStackTrace();
 		}
 		
-		for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+		synchronized(m_systems)
 		{
-			INativeInterface system = iterator.previous();
-			system.onActivitySuspend();
+			for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+			{
+				INativeInterface system = iterator.previous();
+				system.onActivitySuspend();
+			}
 		}
 		
 		m_isActive = false;
@@ -353,10 +371,13 @@ public class CSApplication
 		m_coreSystem.destroy();
 		m_currentAppLifecycleState = LifecycleState.k_destroy;
 		
-		for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+		synchronized(m_systems)
 		{
-			INativeInterface system = iterator.previous();
-			system.onActivityDestroy();
+			for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+			{
+				INativeInterface system = iterator.previous();
+				system.onActivityDestroy();
+			}
 		}
 		
 		m_rootViewContainer = null;
@@ -399,7 +420,10 @@ public class CSApplication
 	 */
 	public void addSystem(INativeInterface in_system)
 	{
-		m_systems.add(in_system);
+		synchronized(m_systems)
+		{
+			m_systems.add(in_system);
+		}
 	}
 	/**
 	 * @author S Downie
@@ -410,11 +434,14 @@ public class CSApplication
 	 */
 	public INativeInterface getSystem(InterfaceIDType in_interfaceID)
 	{
-		for (INativeInterface system : m_systems)
+		synchronized(m_systems)
 		{
-			if (system.IsA(in_interfaceID))
+			for (INativeInterface system : m_systems)
 			{
-				return system;
+				if (system.IsA(in_interfaceID))
+				{
+					return system;
+				}
 			}
 		}
 		

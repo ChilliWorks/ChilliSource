@@ -27,6 +27,15 @@ public class Renderer implements GLSurfaceView.Renderer
 	private int m_prepareFrameCount = 0;
 	
 	/**
+	 * Constructor
+	 * 
+	 * @author S Downie
+	 */
+	public Renderer()
+	{
+		m_loadingView = new LoadingView();
+	}
+	/**
 	 * Triggered every frame by the surface in order to render the GL context.
 	 * This actually runs the application update and render loop
 	 * 
@@ -78,11 +87,6 @@ public class Renderer implements GLSurfaceView.Renderer
     @Override public void onSurfaceCreated(GL10 in_GlContext, EGLConfig in_config) 
     {	
     	m_prepareFrameCount = 5;
-    	
-    	if(m_loadingView == null)
-    	{
-    		m_loadingView = new LoadingView();
-    	}
     	
     	boolean isInitialised = CSApplication.get().hasReceivedInit();
     	

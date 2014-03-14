@@ -46,16 +46,6 @@ public class Surface extends GLSurfaceView
 		setRenderer(new com.chillisource.core.Renderer());
     }
 	/**
-	 * Triggered when the surface is paused i.e. when it is no
-	 * longer visible. This suspends the application
-	 *
-	 * @author I Copland
-	 */
-	@Override public void onPause() 
-	{
-		super.onPause();
-	};
-	/**
 	 * Triggered when the surface receives a touch input event
 	 *
 	 * @author I Copland

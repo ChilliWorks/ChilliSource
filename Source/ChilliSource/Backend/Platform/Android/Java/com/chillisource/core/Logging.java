@@ -1,6 +1,6 @@
 /**
  *  CSLogging.java
- *  ChilliSource
+ *  Chilli Source
  *
  *  Created by Scott Downie on 14/03/2014.
  *  Copyright 2014 Tag Games. All rights reserved.

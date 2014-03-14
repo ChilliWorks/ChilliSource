@@ -1,6 +1,6 @@
 /**
  *  CSActivity.java
- *  ChilliSource
+ *  Chilli Source
  *
  *  Created by Ian Copland on 09/08/2012.
  *  Copyright 2012 Tag Games. All rights reserved.
@@ -13,13 +13,8 @@ import android.content.Intent;
 
 import com.chillisource.core.IQueryableInterface;
 
-//=============================================================
-/// Native Interface
-///
-/// Base class for all native interfaces.
-//=============================================================
 /**
- * Base class for Java systems. Allows systems to Recieve lifecycle events from
+ * Base class for Java systems. Allows systems to receive lifecycle events from
  * the application
  *
  * @author S Downie
