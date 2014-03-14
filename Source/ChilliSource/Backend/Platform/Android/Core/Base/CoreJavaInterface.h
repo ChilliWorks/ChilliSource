@@ -1,23 +1,19 @@
-/**
- * File: JavaInterface.h
- * Date: 1 Oct 2010
- * Description: Interface functions for calls to and from java.
- */
+//
+//  CoreJavaInterface.h
+//  Chilli Source
+//
+//  Created by Ian Copland on 17/03/2011.
+//  Copyright 2012 Tag Games. All rights reserved.
+//
 
-/**
- *
- * Author: Ian Copland
- * Version 1.0 - moFlo
- * Copyright �2010 Tag Games Limited - All rights reserved
- */
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_COREJAVAINTERFACE_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_COREJAVAINTERFACE_H_
 
-#ifndef _MOFLOW_PLATFORM_ANDROID_CORE_JAVA_INTERFACE_JAVA_INTERFACE_
-#define _MOFLOW_PLATFORM_ANDROID_CORE_JAVA_INTERFACE_JAVA_INTERFACE_
-
-#include <jni.h>
-#include <map>
+#include <ChilliSource/Chillisource.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
+
+#include <jni.h>
 
 extern ChilliSource::Core::Application* (*BootFunctionPtr)();
 
@@ -28,179 +24,161 @@ namespace ChilliSource
 		class CoreJavaInterface : public IJavaInterface
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE();
+			CS_DECLARE_NAMEDTYPE(CoreJavaInterface);
 			//--------------------------------------------------------------------------------------
 			/// Constructor
+			///
+			/// @author I Copland
 			//--------------------------------------------------------------------------------------
 			CoreJavaInterface();
 			//--------------------------------------------------------------------------------------
-			/// Is A
+			/// @author I Copland
 			///
-			/// @return whether or not this object implements the given interface.
-			//--------------------------------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
-			//--------------------------------------------------------------------------------------
-			/// Set Application
+			/// @param Interface ID
 			///
-			/// Sets the MoFlow CApplication pointer.
+			/// @return Whether or not this object implements the given interface.
+			//--------------------------------------------------------------------------------------
+			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+			//--------------------------------------------------------------------------------------
+			/// Sets the Chilli Source Application pointer.
+			///
+			/// @author I Copland
 			///
 			/// @param the application pointer.
 			//--------------------------------------------------------------------------------------
-			void SetApplication(ChilliSource::Core::Application* inApplication);
+			void SetApplication(Core::Application* in_application);
 			//--------------------------------------------------------------------------------------
-			/// Destroy Application
+			/// Deletes the Chilli Source Application pointer.
 			///
-			/// Deletes the MoFlow CApplication pointer.
+			/// @author I Copland
 			//--------------------------------------------------------------------------------------
 			void DestroyApplication();
 			//--------------------------------------------------------------------------------------
-			/// Get Application
+			/// @author I Copland
 			///
 			/// @return returns the global instance of the MoFlow application.
 			//--------------------------------------------------------------------------------------
-			ChilliSource::Core::Application* GetApplication();
+			Core::Application* GetApplication();
 			//-----------------------------------------
-			/// Set Max FPS
+			/// @author I Copland
 			///
 			/// @param The maximum frames per second
 			/// to clamp to. This should be in multiples
 			/// of 15 (15, 30, 60)
 			//-----------------------------------------
-			void SetMaxFPS(u32 inudwFPS);
+			void SetMaxFPS(u32 in_maxFPS);
 			//--------------------------------------------------------------------------------------
-			/// Get External Storage Directory
+			/// @author I Copland
 			///
 			/// @return returns the External Storage Directory as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetExternalStorageDirectory();
 			//--------------------------------------------------------------------------------------
-			/// Get Application Name
+			/// @author I Copland
 			///
 			/// @return returns the Application name as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetApplicationName();
 			//--------------------------------------------------------------------------------------
-			/// Get Application Version Code
+			/// @author I Copland
 			///
 			/// @return returns the Application version code as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			u32 GetApplicationVersionCode();
 			//--------------------------------------------------------------------------------------
-			/// Get Application Version Name
+			/// @author I Copland
 			///
 			/// @return returns the Application version name as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetApplicationVersionName();
 			//--------------------------------------------------------------------------------------
-			/// Get Package Name
+			/// @author I Copland
 			///
 			/// @return returns the package name as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetPackageName();
 			//--------------------------------------------------------------------------------------
-			/// Get APK Directory
+			/// @author I Copland
 			///
 			/// @return returns the APK directory as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetAPKDirectory();
 			//--------------------------------------------------------------------------------------
-			/// Get Device Orientation
+			/// @author I Copland
 			///
-			/// The value returns is moFlow orientation flag. The result is not cached
-			///
-			/// @return Orientation as reported by the OS returned as a moFlow orientation flag
+			/// @return Orientation as reported by the OS returned as an int (relates to CS orientation enum)
 			//--------------------------------------------------------------------------------------
 			s32 GetOrientation();
 			//--------------------------------------------------------------------------------------
-			/// Get Screen Width
-			///
-			/// This value is cached, so repeated calls wont result in extra c-to-java calls.
+			/// @author I Copland
 			///
 			/// @return returns the screen width as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			s32 GetScreenWidth();
 			//--------------------------------------------------------------------------------------
-			/// Get Screen Height
-			///
-			/// This value is cached, so repeated calls wont result in extra c-to-java calls.
+			/// @author I Copland
 			///
 			/// @return returns the screen height as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			s32 GetScreenHeight();
 			//--------------------------------------------------------------------------------------
-			/// Get Default Locale Code
-			///
-			/// This value is cached, so repeated calls wont result in extra c-to-java calls.
+			/// @author I Copland
 			///
 			/// @return returns the default locale code as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetDefaultLocaleCode();
 			//--------------------------------------------------------------------------------------
-			/// Get Device Model
-			///
-			/// This value is cached, so repeated calls wont result in extra c-to-java calls.
+			/// @author I Copland
 			///
 			/// @return returns the device model as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetDeviceModel();
 			//--------------------------------------------------------------------------------------
-			/// Get Device Model Type
-			///
-			/// This value is cached, so repeated calls wont result in extra c-to-java calls.
+			/// @author I Copland
 			///
 			/// @return returns the device model type as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetDeviceModelType();
 			//--------------------------------------------------------------------------------------
-			/// Get Device Manufacturer
-			///
-			/// This value is cached, so repeated calls wont result in extra c-to-java calls.
+			/// @author I Copland
 			///
 			/// @return returns the device manufacturer as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetDeviceManufacturer();
 			//--------------------------------------------------------------------------------------
-			/// Get OS Version Code
-			///
-			/// This value is cached, so repeated calls wont result in extra c-to-java calls.
+			/// @author I Copland
 			///
 			/// @return returns the os version number as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			s32 GetOSVersionCode();
 			//--------------------------------------------------------------------------------------
-			/// Get Number Of Cores
-			///
-			/// This value is cached, so repeated calls wont result in extra c-to-java calls.
+			/// @author I Copland
 			///
 			/// @return returns the number of cores as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			s32 GetNumberOfCores();
 			//--------------------------------------------------------------------------------------
-			/// Get Screen Density
-			///
-			/// This value is cached, so repeated calls wont result in extra c-to-java calls.
+			/// @author I Copland
 			///
 			/// @return returns the screen density as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			f32 GetScreenDensity();
 			//--------------------------------------------------------------
-			/// Get Telephony Device ID
-			///
 			/// This returns the telephony device ID acquired from the
 			/// CoreNativeInterface Java class.
 			///
@@ -210,24 +188,24 @@ namespace ChilliSource
 			/// Should not change on factory reset of a device, but it may
 			/// change if the sim card is changed.
 			///
+			/// @author I Copland
+			///
 			/// @return the telephony device ID or an empty string.
 			//--------------------------------------------------------------
 			std::string GetTelephonyDeviceID();
 			//--------------------------------------------------------------
-			/// Get Mac Address
-			///
 			/// This returns the Mac Address acquired from the CoreNativeInterface
 			/// Java class.
 			///
 			/// This may not be available on some devices while wifi is turned
 			/// off. This should not change on factory reset of a device.
 			///
+			/// @author I Copland
+			///
 			/// @return the Mac Address or an empty string.
 			//--------------------------------------------------------------
 			std::string GetMacAddress();
 			//--------------------------------------------------------------
-			/// Get Android ID
-			///
 			/// This returns the Android ID as acquired from the
 			/// CoreNativeInterface Java class.
 			///
@@ -238,40 +216,43 @@ namespace ChilliSource
 			/// will be returned. This value may change if the device is
 			/// factory reset.
 			///
+			/// @author I Copland
+			///
 			/// @return the unique Android ID or an empty string.
 			//--------------------------------------------------------------
 			std::string GetAndroidID();
             //-----------------------------------------------------------------------------------------------------
-            /// Force Quit
+            /// @author I Copland
             ///
-            /// Kill the current process
+            /// Kill the application process
             //-----------------------------------------------------------------------------------------------------
             void ForceQuit();
             //-----------------------------------------------------------------------------------------------------
-            /// Get System Time In Milliseconds
+            /// @author I Copland
             ///
             /// @return the system time in milliseconds.
             //-----------------------------------------------------------------------------------------------------
             TimeIntervalMs GetSystemTimeInMilliseconds();
             //-----------------------------------------------------------------------------------------------------
-            /// Get Physical Screen Size
+            /// @author I Copland
             ///
-            /// @return the physical screen size in inches.
+            /// @return the physical screen size in inches (diagonal length)
             //-----------------------------------------------------------------------------------------------------
             f32 GetPhysicalScreenSize();
             
 		private:
-			ChilliSource::Core::Application* mApplication;
-			s32 mdwScreenWidth;
-			s32 mdwScreenHeight;
-			std::string mstrDeviceModel;
-			std::string mstrDeviceModelType;
-			std::string mstrDeviceManufacturer;
-			std::string mstrLocaleCode;
-			s32 mdwOSVersionCode;
-			s32 mdwNumberOfCores;
-			f32 mfScreenDensity;
-			f32 mfPhysicalScreenSize;
+
+			Core::Application* m_application;
+			s32 m_screenWidth;
+			s32 m_screenHeight;
+			std::string m_deviceModel;
+			std::string m_deviceModelType;
+			std::string m_deviceManufacturer;
+			std::string m_localeCode;
+			s32 m_OSVersionCode;
+			s32 m_numberOfCores;
+			f32 m_screenDensity;
+			f32 m_physicalScreenSize;
 		};
 	}
 }

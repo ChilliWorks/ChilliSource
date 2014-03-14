@@ -9,6 +9,8 @@
 
 package com.chillisource.video;
 
+import com.chillisource.core.CSApplication;
+
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -170,6 +172,12 @@ public class VideoPlayerActivity extends Activity
   	//------------------------------------------------------------------------
     @Override protected synchronized void onDestroy()
     {
+		VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
+		if (mediaPlayerNI != null)
+		{
+			mediaPlayerNI.Stopped();
+		}
+		
     	synchronized(VideoPlayerActivity.class)
     	{
     		mActivityInstance = null;

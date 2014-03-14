@@ -1,11 +1,10 @@
-/*
- *  CoreJavaInterface.h
- *  moFlow
- *
- *  Created by Ian Copland on 17/03/2011.
- *  Copyright 2012 Tag Games. All rights reserved.
- *
- */
+//
+//  CoreJavaInterface.cpp
+//  Chilli Source
+//
+//  Created by Ian Copland on 17/03/2011.
+//  Copyright 2012 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
 
@@ -20,7 +19,6 @@
 #include <ChilliSource/Backend/Platform/Android/Social/Communications/SMSCompositionJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterAuthenticationActivityJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Web/Base/WebViewJavaInterface.h>
-
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/LaunchingActions/LaunchingActions.h>
@@ -34,205 +32,232 @@ ChilliSource::Core::Application* (*BootFunctionPtr)() = nullptr;
 //--------------------------------------------------------------------------------------
 extern "C"
 {
-	void Java_com_chillisource_core_CoreNativeInterface_create(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_resume(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_foreground(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_background(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_suspend(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_destroy(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_update(JNIEnv* inpEnv, jobject inThis, f32 infDeltaTime, s64 inddwTimestamp);
-	void Java_com_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_orientationChanged(JNIEnv* inpEnv, jobject inThis, s32 indwOrientation);
-	void Java_com_chillisource_core_CoreNativeInterface_onBackPressed(JNIEnv* inpEnv, jobject inThis);
-    void Java_com_chillisource_core_CoreNativeInterface_applicationDidReceiveLaunchingURL(JNIEnv* inpEnv, jobject inThis, jstring instrURL);
+	//--------------------------------------------------------------------------------------
+	/// Interface function called from java that forces creation of the core interface
+	///
+	/// @author I Copland
+	///
+	/// @param JNIEnv - The jni environment.
+	/// @param jobject - the java object calling the function
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_core_CoreNativeInterface_create(JNIEnv* in_env, jobject in_this);
+	//--------------------------------------------------------------------------------------
+	/// Interface function called from java. This is called when the application is launched.
+	///
+	/// @author I Copland
+	///
+	/// @param JNIEnv - The jni environment.
+	/// @param jobject - the java object calling the function
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject in_this);
+	//--------------------------------------------------------------------------------------
+	/// Interface function called from java. This is called when the application is resumed.
+	///
+	/// @author I Copland
+	///
+	/// @param JNIEnv - The jni environment.
+	/// @param jobject - the java object calling the function
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_core_CoreNativeInterface_resume(JNIEnv* in_env, jobject in_this);
+	//--------------------------------------------------------------------------------------
+	/// Interface function called from java. This is called when the application is pushed
+	/// to the foreground
+	///
+	/// @author S Downie
+	///
+	/// @param JNIEnv - The jni environment.
+	/// @param jobject - the java object calling the function
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_core_CoreNativeInterface_foreground(JNIEnv* in_env, jobject in_this);
+	//--------------------------------------------------------------------------------------
+	/// Interface function called from java. This is called when the application is pushed
+	/// to the background
+	///
+	/// @author S Downie
+	///
+	/// @param JNIEnv - The jni environment.
+	/// @param jobject - the java object calling the function
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_core_CoreNativeInterface_background(JNIEnv* in_env, jobject in_this);
+	//--------------------------------------------------------------------------------------
+	/// Interface function called from java. This is called when the application is suspended
+	///
+	/// @author I Copland
+	///
+	/// @param JNIEnv - The jni environment.
+	/// @param jobject - the java object calling the function
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_core_CoreNativeInterface_suspend(JNIEnv* in_env, jobject in_this);
+	//--------------------------------------------------------------------------------------
+	/// Interface function called from java. This is called when the application is destroyed
+	///
+	/// @author I Copland
+	///
+	/// @param JNIEnv - The jni environment.
+	/// @param jobject - the java object calling the function
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_core_CoreNativeInterface_destroy(JNIEnv* in_env, jobject in_this);
+	//--------------------------------------------------------------------------------------
+	/// Interface function called from java. This is called when the application is updated
+	///
+	/// @author I Copland
+	///
+	/// @param JNIEnv - The jni environment.
+	/// @param jobject - the java object calling the function
+	/// @param the delta time.
+	/// @param Elapsed app time
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobject in_this, f32 in_deltaTime, s64 in_elapsedTime);
+	//--------------------------------------------------------------------------------------
+	/// Interface function called from java. This is called when the application is almost
+	/// Out of memory.
+	///
+	/// @author I Copland
+	///
+	/// @param JNIEnv - The jni environment.
+	/// @param jobject - the java object calling the function
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env, jobject in_this);
+	//--------------------------------------------------------------------------------------
+	/// Interface function called from java. This is called when the orientation has changed.
+	///
+	/// @author I Copland
+	///
+	/// @param JNIEnv - The jni environment.
+	/// @param jobject - the java object calling the function
+	/// @param the new orientation as an int that maps to the orientation enum.
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_core_CoreNativeInterface_orientationChanged(JNIEnv* in_env, jobject in_this, s32 in_orientationID);
+	//--------------------------------------------------------------------------------------
+	/// Interface function called from java. This is called when the back hardware button is
+	/// pressed
+	///
+	/// @author I Copland
+	///
+	/// @param JNIEnv - The jni environment.
+	/// @param jobject - the java object calling the function
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_core_CoreNativeInterface_onBackPressed(JNIEnv* in_env, jobject in_this);
+	//--------------------------------------------------------------------------------------
+	/// Application Did Receive Launching URL
+	///
+	///
+	/// @param JNIEnv - The jni environment.
+	/// @param jobject - the java object calling the function
+	/// @param URL
+	//--------------------------------------------------------------------------------------
+    void Java_com_chillisource_core_CoreNativeInterface_applicationDidReceiveLaunchingURL(JNIEnv* in_env, jobject in_this, jstring in_url);
 }
 //--------------------------------------------------------------------------------------
-/// Interface function called from java that forces creation of the core interface
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_create(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_create(JNIEnv* in_env, jobject in_this)
 {
 	//get the java VM and init the Java Interface Manager
-	JavaVM * pJavaVM;
-	inpEnv->GetJavaVM(&pJavaVM);
+	JavaVM* javaVM;
+	in_env->GetJavaVM(&javaVM);
 
-	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->Initialise(pJavaVM);
+	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->Initialise(javaVM);
 
 	//add the core native interface
 	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(ChilliSource::Android::IJavaInterfaceSPtr(new ChilliSource::Android::CoreJavaInterface()));
 }
 //--------------------------------------------------------------------------------------
-/// Initialise
-///
-/// Interface function called from java. This is called when the application is started.
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject in_this)
 {
 	//get the java VM and init the Java Interface Manager
-	JavaVM * pJavaVM;
-	inpEnv->GetJavaVM(&pJavaVM);
+	JavaVM* javaVM;
+	in_env->GetJavaVM(&javaVM);
 
 	//create the application
 	ChilliSource::Core::Application* pApplication = BootFunctionPtr();
 	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CoreJavaInterface>()->SetApplication(pApplication);
 
 	//setup other interfaces
-	ChilliSource::Android::TouchInputJavaInterface::SetupJavaInterface(pJavaVM);
-	ChilliSource::Android::HttpConnectionJavaInterface::SetupJavaInterface(pJavaVM);
-	ChilliSource::Android::SharedPreferencesJavaInterface::SetupJavaInterface(pJavaVM);
-	ChilliSource::Android::WebViewJavaInterface::SetupJavaInterface(pJavaVM);
-	ChilliSource::Android::SMSCompositionJavaInterface::SetupJavaInterface(pJavaVM);
-	ChilliSource::Android::ContactInformationProviderJavaInterface::SetupJavaInterface(pJavaVM);
-	ChilliSource::Android::TwitterAuthenticationActivityJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::TouchInputJavaInterface::SetupJavaInterface(javaVM);
+	ChilliSource::Android::HttpConnectionJavaInterface::SetupJavaInterface(javaVM);
+	ChilliSource::Android::SharedPreferencesJavaInterface::SetupJavaInterface(javaVM);
+	ChilliSource::Android::WebViewJavaInterface::SetupJavaInterface(javaVM);
+	ChilliSource::Android::SMSCompositionJavaInterface::SetupJavaInterface(javaVM);
+	ChilliSource::Android::ContactInformationProviderJavaInterface::SetupJavaInterface(javaVM);
+	ChilliSource::Android::TwitterAuthenticationActivityJavaInterface::SetupJavaInterface(javaVM);
     
 	//run the application
     pApplication->Init();
 }
-
 //--------------------------------------------------------------------------------------
-/// Resume
-///
-/// Interface function called from java. This is called when the application is resumed.
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_resume(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_resume(JNIEnv* in_env, jobject in_this)
 {
 	ChilliSource::Core::Application::Get()->Resume();
 }
 //--------------------------------------------------------------------------------------
-/// Interface function called from java. This is called when the application is pushed
-/// to the foreground
-///
-/// @author S Downie
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_foreground(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_foreground(JNIEnv* in_env, jobject in_this)
 {
 	ChilliSource::Core::Application::Get()->Foreground();
 }
 //--------------------------------------------------------------------------------------
-/// Interface function called from java. This is called when the application is pushed
-/// to the background
-///
-/// @author S Downie
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_background(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_background(JNIEnv* in_env, jobject in_this)
 {
 	ChilliSource::Core::Application::Get()->Background();
 }
 //--------------------------------------------------------------------------------------
-/// Suspend
-///
-/// Interface function called from java. This is called when the application is suspended
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_suspend(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_suspend(JNIEnv* in_env, jobject in_this)
 {
 	ChilliSource::Core::Application::Get()->Suspend();
 }
 //--------------------------------------------------------------------------------------
-/// Destroy
-///
-/// Interface function called from java. This is called when the application is destroyed
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_destroy(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_destroy(JNIEnv* in_env, jobject in_this)
 {
 	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CoreJavaInterface>()->DestroyApplication();
 }
 //--------------------------------------------------------------------------------------
-/// Frame Begin
-///
-/// Interface function called from java. This is called when the application is updated
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
-/// @param the delta time.
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_update(JNIEnv* inpEnv, jobject inThis, f32 infDeltaTime, s64 inddwTimestamp)
+void Java_com_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobject in_this, f32 in_deltaTime, s64 in_elaspedTime)
 {
 	//Create the message with the time between frames
-	ChilliSource::Core::Application::Get()->Update((f32)infDeltaTime, (u64)inddwTimestamp);
+	ChilliSource::Core::Application::Get()->Update(in_deltaTime, (u64)in_elaspedTime);
 }
 //--------------------------------------------------------------------------------------
-/// Memory Warning
-///
-/// Interface function called from java. This is called when the application is almost
-/// Out of memory.
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env, jobject in_this)
 {
 	ChilliSource::Core::Application::Get()->ApplicationMemoryWarning();
 }
 //--------------------------------------------------------------------------------------
-/// Orientation Changed
-///
-/// Interface function called from java. This is called when the orientation has changed.
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
-/// @param the new orientation as an int that maps to the orientation enum.
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_orientationChanged(JNIEnv* inpEnv, jobject thiz, s32 indwOrientation)
+void Java_com_chillisource_core_CoreNativeInterface_orientationChanged(JNIEnv* in_env, jobject thiz, s32 in_orientationID)
 {
-	ChilliSource::Core::ScreenOrientation eScreenOrientation;
+	ChilliSource::Core::ScreenOrientation screenOrientation;
 
-	if (indwOrientation == 1)
+	if (in_orientationID == 1)
 	{
-		eScreenOrientation = ChilliSource::Core::ScreenOrientation::k_portraitUp;
+		screenOrientation = ChilliSource::Core::ScreenOrientation::k_portraitUp;
 		CS_LOG_DEBUG("Changing orientation to portrait");
 	}
 	else
 	{
-		eScreenOrientation = ChilliSource::Core::ScreenOrientation::k_landscapeLeft;
+		screenOrientation = ChilliSource::Core::ScreenOrientation::k_landscapeLeft;
 		CS_LOG_DEBUG("Changing orientation to landscape");
 	}
 
-	ChilliSource::Core::Application::Get()->ScreenChangedOrientation(eScreenOrientation);
+	ChilliSource::Core::Application::Get()->ScreenChangedOrientation(screenOrientation);
 }
 //--------------------------------------------------------------------------------------
-/// On Back Pressed
-///
-/// Interface function called from java. This is called when the back hardware button is
-/// pressed
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_onBackPressed(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_core_CoreNativeInterface_onBackPressed(JNIEnv* in_env, jobject in_this)
 {
 	ChilliSource::Core::Application::Get()->GoBack();
 }
 //--------------------------------------------------------------------------------------
-/// Application Did Receive Launching URL
-///
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
-/// @param URL
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_applicationDidReceiveLaunchingURL(JNIEnv* inpEnv, jobject inThis, jstring instrURL)
+void Java_com_chillisource_core_CoreNativeInterface_applicationDidReceiveLaunchingURL(JNIEnv* in_env, jobject in_this, jstring in_url)
 {
-	CSCore::LaunchingActions::ApplicationDidReceiveLaunchingURL(ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrURL));
+	CSCore::LaunchingActions::ApplicationDidReceiveLaunchingURL(ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_url));
 }
 
 namespace ChilliSource
@@ -242,354 +267,320 @@ namespace ChilliSource
 		CS_DEFINE_NAMEDTYPE(CoreJavaInterface);
 
 		//--------------------------------------------------------------------------------------
-		/// Constructor
 		//--------------------------------------------------------------------------------------
 		CoreJavaInterface::CoreJavaInterface()
-		: mApplication(nullptr), mdwScreenWidth(0), mdwScreenHeight(0), mdwOSVersionCode(-1), mdwNumberOfCores(-1), mfScreenDensity(-0.1f), mfPhysicalScreenSize(-0.1f)
+		: m_application(nullptr), m_screenWidth(0), m_screenHeight(0), m_OSVersionCode(-1), m_numberOfCores(-1), m_screenDensity(-0.1f), m_physicalScreenSize(-0.1f)
 		{
 			CreateNativeInterface("com/chillisource/core/CoreNativeInterface");
-			CreateMethodReference("GetExternalStorageDirectory", "()Ljava/lang/String;");
-			CreateMethodReference("GetApplicationName", "()Ljava/lang/String;");
-			CreateMethodReference("GetApplicationVersionCode", "()I");
-			CreateMethodReference("GetApplicationVersionName", "()Ljava/lang/String;");
-			CreateMethodReference("GetPackageName", "()Ljava/lang/String;");
-			CreateMethodReference("GetAPKDirectory", "()Ljava/lang/String;");
-			CreateMethodReference("GetOrientation", "()I");
-			CreateMethodReference("GetOrientationLandscapeConstant", "()I");
-			CreateMethodReference("GetOrientationPortraitConstant", "()I");
-			CreateMethodReference("GetScreenWidth", "()I");
-			CreateMethodReference("GetScreenHeight", "()I");
-			CreateMethodReference("GetDefaultLocaleCode", "()Ljava/lang/String;");
-			CreateMethodReference("GetDeviceModel", "()Ljava/lang/String;");
-			CreateMethodReference("GetDeviceManufacturer", "()Ljava/lang/String;");
-			CreateMethodReference("GetDeviceModelType", "()Ljava/lang/String;");
-			CreateMethodReference("GetOSVersion", "()I");
-			CreateMethodReference("GetNumberOfCores", "()I");
-			CreateMethodReference("GetScreenDensity", "()F");
-			CreateMethodReference("GetTelephonyDeviceID", "()Ljava/lang/String;");
-			CreateMethodReference("GetMacAddress", "()Ljava/lang/String;");
-			CreateMethodReference("GetAndroidID", "()Ljava/lang/String;");
-			CreateMethodReference("ForceQuit", "()V");
-			CreateMethodReference("GetSystemTimeInMilliseconds", "()J");
-			CreateMethodReference("GetPhysicalScreenSize", "()F");
-			CreateMethodReference("SetMaxFPS", "(I)V");
+			CreateMethodReference("getExternalStorageDirectory", "()Ljava/lang/String;");
+			CreateMethodReference("getApplicationName", "()Ljava/lang/String;");
+			CreateMethodReference("getApplicationVersionCode", "()I");
+			CreateMethodReference("getApplicationVersionName", "()Ljava/lang/String;");
+			CreateMethodReference("getPackageName", "()Ljava/lang/String;");
+			CreateMethodReference("getAPKDirectory", "()Ljava/lang/String;");
+			CreateMethodReference("getOrientation", "()I");
+			CreateMethodReference("getOrientationLandscapeConstant", "()I");
+			CreateMethodReference("getOrientationPortraitConstant", "()I");
+			CreateMethodReference("getScreenWidth", "()I");
+			CreateMethodReference("getScreenHeight", "()I");
+			CreateMethodReference("getDefaultLocaleCode", "()Ljava/lang/String;");
+			CreateMethodReference("getDeviceModel", "()Ljava/lang/String;");
+			CreateMethodReference("getDeviceManufacturer", "()Ljava/lang/String;");
+			CreateMethodReference("getDeviceModelType", "()Ljava/lang/String;");
+			CreateMethodReference("getOSVersion", "()I");
+			CreateMethodReference("getNumberOfCores", "()I");
+			CreateMethodReference("getScreenDensity", "()F");
+			CreateMethodReference("getTelephonyDeviceID", "()Ljava/lang/String;");
+			CreateMethodReference("getMacAddress", "()Ljava/lang/String;");
+			CreateMethodReference("getAndroidID", "()Ljava/lang/String;");
+			CreateMethodReference("forceQuit", "()V");
+			CreateMethodReference("getSystemTimeInMilliseconds", "()J");
+			CreateMethodReference("getPhysicalScreenSize", "()F");
+			CreateMethodReference("setMaxFPS", "(I)V");
 		}
 		//--------------------------------------------------------------------------------------
-		/// Is A
 		//--------------------------------------------------------------------------------------
-		bool CoreJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool CoreJavaInterface::IsA(Core::InterfaceIDType in_interfaceID) const
 		{
-			return (inInterfaceID == CoreJavaInterface::InterfaceID);
+			return (in_interfaceID == CoreJavaInterface::InterfaceID);
 		}
 		//--------------------------------------------------------------------------------------
-		/// Set Application
 		//--------------------------------------------------------------------------------------
-		void CoreJavaInterface::SetApplication(ChilliSource::Core::Application* inApplication)
+		void CoreJavaInterface::SetApplication(ChilliSource::Core::Application* in_application)
 		{
-			mApplication = inApplication;
+			m_application = in_application;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Destroy Application
 		//--------------------------------------------------------------------------------------
 		void CoreJavaInterface::DestroyApplication()
 		{
-			mApplication->Destroy();
-			CS_SAFEDELETE(mApplication);
+			m_application->Destroy();
+			CS_SAFEDELETE(m_application);
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Application
 		//--------------------------------------------------------------------------------------
 		ChilliSource::Core::Application* CoreJavaInterface::GetApplication()
 		{
-			return mApplication;
+			return m_application;
 		}
 		//-----------------------------------------
-		/// Set Max FPS
 		//-----------------------------------------
-		void CoreJavaInterface::SetMaxFPS(u32 inudwFPS)
+		void CoreJavaInterface::SetMaxFPS(u32 in_maxFPS)
 		{
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			env->CallVoidMethod(GetJavaObject(), GetMethodID("SetMaxFPS"), inudwFPS);
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("setMaxFPS"), in_maxFPS);
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get External Storage Directory
 		//--------------------------------------------------------------------------------------
 		std::string CoreJavaInterface::GetExternalStorageDirectory()
 		{
 			std::string sdCardRootPath = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrExternalStorageDir = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("GetExternalStorageDirectory")));
-			sdCardRootPath = JavaInterfaceUtils::CreateSTDStringFromJString(jstrExternalStorageDir);
-			env->DeleteLocalRef(jstrExternalStorageDir);
+			jstring externalStorageDir = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getExternalStorageDirectory")));
+			sdCardRootPath = JavaInterfaceUtils::CreateSTDStringFromJString(externalStorageDir);
+			env->DeleteLocalRef(externalStorageDir);
 			return sdCardRootPath;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Application Name
 		//--------------------------------------------------------------------------------------
 		std::string CoreJavaInterface::GetApplicationName()
 		{
 			std::string appName = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrName = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("GetApplicationName")));
+			jstring jstrName = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getApplicationName")));
 			appName = JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
 			env->DeleteLocalRef(jstrName);
 			return appName;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Application Version Code
-		///
-		/// @return returns the Application version code as acquired from the CoreNativeInterface
-		/// Java class.
 		//--------------------------------------------------------------------------------------
 		u32 CoreJavaInterface::GetApplicationVersionCode()
 		{
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			return env->CallIntMethod(GetJavaObject(), GetMethodID("GetApplicationVersionCode"));
+			return env->CallIntMethod(GetJavaObject(), GetMethodID("getApplicationVersionCode"));
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Application Version Name
-		///
-		/// @return returns the Application version name as acquired from the CoreNativeInterface
-		/// Java class.
 		//--------------------------------------------------------------------------------------
 		std::string CoreJavaInterface::GetApplicationVersionName()
 		{
 			std::string appVersion = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrName = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("GetApplicationVersionName")));
+			jstring jstrName = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getApplicationVersionName")));
 			appVersion = JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
 			env->DeleteLocalRef(jstrName);
 			return appVersion;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Package Name
 		//--------------------------------------------------------------------------------------
 		std::string CoreJavaInterface::GetPackageName()
 		{
 			std::string packageName = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrName = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("GetPackageName")));
+			jstring jstrName = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getPackageName")));
 			packageName = JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
 			env->DeleteLocalRef(jstrName);
 			return packageName;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get APK Directory
 		//--------------------------------------------------------------------------------------
 		std::string CoreJavaInterface::GetAPKDirectory()
 		{
 			std::string apkRootPath = " ";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrAkpPath = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("GetAPKDirectory")));
+			jstring jstrAkpPath = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getAPKDirectory")));
 			apkRootPath = JavaInterfaceUtils::CreateSTDStringFromJString(jstrAkpPath);
 			env->DeleteLocalRef(jstrAkpPath);
 			return apkRootPath;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Device Orientation
 		//--------------------------------------------------------------------------------------
 		s32 CoreJavaInterface::GetOrientation()
 		{
-			s32 dwResult = -1;
+			s32 result = -1;
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			s32 dwOSOrientation = env->CallIntMethod(GetJavaObject(), GetMethodID("GetOrientation"));
-			s32 dwOSConstOrientationLandscape = env->CallIntMethod(GetJavaObject(), GetMethodID("GetOrientationLandscapeConstant"));
-			s32 dwOSConstOrientationPortrait = env->CallIntMethod(GetJavaObject(), GetMethodID("GetOrientationPortraitConstant"));
+			s32 OSOrientation = env->CallIntMethod(GetJavaObject(), GetMethodID("getOrientation"));
+			s32 OSConstOrientationLandscape = env->CallIntMethod(GetJavaObject(), GetMethodID("getOrientationLandscapeConstant"));
+			s32 OSConstOrientationPortrait = env->CallIntMethod(GetJavaObject(), GetMethodID("getOrientationPortraitConstant"));
 
 			// Here we need to map the orientation reported back by Android to
 			// moFlow orientation
-			if(dwOSOrientation == dwOSConstOrientationPortrait)
+			if(OSOrientation == OSConstOrientationPortrait)
 			{
-				dwResult = (s32)Core::ScreenOrientation::k_portraitUp;
+				result = (s32)Core::ScreenOrientation::k_portraitUp;
 			}
-			else if(dwOSOrientation == dwOSConstOrientationLandscape)
+			else if(OSOrientation == OSConstOrientationLandscape)
 			{
-				dwResult = (s32)Core::ScreenOrientation::k_landscapeRight;
+				result = (s32)Core::ScreenOrientation::k_landscapeRight;
 			}
 
-			return dwResult;
+			return result;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Screen Width
 		//--------------------------------------------------------------------------------------
 		s32 CoreJavaInterface::GetScreenWidth()
 		{
-			if (mdwScreenWidth == 0)
+			if (m_screenWidth == 0)
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				mdwScreenWidth = env->CallIntMethod(GetJavaObject(), GetMethodID("GetScreenWidth"));
+				m_screenWidth = env->CallIntMethod(GetJavaObject(), GetMethodID("getScreenWidth"));
 			}
-			return mdwScreenWidth;
+			return m_screenWidth;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Screen Height
 		//--------------------------------------------------------------------------------------
 		s32 CoreJavaInterface::GetScreenHeight()
 		{
-			if (mdwScreenHeight == 0)
+			if (m_screenHeight == 0)
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				mdwScreenHeight = env->CallIntMethod(GetJavaObject(), GetMethodID("GetScreenHeight"));
+				m_screenHeight = env->CallIntMethod(GetJavaObject(), GetMethodID("getScreenHeight"));
 			}
-			return mdwScreenHeight;
+			return m_screenHeight;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Default Locale Code
 		//--------------------------------------------------------------------------------------
 		std::string CoreJavaInterface::GetDefaultLocaleCode()
 		{
-			if (mstrLocaleCode == "")
+			if (m_localeCode == "")
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				jstring jstrLocalCode = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("GetDefaultLocaleCode")));
-				mstrLocaleCode = JavaInterfaceUtils::CreateSTDStringFromJString(jstrLocalCode);
+				jstring jstrLocalCode = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getDefaultLocaleCode")));
+				m_localeCode = JavaInterfaceUtils::CreateSTDStringFromJString(jstrLocalCode);
 				env->DeleteLocalRef(jstrLocalCode);
 			}
-			return mstrLocaleCode;
+			return m_localeCode;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Device Model
 		//--------------------------------------------------------------------------------------
 		std::string CoreJavaInterface::GetDeviceModel()
 		{
-			if (mstrDeviceModel == "")
+			if (m_deviceModel == "")
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				jstring jstrDeviceModel = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("GetDeviceModel")));
-				mstrDeviceModel = JavaInterfaceUtils::CreateSTDStringFromJString(jstrDeviceModel);
+				jstring jstrDeviceModel = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getDeviceModel")));
+				m_deviceModel = JavaInterfaceUtils::CreateSTDStringFromJString(jstrDeviceModel);
 				env->DeleteLocalRef(jstrDeviceModel);
 			}
-			return mstrDeviceModel;
+			return m_deviceModel;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Device Model Type
 		//--------------------------------------------------------------------------------------
 		std::string CoreJavaInterface::GetDeviceModelType()
 		{
-			if (mstrDeviceModelType == "")
+			if (m_deviceModelType == "")
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				jstring jstrDeviceModelType = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("GetDeviceModelType")));
-				mstrDeviceModelType = JavaInterfaceUtils::CreateSTDStringFromJString(jstrDeviceModelType);
+				jstring jstrDeviceModelType = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getDeviceModelType")));
+				m_deviceModelType = JavaInterfaceUtils::CreateSTDStringFromJString(jstrDeviceModelType);
 				env->DeleteLocalRef(jstrDeviceModelType);
 			}
-			return mstrDeviceModelType;
+			return m_deviceModelType;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Device Manufacturer
 		//--------------------------------------------------------------------------------------
 		std::string CoreJavaInterface::GetDeviceManufacturer()
 		{
-			if (mstrDeviceManufacturer == "")
+			if (m_deviceManufacturer == "")
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				jstring jstrDeviceManufacturer = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("GetDeviceManufacturer")));
-				mstrDeviceManufacturer = JavaInterfaceUtils::CreateSTDStringFromJString(jstrDeviceManufacturer);
+				jstring jstrDeviceManufacturer = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getDeviceManufacturer")));
+				m_deviceManufacturer = JavaInterfaceUtils::CreateSTDStringFromJString(jstrDeviceManufacturer);
 				env->DeleteLocalRef(jstrDeviceManufacturer);
 			}
-			return mstrDeviceManufacturer;
+			return m_deviceManufacturer;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get OS Version Code
 		//--------------------------------------------------------------------------------------
 		s32 CoreJavaInterface::GetOSVersionCode()
 		{
-			if (mdwOSVersionCode == -1)
+			if (m_OSVersionCode == -1)
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				mdwOSVersionCode = env->CallIntMethod(GetJavaObject(), GetMethodID("GetOSVersion"));
+				m_OSVersionCode = env->CallIntMethod(GetJavaObject(), GetMethodID("getOSVersion"));
 			}
-			return mdwOSVersionCode;
+			return m_OSVersionCode;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Number Of Cores
 		//--------------------------------------------------------------------------------------
 		s32 CoreJavaInterface::GetNumberOfCores()
 		{
-			if (mdwNumberOfCores == -1)
+			if (m_numberOfCores == -1)
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				mdwNumberOfCores = env->CallIntMethod(GetJavaObject(), GetMethodID("GetNumberOfCores"));
+				m_numberOfCores = env->CallIntMethod(GetJavaObject(), GetMethodID("getNumberOfCores"));
 			}
-			return mdwNumberOfCores;
+			return m_numberOfCores;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Screen Density
 		//--------------------------------------------------------------------------------------
 		f32 CoreJavaInterface::GetScreenDensity()
 		{
-			if (mfScreenDensity < 0.0f)
+			if (m_screenDensity < 0.0f)
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				mfScreenDensity = env->CallFloatMethod(GetJavaObject(), GetMethodID("GetScreenDensity"));
+				m_screenDensity = env->CallFloatMethod(GetJavaObject(), GetMethodID("getScreenDensity"));
 			}
-			return mfScreenDensity;
+			return m_screenDensity;
 		}
 		//--------------------------------------------------------------
-		/// Get Telephony Device ID
 		//--------------------------------------------------------------
 		std::string CoreJavaInterface::GetTelephonyDeviceID()
 		{
-			std::string strOutput = "None";
+			std::string output = "None";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrTelephonyDeviceID = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("GetTelephonyDeviceID")));
-			strOutput = JavaInterfaceUtils::CreateSTDStringFromJString(jstrTelephonyDeviceID);
-			env->DeleteLocalRef(jstrTelephonyDeviceID);
-			return strOutput;
+			jstring telephonyDeviceID = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getTelephonyDeviceID")));
+			output = JavaInterfaceUtils::CreateSTDStringFromJString(telephonyDeviceID);
+			env->DeleteLocalRef(telephonyDeviceID);
+			return output;
 		}
 		//--------------------------------------------------------------
-		/// Get Mac Address
 		//--------------------------------------------------------------
 		std::string CoreJavaInterface::GetMacAddress()
 		{
-			std::string strOutput = "None";
+			std::string output = "None";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrMacAddress = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("GetMacAddress")));
-			strOutput = JavaInterfaceUtils::CreateSTDStringFromJString(jstrMacAddress);
-			env->DeleteLocalRef(jstrMacAddress);
-			return strOutput;
+			jstring macAddress = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getMacAddress")));
+			output = JavaInterfaceUtils::CreateSTDStringFromJString(macAddress);
+			env->DeleteLocalRef(macAddress);
+			return output;
 		}
 		//--------------------------------------------------------------
-		/// Get Android ID
 		//--------------------------------------------------------------
 		std::string CoreJavaInterface::GetAndroidID()
 		{
-			std::string strOutput = "None";
+			std::string output = "None";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrAndroidID = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("GetAndroidID")));
-			strOutput = JavaInterfaceUtils::CreateSTDStringFromJString(jstrAndroidID);
-			env->DeleteLocalRef(jstrAndroidID);
-			return strOutput;
+			jstring androidID = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getAndroidID")));
+			output = JavaInterfaceUtils::CreateSTDStringFromJString(androidID);
+			env->DeleteLocalRef(androidID);
+			return output;
 		}
         //-----------------------------------------------------------------------------------------------------
-        /// Force Quit
         //-----------------------------------------------------------------------------------------------------
         void CoreJavaInterface::ForceQuit()
         {
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			env->CallVoidMethod(GetJavaObject(), GetMethodID("ForceQuit"));
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("forceQuit"));
         }
         //-----------------------------------------------------------------------------------------------------
-        /// Get System Time In Milliseconds
         //-----------------------------------------------------------------------------------------------------
         TimeIntervalMs CoreJavaInterface::GetSystemTimeInMilliseconds()
         {
-        	TimeIntervalMs uqwOutput = 0;
+        	TimeIntervalMs output = 0;
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			uqwOutput = (TimeIntervalMs)env->CallLongMethod(GetJavaObject(), GetMethodID("GetSystemTimeInMilliseconds"));
-			return uqwOutput;
+			output = (TimeIntervalMs)env->CallLongMethod(GetJavaObject(), GetMethodID("getSystemTimeInMilliseconds"));
+			return output;
         }
         //-----------------------------------------------------------------------------------------------------
-        /// Get Physical creen Size
         //-----------------------------------------------------------------------------------------------------
         f32 CoreJavaInterface::GetPhysicalScreenSize()
         {
-        	if (mfPhysicalScreenSize < 0.0f)
+        	if (m_physicalScreenSize < 0.0f)
         	{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				mfPhysicalScreenSize = env->CallFloatMethod(GetJavaObject(), GetMethodID("GetPhysicalScreenSize"));
+				m_physicalScreenSize = env->CallFloatMethod(GetJavaObject(), GetMethodID("getPhysicalScreenSize"));
         	}
-        	return mfPhysicalScreenSize;
+        	return m_physicalScreenSize;
         }
 	}
 }

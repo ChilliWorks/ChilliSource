@@ -29,6 +29,17 @@ import android.widget.RelativeLayout;
  */
 public class CSApplication 
 {
+	enum LifecycleState
+	{
+		k_none,
+		k_init,
+		k_resume,
+		k_foreground,
+		k_background,
+		k_suspend,
+		k_destroy
+	}
+	
 	private static CSApplication m_singleton = null;
 	
 	private ArrayList<INativeInterface> m_systems;
@@ -41,24 +52,11 @@ public class CSApplication
 	private boolean m_resetTimeSinceLastUpdate = false;
 	private boolean m_isActive = false;
 	
-	private Object m_backgroundSuspendLock = new Object();
-	
 	private boolean m_initLifecycleEventOccurred = false;
 	private boolean m_resumeLifecycleEventOccurred = false;
 	private boolean m_foregroundLifecycleEventOccurred = false;
 	private boolean m_backgroundLifecycleEventOccurred = false;
 	private Intent m_receivedIntent = null;
-	
-	enum LifecycleState
-	{
-		k_none,
-		k_init,
-		k_resume,
-		k_foreground,
-		k_background,
-		k_suspend,
-		k_destroy
-	}
 	
 	private LifecycleState m_currentAppLifecycleState = LifecycleState.k_none;
 	
@@ -67,7 +65,7 @@ public class CSApplication
 	 * 
 	 * @author S Downie
 	 */
-	public static native void createApplication();
+	private static native void createApplication();
 	/**
 	 * @author S Downie
 	 * 
@@ -93,8 +91,10 @@ public class CSApplication
 	 * Triggered when the app is created
 	 * 
 	 * @author S Downie
+	 * 
+	 * @param Chilli source activity
 	 */
-	public void create(CSActivity in_activeActivity)
+	public static void create(CSActivity in_activeActivity)
 	{
 		//Cannot create app with a null activity
 		assert in_activeActivity != null;
@@ -102,8 +102,17 @@ public class CSApplication
 		//Cannot init app more than once
 		assert m_singleton == null;
 		
-		m_singleton = this;
-		
+		m_singleton = new CSApplication(in_activeActivity);
+	}
+	/**
+	 * Constructor. Private to enforce use of creation factory method
+	 * 
+	 * @author S Downie
+	 * 
+	 * @param Chilli source activity
+	 */
+	private CSApplication(CSActivity in_activeActivity)
+	{
 		m_activeActivity = in_activeActivity;
 		
 		m_systems = new ArrayList<INativeInterface>();
@@ -117,6 +126,8 @@ public class CSApplication
 		m_currentAppLifecycleState = LifecycleState.k_none;
 		
 		LoadSharedLibraries();
+		
+		createApplication();
 	}
 	/**
 	 * Triggered when the app is launched
@@ -208,7 +219,6 @@ public class CSApplication
 	{
 		if(m_initLifecycleEventOccurred == true && (m_currentAppLifecycleState == LifecycleState.k_none || m_currentAppLifecycleState == LifecycleState.k_destroy))
 		{
-			createApplication();
 			CoreNativeInterface.create();
 			m_coreSystem = (CoreNativeInterface)getSystem(CoreNativeInterface.InterfaceID);
 			assert m_coreSystem != null;
@@ -238,14 +248,15 @@ public class CSApplication
 			
 			m_receivedIntent = null;
 		}
+		
+		m_coreSystem.update(in_timeSinceLastUpdate, in_appElapsedTime);
+		
 		if(m_backgroundLifecycleEventOccurred == true && m_currentAppLifecycleState == LifecycleState.k_foreground)
 		{
 			m_coreSystem.background();
 			m_backgroundLifecycleEventOccurred = false;
 			m_currentAppLifecycleState = LifecycleState.k_background;
 		}
-		
-		m_coreSystem.update(in_timeSinceLastUpdate, in_appElapsedTime);
 	}
 	/**
 	 * Triggered when the app is pushed back after being in the foreground
@@ -254,18 +265,15 @@ public class CSApplication
 	 */
 	public void background()
 	{
-		synchronized(m_backgroundSuspendLock)
+		if(m_currentAppLifecycleState != LifecycleState.k_suspend)
 		{
-			if(m_currentAppLifecycleState != LifecycleState.k_suspend)
+			for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
 			{
-				for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
-				{
-					INativeInterface system = iterator.previous();
-					system.onActivityBackground();
-				}
-
-				m_backgroundLifecycleEventOccurred = true;
+				INativeInterface system = iterator.previous();
+				system.onActivityBackground();
 			}
+
+			m_backgroundLifecycleEventOccurred = true;
 		}
 	}
 	/**
@@ -274,21 +282,29 @@ public class CSApplication
 	 * @author S Downie
 	 */
 	public void suspend()
-	{		
+	{	
+		final boolean shouldBackground = (m_currentAppLifecycleState != LifecycleState.k_background);
+		
+		if(shouldBackground == true)
+		{
+			for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+			{
+				INativeInterface system = iterator.previous();
+				system.onActivityBackground();
+			}
+		}
+		
 		//create the task to be run on the rendering thread
 		Runnable task = new Runnable()
 		{
 			@Override public void run() 
 			{
 				//Often suspend is triggered by Android before background. We need to ensure it is not!
-				if(m_currentAppLifecycleState != LifecycleState.k_background)
+				if(shouldBackground)
 				{
-					synchronized(m_backgroundSuspendLock)
-					{
-						m_coreSystem.background();
-						m_backgroundLifecycleEventOccurred = false;
-						m_currentAppLifecycleState = LifecycleState.k_background;
-					}
+					m_coreSystem.background();
+					m_backgroundLifecycleEventOccurred = false;
+					m_currentAppLifecycleState = LifecycleState.k_background;
 				}
 				
 				m_coreSystem.suspend();
@@ -423,6 +439,9 @@ public class CSApplication
 		return m_activeActivity.getApplicationContext();
 	}
 	/**
+	 * We should look to ditch this function once we have established what 
+	 * things should use appContext
+	 * 
 	 * @author S Downie
 	 * 
 	 * @return Android application context 

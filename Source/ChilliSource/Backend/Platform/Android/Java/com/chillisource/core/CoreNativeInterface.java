@@ -13,8 +13,6 @@ import java.util.Locale;
 
 import com.chillisource.core.FileUtils;
 import com.chillisource.core.InterfaceIDType;
-import com.chillisource.core.ILaunchIntentReceiver;
-
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,24 +33,19 @@ import android.util.FloatMath;
 /// Native interface for communicating core features between
 /// native and java.
 //=============================================================
-public class CoreNativeInterface extends INativeInterface implements ILaunchIntentReceiver
+public class CoreNativeInterface extends INativeInterface
 {	
 	//--------------------------------------------------------------
 	/// Static Member Data
 	//--------------------------------------------------------------
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("CCoreNativeInterface");
+	public static InterfaceIDType InterfaceID = new InterfaceIDType("CoreNativeInterface");
 	//--------------------------------------------------------------
 	/// Member Data
 	//--------------------------------------------------------------
-	private PackageInfo mPackageInfo;
+	private PackageInfo m_packageInfo;
 	//--------------------------------------------------------------
 	/// Native methods
 	//--------------------------------------------------------------
-	public native void update(float in_timeSinceLastUpdate, long in_appElapsedTime);
-	public native void memoryWarning();
-	public native void orientationChanged(int indwOrientation);
-	public native void onBackPressed();
-	public native void applicationDidReceiveLaunchingURL(String instrURL);
 	/**
 	 * Force the native interface to create this system
 	 * 
@@ -85,6 +78,15 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	 */
 	public native void foreground();
 	/**
+	 * Updates the native application
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param Time in seconds since last update
+	 * @param Total elapsed time of app
+	 */
+	public native void update(float in_timeSinceLastUpdate, long in_appElapsedTime);
+	/**
 	 * Triggered when the application is sent
 	 * to the background after being in the foreground
 	 * This doesn't override from INativeInterface in
@@ -109,36 +111,67 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	 * @author S Downie
 	 */
 	public native void destroy();
-	//--------------------------------------------------------------
-	/// Constructor
-	//--------------------------------------------------------------
+	/**
+	 * Triggered when the app is low on memory to tell native
+	 * to clean itself up
+	 * 
+	 * @author I Copland
+	 */
+	public native void memoryWarning();
+	/**
+	 * Triggered when the screen orientation changes
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param Orientation ID corresponding to native enum
+	 */
+	public native void orientationChanged(int in_orientationID);
+	/**
+	 * Triggered when the device back button hard key is pressed
+	 * 
+	 * @author I Copland
+	 */
+	public native void onBackPressed();
+	/**
+	 * Triggered when the is launched with an intent containing a URL
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param URL
+	 */
+	public native void applicationDidReceiveLaunchingURL(String in_url);
+	/**
+	 * Constructor
+	 * 
+	 * @author I Copland
+	 */
 	public CoreNativeInterface() throws NameNotFoundException
 	{
-		mPackageInfo = CSApplication.get().getAppContext().getPackageManager().getPackageInfo(CSApplication.get().getActivityContext().getPackageName(), PackageManager.GET_ACTIVITIES);
+		m_packageInfo = CSApplication.get().getAppContext().getPackageManager().getPackageInfo(CSApplication.get().getActivityContext().getPackageName(), PackageManager.GET_ACTIVITIES);
 	}
-	//--------------------------------------------------------------
-	/// Is A
-	///
-	/// @return whether or not this implements the given interface.
-	//--------------------------------------------------------------
-	@Override public boolean IsA(InterfaceIDType inInterfaceType) 
+	/**
+	 * @author I Copland
+	 * 
+	 * @param Java system interface ID
+	 * 
+	 * @return Whether the system implements the ID
+	 */
+	@Override public boolean IsA(InterfaceIDType in_interfaceType) 
 	{
-		return (inInterfaceType.Equals(InterfaceID));
+		return (in_interfaceType.Equals(InterfaceID));
 	}
-	//-------------------------------------------------------------
-	/// On Activity Result
-	///
-	/// Receives intents containing launching URLs. These will be
-	/// passed on to the native side of the application, sending a
-	/// Launching Actions event.
-	///
-	/// @param The new launch intent.
-	//-------------------------------------------------------------
-	@Override public void OnLaunchIntentReceived(Intent inIntent) 
+	/**
+	 * Triggered when the activity receives an intent
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param Intent
+	 */
+	@Override public void onLaunchIntentReceived(Intent in_intent) 
 	{
-		if(inIntent != null)
+		if(in_intent != null)
     	{
-    		String strUri = inIntent.getDataString();
+    		String strUri = in_intent.getDataString();
     		
     		if(strUri != null)
     		{
@@ -146,46 +179,37 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
     		}
     	}
 	}
-	//--------------------------------------------------------------
-	/// Get External Storage Directory
-	///
-	/// A method accessable from native that returns the external
-	/// storage directory.
-	///
-	/// @return the external storage directory.
-	//--------------------------------------------------------------
-	public String GetExternalStorageDirectory()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Path to external storage
+	 */
+	public String getExternalStorageDirectory()
 	{
 		return FileUtils.GetExternalStorageDirectory();
 	}
-	//--------------------------------------------------------------
-	/// Get Application Name
-	///
-	/// A method accessable from native that returns the application
-	/// name.
-	///
-	/// @return the application name.
-	//--------------------------------------------------------------
-	public String GetApplicationName()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Application name as specified by the project
+	 */
+	public String getApplicationName()
 	{
-		if (mPackageInfo.applicationInfo != null)
+		if (m_packageInfo.applicationInfo != null)
 		{
-			return CSApplication.get().getActivityContext().getPackageManager().getApplicationLabel(mPackageInfo.applicationInfo).toString();
+			return CSApplication.get().getActivityContext().getPackageManager().getApplicationLabel(m_packageInfo.applicationInfo).toString();
 		}
 		else
 		{
 			return "ApplicationInfoWrong";
 		}
 	}
-	//--------------------------------------------------------------
-	/// Get Application Version Code
-	///
-	/// A method accessable from native that returns the application
-	/// version code as found in the manifest.
-	///
-	/// @return the application code.
-	//--------------------------------------------------------------
-	public int GetApplicationVersionCode()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Application version code as specified by the manifest
+	 */
+	public int getApplicationVersionCode()
 	{
 		try 
 		{
@@ -196,15 +220,12 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 			return 0;
 		}
 	}
-	//--------------------------------------------------------------
-	/// Get Application Version Name
-	///
-	/// A method accessable from native that returns the application
-	/// version name as found in the manifest.
-	///
-	/// @return the application version name.
-	//--------------------------------------------------------------
-	public String GetApplicationVersionName()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Application version name as specified by the manifest
+	 */
+	public String getApplicationVersionName()
 	{
 		try 
 		{
@@ -215,192 +236,148 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 			return "";
 		}
 	}
-	//--------------------------------------------------------------
-	/// Get Package Name
-	///
-	/// A method accessable from native that returns the package
-	/// name.
-	///
-	/// @return the package name.
-	//--------------------------------------------------------------
-	public String GetPackageName()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Application package name
+	 */
+	public String getPackageName()
 	{
 		return CSApplication.get().getActivityContext().getPackageName();
 	}
-	//--------------------------------------------------------------
-	/// Get APK Directory
-	///
-	/// A method accessable from native that returns this applications
-	/// apk directory.
-	///
-	/// @return the apk directory.
-	//--------------------------------------------------------------
-	public String GetAPKDirectory()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Path to APK directory
+	 */
+	public String getAPKDirectory()
 	{
-		return mPackageInfo.applicationInfo.sourceDir;
+		return m_packageInfo.applicationInfo.sourceDir;
 	}
-	//--------------------------------------------------------------
-	/// Get Orientation
-	///
-	/// A method accessable from native that returns this devices
-	/// orientation.
-	///
-	/// @return the device orientation are reported by the OS.
-	//--------------------------------------------------------------
-	public int GetOrientation()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Current device orientation
+	 */
+	public int getOrientation()
 	{
 		return CSApplication.get().getActivityContext().getResources().getConfiguration().orientation;
 	}
-	//--------------------------------------------------------------
-	/// Returns the constant value for Landscape Orientation
-	///
-	/// A method accessable from native that returns the constant
-	/// value for landscape orientation.
-	///
-	/// @return the constant value for landscape orientation.
-	//--------------------------------------------------------------
-	public int GetOrientationLandscapeConstant()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Orientation constant that represents landscape
+	 */
+	public int getOrientationLandscapeConstant()
 	{
 		return Configuration.ORIENTATION_LANDSCAPE;
 	}
-	//--------------------------------------------------------------
-	/// Returns the constant value for Portrait Orientation
-	///
-	/// A method accessable from native that returns the constant
-	/// value for portrait orientation.
-	///
-	/// @return the constant value for portrait orientation.
-	//--------------------------------------------------------------
-	public int GetOrientationPortraitConstant()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Orientation constant that represents portrait
+	 */
+	public int getOrientationPortraitConstant()
 	{
 		return Configuration.ORIENTATION_PORTRAIT;
 	}
-	//--------------------------------------------------------------
-	/// Get Screen Width
-	///
-	/// A method accessable from native that returns this devices
-	/// screen width.
-	///
-	/// @return the screen width.
-	//--------------------------------------------------------------
-	public int GetScreenWidth()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Screen width in pixels
+	 */
+	public int getScreenWidth()
 	{
 		return CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getWidth();
 	}
-	//--------------------------------------------------------------
-	/// Get Screen Height
-	///
-	/// A method accessable from native that returns this devices
-	/// screen height
-	///
-	/// @return the screen height.
-	//--------------------------------------------------------------
-	public int GetScreenHeight()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Screen height in pixels
+	 */
+	public int getScreenHeight()
 	{
 		return CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getHeight();
 	}
-	//--------------------------------------------------------------
-	/// Get Default Locale Code
-	///
-	/// A method accessable from native that returns this devices
-	/// currently set default locale code.
-	///
-	/// @retuurn the locale code as a string.
-	//--------------------------------------------------------------
-	public String GetDefaultLocaleCode()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Locale code of device as a string
+	 */
+	public String getDefaultLocaleCode()
 	{
-		String strLocaleCode = Locale.getDefault().toString();
-		return strLocaleCode;
+		return Locale.getDefault().toString();
 	}
-	//--------------------------------------------------------------
-	/// Get Device Model
-	///
-	/// A method accessable from native that returns the device model
-	///
-	/// @return the device model.
-	//--------------------------------------------------------------
-	public String GetDeviceModel()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Mode of device as a string
+	 */
+	public String getDeviceModel()
 	{
 		return Build.MODEL.toString();
 	}
-	//--------------------------------------------------------------
-	/// Get Device Manufacturer
-	///
-	/// A method accessable from native that returns the device
-	/// manufacturer.
-	///
-	// @return the device manufacturer.
-	//--------------------------------------------------------------
-	public String GetDeviceManufacturer()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Manufacturer of device as a string
+	 */
+	public String getDeviceManufacturer()
 	{
 		return Build.MANUFACTURER.toString();
 	}
-	//--------------------------------------------------------------
-	/// Get Device Model Type
-	///
-	/// A method accessable from native that returns this devices
-	/// model type.
-	///
-	/// @return the device type
-	//--------------------------------------------------------------
-	public String GetDeviceModelType()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Type of device as a string
+	 */
+	public String getDeviceModelType()
 	{
 		return Build.DEVICE.toString();
 	}
-	//--------------------------------------------------------------
-	/// Get OS Version
-	///
-	/// A method accessable from native that returns the OS version
-	/// number. This is the internal api level number, not the public
-	/// version number. For example: an android 2.2 device will return
-	/// 8 - the api level used for android 2.2.
-	///
-	/// @return the OS version number.
-	//--------------------------------------------------------------
-	public int GetOSVersion()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return OS version as number
+	 */
+	public int getOSVersion()
 	{
 		return Build.VERSION.SDK_INT;
 	}
-	//--------------------------------------------------------------
-	/// Get Number of Cores
-	///
-	/// A method accessable from native that returns the number of
-	/// cores available on the device.
-	///
-	/// @return the number of cores.
-	//--------------------------------------------------------------
-	public int GetNumberOfCores()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Num of CPU cores available
+	 */
+	public int getNumberOfCores()
 	{
 		return Runtime.getRuntime().availableProcessors();
 	}
-	//--------------------------------------------------------------
-	/// Get Screen Density
-	///
-	/// A method accessable from native that returns the screen
-	/// density of this device.
-	///
-	/// @return the screen density.
-	//--------------------------------------------------------------
-	public float GetScreenDensity()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return Density of screen in dpi
+	 */
+	public float getScreenDensity()
 	{
 		DisplayMetrics metrics = new DisplayMetrics();
 		CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		return metrics.density;
 	}
-	//--------------------------------------------------------------
-	/// Get Telephony Device ID
-	///
-	/// Method accesable from native that returns the Device ID
-	/// That can be acquired from TelephonyManager.getDeviceId().
-	/// This id is not accessable if the device does not contain a
-	/// sim card, or if the sim is unavailable (flight mode). If the 
-	/// id is not accessable an empty string will be returned. This
-	/// Should not change on factory reset of a device, but it may
-	/// change if the sim card is changed.
-	///
-	/// @return the telephony device ID or an empty string.
-	//--------------------------------------------------------------
-	public String GetTelephonyDeviceID()
+	/**
+	 * Method accesable from native that returns the Device ID
+	 * That can be acquired from TelephonyManager.getDeviceId().
+	 * This id is not accessable if the device does not contain a
+	 * sim card, or if the sim is unavailable (flight mode). If the 
+	 * id is not accessable an empty string will be returned. This
+	 * Should not change on factory reset of a device, but it may
+	 * change if the sim card is changed.
+	 * 
+	 * @author I Copland
+	 *
+	 * @return the telephony device ID or an empty string.
+	*/
+	public String getTelephonyDeviceID()
 	{
 		TelephonyManager phoneManager = (TelephonyManager) CSApplication.get().getActivityContext().getSystemService(Context.TELEPHONY_SERVICE);
 		String strId = phoneManager.getDeviceId();
@@ -409,16 +386,16 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 			return "";
 		return strId;
 	}
-	//--------------------------------------------------------------
-	/// Get Mac Address
-	///
-	/// Returns the mac address of the device. This may not be available
-	/// on some devices while wifi is turned off. This should not change
-	/// on factory reset of a device.
-	///
-	/// @return the Mac Address or an empty string.
-	//--------------------------------------------------------------
-	public String GetMacAddress()
+	/**
+	 * Returns the mac address of the device. This may not be available
+	 * on some devices while wifi is turned off. This should not change
+	 * on factory reset of a device.
+	 * 
+	 * @author I Copland
+	 *
+	 * @return mac address or an empty string.
+	*/
+	public String getMacAddress()
 	{
 		WifiManager wifiManager = (WifiManager)CSApplication.get().getActivityContext().getSystemService(Context.WIFI_SERVICE);
 		String strMacAddress = wifiManager.getConnectionInfo().getMacAddress();
@@ -427,20 +404,20 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 			return "";
 		return strMacAddress;
 	}
-	//--------------------------------------------------------------
-	/// Get Android ID
-	///
-	/// Returns the android ID for this device. This should be unique
-	/// however a bug in 2.2 has lead to a large amount of devices
-	/// on 2.2 sharing the same ID (9774d56d682e549c). This ID is 
-	/// checked for and, if found, is discarded. If the id is
-	/// unavailable or the duplicate ID is found, an empty string
-	/// will be returned. This value may change if the device is
-	/// factory reset.
-	///
-	/// @return the unique Android ID or an empty string.
-	//--------------------------------------------------------------
-	public String GetAndroidID()
+	/**
+	 * Returns the android ID for this device. This should be unique
+	 * however a bug in 2.2 has lead to a large amount of devices
+	 * on 2.2 sharing the same ID (9774d56d682e549c). This ID is 
+	 * checked for and, if found, is discarded. If the id is
+	 * unavailable or the duplicate ID is found, an empty string
+	 * will be returned. This value may change if the device is
+	 * factory reset.
+	 *
+	 * @author I Copland
+	 *
+	 * @return the unique Android ID or an empty string.
+	*/
+	public String getAndroidID()
 	{
 		String strID = Settings.Secure.getString(CSApplication.get().getActivityContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 		
@@ -449,47 +426,47 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 
 		return strID;
 	}
-	//------------------------------------------------------------------
-	/// Set Max FPS
-	///
-	/// @param Max FPS to clamp to
-	//------------------------------------------------------------------
-	public void SetMaxFPS(int in_maxFPS)
+	/**
+	 * @author S Downie
+	 * 
+	 * @param Max FPS to limit device to
+	 */
+	public void setMaxFPS(int in_maxFPS)
 	{
 		CSApplication.get().setMaxFPS(in_maxFPS);
 	}
-    //-----------------------------------------------------------------------------------------------------
-    /// Force Quit
-    ///
-    /// Kill the current process
-    //-----------------------------------------------------------------------------------------------------
-    public void ForceQuit()
+	/**
+	 * Terminate the activity and the app
+	 * 
+	 * @author I Copland
+	 */
+    public void forceQuit()
     {
     	CSApplication.get().quit();
     }
-    //-----------------------------------------------------------------------------------------------------
-    /// GetSystemTimeInMilliseconds
-    ///
-    /// @return system time in milliseconds
-    //-----------------------------------------------------------------------------------------------------
-    public long GetSystemTimeInMilliseconds()
+	/**
+	 * @author S Downie
+	 * 
+	 * @return system time in milliseconds
+	 */
+    public long getSystemTimeInMilliseconds()
     {
     	return System.currentTimeMillis(); 
     }
-    //-----------------------------------------------------------------------------------------------------
-    /// Get Physical Screen Size
-    ///
-    /// @return the physical screen size in inches.
-    //-----------------------------------------------------------------------------------------------------
-    public float GetPhysicalScreenSize()
+	/**
+	 * @author S Downie
+	 * 
+	 * @return diagonal screen size in inches
+	 */
+    public float getPhysicalScreenSize()
     {
     	//get the display metrics
     	DisplayMetrics displayMetrics = new DisplayMetrics();
     	CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
     	
     	//calculate the diagonal physical size from dpi and resolution.
-    	float sizeX = GetScreenWidth() / displayMetrics.xdpi;
-    	float sizeY = GetScreenHeight() / displayMetrics.ydpi;
+    	float sizeX = getScreenWidth() / displayMetrics.xdpi;
+    	float sizeY = getScreenHeight() / displayMetrics.ydpi;
     	return (float)FloatMath.sqrt((sizeX * sizeX) + (sizeY * sizeY));
     }
 }

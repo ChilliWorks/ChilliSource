@@ -341,12 +341,6 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 		if (mMediaPlayer == inMediaPlayer)
 		{
 			Cleanup();
-			VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
-			if (mediaPlayerNI != null)
-			{
-				mediaPlayerNI.Stopped();
-			}
-			
 			mActivity.finish();
 		}
 	}

@@ -1,6 +1,6 @@
 /**
  *  CSActivity.java
- *  ChilliSource
+ *  Chilli Source
  *
  *  Created by Ian Copland on 14/08/2012.
  *  Copyright 2012 Tag Games. All rights reserved.
@@ -34,7 +34,6 @@ import org.fmod.FMODAudioDevice;
 public class CSActivity extends Activity 
 {
 	private FMODAudioDevice m_FMODAudioDevice = new FMODAudioDevice();
-	private Renderer m_renderer;
 	private Surface m_surface;
 	
 	/**
@@ -53,12 +52,10 @@ public class CSActivity extends Activity
         	requestWindowFeature(Window.FEATURE_NO_TITLE);
         	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
-        	m_renderer = new Renderer();
-    		m_surface = new Surface(this, m_renderer);
+    		m_surface = new Surface(this);
         
-        	CSApplication app = new CSApplication();
-        	app.create(this);
-        	
+        	CSApplication.create(this);
+      
         	CSApplication.get().activityIntent(getIntent());
     		
           	//initialise the old style native interfaces (These should be removed over time as each of these is changed over to the new system!)
@@ -121,11 +118,12 @@ public class CSActivity extends Activity
 	 */
     @Override public void onPause() 
     {
+    	CSApplication.get().suspend();
+    	
     	m_surface.onPause();
     	m_FMODAudioDevice.stop();
         CSPowerManager.ReleaseLock(CSPowerManager.LOCK_TYPE.SCREEN_DIM_LOCK);
-        
-        CSApplication.get().suspend();
+       
         super.onPause();
     }
 	/**
@@ -155,11 +153,11 @@ public class CSActivity extends Activity
 	 * 
 	 * @param Intent
 	 */
-    @Override public void onNewIntent(Intent inIntent)
+    @Override public void onNewIntent(Intent in_intent)
     {
-    	setIntent(inIntent);
-    	CSApplication.get().activityIntent(inIntent);
-    	super.onNewIntent(inIntent);
+    	setIntent(in_intent);
+    	CSApplication.get().activityIntent(in_intent);
+    	super.onNewIntent(in_intent);
     }
 	/**
 	 * Triggered when the activity exits.
@@ -182,12 +180,12 @@ public class CSActivity extends Activity
 	 * 
 	 * @param New config
 	 */
-    @Override public void onConfigurationChanged(Configuration newConfig) 
+    @Override public void onConfigurationChanged(Configuration in_config) 
     {     
-    	super.onConfigurationChanged(newConfig);
+    	super.onConfigurationChanged(in_config);
     	
     	// Checks whether a hardware keyboard is available    
-    	if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) 
+    	if (in_config.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) 
     	{   
     		KeyboardNativeInterface keyboardNI = (KeyboardNativeInterface)CSApplication.get().getSystem(KeyboardNativeInterface.InterfaceID);
     		if (keyboardNI != null)
@@ -195,7 +193,7 @@ public class CSActivity extends Activity
     			keyboardNI.SetHardwareKeyboardOpen();
     		}
     	} 
-    	else if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) 
+    	else if (in_config.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) 
     	{
     		KeyboardNativeInterface keyboardNI = (KeyboardNativeInterface)CSApplication.get().getSystem(KeyboardNativeInterface.InterfaceID);
     		if (keyboardNI != null)
@@ -233,13 +231,4 @@ public class CSActivity extends Activity
     {
     	return m_surface;
     }
-	/**
-	 * @author S Downie
-	 * 
-	 * @return Renderer
-	 */
-    public Renderer getRenderer()
-    {
-    	return m_renderer;
-    } 
 }

@@ -28,9 +28,8 @@ public class Surface extends GLSurfaceView
 	 * @author I Copland
 	 * 
 	 * @param Activity
-	 * @param GL renderer
 	 */
-	public Surface(Activity in_activity, Renderer in_renderer) 
+	public Surface(Activity in_activity) 
 	{
 		super(in_activity);
         
@@ -44,7 +43,7 @@ public class Surface extends GLSurfaceView
 		setEGLConfigChooser(new ConfigChooser(5, 6, 5, 0, depthBufferSize, stencilBufferSize));
 		
 		//create renderer
-		setRenderer(in_renderer);
+		setRenderer(new com.chillisource.core.Renderer());
     }
 	/**
 	 * Triggered when the surface is paused i.e. when it is no
