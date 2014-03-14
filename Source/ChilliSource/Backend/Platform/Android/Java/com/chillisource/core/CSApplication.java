@@ -121,7 +121,7 @@ public class CSApplication
 		
 		m_currentAppLifecycleState = LifecycleState.k_notInitialised;
 		
-		LoadSharedLibraries();
+		loadSharedLibraries();
 		
 		createApplication();
 	}
@@ -209,7 +209,7 @@ public class CSApplication
     	m_elapsedAppTime += deltaTime;
     	m_previousUpdateTime = currentTime;
     	
-    	ProcessAppLifecycleEvents(deltaTime, m_elapsedAppTime);
+    	processAppLifecycleEvents(deltaTime, m_elapsedAppTime);
 	}
 	/**
 	 * Application lifecycle events are deferred to the main thread and are
@@ -217,7 +217,7 @@ public class CSApplication
 	 * 
 	 * @author S Downie
 	 */
-	private void ProcessAppLifecycleEvents(float in_timeSinceLastUpdate, long in_appElapsedTime)
+	private void processAppLifecycleEvents(float in_timeSinceLastUpdate, long in_appElapsedTime)
 	{
 		if(m_initLifecycleEventOccurred == true && m_currentAppLifecycleState == LifecycleState.k_notInitialised)
 		{
@@ -582,7 +582,7 @@ public class CSApplication
 	 * 
 	 * @param Task
 	 */
-	private void LoadSharedLibraries()
+	private void loadSharedLibraries()
 	{
 		assert m_activeActivity != null;
 		
