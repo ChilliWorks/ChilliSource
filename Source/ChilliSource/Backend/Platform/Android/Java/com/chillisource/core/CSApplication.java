@@ -31,13 +31,10 @@ public class CSApplication
 {
 	enum LifecycleState
 	{
-		k_none,
-		k_init,
-		k_resume,
-		k_foreground,
-		k_background,
-		k_suspend,
-		k_destroy
+		k_notInitialised,
+		k_inactive,
+		k_active,
+		k_foreground
 	}
 	
 	private static CSApplication m_singleton = null;
@@ -58,7 +55,7 @@ public class CSApplication
 	private boolean m_backgroundLifecycleEventOccurred = false;
 	private Intent m_receivedIntent = null;
 	
-	private LifecycleState m_currentAppLifecycleState = LifecycleState.k_none;
+	private LifecycleState m_currentAppLifecycleState = LifecycleState.k_notInitialised;
 	
 	/**
 	 * Factory method for creating the application in native
@@ -84,8 +81,7 @@ public class CSApplication
 	 */
 	public boolean hasReceivedInit()
 	{
-		return 	m_initLifecycleEventOccurred || 
-				(m_currentAppLifecycleState != LifecycleState.k_none && m_currentAppLifecycleState != LifecycleState.k_destroy);
+		return 	m_initLifecycleEventOccurred || (m_currentAppLifecycleState != LifecycleState.k_notInitialised);
 	}
 	/**
 	 * Triggered when the app is created
@@ -123,7 +119,7 @@ public class CSApplication
 		m_activeActivity.setContentView(m_rootViewContainer);
 		m_rootViewContainer.addView(m_activeActivity.getSurface());
 		
-		m_currentAppLifecycleState = LifecycleState.k_none;
+		m_currentAppLifecycleState = LifecycleState.k_notInitialised;
 		
 		LoadSharedLibraries();
 		
@@ -223,7 +219,7 @@ public class CSApplication
 	 */
 	private void ProcessAppLifecycleEvents(float in_timeSinceLastUpdate, long in_appElapsedTime)
 	{
-		if(m_initLifecycleEventOccurred == true && (m_currentAppLifecycleState == LifecycleState.k_none || m_currentAppLifecycleState == LifecycleState.k_destroy))
+		if(m_initLifecycleEventOccurred == true && m_currentAppLifecycleState == LifecycleState.k_notInitialised)
 		{
 			CoreNativeInterface.create();
 			m_coreSystem = (CoreNativeInterface)getSystem(CoreNativeInterface.InterfaceID);
@@ -231,15 +227,15 @@ public class CSApplication
 			m_coreSystem.init();
 			
 			m_initLifecycleEventOccurred = false;
-			m_currentAppLifecycleState = LifecycleState.k_init;
+			m_currentAppLifecycleState = LifecycleState.k_inactive;
 		}
-		if(m_resumeLifecycleEventOccurred == true && (m_currentAppLifecycleState == LifecycleState.k_init || m_currentAppLifecycleState == LifecycleState.k_suspend))
+		if(m_resumeLifecycleEventOccurred == true && m_currentAppLifecycleState == LifecycleState.k_inactive)
 		{
 			m_coreSystem.resume();
 			m_resumeLifecycleEventOccurred = false;
-			m_currentAppLifecycleState = LifecycleState.k_resume;
+			m_currentAppLifecycleState = LifecycleState.k_active;
 		}
-		if(m_foregroundLifecycleEventOccurred == true && (m_currentAppLifecycleState == LifecycleState.k_resume || m_currentAppLifecycleState == LifecycleState.k_background))
+		if(m_foregroundLifecycleEventOccurred == true && m_currentAppLifecycleState == LifecycleState.k_active)
 		{
 			m_coreSystem.foreground();
 			m_foregroundLifecycleEventOccurred = false;
@@ -264,7 +260,7 @@ public class CSApplication
 		{
 			m_coreSystem.background();
 			m_backgroundLifecycleEventOccurred = false;
-			m_currentAppLifecycleState = LifecycleState.k_background;
+			m_currentAppLifecycleState = LifecycleState.k_active;
 		}
 	}
 	/**
@@ -274,7 +270,7 @@ public class CSApplication
 	 */
 	public void background()
 	{
-		if(m_currentAppLifecycleState != LifecycleState.k_suspend)
+		if(m_currentAppLifecycleState == LifecycleState.k_foreground)
 		{
 			synchronized(m_systems)
 			{
@@ -295,7 +291,7 @@ public class CSApplication
 	 */
 	public void suspend()
 	{	
-		final boolean shouldBackground = (m_currentAppLifecycleState != LifecycleState.k_background);
+		final boolean shouldBackground = (m_currentAppLifecycleState == LifecycleState.k_foreground);
 		
 		if(shouldBackground == true)
 		{
@@ -319,11 +315,11 @@ public class CSApplication
 				{
 					m_coreSystem.background();
 					m_backgroundLifecycleEventOccurred = false;
-					m_currentAppLifecycleState = LifecycleState.k_background;
+					m_currentAppLifecycleState = LifecycleState.k_active;
 				}
 				
 				m_coreSystem.suspend();
-				m_currentAppLifecycleState = LifecycleState.k_suspend;
+				m_currentAppLifecycleState = LifecycleState.k_inactive;
 				
 				synchronized(this)
 				{
@@ -369,7 +365,7 @@ public class CSApplication
 	{
 		//Make sure the core system is handled first
 		m_coreSystem.destroy();
-		m_currentAppLifecycleState = LifecycleState.k_destroy;
+		m_currentAppLifecycleState = LifecycleState.k_notInitialised;
 		
 		synchronized(m_systems)
 		{
