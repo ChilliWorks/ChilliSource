@@ -25,7 +25,7 @@ import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
 import com.chillisource.core.CSApplication;
-import com.chillisource.core.CSLogging;
+import com.chillisource.core.Logging;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.ResourceHelper;
 import com.chillisource.googleplay.GooglePlayDownloaderService;
@@ -85,7 +85,7 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
 		}
 		else
 		{
-			CSLogging.logError("CExpansionDownloaderNativeInterface: Failed to get 'GooglePlayPublicKey' from the Values resource");
+			Logging.logError("CExpansionDownloaderNativeInterface: Failed to get 'GooglePlayPublicKey' from the Values resource");
 			return;
 		}
 		
@@ -162,7 +162,7 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
 			   
 		if(expansion == null)
 		{
-			CSLogging.logError("CExpansionDownloader::GetPathToExpansion() - No Expansion file could be found!");
+			Logging.logError("CExpansionDownloader::GetPathToExpansion() - No Expansion file could be found!");
 			return "";
 		}
 			   
@@ -315,7 +315,7 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
             case IDownloaderClient.STATE_FAILED:
             case IDownloaderClient.STATE_FAILED_FETCHING_URL:
             case IDownloaderClient.STATE_FAILED_UNLICENSED:
-            	CSLogging.logError("Expansion download failed with error "+newState);
+            	Logging.logError("Expansion download failed with error "+newState);
             	OnDownloadStateChangedFailed();
                 break;
                 

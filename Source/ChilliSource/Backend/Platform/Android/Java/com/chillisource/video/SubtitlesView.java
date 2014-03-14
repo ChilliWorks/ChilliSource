@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.chillisource.core.CSApplication;
-import com.chillisource.core.CSLogging;
+import com.chillisource.core.Logging;
 import com.chillisource.video.VideoPlayerNativeInterface;
 
 import android.content.Context;
@@ -60,7 +60,7 @@ public class SubtitlesView extends ViewGroup
 		mVideoPlayerNativeInterface = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
 		if (mVideoPlayerNativeInterface == null)
 		{
-			CSLogging.logError("Could not get the video player native interface!");
+			Logging.logError("Could not get the video player native interface!");
 		}
 		
 		setWillNotDraw(false);

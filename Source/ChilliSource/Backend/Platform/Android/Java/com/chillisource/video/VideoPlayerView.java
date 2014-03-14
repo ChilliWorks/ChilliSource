@@ -10,7 +10,7 @@
 package com.chillisource.video;
 import com.chillisource.video.VideoPlayerNativeInterface;
 import com.chillisource.core.CSApplication;
-import com.chillisource.core.CSLogging;
+import com.chillisource.core.Logging;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
@@ -180,7 +180,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 			}
 			catch (Exception e)
 			{
-				CSLogging.logError("Error trying to open video file: " + mstrFilename);
+				Logging.logError("Error trying to open video file: " + mstrFilename);
 				onError(mMediaPlayer, 0, 0);
 			}
 		}
@@ -324,7 +324,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	{
 		if (mMediaPlayer == inMediaPlayer)
 		{
-			CSLogging.logError("Media player has encountered an error while preparing.");
+			Logging.logError("Media player has encountered an error while preparing.");
 			onCompletion(inMediaPlayer);
 			return true;
 		}

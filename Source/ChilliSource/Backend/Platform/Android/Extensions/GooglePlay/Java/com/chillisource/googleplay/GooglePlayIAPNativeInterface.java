@@ -18,7 +18,7 @@ import org.json.JSONObject;
 import android.content.Intent;
 
 import com.chillisource.core.CSApplication;
-import com.chillisource.core.CSLogging;
+import com.chillisource.core.Logging;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.INativeInterface;
 import com.chillisource.networking.IAPProductDescription;
@@ -83,7 +83,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 				else
 				{
 					mbIsPurchasingEnabled = false;
-					CSLogging.logError("Cannot setup Google Play IAB: " + result.getMessage());
+					Logging.logError("Cannot setup Google Play IAB: " + result.getMessage());
 				}
 			}
 		});
@@ -137,7 +137,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 						
 						if(result.isFailure())
 						{
-							CSLogging.logError("Cannot query Google IAB inventory: " + result.getMessage());
+							Logging.logError("Cannot query Google IAB inventory: " + result.getMessage());
 							OnProductsRequestComplete(null, inProductIDs);
 							return;
 						}
@@ -249,7 +249,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 
 						if(result.isFailure())
 						{
-							CSLogging.logError("Google IAB purchase error: " + result.getMessage() + " for product: " + inProductID);
+							Logging.logError("Google IAB purchase error: " + result.getMessage() + " for product: " + inProductID);
 
 							switch(result.getResponse())
 							{
@@ -366,7 +366,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 								{
 									if(result.isFailure())
 									{
-										CSLogging.logError("Google IAB consume error: " + result.getMessage() + " for product: " + purchase.getSku());
+										Logging.logError("Google IAB consume error: " + result.getMessage() + " for product: " + purchase.getSku());
 									}
 									
 									NativeOnTransactionClosed(inProductID, inTransactionID);
@@ -465,7 +465,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 		//Loop through the purchase list and pass on any managed products as new transactions but with the original receipts
 		if(mInventory == null)
 		{
-			CSLogging.logError("IAPSystem: Products must be registered and requested before any other actions");
+			Logging.logError("IAPSystem: Products must be registered and requested before any other actions");
 			throw new NullPointerException("Products must be registered and requested before any other actions");
 		}
 		

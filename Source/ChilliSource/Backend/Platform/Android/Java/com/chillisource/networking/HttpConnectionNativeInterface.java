@@ -17,7 +17,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
 
-import com.chillisource.core.CSLogging;
+import com.chillisource.core.Logging;
 import com.chillisource.networking.InsecureHostnameVerifier;
 import com.chillisource.networking.InsecureTrustManager;
 import com.chillisource.networking.DynamicByteContainer;
@@ -188,22 +188,22 @@ public class HttpConnectionNativeInterface
 				catch (UnknownHostException eUnknownHostException)
 				{
 					outadwResultCode[0] = 2; //HRRC_TIMEOUT
-					CSLogging.logError(eUnknownHostException.getMessage());
+					Logging.logError(eUnknownHostException.getMessage());
 				}
 				catch (SocketTimeoutException timeoutException)
 				{
 					outadwResultCode[0] = 2; //HRRC_TIMEOUT
-					CSLogging.logError(timeoutException.getMessage());
+					Logging.logError(timeoutException.getMessage());
 				}
 				catch (EOFException eofException)
 				{
 					outadwResultCode[0] = 2; //HRRC_TIMEOUT
-					CSLogging.logError(eofException.getMessage());
+					Logging.logError(eofException.getMessage());
 				}
 				catch (Exception eConnectionException)
 				{
 					outadwResultCode[0] = 1;//HRRC_COULDNOTCONNECT
-					CSLogging.logError(eConnectionException.getMessage());
+					Logging.logError(eConnectionException.getMessage());
 				}
 				finally 
 				{
@@ -226,7 +226,7 @@ public class HttpConnectionNativeInterface
 				}
 
 				outadwResultCode[0] = 1;//HRRC_COULDNOTCONNECT
-				CSLogging.logError(eUrlException.getMessage());
+				Logging.logError(eUrlException.getMessage());
 			}
 
 		} while(bRetry);

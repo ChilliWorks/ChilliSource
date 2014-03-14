@@ -19,7 +19,7 @@ import org.json.JSONObject;
 import com.amazon.inapp.purchasing.Offset;
 import com.chillisource.amazon.PurchaseTransaction.ProductType;
 import com.chillisource.core.AESEncryption;
-import com.chillisource.core.CSLogging;
+import com.chillisource.core.Logging;
 import com.chillisource.core.ExceptionUtils;
 import com.chillisource.core.FileUtils;
 import com.chillisource.core.HashSHA256;
@@ -310,7 +310,7 @@ public class DataStore
 			}
 			else
 			{
-				CSLogging.logError("Purchase Transaction Cache: Failed to write encrpyted cache.");
+				Logging.logError("Purchase Transaction Cache: Failed to write encrpyted cache.");
 			}
 		}
 		catch (Exception e)

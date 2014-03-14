@@ -33,7 +33,7 @@ import com.facebook.widget.WebDialog;
 import com.facebook.FacebookException;
 import com.taggames.CTagResourceHelper;
 import com.chillisource.core.CSApplication;
-import com.chillisource.core.CSLogging;
+import com.chillisource.core.Logging;
 import com.chillisource.core.INativeInterface;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.ResourceHelper;
@@ -111,7 +111,7 @@ public class FacebookNativeInterface extends INativeInterface
 		}
 		catch(Exception e)
 		{
-			CSLogging.logError(e.getMessage());
+			Logging.logError(e.getMessage());
 		}
 	}
 	//--------------------------------------------------------------------------------------
@@ -220,7 +220,7 @@ public class FacebookNativeInterface extends INativeInterface
     {
 		if(exception != null)
 		{
-			CSLogging.logError(exception.getMessage());
+			Logging.logError(exception.getMessage());
 		}
 		
 		Session.setActiveSession(session);

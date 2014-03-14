@@ -330,7 +330,7 @@ public class CSApplication
 		}
 		catch (Exception e)
 		{
-			CSLogging.logError(e.getMessage());
+			Logging.logError(e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -580,7 +580,7 @@ public class CSApplication
 		}
 		catch (Exception e)
 		{
-			CSLogging.logError("Could not load additional libraries!");
+			Logging.logError("Could not load additional libraries!");
 		}
 		
 		//load the default libraries

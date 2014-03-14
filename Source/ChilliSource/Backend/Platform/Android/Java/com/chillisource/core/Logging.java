@@ -17,7 +17,7 @@ import android.util.Log;
  * 
  * @author S Downie
  */
-public class CSLogging 
+public class Logging 
 {
 	/**
 	 * Log message to LogCat under the "verbose" channel

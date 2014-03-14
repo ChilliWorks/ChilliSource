@@ -69,7 +69,7 @@ public class CSActivity extends Activity
         }
         catch (Exception e)
         {
-        	CSLogging.logError("Activity.onCreate has thrown an exception: " + e.toString());
+        	Logging.logError("Activity.onCreate has thrown an exception: " + e.toString());
         	e.printStackTrace();
         }
     }

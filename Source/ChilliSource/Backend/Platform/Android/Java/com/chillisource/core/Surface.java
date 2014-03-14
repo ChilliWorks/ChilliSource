@@ -1,6 +1,6 @@
 /**
  *  Surface.java
- *  ChilliSource
+ *  Chilli Source
  *
  *  Created by Ian Copland on 14/08/2012.
  *  Copyright 2012 Tag Games. All rights reserved.

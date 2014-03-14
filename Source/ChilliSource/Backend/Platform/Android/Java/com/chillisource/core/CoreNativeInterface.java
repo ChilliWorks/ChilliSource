@@ -1,10 +1,9 @@
-/*
- *  CCoreNativeInterface.java
- *  moFlow
+/**
+ *  CoreNativeInterface.java
+ *  Chilli Source
  *
  *  Created by Ian Copland on 09/08/2012.
  *  Copyright 2012 Tag Games. All rights reserved.
- *
  */
 
 package com.chillisource.core;
@@ -27,12 +26,12 @@ import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
 
-//=============================================================
-/// Core Native Interface
-///
-/// Native interface for communicating core features between
-/// native and java.
-//=============================================================
+/**
+* Native interface for communicating core os features to native.
+* Also responsible for funneling lifecycle events to application
+* 
+* @author I Copland
+*/
 public class CoreNativeInterface extends INativeInterface
 {	
 	//--------------------------------------------------------------

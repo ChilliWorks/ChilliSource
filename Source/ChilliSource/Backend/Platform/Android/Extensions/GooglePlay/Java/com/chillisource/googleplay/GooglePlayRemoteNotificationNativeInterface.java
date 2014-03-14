@@ -9,7 +9,7 @@
 package com.chillisource.googleplay;
 
 import com.chillisource.core.CSApplication;
-import com.chillisource.core.CSLogging;
+import com.chillisource.core.Logging;
 import com.chillisource.core.ResourceHelper;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.INativeInterface;
@@ -68,7 +68,7 @@ public class GooglePlayRemoteNotificationNativeInterface extends INativeInterfac
 		}
 		else
 		{
-			CSLogging.logError("CRemoteNotificationNativeInterface: Failed to get 'GoogleProjectID' from the Values resource");
+			Logging.logError("CRemoteNotificationNativeInterface: Failed to get 'GoogleProjectID' from the Values resource");
 			return;
 		}
 		
