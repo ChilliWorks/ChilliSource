@@ -69,14 +69,6 @@ namespace ChilliSource
             const f32 k_defaultUpdateInterval = 1.0f/60.0f;
             const f32 k_updateClampThreshold = 0.33f;
             const f32 k_updateIntervalMax = k_updateClampThreshold;
-            
-            //----------------------------------------------------
-            /// TODO:
-            //----------------------------------------------------
-            bool ResolutionSortPredicate(const ResourceDirectoryInfo& in_lhs, const ResourceDirectoryInfo& in_rhs)
-            {
-                return in_lhs.m_maxRes < in_rhs.m_maxRes;
-            }
         }
         
         Application* Application::s_application = nullptr;
@@ -647,7 +639,10 @@ namespace ChilliSource
             SetResourceDirectories(aDirectoryInfos, strDefaultDeviceDir, strDefaultDir);
             
             //Sort the info by resolution low to high
-            std::sort(aDirectoryInfos.begin(), aDirectoryInfos.end(), ResolutionSortPredicate);
+            std::sort(aDirectoryInfos.begin(), aDirectoryInfos.end(), [] (const ResourceDirectoryInfo& in_lhs, const ResourceDirectoryInfo& in_rhs)
+            {
+                return (in_lhs.m_maxRes < in_rhs.m_maxRes);
+            });
             
             u32 udwCurrentRes = Screen::GetOrientedWidth() * Screen::GetOrientedHeight();
             f32 fCurrenctDensity = Screen::GetDensity();
