@@ -45,10 +45,14 @@ namespace ChilliSource
             k_jointIndices
 		};
 		
+        MoModelLoaderUPtr MoModelLoader::Create()
+        {
+            return MoModelLoaderUPtr(new MoModelLoader());
+        }
 		//-------------------------------------------------------------------------
 		/// Constructor
 		//-------------------------------------------------------------------------
-		MoModelLoader::MoModelLoader(Core::Application* inpApp) : mpApp(inpApp)
+		MoModelLoader::MoModelLoader()
 		{
 		}
 		//-------------------------------------------------------------------------
@@ -212,7 +216,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool MoModelLoader::BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource, bool inbNeedsPrepared)
 		{
-			bool bSuccess = MeshManager::BuildMesh(mpApp->GetRenderSystem(), inMeshDescriptor, outpResource.get(), inbNeedsPrepared);
+			bool bSuccess = MeshManager::BuildMesh(Core::Application::Get()->GetRenderSystem(), inMeshDescriptor, outpResource.get(), inbNeedsPrepared);
 			
 			//cleanup
 			for (std::vector<SubMeshDescriptor>::const_iterator it = inMeshDescriptor.mMeshes.begin(); it != inMeshDescriptor.mMeshes.end(); ++it)

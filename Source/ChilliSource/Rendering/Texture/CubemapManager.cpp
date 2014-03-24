@@ -10,7 +10,7 @@
 #include <ChilliSource/Rendering/Texture/CubemapManager.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 
-#include <ChilliSource/Core/Image/ImageResourceProvider.h>
+#include <ChilliSource/Core/Image/ImageProvider.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -126,7 +126,7 @@ namespace ChilliSource
                         {
                             Core::ResourceSPtr pSourceImage(new Core::Image());
                             std::string strFileName = strPath + Core::ToString(i+1) + strExt;
-                            if(static_cast<Core::ImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(ineStorageLocation, strFileName, ineFormat, pSourceImage))
+                            if(static_cast<Core::ImageProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(ineStorageLocation, strFileName, ineFormat, pSourceImage))
                             {
                                 Core::Image* pImage = (Core::Image*)(pSourceImage.get());
                                 pImage->SetName(strFileName);
@@ -236,7 +236,7 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<6; ++i)
                     {
-                        if(static_cast<Core::ImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(inDesc.eStorageLocation, inDesc.strFilenames[i], inDesc.eImageFormat, inDesc.pImageResources[i]))
+                        if(static_cast<Core::ImageProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(inDesc.eStorageLocation, inDesc.strFilenames[i], inDesc.eImageFormat, inDesc.pImageResources[i]))
                         {
                             CS_LOG_DEBUG("Loading image " + inDesc.strFilenames[i]);
                             

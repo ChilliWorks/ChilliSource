@@ -58,6 +58,15 @@
     using in_structName##CSPtr = std::shared_ptr<const in_structName>;  \
     using in_structName##CWPtr = std::weak_ptr<const in_structName>;
 //------------------------------------------------------------
+/// A macro for declaring a class non copyable. This is acheived
+/// by deleting the default copy and assignment constructor.
+/// If this is used the default constructor must manually be
+/// specified.
+//------------------------------------------------------------
+#define CS_DECLARE_NONCOPYABLE(in_className)                            \
+    in_className(const in_className& in_toCopy) = delete;               \
+    in_className& operator=(const in_className& in_toCopy) = delete;
+//------------------------------------------------------------
 /// Standard input and output macros. As windows has its own
 /// "safe" versions of some standard io functions, these macros 
 /// should be used to ensure the correct version is used for the 

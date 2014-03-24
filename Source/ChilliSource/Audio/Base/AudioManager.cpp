@@ -85,7 +85,7 @@ namespace ChilliSource
 			
 			for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 			{
-				if(mResourceProviders[nProvider]->StreamResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
+				if(mResourceProviders[nProvider]->StreamResourceFromFile(ineStorageLocation, inFilePath, pResource))
 				{
 					//Add it to the cache
 					CS_LOG_DEBUG("Streaming sound " + inFilePath);

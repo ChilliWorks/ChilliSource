@@ -31,10 +31,15 @@ namespace ChilliSource
 			k_none
 		};
 		
+        MoAnimLoaderUPtr MoAnimLoader::Create()
+        {
+            return MoAnimLoaderUPtr(new MoAnimLoader());
+        }
+        
 		//-------------------------------------------------------------------------
 		/// Constructor
 		//-------------------------------------------------------------------------
-		MoAnimLoader::MoAnimLoader(Core::Application* inpApp) : mpApp(inpApp)
+		MoAnimLoader::MoAnimLoader()
 		{
 		}
 		//-------------------------------------------------------------------------
