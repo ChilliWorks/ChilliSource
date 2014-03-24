@@ -81,7 +81,6 @@ namespace ChilliSource
             return out_resource->IsLoaded();
 		}
 		//--------------------------------------------------------------
-		// Async Create Resource From File
 		//--------------------------------------------------------------
 		bool CSSubtitlesLoader::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
