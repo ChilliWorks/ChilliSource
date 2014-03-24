@@ -26,7 +26,7 @@ namespace ChilliSource
         ///
         /// @author S McGaw
         //----------------------------------------------------------------
-		class ImageProvider : public Core::ImageProvider
+		class ImageProvider final : public Core::ImageProvider
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(ImageProvider);

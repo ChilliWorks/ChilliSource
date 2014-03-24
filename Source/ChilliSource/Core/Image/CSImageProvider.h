@@ -21,7 +21,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------------
-        class CSImageProvider : public ResourceProvider
+        class CSImageProvider final : public ResourceProvider
         {
         public:
             CS_DECLARE_NAMEDTYPE(CSImageProvider);
