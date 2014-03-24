@@ -18,6 +18,11 @@ namespace ChilliSource
 {
 	namespace Video
 	{
+        //-------------------------------------------------------------------------
+        /// Factory loader for creating subtitle resources from file.
+        ///
+        /// @param I Copland
+        //-------------------------------------------------------------------------
 		class CSSubtitlesLoader final : public Core::ResourceProvider
 		{
 		public:
