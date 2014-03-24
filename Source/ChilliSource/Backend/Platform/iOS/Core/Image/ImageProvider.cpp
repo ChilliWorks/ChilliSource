@@ -229,5 +229,13 @@ namespace ChilliSource
             
             return false;
 		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool ImageProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filePath, Core::ResourceSPtr& out_resource)
+        {
+            CS_LOG_WARNING("Async loading is not implemented by the Image Provider.");
+            
+            return false;
+        }
 	}
 }
