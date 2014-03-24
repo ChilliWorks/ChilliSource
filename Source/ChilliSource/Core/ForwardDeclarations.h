@@ -89,7 +89,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(ETC1ImageProvider);
         CS_FORWARDDECLARE_CLASS(Image);
         CS_FORWARDDECLARE_CLASS(ImageProvider);
-        CS_FORWARDDECLARE_CLASS(MoImageProvider);
+        CS_FORWARDDECLARE_CLASS(CSImageProvider);
         //---------------------------------------------------------
         /// Localisation
         //---------------------------------------------------------

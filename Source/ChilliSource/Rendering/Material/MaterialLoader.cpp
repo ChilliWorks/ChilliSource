@@ -106,7 +106,11 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
-                        pMaterial->AddTexture(pTextureManager->GetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::Image::Format::k_default, aTextureFiles[i].mbMipMapped));
+                        pMaterial->AddTexture(LOAD_RESOURCE(Texture, aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile));
+                        if (aTextureFiles[i].mbMipMapped == true)
+                        {
+                            //TODO: Generate mipmaps
+                        }
                     }
                 }
                 
@@ -115,7 +119,11 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)
                     {
-                        pMaterial->SetCubemap(pCubemapManager->GetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::Image::Format::k_default, aCubemapFiles[i].mbMipMapped));
+                        pMaterial->SetCubemap(std::static_pointer_cast<Cubemap>(pCubemapManager->GetResourceFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile)));
+                        if (aCubemapFiles[i].mbMipMapped == true)
+                        {
+                            //TODO: Generate mipmaps
+                        }
                     }
                 }
                 
@@ -166,7 +174,12 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
-                        TextureSPtr pTexture = pTextureManager->AsyncGetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::Image::Format::k_default, aTextureFiles[i].mbMipMapped);
+                        TextureSPtr pTexture = LOAD_RESOURCE(Texture, aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile);
+                        if (aTextureFiles[i].mbMipMapped == true)
+                        {
+                            //TODO: Generate mipmaps
+                        }
+                        
                         pMaterial->AddTexture(pTexture);
                         pTexture->WaitTilLoaded();
                     }
@@ -177,7 +190,7 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)
                     {
-                        CubemapSPtr pCubemap = pCubemapManager->AsyncGetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::Image::Format::k_default, aCubemapFiles[i].mbMipMapped);
+                        CubemapSPtr pCubemap = std::static_pointer_cast<Cubemap>(pCubemapManager->AsyncGetResourceFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile));
                         pMaterial->SetCubemap(pCubemap);
                         pCubemap->WaitTilLoaded();
                     }

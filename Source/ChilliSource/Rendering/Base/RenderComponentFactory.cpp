@@ -187,7 +187,7 @@ namespace ChilliSource
 					std::string strSpriteSheetIndex;
 					if (insParamDictionary.TryGetValue("SpriteSheet", strSpriteSheet) && insParamDictionary.TryGetValue("SpriteSheetIndex", strSpriteSheetIndex))
 					{
-						SpriteSheetSPtr pSpriteSheet = mpSpriteSheetManager->GetSpriteSheetFromFile(Core::StorageLocation::k_package, strSpriteSheet);
+						SpriteSheetSPtr pSpriteSheet = std::static_pointer_cast<SpriteSheet>(mpSpriteSheetManager->GetResourceFromFile(Core::StorageLocation::k_package, strSpriteSheet));
 						u32 udwIndex = pSpriteSheet->GetFrameIndexByID(strSpriteSheetIndex);
 						
 						MaterialSPtr pMaterial = mpMaterialManager->GetMaterialFromFile(Core::StorageLocation::k_package, strMaterialName);
@@ -307,7 +307,7 @@ namespace ChilliSource
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(inpMaterial);
-            SpriteSheetSPtr pSpriteSheet = mpSpriteSheetManager->GetSpriteSheetFromFile(ineStorageLocation, instrSpriteSheetTexture);
+            SpriteSheetSPtr pSpriteSheet = LOAD_RESOURCE(SpriteSheet, ineStorageLocation, instrSpriteSheetTexture);
             pSprite->SetDimensions(pSpriteSheet->GetSizeForFrame(inTpageIndex));
             pSprite->SetUVs(pSpriteSheet->GetUVsForFrame(inTpageIndex));
             
@@ -325,7 +325,7 @@ namespace ChilliSource
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(inpMaterial);
-            SpriteSheetSPtr pSpriteSheet = mpSpriteSheetManager->GetSpriteSheetFromFile(ineStorageLocation, instrSpriteSheetTexture);
+            SpriteSheetSPtr pSpriteSheet = LOAD_RESOURCE(SpriteSheet, ineStorageLocation, instrSpriteSheetTexture);
             u32 udwTpageID = pSpriteSheet->GetFrameIndexByID(instrTpageID);
             pSprite->SetDimensions(pSpriteSheet->GetSizeForFrame(udwTpageID));
             pSprite->SetUVs(pSpriteSheet->GetUVsForFrame(udwTpageID));

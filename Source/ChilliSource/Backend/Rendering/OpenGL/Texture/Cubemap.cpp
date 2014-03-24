@@ -128,14 +128,14 @@ namespace ChilliSource
 		//--------------------------------------------------
 		/// Init
 		//--------------------------------------------------
-		void Cubemap::Init(const std::vector<Core::ResourceSPtr>& inapSourceImages, bool inbWithMipsMaps)
+		void Cubemap::Init(const std::vector<Core::ResourceSPtr>& inapSourceImages)
 		{
             CS_ASSERT(inapSourceImages.size() == 6, "Cubemaps must have 6 face textures");
             
 			glGenTextures(1, &mGLTextureID);
 			Bind();
 			
-            mbHasMipMaps = inbWithMipsMaps;
+            mbHasMipMaps = false;
             mbHasTextureFilterModeChanged = true;
             
             UpdateTextureParameters();
@@ -188,7 +188,7 @@ namespace ChilliSource
                     break;
             };
             
-            if(inbWithMipsMaps)
+            if(mbHasMipMaps)
 			{
                 glGenerateMipmap(GL_TEXTURE_CUBE_MAP); 
 			}

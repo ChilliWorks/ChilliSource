@@ -20,7 +20,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(PlatformSystem);
 		CS_FORWARDDECLARE_CLASS(FileSystem);
-		CS_FORWARDDECLARE_CLASS(ImageLoader);
+		CS_FORWARDDECLARE_CLASS(ImageProvider);
 		CS_FORWARDDECLARE_CLASS(PngImage);
 		//------------------------------------------------------
 		/// Image

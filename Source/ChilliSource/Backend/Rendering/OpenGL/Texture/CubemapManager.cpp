@@ -35,9 +35,9 @@ namespace ChilliSource
 		/// @param Out: Cubemap resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool CubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapSPtr& outpCubemap)
+		bool CubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, ChilliSource::Rendering::CubemapSPtr& outpCubemap)
 		{
-			std::static_pointer_cast<Cubemap>(outpCubemap)->Init(inaImages, inbWithMipsMaps);
+			std::static_pointer_cast<Cubemap>(outpCubemap)->Init(inaImages);
 			return true;
 		}
 		//----------------------------------------------------------------
@@ -77,7 +77,7 @@ namespace ChilliSource
                                         Core::ResourceSPtr pSourceImage(new Core::Image());
                                         Core::Image* pImage = (Core::Image*)(pSourceImage.get());
                                         std::string strFileName = strPath + Core::ToString(i+1) + strExt;
-                                        if(static_cast<Core::ImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(pOpenGLCubemap->GetStorageLocation(), strFileName, pOpenGLCubemap->GetImageFormat(), pSourceImage))
+                                        if(mResourceProviders[nProvider]->CreateResourceFromFile(pOpenGLCubemap->GetStorageLocation(), strFileName, pSourceImage))
                                         {
                                             pImage->SetName(strFileName);
                                             pImage->SetLoaded(true);
@@ -87,7 +87,7 @@ namespace ChilliSource
                                     
                                     if(aImages.size() == 6)
                                     {
-                                        CreateCubemapFromImages(aImages, pOpenGLCubemap->HasMipMaps(), pCubemap);
+                                        CreateCubemapFromImages(aImages, pCubemap);
                                     }
                                     else
                                     {

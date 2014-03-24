@@ -25,8 +25,6 @@ namespace ChilliSource
 {
     namespace Core
     {
-        Core::Image::Format ImageProvider::s_defaultFormat = Core::Image::Format::k_RGBA8888;
-        
         //-------------------------------------------------------
         //-------------------------------------------------------
         ImageProviderUPtr ImageProvider::Create()
@@ -40,14 +38,6 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_WINDOWS
             return ImageProviderUPtr(new Windows::ImageProvider());
 #endif
-            return nullptr;
-        }
-        
-        //--------------------------------------------------
-        //--------------------------------------------------
-        void ImageProvider::SetDefaultFormat(Core::Image::Format in_format)
-        {
-            s_defaultFormat = in_format;
         }
     }
 }

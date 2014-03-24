@@ -36,7 +36,7 @@ namespace ChilliSource
 			/// @param Out: Texture resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::Image::Format ineFormat, ChilliSource::Rendering::TextureSPtr& outpTexture);
+			bool CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::Image::Format ineFormat, ChilliSource::Rendering::TextureSPtr& outpTexture) override;
             //----------------------------------------------------------------
 			/// Create Image From Texture
 			///
@@ -45,7 +45,7 @@ namespace ChilliSource
 			///
 			/// @param mopFlow Texture to create Image from
 			//----------------------------------------------------------------
-			bool CreateImageFromTexture(Rendering::Texture* inpTexture, Core::ImageSPtr& outpImage);
+			bool CreateImageFromTexture(Rendering::Texture* inpTexture, Core::ImageSPtr& outpImage) override;
 			//----------------------------------------------------------------
 			/// Create Texture From Image
 			///
@@ -54,7 +54,7 @@ namespace ChilliSource
 			/// @param Out: Texture resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateTextureFromImage(Core::Image * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TextureSPtr& outpTexture);
+			bool CreateTextureFromImage(Core::Image * inpImage, ChilliSource::Rendering::TextureSPtr& outpTexture) override;
 			//----------------------------------------------------------------
 			/// Backup
 			///
