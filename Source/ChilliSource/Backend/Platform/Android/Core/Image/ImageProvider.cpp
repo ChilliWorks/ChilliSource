@@ -1,22 +1,21 @@
 //
-//  ImageProvider.cpp
+//  ImageProvider.h
 //  Chilli Source
 //
 //  Created by I Copland in 2011
 //  Copyright ©2010 Tag Games Limited. All rights reserved.
 //
 
-#include <ChilliSource/Backend/Platform/Windows/Core/Image/ImageProvider.h>
+#include <ChilliSource/Backend/Platform/Android/Core/Image/ImageProvider.h>
 
-#include <ChilliSource/Backend/Platform/Windows/Core/Image/PngImage.h>
+#include <ChilliSource/Backend/Platform/Android/Core/Image/PngImage.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 namespace ChilliSource
 {
-	namespace Windows
+	namespace Android
 	{
 		namespace
 		{
@@ -27,43 +26,38 @@ namespace ChilliSource
 			///
 			/// @author I Copland
 			///
-			/// @param Storage 
+			/// @param Storage
 			/// @param File path to resource
 			/// @param Whether the asset is high resolution
+			/// @param Image format
 			/// @param [Out] Image data
 			///
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreatePNGImageFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::Image* out_image)
+			bool CreatePNGImageFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, Core::Image* out_image)
 			{
-				ChilliSource::Windows::PngImage image;
+				//load the png image
+				ChilliSource::Android::PngImage image;
 				image.Load(in_storageLocation, in_filepath);
 
-				if (image.IsLoaded())
+				//check the image has loaded
+				if(image.IsLoaded() == false)
 				{
-					u32 udwWidth = image.GetWidth();
-					u32 udwHeight = image.GetHeight();
-					u32 udwArea = udwWidth * udwHeight;
-
-					u8* pubyBitmapData8888 = image.GetImageData();
-
-					//create the cimage
-					out_image->SetData(pubyBitmapData8888);
-					out_image->SetWidth(udwWidth);
-					out_image->SetHeight(udwHeight);
-					out_image->SetFormat(Core::Image::Format::k_RGBA8888);
-
-					//release the png image without deallocating the image data
-					image.Release(false);
-
-					return true;
-				}
-				else
-				{
-					CS_LOG_ERROR("Failed to load image: " + in_filepath);
 					image.Release();
+					CS_LOG_ERROR("Failed to load image: " + in_filepath);
 					return false;
 				}
+
+				//create the cimage
+				out_image->SetData(image.GetImageData());
+				out_image->SetWidth(image.GetWidth());
+				out_image->SetHeight(image.GetHeight());
+				out_image->SetFormat(image.GetImageFormat());
+
+				//release the png image without deallocating the image data
+				image.Release(false);
+
+				return true;
 			}
 		}
 

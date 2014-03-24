@@ -122,11 +122,11 @@ namespace ChilliSource
 						{
 							for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
 							{
-								if(static_cast<Core::ImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(pOpenGLTexture->GetStorageLocation(), pOpenGLTexture->GetFilename(), pOpenGLTexture->GetImageFormat(), pImageResource))
+								if(mResourceProviders[nProvider]->CreateResourceFromFile(pOpenGLTexture->GetStorageLocation(), pOpenGLTexture->GetFilename(), pImageResource))
 								{
 									pImage->SetName(pOpenGLTexture->GetFilename());
 									pImage->SetLoaded(true);
-									CreateTextureFromImage(pImage.get(), pOpenGLTexture->HasMipMaps(), pTexture);
+									CreateTextureFromImage(pImage.get(), pTexture);
 								}
 							}
 						}
@@ -136,7 +136,7 @@ namespace ChilliSource
 							std::unordered_map<Texture*, Core::ImageSPtr>::iterator it = mapBackedUpImages.find(pOpenGLTexture.get());
 							if (it != mapBackedUpImages.end() && it->second != nullptr)
 							{
-								CreateTextureFromImage(it->second.get(), pOpenGLTexture->HasMipMaps(), pTexture);
+								CreateTextureFromImage(it->second.get(), pTexture);
 							}
 							else
 							{

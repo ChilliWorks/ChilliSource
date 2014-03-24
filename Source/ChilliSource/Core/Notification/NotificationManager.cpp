@@ -157,7 +157,7 @@ namespace ChilliSource
             
             //setup the local notification system
             m_localNotificationSystem = Application::Get()->GetSystem<LocalNotificationSystem>();
-            if (m_appNotificationSystem != nullptr)
+			if (m_localNotificationSystem != nullptr)
             {
                 m_localRecievedConnection = m_localNotificationSystem->GetRecievedEvent().OpenConnection(MakeDelegate(this, &NotificationManager::OnNotificationRecieved));
             }

@@ -3,22 +3,21 @@
 //  Chilli Source
 //
 //  Created by I Copland in 2011
-//  Copyright Â©2010 Tag Games Limited. All rights reserved.
+//  Copyright ©2010 Tag Games Limited. All rights reserved.
 //
 
-#ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_IMAGE_IMAGEPROVIDER_H_
-#define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_IMAGE_IMAGEPROVIDER_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_IMAGE_IMAGEPROVIDER_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_IMAGE_IMAGEPROVIDER_H_
 
-#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
-#include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/ImageProvider.h>
+#include <ChilliSource/Core/Image/Image.h>
 
 namespace ChilliSource
 {
-	namespace Windows
+	namespace Android
 	{
 		//--------------------------------------------------------------
-		/// The windows backend for the Image Provider. This loads
+		/// The Android backend for the Image Provider. This loads
 		/// PNG images from file.
 		///
 		/// @author Ian Copland
@@ -73,14 +72,13 @@ namespace ChilliSource
 			bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceSPtr& out_resource) override;
 
 		private:
-			friend Core::ImageProviderUPtr Core::ImageProvider::Create();
-			//-------------------------------------------------------
-			/// Private constructor to force use of factory method
-			///
-			/// @author I Copland
-			//-------------------------------------------------------
-			ImageProvider(){}
-
+            friend Core::ImageProviderUPtr Core::ImageProvider::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            ImageProvider() {};
 		};
 	}
 }
