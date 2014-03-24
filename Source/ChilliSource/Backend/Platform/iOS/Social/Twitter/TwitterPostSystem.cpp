@@ -1,9 +1,9 @@
 //
 //  TwitterPostSystem.cpp
-//  MoFlow
+//  Chilli Source
 //
-//  Created by Scott Downie on 12/09/2011.
-//  Copyright (c) 2011 Tag Games. All rights reserved.
+//  Created by Robert Henning on 08/05/2012.
+//  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
@@ -12,7 +12,6 @@
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
 
 #include <UIKit/UIKit.h>
@@ -26,46 +25,42 @@ namespace ChilliSource
     namespace iOS
     {
 		//------------------------------------------------------------------------
-		/// Constructor
 		//------------------------------------------------------------------------
-		TwitterPostSystem::TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem,
-                                             Core::OAuthSystem* inpOAuthSystem) : Social::TwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
+		TwitterPostSystem::TwitterPostSystem(Networking::HttpConnectionSystem* in_httpConnectionSystem, Core::OAuthSystem* in_oauthSystem)
+        : Social::TwitterPostSystem(in_httpConnectionSystem, in_oauthSystem)
 		{
 			
 		}
 		//------------------------------------------------------------------------
-		/// Destructor
-		//------------------------------------------------------------------------
-		TwitterPostSystem::~TwitterPostSystem()
-		{
-			
-		}
-		//------------------------------------------------------------------------
-        /// Is A
-        ///
-        /// @param Interface ID
-        /// @return Is of interface ID type
         //------------------------------------------------------------------------
-        bool TwitterPostSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool TwitterPostSystem::IsA(Core::InterfaceIDType in_interfaceID) const
         {
-            return inInterfaceID == Social::TwitterPostSystem::InterfaceID;
+            return in_interfaceID == Social::TwitterPostSystem::InterfaceID;
         }
-		//------------------------------------------------------------------------
-		/// Run the OAuth process and, if successful, leave the system in state
-		/// ready to communicate with Twitter
-		//------------------------------------------------------------------------
-		bool TwitterPostSystem::Authenticate()
-		{
-			bool bResult = false;
-			
-			// Try and load saved keys
-			TryLoadAuthenticationKeys();
-			
-			if(mstrSavedOAuthTokenKey.empty() || mstrSavedOAuthTokenSecret.empty())
-			{
-				// We don't have any keys to go though the authentication process
-				std::string strAuthoiseURL;
-				if(RequestOAuthToken(strAuthoiseURL))
+        //------------------------------------------------------------------------
+        //------------------------------------------------------------------------
+        void TwitterPostSystem::Authenticate(const std::string& in_key, const std::string& in_secret, const AuthenticationResultDelegate& in_delegate)
+        {
+            CS_ASSERT(in_key.empty() == false && in_secret.empty() == false, "Twitter must have a key and secret provided by the Twitter application");
+
+            LoadAuthenticationKeys();
+            
+            if(m_savedOAuthTokenKey.empty() == false && m_savedOAuthTokenSecret.empty() == false)
+            {
+                //We have cached Auth tokens so don't need to prompt
+                m_isAuthenticated = true;
+                m_oauthSystem->SetOAuthTokenKey(m_savedOAuthTokenKey);
+				m_oauthSystem->SetOAuthTokenSecret(m_savedOAuthTokenSecret);
+                
+                if(in_delegate)
+                {
+                    in_delegate(AuthenticationResult::k_success);
+                }
+            }
+            else
+            {
+                //We need to prompt the user to login
+                if(RequestOAuthToken())
 				{
 					// Show authentication view
                     m_authenticationView = Social::TwitterAuthenticationActivity::Create();
@@ -76,27 +71,13 @@ namespace ChilliSource
 						m_authenticationView->Present();
 					}
 				}
-				else
-				{
-					CS_LOG_DEBUG("TwitterPostSystem::Authenticate() - Unable to get OAuth token!");
-					return false;
-				}
-				CS_LOG_DEBUG("TwitterPostSystem::Authenticate() - Got request token URL of \""+strAuthoiseURL+"\"");
-				bResult = false;
-			}
-			else
-			{
-				// We have keys, so set them and rock on!
-				mpOAuthSystem->SetOAuthTokenKey(mstrSavedOAuthTokenKey);
-				mpOAuthSystem->SetOAuthTokenSecret(mstrSavedOAuthTokenSecret);
-				CS_LOG_DEBUG("TwitterPostSystem::Authenticate() - Set OAuth key token \""+mstrSavedOAuthTokenKey+"\" and OAuth secret token \""+mstrSavedOAuthTokenSecret+"\"");
-				bResult = true;
-			}
-			
-			return bResult;
-		}
+                else
+                {
+                    CS_LOG_ERROR("TwitterPostSystem::Authenticate - Unable to get OAuth token!");
+                }
+            }
+        }
         //------------------------------------------------------------------------
-        /// Supported By Device
         //------------------------------------------------------------------------
         bool TwitterPostSystem::SupportedByDevice()
         {
@@ -105,7 +86,6 @@ namespace ChilliSource
 			return ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending);
 		}
 		//------------------------------------------------------------------------
-		/// Is Image Post Supported
 		//------------------------------------------------------------------------
 		bool TwitterPostSystem::IsImagePostSupported() const
 		{
@@ -114,40 +94,40 @@ namespace ChilliSource
 			return ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending);
 		}
         //------------------------------------------------------------------------
-        /// Try Post
         //------------------------------------------------------------------------
-        bool TwitterPostSystem::TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
+        void TwitterPostSystem::Post(const Social::TwitterPostSystem::PostDesc& in_desc, const Social::TwitterPostSystem::PostResultDelegate& in_delegate)
         {
+            CS_ASSERT(m_postDelegate == nullptr, "Cannot send tweet when one is already in progress");
+            
 			if(SupportedByDevice())
-				return TryPostUsingiOS(insDesc, inResultCallback);
+            {
+                PostUsingiOS(in_desc, in_delegate);
+            }
 			else
-				return TryPostUsingMoFlow(insDesc, inResultCallback);
+            {
+                PostUsingChilliSource(in_desc, in_delegate);
+            }
         }
-		
-		//--- Private
-		
 		//------------------------------------------------------------------------
-		/// Try Post Using iOS
 		//------------------------------------------------------------------------
-		bool TwitterPostSystem::TryPostUsingiOS(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
+		void TwitterPostSystem::PostUsingiOS(const Social::TwitterPostSystem::PostDesc& in_desc, const Social::TwitterPostSystem::PostResultDelegate& in_delegate)
 		{
 			if([TWTweetComposeViewController canSendTweet])
             {
                 TWTweetComposeViewController* pComposeViewController = [[TWTweetComposeViewController alloc] init];
                 
-                mCompletionDelegate = inResultCallback;
+                m_postDelegate = in_delegate;
                 
                 //Set the text
-                bool bTextResult = true;
-                if(insDesc.strText.length() > 0)
+                if(in_desc.m_text.length() > 0)
                 {
-                    bTextResult = [pComposeViewController setInitialText:Core::StringUtils::UTF8StringToNSString(insDesc.strText)];
+                    [pComposeViewController setInitialText:Core::StringUtils::UTF8StringToNSString(in_desc.m_text)];
                 }
                 
                 bool bImageAttached = true;
-                if(insDesc.strLocalImagePath.length() > 0)
+                if(in_desc.m_localImagePath.length() > 0)
                 {
-                    std::string strPath = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(insDesc.eLocalImageStorageLocation) + insDesc.strLocalImagePath;
+                    std::string strPath = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(in_desc.m_localImageStorageLocation) + in_desc.m_localImagePath;
                     
                     NSString* pImagePath = Core::StringUtils::StringToNSString(strPath);
                     UIImage* pImage = [UIImage imageWithContentsOfFile:pImagePath];
@@ -163,28 +143,27 @@ namespace ChilliSource
                 }
                 
                 //Add a url if available
-                bool bUrlResult = true;
-                if(insDesc.strUrl.length() > 0)
+                if(in_desc.m_url.length() > 0)
                 {
-                    bUrlResult = [pComposeViewController addURL:[NSURL URLWithString:Core::StringUtils::UTF8StringToNSString(insDesc.strUrl)]];
+                    [pComposeViewController addURL:[NSURL URLWithString:Core::StringUtils::UTF8StringToNSString(in_desc.m_url)]];
                 }
                 
                 
                 //Set the completion handler to call our completion delegate
                 pComposeViewController.completionHandler = ^(TWTweetComposeViewControllerResult inResult)
                 {
-					if(mCompletionDelegate)
+					if(m_postDelegate)
 					{
 						switch(inResult)
 						{
 							case TWTweetComposeViewControllerResultDone:
-								mCompletionDelegate(Social::TwitterPostSystem::PostResult::k_success);
+								m_postDelegate(Social::TwitterPostSystem::PostResult::k_success);
 								break;
 							case TWTweetComposeViewControllerResultCancelled:
-								mCompletionDelegate(Social::TwitterPostSystem::PostResult::k_cancelled);
+								m_postDelegate(Social::TwitterPostSystem::PostResult::k_cancelled);
 								break;
 							default:
-								mCompletionDelegate(Social::TwitterPostSystem::PostResult::k_failed);
+								m_postDelegate(Social::TwitterPostSystem::PostResult::k_failed);
 								break;
 						};
 					}
@@ -194,65 +173,49 @@ namespace ChilliSource
                 
                 [[EAGLView sharedInstance].viewController presentModalViewController:pComposeViewController animated:YES];
                 [pComposeViewController release];
-                
-                return (bTextResult && bUrlResult);
             }
             else
             {
                 UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"No Twitter account" message:@"Please sign in to your Twitter account from the device settings" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [alertView show];
                 [alertView release];
-                return false;
             }
 		}
 		//------------------------------------------------------------------------
-		/// Try Post Using moFlow
 		//------------------------------------------------------------------------
-		bool TwitterPostSystem::TryPostUsingMoFlow(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
+		void TwitterPostSystem::PostUsingChilliSource(const Social::TwitterPostSystem::PostDesc& in_desc, const Social::TwitterPostSystem::PostResultDelegate& in_delegate)
 		{
-			bool bResult = false;
-			
 			// Set our callback
-			mCompletionDelegate = inResultCallback;
+			m_postDelegate = in_delegate;
 			
-			if(Authenticate())
+			if(IsAuthenticated())
 			{
 				// Authentication has already occured and our token and secret keys are set
 				// so we are go for Twitter posing action...
-				PostUsingMoFlow(insDesc);
+                Social::TwitterPostSystem::PostUsingChilliSource(in_desc);
 			}
 			else
 			{
-				// Remember our post description
-				msDesc.strUrl = insDesc.strUrl;
-				msDesc.strText = insDesc.strText;
-				if(mCompletionDelegate)
+				if(m_postDelegate)
 				{
-					inResultCallback(Social::TwitterPostSystem::PostResult::k_notAuthenticated);
+					m_postDelegate(Social::TwitterPostSystem::PostResult::k_notAuthenticated);
 				}
-				bResult = false;
 			}
-			
-			return bResult;
 		}
 		
 		//------------------------------------------------------------------------
-		/// Delegate called when the user confirms entry of the PIN
-		///
-		/// @param PIN entered by user
 		//------------------------------------------------------------------------
-		void TwitterPostSystem::OnPINComplete(const ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResult &insResult)
+		void TwitterPostSystem::OnPINComplete(const ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResult &in_result)
 		{
-			if(Social::TwitterPIN::kudwTwitterPINLength == insResult.strPIN.size())
+			if(in_result.strPIN.empty() == false)
 			{
-				mpOAuthSystem->SetOAuthPin(insResult.strPIN);
+				m_oauthSystem->SetOAuthPin(in_result.strPIN);
 				RequestOAuthAccessToken();
 			}
 		}
 		//------------------------------------------------------------------------
-		/// Delegate called with the authorisation view is dismissed.
 		//------------------------------------------------------------------------
-		void TwitterPostSystem::OnAuthorisationDismissed(Core::Activity* inpActivity)
+		void TwitterPostSystem::OnAuthorisationDismissed(Core::Activity* in_activity)
 		{
 			// User has cancelled
             m_authorisationDismissedConnection = nullptr;
