@@ -63,10 +63,6 @@ namespace ChilliSource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
 			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
-			
-		private:
-            
-            TextureManager* mpTextureManager;
 		};
 	}
 }

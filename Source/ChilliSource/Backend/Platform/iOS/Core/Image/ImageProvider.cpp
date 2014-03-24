@@ -2,7 +2,7 @@
 //  ImageProvider.cpp
 //  Chilli Source
 //
-//  Created by S Downie on 01/10/2010.
+//  Created by S McGaw on 01/10/2010.
 //  Copyright 2010 Tag Games. All rights reserved.
 //
 
@@ -221,7 +221,7 @@ namespace ChilliSource
                 }
                 else if(strExtension == k_jpgExtension || strExtension == k_jpegExtension)
                 {
-                    CS_LOG_WARNING("JPG image loading is not cross-platform and will only work on iOS. Do not use PNGs in a cross-platform project.");
+                    CS_LOG_WARNING("JPG image loading is not cross-platform and will only work on iOS. Do not use JPEGs in a cross-platform project.");
                     CreateJPGImageFromFile(abyData.data(), abyData.size(), (Core::Image*)out_resource.get());
 					return true;
                 }

@@ -30,7 +30,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//-----------------------------------------------------------------
-		FontManager::FontManager() : mpSpriteSheetManager(nullptr)
+		FontManager::FontManager()
 		{
 		}
 		//----------------------------------------------------------------
@@ -107,11 +107,6 @@ namespace ChilliSource
 						pFont->SetName(strFontFile);
 						pFont->SetOwningResourceManager(this);
 						pFont->SetLoaded(true);
-                        
-                        if(!mpSpriteSheetManager)
-                        {
-                            mpSpriteSheetManager = Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<SpriteSheetManager>();
-                        }
                         
                         SpriteSheetSPtr pFontData = LOAD_RESOURCE(SpriteSheet, ineStorageLocation, instrFilePath);
                         pFont->SetSpriteSheet(pFontData);

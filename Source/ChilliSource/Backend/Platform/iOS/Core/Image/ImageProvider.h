@@ -1,5 +1,5 @@
 //
-//  ImageProvider.cpp
+//  ImageProvider.h
 //  Chilli Source
 //
 //  Created by S McGaw on 01/10/2010.
@@ -11,8 +11,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Core/Image/ImageProvider.h>
 #include <ChilliSource/Core/Image/Image.h>
+#include <ChilliSource/Core/Image/ImageProvider.h>
 
 #include <string>
 

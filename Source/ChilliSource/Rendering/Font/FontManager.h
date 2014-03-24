@@ -65,10 +65,6 @@ namespace ChilliSource
 			/// @param File name
 			//-----------------------------------------------------------------
 			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
-			
-		private:
-			
-            SpriteSheetManager* mpSpriteSheetManager;
 		};
 	}
 }

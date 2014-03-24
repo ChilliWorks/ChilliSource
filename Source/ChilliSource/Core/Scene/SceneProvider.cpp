@@ -17,7 +17,7 @@ namespace ChilliSource
     {
         namespace
         {
-            const std::string kMoSceneExtension("moscene");
+            const std::string k_sceneExtension("moscene");
         }
         
         CS_DEFINE_NAMEDTYPE(SceneProvider);
@@ -37,7 +37,7 @@ namespace ChilliSource
         //----------------------------------------------------
         bool SceneProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
         {
-            return (in_extension == kMoSceneExtension);
+            return (in_extension == k_sceneExtension);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -50,13 +50,13 @@ namespace ChilliSource
         //----------------------------------------------------
         bool SceneProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceSPtr& out_resource)
         {
-            Task<StorageLocation, const std::string&, ResourceSPtr&> ReadFileTask(this, &SceneProvider::LoadAsyncMoScene, in_storageLocation, in_filepath, out_resource);
+            Task<StorageLocation, const std::string&, ResourceSPtr&> ReadFileTask(this, &SceneProvider::LoadAsyncScene, in_storageLocation, in_filepath, out_resource);
             TaskScheduler::ScheduleTask(ReadFileTask);
             return true;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void SceneProvider::LoadAsyncMoScene(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceSPtr& out_resource)
+        void SceneProvider::LoadAsyncScene(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceSPtr& out_resource)
         {
             SceneDesc * sceneDesc = reinterpret_cast<SceneDesc*>(out_resource.get());
             sceneDesc->LoadFromFile(in_storageLocation, in_filepath);

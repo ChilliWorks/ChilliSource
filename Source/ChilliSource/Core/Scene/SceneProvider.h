@@ -105,7 +105,7 @@ namespace ChilliSource
             /// @return Whether or not the resource async load was
             /// successfully started.
             //----------------------------------------------------
-            void LoadAsyncMoScene(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceSPtr& out_resource);
+            void LoadAsyncScene(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceSPtr& out_resource);
         };
     }
 }
