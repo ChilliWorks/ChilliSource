@@ -22,7 +22,7 @@ namespace ChilliSource
         ///
         /// @author A Glass
         //-------------------------------------------------------
-        class SceneAnimationProvider : public ResourceProvider
+        class SceneAnimationProvider final : public ResourceProvider
         {
         public:
             CS_DECLARE_NAMEDTYPE(SceneAnimationProvider);
@@ -79,7 +79,7 @@ namespace ChilliSource
             /// cannot be used until the loaded flag is set. This
             /// can be queried using IsLoaded() on the resource.
             ///
-            /// @author S Downie
+            /// @author I Copland
             ///
             /// @param The storage location.
             /// @param The filepath.

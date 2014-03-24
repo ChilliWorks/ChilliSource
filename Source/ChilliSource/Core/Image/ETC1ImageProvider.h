@@ -23,7 +23,7 @@ namespace ChilliSource
         ///
         /// @author I Copland
         //--------------------------------------------------------------------
-        class ETC1ImageProvider : public Core::ResourceProvider
+        class ETC1ImageProvider final : public Core::ResourceProvider
         {
         public:
             CS_DECLARE_NAMEDTYPE(ETC1ImageProvider);

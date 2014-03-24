@@ -22,7 +22,7 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//--------------------------------------------------------------
-		class ImageProvider : public Core::ImageProvider
+		class ImageProvider final : public Core::ImageProvider
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(ImageProvider);

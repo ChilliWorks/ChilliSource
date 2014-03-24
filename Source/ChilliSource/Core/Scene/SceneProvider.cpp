@@ -1,10 +1,8 @@
 //
 //  SceneProvider.cpp
-//  MoshiMonsters
+//  Chilli Source
 //
-//	
-//
-//  Created by Andrew Glass on 20/04/2012.
+//  Created by A Glass on 20/04/2012.
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
@@ -17,50 +15,52 @@ namespace ChilliSource
 {
     namespace Core
     {
+        namespace
+        {
+            const std::string kMoSceneExtension("moscene");
+        }
+        
         CS_DEFINE_NAMEDTYPE(SceneProvider);
-        
-        const std::string kMoSceneExtension("moscene");
-        
-        bool SceneProvider::IsA(InterfaceIDType inInterface) const
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool SceneProvider::IsA(InterfaceIDType in_interfaceId) const
         {
-            return SceneProvider::InterfaceID == inInterface||(inInterface) == ResourceProvider::InterfaceID;
+            return (ResourceProvider::InterfaceID == in_interfaceId || SceneProvider::InterfaceID == in_interfaceId);
         }
-        
-        
-        bool SceneProvider::CanCreateResourceOfKind(InterfaceIDType  inInterfaceID) const
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool SceneProvider::CanCreateResourceOfKind(InterfaceIDType in_interfaceID) const
         {
-            return inInterfaceID == ChilliSource::Core::SceneDesc::InterfaceID;
+            return (in_interfaceID == ChilliSource::Core::SceneDesc::InterfaceID);
         }
-        
-        bool SceneProvider::CanCreateResourceFromFileWithExtension(const std::string &inExtension) const
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool SceneProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
         {
-            return inExtension == kMoSceneExtension;
+            return (in_extension == kMoSceneExtension);
         }
-        
-        bool SceneProvider::CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource)
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool SceneProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource)
         {
-            return LoadMoScene(ineStorageLocation, inFilePath, outpResource);
+            SceneDesc* sceneDesc = reinterpret_cast<SceneDesc*>(out_resource.get());
+            return sceneDesc->LoadFromFile(in_storageLocation, in_filepath);
         }
-        
-        bool SceneProvider::AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource)
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool SceneProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceSPtr& out_resource)
         {
-            Task<StorageLocation, const std::string&, ResourceSPtr&> ReadFileTask(this, &SceneProvider::LoadAsyncMoScene, ineStorageLocation, inFilePath, outpResource);
+            Task<StorageLocation, const std::string&, ResourceSPtr&> ReadFileTask(this, &SceneProvider::LoadAsyncMoScene, in_storageLocation, in_filepath, out_resource);
             TaskScheduler::ScheduleTask(ReadFileTask);
             return true;
         }
-        
-        bool SceneProvider::LoadMoScene(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource)
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void SceneProvider::LoadAsyncMoScene(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceSPtr& out_resource)
         {
-            SceneDesc * pSceneDesc = reinterpret_cast<SceneDesc*>(outpResource.get());
-            
-            return pSceneDesc->LoadFromFile(ineStorageLocation, inFilePath);
-        }
-        
-        void SceneProvider::LoadAsyncMoScene(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource)
-        {
-            SceneDesc * pSceneDesc = reinterpret_cast<SceneDesc*>(outpResource.get());
-            pSceneDesc->LoadFromFile(ineStorageLocation, inFilePath);
-            outpResource->SetLoaded(true);
+            SceneDesc * sceneDesc = reinterpret_cast<SceneDesc*>(out_resource.get());
+            sceneDesc->LoadFromFile(in_storageLocation, in_filepath);
+            out_resource->SetLoaded(true);
         }
     }
 }
