@@ -17,6 +17,18 @@ namespace ChilliSource
 {
     namespace iOS
     {
+        //-------------------------------------------------------------------
+        /// System that allows the user to post tweets to Twitter. User
+        /// must first authenticate with the Twitter app key and secret before
+        /// posting is allowed. Posts are restricted to standard twitter
+        /// character limits. NOTE: currently only one post is allowed at a time.
+        ///
+        /// This is the iOS version which will attempt to post using iOS 5+
+        /// Twitter posting dialogue before falling back on Chilli Source
+        /// implementation
+        ///
+        /// @author R Henning
+        //-------------------------------------------------------------------
         class TwitterPostSystem final : public Social::TwitterPostSystem
         {
         public:

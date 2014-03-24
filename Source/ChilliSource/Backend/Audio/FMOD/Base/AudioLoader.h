@@ -19,6 +19,11 @@ namespace ChilliSource
 	{
         class FMODSystem;
         
+        //-------------------------------------------------------
+        /// Factory class for loading audio resources with FMOD.
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
 		class AudioLoader final : public Audio::AudioLoader
 		{
 		public:

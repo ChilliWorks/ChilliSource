@@ -21,8 +21,12 @@ namespace ChilliSource
 {
 	namespace FMOD
 	{
-		const u32 k_maxFMODChannels = 32;
-		
+        //-------------------------------------------------------
+        /// System that controls the playing of audio via
+        /// the FMOD audio library
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
 		class FMODSystem final : public Audio::AudioSystem, public Core::IUpdateable
 		{
 		public:
@@ -60,36 +64,6 @@ namespace ChilliSource
 			/// @param name of event
 			//-------------------------------------------------------
 			::FMOD::Event * PlayEvent(const std::string& instrEventName);
-            //-------------------------------------------------------
-			/// Set the volume for the entire audio effect channel
-            ///
-            /// @author S Downie
-            ///
-			/// @param Normalised volume level [0, 1]
-			//-------------------------------------------------------
-            void SetMasterEffectVolume(f32 in_volume) override;
-			//-------------------------------------------------------
-			/// Set the volume for the entire audio stream channel
-            ///
-            /// @author S Downie
-            ///
-			/// @param Normalised volume level [0, 1]
-			//-------------------------------------------------------
-            void SetMasterStreamVolume(f32 in_volume) override;
-			//-------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return Normalised volume level [0, 1] for effect
-            /// channel
-			//-------------------------------------------------------
-            f32 GetMasterEffectVolume() const override;
-			//-------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return Normalised volume level [0, 1] for stream
-            /// channel
-			//-------------------------------------------------------
-            f32 GetMasterStreamVolume() const override;
 			//-------------------------------------------------------
             /// @author S Downie
             ///

@@ -17,6 +17,17 @@ namespace ChilliSource
 {
 	namespace Android
 	{
+		//-------------------------------------------------------------------
+		/// System that allows the user to post tweets to Twitter. User
+		/// must first authenticate with the Twitter app key and secret before
+		/// posting is allowed. Posts are restricted to standard twitter
+		/// character limits. NOTE: currently only one post is allowed at a time.
+		///
+		/// This is the Android version which will posts using the Chilli Source
+		/// implementation.
+		///
+		/// @author R Henning
+		//-------------------------------------------------------------------
 		class TwitterPostSystem final : public Social::TwitterPostSystem
 		{
 		public:

@@ -20,37 +20,40 @@ namespace ChilliSource
 {
 	namespace Video
 	{
-        //----------------------------------------------------------------
-        // Constants
-        //----------------------------------------------------------------
-		const std::string k_CSSubtitlesExtension("mosubtitles");
-		const std::string k_tagVersionNumber = "VersionNumber";
-        const std::string k_tagStyles = "Styles";
-        const std::string k_tagSubtitles = "Subtitles";
-        const std::string k_tagStyleName = "Name";
-        const std::string k_tagStyleFont = "Font";
-        const std::string k_tagStyleFontSize = "FontSize";
-        const std::string k_tagStyleFontColour = "FontColour";
-        const std::string k_tagStyleFadeTime = "FadeTime";
-        const std::string k_tagStyleAlignment = "Alignment";
-        const std::string k_tagStyleBounds = "Bounds";
-        const std::string k_tagStyleBoundsTop = "Top";
-        const std::string k_tagStyleBoundsBottom = "Bottom";
-        const std::string k_tagStyleBoundsLeft = "Left";
-        const std::string k_tagStyleBoundsRight = "Right";
-        const std::string k_tagSubtitlestyle = "Style";
-        const std::string k_tagSubtitlestartTime = "StartTime";
-        const std::string k_tagSubtitleEndTime = "EndTime";
-        const std::string k_tagSubtitleTextID = "TextID";
-        const std::string k_defaultFont = "Arial";
-        const std::string k_defaultColour = "1.0 1.0 1.0 1.0";
-        const std::string k_defaultAlignment = "MiddleCentre";
-        const u32 k_defaultFontSize = 18;
-        const TimeIntervalMs k_defaultFadeTimeMS = 250;
-        const f32 k_defaultTop = 0.0f;
-        const f32 k_defaultLeft = 0.0f;
-        const f32 k_defaultRight = 1.0f;
-        const f32 k_defaultBottom = 1.0f;
+        namespace
+        {
+            //----------------------------------------------------------------
+            // Constants
+            //----------------------------------------------------------------
+            const std::string k_CSSubtitlesExtension("mosubtitles");
+            const std::string k_tagVersionNumber = "VersionNumber";
+            const std::string k_tagStyles = "Styles";
+            const std::string k_tagSubtitles = "Subtitles";
+            const std::string k_tagStyleName = "Name";
+            const std::string k_tagStyleFont = "Font";
+            const std::string k_tagStyleFontSize = "FontSize";
+            const std::string k_tagStyleFontColour = "FontColour";
+            const std::string k_tagStyleFadeTime = "FadeTime";
+            const std::string k_tagStyleAlignment = "Alignment";
+            const std::string k_tagStyleBounds = "Bounds";
+            const std::string k_tagStyleBoundsTop = "Top";
+            const std::string k_tagStyleBoundsBottom = "Bottom";
+            const std::string k_tagStyleBoundsLeft = "Left";
+            const std::string k_tagStyleBoundsRight = "Right";
+            const std::string k_tagSubtitlestyle = "Style";
+            const std::string k_tagSubtitlestartTime = "StartTime";
+            const std::string k_tagSubtitleEndTime = "EndTime";
+            const std::string k_tagSubtitleTextID = "TextID";
+            const std::string k_defaultFont = "Arial";
+            const std::string k_defaultColour = "1.0 1.0 1.0 1.0";
+            const std::string k_defaultAlignment = "MiddleCentre";
+            const u32 k_defaultFontSize = 18;
+            const TimeIntervalMs k_defaultFadeTimeMS = 250;
+            const f32 k_defaultTop = 0.0f;
+            const f32 k_defaultLeft = 0.0f;
+            const f32 k_defaultRight = 1.0f;
+            const f32 k_defaultBottom = 1.0f;
+        }
 
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
@@ -66,7 +69,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool CSSubtitlesLoader::CanCreateResourceFromFileWithExtension(const std::string & in_extension) const
+		bool CSSubtitlesLoader::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
 		{
 			return (in_extension == k_CSSubtitlesExtension);
 		}
@@ -162,7 +165,6 @@ namespace ChilliSource
             out_resource->SetLoaded(true);
         }
         //-------------------------------------------------------------------------
-        // Load Style
         //-------------------------------------------------------------------------
         Subtitles::StylePtr CSSubtitlesLoader::LoadStyle(const Json::Value& in_styleJSON) const
         {
