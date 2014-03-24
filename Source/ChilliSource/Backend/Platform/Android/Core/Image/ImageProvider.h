@@ -70,7 +70,22 @@ namespace ChilliSource
 			/// @return Success
 			//----------------------------------------------------------------
 			bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceSPtr& out_resource) override;
-
+			//----------------------------------------------------
+			/// Creates a new resource from file asynchronously.
+			/// The resource will be returned immediately but
+			/// cannot be used until the loaded flag is set. This
+			/// can be queried using IsLoaded() on the resource.
+			///
+			/// @author I Copland
+			///
+			/// @param The storage location.
+			/// @param The filepath.
+			/// @param [Out] The output resource.
+			///
+			/// @return Whether or not the resource async load was
+			/// successfully started.
+			//----------------------------------------------------
+			bool AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filePath, Core::ResourceSPtr& out_resource) override;
 		private:
             friend Core::ImageProviderUPtr Core::ImageProvider::Create();
             //-------------------------------------------------------

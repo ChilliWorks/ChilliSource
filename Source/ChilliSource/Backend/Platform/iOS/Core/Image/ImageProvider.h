@@ -76,6 +76,22 @@ namespace ChilliSource
 			/// @return Whether the resource loaded 
 			//-----------------------------------------------------------
 			bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceSPtr& out_resource) override;
+            //----------------------------------------------------
+            /// Creates a new resource from file asynchronously.
+            /// The resource will be returned immediately but
+            /// cannot be used until the loaded flag is set. This
+            /// can be queried using IsLoaded() on the resource.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The storage location.
+            /// @param The filepath.
+            /// @param [Out] The output resource.
+            ///
+            /// @return Whether or not the resource async load was
+            /// successfully started.
+            //----------------------------------------------------
+			bool AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filePath, Core::ResourceSPtr& out_resource) override;
         private:
             friend Core::ImageProviderUPtr Core::ImageProvider::Create();
             
@@ -85,51 +101,6 @@ namespace ChilliSource
             /// @author S Downie
             //-----------------------------------------------------------
             ImageProvider(){}
-
-			//------------------------------------------------------------
-			/// Downsize the image from 32 bits to 16 bits no alpha
-            ///
-            /// @author S McGaw
-			///
-			/// @param RGBA8888 data
-			/// @param Width x Height
-            ///
-			/// @return RGB565 data
-			//------------------------------------------------------------
-			u8* RGBA8888ToRGB565(u8* in_data, u32 in_area);
-			//------------------------------------------------------------
-			/// Downsize the image from 32 bits to 16 bits
-            ///
-            /// @author S McGaw
-			///
-			/// @param RGBA8888 data
-			/// @param Width x Height
-            ///
-			/// @return RGBA4444 data
-			//------------------------------------------------------------
-			u8* RGBA8888ToRGBA4444(u8* in_data, u32 in_area);
-			//------------------------------------------------------------
-			/// Downsize the image from 32 bits to 16 bits
-            ///
-            /// @author S McGaw
-			///
-			/// @param RGBA8888 data
-			/// @param Width x Height
-            ///
-			/// @return LUM88 data
-			//------------------------------------------------------------
-			u8* RGBA8888ToLUM88(u8* in_data, u32 in_area);
-            //------------------------------------------------------------
-			/// Downsize the image from 32 bits to 8 bits
-            ///
-            /// @author S McGaw
-			///
-			/// @param RGBA8888 data
-			/// @param Width x Height
-            ///
-			/// @return LUM8 data
-			//------------------------------------------------------------
-            u8* RGBA8888ToLUM8(u8* in_data, u32 in_area);
 		};
 	}
 }
