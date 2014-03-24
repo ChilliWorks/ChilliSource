@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace FMOD
 	{
-		class AudioManager : public Audio::AudioManager
+		class AudioManager final : public Audio::AudioManager
 		{
 		public:
 			

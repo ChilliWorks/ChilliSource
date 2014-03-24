@@ -64,7 +64,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool AudioLoader::CanCreateResourceFromFileWithExtension(const std::string & in_extension) const
+		bool AudioLoader::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
 		{
 			return
             (in_extension == k_WAVExtension) ||
@@ -117,6 +117,13 @@ namespace ChilliSource
 			return true;
 #endif
 		}
+        //-------------------------------------------------------------------------
+        //-------------------------------------------------------------------------
+        bool AudioLoader::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+        {
+            CS_LOG_FATAL("AudioLoader::AsyncCreateResourceFromFile - Not yet implemented");
+            return false;
+        }
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
 		bool AudioLoader::StreamResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& outpResource)

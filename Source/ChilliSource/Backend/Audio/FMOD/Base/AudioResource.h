@@ -24,7 +24,7 @@ namespace ChilliSource
 {
 	namespace FMOD
 	{
-		class AudioResource : public Audio::AudioResource 
+		class AudioResource final : public Audio::AudioResource
 		{
 		public:
             AudioResource();

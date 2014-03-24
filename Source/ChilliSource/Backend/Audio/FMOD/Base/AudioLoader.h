@@ -19,7 +19,7 @@ namespace ChilliSource
 	{
         class FMODSystem;
         
-		class AudioLoader : public Audio::AudioLoader
+		class AudioLoader final : public Audio::AudioLoader
 		{
 		public:
 			
@@ -58,7 +58,20 @@ namespace ChilliSource
             ///
 			/// @return Success
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource);
+			bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+            //-------------------------------------------------------------------------
+            /// Load the audio resource on a background thread from the given
+            /// file location
+            ///
+			/// @author S Downie
+			///
+            /// @param The storage location to load from
+			/// @param Filename
+			/// @param [Out] Resource object
+            ///
+			/// @return Whether the resource was loaded
+			//-------------------------------------------------------------------------
+			bool AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// Stream audio resource from the given file
             ///

@@ -23,7 +23,7 @@ namespace ChilliSource
 	{
 		const u32 k_maxFMODChannels = 32;
 		
-		class FMODSystem : public Audio::AudioSystem, public Core::IUpdateable
+		class FMODSystem final : public Audio::AudioSystem, public Core::IUpdateable
 		{
 		public:
             
