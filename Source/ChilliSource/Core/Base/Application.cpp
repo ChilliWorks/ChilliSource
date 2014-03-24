@@ -23,7 +23,7 @@
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/File/LocalDataStore.h>
 #include <ChilliSource/Core/File/TweakableConstants.h>
-#include <ChilliSource/Core/Image/MoImageProvider.h>
+#include <ChilliSource/Core/Image/CSImageProvider.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
@@ -497,7 +497,7 @@ namespace ChilliSource
 
             //TODO: Change this to a PNG image provider.
             CreateSystem<ImageProvider>();
-            CreateSystem<MoImageProvider>();
+            CreateSystem<CSImageProvider>();
             AddSystem_Old(DialogueBoxSystem::Create());
 
             //Audio

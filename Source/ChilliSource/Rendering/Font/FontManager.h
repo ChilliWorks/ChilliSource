@@ -54,17 +54,6 @@ namespace ChilliSource
 			/// @return Whether this object manages the object of type
 			//----------------------------------------------------------------
 			bool ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const override;
-			//----------------------------------------------------------------
-			/// Get Font From File
-			///
-			/// Creates (lazily loads) fonts from file. If it already 
-			/// exists it will return that instance
-			///
-            /// @param The storage location to load from
-			/// @param File name
-			/// @param Image format
-			//----------------------------------------------------------------
-			FontSPtr GetFontFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::Image::Format ineFormat = Core::Image::Format::k_default);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///

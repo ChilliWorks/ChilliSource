@@ -38,7 +38,7 @@ namespace ChilliSource
 			/// @param Source image
 			/// @param Whether to create mip maps
 			//--------------------------------------------------
-			void Init(Core::Image * pSourceImage, bool inbWithMipsMaps);
+			void Init(Core::Image * pSourceImage);
             //----------------------------------------------------------------
             /// Create Image From Texture
             ///

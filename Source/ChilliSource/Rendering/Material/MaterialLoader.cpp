@@ -106,7 +106,7 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
-                        pMaterial->AddTexture(pTextureManager->GetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::Image::Format::k_default, aTextureFiles[i].mbMipMapped));
+                        pMaterial->AddTexture(LOAD_RESOURCE(Texture, aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile));
                     }
                 }
                 
@@ -166,7 +166,12 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
-                        TextureSPtr pTexture = pTextureManager->AsyncGetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::Image::Format::k_default, aTextureFiles[i].mbMipMapped);
+                        TextureSPtr pTexture = LOAD_RESOURCE(Texture, aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile);
+                        if (aTextureFiles[i].mbMipMapped == true)
+                        {
+                            //TODO: Generate mipmaps
+                        }
+                        
                         pMaterial->AddTexture(pTexture);
                         pTexture->WaitTilLoaded();
                     }

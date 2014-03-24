@@ -93,7 +93,7 @@ namespace ChilliSource
 		/// @param Source image
 		/// @param Whether to create mip maps
 		//--------------------------------------------------
-		void Texture::Init(Core::Image * pSourceImage, bool inbWithMipsMaps)
+		void Texture::Init(Core::Image * pSourceImage)
 		{
             meImageFormat = pSourceImage->GetFormat();
             
@@ -106,7 +106,7 @@ namespace ChilliSource
             Bind();
             
             mbHasTextureFilterModeChanged = true;
-			mbHasMipMaps = inbWithMipsMaps;
+			mbHasMipMaps = false;
             
             UpdateTextureParameters();
 			
@@ -177,7 +177,7 @@ namespace ChilliSource
 					break;
 			};
             
-            if(inbWithMipsMaps)
+            if(mbHasMipMaps)
 			{
                 glGenerateMipmap(GL_TEXTURE_2D); 
 			}

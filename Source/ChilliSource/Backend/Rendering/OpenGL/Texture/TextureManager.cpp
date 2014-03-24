@@ -47,9 +47,9 @@ namespace ChilliSource
 		/// @param Out: Texture resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool TextureManager::CreateTextureFromImage(Core::Image * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TextureSPtr& outpTexture)
+		bool TextureManager::CreateTextureFromImage(Core::Image * inpImage, ChilliSource::Rendering::TextureSPtr& outpTexture)
 		{
-			std::static_pointer_cast<Texture>(outpTexture)->Init(inpImage, inbWithMipsMaps);
+			std::static_pointer_cast<Texture>(outpTexture)->Init(inpImage);
 			return true;
 		}
 		//----------------------------------------------------------------

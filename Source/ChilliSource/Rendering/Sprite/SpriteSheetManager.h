@@ -54,19 +54,6 @@ namespace ChilliSource
 			/// @return Whether this object manages the object of type
 			//----------------------------------------------------------------
 			bool ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const override;
-			//----------------------------------------------------------------
-			/// Get Sprite Data From File
-			///
-			/// Creates (lazily loads) sprite data from file. If it already 
-			/// exists it will return that instance
-            ///
-            /// @param The storage location to load from
-            /// @param The filepath
-            /// @param The image format
-            /// @param Whether or not mip maps should be used
-            /// @return the spritesheet resource pointer
-			//----------------------------------------------------------------
-			SpriteSheetSPtr GetSpriteSheetFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::Image::Format ineFormat = Core::Image::Format::k_default, bool inbWithMipsMaps = false);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///

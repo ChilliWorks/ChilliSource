@@ -79,36 +79,21 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		Core::ResourceSPtr SpriteSheetManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			return GetSpriteSheetFromFile(ineStorageLocation, instrFilePath, Core::Image::Format::k_default, false);
-		}
-		//----------------------------------------------------------------
-		/// Get Sprite Data From File
-		///
-		/// Creates (lazily loads) sprite data from file. If the 
-		/// sprite data is already loaded it returns a handle to it
-        /// @param The storage location to load from
-        /// @param the filepath
-        /// @param image format
-        /// @param whether or not to use mipmaps
-        /// @return The sprites sheet resource pointer
-		//----------------------------------------------------------------
-		SpriteSheetSPtr SpriteSheetManager::GetSpriteSheetFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::Image::Format ineFormat, bool inbWithMipsMaps)
-		{
-            //It's the texture that is passed in so we need to load the binary file
+			//It's the texture that is passed in so we need to load the binary file
             std::string strSpriteSheetFile;
             std::string strExt;
-            Core::StringUtils::SplitBaseFilename(inFilePath, strSpriteSheetFile, strExt);
+            Core::StringUtils::SplitBaseFilename(instrFilePath, strSpriteSheetFile, strExt);
             strSpriteSheetFile += ".bin";
             
 			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(strSpriteSheetFile);
 			
-			if(pExistingResource == mMapFilenameToResource.end()) 
+			if(pExistingResource == mMapFilenameToResource.end())
 			{
 				Core::ResourceSPtr pResource(new SpriteSheet());
 				
-				for(size_t nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
+				for(size_t nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
 				{
-					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, strSpriteSheetFile, pResource)) 
+					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, strSpriteSheetFile, pResource))
 					{
 						//Add it to the cache
 						CS_LOG_DEBUG("Loading sprite data " + strSpriteSheetFile);
@@ -116,7 +101,7 @@ namespace ChilliSource
 						
 						SpriteSheetSPtr pSpriteSheet = std::static_pointer_cast<SpriteSheet>(pResource);
 						pSpriteSheet->SetName(strSpriteSheetFile);
-						pSpriteSheet->SetFilename(inFilePath);
+						pSpriteSheet->SetFilename(instrFilePath);
 						pSpriteSheet->SetStorageLocation(ineStorageLocation);
 						pSpriteSheet->SetOwningResourceManager(this);
 						pSpriteSheet->SetLoaded(true);
@@ -126,21 +111,20 @@ namespace ChilliSource
                             mpTextureManager = Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<TextureManager>();
                         }
                         
-                        std::string strNewFilePath = inFilePath;
-                        TextureSPtr pTexture = mpTextureManager->GetTextureFromFile(ineStorageLocation, strNewFilePath, ineFormat, inbWithMipsMaps);
+                        TextureSPtr pTexture = LOAD_RESOURCE(Texture, ineStorageLocation, instrFilePath);
                         pSpriteSheet->SetTexture(pTexture);
                         
 						return pSpriteSheet;
 					}
 				}
-			} 
-			else 
+			}
+			else
 			{
-				return std::static_pointer_cast<SpriteSheet>(pExistingResource->second);
+				return pExistingResource->second;
 			}
 			
 			//Resource not found
-			CS_LOG_ERROR("Cannot find resource for sprite data with path " + inFilePath);
+			CS_LOG_ERROR("Cannot find resource for sprite data with path " + instrFilePath);
 			return nullptr;
 		}
 	}

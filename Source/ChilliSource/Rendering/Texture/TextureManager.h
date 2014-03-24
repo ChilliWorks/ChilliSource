@@ -53,43 +53,6 @@ namespace ChilliSource
 			/// @return Whether this object manages the object of type
 			//----------------------------------------------------------------
 			bool ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const override;
-			//----------------------------------------------------------------
-			/// Get Texture From File
-			///
-			/// Loads the texture from resource and returns a handle to it.
-			/// Alternately if the texture already exists it will return the
-			/// handle without loading
-			///
-            /// @param The storage location to load from
-			/// @param File name
-			/// @param Generate mip-maps. Default = false
-			/// @return A handle to the texture
-			//----------------------------------------------------------------
-			TextureSPtr GetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat = Core::Image::Format::k_default, bool inbWithMipsMaps = false);
-			//-----------------------------------------------------------------
-			/// Async Get Texture From File
-			///
-			/// Generic call to get the managers resource. This will
-			/// load the resource on a seperate thread but will return the
-			/// resource pointer synchronously. Before using the resource
-			/// pointer the IsLoaded flag should be checked
-			///
-            /// @param The storage location to load from
-			/// @param File path to resource
-			/// @param Image format
-			/// @param Enable mip-mapping
-			/// @return Generic pointer to resource type
-			//-----------------------------------------------------------------
-			TextureSPtr AsyncGetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat = Core::Image::Format::k_default, bool inbWithMipsMaps = false);
-			//----------------------------------------------------------------
-			/// Create Empty Texture
-			///
-			/// @param Texture width
-			/// @param Texture height
-			/// @param Out: Texture resource 
-			/// @return Success
-			//----------------------------------------------------------------
-			virtual bool CreateEmptyTexture(u32 inWidth, u32 inHeight, Core::Image::Format ineFormat, TextureSPtr& outpTexture) = 0;
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
@@ -108,6 +71,15 @@ namespace ChilliSource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
 			Core::ResourceSPtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			//----------------------------------------------------------------
+			/// Create Empty Texture
+			///
+			/// @param Texture width
+			/// @param Texture height
+			/// @param Out: Texture resource 
+			/// @return Success
+			//----------------------------------------------------------------
+			virtual bool CreateEmptyTexture(u32 inWidth, u32 inHeight, Core::Image::Format ineFormat, TextureSPtr& outpTexture) = 0;
 			//-----------------------------------------------------------------
 			/// GetDefaultTexture
 			///
@@ -138,14 +110,12 @@ namespace ChilliSource
 			///
 			/// @param Image to create moFlo texture from
 			//----------------------------------------------------------------
-			virtual bool CreateTextureFromImage(Core::Image * pImage, bool inbWithMipsMaps, TextureSPtr& outpTexture) = 0;
+			virtual bool CreateTextureFromImage(Core::Image * pImage, TextureSPtr& outpTexture) = 0;
 		protected:
 			
 			struct ImageDesc
 			{
 				std::string strFilename;
-				Core::Image::Format eImageFormat;
-				bool bUseMipmaps;
                 Core::StorageLocation eStorageLocation;
 				Core::ResourceSPtr pImageResource;
 				TextureSPtr pTextureResource;
@@ -168,7 +138,7 @@ namespace ChilliSource
 			/// @param With mipmapping
 			/// @param Texture to create
 			//-----------------------------------------------------------------------------------
-			void TextureLoadTask(const Core::ResourceSPtr& inpImage, bool inbWithMipsMaps, TextureSPtr& outpTexture);
+			void TextureLoadTask(const Core::ResourceSPtr& inpImage, TextureSPtr& outpTexture);
 			//-----------------------------------------------------------------
 			/// CreateDefaultTexture
 			///
