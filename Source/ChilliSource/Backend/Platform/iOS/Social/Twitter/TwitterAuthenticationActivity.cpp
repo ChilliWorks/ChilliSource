@@ -32,11 +32,6 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-        namespace
-        {
-            const u32 k_PINLength = 7;
-        }
-        
 		//-----------------------------------------------
 		/// Constructor
 		///

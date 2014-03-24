@@ -41,8 +41,11 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         void TwitterPostSystem::Authenticate(const std::string& in_key, const std::string& in_secret, const AuthenticationResultDelegate& in_delegate)
         {
+            CS_ASSERT(m_authDelegate == nullptr, "Twitter can only handle one auth request at a time");
             CS_ASSERT(in_key.empty() == false && in_secret.empty() == false, "Twitter must have a key and secret provided by the Twitter application");
 
+            m_authDelegate = in_delegate;
+            
             LoadAuthenticationKeys();
             
             if(m_savedOAuthTokenKey.empty() == false && m_savedOAuthTokenSecret.empty() == false)
@@ -52,9 +55,10 @@ namespace ChilliSource
                 m_oauthSystem->SetOAuthTokenKey(m_savedOAuthTokenKey);
 				m_oauthSystem->SetOAuthTokenSecret(m_savedOAuthTokenSecret);
                 
-                if(in_delegate)
+                if(m_authDelegate)
                 {
-                    in_delegate(AuthenticationResult::k_success);
+                    m_authDelegate(AuthenticationResult::k_success);
+                    m_authDelegate = nullptr;
                 }
             }
             else
@@ -166,6 +170,8 @@ namespace ChilliSource
 								m_postDelegate(Social::TwitterPostSystem::PostResult::k_failed);
 								break;
 						};
+                        
+                        m_postDelegate = nullptr;
 					}
                     
                     [[EAGLView sharedInstance].viewController dismissModalViewControllerAnimated:YES];
@@ -199,6 +205,7 @@ namespace ChilliSource
 				if(m_postDelegate)
 				{
 					m_postDelegate(Social::TwitterPostSystem::PostResult::k_notAuthenticated);
+                    m_postDelegate = nullptr;
 				}
 			}
 		}

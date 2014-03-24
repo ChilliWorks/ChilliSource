@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_SOCIAL_TWITTER_TWITTERPOSTSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
@@ -29,7 +29,7 @@ namespace ChilliSource
         ///
         /// @author R Henning
         //-------------------------------------------------------------------
-		class TwitterPostSystem: public ChilliSource::Core::System
+		class TwitterPostSystem: public Core::AppSystem
 		{
 		public:
 			

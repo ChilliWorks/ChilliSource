@@ -1,64 +1,62 @@
-/*
- *  TwitterPostSystem.h
- *  moFlow
- *
- *  Created by Robert Henning on 11/05/2012.
- *  Copyright 2012 Tag Games. All rights reserved.
- *
- */
+//
+//  TwitterPostSystem.h
+//  Chilli Source
+//
+//  Created by Robert Henning on 11/05/2012.
+//  Copyright 2012 Tag Games. All rights reserved.
+//
 
-#ifndef _MO_FLO_ANDROIDPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
-#define _MO_FLO_ANDROIDPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
+#ifndef _CHILLISOURCE_PLATFORM_ANDROID_SOCIAL_TWITTER_TWITTERPOSTSYSTEM_H_
+#define _CHILLISOURCE_PLATFORM_ANDROID_SOCIAL_TWITTER_TWITTERPOSTSYSTEM_H_
 
-#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpConnectionSystem.h>
-#include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
-#include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
 namespace ChilliSource
 {
 	namespace Android
 	{
-		class TwitterPostSystem: public Social::TwitterPostSystem
+		class TwitterPostSystem final : public Social::TwitterPostSystem
 		{
 		public:
-			~TwitterPostSystem();
             //------------------------------------------------------------------------
-            /// Is A
+            /// @author R Henning
             ///
             /// @param Interface ID
+			///
             /// @return Is of interface ID type
             //------------------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+            bool IsA(Core::InterfaceIDType in_interfaceID) const override;
             //------------------------------------------------------------------------
             /// Run the OAuth process and, if successful, leave the system in state
             /// ready to communicate with Twitter
             ///
-            /// @return Returns true if successful, otherwise false
+            /// @author S Downie
+            ///
+            /// @param Key from Twitter application
+            /// @param Secret from Twitter application
+            /// @param Result delegate
             //------------------------------------------------------------------------
-            bool Authenticate() override;
+            void Authenticate(const std::string& in_key, const std::string& in_secret, const AuthenticationResultDelegate& in_delegate) override;
 			//------------------------------------------------------------------------
-			/// Is Image Post Supported
+			/// @author R Henning
             ///
             /// @return Whether or not posting images using twitter is supported.
 			//------------------------------------------------------------------------
 			bool IsImagePostSupported() const override;
-			//------------------------------------------------------------------------
-			/// Try Post
-			///
+            //------------------------------------------------------------------------
 			/// Attempt to post a tweet to Twitter
+            ///
+            /// @author R Henning
 			///
 			/// @param Twitter post description (i.e. image, text etc)
 			/// @param Completion delegate
-			/// @param Post handle identifier
-            ///
-            /// @return If the tweet exceeds the character limit imposed by Twitter
 			//------------------------------------------------------------------------
-			bool TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback) override;
+			void Post(const Social::TwitterPostSystem::PostDesc& in_desc, const Social::TwitterPostSystem::PostResultDelegate& in_delegate) override;
 
 		private:
-			friend Social::TwitterPostSystemUPtr Social::TwitterPostSystem::Create(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
+			friend Social::TwitterPostSystemUPtr Social::TwitterPostSystem::Create(Networking::HttpConnectionSystem*, Core::OAuthSystem*);
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
@@ -68,19 +66,23 @@ namespace ChilliSource
             /// @param The http connection system.
             /// @param The OAuth system.
             //----------------------------------------------------
-            TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
+            TwitterPostSystem(Networking::HttpConnectionSystem* in_httpConnectionSystem, Core::OAuthSystem* in_oauthSystem);
 			//------------------------------------------------------------------------
 			/// Delegate called when the user confirms entry of the PIN
 			///
+            /// @author R Henning
+            ///
 			/// @param PIN entered by user
 			//------------------------------------------------------------------------
-			void OnPINComplete(const Social::TwitterAuthenticationActivity::AuthenticationPINResult &inResult);
+			void OnPINComplete(const Social::TwitterAuthenticationActivity::AuthenticationPINResult& in_result);
 			//------------------------------------------------------------------------
 			/// Delegate called with the authorisation view is dismissed.
 			///
-			/// @param Pointer to IActivity that has been dismissed
+			/// @author R Henning
+			///
+			/// @param Pointer to Activity that has been dismissed
 			//------------------------------------------------------------------------
-			void OnAuthorisationDismissed(Core::Activity* inpActivity);
+			void OnAuthorisationDismissed(Core::Activity* in_activity);
 
 		private:
 

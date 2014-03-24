@@ -1,18 +1,15 @@
-/*
- *  TwitterPostSystem.cpp
- *  moFlow
- *
- *  Created by Robert Henning on 05/03/2012.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  TwitterPostSystem.cpp
+//  Chilli Source
+//
+//  Created by Robert Henning on 11/05/2012.
+//  Copyright 2012 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterPostSystem.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
-#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 
 namespace ChilliSource
@@ -20,43 +17,49 @@ namespace ChilliSource
 	namespace Android
 	{
 		//------------------------------------------------------------------------
-		/// Constructor
 		//------------------------------------------------------------------------
-		TwitterPostSystem::TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
-		: Social::TwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
+		TwitterPostSystem::TwitterPostSystem(Networking::HttpConnectionSystem* in_httpConnectionSystem, Core::OAuthSystem* in_oauthSystem)
+		: Social::TwitterPostSystem(in_httpConnectionSystem, in_oauthSystem)
 		{
 		}
 		//------------------------------------------------------------------------
-		/// Destructor
-		//------------------------------------------------------------------------
-		TwitterPostSystem::~TwitterPostSystem()
-		{
-		}
-		//------------------------------------------------------------------------
-        /// Is A
         //------------------------------------------------------------------------
-        bool TwitterPostSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool TwitterPostSystem::IsA(Core::InterfaceIDType in_interfaceID) const
         {
-            return inInterfaceID == Social::TwitterPostSystem::InterfaceID;
+            return in_interfaceID == Social::TwitterPostSystem::InterfaceID;
         }
 		//------------------------------------------------------------------------
-		/// Authenticate
 		//------------------------------------------------------------------------
-		bool TwitterPostSystem::Authenticate()
+        void TwitterPostSystem::Authenticate(const std::string& in_key, const std::string& in_secret, const AuthenticationResultDelegate& in_delegate)
 		{
-			bool bResult = false;
+            CS_ASSERT(m_authDelegate == nullptr, "Twitter can only handle one auth request at a time");
+            CS_ASSERT(in_key.empty() == false && in_secret.empty() == false, "Twitter must have a key and secret provided by the Twitter application");
+
+            m_authDelegate = in_delegate;
 
 			// Try and load saved keys
-			TryLoadAuthenticationKeys();
+			LoadAuthenticationKeys();
 
-			if(mstrSavedOAuthTokenKey.empty() || mstrSavedOAuthTokenSecret.empty())
-			{
-				// We don't have any keys to go though the authentication process
-				std::string strAuthoiseURL;
-				if(RequestOAuthToken(strAuthoiseURL))
+            if(m_savedOAuthTokenKey.empty() == false && m_savedOAuthTokenSecret.empty() == false)
+            {
+                //We have cached Auth tokens so don't need to prompt
+                m_isAuthenticated = true;
+                m_oauthSystem->SetOAuthTokenKey(m_savedOAuthTokenKey);
+				m_oauthSystem->SetOAuthTokenSecret(m_savedOAuthTokenSecret);
+
+                if(m_authDelegate)
+                {
+                    m_authDelegate(AuthenticationResult::k_success);
+                    m_authDelegate = nullptr;
+                }
+            }
+            else
+            {
+                //We need to prompt the user to login
+                if(RequestOAuthToken())
 				{
 					// Show authentication view
-					m_authenticationView = Social::TwitterAuthenticationActivity::Create();
+                    m_authenticationView = Social::TwitterAuthenticationActivity::Create();
 					if(m_authenticationView != nullptr)
 					{
 						m_authenticationView->SetAuthenticationPINResultDelegate(Core::MakeDelegate(this, &TwitterPostSystem::OnPINComplete));
@@ -64,76 +67,55 @@ namespace ChilliSource
 						m_authenticationView->Present();
 					}
 				}
-				else
-				{
-					return false;
-				}
-				bResult = false;
-			}
-			else
-			{
-				// We have keys, so set them and rock on!
-				mpOAuthSystem->SetOAuthTokenKey(mstrSavedOAuthTokenKey);
-				mpOAuthSystem->SetOAuthTokenSecret(mstrSavedOAuthTokenSecret);
-				bResult = true;
-			}
-
-			return bResult;
+                else
+                {
+                    CS_LOG_ERROR("TwitterPostSystem::Authenticate - Unable to get OAuth token!");
+                }
+            }
 		}
 		//------------------------------------------------------------------------
-		/// Is Image Post Supported
 		//------------------------------------------------------------------------
 		bool TwitterPostSystem::IsImagePostSupported() const
 		{
 			return false;
 		}
         //------------------------------------------------------------------------
-		/// Try Post
 		//------------------------------------------------------------------------
-		bool TwitterPostSystem::TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
+		void TwitterPostSystem::Post(const Social::TwitterPostSystem::PostDesc& in_desc, const Social::TwitterPostSystem::PostResultDelegate& in_delegate)
 		{
-			bool bResult = false;
-
-			CS_ASSERT(insDesc.strLocalImagePath.size() == 0, "The android twitter post system does not support image post.");
+			CS_ASSERT(in_desc.m_localImagePath.size() == 0, "The Android twitter post system does not support image post.");
 
 			// Set our callback
-			mCompletionDelegate = inResultCallback;
+			m_postDelegate = in_delegate;
 
-			if(Authenticate())
+			if(IsAuthenticated())
 			{
 				// Authentication has already occured and our token and secret keys are set
 				// so we are go for Twitter posing action...
-				PostUsingMoFlow(insDesc);
+				Social::TwitterPostSystem::PostUsingChilliSource(in_desc);
 			}
 			else
 			{
-				// Remember our post description
-				msDesc.strUrl = insDesc.strUrl;
-				msDesc.strText = insDesc.strText;
-				if(mCompletionDelegate)
+				if(m_postDelegate)
 				{
-					inResultCallback(Social::TwitterPostSystem::PostResult::k_notAuthenticated);
+					m_postDelegate(Social::TwitterPostSystem::PostResult::k_notAuthenticated);
+                    m_postDelegate = nullptr;
 				}
-				bResult = false;
 			}
-
-			return bResult;
 		}
 		//------------------------------------------------------------------------
-		/// Delegate called when the user confirms entry of the PIN
 		//------------------------------------------------------------------------
-		void TwitterPostSystem::OnPINComplete(const Social::TwitterAuthenticationActivity::AuthenticationPINResult &insResult)
+		void TwitterPostSystem::OnPINComplete(const Social::TwitterAuthenticationActivity::AuthenticationPINResult& in_result)
 		{
-			if(Social::TwitterPIN::kudwTwitterPINLength == insResult.strPIN.size())
+			if(in_result.strPIN.empty() == false)
 			{
-				mpOAuthSystem->SetOAuthPin(insResult.strPIN);
+				m_oauthSystem->SetOAuthPin(in_result.strPIN);
 				RequestOAuthAccessToken();
 			}
 		}
 		//------------------------------------------------------------------------
-		/// Delegate called with the authorisation view is dismissed.
 		//------------------------------------------------------------------------
-		void TwitterPostSystem::OnAuthorisationDismissed(Core::Activity* inpActivity)
+		void TwitterPostSystem::OnAuthorisationDismissed(Core::Activity* in_activity)
 		{
 			// User has cancelled
 			m_authorisationDismissedConnection = nullptr;

@@ -1,11 +1,10 @@
-/*
- *  TwitterPostSystem.h
- *  Chilli Source
- *
- *  Created by Robert Henning on 08/05/2012.
- *  Copyright 2012 Tag Games. All rights reserved.
- *
- */
+//
+//  TwitterPostSystem.h
+//  Chilli Source
+//
+//  Created by Robert Henning on 08/05/2012.
+//  Copyright 2012 Tag Games. All rights reserved.
+//
 
 #ifndef _CHILLISOURCE_PLATFORM_IOS_SOCIAL_TWITTER_TWITTERPOSTSYSTEM_H_
 #define _CHILLISOURCE_PLATFORM_IOS_SOCIAL_TWITTER_TWITTERPOSTSYSTEM_H_
@@ -18,7 +17,7 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class TwitterPostSystem : public ChilliSource::Social::TwitterPostSystem
+        class TwitterPostSystem final : public Social::TwitterPostSystem
         {
         public:
 			

@@ -93,6 +93,7 @@ namespace ChilliSource
             if(m_postDelegate)
             {
                 m_postDelegate(PostResult::k_failed);
+                m_postDelegate = nullptr;
             }
 		}
 		//------------------------------------------------------------------------
@@ -122,6 +123,8 @@ namespace ChilliSource
                     m_postDelegate(Social::TwitterPostSystem::PostResult::k_failed);
                     break;
             }
+            
+            m_postDelegate = nullptr;
 		}
 		//------------------------------------------------------------------------
 		//------------------------------------------------------------------------
@@ -207,6 +210,7 @@ namespace ChilliSource
             if(m_authDelegate)
             {
                 m_authDelegate(AuthenticationResult::k_failed);
+                m_authDelegate = nullptr;
             }
 		}
 		//------------------------------------------------------------------------
@@ -231,6 +235,7 @@ namespace ChilliSource
                 if(m_authDelegate)
                 {
                     m_authDelegate(AuthenticationResult::k_success);
+                    m_authDelegate = nullptr;
                 }
 			}
             else
@@ -240,6 +245,7 @@ namespace ChilliSource
                 if(m_authDelegate)
                 {
                     m_authDelegate(AuthenticationResult::k_failed);
+                    m_authDelegate = nullptr;
                 }
             }
 		}
