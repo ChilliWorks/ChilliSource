@@ -78,7 +78,7 @@ namespace ChilliSource
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
             std::string strFilePath;
-            Core::FileSystem* fileSystem = Core::Application::Get()->GetSystem<Core::FileSystem>();
+            Core::FileSystem* fileSystem = Core::Application::Get()->GetSystem_Old<Core::FileSystem>();
             
             switch (in_storageLocation)
 			{
@@ -130,7 +130,7 @@ namespace ChilliSource
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
             std::string strFilePath;
-            Core::FileSystem* fileSystem = Core::Application::Get()->GetSystem<Core::FileSystem>();
+            Core::FileSystem* fileSystem = Core::Application::Get()->GetFileSystem();
             
             switch (in_storageLocation)
 			{
