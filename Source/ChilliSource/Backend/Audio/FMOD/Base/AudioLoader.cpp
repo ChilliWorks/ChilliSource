@@ -101,7 +101,7 @@ namespace ChilliSource
                     return false;
             }
             
-            ErrorCheck(m_FMODSystem->createSound(strFilePath.c_str(), FMOD_SOFTWARE|FMOD_3D, nullptr, &static_cast<AudioResource*>(outpResource.get())->mpFMODSound));
+            ErrorCheck(m_FMODSystem->GetFMODSystem()->createSound(strFilePath.c_str(), FMOD_SOFTWARE|FMOD_3D, nullptr, &static_cast<AudioResource*>(outpResource.get())->mpFMODSound));
 			return true;
 #else
             std::string strFilePath;
@@ -146,7 +146,7 @@ namespace ChilliSource
                     return false;
             }
             
-            ErrorCheck(m_FMODSystem->createStream(strFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL, nullptr, &static_cast<AudioResource*>(outpResource.get())->mpFMODSound));
+            ErrorCheck(m_FMODSystem->GetFMODSystem()->createStream(strFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL, nullptr, &static_cast<AudioResource*>(outpResource.get())->mpFMODSound));
 			return true;
 #else
             std::string strFilePath;

@@ -51,17 +51,16 @@ namespace ChilliSource
         , m_FMODEventSystem(nullptr)
         , m_FMODEventProject(nullptr)
 		{
-
+            //TODO: These will go when all the systems are created
+            m_audioManager = new AudioManager();
+            m_audioComponentFactory = new AudioComponentFactory(this, m_audioManager);
+            
+            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(m_audioManager);
 		}
         //------------------------------------------------
         //------------------------------------------------
         void FMODSystem::OnInit()
         {
-            m_audioManager = new AudioManager();
-            m_audioComponentFactory = new AudioComponentFactory(this, m_audioManager);
-            
-            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(m_audioManager);
-            
 			//Create the FMOD event system
 			ErrorCheck(::FMOD::EventSystem_Create(&m_FMODEventSystem));
 			

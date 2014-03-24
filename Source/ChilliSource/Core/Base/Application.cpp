@@ -560,10 +560,6 @@ namespace ChilliSource
 				}
                 
                 //Common systems
-                if(pSystem->IsA(Audio::AudioSystem::InterfaceID))
-                {
-                    m_audioSystem = static_cast<Audio::AudioSystem*>(pSystem);
-                }
                 if(pSystem->IsA(Input::InputSystem::InterfaceID))
                 {
                     m_inputSystem = static_cast<Input::InputSystem*>(pSystem);
@@ -586,6 +582,24 @@ namespace ChilliSource
 				{
 					m_resourceProviders.push_back(dynamic_cast<ResourceProvider*>(system.get()));
 				}
+                
+                //TODO: Remove this when all Component producers have been changed to systems
+				if(system->IsA(IComponentProducer::InterfaceID))
+				{
+                    IComponentProducer* pProducer = dynamic_cast<IComponentProducer*>(system.get());
+                    u32 udwNumFactoriesInSystem = pProducer->GetNumComponentFactories();
+                    
+                    for(u32 i=0; i<udwNumFactoriesInSystem; ++i)
+                    {
+                        m_componentFactoryDispenser->RegisterComponentFactory(pProducer->GetComponentFactoryPtr(i));
+                    }
+				}
+                
+                //Common systems
+                if(system->IsA(Audio::AudioSystem::InterfaceID))
+                {
+                    m_audioSystem = static_cast<Audio::AudioSystem*>(system.get());
+                }
 			}
 
             //Give the resource managers their providers
