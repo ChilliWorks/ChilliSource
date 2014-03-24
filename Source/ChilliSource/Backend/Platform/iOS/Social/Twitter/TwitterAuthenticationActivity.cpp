@@ -191,7 +191,7 @@ namespace ChilliSource
 			bool bResult = false;
 			std::string strPIN = instrPIN;
 			
-			if(Social::TwitterPIN::kudwTwitterPINLength != instrPIN.size())
+			if(k_PINLength != instrPIN.size())
 			{
 				// Handle error here
 				CS_LOG_ERROR("Invalid PIN length!");
@@ -376,7 +376,12 @@ namespace ChilliSource
 			{
 				ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResult sResult;
 				
-				sResult.strPIN.assign(mstrPIN);
+                //Don't pass a dud pin on. Leave blank
+                if(mstrPIN.size() == k_PINLength)
+                {
+                    sResult.strPIN.assign(mstrPIN);
+                }
+                
 				mOnPINResultDelegate(sResult);
 			}
 			Dismiss();

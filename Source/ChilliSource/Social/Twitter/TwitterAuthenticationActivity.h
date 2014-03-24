@@ -25,6 +25,8 @@ namespace ChilliSource
 		public:
 			CS_DECLARE_NAMEDTYPE(TwitterAuthenticationActivity);
             
+            static const u32 k_PINLength = 7;
+            
 			struct AuthenticationPINResult
 			{
 				std::string strPIN;	// PIN entered by user

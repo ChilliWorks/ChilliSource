@@ -1,26 +1,17 @@
-/*
- * File: FMODSystem.cpp
- * Date: 17/11/2010 2010 
- * Description: 
- */
-
-/*
- * Author: Scott Downie
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
+//
+//  FMODSystem.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 17/11/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
 
 #include <ChilliSource/Backend/Audio/FMOD/Base/AudioManager.h>
-#include <ChilliSource/Backend/Audio/FMOD/3D/AudioListener.h>
 #include <ChilliSource/Backend/Audio/FMOD/3D/AudioComponent.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/AudioResource.h>
 #include <ChilliSource/Backend/Audio/FMOD/3D/AudioComponentFactory.h>
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/ApplicationEvents.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
-#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
@@ -31,26 +22,50 @@ namespace ChilliSource
 {
 	namespace FMOD
 	{
+        CS_DEFINE_NAMEDTYPE(FMODSystem);
+        
+        namespace
+        {
+            //-------------------------------------------------------
+            /// Log any FMOD errors and exit
+            ///
+            /// @author S Downie
+            ///
+            /// @param Result of FMOD function return
+            //-------------------------------------------------------
+            void ErrorCheck(FMOD_RESULT in_result)
+            {
+#ifdef CS_ENABLE_DEBUG
+                if(in_result != FMOD_OK)
+                {
+                    CS_LOG_FATAL("FMOD error: " + std::string(FMOD_ErrorString(in_result)));
+                }
+#endif
+            }
+        }
+        
 		//-------------------------------------------------------
-		/// Constructor
-		///
-		/// Initialise FMOD
 		//-------------------------------------------------------
-		FMODSystem::FMODSystem() : mpFMODSystem(nullptr), mpFMODEventSystem(nullptr), mpFMODEventProject(nullptr)
+		FMODSystem::FMODSystem()
+        : m_FMODSystem(nullptr)
+        , m_FMODEventSystem(nullptr)
+        , m_FMODEventProject(nullptr)
 		{
-			mpAudioManager = new AudioManager();
-            mpAudioComponentFactory = new AudioComponentFactory(this, mpAudioManager);
+            //TODO: These will go when all the systems are created
+            m_audioManager = new AudioManager();
+            m_audioComponentFactory = new AudioComponentFactory(this, m_audioManager);
             
-            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(mpAudioManager);
-            
-			// Subscribe to memory warnings so we can clear FMOD's cache
-            m_appLowMemoryConnection = Core::ApplicationEvents::GetLowMemoryEvent().OpenConnection(Core::MakeDelegate(this, &FMODSystem::OnApplicationMemoryWarning));
-			
+            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(m_audioManager);
+		}
+        //------------------------------------------------
+        //------------------------------------------------
+        void FMODSystem::OnInit()
+        {
 			//Create the FMOD event system
-			ErrorCheck(::FMOD::EventSystem_Create(&mpFMODEventSystem));
+			ErrorCheck(::FMOD::EventSystem_Create(&m_FMODEventSystem));
 			
 			//Get the FMOD system
-			ErrorCheck(mpFMODEventSystem->getSystemObject(&mpFMODSystem));
+			ErrorCheck(m_FMODEventSystem->getSystemObject(&m_FMODSystem));
 			
 			//Initialise the system with the number of virtual channels
 #ifdef CS_ENABLE_FMODIOSPLAYANDRECORD
@@ -58,175 +73,51 @@ namespace ChilliSource
             driverData.forceSpeakerOutput = true;
             driverData.forceMixWithOthers = false;
             driverData.sessionCategory = FMOD_IPHONE_SESSIONCATEGORY_PLAYANDRECORD;
-			ErrorCheck(mpFMODEventSystem->init(kudwMaxFMODChannels, FMOD_INIT_NORMAL, &driverData));
+			ErrorCheck(m_FMODEventSystem->init(kudwMaxFMODChannels, FMOD_INIT_NORMAL, &driverData));
 #else
-            ErrorCheck(mpFMODEventSystem->init(kudwMaxFMODChannels, FMOD_INIT_NORMAL, nullptr));
+            ErrorCheck(m_FMODEventSystem->init(k_maxFMODChannels, FMOD_INIT_NORMAL, nullptr));
 #endif
-
+            
 #ifdef CS_ENABLE_FMODANDROIDOPENSL
-			mpFMODSystem->setOutput(FMOD_OUTPUTTYPE_OPENSL);
+			m_FMODSystem->setOutput(FMOD_OUTPUTTYPE_OPENSL);
 #else
-			mpFMODSystem->setOutput(FMOD_OUTPUTTYPE_AUDIOTRACK);
+			m_FMODSystem->setOutput(FMOD_OUTPUTTYPE_AUDIOTRACK);
 #endif
 			
 			//Set defaults
-			mpFMODSystem->set3DSettings(Audio::kfDefaultDoppler, Audio::kfDefaultDistance, Audio::kfDefaultRolloff);
-		}
+            SetMasterEffectVolume(Audio::k_defaultAudioVolume);
+			SetMasterStreamVolume(Audio::k_defaultAudioVolume);
+			m_FMODSystem->set3DSettings(Audio::k_defaultDoppler, Audio::k_defaultDistance, Audio::k_defaultRolloff);
+        }
+        //-------------------------------------------------------
 		//-------------------------------------------------------
-		/// Load Event Data
-		///
-		/// Tell FMOD to load event data generated by the
-		/// fmod designer
-		///
-        /// @param Location
-		/// @param File path
-		//-------------------------------------------------------
-		void FMODSystem::LoadEventData(Core::StorageLocation ineLocation, const std::string& instrFilePath)
+		bool FMODSystem::IsA(Core::InterfaceIDType in_interfaceID) const
 		{
-#ifdef CS_TARGETPLATFORM_ANDROID
-			CS_ASSERT(ineLocation != Core::StorageLocation::k_package, "FMOD Android cannot load from package");
-#endif
-
-            std::string strFilePath;
-            Core::Application::Get()->GetFileSystem()->GetBestPathToFile(ineLocation, instrFilePath, strFilePath);
-            ErrorCheck(mpFMODEventSystem->load(strFilePath.c_str(), nullptr, &mpFMODEventProject));
+			return
+            in_interfaceID == Core::IUpdateable::InterfaceID ||
+            in_interfaceID == Core::IComponentProducer::InterfaceID ||
+            in_interfaceID == AudioSystem::InterfaceID ||
+            in_interfaceID == FMODSystem::InterfaceID;
 		}
 		//-------------------------------------------------------
-		/// Unload Event Data
-		///
-		///	Unload all event data (useful for memory warnings)
-		///
-		/// @param File path
 		//-------------------------------------------------------
-		void FMODSystem::UnloadEventData()
-		{
-            if(mpFMODEventProject)
-            {
-                ::FMOD::EventGroup * pcEventRelease = nullptr;
-                u32 udwGroupID = 0;
-                
-                // get all groups and free them
-                while(mpFMODEventProject->getGroupByIndex(udwGroupID++, false, &pcEventRelease) == FMOD_OK)
-                {
-                    ErrorCheck(pcEventRelease->freeEventData(nullptr, true));
-                }
-            }
-		}
-		//-------------------------------------------------------
-		/// Unload Event Data
-		///
-		///	Unload all event data (useful for memory warnings)
-		///
-		/// @param File path
-		//-------------------------------------------------------
-		void FMODSystem::UnloadEventData(const std::string& instrEventGroup)
-		{
-            if(mpFMODEventProject)
-            {
-                ::FMOD::EventGroup * pcEventRelease = nullptr;
-                
-                // get groups and free it
-                if(mpFMODEventProject->getGroup(instrEventGroup.c_str(), false, &pcEventRelease) == FMOD_OK)
-                {
-                    ErrorCheck(pcEventRelease->freeEventData(nullptr, true));
-                }
-            }
-		}
-		//-------------------------------------------------------
-		/// PreLoad Event Group
-		///
-		/// Preload events inside a specified group
-		///
-		/// @param The name of the group
-		//-------------------------------------------------------
-		void FMODSystem::PreloadEventGroup(const std::string& instrGroupName)
-		{
-			if(mpFMODEventProject != nullptr)
-			{	
-				::FMOD::EventGroup * pPreloadGroup = nullptr;
-				mpFMODEventProject->getGroup(instrGroupName.c_str(), true, &pPreloadGroup);
-			}
-		}
-		//-------------------------------------------------------
-		/// Create Sound
-		///
-		/// Tell FMOD to create a new sound from the given
-		/// file
-		///
-		/// @param File path
-		/// @param Sound handle to be initialised with sound
-		//-------------------------------------------------------
-		void FMODSystem::CreateSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
-		{
-			ErrorCheck(mpFMODSystem->createSound(instrFilePath.c_str(), FMOD_SOFTWARE, nullptr, &static_cast<AudioResource*>(inpAudio)->mpFMODSound));
-		}
-		//-------------------------------------------------------
-		/// Create 3D Sound
-		///
-		/// Tell FMOD to create a new sound from the given
-		/// file
-		///
-		/// @param File path
-		/// @param Sound handle to be initialised with sound
-		//-------------------------------------------------------
-		void FMODSystem::Create3DSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
-		{
-			ErrorCheck(mpFMODSystem->createSound(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_3D, nullptr, &static_cast<AudioResource*>(inpAudio)->mpFMODSound));
-		}
-		//-------------------------------------------------------
-		/// Create Stream
-		///
-		/// Tell FMOD to stream from given file
-		///
-		/// @param File path
-		/// @param Stream handle
-		//-------------------------------------------------------
-		void FMODSystem::CreateStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
-		{
-			ErrorCheck(mpFMODSystem->createStream(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL, nullptr, &static_cast<AudioResource*>(inpAudio)->mpFMODSound));
-		}
-		//-------------------------------------------------------
-		/// Create 3d Stream
-		///
-		/// Tell FMOD to stream from given file
-		///
-		/// @param File path
-		/// @param Stream handle
-		//-------------------------------------------------------
-		void FMODSystem::Create3DStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
-		{
-			ErrorCheck(mpFMODSystem->createStream(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL|FMOD_3D, nullptr, &static_cast<AudioResource*>(inpAudio)->mpFMODSound));
-		}
-		//-------------------------------------------------------
-		/// Play Sound
-		///
-		/// Tell the FMOD system to play the sound with a free
-		/// channel
-		///
-		/// @param FMOD sound handle
-		//-------------------------------------------------------
-		void FMODSystem::PlaySound(Audio::AudioComponent* inpAudioComponent)
+		void FMODSystem::PlaySound(Audio::AudioComponent* in_audioComponent)
 		{
 			//We let FMOD manages the channels 
-			::FMOD::Channel* pActiveChannel = nullptr;
-			ErrorCheck(mpFMODSystem->playSound(FMOD_CHANNEL_FREE, std::static_pointer_cast<AudioResource>(inpAudioComponent->GetAudioSource())->mpFMODSound, false, &pActiveChannel));
+			::FMOD::Channel* activeChannel = nullptr;
+			ErrorCheck(m_FMODSystem->playSound(FMOD_CHANNEL_FREE, std::static_pointer_cast<AudioResource>(in_audioComponent->GetAudioSource())->mpFMODSound, false, &activeChannel));
 			
 			//Give the sound it's channel so we can query the state
-			static_cast<AudioComponent*>(inpAudioComponent)->SetChannel(pActiveChannel);
+			static_cast<AudioComponent*>(in_audioComponent)->SetChannel(activeChannel);
 		}
 		//-------------------------------------------------------
-		/// Play Event
-		///
-		/// Tell the FMOD system to start the sound event
-		///
-		/// @param name of event
 		//-------------------------------------------------------
 		::FMOD::Event* FMODSystem::PlayEvent(const std::string& instrEventName)
 		{
-			if(mpFMODEventProject != nullptr)
+			if(m_FMODEventProject != nullptr)
 			{
 				::FMOD::Event * pEvent = nullptr;
-				ErrorCheck(mpFMODEventProject->getEvent(instrEventName.c_str(), FMOD_EVENT_DEFAULT, &pEvent));
+				ErrorCheck(m_FMODEventProject->getEvent(instrEventName.c_str(), FMOD_EVENT_DEFAULT, &pEvent));
                 
                 if(pEvent)
                 {
@@ -237,73 +128,73 @@ namespace ChilliSource
 			}
 			return nullptr;
 		}
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void FMODSystem::SetMasterEffectVolume(f32 in_volume)
+        {
+            m_masterEffectVolume = Core::MathUtils::Clamp(in_volume, 0.0f, 1.0f);
+			
+			//Trigger the active sounds OnMasterVolumeChanged delegate
+			m_masterEffectVolumeChangedEvent.NotifyConnections();
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void FMODSystem::SetMasterStreamVolume(f32 in_volume)
+        {
+            m_masterStreamVolume = Core::MathUtils::Clamp(in_volume, 0.0f, 1.0f);
+			
+			//Trigger the active sounds OnMasterVolumeChanged delegate
+			m_masterStreamVolumeChangedEvent.NotifyConnections();
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        f32 FMODSystem::GetMasterEffectVolume() const
+        {
+            return m_masterEffectVolume;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        f32 FMODSystem::GetMasterStreamVolume() const
+        {
+            return m_masterStreamVolume;
+        }
 		//-------------------------------------------------------
-		/// Update
-		///
-		/// Tell the system to update
-		/// @param Time since last frame
 		//-------------------------------------------------------
 		void FMODSystem::Update(f32 dt)
 		{
-			ErrorCheck(mpFMODEventSystem->update());
-		}
-		//----------------------------------------------------------------------------
-		/// Create Audio Listener
-		///
-		/// @return Audio listener
-		//----------------------------------------------------------------------------
-		Audio::AudioListenerUPtr FMODSystem::CreateAudioListener()
-		{
-			return Audio::AudioListenerUPtr(new AudioListener(mpFMODSystem));
+			ErrorCheck(m_FMODEventSystem->update());
 		}
 		//-------------------------------------------------------
-		/// Error Check
-		///
-		/// Log any FMOD errors
-		/// @param Result of FMOD function return
-		//-------------------------------------------------------
-		void FMODSystem::ErrorCheck(FMOD_RESULT ineResult)
-		{
-			if(ineResult != FMOD_OK)
-			{
-				CS_LOG_FATAL("FMOD error: " + std::string(FMOD_ErrorString(ineResult)));
-			}
-		}
-		//-------------------------------------------------------
-        /// On Application Memory Warning
-        ///
-        /// Triggered when a message is received detailing
-        /// that the OS has thrown a memory warning. We should
-        /// release the FMOD event cache at this point
         //-------------------------------------------------------
-		void FMODSystem::OnApplicationMemoryWarning()
+		void FMODSystem::OnMemoryWarning()
 		{
-			if(mpFMODEventProject!= nullptr)
+			if(m_FMODEventProject!= nullptr)
 			{
-				mpFMODEventProject->stopAllEvents();
-				UnloadEventData();
+				m_FMODEventProject->stopAllEvents();
+                
+                if(m_FMODEventProject)
+                {
+                    ::FMOD::EventGroup* eventRelease = nullptr;
+                    u32 groupID = 0;
+                    
+                    // get all groups and free them
+                    while(m_FMODEventProject->getGroupByIndex(groupID++, false, &eventRelease) == FMOD_OK)
+                    {
+                        ErrorCheck(eventRelease->freeEventData(nullptr, true));
+                    }
+                }
 			}
 		}
-		//-------------------------------------------------------
-		/// Destroy 
-		///
-		/// Release the FMOD system
-		//-------------------------------------------------------
-		void FMODSystem::Destroy()
-		{
-            ErrorCheck(mpFMODEventSystem->release());
-			mpFMODEventSystem = nullptr;
-		}
-		//-------------------------------------------------------
-		/// Destructor
-		///
-		//-------------------------------------------------------
-		FMODSystem::~FMODSystem()
-		{
-            CS_SAFEDELETE(mpAudioComponentFactory);
-			CS_SAFEDELETE(mpAudioManager);
-			Destroy();
-		}
+        //------------------------------------------------
+        //------------------------------------------------
+        void FMODSystem::OnDestroy()
+        {
+            CS_SAFEDELETE(m_audioComponentFactory);
+			CS_SAFEDELETE(m_audioManager);
+            
+            ErrorCheck(m_FMODEventSystem->release());
+			m_FMODEventSystem = nullptr;
+        }
 	}
 }
 

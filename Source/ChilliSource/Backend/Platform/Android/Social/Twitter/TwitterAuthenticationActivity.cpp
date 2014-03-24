@@ -53,7 +53,7 @@ namespace ChilliSource
 			
 			strPIN.assign(instrPIN);
 
-			if(strPIN.empty() || Social::TwitterPIN::kudwTwitterPINLength != strPIN.size())
+			if(k_PINLength != strPIN.size())
 			{
 				// Handle error here
 				CS_LOG_ERROR("Invalid PIN length!");
@@ -83,7 +83,12 @@ namespace ChilliSource
 			{
 				Social::TwitterAuthenticationActivity::AuthenticationPINResult sResult;
 
-				sResult.strPIN.assign(mstrPIN);
+                //Don't pass a dud pin on. Leave blank
+                if(mstrPIN.size() == k_PINLength)
+                {
+                	sResult.strPIN.assign(mstrPIN);
+                }
+
 				mOnPINResultDelegate(sResult);
 			}
 			Dismiss();
