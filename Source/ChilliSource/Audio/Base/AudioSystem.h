@@ -1,23 +1,19 @@
-/*
- * File: AudioSystem.h
- * Date: 17/11/2010 2010 
- * Description: Interface for concrete systems such as FMOD
- */
+//
+//  AudioSystem.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 17/11/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
-/*
- * Author: Scott Downie
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
-
-#ifndef _MO_FLO_AUDIO_AUDIO_SYSTEM_H_
-#define _MO_FLO_AUDIO_AUDIO_SYSTEM_H_
+#ifndef _CHILLISOURCE_AUDIO_BASE_AUDIOSYSTEM_H_
+#define _CHILLISOURCE_AUDIO_BASE_AUDIOSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/Base/AudioManager.h>
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
 #include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
@@ -25,14 +21,14 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		const f32 kfDefaultAudioVolume	= 0.5f;
-		const f32 kfDefaultDoppler		= 1.0f;
-		const f32 kfDefaultRolloff		= 1.0f;
-		const f32 kfDefaultDistance		= 1.0f;
+		const f32 k_defaultAudioVolume	= 0.5f;
+		const f32 k_defaultDoppler		= 1.0f;
+		const f32 k_defaultRolloff		= 1.0f;
+		const f32 k_defaultDistance		= 1.0f;
 		
         typedef std::function<void()> AudioVolumeEventDelegate;
 		
-		class AudioSystem : public Core::System, public Core::IUpdateable, public Core::IComponentProducer
+		class AudioSystem : public Core::AppSystem, public Core::IComponentProducer
 		{
 		public:
 
@@ -47,142 +43,83 @@ namespace ChilliSource
             //-------------------------------------------------------
             static AudioSystemUPtr Create();
             
-			virtual ~AudioSystem();
+            //-------------------------------------------------------
+            /// Virtual destructor
+            ///
+            /// @author S Downie
+            //------------------------------------------------------
+			virtual ~AudioSystem(){}
 
 			//-------------------------------------------------------
-			/// Is A
+			/// @author S Downie
 			///
-			/// @return Whether this object is of given type
+			/// @param Audio Component to Play
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+			virtual void PlaySound(AudioComponent* in_audioComponent) = 0;
 			//-------------------------------------------------------
-			/// Create Sound
-			///
-			/// Tell concrete system to create a new sound from the given
-			/// file
-			///
-			/// @param File path
-			/// @param Sound handle to be initialised with sound
-			//-------------------------------------------------------
-			virtual void CreateSound(const std::string& instrFilePath, AudioResource* inpAudio) = 0;
-			//-------------------------------------------------------
-			/// Create 3D Sound
-			///
-			/// Tell concrete system to create a new sound from the given
-			/// file
-			///
-			/// @param File path
-			/// @param Sound handle to be initialised with sound
-			//-------------------------------------------------------
-			virtual void Create3DSound(const std::string& instrFilePath, AudioResource* inpAudio) = 0;
-			//-------------------------------------------------------
-			/// Create Stream
-			///
-			/// Tell concrete system to stream from the given
-			/// file
-			///
-			/// @param File path
-			/// @param Sound handle to be initialised with stream
-			//-------------------------------------------------------
-			virtual void CreateStream(const std::string& instrFilePath, AudioResource* inpAudio) = 0;
-			//-------------------------------------------------------
-			/// Create 3D Stream
-			///
-			/// Tell concrete system to stream from the given
-			/// file
-			///
-			/// @param File path
-			/// @param Sound handle to be initialised with stream
-			//-------------------------------------------------------
-			virtual void Create3DStream(const std::string& instrFilePath, AudioResource* inpAudio) = 0;
-			//-------------------------------------------------------
-			/// Play Sound
-			///
-			/// @param Sound handle
-			//-------------------------------------------------------
-			virtual void PlaySound(AudioComponent* inpAudioComponent) = 0;
-			//-------------------------------------------------------
-			/// Destroy 
-			///
-			/// Release the FMOD system
-			//-------------------------------------------------------
-			virtual void Destroy() = 0;
-			//-------------------------------------------------------
-			/// Create Audio Listener
-			///
-			/// @return Audio listener
-			//-------------------------------------------------------
-			virtual AudioListenerUPtr CreateAudioListener() = 0;
-			//-------------------------------------------------------
-			/// Set Master Effect Volume
-			///
-			/// Set the volume for the entire audio effect system
+			/// Set the volume for the entire audio effect channel
+            ///
+            /// @author S Downie
+            ///
 			/// @param Normalised volume level [0, 1]
 			//-------------------------------------------------------
-			void SetMasterEffectVolume(f32 infVolume);
+			virtual void SetMasterEffectVolume(f32 in_volume) = 0;
 			//-------------------------------------------------------
-			/// Set Master Stream Volume
-			///
-			/// Set the volume for the entire audio stream system
+			/// Set the volume for the entire audio stream channel
+            ///
+            /// @author S Downie
+            ///
 			/// @param Normalised volume level [0, 1]
 			//-------------------------------------------------------
-			void SetMasterStreamVolume(f32 infVolume);
+			virtual void SetMasterStreamVolume(f32 in_volume) = 0;
 			//-------------------------------------------------------
-			/// Get Master Volume
+			/// @author S Downie
 			///
-			/// Get the volume for the entire audio system
-			/// @return Normalised volume level [0, 1]
+			/// @return Normalised volume level [0, 1] for effect
+            /// channel
 			//-------------------------------------------------------
-			f32 GetMasterEffectVolume() const;
+			virtual f32 GetMasterEffectVolume() const = 0;
 			//-------------------------------------------------------
-			/// Get Master Stream Volume
+			/// @author S Downie
 			///
-			/// Get the volume for the entire audio stream system
-			/// @return Normalised volume level [0, 1]
+			/// @return Normalised volume level [0, 1] for stream
+            /// channel
 			//-------------------------------------------------------
-			f32 GetMasterStreamVolume() const;
+			virtual f32 GetMasterStreamVolume() const = 0;
 			//-------------------------------------------------------
-			/// Get Audio Manager
-			///
-			/// @param Audio manager
-			//-------------------------------------------------------
-			const AudioManager& GetAudioManager() const;
-			//-------------------------------------------------------
-			/// Get Audio Manager Pointer
+			/// @author S Downie
 			///
 			/// @param Pointer to audio manager
 			//-------------------------------------------------------
-			const AudioManager* GetAudioManagerPtr() const;
+			const AudioManager* GetAudioManager() const;
 			//-------------------------------------------------------
-			/// Get Master Effect Volume Changed Event
-			///
-			/// Exposed event that allows sound resources to 
-			/// listen for this event
-			/// @return Audio event
+            /// @author S Downie
+            ///
+			/// @return Audio event that is triggered on master
+            /// effect volume changed
 			//-------------------------------------------------------
 			Core::IConnectableEvent<AudioVolumeEventDelegate>& GetMasterEffectVolumeChangedEvent();
 			//-------------------------------------------------------
-			/// Get Master Stream Volume Changed Event
-			///
-			/// Exposed event that allows sound resources to 
-			/// listen for this event
-			/// @return Audio event
+            /// @author S Downie
+            ///
+			/// @return Audio event that is triggered on master
+            /// stream volume changed
 			//-------------------------------------------------------
 			Core::IConnectableEvent<AudioVolumeEventDelegate>& GetMasterStreamVolumeChangedEvent();
 			//----------------------------------------------------
-			/// Get Number Of Component Factories
+			/// @author S Downie
 			///
 			/// @return Number of factories in this system
 			//----------------------------------------------------
 			u32 GetNumComponentFactories() const override;
 			//-------------------------------------------------------
-			/// Get Component Factory Pointer
+			/// @author S Downie
 			///
 			/// @return Audio component factory pointer
 			//-------------------------------------------------------
 			Core::ComponentFactory* GetComponentFactoryPtr(u32 inudwIndex) override;
 			//-------------------------------------------------------
-			/// Get Component Factory
+			/// @author S Downie
 			///
 			/// @return Audio component factory
 			//-------------------------------------------------------
@@ -199,17 +136,17 @@ namespace ChilliSource
 			
 		protected:
 			
-			Core::Event<AudioVolumeEventDelegate> mOnMasterEffectVolumeChangedEvent;
-			Core::Event<AudioVolumeEventDelegate> mOnMasterStreamVolumeChangedEvent;
+			Core::Event<AudioVolumeEventDelegate> m_masterEffectVolumeChangedEvent;
+			Core::Event<AudioVolumeEventDelegate> m_masterStreamVolumeChangedEvent;
 			
-			AudioManager* mpAudioManager;
-			AudioComponentFactory* mpAudioComponentFactory;
+			AudioManager* m_audioManager;
+			AudioComponentFactory* m_audioComponentFactory;
 			
-			f32 mfMasterEffectVolume;
-			f32 mfMasterStreamVolume;
-			f32 mfDopplerFactor;
-			f32 mfRolloffFactor;
-			f32 mfDistanceFactor;
+			f32 m_masterEffectVolume;
+			f32 m_masterStreamVolume;
+			f32 m_dopplerFactor;
+			f32 m_rolloffFactor;
+			f32 m_distanceFactor;
 		};
 	}
 }

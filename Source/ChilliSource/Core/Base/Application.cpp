@@ -501,9 +501,8 @@ namespace ChilliSource
             AddSystem_Old(DialogueBoxSystem::Create());
 
             //Audio
-            Audio::AudioSystemUPtr audioSystem(Audio::AudioSystem::Create());
-			AddSystem_Old(Audio::AudioLoader::Create(audioSystem.get()));
-            AddSystem_Old(std::move(audioSystem));
+            Audio::AudioSystem* audioSystem(CreateSystem<Audio::AudioSystem>());
+            CreateSystem<Audio::AudioLoader>(audioSystem);
 
             //Input
             AddSystem_Old(Input::InputSystem::Create());
