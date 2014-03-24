@@ -234,7 +234,7 @@ namespace ChilliSource
             
             if(inDelegate)
             {
-                inDelegate(inpTransaction->strProductID, inpTransaction->strTransactionID);
+                inDelegate(inpTransaction->strProductID, inpTransaction->strTransactionID, true);
             }
         }
         //---------------------------------------------------------------

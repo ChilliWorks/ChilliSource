@@ -33,6 +33,7 @@ import com.facebook.widget.WebDialog;
 import com.facebook.FacebookException;
 import com.taggames.CTagResourceHelper;
 import com.chillisource.core.CSApplication;
+import com.chillisource.core.ExceptionUtils;
 import com.chillisource.core.Logging;
 import com.chillisource.core.INativeInterface;
 import com.chillisource.core.InterfaceIDType;
@@ -98,20 +99,19 @@ public class FacebookNativeInterface extends INativeInterface
 			}
 		};
 		
-		// Run the task.
-		CSApplication.get().scheduleUIThreadTask(task);
-		
-		// Wait for the task to finish before pausing the rendering thread.
 		try
 		{
 			synchronized(task)
 			{
+				// Run the task.
+				CSApplication.get().scheduleUIThreadTask(task);
+				
 				task.wait();
 			}
 		}
 		catch(Exception e)
 		{
-			Logging.logError(e.getMessage());
+			Logging.logError(ExceptionUtils.ConvertToString(e));
 		}
 	}
 	//--------------------------------------------------------------------------------------
@@ -293,17 +293,19 @@ public class FacebookNativeInterface extends INativeInterface
 			}
 		};
 		
-		// Run the task.
-		CSApplication.get().scheduleUIThreadTask(task);
-		
-		// Wait for the task to finish before pausing the rendering thread.
 		try
 		{
-			task.wait();
+			synchronized(task)
+			{
+				// Run the task.
+				CSApplication.get().scheduleUIThreadTask(task);
+				
+				task.wait();
+			}
 		}
 		catch(Exception e)
 		{
-			
+			Logging.logError(ExceptionUtils.ConvertToString(e));
 		}
     }
 	//--------------------------------------------------------------------------------------
@@ -348,15 +350,23 @@ public class FacebookNativeInterface extends INativeInterface
 			}
 		};
 		
-		// Run the task.
-		CSApplication.get().scheduleUIThreadTask(task);
+
 		
 		// Wait for the task to finish before pausing the rendering thread.
 		try
 		{
-			task.wait();
+			synchronized(task)
+			{
+				// Run the task.
+				CSApplication.get().scheduleUIThreadTask(task);
+				
+				task.wait();
+			}
 		}
-		catch(Exception e){}
+		catch(Exception e)
+		{
+			Logging.logError(ExceptionUtils.ConvertToString(e));
+		}
     }
 	//--------------------------------------------------------------------------------------
 	/// Make Post To Feed Request

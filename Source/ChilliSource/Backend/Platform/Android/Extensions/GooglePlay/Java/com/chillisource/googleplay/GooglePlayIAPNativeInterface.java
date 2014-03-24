@@ -43,7 +43,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 	//---------------------------------------------------------------------
 	public native void NativeOnProductsDescriptionsRequestComplete(String[] inIDs, String[] inNames, String[] inDescriptions, String[] inFormattedPrices);
 	public native void NativeOnTransactionStatusUpdated(int inResult, String inProductID, String inTransactionID, String inReceipt);
-	public native void NativeOnTransactionClosed(String inProductID, String inTransactionID);
+	public native void NativeOnTransactionClosed(String inProductID, String inTransactionID, boolean in_success);
 	
 	//---------------------------------------------------------------------
 	/// Constructor
@@ -364,12 +364,13 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 							{
 								@Override public void onConsumeFinished(Purchase purchase, IabResult result) 
 								{
-									if(result.isFailure())
+									boolean success = result.isFailure() == false;
+									if(success == false)
 									{
 										Logging.logError("Google IAB consume error: " + result.getMessage() + " for product: " + purchase.getSku());
 									}
 									
-									NativeOnTransactionClosed(inProductID, inTransactionID);
+									NativeOnTransactionClosed(inProductID, inTransactionID, success);
 								}
 							});
 						}
@@ -381,7 +382,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 					count++;
 				}
 				
-				NativeOnTransactionClosed(inProductID, inTransactionID);
+				NativeOnTransactionClosed(inProductID, inTransactionID, true);
 			}
 		});
 	}

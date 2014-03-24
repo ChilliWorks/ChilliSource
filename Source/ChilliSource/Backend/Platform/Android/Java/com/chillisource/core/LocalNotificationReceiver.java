@@ -121,6 +121,13 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 			
 			Bitmap largeIconBitmap = null;
 			int LargeIconID = ResourceHelper.GetDynamicResourceIDForField(in_context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmiconlarge");
+			
+			//Use small icon if no large icon
+			if(LargeIconID == 0)
+			{
+				LargeIconID = ResourceHelper.GetDynamicResourceIDForField(in_context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmicon");
+			}
+			
 			if(LargeIconID > 0)
 			{
 				largeIconBitmap = BitmapFactory.decodeResource(in_context.getResources(), LargeIconID);

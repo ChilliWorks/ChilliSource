@@ -121,12 +121,16 @@ namespace ChilliSource
             //---------------------------------------------------------------
             void OnTransactionStatusUpdated(u32 inudwStatus, const Networking::IAPTransaction& inTransaction);
             //---------------------------------------------------------------
-    		/// On Transaction Closed
+    		/// Delegate called when the transaction is closed either
+            /// with success or failure
+            ///
+            /// @author S Downie
             ///
             /// @param Product ID
             /// @param Transaction ID
+            /// @param Whether the closing of the transaction was successful
             //---------------------------------------------------------------
-            void OnTransactionClosed(std::string instrProductID, std::string instrTransactionID);
+            void OnTransactionClosed(std::string instrProductID, std::string instrTransactionID, bool in_success);
 
 		private:
 

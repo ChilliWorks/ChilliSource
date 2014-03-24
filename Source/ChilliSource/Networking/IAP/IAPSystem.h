@@ -62,7 +62,7 @@ namespace ChilliSource
         
         typedef std::shared_ptr<IAPTransaction> IAPTransactionPtr;
         typedef std::function<void(IAPTransaction::Status, const IAPTransactionPtr&)> IAPTransactionDelegate;
-        typedef std::function<void(const std::string&, const std::string&)> IAPTransactionCloseDelegate;
+        typedef std::function<void(const std::string&, const std::string&, bool)> IAPTransactionCloseDelegate;
         
         
 		class IAPSystem : public ChilliSource::Core::System

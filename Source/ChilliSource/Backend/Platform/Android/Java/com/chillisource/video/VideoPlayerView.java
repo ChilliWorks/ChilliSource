@@ -115,12 +115,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 		{
 			@Override public void run() 
 			{
-				VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
-				if (mediaPlayerNI != null)
-				{
-					mediaPlayerNI.Dismissed();
-				}
-				onCompletion(mMediaPlayer);
+				DismissMediaPlayerAndComplete();
 				
 				synchronized(this)
 				{
@@ -129,13 +124,13 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 			}
 		};
 		
-		CSApplication.get().scheduleUIThreadTask(task);
-		
 		//wait for this task to finish
 		try
 		{
 			synchronized(task)
 			{
+				CSApplication.get().scheduleUIThreadTask(task);
+				
 				task.wait();
 			}
 		}
@@ -367,12 +362,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 			{
 				if (System.currentTimeMillis() - mqwTapTime <= kqwTapLengthInMS)
 				{
-					VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
-					if (mediaPlayerNI != null)
-					{
-						mediaPlayerNI.Dismissed();
-					}
-					onCompletion(mMediaPlayer);
+					DismissMediaPlayerAndComplete();
 				}
 			}
 		}
@@ -389,12 +379,21 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	{
 		if (mbCanDismissWithTap == true)
 		{
-			VideoPlayerNativeInterface videoPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
-			if (videoPlayerNI != null)
-			{
-				videoPlayerNI.Dismissed();
-			}
-			onCompletion(mMediaPlayer);
+			DismissMediaPlayerAndComplete();
 		}
+	}
+	/**
+	 * Dismiss the view and call the complete delegate
+	 * 
+	 * @author R Henning
+	 */
+	private void DismissMediaPlayerAndComplete()
+	{
+		VideoPlayerNativeInterface videoPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
+		if (videoPlayerNI != null)
+		{
+			videoPlayerNI.Dismissed();
+		}
+		onCompletion(mMediaPlayer);
 	}
 }

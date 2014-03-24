@@ -172,10 +172,17 @@ public class GCMService extends GCMBaseIntentService
             PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
             
 			Bitmap largeIconBitmap = null;
-			int LargeIconID = ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmiconlarge");
-			if(LargeIconID > 0)
+			int largeIconID = ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmiconlarge");
+			
+			//If no large icon then use the small icon
+        	if(largeIconID == 0)
+        	{
+        		largeIconID = ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmicon");
+        	}
+			
+			if(largeIconID > 0)
 			{
-				largeIconBitmap = BitmapFactory.decodeResource(context.getResources(), LargeIconID);
+				largeIconBitmap = BitmapFactory.decodeResource(context.getResources(), largeIconID);
 			}
 			
 			Notification notification = new NotificationCompat.Builder(context)

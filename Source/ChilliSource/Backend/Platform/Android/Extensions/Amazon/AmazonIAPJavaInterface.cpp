@@ -281,7 +281,7 @@ namespace ChilliSource
         {
         	if(mTransactionCloseDelegate != nullptr)
         	{
-        		mTransactionCloseDelegate(instrProductID, instrTransactionID);
+        		mTransactionCloseDelegate(instrProductID, instrTransactionID, true);
         		mTransactionCloseDelegate = nullptr;
         	}
         }

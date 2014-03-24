@@ -24,7 +24,7 @@ extern "C"
 {
 	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices);
 	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt);
-	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID);
+	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID, jboolean in_success);
 }
 
 //--------------------------------------------------------------------------------------
@@ -96,14 +96,14 @@ void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTrans
 /// @param JNI environment
 /// @param Pointer to the calling function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID)
+void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID, jboolean in_success)
 {
 	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
 	if (pInterface != nullptr)
 	{
 		const std::string strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
 		const std::string strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<std::string, std::string>(pInterface.get(), &ChilliSource::Android::GooglePlayIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<std::string, std::string, bool>(pInterface.get(), &ChilliSource::Android::GooglePlayIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID, in_success));
 	}
 }
 
@@ -355,11 +355,11 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// On Transaction Closed
         //---------------------------------------------------------------
-        void GooglePlayIAPJavaInterface::OnTransactionClosed(std::string instrProductID, std::string instrTransactionID)
+        void GooglePlayIAPJavaInterface::OnTransactionClosed(std::string instrProductID, std::string instrTransactionID, bool in_success)
         {
         	if(mTransactionCloseDelegate)
         	{
-        		mTransactionCloseDelegate(instrProductID, instrTransactionID);
+        		mTransactionCloseDelegate(instrProductID, instrTransactionID, in_success);
         	}
         }
         //---------------------------------------------------------------
