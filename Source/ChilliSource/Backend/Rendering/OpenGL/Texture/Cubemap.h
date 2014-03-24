@@ -29,9 +29,8 @@ namespace ChilliSource
 			/// Init
 			///
 			/// @param Source images (Must be 6)
-			/// @param Whether to create mip maps
 			//--------------------------------------------------
-			void Init(const std::vector<Core::ResourceSPtr>& inapSourceImages, bool inbWithMipsMaps);
+			void Init(const std::vector<Core::ResourceSPtr>& inapSourceImages);
 			//--------------------------------------------------
 			/// Is A
 			///

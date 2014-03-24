@@ -76,20 +76,6 @@ namespace ChilliSource
 			/// @return Whether the resource loaded 
 			//-----------------------------------------------------------
 			bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceSPtr& out_resource) override;
-			//-----------------------------------------------------------
-			/// Creates a new image resource from file with the given image
-            /// format.
-			///
-            /// @author S McGaw
-            ///
-            /// @param The storage location to load from
-			/// @param File path to resource
-			/// @param Image format
-			/// @param [Out] Resource
-            ///
-			/// @return Whether the resource loaded 
-			//-----------------------------------------------------------
-			bool CreateImageFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::Image::Format in_format, Core::ResourceSPtr& out_resource) override;
         private:
             friend Core::ImageProviderUPtr Core::ImageProvider::Create();
             
@@ -99,41 +85,7 @@ namespace ChilliSource
             /// @author S Downie
             //-----------------------------------------------------------
             ImageProvider(){}
-            //-----------------------------------------------------------
-            /// Create a PNG image using the Apple API
-            ///
-            /// @author S McGaw
-            ///
-            /// @param Image data in bytes
-			/// @param Size of data in bytes
-			/// @param Whether the asset is high res
-			/// @param Image format
-			/// @param [Out] Image resource
-            //-----------------------------------------------------------
-            void CreatePNGImageFromFile(const s8* in_data, u32 in_dataSize, Core::Image::Format in_format, Core::Image* out_image);
-            //-----------------------------------------------------------
-            /// Create a JPG image using the Apple API
-            ///
-            /// @author S McGaw
-            ///
-            /// @param Image data in bytes
-			/// @param Size of data in bytes
-			/// @param Whether the asset is high res
-			/// @param Image format
-			/// @param [Out] Image resource
-            //-----------------------------------------------------------
-            void CreateJPGImageFromFile(const s8* in_data, u32 in_dataSize, Core::Image::Format in_format, Core::Image* out_image);
-			//-----------------------------------------------------------
-			/// Create an image in raw byte format
-            ///
-            /// @author S McGaw
-			///
-            /// @param Image data in bytes
-			/// @param Size of data in bytes
-			/// @param Whether the asset is high res
-			/// @param [Out] Image resource
-			//------------------------------------------------------------
-			void CreatePVRImageFromFile(const s8* in_data, u32 in_dataSize, Core::Image* out_image);
+
 			//------------------------------------------------------------
 			/// Downsize the image from 32 bits to 16 bits no alpha
             ///

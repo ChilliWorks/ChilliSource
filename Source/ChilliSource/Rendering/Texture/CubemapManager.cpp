@@ -76,41 +76,13 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		Core::ResourceSPtr CubemapManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			return GetCubemapFromFile(ineStorageLocation, instrFilePath, Core::Image::Format::k_default, false);
-		}
-		//-----------------------------------------------------------------
-		/// Async Get Resource From File
-		///
-		/// Generic call to get the managers resource
-        /// @param The storage location to load from
-		/// @param File path to resource
-		/// @return Generic pointer to object type
-		//-----------------------------------------------------------------
-		Core::ResourceSPtr CubemapManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
-		{
-			return AsyncGetCubemapFromFile(ineStorageLocation, instrFilePath, Core::Image::Format::k_default, false);
-		}
-		//----------------------------------------------------------------
-		/// Get Cubemap From File
-		///
-		/// Loads the Cubemap from resource and returns a handle to it.
-		/// Alternately if the Cubemap already exists it will return the
-		/// handle without loading
-		///
-        /// @param The storage location to load from
-		/// @param Base File name
-		/// @param Generate mip-maps. Default = false
-		/// @return A handle to the Cubemap
-		//----------------------------------------------------------------
-		CubemapSPtr CubemapManager::GetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, bool inbWithMipsMaps)
-		{
-			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
-			if(pExistingResource == mMapFilenameToResource.end()) 
+			if(pExistingResource == mMapFilenameToResource.end())
 			{
                 std::string strPath;
                 std::string strExt;
-                Core::StringUtils::SplitBaseFilename(inFilePath, strPath, strExt);
+                Core::StringUtils::SplitBaseFilename(instrFilePath, strPath, strExt);
                 
 				for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
 				{
@@ -126,7 +98,7 @@ namespace ChilliSource
                         {
                             Core::ResourceSPtr pSourceImage(new Core::Image());
                             std::string strFileName = strPath + Core::ToString(i+1) + strExt;
-                            if(static_cast<Core::ImageProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(ineStorageLocation, strFileName, ineFormat, pSourceImage))
+                            if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, strFileName, pSourceImage))
                             {
                                 Core::Image* pImage = (Core::Image*)(pSourceImage.get());
                                 pImage->SetName(strFileName);
@@ -137,19 +109,19 @@ namespace ChilliSource
                         
                         if(aImages.size() != 6)
                         {
-                            CS_LOG_ERROR("Cannot find all resources for Cubemap with base path " + inFilePath);
+                            CS_LOG_ERROR("Cannot find all resources for Cubemap with base path " + instrFilePath);
                             return CubemapSPtr();
                         }
                         
-                        if(CreateCubemapFromImages(aImages, inbWithMipsMaps, pCubemap))
+                        if(CreateCubemapFromImages(aImages, pCubemap))
                         {
-                            CS_LOG_DEBUG("Loading Cubemap with base " + inFilePath);
+                            CS_LOG_DEBUG("Loading Cubemap with base " + instrFilePath);
                             
-                            mMapFilenameToResource.insert(std::make_pair(inFilePath, std::static_pointer_cast<Core::Resource>(pCubemap)));
-                            pCubemap->SetName(inFilePath);
+                            mMapFilenameToResource.insert(std::make_pair(instrFilePath, std::static_pointer_cast<Core::Resource>(pCubemap)));
+                            pCubemap->SetName(instrFilePath);
                             pCubemap->SetOwningResourceManager(this);
                             pCubemap->SetLoaded(true);
-                            pCubemap->SetFilename(inFilePath);
+                            pCubemap->SetFilename(instrFilePath);
                             pCubemap->SetStorageLocation(ineStorageLocation);
                             return pCubemap;
                         }
@@ -161,32 +133,26 @@ namespace ChilliSource
 				return std::static_pointer_cast<Cubemap>(pExistingResource->second);
 			}
 			
-			CS_LOG_ERROR("Cannot find resource for Cubemap with base path " + inFilePath);
+			CS_LOG_ERROR("Cannot find resource for Cubemap with base path " + instrFilePath);
 			return nullptr;
 		}
 		//-----------------------------------------------------------------
-		/// Async Get Cubemap From File
+		/// Async Get Resource From File
 		///
-		/// Generic call to get the managers resource. This will
-		/// load the resource on a seperate thread but will return the
-		/// resource pointer synchronously. Before using the resource
-		/// pointer the IsLoaded flag should be checked
-		///
+		/// Generic call to get the managers resource
         /// @param The storage location to load from
 		/// @param File path to resource
-		/// @param Image format
-		/// @param Enable mip-mapping
-		/// @return Generic pointer to resource type
+		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		CubemapSPtr CubemapManager::AsyncGetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, bool inbWithMipsMaps)
+		Core::ResourceSPtr CubemapManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
-			if(pExistingResource == mMapFilenameToResource.end()) 
+			if(pExistingResource == mMapFilenameToResource.end())
 			{
                 std::string strPath;
                 std::string strExt;
-                Core::StringUtils::SplitBaseFilename(inFilePath, strPath, strExt);
+                Core::StringUtils::SplitBaseFilename(instrFilePath, strPath, strExt);
                 strExt = "." + strExt;
                 
 				ImageDesc Desc;
@@ -195,24 +161,22 @@ namespace ChilliSource
                     Desc.strFilenames[i] = strPath + Core::ToString(i+1) + strExt;
                     Desc.pImageResources.push_back(Core::ResourceSPtr(new Core::Image()));
                 }
-	
-				Desc.eImageFormat = ineFormat;
-				Desc.bUseMipmaps = inbWithMipsMaps;
+                
 				Desc.eStorageLocation = ineStorageLocation;
 				Desc.pCubemapResource = CreateCubemapResource();
-				Desc.pCubemapResource->SetFilename(inFilePath);
+				Desc.pCubemapResource->SetFilename(instrFilePath);
 				Desc.pCubemapResource->SetStorageLocation(ineStorageLocation);
-
+                
 				//Load image as a task. Once it completed we can load the Cubemap as it should be done on the main thread
 				Core::Task<ImageDesc&> ImageLoadTask(this, &CubemapManager::ImageLoadTask, Desc);
 				Core::TaskScheduler::ScheduleTask(ImageLoadTask);
 				
 				//add resource to the resource map
-				mMapFilenameToResource.insert(std::make_pair(inFilePath, std::static_pointer_cast<Core::Resource>(Desc.pCubemapResource)));
+				mMapFilenameToResource.insert(std::make_pair(instrFilePath, std::static_pointer_cast<Core::Resource>(Desc.pCubemapResource)));
 				
 				return Desc.pCubemapResource;
-			} 
-			else 
+			}
+			else
 			{
 				return std::static_pointer_cast<Cubemap>(pExistingResource->second);
 			}
@@ -236,7 +200,7 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<6; ++i)
                     {
-                        if(static_cast<Core::ImageProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(inDesc.eStorageLocation, inDesc.strFilenames[i], inDesc.eImageFormat, inDesc.pImageResources[i]))
+                        if(mResourceProviders[nProvider]->CreateResourceFromFile(inDesc.eStorageLocation, inDesc.strFilenames[i], inDesc.pImageResources[i]))
                         {
                             CS_LOG_DEBUG("Loading image " + inDesc.strFilenames[i]);
                             
@@ -247,7 +211,7 @@ namespace ChilliSource
                     }
                     
                     //Load the Cubemap from this image
-                    Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const std::vector<Core::ResourceSPtr>&, bool, CubemapSPtr&>(this, &CubemapManager::CubemapLoadTask, inDesc.pImageResources, inDesc.bUseMipmaps, inDesc.pCubemapResource));
+                    Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const std::vector<Core::ResourceSPtr>&, CubemapSPtr&>(this, &CubemapManager::CubemapLoadTask, inDesc.pImageResources, inDesc.pCubemapResource));
                     return;
                 }
 			}
@@ -263,9 +227,9 @@ namespace ChilliSource
 		/// @param With mipmapping
 		/// @param Cubemap to create
 		//-----------------------------------------------------------------------------------
-		void CubemapManager::CubemapLoadTask(const std::vector<Core::ResourceSPtr>& inaImages, bool inbWithMipsMaps, CubemapSPtr& outpCubemap)
+		void CubemapManager::CubemapLoadTask(const std::vector<Core::ResourceSPtr>& inaImages, CubemapSPtr& outpCubemap)
 		{
-            if(CreateCubemapFromImages(inaImages, inbWithMipsMaps, outpCubemap))
+            if(CreateCubemapFromImages(inaImages, outpCubemap))
             {
                 outpCubemap->SetName(inaImages[0]->GetName());
                 outpCubemap->SetOwningResourceManager(this);

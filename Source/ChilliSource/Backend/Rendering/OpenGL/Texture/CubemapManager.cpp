@@ -35,9 +35,9 @@ namespace ChilliSource
 		/// @param Out: Cubemap resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool CubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapSPtr& outpCubemap)
+		bool CubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, ChilliSource::Rendering::CubemapSPtr& outpCubemap)
 		{
-			std::static_pointer_cast<Cubemap>(outpCubemap)->Init(inaImages, inbWithMipsMaps);
+			std::static_pointer_cast<Cubemap>(outpCubemap)->Init(inaImages);
 			return true;
 		}
 		//----------------------------------------------------------------
