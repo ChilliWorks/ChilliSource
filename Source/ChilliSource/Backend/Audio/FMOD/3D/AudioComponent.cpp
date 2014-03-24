@@ -53,8 +53,7 @@ namespace ChilliSource
 		/// Default
 		//---------------------------------------------------------------------
 		AudioComponent::AudioComponent(Audio::AudioSystem* inpOwningSystem)
-        : Audio::AudioComponent(inpOwningSystem)
-        , mpFMODChannel(nullptr)
+        : Audio::AudioComponent(inpOwningSystem), mpFMODChannel(nullptr)
         {
         }
         //---------------------------------------------------------------------
@@ -131,7 +130,7 @@ namespace ChilliSource
             if (mpFMODChannel != nullptr)
             {
                 //Set the initial volume
-                SetVolume(Audio::k_defaultAudioVolume);
+                SetVolume(1.0f);
                 
                 //Register for sound ending callbacks
                 //As FMOD uses c-style callbacks we give the channel our instance pointer

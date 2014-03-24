@@ -18,6 +18,12 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
+        //-------------------------------------------------------
+        /// Factory class for loading audio resources. Concrete
+        /// audio systems implement this interface
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
 		class AudioLoader : public Core::ResourceProvider
 		{
 		public:

@@ -26,6 +26,8 @@ namespace ChilliSource
         
         namespace
         {
+            const u32 k_maxChannels = 32;
+            
             //-------------------------------------------------------
             /// Log any FMOD errors and exit
             ///
@@ -47,9 +49,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		FMODSystem::FMODSystem()
-        : m_FMODSystem(nullptr)
-        , m_FMODEventSystem(nullptr)
-        , m_FMODEventProject(nullptr)
+        : m_FMODSystem(nullptr), m_FMODEventSystem(nullptr), m_FMODEventProject(nullptr)
 		{
             //TODO: These will go when all the systems are created
             m_audioManager = new AudioManager();
@@ -75,7 +75,7 @@ namespace ChilliSource
             driverData.sessionCategory = FMOD_IPHONE_SESSIONCATEGORY_PLAYANDRECORD;
 			ErrorCheck(m_FMODEventSystem->init(kudwMaxFMODChannels, FMOD_INIT_NORMAL, &driverData));
 #else
-            ErrorCheck(m_FMODEventSystem->init(k_maxFMODChannels, FMOD_INIT_NORMAL, nullptr));
+            ErrorCheck(m_FMODEventSystem->init(k_maxChannels, FMOD_INIT_NORMAL, nullptr));
 #endif
             
 #ifdef CS_ENABLE_FMODANDROIDOPENSL
@@ -85,9 +85,9 @@ namespace ChilliSource
 #endif
 			
 			//Set defaults
-            SetMasterEffectVolume(Audio::k_defaultAudioVolume);
-			SetMasterStreamVolume(Audio::k_defaultAudioVolume);
-			m_FMODSystem->set3DSettings(Audio::k_defaultDoppler, Audio::k_defaultDistance, Audio::k_defaultRolloff);
+            SetMasterEffectVolume(m_masterEffectVolume);
+			SetMasterStreamVolume(m_masterStreamVolume);
+			m_FMODSystem->set3DSettings(m_dopplerFactor, m_distanceFactor, m_rolloffFactor);
         }
         //-------------------------------------------------------
 		//-------------------------------------------------------
@@ -128,36 +128,6 @@ namespace ChilliSource
 			}
 			return nullptr;
 		}
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void FMODSystem::SetMasterEffectVolume(f32 in_volume)
-        {
-            m_masterEffectVolume = Core::MathUtils::Clamp(in_volume, 0.0f, 1.0f);
-			
-			//Trigger the active sounds OnMasterVolumeChanged delegate
-			m_masterEffectVolumeChangedEvent.NotifyConnections();
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void FMODSystem::SetMasterStreamVolume(f32 in_volume)
-        {
-            m_masterStreamVolume = Core::MathUtils::Clamp(in_volume, 0.0f, 1.0f);
-			
-			//Trigger the active sounds OnMasterVolumeChanged delegate
-			m_masterStreamVolumeChangedEvent.NotifyConnections();
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        f32 FMODSystem::GetMasterEffectVolume() const
-        {
-            return m_masterEffectVolume;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        f32 FMODSystem::GetMasterStreamVolume() const
-        {
-            return m_masterStreamVolume;
-        }
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void FMODSystem::Update(f32 dt)

@@ -21,17 +21,18 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		const f32 k_defaultAudioVolume	= 0.5f;
-		const f32 k_defaultDoppler		= 1.0f;
-		const f32 k_defaultRolloff		= 1.0f;
-		const f32 k_defaultDistance		= 1.0f;
-		
-        typedef std::function<void()> AudioVolumeEventDelegate;
-		
+        //-------------------------------------------------------
+        /// System that controls the playing of audio via
+        /// the concrete audio library implementation
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
 		class AudioSystem : public Core::AppSystem, public Core::IComponentProducer
 		{
 		public:
 
+            typedef std::function<void()> VolumeEventDelegate;
+            
 			CS_DECLARE_NAMEDTYPE(AudioSystem);
             
             //-------------------------------------------------------
@@ -63,7 +64,7 @@ namespace ChilliSource
             ///
 			/// @param Normalised volume level [0, 1]
 			//-------------------------------------------------------
-			virtual void SetMasterEffectVolume(f32 in_volume) = 0;
+            void SetMasterEffectVolume(f32 in_volume);
 			//-------------------------------------------------------
 			/// Set the volume for the entire audio stream channel
             ///
@@ -71,21 +72,21 @@ namespace ChilliSource
             ///
 			/// @param Normalised volume level [0, 1]
 			//-------------------------------------------------------
-			virtual void SetMasterStreamVolume(f32 in_volume) = 0;
+            void SetMasterStreamVolume(f32 in_volume);
 			//-------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return Normalised volume level [0, 1] for effect
             /// channel
 			//-------------------------------------------------------
-			virtual f32 GetMasterEffectVolume() const = 0;
+            f32 GetMasterEffectVolume() const;
 			//-------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return Normalised volume level [0, 1] for stream
             /// channel
 			//-------------------------------------------------------
-			virtual f32 GetMasterStreamVolume() const = 0;
+            f32 GetMasterStreamVolume() const;
 			//-------------------------------------------------------
 			/// @author S Downie
 			///
@@ -98,14 +99,14 @@ namespace ChilliSource
 			/// @return Audio event that is triggered on master
             /// effect volume changed
 			//-------------------------------------------------------
-			Core::IConnectableEvent<AudioVolumeEventDelegate>& GetMasterEffectVolumeChangedEvent();
+			Core::IConnectableEvent<VolumeEventDelegate>& GetMasterEffectVolumeChangedEvent();
 			//-------------------------------------------------------
             /// @author S Downie
             ///
 			/// @return Audio event that is triggered on master
             /// stream volume changed
 			//-------------------------------------------------------
-			Core::IConnectableEvent<AudioVolumeEventDelegate>& GetMasterStreamVolumeChangedEvent();
+			Core::IConnectableEvent<VolumeEventDelegate>& GetMasterStreamVolumeChangedEvent();
 			//----------------------------------------------------
 			/// @author S Downie
 			///
@@ -136,8 +137,8 @@ namespace ChilliSource
 			
 		protected:
 			
-			Core::Event<AudioVolumeEventDelegate> m_masterEffectVolumeChangedEvent;
-			Core::Event<AudioVolumeEventDelegate> m_masterStreamVolumeChangedEvent;
+			Core::Event<VolumeEventDelegate> m_masterEffectVolumeChangedEvent;
+			Core::Event<VolumeEventDelegate> m_masterStreamVolumeChangedEvent;
 			
 			AudioManager* m_audioManager;
 			AudioComponentFactory* m_audioComponentFactory;
