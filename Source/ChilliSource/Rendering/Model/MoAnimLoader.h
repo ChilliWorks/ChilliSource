@@ -26,7 +26,9 @@ namespace ChilliSource
 		class MoAnimLoader : public Core::ResourceProvider
 		{
 		public:
-			MoAnimLoader(Core::Application* inpApp);
+            
+            static MoAnimLoaderUPtr Create();
+			MoAnimLoader();
 			~MoAnimLoader();
 			
 			//-------------------------------------------------------------------------
@@ -128,9 +130,7 @@ namespace ChilliSource
 			}
 			
 			friend class SkinnedAnimation;
-		private:	
-			
-			Core::Application* mpApp;
+		private:
 		};
 	}
 }

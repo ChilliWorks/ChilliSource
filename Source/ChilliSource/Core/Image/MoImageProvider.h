@@ -10,13 +10,13 @@
 #define _MOFLOW_CORE_MOIMAGEPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Image/ImageResourceProvider.h>
+#include <ChilliSource/Core/Image/ImageProvider.h>
 
 namespace ChilliSource
 {
     namespace Core
     {
-        class MoImageProvider : public ImageResourceProvider
+        class MoImageProvider : public ImageProvider
         {
         public:
             

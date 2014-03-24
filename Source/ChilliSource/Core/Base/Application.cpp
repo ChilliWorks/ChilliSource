@@ -496,19 +496,20 @@ namespace ChilliSource
             m_stateManager = CreateSystem<StateManager>();
 
             //TODO: Change this to a PNG image provider.
-            AddSystem_Old(ImageResourceProvider::Create());
-            AddSystem_Old(MoImageProvider::Create());
+            CreateSystem<ImageProvider>();
+            CreateSystem<MoImageProvider>();
             AddSystem_Old(DialogueBoxSystem::Create());
 
             //Audio
             Audio::AudioSystemUPtr audioSystem(Audio::AudioSystem::Create());
-			AddSystem_Old(Audio::AudioLoader::Create(audioSystem.get()));
+            CreateSystem<Audio::AudioLoader>(audioSystem.get());
             AddSystem_Old(std::move(audioSystem));
 
             //Input
             AddSystem_Old(Input::InputSystem::Create());
 
             //Rendering
+            
             Rendering::RenderCapabilitiesUPtr renderCapabilitiesUPtr(Rendering::RenderCapabilities::Create());
             Rendering::RenderCapabilities* renderCapabilities(renderCapabilitiesUPtr.get());
             AddSystem_Old(std::move(renderCapabilitiesUPtr));
@@ -519,10 +520,10 @@ namespace ChilliSource
             renderSystem->Init((u32)Screen::GetRawDimensions().x, (u32)Screen::GetRawDimensions().y);
             AddSystem_Old(std::move(renderSystemUPtr));
             AddSystem_Old(Rendering::MaterialFactory::Create(renderSystem->GetTextureManager(), renderSystem->GetShaderManager(), renderSystem->GetCubemapManager(), renderCapabilities));
-            AddSystem_Old(Rendering::MaterialLoader::Create(renderCapabilities));
-			AddSystem_Old(Rendering::SpriteSheetLoader::Create());
-			AddSystem_Old(Rendering::XMLSpriteSheetLoader::Create());
-			AddSystem_Old(Rendering::FontLoader::Create());
+            CreateSystem<Rendering::MaterialLoader>(renderCapabilities);
+            CreateSystem<Rendering::SpriteSheetLoader>();
+            CreateSystem<Rendering::XMLSpriteSheetLoader>();
+            CreateSystem<Rendering::FontLoader>();
             
             m_renderer = Rendering::Renderer::Create(renderSystem);
         }
@@ -546,7 +547,7 @@ namespace ChilliSource
 				{
                     IComponentProducer* pProducer = dynamic_cast<IComponentProducer*>(pSystem);
                     u32 udwNumFactoriesInSystem = pProducer->GetNumComponentFactories();
-
+                    
                     for(u32 i=0; i<udwNumFactoriesInSystem; ++i)
                     {
                         m_componentFactoryDispenser->RegisterComponentFactory(pProducer->GetComponentFactoryPtr(i));
@@ -576,6 +577,16 @@ namespace ChilliSource
                 {
                     m_fileSystem = static_cast<FileSystem*>(pSystem);
                 }
+			}
+            
+            //Loop round all the created app systems and categorise them
+			for(const AppSystemUPtr& system : m_systems)
+			{
+                //Resource providers
+				if(system->IsA(ResourceProvider::InterfaceID))
+				{
+					m_resourceProviders.push_back(dynamic_cast<ResourceProvider*>(system.get()));
+				}
 			}
 
             //Give the resource managers their providers

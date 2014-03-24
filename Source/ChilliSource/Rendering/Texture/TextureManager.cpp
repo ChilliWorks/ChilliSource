@@ -10,7 +10,7 @@
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-#include <ChilliSource/Core/Image/ImageResourceProvider.h>
+#include <ChilliSource/Core/Image/ImageProvider.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -112,7 +112,7 @@ namespace ChilliSource
 				
 				for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
-					if(static_cast<Core::ImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(ineStorageLocation, inFilePath, ineFormat, pSourceImage))
+					if(static_cast<Core::ImageProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(ineStorageLocation, inFilePath, ineFormat, pSourceImage))
 					{
 						Core::Image* pImage = (Core::Image*)(pSourceImage.get());
 						pImage->SetName(inFilePath);
@@ -198,7 +198,7 @@ namespace ChilliSource
 		{
 			for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 			{
-				if(static_cast<Core::ImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(inDesc.eStorageLocation, inDesc.strFilename, inDesc.eImageFormat, inDesc.pImageResource))
+				if(static_cast<Core::ImageProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(inDesc.eStorageLocation, inDesc.strFilename, inDesc.eImageFormat, inDesc.pImageResource))
 				{
 					CS_LOG_DEBUG("Loading image " + inDesc.strFilename);
 					

@@ -10,7 +10,7 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureManager.h>
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
-#include <ChilliSource/Core/Image/ImageResourceProvider.h>
+#include <ChilliSource/Core/Image/ImageProvider.h>
 
 namespace ChilliSource
 {

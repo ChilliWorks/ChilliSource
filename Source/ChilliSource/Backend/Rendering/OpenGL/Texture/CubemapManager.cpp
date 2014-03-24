@@ -10,7 +10,7 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/CubemapManager.h>
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
-#include <ChilliSource/Core/Image/ImageResourceProvider.h>
+#include <ChilliSource/Core/Image/ImageProvider.h>
 
 namespace ChilliSource
 {
