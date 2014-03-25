@@ -42,10 +42,6 @@ namespace ChilliSource
 		{
 			return &mTouchScreen;
 		}
-		Input::VirtualKeyboard* InputSystem::GetVirtualKeyboard()
-		{
-			return &mVirtualKeyboard;
-		}
 		void InputSystem::Update(float infDT)
 		{
 			m_timeStamp += infDT;

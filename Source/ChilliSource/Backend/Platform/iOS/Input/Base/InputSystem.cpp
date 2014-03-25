@@ -52,10 +52,6 @@ namespace ChilliSource
             m_timeStamp += infDT;
             mTouchScreen.SetCurrentAppTime(m_timeStamp);
         }
-        Input::VirtualKeyboard* InputSystem::GetVirtualKeyboard()
-        {
-            return &mVirtualKeyboard;
-        }
         //-----------------------------------------------------------
         /// Flush Buffered Input
         ///

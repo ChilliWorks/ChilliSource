@@ -17,7 +17,6 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
-#include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboard.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Pointer/TouchScreen.h>
 #include <ChilliSource/Input/Base/InputSystem.h>
 
@@ -38,7 +37,6 @@ namespace ChilliSource
 			
 			
 			virtual Input::TouchScreen * GetTouchScreen() override;
-            virtual Input::VirtualKeyboard* GetVirtualKeyboard() override;
 			virtual void Update(f32 infDT) override;
             
             //-----------------------------------------------------------
@@ -61,7 +59,6 @@ namespace ChilliSource
 			
 		protected:
 			TouchScreen mTouchScreen;
-			VirtualKeyboard mVirtualKeyboard;
 		};
 	}
 }

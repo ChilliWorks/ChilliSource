@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
-#include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
+#include <ChilliSource/Input/Keyboard/Keyboard.h>
 
 namespace ChilliSource
 {
@@ -85,7 +85,7 @@ namespace ChilliSource
 			/// @param The keyboard type to be used the
 			/// next time the keyboard is displayed.
 			//-------------------------------------------
-            void SetKeyboardType(Input::KeyboardType ineKeyboardType);
+            void SetKeyboardType(Input::Keyboard::Type ineKeyboardType);
 			//-------------------------------------------
 			/// Set Capitalisation Method
 			///
@@ -93,7 +93,7 @@ namespace ChilliSource
             /// used the next time the keyboard is
             /// displayed.
 			//-------------------------------------------
-            void SetCapitalisationMethod(Input::KeyboardCapitalisation ineKeyboardCapitalisation);
+            void SetCapitalisationMethod(Input::Keyboard::Capitalisation ineKeyboardCapitalisation);
 			//-----------------------------------------------
 			/// On Text Added
 			///

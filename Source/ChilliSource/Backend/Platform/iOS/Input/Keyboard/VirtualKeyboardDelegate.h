@@ -1,27 +1,39 @@
 //
 //  VirtualKeyboardDelegate.h
-//  iOSTemplate
+//  Chilli Source
 //
 //  Created by Scott Downie on 18/07/2011.
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#ifndef _MO_FLO_PLATFORM_IOS_INPUT_VIRTUAL_KEYBOARD_DELEGATE_H_
-#define _MO_FLO_PLATFORM_IOS_INPUT_VIRTUAL_KEYBOARD_DELEGATE_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_INPUT_KEYBOARD_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_IOS_INPUT_KEYBOARD_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboard.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 
 #include <UIKit/UIKit.h>
 
-using namespace ChilliSource::iOS;
-
+//---------------------------------------------------------
+/// A delegate class for listening for changes from the
+/// iOS virtual keyboard.
+///
+/// @author S Downie
+//---------------------------------------------------------
 @interface VirtualKeyboardDelegate : NSObject<UITextFieldDelegate>
 {
-    VirtualKeyboard* mpKeyboard;
+    ChilliSource::iOS::Keyboard* keyboard;
 }
-
--(VirtualKeyboardDelegate*) initWithKeyboard:(VirtualKeyboard*) inpKeyboard;
+//---------------------------------------------------------
+/// Constructor.
+///
+/// @author S Downie
+///
+/// @param The keyboard system.
+///
+/// @return The new instance of the delegate.
+//---------------------------------------------------------
+-(VirtualKeyboardDelegate*) initWithKeyboard:(ChilliSource::iOS::Keyboard*) keyboardSystem;
 
 @end
 

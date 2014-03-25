@@ -1,5 +1,5 @@
 //
-//  Accelerometer.h
+//  Accelerometer.mm
 //  Chilli Source
 //
 //  Created by S Downie on 15/11/2010
@@ -44,16 +44,6 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void Accelerometer::OnInit()
-        {
-            if (SupportedByDevice() == true)
-            {
-                m_motionManager = [[CMMotionManager alloc] init];
-                m_motionManager.accelerometerUpdateInterval = 0.033;
-            }
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
         bool Accelerometer::IsA(Core::InterfaceIDType in_interfaceID) const
         {
             return (in_interfaceID == Input::Accelerometer::InterfaceID || in_interfaceID == Accelerometer::InterfaceID);
@@ -72,15 +62,6 @@ namespace ChilliSource
             {
                 m_isUpdating = true;
                 [m_motionManager startAccelerometerUpdates];
-            }
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void Accelerometer::OnUpdate(f32 in_deltaTime)
-        {
-            if(m_isUpdating)
-            {
-                m_accelerationUpdatedEvent.NotifyConnections(GetAcceleration());
             }
         }
         //----------------------------------------------------
@@ -105,6 +86,25 @@ namespace ChilliSource
         {
             m_isUpdating = false;
             [m_motionManager stopAccelerometerUpdates];
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Accelerometer::OnInit()
+        {
+            if (SupportedByDevice() == true)
+            {
+                m_motionManager = [[CMMotionManager alloc] init];
+                m_motionManager.accelerometerUpdateInterval = 0.033;
+            }
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Accelerometer::OnUpdate(f32 in_deltaTime)
+        {
+            if(m_isUpdating)
+            {
+                m_accelerationUpdatedEvent.NotifyConnections(GetAcceleration());
+            }
         }
         //----------------------------------------------------
         //----------------------------------------------------
