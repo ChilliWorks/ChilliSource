@@ -1,32 +1,32 @@
-/*
- * File: SpriteSheetLoader.cpp
- * Date: 22/10/2010 2010 
- * Description: 
- */
-
-/*
- * Author: Scott Downie
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
+//
+//  SpriteSheetLoader.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 22/10/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
-#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-		const std::string kstrTagSpriteExtension("bin");
-		
-        // Specify for elements bin sprite versions
-        const u32 kNumElementsPerSpriteV0 = 6;
-        const u32 kNumElementsPerSpriteV1 = 8;
+        namespace
+        {
+            const std::string k_spriteFramesExtension("bin");
+            const std::string k_spriteMapExtension("mospriteid");
+            
+            // Specify for elements bin sprite versions
+            const u32 k_numElementsPerSpriteV0 = 6;
+            const u32 k_numElementsPerSpriteV1 = 8;
+        }
         //-------------------------------------------------------
         //-------------------------------------------------------
         SpriteSheetLoaderUPtr SpriteSheetLoader::Create()
@@ -34,170 +34,166 @@ namespace ChilliSource
             return SpriteSheetLoaderUPtr(new SpriteSheetLoader());
         }
 		//-------------------------------------------------------------------------
-		/// Is A
-		///
-		/// @param Interface to compare
-		/// @return Whether the object implements the given interface
 		//-------------------------------------------------------------------------
-		bool SpriteSheetLoader::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool SpriteSheetLoader::IsA(Core::InterfaceIDType in_interfaceID) const
 		{
-			return inInterfaceID == ResourceProvider::InterfaceID;
+			return in_interfaceID == ResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
-		/// Can Create Resource of Kind
-		///
-		/// @param Type to compare
-		/// @return Whether the object can create a resource of given type
 		//----------------------------------------------------------------------------
-		bool SpriteSheetLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
+		bool SpriteSheetLoader::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
 		{
-			return (inInterfaceID == SpriteSheet::InterfaceID);
+			return (in_interfaceID == SpriteSheet::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
-		/// Can Create Resource From File With Extension
-		///
-		/// @param Type to compare
-		/// @param Extension to compare
-		/// @return Whether the object can create a resource with the given extension
 		//----------------------------------------------------------------------------
-		bool SpriteSheetLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
+		bool SpriteSheetLoader::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
 		{
-			return (inExtension == kstrTagSpriteExtension);
+			return (in_extension == k_spriteFramesExtension || in_extension == k_spriteMapExtension);
 		}
 		//----------------------------------------------------------------------------
-		/// Create Resource From File
-		///
-		/// @param Location to load from
-		/// @param Filename
-		/// @param Out: Resource object
-		/// @return Whether the resource loaded
 		//----------------------------------------------------------------------------
-		bool SpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
+		bool SpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
-			ChilliSource::Core::FileStreamSPtr binary_file = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineLocation, inFilePath, ChilliSource::Core::FileMode::k_readBinary);
+            SpriteSheetSPtr spriteResource(std::static_pointer_cast<SpriteSheet>(out_resource));
+            spriteResource->SetLoaded(false);
+            
+            LoadFrames(in_location, in_filePath, spriteResource);
+            LoadMap(in_location, in_filePath, spriteResource);
+            
+            //TODO: We cannot guarantee that the map file is loaded as fonts use this path and don't require a map file
+            spriteResource->SetLoaded(spriteResource->GetNumSpriteFrames() > 0);// && spriteResource->GetNumSpriteLookupKeys() > 0);
+            
+            return spriteResource->IsLoaded();
+		}
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        bool SpriteSheetLoader::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+        {
+            out_resource->SetLoaded(false);
+            
+            SpriteSheetSPtr spriteResource(std::static_pointer_cast<SpriteSheet>(out_resource));
+            
+            CS_LOG_WARNING("Async SpriteSheet Loading Not Implemented");
+            return false;
+        }
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void SpriteSheetLoader::LoadFrames(Core::StorageLocation in_location, const std::string& in_filePath, SpriteSheetSPtr& out_resource)
+        {
+            ChilliSource::Core::FileStreamSPtr frameFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, ChilliSource::Core::FileMode::k_readBinary);
 			
-			//If we have not successfully loaded the high res then just load the default
-			if(binary_file->IsOpen() == false)
+			if(frameFile->IsOpen() == false)
 			{
-				return false;
+				return;
 			}
 			
 			//Read the first four bytes to get the number of sprites. Remeber to flip the endianness
-			s16 NumSprites = 0;
-			binary_file->Read(reinterpret_cast<s8*>(&NumSprites), sizeof(s16));
-			NumSprites = Core::Utils::Endian2ByteSwap(&NumSprites);
+			s16 numSprites = 0;
+			frameFile->Read(reinterpret_cast<s8*>(&numSprites), sizeof(s16));
+			numSprites = Core::Utils::Endian2ByteSwap(&numSprites);
 			
 			//Read the header 2 bytes in but just discard it
-			s16 wBinVersion = 0;
-			binary_file->Read(reinterpret_cast<s8*>(&wBinVersion), sizeof(s16));
-            wBinVersion = Core::Utils::Endian2ByteSwap(&wBinVersion);
+			s16 binVersion = 0;
+			frameFile->Read(reinterpret_cast<s8*>(&binVersion), sizeof(s16));
+            binVersion = Core::Utils::Endian2ByteSwap(&binVersion);
             
-            s16 wSpriteSheetWidth = 0;
-            s16 wSpriteSheetHeight = 0;
+            s16 spriteSheetWidth = 0;
+            s16 spriteSheetHeight = 0;
             
-            u32 udwNumElementsPerSprite = kNumElementsPerSpriteV0;
-            if(wBinVersion >= 1)
+            u32 numElementsPerSprite = k_numElementsPerSpriteV0;
+            if(binVersion >= 1)
             {
-                udwNumElementsPerSprite = kNumElementsPerSpriteV1;
+                numElementsPerSprite = k_numElementsPerSpriteV1;
                 
-                if(wBinVersion >=2)
+                if(binVersion >=2)
                 {
-                    binary_file->Read(reinterpret_cast<s8*>(&wSpriteSheetWidth), sizeof(s16));
-                    wSpriteSheetWidth = Core::Utils::Endian2ByteSwap(&wSpriteSheetWidth);
+                    frameFile->Read(reinterpret_cast<s8*>(&spriteSheetWidth), sizeof(s16));
+                    spriteSheetWidth = Core::Utils::Endian2ByteSwap(&spriteSheetWidth);
                     
-                    binary_file->Read(reinterpret_cast<s8*>(&wSpriteSheetHeight), sizeof(s16));
-                    wSpriteSheetHeight = Core::Utils::Endian2ByteSwap(&wSpriteSheetHeight);
+                    frameFile->Read(reinterpret_cast<s8*>(&spriteSheetHeight), sizeof(s16));
+                    spriteSheetHeight = Core::Utils::Endian2ByteSwap(&spriteSheetHeight);
                 }
             }
             
 			
 			//Temporary buffer to hold our unformatted data
-			const u16 NumElements = NumSprites * udwNumElementsPerSprite; 
-			s16* SBuffer = new s16[NumElements];
-
+			const u32 numElements = numSprites * numElementsPerSprite;
+			s16* buffer = new s16[numElements];
+            
 			//Fetch the binary data in one read.
-			binary_file->Read(reinterpret_cast<s8*>(SBuffer), NumElements * sizeof(s16));
-			binary_file->Close();
+			frameFile->Read(reinterpret_cast<s8*>(buffer), numElements * sizeof(s16));
+			frameFile->Close();
 			
 			//Swap for endianess as the tool does it backwards!
-			for(u32 i = 0; i<NumElements; ++i)
+			for(u32 i=0; i<numElements; ++i)
 			{
-				SBuffer[i] = Core::Utils::Endian2ByteSwap(&SBuffer[i]);
+				buffer[i] = Core::Utils::Endian2ByteSwap(&buffer[i]);
 			}
 			
 			//Now copy the data into our sprite data buffer as it is now in the correct format
-			SpriteSheet* pSpriteSheet = (SpriteSheet*)(outpResource.get());
-            pSpriteSheet->SetSpriteSheetSize(wSpriteSheetWidth, wSpriteSheetHeight);
-			pSpriteSheet->SetNumSpriteFrames(NumSprites);
+			SpriteSheet* spriteSheet = (out_resource.get());
+            spriteSheet->SetSpriteSheetSize(spriteSheetWidth, spriteSheetHeight);
+			spriteSheet->SetNumSpriteFrames(numSprites);
 			
-            s16 *pFrame = SBuffer;
-			for(s32 i = 0; i < NumSprites; ++i)
+            s16* framePtr = buffer;
+			for(u32 i=0; i<numSprites; ++i)
 			{
-				SpriteSheet::SpriteFrame Frame;
+				SpriteSheet::SpriteFrame frame;
 				
-				Frame.U			= pFrame[0];
-				Frame.V			= pFrame[1];
-				Frame.Width		= pFrame[2];
-				Frame.Height	= pFrame[3];
-				Frame.OffsetX	= pFrame[4];
-				Frame.OffsetY	= pFrame[5];
-                Frame.OriginalWidth = 0;
-                Frame.OriginalHeight = 0;
+				frame.U	= framePtr[0];
+				frame.V	= framePtr[1];
+				frame.Width	= framePtr[2];
+				frame.Height = framePtr[3];
+				frame.OffsetX = framePtr[4];
+				frame.OffsetY = framePtr[5];
+                frame.OriginalWidth = 0;
+                frame.OriginalHeight = 0;
                 
-                if(wBinVersion >=1)
+                if(binVersion >= 1)
                 {
-                    Frame.OriginalWidth = pFrame[6];
-                    Frame.OriginalHeight = pFrame[7];
-                }               
-
-				pSpriteSheet->AddSpriteFrame(Frame);
-                pFrame += udwNumElementsPerSprite;
+                    frame.OriginalWidth = framePtr[6];
+                    frame.OriginalHeight = framePtr[7];
+                }
+                
+				spriteSheet->AddSpriteFrame(frame);
+                framePtr += numElementsPerSprite;
 			}
 			
-			CS_SAFEDELETE_ARRAY(SBuffer);
-            
-            // Load in string IDs
-            std::string strName;
-            std::string strExtension;
+			CS_SAFEDELETE_ARRAY(buffer);
+        }
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void SpriteSheetLoader::LoadMap(Core::StorageLocation in_location, const std::string& in_filePath, SpriteSheetSPtr& out_resource)
+        {
+            //The string IDs are loaded as a by-product so we have to deduce their file type
+            std::string fileName;
+            std::string fileExtension;
             
             //Get the name of the file and append the high res identifier to it
-            Core::StringUtils::SplitBaseFilename(inFilePath, strName, strExtension);
-            Core::FileStreamSPtr idFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineLocation, strName + ".mospriteid", Core::FileMode::k_read);
+            Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
+            Core::FileStreamSPtr mapFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, fileName + ".mospriteid", Core::FileMode::k_read);
             
-            std::vector<u32> IDLookup;
-            std::vector<std::string> IDStringLookup;
-			if(idFile == nullptr || idFile->IsBad())
+			if(mapFile->IsOpen())
 			{
-				CS_LOG_WARNING("Sprite loader ID lookups unavailable: .mospriteid missing");
-				
-				if(idFile->IsOpen())
-					idFile->Close();
-			}
-			else 
-			{
-                std::string strID;
-				while(!idFile->EndOfFile())
+                std::vector<u32> IDHashedLookup;
+                std::vector<std::string> IDStringLookup;
+                
+                std::string spriteID;
+				while(!mapFile->EndOfFile())
 				{
-                    s8 byNextChar = 0;
-                    idFile->Get(byNextChar);
-                    
-                    if(byNextChar != '\n')
+                    mapFile->GetLine(spriteID);
+                    if(spriteID.empty() == false)
                     {
-                    	if(byNextChar != '\r')
-                    		strID += byNextChar;
+                        IDHashedLookup.push_back(Core::HashCRC32::GenerateHashCode(spriteID));
+                        IDStringLookup.push_back(spriteID);
+                        spriteID.clear();
                     }
-                    else
-                    {
-                        IDLookup.push_back(Core::HashCRC32::GenerateHashCode(strID));
-                        IDStringLookup.push_back(strID);
-                        strID.clear();
-                    }					
 				}
+                
+                out_resource->SetIDLookups(IDHashedLookup, IDStringLookup);
 			}
-			
-            pSpriteSheet->SetIDLookups(IDLookup, IDStringLookup);
-			return true;
-		}
+        }
 	}
 }
 

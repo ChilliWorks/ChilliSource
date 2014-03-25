@@ -95,7 +95,13 @@ namespace ChilliSource
 			///
 			/// @return Number of sprite frames loaded
 			//---------------------------------------------------------------------
-			u32 GetNumSpriteFrames() const;			
+			u32 GetNumSpriteFrames() const;
+            //---------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The number of atlas map keys
+            //---------------------------------------------------------------------
+            u32 GetNumSpriteLookupKeys() const;
 			//---------------------------------------------------------------------
 			/// GetUVsForFrame
 			///
@@ -177,36 +183,7 @@ namespace ChilliSource
 			///
 			/// return Texture
 			//---------------------------------------------------------------------
-			const TextureSPtr& GetTexture() const;			
-			//---------------------------------------------------------------------
-			/// Animations
-			//---------------------------------------------------------------------		
-			u32 GetNumAnimations() const;
-			//---------------------------------------------------------------------
-			/// GetAnimationIndexByName
-			/// @param Name of the animation to find 
-			/// @return Integer index for the animation with that name if such an animatione xists or a value >= then GetNumAnimations if not
-			//---------------------------------------------------------------------
-			u32 GetAnimationIndexByName(const std::string & instrName) const;
-			//---------------------------------------------------------------------
-			/// GetNameForAnimation
-			/// @param Integer index for which animation to return
-			/// @return Reference to a string with the name of the animation with the given index or a blank string if inudwAnimIndex is invalid
-			//---------------------------------------------------------------------
-			const std::string & GetNameForAnimation(u32 inudwIndex) const;
-			//---------------------------------------------------------------------
-			/// GetFramesForAnimation
-			/// @param Integer index for which animation to return
-			/// @return Pointer to a vector containing the frame indices for the given animation or nullptr if inudwAnimIndex is invalid
-			//---------------------------------------------------------------------
-			const std::vector<u32> * GetFramesForAnimation(u32 inudwAnimIndex) const;
-			//---------------------------------------------------------------------
-			/// AddAnimation
-			/// @param Name for this animation, must be unique
-			/// @param Array of frame indices describing this animation
-			/// @return true if successful or false if the parameter constraints above are not respected
-			//---------------------------------------------------------------------			
-			bool AddAnimation(std::string & instrName, const std::vector<u32> & instrFrames);
+			const TextureSPtr& GetTexture() const;
             //---------------------------------------------------------------------
             /// Set ID Lookups
             ///
@@ -243,8 +220,6 @@ namespace ChilliSource
             s16        mwSpriteSheetHeight;
             
 			std::vector<Frame> mFrames;
-			std::vector<std::string> mAnimationNames;
-			std::vector<std::vector<u32> > mAnimationFrames;
             std::vector<u32> mIDLookups;
             std::vector<std::string> mStringIDLookups;
 			

@@ -125,6 +125,12 @@ namespace ChilliSource
         {
 			return mFrames.size();
 		}
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        u32 SpriteSheet::GetNumSpriteLookupKeys() const
+        {
+            return mIDLookups.size();
+        }
 		//---------------------------------------------------------------------
 		/// Set Num Sprite Frames
 		///
@@ -273,53 +279,6 @@ namespace ChilliSource
 		const TextureSPtr& SpriteSheet::GetTexture() const
 		{
 			return mpTexture;
-		}
-		
-		u32 SpriteSheet::GetNumAnimations() const
-		{
-			return mAnimationNames.size();
-		}
-		u32 SpriteSheet::GetAnimationIndexByName(const std::string & instrName) const
-		{
-			
-			for (u32 nAnim = 0; nAnim < mAnimationNames.size(); nAnim++){
-			
-				if (mAnimationNames[nAnim] == instrName)
-				{
-					return nAnim;
-				}
-			}
-			
-			return UINT_MAX;
-		}
-		const std::string & SpriteSheet::GetNameForAnimation(u32 inudwIndex) const
-		{
-			
-			if (inudwIndex < mAnimationNames.size())
-				return mAnimationNames[inudwIndex];
-			
-			return Core::StringUtils::BLANK;
-		}
-		const std::vector<u32> * SpriteSheet::GetFramesForAnimation(u32 inudwAnimIndex) const
-		{
-			
-			if (inudwAnimIndex < mAnimationFrames.size())
-				return &mAnimationFrames[inudwAnimIndex];
-			
-			return nullptr;
-		}
-		
-		bool SpriteSheet::AddAnimation(std::string & instrName, const std::vector<u32> & instrFrames)
-		{
-			if (GetAnimationIndexByName(instrName) != UINT_MAX)
-			{
-				return false;
-			}
-			
-			mAnimationNames.push_back(instrName);
-			mAnimationFrames.push_back(instrFrames);
-			
-			return true;
 		}
         //---------------------------------------------------------------------
         /// Set ID Lookups
