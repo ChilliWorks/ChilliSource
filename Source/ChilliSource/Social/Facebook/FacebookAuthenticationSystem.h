@@ -1,13 +1,13 @@
 //
-//  FacebookAuthentication.h
+//  FacebookAuthenticationSystem.h
 //  Chilli Source
 //
 //  Created by Scott Downie on 01/06/2011.
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#ifndef _CHILLISOURCE_SOCIAL_FACEBOOK_FACEBOOKAUTHENTICATION_H_
-#define _CHILLISOURCE_SOCIAL_FACEBOOK_FACEBOOKAUTHENTICATION_H_
+#ifndef _CHILLISOURCE_SOCIAL_FACEBOOK_FACEBOOKAUTHENTICATIONSYSTEM_H_
+#define _CHILLISOURCE_SOCIAL_FACEBOOK_FACEBOOKAUTHENTICATIONSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>

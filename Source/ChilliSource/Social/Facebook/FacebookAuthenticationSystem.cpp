@@ -1,17 +1,17 @@
 //
-//  FacebookAuthentication.cpp
+//  FacebookAuthenticationSystem.cpp
 //  Chilli Source
 //
 //  Created by Scott Downie on 01/06/2011.
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Social/Facebook/FacebookAuthenticationSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookAuthenticationSystem.h>
 #elif CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthenticationSystem.h>
 #endif
 
 namespace ChilliSource
