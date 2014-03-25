@@ -1,17 +1,16 @@
-/*
- *  FacebookAuthentication.h
- *  moFlo
- *
- *  Created by Stuart McGaw on 01/06/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  FacebookAuthentication.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 01/06/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
 #ifndef _CHILLISOURCE_SOCIAL_FACEBOOK_FACEBOOKAUTHENTICATION_H_
 #define _CHILLISOURCE_SOCIAL_FACEBOOK_FACEBOOKAUTHENTICATION_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 #include <functional>
 
@@ -19,11 +18,14 @@ namespace ChilliSource
 {
 	namespace Social
 	{
-		/**
-		 * See http://developers.facebook.com/docs/authentication/permissions/ for definitions of what these provide
-         **/
-		
-		class FacebookAuthenticationSystem : public Core::System
+        //------------------------------------------------
+        /// Base class for logging in to Facebook using
+        /// the back end Facebook SDK. Also handles
+        /// the granting of read and write permissions
+        ///
+        /// @author S Downie
+        //------------------------------------------------
+		class FacebookAuthenticationSystem : public Core::AppSystem
 		{
 		public:
             
@@ -36,10 +38,19 @@ namespace ChilliSource
             
             struct AuthenticateResponse
             {
-                AuthenticateResult eResult;
-                std::string strToken;
+                AuthenticateResult m_result;
+                std::string m_token;
             };
             
+            //------------------------------------------------
+            /// Delegate call when authentication completes
+            /// either successfully or not.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Response containing result and token
+            /// if successful
+            //------------------------------------------------
             typedef std::function<void(const AuthenticateResponse&)> AuthenticationCompleteDelegate;
             
 			CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
@@ -53,26 +64,70 @@ namespace ChilliSource
             /// @return The new instance of the system.
             //------------------------------------------------
             static FacebookAuthenticationSystemUPtr Create();
-            
-			virtual void Authenticate(const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const AuthenticationCompleteDelegate& inDelegate = nullptr) = 0;
-			
+            //------------------------------------------------
+            /// Log the user into Facebook with the given
+            /// read permissions. If no permissions are specified
+            /// then only basic read permissions will be granted
+            /// on authentication success
+            ///
+            /// @author S Downie
+            ///
+            /// @param Read permissions (http://developers.facebook.com/docs/authentication/permissions/)
+            /// @param Result delegate
+            //------------------------------------------------
+			virtual void Authenticate(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate) = 0;
+			//------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Whether the user has authenticated with FB
+            //------------------------------------------------
 			virtual bool IsSignedIn() const = 0;
-			virtual std::string GetActiveToken() const = 0;
-            
-            virtual void AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const AuthenticationCompleteDelegate& inDelegate) = 0;
-            virtual void AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const AuthenticationCompleteDelegate& inDelegate) = 0;
-            
-            virtual bool HasPermission(const std::string& instrPermission) const = 0;
-			
+            //------------------------------------------------
+            /// Request that the user grant additional read
+            /// permissions (http://developers.facebook.com/docs/authentication/permissions/)
+            ///
+            /// @author S Downie
+            ///
+            /// @param Read permissions
+            /// @param Result delegate
+            //------------------------------------------------
+            virtual void AuthoriseReadPermissions(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate) = 0;
+            //------------------------------------------------
+            /// Request that the user grant write
+            /// permissions (http://developers.facebook.com/docs/authentication/permissions/)
+            ///
+            /// @author S Downie
+            ///
+            /// @param Write permissions
+            /// @param Result delegate
+            //------------------------------------------------
+            virtual void AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, const AuthenticationCompleteDelegate& in_delegate) = 0;
+            //------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Permission to check
+            ///
+            /// @return Whether the given permission has been
+            /// granted by the user
+            //------------------------------------------------
+            virtual bool HasPermission(const std::string& in_permission) const = 0;
+			//------------------------------------------------
+            /// Log the current user out of Facebook
+            ///
+            /// @author S Downie
+            //------------------------------------------------
 			virtual void SignOut() = 0;
-            
-            virtual void PublishInstall() = 0;
-            
+            //------------------------------------------------
+            /// Virtual destructor
+            ///
+            /// @author S McGaw
+            //------------------------------------------------
             virtual ~FacebookAuthenticationSystem(){}
             
         protected:
             //------------------------------------------------
-            /// Constructor.
+            /// Private constructor to force use of factory
+            /// method
             ///
             /// @author I Copland
             //------------------------------------------------

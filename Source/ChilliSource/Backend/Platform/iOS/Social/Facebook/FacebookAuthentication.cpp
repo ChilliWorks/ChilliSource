@@ -1,11 +1,10 @@
-/*
- *  FacebookAuthentication.cpp
- *  moFlow
- *
- *  Created by Stuart McGaw on 02/06/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  FacebookAuthentication.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 01/06/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
 
@@ -15,73 +14,89 @@
 #	include <Accounts/Accounts.h>
 #endif
 
-NSArray* CreateNSArrayFromStringArray(const std::vector<std::string> & inaStrings)
-{
-    NSMutableArray * pResult = [[NSMutableArray alloc] initWithCapacity:inaStrings.size()];
-    
-    for (u32 i = 0; i < inaStrings.size(); ++i)
-    {
-        [pResult addObject: ChilliSource::Core::StringUtils::StringToNSString(inaStrings[i])];
-    }
-    
-    return pResult;
-}
-
 namespace ChilliSource
 {
-	using namespace Social;
-	using namespace Core;
-    
 	namespace iOS
 	{
+        namespace
+        {
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Array of std strings
+            ///
+            /// @return Ownership of NSArray of NSStrings
+            //----------------------------------------------------
+            NSArray* CreateNSArrayFromStringArray(const std::vector<std::string> & in_strings)
+            {
+                NSMutableArray * result = [[NSMutableArray alloc] initWithCapacity:in_strings.size()];
+                
+                for (u32 i=0; i<in_strings.size(); ++i)
+                {
+                    [result addObject: ChilliSource::Core::StringUtils::StringToNSString(in_strings[i])];
+                }
+                
+                return result;
+            }
+        }
+        
 		CS_DEFINE_NAMEDTYPE(FacebookAuthenticationSystem);
-		
-		bool FacebookAuthenticationSystem::IsA(Core::InterfaceIDType inID) const
+        
+		//----------------------------------------------------
+        //----------------------------------------------------
+		bool FacebookAuthenticationSystem::IsA(Core::InterfaceIDType in_interfaceID) const
 		{
-			return (inID == FacebookAuthenticationSystem::InterfaceID) || (inID == FacebookAuthenticationSystem::InterfaceID);
+			return (in_interfaceID == FacebookAuthenticationSystem::InterfaceID) || (in_interfaceID == Social::FacebookAuthenticationSystem::InterfaceID);
 		}
-		
-		void FacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& inastrReadPermissions, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
+		//----------------------------------------------------
+        //----------------------------------------------------
+		void FacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate)
 		{
-            mAuthenticateDelegate = inDelegate;
-            mastrPermissions = inastrReadPermissions;
+            CS_ASSERT(m_authenticateDelegate == nullptr, "Cannot authenticate more than once at the same time");
+            
+            m_authenticateDelegate = in_delegate;
 
             if(IsSignedIn())
             {
-                if(mAuthenticateDelegate)
+                //If we already have an open session then just return a success
+                if(m_authenticateDelegate)
                 {
-                    AuthenticateResponse sResponse;
-                    sResponse.strToken = GetActiveToken();
-                    sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_success;
-                    mAuthenticateDelegate(sResponse);
+                    AuthenticateResponse response;
+                    response.m_token = GetActiveToken();
+                    response.m_result = AuthenticateResult::k_success;
+                    m_authenticateDelegate(response);
+                    m_authenticateDelegate = nullptr;
                 }
                 
                 return;
             }
             
-            bool bHasExistingSession = TryResumeExisitingSession();
-            if(!bHasExistingSession)
+            bool hasExistingSession = TryResumeExisitingSession(in_readPermissions);
+            if(!hasExistingSession)
             {
-                CreateNewSession();
+                CreateNewSession(in_readPermissions);
             }
 		}
-        
-        void FacebookAuthenticationSystem::CreateNewSession()
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void FacebookAuthenticationSystem::CreateNewSession(const std::vector<std::string>& in_readPermissions)
         {
-            OpenSession(true);
+            OpenSession(in_readPermissions, true);
         }
-        
-        bool FacebookAuthenticationSystem::TryResumeExisitingSession()
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool FacebookAuthenticationSystem::TryResumeExisitingSession(const std::vector<std::string>& in_readPermissions)
         {
-            return OpenSession(false);
+            return OpenSession(in_readPermissions, false);
         }
-        
-        bool FacebookAuthenticationSystem::OpenSession(bool bShowLogin)
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool FacebookAuthenticationSystem::OpenSession(const std::vector<std::string>& in_readPermissions, bool in_shouldPresentLogin)
         {
-            NSArray* pPermissionsArray = mastrPermissions.empty() ? nil : CreateNSArrayFromStringArray(mastrPermissions);
-            bool bHasExistingSession = [FBSession openActiveSessionWithReadPermissions:pPermissionsArray
-                                               allowLoginUI:bShowLogin
-                                          completionHandler:^(FBSession *session, FBSessionState state, NSError *error)
+            NSArray* permissionsArray = in_readPermissions.empty() ? nil : CreateNSArrayFromStringArray(in_readPermissions);
+            bool hasExistingSession = [FBSession openActiveSessionWithReadPermissions:permissionsArray
+                                                                         allowLoginUI:in_shouldPresentLogin
+                                                                    completionHandler:^(FBSession* session, FBSessionState state, NSError* error)
              {
                  if(!error)
                  {
@@ -91,154 +106,187 @@ namespace ChilliSource
                  {
                      NSLog(@"%@", error.localizedDescription);
                      
-                     if(mAuthenticateDelegate)
+                     if(m_authenticateDelegate)
                      {
-                         AuthenticateResponse sResponse;
-                         sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_failed;
-                         mAuthenticateDelegate(sResponse);
+                         AuthenticateResponse response;
+                         response.m_result = AuthenticateResult::k_failed;
+                         m_authenticateDelegate(response);
+                         m_authenticateDelegate = nullptr;
                      }
                  }
              }];
             
-            return bHasExistingSession;
-        }
-        
-        void FacebookAuthenticationSystem::OnSessionStateChanged(FBSession* inpSession, FBSessionState ineState)
-        {
-            AuthenticateResponse sResponse;
+            if(permissionsArray)
+            {
+                [permissionsArray release];
+            }
             
-            switch (ineState)
+            return hasExistingSession;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void FacebookAuthenticationSystem::OnSessionStateChanged(FBSession* in_session, FBSessionState in_state)
+        {
+            switch (in_state)
             {
                 case FBSessionStateOpen:
                 {
-                    if(mAuthenticateDelegate)
+                    if(m_authenticateDelegate)
                     {
-                        sResponse.strToken = Core::StringUtils::NSStringToString([[inpSession accessTokenData] accessToken]);
-                        sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_success;
-                        mAuthenticateDelegate(sResponse);
+                        AuthenticateResponse response;
+                        response.m_token = Core::StringUtils::NSStringToString([[in_session accessTokenData] accessToken]);
+                        response.m_result = AuthenticateResult::k_success;
+                        m_authenticateDelegate(response);
+                        m_authenticateDelegate = nullptr;
                     }
                     break;
                 }
                 case FBSessionStateClosed:
                 {
-                    [inpSession closeAndClearTokenInformation];
+                    [in_session closeAndClearTokenInformation];
                     break;
                 }
                 case FBSessionStateClosedLoginFailed:
                 default:
                 {
-                    if(mAuthenticateDelegate)
+                    if(m_authenticateDelegate)
                     {
-                        sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_failed;
-                        mAuthenticateDelegate(sResponse);
+                        AuthenticateResponse response;
+                        response.m_result = AuthenticateResult::k_failed;
+                        m_authenticateDelegate(response);
+                        m_authenticateDelegate = nullptr;
                     }
                     break;
                 }
             }
         }
-		
+		//----------------------------------------------------
+        //----------------------------------------------------
 		bool FacebookAuthenticationSystem::IsSignedIn() const
 		{
 			return FBSession.activeSession.isOpen;
 		}
-		
+		//----------------------------------------------------
+        //----------------------------------------------------
         std::string FacebookAuthenticationSystem::GetActiveToken() const
 		{
 			return Core::StringUtils::NSStringToString(FBSession.activeSession.accessTokenData.accessToken);
 		}
-        
-        void FacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void FacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate)
         {
-            mAuthoriseReadDelegate = inDelegate;
+            CS_ASSERT(m_authoriseReadDelegate == nullptr, "Only one read permission request can be active at a time");
+            CS_ASSERT(IsSignedIn() == true, "Must be authenticated");
             
-            NSArray * pPermissionsArray = CreateNSArrayFromStringArray(inaReadPerms);
-            [FBSession.activeSession requestNewReadPermissions:pPermissionsArray
-                        completionHandler:^(FBSession *session, NSError *error)
-                         {
-                 AuthenticateResponse sResponse;
+            m_authoriseReadDelegate = in_delegate;
+            
+            NSArray * permissionsArray = CreateNSArrayFromStringArray(in_readPermissions);
+            
+            [FBSession.activeSession requestNewReadPermissions:permissionsArray
+                                             completionHandler:^(FBSession* session, NSError* error)
+            {
                  if(error)
                  {
                      NSLog(@"%@", error.localizedDescription);
-                     if(mAuthoriseReadDelegate)
+             
+                     if(m_authoriseReadDelegate)
                      {
-                         sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_failed;
-                         mAuthoriseReadDelegate(sResponse);
+                         AuthenticateResponse response;
+                         response.m_result = AuthenticateResult::k_failed;
+                         m_authoriseReadDelegate(response);
+                         m_authoriseReadDelegate = nullptr;
                      }
                  }
-                 else if(mAuthoriseReadDelegate)
+                 else if(m_authoriseReadDelegate)
                  {
-                     sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_success;
-                     sResponse.strToken = GetActiveToken();
-                     mAuthoriseReadDelegate(sResponse);
+                     AuthenticateResponse response;
+                     response.m_result = AuthenticateResult::k_success;
+                     response.m_token = GetActiveToken();
+                     m_authoriseReadDelegate(response);
+                     m_authoriseReadDelegate = nullptr;
                  }
-             }];
-            [pPermissionsArray release];
+            }];
+            
+            [permissionsArray release];
         }
-        
-        void FacebookAuthenticationSystem::AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void FacebookAuthenticationSystem::AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, const AuthenticationCompleteDelegate& in_delegate)
         {
-            mAuthoriseWriteDelegate = inDelegate;
+            CS_ASSERT(m_authoriseWriteDelegate == nullptr, "Only one write permission request can be active at a time");
+            CS_ASSERT(IsSignedIn() == true, "Must be authenticated");
             
-            CS_ASSERT(maRequestedWritePermissions.empty(), "Previous authorise hasn't been completed yet!");
-            maRequestedWritePermissions = inaWritePerms;
+            m_authoriseWriteDelegate = in_delegate;
             
-            NSArray * pPermissionsArray = CreateNSArrayFromStringArray(inaWritePerms);
-             [FBSession.activeSession requestNewPublishPermissions:pPermissionsArray
-                                     defaultAudience:FBSessionDefaultAudienceFriends
-                                        completionHandler:^(FBSession *session, NSError *error)
+            //We store these so we can check that the user granted all our permissions
+            m_currentRequestedWritePermissions = in_writePermissions;
+            
+            NSArray * permissionsArray = CreateNSArrayFromStringArray(m_currentRequestedWritePermissions);
+            
+            [FBSession.activeSession requestNewPublishPermissions:permissionsArray
+                                                  defaultAudience:FBSessionDefaultAudienceFriends
+                                                completionHandler:^(FBSession* session, NSError* error)
+            {
+                if(error)
                 {
-                    AuthenticateResponse sResponse;
-                    if(error)
+                    NSLog(@"%@", error.localizedDescription);
+             
+                    if(m_authoriseWriteDelegate)
                     {
-                        NSLog(@"%@", error.localizedDescription);
-                        if(mAuthoriseWriteDelegate)
+                        AuthenticateResponse response;
+                        response.m_result = AuthenticateResult::k_failed;
+                        m_authoriseWriteDelegate(response);
+                        m_authoriseWriteDelegate = nullptr;
+                    }
+                }
+                else if(m_authoriseWriteDelegate)
+                {
+                    //Check to see if the user granted the permissions we asked for.
+                    bool permissionMismatch = false;
+                    
+                    for(u32 i=0; i<m_currentRequestedWritePermissions.size(); ++i)
+                    {
+                        NSString* permissionName = [NSString stringWithCString:m_currentRequestedWritePermissions.at(i).c_str() encoding:[NSString defaultCStringEncoding]];
+                        
+                        permissionMismatch = ![[FBSession activeSession].permissions containsObject:permissionName];
+                        
+                        if(permissionMismatch)
                         {
-                            sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_failed;
-                            mAuthoriseWriteDelegate(sResponse);
+                            break;
                         }
                     }
-                    else if(mAuthoriseWriteDelegate)
+                    
+                    //Free unused memory.
+                    m_currentRequestedWritePermissions.clear();
+                    m_currentRequestedWritePermissions.shrink_to_fit();
+             
+                    AuthenticateResponse response;
+                    if(permissionMismatch == false)
                     {
-                        // Check to see if we got the permissions we asked for.
-                        BOOL bPermissionMismatch = NO;
-                        
-                        for(u32 i = 0; i < maRequestedWritePermissions.size(); ++i)
-                        {
-                            NSString *permissionName = [NSString stringWithCString:maRequestedWritePermissions.at(i).c_str() encoding:[NSString defaultCStringEncoding]];
-                            
-                            bPermissionMismatch = ![[FBSession activeSession].permissions containsObject:permissionName];
-                            
-                            if(bPermissionMismatch)
-                            {
-                                break;
-                            }
-                        }
-                        
-                        // Free unused memory.
-                        maRequestedWritePermissions.clear();
-                        std::vector<std::string>(maRequestedWritePermissions).swap(maRequestedWritePermissions);
-                        
-                        if(bPermissionMismatch == NO)
-                        {
-                            sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_success;
-                        }
-                        else
-                        {
-                            sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch;
-                        }
-                        
-                        sResponse.strToken = GetActiveToken();
-                        mAuthoriseWriteDelegate(sResponse);
+                        response.m_result = AuthenticateResult::k_success;
                     }
-                }];
-            [pPermissionsArray release];
+                    else
+                    {
+                        response.m_result = AuthenticateResult::k_permissionMismatch;
+                    }
+                    
+                    response.m_token = GetActiveToken();
+                    m_authoriseWriteDelegate(response);
+                    m_authoriseWriteDelegate = nullptr;
+                }
+            }];
+            
+            [permissionsArray release];
         }
-        
-        bool FacebookAuthenticationSystem::HasPermission(const std::string& instrPermission) const
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool FacebookAuthenticationSystem::HasPermission(const std::string& in_permission) const
         {
-            return ([FBSession.activeSession.permissions indexOfObject:StringUtils::StringToNSString(instrPermission)] != NSNotFound);
+            return ([FBSession.activeSession.permissions indexOfObject:Core::StringUtils::StringToNSString(in_permission)] != NSNotFound);
         }
-		
+		//----------------------------------------------------
+        //----------------------------------------------------
 		void FacebookAuthenticationSystem::SignOut()
 		{
             if(IsSignedIn())
@@ -246,23 +294,9 @@ namespace ChilliSource
                 [FBSession.activeSession closeAndClearTokenInformation];
             }
 		}
-        
-        void FacebookAuthenticationSystem::PublishInstall()
-        {
-            NSString* nsAppID = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"FacebookAppID"];
-            
-            if(nsAppID)
-            {
-                [FBSettings setDefaultAppID:nsAppID];
-                [FBAppEvents activateApp];
-            }
-            else
-            {
-                CS_LOG_ERROR("No app ID specified in plist (FacebookAppID)");
-            }
-        }
-        
-        FacebookAuthenticationSystem::~FacebookAuthenticationSystem()
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void FacebookAuthenticationSystem::OnDestroy()
         {
             [FBSession.activeSession close];
         }

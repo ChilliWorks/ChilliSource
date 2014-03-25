@@ -1,11 +1,10 @@
-/*
- *  FacebookAuthentication.cpp
- *  moFlow
- *
- *  Created by Stuart McGaw on 01/06/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  FacebookAuthentication.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 01/06/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
