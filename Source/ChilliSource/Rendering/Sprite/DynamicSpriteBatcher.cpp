@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{	
-        const u32 kudwMaxSpritesInDynamicBatch = 2048;
+        const u32 kudwMaxSpritesInDynamicBatch = 512;
         
 		//-------------------------------------------------------
 		/// Constructor
