@@ -77,8 +77,8 @@ namespace ChilliSource
         
         //----------------------------------------------------
         //----------------------------------------------------
-		FacebookPostSystem::FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem)
-        : m_authSystem(inpAuthSystem)
+		FacebookPostSystem::FacebookPostSystem(Social::FacebookAuthenticationSystem* in_authSystem)
+        : m_authSystem(in_authSystem)
 		{
 #if CS_ENABLE_DEBUG
             [FBSettings enableBetaFeature:FBBetaFeaturesShareDialog];
@@ -116,20 +116,20 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void FacebookPostSystem::SendRequest(const RequestDesc& in_desc, std::vector<std::string>& in_friendIDs, RequestType in_type, const PostResultDelegate& in_delegate)
+        void FacebookPostSystem::SendRequest(const RequestDesc& in_desc, const PostResultDelegate& in_delegate)
         {
             CS_ASSERT(m_requestCompleteDelegate == nullptr, "Cannot request more than once at a time");
             CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to request");
             
             //Construct a list of comma separated IDs
-            std::string friends;
-            ListToCSV(in_friendIDs, friends);
+            std::string recipients;
+            ListToCSV(in_desc.m_recipients, recipients);
             
             m_requestCompleteDelegate = in_delegate;
             
             NSString* requestType = @"to";
             
-            switch (in_type)
+            switch (in_desc.m_type)
             {
                 case RequestType::k_to:
                     requestType = @"to";
@@ -139,7 +139,7 @@ namespace ChilliSource
                     break;
             }
             
-            NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjectsAndKeys:Core::StringUtils::StringToNSString(friends), requestType, nil];
+            NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjectsAndKeys:Core::StringUtils::StringToNSString(recipients), requestType, nil];
             
             [FBWebDialogs presentRequestsDialogModallyWithSession:nil
                                                           message:Core::StringUtils::StringToNSString(in_desc.m_description)

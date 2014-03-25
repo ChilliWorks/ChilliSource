@@ -1,37 +1,34 @@
 //
-//  FacebookAuthenticationSystem.h
-//  Chilli Source
+// FacebookAuthenticationSystem.h
+// Chilli Source
 //
-//  Created by Scott Downie on 01/06/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+// Created by Robert Henning on 03/05/2012
+// Copyright 2012 Tag Games Limited - All rights reserved
 //
 
-#ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_SOCIAL_FACEBOOKAUTHENTICATIONSYSTEM_H_
-#define _CHILLISOURCE_BACKEND_PLATFORM_IOS_SOCIAL_FACEBOOKAUTHENTICATIONSYSTEM_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_SOCIAL_FACEBOOKAUTHENTICATIONSYSTEM_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_SOCIAL_FACEBOOKAUTHENTICATIONSYSTEM_H_
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthenticationSystem.h>
-
-#include <FacebookSDK/FacebookSDK.h>
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace Android
 	{
-        //------------------------------------------------
-        /// Class for logging in to Facebook using
-        /// the iOS Facebook framework. Also handles
-        /// the granting of read and write permissions
-        ///
-        /// @author S Downie
-        //------------------------------------------------
+		//------------------------------------------------
+		/// Class for logging in to Facebook using
+		/// the Android Facebook SDK. Also handles
+		/// the granting of read and write permissions
+		///
+		/// @author R Henning
+		//------------------------------------------------
 		class FacebookAuthenticationSystem final : public Social::FacebookAuthenticationSystem
 		{
 		public:
 
 			CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
-        
+
             //----------------------------------------------------
             /// @author S Downie
             ///
@@ -40,6 +37,13 @@ namespace ChilliSource
             /// @return Whether the interface ID matches this object
             //----------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+            //----------------------------------------------------
+            /// Called when the system is created allocating any
+			/// resources
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void OnInit() override;
             //------------------------------------------------
             /// Log the user into Facebook with the given
             /// read permissions. If no permissions are specified
@@ -110,79 +114,59 @@ namespace ChilliSource
             /// @author S Downie
             //----------------------------------------------------
             void OnDestroy() override;
-			
+
+            //---Internal functions called by JNI
+            //----------------------------------------------------
+            /// Called by JNI when authentication completes
+            /// either with or without success
+            ///
+            /// @author R Henning
+            ///
+            /// @param Success
+            //----------------------------------------------------
+			void OnAuthenticationComplete(bool in_success);
+            //----------------------------------------------------
+            /// Called by JNI when read permission authoring completes
+            /// either with or without success
+            ///
+            /// @author R Henning
+            ///
+            /// @param Success
+            //----------------------------------------------------
+			void OnAuthoriseReadPermissionsComplete(bool in_success);
+            //----------------------------------------------------
+            /// Called by JNI when write permission authoring completes
+            /// either with or without success
+            ///
+            /// @author R Henning
+            ///
+            /// @param Success
+            //----------------------------------------------------
+			void OnAuthoriseWritePermissionsComplete(bool in_success);
+
 		private:
-            
-            friend Social::FacebookAuthenticationSystemUPtr Social::FacebookAuthenticationSystem::Create();
+			friend Social::FacebookAuthenticationSystemUPtr Social::FacebookAuthenticationSystem::Create();
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
             ///
             /// @author I Copland
             //----------------------------------------------------
-            FacebookAuthenticationSystem(){};
+            FacebookAuthenticationSystem(){}
             //----------------------------------------------------
-            /// @author S Downie
+            /// @author R Henning
             ///
-            /// @return Active session token
+            /// @return Token from active session
             //----------------------------------------------------
             std::string GetActiveToken() const;
-            //----------------------------------------------------
-            /// Create a new Facebook session with the given
-            /// read permissions. This should only be called
-            /// when there is no active Facebook session. This
-            /// will cause the Facebook login dialog to appear
-            ///
-            /// @author S Downie
-            ///
-            /// @param Read permissions
-            //----------------------------------------------------
-            void CreateNewSession(const std::vector<std::string>& in_readPermissions);
-            //----------------------------------------------------
-            /// Attempt to resume a cached Facebook session with
-            /// the given read permissions
-            ///
-            /// @author S Downie
-            ///
-            /// @param Read permissions
-            ///
-            /// @return Whether a session now exists or a new one
-            /// should be opened
-            //----------------------------------------------------
-            bool TryResumeExisitingSession(const std::vector<std::string>& in_readPermissions);
-            //----------------------------------------------------
-            /// Open session can be used to attempt to resume
-            /// a previous session or to create a new one. The
-            /// function will always attempt to open an existing session
-            /// the "in_shouldPresentLogin" option determines whether
-            /// it presents the Facebook login dialogue. You don't want
-            /// the dialogue to appear if we have an active session so this
-            /// function may need to be called twice with false then true.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Read permissions
-            /// @param Whether the login dialogue is presented
-            ///
-            /// @return Whether an existing session was opened
-            //----------------------------------------------------
-            bool OpenSession(const std::vector<std::string>& in_readPermissions, bool in_shouldPresentLogin);
-            //----------------------------------------------------
-            /// Triggered when the state of the active session
-            /// changes i.e. open, closed, etc.
-            ///
-            /// @param Session
-            /// @param Current state
-            //----------------------------------------------------
-            void OnSessionStateChanged(FBSession* in_session, FBSessionState in_state);
-            
-        private:
-            
-            AuthenticationCompleteDelegate m_authenticateDelegate;
-            AuthenticationCompleteDelegate m_authoriseReadDelegate;
-            AuthenticationCompleteDelegate m_authoriseWriteDelegate;
-            
-            std::vector<std::string> m_currentRequestedWritePermissions;
+
+		private:
+
+			FacebookJavaInterfaceSPtr m_javaInterface;
+
+			AuthenticationCompleteDelegate m_authDelegate;
+			AuthenticationCompleteDelegate m_authReadDelegate;
+			AuthenticationCompleteDelegate m_authWriteDelegate;
 		};
 	}
 }

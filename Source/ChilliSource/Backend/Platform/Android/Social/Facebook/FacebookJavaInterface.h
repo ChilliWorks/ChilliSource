@@ -107,12 +107,6 @@ namespace ChilliSource
 		    /// path and key value array
 			//--------------------------------------------------------------------------------------
 		    void TryPostRequest(const std::vector<std::string>& inaKeyValues);
-		    //--------------------------------------------------------------------------------------
-			/// Publish Install
-			///
-		    /// Inform FB about the app launch for the marketing SDK
-			//--------------------------------------------------------------------------------------
-		    void PublishInstall();
 		};
 	}
 }

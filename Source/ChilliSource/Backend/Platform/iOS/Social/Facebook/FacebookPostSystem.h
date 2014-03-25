@@ -68,11 +68,9 @@ namespace ChilliSource
             /// @author A Mackie
             ///
             /// @param Request description
-            /// @param List of friends to target
-            /// @param Type of request (suggested or targetted)
             /// @param Result delegate
             //---------------------------------------------------
-            void SendRequest(const RequestDesc& in_desc, std::vector<std::string>& in_friendIDs, RequestType in_type, const PostResultDelegate& in_delegate) override;
+            void SendRequest(const RequestDesc& in_desc, const PostResultDelegate& in_delegate) override;
 			
 		private:
             //----------------------------------------------------
@@ -83,7 +81,7 @@ namespace ChilliSource
             ///
             /// @param The facebook authentication system.
             //----------------------------------------------------
-            FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);
+            FacebookPostSystem(Social::FacebookAuthenticationSystem* in_authSystem);
             //----------------------------------------------------
             /// Post to wall using the native iOS view
             ///

@@ -10,7 +10,7 @@
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthenticationSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -129,7 +129,6 @@ namespace ChilliSource
 			CreateMethodReference("AuthoriseWritePermissions", "([Ljava/lang/String;)V");
 			CreateMethodReference("SignOut", "()V");
 			CreateMethodReference("MakePostToFeedRequest", "(Ljava/lang/String;[Ljava/lang/String;)V");
-			CreateMethodReference("PublishInstall", "()V");
 			CreateMethodReference("MakeRequestToUser", "([Ljava/lang/String;)V");
 		}
 
@@ -340,16 +339,6 @@ namespace ChilliSource
 	    	pEnv->DeleteLocalRef(jaKeyValues);
 	    	pEnv->DeleteLocalRef(jStringClass);
 	    	pEnv->DeleteLocalRef(jstrEmptyString);
-	    }
-		//--------------------------------------------------------------------------------------
-		/// Publish Install
-		///
-	    /// Inform FB about the app launch for the marketing SDK
-		//--------------------------------------------------------------------------------------
-	    void FacebookJavaInterface::PublishInstall()
-	    {
-			JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("PublishInstall"));
 	    }
 	}
 }

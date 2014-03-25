@@ -1,33 +1,110 @@
-/**
- * CFacebookPostSystem.h
- * moFlow
- *
- * Created by Robert Henning on 03/05/2012
- * Copyright �2012 Tag Games Limited - All rights reserved
- */
+//
+// FacebookPostSystem.h
+// Chilli Source
+//
+// Created by Robert Henning on 03/05/2012
+// Copyright 2012 Tag Games Limited - All rights reserved
+//
 
-#ifndef _MOFLO_PLATFORM_ANDROID_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
-#define _MOFLO_PLATFORM_ANDROID_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
+#ifndef _CHILLISOURCE_PLATFORM_ANDROID_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
+#define _CHILLISOURCE_PLATFORM_ANDROID_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 
-#include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
-#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+#include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
 
 namespace ChilliSource
 {
 	namespace Android
 	{
-		class FacebookPostSystem : public Social::FacebookPostSystem
+		//----------------------------------------------------
+		/// Class for posting messages and request
+		/// to the Facebook wall via the Android Facebook SDK.
+		///
+		/// User must be authenticated prior to posting
+		///
+		/// @author R Henning
+		//----------------------------------------------------
+		class FacebookPostSystem final : public Social::FacebookPostSystem
 		{
 		public:
 
-			bool IsA(Core::InterfaceIDType inID) const override;
+			//----------------------------------------------------
+            /// @author R Henning
+            ///
+            /// @param Interface ID to compare
+            ///
+            /// @return Whether the object has the same interface ID
+            //----------------------------------------------------
+			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+            //----------------------------------------------------
+            /// Called when the system is created allocating any
+			/// resources
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void OnInit() override;
+			//----------------------------------------------------
+            /// Post the wall of the user specified in the post
+            /// description. If no user is specified then post
+            /// to the wall of the currently authenticated user.
+            ///
+            /// User must be authenticated and have granted
+            /// the appropriate write permissions "publish_actions"
+            /// and "publish_stream"
+            ///
+            /// Note: For the time being only one post can
+            /// happen at a time
+            ///
+            /// @author R Henning
+            ///
+            /// @param Post description
+            /// @param Result delegate
+            //----------------------------------------------------
+            void Post(const PostDesc& in_desc, const PostResultDelegate& in_delegate) override;
+            //---------------------------------------------------
+            /// Send a request to a group of friends using the
+            /// Android Facebook SDK
+            ///
+            /// User must be authenticated and must have granted
+            /// publish permissions
+            ///
+            /// Note: For the time being only one request can
+            /// happen at a time
+            ///
+            /// @author A Mackie
+            ///
+            /// @param Request description
+            /// @param Result delegate
+            //---------------------------------------------------
+            void SendRequest(const RequestDesc& in_desc, const PostResultDelegate& in_delegate) override;
 
-			void TryPost(const Social::FacebookPostDesc& insDesc, const Social::FacebookPostSystem::PostResultDelegate& insResultCallback) override;
-			void TrySendRequest(const Social::FacebookPostDesc& insDesc, const Social::FacebookPostSystem::PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends) override;
-
-			void OnPostToFeedComplete(bool inbSuccess);
-			void OnPostRequestComplete(bool inbSuccess);
+            //---Internal functions called by the JNI
+            //---------------------------------------------------
+            /// Called by JNI when the Facebook SDK has
+            /// finished posting to the wall
+            ///
+            /// @author R Henning
+            ///
+            /// @param Whether the post was successful
+            //---------------------------------------------------
+			void OnPostToFeedComplete(bool in_success);
+            //---------------------------------------------------
+            /// Called by JNI when the Facebook SDK has
+            /// finished requesting.
+            ///
+            /// @author A Mackie
+            ///
+            /// @param Whether the request was successful
+            //---------------------------------------------------
+			void OnPostRequestComplete(bool in_success);
+            //----------------------------------------------------
+            /// Called when the system is destroyed freeing any
+			/// resources
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void OnDestroy() override;
 
 		private:
 			friend Social::FacebookPostSystemUPtr Social::FacebookPostSystem::Create(Social::FacebookAuthenticationSystem* in_authSystem);
@@ -39,18 +116,14 @@ namespace ChilliSource
             ///
             /// @param The facebook authentication system.
             //----------------------------------------------------
-            FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);
-
-			void Post(const Social::FacebookPostDesc& insDesc);
-			void PostRequest(const Social::FacebookPostDesc& insDesc);
-			void OnPublishPermissionAuthorised(const Social::FacebookAuthenticationSystem::AuthenticateResponse& insResponse);
+            FacebookPostSystem(Social::FacebookAuthenticationSystem* in_authSystem);
 
 		private:
 
-			FacebookJavaInterfaceSPtr mpJavaInterface;
-
-			Social::FacebookAuthenticationSystem* mpAuthSystem;
-			Social::FacebookPostDesc msPostDesc;
+			FacebookJavaInterfaceSPtr m_javaInterface;
+			Social::FacebookAuthenticationSystem* m_authSystem;
+            PostResultDelegate m_postCompleteDelegate;
+            PostResultDelegate m_requestCompleteDelegate;
 		};
 	}
 }

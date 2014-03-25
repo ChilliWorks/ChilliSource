@@ -54,8 +54,10 @@ namespace ChilliSource
             
             struct RequestDesc
             {
+                std::vector<std::string> m_recipients; //Recipients
                 std::string m_caption; //Subline under name
                 std::string m_description; //Body of the post
+                RequestType m_type; //Suggested or targeted
             };
 			
 			enum class PostResult
@@ -103,11 +105,9 @@ namespace ChilliSource
             /// @author A Mackie
             ///
             /// @param Request description
-            /// @param List of friends to target
-            /// @param Type of request (suggested or targetted)
             /// @param Result delegate
             //---------------------------------------------------
-            virtual void SendRequest(const RequestDesc& in_desc, std::vector<std::string>& in_friendIDs, RequestType in_type, const PostResultDelegate& in_delegate) = 0;
+            virtual void SendRequest(const RequestDesc& in_desc, const PostResultDelegate& in_delegate) = 0;
             //---------------------------------------------------
             /// Destructor
             ///

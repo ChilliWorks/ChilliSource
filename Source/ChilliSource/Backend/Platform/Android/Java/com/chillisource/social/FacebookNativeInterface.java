@@ -26,7 +26,6 @@ import com.facebook.Session.StatusCallback;
 import com.facebook.SessionDefaultAudience;
 import com.facebook.SessionLoginBehavior;
 import com.facebook.SessionState;
-import com.facebook.Settings;
 import com.facebook.internal.SessionTracker;
 import com.facebook.internal.Utility;
 import com.facebook.widget.WebDialog;
@@ -37,11 +36,10 @@ import com.chillisource.core.ExceptionUtils;
 import com.chillisource.core.Logging;
 import com.chillisource.core.INativeInterface;
 import com.chillisource.core.InterfaceIDType;
-import com.chillisource.core.ResourceHelper;
 
 public class FacebookNativeInterface extends INativeInterface
 {
-	private static final InterfaceIDType InterfaceID = new InterfaceIDType("CFacebookNativeInterface");
+	private static final InterfaceIDType InterfaceID = new InterfaceIDType("FacebookNativeInterface");
 	
 	public native void OnAuthenticationComplete(boolean inbSuccess);
 	public native void OnReadAuthorisationComplete(boolean inbSuccess);
@@ -471,24 +469,5 @@ public class FacebookNativeInterface extends INativeInterface
     	{
     		Session.getActiveSession().closeAndClearTokenInformation();
     	}
-    }
-    //--------------------------------------------------------------------------------------
-	/// Publish Install
-	///
-    /// Inform FB ads that the application has launched and it can determine
-    /// if it is a fresh install
-	//--------------------------------------------------------------------------------------
-    public void PublishInstall()
-    {
-    	Runnable task = new Runnable()
-		{ 
-			@SuppressWarnings("deprecation")
-			@Override public void run() 
-			{
-		    	String strAppID = CSApplication.get().getActivityContext().getString(ResourceHelper.GetDynamicResourceIDForField(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "app_id"));
-		    	Settings.publishInstallAsync(CSApplication.get().getActivityContext(), strAppID);				
-			}
-		};
-		CSApplication.get().scheduleUIThreadTask(task);    	
     }
 }
