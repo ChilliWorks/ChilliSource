@@ -113,7 +113,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(SpriteSheet);
         CS_FORWARDDECLARE_CLASS(SpriteSheetLoader);
         CS_FORWARDDECLARE_CLASS(SpriteSheetManager);
-        CS_FORWARDDECLARE_CLASS(XMLSpriteSheetLoader);
         //------------------------------------------------------------
         /// Texture
         //------------------------------------------------------------
