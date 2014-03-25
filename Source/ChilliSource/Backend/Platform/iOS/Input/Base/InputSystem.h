@@ -38,7 +38,6 @@ namespace ChilliSource
 			
 			
 			virtual Input::TouchScreen * GetTouchScreen() override;
-			virtual Input::Accelerometer * GetAccelerometer() override;
             virtual Input::VirtualKeyboard* GetVirtualKeyboard() override;
 			virtual void Update(f32 infDT) override;
             
@@ -62,7 +61,6 @@ namespace ChilliSource
 			
 		protected:
 			TouchScreen mTouchScreen;
-			Accelerometer* mpAccelerometer;
 			VirtualKeyboard mVirtualKeyboard;
 		};
 	}

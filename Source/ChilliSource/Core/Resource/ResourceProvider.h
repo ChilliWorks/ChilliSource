@@ -29,13 +29,6 @@ namespace ChilliSource
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(ResourceProvider);
-            CS_DECLARE_NONCOPYABLE(ResourceProvider);
-            //----------------------------------------------------
-            /// Default constructor
-            ///
-            /// @author I Copland
-            //----------------------------------------------------
-            ResourceProvider() = default;
             //----------------------------------------------------
             /// Allows querying of the resource type this provider
             /// can create.

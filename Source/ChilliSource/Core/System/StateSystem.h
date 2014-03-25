@@ -24,6 +24,7 @@ namespace ChilliSource
         class StateSystem : public QueryableInterface
         {
         public:
+            CS_DECLARE_NOCOPY(StateSystem);
             //------------------------------------------------
             /// Initialisation method called at a time when
             /// all State Systems have been created. System
@@ -120,6 +121,13 @@ namespace ChilliSource
             /// @author I Copland
             //------------------------------------------------
             virtual ~StateSystem() {};
+        protected:
+            //------------------------------------------------
+            /// Default constructor.
+            ///
+            /// @author I Copland
+            //------------------------------------------------
+            StateSystem() = default;
         };
     }
 }

@@ -2,7 +2,7 @@
 //  Application.h
 //  Chilli Source
 //
-//  Created by Scott Downie on 23/09/2010.
+//  Created by S Downie on 23/09/2010.
 //  Copyright 2010 Tag Games. All rights reserved.
 //
 
@@ -39,10 +39,13 @@ namespace ChilliSource
         /// This also acts as the entry point into a Chilli Source
         /// application. The user should override this class to include
         /// desired systems and add the initial State.
+        ///
+        /// @author S Downie
 		//-----------------------------------------------------------
 		class Application
 		{
 		public:
+            CS_DECLARE_NOCOPY(Application);
             //----------------------------------------------------
 			/// Returns the global application instance.
             ///
@@ -53,6 +56,8 @@ namespace ChilliSource
             static Application* Get();
             //----------------------------------------------------
 			/// Constructor
+            ///
+            /// @author S Downie
 			//----------------------------------------------------
 			Application();
             //----------------------------------------------------
@@ -119,7 +124,7 @@ namespace ChilliSource
             /// Returns the version number of the application on
             /// the current platform as a string.
             ///
-            /// @author I Copland.
+            /// @author S Downie.
             ///
 			/// @return The version string.
 			//-----------------------------------------------------
@@ -128,7 +133,7 @@ namespace ChilliSource
 			/// Returns the elapsed time since the application
             /// started running in seconds.
 			///
-            /// @author I Copland
+            /// @author S Downie.
             ///
 			/// @return The time in seconds.
 			//-----------------------------------------------------
@@ -136,7 +141,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Returns the system clock time in seconds since epoch.
             ///
-            /// @author I Copland
+            /// @author S Downie.
             ///
             /// @return The time in seconds.
             //-----------------------------------------------------
@@ -145,7 +150,7 @@ namespace ChilliSource
             /// Return the system clock time in milliseconds since
             /// epoch.
             ///
-            /// @author I Copland
+            /// @author S Downie.
             ///
             /// @return The time in milliseconds.
             //-----------------------------------------------------
@@ -154,7 +159,7 @@ namespace ChilliSource
 			/// Set the time between update calls to adjust the
             /// frame rate.
             ///
-            /// @author I Copland
+            /// @author S Downie.
 			///
 			/// @param Time between update calls
 			//-----------------------------------------------------
@@ -162,7 +167,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Returns the time between update calls.
             ///
-            /// @author I Copland.
+            /// @author S Downie.
 			///
 			/// @return Time between update calls
 			//-----------------------------------------------------
@@ -171,7 +176,7 @@ namespace ChilliSource
 			/// Returns the maximum amount of time to be processed
             /// a single update frame.
             ///
-            /// @author I Copland
+            /// @author S Downie.
 			///
 			/// @return Max time to be processed in a single frame.
 			//-----------------------------------------------------
@@ -188,14 +193,14 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Stop the application and exit gracefully
             ///
-            /// @author I Copland
+            /// @author S Downie.
             //-----------------------------------------------------
             void Quit();
             //-----------------------------------------------------
 			/// Returns the default font described in the App.config
             /// file.
 			///
-            /// @author I Copland
+            /// @author S Downie.
             ///
             /// @return The default font.
             //-----------------------------------------------------
@@ -204,7 +209,7 @@ namespace ChilliSource
 			/// Returns the default mesh described in the App.config
             /// file.
             ///
-            /// @author I Copland
+            /// @author S Downie.
 			///
             /// @return The default mesh.
             //-----------------------------------------------------
@@ -213,7 +218,7 @@ namespace ChilliSource
 			/// Returns the default material described in the
             /// App.config file.
             ///
-            /// @author I Copland
+            /// @author S Downie.
 			///
             /// @return The default material.
             //-----------------------------------------------------
@@ -221,7 +226,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Returns a pointer to the state manager.
             ///
-            /// @author I Copland
+            /// @author S Downie.
 			///
 			/// @return Handle to application state manager
 			//-----------------------------------------------------
@@ -229,7 +234,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Returns a pointer to the renderer.
             ///
-            /// @author I Copland
+            /// @author S Downie.
 			///
 			/// @return Handle application renderer
 			//-----------------------------------------------------
@@ -237,7 +242,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Returns a pointer to the render system.
             ///
-            /// @author I Copland
+            /// @author S Downie.
 			///
 			/// @return Handle to platfrom specific render system
 			//-----------------------------------------------------
@@ -245,7 +250,7 @@ namespace ChilliSource
             //-----------------------------------------------------
 			/// Returns a pointer to the platform system.
             ///
-            /// @author I Copland
+            /// @author S Downie.
 			///
             /// @return Pointer to the platform system
             //-----------------------------------------------------
@@ -253,7 +258,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Returns a pointer to the input system.
             ///
-            /// @author I Copland
+            /// @author S Downie.
 			///
 			/// @return Pointer to the input system
 			//-----------------------------------------------------
@@ -261,7 +266,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Returns a pointer to the audio system.
             ///
-            /// @author I Copland
+            /// @author S Downie.
 			///
 			/// @return Pointer to the input system
 			//-----------------------------------------------------
@@ -285,7 +290,7 @@ namespace ChilliSource
 			/// Resumes application from suspended state. This should
             /// not be called by a users application.
             ///
-            /// @author I Copland
+            /// @author  S Downie.
 			//----------------------------------------------------
 			void Resume();
             //----------------------------------------------------
@@ -301,7 +306,7 @@ namespace ChilliSource
             /// the application, systems and states. This should
             /// not be called by a users application.
             ///
-            /// @author I Copland
+            /// @author S Downie
             ///
             /// @param The delta time.
             /// @param The frame timestamp.
@@ -312,7 +317,7 @@ namespace ChilliSource
             /// event. Used to tell the camera and input to rotate.
             /// This should not be called by a users application.
             ///
-            /// @author I Copland
+            /// @author S Downie
             ///
             /// @param The new orientation.
 			//----------------------------------------------------
@@ -321,7 +326,7 @@ namespace ChilliSource
 			/// Triggered on receiving a "screen resized" event.
             /// This should not be called by a users application.
             ///
-            /// @author I Copland
+            /// @author S Downie
             ///
             /// @param The new width.
             /// @param The new height.
@@ -333,7 +338,7 @@ namespace ChilliSource
             /// purge their caches. This should not be called by
             /// a users application.
             ///
-            /// @author I Copland
+            /// @author S Downie
 			//----------------------------------------------------
 			void ApplicationMemoryWarning();
             //----------------------------------------------------
@@ -359,7 +364,7 @@ namespace ChilliSource
             /// and tell the sub systems to stop. This should not
             /// be called by a users application.
             ///
-            /// @author I Copland
+            /// @author S Downie
 			//----------------------------------------------------
 			void Suspend();
             //----------------------------------------------------
@@ -380,7 +385,7 @@ namespace ChilliSource
             /// desired systems. Systems can only be added in this
             /// method.
             ///
-            /// @author I Copland
+            /// @author S Downie
 			//------------------------------------------------------
 			virtual void CreateSystems() = 0;
             //------------------------------------------------------
@@ -396,7 +401,7 @@ namespace ChilliSource
             /// be overriden by the users application to add initial
             /// state.
             ///
-            /// @author I Copland
+            /// @author S Downie
 			//------------------------------------------------------
 			virtual void PushInitialState() = 0;
             //------------------------------------------------------
@@ -404,7 +409,7 @@ namespace ChilliSource
             /// and the info required to decide which directory the
             /// current device should use.
             ///
-            /// @author I Copland
+            /// @author S Downie
             ///
             /// @param [Out] Vector of directory info
             /// @param [Out] The name of the directory to fall back
@@ -433,21 +438,21 @@ namespace ChilliSource
 			/// Once the systems have been created they are then
             /// added to the pool and initialised.
             ///
-            /// @author I Copland
+            /// @author S Downie
 			//------------------------------------------------------
 			void PostCreateSystems();
             //------------------------------------------------------
             /// Open the app config file and load any of the specified
             /// resources to act as the defaults.
             ///
-            /// @author I Copland
+            /// @author S Downie
             //------------------------------------------------------
             void LoadDefaultResources();
             //------------------------------------------------------
             /// Depedending on the device decide which folders
             /// resources should be loaded from.
             ///
-            /// @author I Copland
+            /// @author S Downie
             //------------------------------------------------------
             void DetermineResourceDirectories();
             //------------------------------------------------------
@@ -455,7 +460,7 @@ namespace ChilliSource
             /// timers and the active state This can be called multiple
             /// times per frame depending on fixed updates.
             ///
-            /// @author I Copland
+            /// @author S Downie
             ///
             /// @param Time between frames
             //------------------------------------------------------
@@ -465,7 +470,7 @@ namespace ChilliSource
             /// at the start of the next update following the On
             /// Resume event.
             ///
-            /// @author I Copland
+            /// @author S Downie
             //---------------------------------------------------
             void OnResume();
             //---------------------------------------------------
@@ -481,7 +486,7 @@ namespace ChilliSource
             /// are using touch input we must rotate the input
             /// co-ordinates.
             ///
-            /// @author I Copland
+            /// @author S Downie
             ///
 			/// @param Screen orientation flag
 			//------------------------------------------------------

@@ -39,7 +39,7 @@ namespace ChilliSource
 		class Entity final : public std::enable_shared_from_this<Entity>
 		{	
 		public:
-            
+            CS_DECLARE_NOCOPY(Entity);
             //------------------------------------------------------------------
             /// Factory method to create an empty entity
             ///
@@ -55,19 +55,6 @@ namespace ChilliSource
             /// @author S Downie
             //----------------------------------------------------------------
             ~Entity();
-            //----------------------------------------------------------------
-            /// Direct copying of Entity is undefined and forbidden
-            ///
-            /// @author A Glass
-            //----------------------------------------------------------------
-            Entity(const Entity&) = delete;
-            //----------------------------------------------------------------
-            /// Direct copying of Entity is undefined and forbidden
-            ///
-            /// @author A Glass
-            //----------------------------------------------------------------
-			Entity& operator= (const Entity&) = delete;
-        
             //----------------------------------------------------------------
             /// @author S Downie
             ///

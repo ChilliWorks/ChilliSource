@@ -1,22 +1,16 @@
-/** 
- * File: Accelerometer.h
- * Date: 15/11/2010
- * Description:
- */
+//
+//  Accelerometer.h
+//  Chilli Source
+//
+//  Created by S Downie on 15/11/2010
+//  Copyright ©2010 Tag Games Limited. All rights reserved.
+//
 
-/** 
- *
- * Author: Stuart McGaw 
- * Version: 1.0 - MoFlow
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
-
-#ifndef MOFLOW_PLATFORM_IOS_ACCELEROMETER_H
-#define MOFLOW_PLATFORM_IOS_ACCELEROMETER_H
+#ifndef _CHILLISOURCE_BACKEND_IOS_INPUT_ACCELEROMETER_ACCELEROMETER_H_
+#define _CHILLISOURCE_BACKEND_IOS_INPUT_ACCELEROMETER_ACCELEROMETER_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 
 @class CMMotionManager;
@@ -25,67 +19,96 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class Accelerometer : public Input::Accelerometer, public Core::IUpdateable
+        //------------------------------------------------------------
+        /// The iOS backend implementation of the Accelerometer.
+        ///
+        /// @author S Downie
+        //------------------------------------------------------------
+		class Accelerometer : public Input::Accelerometer
 		{
 		public:
+            CS_DECLARE_NAMEDTYPE(Accelerometer);
 			//----------------------------------------------------
 			/// Constructor
+            ///
+            /// @author S Downie
 			//----------------------------------------------------
 			Accelerometer();
             //----------------------------------------------------
-			/// Is A
-			///
-			/// @return Whether this object is of given type
-			//----------------------------------------------------
-            bool IsA(Core::InterfaceIDType inInterfaceID) const override;
-            //-------------------------------------------------------
-            /// Supported By Device
+			/// Queries whether or not this system implements the
+            /// interface with the given ID.
             ///
-            /// This checks whether or not the current iOS device
-            /// supports accelerometer. This should always be checked before
-            /// creating an instance of the class.
-            //-------------------------------------------------------
-            static bool SupportedByDevice();
+            /// @author S McGaw
+            ///
+            /// @param The interface Id.
+            ///
+			/// @return Whether or not the interface is implemented.
+			//----------------------------------------------------
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
-			/// Is Updating
+			/// Initialises the system. This is called at a time
+            /// when all systems have already been added.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+            void OnInit() override;
+            //----------------------------------------------------
+            /// @author I Copland
 			///
 			/// @return whether or not the accelerometer is
             /// currently updating.
 			//----------------------------------------------------
 			bool IsUpdating() const override;
 			//----------------------------------------------------
-			/// Start Updating
-			///
 			/// Start listening for accelerometer changes.
+            ///
+            /// @author I Copland
 			//----------------------------------------------------
 			void StartUpdating() override;
             //----------------------------------------------------
-            /// Update
+            /// @author I Copland
             ///
             /// @param Time since last update
             //----------------------------------------------------
-            void Update(f32 infDT) override;
+            void OnUpdate(f32 in_deltaTime) override;
 			//----------------------------------------------------
-			/// Get Acceleration
-			///
+			/// @author I Copland
+            ///
 			/// @return The acceleration in Gs.
 			//----------------------------------------------------
             Core::Vector3 GetAcceleration() const override;
-			//----------------------------------------------------
-			/// Stop Updating
+            //----------------------------------------------------
+			/// @author I Copland
 			///
-			/// Stop listening for accelerometer changes.
+			/// @return An event that is invoked every time the
+			/// acceleration is updated. The acceleration will not
+			/// necessarily have changed between updates.
 			//----------------------------------------------------
-			void StopUpdating() override;;
+			Core::IConnectableEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent() override;
+			//----------------------------------------------------
+			/// Stop listening for accelerometer changes.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+			void StopUpdating() override;
+            //----------------------------------------------------
+			/// Destroys the system immediately before systems
+            /// are removed from the application.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+            void OnDestroy() override;
 			//----------------------------------------------------
 			/// Destructor
+            ///
+            /// @author I Copland
 			//----------------------------------------------------
 			~Accelerometer();
-		protected:
+		private:
             
-            bool mbIsUpdating;
-            
+            bool m_isUpdating;
             CMMotionManager* m_motionManager;
+            Core::Event<AccelerationUpdatedDelegate> m_accelerationUpdatedEvent;
 		};
 	}
 }

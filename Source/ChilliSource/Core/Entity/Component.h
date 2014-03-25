@@ -19,7 +19,7 @@ namespace ChilliSource
 		class Component : public QueryableInterface
 		{
 		public:
-            
+            CS_DECLARE_NOCOPY(Component);
             //----------------------------------------------------
             /// Constructor
             ///

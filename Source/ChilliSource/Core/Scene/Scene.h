@@ -28,9 +28,7 @@ namespace ChilliSource
 		class Scene final : public StateSystem
 		{
 		public:
-            
             CS_DECLARE_NAMEDTYPE(Scene);
-            
             //-------------------------------------------------------
             /// Factory method
             ///
