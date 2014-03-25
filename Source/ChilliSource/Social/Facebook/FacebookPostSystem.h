@@ -1,45 +1,64 @@
-/*
- *  FacebookPostSystem
- *  moFlow
- *
- *  Created by Stuart McGaw on 06/06/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  FacebookPostSystem.h
+//  Chilli Source
+//
+//  Created by Stuart McGaw on 06/06/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
-#ifndef _MOFLO_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
-#define _MOFLO_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
+#ifndef _CHILLISOURCE_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
+#define _CHILLISOURCE_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/JSON/json.h>
-#include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Social/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
 	namespace Social
 	{
-		struct FacebookPostDesc
-		{
-			std::string strTo; //ID of the page this post is for (Friend ID perhaps), if blank will default to the user's page
-			
-			std::string strName; //Name in bold of this linky thing
-			std::string strURL; //This must be set for your post to show
-			
-			std::string strCaption; //Subline under name
-			std::string strDescription; //Body of the post
-            
-			std::string strPictureURL; //URL of an image to accompany this. If this isn't set Facebook will scrape the URL page to find a picture.
-			
-			void ToJSON(Json::Value& outsRoot) const;
-		};
-		
-		class FacebookPostSystem : public ChilliSource::Core::System
+        //----------------------------------------------------
+        /// Base class for posting messages and request
+        /// to the Facebook wall. The implementation is handled
+        /// by the platform Facebook SDK.
+        ///
+        /// User must be authenticated prior to posting
+        ///
+        /// @author S McGaw
+        //----------------------------------------------------
+		class FacebookPostSystem : public ChilliSource::Core::AppSystem
 		{
 		public:
 			
 			CS_DECLARE_NAMEDTYPE(FacebookPostSystem);
+            
+            struct PostDesc
+            {
+                std::string m_to; //ID of the page this post is for (Friend ID perhaps), if blank will default to the user's page
+                
+                std::string m_name; //Name in bold of this linky thing
+                std::string m_url; //This must be set for your post to show
+                
+                std::string m_caption; //Subline under name
+                std::string m_description; //Body of the post
+                
+                std::string m_picUrl; //URL of an image to accompany this. If this isn't set Facebook will scrape the URL page to find a picture.
+            };
+            
+            enum class RequestType
+            {
+                k_suggested, //List of friends in the request are merely suggested
+                k_to //List of friends in the request are targetted
+            };
+            
+            struct RequestDesc
+            {
+                std::vector<std::string> m_recipients; //Recipients
+                std::string m_caption; //Subline under name
+                std::string m_description; //Body of the post
+                RequestType m_type; //Suggested or targeted
+            };
 			
 			enum class PostResult
 			{
@@ -60,14 +79,35 @@ namespace ChilliSource
             /// @return The new instance of the system.
             //---------------------------------------------------
             static FacebookPostSystemUPtr Create(FacebookAuthenticationSystem* inpAuthSystem);
-            
-			virtual void TryPost(const FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback) = 0;
-            
-            virtual void TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends) = 0;
-			
-			PostResultDelegate mCompletionDelegate;
-            
-            PostResultDelegate mRequestCompleteDelegate;
+            //---------------------------------------------------
+            /// Post to the users wall using the backend Facebook
+            /// SDK. If the post description has no recipient
+            /// then it posts to the authenticated users wall.
+            ///
+            /// User must be authenticated before posting and
+            /// must have granted publish permissions "publish_actions"
+            /// and "publish_stream"
+            ///
+            /// @author S McGaw
+            ///
+            /// @param Post description containing recipient
+            /// and post text.
+            /// @param Result delegate
+            //---------------------------------------------------
+			virtual void Post(const PostDesc& in_desc, const PostResultDelegate& in_delegate) = 0;
+            //---------------------------------------------------
+            /// Send a request to a group of friends using the
+            /// backend Facebook SDK.
+            ///
+            /// User must be authenticated and must have granted
+            /// publish permissions
+            ///
+            /// @author A Mackie
+            ///
+            /// @param Request description
+            /// @param Result delegate
+            //---------------------------------------------------
+            virtual void SendRequest(const RequestDesc& in_desc, const PostResultDelegate& in_delegate) = 0;
             //---------------------------------------------------
             /// Destructor
             ///

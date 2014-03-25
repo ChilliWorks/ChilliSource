@@ -1,190 +1,205 @@
-/**
- * CFacebookPostSystem.cpp
- * moFlow
- *
- * Created by Robert Henning on 03/05/2012
- * Copyright �2012 Tag Games Limited - All rights reserved
- */
+//
+// FacebookPostSystem.cpp
+// Chilli Source
+//
+// Created by Robert Henning on 03/05/2012
+// Copyright 2012 Tag Games Limited - All rights reserved
+//
 
-#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
+
+#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthenticationSystem.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 
 namespace ChilliSource
 {
-	using namespace ChilliSource::Social;
-
 	namespace Android
 	{
-		FacebookPostSystem::FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem) : mpAuthSystem(inpAuthSystem)
+		namespace
 		{
-			mpJavaInterface = static_cast<FacebookAuthenticationSystem*>(mpAuthSystem)->GetJavaInterface();
-			mpJavaInterface->SetPostSystem(this);
-		}
-
-		bool FacebookPostSystem::IsA(Core::InterfaceIDType inID) const
-		{
-			return Social::FacebookPostSystem::InterfaceID == inID || FacebookPostSystem::InterfaceID == inID;
-		}
-
-		void FacebookPostSystem::TryPost(const FacebookPostDesc& insDesc, const FacebookPostSystem::PostResultDelegate& insResultCallback)
-		{
-			mCompletionDelegate = insResultCallback;
-
-            if(mpAuthSystem->IsSignedIn())
-            {
-                if(mpAuthSystem->HasPermission("publish_actions"))
-                {
-                    Post(insDesc);
-                }
-                else
-                {
-                    msPostDesc = insDesc;
-                    std::vector<std::string> aWritePerms;
-                    aWritePerms.push_back("publish_actions");
-                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, Core::MakeDelegate(this, &FacebookPostSystem::OnPublishPermissionAuthorised));
-                }
-            }
-            else
-            {
-                CS_LOG_ERROR("Facebook Post: User must be authenticated");
-            }
-		}
-
-		void FacebookPostSystem::TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends)
-		{
-			mRequestCompleteDelegate = insResultCallback;
-
-			if(mpAuthSystem->IsSignedIn())
+			//----------------------------------------------------
+			/// @author R Henning
+			///
+			/// @param Post description
+			/// @param [Out] Key value array in the form key, value, key, value
+			//----------------------------------------------------
+			void PostDescToKeyValueArray(const Social::FacebookPostSystem::PostDesc& in_desc, std::vector<std::string>& out_keyValues)
 			{
-                if(mpAuthSystem->HasPermission("publish_actions"))
+				out_keyValues.push_back("link");
+				out_keyValues.push_back(in_desc.m_url);
+
+				out_keyValues.push_back("picture");
+				out_keyValues.push_back(in_desc.m_picUrl);
+
+				out_keyValues.push_back("name");
+				out_keyValues.push_back(in_desc.m_name);
+
+				out_keyValues.push_back("caption");
+				out_keyValues.push_back(in_desc.m_caption);
+
+				out_keyValues.push_back("description");
+				out_keyValues.push_back(in_desc.m_description);
+			}
+            //----------------------------------------------------
+            /// Convert a list of string values to a CSV string
+            ///
+            /// @author S Downie
+            ///
+            /// @param List of values
+            /// @param [Out] CSV string
+            //----------------------------------------------------
+            void ListToCSV(const std::vector<std::string>& in_values, std::string& out_csv)
+            {
+                if(in_values.empty())
+                    return;
+
+                u32 numVals = in_values.size() - 1;
+                for(u32 i=0; i<numVals; ++i)
                 {
-                    PostRequest(insDesc);
+                    out_csv += in_values[i];
+                    out_csv += ",";
                 }
-                else
-                {
-                    msPostDesc = insDesc;
-                    std::vector<std::string> aWritePerms;
-                    aWritePerms.push_back("publish_actions");
-                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, Core::MakeDelegate(this, &FacebookPostSystem::OnPublishPermissionAuthorised));
-                }
+
+                //Add the last one without a following comma
+                out_csv += in_values[numVals];
             }
-            else
+			//----------------------------------------------------
+			/// @author A Mackie
+			///
+			/// @param Request description
+			/// @param [Out] Key value array in the form key, value, key, value
+			//----------------------------------------------------
+			void RequestDescToKeyValueArray(const Social::FacebookPostSystem::RequestDesc& in_desc, std::vector<std::string>& out_keyValues)
+			{
+				out_keyValues.push_back("caption");
+				out_keyValues.push_back(in_desc.m_caption);
+
+				out_keyValues.push_back("message");
+				out_keyValues.push_back(in_desc.m_description);
+
+	            std::string recipients;
+	            ListToCSV(in_desc.m_recipients, recipients);
+
+	            std::string requestType = "to";
+
+	            switch (in_desc.m_type)
+	            {
+	                case Social::FacebookPostSystem::RequestType::k_to:
+	                    requestType = "to";
+	                    break;
+	                case Social::FacebookPostSystem::RequestType::k_suggested:
+	                    requestType = "suggestions";
+	                    break;
+	            }
+
+	            out_keyValues.push_back(requestType);
+	            out_keyValues.push_back(recipients);
+			}
+		}
+		//----------------------------------------------------
+		//----------------------------------------------------
+		FacebookPostSystem::FacebookPostSystem(Social::FacebookAuthenticationSystem* in_authSystem)
+		: m_authSystem(in_authSystem)
+		{
+
+		}
+		//----------------------------------------------------
+		//----------------------------------------------------
+		bool FacebookPostSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+		{
+			return Social::FacebookPostSystem::InterfaceID == in_interfaceID || FacebookPostSystem::InterfaceID == in_interfaceID;
+		}
+		//----------------------------------------------------
+		//----------------------------------------------------
+		void FacebookPostSystem::OnInit()
+		{
+			m_javaInterface = m_javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<FacebookJavaInterface>();
+			CS_ASSERT(m_javaInterface != nullptr, "Must have the auth system created");
+			m_javaInterface->SetPostSystem(this);
+		}
+		//----------------------------------------------------
+		//----------------------------------------------------
+		void FacebookPostSystem::Post(const PostDesc& in_desc, const PostResultDelegate& in_delegate)
+		{
+            CS_ASSERT(m_postCompleteDelegate == nullptr, "Cannot post more than once at a time");
+            CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to post");
+            CS_ASSERT(m_authSystem->HasPermission("publish_actions") == true, "User must have publish_actions write permission granted");
+            CS_ASSERT(in_desc.m_to.empty() == true || m_authSystem->HasPermission("publish_stream") == true, "User must have publish_stream write permissions in order to post to their wall");
+
+            m_postCompleteDelegate = in_delegate;
+
+            //If we aren't posting to anyone we are posting to the
+            //signed in user feed.
+            std::string graphPath = "me/feed";
+            if(!in_desc.m_to.empty())
             {
-                CS_LOG_ERROR("Facebook Post: User must be authenticated");
-            }
-		}
-
-		void CreateKeyValueArrayFromPostDesc(const FacebookPostDesc& insDesc, std::vector<std::string>& outaKeyValues)
-		{
-			outaKeyValues.push_back("link");
-			outaKeyValues.push_back(insDesc.strURL);
-
-			outaKeyValues.push_back("picture");
-			outaKeyValues.push_back(insDesc.strPictureURL);
-
-			outaKeyValues.push_back("name");
-			outaKeyValues.push_back(insDesc.strName);
-
-			outaKeyValues.push_back("caption");
-			outaKeyValues.push_back(insDesc.strCaption);
-
-			outaKeyValues.push_back("description");
-			outaKeyValues.push_back(insDesc.strDescription);
-        }
-
-		void CreateKeyValueArrayFromRequestPostDesc(const FacebookPostDesc& insDesc, std::vector<std::string>& outaKeyValues)
-		{
-			outaKeyValues.push_back("picture");
-			outaKeyValues.push_back(insDesc.strPictureURL);
-
-			outaKeyValues.push_back("name");
-			outaKeyValues.push_back(insDesc.strName);
-
-			outaKeyValues.push_back("caption");
-			outaKeyValues.push_back(insDesc.strCaption);
-
-			outaKeyValues.push_back("message");
-			outaKeyValues.push_back(insDesc.strDescription);
-
-			outaKeyValues.push_back("to");
-			outaKeyValues.push_back(insDesc.strTo);
-        }
-
-		void FacebookPostSystem::Post(const FacebookPostDesc& insDesc)
-		{
-            std::string strGraphPath = "me/feed";
-            if(!insDesc.strTo.empty())
-            {
-            	strGraphPath = insDesc.strTo + "/feed";
+            	graphPath = in_desc.m_to + "/feed";
             }
 
-            std::vector<std::string> aPostParamsKeyValue;
-            CreateKeyValueArrayFromPostDesc(insDesc, aPostParamsKeyValue);
-            mpJavaInterface->TryPostToFeed(strGraphPath, aPostParamsKeyValue);
+            std::vector<std::string> postParamsKeyValue;
+            PostDescToKeyValueArray(in_desc, postParamsKeyValue);
+            m_javaInterface->TryPostToFeed(graphPath, postParamsKeyValue);
 		}
-
-		void FacebookPostSystem::PostRequest(const Social::FacebookPostDesc& insDesc)
+		//----------------------------------------------------
+		//----------------------------------------------------
+		void FacebookPostSystem::SendRequest(const RequestDesc& in_desc, const PostResultDelegate& in_delegate)
 		{
-            std::vector<std::string> aPostParamsKeyValue;
-            CreateKeyValueArrayFromRequestPostDesc(insDesc, aPostParamsKeyValue);
-            mpJavaInterface->TryPostRequest(aPostParamsKeyValue);
-		}
+            CS_ASSERT(m_requestCompleteDelegate == nullptr, "Cannot request more than once at a time");
+            CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to request");
 
-		void FacebookPostSystem::OnPublishPermissionAuthorised(const Social::FacebookAuthenticationSystem::AuthenticateResponse& insResponse)
-		{
-            switch(insResponse.eResult)
-            {
-                case FacebookAuthenticationSystem::AuthenticateResult::k_success:
-                    Post(msPostDesc);
-                    break;
-                case FacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch:
-                    if(mCompletionDelegate)
-                    {
-                        mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
-                    }
-                	break;
-                case FacebookAuthenticationSystem::AuthenticateResult::k_failed:
-                    if(mCompletionDelegate)
-                    {
-                        mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_failed);
-                    }
-                    break;
-            }
-		}
+            m_requestCompleteDelegate = in_delegate;
 
+            std::vector<std::string> requestParamsKeyValue;
+            RequestDescToKeyValueArray(in_desc, requestParamsKeyValue);
+            m_javaInterface->TryPostRequest(requestParamsKeyValue);
+		}
+		//----------------------------------------------------
+		//----------------------------------------------------
 		void FacebookPostSystem::OnPostToFeedComplete(bool inbSuccess)
 		{
-			if(!mCompletionDelegate)
+			if(!m_postCompleteDelegate)
 			{
 				return;
 			}
 
 			if(inbSuccess)
 			{
-				mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_success);
+				m_postCompleteDelegate(PostResult::k_success);
 			}
 			else
 			{
-				mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_failed);
+				m_postCompleteDelegate(PostResult::k_failed);
             }
-		}
 
+			m_postCompleteDelegate = nullptr;
+		}
+		//----------------------------------------------------
+		//----------------------------------------------------
 		void FacebookPostSystem::OnPostRequestComplete(bool inbSuccess)
 		{
-			if(!mRequestCompleteDelegate)
+			if(!m_requestCompleteDelegate)
 			{
 				return;
 			}
 
 			if(inbSuccess)
 			{
-				mRequestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
+				m_requestCompleteDelegate(PostResult::k_success);
 			}
 			else
 			{
-				mRequestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
+				m_requestCompleteDelegate(PostResult::k_failed);
             }
+
+			m_requestCompleteDelegate = nullptr;
+		}
+		//----------------------------------------------------
+		//----------------------------------------------------
+		void FacebookPostSystem::OnDestroy()
+		{
+			m_javaInterface->SetPostSystem(nullptr);
+			m_javaInterface = nullptr;
 		}
 	}
 }

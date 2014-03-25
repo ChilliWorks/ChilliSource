@@ -1,15 +1,15 @@
-/*
- *  FacebookPostSystem.cpp
- *  moFlo
- *
- *  Created by Stuart McGaw on 06/06/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  FacebookPostSystem.cpp
+//  Chilli Source
+//
+//  Created by Stuart McGaw on 06/06/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
 
 #include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Social/Facebook/FacebookAuthenticationSystem.h>
 
 #include <FacebookSDK/FacebookSDK.h>
 
@@ -26,98 +26,130 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		FacebookPostSystem::FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem)
-        : mpAuthSystem(inpAuthSystem)
+        namespace
+        {
+            //----------------------------------------------------
+            /// Convert the post description to a newly allocated
+            /// NSDictionary which is what the iOS framework deals
+            /// with
+            ///
+            /// @author S Downie
+            ///
+            /// @param Post description
+            /// @return Ownership of new dictionary
+            //----------------------------------------------------
+            NSDictionary* CreateNSDisctionaryFromPostDesc(const Social::FacebookPostSystem::PostDesc& in_desc)
+            {
+                NSDictionary* postParams = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                                                                           Core::StringUtils::StringToNSString(in_desc.m_url), @"link",
+                                                                                           Core::StringUtils::StringToNSString(in_desc.m_picUrl), @"picture",
+                                                                                           Core::StringUtils::StringToNSString(in_desc.m_name), @"name",
+                                                                                           Core::StringUtils::StringToNSString(in_desc.m_caption), @"caption",
+                                                                                           Core::StringUtils::StringToNSString(in_desc.m_description), @"description",
+                                                                                           Core::StringUtils::StringToNSString(in_desc.m_to), @"to", nil];
+                
+                return postParams;
+            }
+            //----------------------------------------------------
+            /// Convert a list of string values to a CSV string
+            ///
+            /// @author S Downie
+            ///
+            /// @param List of values
+            /// @param [Out] CSV string
+            //----------------------------------------------------
+            void ListToCSV(const std::vector<std::string>& in_values, std::string& out_csv)
+            {
+                if(in_values.empty())
+                    return;
+                
+                u32 numVals = in_values.size() - 1;
+                for(u32 i=0; i<numVals; ++i)
+                {
+                    out_csv += in_values[i];
+                    out_csv += ",";
+                }
+                
+                //Add the last one without a following comma
+                out_csv += in_values[numVals];
+            }
+        }
+        
+        //----------------------------------------------------
+        //----------------------------------------------------
+		FacebookPostSystem::FacebookPostSystem(Social::FacebookAuthenticationSystem* in_authSystem)
+        : m_authSystem(in_authSystem)
 		{
-			mCompletionDelegate = nullptr;
 #if CS_ENABLE_DEBUG
             [FBSettings enableBetaFeature:FBBetaFeaturesShareDialog];
 #endif
 		}
-		
-		bool FacebookPostSystem::IsA(Core::InterfaceIDType inID) const
+		//----------------------------------------------------
+        //----------------------------------------------------
+		bool FacebookPostSystem::IsA(Core::InterfaceIDType in_interfaceID) const
 		{
-			return FacebookPostSystem::InterfaceID == inID;
+			return FacebookPostSystem::InterfaceID == in_interfaceID || Social::FacebookPostSystem::InterfaceID == in_interfaceID;
 		}
-        
-        NSDictionary* CreateNSDisctionaryFromPostDesc(const Social::FacebookPostDesc& insDesc)
-        {
-            NSDictionary* pPostParams = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                                                                       Core::StringUtils::StringToNSString(insDesc.strURL), @"link",
-                                                                                       Core::StringUtils::StringToNSString(insDesc.strPictureURL), @"picture",
-                                                                                       Core::StringUtils::StringToNSString(insDesc.strName), @"name",
-                                                                                       Core::StringUtils::StringToNSString(insDesc.strCaption), @"caption",
-                                                                                       Core::StringUtils::StringToNSString(insDesc.strDescription), @"description",
-                                                                                       Core::StringUtils::StringToNSString(insDesc.strTo), @"to",
-                                         nil];
-            
-            return pPostParams;
-        }
-        
-		void FacebookPostSystem::TryPost(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback)
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void FacebookPostSystem::Post(const PostDesc& in_desc, const PostResultDelegate& in_delegate)
 		{
-			mCompletionDelegate = insResultCallback;
-			
-            if(![FBSession.activeSession isOpen])
-                mpAuthSystem->Authenticate();
+            CS_ASSERT(m_postCompleteDelegate == nullptr, "Cannot post more than once at a time");
+            CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to post");
+            CS_ASSERT(m_authSystem->HasPermission("publish_actions") == true, "User must have publish_actions write permission granted");
+            CS_ASSERT(in_desc.m_to.empty() == true || m_authSystem->HasPermission("publish_stream") == true, "User must have publish_stream write permissions in order to post to their wall");
             
-            if(mpAuthSystem->IsSignedIn())
+			m_postCompleteDelegate = in_delegate;
+			
+            //Currently the iOS native dialog does not provide all the functionality of the web based one so we
+            //cannot use it
+            bool canPostNatively = false;//([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0f);
+            
+            if(canPostNatively)
             {
-                if(mpAuthSystem->HasPermission("publish_actions") && (insDesc.strTo != "" || mpAuthSystem->HasPermission("publish_stream")))
-                {
-                    Post(insDesc);
-                }
-                else
-                {
-                    msPostDesc = insDesc;
-                    std::vector<std::string> aWritePerms;
-                    aWritePerms.push_back("publish_actions");
-                    if(insDesc.strTo != "")
-                        aWritePerms.push_back("publish_stream");
-                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, Core::MakeDelegate(this, &FacebookPostSystem::OnPublishPermissionAuthorised));
-                }
+                PostNative(in_desc);
             }
             else
             {
-                CS_LOG_ERROR("Facebook Post: User must be authenticated");
+                PostWeb(in_desc);
             }
         }
-        
-        void FacebookPostSystem::TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends)
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void FacebookPostSystem::SendRequest(const RequestDesc& in_desc, const PostResultDelegate& in_delegate)
         {
-            std::string strFriends;
+            CS_ASSERT(m_requestCompleteDelegate == nullptr, "Cannot request more than once at a time");
+            CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to request");
             
-            for(u32 i = 0; i < inastrRecommendedFriends.size(); ++i)
+            //Construct a list of comma separated IDs
+            std::string recipients;
+            ListToCSV(in_desc.m_recipients, recipients);
+            
+            m_requestCompleteDelegate = in_delegate;
+            
+            NSString* requestType = @"to";
+            
+            switch (in_desc.m_type)
             {
-                strFriends += inastrRecommendedFriends[i];
-                if(i != inastrRecommendedFriends.size() - 1)
-                {
-                    strFriends += ",";
-                }
+                case RequestType::k_to:
+                    requestType = @"to";
+                    break;
+                case RequestType::k_suggested:
+                    requestType = @"suggestions";
+                    break;
             }
             
-            mRequestCompleteDelegate = insResultCallback;
-            
-            NSMutableDictionary* params;
-            
-            if(!insDesc.strTo.empty())
-            {
-                params = [NSMutableDictionary dictionaryWithObjectsAndKeys:Core::StringUtils::StringToNSString(insDesc.strTo), @"to", nil];
-            }
-            else
-            {
-                params = [NSMutableDictionary dictionaryWithObjectsAndKeys:Core::StringUtils::StringToNSString(strFriends), @"suggestions", nil];
-            }
+            NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjectsAndKeys:Core::StringUtils::StringToNSString(recipients), requestType, nil];
             
             [FBWebDialogs presentRequestsDialogModallyWithSession:nil
-                                                          message:Core::StringUtils::StringToNSString(insDesc.strDescription)
-                                                            title:Core::StringUtils::StringToNSString(insDesc.strCaption)
+                                                          message:Core::StringUtils::StringToNSString(in_desc.m_description)
+                                                            title:Core::StringUtils::StringToNSString(in_desc.m_caption)
                                                        parameters:params
                                                           handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error)
              {
                  if(!error)
                  {
-                     if(mRequestCompleteDelegate)
+                     if(m_requestCompleteDelegate)
                      {
                          if(result == FBWebDialogResultDialogCompleted)
                          {
@@ -125,18 +157,21 @@ namespace ChilliSource
                              if (![urlParams valueForKey:@"request"])
                              {
                                  // User clicked the Cancel button
-                                 mRequestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                                m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                                m_requestCompleteDelegate = nullptr;
                              }
                              else
                              {
-                                 // User clicked the Share button
-                                 mRequestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
+                                // User clicked the Share button
+                                m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
+                                m_requestCompleteDelegate = nullptr;
                              }
                          }
                          else
                          {
                              // User clicked the X button
-                             mRequestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                             m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                             m_requestCompleteDelegate = nullptr;
                          }
                      }
                  }
@@ -144,113 +179,74 @@ namespace ChilliSource
                  {
                      NSLog(@"%@", error.localizedDescription);
                      NSLog(@"%@", error.description);
-                     if(mRequestCompleteDelegate)
+             
+                     if(m_requestCompleteDelegate)
                      {
-                         mRequestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
+                         m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
+                         m_requestCompleteDelegate = nullptr;
                      }
                  }
              }];
         }
-        
-        void FacebookPostSystem::OnPublishPermissionAuthorised(const Social::FacebookAuthenticationSystem::AuthenticateResponse& insResponse)
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void FacebookPostSystem::PostNative(const PostDesc& in_desc)
         {
-            switch(insResponse.eResult)
+            [FBDialogs presentOSIntegratedShareDialogModallyFrom:[UIApplication sharedApplication].keyWindow.rootViewController
+                                                     initialText:Core::StringUtils::StringToNSString(in_desc.m_name + " " + in_desc.m_description)
+                                                           image:nil
+                                                             url:[NSURL URLWithString:Core::StringUtils::StringToNSString(in_desc.m_url)]
+                                                         handler:^(FBOSIntegratedShareDialogResult result, NSError *error)
             {
-                case Social::FacebookAuthenticationSystem::AuthenticateResult::k_success:
+                if (error)
                 {
-                    Post(msPostDesc);
-                    break;
-                }
-                case Social::FacebookAuthenticationSystem::AuthenticateResult::k_failed:
-                {
-                    if(mCompletionDelegate)
+                    NSLog(@"%@", error.localizedDescription);
+
+                    if(m_postCompleteDelegate)
                     {
-                        mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_failed);
+                        m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
+                        m_postCompleteDelegate = nullptr;
                     }
-                    break;
                 }
-                case Social::FacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch:
+                else if (result == FBNativeDialogResultSucceeded)
                 {
-                    if(mCompletionDelegate)
+                    if(m_postCompleteDelegate)
                     {
-                        mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                        m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
+                        m_postCompleteDelegate = nullptr;
                     }
-                    break;  
-                }                    
-            }
-        }
-        
-        void FacebookPostSystem::Post(const Social::FacebookPostDesc& insDesc)
-        {
-            bool bDisplayedNative = TryPostNative(insDesc);
-            if(!bDisplayedNative)
-            {
-                PostWebBased(insDesc);
-            }
-        }
-        
-        bool FacebookPostSystem::TryPostNative(const Social::FacebookPostDesc& insDesc)
-        {
-            return false;
-            
-            bool bIsiOS6 = ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0f);
-            
-            if(!bIsiOS6)
-            {
-                return false;
-            }
-            
-            return [FBDialogs presentOSIntegratedShareDialogModallyFrom:[UIApplication sharedApplication].keyWindow.rootViewController
-                                                            initialText:Core::StringUtils::StringToNSString(insDesc.strName + " " + insDesc.strDescription)
-                                                                  image:nil
-                                                                    url:[NSURL URLWithString:Core::StringUtils::StringToNSString(insDesc.strURL)]
-                                                                handler:^(FBOSIntegratedShareDialogResult result, NSError *error)
+                }
+                else if(result == FBNativeDialogResultCancelled)
+                {
+                    if(m_postCompleteDelegate)
                     {
-                        if (error)
-                        {
-                            NSLog(@"%@", error.localizedDescription);
-                            if(mCompletionDelegate)
-                            {
-                                mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_failed);
-                            }
-                        }
-                        else
-                        {
-                            if (result == FBNativeDialogResultSucceeded)
-                            {
-                                if(mCompletionDelegate)
-                                {
-                                    mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_success);
-                                }
-                            }
-                            else
-                            {
-                                if(mCompletionDelegate)
-                                {
-                                    mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
-                                }
-                            }
-                        }
-                    }];
+                        m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                        m_postCompleteDelegate = nullptr;
+                    }
+                }
+            }];
         }
-        
-        void FacebookPostSystem::PostWebBased(const Social::FacebookPostDesc& insDesc)
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void FacebookPostSystem::PostWeb(const PostDesc& in_desc)
         {
-            std::string strToUser = "me";
-            if(!insDesc.strTo.empty())
+            //If the user is posting to nobody then they are posting to
+            //their own wall.
+            std::string toUser = "me";
+            if(!in_desc.m_to.empty())
             {
-                strToUser = insDesc.strTo;
+                toUser = in_desc.m_to;
             }
             
-            NSDictionary* pPostParams = CreateNSDisctionaryFromPostDesc(insDesc);
+            NSDictionary* postParams = CreateNSDisctionaryFromPostDesc(in_desc);
             
             [FBWebDialogs presentFeedDialogModallyWithSession:nil
-                                                   parameters:pPostParams
+                                                   parameters:postParams
                                                       handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error)
             {
                 if(!error)
                 {
-                    if(mCompletionDelegate)
+                    if(m_postCompleteDelegate)
                     {
                         if(result == FBWebDialogResultDialogCompleted)
                         {
@@ -258,18 +254,21 @@ namespace ChilliSource
                             if (![urlParams valueForKey:@"post_id"])
                             {
                                 // User clicked the Cancel button
-                                mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                                m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                                m_postCompleteDelegate = nullptr;
                             }
                             else
                             {
                                 // User clicked the Share button
-                                mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_success);
+                                m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
+                                m_postCompleteDelegate = nullptr;
                             }
                         }
                         else
                         {
                             // User clicked the X button
-                            mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                            m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                            m_postCompleteDelegate = nullptr;
                         }
                     }
                 }
@@ -277,15 +276,16 @@ namespace ChilliSource
                 {
                     NSLog(@"%@", error.localizedDescription);
                     NSLog(@"%@", error.description);
-                    if(mCompletionDelegate)
+             
+                    if(m_postCompleteDelegate)
                     {
-                        mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_failed);
+                        m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
+                        m_postCompleteDelegate = nullptr;
                     }
                 }
-                
             }];
             
-            [pPostParams release];
+            [postParams release];
         }
 	}
 }
