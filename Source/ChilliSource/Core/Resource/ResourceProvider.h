@@ -57,7 +57,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the resource can be created.
             //----------------------------------------------------
-			virtual bool CanCreateResourceFromFileWithExtension(const std::string & in_extension) const = 0;
+			virtual bool CanCreateResourceFromFileWithExtension(const std::string& in_extension) const = 0;
             //----------------------------------------------------
             /// Creates a new resource from file.
             ///
@@ -70,7 +70,7 @@ namespace ChilliSource
             /// @return Whether or not the resource was successfully
             /// created.
             //----------------------------------------------------
-			virtual bool CreateResourceFromFile(StorageLocation in_storageLocation, const std::string & in_filePath, ResourceSPtr& out_resource) = 0;
+			virtual bool CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) = 0;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
             /// The resource will be returned immediately but
@@ -86,7 +86,7 @@ namespace ChilliSource
             /// @return Whether or not the resource async load was
             /// successfully started.
             //----------------------------------------------------
-			virtual bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string & in_filePath, ResourceSPtr& out_resource) {return false;};
+			virtual bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) {return false;};
             //----------------------------------------------------
             /// Destructor.
             ///
@@ -94,7 +94,7 @@ namespace ChilliSource
             //----------------------------------------------------
 			virtual ~ResourceProvider() {}
             
-            virtual bool StreamResourceFromFile(StorageLocation in_storageLocation, const std::string & in_filePath, ResourceSPtr& out_resource) {return false;};
+            virtual bool StreamResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) {return false;};
 		};
 	}	
 }

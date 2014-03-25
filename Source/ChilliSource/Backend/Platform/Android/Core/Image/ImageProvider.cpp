@@ -1,5 +1,5 @@
 //
-//  ImageProvider.h
+//  ImageProvider.cpp
 //  Chilli Source
 //
 //  Created by I Copland in 2011

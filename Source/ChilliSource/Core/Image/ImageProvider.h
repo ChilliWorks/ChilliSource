@@ -11,7 +11,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
-#include <ChilliSource/Core/Image/Image.h>
 
 namespace ChilliSource
 {

@@ -188,6 +188,7 @@ namespace ChilliSource
                     break;
             };
             
+            //TODO: This should be moved to GenerateMipMaps method when one is created.
             if(mbHasMipMaps)
 			{
                 glGenerateMipmap(GL_TEXTURE_CUBE_MAP); 

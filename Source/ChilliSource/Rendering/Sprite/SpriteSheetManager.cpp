@@ -28,7 +28,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//-----------------------------------------------------------------
-		SpriteSheetManager::SpriteSheetManager() : mpTextureManager(nullptr)
+		SpriteSheetManager::SpriteSheetManager()
 		{
 		}
 		//----------------------------------------------------------------
@@ -105,11 +105,6 @@ namespace ChilliSource
 						pSpriteSheet->SetStorageLocation(ineStorageLocation);
 						pSpriteSheet->SetOwningResourceManager(this);
 						pSpriteSheet->SetLoaded(true);
-                        
-                        if(!mpTextureManager)
-                        {
-                            mpTextureManager = Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<TextureManager>();
-                        }
                         
                         TextureSPtr pTexture = LOAD_RESOURCE(Texture, ineStorageLocation, instrFilePath);
                         pSpriteSheet->SetTexture(pTexture);

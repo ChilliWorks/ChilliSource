@@ -16,7 +16,7 @@ namespace ChilliSource
     {
         namespace
         {
-            const std::string k_moSceneAnimExtension("moscene.animations");
+            const std::string k_sceneAnimExtension("moscene.animations");
         }
         
         CS_DEFINE_NAMEDTYPE(SceneAnimationProvider);
@@ -36,7 +36,7 @@ namespace ChilliSource
         //----------------------------------------------------
         bool SceneAnimationProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
         {
-            return (in_extension == k_moSceneAnimExtension);
+            return (in_extension == k_sceneAnimExtension);
         }
         //----------------------------------------------------
         //----------------------------------------------------

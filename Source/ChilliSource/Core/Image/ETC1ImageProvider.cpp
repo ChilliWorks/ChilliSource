@@ -27,12 +27,12 @@ namespace ChilliSource
             //-------------------------------------------------------
             struct ETC1Header
             {
-                u8 abyPKMTag[6];
-                u16 wNumberOfMipmaps;
-                u16 wTextureWidth;
-                u16 wTextureHeight;
-                u16 wOriginalWidth;
-                u16 wOriginalHeight;
+                u8 m_pkmTag[6];
+                u16 m_numberOfMipmaps;
+                u16 m_textureWidth;
+                u16 m_textureHeight;
+                u16 m_originalWidth;
+                u16 m_originalHeight;
             };
         }
         
@@ -45,53 +45,53 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool ETC1ImageProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool ETC1ImageProvider::IsA(InterfaceIDType in_interfaceId) const
         {
             return (in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == ETC1ImageProvider::InterfaceID);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool ETC1ImageProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
+        bool ETC1ImageProvider::CanCreateResourceOfKind(InterfaceIDType in_interfaceId) const
         {
             return (in_interfaceId == Image::InterfaceID);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool ETC1ImageProvider::CanCreateResourceFromFileWithExtension(const std::string & in_extension) const
+        bool ETC1ImageProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
         {
             return (in_extension == k_etc1Extension);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool ETC1ImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceSPtr& out_resource)
+        bool ETC1ImageProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource)
         {
             //ensure the extension is correct.
-            if (ChilliSource::Core::StringUtils::EndsWith(in_filepath, k_etc1Extension, true) == false)
+            if (StringUtils::EndsWith(in_filepath, k_etc1Extension, true) == false)
                 return false;
             
-            Core::FileStreamSPtr pImageFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, Core::FileMode::k_readBinary);
+            FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
             
             if (pImageFile != nullptr && pImageFile->IsOpen() == true && pImageFile->IsBad() == false)
             {
                 //ETC1 Format is in big endian format. As all the platforms we support are little endian we will have to convert the data to little endian.
                 //read the header.
                 ETC1Header sHeader;
-                pImageFile->Read((s8*)sHeader.abyPKMTag, sizeof(u8) * 6);
+                pImageFile->Read((s8*)sHeader.m_pkmTag, sizeof(u8) * 6);
                 
-                pImageFile->Read((s8*)&sHeader.wNumberOfMipmaps, sizeof(u16));
-                sHeader.wNumberOfMipmaps = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wNumberOfMipmaps));
+                pImageFile->Read((s8*)&sHeader.m_numberOfMipmaps, sizeof(u16));
+                sHeader.m_numberOfMipmaps = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_numberOfMipmaps));
                 
-                pImageFile->Read((s8*)&sHeader.wTextureWidth, sizeof(u16));
-                sHeader.wTextureWidth = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wTextureWidth));
+                pImageFile->Read((s8*)&sHeader.m_textureWidth, sizeof(u16));
+                sHeader.m_textureWidth = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_textureWidth));
                 
-                pImageFile->Read((s8*)&sHeader.wTextureHeight, sizeof(u16));
-                sHeader.wTextureHeight = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wTextureHeight));
+                pImageFile->Read((s8*)&sHeader.m_textureHeight, sizeof(u16));
+                sHeader.m_textureHeight = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_textureHeight));
                 
-                pImageFile->Read((s8*)&sHeader.wOriginalWidth, sizeof(u16));
-                sHeader.wOriginalWidth = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wOriginalWidth));
+                pImageFile->Read((s8*)&sHeader.m_originalWidth, sizeof(u16));
+                sHeader.m_originalWidth = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_originalWidth));
                 
-                pImageFile->Read((s8*)&sHeader.wOriginalHeight, sizeof(u16));
-                sHeader.wOriginalHeight = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wOriginalHeight));
+                pImageFile->Read((s8*)&sHeader.m_originalHeight, sizeof(u16));
+                sHeader.m_originalHeight = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_originalHeight));
                 
                 //get the size of the rest of the data
                 const u32 kstrHeaderSize = 16;
@@ -109,8 +109,8 @@ namespace ChilliSource
                 outpImage->SetFormat(Core::Image::Format::k_RGBA8888);
                 outpImage->SetData(pData);
                 outpImage->SetDataLength(dwDataSize);
-                outpImage->SetWidth(sHeader.wTextureWidth);
-                outpImage->SetHeight(sHeader.wTextureHeight);
+                outpImage->SetWidth(sHeader.m_textureWidth);
+                outpImage->SetHeight(sHeader.m_textureHeight);
                 outpImage->SetCompression(Core::ImageCompression::k_ETC1);
                 
                 return true;
@@ -120,7 +120,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool ETC1ImageProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string & in_filePath, ResourceSPtr& out_resource)
+        bool ETC1ImageProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource)
         {
             CS_LOG_WARNING("Async load not implemented for ETC1 Image Provider");
             return false;

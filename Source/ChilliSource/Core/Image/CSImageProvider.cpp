@@ -8,8 +8,9 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
-#include <ChilliSource/Core/Minizip/unzip.h>
+#include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/CSImageProvider.h>
+#include <ChilliSource/Core/Minizip/unzip.h>
 
 namespace ChilliSource
 {
@@ -17,7 +18,7 @@ namespace ChilliSource
     {
         namespace
         {
-            const std::string k_moImageExtension("moimage");
+            const std::string k_csImageExtension("moimage");
             
             //------------------------------------------------------
             /// A container for the imformation provided in the
@@ -60,32 +61,32 @@ namespace ChilliSource
             ///
             /// @return Whether the format was found
             //-------------------------------------------------------
-            bool GetFormatInfo(const u32 in_format, const u32 in_width, const u32 in_height, Core::Image::Format& out_format, u32& out_imageSize)
+            bool GetFormatInfo(const u32 in_format, const u32 in_width, const u32 in_height, Image::Format& out_format, u32& out_imageSize)
             {
                 switch(in_format)
                 {
                     case 1:
-                        out_format = Core::Image::Format::k_Lum8;
+                        out_format = Image::Format::k_Lum8;
                         out_imageSize = in_width * in_height * 1;
                         return true;
                     case 2:
-                        out_format = Core::Image::Format::k_LumA88;
+                        out_format = Image::Format::k_LumA88;
                         out_imageSize = in_width * in_height * 2;
                         return true;
                     case 3:
-                        out_format = Core::Image::Format::k_RGB565;
+                        out_format = Image::Format::k_RGB565;
                         out_imageSize = in_width * in_height * 2;
                         return true;
                     case 4:
-                        out_format = Core::Image::Format::k_RGBA4444;
+                        out_format = Image::Format::k_RGBA4444;
                         out_imageSize = in_width * in_height * 2;
                         return true;
                     case 5:
-                        out_format = Core::Image::Format::k_RGB888;
+                        out_format = Image::Format::k_RGB888;
                         out_imageSize = in_width * in_height * 3;
                         return true;
                     case 6:
-                        out_format = Core::Image::Format::k_RGBA8888;
+                        out_format = Image::Format::k_RGBA8888;
                         out_imageSize = in_width * in_height * 4;
                         return true;
                     default:
@@ -224,16 +225,16 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool CSImageProvider::CanCreateResourceFromFileWithExtension(const std::string & in_extension) const
+        bool CSImageProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
         {
-            return (in_extension == k_moImageExtension);
+            return (in_extension == k_csImageExtension);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool CSImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceSPtr& out_resource)
+        bool CSImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, Core::ResourceSPtr& out_resource)
         {
             //ensure the extension is correct.
-            if (ChilliSource::Core::StringUtils::EndsWith(in_filepath, k_moImageExtension, true) == false)
+            if (ChilliSource::Core::StringUtils::EndsWith(in_filepath, k_csImageExtension, true) == false)
                 return false;
             
             Core::FileStreamSPtr pImageFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, Core::FileMode::k_readBinary);
@@ -254,12 +255,11 @@ namespace ChilliSource
                 {
                     ReadFileVersion3(pImageFile, out_resource);
                 }
-                else
-                    if(2 == udwVersion)
-                    {
-                        CS_LOG_WARNING("File \"" + in_filepath + "\" moimage version 2 is deprecated. Please use version 3 which is supported from revision 86 in the tool repository.");
-                        ReadFileVersion2(pImageFile, out_resource);
-                    }
+                else if (2 == udwVersion)
+                {
+                    CS_LOG_WARNING("File \"" + in_filepath + "\" moimage version 2 is deprecated. Please use version 3 which is supported from revision 86 in the tool repository.");
+                    ReadFileVersion2(pImageFile, out_resource);
+                }
                 
                 return true;
             }
@@ -268,7 +268,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool CSImageProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string & in_filePath, ResourceSPtr& out_resource)
+        bool CSImageProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource)
         {
             CS_LOG_WARNING("Async load is not implemented in CSImage Provider.");
             return false;

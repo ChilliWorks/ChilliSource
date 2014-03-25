@@ -44,7 +44,7 @@ namespace ChilliSource
             ///
             /// @return Whether the object is of given type
             //-------------------------------------------------------------
-            bool IsA(ChilliSource::Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------------
             /// Allows querying of whether or not the provider can create
             /// resources of the given type.
@@ -55,7 +55,7 @@ namespace ChilliSource
             ///
             /// @return Whether the object can load a resource of given type
             //-------------------------------------------------------------
-            bool CanCreateResourceOfKind(ChilliSource::Core::InterfaceIDType in_interfaceId) const override;
+            bool CanCreateResourceOfKind(InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------------------
             /// Allows querying of the whether or not the provider can create
             /// resources from files with the given extension.
@@ -67,7 +67,7 @@ namespace ChilliSource
             /// @return Whether the object can load a resource with that
             /// extension
             //----------------------------------------------------------------
-            bool CanCreateResourceFromFileWithExtension(const std::string & in_extension) const override;
+            bool CanCreateResourceFromFileWithExtension(const std::string& in_extension) const override;
             //----------------------------------------------------------------
             /// Creates a new image resource from file.
             ///
@@ -79,7 +79,7 @@ namespace ChilliSource
             ///
             /// @return Whether the resource loaded
             //----------------------------------------------------------------
-            bool CreateResourceFromFile(ChilliSource::Core::StorageLocation in_storageLocation, const std::string & in_filepath, ChilliSource::Core::ResourceSPtr& out_resource) override;
+            bool CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource) override;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
             /// The resource will be returned immediately but
@@ -95,7 +95,7 @@ namespace ChilliSource
             /// @return Whether or not the resource async load was
             /// successfully started.
             //----------------------------------------------------
-			bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string & in_filePath, ResourceSPtr& out_resource) override;
+			bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) override;
         private:
             //-------------------------------------------------------
             /// Private constructor to force use of factory method

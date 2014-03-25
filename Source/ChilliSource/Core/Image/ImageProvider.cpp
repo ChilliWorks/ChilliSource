@@ -1,11 +1,10 @@
-/*
- *  ImageProvider.cpp
- *  moFlow
- *
- *  Created by Scott Downie on 18/08/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  ImageProvider.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 18/08/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Core/Image/ImageProvider.h>
 
