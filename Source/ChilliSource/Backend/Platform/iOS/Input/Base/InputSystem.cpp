@@ -18,15 +18,10 @@ namespace ChilliSource
     {
         InputSystem::InputSystem()
         {
-            if(Accelerometer::SupportedByDevice() == true)
-            {
-                mpAccelerometer = new Accelerometer();
-            }
         }
 
         InputSystem::~InputSystem()
         {
-            CS_SAFEDELETE(mpAccelerometer);
         }
 
         bool InputSystem::IsA(Core::InterfaceIDType inInterfaceID) const
@@ -46,10 +41,6 @@ namespace ChilliSource
             }
             
             return nullptr;
-        }
-        Input::Accelerometer * InputSystem::GetAccelerometer()
-        {
-            return mpAccelerometer;
         }
 
         Input::TouchScreen * InputSystem::GetTouchScreen()

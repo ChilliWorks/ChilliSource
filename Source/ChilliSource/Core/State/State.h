@@ -33,6 +33,7 @@ namespace ChilliSource
 		class State
 		{
 		public:
+            CS_DECLARE_NOCOPY(State);
             //--------------------------------------------
             /// Constructor
             ///

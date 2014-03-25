@@ -1,8 +1,8 @@
 //
 //  Accelerometer.cpp
-//  moFlow
+//  Chilli Source
 //
-//  Created by Ian Copland on 10/06/2013.
+//  Created by I Copland on 10/06/2013.
 //  Copyright 2013 Tag Games. All rights reserved.
 //
 
@@ -16,73 +16,80 @@ namespace ChilliSource
 {
 	namespace Android
 	{
+		CS_DEFINE_NAMEDTYPE(Accelerometer);
 		//------------------------------------------------
-		/// Constructor
 		//------------------------------------------------
 		Accelerometer::Accelerometer()
-			: mbIsUpdating(false)
+			: m_isUpdating(false)
 		{
-			//get the accelerometer java interface or create it if it doesn't yet exist.
-			mpAccelerometerJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<AccelerometerJavaInterface>();
-			if (mpAccelerometerJI == nullptr)
-			{
-				mpAccelerometerJI = AccelerometerJavaInterfaceSPtr(new AccelerometerJavaInterface());
-				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpAccelerometerJI);
-			}
 		}
 		//------------------------------------------------
-		/// Is A
 		//------------------------------------------------
-		bool Accelerometer::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Accelerometer::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return inInterfaceID == Input::Accelerometer::InterfaceID;
+			return (in_interfaceId == Input::Accelerometer::InterfaceID || in_interfaceId == Accelerometer::InterfaceID);
 		}
+        //----------------------------------------------------
 		//----------------------------------------------------
-		/// Is Updating
-		///
-		/// @return whether or not the accelerometer is
-        /// currently updating.
+        void Accelerometer::OnInit()
+        {
+			m_accelerometerJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<AccelerometerJavaInterface>();
+			if (m_accelerometerJI == nullptr)
+			{
+				m_accelerometerJI = AccelerometerJavaInterfaceSPtr(new AccelerometerJavaInterface());
+				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_accelerometerJI);
+			}
+        }
+		//----------------------------------------------------
 		//----------------------------------------------------
 		bool Accelerometer::IsUpdating() const
 		{
-			return mbIsUpdating;
+			return m_isUpdating;
 		}
 		//----------------------------------------------------
-		/// Start Updating
 		//----------------------------------------------------
 		void Accelerometer::StartUpdating()
 		{
-			if (false == mbIsUpdating)
+			if (false == m_isUpdating)
 			{
-				mbIsUpdating = true;
-				mpAccelerometerJI->StartListening(Core::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
+				m_isUpdating = true;
+				m_accelerometerJI->StartListening(Core::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
 			}
 		}
 		//------------------------------------------------
-		/// Get Acceleration
 		//------------------------------------------------
 		Core::Vector3 Accelerometer::GetAcceleration() const
 		{
-			return mvAcceleration;
+			return m_acceleration;
 		}
 		//----------------------------------------------------
-		/// Stop Updating
+		//----------------------------------------------------
+		Core::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
+		{
+			return m_accelerationUpdatedEvent;
+		}
+		//----------------------------------------------------
 		//----------------------------------------------------
 		void Accelerometer::StopUpdating()
 		{
-			if (true == mbIsUpdating)
+			if (true == m_isUpdating)
 			{
-				mpAccelerometerJI->StopListening();
-				mbIsUpdating = false;
+				m_accelerometerJI->StopListening();
+				m_isUpdating = false;
 			}
 		}
 		//------------------------------------------------
-		/// On Acceleration Changed
 		//------------------------------------------------
-		void Accelerometer::OnAccelerationChanged(const Core::Vector3& invAcceleration)
+		void Accelerometer::OnAccelerationChanged(const Core::Vector3& in_acceleration)
 		{
-			mvAcceleration = invAcceleration;
-			mAccelerationUpdatedEvent.NotifyConnections(mvAcceleration);
+			m_acceleration = in_acceleration;
+			m_accelerationUpdatedEvent.NotifyConnections(m_acceleration);
 		}
+        //----------------------------------------------------
+		//----------------------------------------------------
+        void Accelerometer::OnDestroy()
+        {
+        	m_accelerometerJI.reset();
+        }
 	}
 }

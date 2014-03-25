@@ -24,6 +24,7 @@ namespace ChilliSource
         class AppSystem : public QueryableInterface
         {
         public:
+            CS_DECLARE_NOCOPY(AppSystem);
             //------------------------------------------------
             /// Initialisation method called at a time when
             /// all App Systems have been created. System
@@ -119,6 +120,13 @@ namespace ChilliSource
             /// @author I Copland
             //------------------------------------------------
             virtual ~AppSystem() {};
+        protected:
+            //------------------------------------------------
+            /// Default constructor.
+            ///
+            /// @author I Copland
+            //------------------------------------------------
+            AppSystem() = default;
         };
     }
 }

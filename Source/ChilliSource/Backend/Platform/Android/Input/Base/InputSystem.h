@@ -33,7 +33,6 @@ namespace ChilliSource
 			Input::InputDevice* GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID) override;
 
 			Input::TouchScreen* GetTouchScreen() override;
-			Input::Accelerometer* GetAccelerometer() override;
 			Input::VirtualKeyboard* GetVirtualKeyboard() override;
 			
 			void Update(float infDT);
@@ -52,7 +51,6 @@ namespace ChilliSource
 		private:
 			
 			TouchScreen mTouchScreen;
-			Accelerometer mAccelerometer;
 			VirtualKeyboard mVirtualKeyboard;
 		};
 	}

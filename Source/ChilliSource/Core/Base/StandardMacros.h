@@ -63,7 +63,7 @@
 /// If this is used the default constructor must manually be
 /// specified.
 //------------------------------------------------------------
-#define CS_DECLARE_NONCOPYABLE(in_className)                            \
+#define CS_DECLARE_NOCOPY(in_className)                            \
     in_className(const in_className& in_toCopy) = delete;               \
     in_className& operator=(const in_className& in_toCopy) = delete;
 //------------------------------------------------------------
