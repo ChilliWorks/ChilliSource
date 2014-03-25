@@ -26,6 +26,21 @@ namespace ChilliSource
         public:
             CS_DECLARE_NOCOPY(AppSystem);
             //------------------------------------------------
+            /// Destructor
+            ///
+            /// @author I Copland
+            //------------------------------------------------
+            virtual ~AppSystem() {};
+        protected:
+            friend class Application;
+            
+            //------------------------------------------------
+            /// Default constructor.
+            ///
+            /// @author I Copland
+            //------------------------------------------------
+            AppSystem() = default;
+            //------------------------------------------------
             /// Initialisation method called at a time when
             /// all App Systems have been created. System
             /// initialisation occurs in the order they were
@@ -114,19 +129,6 @@ namespace ChilliSource
             /// @author I Copland
             //------------------------------------------------
             virtual void OnMemoryWarning() {};
-            //------------------------------------------------
-            /// Destructor
-            ///
-            /// @author I Copland
-            //------------------------------------------------
-            virtual ~AppSystem() {};
-        protected:
-            //------------------------------------------------
-            /// Default constructor.
-            ///
-            /// @author I Copland
-            //------------------------------------------------
-            AppSystem() = default;
         };
     }
 }

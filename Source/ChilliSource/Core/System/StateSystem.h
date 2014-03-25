@@ -26,6 +26,21 @@ namespace ChilliSource
         public:
             CS_DECLARE_NOCOPY(StateSystem);
             //------------------------------------------------
+            /// Destructor
+            ///
+            /// @author I Copland
+            //------------------------------------------------
+            virtual ~StateSystem() {};
+        protected:
+            friend class State;
+            
+            //------------------------------------------------
+            /// Default constructor.
+            ///
+            /// @author I Copland
+            //------------------------------------------------
+            StateSystem() = default;
+            //------------------------------------------------
             /// Initialisation method called at a time when
             /// all State Systems have been created. System
             /// initialisation occurs in the order they were
@@ -115,19 +130,6 @@ namespace ChilliSource
             /// @author I Copland
             //------------------------------------------------
             virtual void OnMemoryWarning() {};
-            //------------------------------------------------
-            /// Destructor
-            ///
-            /// @author I Copland
-            //------------------------------------------------
-            virtual ~StateSystem() {};
-        protected:
-            //------------------------------------------------
-            /// Default constructor.
-            ///
-            /// @author I Copland
-            //------------------------------------------------
-            StateSystem() = default;
         };
     }
 }

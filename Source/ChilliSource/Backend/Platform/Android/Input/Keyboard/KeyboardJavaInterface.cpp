@@ -96,13 +96,13 @@ namespace ChilliSource
 			/// @param The keyboard type to convert.
 			/// @return The keyboard type in integer form.
 			//-----------------------------------------------
-			s32 KeyboardTypeToInteger(Input::KeyboardType ineKeyboardType)
+			s32 KeyboardTypeToInteger(Input::Keyboard::Type ineKeyboardType)
 			{
 				switch (ineKeyboardType)
 				{
-				case Input::KeyboardType::k_text:
+				case Input::Keyboard::Type::k_text:
 					return 0;
-				case Input::KeyboardType::k_numeric:
+				case Input::Keyboard::Type::k_numeric:
 					return 1;
 				default:
 					CS_LOG_ERROR("Invalid keyboard type, cannot be converted.");
@@ -120,17 +120,17 @@ namespace ChilliSource
 			/// @return The Keyboard Capitalisation in integer
 			/// form.
 			//-----------------------------------------------
-			s32 KeyboardCapitalisationToInteger(Input::KeyboardCapitalisation ineKeyboardCapitalisation)
+			s32 KeyboardCapitalisationToInteger(Input::Keyboard::Capitalisation ineKeyboardCapitalisation)
 			{
 				switch (ineKeyboardCapitalisation)
 				{
-				case Input::KeyboardCapitalisation::k_none:
+				case Input::Keyboard::Capitalisation::k_none:
 					return 0;
-				case Input::KeyboardCapitalisation::k_sentences:
+				case Input::Keyboard::Capitalisation::k_sentences:
 					return 1;
-				case Input::KeyboardCapitalisation::k_words:
+				case Input::Keyboard::Capitalisation::k_words:
 					return 2;
-				case Input::KeyboardCapitalisation::k_all:
+				case Input::Keyboard::Capitalisation::k_all:
 					return 3;
 				default:
 					CS_LOG_ERROR("Invalid keyboard capitalisation, cannot be converted.");
@@ -198,7 +198,7 @@ namespace ChilliSource
 		//-------------------------------------------
 		/// Set Keyboard Type
 		//-------------------------------------------
-        void KeyboardJavaInterface::SetKeyboardType(Input::KeyboardType ineKeyboardType)
+        void KeyboardJavaInterface::SetKeyboardType(Input::Keyboard::Type ineKeyboardType)
         {
         	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	s32 dwKeyboardType = KeyboardTypeToInteger(ineKeyboardType);
@@ -207,7 +207,7 @@ namespace ChilliSource
 		//-------------------------------------------
 		/// Set Capitalisation Method
 		//-------------------------------------------
-        void KeyboardJavaInterface::SetCapitalisationMethod(Input::KeyboardCapitalisation ineKeyboardCapitalisation)
+        void KeyboardJavaInterface::SetCapitalisationMethod(Input::Keyboard::Capitalisation ineKeyboardCapitalisation)
         {
         	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	s32 dwKeyboardCapitalisation = KeyboardCapitalisationToInteger(ineKeyboardCapitalisation);

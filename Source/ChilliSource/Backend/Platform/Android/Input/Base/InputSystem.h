@@ -15,7 +15,6 @@
 #define _MOFLO_PLATFORM_ANDROID_INPUTSYSTEM_H_
 
 #include <ChilliSource/Backend/Platform/Android/Input/Accelerometer/Accelerometer.h>
-#include <ChilliSource/Backend/Platform/Android/Input/Keyboard/VirtualKeyboard.h>
 #include <ChilliSource/Backend/Platform/Android/Input/Pointer/TouchScreen.h>
 #include <ChilliSource/Input/Base/InputSystem.h>
 
@@ -33,7 +32,6 @@ namespace ChilliSource
 			Input::InputDevice* GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID) override;
 
 			Input::TouchScreen* GetTouchScreen() override;
-			Input::VirtualKeyboard* GetVirtualKeyboard() override;
 			
 			void Update(float infDT);
 			
@@ -51,7 +49,6 @@ namespace ChilliSource
 		private:
 			
 			TouchScreen mTouchScreen;
-			VirtualKeyboard mVirtualKeyboard;
 		};
 	}
 }
