@@ -56,6 +56,7 @@
 /// @author S Downie
 ///
 /// @param The text field.
+/// @return Whether or not text editing should end.
 //---------------------------------------------------------
 -(BOOL) textFieldShouldReturn:(UITextField*)textField
 {

@@ -69,6 +69,10 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// A delegate used for recieving text input events.
             ///
+            /// @param The new updated version of the text.
+            /// @param [Out] Whether or not the change to the text
+            /// has been rejected.
+            ///
             /// @author S Downie
             //-------------------------------------------------------
             typedef std::function<void(const Core::UTF8String&, bool*)> TextInputEventDelegate;
