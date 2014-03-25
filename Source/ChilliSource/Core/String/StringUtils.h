@@ -237,6 +237,16 @@ namespace ChilliSource
             
             /** Checks the std::string is a inValid number inValue. */
 			bool isNumber(const std::string& inVal);
+            
+            //----------------------------------------------------
+            /// Convert a list of string values to a CSV string
+            ///
+            /// @author S Downie
+            ///
+            /// @param List of values
+            /// @param [Out] CSV string
+            //----------------------------------------------------
+            void ToCSV(const std::vector<std::string>& in_values, std::string& out_csv);
 		};
 	}
 }

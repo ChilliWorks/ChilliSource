@@ -41,29 +41,6 @@ namespace ChilliSource
 				out_keyValues.push_back("description");
 				out_keyValues.push_back(in_desc.m_description);
 			}
-            //----------------------------------------------------
-            /// Convert a list of string values to a CSV string
-            ///
-            /// @author S Downie
-            ///
-            /// @param List of values
-            /// @param [Out] CSV string
-            //----------------------------------------------------
-            void ListToCSV(const std::vector<std::string>& in_values, std::string& out_csv)
-            {
-                if(in_values.empty())
-                    return;
-
-                u32 numVals = in_values.size() - 1;
-                for(u32 i=0; i<numVals; ++i)
-                {
-                    out_csv += in_values[i];
-                    out_csv += ",";
-                }
-
-                //Add the last one without a following comma
-                out_csv += in_values[numVals];
-            }
 			//----------------------------------------------------
 			/// @author A Mackie
 			///
@@ -79,16 +56,16 @@ namespace ChilliSource
 				out_keyValues.push_back(in_desc.m_description);
 
 	            std::string recipients;
-	            ListToCSV(in_desc.m_recipients, recipients);
+	            Core::StringUtils::ToCSV(in_desc.m_recipients, recipients);
 
 	            std::string requestType = "to";
 
 	            switch (in_desc.m_type)
 	            {
-	                case Social::FacebookPostSystem::RequestType::k_to:
+	                case Social::FacebookPostSystem::RequestRecipientMode::k_fixed:
 	                    requestType = "to";
 	                    break;
-	                case Social::FacebookPostSystem::RequestType::k_suggested:
+	                case Social::FacebookPostSystem::RequestRecipientMode::k_optional:
 	                    requestType = "suggestions";
 	                    break;
 	            }
@@ -97,6 +74,9 @@ namespace ChilliSource
 	            out_keyValues.push_back(recipients);
 			}
 		}
+
+		CS_DEFINE_NAMEDTYPE(FacebookPostSystem);
+
 		//----------------------------------------------------
 		//----------------------------------------------------
 		FacebookPostSystem::FacebookPostSystem(Social::FacebookAuthenticationSystem* in_authSystem)

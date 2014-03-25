@@ -27,37 +27,48 @@ namespace ChilliSource
         ///
         /// @author S McGaw
         //----------------------------------------------------
-		class FacebookPostSystem : public ChilliSource::Core::AppSystem
+		class FacebookPostSystem : public Core::AppSystem
 		{
 		public:
 			
 			CS_DECLARE_NAMEDTYPE(FacebookPostSystem);
             
+            //-------------------------------------------------
+            /// @author S McGaw
+            ///
+            /// Hold the description of a post to the Facebook
+            /// wall feed. Including the recipient and the text
+            //-------------------------------------------------
             struct PostDesc
             {
                 std::string m_to; //ID of the page this post is for (Friend ID perhaps), if blank will default to the user's page
                 
-                std::string m_name; //Name in bold of this linky thing
-                std::string m_url; //This must be set for your post to show
+                std::string m_name;
+                std::string m_url;
                 
-                std::string m_caption; //Subline under name
-                std::string m_description; //Body of the post
+                std::string m_caption;
+                std::string m_description;
                 
                 std::string m_picUrl; //URL of an image to accompany this. If this isn't set Facebook will scrape the URL page to find a picture.
             };
             
-            enum class RequestType
+            enum class RequestRecipientMode
             {
-                k_suggested, //List of friends in the request are merely suggested
-                k_to //List of friends in the request are targetted
+                k_optional,
+                k_fixed
             };
-            
+            //-------------------------------------------------
+            /// @author S McGaw
+            ///
+            /// Hold the description of a request to Facebook
+            /// users. Including the recipients and the text
+            //-------------------------------------------------
             struct RequestDesc
             {
-                std::vector<std::string> m_recipients; //Recipients
-                std::string m_caption; //Subline under name
-                std::string m_description; //Body of the post
-                RequestType m_type; //Suggested or targeted
+                std::vector<std::string> m_recipients;
+                std::string m_caption;
+                std::string m_description;
+                RequestRecipientMode m_type;
             };
 			
 			enum class PostResult
@@ -66,7 +77,14 @@ namespace ChilliSource
                 k_cancelled,
                 k_failed
 			};
-			
+            //-------------------------------------------------
+            /// Delegate that is fired for any facebook post
+            /// request
+            ///
+            /// @author S McGaw
+            ///
+            /// @param Result - Success, failure, etc.
+            //-------------------------------------------------
 			typedef std::function<void(const PostResult&)> PostResultDelegate;
             
             //---------------------------------------------------
@@ -114,14 +132,6 @@ namespace ChilliSource
             /// @author I Copland
             //---------------------------------------------------
             virtual ~FacebookPostSystem(){};
-        protected:
-            //---------------------------------------------------
-            /// Protected constructor to force the use of the
-            /// factory method.
-            ///
-            /// @author I Copland
-            //---------------------------------------------------
-            FacebookPostSystem(){};
 		};
 	}
 }

@@ -152,7 +152,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //----------------------------------------------------
-            FacebookAuthenticationSystem(){}
+            FacebookAuthenticationSystem() = default;
             //----------------------------------------------------
             /// @author R Henning
             ///

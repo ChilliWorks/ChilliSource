@@ -36,6 +36,12 @@ namespace ChilliSource
                 k_permissionMismatch
             };
             
+            //-------------------------------------------------
+            /// @author S McGaw
+            ///
+            /// Hold the response from any authentication
+            /// request
+            //-------------------------------------------------
             struct AuthenticateResponse
             {
                 AuthenticateResult m_result;
@@ -123,15 +129,6 @@ namespace ChilliSource
             /// @author S McGaw
             //------------------------------------------------
             virtual ~FacebookAuthenticationSystem(){}
-            
-        protected:
-            //------------------------------------------------
-            /// Private constructor to force use of factory
-            /// method
-            ///
-            /// @author I Copland
-            //------------------------------------------------
-            FacebookAuthenticationSystem(){};
 		};
 	}
 }

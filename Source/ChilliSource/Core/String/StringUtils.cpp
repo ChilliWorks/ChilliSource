@@ -731,6 +731,23 @@ namespace ChilliSource
                 str >> tst;
                 return !str.fail() && str.eof();
             }
+            //----------------------------------------------------
+            //----------------------------------------------------
+            void ToCSV(const std::vector<std::string>& in_values, std::string& out_csv)
+            {
+                if(in_values.empty())
+                    return;
+                
+                u32 numVals = in_values.size() - 1;
+                for(u32 i=0; i<numVals; ++i)
+                {
+                    out_csv += in_values[i];
+                    out_csv += ",";
+                }
+                
+                //Add the last one without a following comma
+                out_csv += in_values[numVals];
+            }
         }
 	}
 }
