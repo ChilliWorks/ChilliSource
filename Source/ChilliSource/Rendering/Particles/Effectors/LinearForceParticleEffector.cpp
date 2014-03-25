@@ -56,7 +56,7 @@ namespace ChilliSource
         ///
         /// @param Particle to intialise
         //-----------------------------------------------------
-        void LinearForceParticleEffector::Init(Particle* inpParticle, u32 inudwIndex)
+        void LinearForceParticleEffector::Init(Particle& in_particle)
         {
             
         }
@@ -69,9 +69,9 @@ namespace ChilliSource
         /// @param Particle to effect
         /// @param Time between frames
         //-----------------------------------------------------
-        void LinearForceParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
+        void LinearForceParticleEffector::Apply(Particle& in_particle, f32 infDt)
         {
-			inpParticle->vVelocity[inudwIndex] += (mvForce * infDt);
+			in_particle.m_velocity += (mvForce * infDt);
         }
     }
 }

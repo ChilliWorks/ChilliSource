@@ -40,7 +40,7 @@ namespace ChilliSource
             ///
             /// @param Particle to intialise
             //-----------------------------------------------------
-            void Init(Particle* inpParticle, u32 inudwIndex);
+            void Init(Particle& in_particle);
             //-----------------------------------------------------
             /// Apply
             ///
@@ -50,7 +50,7 @@ namespace ChilliSource
             /// @param Particle to effect
             /// @param Time between frames
             //-----------------------------------------------------
-            void Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt);
+            void Apply(Particle& in_particle, f32 infDt);
             
         private:
             

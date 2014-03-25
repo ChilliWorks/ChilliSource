@@ -57,7 +57,7 @@ namespace ChilliSource
         ///
         /// @param Particle to intialise
         //-----------------------------------------------------
-        void ColourChangerParticleEffector::Init(Particle* inpParticle, u32 inudwIndex)
+        void ColourChangerParticleEffector::Init(Particle& in_particle)
         {
             //Doesn't require initing
         }
@@ -70,22 +70,22 @@ namespace ChilliSource
         /// @param Particle to effect
         /// @param Time between frames
         //-----------------------------------------------------
-        void ColourChangerParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
+        void ColourChangerParticleEffector::Apply(Particle& in_particle, f32 infDt)
         {
-            f32 fEnergy = inpParticle->fEnergy[inudwIndex];
+            f32 fEnergy = in_particle.m_energy;
             
             fEnergy = fEnergy / mfActiveEnergyLevel;
             
             if(!mbInitialColourSet)
             {
                 mbInitialColourSet = true;
-                mInitialColour = inpParticle->Col[inudwIndex];
+                mInitialColour = in_particle.m_colour;
             }
             
             Core::Colour cColourDiff = (mTargetColour - mInitialColour) * (1.0f - fEnergy);
             Core::Colour cColourNew = mInitialColour + cColourDiff;
             
-			inpParticle->Col[inudwIndex] = cColourNew *cColourNew.a;
+			in_particle.m_colour = cColourNew *cColourNew.a;
         }
     }
 }

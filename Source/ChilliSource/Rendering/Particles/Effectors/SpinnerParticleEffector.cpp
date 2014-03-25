@@ -24,8 +24,6 @@ namespace ChilliSource
         {
             mfActiveEnergyLevel = 0.0f;
             
-            mfRandomOffset = Core::MathUtils::RandomInRange(0.0f, 1.0f);
-            
             std::string strTemp;
 
             //Linear force
@@ -59,7 +57,7 @@ namespace ChilliSource
         ///
         /// @param Particle to intialise
         //-----------------------------------------------------
-        void SpinnerParticleEffector::Init(Particle* inpParticle, u32 inudwIndex)
+        void SpinnerParticleEffector::Init(Particle& in_particle)
         {
             
         }
@@ -72,12 +70,9 @@ namespace ChilliSource
         /// @param Particle to effect
         /// @param Time between frames
         //-----------------------------------------------------
-        void SpinnerParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
+        void SpinnerParticleEffector::Apply(Particle& in_particle, f32 infDt)
         {
-            f32 fRand = Core::MathUtils::GetPseudoRandom(inudwIndex + 1) + mfRandomOffset - 1.0f;
-            f32 fAngVelocity = mfAngVelocity * fRand;
-            
-            inpParticle->fAngularRotation[inudwIndex] +=  fAngVelocity * infDt;
+            in_particle.m_angularRotation +=  mfAngVelocity * infDt;
         }
     }
 }
