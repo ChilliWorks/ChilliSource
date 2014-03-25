@@ -29,17 +29,6 @@ namespace ChilliSource
 		{
 			return (in_interfaceId == Input::Accelerometer::InterfaceID || in_interfaceId == Accelerometer::InterfaceID);
 		}
-        //----------------------------------------------------
-		//----------------------------------------------------
-        void Accelerometer::OnInit()
-        {
-			m_accelerometerJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<AccelerometerJavaInterface>();
-			if (m_accelerometerJI == nullptr)
-			{
-				m_accelerometerJI = AccelerometerJavaInterfaceSPtr(new AccelerometerJavaInterface());
-				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_accelerometerJI);
-			}
-        }
 		//----------------------------------------------------
 		//----------------------------------------------------
 		bool Accelerometer::IsUpdating() const
@@ -78,6 +67,23 @@ namespace ChilliSource
 				m_isUpdating = false;
 			}
 		}
+        //----------------------------------------------------
+		//----------------------------------------------------
+        void Accelerometer::OnInit()
+        {
+			m_accelerometerJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<AccelerometerJavaInterface>();
+			if (m_accelerometerJI == nullptr)
+			{
+				m_accelerometerJI = AccelerometerJavaInterfaceSPtr(new AccelerometerJavaInterface());
+				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_accelerometerJI);
+			}
+        }
+        //----------------------------------------------------
+		//----------------------------------------------------
+        void Accelerometer::OnDestroy()
+        {
+        	m_accelerometerJI.reset();
+        }
 		//------------------------------------------------
 		//------------------------------------------------
 		void Accelerometer::OnAccelerationChanged(const Core::Vector3& in_acceleration)
@@ -85,11 +91,5 @@ namespace ChilliSource
 			m_acceleration = in_acceleration;
 			m_accelerationUpdatedEvent.NotifyConnections(m_acceleration);
 		}
-        //----------------------------------------------------
-		//----------------------------------------------------
-        void Accelerometer::OnDestroy()
-        {
-        	m_accelerometerJI.reset();
-        }
 	}
 }

@@ -8,40 +8,58 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboardDelegate.h>
 
+#include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/Keyboard.h>
+
 @implementation VirtualKeyboardDelegate
 
--(VirtualKeyboardDelegate*) initWithKeyboard:(VirtualKeyboard*) inpKeyboard
+//---------------------------------------------------------
+//---------------------------------------------------------
+-(VirtualKeyboardDelegate*) initWithKeyboard:(ChilliSource::iOS::Keyboard*) keyboardSystem
 {
-    self = [super init];
-    
-    if(self)
+    if(self = [super init])
     {
-        mpKeyboard = inpKeyboard;
+        keyboard = keyboardSystem;
+        return self;
     }
-    
-    return self;
+    return nil;
 }
+//---------------------------------------------------------
+/// Called when the keyboard text changes.
+///
+/// @author S Downie
+///
+/// @param The text field in which the text has changed.
+/// @param The range of characters that have changed.
+/// @param The replacement string.
+///
+/// @return Whether or not this change has been accepted.
+//---------------------------------------------------------
 -(BOOL) textField:(UITextField*)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString*)string
 {
-    NSString* strText = textField.text;
+    NSString* text = textField.text;
     
     if(string.length > 0)
     {
-        return mpKeyboard->UpdateText([strText stringByAppendingString:string]);
+        return keyboard->OnTextUpdated([text stringByAppendingString:string]);
     }
     else
     {
-        if(strText.length > 0)
+        if(text.length > 0)
         {
-            strText = [strText substringToIndex:(strText.length - 1)];
+            text = [text substringToIndex:(text.length - 1)];
         }
 
-        return mpKeyboard->UpdateText(strText);
+        return keyboard->OnTextUpdated(text);
     }
 }
+//---------------------------------------------------------
+/// @author S Downie
+///
+/// @param The text field.
+//---------------------------------------------------------
 -(BOOL) textFieldShouldReturn:(UITextField*)textField
 {
-    mpKeyboard->Hide();
+    keyboard->SetTextInputEnabled(false);
     return NO;
 }
 

@@ -24,16 +24,10 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //------------------------------------------------------------
-		class Accelerometer : public Input::Accelerometer
+		class Accelerometer final : public Input::Accelerometer
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(Accelerometer);
-			//----------------------------------------------------
-			/// Constructor
-            ///
-            /// @author S Downie
-			//----------------------------------------------------
-			Accelerometer();
             //----------------------------------------------------
 			/// Queries whether or not this system implements the
             /// interface with the given ID.
@@ -45,13 +39,6 @@ namespace ChilliSource
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-            //----------------------------------------------------
-			/// Initialises the system. This is called at a time
-            /// when all systems have already been added.
-            ///
-            /// @author I Copland
-			//----------------------------------------------------
-            void OnInit() override;
             //----------------------------------------------------
             /// @author I Copland
 			///
@@ -65,12 +52,6 @@ namespace ChilliSource
             /// @author I Copland
 			//----------------------------------------------------
 			void StartUpdating() override;
-            //----------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @param Time since last update
-            //----------------------------------------------------
-            void OnUpdate(f32 in_deltaTime) override;
 			//----------------------------------------------------
 			/// @author I Copland
             ///
@@ -91,13 +72,6 @@ namespace ChilliSource
             /// @author I Copland
 			//----------------------------------------------------
 			void StopUpdating() override;
-            //----------------------------------------------------
-			/// Destroys the system immediately before systems
-            /// are removed from the application.
-            ///
-            /// @author I Copland
-			//----------------------------------------------------
-            void OnDestroy() override;
 			//----------------------------------------------------
 			/// Destructor
             ///
@@ -105,6 +79,35 @@ namespace ChilliSource
 			//----------------------------------------------------
 			~Accelerometer();
 		private:
+            friend Input::AccelerometerUPtr Input::Accelerometer::Create();
+            
+            //----------------------------------------------------
+			/// Constructor. Declared private to force the use of
+            /// the factory method.
+            ///
+            /// @author S Downie
+			//----------------------------------------------------
+			Accelerometer();
+            //----------------------------------------------------
+			/// Initialises the system. This is called at a time
+            /// when all systems have already been added.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+            void OnInit() override;
+            //----------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @param Time since last update
+            //----------------------------------------------------
+            void OnUpdate(f32 in_deltaTime) override;
+            //----------------------------------------------------
+			/// Destroys the system immediately before systems
+            /// are removed from the application.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+            void OnDestroy() override;
             
             bool m_isUpdating;
             CMMotionManager* m_motionManager;

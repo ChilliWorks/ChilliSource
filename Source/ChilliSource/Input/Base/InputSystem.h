@@ -65,12 +65,6 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return Virtual keyboard device or null if none exists
-            //-------------------------------------------------------
-			virtual VirtualKeyboard* GetVirtualKeyboard() {return nullptr;}
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
             /// @return Mouse device or null if none exists
             //-------------------------------------------------------
 			virtual Mouse* GetMouse() {return nullptr;}

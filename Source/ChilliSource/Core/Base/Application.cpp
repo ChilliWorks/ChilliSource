@@ -41,6 +41,7 @@
 #include <ChilliSource/GUI/Base/GUIViewFactory.h>
 
 #include <ChilliSource/Input/Base/InputSystem.h>
+#include <ChilliSource/Input/Keyboard/Keyboard.h>
 
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
@@ -505,6 +506,7 @@ namespace ChilliSource
             CreateSystem<Audio::AudioLoader>(audioSystem);
 
             //Input
+            CreateSystem<Input::Keyboard>();
             AddSystem_Old(Input::InputSystem::Create());
 
             //Rendering

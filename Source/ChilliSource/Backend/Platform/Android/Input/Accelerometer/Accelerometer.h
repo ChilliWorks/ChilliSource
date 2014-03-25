@@ -23,16 +23,10 @@ namespace ChilliSource
 		///
 		/// @author I Copland
 		//------------------------------------------------------------
-		class Accelerometer : public Input::Accelerometer
+		class Accelerometer final : public Input::Accelerometer
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(Accelerometer);
-			//----------------------------------------------------
-			/// Constructor
-			///
-			/// @author I Copland
-			//----------------------------------------------------
-			Accelerometer();
 			//----------------------------------------------------
 			/// @author I Copland
 			///
@@ -40,13 +34,6 @@ namespace ChilliSource
 			/// the given interface.
 			//----------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-            //----------------------------------------------------
-			/// Initialises the system. This is called at a time
-            /// when all systems have already been added.
-            ///
-            /// @author I Copland
-			//----------------------------------------------------
-            void OnInit() override;
 			//----------------------------------------------------
 			/// @author I Copland
 			///
@@ -81,6 +68,23 @@ namespace ChilliSource
 			/// @author I Copland
 			//----------------------------------------------------
 			void StopUpdating() override;
+
+		protected:
+            friend Input::AccelerometerUPtr Input::Accelerometer::Create();
+			//----------------------------------------------------
+			/// Constructor. Declared private to force the use of
+            /// the factory method.
+			///
+			/// @author I Copland
+			//----------------------------------------------------
+			Accelerometer();
+            //----------------------------------------------------
+			/// Initialises the system. This is called at a time
+            /// when all systems have already been added.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+            void OnInit() override;
             //----------------------------------------------------
 			/// Destroys the system immediately before systems
             /// are removed from the application.
@@ -88,8 +92,6 @@ namespace ChilliSource
             /// @author I Copland
 			//----------------------------------------------------
             void OnDestroy() override;
-
-		protected:
 			//------------------------------------------------
 			/// Called whenever the acceleration changes.
 			///

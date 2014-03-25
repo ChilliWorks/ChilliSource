@@ -12,7 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/GUI/Label/Label.h>
-#include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
+#include <ChilliSource/Input/Keyboard/Keyboard.h>
 
 namespace ChilliSource
 {
@@ -40,7 +40,7 @@ namespace ChilliSource
 			///
 			/// @param Keyboard Event Delegate
 			//-------------------------------------------------
-			Core::IConnectableEvent<Input::KeyboardEventDelegate>& GetKeyboardShowEvent();
+			Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& GetKeyboardShowEvent();
 			//-------------------------------------------------
 			/// Get Keyboard Hide Event
 			///
@@ -49,7 +49,7 @@ namespace ChilliSource
 			///
 			/// @param Keyboard Event Delegate
 			//-------------------------------------------------
-			Core::IConnectableEvent<Input::KeyboardEventDelegate>& GetKeyboardHideEvent();
+			Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& GetKeyboardHideEvent();
 			//-------------------------------------------------
 			/// Get Text Change Event
 			///
@@ -64,13 +64,13 @@ namespace ChilliSource
 			///
 			/// @param Virtual keyboard
 			//-------------------------------------------------
-			void SetKeyboard(Input::VirtualKeyboard* inpKeyboard);
+			void SetKeyboard(Input::Keyboard* inpKeyboard);
 			//-------------------------------------------------
 			/// Get Keyboard Ptr
 			///
 			/// @return Virtual keyboard
 			//-------------------------------------------------
-			Input::VirtualKeyboard* GetKeyboardPtr();
+			Input::Keyboard* GetKeyboardPtr();
             //-------------------------------------------------
 			/// Show Keyboard
 			//-------------------------------------------------
@@ -151,7 +151,7 @@ namespace ChilliSource
             ///
             /// @param Capitalisation Type
             //------------------------
-            void SetKeyboardCapitalisationMethod(Input::KeyboardCapitalisation ineCapitalisationType);
+            void SetKeyboardCapitalisationMethod(Input::Keyboard::Capitalisation ineCapitalisationType);
             //-------------------------------------------------------
 			/// SetTextSeparator
 			///
@@ -239,10 +239,10 @@ namespace ChilliSource
 
 		private:
 
-			Input::VirtualKeyboard* mpKeyboard;
+			Input::Keyboard* mpKeyboard;
 
-			Core::Event<Input::KeyboardEventDelegate> mOnKeyboardShowEvent;
-			Core::Event<Input::KeyboardEventDelegate> mOnKeyboardHideEvent;
+			Core::Event<Input::Keyboard::KeyboardEventDelegate> mOnKeyboardShowEvent;
+			Core::Event<Input::Keyboard::KeyboardEventDelegate> mOnKeyboardHideEvent;
 			Core::Event<TextChangeEventDelegate> mOnTextChangeEvent;
             
             Core::ConnectionUPtr m_keyboardShownConnection;

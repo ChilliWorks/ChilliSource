@@ -61,7 +61,7 @@ namespace ChilliSource
         ///
         /// @param Keyboard Event Delegate
         //-------------------------------------------------
-        Core::IConnectableEvent<Input::KeyboardEventDelegate>& EditableLabel::GetKeyboardShowEvent()
+        Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& EditableLabel::GetKeyboardShowEvent()
         {
             return mOnKeyboardShowEvent;
         }
@@ -73,7 +73,7 @@ namespace ChilliSource
         ///
         /// @param Keyboard Event Delegate
         //-------------------------------------------------
-        Core::IConnectableEvent<Input::KeyboardEventDelegate>& EditableLabel::GetKeyboardHideEvent()
+        Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& EditableLabel::GetKeyboardHideEvent()
         {
             return mOnKeyboardHideEvent;
         }
@@ -145,7 +145,7 @@ namespace ChilliSource
 		///
 		/// @return Virtual keyboard
 		//-------------------------------------------------
-		Input::VirtualKeyboard* EditableLabel::GetKeyboardPtr()
+		Input::Keyboard* EditableLabel::GetKeyboardPtr()
 		{
 			return mpKeyboard;
 		}
@@ -154,7 +154,7 @@ namespace ChilliSource
         ///
         /// @param Virtual keyboard
         //-------------------------------------------------
-        void EditableLabel::SetKeyboard(Input::VirtualKeyboard* inpKeyboard)
+        void EditableLabel::SetKeyboard(Input::Keyboard* inpKeyboard)
         {
             if(mpKeyboard)
             {
@@ -168,8 +168,8 @@ namespace ChilliSource
                 mpKeyboard = inpKeyboard;
                 
                 //Stop listening to old keyboard
-                m_keyboardShownConnection = mpKeyboard->GetKeyboardShowEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardShown));
-                m_keyboardHiddenConnection = mpKeyboard->GetKeyboardHideEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardHidden));
+                m_keyboardShownConnection = mpKeyboard->GetTextInputEnabledEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardShown));
+                m_keyboardHiddenConnection = mpKeyboard->GetTextInputDisabledEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardHidden));
             }
             else
             {
@@ -184,7 +184,7 @@ namespace ChilliSource
             if(mpKeyboard)
             {
                 pKeyboardListener = this;
-                mpKeyboard->Show();
+                mpKeyboard->SetTextInputEnabled(true);
             }
         }
         //-------------------------------------------------
@@ -194,7 +194,7 @@ namespace ChilliSource
         {
             if(mpKeyboard)
             {
-                mpKeyboard->Hide();
+                mpKeyboard->SetTextInputEnabled(false);
                 mbShowKeyboard = false;
                 pKeyboardListener = this;
             }
@@ -209,7 +209,7 @@ namespace ChilliSource
             if(pKeyboardListener == this)
             {
                 mpKeyboard->SetText(Text);
-                m_keyboardTextChangedConnection = mpKeyboard->GetKeyboardTextChangeEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextChanged));
+                m_keyboardTextChangedConnection = mpKeyboard->GetTextInputReceivedEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextChanged));
                 mOnKeyboardShowEvent.NotifyConnections();
             }
         }
@@ -292,7 +292,7 @@ namespace ChilliSource
                if(Contains(insTouchInfo.vLocation))
                {
                    //Flag the keyboard as hidden and wait a few seconds so we can slide it in again
-				   if(!mpKeyboard->IsActive())
+				   if(!mpKeyboard->IsTextInputEnabled())
 				   {
                        ShowKeyboard();
 				   }
@@ -320,7 +320,7 @@ namespace ChilliSource
             {
                 mfTimeToShow = 0.0f;
                 mbShowKeyboard = false;
-                mpKeyboard->Show();
+                mpKeyboard->SetTextInputEnabled(true);
             }
         }
         //-------------------------------------------------------
@@ -442,7 +442,7 @@ namespace ChilliSource
         void EditableLabel::SetKeyboardInputTypeNumeric()
         {
             if(mpKeyboard)
-                mpKeyboard->SetKeyboardType(ChilliSource::Input::KeyboardType::k_numeric);
+                mpKeyboard->SetType(Input::Keyboard::Type::k_numeric);
         }
         //-------------------------------------------------
         /// SetKeyboardInputTypeText
@@ -452,17 +452,17 @@ namespace ChilliSource
         void EditableLabel::SetKeyboardInputTypeText()
         {
             if(mpKeyboard)
-                mpKeyboard->SetKeyboardType(ChilliSource::Input::KeyboardType::k_text);
+                mpKeyboard->SetType(Input::Keyboard::Type::k_text);
         }
         //------------------------
         /// Set Keyboard Capitalisation Method
         ///
         /// @param Capitalisation Type
         //------------------------
-        void EditableLabel::SetKeyboardCapitalisationMethod(Input::KeyboardCapitalisation ineCapitalisationType)
+        void EditableLabel::SetKeyboardCapitalisationMethod(Input::Keyboard::Capitalisation ineCapitalisationType)
         {
             if(mpKeyboard)
-                mpKeyboard->SetCapitalisationMethod(ineCapitalisationType);
+                mpKeyboard->SetCapitalisation(ineCapitalisationType);
         }
         //-------------------------------------------------
         /// SetText
@@ -525,7 +525,7 @@ namespace ChilliSource
 				
 				if(mpKeyboard)
 				{
-					mpKeyboard->Hide();
+					mpKeyboard->SetTextInputEnabled(false);
 				}
             }
         }
