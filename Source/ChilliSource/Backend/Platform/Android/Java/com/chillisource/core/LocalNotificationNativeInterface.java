@@ -21,7 +21,6 @@ import android.os.Bundle;
 
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.LocalNotificationReceiver;
-import com.chillisource.core.LocalNotificationService;
 
 /**
  * A native interface for passing local notifications down
@@ -50,7 +49,6 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 */
 	private Intent m_createNotificationIntent;
 	private AlarmManager m_alarmManager;
-	private LocalNotificationService m_localNotificationService;
 	
 	/**
 	 * Constructor
@@ -115,7 +113,6 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	
         //set alarm to time of trigger
 		m_alarmManager.set(AlarmManager.RTC_WAKEUP, in_time, pendingIntent);
-		
 	}
 	
 	/**
