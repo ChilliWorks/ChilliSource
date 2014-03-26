@@ -20,16 +20,15 @@ namespace ChilliSource
         
         //-------------------------------------------------------
         //-------------------------------------------------------
-        SceneUPtr Scene::Create(Input::InputSystem* in_inputSystem )
+        SceneUPtr Scene::Create()
         {
-            return SceneUPtr(new Scene(in_inputSystem));
+            return SceneUPtr(new Scene());
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		Scene::Scene(Input::InputSystem* inpInputSystem) 
+		Scene::Scene()
         : m_rootWindow(new GUI::Window())
 		{
-			m_rootWindow->SetInputSystem(inpInputSystem);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -67,9 +66,8 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void Scene::OnBackground()
 		{
-			Input::TouchInfo info;
-			info.eType = Input::TouchInputType::k_ended;
-			m_rootWindow->_OnTouchEnded(info);
+			Input::PointerSystem::Pointer pointer;
+			m_rootWindow->_OnPointerUp(pointer, 0.0f, Input::PointerSystem::GetDefaultPressType());
             m_rootWindow->UnlistenFromTouches();
 		}
 		//-------------------------------------------------------

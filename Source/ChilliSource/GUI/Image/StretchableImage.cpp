@@ -599,15 +599,16 @@ namespace ChilliSource
 		{
 			return CentreTouchConsumption;
 		}
-		
-		bool StretchableImage::OnTouchBegan(const Input::TouchInfo &insTouchInfo)
+        //--------------------------------------------------------
+		//--------------------------------------------------------
+		bool StretchableImage::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer)
 		{
-			bool bConsumed = GUIView::OnTouchBegan(insTouchInfo);
+			bool bConsumed = GUIView::OnPointerDown(in_pointer);
 			
 			if (!CentreTouchConsumption && bConsumed && IsTouchConsumptionEnabled(TouchType::k_began))
 			{
 				// If the patch contains the touch
-				if(Contains(insTouchInfo.vLocation))
+				if(Contains(in_pointer.m_location))
 				{
 					// Retrieve the patch sizes
 					PatchSize sPatchSize;
@@ -617,7 +618,7 @@ namespace ChilliSource
 					Core::Rectangle sMiddleAABB(GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft) + sPatchSize.vSizeBottomLeft, sPatchSize.vSizeMiddleCentre);
 					
 					// If the touch is not located in the centre, we consume it
-					bool bContainsMiddle = sMiddleAABB.Contains(insTouchInfo.vLocation);
+					bool bContainsMiddle = sMiddleAABB.Contains(in_pointer.m_location);
 					
 					bConsumed = !bContainsMiddle;
 				}
@@ -626,7 +627,9 @@ namespace ChilliSource
 			return bConsumed;
 		}
 		
-		bool StretchableImage::OnTouchMoved(const Input::TouchInfo & insTouchInfo)
+        //--------------------------------------------------------
+		//--------------------------------------------------------
+		bool StretchableImage::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer)
 		{
 			// Special treatment if the middle image has to let the touch through
 			if (!CentreTouchConsumption && IsTouchConsumptionEnabled(TouchType::k_moved))
@@ -637,11 +640,11 @@ namespace ChilliSource
 					{
 						if(!AlignedWithParent)
 						{
-							SetPosition(Core::UnifiedVector2(Core::Vector2::ZERO, insTouchInfo.vLocation));
+							SetPosition(Core::UnifiedVector2(Core::Vector2::ZERO, in_pointer.m_location));
 						}
 						else
 						{
-							SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::ZERO, insTouchInfo.vLocation));
+							SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::ZERO, in_pointer.m_location));
 						}
 					}
 					
@@ -649,7 +652,7 @@ namespace ChilliSource
 					
 					for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
 					{
-						if((*it)->OnTouchMoved(insTouchInfo))
+						if((*it)->OnPointerMoved(in_pointer))
 						{
 							mSubviewsCopy.clear();
 							return true;
@@ -658,7 +661,7 @@ namespace ChilliSource
 					
 					//Check for input events
 					//If we contain this touch we can consume it
-					if(mInputEvents.OnTouchMoved(this, insTouchInfo) && IsTouchConsumptionEnabled(TouchType::k_moved))
+					if(mInputEvents.OnPointerMoved(this, in_pointer) && IsTouchConsumptionEnabled(TouchType::k_moved))
 					{
 						// Retrieve the patch sizes
 						PatchSize sPatchSize;
@@ -668,7 +671,7 @@ namespace ChilliSource
 						Core::Rectangle sMiddleAABB(GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft) + sPatchSize.vSizeBottomLeft, sPatchSize.vSizeMiddleCentre);
 						
 						// If the touch is not located in the centre, we consume it
-						bool bContainsMiddle = sMiddleAABB.Contains(insTouchInfo.vLocation);
+						bool bContainsMiddle = sMiddleAABB.Contains(in_pointer.m_location);
 						
 						if (bContainsMiddle)
 						{
@@ -684,7 +687,7 @@ namespace ChilliSource
 				return false;
 			}
 			
-			return GUIView::OnTouchMoved(insTouchInfo);
+			return GUIView::OnPointerMoved(in_pointer);
 		}
     }
 }

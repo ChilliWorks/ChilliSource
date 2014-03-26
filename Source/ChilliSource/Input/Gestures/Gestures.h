@@ -37,7 +37,7 @@ namespace ChilliSource
 			typedef std::function<void(const Gesture*)> GestureEventDelegate;
 			
             Gesture(GUI::GUIView* inpView);
-            Gesture(TouchScreen* inpTouchDevice);
+            Gesture(PointerSystem* in_pointerSystem);
 			virtual ~Gesture(){}
 			
 			//----------------------------------------------------
@@ -58,9 +58,9 @@ namespace ChilliSource
 			/// Triggered by the input manager when the device
 			/// receives touch notifications
 			//----------------------------------------------------
-			virtual void OnTouchBegan(const TouchInfo &Info) = 0;
-			virtual void OnTouchMoved(const TouchInfo &Info) = 0;
-			virtual void OnTouchEnded(const TouchInfo &Info) = 0;
+			virtual void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) = 0;
+			virtual void OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp) = 0;
+			virtual void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) = 0;
             
             //----------------------------------------------------
             /// Surface Destroyed
@@ -85,11 +85,11 @@ namespace ChilliSource
 			bool mbIsGestureInvalid;
 			Core::Timer mTimer;
             GUI::GUIView* mpView;
-            TouchScreen* mpTouchDevice;
+            PointerSystem* m_pointerSystem;
             
-            Core::ConnectionUPtr m_touchBeganConnection;
-            Core::ConnectionUPtr m_touchMoveConnection;
-            Core::ConnectionUPtr m_touchEndConnection;
+            Core::ConnectionUPtr m_pointerDownConnection;
+            Core::ConnectionUPtr m_pointerMovedConnection;
+            Core::ConnectionUPtr m_pointerUpConnection;
             
         private:
             
@@ -106,7 +106,7 @@ namespace ChilliSource
 		{
 		public:
             SwipeGesture(GUI::GUIView* inpSurface);
-            SwipeGesture(TouchScreen* inpTouchDevice);
+            SwipeGesture(PointerSystem* in_pointerSystem);
 			
 			//----------------------------------------------------
 			/// Set Number of Contact Points Required
@@ -155,9 +155,9 @@ namespace ChilliSource
 			/// Triggered by the input manager when the device
 			/// receives touch notifications
 			//----------------------------------------------------
-			void OnTouchBegan(const TouchInfo &Info);
-			void OnTouchMoved(const TouchInfo &Info){}
-			void OnTouchEnded(const TouchInfo &Info);
+			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp) override {}
+			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
 			
 		public:
 			
@@ -185,7 +185,7 @@ namespace ChilliSource
 		{
 		public:
             PinchGesture(GUI::GUIView* inpSurface);
-            PinchGesture(TouchScreen* inpTouchDevice);
+            PinchGesture(PointerSystem* in_pointerSystem);
 			
             //----------------------------------------------------
             /// @author S Downie
@@ -238,9 +238,9 @@ namespace ChilliSource
 			/// Triggered by the input manager when the device
 			/// receives touch notifications
 			//----------------------------------------------------
-			void OnTouchBegan(const TouchInfo &Info);
-			void OnTouchMoved(const TouchInfo &Info);
-			void OnTouchEnded(const TouchInfo &Info);
+			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp) override;
+			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
 			
 		public:
 			f32				mfRatio;				// The ratio of mfCurrentDisplacement / mfStartDisplacement
@@ -279,7 +279,7 @@ namespace ChilliSource
 		{
 		public:
             TapCSwipeGestureGesture(GUI::GUIView* inpSurface);
-            TapCSwipeGestureGesture(TouchScreen* inpTouchDevice);
+            TapCSwipeGestureGesture(PointerSystem* in_pointerSystem);
 			
 			//----------------------------------------------------
 			/// Set Number of Taps Required
@@ -318,9 +318,9 @@ namespace ChilliSource
 			/// Triggered by the input manager when the device
 			/// receives touch notifications
 			//----------------------------------------------------
-			void OnTouchBegan(const TouchInfo &Info);
-			void OnTouchMoved(const TouchInfo &Info){}
-			void OnTouchEnded(const TouchInfo &Info);
+			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp) override {};
+			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
 			
 			//----------------------------------------------------
 			/// Check For Tap
@@ -357,7 +357,7 @@ namespace ChilliSource
 		{
 		public:
 			DragGesture(GUI::GUIView* inpSurface);
-            DragGesture(TouchScreen* inpTouchDevice);
+            DragGesture(PointerSystem* in_pointerSystem);
 			
             //----------------------------------------------------
             /// @author S Downie
@@ -404,9 +404,9 @@ namespace ChilliSource
 			/// Triggered by the input manager when the device
 			/// receives touch notifications
 			//----------------------------------------------------
-			void OnTouchBegan(const TouchInfo &Info);
-			void OnTouchMoved(const TouchInfo &Info);
-			void OnTouchEnded(const TouchInfo &Info);
+			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp) override;
+			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
 			
 		public:
 			
@@ -438,7 +438,7 @@ namespace ChilliSource
 		{
 		public:
 			CHoldGesture(GUI::GUIView* inpSurface);
-            CHoldGesture(TouchScreen* inpTouchDevice);
+            CHoldGesture(PointerSystem* in_pointerSystem);
 			
             //----------------------------------------------------
             /// @author S Downie
@@ -504,9 +504,9 @@ namespace ChilliSource
 			/// Triggered by the input manager when the device
 			/// receives touch notifications
 			//----------------------------------------------------
-			void OnTouchBegan(const TouchInfo &Info);
-			void OnTouchMoved(const TouchInfo &Info);
-			void OnTouchEnded(const TouchInfo &Info);
+			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp) override;
+			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
 			
 			void CancelGesture();
 			void EndGesture();

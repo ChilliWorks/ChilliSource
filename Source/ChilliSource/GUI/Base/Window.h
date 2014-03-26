@@ -31,18 +31,6 @@ namespace ChilliSource
             Window();
             virtual ~Window();
             
-    		//-----------------------------------------------------
-    		/// Set Input System
-    		///
-    		/// @param pointer to the input system
-    		//-----------------------------------------------------
-    		void SetInputSystem(Input::InputSystem* inpInputSystem);
-            //-----------------------------------------------------
-            /// Get Input System
-            ///
-            /// @return pointer to the input system
-            //-----------------------------------------------------
-            Input::InputSystem* GetInputSystem();
             void ListenForTouches();
             void UnlistenFromTouches();
             //-----------------------------------------------------------
@@ -61,53 +49,53 @@ namespace ChilliSource
             
         protected:
             //-----------------------------------------------------------
-            /// On Touch Began
-            ///
             /// Called when the window receives cursor/touch input
+            ///
+            /// @author S Downie
             ///
             /// @param Touch data
             //-----------------------------------------------------------
-            void _OnTouchBegan(const Input::TouchInfo & insTouchInfo);
+            void _OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType);
             //-----------------------------------------------------------
-            /// On Touch Moved
-            ///
             /// Called when the window receives cursor/touch input
+            ///
+            /// @author S Downie
             ///
             /// @param Touch data
             //-----------------------------------------------------------
-            void _OnTouchMoved(const Input::TouchInfo & insTouchInfo);
+            void _OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp);
             //-----------------------------------------------------------
-            /// On Touch Ended
-            ///
             /// Called when the window stops receiving cursor/touch input
             ///
+            /// @author S Downie
+            ///
             /// @param Touch data
             //-----------------------------------------------------------
-            void _OnTouchEnded(const Input::TouchInfo & insTouchInfo);
+            void _OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType);
             //-----------------------------------------------------------
-            /// On Touch Began
-            ///
             /// Called when the window receives cursor/touch input
             ///
+            /// @author S Downie
+            ///
             /// @param Touch data
             //-----------------------------------------------------------
-            bool OnTouchBegan(const Input::TouchInfo & insTouchInfo);
+            bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer) override;
             //-----------------------------------------------------------
-            /// On Touch Moved
-            ///
             /// Called when the window receives cursor/touch input
             ///
+            /// @author S Downie
+            ///
             /// @param Touch data
             //-----------------------------------------------------------
-            bool OnTouchMoved(const Input::TouchInfo & insTouchInfo);
+            bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer) override;
             //-----------------------------------------------------------
-            /// On Touch Ended
-            ///
             /// Called when the window stops receiving cursor/touch input
             ///
+            /// @author S Downie
+            ///
             /// @param Touch data
             //-----------------------------------------------------------
-            void OnTouchEnded(const Input::TouchInfo & insTouchInfo);
+            void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer) override;
 #ifdef CS_ENABLE_DEBUGSTATS
             //-----------------------------------------------------
 			/// Draw
@@ -127,14 +115,14 @@ namespace ChilliSource
 			friend void Core::Scene::OnBackground();
             
         private:
-            Input::InputSystem* mpInputSystem;
+            Input::PointerSystem* m_pointerSystem;
             
             Core::ConnectionUPtr m_screenOrientationChangedConnection;
             Core::ConnectionUPtr m_screenResizedConnection;
             
-            Core::ConnectionUPtr m_touchBeganConnection;
-            Core::ConnectionUPtr m_touchMoveConnection;
-            Core::ConnectionUPtr m_touchEndConnection;
+            Core::ConnectionUPtr m_pointerDownConnection;
+            Core::ConnectionUPtr m_pointerMovedConnection;
+            Core::ConnectionUPtr m_pointerUpConnection;
         };
     }
 }

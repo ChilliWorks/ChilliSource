@@ -90,67 +90,56 @@ namespace ChilliSource
         //---Touch Delegates
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void InputEvents::OnTouchBegan(GUIView* inpView, const Input::TouchInfo & insTouchInfo, bool in_containsTouch)
+        void InputEvents::OnPointerDown(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer, bool in_containsTouch)
         {
             //We must contain this point to be notified so we can trigger an event
             //Events: PressedInside
             //Possible: Released outside, Moved Outside, Moved Within
             if(in_containsTouch == true)
             {
-                mTouchPressedInside.NotifyConnections(inpView, insTouchInfo);
+                mTouchPressedInside.NotifyConnections(in_view, in_pointer);
             }
             
-            mOpenTouches.push_back(insTouchInfo.ID);
+            mOpenTouches.push_back(in_pointer.m_uniqueId);
         }
         //-----------------------------------------------------------
-        /// On Touch Moved
-        ///
-        /// Called when the window receives cursor/touch input
-        ///
-        /// @param Touch data
-        /// @return Whether the view contains the touch
         //-----------------------------------------------------------
-        bool InputEvents::OnTouchMoved(GUIView* inpView, const Input::TouchInfo & insTouchInfo)
+        bool InputEvents::OnPointerMoved(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer)
         {
-            std::vector<u32>::iterator it = std::find(mOpenTouches.begin(), mOpenTouches.end(), insTouchInfo.ID);
+            std::vector<u32>::iterator it = std::find(mOpenTouches.begin(), mOpenTouches.end(), in_pointer.m_uniqueId);
             
-            bool bContains = inpView->Contains(insTouchInfo.vLocation);
+            bool bContains = in_view->Contains(in_pointer.m_location);
             
             if(it == mOpenTouches.end() && bContains)
             {
                 //Event: Moved inside
                 //The touch has moved into us raise an event
-                mTouchMoveEnter.NotifyConnections(inpView, insTouchInfo);
+                mTouchMoveEnter.NotifyConnections(in_view, in_pointer);
             }
             else if(it != mOpenTouches.end() && bContains)
             {
                 //Event: Moved within
-                mTouchMovedWithin.NotifyConnections(inpView, insTouchInfo);
+                mTouchMovedWithin.NotifyConnections(in_view, in_pointer);
             }
             else if(it != mOpenTouches.end() && !bContains)
             {
                 //If the touch started within us then we can trigger an event
                 //Event: Moved outside
-                mTouchMoveExit.NotifyConnections(inpView, insTouchInfo);
+                mTouchMoveExit.NotifyConnections(in_view, in_pointer);
             }
             
             return bContains;
         }
         //-----------------------------------------------------------
-        /// On Touch Ended
-        ///
-        /// Called when the window stops receiving cursor/touch input
-        ///
-        /// @param Touch data
         //-----------------------------------------------------------
-        void InputEvents::OnTouchEnded(GUIView* inpView, const Input::TouchInfo & insTouchInfo)
+        void InputEvents::OnPointerUp(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer)
         {
-            std::vector<u32>::iterator it = std::find(mOpenTouches.begin(), mOpenTouches.end(), insTouchInfo.ID);
+            std::vector<u32>::iterator it = std::find(mOpenTouches.begin(), mOpenTouches.end(), in_pointer.m_uniqueId);
             
-            if(inpView->Contains(insTouchInfo.vLocation))
+            if(in_view->Contains(in_pointer.m_location))
             {
                 //We contained the touch when it was released we can raise an event
-                mTouchReleasedInside.NotifyConnections(inpView, insTouchInfo);
+                mTouchReleasedInside.NotifyConnections(in_view, in_pointer);
                 
                 if(it != mOpenTouches.end())
                 {
@@ -161,7 +150,7 @@ namespace ChilliSource
             else if(it != mOpenTouches.end())
             {
                 //If the touch started within us then we can trigger an event
-                mTouchReleasedOutside.NotifyConnections(inpView, insTouchInfo);
+                mTouchReleasedOutside.NotifyConnections(in_view, in_pointer);
                 mOpenTouches.erase(it);
             }
         }  

@@ -231,34 +231,23 @@ namespace ChilliSource
             }
         }
         //-----------------------------------------------------------
-        /// On Touch Began
-        ///
-        /// Called when the window receives cursor/touch input
-        ///
-        /// @param Touch data
-        /// @return Whether touch has been consumed
         //-----------------------------------------------------------
-        bool EditableLabel::OnTouchBegan(const Input::TouchInfo & insTouchInfo)
+        bool EditableLabel::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer)
         {
             if(UserInteraction)
             {
                 mbSelected = true;
             }
             
-            return GUIView::OnTouchBegan(insTouchInfo);
+            return GUIView::OnPointerDown(in_pointer);
         }
         //-----------------------------------------------------------
-        /// On Touch Ended
-        ///
-        /// Called when the view stops receiving cursor/touch input
-        ///
-        /// @param Touch data
         //-----------------------------------------------------------
-        void EditableLabel::OnTouchEnded(const Input::TouchInfo & insTouchInfo)
+        void EditableLabel::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer)
         {
             if(UserInteraction && Visible && mpKeyboard && mbSelected)
             {
-               if(Contains(insTouchInfo.vLocation))
+               if(Contains(in_pointer.m_location))
                {
                    //Flag the keyboard as hidden and wait a few seconds so we can slide it in again
 				   if(!mpKeyboard->IsTextInputEnabled())
@@ -274,7 +263,7 @@ namespace ChilliSource
             
             mbSelected = false;
             
-            GUIView::OnTouchEnded(insTouchInfo);
+            GUIView::OnPointerUp(in_pointer);
         }
         //-------------------------------------------------------
         /// Update

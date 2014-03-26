@@ -41,31 +41,31 @@ namespace ChilliSource
             //-----------------------------------------------------
             void RemoveSubview(GUIView* inpSubview);
             //-----------------------------------------------------------
-            /// On Touch Began
-            ///
             /// Called when the window receives cursor/touch input
             ///
-            /// @param Touch data
+            /// @author S Downie
+            ///
+            /// @param The pointer.
             /// @return Whether touch has been consumed
             //-----------------------------------------------------------
-            bool OnTouchBegan(const Input::TouchInfo& insTouchInfo);
+            bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer) override;
             //-----------------------------------------------------------
-            /// On Touch Moved
-            ///
             /// Called when the window receives cursor/touch input
             ///
-            /// @param Touch data
+            /// @author S Downie
+            ///
+            /// @param The pointer.
             /// @return Whether touch has been consumed
             //-----------------------------------------------------------
-            bool OnTouchMoved(const Input::TouchInfo& insTouchInfo);
+            bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer) override;
 			//-----------------------------------------------------------
-			/// On Touch Ended
-			///
 			/// Called when the window receives cursor/touch input
+            ///
+            /// @author S Downie
 			///
-			/// @param Touch data
+			/// @param The pointer.
 			//-----------------------------------------------------------
-			void OnTouchEnded(const Input::TouchInfo& insTouchInfo);
+			void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer) override;
             //-----------------------------------------------------------
             /// Enable Horizontal Scrolling
             ///

@@ -22,9 +22,9 @@
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Math/Matrix3x3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
-#include <ChilliSource/Input/Pointer/TouchScreen.h>
 #include <ChilliSource/Core/Reflection/Reflection.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Input/Pointer/PointerSystem.h>
 
 namespace ChilliSource
 {
@@ -813,31 +813,35 @@ namespace ChilliSource
 
 			//---Touch Delegates
 			//-----------------------------------------------------------
-			/// On Touch Began
-			///
 			/// Called when the window receives cursor/touch input
 			///
-			/// @param Touch data
-			/// @return Whether touch has been consumed
-			//-----------------------------------------------------------
-			virtual bool OnTouchBegan(const Input::TouchInfo & insTouchInfo);
-			//-----------------------------------------------------------
-			/// On Touch Moved
+            /// @author S Downie
+            ///
+			/// @param The pointer
+            /// @param The timestamp
+            /// @param The press type.
 			///
+            /// @return Whether touch has been consumed
+			//-----------------------------------------------------------
+			virtual bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::Pointer);
+			//-----------------------------------------------------------
 			/// Called when the window receives cursor/touch input
 			///
+            /// @author S Downie
+            ///
 			/// @param Touch data
+            ///
 			/// @return Whether touch has been consumed
 			//-----------------------------------------------------------
-			virtual bool OnTouchMoved(const Input::TouchInfo & insTouchInfo);
+			virtual bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer);
 			//-----------------------------------------------------------
-			/// On Touch Ended
-			///
 			/// Called when the window stops receiving cursor/touch input
 			///
+            /// @author S Downie
+            ///
 			/// @param Touch data
 			//-----------------------------------------------------------
-			virtual void OnTouchEnded(const Input::TouchInfo & insTouchInfo);
+			virtual void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer);
 			//-----------------------------------------------------
 			/// Set Parent View 
 			///
@@ -857,32 +861,32 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			void SetRootWindow(Window* inpWindow);
             //-----------------------------------------------------------
-            /// Get Touch Began Event
-            ///
             /// Use this to register for touch notifications that
-            /// are not consumed by the GUI
+            /// are not consumed by the GUI.
+            ///
+            /// @author S Downie
             ///
             /// @return Touch began event
             //-----------------------------------------------------------
-            Core::IConnectableEvent<Input::TouchEventDelegate> & GetTouchBeganEvent();
+            Core::IConnectableEvent<Input::PointerSystem::PointerDownDelegate>& GetPointerDownEvent();
             //-----------------------------------------------------------
-            /// Get Touch Moved Event
-            ///
             /// Use this to register for touch notifications that
             /// are not consumed by the GUI
+            ///
+            /// @author S Downie
             ///
             /// @return Touch moved event
             //-----------------------------------------------------------
-            Core::IConnectableEvent<Input::TouchEventDelegate> & GetTouchMovedEvent();
+            Core::IConnectableEvent<Input::PointerSystem::PointerMovedDelegate>& GetPointerMovedEvent();
             //-----------------------------------------------------------
-            /// Get Touch End Event
-            ///
             /// Use this to register for touch notifications that
             /// are not consumed by the GUI
             ///
+            /// @author S Downie
+            ///
             /// @return Touch end event
             //-----------------------------------------------------------
-            Core::IConnectableEvent<Input::TouchEventDelegate> & GetTouchEndEvent();
+            Core::IConnectableEvent<Input::PointerSystem::PointerUpDelegate>& GetPointerUpEvent();
             
 		protected:
 
@@ -929,9 +933,9 @@ namespace ChilliSource
 
 		protected:
 
-            Core::Event<Input::TouchEventDelegate> mTouchBeganEvent;
-            Core::Event<Input::TouchEventDelegate> mTouchMovedEvent;
-            Core::Event<Input::TouchEventDelegate> mTouchEndedEvent;
+            Core::Event<Input::PointerSystem::PointerDownDelegate> m_pointerDownEvent;
+            Core::Event<Input::PointerSystem::PointerMovedDelegate> m_pointerMovedEvent;
+            Core::Event<Input::PointerSystem::PointerUpDelegate> m_pointerUpEvent;
             
 			Subviews mSubviews;
 			Subviews mSubviewsCopy;

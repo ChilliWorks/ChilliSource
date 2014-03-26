@@ -184,23 +184,25 @@ namespace ChilliSource
 			
 			//---Touch Delegates
 			//-----------------------------------------------------------
-			/// On Touch Began
-			///
 			/// Called when the window receives cursor/touch input
 			///
-			/// @param Touch data
+            /// @author S Downie
+            ///
+			/// @param The pointer.
+            ///
 			/// @return Whether touch has been consumed
 			//-----------------------------------------------------------
-			virtual bool OnTouchBegan(const Input::TouchInfo & insTouchInfo);
+			virtual bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer) override;
 			//-----------------------------------------------------------
-			/// On Touch Moved
-			///
 			/// Called when the window receives cursor/touch input
 			///
-			/// @param Touch data
+            /// @author S Downie
+			///
+			/// @param The pointer.
+            ///
 			/// @return Whether touch has been consumed
 			//-----------------------------------------------------------
-			virtual bool OnTouchMoved(const Input::TouchInfo & insTouchInfo);
+			virtual bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer) override;
             
             struct PatchSize
             {

@@ -256,14 +256,6 @@ namespace ChilliSource
             //-----------------------------------------------------
 			PlatformSystem* GetPlatformSystem();
 			//-----------------------------------------------------
-			/// Returns a pointer to the input system.
-            ///
-            /// @author S Downie.
-			///
-			/// @return Pointer to the input system
-			//-----------------------------------------------------
-			Input::InputSystem* GetInputSystem();
-			//-----------------------------------------------------
 			/// Returns a pointer to the audio system.
             ///
             /// @author S Downie.
@@ -501,10 +493,10 @@ namespace ChilliSource
 			StateManager* m_stateManager;
 			Rendering::RendererUPtr m_renderer;
             Rendering::RenderSystem* m_renderSystem;
-			Input::InputSystem * m_inputSystem;
             PlatformSystemUPtr m_platformSystem;
             Audio::AudioSystem* m_audioSystem;
             FileSystem* m_fileSystem;
+            Input::PointerSystem* m_pointerSystem;
 
 			ScreenOrientation m_defaultOrientation;
             

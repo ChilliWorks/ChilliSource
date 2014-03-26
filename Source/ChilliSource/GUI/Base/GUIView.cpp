@@ -509,40 +509,22 @@ namespace ChilliSource
 			}
         }
         //-----------------------------------------------------------
-        /// Get Touch Began Event
-        ///
-        /// Use this to register for touch notifications that
-        /// are not consumed by the GUI
-        ///
-        /// @return Touch began event
         //-----------------------------------------------------------
-        Core::IConnectableEvent<Input::TouchEventDelegate> & GUIView::GetTouchBeganEvent()
+        Core::IConnectableEvent<Input::PointerSystem::PointerDownDelegate>& GUIView::GetPointerDownEvent()
         {
-            return mTouchBeganEvent;
+            return m_pointerDownEvent;
         }
         //-----------------------------------------------------------
-        /// Get Touch Moved Event
-        ///
-        /// Use this to register for touch notifications that
-        /// are not consumed by the GUI
-        ///
-        /// @return Touch moved event
         //-----------------------------------------------------------
-        Core::IConnectableEvent<Input::TouchEventDelegate> & GUIView::GetTouchMovedEvent()
+        Core::IConnectableEvent<Input::PointerSystem::PointerMovedDelegate>& GUIView::GetPointerMovedEvent()
         {
-            return mTouchMovedEvent;
+            return m_pointerMovedEvent;
         }
         //-----------------------------------------------------------
-        /// Get Touch End Event
-        ///
-        /// Use this to register for touch notifications that
-        /// are not consumed by the GUI
-        ///
-        /// @return Touch end event
         //-----------------------------------------------------------
-        Core::IConnectableEvent<Input::TouchEventDelegate> & GUIView::GetTouchEndEvent()
+        Core::IConnectableEvent<Input::PointerSystem::PointerUpDelegate>& GUIView::GetPointerUpEvent()
         {
-            return mTouchEndedEvent;
+            return m_pointerUpEvent;
         }
         //-----------------------------------------------------
         /// Get Subviews
@@ -1690,14 +1672,8 @@ namespace ChilliSource
 		}
         //---Touch Delegates
         //-----------------------------------------------------------
-        /// On Touch Began
-        ///
-        /// Called when the window receives cursor/touch input
-        ///
-        /// @param Touch data
-        /// @return Whether touch has been consumed
         //-----------------------------------------------------------
-        bool GUIView::OnTouchBegan(const Input::TouchInfo & insTouchInfo)
+        bool GUIView::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer)
         {
             if(UserInteraction)
             {
@@ -1713,10 +1689,10 @@ namespace ChilliSource
                 {
 					if((*it)->UserInteraction)
 					{
-						bool bContains = (*it)->Contains(insTouchInfo.vLocation);
+						bool bContains = (*it)->Contains(in_pointer.m_location);
 						if((*it)->IsAcceptTouchesOutsideOfBoundsEnabled() || bContains)
 						{
-							if((*it)->OnTouchBegan(insTouchInfo))
+							if((*it)->OnPointerDown(in_pointer))
 							{
                                 mSubviewsCopy.clear();
 								return true;
@@ -1725,11 +1701,12 @@ namespace ChilliSource
 					}
                 }
                 //Check for input events
-				bool bContains = Contains(insTouchInfo.vLocation);
+				bool bContains = Contains(in_pointer.m_location);
 				if(IsAcceptTouchesOutsideOfBoundsEnabled() || bContains)
 				{
-					mInputEvents.OnTouchBegan(this, insTouchInfo, bContains);
-                    mTouchBeganEvent.NotifyConnections(insTouchInfo);
+					mInputEvents.OnPointerDown(this, in_pointer, bContains);
+                    m_pointerDownEvent.NotifyConnections(in_pointer);
+                    
 					//We consume this touch as it is within us
 					if(IsTouchConsumptionEnabled(TouchType::k_began) && bContains)
 					{
@@ -1745,14 +1722,8 @@ namespace ChilliSource
             return false;
         }
         //-----------------------------------------------------------
-        /// On Touch Moved
-        ///
-        /// Called when the window receives cursor/touch input
-        ///
-        /// @param Touch data
-        /// @return Whether touch has been consumed
         //-----------------------------------------------------------
-        bool GUIView::OnTouchMoved(const Input::TouchInfo & insTouchInfo)
+        bool GUIView::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer)
         {
             if(UserInteraction)
             {
@@ -1760,11 +1731,11 @@ namespace ChilliSource
 				{
 					if(!AlignedWithParent)
 					{
-						SetPosition(Core::UnifiedVector2(Core::Vector2::ZERO, insTouchInfo.vLocation));
+						SetPosition(Core::UnifiedVector2(Core::Vector2::ZERO, in_pointer.m_location));
 					}
 					else
 					{
-						SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::ZERO, insTouchInfo.vLocation));
+						SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::ZERO, in_pointer.m_location));
 					}
 				}
 
@@ -1772,7 +1743,7 @@ namespace ChilliSource
 
                 for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
-                    if((*it)->OnTouchMoved(insTouchInfo))
+                    if((*it)->OnPointerMoved(in_pointer))
                     {
                         mSubviewsCopy.clear();
                         return true;
@@ -1781,9 +1752,9 @@ namespace ChilliSource
                 
                 //Check for input events
                 //If we contain this touch we can consume it
-                if(mInputEvents.OnTouchMoved(this, insTouchInfo))
+                if(mInputEvents.OnPointerMoved(this, in_pointer))
                 {
-                    mTouchMovedEvent.NotifyConnections(insTouchInfo);
+                    m_pointerMovedEvent.NotifyConnections(in_pointer);
                     if(IsTouchConsumptionEnabled(TouchType::k_moved))
                     {
                         mSubviewsCopy.clear();
@@ -1797,14 +1768,8 @@ namespace ChilliSource
             return false;
         }
         //-----------------------------------------------------------
-        /// On Touch Ended
-        ///
-        /// Called when the window stops receiving cursor/touch input
-        ///
-        /// @param Touch data
-        /// @return Whether touch has been consumed
         //-----------------------------------------------------------
-        void GUIView::OnTouchEnded(const Input::TouchInfo & insTouchInfo)
+        void GUIView::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer)
         {
 			mbIsBeingDragged = false;
 
@@ -1814,11 +1779,11 @@ namespace ChilliSource
 				
                 for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
-                    (*it)->OnTouchEnded(insTouchInfo);
+                    (*it)->OnPointerUp(in_pointer);
                 }
                 
-                mTouchEndedEvent.NotifyConnections(insTouchInfo);
-                mInputEvents.OnTouchEnded(this, insTouchInfo);
+                m_pointerUpEvent.NotifyConnections(in_pointer);
+                mInputEvents.OnPointerUp(this, in_pointer);
             }
             mSubviewsCopy.clear();
         }

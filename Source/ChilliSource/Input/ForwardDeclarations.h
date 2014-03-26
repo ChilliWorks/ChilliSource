@@ -22,12 +22,6 @@ namespace ChilliSource
         //--------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Accelerometer);
         //--------------------------------------------------
-        /// Base
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(InputDevice);
-        CS_FORWARDDECLARE_CLASS(InputDeviceFactory);
-        CS_FORWARDDECLARE_CLASS(InputSystem);
-        //--------------------------------------------------
         /// Gestures
         //--------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Gesture);
@@ -43,8 +37,7 @@ namespace ChilliSource
         //--------------------------------------------------
         /// Pointer
         //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Mouse);
-        CS_FORWARDDECLARE_CLASS(TouchScreen);
+        CS_FORWARDDECLARE_CLASS(PointerSystem);
 	}
 }
 

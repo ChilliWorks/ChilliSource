@@ -8,10 +8,11 @@
 
 #include <ChilliSource/GUI/Base/Window.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 
-#include <ChilliSource/Input/Base/InputSystem.h>
+#include <ChilliSource/Input/Pointer/PointerSystem.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/GUI/Debug/DebugStatsView.h>
@@ -33,6 +34,8 @@ namespace ChilliSource
 			//Each hierarchy can only have on window
 			mpRootWindow = this;
             
+            m_pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
+            
 			Core::Vector2 vAbsSize = Core::Screen::GetOrientedDimensions();
             
 			//The window is fullscreen and centred
@@ -44,43 +47,22 @@ namespace ChilliSource
 			m_screenOrientationChangedConnection = Core::ApplicationEvents::GetScreenOrientationChangedEvent().OpenConnection(Core::MakeDelegate(this, &Window::OnScreenOrientationChanged));
 			m_screenResizedConnection = Core::ApplicationEvents::GetScreenResizedEvent().OpenConnection(Core::MakeDelegate(this, &Window::OnScreenResized));
 		}
-		//-----------------------------------------------------
-		/// Set Input System
-		///
-		/// @param pointer to the input system
-		//-----------------------------------------------------
-		void Window::SetInputSystem(Input::InputSystem* inpInputSystem)
-		{
-			mpInputSystem = inpInputSystem;
-            
-			//The window is responsible for receiving input for this scene
-            ListenForTouches();
-		}
-        //-----------------------------------------------------
-        /// Get Input System
-        ///
-        /// @return pointer to the input system
-        //-----------------------------------------------------
-        Input::InputSystem* Window::GetInputSystem()
-        {
-            return mpInputSystem;
-        }
         void Window::ListenForTouches()
         {
-            if(mpInputSystem && mpInputSystem->GetTouchScreen() && !mbListeningForTouches)
+            if(m_pointerSystem && !mbListeningForTouches)
 			{
-				m_touchBeganConnection = mpInputSystem->GetTouchScreen()->GetTouchBeganEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnTouchBegan));
-				m_touchMoveConnection = mpInputSystem->GetTouchScreen()->GetTouchMovedEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnTouchMoved));
-				m_touchEndConnection = mpInputSystem->GetTouchScreen()->GetTouchEndEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnTouchEnded));
+				m_pointerDownConnection = m_pointerSystem->GetPointerDownEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnPointerDown));
+				m_pointerMovedConnection = m_pointerSystem->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnPointerMoved));
+				m_pointerUpConnection = m_pointerSystem->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnPointerUp));
                 mbListeningForTouches=true;
 			}
         }
         
         void Window::UnlistenFromTouches()
         {
-            m_touchBeganConnection = nullptr;
-            m_touchMoveConnection = nullptr;
-            m_touchEndConnection = nullptr;
+            m_pointerDownConnection.reset();
+            m_pointerMovedConnection.reset();
+            m_pointerUpConnection.reset();
             mbListeningForTouches = false;
         }
 		//-----------------------------------------------------------
@@ -117,133 +99,111 @@ namespace ChilliSource
 			GUIView::OnScreenOrientationChanged();
 		}
 		//-----------------------------------------------------------
-		/// On Touch Began
-		///
-		/// Called when the window receives cursor/touch input
-		///
-		/// @param Touch data
 		//-----------------------------------------------------------
-		void Window::_OnTouchBegan(const Input::TouchInfo & insTouchInfo)
+		void Window::_OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
 		{
-			if (!UserInteraction)
-				return;
-			
-			mSubviewsCopy = mSubviews;
-            
-			mInputEvents.OnTouchBegan(this, insTouchInfo, true);
-			
-			//We need to notify any subviews they get first dibs
-			for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
-			{
-				if(((*it)->IsAcceptTouchesOutsideOfBoundsEnabled() || (*it)->Contains(insTouchInfo.vLocation)))
-				{
-					if((*it)->OnTouchBegan(insTouchInfo))
-					{
-						//This means the touch has been consumed
-						//and we should not notify anyone else
+			if (in_pressType == Input::PointerSystem::GetDefaultPressType())
+            {
+                if (!UserInteraction)
+                    return;
+                
+                mSubviewsCopy = mSubviews;
+                
+                mInputEvents.OnPointerDown(this, in_pointer, true);
+                
+                //We need to notify any subviews they get first dibs
+                for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
+                {
+                    if(((*it)->IsAcceptTouchesOutsideOfBoundsEnabled() || (*it)->Contains(in_pointer.m_location)))
+                    {
+                        if((*it)->OnPointerDown(in_pointer))
+                        {
+                            //This means the touch has been consumed
+                            //and we should not notify anyone else
+                            mSubviewsCopy.clear();
+                            return;
+                        }
+                    }
+                }
+                
+                //If the touch has not been consumed we then notify
+                //the outside world
+                mSubviewsCopy.clear();
+                m_pointerDownEvent.NotifyConnections(in_pointer, in_timestamp, in_pressType);
+            }
+		}
+		//-----------------------------------------------------------
+		//-----------------------------------------------------------
+		void Window::_OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
+		{
+            if (in_pointer.m_activePresses.find(Input::PointerSystem::GetDefaultPressType()) != in_pointer.m_activePresses.end())
+            {
+                if (!UserInteraction)
+                    return;
+                
+                mSubviewsCopy = mSubviews;
+                
+                mInputEvents.OnPointerMoved(this, in_pointer);
+                
+                //We need to notify any subviews they get first dibs
+                for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
+                {
+                    if((*it)->OnPointerMoved(in_pointer))
+                    {
+                        //This means the touch has been consumed
+                        //and we should not notify anyone else
                         mSubviewsCopy.clear();
-						return;
-					}
-				}
-			}
-            
-			//If the touch has not been consumed we then notify
-			//the outside world
-            mSubviewsCopy.clear();
-            mTouchBeganEvent.NotifyConnections(insTouchInfo);
+                        return;
+                    }
+                }
+                
+                //If the touch has not been consumed we then notify
+                //the outside world
+                mSubviewsCopy.clear();
+                m_pointerMovedEvent.NotifyConnections(in_pointer, in_timestamp);
+            }
 		}
 		//-----------------------------------------------------------
-		/// On Touch Moved
-		///
-		/// Called when the window receives cursor/touch input
-		///
-		/// @param Touch data
 		//-----------------------------------------------------------
-		void Window::_OnTouchMoved(const Input::TouchInfo & insTouchInfo)
+		void Window::_OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
 		{
-			if (!UserInteraction)
-				return;
-			
-			mSubviewsCopy = mSubviews;
-            
-			mInputEvents.OnTouchMoved(this, insTouchInfo);
-			
-			//We need to notify any subviews they get first dibs
-			for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
-			{
-				if((*it)->OnTouchMoved(insTouchInfo))
-				{
-					//This means the touch has been consumed
-					//and we should not notify anyone else
-                    mSubviewsCopy.clear();
-					return;
-				}
-			}
-            
-			//If the touch has not been consumed we then notify
-			//the outside world
-            mSubviewsCopy.clear();
-            mTouchMovedEvent.NotifyConnections(insTouchInfo);
-		}
-		//-----------------------------------------------------------
-		/// On Touch Ended
-		///
-		/// Called when the window stops receiving cursor/touch input
-		///
-		/// @param Touch data
-		//-----------------------------------------------------------
-		void Window::_OnTouchEnded(const Input::TouchInfo & insTouchInfo)
-		{
-			if (!UserInteraction)
-				return;
-			
-			mSubviewsCopy = mSubviews;
-            
-			mInputEvents.OnTouchEnded(this, insTouchInfo);
-			
-			//We need to notify any subviews they get first dibs
-			for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
-			{
-				(*it)->OnTouchEnded(insTouchInfo);
-			}
-            
-			//If the touch has not been consumed we then notify
-			//the outside world
-            mSubviewsCopy.clear();
-            mTouchEndedEvent.NotifyConnections(insTouchInfo);
+            if (in_pressType == Input::PointerSystem::GetDefaultPressType())
+            {
+                if (!UserInteraction)
+                    return;
+                
+                mSubviewsCopy = mSubviews;
+                
+                mInputEvents.OnPointerUp(this, in_pointer);
+                
+                //We need to notify any subviews they get first dibs
+                for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
+                {
+                    (*it)->OnPointerDown(in_pointer);
+                }
+                
+                //If the touch has not been consumed we then notify
+                //the outside world
+                mSubviewsCopy.clear();
+                m_pointerUpEvent.NotifyConnections(in_pointer, in_timestamp, in_pressType);
+            }
 		}
         //-----------------------------------------------------------
-        /// On Touch Began
-        ///
-        /// Called when the window receives cursor/touch input
-        ///
-        /// @param Touch data
         //-----------------------------------------------------------
-        bool Window::OnTouchBegan(const Input::TouchInfo & insTouchInfo)
+        bool Window::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer)
         {
             return false;
         }
         //-----------------------------------------------------------
-        /// On Touch Moved
-        ///
-        /// Called when the window receives cursor/touch input
-        ///
-        /// @param Touch data
         //-----------------------------------------------------------
-        bool Window::OnTouchMoved(const Input::TouchInfo & insTouchInfo)
+        bool Window::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer)
         {
             return false;
         }
         //-----------------------------------------------------------
-        /// On Touch Ended
-        ///
-        /// Called when the window stops receiving cursor/touch input
-        ///
-        /// @param Touch data
         //-----------------------------------------------------------
-        void Window::OnTouchEnded(const Input::TouchInfo & insTouchInfo)
+        void Window::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer)
         {
-            
         }
 #ifdef CS_ENABLE_DEBUGSTATS
         //-----------------------------------------------------

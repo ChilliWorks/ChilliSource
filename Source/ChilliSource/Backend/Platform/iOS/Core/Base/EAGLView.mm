@@ -7,7 +7,9 @@
 //
 
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
-#import <ChilliSource/Backend/Platform/iOS/Input/Pointer/TouchScreen.h>
+
+#include <ChilliSource/Backend/Platform/iOS/Input/Pointer/PointerSystem.h>
+#include <ChilliSource/Core/Base/Application.h>
 
 static EAGLView* gpGLView = nil;
 
@@ -86,32 +88,51 @@ static EAGLView* gpGLView = nil;
 }
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
 {
-	for (UITouch* touch in touches)
+    ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
+    
+    if (pointerSystem != nullptr)
     {
-		TouchBegan(touch);
+        for (UITouch* touch in touches)
+        {
+            pointerSystem->OnTouchBegan(touch);
+        }
 	}
-	
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	for (UITouch* touch in touches)
+    ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
+    
+    if (pointerSystem != nullptr)
     {
-		TouchEnded(touch);
+        for (UITouch* touch in touches)
+        {
+            pointerSystem->OnTouchEnded(touch);
+        }
 	}
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	for (UITouch* touch in touches)
+    ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
+    
+    if (pointerSystem != nullptr)
     {
-		TouchEnded(touch);
+        for (UITouch* touch in touches)
+        {
+            pointerSystem->OnTouchEnded(touch);
+        }
 	}
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	for (UITouch* touch in touches)
+    ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
+    
+    if (pointerSystem != nullptr)
     {
-		TouchMoved(touch);
+        for (UITouch* touch in touches)
+        {
+            pointerSystem->OnTouchMoved(touch);
+        }
 	}
 }
 

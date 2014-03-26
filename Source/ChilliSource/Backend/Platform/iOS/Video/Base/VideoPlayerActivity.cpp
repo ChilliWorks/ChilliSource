@@ -19,7 +19,6 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
-#include <ChilliSource/Input/Base/InputSystem.h>
 
 #include <MediaPlayer/MediaPlayer.h>
 #include <AudioToolbox/AudioSession.h>

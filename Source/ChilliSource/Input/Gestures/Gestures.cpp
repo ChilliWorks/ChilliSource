@@ -11,7 +11,6 @@
  */
 
 #include <ChilliSource/Input/Gestures/Gestures.h>
-#include <ChilliSource/Input/Base/InputSystem.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
@@ -31,12 +30,12 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		Gesture::Gesture(TouchScreen* inpTouchDevice) : mbIsGestureInvalid(false), mpView(nullptr), mpTouchDevice(inpTouchDevice)
+		Gesture::Gesture(PointerSystem* in_pointerSystem) : mbIsGestureInvalid(false), mpView(nullptr), m_pointerSystem(in_pointerSystem)
 		{
 			//Register for touch notifications
-			m_touchBeganConnection = inpTouchDevice->GetTouchBeganEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchBegan));
-			m_touchMoveConnection = inpTouchDevice->GetTouchMovedEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchMoved));
-			m_touchEndConnection = inpTouchDevice->GetTouchEndEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchEnded));
+			m_pointerDownConnection = m_pointerSystem->GetPointerDownEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnPointerDown));
+			m_pointerMovedConnection = m_pointerSystem->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnPointerMoved));
+			m_pointerUpConnection = m_pointerSystem->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnPointerUp));
 		}
         //----------------------------------------------------
 		/// Constructor
@@ -44,12 +43,12 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		Gesture::Gesture(GUI::GUIView* inpView) : mbIsGestureInvalid(false), mpView(inpView), mpTouchDevice(nullptr)
+		Gesture::Gesture(GUI::GUIView* inpView) : mbIsGestureInvalid(false), mpView(inpView), m_pointerSystem(nullptr)
 		{
 			//Register for touch notifications
-			m_touchBeganConnection = mpView->GetTouchBeganEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchBegan));
-			m_touchMoveConnection = mpView->GetTouchMovedEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchMoved));
-			m_touchEndConnection = mpView->GetTouchEndEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchEnded));
+			m_pointerDownConnection = mpView->GetPointerDownEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnPointerDown));
+			m_pointerMovedConnection = mpView->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnPointerMoved));
+			m_pointerUpConnection = mpView->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnPointerUp));
 		}
         //----------------------------------------------------
 		/// Surface Destroyed
@@ -59,7 +58,7 @@ namespace ChilliSource
 		void Gesture::SurfaceDestroyed()
         {
             mpView = nullptr;
-            mpTouchDevice = nullptr;
+            m_pointerSystem = nullptr;
         }
         //----------------------------------------------------
 		/// Notify Gesture Triggered
@@ -93,8 +92,8 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		SwipeGesture::SwipeGesture(TouchScreen* inpTouchDevice)
-		: Gesture(inpTouchDevice), mMinDistanceRequiredSqrd(4000), mNumContactPointsRequired(1), mCurrentNumContactPoints(0), mMaxNumContactPoints(0), mfMaximumSwipeDuration(0.5f)
+		SwipeGesture::SwipeGesture(PointerSystem* in_pointerSystem)
+		: Gesture(in_pointerSystem), mMinDistanceRequiredSqrd(4000), mNumContactPointsRequired(1), mCurrentNumContactPoints(0), mMaxNumContactPoints(0), mfMaximumSwipeDuration(0.5f)
 		{
 		}
 		//----------------------------------------------------
@@ -129,62 +128,66 @@ namespace ChilliSource
 		}
 		//---Touch Delegates
 		//----------------------------------------------------
-		/// On Touch Delegates
-		///
-		/// Triggered by the input manager when the device
-		/// receives touch notifications
 		//----------------------------------------------------
-		void SwipeGesture::OnTouchBegan(const TouchInfo &Info)
+		void SwipeGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
-			if(++mCurrentNumContactPoints == 1)
-			{
-				//Clean the pipes
-				mTimer.Reset();
-				//Start the timer. If we let go within the max duration and have covered the given distance we have swiped. Easy!
-				mTimer.Start();
-				
-                mMaxNumContactPoints = 0;
+            if (in_pressType == PointerSystem::GetDefaultPressType())
+            {
+                if(++mCurrentNumContactPoints == 1)
+                {
+                    //Clean the pipes
+                    mTimer.Reset();
+                    //Start the timer. If we let go within the max duration and have covered the given distance we have swiped. Easy!
+                    mTimer.Start();
+                    
+                    mMaxNumContactPoints = 0;
+                    
+                    mbIsGestureInvalid = false;
+                }
+                mMaxNumContactPoints++;
                 
-				mbIsGestureInvalid = false;
-			}
-			mMaxNumContactPoints++;
-			
-			//Get it's initial position so we can work out it's velocity later
-			mvStartPos = Info.vLocation;
+                //Get it's initial position so we can work out it's velocity later
+                mvStartPos = in_pointer.m_location;
+            }
 		}
-		void SwipeGesture::OnTouchEnded(const TouchInfo &Info)
+        //----------------------------------------------------
+		//----------------------------------------------------
+		void SwipeGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
-			if (mCurrentNumContactPoints > 0)
-				mCurrentNumContactPoints--;
-			
-			//Don't process subsequent touches in the sequence if the gesture is invalid
-			if(mbIsGestureInvalid)
-			{
-				mMaxNumContactPoints = 0;
-				return;
-			}
-			
-			//Contact has ended without the correct number of contact
-			//points being applied. This gesture is not a swipe!
-			if(mMaxNumContactPoints != mNumContactPointsRequired)
-			{
-				mbIsGestureInvalid = true;
-				mMaxNumContactPoints = 0;
-				return;
-			}
-			
-			//Calculate the velocity based on the released position
-			mvEndPos = Info.vLocation;
-			//Average all the contact point velocities and us that to determine if we have swiped
-			mvVelocity = mvEndPos - mvStartPos;
-			
-			if(mCurrentNumContactPoints == 0 && mTimer.GetElapsedTime() < mfMaximumSwipeDuration && mvVelocity.LengthSquared() > mMinDistanceRequiredSqrd)
-			{
-				//Fire off the delegates
-                NotifyGestureTriggered();
-				
-				mMaxNumContactPoints = 0;
-			}
+            if (in_pressType == PointerSystem::GetDefaultPressType())
+            {
+                if (mCurrentNumContactPoints > 0)
+                    mCurrentNumContactPoints--;
+                
+                //Don't process subsequent touches in the sequence if the gesture is invalid
+                if(mbIsGestureInvalid)
+                {
+                    mMaxNumContactPoints = 0;
+                    return;
+                }
+                
+                //Contact has ended without the correct number of contact
+                //points being applied. This gesture is not a swipe!
+                if(mMaxNumContactPoints != mNumContactPointsRequired)
+                {
+                    mbIsGestureInvalid = true;
+                    mMaxNumContactPoints = 0;
+                    return;
+                }
+                
+                //Calculate the velocity based on the released position
+                mvEndPos = in_pointer.m_location;
+                //Average all the contact point velocities and us that to determine if we have swiped
+                mvVelocity = mvEndPos - mvStartPos;
+                
+                if(mCurrentNumContactPoints == 0 && mTimer.GetElapsedTime() < mfMaximumSwipeDuration && mvVelocity.LengthSquared() > mMinDistanceRequiredSqrd)
+                {
+                    //Fire off the delegates
+                    NotifyGestureTriggered();
+                    
+                    mMaxNumContactPoints = 0;
+                }
+            }
 		}
         
 		//================================================
@@ -210,8 +213,8 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		PinchGesture::PinchGesture(TouchScreen* inpTouchDevice) 
-		: Gesture(inpTouchDevice), mMinDistanceRequiredSqrd(6000), mfStartDisplacement(0.0f), mfCurrentDisplacement(0.0f), mbFirstTouchBegan(false), mbSecondTouchBegan(false), mCurrentTouches(0), mTouchID1(0), mfRatio(0.0f),
+		PinchGesture::PinchGesture(PointerSystem* in_pointerSystem)
+		: Gesture(in_pointerSystem), mMinDistanceRequiredSqrd(6000), mfStartDisplacement(0.0f), mfCurrentDisplacement(0.0f), mbFirstTouchBegan(false), mbSecondTouchBegan(false), mCurrentTouches(0), mTouchID1(0), mfRatio(0.0f),
 		mTouchID2(0)
 		{
 		}
@@ -235,102 +238,72 @@ namespace ChilliSource
 		}
 		//---Touch Delegates
 		//----------------------------------------------------
-		/// On Touch Delegates
-		///
-		/// Triggered by the input manager when the device
-		/// receives touch notifications
 		//----------------------------------------------------
-		void PinchGesture::OnTouchBegan(const TouchInfo &Info)
+		void PinchGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
-			mCurrentTouches++;
-			
-			if(!mbFirstTouchBegan)
-			{
-				mbIsGestureInvalid = true;
-				mbFirstTouchBegan = true;
-				mvStartPos1 = mvCurrentPos1 = Info.vLocation;
-				mTouchID1 = Info.ID;
-			}
-			else if(!mbSecondTouchBegan)
-			{
-				// Need to set the first touch to the current first touch position
-                TouchScreen* pTouchScreen = mpTouchDevice;
-                
-                if(mpView)
-                {
-                    pTouchScreen = Core::Application::Get()->GetInputSystem()->GetTouchScreen();
-                }
-                
-				TouchScreen::TouchList& cTouchList = pTouchScreen->GetTouchList();
-				for (u32 i = 0; i < cTouchList.size(); ++i)
-				{
-					if (cTouchList[i].ID == mTouchID1)
-					{
-						mvStartPos1 = cTouchList[i].vLocation;
-						break;
-					}
-				}
-				
-				mbSecondTouchBegan = true;
-				mvStartPos2 = mvCurrentPos2 = Info.vLocation;
-				mTouchID2 = Info.ID;
-				
-				// Now generate the distance between all this stuff
-				mfStartDisplacement = mfCurrentDisplacement = (mvStartPos2 - mvStartPos1).Length();
-				mfRatio = 1.0f;
-				
-				// Determine the start angle
-				Core::Vector2 cV = mvStartPos2 - mvStartPos1;
-				mfStartAngle = atan2f(cV.y, cV.x);
-				mfDAngle = 0.0f;
-				
-                m_gestureBeganEvent.NotifyConnections(this);
-			}
-		}
-		void PinchGesture::OnTouchMoved(const TouchInfo &Info)
-		{
-			//Get the initial distance between the touches
-			//Once that distance has changed sufficiently then we better recognize!
-			if (mbFirstTouchBegan && mbSecondTouchBegan)
-			{
-				//Update the velocity
-				if (Info.ID == mTouchID1)
-					mvCurrentPos1 = Info.vLocation;
-				else if (Info.ID == mTouchID2)
-					mvCurrentPos2 = Info.vLocation;
-				
-				mfCurrentDisplacement = (mvCurrentPos2 - mvCurrentPos1).Length();
-				if (mfStartDisplacement)
-					mfRatio = mfCurrentDisplacement / mfStartDisplacement;
-				else
-					mfRatio = 0.0f;
-				
-				// Determine the start angle
-				Core::Vector2 cV = mvCurrentPos2 - mvCurrentPos1;
-				mfCurrentAngle = atan2f(cV.y, cV.x);
-				mfDAngle = mfCurrentAngle - mfStartAngle;
-				
-				if (!mbIsGestureInvalid || (u32)std::abs(mfCurrentDisplacement * mfCurrentDisplacement) > mMinDistanceRequiredSqrd)
-				{
-					mbIsGestureInvalid = false;
-					
-                    NotifyGestureTriggered();
-				}
-			}
-		}
-		void PinchGesture::OnTouchEnded(const TouchInfo &Info)
-		{
-            if(mCurrentTouches > 0)
+            if (in_pressType == PointerSystem::GetDefaultPressType())
             {
-                mCurrentTouches--;
+                mCurrentTouches++;
                 
-                if (mbFirstTouchBegan && mbSecondTouchBegan && !mbIsGestureInvalid)
+                if(!mbFirstTouchBegan)
+                {
+                    mbIsGestureInvalid = true;
+                    mbFirstTouchBegan = true;
+                    mvStartPos1 = mvCurrentPos1 = in_pointer.m_location;
+                    mTouchID1 = in_pointer.m_uniqueId;
+                }
+                else if(!mbSecondTouchBegan)
+                {
+                    // Need to set the first touch to the current first touch position
+                    PointerSystem* pointer = m_pointerSystem;
+                    
+                    if(mpView)
+                    {
+                        pointer = Core::Application::Get()->GetSystem<PointerSystem>();
+                    }
+                    
+                    std::vector<PointerSystem::Pointer> pointers = pointer->GetActivePointers();
+                    for (u32 i = 0; i < pointers.size(); ++i)
+                    {
+                        if (pointers[i].m_uniqueId == mTouchID1)
+                        {
+                            mvStartPos1 = pointers[i].m_location;
+                            break;
+                        }
+                    }
+                    
+                    mbSecondTouchBegan = true;
+                    mvStartPos2 = mvCurrentPos2 = in_pointer.m_location;
+                    mTouchID2 = in_pointer.m_uniqueId;
+                    
+                    // Now generate the distance between all this stuff
+                    mfStartDisplacement = mfCurrentDisplacement = (mvStartPos2 - mvStartPos1).Length();
+                    mfRatio = 1.0f;
+                    
+                    // Determine the start angle
+                    Core::Vector2 cV = mvStartPos2 - mvStartPos1;
+                    mfStartAngle = atan2f(cV.y, cV.x);
+                    mfDAngle = 0.0f;
+                    
+                    m_gestureBeganEvent.NotifyConnections(this);
+                }
+            }
+		}
+		//----------------------------------------------------
+		//----------------------------------------------------
+		void PinchGesture::OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp)
+		{
+            if (in_pointer.m_activePresses.find(PointerSystem::GetDefaultPressType()) != in_pointer.m_activePresses.end())
+            {
+                //Get the initial distance between the touches
+                //Once that distance has changed sufficiently then we better recognize!
+                if (mbFirstTouchBegan && mbSecondTouchBegan)
                 {
                     //Update the velocity
-                    if (Info.ID == mTouchID1)
-                        mvCurrentPos1 = Info.vLocation;
-                    else if (Info.ID == mTouchID2)
-                        mvCurrentPos2 = Info.vLocation;
+                    if (in_pointer.m_uniqueId == mTouchID1)
+                        mvCurrentPos1 = in_pointer.m_location;
+                    else if (in_pointer.m_uniqueId == mTouchID2)
+                        mvCurrentPos2 = in_pointer.m_location;
                     
                     mfCurrentDisplacement = (mvCurrentPos2 - mvCurrentPos1).Length();
                     if (mfStartDisplacement)
@@ -338,10 +311,49 @@ namespace ChilliSource
                     else
                         mfRatio = 0.0f;
                     
-                    m_gestureEndedEvent.NotifyConnections(this);
+                    // Determine the start angle
+                    Core::Vector2 cV = mvCurrentPos2 - mvCurrentPos1;
+                    mfCurrentAngle = atan2f(cV.y, cV.x);
+                    mfDAngle = mfCurrentAngle - mfStartAngle;
+                    
+                    if (!mbIsGestureInvalid || (u32)std::abs(mfCurrentDisplacement * mfCurrentDisplacement) > mMinDistanceRequiredSqrd)
+                    {
+                        mbIsGestureInvalid = false;
+                        
+                        NotifyGestureTriggered();
+                    }
                 }
-                
-                mbFirstTouchBegan = mbSecondTouchBegan = false;
+            }
+		}
+        //----------------------------------------------------
+		//----------------------------------------------------
+		void PinchGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		{
+            if (in_pressType == PointerSystem::GetDefaultPressType())
+            {
+                if(mCurrentTouches > 0)
+                {
+                    mCurrentTouches--;
+                    
+                    if (mbFirstTouchBegan && mbSecondTouchBegan && !mbIsGestureInvalid)
+                    {
+                        //Update the velocity
+                        if (in_pointer.m_uniqueId == mTouchID1)
+                            mvCurrentPos1 = in_pointer.m_location;
+                        else if (in_pointer.m_uniqueId == mTouchID2)
+                            mvCurrentPos2 = in_pointer.m_location;
+                        
+                        mfCurrentDisplacement = (mvCurrentPos2 - mvCurrentPos1).Length();
+                        if (mfStartDisplacement)
+                            mfRatio = mfCurrentDisplacement / mfStartDisplacement;
+                        else
+                            mfRatio = 0.0f;
+                        
+                        m_gestureEndedEvent.NotifyConnections(this);
+                    }
+                    
+                    mbFirstTouchBegan = mbSecondTouchBegan = false;
+                }
             }
 		}
         
@@ -379,8 +391,8 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		TapCSwipeGestureGesture::TapCSwipeGestureGesture(TouchScreen* inpTouchDevice) 
-		: Gesture(inpTouchDevice), mNumTapsRequired(1), mfMaximumTapDuration(0.15f), mfMaxTimeBetweenTaps(0.25f), mCurrentNumTaps(0), mfLastTapTime(0.0f), mfLastBeganTime(0.0f), mudwMaxDistAllowedSqrd(1000)
+		TapCSwipeGestureGesture::TapCSwipeGestureGesture(PointerSystem* in_pointerSystem)
+		: Gesture(in_pointerSystem), mNumTapsRequired(1), mfMaximumTapDuration(0.15f), mfMaxTimeBetweenTaps(0.25f), mCurrentNumTaps(0), mfLastTapTime(0.0f), mfLastBeganTime(0.0f), mudwMaxDistAllowedSqrd(1000)
 		{
 		}
 		//----------------------------------------------------
@@ -418,54 +430,58 @@ namespace ChilliSource
         }
 		//---Touch Delegates
 		//----------------------------------------------------
-		/// On Touch Delegates
-		///
-		/// Triggered by the input manager when the device
-		/// receives touch notifications
 		//----------------------------------------------------
-		void TapCSwipeGestureGesture::OnTouchBegan(const TouchInfo &Info)
+		void TapCSwipeGestureGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
-			if(mCurrentNumTaps == 0)
-			{
-				//Clean the pipes
-				mTimer.Reset();
-				//Start the timer. If we let go within the max duration then we have tapped. Easy!
-				mTimer.Start();
-				mvStartPos = Info.vLocation;
-			}
-			
-			mfLastBeganTime = mTimer.GetElapsedTime();
+            if (in_pressType == PointerSystem::GetDefaultPressType())
+            {
+                if(mCurrentNumTaps == 0)
+                {
+                    //Clean the pipes
+                    mTimer.Reset();
+                    //Start the timer. If we let go within the max duration then we have tapped. Easy!
+                    mTimer.Start();
+                    mvStartPos = in_pointer.m_location;
+                }
+                
+                mfLastBeganTime = mTimer.GetElapsedTime();
+            }
 		}
-		void TapCSwipeGestureGesture::OnTouchEnded(const TouchInfo &Info)
+        //----------------------------------------------------
+		//----------------------------------------------------
+		void TapCSwipeGestureGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
-			//Ok we know by now whether we had a single tap (gesture will be valid)! Let's check if we have met the multi tap criteria
-			//That is that the taps happen within the given time
-			Core::Vector2 v = (Info.vLocation - mvStartPos);
-			if(v.LengthSquared() < mudwMaxDistAllowedSqrd && CheckForTap() && ((mNumTapsRequired == 1) || CheckForMultiTap()))
-			{				
-				mCurrentNumTaps++;
-			}
-			else 
-			{
-				mCurrentNumTaps = 0;
-				
-				if (mNumTapsRequired > 1)
-				{
-					OnTouchBegan(Info);
-					mCurrentNumTaps = 1;
-				}
-			}
-			
-			//Have we amassed enough taps quickly enough
-			if(mCurrentNumTaps >= mNumTapsRequired)
-			{
-				mvLocation = Info.vLocation;
-				
-				//Fire off the delegates
-                NotifyGestureTriggered();
-				
-				mCurrentNumTaps = 0;
-			}
+            if (in_pressType == PointerSystem::GetDefaultPressType())
+            {
+                //Ok we know by now whether we had a single tap (gesture will be valid)! Let's check if we have met the multi tap criteria
+                //That is that the taps happen within the given time
+                Core::Vector2 v = (in_pointer.m_location - mvStartPos);
+                if(v.LengthSquared() < mudwMaxDistAllowedSqrd && CheckForTap() && ((mNumTapsRequired == 1) || CheckForMultiTap()))
+                {				
+                    mCurrentNumTaps++;
+                }
+                else 
+                {
+                    mCurrentNumTaps = 0;
+                    
+                    if (mNumTapsRequired > 1)
+                    {
+                        OnPointerDown(in_pointer, in_timestamp, in_pressType);
+                        mCurrentNumTaps = 1;
+                    }
+                }
+                
+                //Have we amassed enough taps quickly enough
+                if(mCurrentNumTaps >= mNumTapsRequired)
+                {
+                    mvLocation = in_pointer.m_location;
+                    
+                    //Fire off the delegates
+                    NotifyGestureTriggered();
+                    
+                    mCurrentNumTaps = 0;
+                }
+            }
 		}
 		//----------------------------------------------------
 		/// Check For Tap
@@ -531,18 +547,14 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//-----------------------------------------------------
-		DragGesture::DragGesture(TouchScreen* inpTouchDevice) 
-		: Gesture(inpTouchDevice), mMinDistanceRequiredSqrd(2000), mfInitialHoldDuration(0.8f), mbFirstRun(true), mCurrentTouches(0), mbIsGestureActive(false), mCurrentID(0)
+		DragGesture::DragGesture(PointerSystem* in_pointerSystem)
+		: Gesture(in_pointerSystem), mMinDistanceRequiredSqrd(2000), mfInitialHoldDuration(0.8f), mbFirstRun(true), mCurrentTouches(0), mbIsGestureActive(false), mCurrentID(0)
 		{
 		}
 		//---Touch Delegates
 		//----------------------------------------------------
-		/// On Touch Delegates
-		///
-		/// Triggered by the input manager when the device
-		/// receives touch notifications
 		//----------------------------------------------------
-		void DragGesture::OnTouchBegan(const TouchInfo &Info)
+		void DragGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
 			mbIsGestureInvalid = true;
 			mCurrentTouches++;
@@ -553,72 +565,76 @@ namespace ChilliSource
 				mbIsGestureActive = true;
 
 				// Keep track of the touch that started the gesture
-                mCurrentID = Info.ID;
+                mCurrentID = in_pointer.m_uniqueId;
+            }
+		}
+        //----------------------------------------------------
+		//----------------------------------------------------
+		void DragGesture::OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp)
+		{
+            if (in_pointer.m_activePresses.find(PointerSystem::GetDefaultPressType()) != in_pointer.m_activePresses.end())
+            {
+                // Only recognise the touch that started the gesture
+                if (mbIsGestureActive && mCurrentID == in_pointer.m_uniqueId)
+                {
+                    //Get it's initial position so we can work out it's velocity later
+                    if(mbFirstRun)
+                    {
+                        //Clean the pipes
+                        mTimer.Reset();
+                        
+                        //Start the timer. If we move after the initial hold duration and have covered the given distance we have dragged. Easy!
+                        mTimer.Start();
+                        
+                        mvStartPos = in_pointer.m_location;
+                        mvLocation = mvStartPos;
+                        mvPreviousLocation = in_pointer.m_previousLocation;
+                        
+                        mbFirstRun = false;
+                        
+                        m_gestureBeganEvent.NotifyConnections(this);
+                    }			
+                    
+                    //Make sure we are holding down before we declare a drag gesture recognized
+                    if (mTimer.GetElapsedTime() > mfInitialHoldDuration && mCurrentTouches == 1)
+                    {
+                        // Gesture is now valid
+                        mbIsGestureInvalid = false;
+                        
+                        //Update location from touch
+                        mvLocation = in_pointer.m_location;
+                        mvPreviousLocation = in_pointer.m_previousLocation;
+                        
+                        //Calculate the distance travelled
+                        Core::Vector2 vVelocity = mvLocation - mvStartPos;
+                        
+                        if(vVelocity.LengthSquared() > mMinDistanceRequiredSqrd)
+                        {
+                            NotifyGestureTriggered();
+                            return;
+                        }
+                    }
+                    else if(mCurrentTouches > 1)
+                    {
+                        mbIsGestureInvalid = true;
+                        mbIsGestureActive = false;	// Now deactivate the gesture
+                        mCurrentID = 0;
+                    }
+                    
+                    mbIsGestureInvalid = true;
+                }
             }
 		}
 		
-		void DragGesture::OnTouchMoved(const TouchInfo &Info)
-		{
-			// Only recognise the touch that started the gesture
-			if (mbIsGestureActive && mCurrentID == Info.ID)
-			{
-				//Get it's initial position so we can work out it's velocity later
-				if(mbFirstRun)
-				{
-					//Clean the pipes
-					mTimer.Reset();
-					
-					//Start the timer. If we move after the initial hold duration and have covered the given distance we have dragged. Easy!
-					mTimer.Start();
-					
-					mvStartPos = Info.vLocation;
-					mvLocation = mvStartPos;
-                    mvPreviousLocation = Info.vPreviousLocation;
-					
-					mbFirstRun = false;
-					
-                    m_gestureBeganEvent.NotifyConnections(this);
-				}			
-				
-				//Make sure we are holding down before we declare a drag gesture recognized
-				if (mTimer.GetElapsedTime() > mfInitialHoldDuration && mCurrentTouches == 1)
-				{
-					// Gesture is now valid
-					mbIsGestureInvalid = false;
-					
-					//Update location from touch
-					mvLocation = Info.vLocation;
-                    mvPreviousLocation = Info.vPreviousLocation;
-					
-					//Calculate the distance travelled
-					Core::Vector2 vVelocity = mvLocation - mvStartPos;
-					
-					if(vVelocity.LengthSquared() > mMinDistanceRequiredSqrd)
-					{
-                        NotifyGestureTriggered();
-						return;
-					}
-				}
-				else if(mCurrentTouches > 1)
-				{
-					mbIsGestureInvalid = true;
-					mbIsGestureActive = false;	// Now deactivate the gesture
-	                mCurrentID = 0;
-				}
-				
-				mbIsGestureInvalid = true;
-			}
-		}
-		
-		void DragGesture::OnTouchEnded(const TouchInfo &Info)
+		void DragGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
             if(mCurrentTouches > 0)//if(mbIsGestureActive && mCurrentTouches > 0)
             {
                 if(--mCurrentTouches == 0)
                 {
                     //Update the location of the drag
-                    mvLocation = Info.vLocation;
-                    mvPreviousLocation = Info.vPreviousLocation;
+                    mvLocation = in_pointer.m_location;
+                    mvPreviousLocation = in_pointer.m_previousLocation;
                         
                     //Fire off the delegates
                     m_gestureEndedEvent.NotifyConnections(this);
@@ -657,19 +673,15 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//-----------------------------------------------------
-		CHoldGesture::CHoldGesture(TouchScreen* inpTouchDevice) 
-		: Gesture(inpTouchDevice), mfMaxDistanceAllowedSqrd(100), mfHoldDuration(0.8f), mbIsGestureActive(false), mudwNumberOfTouch(0), mfInitialHoldTime(0.2f), mbIsGestureStarted(false)
+		CHoldGesture::CHoldGesture(PointerSystem* in_pointerSystem)
+		: Gesture(in_pointerSystem), mfMaxDistanceAllowedSqrd(100), mfHoldDuration(0.8f), mbIsGestureActive(false), mudwNumberOfTouch(0), mfInitialHoldTime(0.2f), mbIsGestureStarted(false)
 		{
 		}
         
 		//---Touch Delegates
 		//----------------------------------------------------
-		/// On Touch Delegates
-		///
-		/// Triggered by the input manager when the device
-		/// receives touch notifications
 		//----------------------------------------------------
-		void CHoldGesture::OnTouchBegan(const TouchInfo &Info)
+		void CHoldGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
 			++mudwNumberOfTouch;
 			if (mudwNumberOfTouch == 1)
@@ -681,7 +693,7 @@ namespace ChilliSource
 				m_periodicTimerConnection = mTimer.OpenConnection(Core::MakeDelegate(this, &CHoldGesture::OnGestureUpdate), 0);
 				
 				// Set the starting location
-				mvLocation = Info.vLocation;
+				mvLocation = in_pointer.m_location;
              
                 //Set the gesture to started but it is not active until the minimum time limit has been reached
                 mbIsGestureStarted = true;
@@ -718,12 +730,13 @@ namespace ChilliSource
                 }
             }
 		}
-		
-		void CHoldGesture::OnTouchMoved(const TouchInfo &Info)
+        //----------------------------------------------------
+		//----------------------------------------------------
+		void CHoldGesture::OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp)
 		{
 			if (mbIsGestureStarted)
 			{
-				Core::Vector2 vDistance = Info.vLocation - mvLocation;
+				Core::Vector2 vDistance = in_pointer.m_location - mvLocation;
 				
 				// Check the movement of the touch
 				if(vDistance.LengthSquared() > mfMaxDistanceAllowedSqrd)
@@ -767,8 +780,9 @@ namespace ChilliSource
             m_periodicTimerConnection = nullptr;
 			mTimer.Reset();
         }
-        
-		void CHoldGesture::OnTouchEnded(const TouchInfo &Info)
+        //----------------------------------------------------
+		//----------------------------------------------------
+		void CHoldGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
             if(mudwNumberOfTouch > 0)
             {
@@ -777,7 +791,7 @@ namespace ChilliSource
                 if(mudwNumberOfTouch == 0)
                 {
                     //Update the location of the hold
-                    mvLocation = Info.vLocation;
+                    mvLocation = in_pointer.m_location;
                     
                     CancelGesture();
                 }

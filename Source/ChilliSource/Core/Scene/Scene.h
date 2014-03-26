@@ -37,7 +37,7 @@ namespace ChilliSource
             /// @param Input system used by the window to listen
             /// for input events
             //-------------------------------------------------------
-			static SceneUPtr Create(Input::InputSystem* in_inputSystem = nullptr);
+			static SceneUPtr Create();
             
             //-------------------------------------------------------
             /// Destructor
@@ -188,11 +188,8 @@ namespace ChilliSource
             /// Private to enforce use of factory method
             ///
             /// @author S Downie
-            ///
-            /// @param Input system used by the window to listen
-            /// for input events
             //-------------------------------------------------------
-			Scene(Input::InputSystem* in_inputSystem);
+			Scene();
             
 		private:
 			

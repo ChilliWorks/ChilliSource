@@ -40,8 +40,8 @@
 
 #include <ChilliSource/GUI/Base/GUIViewFactory.h>
 
-#include <ChilliSource/Input/Base/InputSystem.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
+#include <ChilliSource/Input/Pointer/PointerSystem.h>
 
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
@@ -82,7 +82,7 @@ namespace ChilliSource
         //----------------------------------------------------
         //----------------------------------------------------
 		Application::Application()
-        : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_inputSystem(nullptr), m_audioSystem(nullptr),
+        : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_audioSystem(nullptr),
         m_renderer(nullptr), m_fileSystem(nullptr), m_stateManager(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_resourceManagerDispenser(nullptr), m_updateIntervalRemainder(0.0f),
         m_shouldNotifyConnectionsResumeEvent(false), m_shouldNotifyConnectionsForegroundEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
 		{
@@ -182,12 +182,6 @@ namespace ChilliSource
         PlatformSystem* Application::GetPlatformSystem()
         {
             return m_platformSystem.get();
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        Input::InputSystem* Application::GetInputSystem()
-        {
-            return m_inputSystem;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
@@ -318,10 +312,10 @@ namespace ChilliSource
             //and our actual update frequency. We carry the remainder to the next frame until we have a full update cycle
             m_updateIntervalRemainder = MathUtils::Min(m_updateIntervalRemainder + in_deltaTime, GetUpdateIntervalMax());
             
-			//Force the input system to distribute any buffered input
-			if(m_inputSystem != nullptr)
+			//process any queued input received by the pointer system.
+			if(m_pointerSystem != nullptr)
 			{
-				m_inputSystem->FlushBufferedInput();
+				m_pointerSystem->ProcessQueuedInput();
 			}
             
             while((m_updateIntervalRemainder >= Application::GetUpdateInterval()) || m_isFirstFrame)
@@ -375,14 +369,6 @@ namespace ChilliSource
 				m_renderSystem->OnScreenOrientationChanged(in_width, in_height);
 			}
 
-			if (m_inputSystem != nullptr)
-			{
-				Input::TouchScreen * pTouchScreen = m_inputSystem->GetTouchScreen();
-				if (pTouchScreen != nullptr)
-				{
-					pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
-				}
-			}
 			ApplicationEvents::GetScreenResizedEvent().NotifyConnections(in_width, in_height);
             
 			CS_LOG_DEBUG("Screen resized Notification");
@@ -506,7 +492,7 @@ namespace ChilliSource
 
             //Input
             CreateSystem<Input::Keyboard>();
-            AddSystem_Old(Input::InputSystem::Create());
+            m_pointerSystem = CreateSystem<Input::PointerSystem>();
 
             //Rendering
             
@@ -560,10 +546,6 @@ namespace ChilliSource
 				}
                 
                 //Common systems
-                if(pSystem->IsA(Input::InputSystem::InterfaceID))
-                {
-                    m_inputSystem = static_cast<Input::InputSystem*>(pSystem);
-                }
                 if(pSystem->IsA(Rendering::RenderSystem::InterfaceID))
                 {
                     m_renderSystem = static_cast<Rendering::RenderSystem*>(pSystem);
@@ -749,12 +731,6 @@ namespace ChilliSource
 			{
 				m_renderer->GetActiveCameraPtr()->SetViewportOrientation(in_orientation);
 			}
-            
-            Input::TouchScreen * pTouchScreen = GetInputSystem()->GetTouchScreen();
-            if (pTouchScreen != nullptr)
-            {
-                pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
-            }
 		}
         //----------------------------------------------------
         //----------------------------------------------------

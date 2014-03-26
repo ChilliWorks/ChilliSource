@@ -121,13 +121,13 @@ namespace ChilliSource
             
             //---Touch Delegates
             //-----------------------------------------------------------
-            /// On Slider Moved
-            ///
             /// Called when the user drags the slider
+            ///
+            /// @author S Downie
             ///
             /// @param Touch data
             //-----------------------------------------------------------
-            void OnSliderMoved(GUIView* inpView, const Input::TouchInfo & insTouchInfo);
+            void OnSliderMoved(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer);
 			//-----------------------------------------------------------
 			/// Update Slider Position
 			/// 
