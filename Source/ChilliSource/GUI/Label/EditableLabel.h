@@ -33,33 +33,27 @@ namespace ChilliSource
 			virtual ~EditableLabel();
 
 			//-------------------------------------------------
-			/// Get Keyboard Show Event
-			///
-			/// Use to register delegate for when keyboard
-			/// becomes active
-			///
-			/// @param Keyboard Event Delegate
+			/// @author S Downie
+            ///
+            /// @return A delegate that is called when text
+            /// input is enabled.
 			//-------------------------------------------------
-			Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& GetKeyboardShowEvent();
+			Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& GetTextInputEnabledEvent();
 			//-------------------------------------------------
-			/// Get Keyboard Hide Event
-			///
-			/// Use to register delegate for when keyboard
-			/// stops being active
-			///
-			/// @param Keyboard Event Delegate
+			/// @author S Downie
+            ///
+            /// @return A delegate that is called when text
+            /// input is disabled.
 			//-------------------------------------------------
-			Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& GetKeyboardHideEvent();
+			Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& GetTextInputDisabledEvent();
 			//-------------------------------------------------
-			/// Get Text Change Event
-			///
-			/// Use to register delegate for when a character
-			/// is input using the keyboard
-			///
-			/// @param Text Change Event Delegate
+			/// @author S Downie
+            ///
+            /// @return A delegate that is called when text
+            /// input is received.
 			//-------------------------------------------------
-			Core::IConnectableEvent<TextChangeEventDelegate>& GetTextChangeEvent();
-			//-------------------------------------------------
+			Core::IConnectableEvent<TextChangeEventDelegate>& GetTextInputReceivedEvent();
+            //-------------------------------------------------
 			/// Set Keyboard
 			///
 			/// @param Virtual keyboard
@@ -176,26 +170,28 @@ namespace ChilliSource
 		protected:
 
 			//-------------------------------------------------
-			/// On Keyboard Shown
-			///
-			/// Triggered when the keyboard displays
+			/// Called when Text Input is enabled on the
+            /// keyboard.
+            ///
+            /// @author S Downie
 			//-------------------------------------------------
-			void OnKeyboardShown();
+			void OnKeyboardTextInputEnabled();
+            //-------------------------------------------------
+			/// Called when the keyboard text input changes.
+			///
+            /// @author S Downie
+            ///
+			/// @param Contents of the keyboard.
+			/// @param [Out] Whether to accept the input.
 			//----------------------------------------------------
-			/// On Keyboard Text Changed
-			///
-			/// Used to get the text from the keyboard
-			///
-			/// @param Contents of the keyboard
-			/// @param Whether to accept the input
-			//----------------------------------------------------
-			void OnKeyboardTextChanged(const Core::UTF8String& instrText, bool* inbRejectInput);
+			void OnKeyboardTextInputReceived(const Core::UTF8String& in_text, bool* out_rejectText);
 			//-------------------------------------------------
-			/// On Keyboard Hidden
-			///
-			/// Triggered when the keyboard disappears
+			/// Called when Text Input is disabled on the
+            /// keyboard.
+            ///
+            /// @author S Downie
 			//-------------------------------------------------
-			void OnKeyboardHidden();
+			void OnKeyboardTextInputDisabled();
             //-----------------------------------------------------------
             /// On Touch Began
             ///
@@ -241,9 +237,9 @@ namespace ChilliSource
 
 			Input::Keyboard* mpKeyboard;
 
-			Core::Event<Input::Keyboard::KeyboardEventDelegate> mOnKeyboardShowEvent;
-			Core::Event<Input::Keyboard::KeyboardEventDelegate> mOnKeyboardHideEvent;
-			Core::Event<TextChangeEventDelegate> mOnTextChangeEvent;
+			Core::Event<Input::Keyboard::KeyboardEventDelegate> m_textInputEnabledEvent;
+			Core::Event<Input::Keyboard::KeyboardEventDelegate> m_textInputDisabledEvent;
+			Core::Event<TextChangeEventDelegate> m_textInputReceivedEvent;
             
             Core::ConnectionUPtr m_keyboardShownConnection;
             Core::ConnectionUPtr m_keyboardHiddenConnection;

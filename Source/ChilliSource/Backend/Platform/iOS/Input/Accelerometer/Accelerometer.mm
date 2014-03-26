@@ -14,33 +14,26 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-        namespace
-        {
-            //----------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return Whether or not the accelerometer is supported
-            /// on this device.
-            //----------------------------------------------------
-            bool SupportedByDevice()
-            {
-                if(NSClassFromString(@"CMMotionManager") == nil)
-                    return false;
-                
-                CMMotionManager* manager = [[CMMotionManager alloc] init];
-                bool supported = manager.accelerometerAvailable;
-                [manager release];
-                
-                return supported;
-            }
-        }
-        
         CS_DEFINE_NAMEDTYPE(Accelerometer);
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool Accelerometer::IsSupportedByDevice()
+        {
+            if(NSClassFromString(@"CMMotionManager") == nil)
+                return false;
+            
+            CMMotionManager* manager = [[CMMotionManager alloc] init];
+            bool supported = manager.accelerometerAvailable;
+            [manager release];
+            
+            return supported;
+        }
         //----------------------------------------------------
         //----------------------------------------------------
         Accelerometer::Accelerometer()
             : m_isUpdating(false), m_motionManager(nil)
         {
+            CS_ASSERT(IsSupportedByDevice(), "Cannot create accelerometer on device that does not support it!");
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -58,7 +51,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void Accelerometer::StartUpdating()
         {
-            if (m_motionManager != nil)
+            if (m_isUpdating == false)
             {
                 m_isUpdating = true;
                 [m_motionManager startAccelerometerUpdates];
@@ -68,11 +61,7 @@ namespace ChilliSource
         //----------------------------------------------------
         Core::Vector3 Accelerometer::GetAcceleration() const
         {
-            if (m_motionManager != nil)
-            {
-                return Core::Vector3(m_motionManager.accelerometerData.acceleration.x, m_motionManager.accelerometerData.acceleration.y, m_motionManager.accelerometerData.acceleration.z);
-            }
-            return Core::Vector3::ZERO;
+            return Core::Vector3(m_motionManager.accelerometerData.acceleration.x, m_motionManager.accelerometerData.acceleration.y, m_motionManager.accelerometerData.acceleration.z);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -84,18 +73,18 @@ namespace ChilliSource
         //----------------------------------------------------
         void Accelerometer::StopUpdating()
         {
-            m_isUpdating = false;
-            [m_motionManager stopAccelerometerUpdates];
+            if (m_isUpdating == true)
+            {
+                m_isUpdating = false;
+                [m_motionManager stopAccelerometerUpdates];
+            }
         }
         //----------------------------------------------------
         //----------------------------------------------------
         void Accelerometer::OnInit()
         {
-            if (SupportedByDevice() == true)
-            {
-                m_motionManager = [[CMMotionManager alloc] init];
-                m_motionManager.accelerometerUpdateInterval = 0.033;
-            }
+            m_motionManager = [[CMMotionManager alloc] init];
+            m_motionManager.accelerometerUpdateInterval = 0.033;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -110,17 +99,8 @@ namespace ChilliSource
         //----------------------------------------------------
         void Accelerometer::OnDestroy()
         {
-            if (m_motionManager != nil)
-            {
-                [m_motionManager release];
-                m_motionManager = nil;
-            }
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        Accelerometer::~Accelerometer()
-        {
-            OnDestroy();
+            [m_motionManager release];
+            m_motionManager = nil;
         }
 	}
 }

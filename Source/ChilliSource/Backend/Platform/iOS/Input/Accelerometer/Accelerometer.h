@@ -29,6 +29,17 @@ namespace ChilliSource
 		public:
             CS_DECLARE_NAMEDTYPE(Accelerometer);
             //----------------------------------------------------
+            /// Returns whether or not this is supported on this
+            /// device. This should be called prior to allocating
+            /// the system.
+            ///
+            /// @author I Copland
+            ///
+            /// @return Whether or not the accelerometer is supported
+            /// on this device.
+            //----------------------------------------------------
+            static bool IsSupportedByDevice();
+            //----------------------------------------------------
 			/// Queries whether or not this system implements the
             /// interface with the given ID.
             ///
@@ -72,12 +83,6 @@ namespace ChilliSource
             /// @author I Copland
 			//----------------------------------------------------
 			void StopUpdating() override;
-			//----------------------------------------------------
-			/// Destructor
-            ///
-            /// @author I Copland
-			//----------------------------------------------------
-			~Accelerometer();
 		private:
             friend Input::AccelerometerUPtr Input::Accelerometer::Create();
             

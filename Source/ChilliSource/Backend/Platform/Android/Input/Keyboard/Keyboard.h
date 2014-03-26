@@ -107,12 +107,6 @@ namespace ChilliSource
 			/// disabled.
 			//-------------------------------------------------------
 			Core::IConnectableEvent<KeyboardEventDelegate>& GetTextInputDisabledEvent() override;
-			//-------------------------------------------------------
-			/// Destructor.
-			///
-			/// @author I Copland
-			//-------------------------------------------------------
-			~Keyboard();
 		private:
 			friend Input::KeyboardUPtr Input::Keyboard::Create();
 

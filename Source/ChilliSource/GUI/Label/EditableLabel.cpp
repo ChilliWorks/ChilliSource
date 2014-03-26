@@ -54,40 +54,22 @@ namespace ChilliSource
 			}
         }
         //-------------------------------------------------
-        /// Get Keyboard Show Event
-        ///
-        /// Use to register delegate for when keyboard
-        /// becomes active
-        ///
-        /// @param Keyboard Event Delegate
         //-------------------------------------------------
-        Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& EditableLabel::GetKeyboardShowEvent()
+        Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& EditableLabel::GetTextInputEnabledEvent()
         {
-            return mOnKeyboardShowEvent;
+            return m_textInputEnabledEvent;
         }
         //-------------------------------------------------
-        /// Get Keyboard Hide Event
-        ///
-        /// Use to register delegate for when keyboard
-        /// stops being active
-        ///
-        /// @param Keyboard Event Delegate
         //-------------------------------------------------
-        Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& EditableLabel::GetKeyboardHideEvent()
+        Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& EditableLabel::GetTextInputDisabledEvent()
         {
-            return mOnKeyboardHideEvent;
+            return m_textInputDisabledEvent;
         }
         //-------------------------------------------------
-        /// Get Text Change Event
-        ///
-        /// Use to register delegate for when a character
-        /// is input using the keyboard
-        ///
-        /// @param Text Change Event Delegate
         //-------------------------------------------------
-        Core::IConnectableEvent<EditableLabel::TextChangeEventDelegate>& EditableLabel::GetTextChangeEvent()
+        Core::IConnectableEvent<EditableLabel::TextChangeEventDelegate>& EditableLabel::GetTextInputReceivedEvent()
         {
-            return mOnTextChangeEvent;
+            return m_textInputReceivedEvent;
         }
         //-------------------------------------------------
         /// Enable Secure Entry
@@ -168,8 +150,8 @@ namespace ChilliSource
                 mpKeyboard = inpKeyboard;
                 
                 //Stop listening to old keyboard
-                m_keyboardShownConnection = mpKeyboard->GetTextInputEnabledEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardShown));
-                m_keyboardHiddenConnection = mpKeyboard->GetTextInputDisabledEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardHidden));
+                m_keyboardShownConnection = mpKeyboard->GetTextInputEnabledEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextInputEnabled));
+                m_keyboardHiddenConnection = mpKeyboard->GetTextInputDisabledEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextInputDisabled));
             }
             else
             {
@@ -200,17 +182,14 @@ namespace ChilliSource
             }
         }
         //-------------------------------------------------
-        /// On Keyboard Shown
-        ///
-        /// Triggered when the keyboard displays
         //-------------------------------------------------
-        void EditableLabel::OnKeyboardShown()
+        void EditableLabel::OnKeyboardTextInputEnabled()
         {
             if(pKeyboardListener == this)
             {
                 mpKeyboard->SetText(Text);
-                m_keyboardTextChangedConnection = mpKeyboard->GetTextInputReceivedEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextChanged));
-                mOnKeyboardShowEvent.NotifyConnections();
+                m_keyboardTextChangedConnection = mpKeyboard->GetTextInputReceivedEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextInputReceived));
+                m_textInputEnabledEvent.NotifyConnections();
             }
         }
         
@@ -220,14 +199,8 @@ namespace ChilliSource
             Label::SetText("");
         }
         //----------------------------------------------------
-		/// On Keyboard Text Changed
-		///
-		/// Used to get the text from the keyboard
-        ///
-        /// @param Contents of the keyboard
-        /// @param Whether to accept the input
 		//----------------------------------------------------
-		void EditableLabel::OnKeyboardTextChanged(const Core::UTF8String& instrText, bool* inbRejectInput)
+		void EditableLabel::OnKeyboardTextInputReceived(const Core::UTF8String& instrText, bool* inbRejectInput)
 		{
             //We can reject the text if it exceeds our input limit
             if(CharacterLimit > 0 && instrText.length() > CharacterLimit)
@@ -243,22 +216,18 @@ namespace ChilliSource
                 if(mutf8strSeparator.size() > 0)
                     mutf8strTextWithSeparators = GetTextWithSeparators();
 
-                mOnTextChangeEvent.NotifyConnections(this);
+                m_textInputReceivedEvent.NotifyConnections(this);
             }
 		}
         //-------------------------------------------------
-        /// On Keyboard Hidden
-        ///
-        /// Triggered when the keyboard disappears
         //-------------------------------------------------
-        void EditableLabel::OnKeyboardHidden()
+        void EditableLabel::OnKeyboardTextInputDisabled()
         {
             if(pKeyboardListener == this)
             {
                 m_keyboardTextChangedConnection = nullptr;
                 pKeyboardListener = nullptr;
-                mOnKeyboardHideEvent.NotifyConnections();
-               
+                m_textInputDisabledEvent.NotifyConnections();
             }
         }
         //-----------------------------------------------------------
