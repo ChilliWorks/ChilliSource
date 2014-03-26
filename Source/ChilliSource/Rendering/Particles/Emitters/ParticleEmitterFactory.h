@@ -25,14 +25,20 @@ namespace ChilliSource
             typedef std::function<ParticleEmitterUPtr(const Core::ParamDictionary&, const MaterialSPtr&, ParticleComponent*)> EmitterCreateDelegate;
 
             //------------------------------------------------------------------
-            /// Register 
+            /// Registers a new emitter factory method with the given key
             ///
-            /// Resgiters a new emitter type with the given key
+            /// @author S Downie
             ///
             /// @param Emitter instance static create delegate
             /// @param Key string
             //------------------------------------------------------------------
-            void Register(const EmitterCreateDelegate& inDelegate, const std::string& instrKey);
+            void AddCreator(const EmitterCreateDelegate& inDelegate, const std::string& instrKey);
+            //------------------------------------------------------------------
+            /// Unsubscribe all emitter factory methods
+            ///
+            /// @author S Downie
+            //------------------------------------------------------------------
+            void RemoveAllCreators();
             //------------------------------------------------------------------
             /// Create Particle Emitter
             ///

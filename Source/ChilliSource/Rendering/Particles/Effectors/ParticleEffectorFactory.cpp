@@ -14,16 +14,16 @@ namespace ChilliSource
     namespace Rendering
     {
         //------------------------------------------------------------------
-        /// Register 
-        ///
-        /// Resgiters a new effector type with the given key
-        ///
-        /// @param Effector static create delegate
-        /// @param Key string
         //------------------------------------------------------------------
-        void ParticleEffectorFactory::Register(const EffectorCreateDelegate& inDelegate, const std::string& instrKey)
+        void ParticleEffectorFactory::AddCreator(const EffectorCreateDelegate& inDelegate, const std::string& instrKey)
         {
             mmapDelegateToType.insert(std::make_pair(instrKey, inDelegate));
+        }
+        //------------------------------------------------------------------
+        //------------------------------------------------------------------
+        void ParticleEffectorFactory::RemoveAllCreators()
+        {
+            mmapDelegateToType.clear();
         }
         //------------------------------------------------------------------
         /// Create Particle Effector
