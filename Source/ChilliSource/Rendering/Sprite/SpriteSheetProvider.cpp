@@ -1,12 +1,12 @@
 //
-//  SpriteSheetLoader.cpp
+//  SpriteSheetProvider.cpp
 //  Chilli Source
 //
 //  Created by Scott Downie on 22/10/2010.
 //  Copyright 2010 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheetProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
@@ -27,33 +27,36 @@ namespace ChilliSource
             const u32 k_numElementsPerSpriteV0 = 6;
             const u32 k_numElementsPerSpriteV1 = 8;
         }
+        
+        CS_DEFINE_NAMEDTYPE(SpriteSheetProvider);
+        
         //-------------------------------------------------------
         //-------------------------------------------------------
-        SpriteSheetLoaderUPtr SpriteSheetLoader::Create()
+        SpriteSheetProviderUPtr SpriteSheetProvider::Create()
         {
-            return SpriteSheetLoaderUPtr(new SpriteSheetLoader());
+            return SpriteSheetProviderUPtr(new SpriteSheetProvider());
         }
 		//-------------------------------------------------------------------------
 		//-------------------------------------------------------------------------
-		bool SpriteSheetLoader::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool SpriteSheetProvider::IsA(Core::InterfaceIDType in_interfaceID) const
 		{
-			return in_interfaceID == ResourceProvider::InterfaceID;
+			return in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == SpriteSheetProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool SpriteSheetLoader::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
+		bool SpriteSheetProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
 		{
 			return (in_interfaceID == SpriteSheet::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool SpriteSheetLoader::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
+		bool SpriteSheetProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
 		{
 			return (in_extension == k_spriteFramesExtension || in_extension == k_spriteMapExtension);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool SpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool SpriteSheetProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
             SpriteSheetSPtr spriteResource(std::static_pointer_cast<SpriteSheet>(out_resource));
             spriteResource->SetLoaded(false);
@@ -68,7 +71,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        bool SpriteSheetLoader::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+        bool SpriteSheetProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
         {
             out_resource->SetLoaded(false);
             
@@ -79,7 +82,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void SpriteSheetLoader::LoadFrames(Core::StorageLocation in_location, const std::string& in_filePath, SpriteSheetSPtr& out_resource)
+        void SpriteSheetProvider::LoadFrames(Core::StorageLocation in_location, const std::string& in_filePath, SpriteSheetSPtr& out_resource)
         {
             ChilliSource::Core::FileStreamSPtr frameFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, ChilliSource::Core::FileMode::k_readBinary);
 			
@@ -164,7 +167,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void SpriteSheetLoader::LoadMap(Core::StorageLocation in_location, const std::string& in_filePath, SpriteSheetSPtr& out_resource)
+        void SpriteSheetProvider::LoadMap(Core::StorageLocation in_location, const std::string& in_filePath, SpriteSheetSPtr& out_resource)
         {
             //The string IDs are loaded as a by-product so we have to deduce their file type
             std::string fileName;

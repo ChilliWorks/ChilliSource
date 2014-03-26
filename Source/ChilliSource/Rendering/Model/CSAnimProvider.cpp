@@ -1,12 +1,12 @@
 //
-//  CSAnimLoader.cpp
+//  CSAnimProvider.cpp
 //  Chilli Source
 //
 //  Created by Ian Copland on 17/10/2011.
 //  Copyright 2011 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Rendering/Model/CSAnimLoader.h>
+#include <ChilliSource/Rendering/Model/CSAnimProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
@@ -149,35 +149,35 @@ namespace ChilliSource
             }
         }
         
-        CS_DEFINE_NAMEDTYPE(CSAnimLoader);
+        CS_DEFINE_NAMEDTYPE(CSAnimProvider);
         
         //-------------------------------------------------------------------------
 		//-------------------------------------------------------------------------
-        CSAnimLoaderUPtr CSAnimLoader::Create()
+        CSAnimProviderUPtr CSAnimProvider::Create()
         {
-            return CSAnimLoaderUPtr(new CSAnimLoader());
+            return CSAnimProviderUPtr(new CSAnimProvider());
         }
 		//-------------------------------------------------------------------------
 		//-------------------------------------------------------------------------
-		bool CSAnimLoader::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool CSAnimProvider::IsA(Core::InterfaceIDType in_interfaceID) const
 		{
-			return in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == CSAnimLoader::InterfaceID;
+			return in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == CSAnimProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSAnimLoader::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
+		bool CSAnimProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
 		{
 			return (in_interfaceID == SkinnedAnimation::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSAnimLoader::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
+		bool CSAnimProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
 		{
 			return (in_extension == k_fileExtension);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSAnimLoader::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool CSAnimProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
 			SkinnedAnimationSPtr anim = std::static_pointer_cast<SkinnedAnimation>(out_resource);
 			anim->SetLoaded(false);
@@ -187,20 +187,20 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSAnimLoader::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool CSAnimProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
 			SkinnedAnimationSPtr anim = std::static_pointer_cast<SkinnedAnimation>(out_resource);
 			anim->SetLoaded(false);
             
 			//Load model as task
-			Core::Task<Core::StorageLocation, const std::string&, const SkinnedAnimationSPtr&> AnimTask(this, &CSAnimLoader::ReadSkinnedAnimationFromFile,in_location, in_filePath, anim);
+			Core::Task<Core::StorageLocation, const std::string&, const SkinnedAnimationSPtr&> AnimTask(this, &CSAnimProvider::ReadSkinnedAnimationFromFile,in_location, in_filePath, anim);
 			Core::TaskScheduler::ScheduleTask(AnimTask);
 			
 			return true;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void CSAnimLoader::ReadSkinnedAnimationFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const SkinnedAnimationSPtr& out_resource) const
+		void CSAnimProvider::ReadSkinnedAnimationFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const SkinnedAnimationSPtr& out_resource) const
 		{
 			Core::FileStreamSPtr stream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_readBinary);
 			

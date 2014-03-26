@@ -1,5 +1,5 @@
 //
-//  CSAnimLoader.h
+//  CSAnimProvider.h
 //  Chilli Source
 //
 //  Created by Ian Copland on 17/10/2011.
@@ -7,8 +7,8 @@
 //
 
 
-#ifndef _CHILLISOURCE_RENDERING_MODEL_CSANIMLOADER_H_
-#define _CHILLISOURCE_RENDERING_MODEL_CSANIMLOADER_H_
+#ifndef _CHILLISOURCE_RENDERING_MODEL_CSANIMPROVIDER_H_
+#define _CHILLISOURCE_RENDERING_MODEL_CSANIMPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
@@ -22,18 +22,18 @@ namespace ChilliSource
         ///
         /// @author I Copland
 		//-------------------------------------------------------------------------
-		class CSAnimLoader : public Core::ResourceProvider
+		class CSAnimProvider : public Core::ResourceProvider
 		{
 		public:
             
-            CS_DECLARE_NAMEDTYPE(CSAnimLoader);
+            CS_DECLARE_NAMEDTYPE(CSAnimProvider);
             
             //-------------------------------------------------------------------------
             /// Factory method for creating new anim loader
             ///
             /// @author I Copland
             //-------------------------------------------------------------------------
-            static CSAnimLoaderUPtr Create();
+            static CSAnimProviderUPtr Create();
 			//-------------------------------------------------------------------------
 			/// @author I Copland
 			///

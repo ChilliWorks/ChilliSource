@@ -1,13 +1,13 @@
 //
-//  SpriteSheetLoader.h
+//  SpriteSheetProvider.h
 //  Chilli Source
 //
 //  Created by Scott Downie on 22/10/2010.
 //  Copyright 2010 Tag Games. All rights reserved.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_SPRITE_SPRITESHEETLOADER_H_
-#define _CHILLISOURCE_RENDERING_SPRITE_SPRITESHEETLOADER_H_
+#ifndef _CHILLISOURCE_RENDERING_SPRITE_SPRITESHEETPROVIDER_H_
+#define _CHILLISOURCE_RENDERING_SPRITE_SPRITESHEETPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
@@ -24,9 +24,12 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------
-		class SpriteSheetLoader final : public Core::ResourceProvider
+		class SpriteSheetProvider final : public Core::ResourceProvider
 		{
 		public:
+            
+            CS_DECLARE_NAMEDTYPE(SpriteSheetProvider);
+            
             //-------------------------------------------------------
             /// Factory method
             ///
@@ -34,7 +37,7 @@ namespace ChilliSource
             ///
             /// @return New backend with ownership transferred
             //-------------------------------------------------------
-            static SpriteSheetLoaderUPtr Create();
+            static SpriteSheetProviderUPtr Create();
 			//-------------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -66,7 +69,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            SpriteSheetLoader(){}
+            SpriteSheetProvider(){}
 			//----------------------------------------------------------------------------
 			/// Loads the two files that constitute a sprite sheet resource and
             /// parses them into the output resource
