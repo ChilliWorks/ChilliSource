@@ -29,6 +29,8 @@ namespace ChilliSource
 		{
 		public:
 			
+            CS_DECLARE_NAMEDTYPE(FacebookPostSystem);
+            
 			//----------------------------------------------------
             /// @author S McGaw
             ///

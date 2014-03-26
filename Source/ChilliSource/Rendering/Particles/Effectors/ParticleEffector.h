@@ -33,7 +33,7 @@ namespace ChilliSource
             ///
             /// @param Particle to intialise
             //-----------------------------------------------------
-            virtual void Init(Particle* inpParticle, u32 inudwIndex) = 0;
+            virtual void Init(Particle& in_particle) = 0;
             //-----------------------------------------------------
             /// Apply
             ///
@@ -43,7 +43,7 @@ namespace ChilliSource
             /// @param Particle to effect
             /// @param Time between frames
             //-----------------------------------------------------
-			virtual void Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt) = 0;
+			virtual void Apply(Particle& in_particle, f32 infDt) = 0;
             //-----------------------------------------------------
             /// Update
             ///

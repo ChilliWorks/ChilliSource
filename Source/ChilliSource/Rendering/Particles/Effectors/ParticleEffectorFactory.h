@@ -26,14 +26,20 @@ namespace ChilliSource
             typedef std::function<ParticleEffectorUPtr(const Core::ParamDictionary&)> EffectorCreateDelegate;
             
             //------------------------------------------------------------------
-            /// Register 
+            /// Registers a new effector factory method with the given key
             ///
-            /// Resgiters a new effector type with the given key
+            /// @author S Downie
             ///
             /// @param Effector static create delegate
             /// @param Key string
             //------------------------------------------------------------------
-            void Register(const EffectorCreateDelegate& inDelegate, const std::string& instrKey);
+            void AddCreator(const EffectorCreateDelegate& inDelegate, const std::string& instrKey);
+            //------------------------------------------------------------------
+            /// Remove all registered creator methods
+            ///
+            /// @author S Downie
+            //------------------------------------------------------------------
+            void RemoveAllCreators();
             //------------------------------------------------------------------
             /// Create Particle Effector
             ///

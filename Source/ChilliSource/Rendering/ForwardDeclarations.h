@@ -71,7 +71,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_STRUCT(SubMeshDescriptor);
         CS_FORWARDDECLARE_STRUCT(MeshDescriptor);
         CS_FORWARDDECLARE_CLASS(MeshManager);
-        CS_FORWARDDECLARE_CLASS(MoAnimLoader);
+        CS_FORWARDDECLARE_CLASS(CSAnimProvider);
         CS_FORWARDDECLARE_CLASS(MoModelLoader);
         CS_FORWARDDECLARE_CLASS(Skeleton);
         CS_FORWARDDECLARE_CLASS(SkinnedAnimation);
@@ -111,7 +111,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(SpriteBatch);
         CS_FORWARDDECLARE_CLASS(SpriteComponent);
         CS_FORWARDDECLARE_CLASS(SpriteSheet);
-        CS_FORWARDDECLARE_CLASS(SpriteSheetLoader);
+        CS_FORWARDDECLARE_CLASS(SpriteSheetProvider);
         CS_FORWARDDECLARE_CLASS(SpriteSheetManager);
         //------------------------------------------------------------
         /// Texture

@@ -88,18 +88,13 @@ namespace ChilliSource
 			mudwMaxNumParticles = (u32)(std::ceil(mfTimeToLive / mfEmissionFreq) * mudwMaxNumParticlesPerEmission);
             
             // Allocate all the memory upfront
-			mParticles.vTranslation = new Core::Vector3[mudwMaxNumParticles];
-            mParticles.vScale = new Core::Vector3[mudwMaxNumParticles];
-            mParticles.vVelocity = new Core::Vector3[mudwMaxNumParticles];
-			mParticles.Col = new Core::Colour[mudwMaxNumParticles];
-            mParticles.fEnergy = new f32[mudwMaxNumParticles];
-            mParticles.fAngularRotation = new f32[mudwMaxNumParticles];
+            m_particles = new Particle[mudwMaxNumParticles];
             
             // Initialise Energy array to 0
             for(u32 i=0; i<mudwMaxNumParticles; ++i)
             {
-                mParticles.fEnergy[i] = 0.0f;
-                mParticles.fAngularRotation[i] = 0.0f;
+                m_particles[i].m_energy = 0.0f;
+                m_particles[i].m_angularRotation = 0.0f;
             }
         }
         //-----------------------------------------------------
@@ -130,33 +125,33 @@ namespace ChilliSource
             }
             
             u32 udwNumParticleToEmit = mudwMaxNumParticlesPerEmission * udwNumEmits;
-            u32 udwNumParticlesEmittedThisStep = 0;
+            u32 udwNum_particlesEmittedThisStep = 0;
             f32 fEmissionStep = 0.0f;
             bool bParticlesActive = false;
             
             for(u32 i=0; i<mudwMaxNumParticles; ++i)
             {
                 // allow active particle to die if time elapsed so it can be recycled
-                if(mParticles.fEnergy[i] > 0.0f)
+                if(m_particles[i].m_energy > 0.0f)
                 {
-                    UpdateParticle(i, infDT);
-                    mudwNumUsed = (mParticles.fEnergy[i] <= 0.0f) ? mudwNumUsed-1 : mudwNumUsed;
+                    UpdateParticle(m_particles[i], infDT);
+                    mudwNumUsed = (m_particles[i].m_energy <= 0.0f) ? mudwNumUsed-1 : mudwNumUsed;
                 }
                 
                 //If time to emit and we have some left in our quota...or we are a looping emitter then we need to emit
-                bool bEmit = (mbIsEmitting && (mudwNumUsed < mudwMaxNumParticles) && udwNumParticleToEmit > 0 && mParticles.fEnergy[i] <= 0.0f);
+                bool bEmit = (mbIsEmitting && (mudwNumUsed < mudwMaxNumParticles) && udwNumParticleToEmit > 0 && m_particles[i].m_energy <= 0.0f);
                 if(bEmit)
                 {
                     mudwNumUsed++;
                     udwNumParticleToEmit--;
-                    udwNumParticlesEmittedThisStep++;
+                    udwNum_particlesEmittedThisStep++;
                     
                     f32 fLerpFactor = fEmissionStep/kfTimeSinceLastEmission;
                     Core::Vector3 vPosition = Core::MathUtils::Lerp(fLerpFactor, mvLastEmissionPos, vCurrentPos) - vCurrentPos;
-                    if(udwNumParticlesEmittedThisStep >= mudwMaxNumParticlesPerEmission)
+                    if(udwNum_particlesEmittedThisStep >= mudwMaxNumParticlesPerEmission)
                     {
                         fEmissionStep += mfEmissionFreq;
-                        udwNumParticlesEmittedThisStep = 0;
+                        udwNum_particlesEmittedThisStep = 0;
                     }
                     Core::Quaternion qOrientation;
                     Core::Vector3 vScale(Core::Vector3::ONE);
@@ -168,31 +163,31 @@ namespace ChilliSource
                         vScale = mpOwningComponent->GetEntity()->GetTransform().GetWorldScale();
                     }
                     
-                    mParticles.fEnergy[i] = 1.0f;
-                    mParticles.Col[i] = mInitialColour;
-                    mParticles.vTranslation[i] = vPosition;
-                    mParticles.vScale[i] = vScale;
-                    mParticles.fAngularRotation[i] = 0.0f;
+                    m_particles[i].m_energy = 1.0f;
+                    m_particles[i].m_colour = mInitialColour;
+                    m_particles[i].m_translation = vPosition;
+                    m_particles[i].m_scale = vScale;
+                    m_particles[i].m_angularRotation = 0.0f;
                     
                     //We will emit a particle and pass it through the effector
-                    Emit(&mParticles, i);
+                    Emit(m_particles[i]);
                     
                     // We need to rotate our velocity by our emmiters orientation if in global space
                     if(mbIsGlobalSpace)
                     {
-                        mParticles.vVelocity[i] = qOrientation * mParticles.vVelocity[i];
+                        m_particles[i].m_velocity = qOrientation * m_particles[i].m_velocity;
                     }
                     
                     for(std::vector<ParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
                     {
-                        (*itEffector)->Init(&mParticles, i);
+                        (*itEffector)->Init(m_particles[i]);
                     }
                     
-                    UpdateParticle(i, kfTimeSinceLastEmission - fEmissionStep);
-                    mudwNumUsed = (mParticles.fEnergy[i] <= 0.0f) ? mudwNumUsed-1 : mudwNumUsed;
+                    UpdateParticle(m_particles[i], kfTimeSinceLastEmission - fEmissionStep);
+                    mudwNumUsed = (m_particles[i].m_energy <= 0.0f) ? mudwNumUsed-1 : mudwNumUsed;
                 }
                 // test particles for activity
-                if(mParticles.fEnergy[i] > 0.0f)
+                if(m_particles[i].m_energy > 0.0f)
                 {
                     bParticlesActive = true;
                 }
@@ -242,19 +237,19 @@ namespace ChilliSource
         /// @param Particle array index
         /// @param DT
         //-----------------------------------------------------
-        void ParticleEmitter::UpdateParticle(u32 inudwParticleIndex, f32 infDT)
+        void ParticleEmitter::UpdateParticle(Particle& in_particle, f32 infDT)
         {
             //Apply the effector to each particle
             for(std::vector<ParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
             {
-                if(mParticles.fEnergy[inudwParticleIndex] <= (*itEffector)->GetActiveEnergyLevel())
+                if(in_particle.m_energy <= (*itEffector)->GetActiveEnergyLevel())
                 {
-                    (*itEffector)->Apply(&mParticles, inudwParticleIndex, infDT);
+                    (*itEffector)->Apply(in_particle, infDT);
                 }
             }
             
-            mParticles.fEnergy[inudwParticleIndex] -= (mfEnergyLoss * infDT);
-            mParticles.vTranslation[inudwParticleIndex] += (mParticles.vVelocity[inudwParticleIndex] * infDT);
+            in_particle.m_energy -= (mfEnergyLoss * infDT);
+            in_particle.m_translation += (in_particle.m_velocity * infDT);
         }
         //-----------------------------------------------------
         /// Render
@@ -291,12 +286,12 @@ namespace ChilliSource
 
             for(u32 i=0; i<mudwMaxNumParticles; ++i)
             {
-                if(mParticles.fEnergy[i] > 0.0f && mParticles.Col[i].a > 0.0f)
+                if(m_particles[i].m_energy > 0.0f && m_particles[i].m_colour.a > 0.0f)
                 {
                     // Rotate per particle
-                    Core::Quaternion qRot(vForward, mParticles.fAngularRotation[i]);
+                    Core::Quaternion qRot(vForward, m_particles[i].m_angularRotation);
 
-                    UpdateSpriteData(mParticles.vTranslation[i], mParticles.Col[i], sData, qRot * vRight, qRot * vUp, mParticles.vScale[i]);
+                    UpdateSpriteData(m_particles[i].m_translation, m_particles[i].m_colour, sData, qRot * vRight, qRot * vUp, m_particles[i].m_scale);
                     
                     if (sData.pMaterial->GetActiveShaderProgram() != nullptr)
                     {
@@ -505,12 +500,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         ParticleEmitter::~ParticleEmitter()
         {
-            delete[] mParticles.vTranslation;
-            delete[] mParticles.vScale;
-            delete[] mParticles.vVelocity;
-			delete[] mParticles.Col;
-            delete[] mParticles.fEnergy;
-            delete[] mParticles.fAngularRotation;
+            delete[] m_particles;
         }
     }
 }

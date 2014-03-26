@@ -30,13 +30,10 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		/// Get Frame At Index
 		//---------------------------------------------------------------------
-		SkinnedAnimationFrameSPtr SkinnedAnimation::GetFrameAtIndex(u32 indwFrameIndex) const
+		const SkinnedAnimationFrameUPtr& SkinnedAnimation::GetFrameAtIndex(u32 indwFrameIndex) const
 		{
-			if (indwFrameIndex < mFrames.size())
-			{
-				return mFrames[indwFrameIndex];
-			}
-			return SkinnedAnimationFrameSPtr();
+            CS_ASSERT(indwFrameIndex < mFrames.size(), "Frame out of bounds");
+            return mFrames[indwFrameIndex];
 		}
 		//---------------------------------------------------------------------
 		/// Get Frame Time
@@ -55,9 +52,9 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		/// Add Frame
 		//---------------------------------------------------------------------
-		void SkinnedAnimation::AddFrame(const SkinnedAnimationFrameSPtr& inpAnimationFrame)
+		void SkinnedAnimation::AddFrame(SkinnedAnimationFrameUPtr in_frame)
 		{
-			mFrames.push_back(inpAnimationFrame);
+			mFrames.push_back(std::move(in_frame));
 		}
 		//---------------------------------------------------------------------
 		/// Set Frame Rate

@@ -50,16 +50,8 @@ namespace ChilliSource
             return ParticleEmitterUPtr(new ConeParticleEmitter(inParams, inpMaterial, inpComponent));
         }
 		//-----------------------------------------------------
-		/// Emit
-		///
-		/// Emit some new particles by pulling from the dead
-		/// pool. Emission will depend on the number of
-		/// particles emitted and the shape of the emitter
-		///
-		/// @param Particles
-		/// @param Index of current particle
 		//-----------------------------------------------------
-		void ConeParticleEmitter::Emit(Particle* inpParticles, u32 udwParticleIndex)
+		void ConeParticleEmitter::Emit(Particle& in_particle)
         {
             f32 fBoxAreaSq = mfBoxArea * mfBoxArea;
             Core::Vector3 vDir;
@@ -70,9 +62,9 @@ namespace ChilliSource
             }while(fBoxAreaSq < (vDir.x *vDir.x + vDir.z *vDir.z));
             
             vDir.y = mfBoxHeight;
-            inpParticles->vVelocity[udwParticleIndex] = vDir;
-			inpParticles->vVelocity[udwParticleIndex].Normalise();
-            inpParticles->vVelocity[udwParticleIndex] *= mfInitialVelocity;
+            in_particle.m_velocity = vDir;
+			in_particle.m_velocity.Normalise();
+            in_particle.m_velocity *= mfInitialVelocity;
         }
         
     }

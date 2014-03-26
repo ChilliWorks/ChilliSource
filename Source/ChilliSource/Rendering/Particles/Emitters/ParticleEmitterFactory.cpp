@@ -15,16 +15,16 @@ namespace ChilliSource
     namespace Rendering
     {
         //------------------------------------------------------------------
-        /// Register 
-        ///
-        /// Resgiters a new emitter type with the given key
-        ///
-        /// @param Emitter instance static create delegate
-        /// @param Key string
         //------------------------------------------------------------------
-        void ParticleEmitterFactory::Register(const EmitterCreateDelegate& inDelegate, const std::string& instrKey)
+        void ParticleEmitterFactory::AddCreator(const EmitterCreateDelegate& inDelegate, const std::string& instrKey)
         {
             mmapDelegateToType.insert(std::make_pair(instrKey, inDelegate));
+        }
+        //------------------------------------------------------------------
+        //------------------------------------------------------------------
+        void ParticleEmitterFactory::RemoveAllCreators()
+        {
+            mmapDelegateToType.clear();
         }
         //------------------------------------------------------------------
         /// Create Particle Emitter

@@ -86,6 +86,19 @@ namespace ChilliSource
 			//----------------------------------------------------
             void OnInit() override;
             //----------------------------------------------------
+            /// Resume accelerometer events if enabled
+            ///
+            /// @author S Downie
+			//----------------------------------------------------
+            void OnResume() override;
+            //----------------------------------------------------
+            /// Prevents accelerometer events when the app is
+            /// backgrounded
+            ///
+            /// @author S Downie
+			//----------------------------------------------------
+            void OnSuspend() override;
+            //----------------------------------------------------
 			/// Destroys the system immediately before systems
             /// are removed from the application.
             ///

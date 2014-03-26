@@ -19,12 +19,12 @@ namespace ChilliSource
     {
         struct Particle
         {
-            Core::Vector3* vScale;
-            Core::Vector3* vTranslation;
-			Core::Colour* Col;				//The colour of the particle
-            Core::Vector3* vVelocity;		//The speed of the particle in 3D space
-            f32* fEnergy;					//Measures the full lifetime of the particle from birth at 1 to death at 0
-            f32* fAngularRotation;
+            Core::Vector3 m_scale;
+            Core::Vector3 m_translation;
+			Core::Colour m_colour;				//The colour of the particle
+            Core::Vector3 m_velocity;		//The speed of the particle in 3D space
+            f32 m_energy;					//Measures the full lifetime of the particle from birth at 1 to death at 0
+            f32 m_angularRotation;
         };
         
         class ParticleEmitter
@@ -163,10 +163,10 @@ namespace ChilliSource
             ///
             /// Update an indivdual particle with the effectors
             ///
-            /// @param Particle array index
+            /// @param Particle
             /// @param DT
             //-----------------------------------------------------
-            void UpdateParticle(u32 inudwParticleIndex, f32 infDT);
+            void UpdateParticle(Particle& in_particle, f32 infDT);
             //-----------------------------------------------------
             /// Emit
             ///
@@ -174,10 +174,9 @@ namespace ChilliSource
             /// pool. Emission will depend on the number of
             /// particles emitted and the shape of the emitter
             ///
-			/// @param Particles
-			/// @param Index of current particle
+			/// @param Particle
             //-----------------------------------------------------
-            virtual void Emit(Particle* inpParticles, u32 udwParticleIndex) = 0;
+            virtual void Emit(Particle& in_particle) = 0;
 			
 		protected:
 			
@@ -191,7 +190,7 @@ namespace ChilliSource
             
         protected:
             
-            Particle mParticles;
+            Particle* m_particles;
             std::vector<ParticleEffector*> mEffectors;
             
             f32 mfInitialVelocity;

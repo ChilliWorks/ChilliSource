@@ -60,7 +60,7 @@ namespace ChilliSource
         ///
         /// @param Particle to intialise
         //-----------------------------------------------------
-        void ScalerParticleEffector::Init(Particle* inpParticle, u32 inudwIndex)
+        void ScalerParticleEffector::Init(Particle& in_particle)
         {
             //Doesn't require initing
         }
@@ -73,20 +73,20 @@ namespace ChilliSource
         /// @param Particle to effect
         /// @param Time between frames
         //-----------------------------------------------------
-        void ScalerParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
+        void ScalerParticleEffector::Apply(Particle& in_particle, f32 infDt)
         {
-            f32 fEnergy = inpParticle->fEnergy[inudwIndex];
+            f32 fEnergy = in_particle.m_energy;
             
             fEnergy = fEnergy / mfActiveEnergyLevel;
             
             if(!mbInitialSet)
             {
                 mbInitialSet = true;
-                mvInitialScale = inpParticle->vScale[inudwIndex];
+                mvInitialScale = in_particle.m_scale;
             }
             
             Core::Vector3 vDiff = (mvTargetScale - mvInitialScale) * (1.0f - fEnergy);
-            inpParticle->vScale[inudwIndex] = mvInitialScale + vDiff;
+            in_particle.m_scale = mvInitialScale + vDiff;
         }
     }
 }

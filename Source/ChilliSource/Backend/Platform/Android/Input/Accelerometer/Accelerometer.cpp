@@ -80,6 +80,29 @@ namespace ChilliSource
         }
         //----------------------------------------------------
 		//----------------------------------------------------
+        void Accelerometer::OnResume()
+        {
+        	//Android continues to send accelerometer events even if
+        	//the app is suspended so we may have had to manually stop this
+        	//and now must restart listening
+        	if(true == m_isUpdating)
+        	{
+        		m_accelerometerJI->StartListening(Core::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
+        	}
+        }
+        //----------------------------------------------------
+		//----------------------------------------------------
+        void Accelerometer::OnSuspend()
+        {
+        	//Android continues to send accelerometer events even if
+        	//the app is suspended. We don't want this
+        	if(true == m_isUpdating)
+        	{
+        		m_accelerometerJI->StopListening();
+        	}
+        }
+        //----------------------------------------------------
+		//----------------------------------------------------
         void Accelerometer::OnDestroy()
         {
         	m_accelerometerJI.reset();

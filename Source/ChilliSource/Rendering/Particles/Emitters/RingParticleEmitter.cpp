@@ -49,27 +49,17 @@ namespace ChilliSource
             return ParticleEmitterUPtr(new RingParticleEmitter(inParams, inpMaterial, inpComponent));
         }
 		//-----------------------------------------------------
-		/// Emit
-		///
-		/// Emit some new particles by pulling from the dead
-		/// pool. Emission will depend on the number of
-		/// particles emitted and the shape of the emitter
-		///
-		/// @param Particles
-		/// @param Index of current particle
 		//-----------------------------------------------------
-		void RingParticleEmitter::Emit(Particle* inpParticles, u32 udwParticleIndex)
+		void RingParticleEmitter::Emit(Particle& in_particle)
         {
-            
-    
             Core::Vector3 vPos;
             vPos.x = Core::MathUtils::RandomInRange(-1.0f, 1.0f);
             vPos.z = Core::MathUtils::RandomInRange(-1.0f, 1.0f);
             
             vPos.Normalise() *=  mfRadius;
             
-            inpParticles->vTranslation[udwParticleIndex] += vPos;
-            inpParticles->vVelocity[udwParticleIndex] = Core::Vector3::Y_UNIT_POSITIVE * mfInitialVelocity;
+            in_particle.m_translation += vPos;
+            in_particle.m_velocity = Core::Vector3::Y_UNIT_POSITIVE * mfInitialVelocity;
             
         }
     }

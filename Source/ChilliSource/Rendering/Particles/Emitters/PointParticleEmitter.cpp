@@ -42,24 +42,16 @@ namespace ChilliSource
             return ParticleEmitterUPtr(new PointParticleEmitter(inParams, inpMaterial, inpComponent));
         }
 		//-----------------------------------------------------
-		/// Emit
-		///
-		/// Emit some new particles by pulling from the dead
-		/// pool. Emission will depend on the number of
-		/// particles emitted and the shape of the emitter
-		///
-		/// @param Particles
-		/// @param Index of current particle
 		//-----------------------------------------------------
-		void PointParticleEmitter::Emit(Particle* inpParticles, u32 udwParticleIndex)
+		void PointParticleEmitter::Emit(Particle& in_particle)
         {
 			Core::Vector3 vDirection(Core::MathUtils::RandomInRange(-1.0f, 1.0f),
 									  Core::MathUtils::RandomInRange(-1.0f, 1.0f),
 									  Core::MathUtils::RandomInRange(-1.0f, 1.0f));
 			
-			inpParticles->vVelocity[udwParticleIndex] = vDirection;
-			inpParticles->vVelocity[udwParticleIndex].Normalise();
-            inpParticles->vVelocity[udwParticleIndex] *= Core::MathUtils::RandomInRange(mfMinInitialVelocity, mfInitialVelocity);
+			in_particle.m_velocity = vDirection;
+			in_particle.m_velocity.Normalise();
+            in_particle.m_velocity *= Core::MathUtils::RandomInRange(mfMinInitialVelocity, mfInitialVelocity);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace ChilliSource
 			CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
 
             //----------------------------------------------------
-            /// @author S Downie
+            /// @author R Henning
             ///
             /// @param Interface ID to compare
             ///
@@ -53,14 +53,14 @@ namespace ChilliSource
             /// Only one auth request can be active at any time
             /// otherwise an assert will be triggered
             ///
-            /// @author S Downie
+            /// @author R Henning
             ///
             /// @param Read permissions (http://developers.facebook.com/docs/authentication/permissions/)
             /// @param Result delegate
             //------------------------------------------------
             void Authenticate(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate) override;
 			//------------------------------------------------
-            /// @author S Downie
+            /// @author R Henning
             ///
             /// @return Whether there is an active session
             //------------------------------------------------
@@ -72,7 +72,7 @@ namespace ChilliSource
             /// Only one auth request can be active at any time
             /// otherwise an assert will be triggered
             ///
-            /// @author S Downie
+            /// @author R Henning
             ///
             /// @param Read permissions
             /// @param Result delegate
@@ -85,14 +85,14 @@ namespace ChilliSource
             /// Only one auth request can be active at any time
             /// otherwise an assert will be triggered
             ///
-            /// @author S Downie
+            /// @author R Henning
             ///
             /// @param Write permissions
             /// @param Result delegate
             //------------------------------------------------
             void AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, const AuthenticationCompleteDelegate& in_delegate) override;
             //------------------------------------------------
-            /// @author S Downie
+            /// @author R Henning
             ///
             /// @param Permission to check
             ///
@@ -104,7 +104,7 @@ namespace ChilliSource
             /// Log the current user out of Facebook and
             /// close the active session
             ///
-            /// @author S Downie
+            /// @author R Henning
             //------------------------------------------------
             void SignOut() override;
             //----------------------------------------------------
@@ -152,7 +152,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //----------------------------------------------------
-            FacebookAuthenticationSystem(){}
+            FacebookAuthenticationSystem() = default;
             //----------------------------------------------------
             /// @author R Henning
             ///

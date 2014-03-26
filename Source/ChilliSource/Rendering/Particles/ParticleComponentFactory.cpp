@@ -69,30 +69,6 @@ namespace ChilliSource
 			return (ParticleComponent::TypeName == incName);
 		}
         //--------------------------------------------------------
-        /// Register Emitter Type
-        ///
-        /// Register a custom emitter type
-        ///
-        /// @param Delegate
-        /// @param Emitter type name
-        //--------------------------------------------------------
-        void ParticleComponentFactory::RegisterEmitterType(const ParticleEmitterFactory::EmitterCreateDelegate& inDelegate, const std::string& instrName)
-        {
-            mpEmitterFactory->Register(inDelegate, instrName);
-        }
-        //--------------------------------------------------------
-        /// Register Effector Type
-        ///
-        /// Register a custom effector type
-        ///
-        /// @param Delegate
-        /// @param Effector type name
-        //--------------------------------------------------------
-        void ParticleComponentFactory::RegisterEffectorType(const ParticleEffectorFactory::EffectorCreateDelegate& inDelegate, const std::string& instrName)
-        {
-            mpEffectorFactory->Register(inDelegate, instrName);
-        }
-        //--------------------------------------------------------
         /// Create Particle Component
         ///
         /// Creates a default particle effect for customisation

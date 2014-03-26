@@ -47,7 +47,8 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 	private static PowerManager.WakeLock s_wakeLock;
 	
 	/**
-	 * Called when a local notification broad cast is received.
+	 * Called when a local notification broad cast is received. Funnels the notification
+	 * into the app if open or into the notification bar if not
 	 * 
 	 * @author Steven Hendrie
 	 * 
@@ -67,8 +68,7 @@ public class LocalNotificationReceiver extends BroadcastReceiver
         //notification into it. Otherwise display a notification.
 		if(isAppInForeground == true)
 		{
-			Intent intent = new Intent(in_intent.getAction());
-	        intent.setClass(in_context, LocalNotificationService.class);
+			final Intent intent = new Intent(in_intent.getAction());
 	        Bundle mapParams = in_intent.getExtras();
 	        Iterator<String> iter = mapParams.keySet().iterator();
 	        
@@ -77,8 +77,20 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 	        	String strKey =  iter.next();
 	        	intent.putExtra(strKey, mapParams.get(strKey).toString());
 	        }
-	        
-	        in_context.startService(intent);
+	       
+	        Runnable task = new Runnable()
+	        { 
+	        	@Override public void run() 
+	        	{
+	        		LocalNotificationNativeInterface localNotificationNI = (LocalNotificationNativeInterface)CSApplication.get().getSystem(LocalNotificationNativeInterface.InterfaceID);
+	        		if (localNotificationNI != null)
+	        		{
+	        			localNotificationNI.onNotificationReceived(intent);
+	        		}   
+	        	}
+	        };
+
+	        CSApplication.get().scheduleMainThreadTask(task);
 		}
 		else
 		{

@@ -1,103 +1,141 @@
-/*
- *  ParticleSystem.h
- *  moFloTest
- *
- *  Created by Scott Downie on 17/01/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  ParticleSystem.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 17/01/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
-#ifndef _MO_FLO_RENDERING_PARTICLE_SYSTEM_H_
-#define _MO_FLO_RENDERING_PARTICLE_SYSTEM_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLES_PARTICLESYSTEM_H_
+#define _CHILLISOURCE_RENDERING_PARTICLES_PARTICLESYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particles/ParticleComponentFactory.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffectorFactory.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class ParticleSystem : public Core::System, public Core::IUpdateable, public Core::IComponentProducer
+        //----------------------------------------------------------
+        /// The particle system manages the updating of all
+        /// existing particle components
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------
+		class ParticleSystem : public Core::AppSystem, public Core::IComponentProducer
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(ParticleSystem);
 			
-			ParticleSystem();
-			
+            //----------------------------------------------------------
+            /// Factory method to create new particle system
+            ///
+            /// @author S Downie
+            ///
+            /// @return Ownership of new particle system
+            //----------------------------------------------------------
+            static ParticleSystemUPtr Create();
 			//----------------------------------------------------------
-			/// Is A
+			/// @author S Downie
 			///
-			/// Returns if it is of the type given
 			/// @param Comparison Type
+            ///
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+            //----------------------------------------------------------
+			/// @author S Downie
+			///
+            /// Called when the system is created
+			//----------------------------------------------------------
+			void OnInit() override;
 			//-------------------------------------------
-			/// Add Particle Component
+			/// @author S Downie
 			///
 			/// @param Particle Component
 			//-------------------------------------------
-			void AddParticleComponent(ParticleComponent* inpParticle);
+			void AddParticleComponent(ParticleComponent* in_particle);
 			//-------------------------------------------
-			/// Remove Particle Component
+			/// @author S Downie
 			///
 			/// @param Particle Component
 			//-------------------------------------------
-			void RemoveParticleComponent(ParticleComponent* inpParticle);
+			void RemoveParticleComponent(ParticleComponent* in_particle);
 			//-------------------------------------------
-			/// Update 
-			///
 			/// Update all the particle components
 			///
-			/// @param Time between frames
+            /// @author S Downie
+            ///
+			/// @param Time since last update in seconds
 			//-------------------------------------------
-			void Update(f32 infDT) override;
+			void OnUpdate(f32 in_timeSinceLastUpdate) override;
 			//-------------------------------------------
-			/// Sets a factor to scale update delta time by. Useful for pausing all effects when paused etc.
+			/// Sets a factor to scale update delta time by.
+            /// Useful for pausing, slowing down and speeding
+            /// up all effects.
+            ///
+            /// @param Time scaler
 			//-------------------------------------------
-			void SetTimeScaleFactor(f32 infValue);			
+			void SetTimeScaleFactor(f32 in_scale);
 			//----------------------------------------------------
-			/// Get Number Of Component Factories
+			/// @author S Downie
 			///
 			/// @return Number of factories in this system
 			//----------------------------------------------------
 			u32 GetNumComponentFactories() const override;
 			//-------------------------------------------
-			/// Get Component Factory Pointer 
+			/// @author S Downie
 			///
 			/// @return Particle component factory
 			//-------------------------------------------
-			Core::ComponentFactory* GetComponentFactoryPtr(u32 inudwIndex) override;
+			Core::ComponentFactory* GetComponentFactoryPtr(u32 in_index) override;
 			//-------------------------------------------
-			/// Get Component Factory  
+			/// @author S Downie
 			///
 			/// @return Particle component factory
 			//-------------------------------------------
-			Core::ComponentFactory& GetComponentFactory(u32 inudwIndex) override;
+			Core::ComponentFactory& GetComponentFactory(u32 in_index) override;
             //-------------------------------------------
-			/// Get Emitter Factory
+			/// @author S Downie
 			///
 			/// @return Particle Emitter factory
 			//-------------------------------------------
             ParticleEmitterFactory& GetEmitterFactory();
             //-------------------------------------------
-			/// Get Effector Factory  
+			/// @author S Downie
 			///
 			/// @return Particle Effector factory
 			//-------------------------------------------
             ParticleEffectorFactory& GetEffectorFactory();
+            //----------------------------------------------------------
+			/// @author S Downie
+			///
+            /// Called when the system is destroyed
+			//----------------------------------------------------------
+			void OnDestroy() override;
+            
+        private:
+            
+            //----------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+			ParticleSystem();
 			
 		private:
 			
-			ParticleComponentFactory* mpParticleFactory;
-            ParticleEmitterFactory mEmitterFactory;
-            ParticleEffectorFactory mEffectorFactory;
-			f32 mfTimeScaleFactor;
-			std::vector<ParticleComponent*> mParticleComponents;
+            ParticleEmitterFactory m_emitterFactory;
+            ParticleEffectorFactory m_effectorFactory;
+            ParticleComponentFactory m_particleFactory;
+            
+			std::vector<ParticleComponent*> m_particleComponents;
+            
+            f32 m_timeScaleFactor;
 		};
 	}
 }

@@ -41,10 +41,9 @@ namespace ChilliSource
 			/// pool. Emission will depend on the number of
 			/// particles emitted and the shape of the emitter
 			///
-			/// @param Particles
-			/// @param Index of current particle
+			/// @param Particle
 			//-----------------------------------------------------
-			void Emit(Particle* inpParticles, u32 udwParticleIndex);
+			void Emit(Particle& in_particle);
         private:
             
             f32 mfRadius;

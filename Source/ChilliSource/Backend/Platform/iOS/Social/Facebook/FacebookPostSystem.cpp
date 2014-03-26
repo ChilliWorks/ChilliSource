@@ -50,30 +50,9 @@ namespace ChilliSource
                 
                 return postParams;
             }
-            //----------------------------------------------------
-            /// Convert a list of string values to a CSV string
-            ///
-            /// @author S Downie
-            ///
-            /// @param List of values
-            /// @param [Out] CSV string
-            //----------------------------------------------------
-            void ListToCSV(const std::vector<std::string>& in_values, std::string& out_csv)
-            {
-                if(in_values.empty())
-                    return;
-                
-                u32 numVals = in_values.size() - 1;
-                for(u32 i=0; i<numVals; ++i)
-                {
-                    out_csv += in_values[i];
-                    out_csv += ",";
-                }
-                
-                //Add the last one without a following comma
-                out_csv += in_values[numVals];
-            }
         }
+        
+        CS_DEFINE_NAMEDTYPE(FacebookPostSystem);
         
         //----------------------------------------------------
         //----------------------------------------------------
@@ -123,7 +102,7 @@ namespace ChilliSource
             
             //Construct a list of comma separated IDs
             std::string recipients;
-            ListToCSV(in_desc.m_recipients, recipients);
+            Core::StringUtils::ToCSV(in_desc.m_recipients, recipients);
             
             m_requestCompleteDelegate = in_delegate;
             
@@ -131,10 +110,10 @@ namespace ChilliSource
             
             switch (in_desc.m_type)
             {
-                case RequestType::k_to:
+                case RequestRecipientMode::k_fixed:
                     requestType = @"to";
                     break;
-                case RequestType::k_suggested:
+                case RequestRecipientMode::k_optional:
                     requestType = @"suggestions";
                     break;
             }
@@ -208,21 +187,22 @@ namespace ChilliSource
                         m_postCompleteDelegate = nullptr;
                     }
                 }
-                else if (result == FBNativeDialogResultSucceeded)
+                else if(m_postCompleteDelegate)
                 {
-                    if(m_postCompleteDelegate)
+                    switch(result)
                     {
-                        m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
-                        m_postCompleteDelegate = nullptr;
+                        case FBNativeDialogResultSucceeded:
+                            m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
+                            break;
+                        case FBNativeDialogResultCancelled:
+                            m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                            break;
+                        case FBNativeDialogResultError:
+                            m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
+                            break;
                     }
-                }
-                else if(result == FBNativeDialogResultCancelled)
-                {
-                    if(m_postCompleteDelegate)
-                    {
-                        m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
-                        m_postCompleteDelegate = nullptr;
-                    }
+             
+                    m_postCompleteDelegate = nullptr;
                 }
             }];
         }
