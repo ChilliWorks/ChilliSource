@@ -27,7 +27,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------
-		class FMODSystem final : public Audio::AudioSystem, public Core::IUpdateable
+		class FMODSystem final : public Audio::AudioSystem
 		{
 		public:
             
@@ -69,7 +69,7 @@ namespace ChilliSource
             ///
 			/// @param Time since last updated in seconds
 			//-------------------------------------------------------
-			void Update(f32 in_timeSinceLastUpdate) override;
+			void OnUpdate(f32 in_timeSinceLastUpdate) override;
             //-------------------------------------------------------
 			/// @author A Glass
 			///

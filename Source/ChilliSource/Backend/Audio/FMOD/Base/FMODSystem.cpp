@@ -94,7 +94,6 @@ namespace ChilliSource
 		bool FMODSystem::IsA(Core::InterfaceIDType in_interfaceID) const
 		{
 			return
-            in_interfaceID == Core::IUpdateable::InterfaceID ||
             in_interfaceID == Core::IComponentProducer::InterfaceID ||
             in_interfaceID == AudioSystem::InterfaceID ||
             in_interfaceID == FMODSystem::InterfaceID;
@@ -130,7 +129,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void FMODSystem::Update(f32 dt)
+		void FMODSystem::OnUpdate(f32 in_timeSinceLastUpdate)
 		{
 			ErrorCheck(m_FMODEventSystem->update());
 		}
