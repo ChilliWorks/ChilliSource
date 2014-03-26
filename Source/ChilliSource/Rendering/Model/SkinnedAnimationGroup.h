@@ -166,7 +166,7 @@ namespace ChilliSource
             /// @param the animation.
             /// @param the playback position.
 			//----------------------------------------------------------
-			SkinnedAnimationFrameSPtr CalculateAnimationFrame(const SkinnedAnimationSPtr& inpAnimation, f32 infPlaybackPosition);
+			SkinnedAnimationFrameUPtr CalculateAnimationFrame(const SkinnedAnimationSPtr& inpAnimation, f32 infPlaybackPosition);
             //--------------------------------------------------------------
 			/// Lerp Between Frames
 			///
@@ -177,11 +177,11 @@ namespace ChilliSource
 			/// @param the interpolation factor
 			/// @return output interpolated frame.
 			//--------------------------------------------------------------
-			SkinnedAnimationFrameSPtr LerpBetweenFrames(const SkinnedAnimationFrameSPtr& inFrameA, const SkinnedAnimationFrameSPtr& inFrameB, f32 infInterpFactor);
+			SkinnedAnimationFrameUPtr LerpBetweenFrames(const SkinnedAnimationFrame* inFrameA, const SkinnedAnimationFrame* inFrameB, f32 infInterpFactor);
             
             SkeletonSPtr mpSkeleton;
             std::vector<AnimationItemPtr> mAnimations;
-            SkinnedAnimationFrameSPtr mCurrentAnimationData;
+            SkinnedAnimationFrameUPtr mCurrentAnimationData;
             std::vector<Core::Matrix4x4> mCurrentAnimationMatrices;
             bool mbAnimationLengthDirty;
             f32 mfAnimationLength;

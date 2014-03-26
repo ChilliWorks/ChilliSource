@@ -71,7 +71,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_STRUCT(SubMeshDescriptor);
         CS_FORWARDDECLARE_STRUCT(MeshDescriptor);
         CS_FORWARDDECLARE_CLASS(MeshManager);
-        CS_FORWARDDECLARE_CLASS(MoAnimLoader);
+        CS_FORWARDDECLARE_CLASS(CSAnimLoader);
         CS_FORWARDDECLARE_CLASS(MoModelLoader);
         CS_FORWARDDECLARE_CLASS(Skeleton);
         CS_FORWARDDECLARE_CLASS(SkinnedAnimation);

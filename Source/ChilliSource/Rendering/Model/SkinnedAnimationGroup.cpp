@@ -86,11 +86,11 @@ namespace ChilliSource
                 }
                 
                 //get the animation frames
-                SkinnedAnimationFrameSPtr pFrame1;
+                SkinnedAnimationFrameUPtr pFrame1;
                 if (pAnimItem1 != nullptr)
                     pFrame1 = CalculateAnimationFrame(pAnimItem1->pSkinnedAnimation, infPlaybackPosition);
                 
-                SkinnedAnimationFrameSPtr pFrame2;
+                SkinnedAnimationFrameUPtr pFrame2;
                 if (pAnimItem2 != nullptr)
                     pFrame2 = CalculateAnimationFrame(pAnimItem2->pSkinnedAnimation, infPlaybackPosition);
                 
@@ -102,21 +102,21 @@ namespace ChilliSource
                     switch (ineBlendType)
                     {
                         case AnimationBlendType::k_linear:
-                            mCurrentAnimationData = LerpBetweenFrames(pFrame1, pFrame2, fFactor);
+                            mCurrentAnimationData = LerpBetweenFrames(pFrame1.get(), pFrame2.get(), fFactor);
                             break;
                         default:
                             CS_LOG_ERROR("Invalid animation blend type given.");
-                            mCurrentAnimationData = pFrame1;
+                            mCurrentAnimationData = std::move(pFrame1);
                             break;
                     }
                 }
                 else if (pFrame1 != nullptr)
                 {
-                    mCurrentAnimationData = pFrame1;
+                    mCurrentAnimationData = std::move(pFrame1);
                 }
                 else if (pFrame2 != nullptr)
                 {
-                    mCurrentAnimationData = pFrame2;
+                    mCurrentAnimationData = std::move(pFrame2);
                 }
                 else 
                 {
@@ -145,7 +145,7 @@ namespace ChilliSource
             switch (ineBlendType)
             {
                 case AnimationBlendType::k_linear:
-                    mCurrentAnimationData = LerpBetweenFrames(mCurrentAnimationData, inpAnimationGroup->mCurrentAnimationData, infBlendFactor);
+                    mCurrentAnimationData = LerpBetweenFrames(mCurrentAnimationData.get(), inpAnimationGroup->mCurrentAnimationData.get(), infBlendFactor);
                     break;
                 default:
                     CS_LOG_ERROR("Invalid animation blend type given.");
@@ -293,7 +293,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Calculate Animation Frame
         //----------------------------------------------------------
-        SkinnedAnimationFrameSPtr SkinnedAnimationGroup::CalculateAnimationFrame(const SkinnedAnimationSPtr& inpAnimation, f32 infPlaybackPosition)
+        SkinnedAnimationFrameUPtr SkinnedAnimationGroup::CalculateAnimationFrame(const SkinnedAnimationSPtr& inpAnimation, f32 infPlaybackPosition)
         {
             //report errors if the playback position provided does not make sense
             if (infPlaybackPosition < 0.0f)
@@ -328,8 +328,8 @@ namespace ChilliSource
             }
             
 			//get the frames
-			SkinnedAnimationFrameSPtr frameA = inpAnimation->GetFrameAtIndex(dwFrameAIndex);
-			SkinnedAnimationFrameSPtr frameB = inpAnimation->GetFrameAtIndex(dwFrameBIndex);
+			const SkinnedAnimationFrame* frameA = inpAnimation->GetFrameAtIndex(dwFrameAIndex).get();
+			const SkinnedAnimationFrame* frameB = inpAnimation->GetFrameAtIndex(dwFrameBIndex).get();
 			
 			//get the ratio of one frame to the next
 			f32 interpFactor = (infPlaybackPosition - (dwFrameAIndex * inpAnimation->GetFrameTime())) / inpAnimation->GetFrameTime();
@@ -340,9 +340,9 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Lerp Between Frames
         //--------------------------------------------------------------
-        SkinnedAnimationFrameSPtr SkinnedAnimationGroup::LerpBetweenFrames(const SkinnedAnimationFrameSPtr& inFrameA, const SkinnedAnimationFrameSPtr& inFrameB, f32 infInterpFactor)
+        SkinnedAnimationFrameUPtr SkinnedAnimationGroup::LerpBetweenFrames(const SkinnedAnimationFrame* inFrameA, const SkinnedAnimationFrame* inFrameB, f32 infInterpFactor)
         {
-            SkinnedAnimationFrameSPtr outFrame(new SkinnedAnimationFrame());
+            SkinnedAnimationFrameUPtr outFrame(new SkinnedAnimationFrame());
 			
             if(inFrameA != nullptr && inFrameB != nullptr)
             {

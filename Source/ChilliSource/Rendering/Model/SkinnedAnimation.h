@@ -13,6 +13,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 
 namespace ChilliSource
 {
@@ -50,7 +52,7 @@ namespace ChilliSource
 			/// @param the index to the frame
 			/// @return the AnimationFramePtr at the given index
 			//---------------------------------------------------------------------
-			SkinnedAnimationFrameSPtr GetFrameAtIndex(u32 indwFrameIndex) const;
+			const SkinnedAnimationFrameUPtr& GetFrameAtIndex(u32 indwFrameIndex) const;
 			//---------------------------------------------------------------------
 			/// Get Frame Time
 			///
@@ -63,22 +65,14 @@ namespace ChilliSource
 			/// @return the number of frames in the animation.
 			//---------------------------------------------------------------------
 			u32 GetNumFrames() const;
-		private:
-			//---------------------------------------------------------------------
-			/// Constructor
-			///
-			/// Declared private so that this can only be created by the
-			/// Skeletal Animation Manager.
-			//---------------------------------------------------------------------
-			SkinnedAnimation();
-			//---------------------------------------------------------------------
+            //---------------------------------------------------------------------
 			/// Add Frame
 			///
 			/// Adds a new frame to the end of the animation.
 			///
 			/// @param The new frame.
 			//---------------------------------------------------------------------
-			void AddFrame(const SkinnedAnimationFrameSPtr& inpAnimationFrame);
+			void AddFrame(SkinnedAnimationFrameUPtr in_frame);
 			//---------------------------------------------------------------------
 			/// Set Frame Rate
 			///
@@ -89,13 +83,23 @@ namespace ChilliSource
 			/// @param The frame rate
 			//---------------------------------------------------------------------
 			void SetFrameTime(f32 infFrameTime);
-			
-			friend class MoAnimLoader;
-			friend class SkinnedAnimationManager;
+            
+		private:
+            
+			//---------------------------------------------------------------------
+			/// Constructor
+			///
+			/// Declared private so that this can only be created by the
+			/// Skeletal Animation Manager.
+			//---------------------------------------------------------------------
+			SkinnedAnimation();
+
+            friend class SkinnedAnimationManager;
+            
 		private:
 			
 			f32 mfFrameTime;
-			std::vector<SkinnedAnimationFrameSPtr> mFrames;
+			std::vector<SkinnedAnimationFrameUPtr> mFrames;
 		};
 	}
 }
