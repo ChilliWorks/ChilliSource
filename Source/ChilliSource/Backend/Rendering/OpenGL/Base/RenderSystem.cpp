@@ -20,6 +20,7 @@
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
+#include <ChilliSource/Rendering/Material/Material.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
 #include <UIKit/UIKit.h>
@@ -52,7 +53,18 @@ namespace ChilliSource
             Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mTexManager);
             Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mCubemapManager);
             Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mShaderManager);
-            
+		}
+        //----------------------------------------------------------
+		/// Is A
+		//----------------------------------------------------------
+		bool RenderSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		{
+			return inInterfaceID == RenderSystem::InterfaceID || inInterfaceID == Rendering::RenderSystem::InterfaceID || inInterfaceID == Core::IComponentProducer::InterfaceID;
+		}
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void RenderSystem::Init()
+		{
 #ifdef CS_TARGETPLATFORM_IOS
             //Create the context with the specified GLES version
 			mContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
@@ -71,20 +83,9 @@ namespace ChilliSource
 				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
 			}
 #endif
-		}
-        //----------------------------------------------------------
-		/// Is A
-		//----------------------------------------------------------
-		bool RenderSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
-		{
-			return	(inInterfaceID == RenderSystem::InterfaceID) || (inInterfaceID == Core::IComponentProducer::InterfaceID);
-		}
-        //----------------------------------------------------------
-        /// Init
-        //----------------------------------------------------------
-        bool RenderSystem::Init(u32 inudwWidth, u32 inudwHeight)
-		{
-            CS_ASSERT((inudwWidth > 0 && inudwHeight > 0), "Cannot create and OpenGL ES view with size ZERO");
+            
+            CS_ASSERT((Core::Screen::GetRawDimensions() > Core::Vector2::ZERO), "Cannot create and OpenGL ES view with size ZERO");
+            
 #ifdef CS_TARGETPLATFORM_ANDROID
             //Check for map buffer support
             gbIsMapBufferAvailable = RenderSystem::CheckForOpenGLExtension("GL_OES_mapbuffer");
@@ -96,17 +97,11 @@ namespace ChilliSource
             ForceRefreshRenderStates();
 			
             mShaderManager.SetRenderSystem(this);
-            OnScreenOrientationChanged(inudwWidth, inudwHeight);
-            
-            mudwViewWidth = inudwWidth;
-            mudwViewHeight = inudwHeight;
+            OnScreenOrientationChanged((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
             
             m_hasContextBeenBackedUp = false;
-            
-            return true;
 		}
         //----------------------------------------------------------
-        /// Resume
         //----------------------------------------------------------
         void RenderSystem::Resume()
         {
@@ -121,7 +116,6 @@ namespace ChilliSource
             RestoreContext();
         }
         //----------------------------------------------------------
-        /// Suspend
         //----------------------------------------------------------
         void RenderSystem::Suspend()
         {
@@ -1310,7 +1304,6 @@ namespace ChilliSource
 			}
 		}
         //----------------------------------------------------------
-		/// Destroy
 		//----------------------------------------------------------
 		void RenderSystem::Destroy()
 		{
@@ -1332,13 +1325,7 @@ namespace ChilliSource
 				mContext = nullptr;
 			}
 #endif
-		}
-		//----------------------------------------------------------------
-		/// Destructor
-		//----------------------------------------------------------
-		RenderSystem::~RenderSystem()
-		{
-            Destroy();
+            
             free(mpbCurrentVertexAttribState);
             free(mpbLastVertexAttribState);
             free(mpVertexAttribs);

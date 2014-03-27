@@ -247,6 +247,12 @@ namespace ChilliSource
             //init tweakable constants and local data store.
 			new TweakableConstants();
 			new LocalDataStore();
+            
+            m_renderSystem->Init();
+            
+            //TODO: Once renderer becomes a system we can remove this stuff from here
+            m_renderer = Rendering::Renderer::Create(m_renderSystem);
+            m_renderer->Init();
 
             LoadDefaultResources();
 			ScreenChangedOrientation(m_defaultOrientation);
@@ -432,14 +438,10 @@ namespace ChilliSource
                 (*it)->OnSuspend();
             }
             
+            m_renderSystem->Suspend();
+            
 			//We must invalidate the application timer. This will stop sub-system updates
 			m_platformSystem->SetUpdaterActive(false);
-            
-			//We need to rebind or rebuild the context if it was stolen
-			if(m_renderSystem)
-			{
-				m_renderSystem->Suspend();
-			}
             
 			ApplicationEvents::GetSuspendEvent().NotifyConnections();
 			ApplicationEvents::GetLateSuspendEvent().NotifyConnections();
@@ -463,6 +465,8 @@ namespace ChilliSource
 			m_defaultFont.reset();
 			m_defaultMesh.reset();
 			m_defaultMaterial.reset();
+            
+            m_renderSystem->Destroy();
             
             m_platformSystem.reset();
 			m_renderer.reset();
@@ -513,18 +517,14 @@ namespace ChilliSource
             Rendering::RenderCapabilitiesUPtr renderCapabilitiesUPtr(Rendering::RenderCapabilities::Create());
             Rendering::RenderCapabilities* renderCapabilities(renderCapabilitiesUPtr.get());
             AddSystem_Old(std::move(renderCapabilitiesUPtr));
-            Rendering::RenderSystemUPtr renderSystemUPtr(Rendering::RenderSystem::Create(renderCapabilities));
+            
             //TODO: Don't assume this will be a GL render system. We only do this temporarily
             //in order to access the managers. This will change.
-            OpenGL::RenderSystem* renderSystem((OpenGL::RenderSystem*)renderSystemUPtr.get());
-            renderSystem->Init((u32)Screen::GetRawDimensions().x, (u32)Screen::GetRawDimensions().y);
-            AddSystem_Old(std::move(renderSystemUPtr));
+            OpenGL::RenderSystem* renderSystem = (OpenGL::RenderSystem*)CreateSystem<Rendering::RenderSystem>(renderCapabilities);
             CreateSystem<Rendering::MaterialFactory>(renderSystem->GetShaderManager(), renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
             CreateSystem<Rendering::SpriteSheetProvider>();
             CreateSystem<Rendering::FontProvider>();
-            
-            m_renderer = Rendering::Renderer::Create(renderSystem);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -564,10 +564,6 @@ namespace ChilliSource
                 {
                     m_inputSystem = static_cast<Input::InputSystem*>(pSystem);
                 }
-                if(pSystem->IsA(Rendering::RenderSystem::InterfaceID))
-                {
-                    m_renderSystem = static_cast<Rendering::RenderSystem*>(pSystem);
-                }
                 if(pSystem->IsA(FileSystem::InterfaceID))
                 {
                     m_fileSystem = static_cast<FileSystem*>(pSystem);
@@ -600,12 +596,15 @@ namespace ChilliSource
                 {
                     m_audioSystem = static_cast<Audio::AudioSystem*>(system.get());
                 }
+                if(system->IsA(Rendering::RenderSystem::InterfaceID))
+                {
+                    m_renderSystem = static_cast<Rendering::RenderSystem*>(system.get());
+                }
 			}
 
             //Give the resource managers their providers
             m_resourceManagerDispenser->SetResourceProviders(m_resourceProviders);
 
-            GetRenderer()->Init();
             Audio::AudioPlayer::Init();
 
             m_platformSystem->PostCreateSystems();
@@ -716,13 +715,10 @@ namespace ChilliSource
 		{
 			CS_LOG_DEBUG("App Resuming...");
             
-			if(m_renderSystem != nullptr)
-			{
-				m_renderSystem->Resume();
-			}
-            
 			m_isSuspending = false;
 			ApplicationEvents::GetResumeEvent().NotifyConnections();
+            
+            m_renderSystem->Resume();
             
             //resume all of the application systems
             for (const AppSystemUPtr& system : m_systems)

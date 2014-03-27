@@ -12,18 +12,13 @@
 #define _MOFLO_RENDERING_IRENDERSYSTEM_H
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
-#include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Rendering/Lighting/LightComponent.h>
-#include <ChilliSource/Rendering/Base/RenderTarget.h>
-#include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
+#include <ChilliSource/Rendering/Font/FontManager.h>
+#include <ChilliSource/Rendering/Material/MaterialManager.h>
 #include <ChilliSource/Rendering/Model/MeshManager.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimationManager.h>
-#include <ChilliSource/Rendering/Material/MaterialManager.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
-#include <ChilliSource/Rendering/Font/FontManager.h>
 
 namespace ChilliSource
 {
@@ -31,7 +26,7 @@ namespace ChilliSource
 	{
         class DynamicSpriteBatch;
         
-		class RenderSystem : public Core::System, public Core::IComponentProducer
+		class RenderSystem : public Core::AppSystem, public Core::IComponentProducer
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(RenderSystem);
@@ -46,13 +41,33 @@ namespace ChilliSource
             /// @return New backend instance
             //-------------------------------------------------------
             static RenderSystemUPtr Create(RenderCapabilities* in_renderCapabilities);
+            //----------------------------------------------------------
+            /// Called before system init
+            ///
+            /// @author S Downie
+			//----------------------------------------------------------
+			virtual void Init() = 0;
+            //----------------------------------------------------------
+            /// Called before system resume
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+            virtual void Resume() = 0;
+            //----------------------------------------------------------
+			/// Called after system suspend
+            ///
+            /// @author I Copland
+			//----------------------------------------------------------
+			virtual void Suspend() = 0;
+            //----------------------------------------------------------
+			/// Called after system destroy
+            ///
+            /// @author S Downie
+			//----------------------------------------------------------
+            virtual void Destroy() = 0;
 			
 			virtual ~RenderSystem();
 			
-			virtual bool Init(u32 inudwWidth, u32 inudwHeight) = 0;
-			virtual void Resume() = 0;
-			virtual void Suspend() = 0;
-			virtual void Destroy() = 0;
 			virtual void OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight) = 0;
 
 			virtual void BeginFrame(RenderTarget* inpActiveRenderTarget) = 0;
