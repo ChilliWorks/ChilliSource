@@ -61,6 +61,8 @@ namespace ChilliSource
 		//-------------------------------------------
 		void ParticleSystem::AddParticleComponent(ParticleComponent* in_particle)
 		{
+            CS_ASSERT(in_particle != nullptr, "Cannot add null particle");
+            
 			in_particle->SetOwningSystem(this);
 			m_particleComponents.push_back(in_particle);
 		}
@@ -68,6 +70,8 @@ namespace ChilliSource
 		//-------------------------------------------
 		void ParticleSystem::RemoveParticleComponent(ParticleComponent* in_particle)
 		{
+            CS_ASSERT(in_particle != nullptr, "Cannot remove null particle");
+            
             u32 numParticles = m_particleComponents.size();
             for(u32 i=0; i<numParticles; ++i)
             {

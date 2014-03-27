@@ -26,7 +26,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------
-		class ParticleSystem : public Core::AppSystem, public Core::IComponentProducer
+		class ParticleSystem final : public Core::AppSystem, public Core::IComponentProducer
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(ParticleSystem);
@@ -47,12 +47,6 @@ namespace ChilliSource
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
-            //----------------------------------------------------------
-			/// @author S Downie
-			///
-            /// Called when the system is created
-			//----------------------------------------------------------
-			void OnInit() override;
 			//-------------------------------------------
 			/// @author S Downie
 			///
@@ -66,17 +60,11 @@ namespace ChilliSource
 			//-------------------------------------------
 			void RemoveParticleComponent(ParticleComponent* in_particle);
 			//-------------------------------------------
-			/// Update all the particle components
-			///
-            /// @author S Downie
-            ///
-			/// @param Time since last update in seconds
-			//-------------------------------------------
-			void OnUpdate(f32 in_timeSinceLastUpdate) override;
-			//-------------------------------------------
 			/// Sets a factor to scale update delta time by.
             /// Useful for pausing, slowing down and speeding
             /// up all effects.
+            ///
+            /// @author S Downie
             ///
             /// @param Time scaler
 			//-------------------------------------------
@@ -111,12 +99,6 @@ namespace ChilliSource
 			/// @return Particle Effector factory
 			//-------------------------------------------
             ParticleEffectorFactory& GetEffectorFactory();
-            //----------------------------------------------------------
-			/// @author S Downie
-			///
-            /// Called when the system is destroyed
-			//----------------------------------------------------------
-			void OnDestroy() override;
             
         private:
             
@@ -126,6 +108,26 @@ namespace ChilliSource
             /// @author S Downie
             //----------------------------------------------------------
 			ParticleSystem();
+            //----------------------------------------------------------
+			/// @author S Downie
+			///
+            /// Called when the system is created
+			//----------------------------------------------------------
+			void OnInit() override;
+            //-------------------------------------------
+			/// Update all the particle components
+			///
+            /// @author S Downie
+            ///
+			/// @param Time since last update in seconds
+			//-------------------------------------------
+			void OnUpdate(f32 in_timeSinceLastUpdate) override;
+            //----------------------------------------------------------
+			/// @author S Downie
+			///
+            /// Called when the system is destroyed
+			//----------------------------------------------------------
+			void OnDestroy() override;
 			
 		private:
 			
