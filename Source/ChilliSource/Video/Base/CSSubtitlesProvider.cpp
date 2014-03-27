@@ -1,12 +1,12 @@
 //
-//  CSSubtitlesLoader.cpp
+//  CSSubtitlesProvider.cpp
 //  Chilli Source
 //
 //  Created by Ian Copland 21/02/2013.
 //  Copyright 2013 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Video/Base/CSSubtitlesLoader.h>
+#include <ChilliSource/Video/Base/CSSubtitlesProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
@@ -54,28 +54,30 @@ namespace ChilliSource
             const f32 k_defaultRight = 1.0f;
             const f32 k_defaultBottom = 1.0f;
         }
+        
+        CS_DEFINE_NAMEDTYPE(CSSubtitlesProvider);
 
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool CSSubtitlesLoader::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool CSSubtitlesProvider::IsA(Core::InterfaceIDType in_interfaceID) const
 		{
-			return in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == CSSubtitlesLoader::InterfaceID;
+			return in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == CSSubtitlesProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool CSSubtitlesLoader::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
+		bool CSSubtitlesProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
 		{
 			return (in_interfaceID == Subtitles::InterfaceID);
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool CSSubtitlesLoader::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
+		bool CSSubtitlesProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
 		{
 			return (in_extension == k_CSSubtitlesExtension);
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool CSSubtitlesLoader::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool CSSubtitlesProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
             SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(out_resource);
             
@@ -85,19 +87,19 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool CSSubtitlesLoader::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool CSSubtitlesProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
 			SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(out_resource);
 			
 			//Load model as task
-            Core::Task<Core::StorageLocation, const std::string&, SubtitlesSPtr&> task(this, &CSSubtitlesLoader::LoadSubtitles, in_storageLocation, in_filePath, pSubtitles);
+            Core::Task<Core::StorageLocation, const std::string&, SubtitlesSPtr&> task(this, &CSSubtitlesProvider::LoadSubtitles, in_storageLocation, in_filePath, pSubtitles);
 			Core::TaskScheduler::ScheduleTask(task);
 			
 			return true;
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void CSSubtitlesLoader::LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, SubtitlesSPtr& out_resource) const
+        void CSSubtitlesProvider::LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, SubtitlesSPtr& out_resource) const
         {
             //read the JSON
             Json::Value root;
@@ -166,7 +168,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------------
         //-------------------------------------------------------------------------
-        Subtitles::StylePtr CSSubtitlesLoader::LoadStyle(const Json::Value& in_styleJSON) const
+        Subtitles::StylePtr CSSubtitlesProvider::LoadStyle(const Json::Value& in_styleJSON) const
         {
             Subtitles::StylePtr pStyle(new Subtitles::Style());
             
@@ -189,7 +191,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------------
         //-------------------------------------------------------------------------
-        Subtitles::SubtitlePtr CSSubtitlesLoader::LoadSubtitle(const Json::Value& in_subtitleJSON) const
+        Subtitles::SubtitlePtr CSSubtitlesProvider::LoadSubtitle(const Json::Value& in_subtitleJSON) const
         {
             Subtitles::SubtitlePtr pSubtitle(new Subtitles::Subtitle());
             
@@ -216,7 +218,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------------
         //-------------------------------------------------------------------------
-        Core::Rectangle CSSubtitlesLoader::LoadBounds(const Json::Value& in_boundsJSON) const
+        Core::Rectangle CSSubtitlesProvider::LoadBounds(const Json::Value& in_boundsJSON) const
         {
         	f32 fTop = (f32)in_boundsJSON.get(k_tagStyleBoundsTop, k_defaultTop).asDouble();
         	f32 fBottom = (f32)in_boundsJSON.get(k_tagStyleBoundsBottom, k_defaultBottom).asDouble();
@@ -227,7 +229,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------------
         //-------------------------------------------------------------------------
-        TimeIntervalMs CSSubtitlesLoader::ParseTime(const std::string& in_time) const
+        TimeIntervalMs CSSubtitlesProvider::ParseTime(const std::string& in_time) const
         {
             u32 udwHours, udwMinutes, udwSeconds, udwMilliseconds;
 

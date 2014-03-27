@@ -1,22 +1,22 @@
 //
 //  MaterialFactory.h
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Scott Downie on 05/08/2013.
 //  Copyright (c) 2013 Tag Games Ltd. All rights reserved.
 //
 
-#ifndef MOFLOW_RENDERING_MATERIALFACTORY_H
-#define MOFLOW_RENDERING_MATERIALFACTORY_H
+#ifndef _CHILLISOURCE_RENDERING_MATERIAL_MATERIALFACTORY_H
+#define _CHILLISOURCE_RENDERING_MATERIAL_MATERIALFACTORY_H
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 namespace ChilliSource
 {
     namespace Rendering
     {
-        class MaterialFactory : public Core::System
+        class MaterialFactory : public Core::AppSystem
         {
         public:
             
@@ -27,207 +27,221 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Texture manager used to load material textures
             /// @param Shader manager used to load material shaders
-            /// @param Cubemap manager used to load material cubemaps
             /// @param Render capabilities used to determine which
             /// materials can be used
             ///
             /// @return New instance with ownership transferred
             //-------------------------------------------------------
-            static MaterialFactoryUPtr Create(TextureManager* in_texMgr, ShaderManager* in_shaderMgr, CubemapManager* in_cubemapMgr, RenderCapabilities* in_renderCapabilities);
+            static MaterialFactoryUPtr Create(ShaderManager* in_shaderMgr, RenderCapabilities* in_renderCapabilities);
             
             //---------------------------------------------------
-            /// Is A
+            /// @author S Downie
             ///
             /// @param Interface ID
             /// @return Whether the object is of the same interface
             //---------------------------------------------------
-            bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+            bool IsA(Core::InterfaceIDType in_interfaceID) const override;
             //---------------------------------------------------
-            /// Create Custom
-            ///
             /// Create a material with no shader programs.
             /// The shader programs must be specified by the
             /// user before using the material
+            ///
+            /// @author S Downie
             ///
             /// @param Empty new material
             //---------------------------------------------------
             MaterialUPtr CreateCustom() const;
             //---------------------------------------------------
-            /// Create GUI
-            ///
             /// Create a material to render UI
+            ///
+            /// @author S Downie
+            ///
             /// @return New material
             //---------------------------------------------------
             MaterialUPtr CreateGUI() const;
             //---------------------------------------------------
-            /// Create GUI Distance Font
-            ///
             /// Create a material to render UI distance fonts
+            ///
+            /// @author S Downie
+            ///
             /// @return New material
             //---------------------------------------------------
             MaterialUPtr CreateGUIDistanceFont() const;
             //---------------------------------------------------
-            /// Create GUI Distance Font Outlined
-            ///
             /// Create a material to render UI distance fonts with
             /// outlines
+            ///
+            /// @author S Downie
+            ///
             /// @return New material
             //---------------------------------------------------
             MaterialUPtr CreateGUIDistanceFontOutlined() const;
             //---------------------------------------------------
-            /// Create Sprite
-            ///
             /// Create a material for rendering sprites. Sprites
             /// have no lighting and vertex colours
             ///
+            /// @author S Downie
+            ///
             /// @param Texture
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateSprite(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateSprite(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Static
-            ///
             /// Creates a new material for static textured models
             /// that use no lighting.
             ///
+            /// @author S Downie
+            ///
             /// @param Texture
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStatic(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateStatic(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Static
-            ///
             /// Creates a new material for static textured models
             /// that use Ambient lighting.
             ///
+            /// @author S Downie
+            ///
             /// @param Texture
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStaticAmbient(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateStaticAmbient(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Static Blinn
-            ///
             /// Creates a new material for static textured models
             /// that use blinn-phong per pixel lighting.
             ///
+            /// @author S Downie
+            ///
             /// @param Texture file location
             /// @param Texture file path
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStaticBlinn(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateStaticBlinn(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Static Blinn Shadowed
-            ///
             /// Creates a new material for static textured models
             /// that use blinn-phong per pixel lighting and recieved
             /// shadows.
             ///
+            /// @author S Downie
+            ///
             /// @param Texture file location
             /// @param Texture file path
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStaticBlinnShadowed(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateStaticBlinnShadowed(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Static Blinn Per Vertex
-            ///
             /// Creates a new material for static textured models
             /// that use blinn-phong per vertex lighting.
             ///
+            /// @author S Downie
+            ///
             /// @param Texture
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStaticBlinnPerVertex(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateStaticBlinnPerVertex(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Static Blinn Per Vertex Shadowed
-            ///
             /// Creates a new material for static textured models
             /// that use blinn-phong per vertex lighting and
             /// received shadows.
             ///
+            /// @author S Downie
+            ///
             /// @param Texture
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStaticBlinnPerVertexShadowed(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateStaticBlinnPerVertexShadowed(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Static Directional Shadow Map
-            ///
             /// Create a material for rendering a static model
             /// to a directional shadow map.
+            ///
+            /// @author S Downie
             ///
             /// @return New material
             //---------------------------------------------------
             MaterialUPtr CreateStaticDirectionalShadowMap() const;
             //---------------------------------------------------
-            /// Create Animated
-            ///
             /// Creates a new material for animated textured models
             /// that use no lighting.
             ///
+            /// @author S Downie
+            ///
             /// @param Texture
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimated(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateAnimated(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Animated Ambient
-            ///
             /// Creates a new material for animated textured models
             /// that use ambient lighting.
             ///
+            /// @author S Downie
+            ///
             /// @param Texture
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimatedAmbient(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateAnimatedAmbient(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Animated Blinn
-            ///
             /// Creates a new material for animated textured models
             /// that use blinn-phong per pixel lighting.
             ///
+            /// @author S Downie
+            ///
             /// @param Texture file location
             /// @param Texture file path
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimatedBlinn(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateAnimatedBlinn(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Animated Blinn Shadowed
-            ///
             /// Creates a new material for animated textured models
             /// that use blinn-phong per pixel lighting and receives
             /// shadows.
             ///
+            /// @author S Downie
+            ///
             /// @param Texture file location
             /// @param Texture file path
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimatedBlinnShadowed(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateAnimatedBlinnShadowed(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Animated Blinn Per Vertex
-            ///
             /// Creates a new material for animated textured models
             /// that use blinn-phong per vertex lighting.
             ///
+            /// @author S Downie
+            ///
             /// @param Texture
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimatedBlinnPerVertex(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateAnimatedBlinnPerVertex(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Animated Blinn Per Vertex Shadowed
-            ///
             /// Creates a new material for animated textured models
             /// that use blinn-phong per vertex lighting and
             /// recieves shadows.
             ///
+            /// @author S Downie
+            ///
             /// @param Texture
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimatedBlinnPerVertexShadowed(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateAnimatedBlinnPerVertexShadowed(const TextureSPtr& in_texture) const;
             //---------------------------------------------------
-            /// Create Animated Directional Shadow Map
-            ///
             /// Create a material for rendering an animated model
             /// to a directional shadow map.
+            ///
+            /// @author S Downie
             ///
             /// @return New material
             //---------------------------------------------------
@@ -240,47 +254,16 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Texture manager used to load material textures
             /// @param Shader manager used to load material shaders
-            /// @param Cubemap manager used to load material cubemaps
             /// @param Render capabilities used to determine which
             /// materials can be used
             //-------------------------------------------------------
-            MaterialFactory(TextureManager* in_texMgr, ShaderManager* in_shaderMgr, CubemapManager* in_cubemapMgr, RenderCapabilities* in_renderCapabilities);
+            MaterialFactory(ShaderManager* in_shaderMgr, RenderCapabilities* in_renderCapabilities);
             
         private:
             
-            //---------------------------------------------------
-            /// Get Texture Manager
-            ///
-            /// @return Texture manager
-            //---------------------------------------------------
-            TextureManager* GetTextureManager() const;
-            //---------------------------------------------------
-            /// Get Shader Manager
-            ///
-            /// @return Shader manager
-            //---------------------------------------------------
-            ShaderManager* GetShaderManager() const;
-            //---------------------------------------------------
-            /// Get Cubemap Manager
-            ///
-            /// @return Cubemap manager
-            //---------------------------------------------------
-            CubemapManager* GetCubemapManager() const;
-            //---------------------------------------------------
-            /// Get Render Capabilities
-            ///
-            /// @return The render capabilities.
-            //---------------------------------------------------
-            RenderCapabilities* GetRenderCapabilities() const;
-            
-        private:
-            
-            TextureManager* mpTextureManager;
-            ShaderManager* mpShaderManager;
-            CubemapManager* mpCubemapManager;
-            RenderCapabilities* mpRenderCapabilities;
+            ShaderManager* m_shaderManager;
+            RenderCapabilities* m_renderCapabilities;
         };
     }
 }

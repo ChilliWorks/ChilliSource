@@ -14,6 +14,8 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Social/ForwardDeclarations.h>
 
+#include <functional>
+
 namespace ChilliSource
 {
 	namespace Social
