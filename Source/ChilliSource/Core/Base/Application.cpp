@@ -546,14 +546,6 @@ namespace ChilliSource
 				}
                 
                 //Common systems
-                if(pSystem->IsA(Input::InputSystem::InterfaceID))
-                {
-                    m_inputSystem = static_cast<Input::InputSystem*>(pSystem);
-                }
-                if(pSystem->IsA(Rendering::RenderSystem::InterfaceID))
-                {
-                    m_renderSystem = static_cast<Rendering::RenderSystem*>(pSystem);
-                }
                 if(pSystem->IsA(FileSystem::InterfaceID))
                 {
                     m_fileSystem = static_cast<FileSystem*>(pSystem);
