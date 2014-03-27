@@ -19,6 +19,7 @@ namespace ChilliSource
 {
     namespace Core
     {
+        //TODO: Need to address the mutable member with the new definition of const
         //-------------------------------------------------
         /// Key value array that uses a binary search to
         /// perform lookups on the key. The key is
@@ -50,7 +51,7 @@ namespace ChilliSource
             /// @param Hash function
             //-------------------------------------------
             HashedArray(u32 in_capacity, const HashDelegate& in_hashFunction)
-            : m_capacity(0), m_size(0), m_hashFunction(in_hashFunction), m_isSortCacheValid(true)
+            : m_capacity(0), m_size(0), m_hashFunction(in_hashFunction), m_isSortCacheValid(true), m_storage(nullptr)
             {
                 CS_ASSERT(m_hashFunction, "HashedArray: Key type cannot be hashed without providing a custom hash method");
                 
@@ -263,6 +264,16 @@ namespace ChilliSource
             inline const_iterator end() const
             {
                 return (m_storage + m_size);
+            }
+            //-------------------------------------------
+            /// Destructor
+            ///
+            /// @author S Downie
+            //-------------------------------------------
+            ~HashedArray()
+            {
+                clear();
+                CS_SAFEDELETE_ARRAY(m_storage);
             }
             
         private:
