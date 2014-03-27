@@ -823,25 +823,28 @@ namespace ChilliSource
 			///
             /// @return Whether touch has been consumed
 			//-----------------------------------------------------------
-			virtual bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::Pointer);
+			virtual bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType);
 			//-----------------------------------------------------------
 			/// Called when the window receives cursor/touch input
 			///
             /// @author S Downie
             ///
 			/// @param Touch data
+            /// @param The timestamp
             ///
 			/// @return Whether touch has been consumed
 			//-----------------------------------------------------------
-			virtual bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer);
+			virtual bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp);
 			//-----------------------------------------------------------
 			/// Called when the window stops receiving cursor/touch input
 			///
             /// @author S Downie
             ///
 			/// @param Touch data
+            /// @param The timestamp
+            /// @param The press type.
 			//-----------------------------------------------------------
-			virtual void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer);
+			virtual void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType);
 			//-----------------------------------------------------
 			/// Set Parent View 
 			///

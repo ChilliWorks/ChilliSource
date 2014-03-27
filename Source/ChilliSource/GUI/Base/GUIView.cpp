@@ -1673,7 +1673,7 @@ namespace ChilliSource
         //---Touch Delegates
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool GUIView::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer)
+        bool GUIView::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
         {
             if(UserInteraction)
             {
@@ -1692,7 +1692,7 @@ namespace ChilliSource
 						bool bContains = (*it)->Contains(in_pointer.m_location);
 						if((*it)->IsAcceptTouchesOutsideOfBoundsEnabled() || bContains)
 						{
-							if((*it)->OnPointerDown(in_pointer))
+							if((*it)->OnPointerDown(in_pointer, in_timestamp, in_pressType))
 							{
                                 mSubviewsCopy.clear();
 								return true;
@@ -1705,7 +1705,7 @@ namespace ChilliSource
 				if(IsAcceptTouchesOutsideOfBoundsEnabled() || bContains)
 				{
 					mInputEvents.OnPointerDown(this, in_pointer, bContains);
-                    m_pointerDownEvent.NotifyConnections(in_pointer);
+                    m_pointerDownEvent.NotifyConnections(in_pointer, in_timestamp, in_pressType);
                     
 					//We consume this touch as it is within us
 					if(IsTouchConsumptionEnabled(TouchType::k_began) && bContains)
@@ -1723,7 +1723,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool GUIView::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer)
+        bool GUIView::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
         {
             if(UserInteraction)
             {
@@ -1743,7 +1743,7 @@ namespace ChilliSource
 
                 for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
-                    if((*it)->OnPointerMoved(in_pointer))
+                    if((*it)->OnPointerMoved(in_pointer, in_timestamp))
                     {
                         mSubviewsCopy.clear();
                         return true;
@@ -1754,7 +1754,7 @@ namespace ChilliSource
                 //If we contain this touch we can consume it
                 if(mInputEvents.OnPointerMoved(this, in_pointer))
                 {
-                    m_pointerMovedEvent.NotifyConnections(in_pointer);
+                    m_pointerMovedEvent.NotifyConnections(in_pointer, in_timestamp);
                     if(IsTouchConsumptionEnabled(TouchType::k_moved))
                     {
                         mSubviewsCopy.clear();
@@ -1769,7 +1769,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void GUIView::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer)
+        void GUIView::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
         {
 			mbIsBeingDragged = false;
 
@@ -1779,10 +1779,10 @@ namespace ChilliSource
 				
                 for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
-                    (*it)->OnPointerUp(in_pointer);
+                    (*it)->OnPointerUp(in_pointer, in_timestamp, in_pressType);
                 }
                 
-                m_pointerUpEvent.NotifyConnections(in_pointer);
+                m_pointerUpEvent.NotifyConnections(in_pointer, in_timestamp, in_pressType);
                 mInputEvents.OnPointerUp(this, in_pointer);
             }
             mSubviewsCopy.clear();

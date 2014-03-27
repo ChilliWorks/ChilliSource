@@ -28,8 +28,9 @@ namespace ChilliSource
         void PointerSystem::OnTouchBegan(UITouch* in_touch)
         {
             //Grab the touch location from the OS
-			CGPoint touchLocation = [in_touch locationInView:in_touch.view];
-			u64 pointerId = AddPointerCreateEvent(Core::Vector2(touchLocation.x * m_densityScale, touchLocation.y * m_densityScale));
+			CGPoint uitouchLocation = [in_touch locationInView:in_touch.view];
+            Core::Vector2 touchLocation(uitouchLocation.x * m_densityScale, Core::Screen::GetOrientedDimensions().y - uitouchLocation.y * m_densityScale);
+			u64 pointerId = AddPointerCreateEvent(touchLocation);
             AddPointerDownEvent(pointerId, PressType::k_touch);
 			m_touchToIdMap.emplace(in_touch, pointerId);
         }
@@ -40,8 +41,9 @@ namespace ChilliSource
             auto it = m_touchToIdMap.find(in_touch);
 			if (it != m_touchToIdMap.end())
 			{
-				CGPoint touchLocation = [in_touch locationInView:in_touch.view];
-				AddPointerMovedEvent(it->second, Core::Vector2(touchLocation.x * m_densityScale, touchLocation.y * m_densityScale));
+                CGPoint uitouchLocation = [in_touch locationInView:in_touch.view];
+                Core::Vector2 touchLocation(uitouchLocation.x * m_densityScale, Core::Screen::GetOrientedDimensions().y - uitouchLocation.y * m_densityScale);
+				AddPointerMovedEvent(it->second, touchLocation);
 			}
         }
         //----------------------------------------------------
@@ -53,6 +55,7 @@ namespace ChilliSource
 			{
 				AddPointerUpEvent(it->second, PressType::k_touch);
                 AddPointerRemoveEvent(it->second);
+                m_touchToIdMap.erase(it);
 			}
         }
         //------------------------------------------------

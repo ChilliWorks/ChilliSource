@@ -601,9 +601,9 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------
 		//--------------------------------------------------------
-		bool StretchableImage::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer)
+		bool StretchableImage::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
 		{
-			bool bConsumed = GUIView::OnPointerDown(in_pointer);
+			bool bConsumed = GUIView::OnPointerDown(in_pointer, in_timestamp, in_pressType);
 			
 			if (!CentreTouchConsumption && bConsumed && IsTouchConsumptionEnabled(TouchType::k_began))
 			{
@@ -629,7 +629,7 @@ namespace ChilliSource
 		
         //--------------------------------------------------------
 		//--------------------------------------------------------
-		bool StretchableImage::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer)
+		bool StretchableImage::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
 		{
 			// Special treatment if the middle image has to let the touch through
 			if (!CentreTouchConsumption && IsTouchConsumptionEnabled(TouchType::k_moved))
@@ -652,7 +652,7 @@ namespace ChilliSource
 					
 					for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
 					{
-						if((*it)->OnPointerMoved(in_pointer))
+						if((*it)->OnPointerMoved(in_pointer, in_timestamp))
 						{
 							mSubviewsCopy.clear();
 							return true;
@@ -687,7 +687,7 @@ namespace ChilliSource
 				return false;
 			}
 			
-			return GUIView::OnPointerMoved(in_pointer);
+			return GUIView::OnPointerMoved(in_pointer, in_timestamp);
 		}
     }
 }

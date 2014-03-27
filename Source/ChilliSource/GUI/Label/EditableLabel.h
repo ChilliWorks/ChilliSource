@@ -198,18 +198,22 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param The pointer
+            /// @param The time stamp.
+            /// @param The press type.
             ///
             /// @return Whether touch has been consumed
             //-----------------------------------------------------------
-			bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer) override;
+			bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType) override;
 			//-----------------------------------------------------------
 			/// Called when the view stops receiving cursor/touch input
             ///
             /// @author S Downie
 			///
-			/// @param The poniter
+			/// @param The pointer
+            /// @param The time stamp.
+            /// @param The press type.
 			//-----------------------------------------------------------
-			void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer) override;
+			void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType) override;
 			//-------------------------------------------------------
 			/// Draw
 			///

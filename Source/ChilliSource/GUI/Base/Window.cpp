@@ -116,7 +116,7 @@ namespace ChilliSource
                 {
                     if(((*it)->IsAcceptTouchesOutsideOfBoundsEnabled() || (*it)->Contains(in_pointer.m_location)))
                     {
-                        if((*it)->OnPointerDown(in_pointer))
+                        if((*it)->OnPointerDown(in_pointer, in_timestamp, in_pressType))
                         {
                             //This means the touch has been consumed
                             //and we should not notify anyone else
@@ -148,7 +148,7 @@ namespace ChilliSource
                 //We need to notify any subviews they get first dibs
                 for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
-                    if((*it)->OnPointerMoved(in_pointer))
+                    if((*it)->OnPointerMoved(in_pointer, in_timestamp))
                     {
                         //This means the touch has been consumed
                         //and we should not notify anyone else
@@ -179,7 +179,7 @@ namespace ChilliSource
                 //We need to notify any subviews they get first dibs
                 for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
-                    (*it)->OnPointerDown(in_pointer);
+                    (*it)->OnPointerDown(in_pointer, in_timestamp, in_pressType);
                 }
                 
                 //If the touch has not been consumed we then notify
@@ -190,19 +190,19 @@ namespace ChilliSource
 		}
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool Window::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer)
+        bool Window::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
         {
             return false;
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool Window::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer)
+        bool Window::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
         {
             return false;
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void Window::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer)
+        void Window::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
         {
         }
 #ifdef CS_ENABLE_DEBUGSTATS

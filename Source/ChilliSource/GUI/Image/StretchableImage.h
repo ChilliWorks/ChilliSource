@@ -189,20 +189,23 @@ namespace ChilliSource
             /// @author S Downie
             ///
 			/// @param The pointer.
+            /// @param The timestamp
+            /// @param The press type.
             ///
 			/// @return Whether touch has been consumed
 			//-----------------------------------------------------------
-			virtual bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer) override;
+			virtual bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType) override;
 			//-----------------------------------------------------------
 			/// Called when the window receives cursor/touch input
 			///
             /// @author S Downie
 			///
 			/// @param The pointer.
+            /// @param The timestamp
             ///
 			/// @return Whether touch has been consumed
 			//-----------------------------------------------------------
-			virtual bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer) override;
+			virtual bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp) override;
             
             struct PatchSize
             {

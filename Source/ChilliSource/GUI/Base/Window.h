@@ -53,7 +53,9 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Touch data
+            /// @param The pointer
+            /// @param The timestamp.
+            /// @param The press type.
             //-----------------------------------------------------------
             void _OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType);
             //-----------------------------------------------------------
@@ -61,7 +63,8 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Touch data
+            /// @param The pointer
+            /// @param The timestamp.
             //-----------------------------------------------------------
             void _OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp);
             //-----------------------------------------------------------
@@ -69,7 +72,9 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Touch data
+            /// @param The pointer
+            /// @param The timestamp.
+            /// @param The press type.
             //-----------------------------------------------------------
             void _OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType);
             //-----------------------------------------------------------
@@ -77,25 +82,30 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Touch data
+            /// @param The pointer
+            /// @param The timestamp.
+            /// @param The press type.
             //-----------------------------------------------------------
-            bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer) override;
+            bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType) override;
             //-----------------------------------------------------------
             /// Called when the window receives cursor/touch input
             ///
             /// @author S Downie
             ///
-            /// @param Touch data
+            /// @param The pointer
+            /// @param The timestamp.
             //-----------------------------------------------------------
-            bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer) override;
+            bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp) override;
             //-----------------------------------------------------------
             /// Called when the window stops receiving cursor/touch input
             ///
             /// @author S Downie
             ///
-            /// @param Touch data
+            /// @param The pointer
+            /// @param The timestamp.
+            /// @param The press type.
             //-----------------------------------------------------------
-            void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer) override;
+            void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType) override;
 #ifdef CS_ENABLE_DEBUGSTATS
             //-----------------------------------------------------
 			/// Draw

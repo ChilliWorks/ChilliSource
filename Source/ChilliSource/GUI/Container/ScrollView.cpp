@@ -284,7 +284,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool ScrollView::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer)
+        bool ScrollView::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
         {
             if(UserInteraction && Visible)
             {
@@ -296,11 +296,11 @@ namespace ChilliSource
 				mfTouchTravel = 0.0f;
             }
             
-            return GUIView::OnPointerDown(in_pointer);
+            return GUIView::OnPointerDown(in_pointer, in_timestamp, in_pressType);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool ScrollView::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer)
+        bool ScrollView::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
         {
             if(UserInteraction && Visible && mbTouchActive && Contains(in_pointer.m_location))
             {
@@ -320,21 +320,21 @@ namespace ChilliSource
 				mvNextRealPreviousTouchPosition = in_pointer.m_location;
 				mbTouchMoved = true;
 				
-				GUIView::OnPointerMoved(in_pointer);
+				GUIView::OnPointerMoved(in_pointer, in_timestamp);
             }
             
             return false;
         }
 		//-----------------------------------------------------------
         //-----------------------------------------------------------
-        void ScrollView::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer)
+        void ScrollView::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
         {
 			if(UserInteraction && Visible)
 			{
 				mbTouchActive = false;
 			}
 
-            GUIView::OnPointerUp(in_pointer);
+            GUIView::OnPointerUp(in_pointer, in_timestamp, in_pressType);
         }
         //-------------------------------------------------------
         /// Draw
