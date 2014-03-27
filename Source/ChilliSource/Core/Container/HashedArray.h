@@ -1,13 +1,13 @@
 //
 //  HashedArray.h
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Scott Downie on 16/02/2012.
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#ifndef _MOFLOW_CORE_CONTAINERS_HASHED_ARRAY_H_
-#define _MOFLOW_CORE_CONTAINERS_HASHED_ARRAY_H_
+#ifndef _CHILLISOURCE_CORE_CONTAINERS_HASHEDARRAY_H_
+#define _CHILLISOURCE_CORE_CONTAINERS_HASHEDARRAY_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
@@ -19,292 +19,304 @@ namespace ChilliSource
 {
     namespace Core
     {
-        //=======================================================================
-        /// Generic
-        //=======================================================================
-        //=======================================================================
-        /// Key - K
-        //=======================================================================
-        template <typename K, typename T> class HashedArray
+        //-------------------------------------------------
+        /// Key value array that uses a binary search to
+        /// perform lookups on the key. The key is
+        /// hashed. Array is statically
+        /// sized. Order is not guaranteed. The syntax
+        /// mimics std syntax
+        ///
+        /// @author S Downie
+        //-------------------------------------------------
+        template <typename TKey, typename TValue> class HashedArray
         {
         public:
 
-            typedef std::function<u32(K)> HashDelegate;
-            typedef std::pair<u32, T> KeyValue;
+            CS_DECLARE_NOCOPY(HashedArray);
+            
+            typedef std::function<u32(TKey)> HashDelegate;
+            typedef std::pair<u32, TValue> KeyValue;
             typedef KeyValue* iterator;
             typedef const KeyValue* const_iterator;
             
             //-------------------------------------------
             /// Constructor
             ///
-            /// @param Size/Capcity of the array
+            /// @author S Downie
+            ///
+            /// @param Capacity of the array. If this
+            /// is zero then the array cannot be added
+            /// to until set capacity is called
             /// @param Hash function
             //-------------------------------------------
-            HashedArray(u32 inudwCapacity, const HashDelegate& inDelegate) 
-            : mudwCapacity(inudwCapacity), mudwSize(0), mHashDelegate(inDelegate), mbSortCacheValid(true)
+            HashedArray(u32 in_capacity, const HashDelegate& in_hashFunction)
+            : m_capacity(0), m_size(0), m_hashFunction(in_hashFunction), m_isSortCacheValid(true)
             {
-                CS_ASSERT(inudwCapacity > 0, "Cannot create an array with capacity zero");
-                mpaStorage = new KeyValue[inudwCapacity];
-            }
-            //-------------------------------------------
-            /// Copy Constructor
-            ///
-            /// @param Copy
-            //-------------------------------------------
-            HashedArray(const HashedArray& inRHS) 
-            : mudwCapacity(inRHS.mudwCapacity), mudwSize(inRHS.mudwSize), mHashDelegate(inRHS.mHashDelegate), mbSortCacheValid(inRHS.mbSortCacheValid)
-            {
-                mpaStorage = new KeyValue[inRHS.mudwSize];
+                CS_ASSERT(m_hashFunction, "HashedArray: Key type cannot be hashed without providing a custom hash method");
                 
-                std::copy(inRHS.begin(), inRHS.end(), this->begin());
+                if(in_capacity > 0)
+                {
+                    set_capacity(in_capacity);
+                }
             }
             //-------------------------------------------
-            /// Copy Assignment
+            /// Makes a deep copy of the array
             ///
-            /// @param Copy
+            /// @author S Downie
+            ///
+            /// @param Array to copy
             //-------------------------------------------
-            void operator=(const HashedArray& inRHS)
+            void clone(const HashedArray& inRHS)
             {
-                mudwCapacity = inRHS.mudwCapacity;
-                mudwSize = inRHS.mudwSize;
-                mHashDelegate = inRHS.mHashDelegate;
-                mbSortCacheValid = inRHS.mbSortCacheValid;
+                m_capacity = inRHS.m_capacity;
+                m_size = inRHS.m_size;
+                m_hashFunction = inRHS.m_hashFunction;
+                m_isSortCacheValid = inRHS.m_isSortCacheValid;
                 std::copy(inRHS.begin(), inRHS.end(), this->begin());
             }
             //-------------------------------------------
-            /// Insert
+            /// @author S Downie
             ///
-            /// Insert the object into the array
+            /// Set the initial capacity of the array
+            /// if it has already been set then this
+            /// will assert
+            ///
+            /// @param Capacity
+            //-------------------------------------------
+            void set_capacity(u32 in_capacity)
+            {
+                CS_ASSERT(in_capacity > 0, "HashedArray: Cannot create an array with capacity zero");
+                CS_ASSERT(m_capacity == 0, "HashedArray: Cannot allocate array twice");
+                m_storage = new KeyValue[in_capacity];
+                m_capacity = in_capacity;
+            }
+            //-------------------------------------------
+            /// Insert the object into the array. Order
+            /// is not guaranteed
+            ///
+            /// @author S Downie
             ///
             /// @param Key
             /// @param Value
-            /// @return False if exceeds capacity
             //-------------------------------------------
-            bool Insert(const K& inKey, const T& inValue)
+            void insert(const TKey& in_key, const TValue& in_value)
             {
-                if(mudwSize >= mudwCapacity)
-                {
-                    return false;
-                }
+                CS_ASSERT(m_capacity > 0, "HashedArray: Must allocate capacity");
+                CS_ASSERT(m_size < m_capacity, "HashedArray: Exceeds capacity");
                 
-                CS_ASSERT(mHashDelegate, "Key type cannot be hashed without providing a custom hash method");
-                u32 udwHash = mHashDelegate(inKey);
-                mpaStorage[mudwSize].first = udwHash;
-                mpaStorage[mudwSize].second = inValue;
-                mbSortCacheValid = false;
-                mudwSize++;
-                return true;
+                u32 hash = m_hashFunction(in_key);
+                m_storage[m_size].first = hash;
+                m_storage[m_size].second = in_value;
+                m_isSortCacheValid = false;
+                m_size++;
             }
             //-------------------------------------------
-            /// Remove 
-            ///
             /// Remove the object identified by the
-            /// given key
+            /// given key. This doesn't free any memory
             ///
-            /// @param Remove
+            /// @author S Downie
+            ///
+            /// @param Key of key and value to remove
             //-------------------------------------------
-            void Remove(const K& inKey)
+            void remove(const TKey& in_key)
             {
-                if(!mbSortCacheValid)
-                {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
-                    mbSortCacheValid = true;
-                }
+                u32 hash = m_hashFunction(in_key);
+                s32 index = FindIndex(hash);
                 
-                CS_ASSERT(mHashDelegate, "Key type cannot be hashed without providing a custom hash method");
+                CS_ASSERT(index >= 0, "HashedArray: Cannot find key to remove");
                 
-                u32 udwHash = mHashDelegate(inKey);
-                s32 dwIndex = FindIndex(udwHash);
+                std::swap(m_storage[index], m_storage[m_size-1]);
+                m_storage[m_size-1].~KeyValue();
                 
-                if(dwIndex >= 0)
-                {
-                    for(s32 i=dwIndex; i<(mudwSize-1); i++)
-                    {	
-                        mpaStorage[i] = mpaStorage[i+1];
-                    }
-                    
-                    mpaStorage[dwIndex].~KeyValue();
-                    
-                    mudwSize--;
-                }
+                m_size--;
+                m_isSortCacheValid = false;
             }
             //-------------------------------------------
-            /// Clear
+            /// Clear all objects but hold onto the memory
             ///
-            /// Clear all objects
+            /// @author S Downie
             //-------------------------------------------
-            void Clear()
+            void clear()
             {
-                for(u32 i=0; i<mudwSize; ++i)
+                for(u32 i=0; i<m_size; ++i)
                 {	
-                    mpaStorage[i].~KeyValue();
+                    m_storage[i].~KeyValue();
                 }
                 
-                mudwSize = 0;
+                m_size = 0;
+                m_isSortCacheValid = false;
             }
             //-------------------------------------------
-            /// Find
+            /// @author S Downie
             ///
             /// @param Key
-            /// @return Value
+            ///
+            /// @return Value at key or end if not found
             //-------------------------------------------
-            iterator Find(const K& inKey) 
+            iterator find(const TKey& in_key)
             {
-                if(!mbSortCacheValid)
+                if(!m_isSortCacheValid)
                 {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
-                    mbSortCacheValid = true;
+                    std::sort(m_storage, m_storage + m_size, HashedArray::LessThanSortPredicate);
+                    m_isSortCacheValid = true;
                 }
                 
-                CS_ASSERT(mHashDelegate, "Key type cannot be hashed without providing a custom hash method");
+                u32 hash = m_hashFunction(in_key);
+                s32 index = FindIndex(hash);
                 
-                u32 udwHash = mHashDelegate(inKey);
-                s32 dwIndex = FindIndex(udwHash);
-                
-                if(dwIndex >= 0)
+                if(index >= 0)
                 {
-                    return &mpaStorage[dwIndex];
+                    return &m_storage[index];
                 }
              
                 return end();
             }
             //-------------------------------------------
-            /// Find
+            /// @author S Downie
             ///
             /// @param Key
-            /// @return Value
+            ///
+            /// @return Value at key or end if not found
             //-------------------------------------------
-            const_iterator Find(const K& inKey) const 
+            const_iterator find(const TKey& in_key) const
             {
-                if(!mbSortCacheValid)
+                if(!m_isSortCacheValid)
                 {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
-                    mbSortCacheValid = true;
+                    std::sort(m_storage, m_storage + m_size, HashedArray::LessThanSortPredicate);
+                    m_isSortCacheValid = true;
                 }
                 
-                CS_ASSERT(mHashDelegate, "Key type cannot be hashed without providing a custom hash method");
+                u32 hash = m_hashFunction(in_key);
+                s32 index = FindIndex(hash);
                 
-                u32 udwHash = mHashDelegate(inKey);
-                s32 dwIndex = FindIndex(udwHash);
-                
-                if(dwIndex >= 0)
+                if(index >= 0)
                 {
-                    return &mpaStorage[dwIndex];
+                    return &m_storage[index];
                 }
                 
                 return end();
             }
             //-------------------------------------------
-            /// Get Length
+            /// @author S Downie
             ///
-            /// The number of elements that have been
-            /// added to the array
-            ///
-            /// @return Length
+            /// @return Number of elements that have been
+            /// added
             //-------------------------------------------
-            inline u32 GetLength() const
+            inline u32 length() const
             {
-                return mudwSize;
+                return m_size;
             }
             //-------------------------------------------
-            /// Get Capacity
+            /// @author S Downie
             ///
-            /// @return Size/Capcity of the array
+            /// @return Whether the array is empty
             //-------------------------------------------
-            inline u32 GetCapacity() const
+            inline bool empty() const
             {
-                return mudwCapacity;
+                return length() == 0;
             }
             //-------------------------------------------
-            /// Begin
+            /// @author S Downie
+            ///
+            /// @return Capcaity of the array
+            //-------------------------------------------
+            inline u32 capacity() const
+            {
+                return m_capacity;
+            }
+            //-------------------------------------------
+            /// @author S Downie
             ///
             /// @return Iterator pointing to the first
             /// object in the structure
             //-------------------------------------------
             inline iterator begin() 
             {
-                return mpaStorage;
+                return m_storage;
             }
             //-------------------------------------------
-            /// End
+            /// @author S Downie
             ///
             /// @return Iterator pointing beyond the last
             /// object in the structure
             //-------------------------------------------
             inline iterator end() 
             {
-                return (mpaStorage + mudwSize);
+                return (m_storage + m_size);
             }
             //-------------------------------------------
-            /// Begin
+            /// @author S Downie
             ///
             /// @return Iterator pointing to the first
             /// object in the structure
             //-------------------------------------------
             inline const_iterator begin() const
             {
-                return mpaStorage;
+                return m_storage;
             }
             //-------------------------------------------
-            /// End
+            /// @author S Downie
             ///
             /// @return Iterator pointing beyond the last
             /// object in the structure
             //-------------------------------------------
             inline const_iterator end() const
             {
-                return (mpaStorage + mudwSize);
+                return (m_storage + m_size);
             }
             
         private:
             
-            //---Sort Predicate
             //-------------------------------------------
-            /// Less Than
+            /// Sort predicate
+            ///
+            /// @author S Downie
             ///
             /// @param LHS
             /// @param RHS
+            ///
             /// @return Whether LHS is less than RHS
             //-------------------------------------------
-            static bool LessThanSortPredicate(const KeyValue& inLHS, const KeyValue& inRHS)
+            static bool LessThanSortPredicate(const KeyValue& in_lhs, const KeyValue& in_rhs)
             {
-                return inLHS.first < inRHS.first;
+                return in_lhs.first < in_rhs.first;
             }
             //--------------------------------------------
-            /// Find Index
-            ///
             /// Performs a binary search looking for the
             /// index of the object with the given key
             ///
+            /// @author S Downie
+            ///
             /// @param Key
+            ///
             /// @return Index of object identified by key
             /// or -1 if not found
             //--------------------------------------------
-            s32 FindIndex(u32 inudwKey) const
+            s32 FindIndex(u32 in_keyHash) const
             {
-                if(mudwSize == 0)
+                if(m_size == 0)
                 {
                     return -1;
                 }
                 
-                u32 udwLow = 0;
-                s32 dwHigh = mudwSize-1;
-                u32 udwMidpoint = 0;
+                u32 low = 0;
+                s32 high = m_size-1;
+                u32 mid = 0;
                 
-                while((s32)udwLow <= dwHigh)
+                while((s32)low <= high)
                 {
-                    udwMidpoint = (dwHigh + udwLow)/ 2;
-                    if(inudwKey == mpaStorage[udwMidpoint].first)
+                    mid = (high + low)/ 2;
+                    if(in_keyHash == m_storage[mid].first)
                     {
-                        return udwMidpoint;
+                        return mid;
                     }
-                    else if(inudwKey < mpaStorage[udwMidpoint].first)
+                    else if(in_keyHash < m_storage[mid].first)
                     {
-                        dwHigh = udwMidpoint - 1;
+                        high = mid - 1;
                     }
                     else
                     {
-                        udwLow = udwMidpoint + 1;
+                        low = mid + 1;
                     }
                 }
                 
@@ -313,600 +325,14 @@ namespace ChilliSource
             
         private:
             
-            HashDelegate mHashDelegate;
+            HashDelegate m_hashFunction;
             
-            u32 mudwSize;
-            u32 mudwCapacity;
+            u32 m_size;
+            u32 m_capacity;
             
-            mutable bool mbSortCacheValid;
+            mutable bool m_isSortCacheValid;
             
-            KeyValue* mpaStorage; 
-        };
-        
-        //=======================================================================
-        /// Specialisations
-        //=======================================================================
-        //=======================================================================
-        /// Key - String
-        //=======================================================================
-        template <typename T> class HashedArray <std::string, T>
-        {
-        public:
-            
-            typedef std::string K;
-            typedef std::function<u32(K)> HashDelegate;
-            typedef std::pair<u32, T> KeyValue;
-            typedef KeyValue* iterator;
-            typedef const KeyValue* const_iterator;
-            
-            //-------------------------------------------
-            /// Constructor
-            ///
-            /// @param Size/Capcity of the array
-            //-------------------------------------------
-            HashedArray(u32 inudwCapacity) 
-            : mudwCapacity(inudwCapacity), mudwSize(0), mbSortCacheValid(true)
-            {
-                CS_ASSERT(inudwCapacity > 0, "Cannot create an array with capacity zero");
-                mpaStorage = new KeyValue[inudwCapacity];
-            }
-            //-------------------------------------------
-            /// Copy Constructor
-            ///
-            /// @param Copy
-            //-------------------------------------------
-            HashedArray(const HashedArray& inRHS) 
-            : mudwCapacity(inRHS.mudwCapacity), mudwSize(inRHS.mudwSize), mbSortCacheValid(inRHS.mbSortCacheValid)
-            {
-                mpaStorage = new KeyValue[inRHS.mudwSize];
-                
-                std::copy(inRHS.begin(), inRHS.end(), this->begin());
-            }
-            //-------------------------------------------
-            /// Copy Assignment
-            ///
-            /// @param Copy
-            //-------------------------------------------
-            void operator=(const HashedArray& inRHS)
-            {
-                mudwCapacity = inRHS.mudwCapacity;
-                mudwSize = inRHS.mudwSize;
-                mbSortCacheValid = inRHS.mbSortCacheValid;
-                std::copy(inRHS.begin(), inRHS.end(), this->begin());
-            }
-            //-------------------------------------------
-            /// Insert
-            ///
-            /// Insert the object into the array
-            ///
-            /// @param Key
-            /// @param Value
-            /// @return False if exceeds capacity
-            //-------------------------------------------
-            bool Insert(const K& inKey, const T& inValue)
-            {
-                if(mudwSize >= mudwCapacity)
-                {
-                    return false;
-                }
-                
-                u32 udwHash = HashCRC32::GenerateHashCode(inKey);
-                mpaStorage[mudwSize].first = udwHash;
-                mpaStorage[mudwSize].second = inValue;
-                mbSortCacheValid = false;
-                mudwSize++;
-                return true;
-            }
-            //-------------------------------------------
-            /// Remove 
-            ///
-            /// Remove the object identified by the
-            /// given key
-            ///
-            /// @param Remove
-            //-------------------------------------------
-            void Remove(const K& inKey)
-            {
-                if(!mbSortCacheValid)
-                {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
-                    mbSortCacheValid = true;
-                }
-                
-                u32 udwHash = HashCRC32::GenerateHashCode(inKey);
-                s32 dwIndex = FindIndex(udwHash);
-                
-                if(dwIndex >= 0)
-                {
-                    for(s32 i=dwIndex; i<(mudwSize-1); ++i)
-                    {	
-                        mpaStorage[i] = mpaStorage[i+1];
-                    }
-                    
-                    mpaStorage[dwIndex].~KeyValue();
-                    
-                    mudwSize--;
-                }
-            }
-            //-------------------------------------------
-            /// Clear
-            ///
-            /// Clear all objects
-            //-------------------------------------------
-            void Clear()
-            {
-                for(u32 i=0; i<mudwSize; ++i)
-                {	
-                    mpaStorage[i].~KeyValue();
-                }
-                
-                mudwSize = 0;
-            }
-            //-------------------------------------------
-            /// Find
-            ///
-            /// @param Key
-            /// @return Value
-            //-------------------------------------------
-            iterator Find(const K& inKey) 
-            {
-                if(!mbSortCacheValid)
-                {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
-                    mbSortCacheValid = true;
-                }
-                
-                u32 udwHash = HashCRC32::GenerateHashCode(inKey);
-                s32 dwIndex = FindIndex(udwHash);
-                
-                if(dwIndex >= 0)
-                {
-                    return &mpaStorage[dwIndex];
-                }
-                
-                return end();
-            }
-            //-------------------------------------------
-            /// Find
-            ///
-            /// @param Key
-            /// @return Value
-            //-------------------------------------------
-            const_iterator Find(const K& inKey) const 
-            {
-                if(!mbSortCacheValid)
-                {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
-                    mbSortCacheValid = true;
-                }
-                
-                u32 udwHash = HashCRC32::GenerateHashCode(inKey);
-                s32 dwIndex = FindIndex(udwHash);
-                
-                if(dwIndex >= 0)
-                {
-                    return &mpaStorage[dwIndex];
-                }
-                
-                return end();
-            }
-            //-------------------------------------------
-            /// Get Length
-            ///
-            /// The number of elements that have been
-            /// added to the array
-            ///
-            /// @return Length
-            //-------------------------------------------
-            inline u32 GetLength() const
-            {
-                return mudwSize;
-            }
-            //-------------------------------------------
-            /// Get Capacity
-            ///
-            /// @return Size/Capcity of the array
-            //-------------------------------------------
-            inline u32 GetCapacity() const
-            {
-                return mudwCapacity;
-            }
-            //-------------------------------------------
-            /// Begin
-            ///
-            /// @return Iterator pointing to the first
-            /// object in the structure
-            //-------------------------------------------
-            inline iterator begin()
-            {
-                return mpaStorage;
-            }
-            //-------------------------------------------
-            /// End
-            ///
-            /// @return Iterator pointing beyond the last
-            /// object in the structure
-            //-------------------------------------------
-            inline iterator end()
-            {
-                return (mpaStorage + mudwSize);
-            }
-            //-------------------------------------------
-            /// Begin
-            ///
-            /// @return Iterator pointing to the first
-            /// object in the structure
-            //-------------------------------------------
-            inline const_iterator begin() const
-            {
-                return mpaStorage;
-            }
-            //-------------------------------------------
-            /// End
-            ///
-            /// @return Iterator pointing beyond the last
-            /// object in the structure
-            //-------------------------------------------
-            inline const_iterator end() const
-            {
-                return (mpaStorage + mudwSize);
-            }
-            
-        private:
-            
-            //---Sort Predicate
-            //-------------------------------------------
-            /// Less Than
-            ///
-            /// @param LHS
-            /// @param RHS
-            /// @return Whether LHS is less than RHS
-            //-------------------------------------------
-            static bool LessThanSortPredicate(const KeyValue& inLHS, const KeyValue& inRHS)
-            {
-                return inLHS.first < inRHS.first;
-            }
-            
-            //--------------------------------------------
-            /// Find Index
-            ///
-            /// Performs a binary search looking for the
-            /// index of the object with the given key
-            ///
-            /// @param Key
-            /// @return Index of object identified by key
-            /// or -1 if not found
-            //--------------------------------------------
-            s32 FindIndex(u32 inudwKey) const
-            {
-                if(mudwSize == 0)
-                {
-                    return -1;
-                }
-                
-                u32 udwLow = 0;
-                s32 dwHigh = mudwSize-1;
-                u32 udwMidpoint = 0;
-                
-                while((s32)udwLow <= dwHigh)
-                {
-                    udwMidpoint = (dwHigh + udwLow)/ 2;
-                    if(inudwKey == mpaStorage[udwMidpoint].first)
-                    {
-                        return udwMidpoint;
-                    }
-                    else if(inudwKey < mpaStorage[udwMidpoint].first)
-                    {
-                        dwHigh = udwMidpoint - 1;
-                    }
-                    else
-                    {
-                        udwLow = udwMidpoint + 1;
-                    }
-                }
-                
-                return -1;
-            }
-            
-        private:
-            
-            u32 mudwSize;
-            u32 mudwCapacity;
-            
-            mutable bool mbSortCacheValid;
-            
-            KeyValue* mpaStorage; 
-        };
-        
-        //=======================================================================
-        /// Key - u32
-        //=======================================================================
-        template <typename T> class HashedArray <u32, T>
-        {
-        public:
-            
-            typedef u32 K;
-            typedef std::function<u32(K)> HashDelegate;
-            typedef std::pair<u32, T> KeyValue;
-            typedef KeyValue* iterator;
-            typedef const KeyValue* const_iterator;
-            
-            //-------------------------------------------
-            /// Constructor
-            ///
-            /// @param Size/Capcity of the array
-            //-------------------------------------------
-            HashedArray(u32 inudwCapacity) 
-            : mudwCapacity(inudwCapacity), mudwSize(0), mbSortCacheValid(true)
-            {
-                CS_ASSERT(inudwCapacity > 0, "Cannot create an array with capacity zero");
-                mpaStorage = new KeyValue[inudwCapacity];
-            }
-            //-------------------------------------------
-            /// Copy Constructor
-            ///
-            /// @param Copy
-            //-------------------------------------------
-            HashedArray(const HashedArray& inRHS) 
-            : mudwCapacity(inRHS.mudwCapacity), mudwSize(inRHS.mudwSize), mbSortCacheValid(inRHS.mbSortCacheValid)
-            {
-                mpaStorage = new KeyValue[inRHS.mudwSize];
-                
-                std::copy(inRHS.begin(), inRHS.end(), this->begin());
-            }
-            //-------------------------------------------
-            /// Copy Assignment
-            ///
-            /// @param Copy
-            //-------------------------------------------
-            void operator=(const HashedArray& inRHS)
-            {
-                mudwCapacity = inRHS.mudwCapacity;
-                mudwSize = inRHS.mudwSize;
-                mbSortCacheValid = inRHS.mbSortCacheValid;
-                std::copy(inRHS.begin(), inRHS.end(), this->begin());
-            }
-            //-------------------------------------------
-            /// Insert
-            ///
-            /// Insert the object into the array
-            ///
-            /// @param Key
-            /// @param Value
-            /// @return False if exceeds capacity
-            //-------------------------------------------
-            bool Insert(K inKey, const T& inValue)
-            {
-                if(mudwSize >= mudwCapacity)
-                {
-                    return false;
-                }
-                
-                mpaStorage[mudwSize].first = inKey;
-                mpaStorage[mudwSize].second = inValue;
-                mbSortCacheValid = false;
-                mudwSize++;
-                return true;
-            }
-            //-------------------------------------------
-            /// Remove 
-            ///
-            /// Remove the object identified by the
-            /// given key
-            ///
-            /// @param Remove
-            //-------------------------------------------
-            void Remove(K inKey)
-            {
-                if(!mbSortCacheValid)
-                {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
-                    mbSortCacheValid = true;
-                }
-                
-                u32 udwHash = inKey;
-                s32 dwIndex = FindIndex(udwHash);
-                
-                if(dwIndex >= 0)
-                {
-                    for(s32 i=dwIndex; i<(mudwSize-1); i++)
-                    {	
-                        mpaStorage[i] = mpaStorage[i+1];
-                    }
-                    
-                    mpaStorage[dwIndex].~KeyValue();
-                    
-                    mudwSize--;
-                }
-            }
-            //-------------------------------------------
-            /// Clear
-            ///
-            /// Clear all objects
-            //-------------------------------------------
-            void Clear()
-            {
-                for(u32 i=0; i<mudwSize; ++i)
-                {	
-                   mpaStorage[i].~KeyValue();
-                }
-                
-                mudwSize = 0;
-            }
-            //-------------------------------------------
-            /// Find
-            ///
-            /// @param Key
-            /// @return Value
-            //-------------------------------------------
-            iterator Find(K inKey)  
-            {
-                if(!mbSortCacheValid)
-                {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
-                    mbSortCacheValid = true;
-                }
-                
-                u32 udwHash = inKey;
-                s32 dwIndex = FindIndex(udwHash);
-                
-                if(dwIndex >= 0)
-                {
-                    return &mpaStorage[dwIndex];
-                }
-                
-                return end();
-            }
-            //-------------------------------------------
-            /// Find
-            ///
-            /// @param Key
-            /// @return Value
-            //-------------------------------------------
-            const_iterator Find(K inKey) const 
-            {
-                if(!mbSortCacheValid)
-                {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
-                    mbSortCacheValid = true;
-                }
-                
-                u32 udwHash = inKey;
-                s32 dwIndex = FindIndex(udwHash);
-                
-                if(dwIndex >= 0)
-                {
-                    return &mpaStorage[dwIndex];
-                }
-                
-                return end();
-            }
-            //-------------------------------------------
-            /// Get Length
-            ///
-            /// The number of elements that have been
-            /// added to the array
-            ///
-            /// @return Length
-            //-------------------------------------------
-            inline u32 GetLength() const
-            {
-                return mudwSize;
-            }
-            //-------------------------------------------
-            /// Get Capacity
-            ///
-            /// @return Size/Capcity of the array
-            //-------------------------------------------
-            inline u32 GetCapacity() const
-            {
-                return mudwCapacity;
-            }
-            //-------------------------------------------
-            /// Begin
-            ///
-            /// @return Iterator pointing to the first
-            /// object in the structure
-            //-------------------------------------------
-            inline iterator begin()
-            {
-                return mpaStorage;
-            }
-            //-------------------------------------------
-            /// End
-            ///
-            /// @return Iterator pointing beyond the last
-            /// object in the structure
-            //-------------------------------------------
-            inline iterator end()
-            {
-                return (mpaStorage + mudwSize);
-            }
-            //-------------------------------------------
-            /// Begin
-            ///
-            /// @return Iterator pointing to the first
-            /// object in the structure
-            //-------------------------------------------
-            inline const_iterator begin() const
-            {
-                return mpaStorage;
-            }
-            //-------------------------------------------
-            /// End
-            ///
-            /// @return Iterator pointing beyond the last
-            /// object in the structure
-            //-------------------------------------------
-            inline const_iterator end() const
-            {
-                return (mpaStorage + mudwSize);
-            }
-            
-        private:
-            
-            //---Sort Predicate
-            //-------------------------------------------
-            /// Less Than
-            ///
-            /// @param LHS
-            /// @param RHS
-            /// @return Whether LHS is less than RHS
-            //-------------------------------------------
-            static bool LessThanSortPredicate(const KeyValue& inLHS, const KeyValue& inRHS)
-            {
-                return inLHS.first < inRHS.first;
-            }
-            
-            //--------------------------------------------
-            /// Find Index
-            ///
-            /// Performs a binary search looking for the
-            /// index of the object with the given key
-            ///
-            /// @param Key
-            /// @return Index of object identified by key
-            /// or -1 if not found
-            //--------------------------------------------
-            s32 FindIndex(u32 inudwKey) const
-            {
-                if(mudwSize == 0)
-                {
-                    return -1;
-                }
-                
-                u32 udwLow = 0;
-                s32 dwHigh = mudwSize-1;
-                u32 udwMidpoint = 0;
-                
-                while((s32)udwLow <= dwHigh)
-                {
-                    udwMidpoint = (dwHigh + udwLow)/ 2;
-                    if(inudwKey == mpaStorage[udwMidpoint].first)
-                    {
-                        return udwMidpoint;
-                    }
-                    else if(inudwKey < mpaStorage[udwMidpoint].first)
-                    {
-                        dwHigh = udwMidpoint - 1;
-                    }
-                    else
-                    {
-                        udwLow = udwMidpoint + 1;
-                    }
-                }
-                
-                return -1;
-            }
-            
-        private:
-            
-            u32 mudwSize;
-            u32 mudwCapacity;
-            
-            mutable bool mbSortCacheValid;
-            
-            KeyValue* mpaStorage; 
+            KeyValue* m_storage;
         };
     }
 }

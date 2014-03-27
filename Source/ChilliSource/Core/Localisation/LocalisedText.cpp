@@ -8,8 +8,10 @@
  */
 
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
+
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 namespace ChilliSource
@@ -57,7 +59,7 @@ namespace ChilliSource
         {
 			CS_ASSERT(mpTextLookup, "Text Lookup IDs are missing");
 
-            IDToLookupIndex::iterator it = mpTextLookup->Find(instrID);
+            IDToLookupIndex::iterator it = mpTextLookup->find(instrID);
             
             if(it != mpTextLookup->end())
             {
@@ -269,13 +271,13 @@ namespace ChilliSource
 
             std::string strID;
             
-            mpTextLookup = new IDToLookupIndex(mudwLineCount);
+            mpTextLookup = new IDToLookupIndex(mudwLineCount, MakeDelegate<u32, const std::string&>(HashCRC32::GenerateHashCode));
             
             u32 udwCurrentLine = 0;
             while(udwCurrentLine < mudwLineCount)
             {
                 incIDFile->GetLine(strID);
-                mpTextLookup->Insert(strID, (LocalisedTextKey)udwCurrentLine);
+                mpTextLookup->insert(strID, (LocalisedTextKey)udwCurrentLine);
                 udwCurrentLine++;
             }
             
