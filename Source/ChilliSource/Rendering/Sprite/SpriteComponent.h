@@ -143,7 +143,7 @@ namespace ChilliSource
 			///
 			/// @param Rect containing uv, st
 			//-----------------------------------------------------------
-			void SetUVs(const Core::CRect &inUVs);
+			void SetUVs(const Core::Rectangle &inUVs);
 			//-----------------------------------------------------------
 			/// Set UV's
 			///
@@ -160,7 +160,7 @@ namespace ChilliSource
 			///
 			/// @return Rect with UV and ST
 			//-----------------------------------------------------------
-			const Core::CRect& GetUVs() const;
+			const Core::Rectangle& GetUVs() const;
 			//-----------------------------------------------------------
 			/// Set Colour
 			///
@@ -195,7 +195,7 @@ namespace ChilliSource
 			///
 			/// @param Rect containing the UV and ST
 			//-----------------------------------------------------------
-			const Core::CRect& GetCurrentFrame();
+			const Core::Rectangle& GetCurrentFrame();
 			//-----------------------------------------------------------
 			/// Set Flipped Horizontal
 			///
@@ -365,8 +365,8 @@ namespace ChilliSource
 
 			Core::Vector2 mvDimensions;
 			
-			Core::CRect mUVs;
-			Core::CRect mTransformedUVs;
+			Core::Rectangle mUVs;
+			Core::Rectangle mTransformedUVs;
             
             Core::Colour mColour;
             

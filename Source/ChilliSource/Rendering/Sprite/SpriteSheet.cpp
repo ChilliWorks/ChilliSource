@@ -76,7 +76,7 @@ namespace ChilliSource
                 }
             }
             
-//            CS_LOG_WARNING("Sprite not found for ID: " + inID);
+            CS_LOG_FATAL("Sprite not found for ID: " + inID);
             return 0;
         }
         
@@ -108,13 +108,8 @@ namespace ChilliSource
         //---------------------------------------------------------------------
         const std::string& SpriteSheet::GetIDFromFrameIndex(u32 inudwFrameIndex) const
         {
-            if(inudwFrameIndex < mStringIDLookups.size())
-            {
-                return mStringIDLookups[inudwFrameIndex];
-            }
-            
-            CS_LOG_WARNING("Sprite not found for Frame Index: " + Core::ToString(inudwFrameIndex));
-            return Core::StringUtils::BLANK;
+            CS_ASSERT(inudwFrameIndex < mStringIDLookups.size(), "Sprite sheet frame index out of bounds");
+            return mStringIDLookups[inudwFrameIndex];
         }		
 		//---------------------------------------------------------------------
 		/// Get Num Sprite Frames
@@ -146,9 +141,9 @@ namespace ChilliSource
 		/// @param ID for frame 
 		/// @return Rect containing UV coords for the given frame
 		//---------------------------------------------------------------------
-		Core::CRect SpriteSheet::GetUVsForFrame(u32 inudwFrameID) const
+		Core::Rectangle SpriteSheet::GetUVsForFrame(u32 inudwFrameID) const
         {
-			Core::CRect sResult;
+			Core::Rectangle sResult;
 			GetUVsForFrame(inudwFrameID, sResult);
 			return sResult;
 		}
@@ -158,7 +153,7 @@ namespace ChilliSource
 		/// @param ID for frame 
 		/// @param Rect set to UV coords for the given frame
 		//---------------------------------------------------------------------
-		void SpriteSheet::GetUVsForFrame(u32 inudwFrameID, Core::CRect & outsUVRect) const
+		void SpriteSheet::GetUVsForFrame(u32 inudwFrameID, Core::Rectangle & outsUVRect) const
         {
 			const Frame & sFrame = mFrames[inudwFrameID];
 			

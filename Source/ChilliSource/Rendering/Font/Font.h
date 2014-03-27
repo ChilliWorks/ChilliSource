@@ -54,7 +54,7 @@ namespace ChilliSource
 		//Details how a particular character must be drawn
 		struct PlacedCharacter
 		{
-			Core::CRect sUVs;
+			Core::Rectangle sUVs;
 			Core::Vector2 vSize;
 			Core::Vector2 vPosition;
 		};
@@ -68,26 +68,26 @@ namespace ChilliSource
 			//Internal cache of what a character should be built of
 			struct CharacterInfo
 			{
-				Core::CRect sUVs;
+				Core::Rectangle sUVs;
                 Core::Vector2 vSize;
                 Core::Vector2 vOffset;
 			};
             
-            struct CKernLookup
+            struct KernLookup
 			{
                 //---------------------------------------------------------------------
                 /// Constructor
                 //---------------------------------------------------------------------
-				CKernLookup(s16 inwCharacter, u16 inuwStart, u16 inuwLength)
+				KernLookup(s16 inwCharacter, u16 inuwStart)
 				: wCharacter(inwCharacter)
 				, uwStart(inuwStart)
-				, uwLength(inuwLength)
+				, uwLength(0)
 				{
 				}
 				//---------------------------------------------------------------------
                 /// Less then operator overload
                 //---------------------------------------------------------------------
-				bool operator < (const CKernLookup& inB) const
+				bool operator < (const KernLookup& inB) const
 				{
                     return wCharacter < inB.wCharacter;
                 }
@@ -97,12 +97,12 @@ namespace ChilliSource
                 u16 uwLength;
             };
                     
-            struct CKernPair
+            struct KernPair
             {
                 //---------------------------------------------------------------------
                 /// Constructor
                 //---------------------------------------------------------------------
-                CKernPair(s16 inwCharacter, f32 infSpacing)
+                KernPair(s16 inwCharacter, f32 infSpacing)
                 : wCharacter(inwCharacter)
                 , fSpacing(infSpacing)
                 {
@@ -110,7 +110,7 @@ namespace ChilliSource
                 //---------------------------------------------------------------------
                 /// Less then operator overload
                 //---------------------------------------------------------------------
-                bool operator < (const CKernPair& inB) const
+                bool operator < (const KernPair& inB) const
                 {
                     return wCharacter < inB.wCharacter;
                 }
@@ -204,17 +204,6 @@ namespace ChilliSource
             /// @param Offset
             //-------------------------------------------
             static void SetGlobalKerningOffset(f32 infOffset);
-		
-        private:
-            friend class FontManager;
-            friend class FontLoader;
-                    
-			//Only the font manager can create this
-            Font() : mfLineHeight(0.0f)
-            {
-                maFirstLookup.clear();
-                maPairs.clear();
-            }
             //-------------------------------------------
             /// Set Kerning Info
             ///
@@ -223,7 +212,17 @@ namespace ChilliSource
             /// @param Kerning lookup array
             /// @param Kerning pair array
             //-------------------------------------------
-            void SetKerningInfo(const std::vector<CKernLookup>& inaFirstReg, const std::vector<CKernPair>& inaPairs);
+            void SetKerningInfo(const std::vector<KernLookup>& inaFirstReg, const std::vector<KernPair>& inaPairs);
+		
+        private:
+            friend class FontManager;
+                    
+			//Only the font manager can create this
+            Font() : mfLineHeight(0.0f)
+            {
+                maFirstLookup.clear();
+                maPairs.clear();
+            }
             
 			typedef std::unordered_map<Core::UTF8String::Char, CharacterInfo> CharToCharInfoMap;
 			
@@ -236,10 +235,10 @@ namespace ChilliSource
 			CharacterSet mCharacterSet;
 			
             // Kerning lookup
-            std::vector<CKernLookup> maFirstLookup;
+            std::vector<KernLookup> maFirstLookup;
                     
             // Kerning pairs
-            std::vector<CKernPair> maPairs;
+            std::vector<KernPair> maPairs;
                     
 			//The font bitmap
 			TextureSPtr mpTexture;

@@ -139,7 +139,7 @@ namespace ChilliSource
             //----------------------------------------------------------------
             /// Rect vs Rect
             //----------------------------------------------------------------
-            bool Intersects(const CRect& inRectLHS, const CRect& inRectRHS)
+            bool Intersects(const Rectangle& inRectLHS, const Rectangle& inRectRHS)
             {
                 Core::Vector2 vMinLS(inRectLHS.vOrigin);
                 Core::Vector2 vMaxLS(inRectLHS.vOrigin.x + inRectLHS.vSize.x, inRectLHS.vOrigin.y + inRectLHS.vSize.y);
@@ -153,7 +153,7 @@ namespace ChilliSource
             //----------------------------------------------------------------
             /// Rect vs Point
             //----------------------------------------------------------------
-            bool Intersects(const CRect& inRect, const Vector3& invPoint)
+            bool Intersects(const Rectangle& inRect, const Vector3& invPoint)
             {
                 return (invPoint.x >= inRect.vOrigin.x) && (invPoint.y >= inRect.vOrigin.y) && (inRect.vOrigin.x + inRect.vSize.x >= invPoint.x) && (inRect.vOrigin.y + inRect.vSize.y >= invPoint.y);
             }

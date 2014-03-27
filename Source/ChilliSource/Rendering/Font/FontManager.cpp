@@ -106,7 +106,6 @@ namespace ChilliSource
 						FontSPtr pFont = std::static_pointer_cast<Font>(pResource);
 						pFont->SetName(strFontFile);
 						pFont->SetOwningResourceManager(this);
-						pFont->SetLoaded(true);
                         
                         SpriteSheetSPtr pFontData = LOAD_RESOURCE(SpriteSheet, ineStorageLocation, instrFilePath);
                         pFont->SetSpriteSheet(pFontData);
@@ -120,7 +119,7 @@ namespace ChilliSource
 			}
 			
 			//Resource not found
-			CS_LOG_ERROR("Cannot find resource for font with path " + instrFilePath);
+			CS_LOG_FATAL("Cannot find resource for font with path " + instrFilePath);
 			return nullptr;
 		}
 	}

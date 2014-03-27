@@ -108,14 +108,14 @@ namespace ChilliSource
 			/// @param ID for frame 
 			/// @return Rect containing UV coords for the given frame
 			//---------------------------------------------------------------------
-			Core::CRect GetUVsForFrame(u32 inudwFrameID) const;
+			Core::Rectangle GetUVsForFrame(u32 inudwFrameID) const;
 			//---------------------------------------------------------------------
 			/// GetUVsForFrame
 			///
 			/// @param ID for frame 
 			/// @param Rect set to UV coords for the given frame
 			//---------------------------------------------------------------------
-			void GetUVsForFrame(u32 inudwFrameID, Core::CRect & outsUVRect) const;			
+			void GetUVsForFrame(u32 inudwFrameID, Core::Rectangle & outsUVRect) const;			
 			//---------------------------------------------------------------------
 			/// Get Size For Frame
 			///

@@ -46,13 +46,13 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool SpriteSheetProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
 		{
-			return (in_interfaceID == SpriteSheet::InterfaceID);
+			return in_interfaceID == SpriteSheet::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
 		bool SpriteSheetProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
 		{
-			return (in_extension == k_spriteFramesExtension || in_extension == k_spriteMapExtension);
+			return in_extension == k_spriteFramesExtension;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -73,6 +73,8 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         bool SpriteSheetProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
         {
+            //TODO: Implement this once we have a way of resolving whether loading of bin and id file on separate threads
+            //has worked
             out_resource->SetLoaded(false);
             
             SpriteSheetSPtr spriteResource(std::static_pointer_cast<SpriteSheet>(out_resource));

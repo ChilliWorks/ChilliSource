@@ -128,7 +128,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set UV's
 		//-----------------------------------------------------------
-		void SpriteComponent::SetUVs(const Core::CRect &inUVs)
+		void SpriteComponent::SetUVs(const Core::Rectangle &inUVs)
 		{
 			mUVs = inUVs;
             
@@ -149,7 +149,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get UVs
 		//-----------------------------------------------------------
-		const Core::CRect& SpriteComponent::GetUVs() const
+		const Core::Rectangle& SpriteComponent::GetUVs() const
 		{
 			return mUVs;
 		}
@@ -179,7 +179,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Current Frame
 		//-----------------------------------------------------------
-		const Core::CRect& SpriteComponent::GetCurrentFrame()
+		const Core::Rectangle& SpriteComponent::GetCurrentFrame()
 		{
 			if (mbFlippedHorizontal) 
 			{
@@ -289,7 +289,7 @@ namespace ChilliSource
             {
                 mbUVCacheValid = true;
                 
-                Core::CRect TexCoords = GetCurrentFrame();
+                Core::Rectangle TexCoords = GetCurrentFrame();
                 
                 mSpriteData.sVerts[(u32)Verts::k_topLeft].vTex = TexCoords.TopLeft();
                 mSpriteData.sVerts[(u32)Verts::k_bottomLeft].vTex = TexCoords.BottomLeft();

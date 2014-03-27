@@ -189,7 +189,7 @@ namespace ChilliSource
         //-------------------------------------------
         f32 Font::GetKerningBetweenCharacters(Core::UTF8String::Char inChar1, Core::UTF8String::Char inChar2) const
         {
-            const CKernLookup* pLookup = &(*std::lower_bound(maFirstLookup.begin(), maFirstLookup.end(), CKernLookup(inChar1, 0, 0)));
+            const KernLookup* pLookup = &(*std::lower_bound(maFirstLookup.begin(), maFirstLookup.end(), KernLookup(inChar1, 0)));
 			if(nullptr == pLookup || pLookup->wCharacter != inChar1)
             {
 				return mfGlobalKerningOffset;
@@ -197,7 +197,7 @@ namespace ChilliSource
 			
             u32 udwStart = pLookup->uwStart;
 			u32 udwEnd = udwStart + pLookup->uwLength;
-			const CKernPair* pPair = &(*std::lower_bound(maPairs.begin() + udwStart, maPairs.begin() + udwEnd, CKernPair(inChar2, 0.0f)));
+			const KernPair* pPair = &(*std::lower_bound(maPairs.begin() + udwStart, maPairs.begin() + udwEnd, KernPair(inChar2, 0.0f)));
 			if(nullptr == pPair || pPair->wCharacter != inChar2)
             {
 				return mfGlobalKerningOffset;
@@ -208,7 +208,7 @@ namespace ChilliSource
         //-------------------------------------------
         /// Set Kerning Info
         //-------------------------------------------
-        void Font::SetKerningInfo(const std::vector<CKernLookup>& inaFirstReg, const std::vector<CKernPair>& inaPairs)
+        void Font::SetKerningInfo(const std::vector<KernLookup>& inaFirstReg, const std::vector<KernPair>& inaPairs)
         {
             maFirstLookup = inaFirstReg;
             maPairs = inaPairs;
