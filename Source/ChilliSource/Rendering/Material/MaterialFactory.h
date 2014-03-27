@@ -16,6 +16,11 @@ namespace ChilliSource
 {
     namespace Rendering
     {
+        //-------------------------------------------------------------------------
+        /// Factory for creating material resources based on rendering type
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------------------------
         class MaterialFactory : public Core::AppSystem
         {
         public:
@@ -34,7 +39,6 @@ namespace ChilliSource
             /// @return New instance with ownership transferred
             //-------------------------------------------------------
             static MaterialFactoryUPtr Create(ShaderManager* in_shaderMgr, RenderCapabilities* in_renderCapabilities);
-            
             //---------------------------------------------------
             /// @author S Downie
             ///

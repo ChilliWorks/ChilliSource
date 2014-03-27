@@ -1,17 +1,13 @@
-/*
- * File: FontLoader.h
- * Date: 26/10/2010 2010 
- * Description: Loads the glyphs and the texture for fonts and caches the data
- */
+//
+//  FontProvider.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 26/10/2010.
+//  Copyright 2010 Tag Games Ltd. All rights reserved.
+//
 
-/*
- * Author: Scott Downie
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
-
-#ifndef _MO_FLO_RENDERING_FONT_LOADER_H_
-#define _MO_FLO_RENDERING_FONT_LOADER_H_
+#ifndef _CHILLISOURCE_RENDERING_FONT_FONTPROVIDER_H_
+#define _CHILLISOURCE_RENDERING_FONT_FONTPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
@@ -20,10 +16,19 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class FontLoader : public Core::ResourceProvider
+        //-------------------------------------------------------
+        /// Factory class from loading font resources
+        /// from file. The font resource is actually a compound
+        /// resource of supported characters and kerning info
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
+		class FontProvider final : public Core::ResourceProvider
 		{
 		public:
 
+            CS_DECLARE_NAMEDTYPE(FontProvider);
+            
             //-------------------------------------------------------
             /// Factory method
             ///
@@ -31,32 +36,31 @@ namespace ChilliSource
             ///
             /// @return New backend with ownership transferred
             //-------------------------------------------------------
-            static FontLoaderUPtr Create();
-            
-			virtual ~FontLoader();
-			
+            static FontProviderUPtr Create();
 			//-------------------------------------------------------------------------
-			/// Is A
+			/// @author S Downie
 			///
 			/// @param Interface to compare
+            ///
 			/// @return Whether the object implements the given interface
 			//-------------------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
 			//----------------------------------------------------------------------------
-			/// Can Create Resource of Kind
+			/// @author S Downie
 			///
 			/// @param Type to compare
+            ///
 			/// @return Whether the object can create a resource of given type
 			//----------------------------------------------------------------------------
-			bool CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const override;
+			bool CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const override;
 			//----------------------------------------------------------------------------
-			/// Can Create Resource From File With Extension
+			/// @author S Downie
 			///
-			/// @param Type to compare
 			/// @param Extension to compare
+            ///
 			/// @return Whether the object can create a resource with the given extension
 			//----------------------------------------------------------------------------
-			bool CanCreateResourceFromFileWithExtension(const std::string& inExtension) const override;
+			bool CanCreateResourceFromFileWithExtension(const std::string& in_extension) const override;
 			
 		private:
             //-------------------------------------------------------
@@ -64,39 +68,32 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            FontLoader(){}
+            FontProvider() = default;
 			//----------------------------------------------------------------------------
-			/// Create Resource From File
-			///
-			/// Load the font from the external file
+			/// Load the font from the external file into a resource.
+            ///
+            /// @author S Downie
 			///
             /// @param The storage location to load from
 			/// @param Filename
-			/// @param Out: Resource object
+			/// @param [Out] Resource object
+            ///
 			/// @return Whether the resource was created successfully
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, Core::ResourceSPtr& outpResource) override;
+			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
-			/// Has Kerning Info
-			///
-			/// Returns if the font being loaded has a kerning info file
+			/// Load the font from the external file into a resource on a background
+            /// thread
+            ///
+            /// @author S Downie
 			///
             /// @param The storage location to load from
-			/// @param Filename of font
-			/// @return Whether a kerning info file is found
+			/// @param Filename
+			/// @param [Out] Resource object
+            ///
+			/// @return Whether the resource loading was scheduled
 			//----------------------------------------------------------------------------
-            const bool HasKerningInfo(const Core::StorageLocation ineStorageLocation, const std::string& inFilePath) const;
-            //----------------------------------------------------------------------------
-			/// Load Kerning Info
-			///
-			/// Load the font kerning information from the external file
-			///
-            /// @param The storage location to load from
-			/// @param Filename of font
-			/// @param Pointer to font resource
-			/// @return Whether the resource was created successfully
-			//----------------------------------------------------------------------------
-            bool LoadKerningInfo(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, Font* inpFont);
+			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
 		};
 	}
 }

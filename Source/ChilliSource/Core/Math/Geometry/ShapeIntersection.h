@@ -76,11 +76,11 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			/// Rect vs Rect
 			//----------------------------------------------------------------
-			bool Intersects(const CRect& inRectLHS, const CRect& inRectRHS);
+			bool Intersects(const Rectangle& inRectLHS, const Rectangle& inRectRHS);
 			//----------------------------------------------------------------
 			/// Rect vs Point
 			//----------------------------------------------------------------
-			bool Intersects(const CRect& inRect, const Vector3& invPoint);
+			bool Intersects(const Rectangle& inRect, const Vector3& invPoint);
 			//----------------------------------------------------------------
 			/// Ray vs Slab
 			//----------------------------------------------------------------

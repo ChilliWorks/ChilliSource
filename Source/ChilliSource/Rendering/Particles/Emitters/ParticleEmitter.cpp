@@ -111,7 +111,7 @@ namespace ChilliSource
             
             const Core::Vector3& vCurrentPos = mpOwningComponent->GetEntity()->GetTransform().GetWorldPosition();
             const f32 kfTimeSinceLastEmission = Core::MathUtils::Min(mfCurrentTime - mfLastEmissionTime, mfTimeToLive);
-            u32 udwNumEmits = kfTimeSinceLastEmission/mfEmissionFreq;
+            u32 udwNumEmits = std::ceil(kfTimeSinceLastEmission/mfEmissionFreq);
             
             //If we force a burst emit then we override the frequency
             if(mudwBurstCounter > 0)

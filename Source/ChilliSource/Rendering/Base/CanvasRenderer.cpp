@@ -154,7 +154,7 @@ namespace ChilliSource
         /// Build a sprite box and batch it ready for rendering
         //-----------------------------------------------------------
         void CanvasRenderer::DrawBox(const Core::Matrix3x3& inmatTransform, const Core::Vector2 & invSize, const TextureSPtr & inpTexture, 
-                                      const Core::CRect& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
+                                      const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
         {
             //Flush buffer
             if(msCachedSprite.pMaterial != mpDefaultMaterial)

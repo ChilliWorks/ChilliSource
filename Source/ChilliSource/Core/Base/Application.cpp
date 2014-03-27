@@ -48,7 +48,7 @@
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Font/Font.h>
-#include <ChilliSource/Rendering/Font/FontLoader.h>
+#include <ChilliSource/Rendering/Font/FontProvider.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialProvider.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
@@ -508,7 +508,7 @@ namespace ChilliSource
             CreateSystem<Rendering::MaterialFactory>(renderSystem->GetShaderManager(), renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
             CreateSystem<Rendering::SpriteSheetProvider>();
-            CreateSystem<Rendering::FontLoader>();
+            CreateSystem<Rendering::FontProvider>();
             
             m_renderer = Rendering::Renderer::Create(renderSystem);
         }

@@ -509,9 +509,6 @@ namespace ChilliSource
 			Vector3 mvNormal;
 			f32 mfD;
 		};
-		
-		typedef Rectangle CRect;
-		typedef Plane CPlane;
 
 		//===============================================
 		/// Frustum
