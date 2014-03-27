@@ -8,15 +8,18 @@
  */
 
 #include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/Model/SubMesh.h>
-#include <ChilliSource/Rendering/Base/VertexLayouts.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
-#include <limits>
+
 #include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Base/VertexLayouts.h>
+#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Model/SubMesh.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
+
+#include <limits>
 
 namespace ChilliSource
 {

@@ -35,12 +35,11 @@ namespace ChilliSource
 		/// Creates and manages the OpenGL ES context and
 		/// handles the rendering of scene objects
 		//=======================================================
-		class RenderSystem : public Rendering::RenderSystem
+		class RenderSystem final : public Rendering::RenderSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(RenderSystem);
             
-            ~RenderSystem();
             //----------------------------------------------------------
 			/// Is A
 			///
@@ -49,45 +48,35 @@ namespace ChilliSource
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
 			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
-			//----------------------------------------------------------
-			/// Init
-			///
-			/// Set up default client states etc
-            ///
-            /// @param Width
-            /// @param Height
-            /// @return Success
-			//----------------------------------------------------------
-			bool Init(u32 inudwWidth, u32 inudwHeight) override;
             //----------------------------------------------------------
-            /// Resume
+            /// Called when the system is created. Sets up the
+            /// render target, viewport, etc.
             ///
+            /// @author S Downie
+			//----------------------------------------------------------
+			void Init() override;
+            //----------------------------------------------------------
             /// Called when the app resumes from an inactive state.
             /// Something may have stole our context so we need to
-            /// check and bind it
+            /// check and bind it. On Android our context needs to be
+            /// recreated
+            ///
+            /// @author S Downie
             //----------------------------------------------------------
             void Resume() override;
             //----------------------------------------------------------
-			/// Suspend
-			///
-			/// Called when the app suspends. This can be used to prepare
-			/// For re-setting up the context in resume.
+			/// Called when the app suspends. Android stores the assets that
+            /// require recreation when the context is reacreate on resume.
+            ///
+            /// @author I Copland
 			//----------------------------------------------------------
 			void Suspend() override;
             //----------------------------------------------------------
-            /// Backup Context
+			/// Release the OpenGL ES context and any assets
             ///
-            /// Stores all non re-createable information about the current
-			/// context in memory.
-            //----------------------------------------------------------
-            void BackupContext();
-            //----------------------------------------------------------
-			/// Restore Context
-			///
-			/// Restores the new opengl context to the state of the
-            /// previous one.
+            /// @author S Downie
 			//----------------------------------------------------------
-			void RestoreContext();
+            void Destroy() override;
             //----------------------------------------------------------
 			/// Create Buffer
 			///
@@ -193,12 +182,6 @@ namespace ChilliSource
 			/// @param Height
 			//----------------------------------------------------------
 			void OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight) override;
-            //----------------------------------------------------------
-			/// Destroy
-			///
-			/// Release the OpenGL ES context and any assets
-			//----------------------------------------------------------
-            void Destroy() override;
             
             //---Render states
             //----------------------------------------------------------
@@ -342,7 +325,20 @@ namespace ChilliSource
             /// @param Render capabilities
             //-------------------------------------------------------
             RenderSystem(Rendering::RenderCapabilities* in_renderCapabilities);
-            
+            //----------------------------------------------------------
+            /// Backup Context
+            ///
+            /// Stores all non re-createable information about the current
+			/// context in memory.
+            //----------------------------------------------------------
+            void BackupContext();
+            //----------------------------------------------------------
+			/// Restore Context
+			///
+			/// Restores the new opengl context to the state of the
+            /// previous one.
+			//----------------------------------------------------------
+			void RestoreContext();
             //----------------------------------------------------------
             /// Apply Render States
             ///

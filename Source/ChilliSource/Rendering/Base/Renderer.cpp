@@ -17,6 +17,7 @@
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
+#include <ChilliSource/Rendering/Base/RenderTarget.h>
 #include <ChilliSource/Rendering/Base/RendererSortPredicates.h>
 #include <ChilliSource/Rendering/Base/CullingPredicates.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
@@ -50,16 +51,18 @@ namespace ChilliSource
         , mCanvas(in_renderSystem)
         , mpActiveCamera(nullptr)
 		{
-			mpTransparentSortPredicate = RendererSortPredicateSPtr(new BackToFrontSortPredicate());
-            mpOpaqueSortPredicate = RendererSortPredicateSPtr(new MaterialSortPredicate());
-            
-            mpPerspectiveCullPredicate = ICullingPredicateSPtr(new FrustumCullPredicate());
-            mpOrthoCullPredicate = ICullingPredicateSPtr(new ViewportCullPredicate());
+
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
         void Renderer::Init()
         {
+            mpTransparentSortPredicate = RendererSortPredicateSPtr(new BackToFrontSortPredicate());
+            mpOpaqueSortPredicate = RendererSortPredicateSPtr(new MaterialSortPredicate());
+            
+            mpPerspectiveCullPredicate = ICullingPredicateSPtr(new FrustumCullPredicate());
+            mpOrthoCullPredicate = ICullingPredicateSPtr(new ViewportCullPredicate());
+            
             mCanvas.Init();
         }
 		//----------------------------------------------------------

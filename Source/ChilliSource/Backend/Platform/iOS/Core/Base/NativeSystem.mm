@@ -36,8 +36,6 @@ static mach_timebase_info_data_t gMachtimeBase;
 	//Get the current frame time
 	mPreviousFrameTime = (mach_absolute_time() * gMachtimeBase.numer) / gMachtimeBase.denom;
 	mAppStartTime = mPreviousFrameTime;
-    
-    ChilliSource::Core::Application::Get()->Update(0.0f, (f32)mPreviousFrameTime - (f32)mAppStartTime);
 	
 	//Begin the update loop
     [self SetMaxFPS:30];

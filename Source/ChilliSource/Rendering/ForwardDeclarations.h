@@ -65,6 +65,7 @@ namespace ChilliSource
         enum class ShaderPass;
         enum class AlphaBlend;
         enum class CullFace;
+        enum class DepthFunction;
         //------------------------------------------------------------
         /// Model
         //------------------------------------------------------------
