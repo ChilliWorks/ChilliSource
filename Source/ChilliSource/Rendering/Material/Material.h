@@ -468,7 +468,6 @@ namespace ChilliSource
             bool mbIsCullingEnabled;
             
             friend class MaterialManager;
-			friend class MaterialLoader;
 		};
 	}
 }

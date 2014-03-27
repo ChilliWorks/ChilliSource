@@ -50,7 +50,7 @@
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Font/FontLoader.h>
 #include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Material/MaterialLoader.h>
+#include <ChilliSource/Rendering/Material/MaterialProvider.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetProvider.h>
@@ -520,7 +520,7 @@ namespace ChilliSource
             renderSystem->Init((u32)Screen::GetRawDimensions().x, (u32)Screen::GetRawDimensions().y);
             AddSystem_Old(std::move(renderSystemUPtr));
             AddSystem_Old(Rendering::MaterialFactory::Create(renderSystem->GetTextureManager(), renderSystem->GetShaderManager(), renderSystem->GetCubemapManager(), renderCapabilities));
-            CreateSystem<Rendering::MaterialLoader>(renderCapabilities);
+            CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
             CreateSystem<Rendering::SpriteSheetProvider>();
             CreateSystem<Rendering::FontLoader>();
             

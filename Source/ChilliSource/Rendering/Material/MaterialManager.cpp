@@ -115,7 +115,6 @@ namespace ChilliSource
 						pMaterial->SetOwningResourceManager(this);
 						pMaterial->SetFilename(inFilePath);
 						pMaterial->SetStorageLocation(ineStorageLocation);
-						pMaterial->SetLoaded(true);
 						
 						return pMaterial;
 					}
@@ -126,7 +125,7 @@ namespace ChilliSource
 				return std::static_pointer_cast<Material>(pExistingResource->second);
 			}
 			
-			CS_LOG_ERROR("Cannot find resource for Material with path " + inFilePath);
+			CS_LOG_FATAL("Cannot find resource for Material with path " + inFilePath);
 			return Core::Application::Get()->GetDefaultMaterial();
 		}
 		//----------------------------------------------------------------
@@ -171,7 +170,7 @@ namespace ChilliSource
 				return std::static_pointer_cast<Material>(pExistingResource->second);
 			}
 			
-			CS_LOG_ERROR("Cannot find resource for Material with path " + inFilePath);
+			CS_LOG_FATAL("Cannot find resource for Material with path " + inFilePath);
 			return nullptr;
 		}
 	}

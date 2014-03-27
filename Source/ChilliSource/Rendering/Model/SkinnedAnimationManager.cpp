@@ -95,7 +95,6 @@ namespace ChilliSource
 							pResource->SetFilename(instrFilePath);
 							pResource->SetStorageLocation(ineStorageLocation);
 							pResource->SetOwningResourceManager(static_cast<Core::ResourceManager*>(this));
-							pResource->SetLoaded(true);
 							
 							return std::static_pointer_cast<SkinnedAnimation>(pResource);
 						}
@@ -108,7 +107,7 @@ namespace ChilliSource
 			}
 			
 			//Resource not found
-			CS_LOG_ERROR("Cannot find resource for skinned animation with path " + instrFilePath);
+			CS_LOG_FATAL("Cannot find resource for skinned animation with path " + instrFilePath);
 			return nullptr;
 		}
 		//-----------------------------------------------------------------
@@ -130,14 +129,12 @@ namespace ChilliSource
 					
 					if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
 					{
-						
 						CS_LOG_DEBUG("Loading skinned animation " + instrFilePath);
 						
 						pResource->SetName(instrFilePath);
 						pResource->SetFilename(instrFilePath);
 						pResource->SetStorageLocation(ineStorageLocation);
 						pResource->SetOwningResourceManager(this);
-						pResource->SetLoaded(false);
 						
 						if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, instrFilePath, pResource)) 
 						{
@@ -154,7 +151,7 @@ namespace ChilliSource
 			}
 			
 			//Resource not found
-			CS_LOG_ERROR("Cannot find resource for skinned animation with path " + instrFilePath);
+			CS_LOG_FATAL("Cannot find resource for skinned animation with path " + instrFilePath);
 			return nullptr;
 		}
 		//-----------------------------------------------------------------

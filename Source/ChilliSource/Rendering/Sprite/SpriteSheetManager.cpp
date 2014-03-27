@@ -104,10 +104,9 @@ namespace ChilliSource
 						pSpriteSheet->SetFilename(instrFilePath);
 						pSpriteSheet->SetStorageLocation(ineStorageLocation);
 						pSpriteSheet->SetOwningResourceManager(this);
-						pSpriteSheet->SetLoaded(true);
                         
-                        TextureSPtr pTexture = LOAD_RESOURCE(Texture, ineStorageLocation, instrFilePath);
-                        pSpriteSheet->SetTexture(pTexture);
+                        TextureSPtr texture = LOAD_RESOURCE(Texture, ineStorageLocation, instrFilePath);
+                        pSpriteSheet->SetTexture(texture);
                         
 						return pSpriteSheet;
 					}
@@ -119,7 +118,7 @@ namespace ChilliSource
 			}
 			
 			//Resource not found
-			CS_LOG_ERROR("Cannot find resource for sprite data with path " + instrFilePath);
+			CS_LOG_FATAL("Cannot find resource for sprite data with path " + instrFilePath);
 			return nullptr;
 		}
 	}

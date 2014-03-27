@@ -110,7 +110,7 @@ namespace ChilliSource
 				return std::static_pointer_cast<Texture>(pExistingResource->second);
 			}
 			
-			CS_LOG_ERROR("Cannot find resource for texture with path " + instrFilePath);
+			CS_LOG_FATAL("Cannot find resource for texture with path " + instrFilePath);
 			return GetDefaultTexture();
 		}
 		//-----------------------------------------------------------------
@@ -175,7 +175,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_LOG_ERROR("Cannot find resource for image with name " + inDesc.strFilename);
+			CS_LOG_FATAL("Cannot find resource for image with name " + inDesc.strFilename);
 		}
 		//-----------------------------------------------------------------------------------
 		/// Texture Load Task
@@ -196,7 +196,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				CS_LOG_ERROR("Cannot create texture from image " + pImage->GetName());
+				CS_LOG_FATAL("Cannot create texture from image " + pImage->GetName());
 				outpTexture = GetDefaultTexture();
 			}
 
