@@ -60,8 +60,11 @@ namespace ChilliSource
         //------------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Material);
         CS_FORWARDDECLARE_CLASS(MaterialFactory);
-        CS_FORWARDDECLARE_CLASS(MaterialLoader);
+        CS_FORWARDDECLARE_CLASS(MaterialProvider);
         CS_FORWARDDECLARE_CLASS(MaterialManager);
+        enum class ShaderPass;
+        enum class AlphaBlend;
+        enum class CullFace;
         //------------------------------------------------------------
         /// Model
         //------------------------------------------------------------

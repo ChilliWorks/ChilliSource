@@ -41,12 +41,6 @@ namespace ChilliSource
             /// @return Whether this object is of given type
             //-------------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceID) const override;
-            //------------------------------------------------
-            /// Called when the system is being created
-            ///
-            /// @author S Downie
-            //------------------------------------------------
-            void OnInit() override;
 			//-------------------------------------------------------
 			/// Play Sound
 			///
@@ -64,12 +58,6 @@ namespace ChilliSource
 			/// @param name of event
 			//-------------------------------------------------------
 			::FMOD::Event * PlayEvent(const std::string& instrEventName);
-			//-------------------------------------------------------
-            /// @author S Downie
-            ///
-			/// @param Time since last updated in seconds
-			//-------------------------------------------------------
-			void OnUpdate(f32 in_timeSinceLastUpdate) override;
             //-------------------------------------------------------
 			/// @author A Glass
 			///
@@ -98,12 +86,6 @@ namespace ChilliSource
                 return m_FMODEventProject;
             }
             //------------------------------------------------
-            /// Called when the system is being destroyed
-            ///
-            /// @author S Downie
-            //------------------------------------------------
-            void OnDestroy() override;
-            //------------------------------------------------
             /// Called when the system receieves a memory
             /// warning. This will cause FMOD to free up any
             /// cached resources
@@ -120,6 +102,24 @@ namespace ChilliSource
             /// @author S Downie
             //-------------------------------------------------------
             FMODSystem();
+            //------------------------------------------------
+            /// Called when the system is being created
+            ///
+            /// @author S Downie
+            //------------------------------------------------
+            void OnInit() override;
+            //-------------------------------------------------------
+            /// @author S Downie
+            ///
+			/// @param Time since last updated in seconds
+			//-------------------------------------------------------
+			void OnUpdate(f32 in_timeSinceLastUpdate) override;
+            //------------------------------------------------
+            /// Called when the system is being destroyed
+            ///
+            /// @author S Downie
+            //------------------------------------------------
+            void OnDestroy() override;
 			
 		private:
 			

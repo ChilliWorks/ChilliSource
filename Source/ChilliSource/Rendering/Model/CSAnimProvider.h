@@ -22,7 +22,7 @@ namespace ChilliSource
         ///
         /// @author I Copland
 		//-------------------------------------------------------------------------
-		class CSAnimProvider : public Core::ResourceProvider
+		class CSAnimProvider final : public Core::ResourceProvider
 		{
 		public:
             

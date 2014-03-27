@@ -547,7 +547,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_LOG_WARNING("Application cannot find implementing systems");
+			CS_LOG_WARNING("Application cannot find system: " + TNamedType::TypeName);
 			return nullptr;
         }
         //-----------------------------------------------------
@@ -574,7 +574,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_LOG_WARNING("Application cannot find implementing systems");
+			CS_LOG_WARNING("Application cannot find system: " + TNamedType::TypeName);
 			return nullptr;
         }
         //-----------------------------------------------------

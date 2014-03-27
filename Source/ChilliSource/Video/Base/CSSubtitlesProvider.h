@@ -1,13 +1,13 @@
 //
-//  CSSubtitlesLoader.h
+//  CSSubtitlesProvider.h
 //  Chilli Source
 //
 //  Created by Ian Copland 21/02/2013.
 //  Copyright 2013 Tag Games. All rights reserved.
 //
 
-#ifndef _CHILLISOURCE_VIDEO_BASE_CSSUBTITLESLOADER_H_
-#define _CHILLISOURCE_VIDEO_BASE_CSSUBTITLESLOADER_H_
+#ifndef _CHILLISOURCE_VIDEO_BASE_CSSUBTITLESPROVIDER_H_
+#define _CHILLISOURCE_VIDEO_BASE_CSSUBTITLESPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/JSON/json.h>
@@ -23,9 +23,12 @@ namespace ChilliSource
         ///
         /// @param I Copland
         //-------------------------------------------------------------------------
-		class CSSubtitlesLoader final : public Core::ResourceProvider
+		class CSSubtitlesProvider final : public Core::ResourceProvider
 		{
 		public:
+            
+            CS_DECLARE_NAMEDTYPE(CSSubtitlesProvider);
+            
 			//-------------------------------------------------------------------------
 			/// @author I Copland
 			///
