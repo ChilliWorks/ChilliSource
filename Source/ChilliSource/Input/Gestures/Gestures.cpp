@@ -381,7 +381,7 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		TapCSwipeGestureGesture::TapCSwipeGestureGesture(GUI::GUIView* inpView)
+		TapGesture::TapGesture(GUI::GUIView* inpView)
 		: Gesture(inpView), mNumTapsRequired(1), mfMaximumTapDuration(0.15f), mfMaxTimeBetweenTaps(0.25f), mCurrentNumTaps(0), mfLastTapTime(0.0f), mfLastBeganTime(0.0f), mudwMaxDistAllowedSqrd(1000)
 		{
 		}
@@ -391,7 +391,7 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		TapCSwipeGestureGesture::TapCSwipeGestureGesture(PointerSystem* in_pointerSystem)
+		TapGesture::TapGesture(PointerSystem* in_pointerSystem)
 		: Gesture(in_pointerSystem), mNumTapsRequired(1), mfMaximumTapDuration(0.15f), mfMaxTimeBetweenTaps(0.25f), mCurrentNumTaps(0), mfLastTapTime(0.0f), mfLastBeganTime(0.0f), mudwMaxDistAllowedSqrd(1000)
 		{
 		}
@@ -402,7 +402,7 @@ namespace ChilliSource
 		/// Use this for double tapping etc
 		/// @param Number of taps required
 		//----------------------------------------------------
-		void TapCSwipeGestureGesture::SetNumTapsRequired(const u32 inNumTaps)
+		void TapGesture::SetNumTapsRequired(const u32 inNumTaps)
 		{
 			mNumTapsRequired = inNumTaps;
 		}
@@ -413,7 +413,7 @@ namespace ChilliSource
         /// classes as a tap anymore
         /// @param Duration
         //----------------------------------------------------
-        void TapCSwipeGestureGesture::SetMaximumTapDuration(const f32 infMaximumTapDuration)
+        void TapGesture::SetMaximumTapDuration(const f32 infMaximumTapDuration)
         {
             mfMaximumTapDuration = infMaximumTapDuration;
         }
@@ -424,14 +424,14 @@ namespace ChilliSource
         /// touch that will be accepted as a tap
         /// @param Duration
         //----------------------------------------------------
-        void TapCSwipeGestureGesture::SetMaxDistanceAllowedSqrd(const u32 inudwMaxDistanceAllowedSqrd)
+        void TapGesture::SetMaxDistanceAllowedSqrd(const u32 inudwMaxDistanceAllowedSqrd)
         {
             mudwMaxDistAllowedSqrd = inudwMaxDistanceAllowedSqrd;
         }
 		//---Touch Delegates
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void TapCSwipeGestureGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void TapGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
             if (in_pressType == PointerSystem::GetDefaultPressType())
             {
@@ -449,7 +449,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
 		//----------------------------------------------------
-		void TapCSwipeGestureGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void TapGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
             if (in_pressType == PointerSystem::GetDefaultPressType())
             {
@@ -487,7 +487,7 @@ namespace ChilliSource
 		/// Check For Tap
 		/// @return Whether a single tap has been recognized
 		//----------------------------------------------------
-		bool TapCSwipeGestureGesture::CheckForTap()
+		bool TapGesture::CheckForTap()
 		{
 			f32 fCurrentTapTime = mTimer.GetElapsedTime();
 			
@@ -504,7 +504,7 @@ namespace ChilliSource
 		/// Check For Multi-Tap
 		/// @return Whether a the most recent tap was part of the last sequence
 		//----------------------------------------------------------------------
-		bool TapCSwipeGestureGesture::CheckForMultiTap()
+		bool TapGesture::CheckForMultiTap()
 		{
 			f32 fCurrentTapTime = mTimer.GetElapsedTime();
 			
@@ -663,7 +663,7 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//-----------------------------------------------------
-		CHoldGesture::CHoldGesture(GUI::GUIView* inpView)
+		HoldGesture::HoldGesture(GUI::GUIView* inpView)
 		: Gesture(inpView), mfMaxDistanceAllowedSqrd(100), mfHoldDuration(0.8f), mbIsGestureActive(false), mudwNumberOfTouch(0), mfInitialHoldTime(0.2f), mbIsGestureStarted(false)
 		{
 		}
@@ -673,7 +673,7 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//-----------------------------------------------------
-		CHoldGesture::CHoldGesture(PointerSystem* in_pointerSystem)
+		HoldGesture::HoldGesture(PointerSystem* in_pointerSystem)
 		: Gesture(in_pointerSystem), mfMaxDistanceAllowedSqrd(100), mfHoldDuration(0.8f), mbIsGestureActive(false), mudwNumberOfTouch(0), mfInitialHoldTime(0.2f), mbIsGestureStarted(false)
 		{
 		}
@@ -681,7 +681,7 @@ namespace ChilliSource
 		//---Touch Delegates
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void CHoldGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void HoldGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
 			++mudwNumberOfTouch;
 			if (mudwNumberOfTouch == 1)
@@ -690,7 +690,7 @@ namespace ChilliSource
 				mTimer.Reset();
 				mTimer.Start();
 				
-				m_periodicTimerConnection = mTimer.OpenConnection(Core::MakeDelegate(this, &CHoldGesture::OnGestureUpdate), 0);
+				m_periodicTimerConnection = mTimer.OpenConnection(Core::MakeDelegate(this, &HoldGesture::OnGestureUpdate), 0);
 				
 				// Set the starting location
 				mvLocation = in_pointer.m_location;
@@ -704,7 +704,7 @@ namespace ChilliSource
 			}
 		}
 		
-		void CHoldGesture::OnGestureUpdate()
+		void HoldGesture::OnGestureUpdate()
 		{
 			if (mbIsGestureActive)
 			{
@@ -732,7 +732,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
 		//----------------------------------------------------
-		void CHoldGesture::OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp)
+		void HoldGesture::OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp)
 		{
 			if (mbIsGestureStarted)
 			{
@@ -748,7 +748,7 @@ namespace ChilliSource
 		}
 		
         //Gesture was cancelled early
-		void CHoldGesture::CancelGesture()
+		void HoldGesture::CancelGesture()
 		{
             if(mbIsGestureStarted)
             {
@@ -759,7 +759,7 @@ namespace ChilliSource
 		}
 		
         //Gesture ends successfully
-        void CHoldGesture::EndGesture()
+        void HoldGesture::EndGesture()
         {
             if(mbIsGestureStarted)
             {
@@ -772,7 +772,7 @@ namespace ChilliSource
         //----------------------------------------------------
         // ResetGesture
         //----------------------------------------------------
-        void CHoldGesture::ResetGesture()
+        void HoldGesture::ResetGesture()
         {
             mbIsGestureActive = false;
 			mbIsGestureStarted = false;
@@ -782,7 +782,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
 		//----------------------------------------------------
-		void CHoldGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void HoldGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
 		{
             if(mudwNumberOfTouch > 0)
             {

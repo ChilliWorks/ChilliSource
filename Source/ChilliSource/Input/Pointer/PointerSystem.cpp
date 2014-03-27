@@ -11,6 +11,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 
 #include <thread>
+#include <algorithm>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 #   include <ChilliSource/Backend/Platform/Android/Input/Pointer/PointerSystem.h>

@@ -16,6 +16,7 @@
 
 #include <queue>
 #include <set>
+#include <mutex>
 
 namespace ChilliSource
 {

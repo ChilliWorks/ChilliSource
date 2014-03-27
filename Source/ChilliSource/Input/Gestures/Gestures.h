@@ -275,11 +275,11 @@ namespace ChilliSource
 		/// One or more contact points registered for
 		/// a short period of time. Handles multiple taps
 		//================================================
-		class TapCSwipeGestureGesture : public Gesture
+		class TapGesture : public Gesture
 		{
 		public:
-            TapCSwipeGestureGesture(GUI::GUIView* inpSurface);
-            TapCSwipeGestureGesture(PointerSystem* in_pointerSystem);
+			TapGesture(GUI::GUIView* inpSurface);
+			TapGesture(PointerSystem* in_pointerSystem);
 			
 			//----------------------------------------------------
 			/// Set Number of Taps Required
@@ -434,11 +434,11 @@ namespace ChilliSource
 		/// One contact point registered for a short 
 		/// period of time.
 		//================================================
-		class CHoldGesture : public Gesture
+		class HoldGesture : public Gesture
 		{
 		public:
-			CHoldGesture(GUI::GUIView* inpSurface);
-            CHoldGesture(PointerSystem* in_pointerSystem);
+			HoldGesture(GUI::GUIView* inpSurface);
+            HoldGesture(PointerSystem* in_pointerSystem);
 			
             //----------------------------------------------------
             /// @author S Downie
@@ -528,14 +528,6 @@ namespace ChilliSource
             
             Core::ConnectionUPtr m_periodicTimerConnection;
 		};
-		
-		typedef std::shared_ptr<PinchGesture> PinchGesturePtr;
-		typedef std::shared_ptr<PinchGesture> SwipeGesturePtr;
-		typedef std::shared_ptr<TapCSwipeGestureGesture> TapGesturePtr;
-		typedef std::shared_ptr<DragGesture> DragGesturePtr;
-		typedef std::shared_ptr<CHoldGesture> HoldGesturePtr;
-		typedef std::shared_ptr<Gesture> GesturePtr;
-
 	}
 }
 
