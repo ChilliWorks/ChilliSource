@@ -69,7 +69,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			void StopUpdating() override;
 
-		protected:
+		private:
             friend Input::AccelerometerUPtr Input::Accelerometer::Create();
 			//----------------------------------------------------
 			/// Constructor. Declared private to force the use of
