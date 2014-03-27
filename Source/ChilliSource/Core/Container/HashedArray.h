@@ -156,12 +156,6 @@ namespace ChilliSource
             //-------------------------------------------
             iterator find(const TKey& in_key)
             {
-                if(!m_isSortCacheValid)
-                {
-                    std::sort(m_storage, m_storage + m_size, HashedArray::LessThanSortPredicate);
-                    m_isSortCacheValid = true;
-                }
-                
                 u32 hash = m_hashFunction(in_key);
                 s32 index = FindIndex(hash);
                 
@@ -181,12 +175,6 @@ namespace ChilliSource
             //-------------------------------------------
             const_iterator find(const TKey& in_key) const
             {
-                if(!m_isSortCacheValid)
-                {
-                    std::sort(m_storage, m_storage + m_size, HashedArray::LessThanSortPredicate);
-                    m_isSortCacheValid = true;
-                }
-                
                 u32 hash = m_hashFunction(in_key);
                 s32 index = FindIndex(hash);
                 
@@ -308,6 +296,12 @@ namespace ChilliSource
                 if(m_size == 0)
                 {
                     return -1;
+                }
+                
+                if(!m_isSortCacheValid)
+                {
+                    std::sort(m_storage, m_storage + m_size, HashedArray::LessThanSortPredicate);
+                    m_isSortCacheValid = true;
                 }
                 
                 u32 low = 0;
