@@ -27,15 +27,6 @@ namespace ChilliSource
             const u32 k_fileCheckValue = 7777;
             
             //----------------------------------------------------------------------------
-            /// A list of optional features that are supported by the animation format
-            ///
-            /// @author I Copland
-            //----------------------------------------------------------------------------
-            enum class Feature
-            {
-                k_none
-            };
-            //----------------------------------------------------------------------------
             /// Read value of the given type and size from the binary file stream
             ///
 			/// @author I Copland
