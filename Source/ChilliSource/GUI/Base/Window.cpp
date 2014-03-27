@@ -179,7 +179,7 @@ namespace ChilliSource
                 //We need to notify any subviews they get first dibs
                 for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
-                    (*it)->OnPointerDown(in_pointer, in_timestamp, in_pressType);
+                    (*it)->OnPointerUp(in_pointer, in_timestamp, in_pressType);
                 }
                 
                 //If the touch has not been consumed we then notify
