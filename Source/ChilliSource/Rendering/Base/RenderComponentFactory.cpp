@@ -11,6 +11,7 @@
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
 
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
