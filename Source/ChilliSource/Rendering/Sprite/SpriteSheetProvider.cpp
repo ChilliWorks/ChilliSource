@@ -140,7 +140,7 @@ namespace ChilliSource
 			spriteSheet->SetNumSpriteFrames(numSprites);
 			
             s16* framePtr = buffer;
-			for(u32 i=0; i<numSprites; ++i)
+			for(u32 i=0; i<(u32)numSprites; ++i)
 			{
 				SpriteSheet::SpriteFrame frame;
 				

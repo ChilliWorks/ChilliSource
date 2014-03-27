@@ -251,8 +251,8 @@ namespace ChilliSource
 			u32 mMinDistanceRequiredSqrd;
 			u32 mCurrentTouches;
 			
-			u32 mTouchID1;
-			u32 mTouchID2;
+			u64 mTouchID1;
+			u64 mTouchID2;
 			
 			
 			bool mbFirstTouchBegan, mbSecondTouchBegan;
@@ -390,7 +390,7 @@ namespace ChilliSource
 			///
 			/// Return the touch ID
 			//----------------------------------------------------
-            u32 GetTouchID() const { return mCurrentID; }
+            u64 GetTouchID() const { return mCurrentID; }
             
 			void SetMinDistanceRequiredSqrd(f32 fMinDistanceRequiredSqrd) { mMinDistanceRequiredSqrd = fMinDistanceRequiredSqrd; }
 			void SetInitialHoldDuration(f32 fInitialHoldDuration) { mfInitialHoldDuration = fInitialHoldDuration; }
@@ -418,7 +418,7 @@ namespace ChilliSource
 			Core::Vector2 mvStartPos;
 			
 			f32 mMinDistanceRequiredSqrd;
-            u32 mCurrentID;
+            u64 mCurrentID;
             u32 mCurrentTouches;
 			
 			bool mbFirstRun;
