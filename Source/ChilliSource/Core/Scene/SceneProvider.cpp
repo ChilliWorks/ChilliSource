@@ -44,7 +44,9 @@ namespace ChilliSource
         bool SceneProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource)
         {
             SceneDesc* sceneDesc = reinterpret_cast<SceneDesc*>(out_resource.get());
-            return sceneDesc->LoadFromFile(in_storageLocation, in_filepath);
+            bool success = sceneDesc->LoadFromFile(in_storageLocation, in_filepath);
+            out_resource->SetLoaded(success);
+            return success;
         }
         //----------------------------------------------------
         //----------------------------------------------------

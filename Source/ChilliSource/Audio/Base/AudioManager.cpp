@@ -85,16 +85,20 @@ namespace ChilliSource
 			
 			for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 			{
-				if(mResourceProviders[nProvider]->StreamResourceFromFile(ineStorageLocation, inFilePath, pResource))
-				{
-					//Add it to the cache
-					CS_LOG_DEBUG("Streaming sound " + inFilePath);
-					AudioResourceSPtr pAudio = std::static_pointer_cast<AudioResource>(pResource);
-					pAudio->SetName(inFilePath);
-					pAudio->SetOwningResourceManager(this);
-					pAudio->SetLoaded(true);
-					return pAudio;
-				}
+                if(mResourceProviders[nProvider]->IsA(AudioLoader::InterfaceID) == true)
+                {
+                    AudioLoader* audioLoader = static_cast<AudioLoader*>(mResourceProviders[nProvider]);
+                    if (audioLoader->StreamResourceFromFile(ineStorageLocation, inFilePath, pResource))
+                    {
+                        //Add it to the cache
+                        CS_LOG_DEBUG("Streaming sound " + inFilePath);
+                        AudioResourceSPtr pAudio = std::static_pointer_cast<AudioResource>(pResource);
+                        pAudio->SetName(inFilePath);
+                        pAudio->SetOwningResourceManager(this);
+                        pAudio->SetLoaded(true);
+                        return pAudio;
+                    }
+                }
 			}
 		
 			//Resource not found

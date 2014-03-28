@@ -50,6 +50,7 @@ namespace ChilliSource
                 return false;
             
             sceneAnim->SetSceneAnimDesc(animDesc);
+            sceneAnim->SetLoaded(true);
             
             return true;
         }

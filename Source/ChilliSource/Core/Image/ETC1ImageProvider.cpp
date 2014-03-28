@@ -112,7 +112,7 @@ namespace ChilliSource
                 outpImage->SetWidth(sHeader.m_textureWidth);
                 outpImage->SetHeight(sHeader.m_textureHeight);
                 outpImage->SetCompression(Core::ImageCompression::k_ETC1);
-                
+                outpImage->SetLoaded(true);
                 return true;
             }
             

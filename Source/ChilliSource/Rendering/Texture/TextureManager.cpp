@@ -87,7 +87,6 @@ namespace ChilliSource
 					{
 						Core::Image* pImage = (Core::Image*)(pSourceImage.get());
 						pImage->SetName(instrFilePath);
-						pImage->SetLoaded(true);
 						
 						TextureSPtr pTexture = CreateTextureResource();
 						if(CreateTextureFromImage(pImage, pTexture))
@@ -167,7 +166,6 @@ namespace ChilliSource
 					
 					Core::Image* pImage = (Core::Image*)(inDesc.pImageResource.get());
 					pImage->SetName(inDesc.strFilename);
-					pImage->SetLoaded(true);
 					
 					//Load the texture from this image
 					Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&, TextureSPtr&>(this, &TextureManager::TextureLoadTask, inDesc.pImageResource, inDesc.pTextureResource));

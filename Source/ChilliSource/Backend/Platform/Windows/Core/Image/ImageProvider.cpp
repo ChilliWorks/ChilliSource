@@ -52,6 +52,7 @@ namespace ChilliSource
 					out_image->SetWidth(udwWidth);
 					out_image->SetHeight(udwHeight);
 					out_image->SetFormat(Core::Image::Format::k_RGBA8888);
+					out_image->SetLoaded(true);
 
 					//release the png image without deallocating the image data
 					image.Release(false);

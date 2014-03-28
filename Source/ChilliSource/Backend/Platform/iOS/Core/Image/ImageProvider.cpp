@@ -100,6 +100,7 @@ namespace ChilliSource
                 out_image->SetWidth(udwWidth);
                 out_image->SetHeight(udwHeight);
                 out_image->SetFormat(format);
+                out_image->SetLoaded(true);
             }
             //-----------------------------------------------------------
             /// Create a JPG image using the Apple API
@@ -151,6 +152,7 @@ namespace ChilliSource
                 out_image->SetWidth(udwWidth);
                 out_image->SetHeight(udwHeight);
                 out_image->SetFormat(Core::Image::Format::k_RGBA8888);
+                out_image->SetLoaded(true);
             }
 			//-----------------------------------------------------------
 			/// Create an image in raw byte format
@@ -170,6 +172,7 @@ namespace ChilliSource
                 out_image->SetData((u8*)pData);
                 out_image->UnpackPVRData();
                 out_image->SetFormat(Core::Image::Format::k_RGBA8888);
+                out_image->SetLoaded(true);
             }
         }
         CS_DEFINE_NAMEDTYPE(ImageProvider);
