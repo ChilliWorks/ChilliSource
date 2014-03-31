@@ -40,12 +40,6 @@ namespace ChilliSource
         /// IAP
         //--------------------------------------------------
         CS_FORWARDDECLARE_CLASS(IAPSystem);
-        //--------------------------------------------------
-        /// Metrics
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(MoMetricsSession);
-        CS_FORWARDDECLARE_CLASS(MoMetricsSystem);
-        CS_FORWARDDECLARE_CLASS(IExternalMetrics);
 	}
 }
 
