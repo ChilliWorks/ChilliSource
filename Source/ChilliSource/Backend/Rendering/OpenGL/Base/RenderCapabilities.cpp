@@ -1,87 +1,105 @@
 //
 //  RenderingCapabilities.cpp
-//  FestivalFever
+//  Chilli Source
 //
-//  Created by Tag Games on 27/01/2014.
+//  Created by Ian Copland on 27/01/2014.
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 
 namespace ChilliSource
 {
     namespace OpenGL
     {
+        namespace
+        {
+            //----------------------------------------------------------
+            /// Check for OpenGL Extension support
+            ///
+            /// @author I Copland
+            ///
+            /// @param Extension ID
+            ///
+            /// @return Whether it is supported
+            //----------------------------------------------------------
+            bool CheckForOpenGLExtension(const std::string& in_extension)
+            {
+                std::string extensions = (const char*)glGetString(GL_EXTENSIONS);
+                return extensions.find(in_extension) != extensions.npos;
+            }
+        }
+        
         CS_DEFINE_NAMEDTYPE(RenderCapabilities);
         //-------------------------------------------------
-        /// Constructor
         //-------------------------------------------------
         RenderCapabilities::RenderCapabilities()
-        : mbShadowsSupported(false), mbDepthTexturesSupported(false), mudwMaxTextureSize(0), mudwNumTextureUnits(0)
+        : m_areShadowMapsSupported(false), m_areDepthTexturesSupported(false), m_areMapBuffersSupported(false), m_maxTextureSize(0), m_maxTextureUnits(0)
         {
         }
         //-------------------------------------------------
-        /// Is A
         //-------------------------------------------------
-        bool RenderCapabilities::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool RenderCapabilities::IsA(Core::InterfaceIDType in_interfaceID) const
         {
-            return (Rendering::RenderCapabilities::InterfaceID == inInterfaceID || RenderCapabilities::InterfaceID == inInterfaceID);
+            return (Rendering::RenderCapabilities::InterfaceID == in_interfaceID || RenderCapabilities::InterfaceID == in_interfaceID);
         }
         //-------------------------------------------------
-        /// Calculate Capabilities
         //-------------------------------------------------
-        void RenderCapabilities::CalculateCapabilities()
+        void RenderCapabilities::DetermineCapabilities()
         {
-			mbHighPrecisionInFragmentShaderSupported = true;
+			bool areHighPrecFragmentsSupported = true;
+            m_areMapBuffersSupported = true;
 
 #ifdef CS_OPENGLVERSION_ES
-            s32 adwFragmentHighRange[2], dwFragmentHighPrecision;
-            glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_FLOAT, adwFragmentHighRange, &dwFragmentHighPrecision);
-            if (dwFragmentHighPrecision == 0 && adwFragmentHighRange[0] == 0 && adwFragmentHighRange[1] == 0)
-            {
-                mbHighPrecisionInFragmentShaderSupported = false;
-            }
-            else
-            {
-                mbHighPrecisionInFragmentShaderSupported = true;
-            }
+            s32 fragmentHighRanges[2];
+            s32 fragmentHighPrecision;
+            
+            glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_FLOAT, fragmentHighRanges, &fragmentHighPrecision);
+            areHighPrecFragmentsSupported = fragmentHighPrecision != 0 && fragmentHighRanges[0] != 0 && fragmentHighRanges[1] != 0;
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            //Check for map buffer support
+            m_areMapBuffersSupported = CheckForOpenGLExtension("GL_OES_mapbuffer");
 #endif
             
-            mbDepthTexturesSupported = RenderSystem::CheckForOpenGLExtension("GL_OES_depth_texture");
-            mbShadowsSupported = (mbDepthTexturesSupported && mbHighPrecisionInFragmentShaderSupported);
-            glGetIntegerv(GL_MAX_TEXTURE_SIZE, (s32*)&mudwMaxTextureSize);
-            glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (s32*)&mudwNumTextureUnits);
+#endif
+            
+            m_areDepthTexturesSupported = CheckForOpenGLExtension("GL_OES_depth_texture");
+            m_areShadowMapsSupported = (m_areDepthTexturesSupported && areHighPrecFragmentsSupported);
+            glGetIntegerv(GL_MAX_TEXTURE_SIZE, (s32*)&m_maxTextureSize);
+            glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (s32*)&m_maxTextureUnits);
         }
         //-------------------------------------------------
-        /// Is Shadow Mapping Supported
         //-------------------------------------------------
         bool RenderCapabilities::IsShadowMappingSupported() const
         {
-            return mbShadowsSupported;
+            return m_areShadowMapsSupported;
         }
         //-------------------------------------------------
-        /// Are Depth Texture Supported
         //-------------------------------------------------
-        bool RenderCapabilities::AreDepthTexturesSupported() const
+        bool RenderCapabilities::IsDepthTextureSupported() const
         {
-            return mbDepthTexturesSupported;
+            return m_areDepthTexturesSupported;
         }
         //-------------------------------------------------
-        /// Get Max Texture Size
+        //-------------------------------------------------
+        bool RenderCapabilities::IsMapBufferSupported() const
+        {
+            return m_areMapBuffersSupported;
+        }
+        //-------------------------------------------------
         //-------------------------------------------------
         u32 RenderCapabilities::GetMaxTextureSize() const
         {
-            return mudwMaxTextureSize;
+            return m_maxTextureSize;
         }
         //-------------------------------------------------
-        /// Get Num Texture Units
         //-------------------------------------------------
         u32 RenderCapabilities::GetNumTextureUnits() const
         {
-            return mudwNumTextureUnits;
+            return m_maxTextureUnits;
         }
     }
 }

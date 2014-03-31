@@ -75,13 +75,6 @@ namespace ChilliSource
             //-----------------------------------------------------
 			bool UnlockIndex();
 			//-----------------------------------------------------
-			/// Set Map Buffer Available
-			///
-			/// @param Whether the GL implementation supports
-			/// the map buffer extension
-			//-----------------------------------------------------
-			void SetMapBufferAvailable(bool inbEnabled);
-			//-----------------------------------------------------
 			/// Backup
 			///
 			/// Backs up the data in the mesh buffer to make

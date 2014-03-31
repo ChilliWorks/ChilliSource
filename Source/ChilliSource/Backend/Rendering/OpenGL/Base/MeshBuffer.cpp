@@ -10,6 +10,8 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/MeshBuffer.h>
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
 namespace ChilliSource
 {
@@ -28,6 +30,8 @@ namespace ChilliSource
         : ChilliSource::Rendering::MeshBuffer(inBuffDesc), mVertexBuffer(0), mIndexBuffer(0), mBufferUsage(0), mBufferAccess(0),
           mpVertexData(nullptr), mpIndexData(nullptr), mpVertexDataBackup(nullptr), mpIndexDataBackup(nullptr), mbMapBufferAvailable(false), mbCacheValid(false)
 		{
+            mbMapBufferAvailable = Core::Application::Get()->GetSystem<Rendering::RenderCapabilities>()->IsMapBufferSupported();
+            
 			glGenBuffers(1, &mVertexBuffer);
             
             if(mBufferDesc.IndexDataCapacity > 0)
@@ -219,16 +223,6 @@ namespace ChilliSource
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, mBufferDesc.IndexDataCapacity, mpIndexData, mBufferUsage);
 				return true;
 			}
-		}
-		//-----------------------------------------------------
-		/// Set Map Buffer Available
-		///
-		/// @param Whether the GL implementation supports
-		/// the map buffer extension
-		//-----------------------------------------------------
-		void MeshBuffer::SetMapBufferAvailable(bool inbEnabled)
-		{
-			mbMapBufferAvailable = inbEnabled;
 		}
 		//-----------------------------------------------------
 		/// Backup

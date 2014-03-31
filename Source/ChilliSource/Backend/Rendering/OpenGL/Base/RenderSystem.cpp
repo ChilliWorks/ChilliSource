@@ -38,8 +38,6 @@ namespace ChilliSource
 	{
         CS_DEFINE_NAMEDTYPE(RenderSystem);
         
-        bool gbIsMapBufferAvailable = true;
-        
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
@@ -86,13 +84,9 @@ namespace ChilliSource
             
             CS_ASSERT((Core::Screen::GetRawDimensions() > Core::Vector2::ZERO), "Cannot create and OpenGL ES view with size ZERO");
             
-#ifdef CS_TARGETPLATFORM_ANDROID
-            //Check for map buffer support
-            gbIsMapBufferAvailable = RenderSystem::CheckForOpenGLExtension("GL_OES_mapbuffer");
-#endif
-            
+
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
-            mpRenderCapabilities->CalculateCapabilities();
+            mpRenderCapabilities->DetermineCapabilities();
             
             ForceRefreshRenderStates();
 			
@@ -587,7 +581,6 @@ namespace ChilliSource
 		Rendering::MeshBuffer* RenderSystem::CreateBuffer(Rendering::BufferDescription &inDesc)
 		{
 			MeshBuffer* pBuffer = new MeshBuffer(inDesc);
-			pBuffer->SetMapBufferAvailable(gbIsMapBufferAvailable);
 			pBuffer->SetOwningRenderSystem(this);
             
 #ifdef CS_TARGETPLATFORM_ANDROID
@@ -1193,14 +1186,6 @@ namespace ChilliSource
         {
             return "Shaders/OpenGL/";
         }
-		//----------------------------------------------------------
-		/// Check for OpenGL Extension
-		//----------------------------------------------------------
-		bool RenderSystem::CheckForOpenGLExtension(const std::string& instrExtension)
-		{
-			std::string strExt = (const char*)glGetString(GL_EXTENSIONS);
-            return strExt.find(instrExtension) != strExt.npos;
-		}
 		//----------------------------------------------------------
 		/// Force Refresh Render States
 		//----------------------------------------------------------
