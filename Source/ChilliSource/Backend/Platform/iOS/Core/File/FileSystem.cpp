@@ -1,11 +1,10 @@
-/*
- *  FileSystem.cpp
- *  iOSTemplate
- *
- *  Created by Ian Copland on 25/03/2011.
- *  Copyright 2011 Tag Games Ltd. All rights reserved.
- *
- */
+//
+//  FileSystem.cpp
+//  Chilli Source
+//
+//  Created by I Copland on 25/03/2011.
+//  Copyright 2011 Tag Games Ltd. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 
@@ -13,29 +12,199 @@
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
+#include <iostream>
 #include <UIKit/UIKit.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
-#include <iostream>
 
 namespace ChilliSource
 {
 	namespace iOS 
 	{
-        //constants
-        const std::string kstrSaveDataPath  = "SaveData/";
-        const std::string kstrCachePath  = "Caches/Cache/";
-        const std::string kstrDLCPath  = "Caches/DLC/";
-        
-        std::string RetrieveBundlePath();
-        std::string RetrieveDocumentsPath();
-        std::string RetrieveLibraryPath();
-        
+        namespace
+        {
+            const std::string k_saveDataPath  = "SaveData/";
+            const std::string k_cachePath  = "Caches/Cache/";
+            const std::string k_dlcPath  = "Caches/DLC/";
+            
+            //--------------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return whether or not the given file mode is a write mode
+            //--------------------------------------------------------------
+            bool IsWriteMode(Core::FileMode in_fileMode)
+            {
+                switch (in_fileMode)
+                {
+                    case Core::FileMode::k_write:
+                    case Core::FileMode::k_writeAppend:
+                    case Core::FileMode::k_writeAtEnd:
+                    case Core::FileMode::k_writeBinary:
+                    case Core::FileMode::k_writeBinaryAppend:
+                    case Core::FileMode::k_writeBinaryAtEnd:
+                    case Core::FileMode::k_writeBinaryTruncate:
+                    case Core::FileMode::k_writeTruncate:
+                        return true;
+                    case Core::FileMode::k_read:
+                    case Core::FileMode::k_readBinary:
+                        return false;
+                        
+                }
+            }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The device bundle path as returned by iOS
+            //--------------------------------------------------------------
+            std::string RetrieveBundlePath()
+            {
+                CFBundleRef mainBundle = CFBundleGetMainBundle();
+                CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
+                char path[PATH_MAX];
+                if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX))
+                {
+                    CS_LOG_ERROR("Changing working directory to resource folder");
+                }
+                CFRelease(resourcesURL);
+                return std::string(path)  + "/";
+            }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The device documents path as returned by iOS
+            //--------------------------------------------------------------
+            std::string RetrieveDocumentsPath()
+            {
+                NSArray* documentDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                if (documentDir)
+                {
+                    NSString*	nsDocumentPath = nil;
+                    nsDocumentPath = [documentDir objectAtIndex:0];
+                    if (nsDocumentPath != nil)
+                    {
+                        const char* pPath = [nsDocumentPath fileSystemRepresentation];
+                        return std::string(pPath) + "/";
+                    }
+                }
+                
+                return "";
+            }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The device library path as returned by iOS
+            //--------------------------------------------------------------
+            std::string RetrieveLibraryPath()
+            {
+                NSArray* libraryDir = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+                if (libraryDir)
+                {
+                    NSString*	nsLibraryPath = nil;
+                    nsLibraryPath = [libraryDir objectAtIndex:0];
+                    if (nsLibraryPath != nil)
+                    {
+                        const char* pPath = [nsLibraryPath fileSystemRepresentation];
+                        return std::string(pPath) + "/";
+                    }
+                }
+                
+                return "";
+            }
+            //------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Directories
+            /// @param Recurse into sub directories
+            /// @param Out: Content file names
+            //------------------------------------------------------------
+            void GetDirectoryContents(const std::vector<std::string>& inastrDirs, bool inbRecursive, NSMutableArray* outpContents)
+            {
+                for(std::vector<std::string>::const_iterator it = inastrDirs.begin(); it != inastrDirs.end(); ++it)
+                {
+                    std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
+                    NSString* Dir = [NSString stringWithCString:path.c_str() encoding:NSASCIIStringEncoding];
+                    
+                    if (inbRecursive == true)
+                    {
+                        [outpContents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:Dir error:nil]];
+                    }
+                    else
+                    {
+                        [outpContents addObjectsFromArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:Dir error:nil]];
+                    }
+                }
+            }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Unfiltered names
+            /// @param Extension
+            /// @return Filtered names
+            //--------------------------------------------------------------
+            NSArray* FilterFileNamesByExtension(NSArray* inpFilenames, const std::string& instrExtension)
+            {
+                //Filter out the files we don't want
+                NSString* Extension = [NSString stringWithCString:instrExtension.c_str() encoding:NSASCIIStringEncoding];
+                NSString* Predicate = [NSString stringWithFormat:@"self ENDSWITH '.%@'", Extension];
+                NSArray* Filtered = [inpFilenames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:Predicate]];
+                return Filtered;
+            }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Unfiltered names
+            /// @param Name
+            /// @return Filtered names
+            //--------------------------------------------------------------
+            NSArray* FilterFileNamesByName(NSArray* inpFilenames, const std::string& instrName)
+            {
+                //Filter out the files we don't want
+                NSString* Name = [NSString stringWithCString:instrName.c_str() encoding:NSASCIIStringEncoding];
+                NSString* Predicate = [NSString stringWithFormat:@"self ENDSWITH '%@'", Name];
+                NSArray* Filtered = [inpFilenames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:Predicate]];
+                return Filtered;
+            }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Unfiltered names
+            /// @return Filtered names
+            //--------------------------------------------------------------
+            NSArray* FilterFileNamesByFile(NSArray* inpFilenames)
+            {
+                //Filter out the files we don't want
+                NSString* Predicate = [NSString stringWithFormat:@"self contains '.'"];
+                NSArray* Filtered = [inpFilenames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:Predicate]];
+                return Filtered;
+            }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Filenames ObjC
+            /// @param Directory to append
+            /// @param Out: Filenames
+            //--------------------------------------------------------------
+            void ConvertObjCToPath(NSArray* inpFilenames, const std::string& instrDirectory, std::vector<std::string> &outstrFileNames)
+            {
+                std::string strDir;
+                if(instrDirectory.empty() == false)
+                {
+                    strDir = ChilliSource::Core::StringUtils::StandardisePath(instrDirectory);
+                }
+                
+                for(NSString* FileNames in inpFilenames)
+                {
+                    outstrFileNames.push_back(strDir + ChilliSource::Core::StringUtils::NSStringToString(FileNames));
+                }
+            }
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
 		FileSystem::FileSystem()
 		{
-            mstrBundlePath = RetrieveBundlePath();
-            mstrDocumentsPath = RetrieveDocumentsPath();
-            mstrLibraryPath = RetrieveLibraryPath();
+            m_bundlePath = RetrieveBundlePath();
+            m_documentsPath = RetrieveDocumentsPath();
+            m_libraryPath = RetrieveLibraryPath();
             
             CreateDirectory(Core::StorageLocation::k_saveData, "");
             CreateDirectory(Core::StorageLocation::k_cache, "");
@@ -44,145 +213,52 @@ namespace ChilliSource
             CreateHashedBundleFileList();
 		}
         //--------------------------------------------------------------
-        /// Retrieve Bundle Path
-        ///
-        /// @return The device bundle path as returned by iOS
-        //--------------------------------------------------------------
-        std::string RetrieveBundlePath()
-        {
-            CFBundleRef mainBundle = CFBundleGetMainBundle();
-			CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
-			char path[PATH_MAX];
-			if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX))
-			{
-				CS_LOG_ERROR("Changing working directory to resource folder");
-			}
-			CFRelease(resourcesURL);
-			return std::string(path)  + "/";
-        }
-        //--------------------------------------------------------------
-        /// Retrieve Documents Path
-        ///
-        /// @return The device documents path as returned by iOS
-        //--------------------------------------------------------------
-        std::string RetrieveDocumentsPath()
-        {
-            NSArray* documentDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-			if (documentDir)
-			{
-                NSString*	nsDocumentPath = nil;
-				nsDocumentPath = [documentDir objectAtIndex:0];
-                if (nsDocumentPath != nil)
-                {
-                    const char* pPath = [nsDocumentPath fileSystemRepresentation];
-                    return std::string(pPath) + "/";
-                }
-			}
-            
-            return "";
-        }
-        //--------------------------------------------------------------
-        /// Retrieve Library Path
-        ///
-        /// @return The device library path as returned by iOS
-        //--------------------------------------------------------------
-        std::string RetrieveLibraryPath()
-        {
-            NSArray* libraryDir = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-			if (libraryDir)
-			{
-                NSString*	nsLibraryPath = nil;
-				nsLibraryPath = [libraryDir objectAtIndex:0];
-                if (nsLibraryPath != nil)
-                {
-                    const char* pPath = [nsLibraryPath fileSystemRepresentation];
-                    return std::string(pPath) + "/";
-                }
-			}
-            
-            return "";
-        }
-        //--------------------------------------------------------------
-        /// Create Hashed Bundle File List
-        ///
         //--------------------------------------------------------------
         void FileSystem::CreateHashedBundleFileList()
         {
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
             NSMutableArray* Contents = [[NSMutableArray alloc] init];
-            NSString* Dir = [NSString stringWithCString:mstrBundlePath.c_str() encoding:NSASCIIStringEncoding];
+            NSString* Dir = [NSString stringWithCString:m_bundlePath.c_str() encoding:NSASCIIStringEncoding];
             
             [Contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:Dir error:nil]];
             
             for(NSString* file in Contents)
             {
                 std::string strFile([file UTF8String]);
-                mHashedPackageFileNames.push_back(Core::HashCRC32::GenerateHashCode(strFile));
+                m_hashedPackageFileNames.push_back(Core::HashCRC32::GenerateHashCode(strFile));
             }
             
-            std::sort(mHashedPackageFileNames.begin(), mHashedPackageFileNames.end());
+            std::sort(m_hashedPackageFileNames.begin(), m_hashedPackageFileNames.end());
             
             [Contents release];
             [pPool release];
         }
         //--------------------------------------------------------------
-        /// Create File Stream
         //--------------------------------------------------------------
-        Core::FileStreamSPtr FileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
+        Core::FileStreamUPtr FileSystem::CreateFileStream(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::FileMode in_fileMode) const
         {
             //create the file stream
-            Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new Core::FileStream());
-            
-            //check the requested storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
-                return newFilestream;
-            }
+            Core::FileStreamUPtr fileStream = Core::FileStreamUPtr(new Core::FileStream());
             
             //if this is not a read stream, insure that the storage location is writable.
-            if (ineFileMode != Core::FileMode::k_read && ineFileMode != Core::FileMode::k_readBinary)
+            if (IsWriteMode(in_fileMode) == true)
             {
-                if(IsStorageLocationWritable(ineStorageLocation) == true)
-                {
-                    std::string filepath = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
-                    newFilestream->Open(filepath, ineFileMode);
-                }
-                else
-                {
-                    CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-                }
+                CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "Trying to write to read only storage location!");
+ 
+                std::string filePath = GetStorageLocationDirectory(in_storageLocation) + in_filePath;
+                newFilestream->Open(filePath, in_fileMode);
             }
             else
             {
-                std::string filepath;
-                GetBestPathToFile(ineStorageLocation, instrFilepath, filepath);
-                newFilestream->Open(filepath, ineFileMode);
+                std::string filePath = GetAbsolutePathForFile(in_storageLocation, in_filePath);
+                newFilestream->Open(filePath, in_fileMode);
             }
             
-			return newFilestream;
+			return fileStream;
         }
         //--------------------------------------------------------------
-        /// Create File
         //--------------------------------------------------------------
-        bool FileSystem::CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const
-        {
-            Core::FileStreamSPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FileMode::k_writeBinary);
-			
-            if (pFileStream.get() == nullptr || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
-            {
-                CS_LOG_ERROR("Failed to create file: " + instrDirectory);
-                return false;
-            }
-            
-            pFileStream->Write(inpbyData, (s32)inudwDataSize);
-            pFileStream->Close();
-            return true;
-        }
-        //--------------------------------------------------------------
-        /// Create Directory
-        //--------------------------------------------------------------
-        bool FileSystem::CreateDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
+        bool FileSystem::CreateDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const <--- Continue here!
         {
             //check the requested storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -217,7 +293,6 @@ namespace ChilliSource
 			return true;
         }
         //--------------------------------------------------------------
-        /// Copy File
         //--------------------------------------------------------------
         bool FileSystem::CopyFile(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceFilepath, 
                                    Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const
@@ -285,7 +360,6 @@ namespace ChilliSource
             return pCopyError == nil && pReplaceError == nil;
         }
         //--------------------------------------------------------------
-        /// Copy Directory
         //--------------------------------------------------------------
         bool FileSystem::CopyDirectory(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceDirectory, 
                                         Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationDirectory) const
@@ -337,7 +411,6 @@ namespace ChilliSource
             return true;
         }
         //--------------------------------------------------------------
-        /// Delete File
         //--------------------------------------------------------------
         bool FileSystem::DeleteFile(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
         {
@@ -369,7 +442,6 @@ namespace ChilliSource
             return true;
         }
         //--------------------------------------------------------------
-        /// Delete Directory
         //--------------------------------------------------------------
         bool FileSystem::DeleteDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
         {
@@ -400,95 +472,7 @@ namespace ChilliSource
             //return successful
             return true;
         }
-        //------------------------------------------------------------
-        /// Get Directory Contents
-        ///
-        /// @param Directories
-        /// @param Recurse into sub directories
-        /// @param Out: Content file names
-        //------------------------------------------------------------
-        void GetDirectoryContents(const std::vector<std::string>& inastrDirs, bool inbRecursive, NSMutableArray* outpContents)
-        {
-            for(std::vector<std::string>::const_iterator it = inastrDirs.begin(); it != inastrDirs.end(); ++it)
-            {
-                std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
-                NSString* Dir = [NSString stringWithCString:path.c_str() encoding:NSASCIIStringEncoding];
-                
-                if (inbRecursive == true)
-                {
-                    [outpContents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:Dir error:nil]];
-                }
-                else
-                {
-                    [outpContents addObjectsFromArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:Dir error:nil]];
-                }
-            }
-        }
         //--------------------------------------------------------------
-        /// Filter File Names By Extension
-        ///
-        /// @param Unfiltered names
-        /// @param Extension
-        /// @return Filtered names
-        //--------------------------------------------------------------
-        NSArray* FilterFileNamesByExtension(NSArray* inpFilenames, const std::string& instrExtension)
-        {
-            //Filter out the files we don't want
-            NSString* Extension = [NSString stringWithCString:instrExtension.c_str() encoding:NSASCIIStringEncoding];
-            NSString* Predicate = [NSString stringWithFormat:@"self ENDSWITH '.%@'", Extension];
-            NSArray* Filtered = [inpFilenames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:Predicate]];
-            return Filtered;
-        }
-        //--------------------------------------------------------------
-        /// Filter File Names By Name
-        ///
-        /// @param Unfiltered names
-        /// @param Name
-        /// @return Filtered names
-        //--------------------------------------------------------------
-        NSArray* FilterFileNamesByName(NSArray* inpFilenames, const std::string& instrName)
-        {
-            //Filter out the files we don't want
-            NSString* Name = [NSString stringWithCString:instrName.c_str() encoding:NSASCIIStringEncoding];
-            NSString* Predicate = [NSString stringWithFormat:@"self ENDSWITH '%@'", Name];
-            NSArray* Filtered = [inpFilenames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:Predicate]];
-            return Filtered;
-        }
-        //--------------------------------------------------------------
-        /// Filter File Names By File
-        ///
-        /// @param Unfiltered names
-        /// @return Filtered names
-        //--------------------------------------------------------------
-        NSArray* FilterFileNamesByFile(NSArray* inpFilenames)
-        {
-            //Filter out the files we don't want
-            NSString* Predicate = [NSString stringWithFormat:@"self contains '.'"];
-            NSArray* Filtered = [inpFilenames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:Predicate]];
-            return Filtered;
-        }
-        //--------------------------------------------------------------
-        /// Convert ObjC To Path
-        ///
-        /// @param Filenames ObjC
-        /// @param Directory to append
-        /// @param Out: Filenames
-        //--------------------------------------------------------------
-        void ConvertObjCToPath(NSArray* inpFilenames, const std::string& instrDirectory, std::vector<std::string> &outstrFileNames)
-        {
-            std::string strDir;
-            if(instrDirectory.empty() == false)
-            {
-                strDir = ChilliSource::Core::StringUtils::StandardisePath(instrDirectory);
-            }
-            
-            for(NSString* FileNames in inpFilenames)
-            {
-                outstrFileNames.push_back(strDir + ChilliSource::Core::StringUtils::NSStringToString(FileNames));
-            }
-        }
-        //--------------------------------------------------------------
-        /// Get File Names With Extension In Directory
         //--------------------------------------------------------------
         void FileSystem::GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
                                                   const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
@@ -530,17 +514,6 @@ namespace ChilliSource
             outstrFileNames.resize(it - outstrFileNames.begin()); 
         }
         //--------------------------------------------------------------
-        /// Get Path For Files With Name In Directory
-        ///
-        /// Creates a dynamic array containing the filenames of each of
-        /// each file with the given name in the given
-        /// directory.
-        ///
-        /// @param The Storage Location
-        /// @param The directory
-        /// @param Flag to determine whether or not to recurse into sub directories
-        /// @param The name
-        /// @param Output dynamic array containing the filenames.
         //--------------------------------------------------------------
         void FileSystem::GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
                                                         const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
@@ -582,7 +555,6 @@ namespace ChilliSource
             outstrFileNames.resize(it - outstrFileNames.begin()); 
         }
         //--------------------------------------------------------------
-        /// Get File Names In Directory
         //--------------------------------------------------------------
         void FileSystem::GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
                                      std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
@@ -624,7 +596,6 @@ namespace ChilliSource
             outstrFileNames.resize(it - outstrFileNames.begin()); 
         }
         //--------------------------------------------------------------
-        /// Get Directories In Directory
         //--------------------------------------------------------------
         void FileSystem::GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
                                                     std::vector<std::string> &outstrDirectories, bool inbAppendFullPath) const
@@ -665,13 +636,8 @@ namespace ChilliSource
             std::vector<std::string>::iterator it = std::unique(outstrDirectories.begin(), outstrDirectories.end());
             outstrDirectories.resize(it - outstrDirectories.begin()); 
         }
-        //------------------------------------------------------------
-        /// Get Paths For Storage Location
-        ///
-        /// @param Storage location
-        /// @param File name to append
-        /// @param Out: All the paths for the given location
-        //------------------------------------------------------------
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
         void FileSystem::GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, std::vector<std::string>& outaPaths) const
         {
             switch(ineStorageLocation)
@@ -695,7 +661,6 @@ namespace ChilliSource
             }
         }
         //--------------------------------------------------------------
-        /// Does File Exist
         //--------------------------------------------------------------
         bool FileSystem::DoesFileExist(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
         {
@@ -737,27 +702,18 @@ namespace ChilliSource
 			return DoesFileExist(ChilliSource::Core::StringUtils::StandardisePath(path));
         }
         //--------------------------------------------------------------
-        /// Does File Exist In Cached DLC
-        ///
-        /// @param The filepath.
-        /// @return Whether or not it is in the cached DLC.
         //--------------------------------------------------------------
         bool FileSystem::DoesFileExistInCachedDLC(const std::string& instrFilepath) const
         {
             return DoesItemExistInDLCCache(instrFilepath, false);
         }
         //--------------------------------------------------------------
-        /// Does File Exist In Package DLC
-        ///
-        /// @param The filepath.
-        /// @return Whether or not it is in the local DLC.
         //--------------------------------------------------------------
         bool FileSystem::DoesFileExistInPackageDLC(const std::string& instrFilepath) const
         {
             return DoesFileExist(ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mstrPackageDLCPath + instrFilepath));
         }
         //--------------------------------------------------------------
-        /// Does Directory Exist
         //--------------------------------------------------------------
         bool FileSystem::DoesDirectoryExist(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
         {
@@ -799,7 +755,6 @@ namespace ChilliSource
 			return DoesFolderExist(ChilliSource::Core::StringUtils::StandardisePath(path));
         }
         //--------------------------------------------------------------
-        /// Is Storage Location Available
         //--------------------------------------------------------------
         bool FileSystem::IsStorageLocationAvailable(Core::StorageLocation ineStorageLocation) const
         {
@@ -815,7 +770,6 @@ namespace ChilliSource
             }
         }
         //--------------------------------------------------------------
-        /// Get Storage Location Directory
         //--------------------------------------------------------------
         std::string FileSystem::GetStorageLocationDirectory(Core::StorageLocation ineStorageLocation) const
         {
@@ -843,7 +797,6 @@ namespace ChilliSource
             return strStorageLocationPath;
         }
         //--------------------------------------------------------------
-        /// Does Item Exist In DLC Cache
         //--------------------------------------------------------------
         bool FileSystem::DoesItemExistInDLCCache(const std::string& instrPath, bool inbFolder) const
         {
@@ -865,10 +818,6 @@ namespace ChilliSource
             }
         }
         //--------------------------------------------------------------
-        /// Get Directory For DLC File
-        ///
-        /// @param The filename of the DLC asset.
-        /// @return The directory to either the package DLC or cache DLC.
         //--------------------------------------------------------------
         std::string FileSystem::GetDirectoryForDLCFile(const std::string& instrFilePath) const
         {
@@ -887,10 +836,6 @@ namespace ChilliSource
             return strResult;
         }
         //--------------------------------------------------------------
-        /// Get Directory For Package File
-        ///
-        /// @param The filename of the package asset.
-        /// @return The directory to either the correct device package directory.
         //--------------------------------------------------------------
         std::string FileSystem::GetDirectoryForPackageFile(const std::string& instrFilePath) const
         {
@@ -909,12 +854,6 @@ namespace ChilliSource
             return strResult;
         }
         //--------------------------------------------------------------
-        /// Does File Exist In Hashed Store
-        ///
-        /// returns whether the path exists in the stored hashed manifest
-        ///
-        /// @param the filepath.
-        /// @return whether or not it exists.
         //--------------------------------------------------------------
         bool FileSystem::DoesFileExistInHashedStore(const std::string& instrPath) const
         {
@@ -928,12 +867,6 @@ namespace ChilliSource
             return false;
         }
         //--------------------------------------------------------------
-        /// Does File Exist
-        ///
-        /// returns whether the path exists on the filesystem
-        ///
-        /// @param the filepath.
-        /// @return whether or not it exists.
         //--------------------------------------------------------------
         bool FileSystem::DoesFileExist(const std::string& instrPath) const
         {
@@ -951,12 +884,6 @@ namespace ChilliSource
             return (bExists && !bDirectory);
         }
         //--------------------------------------------------------------
-        /// Does Folder Exist
-        ///
-        /// returns whether the path exists on the filesystem
-        ///
-        /// @param the filepath.
-        /// @return whether or not it exists.
         //--------------------------------------------------------------
         bool FileSystem::DoesFolderExist(const std::string& instrPath) const
         {

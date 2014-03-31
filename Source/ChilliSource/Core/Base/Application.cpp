@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Time/CoreTimer.h>
@@ -482,7 +483,7 @@ namespace ChilliSource
         void Application::CreateDefaultSystems()
         {
             //Core
-            AddSystem_Old(FileSystem::Create());
+            m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
 
             //TODO: Change this to a PNG image provider.
@@ -544,12 +545,6 @@ namespace ChilliSource
 				{
 					m_resourceProviders.push_back(dynamic_cast<ResourceProvider*>(pSystem));
 				}
-                
-                //Common systems
-                if(pSystem->IsA(FileSystem::InterfaceID))
-                {
-                    m_fileSystem = static_cast<FileSystem*>(pSystem);
-                }
 			}
             
             //Loop round all the created app systems and categorise them
@@ -606,28 +601,28 @@ namespace ChilliSource
                 
                 if(jRoot.isMember("MasterText"))
                 {
-                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["MasterText"].get("Location", "Package").asString());
+                    StorageLocation eStorageLocation = ParseStorageLocation(jRoot["MasterText"].get("Location", "Package").asString());
                     std::string strPath = jRoot["MasterText"].get("Path", "").asString();
                     LocalisedText::RefreshMasterText(eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultMesh"))
                 {
-                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMesh"].get("Location", "Package").asString());
+                    StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultMesh"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultMesh"].get("Path", "").asString();
                     m_defaultMesh = LOAD_RESOURCE(Rendering::Mesh, eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultFont"))
                 {
-                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultFont"].get("Location", "Package").asString());
+                    StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultFont"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultFont"].get("Path", "").asString();
                     m_defaultFont = LOAD_RESOURCE(Rendering::Font, eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultMaterial"))
                 {
-                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMaterial"].get("Location", "Package").asString());
+                    StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultMaterial"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultMaterial"].get("Path", "").asString();
                     m_defaultMaterial = LOAD_RESOURCE(Rendering::Material, eStorageLocation, strPath);
                 }
