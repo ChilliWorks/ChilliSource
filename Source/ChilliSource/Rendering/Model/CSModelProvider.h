@@ -1,11 +1,10 @@
-/*
- *  CSModelProvider.h
- *  Chilli Source
- *
- *  Created by Ian Copland on 25/08/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  CSModelProvider.h
+//  Chilli Source
+//
+//  Created by Ian Copland on 25/08/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
 #ifndef _CHILLISOURCE_RENDERING_MODEL_CSMODELPROVIDER_H_
 #define _CHILLISOURCE_RENDERING_MODEL_CSMODELPROVIDER_H_

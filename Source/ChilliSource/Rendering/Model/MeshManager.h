@@ -117,7 +117,6 @@ namespace ChilliSource
 			///
 			/// @param The MoModel Declaration used to build the mesh
 			/// @param the mesh resource
-			/// @param whether or not the mesh needs prepared. Defaults to true.
 			/// @return success or failure.
 			//----------------------------------------------------------------------------
 			static bool BuildMesh(RenderSystem* inpRenderSystem, const MeshDescriptor& inMeshDescriptor, Mesh* outpResource);

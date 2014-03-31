@@ -1,20 +1,15 @@
-/*
- *  MoStaticModelLoader.cpp
- *  moFlo
- *
- *  Created by Ian Copland on 25/08/2011.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  CSModelProvider.cpp
+//  Chilli Source
+//
+//  Created by Ian Copland on 25/08/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Rendering/Model/CSModelProvider.h>
-#include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/Model/SubMesh.h>
-#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-
-#include <stdexcept>
+#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 #include <ChilliSource/Rendering/Model/MeshManager.h>
 
 namespace ChilliSource
@@ -200,18 +195,18 @@ namespace ChilliSource
                     nextChar = ReadValue<u8>(in_meshStream);
                     out_subMeshDesc.mstrName += nextChar;
                     
-                } while(nextChar != 0u);
+                } while(nextChar != 0);
                 
                 //read num verts and triangles
-                if (2u == in_meshDesc.mudwIndexSize)
+                if (2 == in_meshDesc.mudwIndexSize)
                 {
                     out_subMeshDesc.mudwNumVertices = (u32)ReadValue<u16>(in_meshStream);
-                    out_subMeshDesc.mudwNumIndices = ((u32)ReadValue<u16>(in_meshStream)) * 3u;
+                    out_subMeshDesc.mudwNumIndices = ((u32)ReadValue<u16>(in_meshStream)) * 3;
                 }
                 else
                 {
                     out_subMeshDesc.mudwNumVertices = ReadValue<u32>(in_meshStream);
-                    out_subMeshDesc.mudwNumIndices = ReadValue<u32>(in_meshStream) * 3u;
+                    out_subMeshDesc.mudwNumIndices = ReadValue<u32>(in_meshStream) * 3;
                 }
                 
                 //read bounds
@@ -231,7 +226,7 @@ namespace ChilliSource
                     {
                         nextChar = ReadValue<u8>(in_meshStream);
                         
-                    } while(nextChar != 0u);
+                    } while(nextChar != 0);
                 }
                 
                 if (true == in_meshDesc.mFeatures.mbHasMaterial)
@@ -241,7 +236,7 @@ namespace ChilliSource
                     {
                         nextChar = ReadValue<u8>(in_meshStream);
                         
-                    } while(nextChar != 0u);
+                    } while(nextChar != 0);
                 }
             }
             //-----------------------------------------------------------------------------

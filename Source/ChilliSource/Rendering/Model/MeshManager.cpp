@@ -124,7 +124,6 @@ namespace ChilliSource
 							pResource->SetFilename(inFilePath);
 							pResource->SetStorageLocation(ineStorageLocation);
 							pResource->SetOwningResourceManager(static_cast<Core::ResourceManager*>(this));
-							pResource->SetLoaded(true);
 							
 							return std::static_pointer_cast<Mesh>(pResource);
 						}
@@ -173,7 +172,6 @@ namespace ChilliSource
 						pResource->SetFilename(inFilePath);
 						pResource->SetStorageLocation(ineStorageLocation);
 						pResource->SetOwningResourceManager(this);
-						pResource->SetLoaded(false);
 						
 						if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
 						{
@@ -282,9 +280,6 @@ namespace ChilliSource
 			}
 			
 			outpResource->CalcVertexAndIndexCounts();
-			
-			//flag as loaded
-			outpResource->SetLoaded(true);
 			
 			//return success
 			return bSuccess;

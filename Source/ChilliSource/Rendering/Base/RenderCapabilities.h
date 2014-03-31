@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#ifndef _MOFLOW_RENDERING_RENDERCAPABILITIES_H_
-#define _MOFLOW_RENDERING_RENDERCAPABILITIES_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_RENDERCAPABILITIES_H_
+#define _CHILLISOURCE_RENDERING_BASE_RENDERCAPABILITIES_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
