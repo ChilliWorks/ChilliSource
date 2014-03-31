@@ -274,16 +274,11 @@ namespace ChilliSource
 			return UnifiedSliderSize;
 		}
         //---Touch Delegates
+        //----------------------------------------------------------
         //-----------------------------------------------------------
-        /// On Slider Moved
-        ///
-        /// Called when the user drags the slider
-        ///
-        /// @param Touch data
-        //-----------------------------------------------------------
-        void HorizontalSliderBar::OnSliderMoved(GUIView* inpView, const Input::TouchInfo & insTouchInfo)
+        void HorizontalSliderBar::OnSliderMoved(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer)
         {
-            mfSliderValue = ((insTouchInfo.vLocation.x - GetAbsoluteScreenSpacePosition().x)/GetAbsoluteSize().x) + 0.5f;
+            mfSliderValue = ((in_pointer.m_location.x - GetAbsoluteScreenSpacePosition().x)/GetAbsoluteSize().x) + 0.5f;
             mpSliderImage->SetPosition(mfSliderValue, 0.5f, 0.0f, 0.0f);
         }
         //------------------------------------------------------

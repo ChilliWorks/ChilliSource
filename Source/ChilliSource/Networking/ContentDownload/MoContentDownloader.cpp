@@ -37,7 +37,7 @@ namespace ChilliSource
         /// @param Delegate
         /// @return Whether the manifest download has begun
         //----------------------------------------------------------------
-        bool MoContentDownloader::DownloadContentManifest(const ContentDownloader::Delegate& inDelegate)
+        bool MoContentDownloader::DownloadContentManifest(const Delegate& inDelegate)
         {
             mOnContentManifestDownloadCompleteDelegate = inDelegate;
             
@@ -83,7 +83,7 @@ namespace ChilliSource
         /// @param URL string
         /// @param Delegate
         //----------------------------------------------------------------
-        void MoContentDownloader::DownloadPackage(const std::string& instrURL, const ContentDownloader::Delegate& inDelegate)
+        void MoContentDownloader::DownloadPackage(const std::string& instrURL, const Delegate& inDelegate)
         {
             mOnContentDownloadCompleteDelegate = inDelegate;
             
@@ -112,14 +112,14 @@ namespace ChilliSource
                         default:   //OK 
                         case Networking::kHTTPResponseOK:
                         {
-                            mOnContentManifestDownloadCompleteDelegate(ContentDownloader::Result::k_succeeded, inpRequest->GetResponseString());
+                            mOnContentManifestDownloadCompleteDelegate(Result::k_succeeded, inpRequest->GetResponseString());
                             break;
                         }
                         case Networking::kHTTPError:      //Error
                         case Networking::kHTTPBusy:       //Temporary error try again later
                         case Networking::kHTTPNotFound:   //End point doesn't exist
                         {
-                            mOnContentManifestDownloadCompleteDelegate(ContentDownloader::Result::k_failed, inpRequest->GetResponseString());
+                            mOnContentManifestDownloadCompleteDelegate(Result::k_failed, inpRequest->GetResponseString());
                             break;
                         }
                     }
@@ -129,7 +129,7 @@ namespace ChilliSource
                 case HttpRequest::CompletionResult::k_failed:
                 case HttpRequest::CompletionResult::k_cancelled:
                 {
-                    mOnContentManifestDownloadCompleteDelegate(ContentDownloader::Result::k_failed, inpRequest->GetResponseString());
+                    mOnContentManifestDownloadCompleteDelegate(Result::k_failed, inpRequest->GetResponseString());
                     break;
                 }
                 case HttpRequest::CompletionResult::k_flushed:
@@ -140,14 +140,14 @@ namespace ChilliSource
                         default:   //OK 
                         case Networking::kHTTPResponseOK:
                         {
-                            mOnContentManifestDownloadCompleteDelegate(ContentDownloader::Result::k_flushed, inpRequest->GetResponseString());
+                            mOnContentManifestDownloadCompleteDelegate(Result::k_flushed, inpRequest->GetResponseString());
                             break;
                         }
                         case Networking::kHTTPError:      //Error
                         case Networking::kHTTPBusy:       //Temporary error try again later
                         case Networking::kHTTPNotFound:   //End point doesn't exist
                         {
-                            mOnContentManifestDownloadCompleteDelegate(ContentDownloader::Result::k_failed, inpRequest->GetResponseString());
+                            mOnContentManifestDownloadCompleteDelegate(Result::k_failed, inpRequest->GetResponseString());
                             break;
                         }
                     }
@@ -178,7 +178,7 @@ namespace ChilliSource
                         default:   //OK
                         case Networking::kHTTPResponseOK:
                         {
-                            mOnContentDownloadCompleteDelegate(ContentDownloader::Result::k_succeeded, inpRequest->GetResponseString());
+                            mOnContentDownloadCompleteDelegate(Result::k_succeeded, inpRequest->GetResponseString());
                             break;
                         }
                         case Networking::kHTTPMovedTemporarily:      // Redirected
@@ -202,12 +202,12 @@ namespace ChilliSource
                 case HttpRequest::CompletionResult::k_failed:
                 case HttpRequest::CompletionResult::k_cancelled:
                 {
-                    mOnContentDownloadCompleteDelegate(ContentDownloader::Result::k_failed, inpRequest->GetResponseString());
+                    mOnContentDownloadCompleteDelegate(Result::k_failed, inpRequest->GetResponseString());
                     break;
                 }
                 case HttpRequest::CompletionResult::k_flushed:
                 {
-                    mOnContentDownloadCompleteDelegate(ContentDownloader::Result::k_flushed, inpRequest->GetResponseString());
+                    mOnContentDownloadCompleteDelegate(Result::k_flushed, inpRequest->GetResponseString());
                     break;
                 }
             }

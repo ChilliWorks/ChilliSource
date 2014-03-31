@@ -11,8 +11,6 @@
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 
-#include <ChilliSource/Input/Base/InputSystem.h>
-
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 

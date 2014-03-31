@@ -283,41 +283,29 @@ namespace ChilliSource
             mvVelocity = invVelocity;
         }
         //-----------------------------------------------------------
-        /// On Touch Began
-        ///
-        /// Called when the window receives cursor/touch input
-        ///
-        /// @param Touch data
-        /// @return Whether touch has been consumed
         //-----------------------------------------------------------
-        bool ScrollView::OnTouchBegan(const Input::TouchInfo& insTouchInfo)
+        bool ScrollView::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
         {
             if(UserInteraction && Visible)
             {
 				mbTouchActive = true;
-				mvRealPreviousTouchPosition = insTouchInfo.vLocation;
+				mvRealPreviousTouchPosition = in_pointer.m_location;
 				
                 //Stop! Hammer time...
                 mvVelocity = Core::Vector2::ZERO; 
 				mfTouchTravel = 0.0f;
             }
             
-            return GUIView::OnTouchBegan(insTouchInfo);
+            return GUIView::OnPointerDown(in_pointer, in_timestamp, in_pressType);
         }
         //-----------------------------------------------------------
-        /// On Touch Moved
-        ///
-        /// Called when the window receives cursor/touch input
-        ///
-        /// @param Touch data
-        /// @return Whether touch has been consumed
         //-----------------------------------------------------------
-        bool ScrollView::OnTouchMoved(const Input::TouchInfo& insTouchInfo)
+        bool ScrollView::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
         {
-            if(UserInteraction && Visible && mbTouchActive && Contains(insTouchInfo.vLocation))
+            if(UserInteraction && Visible && mbTouchActive && Contains(in_pointer.m_location))
             {
                 //Calculate the displacement
-                mvVelocity = insTouchInfo.vLocation - mvRealPreviousTouchPosition;
+                mvVelocity = in_pointer.m_location - mvRealPreviousTouchPosition;
 				mfTouchTravel += mvVelocity.LengthSquared();
 				
                 if(!ScrollHorizontally)
@@ -329,32 +317,25 @@ namespace ChilliSource
                     mvVelocity.y = 0.0f;
                 }
 				
-				mvNextRealPreviousTouchPosition = insTouchInfo.vLocation;
+				mvNextRealPreviousTouchPosition = in_pointer.m_location;
 				mbTouchMoved = true;
 				
-				GUIView::OnTouchMoved(insTouchInfo);
+				GUIView::OnPointerMoved(in_pointer, in_timestamp);
             }
             
             return false;
         }
 		//-----------------------------------------------------------
-        /// On Touch Ended
-        ///
-        /// Called when the window receives cursor/touch input
-        ///
-        /// @param Touch data
         //-----------------------------------------------------------
-        void ScrollView::OnTouchEnded(const Input::TouchInfo& insTouchInfo)
+        void ScrollView::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
         {
 			if(UserInteraction && Visible)
 			{
 				mbTouchActive = false;
 			}
 
-            GUIView::OnTouchEnded(insTouchInfo);
-
+            GUIView::OnPointerUp(in_pointer, in_timestamp, in_pressType);
         }
-        
         //-------------------------------------------------------
         /// Draw
         ///

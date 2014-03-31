@@ -67,7 +67,6 @@ namespace ChilliSource
                         pSceneDesc->SetOwningResourceManager(this);
                         pSceneDesc->SetFilename(instrFilePath);
                         pSceneDesc->SetStorageLocation(ineStorageLocation);
-                        pSceneDesc->SetLoaded(true);
                         
                         return pSceneDesc;
                     }
@@ -96,7 +95,6 @@ namespace ChilliSource
                     pSceneDesc->SetOwningResourceManager(this);
                     pSceneDesc->SetFilename(instrFilePath);
                     pSceneDesc->SetStorageLocation(ineStorageLocation);
-                    pSceneDesc->SetLoaded(false);
 
                     if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {

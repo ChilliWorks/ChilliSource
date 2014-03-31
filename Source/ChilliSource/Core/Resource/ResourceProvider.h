@@ -79,15 +79,13 @@ namespace ChilliSource
             /// @return Whether or not the resource async load was
             /// successfully started.
             //----------------------------------------------------
-			virtual bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) {return false;};
+			virtual bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) = 0;
             //----------------------------------------------------
             /// Destructor.
             ///
             /// @author S Downie
             //----------------------------------------------------
 			virtual ~ResourceProvider() {}
-            
-            virtual bool StreamResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) {return false;};
 		};
 	}	
 }

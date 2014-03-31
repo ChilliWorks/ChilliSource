@@ -193,22 +193,27 @@ namespace ChilliSource
 			//-------------------------------------------------
 			void OnKeyboardTextInputDisabled();
             //-----------------------------------------------------------
-            /// On Touch Began
-            ///
             /// Called when the window receives cursor/touch input
             ///
-            /// @param Touch data
+            /// @author S Downie
+            ///
+            /// @param The pointer
+            /// @param The time stamp.
+            /// @param The press type.
+            ///
             /// @return Whether touch has been consumed
             //-----------------------------------------------------------
-			bool OnTouchBegan(const Input::TouchInfo & insTouchInfo);
+			bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType) override;
 			//-----------------------------------------------------------
-			/// On Touch Ended
-			///
 			/// Called when the view stops receiving cursor/touch input
+            ///
+            /// @author S Downie
 			///
-			/// @param Touch data
+			/// @param The pointer
+            /// @param The time stamp.
+            /// @param The press type.
 			//-----------------------------------------------------------
-			void OnTouchEnded(const Input::TouchInfo & insTouchInfo);
+			void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType) override;
 			//-------------------------------------------------------
 			/// Draw
 			///

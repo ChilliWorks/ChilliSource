@@ -287,45 +287,45 @@ namespace ChilliSource
 			
         protected:
             //-----------------------------------------------------------
-            /// On Button Select
-            ///
             /// Triggered when a button event happens that should
             /// cause the button to Off
             ///
-            /// @param Button that triggered event
-            /// @param Touch info
-            //-----------------------------------------------------------
-            virtual void OnButtonSelect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
-            //-----------------------------------------------------------
-            /// On Button Activated
+            /// @author S Downie
             ///
+            /// @param Button that triggered event
+            /// @param The pointer.
+            //-----------------------------------------------------------
+            virtual void OnButtonSelect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            //-----------------------------------------------------------
             /// Triggered when a button event happens that should
             /// cause the button to fire
             ///
-            /// @param Button that triggered event
-            /// @param Touch info
-            //-----------------------------------------------------------
-            virtual void OnButtonActivated(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
-            //-----------------------------------------------------------
-            /// On Button De-select
+            /// @author S Downie
             ///
+            /// @param Button that triggered event
+            /// @param The pointer.
+            //-----------------------------------------------------------
+            virtual void OnButtonActivated(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            //-----------------------------------------------------------
             /// Triggered when a button event happens that should
             /// cause the button to return to On
             ///
-            /// @param Button that triggered event
-            /// @param Touch info
-            //-----------------------------------------------------------
-            virtual void OnButtonDeselect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
-            //-----------------------------------------------------------
-            /// On Button De-select Threshold
+            /// @author S Downie
             ///
+            /// @param Button that triggered event
+            /// @param The pointer.
+            //-----------------------------------------------------------
+            virtual void OnButtonDeselect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            //-----------------------------------------------------------
             /// Triggered when a button event happens that should
             /// cause the button to return to On
             ///
+            /// @author S Downie
+            ///
             /// @param Button that triggered event
-            /// @param Touch info
+            /// @param The pointer.
             //-----------------------------------------------------------
-            virtual void OnButtonDeselectThreshold(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            virtual void OnButtonDeselectThreshold(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
 			//-----------------------------------------------------------
 			/// Draw
 			///

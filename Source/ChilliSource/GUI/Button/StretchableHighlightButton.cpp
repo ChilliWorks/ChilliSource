@@ -643,13 +643,12 @@ namespace ChilliSource
             return HeightMaintain;
         }
         //-----------------------------------------------------------
-        /// On Button Select
         //-----------------------------------------------------------
-        void StretchableHighlightButton::OnButtonSelect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void StretchableHighlightButton::OnButtonSelect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
         {
             if(!mbSelected)
 			{
-                mvSelectedPos = insTouchInfo.vLocation;
+                mvSelectedPos = in_pointer.m_location;
                 
 				mbSelected = true;
 				
@@ -673,20 +672,18 @@ namespace ChilliSource
 			}
         }
         //-----------------------------------------------------------
-        /// On Button Activated
         //-----------------------------------------------------------
-        void StretchableHighlightButton::OnButtonActivated(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void StretchableHighlightButton::OnButtonActivated(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
         {
             if(mbSelected)
 			{
-				OnButtonDeselect(inpButton, insTouchInfo);
+				OnButtonDeselect(in_button, in_pointer);
 				mOnButtonActivatedEvent.NotifyConnections(this);
 			}
         }
         //-----------------------------------------------------------
-        /// On Button De-select
         //-----------------------------------------------------------
-        void StretchableHighlightButton::OnButtonDeselect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void StretchableHighlightButton::OnButtonDeselect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
         {
             if(mbSelected)
 			{
@@ -706,16 +703,15 @@ namespace ChilliSource
 			}
         }
         //-----------------------------------------------------------
-        /// On Button De-select Threshold
         //-----------------------------------------------------------
-        void StretchableHighlightButton::OnButtonDeselectThreshold(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void StretchableHighlightButton::OnButtonDeselectThreshold(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
         {
             const f32 kfThreshold = (f32)(Core::Screen::GetOrientedWidth()) * 0.02f;
-            f32 fDistX = std::abs(insTouchInfo.vLocation.x - mvSelectedPos.x);
-            f32 fDisty = std::abs(insTouchInfo.vLocation.y - mvSelectedPos.y);
+            f32 fDistX = std::abs(in_pointer.m_location.x - mvSelectedPos.x);
+            f32 fDisty = std::abs(in_pointer.m_location.y - mvSelectedPos.y);
 			if(fDistX >= kfThreshold || fDisty >= kfThreshold)
 			{
-                OnButtonDeselect(inpButton, insTouchInfo);
+                OnButtonDeselect(in_button, in_pointer);
 			}
         }
         //-----------------------------------------------------------

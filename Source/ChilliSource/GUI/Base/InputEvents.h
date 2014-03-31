@@ -11,13 +11,13 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Input/Pointer/TouchScreen.h>
+#include <ChilliSource/Input/Pointer/PointerSystem.h>
 
 namespace ChilliSource
 {
     namespace GUI
     {
-        typedef std::function<void(GUIView*, const Input::TouchInfo&)> GUIEventDelegate;
+        typedef std::function<void(GUIView*, const Input::PointerSystem::Pointer&)> GUIEventDelegate;
         
         class InputEvents
         {
@@ -87,24 +87,25 @@ namespace ChilliSource
             /// @param Touch data
             /// @param Whether the view contains the touch
             //-----------------------------------------------------------
-            void OnTouchBegan(GUIView* inpView, const Input::TouchInfo & insTouchInfo, bool in_containsTouch);
+            void OnPointerDown(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer, bool in_containsTouch);
             //-----------------------------------------------------------
-            /// On Touch Moved
-            ///
             /// Called when the window receives cursor/touch input
             ///
+            /// @author S Downie
+            ///
             /// @param Touch data
+            ///
             /// @return Whether the view contains the touch
             //-----------------------------------------------------------
-            bool OnTouchMoved(GUIView* inpView, const Input::TouchInfo & insTouchInfo);
+            bool OnPointerMoved(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer);
             //-----------------------------------------------------------
-            /// On Touch Ended
-            ///
             /// Called when the window stops receiving cursor/touch input
+            ///
+            /// @author S Downie
             ///
             /// @param Touch data
             //-----------------------------------------------------------
-            void OnTouchEnded(GUIView* inpView, const Input::TouchInfo & insTouchInfo);
+            void OnPointerUp(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer);
             
         protected:
             

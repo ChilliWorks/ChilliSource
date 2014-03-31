@@ -14,11 +14,11 @@
 #ifndef _MOFLO_PLATFORM_ANDROID_TOUCH_INPUT_JAVA_INTERFACE_JAVA_INTERFACE_
 #define _MOFLO_PLATFORM_ANDROID_TOUCH_INPUT_JAVA_INTERFACE_JAVA_INTERFACE_
 
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/_JavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Input/Pointer/TouchScreen.h>
 
 #include <jni.h>
-
 #include <map>
 
 namespace ChilliSource
@@ -37,22 +37,24 @@ namespace ChilliSource
 			/// @param a pointer to the virtual machine
 			//--------------------------------------------------------------------------------------
 			static void SetupJavaInterface(JavaVM* inpJavaVM);
-			//--------------------------------------------------------------------------------------
-			/// Register Touch Screen
+			//---------------------------------------------------
+			/// Sets the Pointer system that should be used. If
+			/// null is passed to this, no pointer system will
+			/// be used.
 			///
-			/// Registers the current android touch screen that is to be used.
+			/// @author I Copland
 			///
-			/// @param CTouchScreen* a pointer to the android touch screen.
-			//--------------------------------------------------------------------------------------
-			static void RegisterTouchScreen(TouchScreen* inpTouchScreen);
-			//--------------------------------------------------------------------------------------
-			/// Get Touch Screen
+			/// @param The pointer system.
+			//---------------------------------------------------
+			static void SetPointerSystem(PointerSystem* in_pointerSystem);
+			//---------------------------------------------------
+			/// @author I Copland
 			///
-			/// @return CTouchScreen* returns the currently active touch screen or null.
-			//--------------------------------------------------------------------------------------
-			static TouchScreen* GetTouchScreen();
+			/// @return The pointer system.
+			//---------------------------------------------------
+			static PointerSystem* GetPointerSystem();
 		private:
-			static TouchScreen * mspTouchScreen;
+			static PointerSystem* s_pointerSystem;
 		};
 	}
 }

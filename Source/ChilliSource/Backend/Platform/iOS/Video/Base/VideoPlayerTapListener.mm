@@ -8,7 +8,6 @@
 
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
 #import <QuartzCore/QuartzCore.h>
-#include <ChilliSource/Backend/Platform/iOS/Input/Pointer/TouchScreen.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
 

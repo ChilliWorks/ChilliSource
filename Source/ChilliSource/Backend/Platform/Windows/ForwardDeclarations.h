@@ -23,11 +23,9 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(ImageProvider);
 		CS_FORWARDDECLARE_CLASS(PngImage);
 		//------------------------------------------------------
-		/// Image
+		/// Input
 		//------------------------------------------------------
-		CS_FORWARDDECLARE_CLASS(InputSystem);
-		CS_FORWARDDECLARE_CLASS(Mouse);
-		CS_FORWARDDECLARE_CLASS(TouchScreen);
+		CS_FORWARDDECLARE_CLASS(PointerSystem);
 		//------------------------------------------------------
 		/// Networking
 		//------------------------------------------------------

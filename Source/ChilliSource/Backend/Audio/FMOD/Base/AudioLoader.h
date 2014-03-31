@@ -88,7 +88,7 @@ namespace ChilliSource
             ///
 			/// @return Success
 			//----------------------------------------------------------------------------
-			bool StreamResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource);
+			bool StreamResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// @author S Downie
 			///

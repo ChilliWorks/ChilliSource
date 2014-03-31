@@ -31,7 +31,7 @@ namespace ChilliSource
         {
             m_canAddSystems = true;
             //States will always have a scene by default
-            m_scene = CreateSystem<Scene>(Application::Get()->GetInputSystem());
+            m_scene = CreateSystem<Scene>();
             CreateSystems();
             m_canAddSystems = false;
             

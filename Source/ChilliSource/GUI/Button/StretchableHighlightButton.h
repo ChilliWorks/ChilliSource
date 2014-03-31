@@ -238,45 +238,45 @@ namespace ChilliSource
             
         private:
             //-----------------------------------------------------------
-            /// On Button Select
-            ///
             /// Triggered when a button event happens that should
             /// cause the button to highlight
             ///
-            /// @param Button that triggered event
-            /// @param Touch info
-            //-----------------------------------------------------------
-            void OnButtonSelect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
-            //-----------------------------------------------------------
-            /// On Button Activated
+            /// @author I Copland
             ///
+            /// @param Button that triggered event
+            /// @param The pointer.
+            //-----------------------------------------------------------
+            void OnButtonSelect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            //-----------------------------------------------------------
             /// Triggered when a button event happens that should
             /// cause the button to fire
             ///
-            /// @param Button that triggered event
-            /// @param Touch info
-            //-----------------------------------------------------------
-            void OnButtonActivated(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
-            //-----------------------------------------------------------
-            /// On Button De-select
+            /// @author I Copland
             ///
+            /// @param Button that triggered event
+            /// @param The pointer.
+            //-----------------------------------------------------------
+            void OnButtonActivated(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            //-----------------------------------------------------------
             /// Triggered when a button event happens that should
             /// cause the button to return to normal
             ///
-            /// @param Button that triggered event
-            /// @param Touch info
-            //-----------------------------------------------------------
-            void OnButtonDeselect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
-            //-----------------------------------------------------------
-            /// On Button De-select Threshold
+            /// @author I Copland
             ///
+            /// @param Button that triggered event
+            /// @param The pointer.
+            //-----------------------------------------------------------
+            void OnButtonDeselect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            //-----------------------------------------------------------
             /// Triggered when a button event happens that should
             /// cause the button to return to normal
             ///
+            /// @author I Copland
+            ///
             /// @param Button that triggered event
-            /// @param Touch info
+            /// @param The pointer.
             //-----------------------------------------------------------
-            void OnButtonDeselectThreshold(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            void OnButtonDeselectThreshold(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
             
         private:
             Rendering::SpriteSheetSPtr mCurrentSpriteSheet;

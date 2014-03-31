@@ -38,19 +38,30 @@ namespace ChilliSource
             /// @return New backend instance
             //-------------------------------------------------------
             static AudioLoaderUPtr Create(AudioSystem* in_system);
-            //-------------------------------------------------------
-            /// Virtual destructor
+            //----------------------------------------------------------------------------
+			/// Stream audio resource from the given file
             ///
             /// @author S Downie
-            //-------------------------------------------------------
-			virtual ~AudioLoader(){}
-			
+            ///
+            /// @param The storage location to load from
+			/// @param Filename
+			/// @param [Out] Resource object
+            ///
+			/// @return Success
+			//----------------------------------------------------------------------------
+			virtual bool StreamResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource) = 0;
 			//----------------------------------------------------------------------------
 			/// Create Audio Listener
 			///
 			/// @return Audio listener
 			//----------------------------------------------------------------------------
 			virtual AudioListenerUPtr CreateAudioListener() = 0;
+            //-------------------------------------------------------
+            /// Virtual destructor
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+			virtual ~AudioLoader(){}
             
         protected:
             

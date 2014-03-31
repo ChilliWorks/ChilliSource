@@ -128,6 +128,7 @@ namespace ChilliSource
                 outpImage->SetData(pubyBitmapData);
                 outpImage->SetWidth(sHeader.m_width);
                 outpImage->SetHeight(sHeader.m_height);
+                outpImage->SetLoaded(true);
             }
             //-------------------------------------------------------
             /// Reads a version 3 formatted .moimage file
@@ -201,6 +202,7 @@ namespace ChilliSource
                 outpImage->SetData(pubyBitmapData);
                 outpImage->SetWidth(sHeader.m_width);
                 outpImage->SetHeight(sHeader.m_height);
+                outpImage->SetLoaded(true);
             }
         }
         

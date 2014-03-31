@@ -1,215 +1,238 @@
 //
 //  ContentManagementSystem.cpp
-//  moFlow
+//  Chilli Source
 //
-//  Created by Scott Downie on 04/07/2011.
+//  Created by S Downie on 04/07/2011.
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
 #include <ChilliSource/Networking/ContentDownload/ContentManagementSystem.h>
 
-#include <ChilliSource/Core/File/TweakableConstants.h>
-#include <ChilliSource/Core/Cryptographic/HashMD5.h>
-#include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
-#include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/File/LocalDataStore.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
+#include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/FileStream.h>
+#include <ChilliSource/Core/File/LocalDataStore.h>
+#include <ChilliSource/Core/File/TweakableConstants.h>
 #include <ChilliSource/Core/Minizip/unzip.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace ChilliSource
 {
     namespace Networking
     {
-        CS_DEFINE_NAMEDTYPE(ContentManagementSystem);
-        
-        //-----------------------------------------------------------
-        /// Constructor
-        ///
-        /// @param Content downloader
-		/// @param Current application version 
-        /// @param Array of tags
-        //-----------------------------------------------------------
-        ContentManagementSystem::ContentManagementSystem(IContentDownloader* inpContentDownloader) 
-        : mpContentDownloader(inpContentDownloader), mpServerManifest(nullptr), 
-        muRunningToDownloadTotal(0), muRunningDownloadedTotal(0), mbDLCCachePurged(false)
+        namespace
         {
-            mstrContentDirectory = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
+            //--------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A filepath.
+            ///
+            /// @return Whether or not the given path contains a
+            /// directory path.
+            //--------------------------------------------------------
+            bool ContainsDirectoryPath(const std::string& instrPath)
+            {
+                return (instrPath.find_first_of("/") != std::string::npos);
+            }
+            //--------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A filepath.
+            ///
+            /// @return Whether or not the filepath points to a file.
+            //--------------------------------------------------------
+            bool IsFile(const std::string& instrPath)
+            {
+                return (instrPath.find_first_of(".") != std::string::npos);
+            }
+            //--------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A filepath.
+            ///
+            /// @return The path of the directory the file is contained
+            /// in.
+            //--------------------------------------------------------
+            std::string GetPathExcludingFileName(const std::string& instrPath)
+            {
+                u32 udwOffset = instrPath.find_last_of("/");
+                if(udwOffset != std::string::npos)
+                {
+                    return instrPath.substr(0, udwOffset);
+                }
+                
+                return "";
+            }
+            //--------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A filepath.
+            ///
+            /// @return Returns just the filename portion of the file
+            /// path.
+            //--------------------------------------------------------
+            std::string GetFileNameExcludingPath(const std::string& instrPath)
+            {
+                u32 udwOffset = instrPath.find_last_of("/");
+                if(udwOffset != std::string::npos)
+                {
+                    if(udwOffset + 1 < instrPath.size())
+                    {
+                        return instrPath.substr(udwOffset+1, instrPath.size());
+                    }
+                }
+                
+                return instrPath;
+            }
+            //--------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A filepath.
+            ///
+            /// @return The root folder without the path.
+            //--------------------------------------------------------
+            std::string GetRootFolderExcludingPath(const std::string& instrPath)
+            {
+                u32 udwOffset = instrPath.find_first_of("/", 1);
+                if(udwOffset != std::string::npos)
+                {
+                    return instrPath.substr(0, udwOffset);
+                }
+                
+                return "";
+            }
+        }
+        CS_DEFINE_NAMEDTYPE(ContentManagementSystem);
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        ContentManagementSystemUPtr ContentManagementSystem::Create(IContentDownloader* in_contentDownloader)
+        {
+            return ContentManagementSystemUPtr(new ContentManagementSystem(in_contentDownloader));
         }
         //-----------------------------------------------------------
-        /// Load Local Manifest 
-        ///
-        /// Load the client side cached content manifest if one
-        /// exists
-        ///
-        /// @param TiXmlDocument
         //-----------------------------------------------------------
-        void ContentManagementSystem::LoadLocalManifest(TiXmlDocument* inpCurrentManifest)
+        ContentManagementSystem::ContentManagementSystem(IContentDownloader* in_contentDownloader)
+            : m_contentDownloader(in_contentDownloader), m_serverManifest(nullptr),  m_runningToDownloadTotal(0),
+            m_runningDownloadedTotal(0), m_dlcCachePurged(false)
+        {
+        }
+        //------------------------------------------------------------
+        //-----------------------------------------------------------
+        void ContentManagementSystem::OnInit()
+        {
+            m_contentDirectory = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        bool ContentManagementSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        {
+            return in_interfaceId == ContentManagementSystem::InterfaceID;
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        void ContentManagementSystem::LoadLocalManifest(TiXmlDocument* in_currentManifest)
         {
             //The manifest lives in the documents directory
-            inpCurrentManifest->LoadFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
+            in_currentManifest->LoadFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
             
             //If there is no DLC we should check to see if there ever was any
-            if(!inpCurrentManifest->RootElement() && Core::LocalDataStore::GetSingletonPtr()->HasValueForKey("MOCMSCachedDLC"))
+            if(!in_currentManifest->RootElement() && Core::LocalDataStore::GetSingletonPtr()->HasValueForKey("MOCMSCachedDLC"))
             {
-                mbDLCCachePurged = true;
+                m_dlcCachePurged = true;
             }
         }
         //-----------------------------------------------------------
-        /// Get Manifest Checksum for File
-        ///
-        /// @param File name
-        /// @return Checksum of file as found in the current manifest
         //-----------------------------------------------------------
-        std::string ContentManagementSystem::GetManifestChecksumForFile(const std::string& instrFilename)
+        std::string ContentManagementSystem::GetManifestChecksumForFile(const std::string& in_filename)
         {
-            return CalculateChecksum(Core::StorageLocation::k_DLC, instrFilename);
+            return CalculateChecksum(Core::StorageLocation::k_DLC, in_filename);
         }
 		//-----------------------------------------------------------
-		/// Calculate Checksum
-		///
-		/// Calculate a checksum for the file. This involves
-		/// performing an MD5 hash of the file and converting that
-		/// to base 64 encoded and then trimming the trailing '='
-		///
-		/// @param File location
-		/// @param File path
-		/// @return Checksum string
 		//-----------------------------------------------------------
-		std::string ContentManagementSystem::CalculateChecksum(Core::StorageLocation ineLocation, const std::string& instrFilePath)
+		std::string ContentManagementSystem::CalculateChecksum(Core::StorageLocation in_location, const std::string& in_filePath)
 		{
-            std::string strMD5Checksum = Core::Application::Get()->GetFileSystem()->GetFileMD5Checksum(ineLocation, instrFilePath);
+            std::string strMD5Checksum = Core::Application::Get()->GetFileSystem()->GetFileMD5Checksum(in_location, in_filePath);
 			std::string strBase64Encoded = Core::BaseEncoding::Base64Encode(strMD5Checksum);
 			Core::StringUtils::ChopTrailingChars(strBase64Encoded, '=');
 			return strBase64Encoded;
 		}
         //-----------------------------------------------------------
-        /// Is A
-        ///
-        /// @param Interface ID to compare
-        /// @return Whether system is of that type
-        //-----------------------------------------------------------
-        bool ContentManagementSystem::IsA(Core::InterfaceIDType inInterfaceID) const
-        {
-            return inInterfaceID == ContentManagementSystem::InterfaceID;
-        }
-        //-----------------------------------------------------------
-        /// Clear Download Data
-        ///
-        /// Data is cached in memory and only written to disc
-        /// when the download is successful; at which point
-        /// we can clear the data and remove any temp files
         //-----------------------------------------------------------
         void ContentManagementSystem::ClearDownloadData()
         {
         	//Clear the old crap
-            CS_SAFEDELETE(mpServerManifest);
-            mRemovePackageIDs.clear();
-            mPackageDetails.clear();
+            CS_SAFEDELETE(m_serverManifest);
+            m_removePackageIds.clear();
+            m_packageDetails.clear();
         }
         //-----------------------------------------------------------
-        /// Check For Updates
-        ///
-        /// Get the content manifest from the asset server and
-        /// check for any changes with the local copy
-        ///
-        /// The location of the asset server is usually the Tag 
-        /// server but may be a third party storage solution based on
-        /// the SKU (i.e. Google's Asset Store). The URL is taken
-        /// from the tweak constants
-        ///
-        /// @param Delegate to callback notifying whether an update
-        /// is required
         //-----------------------------------------------------------
-        void ContentManagementSystem::CheckForUpdates(const ContentManagementSystem::CheckForUpdateDelegate& inDelegate)
+        void ContentManagementSystem::CheckForUpdates(const ContentManagementSystem::CheckForUpdateDelegate& in_delegate)
         {
-            CS_LOG_DEBUG("CMS: Checking for content updates...");
-            
             //Clear any stale data from last update check
             ClearDownloadData();
             
             //Have the downloader request the manifest in it's own way
-            if(mpContentDownloader->DownloadContentManifest(Core::MakeDelegate(this, &ContentManagementSystem::OnContentManifestDownloadComplete)))
+            if(m_contentDownloader->DownloadContentManifest(Core::MakeDelegate(this, &ContentManagementSystem::OnContentManifestDownloadComplete)))
             {
                 //The request has started successfully
-                mOnUpdateCheckCompleteDelegate = inDelegate;
+                m_onUpdateCheckCompleteDelegate = in_delegate;
             }
             else
             {
                 //The request has failed to start most likely due to internet connection
                 CS_LOG_ERROR("CMS: Internet not reachable");
-                if(mbDLCCachePurged)
+                if(m_dlcCachePurged)
                 {
-                    inDelegate(UpdateResult::k_updateCheckFailedBlocking);
+                    in_delegate(CheckForUpdatesResult::k_checkFailedBlocking);
                 }
                 else
                 {
-                    inDelegate(UpdateResult::k_updateCheckFailed);
+                    in_delegate(CheckForUpdatesResult::k_checkFailed);
                 }
             }
         }
         //-----------------------------------------------------------
-        /// Download Updates
-        ///
-        /// Having checked for updates and been notified whether
-        /// there are updates pending this function should be
-        /// called to begin downloading any out of date content
-        ///
-        /// Call GetDownloadProgress to get the progress value
-        /// to update any progress UI
-        ///
-        /// @param Delegate to call when download is complete
         //-----------------------------------------------------------
-        void ContentManagementSystem::DownloadUpdates(const ContentManagementSystem::CompleteDelegate& inDelegate)
+        void ContentManagementSystem::DownloadUpdates(const ContentManagementSystem::CompleteDelegate& in_delegate)
         {
-        	mOnDownloadCompleteDelegate = inDelegate;
-            mudwCurrentPackageDownload = 0;
+        	m_onDownloadCompleteDelegate = in_delegate;
+            m_currentPackageDownload = 0;
             
-            if(!mPackageDetails.empty())
+            if(!m_packageDetails.empty())
             {
             	//Add a temp directory so that the packages are stored atomically and only overwrite
                 //the originals on full success
                 Core::Application::Get()->GetFileSystem()->CreateDirectory(Core::StorageLocation::k_DLC, "Temp");
-                mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete));
+                m_contentDownloader->DownloadPackage(m_packageDetails[m_currentPackageDownload].m_url, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete));
             }
             else
             {
-            	CS_LOG_DEBUG("CMS: Content update finished");
-                mOnDownloadCompleteDelegate(Result::k_contentSucceeded);
+                m_onDownloadCompleteDelegate(Result::k_succeeded);
             }
         }
         //-----------------------------------------------------------
-        /// Download Next Package
-        ///
-        /// Perform the HTTP request for the next DLC package
         //-----------------------------------------------------------
         void ContentManagementSystem::DownloadNextPackage()
         {
-            mudwCurrentPackageDownload++;
-            mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete));
+            m_currentPackageDownload++;
+            m_contentDownloader->DownloadPackage(m_packageDetails[m_currentPackageDownload].m_url, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete));
         }
         //-----------------------------------------------------------
-        /// Install Updates
-        ///
-        /// Having downloaded the update packages this method
-        /// unzips the packages and overwrites any old assets
-        ///
-        /// @param Delegate to call when Install is complete
         //-----------------------------------------------------------
         void ContentManagementSystem::InstallUpdates(const CompleteDelegate& inDelegate)
         {
-            if(!mPackageDetails.empty() || !mRemovePackageIDs.empty())
+            if(!m_packageDetails.empty() || !m_removePackageIds.empty())
             {
-                CS_LOG_DEBUG("CMS: Installing content updates...");
-				
-				if(!mPackageDetails.empty())
+				if(!m_packageDetails.empty())
 				{
 					//Unzip all the files and overwrite the old manifest
-					Core::WaitCondition waitCondition(mPackageDetails.size());
+					Core::WaitCondition waitCondition(m_packageDetails.size());
 					
-					Core::TaskScheduler::ForEach(mPackageDetails.begin(), mPackageDetails.end(), this, &ContentManagementSystem::ExtractFilesFromPackage, &waitCondition);
+					Core::TaskScheduler::ForEach(m_packageDetails.begin(), m_packageDetails.end(), this, &ContentManagementSystem::ExtractFilesFromPackage, &waitCondition);
 					
 					//Wait on all the packages being unzipped
 					waitCondition.Wait();
@@ -218,99 +241,79 @@ namespace ChilliSource
                 //Remove the temp zips
                 DeleteDirectory("Temp");
                 
-                mPackageDetails.clear();
+                m_packageDetails.clear();
 			
-				if(!mRemovePackageIDs.empty())
+				if(!m_removePackageIds.empty())
 				{
 					//Remove any unused files from the documents
-					Core::WaitCondition waitCondition(mRemovePackageIDs.size());
+					Core::WaitCondition waitCondition(m_removePackageIds.size());
 					
-					Core::TaskScheduler::ForEach(mRemovePackageIDs.begin(), mRemovePackageIDs.end(), this, &ContentManagementSystem::DeleteDirectory, &waitCondition);
+					Core::TaskScheduler::ForEach(m_removePackageIds.begin(), m_removePackageIds.end(), this, &ContentManagementSystem::DeleteDirectory, &waitCondition);
 					
 					//Wait on all the packages being removed
 					waitCondition.Wait();
 				}
                 
                 //Save the new content manifest
-                mpServerManifest->SaveFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
+                m_serverManifest->SaveFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
                 
-                CS_LOG_DEBUG("CMS: Installing content updates complete");
-                
-                mbDLCCachePurged = false;
+                m_dlcCachePurged = false;
                 
                 //Store that we have DLC cached. If there is no DLC on next check then 
                 //we know the cache has been purged and we have to block on download
                 Core::LocalDataStore::GetSingletonPtr()->SetValueForKey("MOCMSCachedDLC", true);
                 
                 //Tell the delegate all is good
-                inDelegate(Result::k_contentSucceeded);
+                inDelegate(Result::k_succeeded);
             }
             else
             {
                 //Tell the delegate all is bad
-                inDelegate(Result::k_contentFailed);
+                inDelegate(Result::k_failed);
             }
             
             ClearDownloadData();
         }
         //-----------------------------------------------------------
-        /// On Content Manifest Download Complete
-        ///
-        /// The manifest file has downloaded we can now compare
-        /// and contrast to check for outdated files
-        ///
-        /// @param Request result
-        /// @param Request response
         //-----------------------------------------------------------
-        void ContentManagementSystem::OnContentManifestDownloadComplete(ContentDownloader::Result ineResult, const std::string& instrManifest)
+        void ContentManagementSystem::OnContentManifestDownloadComplete(IContentDownloader::Result in_result, const std::string& in_manifest)
         {
-            switch(ineResult)
+            switch(in_result)
             {
-                case ContentDownloader::Result::k_succeeded:
-                    CS_LOG_DEBUG("CMS: Content manifest download complete");
-                    mstrServerManifestData += instrManifest;
-                    BuildDownloadList(mstrServerManifestData); 
-                    mstrServerManifestData.clear();
+                case IContentDownloader::Result::k_succeeded:
+                    m_serverManifestData += in_manifest;
+                    BuildDownloadList(m_serverManifestData);
+                    m_serverManifestData.clear();
                     break;
-                case ContentDownloader::Result::k_failed:
-                    CS_LOG_DEBUG("CMS: Content manifest download failed: " + instrManifest);
-                    mstrServerManifestData.clear();
-                    mbDLCCachePurged ? mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailedBlocking) : mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailed);
+                case IContentDownloader::Result::k_failed:
+                    m_serverManifestData.clear();
+                    m_dlcCachePurged ? m_onUpdateCheckCompleteDelegate(CheckForUpdatesResult::k_checkFailedBlocking) : m_onUpdateCheckCompleteDelegate(CheckForUpdatesResult::k_checkFailed);
                     break;
-                case ContentDownloader::Result::k_flushed:
-                    CS_LOG_DEBUG("CMS: Content manifest download flushed");
-                    mstrServerManifestData += instrManifest;
+                case IContentDownloader::Result::k_flushed:
+                    m_serverManifestData += in_manifest;
                     break;
             };
             
             //Reset the listener
-            mOnUpdateCheckCompleteDelegate = nullptr;
+            m_onUpdateCheckCompleteDelegate = nullptr;
         }
         //-----------------------------------------------------------
-        /// On Content Download Complete
-        ///
-        /// The file has downloaded we can now save it to the the 
-        /// cache
-        ///
-        /// @param Request result
-        /// @param Request response
         //-----------------------------------------------------------
-        void ContentManagementSystem::OnContentDownloadComplete(ContentDownloader::Result ineResult, const std::string& instrData)
+        void ContentManagementSystem::OnContentDownloadComplete(IContentDownloader::Result in_result, const std::string& in_data)
         {
-        	switch(ineResult)
+        	switch(in_result)
             {
-                case ContentDownloader::Result::k_succeeded:
+                case IContentDownloader::Result::k_succeeded:
                 {
-                    CS_LOG_DEBUG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package download complete");
-                    if(SavePackageToFile(mPackageDetails[mudwCurrentPackageDownload], instrData, true))
+                    
+                    if(SavePackageToFile(m_packageDetails[m_currentPackageDownload], in_data, true))
                     {
-                        muRunningDownloadedTotal += mPackageDetails[mudwCurrentPackageDownload].udwSize;
+                        m_runningDownloadedTotal += m_packageDetails[m_currentPackageDownload].m_size;
                         
                         //Don't overwrite the old manifest until all the content has been downloaded 
-                        if(mudwCurrentPackageDownload >= (mPackageDetails.size() - 1))
+                        if(m_currentPackageDownload >= (m_packageDetails.size() - 1))
                         {
-                            CS_LOG_DEBUG("CMS: Content update finished");
-                            mOnDownloadCompleteDelegate(Result::k_contentSucceeded);
+                            m_onDownloadCompleteDelegate(Result::k_succeeded);
                         }
                         else
                         {
@@ -320,62 +323,51 @@ namespace ChilliSource
                         break;
                     }
                 }
-                case ContentDownloader::Result::k_failed:
+                case IContentDownloader::Result::k_failed:
                 {
-                	CS_LOG_DEBUG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package download failed");
-                    
                     //Delete all temp zip files and cancel the outstanding requests
                     DeleteDirectory("Temp");
                     
-                    if(mOnDownloadCompleteDelegate)
+                    if(m_onDownloadCompleteDelegate)
                     {
-                        mOnDownloadCompleteDelegate(Result::k_contentFailed);
+                        m_onDownloadCompleteDelegate(Result::k_failed);
                     }
                     break;
                 }
-                case ContentDownloader::Result::k_flushed:
+                case IContentDownloader::Result::k_flushed:
                 {
-                	CS_LOG_DEBUG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package exceeds buffer size and is being flushed");
-                    SavePackageToFile(mPackageDetails[mudwCurrentPackageDownload], instrData, false);
+                    SavePackageToFile(m_packageDetails[m_currentPackageDownload], in_data, false);
                     break;
                 }
             }
         }
         //-----------------------------------------------------------
-        /// Build Download List
-        ///
-        /// Check if an existing content manifest exists and
-        /// construct a list of the files that require updating
-        /// then overwrite the old manifest with the new one
-        ///
-        /// @param String containing the server manifest
         //-----------------------------------------------------------
-        void ContentManagementSystem::BuildDownloadList(const std::string& instrServerManifest)
+        void ContentManagementSystem::BuildDownloadList(const std::string& in_serverManifest)
         {
 			//Validate the server manifest
-            mpServerManifest = new TiXmlDocument();
-            mpServerManifest->Parse(instrServerManifest.c_str(), 0, TIXML_ENCODING_UTF8);
+            m_serverManifest = new TiXmlDocument();
+            m_serverManifest->Parse(in_serverManifest.c_str(), 0, TIXML_ENCODING_UTF8);
             
-            if(!mpServerManifest->RootElement())
+            if(!m_serverManifest->RootElement())
             {
                 CS_LOG_ERROR("CMS: Server content manifest is invalid");
-                if(mbDLCCachePurged)
+                if(m_dlcCachePurged)
                 {
-                    mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailedBlocking);
+                    m_onUpdateCheckCompleteDelegate(CheckForUpdatesResult::k_checkFailedBlocking);
                 }
                 else
                 {
-                    mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailed);
+                    m_onUpdateCheckCompleteDelegate(CheckForUpdatesResult::k_checkFailed);
                 }
 
                 return;
             }
             
             //Check if DLC is enabled
-            if(!Core::XMLUtils::GetAttributeValueOrDefault<bool>(mpServerManifest->RootElement(), "DLCEnabled", false))
+            if(!Core::XMLUtils::GetAttributeValueOrDefault<bool>(m_serverManifest->RootElement(), "DLCEnabled", false))
             {
-                CS_LOG_DEBUG("CMS: DLC disabled by server");
-				mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateNotAvailable);
+				m_onUpdateCheckCompleteDelegate(CheckForUpdatesResult::k_notAvailable);
                 return;
             }
             
@@ -387,7 +379,7 @@ namespace ChilliSource
 			if(!pCurrentManifest || !pCurrentManifest->RootElement())
 			{
                 //Grab all the URL's from the new manifest
-                TiXmlElement* pPackageEl = Core::XMLUtils::FirstChildElementWithName(mpServerManifest->RootElement(), "Package");
+                TiXmlElement* pPackageEl = Core::XMLUtils::FirstChildElementWithName(m_serverManifest->RootElement(), "Package");
                 while(pPackageEl)
                 {
                     //If the package is not in the bundle it will download
@@ -421,7 +413,7 @@ namespace ChilliSource
                 }
 				
                 //Now process the server manifest and see whats different between the two
-                TiXmlElement* pServerPackageEl = Core::XMLUtils::FirstChildElementWithName(mpServerManifest->RootElement(), "Package");
+                TiXmlElement* pServerPackageEl = Core::XMLUtils::FirstChildElementWithName(m_serverManifest->RootElement(), "Package");
                 while(pServerPackageEl)
                 {
                     //Store the local ID's and checksums for comparison later
@@ -463,16 +455,14 @@ namespace ChilliSource
                                 {
                                     std::string strPackageUrl = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pServerPackageEl, "URL", "");
                                     u32 udwPackageSize = Core::XMLUtils::GetAttributeValueOrDefault<u32>(pServerPackageEl, "Size", 0);
-                                    muRunningToDownloadTotal += udwPackageSize;
-                                    
-                                    CS_LOG_DEBUG("CMS: " + strServerPackageID + " package requires updating of size : " + Core::ToString(udwPackageSize));
-                                    
-                                    PackageDetails sPackageDetails;
-                                    sPackageDetails.strID = strServerPackageID;
-                                    sPackageDetails.strURL = strPackageUrl;
-                                    sPackageDetails.strChecksum = strServerPackageChecksum;
-                                    sPackageDetails.udwSize = udwPackageSize;
-                                    mPackageDetails.push_back(sPackageDetails);
+                                    m_runningToDownloadTotal += udwPackageSize;
+
+                                    PackageDetails packageDetails;
+                                    packageDetails.m_id = strServerPackageID;
+                                    packageDetails.m_url = strPackageUrl;
+                                    packageDetails.m_checksum = strServerPackageChecksum;
+                                    packageDetails.m_size = udwPackageSize;
+                                    m_packageDetails.push_back(packageDetails);
                                     break;
                                 }
                                 
@@ -496,64 +486,55 @@ namespace ChilliSource
                 //Any packages left in the local manifest need to be removed
                 for(std::unordered_map<std::string, std::string>::iterator it = mapPackageIDToChecksum.begin(); it != mapPackageIDToChecksum.end(); ++it)
                 {
-                    mRemovePackageIDs.push_back(it->first);
+                    m_removePackageIds.push_back(it->first);
                 }
             }
             
             //Notify the delegate of our completion and whether the need to update anything
-            bool bRequiresUpdating = (!mRemovePackageIDs.empty() || !mPackageDetails.empty());
+            bool bRequiresUpdating = (!m_removePackageIds.empty() || !m_packageDetails.empty());
             
-            if(bRequiresUpdating && mbDLCCachePurged)
+            if(bRequiresUpdating && m_dlcCachePurged)
             {
-                mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateAvailableBlocking);
+                m_onUpdateCheckCompleteDelegate(CheckForUpdatesResult::k_availableBlocking);
             }
-            else if(bRequiresUpdating && !mbDLCCachePurged)
+            else if(bRequiresUpdating && !m_dlcCachePurged)
             {
-                mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateAvailable);
+                m_onUpdateCheckCompleteDelegate(CheckForUpdatesResult::k_available);
             }
             else
             {
-                mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateNotAvailable);
+                m_onUpdateCheckCompleteDelegate(CheckForUpdatesResult::k_notAvailable);
             }
             
             CS_SAFEDELETE(pCurrentManifest);
         }
         //-----------------------------------------------------------
-        /// Add To Download List if not in Bundle
-        ///
-        /// The package may be outdated in documents but are
-        /// all the files in bundle up to date
-        ///
-        /// @param Package element
         //-----------------------------------------------------------
-        void ContentManagementSystem::AddToDownloadListIfNotInBundle(TiXmlElement* pPackageEl) 
+        void ContentManagementSystem::AddToDownloadListIfNotInBundle(TiXmlElement* in_packageEl)
         {
             //Check all the file names
-            TiXmlElement* pFileEl = Core::XMLUtils::FirstChildElementWithName(pPackageEl, "File");
+            TiXmlElement* pFileEl = Core::XMLUtils::FirstChildElementWithName(in_packageEl, "File");
             while(pFileEl)
             {
                 std::string strFileName = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pFileEl, "Name", "");
                 std::string strChecksum = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pFileEl, "Checksum", "");
-                std::string strPackageID = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pPackageEl, "ID", "");
+                std::string strPackageID = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(in_packageEl, "ID", "");
                 
                 if(!DoesFileExist(strPackageID + "/" + strFileName, strChecksum, true))
                 {
                     //It doesn't exist in the bundle either!
-                    std::string strPackageUrl = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pPackageEl, "URL", "");
-                    std::string strPackageChecksum = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pPackageEl, "Checksum", "");
+                    std::string strPackageUrl = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(in_packageEl, "URL", "");
+                    std::string strPackageChecksum = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(in_packageEl, "Checksum", "");
                     
-                    u32 udwPackageSize = Core::XMLUtils::GetAttributeValueOrDefault<u32>(pPackageEl, "Size", 0);
-					muRunningToDownloadTotal += udwPackageSize;
+                    u32 udwPackageSize = Core::XMLUtils::GetAttributeValueOrDefault<u32>(in_packageEl, "Size", 0);
+					m_runningToDownloadTotal += udwPackageSize;
                     
-					CS_LOG_DEBUG("CMS: " + strPackageID + " package content is different on server than on device");
-                    CS_LOG_DEBUG("CMS: " + strPackageID + " package requires updating of size : " + Core::ToString(udwPackageSize));
-                    
-                    PackageDetails sPackageDetails;
-                    sPackageDetails.strID = strPackageID;
-                    sPackageDetails.strURL = strPackageUrl;
-                    sPackageDetails.strChecksum = strPackageChecksum;
-                    sPackageDetails.udwSize = udwPackageSize;
-                    mPackageDetails.push_back(sPackageDetails);
+                    PackageDetails packageDetails;
+                    packageDetails.m_id = strPackageID;
+                    packageDetails.m_url = strPackageUrl;
+                    packageDetails.m_checksum = strPackageChecksum;
+                    packageDetails.m_size = udwPackageSize;
+                    m_packageDetails.push_back(packageDetails);
                     //It doesn't matter if all the other files exist we need to pull down this package anyway
                     break;
                 }
@@ -569,105 +550,46 @@ namespace ChilliSource
             }
         }
         //-----------------------------------------------------------
-        /// Save Package To File
-        ///
-        /// Save the zip file to documents directory
-        ///
-        /// @param Package details
-        /// @param Binary zip
-        /// @param Whether the file has finished downloading
-		/// @return Success
         //-----------------------------------------------------------
-        bool ContentManagementSystem::SavePackageToFile(const PackageDetails& insPackageDetails, const std::string& instrZippedPackage, bool inbFullyDownloaded)
+        bool ContentManagementSystem::SavePackageToFile(const PackageDetails& in_packageDetails, const std::string& in_zippedPackage, bool in_fullyDownloaded)
         {
-            std::string strFile = "Temp/" + insPackageDetails.strID + ".packzip";
+            std::string strFile = "Temp/" + in_packageDetails.m_id + ".packzip";
 
             //Append to the file as it can take multiple writes
             Core::FileStreamSPtr pFileStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(Core::StorageLocation::k_DLC, strFile, Core::FileMode::k_writeBinaryAppend);
-			pFileStream->Write((s8*)instrZippedPackage.data(), (s32)instrZippedPackage.size());
+			pFileStream->Write((s8*)in_zippedPackage.data(), (s32)in_zippedPackage.size());
             pFileStream->Close();
             
             //Check if the full file has been written and perform a checksum validation 
-            if(inbFullyDownloaded)
+            if(in_fullyDownloaded)
             {
                 std::string strChecksum = CalculateChecksum(Core::StorageLocation::k_DLC, strFile);
-                CS_LOG_DEBUG("CMS: Package Checksum: " + strChecksum + " Pristine Checksum: " + insPackageDetails.strChecksum);
-                if(strChecksum != insPackageDetails.strChecksum)
+                if(strChecksum != in_packageDetails.m_checksum)
                 {
-                    CS_LOG_ERROR("CMS: " + insPackageDetails.strID + " Package download corrupted");
+                    CS_LOG_ERROR("CMS: " + in_packageDetails.m_id + " Package download corrupted");
                     return false;
                 }
             }
                 
             return true;
         }
-        bool ContainsDirectoryPath(const std::string& instrPath)
-        {
-        	return (instrPath.find_first_of("/") != std::string::npos);
-        }
-        
-        bool IsFile(const std::string& instrPath)
-        {
-        	return (instrPath.find_first_of(".") != std::string::npos);
-        }
-        
-        std::string GetPathExcludingFileName(const std::string& instrPath)
-        {
-			u32 udwOffset = instrPath.find_last_of("/");
-			if(udwOffset != std::string::npos)
-			{
-				return instrPath.substr(0, udwOffset);
-			}
-            
-			return "";
-        }
-        
-        std::string GetFileNameExcludingPath(const std::string& instrPath)
-        {
-			u32 udwOffset = instrPath.find_last_of("/");
-			if(udwOffset != std::string::npos)
-			{
-				if(udwOffset + 1 < instrPath.size())
-				{
-					return instrPath.substr(udwOffset+1, instrPath.size());
-				}
-			}
-            
-			return instrPath;
-        }
-        
-        std::string GetRootFolderExcludingPath(const std::string& instrPath)
-        {
-			u32 udwOffset = instrPath.find_first_of("/", 1);
-			if(udwOffset != std::string::npos)
-			{
-				return instrPath.substr(0, udwOffset);
-			}
-            
-			return "";
-        }
+
         //-----------------------------------------------------------
-        /// Extract Files From Package
-        ///
-        /// Unzip the package and save all the files to the
-        /// documents directory
-        ///
-        /// @param Zipped package
         //-----------------------------------------------------------
-        void ContentManagementSystem::ExtractFilesFromPackage(const ContentManagementSystem::PackageDetails& insPackageDetails) const
+        void ContentManagementSystem::ExtractFilesFromPackage(const ContentManagementSystem::PackageDetails& in_packageDetails) const
         {
 			//Open zip
-			std::string strZipFilePath(mstrContentDirectory + "/Temp/" + insPackageDetails.strID + ".packzip");
+			std::string strZipFilePath(m_contentDirectory + "/Temp/" + in_packageDetails.m_id + ".packzip");
 			
 			unzFile ZippedFile = unzOpen(strZipFilePath.c_str());
 			if(!ZippedFile)
 			{
-				CS_LOG_ERROR("CMS: Cannot unzip content package: " + insPackageDetails.strID);
+				CS_LOG_ERROR("CMS: Cannot unzip content package: " + in_packageDetails.m_id);
 				return;
 			}
 
             //Remove old content before installing the new stuff
-            DeleteDirectory(insPackageDetails.strID);
+            DeleteDirectory(in_packageDetails.m_id);
             
             //Go to the first file in the zip
             const u64 uddwFilenameLength = 256;
@@ -713,72 +635,53 @@ namespace ChilliSource
             unzClose(ZippedFile);
         }
 		//-----------------------------------------------------------
-		/// Get Running Total To Download
-		///
-		/// Returns the current running total of the size of data to download
-		///
-		/// @return The size of the data needing to be downloaded
 		//-----------------------------------------------------------
 		u32 ContentManagementSystem::GetRunningTotalToDownload()
 		{
-			return muRunningToDownloadTotal;
+			return m_runningToDownloadTotal;
 		}
 		//-----------------------------------------------------------
-		/// Get Running Total Downloaded
-		///
-		/// Returns the current running total of the size of data downloaded
-		///
-		/// @return The current running total of the size of data downloaded
 		//-----------------------------------------------------------
 		u32 ContentManagementSystem::GetRunningTotalDownloaded()
 		{
-			return muRunningDownloadedTotal + mpContentDownloader->GetCurrentDownloadedBytes();
+			return m_runningDownloadedTotal + m_contentDownloader->GetCurrentDownloadedBytes();
 		}
         //-----------------------------------------------------------
-        /// Does File Exist
-        ///
-        /// Checks whether the file is within the application and if the
-        /// the checksums match
-        ///
-        /// @param Filename
-        /// @param Checksum
-        /// @param Whether to check only the bundle
-        ///
-        /// @return Whether the file exists
         //-----------------------------------------------------------
-        bool ContentManagementSystem::DoesFileExist(const std::string& instrFilename, const std::string instrChecksum, bool inbCheckOnlyBundle) 
+        IContentDownloader* ContentManagementSystem::GetContentDownloader() const
         {
-            if(inbCheckOnlyBundle)
+            return m_contentDownloader;
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        bool ContentManagementSystem::DoesFileExist(const std::string& in_filename, const std::string in_checksum, bool in_checkOnlyBundle)
+        {
+            if(in_checkOnlyBundle)
             {
-                if(Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + instrFilename))
+                if(Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + in_filename))
                 {
                     //Check if the file has become corrupted
-                    return (CalculateChecksum(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + instrFilename) == instrChecksum);
+                    return (CalculateChecksum(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + in_filename) == in_checksum);
                 }
                 
                 return false;
             }
             else
             {
-                if(Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_DLC, instrFilename))
+                if(Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_DLC, in_filename))
                 {
                     //Check if the file has become corrupted
-                    return (CalculateChecksum(Core::StorageLocation::k_DLC, instrFilename) == instrChecksum);
+                    return (CalculateChecksum(Core::StorageLocation::k_DLC, in_filename) == in_checksum);
                 }
                 
                 return false;
             }
         }
         //-----------------------------------------------------------
-        /// Delete Directory
-        ///
-        /// Deletes a directory from the DLC Storage Location.
-        ///
-        /// @return The directory
         //-----------------------------------------------------------
-        void ContentManagementSystem::DeleteDirectory(const std::string& instrDirectory) const
+        void ContentManagementSystem::DeleteDirectory(const std::string& in_directory) const
         {
-            ChilliSource::Core::Application::Get()->GetFileSystem()->DeleteDirectory(Core::StorageLocation::k_DLC, instrDirectory);
+            ChilliSource::Core::Application::Get()->GetFileSystem()->DeleteDirectory(Core::StorageLocation::k_DLC, in_directory);
         }
     }
 }

@@ -10,7 +10,7 @@
 #define _MOFLOW_NETWORKING_MO_CONTENT_DOWNLOADER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Networking/ContentDownload/ContentDownloader.h>
+#include <ChilliSource/Networking/ContentDownload/IContentDownloader.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 
 namespace ChilliSource
@@ -37,7 +37,7 @@ namespace ChilliSource
             /// @param Delegate
             /// @return Whether the manifest download has begun
             //----------------------------------------------------------------
-            bool DownloadContentManifest(const ContentDownloader::Delegate& inDelegate);
+            bool DownloadContentManifest(const Delegate& inDelegate);
             //----------------------------------------------------------------
             /// Download Package
             ///
@@ -46,7 +46,7 @@ namespace ChilliSource
             /// @param URL string
             /// @param Delegate
             //----------------------------------------------------------------
-            void DownloadPackage(const std::string& instrURL, const ContentDownloader::Delegate& inDelegate);
+            void DownloadPackage(const std::string& instrURL, const Delegate& inDelegate);
             //----------------------------------------------------------------
             /// Get CurrentDownloaded Bytes
             ///
@@ -91,8 +91,8 @@ namespace ChilliSource
             std::vector<std::string> mastrTags;
             
             std::string mstrAssetServerURL;
-            ContentDownloader::Delegate mOnContentManifestDownloadCompleteDelegate;
-            ContentDownloader::Delegate mOnContentDownloadCompleteDelegate;
+            Delegate mOnContentManifestDownloadCompleteDelegate;
+            Delegate mOnContentDownloadCompleteDelegate;
             
             HttpConnectionSystem* mpHttpConnectionSystem;
             

@@ -481,13 +481,12 @@ namespace ChilliSource
             mspDefaultDeSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
         }
         //-----------------------------------------------------------
-        /// On Button Select
         //-----------------------------------------------------------
-        void ToggleButton::OnButtonSelect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void ToggleButton::OnButtonSelect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
         {
 			if(!mbSelected)
 			{
-                mvSelectedPos = insTouchInfo.vLocation;
+                mvSelectedPos = in_pointer.m_location;
                 
 				mbSelected = true;
 				
@@ -498,9 +497,8 @@ namespace ChilliSource
 			}
         }
         //-----------------------------------------------------------
-        /// On Button De-select
         //-----------------------------------------------------------
-        void ToggleButton::OnButtonDeselect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void ToggleButton::OnButtonDeselect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
         {
 			if(mbSelected)
 			{
@@ -513,26 +511,24 @@ namespace ChilliSource
 			}
         }
         //-----------------------------------------------------------
-        /// On Button De-select Threshold
         //-----------------------------------------------------------
-        void ToggleButton::OnButtonDeselectThreshold(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void ToggleButton::OnButtonDeselectThreshold(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
         {
             const f32 kfThreshold = (f32)(Core::Screen::GetOrientedWidth()) * 0.02f;
-            f32 fDistX = std::abs(insTouchInfo.vLocation.x - mvSelectedPos.x);
-            f32 fDisty = std::abs(insTouchInfo.vLocation.y - mvSelectedPos.y);
+            f32 fDistX = std::abs(in_pointer.m_location.x - mvSelectedPos.x);
+            f32 fDisty = std::abs(in_pointer.m_location.y - mvSelectedPos.y);
 			if(fDistX >= kfThreshold || fDisty >= kfThreshold)
 			{
-                OnButtonDeselect(inpButton, insTouchInfo);
+                OnButtonDeselect(in_button, in_pointer);
 			}
         }
         //-----------------------------------------------------------
-        /// On Button Activated
         //-----------------------------------------------------------
-        void ToggleButton::OnButtonActivated(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void ToggleButton::OnButtonActivated(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
         {
 			if(mbSelected)
 			{
-				OnButtonDeselect(inpButton, insTouchInfo);
+				OnButtonDeselect(in_button, in_pointer);
                 
                 mbToggledOn = !mbToggledOn;
 				

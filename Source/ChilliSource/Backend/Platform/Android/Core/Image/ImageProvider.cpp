@@ -53,6 +53,7 @@ namespace ChilliSource
 				out_image->SetWidth(image.GetWidth());
 				out_image->SetHeight(image.GetHeight());
 				out_image->SetFormat(image.GetImageFormat());
+				out_image->SetLoaded(true);
 
 				//release the png image without deallocating the image data
 				image.Release(false);
