@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#ifndef _CHILLISOURCE_CORE_CONTAINERS_HASHEDARRAY_H_
-#define _CHILLISOURCE_CORE_CONTAINERS_HASHEDARRAY_H_
+#ifndef _CHILLISOURCE_CORE_CONTAINER_HASHEDARRAY_H_
+#define _CHILLISOURCE_CORE_CONTAINER_HASHEDARRAY_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
@@ -33,8 +33,6 @@ namespace ChilliSource
         {
         public:
 
-            CS_DECLARE_NOCOPY(HashedArray);
-            
             typedef std::function<u32(TKey)> HashDelegate;
             typedef std::pair<u32, TValue> KeyValue;
             typedef KeyValue* iterator;
@@ -61,19 +59,26 @@ namespace ChilliSource
                 }
             }
             //-------------------------------------------
-            /// Makes a deep copy of the array
+            /// Copy constructor
             ///
             /// @author S Downie
             ///
-            /// @param Array to copy
+            /// @param Object to copy
             //-------------------------------------------
-            void clone(const HashedArray& inRHS)
+            HashedArray(const HashedArray& in_toCopy)
             {
-                m_capacity = inRHS.m_capacity;
-                m_size = inRHS.m_size;
-                m_hashFunction = inRHS.m_hashFunction;
-                m_isSortCacheValid = inRHS.m_isSortCacheValid;
-                std::copy(inRHS.begin(), inRHS.end(), this->begin());
+                Clone();
+            }
+            //-------------------------------------------
+            /// Copy assignment
+            ///
+            /// @author S Downie
+            ///
+            /// @param Object to copy
+            //-------------------------------------------
+            HashedArray& operator=(const HashedArray& in_toCopy)
+            {
+                Clone();
             }
             //-------------------------------------------
             /// @author S Downie
@@ -279,6 +284,21 @@ namespace ChilliSource
             static bool LessThanSortPredicate(const KeyValue& in_lhs, const KeyValue& in_rhs)
             {
                 return in_lhs.first < in_rhs.first;
+            }
+            //-------------------------------------------
+            /// Makes a deep copy of the array
+            ///
+            /// @author S Downie
+            ///
+            /// @param Array to copy
+            //-------------------------------------------
+            void Clone(const HashedArray& inRHS)
+            {
+                m_capacity = inRHS.m_capacity;
+                m_size = inRHS.m_size;
+                m_hashFunction = inRHS.m_hashFunction;
+                m_isSortCacheValid = inRHS.m_isSortCacheValid;
+                std::copy(inRHS.begin(), inRHS.end(), this->begin());
             }
             //--------------------------------------------
             /// Performs a binary search looking for the

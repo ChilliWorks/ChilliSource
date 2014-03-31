@@ -21,7 +21,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------------------------
-        class MaterialFactory : public Core::AppSystem
+        class MaterialFactory final : public Core::AppSystem
         {
         public:
             
