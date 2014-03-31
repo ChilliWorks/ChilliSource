@@ -237,47 +237,32 @@ namespace ChilliSource
         //--------------------------------------------------------------
         Core::FileStreamUPtr FileSystem::CreateFileStream(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::FileMode in_fileMode) const
         {
-            //create the file stream
             Core::FileStreamUPtr fileStream = Core::FileStreamUPtr(new Core::FileStream());
-            
-            //if this is not a read stream, insure that the storage location is writable.
             if (IsWriteMode(in_fileMode) == true)
             {
                 CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "Trying to write to read only storage location!");
  
-                std::string filePath = GetStorageLocationDirectory(in_storageLocation) + in_filePath;
-                newFilestream->Open(filePath, in_fileMode);
+                std::string filePath = GetPathToStorageLocation(in_storageLocation) + in_filePath;
+                fileStream->Open(filePath, in_fileMode);
             }
             else
             {
                 std::string filePath = GetAbsolutePathForFile(in_storageLocation, in_filePath);
-                newFilestream->Open(filePath, in_fileMode);
+                fileStream->Open(filePath, in_fileMode);
             }
             
 			return fileStream;
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool FileSystem::CreateDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const <--- Continue here!
+        bool FileSystem::CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const //<--- Continue here!
         {
-            //check the requested storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
-                return false;
-            }
-            
-            //insure that the storage location is writable.
-            if (IsStorageLocationWritable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-                return false;
-            }
+            CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "Trying to write to read only storage location!");
             
             //create the directory
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
-            std::string path = GetStorageLocationDirectory(ineStorageLocation) + instrDirectory;
-			NSFileManager *fileManager = [NSFileManager defaultManager];
+            std::string path = GetPathToStorageLocation(in_storageLocation) + in_directoryPath;
+			NSFileManager* fileManager = [NSFileManager defaultManager];
             if (![fileManager fileExistsAtPath:[NSString stringWithUTF8String:path.c_str()]])
             {
                 if (![fileManager createDirectoryAtPath:[NSString stringWithUTF8String:path.c_str()] withIntermediateDirectories:YES attributes:nil error:nil])
@@ -295,21 +280,8 @@ namespace ChilliSource
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         bool FileSystem::CopyFile(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceFilepath, 
-                                   Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const
+                                   Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const <------- COntinue here!!
         {
-            //check the requested source storage location is available
-            if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested source Storage Location is not available on this platform!");
-                return false;
-            }
-            
-            //check the requested destination storage location is available
-            if (IsStorageLocationAvailable(ineDestinationStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested destination Storage Location is not available on this platform!");
-                return false;
-            }
             
             //insure that the destination location is writable.
             if (IsStorageLocationWritable(ineDestinationStorageLocation) == false)
