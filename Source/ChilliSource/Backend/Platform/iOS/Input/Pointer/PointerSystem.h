@@ -94,7 +94,7 @@ namespace ChilliSource
             //------------------------------------------------
             void OnDestroy() override;
             
-            std::unordered_map<UITouch*, u64> m_touchToIdMap;
+            std::unordered_map<UITouch*, PointerId> m_touchToIdMap;
             f32 m_densityScale;
         };
     }

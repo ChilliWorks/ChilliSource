@@ -27,8 +27,8 @@ namespace ChilliSource
 		void PointerSystem::OnTouchDown(s32 in_systemId, const Core::Vector2& in_location)
 		{
 			Core::Vector2 touchLocation(in_location.x, Core::Screen::GetOrientedDimensions().y - in_location.y);
-			u64 pointerId = AddPointerCreateEvent(touchLocation);
-			AddPointerDownEvent(pointerId, PressType::k_touch);
+			PointerId pointerId = AddPointerCreateEvent(touchLocation);
+			AddPointerDownEvent(pointerId, InputType::k_touch);
 			m_systemIdToPointerIdMap.emplace(in_systemId, pointerId);
 		}
 		//----------------------------------------------------
@@ -49,7 +49,7 @@ namespace ChilliSource
 			auto it = m_systemIdToPointerIdMap.find(in_systemId);
 			if (it != m_systemIdToPointerIdMap.end())
 			{
-				AddPointerUpEvent(it->second, PressType::k_touch);
+				AddPointerUpEvent(it->second, InputType::k_touch);
 				AddPointerRemoveEvent(it->second);
 				m_systemIdToPointerIdMap.erase(it);
 			}

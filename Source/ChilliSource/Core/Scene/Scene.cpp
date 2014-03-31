@@ -40,7 +40,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void Scene::OnForeground()
 		{
-            m_rootWindow->ListenForTouches();
+            m_rootWindow->StartListeningForPointerInput();
 		}
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
@@ -66,9 +66,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void Scene::OnBackground()
 		{
-			Input::PointerSystem::Pointer pointer;
-			m_rootWindow->_OnPointerUp(pointer, 0.0f, Input::PointerSystem::GetDefaultPressType());
-            m_rootWindow->UnlistenFromTouches();
+			m_rootWindow->StopListeningForPointerInput();
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------

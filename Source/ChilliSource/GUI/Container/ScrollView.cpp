@@ -284,7 +284,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool ScrollView::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
+        bool ScrollView::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
         {
             if(UserInteraction && Visible)
             {
@@ -296,7 +296,7 @@ namespace ChilliSource
 				mfTouchTravel = 0.0f;
             }
             
-            return GUIView::OnPointerDown(in_pointer, in_timestamp, in_pressType);
+            return GUIView::OnPointerDown(in_pointer, in_timestamp, in_inputType);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -327,14 +327,14 @@ namespace ChilliSource
         }
 		//-----------------------------------------------------------
         //-----------------------------------------------------------
-        void ScrollView::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
+        void ScrollView::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
         {
 			if(UserInteraction && Visible)
 			{
 				mbTouchActive = false;
 			}
 
-            GUIView::OnPointerUp(in_pointer, in_timestamp, in_pressType);
+            GUIView::OnPointerUp(in_pointer, in_timestamp, in_inputType);
         }
         //-------------------------------------------------------
         /// Draw

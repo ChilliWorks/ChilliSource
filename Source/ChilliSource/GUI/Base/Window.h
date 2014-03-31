@@ -31,8 +31,8 @@ namespace ChilliSource
             Window();
             virtual ~Window();
             
-            void ListenForTouches();
-            void UnlistenFromTouches();
+            void StartListeningForPointerInput();
+            void StopListeningForPointerInput();
             //-----------------------------------------------------------
 			/// On Screen Orientation Changed
 			///
@@ -57,7 +57,7 @@ namespace ChilliSource
             /// @param The timestamp.
             /// @param The press type.
             //-----------------------------------------------------------
-            void _OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType);
+            void _OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType);
             //-----------------------------------------------------------
             /// Called when the window receives cursor/touch input
             ///
@@ -76,7 +76,7 @@ namespace ChilliSource
             /// @param The timestamp.
             /// @param The press type.
             //-----------------------------------------------------------
-            void _OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType);
+            void _OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType);
             //-----------------------------------------------------------
             /// Called when the window receives cursor/touch input
             ///
@@ -86,7 +86,7 @@ namespace ChilliSource
             /// @param The timestamp.
             /// @param The press type.
             //-----------------------------------------------------------
-            bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType) override;
+            bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType) override;
             //-----------------------------------------------------------
             /// Called when the window receives cursor/touch input
             ///
@@ -105,7 +105,7 @@ namespace ChilliSource
             /// @param The timestamp.
             /// @param The press type.
             //-----------------------------------------------------------
-            void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType) override;
+            void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType) override;
 #ifdef CS_ENABLE_DEBUGSTATS
             //-----------------------------------------------------
 			/// Draw
@@ -119,14 +119,14 @@ namespace ChilliSource
             void Draw(CanvasRenderer * inpCanvas);
 #endif
 			
-            bool mbListeningForTouches;
-            
 			// Granting friendly access for the Scene
 			friend void Core::Scene::OnBackground();
             
         private:
             Input::PointerSystem* m_pointerSystem;
             
+            bool mbListeningForTouches;
+
             Core::ConnectionUPtr m_screenOrientationChangedConnection;
             Core::ConnectionUPtr m_screenResizedConnection;
             

@@ -45,18 +45,18 @@ namespace ChilliSource
 			/// @return The equivelent Press Type for the
 			/// button Id
 			//------------------------------------------------
-			PointerSystem::PressType ButtonIdToPressType(s32 in_buttonId)
+			PointerSystem::InputType ButtonIdToInputType(s32 in_buttonId)
 			{
 				switch (in_buttonId)
 				{
 				case GLFW_MOUSE_BUTTON_LEFT:
-					return PointerSystem::PressType::k_leftMouseButton;
+					return PointerSystem::InputType::k_leftMouseButton;
 				case GLFW_MOUSE_BUTTON_MIDDLE:
-					return PointerSystem::PressType::k_middleMouseButton;
+					return PointerSystem::InputType::k_middleMouseButton;
 				case GLFW_MOUSE_BUTTON_RIGHT:
-					return PointerSystem::PressType::k_rightMouseButton;
+					return PointerSystem::InputType::k_rightMouseButton;
 				default:
-					return PointerSystem::PressType::k_none;
+					return PointerSystem::InputType::k_none;
 				}
 				
 			}
@@ -72,44 +72,42 @@ namespace ChilliSource
 		//----------------------------------------------
 		void PointerSystem::OnMouseMoved(GLFWwindow* in_window, f64 in_xPos, f64 in_yPos)
 		{
-			if (g_pointerSystem != nullptr)
-			{
-				Core::Vector2 touchLocation((f32)in_xPos, Core::Screen::GetOrientedDimensions().y - ((f32)in_yPos));
-				g_pointerSystem->AddPointerMovedEvent(g_pointerSystem->m_pointerId, touchLocation);
-			}
+			CS_ASSERT(g_pointerSystem, "OnMouseMoved callback requires a pointer system.");
+
+			Core::Vector2 touchLocation((f32)in_xPos, Core::Screen::GetOrientedDimensions().y - ((f32)in_yPos));
+			g_pointerSystem->AddPointerMovedEvent(g_pointerSystem->m_pointerId, touchLocation);
 		}
 		//----------------------------------------------
 		//----------------------------------------------
 		void PointerSystem::OnMouseButtonPressed(GLFWwindow* in_window, s32 in_buttonID, s32 in_buttonAction, s32 in_modifierKeys)
 		{
-			if (g_pointerSystem)
+			CS_ASSERT(g_pointerSystem, "On Mouse Button Pressed callback requires a pointer system.");
+
+			switch (GLFWManager::MouseButtonAction(in_buttonAction))
 			{
-				switch (GLFWManager::MouseButtonAction(in_buttonAction))
+				case GLFWManager::MouseButtonAction::k_press:
 				{
-					case GLFWManager::MouseButtonAction::k_press:
+					InputType type = ButtonIdToInputType(in_buttonID);
+					if (type != InputType::k_none)
 					{
-						PressType type = ButtonIdToPressType(in_buttonID);
-						if (type != PressType::k_none)
-						{
-							g_pointerSystem->AddPointerDownEvent(g_pointerSystem->m_pointerId, type);
-						}
-						break;
+						g_pointerSystem->AddPointerDownEvent(g_pointerSystem->m_pointerId, type);
 					}
-					case GLFWManager::MouseButtonAction::k_release:
+					break;
+				}
+				case GLFWManager::MouseButtonAction::k_release:
+				{
+					InputType type = ButtonIdToInputType(in_buttonID);
+					if (type != InputType::k_none)
 					{
-						PressType type = ButtonIdToPressType(in_buttonID);
-						if (type != PressType::k_none)
-						{
-							g_pointerSystem->AddPointerUpEvent(g_pointerSystem->m_pointerId, type);
-						}
-						break;
+						g_pointerSystem->AddPointerUpEvent(g_pointerSystem->m_pointerId, type);
 					}
-					default:
-					{
-						break;
-					}
-				};
-			}
+					break;
+				}
+				default:
+				{
+					break;
+				}
+			};
 		}
 		//------------------------------------------------
 		//------------------------------------------------

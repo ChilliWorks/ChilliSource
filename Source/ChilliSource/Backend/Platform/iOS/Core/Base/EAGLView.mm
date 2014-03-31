@@ -89,51 +89,43 @@ static EAGLView* gpGLView = nil;
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
 {
     ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
-    
-    if (pointerSystem != nullptr)
+    CS_ASSERT(pointerSystem, "touchesBegan callback requires the pointer system.");
+        
+    for (UITouch* touch in touches)
     {
-        for (UITouch* touch in touches)
-        {
-            pointerSystem->OnTouchBegan(touch);
-        }
-	}
+        pointerSystem->OnTouchBegan(touch);
+    }
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
+    CS_ASSERT(pointerSystem, "touchesCancelled callback requires the pointer system.");
     
-    if (pointerSystem != nullptr)
+    for (UITouch* touch in touches)
     {
-        for (UITouch* touch in touches)
-        {
-            pointerSystem->OnTouchEnded(touch);
-        }
-	}
+        pointerSystem->OnTouchEnded(touch);
+    }
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
+    CS_ASSERT(pointerSystem, "touchesEnded callback requires the pointer system.");
     
-    if (pointerSystem != nullptr)
+	for (UITouch* touch in touches)
     {
-        for (UITouch* touch in touches)
-        {
-            pointerSystem->OnTouchEnded(touch);
-        }
-	}
+        pointerSystem->OnTouchEnded(touch);
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
+    CS_ASSERT(pointerSystem, "touchesEnded callback requires the pointer system.");
     
-    if (pointerSystem != nullptr)
+    for (UITouch* touch in touches)
     {
-        for (UITouch* touch in touches)
-        {
-            pointerSystem->OnTouchMoved(touch);
-        }
-	}
+        pointerSystem->OnTouchMoved(touch);
+    }
 }
 
 @end

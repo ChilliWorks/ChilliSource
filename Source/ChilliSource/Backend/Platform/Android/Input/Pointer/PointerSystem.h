@@ -94,7 +94,7 @@ namespace ChilliSource
             //------------------------------------------------
             void OnDestroy() override;
 
-            std::unordered_map<s32, u64> m_systemIdToPointerIdMap;
+            std::unordered_map<s32, PointerId> m_systemIdToPointerIdMap;
         };
     }
 }

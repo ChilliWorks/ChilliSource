@@ -129,9 +129,9 @@ namespace ChilliSource
 		//---Touch Delegates
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void SwipeGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void SwipeGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType)
 		{
-            if (in_pressType == PointerSystem::GetDefaultPressType())
+            if (in_inputType == PointerSystem::GetDefaultInputType())
             {
                 if(++mCurrentNumContactPoints == 1)
                 {
@@ -152,9 +152,9 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
 		//----------------------------------------------------
-		void SwipeGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void SwipeGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType)
 		{
-            if (in_pressType == PointerSystem::GetDefaultPressType())
+            if (in_inputType == PointerSystem::GetDefaultInputType())
             {
                 if (mCurrentNumContactPoints > 0)
                     mCurrentNumContactPoints--;
@@ -239,9 +239,9 @@ namespace ChilliSource
 		//---Touch Delegates
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void PinchGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void PinchGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType)
 		{
-            if (in_pressType == PointerSystem::GetDefaultPressType())
+            if (in_inputType == PointerSystem::GetDefaultInputType())
             {
                 mCurrentTouches++;
                 
@@ -262,7 +262,7 @@ namespace ChilliSource
                         pointer = Core::Application::Get()->GetSystem<PointerSystem>();
                     }
                     
-                    std::vector<PointerSystem::Pointer> pointers = pointer->GetActivePointers();
+                    std::vector<PointerSystem::Pointer> pointers = pointer->GetPointers();
                     for (u32 i = 0; i < pointers.size(); ++i)
                     {
                         if (pointers[i].m_uniqueId == mTouchID1)
@@ -293,7 +293,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void PinchGesture::OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp)
 		{
-            if (in_pointer.m_activePresses.find(PointerSystem::GetDefaultPressType()) != in_pointer.m_activePresses.end())
+            if (in_pointer.m_activeInput.find(PointerSystem::GetDefaultInputType()) != in_pointer.m_activeInput.end())
             {
                 //Get the initial distance between the touches
                 //Once that distance has changed sufficiently then we better recognize!
@@ -327,9 +327,9 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
 		//----------------------------------------------------
-		void PinchGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void PinchGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType)
 		{
-            if (in_pressType == PointerSystem::GetDefaultPressType())
+            if (in_inputType == PointerSystem::GetDefaultInputType())
             {
                 if(mCurrentTouches > 0)
                 {
@@ -431,9 +431,9 @@ namespace ChilliSource
 		//---Touch Delegates
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void TapGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void TapGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType)
 		{
-            if (in_pressType == PointerSystem::GetDefaultPressType())
+            if (in_inputType == PointerSystem::GetDefaultInputType())
             {
                 if(mCurrentNumTaps == 0)
                 {
@@ -449,9 +449,9 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
 		//----------------------------------------------------
-		void TapGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void TapGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType)
 		{
-            if (in_pressType == PointerSystem::GetDefaultPressType())
+            if (in_inputType == PointerSystem::GetDefaultInputType())
             {
                 //Ok we know by now whether we had a single tap (gesture will be valid)! Let's check if we have met the multi tap criteria
                 //That is that the taps happen within the given time
@@ -466,7 +466,7 @@ namespace ChilliSource
                     
                     if (mNumTapsRequired > 1)
                     {
-                        OnPointerDown(in_pointer, in_timestamp, in_pressType);
+                        OnPointerDown(in_pointer, in_timestamp, in_inputType);
                         mCurrentNumTaps = 1;
                     }
                 }
@@ -554,7 +554,7 @@ namespace ChilliSource
 		//---Touch Delegates
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void DragGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void DragGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType)
 		{
 			mbIsGestureInvalid = true;
 			mCurrentTouches++;
@@ -572,7 +572,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void DragGesture::OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp)
 		{
-            if (in_pointer.m_activePresses.find(PointerSystem::GetDefaultPressType()) != in_pointer.m_activePresses.end())
+            if (in_pointer.m_activeInput.find(PointerSystem::GetDefaultInputType()) != in_pointer.m_activeInput.end())
             {
                 // Only recognise the touch that started the gesture
                 if (mbIsGestureActive && mCurrentID == in_pointer.m_uniqueId)
@@ -626,30 +626,33 @@ namespace ChilliSource
             }
 		}
 		
-		void DragGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void DragGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType)
 		{
-            if(mCurrentTouches > 0)//if(mbIsGestureActive && mCurrentTouches > 0)
-            {
-                if(--mCurrentTouches == 0)
-                {
-                    //Update the location of the drag
-                    mvLocation = in_pointer.m_location;
-                    mvPreviousLocation = in_pointer.m_previousLocation;
-                        
-                    //Fire off the delegates
-                    m_gestureEndedEvent.NotifyConnections(this);
-                    
-                    if(mCurrentTouches == 0)
-                    {
-                        mbFirstRun = true;
-                    }
-                    
-                    mTimer.Reset();
-                }
-                
-                mbIsGestureActive = false;
-                mCurrentID = 0;
-            }
+			if (in_inputType == PointerSystem::GetDefaultInputType())
+			{
+				if(mCurrentTouches > 0)
+				{
+					if(--mCurrentTouches == 0)
+					{
+						//Update the location of the drag
+						mvLocation = in_pointer.m_location;
+						mvPreviousLocation = in_pointer.m_previousLocation;
+
+						//Fire off the delegates
+						m_gestureEndedEvent.NotifyConnections(this);
+
+						if(mCurrentTouches == 0)
+						{
+							mbFirstRun = true;
+						}
+
+						mTimer.Reset();
+					}
+
+					mbIsGestureActive = false;
+					mCurrentID = 0;
+				}
+			}
 		}
 		//================================================
 		/// Hold Gesture
@@ -681,26 +684,29 @@ namespace ChilliSource
 		//---Touch Delegates
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void HoldGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void HoldGesture::OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType)
 		{
-			++mudwNumberOfTouch;
-			if (mudwNumberOfTouch == 1)
+			if (in_inputType == PointerSystem::GetDefaultInputType())
 			{
-				// Start the timer
-				mTimer.Reset();
-				mTimer.Start();
-				
-				m_periodicTimerConnection = mTimer.OpenConnection(Core::MakeDelegate(this, &HoldGesture::OnGestureUpdate), 0);
-				
-				// Set the starting location
-				mvLocation = in_pointer.m_location;
-             
-                //Set the gesture to started but it is not active until the minimum time limit has been reached
-                mbIsGestureStarted = true;
-			}
-			else
-			{
-				CancelGesture();
+				++mudwNumberOfTouch;
+				if (mudwNumberOfTouch == 1)
+				{
+					// Start the timer
+					mTimer.Reset();
+					mTimer.Start();
+
+					m_periodicTimerConnection = mTimer.OpenConnection(Core::MakeDelegate(this, &HoldGesture::OnGestureUpdate), 0);
+
+					// Set the starting location
+					mvLocation = in_pointer.m_location;
+
+					//Set the gesture to started but it is not active until the minimum time limit has been reached
+					mbIsGestureStarted = true;
+				}
+				else
+				{
+					CancelGesture();
+				}
 			}
 		}
 		
@@ -734,7 +740,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void HoldGesture::OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp)
 		{
-			if (mbIsGestureStarted)
+			if (in_pointer.m_activeInput.find(PointerSystem::GetDefaultInputType()) != in_pointer.m_activeInput.end() && mbIsGestureStarted)
 			{
 				Core::Vector2 vDistance = in_pointer.m_location - mvLocation;
 				
@@ -782,9 +788,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------
 		//----------------------------------------------------
-		void HoldGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType)
+		void HoldGesture::OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType)
 		{
-            if(mudwNumberOfTouch > 0)
+            if (in_inputType == PointerSystem::GetDefaultInputType() && mudwNumberOfTouch > 0)
             {
                 mudwNumberOfTouch --;
                 
@@ -796,7 +802,6 @@ namespace ChilliSource
                     CancelGesture();
                 }
             }
-            
 		}
 	}
 }

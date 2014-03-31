@@ -10,13 +10,13 @@
 #define _CHILLISOURCE_INPUT_POINTER_POINTERSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Core/Event/Event.h>
 
+#include <mutex>
 #include <queue>
 #include <set>
-#include <mutex>
 
 namespace ChilliSource
 {
@@ -34,12 +34,16 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(PointerSystem);
             //----------------------------------------------------
+            /// typedef
+            //----------------------------------------------------
+            using PointerId = u64;
+            //----------------------------------------------------
             /// An enum describing the different types of pointer
             /// press.
             ///
             /// @author I Copland
             //----------------------------------------------------
-            enum class PressType
+            enum class InputType
             {
                 k_none,
                 k_touch,
@@ -51,7 +55,7 @@ namespace ChilliSource
             /// A container for information on a single pointer.
             /// A pointer contains positional information as well
             /// as an index and unique Id. The Id is unique to that
-            /// specfic pointer and can be used to query for it.
+            /// specific pointer and can be used to query for it.
             /// The index describes the active index of the pointer
             /// at the point it was created, so if there were already
             /// two active pointers existing at creation, it will be
@@ -64,8 +68,8 @@ namespace ChilliSource
                 Core::Vector2 m_location;
                 Core::Vector2 m_previousLocation;
                 u32 m_pointerIndex;
-                u64 m_uniqueId;
-                std::set<PressType> m_activePresses;
+                PointerId m_uniqueId;
+                std::set<InputType> m_activeInput;
             };
             //----------------------------------------------------
             /// A delegate that is used to receive pointer down
@@ -78,7 +82,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //----------------------------------------------------
-            using PointerDownDelegate = std::function<void(const Pointer&, f64, PressType)>;
+            using PointerDownDelegate = std::function<void(const Pointer&, f64, InputType)>;
             //----------------------------------------------------
             /// A delegate that is used to receive pointer moved
             /// events. This could be dragging a touch on screen
@@ -101,7 +105,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //----------------------------------------------------
-            using PointerUpDelegate = std::function<void(const Pointer&, f64, PressType)>;
+            using PointerUpDelegate = std::function<void(const Pointer&, f64, InputType)>;
             //----------------------------------------------------
             /// Creates a new platfrom specific instance of pointer
             /// system.
@@ -121,7 +125,7 @@ namespace ChilliSource
             ///
             /// @return the default press type.
             //----------------------------------------------------
-            static PressType GetDefaultPressType();
+            static InputType GetDefaultInputType();
             //----------------------------------------------------
             /// @author I Copland
             ///
@@ -152,7 +156,7 @@ namespace ChilliSource
             /// @return Whether or not there was a pointer with
             /// the given Id.
             //----------------------------------------------------
-            bool TryGetPointerWithId(u64 in_uniqueId, Pointer& out_pointer) const;
+            bool TryGetPointerWithId(PointerId in_uniqueId, Pointer& out_pointer) const;
             //----------------------------------------------------
             /// Tries to get the pointer with the given index.
             ///
@@ -168,7 +172,7 @@ namespace ChilliSource
             ///
             /// @return The pointer up event.
             //----------------------------------------------------
-            std::vector<Pointer> GetActivePointers() const;
+            std::vector<Pointer> GetPointers() const;
             //----------------------------------------------------
             /// Process all input events that have been received
             /// from the OS.
@@ -184,8 +188,8 @@ namespace ChilliSource
             virtual ~PointerSystem() {};
         protected:
             //----------------------------------------------------
-            /// Default constructor. Declared protected to force
-            /// the use of the factory method.
+            /// Constructor. Declared protected to force the use
+            /// of the factory method.
             ///
             /// @author I Copland
             //----------------------------------------------------
@@ -200,7 +204,7 @@ namespace ChilliSource
             ///
             /// @return The unique Id of the new pointer.
             //----------------------------------------------------
-            u64 AddPointerCreateEvent(const Core::Vector2& in_position);
+            PointerId AddPointerCreateEvent(const Core::Vector2& in_position);
             //----------------------------------------------------
             /// Adds a new pointer down event. This method is thread
             /// safe and can be called on any thread.
@@ -210,7 +214,7 @@ namespace ChilliSource
             /// @param The unique Id of the pointer.
             /// @param The press type.
             //----------------------------------------------------
-            void AddPointerDownEvent(u64 in_pointerUniqueId, PressType in_pressType);
+            void AddPointerDownEvent(PointerId in_pointerUniqueId, InputType in_inputType);
             //----------------------------------------------------
             /// Adds a new pointer moved event. This method is
             /// threadsafe and can be called on any thread.
@@ -220,7 +224,7 @@ namespace ChilliSource
             /// @param The unique Id of the pointer.
             /// @param The position it has moved to.
             //----------------------------------------------------
-            void AddPointerMovedEvent(u64 in_pointerUniqueId, const Core::Vector2& in_position);
+            void AddPointerMovedEvent(PointerId in_pointerUniqueId, const Core::Vector2& in_position);
             //----------------------------------------------------
             /// Adds a new pointer up event. This method is thread
             /// safe and can be called on any thread.
@@ -230,7 +234,7 @@ namespace ChilliSource
             /// @param The unique Id of the pointer.
             /// @param The press type.
             //----------------------------------------------------
-            void AddPointerUpEvent(u64 in_pointerUniqueId, PressType in_pressType);
+            void AddPointerUpEvent(PointerId in_pointerUniqueId, InputType in_inputType);
             //----------------------------------------------------
             /// Adds a new remove pointer event. This method is thread
             /// safe and can be called on any thread.
@@ -240,7 +244,7 @@ namespace ChilliSource
             /// @param The unique Id of the pointer that should be
             /// removed.
             //-----------------------------------------------------
-            void AddPointerRemoveEvent(u64 in_pointerUniqueId);
+            void AddPointerRemoveEvent(PointerId in_pointerUniqueId);
             //----------------------------------------------------
             /// Removes all existing pointers. This must be called
             /// from the main thread.
@@ -259,7 +263,7 @@ namespace ChilliSource
             {
                 k_add,
                 k_down,
-                k_moved,
+                k_move,
                 k_up,
                 k_remove
             };
@@ -272,9 +276,9 @@ namespace ChilliSource
             struct PointerEvent
             {
                 PointerEventType m_type;
-                u64 m_pointerUniqueId;
+                PointerId m_pointerUniqueId;
                 Core::Vector2 m_position;
-                PressType m_pressType;
+                InputType m_InputType;
                 f64 m_timestamp;
             };
             //----------------------------------------------------
@@ -285,7 +289,7 @@ namespace ChilliSource
             /// @param The unique pointer Id.
             /// @param The initial position.
             //-----------------------------------------------------
-            void CreatePointer(u64 in_uniqueId, const Core::Vector2& in_initialPosition);
+            void CreatePointer(PointerId in_uniqueId, const Core::Vector2& in_initialPosition);
             //----------------------------------------------------
             /// Notifies listeners that the pointer with the given
             /// unique id is down.
@@ -296,7 +300,7 @@ namespace ChilliSource
             /// @param The timestamp.
             /// @param The press type.
             //-----------------------------------------------------
-            void PointerDown(u64 in_uniqueId, f64 in_timestamp, PressType in_pressType);
+            void PointerDown(PointerId in_uniqueId, f64 in_timestamp, InputType in_inputType);
             //----------------------------------------------------
             /// Updates the pointer with the given unique id and
             /// notifies listeners that it has moved.
@@ -307,7 +311,7 @@ namespace ChilliSource
             /// @param The timestamp.
             /// @param The new position.
             //-----------------------------------------------------
-            void PointerMoved(u64 in_uniqueId, f64 in_timestamp, const Core::Vector2& in_newPosition);
+            void PointerMoved(PointerId in_uniqueId, f64 in_timestamp, const Core::Vector2& in_newPosition);
             //----------------------------------------------------
             /// Notifies listeners that the pointer with the given
             /// unique id is up.
@@ -318,7 +322,7 @@ namespace ChilliSource
             /// @param The timestamp.
             /// @param The press type.
             //-----------------------------------------------------
-            void PointerUp(u64 in_uniqueId, f64 in_timestamp, PressType in_pressType);
+            void PointerUp(PointerId in_uniqueId, f64 in_timestamp, InputType in_inputType);
             //----------------------------------------------------
             /// Removes the pointer with the given Id.
             ///
@@ -326,7 +330,7 @@ namespace ChilliSource
             ///
             /// @param The unique pointer Id.
             //-----------------------------------------------------
-            void RemovePointer(u64 in_uniqueId);
+            void RemovePointer(PointerId in_uniqueId);
             
             Core::Event<PointerDownDelegate> m_pointerDownEvent;
             Core::Event<PointerMovedDelegate> m_pointerMovedEvent;
@@ -334,7 +338,7 @@ namespace ChilliSource
             std::mutex m_mutex;
             std::vector<Pointer> m_pointers;
             std::queue<PointerEvent> m_eventQueue;
-            u64 m_nextUniqueId;
+            PointerId m_nextUniqueId;
         };
     }
 }

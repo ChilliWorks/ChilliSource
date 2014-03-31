@@ -58,9 +58,9 @@ namespace ChilliSource
 			/// Triggered by the input manager when the device
 			/// receives touch notifications
 			//----------------------------------------------------
-			virtual void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) = 0;
+			virtual void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType) = 0;
 			virtual void OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp) = 0;
-			virtual void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) = 0;
+			virtual void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType) = 0;
             
             //----------------------------------------------------
             /// Surface Destroyed
@@ -155,9 +155,9 @@ namespace ChilliSource
 			/// Triggered by the input manager when the device
 			/// receives touch notifications
 			//----------------------------------------------------
-			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType) override;
 			void OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp) override {}
-			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType) override;
 			
 		public:
 			
@@ -238,9 +238,9 @@ namespace ChilliSource
 			/// Triggered by the input manager when the device
 			/// receives touch notifications
 			//----------------------------------------------------
-			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType) override;
 			void OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp) override;
-			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType) override;
 			
 		public:
 			f32				mfRatio;				// The ratio of mfCurrentDisplacement / mfStartDisplacement
@@ -251,8 +251,8 @@ namespace ChilliSource
 			u32 mMinDistanceRequiredSqrd;
 			u32 mCurrentTouches;
 			
-			u64 mTouchID1;
-			u64 mTouchID2;
+			PointerSystem::PointerId mTouchID1;
+			PointerSystem::PointerId mTouchID2;
 			
 			
 			bool mbFirstTouchBegan, mbSecondTouchBegan;
@@ -318,9 +318,9 @@ namespace ChilliSource
 			/// Triggered by the input manager when the device
 			/// receives touch notifications
 			//----------------------------------------------------
-			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType) override;
 			void OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp) override {};
-			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType) override;
 			
 			//----------------------------------------------------
 			/// Check For Tap
@@ -390,7 +390,7 @@ namespace ChilliSource
 			///
 			/// Return the touch ID
 			//----------------------------------------------------
-            u64 GetTouchID() const { return mCurrentID; }
+            PointerSystem::PointerId GetTouchID() const { return mCurrentID; }
             
 			void SetMinDistanceRequiredSqrd(f32 fMinDistanceRequiredSqrd) { mMinDistanceRequiredSqrd = fMinDistanceRequiredSqrd; }
 			void SetInitialHoldDuration(f32 fInitialHoldDuration) { mfInitialHoldDuration = fInitialHoldDuration; }
@@ -404,9 +404,9 @@ namespace ChilliSource
 			/// Triggered by the input manager when the device
 			/// receives touch notifications
 			//----------------------------------------------------
-			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType) override;
 			void OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp) override;
-			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType) override;
 			
 		public:
 			
@@ -418,7 +418,7 @@ namespace ChilliSource
 			Core::Vector2 mvStartPos;
 			
 			f32 mMinDistanceRequiredSqrd;
-            u64 mCurrentID;
+			PointerSystem::PointerId mCurrentID;
             u32 mCurrentTouches;
 			
 			bool mbFirstRun;
@@ -504,9 +504,9 @@ namespace ChilliSource
 			/// Triggered by the input manager when the device
 			/// receives touch notifications
 			//----------------------------------------------------
-			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerDown(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType) override;
 			void OnPointerMoved(const PointerSystem::Pointer& in_pointer, f64 in_timestamp) override;
-			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::PressType in_pressType) override;
+			void OnPointerUp(const PointerSystem::Pointer& in_pointer, f64 in_timestamp, PointerSystem::InputType in_inputType) override;
 			
 			void CancelGesture();
 			void EndGesture();
