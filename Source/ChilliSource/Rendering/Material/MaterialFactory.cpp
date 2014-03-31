@@ -30,7 +30,8 @@ namespace ChilliSource
         MaterialFactory::MaterialFactory(ShaderManager* in_shaderMgr, RenderCapabilities* in_renderCapabilities)
         : m_shaderManager(in_shaderMgr), m_renderCapabilities(in_renderCapabilities)
         {
-            
+            CS_ASSERT(m_shaderManager, "Must have shader manager");
+            CS_ASSERT(m_renderCapabilities, "Must have render caps.");
         }
         //---------------------------------------------------
         //---------------------------------------------------
