@@ -17,10 +17,6 @@ namespace ChilliSource
 	namespace Networking 
     {
         //--------------------------------------------------
-        /// Account Management
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(MoConnectSystem);
-        //--------------------------------------------------
         /// Cloud
         //--------------------------------------------------
         CS_FORWARDDECLARE_CLASS(CloudStorageSystem);
