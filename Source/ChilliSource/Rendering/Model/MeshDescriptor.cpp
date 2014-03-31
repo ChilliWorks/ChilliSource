@@ -18,9 +18,9 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		MeshFeatureDescriptor::MeshFeatureDescriptor()
 		{
-			mbHasTexture = false;
-			mbHasMaterial = false;
 			mbHasAnimationData = false;
+            mbHasMaterial = false;
+            mbHasTexture = false;
 		}
 		//-------------------------------------------------------------------------
 		/// Container for information required to build a sub-mesh. 
@@ -34,7 +34,6 @@ namespace ChilliSource
 			mpVertexData = nullptr;
 			mpIndexData = nullptr;
             ePrimitiveType = PrimitiveType::k_tri;
-			meMaterialStorageLocation = Core::StorageLocation::k_none;
 		}
 		//-------------------------------------------------------------------------
 		/// Container for information required to build a mesh.

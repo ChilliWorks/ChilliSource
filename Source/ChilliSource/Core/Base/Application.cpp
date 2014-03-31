@@ -492,22 +492,20 @@ namespace ChilliSource
             AddSystem_Old(DialogueBoxSystem::Create());
 
             //Audio
-            Audio::AudioSystem* audioSystem(CreateSystem<Audio::AudioSystem>());
-            CreateSystem<Audio::AudioLoader>(audioSystem);
+            m_audioSystem = CreateSystem<Audio::AudioSystem>();
+            CreateSystem<Audio::AudioLoader>(m_audioSystem);
 
             //Input
             CreateSystem<Input::Keyboard>();
             m_pointerSystem = CreateSystem<Input::PointerSystem>();
 
             //Rendering
-            
-            Rendering::RenderCapabilitiesUPtr renderCapabilitiesUPtr(Rendering::RenderCapabilities::Create());
-            Rendering::RenderCapabilities* renderCapabilities(renderCapabilitiesUPtr.get());
-            AddSystem_Old(std::move(renderCapabilitiesUPtr));
+            Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();
             
             //TODO: Don't assume this will be a GL render system. We only do this temporarily
             //in order to access the managers. This will change.
-            OpenGL::RenderSystem* renderSystem = (OpenGL::RenderSystem*)CreateSystem<Rendering::RenderSystem>(renderCapabilities);
+            m_renderSystem = CreateSystem<Rendering::RenderSystem>(renderCapabilities);
+            OpenGL::RenderSystem* renderSystem = (OpenGL::RenderSystem*)m_renderSystem;
             CreateSystem<Rendering::MaterialFactory>(renderSystem->GetShaderManager(), renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
             CreateSystem<Rendering::SpriteSheetProvider>();
@@ -567,16 +565,6 @@ namespace ChilliSource
                         m_componentFactoryDispenser->RegisterComponentFactory(pProducer->GetComponentFactoryPtr(i));
                     }
 				}
-                
-                //Common systems
-                if(system->IsA(Audio::AudioSystem::InterfaceID))
-                {
-                    m_audioSystem = static_cast<Audio::AudioSystem*>(system.get());
-                }
-                if(system->IsA(Rendering::RenderSystem::InterfaceID))
-                {
-                    m_renderSystem = static_cast<Rendering::RenderSystem*>(system.get());
-                }
 			}
 
             //Give the resource managers their providers

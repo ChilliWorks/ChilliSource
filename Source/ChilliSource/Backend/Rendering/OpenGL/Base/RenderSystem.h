@@ -303,12 +303,6 @@ namespace ChilliSource
             /// @param Mesh buffer pointer.
             //----------------------------------------------------------
             void RemoveBuffer(Rendering::MeshBuffer* inpBuffer);
-            //----------------------------------------------------------
-			/// Check for OpenGL Extension
-			///
-			/// @return Whether the given extension is supported
-			//----------------------------------------------------------
-			static bool CheckForOpenGLExtension(const std::string& instrExtension);
             
             inline TextureManager* GetTextureManager() {return &mTexManager;}
             inline CubemapManager* GetCubemapManager() {return &mCubemapManager;}

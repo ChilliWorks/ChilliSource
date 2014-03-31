@@ -124,7 +124,6 @@ namespace ChilliSource
 							pResource->SetFilename(inFilePath);
 							pResource->SetStorageLocation(ineStorageLocation);
 							pResource->SetOwningResourceManager(static_cast<Core::ResourceManager*>(this));
-							pResource->SetLoaded(true);
 							
 							return std::static_pointer_cast<Mesh>(pResource);
 						}
@@ -173,7 +172,6 @@ namespace ChilliSource
 						pResource->SetFilename(inFilePath);
 						pResource->SetStorageLocation(ineStorageLocation);
 						pResource->SetOwningResourceManager(this);
-						pResource->SetLoaded(false);
 						
 						if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
 						{
@@ -233,7 +231,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// BuildMesh
 		//----------------------------------------------------------------------------
-		bool MeshManager::BuildMesh(RenderSystem* inpRenderSystem, const MeshDescriptor& inMeshDescriptor, Mesh* outpResource, bool inbNeedsPrepared)
+		bool MeshManager::BuildMesh(RenderSystem* inpRenderSystem, const MeshDescriptor& inMeshDescriptor, Mesh* outpResource)
 		{
 			bool bSuccess = true;
 			
@@ -254,18 +252,9 @@ namespace ChilliSource
 				u32 udwIndexDataCapacity  = it->mudwNumIndices * inMeshDescriptor.mudwIndexSize;
 				
 				//prepare the mesh if it needs it, otherwise just update the vertex and index declarations.
-				SubMeshSPtr newSubMesh;
-				if (inbNeedsPrepared == true)
-				{
-					newSubMesh = outpResource->CreateSubMesh(it->mstrName);
-					newSubMesh->Prepare(inpRenderSystem, inMeshDescriptor.mVertexDeclaration, inMeshDescriptor.mudwIndexSize, 
-										udwVertexDataCapacity, udwIndexDataCapacity, BufferAccess::k_read, it->ePrimitiveType);
-				}
-				else 
-				{
-					newSubMesh = outpResource->GetSubMeshAtIndex(count);
-					newSubMesh->AlterBufferDeclaration(inMeshDescriptor.mVertexDeclaration, inMeshDescriptor.mudwIndexSize);
-				}
+				SubMeshSPtr	newSubMesh = outpResource->CreateSubMesh(it->mstrName);
+                newSubMesh->Prepare(inpRenderSystem, inMeshDescriptor.mVertexDeclaration, inMeshDescriptor.mudwIndexSize,
+                                    udwVertexDataCapacity, udwIndexDataCapacity, BufferAccess::k_read, it->ePrimitiveType);
 				
 				//check that the buffers are big enough to hold this data. if not throw an error.
 				if (udwVertexDataCapacity <= newSubMesh->GetInternalMeshBuffer()->GetVertexCapacity() &&
@@ -279,13 +268,6 @@ namespace ChilliSource
 					bSuccess = false;
 				}
 				
-				//set the default material name.
-				if (inMeshDescriptor.mFeatures.mbHasMaterial == true)
-                {
-					newSubMesh->SetDefaultMaterialName(it->mstrMaterialName);
-                    newSubMesh->SetDefaultMaterialStorageLocation(it->meMaterialStorageLocation);
-                }
-				
 				//add the skeleton controller
 				if (inMeshDescriptor.mFeatures.mbHasAnimationData == true)
 				{
@@ -298,9 +280,6 @@ namespace ChilliSource
 			}
 			
 			outpResource->CalcVertexAndIndexCounts();
-			
-			//flag as loaded
-			outpResource->SetLoaded(true);
 			
 			//return success
 			return bSuccess;

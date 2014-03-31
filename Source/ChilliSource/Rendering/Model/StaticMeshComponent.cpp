@@ -269,8 +269,6 @@ namespace ChilliSource
             {
                 mMaterials.push_back(MaterialSPtr());
             }
-			
-			ApplyDefaultMaterials();
 		}
         //----------------------------------------------------------
         /// Attach Mesh
@@ -359,48 +357,6 @@ namespace ChilliSource
         void StaticMeshComponent::OnRemovedFromScene()
         {
             m_transformChangedConnection = nullptr;
-        }
-        //----------------------------------------------------
-        /// Apply Default Materials
-        //----------------------------------------------------
-        void StaticMeshComponent::ApplyDefaultMaterials()
-        {
-            // if the first mesh contains a default material name, then get all the default materials.
-			if (mpModel->GetNumSubMeshes() > 0 && mpModel->GetSubMeshAtIndex(0)->GetDefaultMaterialName() != "")
-			{
-				//iterate through each mesh
-				for (u32 i = 0; i < mpModel->GetNumSubMeshes(); i++)
-				{
-					//get the material name
-					SubMeshSPtr subMesh = mpModel->GetSubMeshAtIndex(i);
-					std::string matName = subMesh->GetDefaultMaterialName();
-                    Core::StorageLocation eStorageLocation = subMesh->GetDefaultMaterialStorageLocation();
-                    
-					//try and load the material
-					MaterialSPtr pMaterial;
-					if (matName != "")
-                    {
-						pMaterial = LOAD_RESOURCE(Material, eStorageLocation, matName);
-                    }
-                    
-					//if the material load has failed, either fall back on the previous material, or stop getting materials if this is the
-					//first mesh as theres no material to fall back on.
-					if (pMaterial.get() == nullptr)
-					{
-						if (i == 0)
-							break;
-						
-						mMaterials[i] = mMaterials[0];
-					}
-					else
-					{                       
-                        mMaterials[i] = pMaterial;
-					}
-                    
-				}
-			}
-            
-            mpMaterial = mMaterials[0];
         }
 	}
 }

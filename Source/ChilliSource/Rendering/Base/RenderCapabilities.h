@@ -1,31 +1,31 @@
 //
 //  RenderCapabilities.h
-//  moFlow
+//  Chilli Source
 //
 //  Created by Ian Copland on 27/01/2014.
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#ifndef _MOFLOW_RENDERING_RENDERCAPABILITIES_H_
-#define _MOFLOW_RENDERING_RENDERCAPABILITIES_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_RENDERCAPABILITIES_H_
+#define _CHILLISOURCE_RENDERING_BASE_RENDERCAPABILITIES_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 namespace ChilliSource
 {
     namespace Rendering
     {
-        //===============================================================
-        /// Render Capabilities
-        ///
+        //---------------------------------------------------------------
         /// A system for getting information on the capabilities of the
         /// renderer on this specfic device. This includes information
         /// like whether specific features are available or the maximum
         /// texture size. This should not be used prior to the render
         /// system being initialised.
-        //===============================================================
-        class RenderCapabilities : public Core::System
+        ///
+        /// @author I Copland
+        //---------------------------------------------------------------
+        class RenderCapabilities : public Core::AppSystem
         {
         public:
             CS_DECLARE_NAMEDTYPE(RenderCapabilities);
@@ -39,26 +39,32 @@ namespace ChilliSource
             //-------------------------------------------------------
             static RenderCapabilitiesUPtr Create();
             //-------------------------------------------------------
-            /// Is Shadow Mapping Supported
+            /// @author I Copland
             ///
             /// @return Whether or not shadow mapping is supported.
             //-------------------------------------------------------
             virtual bool IsShadowMappingSupported() const = 0;
             //-------------------------------------------------------
-            /// Are Depth Texture Supported
+            /// @author I Copland
             ///
             /// @return Whether or not depth textures are supported.
             //-------------------------------------------------------
-            virtual bool AreDepthTexturesSupported() const = 0;
+            virtual bool IsDepthTextureSupported() const = 0;
+            //-------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return Whether or not map buffer is supported
+            //-------------------------------------------------
+            virtual bool IsMapBufferSupported() const = 0;
             //-------------------------------------------------------
-            /// Get Max Texture Size
+            /// @author I Copland
             ///
             /// @return The maximum texture size available on this
             /// device.
             //-------------------------------------------------------
             virtual u32 GetMaxTextureSize() const = 0;
             //-------------------------------------------------------
-            /// Get Num Texture Units
+            /// @author I Copland
             ///
             /// @return The number of texture units supported by this
             /// device.
@@ -66,6 +72,8 @@ namespace ChilliSource
             virtual u32 GetNumTextureUnits() const = 0;
             //-------------------------------------------------------
             /// Destructor
+            ///
+            /// @author I Copland
             //-------------------------------------------------------
             virtual ~RenderCapabilities(){};
             
@@ -76,7 +84,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            RenderCapabilities(){}
+            RenderCapabilities() = default;
         };
     }
 }

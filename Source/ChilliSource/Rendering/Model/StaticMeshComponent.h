@@ -181,13 +181,6 @@ namespace ChilliSource
             /// @author S Downie
             //----------------------------------------------------
             void OnRemovedFromScene() override;
-            //----------------------------------------------------
-            /// Apply Default Materials
-            ///
-            /// Sets the materials to the defaults described in the
-            /// mesh resource.
-            //----------------------------------------------------
-            void ApplyDefaultMaterials();
             
 		private:
 			

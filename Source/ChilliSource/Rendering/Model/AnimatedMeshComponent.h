@@ -445,13 +445,6 @@ namespace ChilliSource
             /// to start a new animation.
 			//----------------------------------------------------------
 			void Reset();
-            //----------------------------------------------------
-            /// Apply Default Materials
-            ///
-            /// Sets the materials to the defaults described in the
-            /// mesh resource.
-            //----------------------------------------------------
-            void ApplyDefaultMaterials();
             
 		private:
             typedef std::vector<std::pair<Core::EntityWPtr, s32> > AttachedEntityList;
