@@ -47,7 +47,7 @@ namespace ChilliSource
 			m_screenOrientationChangedConnection = Core::ApplicationEvents::GetScreenOrientationChangedEvent().OpenConnection(Core::MakeDelegate(this, &Window::OnScreenOrientationChanged));
 			m_screenResizedConnection = Core::ApplicationEvents::GetScreenResizedEvent().OpenConnection(Core::MakeDelegate(this, &Window::OnScreenResized));
 		}
-        void Window::ListenForTouches()
+        void Window::StartListeningForPointerInput()
         {
             if(m_pointerSystem && !mbListeningForTouches)
 			{
@@ -58,8 +58,17 @@ namespace ChilliSource
 			}
         }
         
-        void Window::UnlistenFromTouches()
+        void Window::StopListeningForPointerInput()
         {
+        	//send up event for all currently active pointers
+        	for (const Input::PointerSystem::Pointer& pointer : m_pointerSystem->GetPointers())
+        	{
+        		for (const Input::PointerSystem::InputType& type : pointer.m_activeInput)
+        		{
+        			_OnPointerUp(pointer, ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0, type);
+        		}
+        	}
+
             m_pointerDownConnection.reset();
             m_pointerMovedConnection.reset();
             m_pointerUpConnection.reset();
@@ -100,9 +109,9 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		void Window::_OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
+		void Window::_OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
 		{
-			if (in_pressType == Input::PointerSystem::GetDefaultPressType())
+			if (in_inputType == Input::PointerSystem::GetDefaultInputType())
             {
                 if (!UserInteraction)
                     return;
@@ -116,7 +125,7 @@ namespace ChilliSource
                 {
                     if(((*it)->IsAcceptTouchesOutsideOfBoundsEnabled() || (*it)->Contains(in_pointer.m_location)))
                     {
-                        if((*it)->OnPointerDown(in_pointer, in_timestamp, in_pressType))
+                        if((*it)->OnPointerDown(in_pointer, in_timestamp, in_inputType))
                         {
                             //This means the touch has been consumed
                             //and we should not notify anyone else
@@ -129,14 +138,14 @@ namespace ChilliSource
                 //If the touch has not been consumed we then notify
                 //the outside world
                 mSubviewsCopy.clear();
-                m_pointerDownEvent.NotifyConnections(in_pointer, in_timestamp, in_pressType);
+                m_pointerDownEvent.NotifyConnections(in_pointer, in_timestamp, in_inputType);
             }
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
 		void Window::_OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
 		{
-            if (in_pointer.m_activePresses.find(Input::PointerSystem::GetDefaultPressType()) != in_pointer.m_activePresses.end())
+            if (in_pointer.m_activeInput.find(Input::PointerSystem::GetDefaultInputType()) != in_pointer.m_activeInput.end())
             {
                 if (!UserInteraction)
                     return;
@@ -165,9 +174,9 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		void Window::_OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
+		void Window::_OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
 		{
-            if (in_pressType == Input::PointerSystem::GetDefaultPressType())
+            if (in_inputType == Input::PointerSystem::GetDefaultInputType())
             {
                 if (!UserInteraction)
                     return;
@@ -179,18 +188,18 @@ namespace ChilliSource
                 //We need to notify any subviews they get first dibs
                 for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
-                    (*it)->OnPointerUp(in_pointer, in_timestamp, in_pressType);
+                    (*it)->OnPointerUp(in_pointer, in_timestamp, in_inputType);
                 }
                 
                 //If the touch has not been consumed we then notify
                 //the outside world
                 mSubviewsCopy.clear();
-                m_pointerUpEvent.NotifyConnections(in_pointer, in_timestamp, in_pressType);
+                m_pointerUpEvent.NotifyConnections(in_pointer, in_timestamp, in_inputType);
             }
 		}
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool Window::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
+        bool Window::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
         {
             return false;
         }
@@ -202,7 +211,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void Window::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
+        void Window::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
         {
         }
 #ifdef CS_ENABLE_DEBUGSTATS
@@ -236,7 +245,7 @@ namespace ChilliSource
 		{
 			//Deregister for touch delegates
 			//The window is responsible for receiving input for this scene
-			UnlistenFromTouches();
+			StopListeningForPointerInput();
 		}
 	}
 }

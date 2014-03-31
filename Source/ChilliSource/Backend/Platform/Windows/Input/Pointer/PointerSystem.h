@@ -40,6 +40,9 @@ namespace ChilliSource
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+		private:
+			friend Input::PointerSystemUPtr Input::PointerSystem::Create();
+
 			//----------------------------------------------
 			/// Triggered by GLFW when the cursor moves
 			///
@@ -51,7 +54,7 @@ namespace ChilliSource
 			//----------------------------------------------
 			static void OnMouseMoved(GLFWwindow* in_window, f64 in_xPos, f64 in_yPos);
 			//----------------------------------------------
-			/// Triggered by GLFW when a mouse button is 
+			/// Triggered by GLFW when a mouse button is
 			/// pressed
 			///
 			/// @author S Downie
@@ -62,9 +65,6 @@ namespace ChilliSource
 			/// @param Bit field describing modifier keys
 			//----------------------------------------------
 			static void OnMouseButtonPressed(GLFWwindow* in_window, s32 in_buttonID, s32 in_buttonAction, s32 in_modifierKeys);
-		private:
-			friend Input::PointerSystemUPtr Input::PointerSystem::Create();
-
 			//------------------------------------------------
 			/// Default constructor. Declared private to force
 			/// the use of the factory method.
@@ -92,7 +92,7 @@ namespace ChilliSource
 			//------------------------------------------------
 			void OnDestroy() override;
 
-			u64 m_pointerId;
+			PointerId m_pointerId;
 		};
 	}
 }

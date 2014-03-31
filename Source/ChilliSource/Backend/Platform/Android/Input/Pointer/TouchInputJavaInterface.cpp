@@ -57,30 +57,24 @@ extern "C"
 void Java_com_chillisource_input_TouchInputNativeInterface_TouchDown(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y)
 {
 	ChilliSource::Android::PointerSystem* pointerSystem = ChilliSource::Android::TouchInputJavaInterface::GetPointerSystem();
-	if (pointerSystem != nullptr)
-	{
-		pointerSystem->OnTouchDown(in_systemId, ChilliSource::Core::Vector2(in_x, in_y));
-	}
+	CS_ASSERT(pointerSystem, "Touch Input Java Interface: No pointer system!");
+	pointerSystem->OnTouchDown(in_systemId, ChilliSource::Core::Vector2(in_x, in_y));
 }
 //-------------------------------------------------------
 //-------------------------------------------------------
 void Java_com_chillisource_input_TouchInputNativeInterface_TouchMoved(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y)
 {
 	ChilliSource::Android::PointerSystem* pointerSystem = ChilliSource::Android::TouchInputJavaInterface::GetPointerSystem();
-	if (pointerSystem != nullptr)
-	{
-		pointerSystem->OnTouchMoved(in_systemId, ChilliSource::Core::Vector2(in_x, in_y));
-	}
+	CS_ASSERT(pointerSystem, "Touch Input Java Interface: No pointer system!");
+	pointerSystem->OnTouchMoved(in_systemId, ChilliSource::Core::Vector2(in_x, in_y));
 }
 //-------------------------------------------------------
 //-------------------------------------------------------
 void Java_com_chillisource_input_TouchInputNativeInterface_TouchUp(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y)
 {
 	ChilliSource::Android::PointerSystem* pointerSystem = ChilliSource::Android::TouchInputJavaInterface::GetPointerSystem();
-	if (pointerSystem != nullptr)
-	{
-		pointerSystem->OnTouchUp(in_systemId);
-	}
+	CS_ASSERT(pointerSystem, "Touch Input Java Interface: No pointer system!");
+	pointerSystem->OnTouchUp(in_systemId);
 }
 
 namespace ChilliSource
@@ -88,7 +82,6 @@ namespace ChilliSource
 	namespace Android
 	{
 		PointerSystem* TouchInputJavaInterface::s_pointerSystem = nullptr;
-
 		//--------------------------------------------------------------------------------------
 		/// Setup Java Interface
 		//--------------------------------------------------------------------------------------

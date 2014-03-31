@@ -232,18 +232,18 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool EditableLabel::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
+        bool EditableLabel::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
         {
             if(UserInteraction)
             {
                 mbSelected = true;
             }
             
-            return GUIView::OnPointerDown(in_pointer, in_timestamp, in_pressType);
+            return GUIView::OnPointerDown(in_pointer, in_timestamp, in_inputType);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void EditableLabel::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
+        void EditableLabel::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
         {
             if(UserInteraction && Visible && mpKeyboard && mbSelected)
             {
@@ -263,7 +263,7 @@ namespace ChilliSource
             
             mbSelected = false;
             
-            GUIView::OnPointerUp(in_pointer, in_timestamp, in_pressType);
+            GUIView::OnPointerUp(in_pointer, in_timestamp, in_inputType);
         }
         //-------------------------------------------------------
         /// Update

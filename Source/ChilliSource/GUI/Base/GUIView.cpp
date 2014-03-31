@@ -1673,7 +1673,7 @@ namespace ChilliSource
         //---Touch Delegates
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool GUIView::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
+        bool GUIView::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
         {
             if(UserInteraction)
             {
@@ -1692,7 +1692,7 @@ namespace ChilliSource
 						bool bContains = (*it)->Contains(in_pointer.m_location);
 						if((*it)->IsAcceptTouchesOutsideOfBoundsEnabled() || bContains)
 						{
-							if((*it)->OnPointerDown(in_pointer, in_timestamp, in_pressType))
+							if((*it)->OnPointerDown(in_pointer, in_timestamp, in_inputType))
 							{
                                 mSubviewsCopy.clear();
 								return true;
@@ -1705,7 +1705,7 @@ namespace ChilliSource
 				if(IsAcceptTouchesOutsideOfBoundsEnabled() || bContains)
 				{
 					mInputEvents.OnPointerDown(this, in_pointer, bContains);
-                    m_pointerDownEvent.NotifyConnections(in_pointer, in_timestamp, in_pressType);
+                    m_pointerDownEvent.NotifyConnections(in_pointer, in_timestamp, in_inputType);
                     
 					//We consume this touch as it is within us
 					if(IsTouchConsumptionEnabled(TouchType::k_began) && bContains)
@@ -1769,7 +1769,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void GUIView::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType)
+        void GUIView::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
         {
 			mbIsBeingDragged = false;
 
@@ -1779,10 +1779,10 @@ namespace ChilliSource
 				
                 for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
-                    (*it)->OnPointerUp(in_pointer, in_timestamp, in_pressType);
+                    (*it)->OnPointerUp(in_pointer, in_timestamp, in_inputType);
                 }
                 
-                m_pointerUpEvent.NotifyConnections(in_pointer, in_timestamp, in_pressType);
+                m_pointerUpEvent.NotifyConnections(in_pointer, in_timestamp, in_inputType);
                 mInputEvents.OnPointerUp(this, in_pointer);
             }
             mSubviewsCopy.clear();

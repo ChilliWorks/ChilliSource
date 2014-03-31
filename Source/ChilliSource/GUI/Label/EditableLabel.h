@@ -203,7 +203,7 @@ namespace ChilliSource
             ///
             /// @return Whether touch has been consumed
             //-----------------------------------------------------------
-			bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType) override;
+			bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType) override;
 			//-----------------------------------------------------------
 			/// Called when the view stops receiving cursor/touch input
             ///
@@ -213,7 +213,7 @@ namespace ChilliSource
             /// @param The time stamp.
             /// @param The press type.
 			//-----------------------------------------------------------
-			void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::PressType in_pressType) override;
+			void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType) override;
 			//-------------------------------------------------------
 			/// Draw
 			///
