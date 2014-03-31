@@ -142,7 +142,7 @@ namespace ChilliSource
 			void CalcVertexAndIndexCounts();
 			
 			//Only model loaders can alter the mesh construct
-			friend class MoModelLoader;
+			friend class CSModelProvider;
 			friend class MeshManager;
 			friend class MeshBatch;
 		private:

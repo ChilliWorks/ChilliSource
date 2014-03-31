@@ -1,0 +1,519 @@
+/*
+ *  MoStaticModelLoader.cpp
+ *  moFlo
+ *
+ *  Created by Ian Copland on 25/08/2011.
+ *  Copyright 2010 Tag Games. All rights reserved.
+ *
+ */
+
+#include <ChilliSource/Rendering/Model/CSModelProvider.h>
+#include <ChilliSource/Rendering/Model/Mesh.h>
+#include <ChilliSource/Rendering/Model/SubMesh.h>
+#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
+
+#include <ChilliSource/Core/Base/Application.h>
+
+#include <stdexcept>
+#include <ChilliSource/Rendering/Model/MeshManager.h>
+
+namespace ChilliSource
+{
+	namespace Rendering
+	{
+        namespace
+        {
+            const std::string k_modelFileExtension("momodel");
+            
+            const u32 k_minVersion = 9;
+            const u32 k_maxVersion = 11;
+            const u32 k_fileCheckValue = 6666;
+            
+            //---------------------------------------------
+            /// Features implemented by the model resource.
+            /// Models can opt in and out of features.
+            ///
+            /// @author I Copland.
+            //---------------------------------------------
+            enum class Feature
+            {
+                k_none,
+                k_hasTexture, //TODO: Remove this once texture is no longer part of model
+                k_hasMaterial, //TODO: Remove this once material is no longer part of model
+                k_hasAnimation,
+            };
+            //---------------------------------------------
+            /// Model resources can have flexible attribute
+            /// formats described by mixing and matching the
+            /// following.
+            ///
+            /// @author I Copland.
+            //---------------------------------------------
+            enum class VertexAttribute
+            {
+                k_none,
+                k_position,
+                k_normal,
+                k_texcoord,
+                k_colour,
+                k_weights,
+                k_jointIndices
+            };
+            //----------------------------------------------------------------------------
+            /// Mesh Data Quantities
+            ///
+            /// A struct containing the quantities of different pieces of mesh data.
+            //----------------------------------------------------------------------------
+			struct MeshDataQuantities
+            {
+                u32 m_numMeshes;
+                s32 m_numSkeletonNodes;
+                u32 m_numJoints;
+            };
+            //----------------------------------------------------------------------------
+			/// Read value in for given type
+            ///
+            /// @author I Copland
+            ///
+			/// @param File stream
+            ///
+			/// @return Value of type T
+			//----------------------------------------------------------------------------
+			template <typename TType> TType ReadValue(const Core::FileStreamSPtr& in_meshStream)
+			{
+				TType value;
+				in_meshStream->Read(reinterpret_cast<s8*>(&value), sizeof(TType));
+				return value;
+			}
+            //----------------------------------------------------------------------------
+			/// Read block of data in for given type
+            ///
+            /// @author I Copland
+            ///
+			/// @param File stream
+            /// @param Num to read
+			/// @param [Out] data
+			//----------------------------------------------------------------------------
+			template <typename TType> void ReadBlock(const Core::FileStreamSPtr& in_meshStream, u32 in_numToRead, TType* out_data)
+			{
+				in_meshStream->Read(reinterpret_cast<s8*>(out_data), sizeof(TType) * in_numToRead);
+			}
+            //-----------------------------------------------------------------------------
+            /// Read the vertex declaration from the mesh filestream. The declaration
+            /// is variable
+            ///
+            /// @author I Copland
+            ///
+            /// @param Mesh stream
+            /// @param [Out] Mesh description
+            //-----------------------------------------------------------------------------
+            void ReadVertexDeclaration(const Core::FileStreamSPtr& in_meshStream, MeshDescriptor& out_meshDesc)
+            {
+                //build the vertex declaration from the file
+                u8 numVertexElements = ReadValue<u8>(in_meshStream);
+                
+                VertexElement* vertexElements = new VertexElement[numVertexElements];
+                for (int i = 0; i < numVertexElements; i++)
+                {
+                    u8 vertexAttrib = ReadValue<u8>(in_meshStream);
+                    
+                    switch (VertexAttribute(vertexAttrib))
+                    {
+                        case VertexAttribute::k_none:
+                            CS_LOG_ERROR("Unknown vertex type in vertex declaration!");
+                            break;
+                        case VertexAttribute::k_position:
+                            vertexElements[i].eType = VertexDataType::k_float4;
+                            vertexElements[i].eSemantic = VertexDataSemantic::k_position;
+                            break;
+                        case VertexAttribute::k_normal:
+                            vertexElements[i].eType = VertexDataType::k_float3;
+                            vertexElements[i].eSemantic = VertexDataSemantic::k_normal;
+                            break;
+                        case VertexAttribute::k_texcoord:
+                            vertexElements[i].eType = VertexDataType::k_float2;
+                            vertexElements[i].eSemantic = VertexDataSemantic::k_uv;
+                            break;
+                        case VertexAttribute::k_colour:
+                            vertexElements[i].eType = VertexDataType::k_byte4;
+                            vertexElements[i].eSemantic = VertexDataSemantic::k_colour;
+                            break;
+                        case VertexAttribute::k_weights:
+                            vertexElements[i].eType = VertexDataType::k_float4;
+                            vertexElements[i].eSemantic = VertexDataSemantic::k_weight;
+                            break;
+                        case VertexAttribute::k_jointIndices:
+                            vertexElements[i].eType = VertexDataType::k_byte4;
+                            vertexElements[i].eSemantic = VertexDataSemantic::k_jointIndex;
+                            break;
+                    }
+                }
+                
+                out_meshDesc.mVertexDeclaration = VertexDeclaration(numVertexElements, vertexElements);
+                delete[] vertexElements;
+            }
+            //-----------------------------------------------------------------------------
+			/// Read the mesh section of the file
+            ///
+            /// @author I Copland
+			///
+			/// @param File stream
+			/// @param Mesh description
+            /// @param [Out] Submesh description
+            //-----------------------------------------------------------------------------
+            void ReadSubMeshData(const Core::FileStreamSPtr& in_meshStream, const MeshDescriptor& in_meshDesc, SubMeshDescriptor& out_subMeshDesc)
+            {
+                //read the inverse bind matrices
+                if(true == in_meshDesc.mFeatures.mbHasAnimationData)
+                {
+                    for(u32 i=0; i<in_meshDesc.mpSkeleton->GetNumJoints(); i++)
+                    {
+                        ChilliSource::Core::Matrix4x4 IBPMat;
+                        ReadBlock<f32>(in_meshStream, 16, IBPMat.m);
+                        out_subMeshDesc.mInverseBindPoseMatrices.push_back(IBPMat);
+                    }
+                }
+                
+                //read the vertex data
+                out_subMeshDesc.mpVertexData = new u8[in_meshDesc.mVertexDeclaration.GetTotalSize() * out_subMeshDesc.mudwNumVertices];
+                in_meshStream->Read((s8*)out_subMeshDesc.mpVertexData, in_meshDesc.mVertexDeclaration.GetTotalSize() * out_subMeshDesc.mudwNumVertices);
+                
+                //read the index data
+                out_subMeshDesc.mpIndexData = new u8[in_meshDesc.mudwIndexSize * out_subMeshDesc.mudwNumIndices];
+                in_meshStream->Read((s8*)out_subMeshDesc.mpIndexData, in_meshDesc.mudwIndexSize * out_subMeshDesc.mudwNumIndices);
+            }
+            //-----------------------------------------------------------------------------
+			/// Reads the sub-mesh header section of the file
+            ///
+            /// @author I Copland
+			///
+			/// @param File stream
+            /// @param Mesh description
+			/// @param [Out] Sube mesh description
+            //-----------------------------------------------------------------------------
+            void ReadSubMeshHeader(const Core::FileStreamSPtr& in_meshStream, const MeshDescriptor& in_meshDesc, SubMeshDescriptor& out_subMeshDesc)
+            {
+                //read mesh name
+                u8 nextChar = 0;
+                do
+                {
+                    nextChar = ReadValue<u8>(in_meshStream);
+                    out_subMeshDesc.mstrName += nextChar;
+                    
+                } while(nextChar != 0u);
+                
+                //read num verts and triangles
+                if (2u == in_meshDesc.mudwIndexSize)
+                {
+                    out_subMeshDesc.mudwNumVertices = (u32)ReadValue<u16>(in_meshStream);
+                    out_subMeshDesc.mudwNumIndices = ((u32)ReadValue<u16>(in_meshStream)) * 3u;
+                }
+                else
+                {
+                    out_subMeshDesc.mudwNumVertices = ReadValue<u32>(in_meshStream);
+                    out_subMeshDesc.mudwNumIndices = ReadValue<u32>(in_meshStream) * 3u;
+                }
+                
+                //read bounds
+                out_subMeshDesc.mvMinBounds.x = ReadValue<f32>(in_meshStream);
+                out_subMeshDesc.mvMinBounds.y = ReadValue<f32>(in_meshStream);
+                out_subMeshDesc.mvMinBounds.z = ReadValue<f32>(in_meshStream);
+                out_subMeshDesc.mvMaxBounds.x = ReadValue<f32>(in_meshStream);
+                out_subMeshDesc.mvMaxBounds.y = ReadValue<f32>(in_meshStream);
+                out_subMeshDesc.mvMaxBounds.z = ReadValue<f32>(in_meshStream);
+                
+                //TODO: Remove texture and material from mesh
+                //in the meantime just read and discard.
+                if (true == in_meshDesc.mFeatures.mbHasTexture)
+                {
+                    u8 nextChar = 0;
+                    do
+                    {
+                        nextChar = ReadValue<u8>(in_meshStream);
+                        
+                    } while(nextChar != 0u);
+                }
+                
+                if (true == in_meshDesc.mFeatures.mbHasMaterial)
+                {
+                    u8 nextChar = 0;
+                    do
+                    {
+                        nextChar = ReadValue<u8>(in_meshStream);
+                        
+                    } while(nextChar != 0u);
+                }
+            }
+            //-----------------------------------------------------------------------------
+			/// Reads the skeleton section of the file
+            ///
+            /// @author I Copland
+			///
+			/// @param File stream
+            /// @param Container holding the num of meshes, joints and bones
+			/// @param [Out] Mesh description
+            //-----------------------------------------------------------------------------
+            void ReadSkeletonData(const Core::FileStreamSPtr& in_meshStream, const MeshDataQuantities& in_quantities, MeshDescriptor& out_meshDesc)
+            {
+                if (true == out_meshDesc.mFeatures.mbHasAnimationData)
+                {
+                    out_meshDesc.mpSkeleton = SkeletonSPtr(new Skeleton());
+                    
+                    //read the skeleton nodes
+                    std::unordered_map<u32, s32> jointToNodeMap;
+                    for(u32 i=0; i<in_quantities.m_numSkeletonNodes; ++i)
+                    {
+                        //get the skeleton node name name
+                        std::string nodeName;
+                        u8 nextChar = 0;
+                        do
+                        {
+                            nextChar = ReadValue<u8>(in_meshStream);
+                            nodeName += nextChar;
+                        } while(nextChar != 0);
+                        
+                        //get the parent index
+                        s32 parentIndex = (s32)ReadValue<s16>(in_meshStream);
+                        
+                        //get the type
+                        const u32 isJoint = 1;
+                        u8 type = ReadValue<u8>(in_meshStream);
+                        if (type == isJoint)
+                        {
+                            u32 jointIndex = (u32)ReadValue<u8>(in_meshStream);
+                            jointToNodeMap.insert(std::pair<u32, s32>(jointIndex, (s32)i));
+                        }
+                        
+                        //add joint
+                        out_meshDesc.mpSkeleton->AddNode(nodeName, parentIndex);
+                    }
+                    
+                    for (u32 i=0; i<in_quantities.m_numJoints; ++i)
+                    {
+                        out_meshDesc.mpSkeleton->AddJointIndex(jointToNodeMap[i]);
+                    }
+                }
+            }
+            //-----------------------------------------------------------------------------
+			/// Reads the header of the file
+            ///
+            /// @author I Copland
+			///
+			/// @param File stream
+			/// @param the file path
+            /// @param [Out] Mesh description
+            /// @param [Out] A struct containing info on the number of meshes, nodes and joints.
+            ///
+			/// @return Whether the file is correct
+            //-----------------------------------------------------------------------------
+            bool ReadGlobalHeader(const Core::FileStreamSPtr& in_meshStream, const std::string& in_filePath, MeshDescriptor& out_meshDesc, MeshDataQuantities& out_meshQuantities)
+            {
+                //Check file for corruption
+                if(nullptr == in_meshStream || true == in_meshStream->IsBad())
+                {
+                    CS_LOG_ERROR("Cannot open MoModel file: " + in_filePath);
+                    return false;
+                }
+                
+                u32 fileCheckValue = ReadValue<u32>(in_meshStream);
+                if(fileCheckValue != k_fileCheckValue)
+                {
+                    CS_LOG_ERROR("MoModel file has corruption(incorrect File Check Value): " + in_filePath);
+                    return false;
+                }
+                
+                u32 versionNum = ReadValue<u32>(in_meshStream);
+                if (versionNum < k_minVersion || versionNum > k_maxVersion)
+                {
+                    CS_LOG_ERROR("Unsupported MoModel version: " + in_filePath);
+                    return false;
+                }
+                
+                //init features
+                out_meshDesc.mFeatures.mbHasAnimationData = false;
+                out_meshDesc.mFeatures.mbHasMaterial = false;
+                out_meshDesc.mFeatures.mbHasTexture = false;
+                
+                //build the feature declaration from the file
+                u32 numFeatures = (u32)ReadValue<u8>(in_meshStream);
+                for (u32 i=0; i<numFeatures; ++i)
+                {
+                    u32 featureType = (u32)ReadValue<u8>(in_meshStream);
+                    
+                    switch (Feature(featureType))
+                    {
+                        case Feature::k_hasAnimation:
+                            //A breaking change was made to animated models in version 11.
+                            CS_ASSERT(versionNum >= 11, "Model contains old format animation data, please update to momodel version 11: " + in_filePath);
+                            out_meshDesc.mFeatures.mbHasAnimationData = true;
+                            break;
+                        case Feature::k_hasMaterial:
+                            out_meshDesc.mFeatures.mbHasMaterial = true;
+                            CS_LOG_WARNING("Material is deprecated in CSModel format: " + in_filePath);
+                            break;
+                        case Feature::k_hasTexture:
+                            out_meshDesc.mFeatures.mbHasTexture = true;
+                            CS_LOG_WARNING("Texture is deprecated in CSModel format: " + in_filePath);
+                            break;
+                        default:
+                            CS_LOG_ERROR("Unknown feature type in MoModel (" + in_filePath + ") feature declaration!");
+                            break;
+                    }
+                }
+                
+                //read the vertex declaration
+                ReadVertexDeclaration(in_meshStream, out_meshDesc);
+                
+                //read index declaration
+                out_meshDesc.mudwIndexSize = ReadValue<u8>(in_meshStream);
+                
+                //read the min and max bounds
+                out_meshDesc.mvMinBounds.x = ReadValue<f32>(in_meshStream);
+                out_meshDesc.mvMinBounds.y = ReadValue<f32>(in_meshStream);
+                out_meshDesc.mvMinBounds.z = ReadValue<f32>(in_meshStream);
+                out_meshDesc.mvMaxBounds.x = ReadValue<f32>(in_meshStream);
+                out_meshDesc.mvMaxBounds.y = ReadValue<f32>(in_meshStream);
+                out_meshDesc.mvMaxBounds.z = ReadValue<f32>(in_meshStream);
+                
+                //read the number of meshes
+                out_meshQuantities.m_numMeshes = (u32)ReadValue<u16>(in_meshStream);
+                out_meshQuantities.m_numSkeletonNodes = 0;
+                out_meshQuantities.m_numJoints = 0;
+                
+                //read num skeleton nodes and joints if used
+                if (true == out_meshDesc.mFeatures.mbHasAnimationData)
+                {
+                    out_meshQuantities.m_numSkeletonNodes = (s32)ReadValue<s16>(in_meshStream);
+                    out_meshQuantities.m_numJoints = (u32)ReadValue<u8>(in_meshStream);
+                }
+                
+                return true;
+            }
+            //----------------------------------------------------------------------------
+			/// Read the mesh data from file and creates a mesh descriptor.
+            ///
+            /// @author I Copland
+			///
+            /// @param The storage location to load from
+			/// @param File path
+			/// @param [Out] Mesh description
+            ///
+			/// @return true if successful, false if not
+            //----------------------------------------------------------------------------
+            bool ReadFile(Core::StorageLocation in_location, const std::string& in_filePath, MeshDescriptor& out_meshDesc)
+            {
+                Core::FileStreamSPtr meshStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_readBinary);
+                
+                MeshDataQuantities quantities;
+                if(ReadGlobalHeader(meshStream, in_filePath, out_meshDesc, quantities) == false)
+                {
+                    return false;
+                }
+                
+                ReadSkeletonData(meshStream, quantities, out_meshDesc);
+                
+                for(u32 i=0; i<quantities.m_numMeshes; ++i)
+                {
+                    SubMeshDescriptor subMeshDesc;
+                    
+                    ReadSubMeshHeader(meshStream, out_meshDesc, subMeshDesc);
+                    ReadSubMeshData(meshStream, out_meshDesc, subMeshDesc);
+                    
+                    out_meshDesc.mMeshes.push_back(subMeshDesc);
+                }
+                
+                meshStream->Close();
+                
+                return true;
+            }
+        }
+        
+        CS_DEFINE_NAMEDTYPE(CSModelProvider);
+        
+        //-------------------------------------------------------------------------
+		//-------------------------------------------------------------------------
+        CSModelProviderUPtr CSModelProvider::Create()
+        {
+            return CSModelProviderUPtr(new CSModelProvider());
+        }
+		//-------------------------------------------------------------------------
+		//-------------------------------------------------------------------------
+		bool CSModelProvider::IsA(Core::InterfaceIDType in_interfaceID) const
+		{
+			return in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == CSModelProvider::InterfaceID;
+		}
+		//----------------------------------------------------------------------------
+		//----------------------------------------------------------------------------
+		bool CSModelProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
+		{
+			return in_interfaceID == Mesh::InterfaceID;
+		}
+		//----------------------------------------------------------------------------
+		//----------------------------------------------------------------------------
+		bool CSModelProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
+		{
+			return in_extension == k_modelFileExtension;
+		}
+		//----------------------------------------------------------------------------
+		//----------------------------------------------------------------------------
+		bool CSModelProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		{
+			MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
+            meshResource->SetLoaded(false);
+			
+            MeshDescriptor descriptor;
+			
+			if (ReadFile(in_location, in_filePath, descriptor) == false)
+			{
+				return false;
+			}
+			
+            BuildMesh(descriptor, meshResource);
+            
+            return meshResource->IsLoaded();
+		}
+		//----------------------------------------------------------------------------
+		//----------------------------------------------------------------------------
+		bool CSModelProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		{
+			MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
+            meshResource->SetLoaded(false);
+			
+            //Load model as task
+			Core::Task<Core::StorageLocation, const std::string&, const MeshSPtr&> MeshTask(this, &CSModelProvider::LoadMeshDataTask, in_location, in_filePath, meshResource);
+			Core::TaskScheduler::ScheduleTask(MeshTask);
+			
+			return true;
+		}
+		//----------------------------------------------------------------------------
+		//----------------------------------------------------------------------------
+		void CSModelProvider::LoadMeshDataTask(Core::StorageLocation in_location, const std::string& in_filePath, const MeshSPtr& out_resource)
+		{
+			//read the mesh data into a MoStaticDeclaration
+			MeshDescriptor descriptor;
+			if (false == ReadFile(in_location, in_filePath, descriptor))
+			{
+				return;
+			}
+			
+			//start a main thread task for loading the data into a mesh
+			Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<MeshDescriptor&,const MeshSPtr&>(this, &CSModelProvider::BuildMesh, descriptor, out_resource));
+		}
+		//----------------------------------------------------------------------------
+		//----------------------------------------------------------------------------
+		void CSModelProvider::BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource)
+		{
+			bool bSuccess = MeshManager::BuildMesh(Core::Application::Get()->GetRenderSystem(), inMeshDescriptor, outpResource.get());
+			
+			//cleanup
+			for (std::vector<SubMeshDescriptor>::const_iterator it = inMeshDescriptor.mMeshes.begin(); it != inMeshDescriptor.mMeshes.end(); ++it)
+			{
+				delete[] it->mpVertexData;
+				delete[] it->mpIndexData;
+			}
+			
+            outpResource->SetLoaded(bSuccess);
+		}
+	}
+}
+

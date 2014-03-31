@@ -233,7 +233,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// BuildMesh
 		//----------------------------------------------------------------------------
-		bool MeshManager::BuildMesh(RenderSystem* inpRenderSystem, const MeshDescriptor& inMeshDescriptor, Mesh* outpResource, bool inbNeedsPrepared)
+		bool MeshManager::BuildMesh(RenderSystem* inpRenderSystem, const MeshDescriptor& inMeshDescriptor, Mesh* outpResource)
 		{
 			bool bSuccess = true;
 			
@@ -254,18 +254,9 @@ namespace ChilliSource
 				u32 udwIndexDataCapacity  = it->mudwNumIndices * inMeshDescriptor.mudwIndexSize;
 				
 				//prepare the mesh if it needs it, otherwise just update the vertex and index declarations.
-				SubMeshSPtr newSubMesh;
-				if (inbNeedsPrepared == true)
-				{
-					newSubMesh = outpResource->CreateSubMesh(it->mstrName);
-					newSubMesh->Prepare(inpRenderSystem, inMeshDescriptor.mVertexDeclaration, inMeshDescriptor.mudwIndexSize, 
-										udwVertexDataCapacity, udwIndexDataCapacity, BufferAccess::k_read, it->ePrimitiveType);
-				}
-				else 
-				{
-					newSubMesh = outpResource->GetSubMeshAtIndex(count);
-					newSubMesh->AlterBufferDeclaration(inMeshDescriptor.mVertexDeclaration, inMeshDescriptor.mudwIndexSize);
-				}
+				SubMeshSPtr	newSubMesh = outpResource->CreateSubMesh(it->mstrName);
+                newSubMesh->Prepare(inpRenderSystem, inMeshDescriptor.mVertexDeclaration, inMeshDescriptor.mudwIndexSize,
+                                    udwVertexDataCapacity, udwIndexDataCapacity, BufferAccess::k_read, it->ePrimitiveType);
 				
 				//check that the buffers are big enough to hold this data. if not throw an error.
 				if (udwVertexDataCapacity <= newSubMesh->GetInternalMeshBuffer()->GetVertexCapacity() &&
@@ -278,13 +269,6 @@ namespace ChilliSource
 					CS_LOG_ERROR("Sub mesh data exceeds its buffer capacity. Mesh will return empty!");
 					bSuccess = false;
 				}
-				
-				//set the default material name.
-				if (inMeshDescriptor.mFeatures.mbHasMaterial == true)
-                {
-					newSubMesh->SetDefaultMaterialName(it->mstrMaterialName);
-                    newSubMesh->SetDefaultMaterialStorageLocation(it->meMaterialStorageLocation);
-                }
 				
 				//add the skeleton controller
 				if (inMeshDescriptor.mFeatures.mbHasAnimationData == true)

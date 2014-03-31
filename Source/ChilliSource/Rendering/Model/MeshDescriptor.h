@@ -28,9 +28,9 @@ namespace ChilliSource
 		{
 			MeshFeatureDescriptor();
 			
-			bool mbHasTexture;
-			bool mbHasMaterial;
 			bool mbHasAnimationData;
+            bool mbHasMaterial;
+            bool mbHasTexture;
 		};
 		//-------------------------------------------------------------------------
 		/// Container for information required to build a sub-mesh. 
@@ -44,9 +44,6 @@ namespace ChilliSource
 			u32 mudwNumIndices;
 			ChilliSource::Core::Vector3 mvMinBounds;
 			ChilliSource::Core::Vector3 mvMaxBounds;
-			std::string mstrTextureName;
-			std::string mstrMaterialName;
-            Core::StorageLocation meMaterialStorageLocation;
 			u8* mpVertexData;
 			u8* mpIndexData;
 			std::vector<ChilliSource::Core::Matrix4x4> mInverseBindPoseMatrices;

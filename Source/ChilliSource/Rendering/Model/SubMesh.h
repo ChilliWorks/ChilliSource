@@ -40,18 +40,6 @@ namespace ChilliSource
 			virtual ~SubMesh();
 			
 			//-----------------------------------------------------------------
-			/// Get Default Material Name
-			///
-			/// @param the name(filepath) of the default material.
-			//-----------------------------------------------------------------
-			const std::string& GetDefaultMaterialName();
-            //-----------------------------------------------------------------
-			/// Get Default Material Storage Location
-			///
-			/// @param the storage location of the default material.
-			//-----------------------------------------------------------------
-            Core::StorageLocation GetDefaultMaterialStorageLocation();
-			//-----------------------------------------------------------------
 			/// Get Internal Mesh Buffer
 			///
 			/// @return Mesh buffer containing the vertex data
@@ -129,18 +117,6 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			void Build(void* inpVertexData, void*inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::Vector3 invMin, Core::Vector3 invMax);
 			//-----------------------------------------------------------------
-			/// Set Default Material Name
-			/// 
-			/// @param the material name
-			//-----------------------------------------------------------------
-			void SetDefaultMaterialName(const std::string& instrMaterialName);
-            //-----------------------------------------------------------------
-			/// Set Default Material Storage Location
-			/// 
-			/// @param the material storage location
-			//-----------------------------------------------------------------
-			void SetDefaultMaterialStorageLocation(Core::StorageLocation ineStorageLocation);
-			//-----------------------------------------------------------------
 			/// Set Inverse Bind Pose
 			/// 
 			/// @param the new InverseBindPose
@@ -164,8 +140,6 @@ namespace ChilliSource
 		private:
 			
 			std::string mstrName;
-			std::string mstrDefaultMaterialName;
-            Core::StorageLocation meDefaultStorageLocation;
 			Core::AABB mBoundingBox;
 			
 			//Used to create hardware buffers and render

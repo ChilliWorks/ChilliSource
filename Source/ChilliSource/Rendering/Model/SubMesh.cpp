@@ -34,20 +34,6 @@ namespace ChilliSource
 			
 		}
 		//-----------------------------------------------------------------
-		/// Get Default Material Name
-		//-----------------------------------------------------------------
-		const std::string& SubMesh::GetDefaultMaterialName()
-		{
-			return mstrDefaultMaterialName;
-		}
-        //-----------------------------------------------------------------
-        /// Get Default Material Storage Location
-        //-----------------------------------------------------------------
-        Core::StorageLocation SubMesh::GetDefaultMaterialStorageLocation()
-        {
-            return meDefaultStorageLocation;
-        }
-		//-----------------------------------------------------------------
 		/// Get Internal Mesh Buffer
 		//-----------------------------------------------------------------
 		MeshBuffer* SubMesh::GetInternalMeshBuffer() const
@@ -170,20 +156,6 @@ namespace ChilliSource
 			mBoundingBox = Core::AABB((invMax + invMin) * 0.5f, vSize);
 			
 		}
-		//-----------------------------------------------------------------
-		/// Set Default Material Name
-		//-----------------------------------------------------------------
-		void SubMesh::SetDefaultMaterialName(const std::string& instrMaterialName)
-		{
-			mstrDefaultMaterialName = instrMaterialName;
-		}
-        //-----------------------------------------------------------------
-        /// Set Default Material Storage Location
-        //-----------------------------------------------------------------
-        void SubMesh::SetDefaultMaterialStorageLocation(Core::StorageLocation ineStorageLocation)
-        {
-            meDefaultStorageLocation = ineStorageLocation;
-        }
 		//-----------------------------------------------------------------
 		/// Set Skeleton Controller
 		//-----------------------------------------------------------------
