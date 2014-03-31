@@ -108,7 +108,7 @@ namespace ChilliSource
                 u8 numVertexElements = ReadValue<u8>(in_meshStream);
                 
                 VertexElement* vertexElements = new VertexElement[numVertexElements];
-                for (int i = 0; i < numVertexElements; i++)
+                for (int i = 0; i < numVertexElements; ++i)
                 {
                     u8 vertexAttrib = ReadValue<u8>(in_meshStream);
                     
@@ -161,7 +161,7 @@ namespace ChilliSource
                 //read the inverse bind matrices
                 if(true == in_meshDesc.mFeatures.mbHasAnimationData)
                 {
-                    for(u32 i=0; i<in_meshDesc.mpSkeleton->GetNumJoints(); i++)
+                    for(u32 i=0; i<in_meshDesc.mpSkeleton->GetNumJoints(); ++i)
                     {
                         ChilliSource::Core::Matrix4x4 IBPMat;
                         ReadBlock<f32>(in_meshStream, 16, IBPMat.m);
@@ -271,9 +271,9 @@ namespace ChilliSource
                         s32 parentIndex = (s32)ReadValue<s16>(in_meshStream);
                         
                         //get the type
-                        const u32 isJoint = 1;
+                        const u32 k_isJoint = 1;
                         u8 type = ReadValue<u8>(in_meshStream);
-                        if (type == isJoint)
+                        if (type == k_isJoint)
                         {
                             u32 jointIndex = (u32)ReadValue<u8>(in_meshStream);
                             jointToNodeMap.insert(std::pair<u32, s32>(jointIndex, (s32)i));
@@ -303,13 +303,6 @@ namespace ChilliSource
             //-----------------------------------------------------------------------------
             bool ReadGlobalHeader(const Core::FileStreamSPtr& in_meshStream, const std::string& in_filePath, MeshDescriptor& out_meshDesc, MeshDataQuantities& out_meshQuantities)
             {
-                //Check file for corruption
-                if(nullptr == in_meshStream || true == in_meshStream->IsBad())
-                {
-                    CS_LOG_ERROR("Cannot open MoModel file: " + in_filePath);
-                    return false;
-                }
-                
                 u32 fileCheckValue = ReadValue<u32>(in_meshStream);
                 if(fileCheckValue != k_fileCheckValue)
                 {
@@ -398,6 +391,13 @@ namespace ChilliSource
             bool ReadFile(Core::StorageLocation in_location, const std::string& in_filePath, MeshDescriptor& out_meshDesc)
             {
                 Core::FileStreamSPtr meshStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_readBinary);
+                
+                //Check file for corruption
+                if(nullptr == meshStream || true == meshStream->IsBad())
+                {
+                    CS_LOG_ERROR("Cannot open MoModel file: " + in_filePath);
+                    return false;
+                }
                 
                 MeshDataQuantities quantities;
                 if(ReadGlobalHeader(meshStream, in_filePath, out_meshDesc, quantities) == false)

@@ -65,25 +65,31 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             CSModelProvider() = default;
 			//----------------------------------------------------------------------------
-			/// Create Resource From File
+			/// Create mesh resource from model file
+            ///
+            /// @author I Copland
 			///
             /// @param The storage location to load from
 			/// @param Filename
 			/// @param the output resource pointer
+            ///
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
 			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
-			/// Async Create Resource From File
+			/// Create mesh resource from model file on a background thread
 			///
+            /// @author I Copland
+            ///
             /// @param The storage location to load from
 			/// @param Filename
 			/// @param the output resource pointer
-			/// @return whether or not this was successful
+            ///
+			/// @return whether or not this was successfully scheduled
 			//----------------------------------------------------------------------------
 			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
-			/// LoadMeshDataTask
+			/// @author I Copland
 			///
             /// @param The storage location to load from
 			/// @param Filename
@@ -91,9 +97,9 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			void LoadMeshDataTask(Core::StorageLocation in_location, const std::string& in_filePath, const MeshSPtr& out_resource);
 			//----------------------------------------------------------------------------
-			/// BuildMesh
+			/// Constructs the mesh buffer from the mesh description
 			///
-			/// Calls BuildMesh in the mesh manager, then cleans up the MeshDescriptor.
+			/// @author I Copland
 			///
 			/// @param The MeshDescriptor used to build the mesh
 			/// @param the mesh resource
