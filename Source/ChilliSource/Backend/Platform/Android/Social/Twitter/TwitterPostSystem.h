@@ -38,7 +38,7 @@ namespace ChilliSource
 			///
             /// @return Is of interface ID type
             //------------------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //------------------------------------------------------------------------
             /// Run the OAuth process and, if successful, leave the system in state
             /// ready to communicate with Twitter

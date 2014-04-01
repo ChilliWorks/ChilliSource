@@ -38,7 +38,7 @@ namespace ChilliSource
 			/// @return whether or not this object implements
 			/// the given interface.
 			//-----------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceID) const;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const;
             //-----------------------------------------------
             /// Display the systems confirmation dialog
             ///

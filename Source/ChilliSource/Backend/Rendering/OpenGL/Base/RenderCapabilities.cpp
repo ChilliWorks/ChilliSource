@@ -41,9 +41,9 @@ namespace ChilliSource
         }
         //-------------------------------------------------
         //-------------------------------------------------
-        bool RenderCapabilities::IsA(Core::InterfaceIDType in_interfaceID) const
+        bool RenderCapabilities::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return (Rendering::RenderCapabilities::InterfaceID == in_interfaceID || RenderCapabilities::InterfaceID == in_interfaceID);
+            return (Rendering::RenderCapabilities::InterfaceID == in_interfaceId || RenderCapabilities::InterfaceID == in_interfaceId);
         }
         //-------------------------------------------------
         //-------------------------------------------------

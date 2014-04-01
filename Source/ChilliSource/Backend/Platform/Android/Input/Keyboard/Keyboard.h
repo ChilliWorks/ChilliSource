@@ -38,7 +38,7 @@ namespace ChilliSource
 			/// @return Whether the object implements an interface
 			/// that has the given ID
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//-------------------------------------------------------
 			/// Sets whether or not the text input is currently
 			/// enabled or disabled. If the keyboard is virtual, it

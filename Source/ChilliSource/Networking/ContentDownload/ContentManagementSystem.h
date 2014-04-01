@@ -92,7 +92,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the inteface is implemented.
             //---------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //-----------------------------------------------------------
             /// Get the content manifest from the asset server and
             /// check for any changes with the local copy.

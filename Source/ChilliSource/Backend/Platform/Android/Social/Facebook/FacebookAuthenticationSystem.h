@@ -36,7 +36,7 @@ namespace ChilliSource
             ///
             /// @return Whether the interface ID matches this object
             //----------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
             /// Called when the system is created allocating any
 			/// resources

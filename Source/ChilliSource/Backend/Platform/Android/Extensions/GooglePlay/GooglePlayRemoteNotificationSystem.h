@@ -34,7 +34,7 @@ namespace ChilliSource
             /// @return Whether this implements the passed in
             /// interface id.
             //--------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------
             /// Enables and disables addition of remote notifications.
             /// All existing notifications will be cancelled

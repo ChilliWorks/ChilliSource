@@ -36,7 +36,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the object implements the given interface
 			//-------------------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//-------------------------------------------------------------------------
 			/// @author I Copland
 			///
@@ -44,7 +44,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the object can create a resource of given type
 			//-------------------------------------------------------------------------
-			bool CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const override;
+			bool CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const override;
 			//-------------------------------------------------------------------------
 			/// @author I Copland
 			///

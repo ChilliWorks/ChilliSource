@@ -32,9 +32,9 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Scene::IsA(InterfaceIDType in_interfaceID) const
+        bool Scene::IsA(InterfaceIDType in_interfaceId) const
         {
-            return Scene::InterfaceID == in_interfaceID;
+            return Scene::InterfaceID == in_interfaceId;
         }
 		//-------------------------------------------------------
 		//-------------------------------------------------------

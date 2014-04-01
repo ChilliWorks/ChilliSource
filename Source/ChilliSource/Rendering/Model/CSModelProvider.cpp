@@ -433,15 +433,15 @@ namespace ChilliSource
         }
 		//-------------------------------------------------------------------------
 		//-------------------------------------------------------------------------
-		bool CSModelProvider::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool CSModelProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == CSModelProvider::InterfaceID;
+			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSModelProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSModelProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
+		bool CSModelProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceID == Mesh::InterfaceID;
+			return in_interfaceId == Mesh::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------

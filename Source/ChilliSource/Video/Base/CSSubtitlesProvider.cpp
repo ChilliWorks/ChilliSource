@@ -59,15 +59,15 @@ namespace ChilliSource
 
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool CSSubtitlesProvider::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool CSSubtitlesProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == CSSubtitlesProvider::InterfaceID;
+			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSSubtitlesProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool CSSubtitlesProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
+		bool CSSubtitlesProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceID == Subtitles::InterfaceID);
+			return (in_interfaceId == Subtitles::InterfaceID);
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------

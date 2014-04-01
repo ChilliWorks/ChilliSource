@@ -29,9 +29,9 @@ namespace ChilliSource
         }
         //--------------------------------------------------
         //--------------------------------------------------
-        bool AppNotificationSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+        bool AppNotificationSystem::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return (AppNotificationSystem::InterfaceID == in_interfaceID);
+            return (AppNotificationSystem::InterfaceID == in_interfaceId);
         }
         //--------------------------------------------------
         //--------------------------------------------------

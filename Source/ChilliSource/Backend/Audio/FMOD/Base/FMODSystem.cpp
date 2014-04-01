@@ -91,12 +91,12 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
 		//-------------------------------------------------------
-		bool FMODSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool FMODSystem::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
 			return
-            in_interfaceID == Core::IComponentProducer::InterfaceID ||
-            in_interfaceID == AudioSystem::InterfaceID ||
-            in_interfaceID == FMODSystem::InterfaceID;
+            in_interfaceId == Core::IComponentProducer::InterfaceID ||
+            in_interfaceId == AudioSystem::InterfaceID ||
+            in_interfaceId == FMODSystem::InterfaceID;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------

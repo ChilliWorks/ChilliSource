@@ -82,15 +82,15 @@ namespace ChilliSource
         }
 		//-------------------------------------------------------------------------e
 		//-------------------------------------------------------------------------
-		bool FontProvider::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool FontProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == FontProvider::InterfaceID;
+			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == FontProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool FontProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
+		bool FontProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceID == Font::InterfaceID;
+			return in_interfaceId == Font::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------

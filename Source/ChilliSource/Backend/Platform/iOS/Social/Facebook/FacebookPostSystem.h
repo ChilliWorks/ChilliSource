@@ -38,7 +38,7 @@ namespace ChilliSource
             ///
             /// @return Whether the object has the same interface ID
             //----------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------
             /// Post the wall of the user specified in the post
             /// description. If no user is specified then post

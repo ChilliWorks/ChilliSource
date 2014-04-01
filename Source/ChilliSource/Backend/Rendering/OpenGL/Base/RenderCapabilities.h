@@ -38,7 +38,7 @@ namespace ChilliSource
 			/// @return Whether the object implements that
             /// interface
 			//-------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------
             /// Determine the capabilities of the device
             /// in terms of GL and render support. This needs

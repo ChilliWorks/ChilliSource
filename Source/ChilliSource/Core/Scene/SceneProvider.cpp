@@ -29,9 +29,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool SceneProvider::CanCreateResourceOfKind(InterfaceIDType in_interfaceID) const
+        bool SceneProvider::CanCreateResourceOfKind(InterfaceIDType in_interfaceId) const
         {
-            return (in_interfaceID == ChilliSource::Core::SceneDesc::InterfaceID);
+            return (in_interfaceId == ChilliSource::Core::SceneDesc::InterfaceID);
         }
         //----------------------------------------------------
         //----------------------------------------------------

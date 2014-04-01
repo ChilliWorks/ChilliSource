@@ -38,7 +38,7 @@ namespace ChilliSource
 			///
 			/// @return Whether or not this object implements the given interface.
 			//--------------------------------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//--------------------------------------------------------------------------------------
 			/// Sets the Chilli Source Application pointer.
 			///

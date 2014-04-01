@@ -65,9 +65,9 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------
         //----------------------------------------------------
-		bool FacebookPostSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool FacebookPostSystem::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return FacebookPostSystem::InterfaceID == in_interfaceID || Social::FacebookPostSystem::InterfaceID == in_interfaceID;
+			return FacebookPostSystem::InterfaceID == in_interfaceId || Social::FacebookPostSystem::InterfaceID == in_interfaceId;
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -132,7 +132,7 @@ namespace ChilliSource
                      {
                          if(result == FBWebDialogResultDialogCompleted)
                          {
-                             NSDictionary *urlParams = [URLParser parseURLParams:[resultURL query]];
+                             NSDictionary* urlParams = [URLParser parseURLParams:[resultURL query]];
                              if (![urlParams valueForKey:@"request"])
                              {
                                  // User clicked the Cancel button
@@ -145,6 +145,8 @@ namespace ChilliSource
                                 m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
                                 m_requestCompleteDelegate = nullptr;
                              }
+             
+                             [urlParams release];
                          }
                          else
                          {
@@ -230,7 +232,7 @@ namespace ChilliSource
                     {
                         if(result == FBWebDialogResultDialogCompleted)
                         {
-                            NSDictionary *urlParams = [URLParser parseURLParams:[resultURL query]];
+                            NSDictionary* urlParams = [URLParser parseURLParams:[resultURL query]];
                             if (![urlParams valueForKey:@"post_id"])
                             {
                                 // User clicked the Cancel button
@@ -243,6 +245,7 @@ namespace ChilliSource
                                 m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
                                 m_postCompleteDelegate = nullptr;
                             }
+                            [urlParams release];
                         }
                         else
                         {

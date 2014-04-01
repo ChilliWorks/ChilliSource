@@ -52,15 +52,15 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------------------------
 		//-------------------------------------------------------------------------
-		bool AudioLoader::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool AudioLoader::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == Audio::AudioLoader::InterfaceID || in_interfaceID == AudioLoader::InterfaceID);
+			return (in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == Audio::AudioLoader::InterfaceID || in_interfaceId == AudioLoader::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool AudioLoader::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
+		bool AudioLoader::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceID == Audio::AudioResource::InterfaceID || in_interfaceID == AudioResource::InterfaceID);
+			return (in_interfaceId == Audio::AudioResource::InterfaceID || in_interfaceId == AudioResource::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------

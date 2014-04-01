@@ -26,9 +26,9 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		bool Keyboard::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool Keyboard::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (Input::Keyboard::InterfaceID == in_interfaceID || Keyboard::InterfaceID == in_interfaceID);
+			return (Input::Keyboard::InterfaceID == in_interfaceId || Keyboard::InterfaceID == in_interfaceId);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------

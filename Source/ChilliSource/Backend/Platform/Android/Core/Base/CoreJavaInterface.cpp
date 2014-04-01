@@ -300,9 +300,9 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
-		bool CoreJavaInterface::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool CoreJavaInterface::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceID == CoreJavaInterface::InterfaceID);
+			return (in_interfaceId == CoreJavaInterface::InterfaceID);
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------

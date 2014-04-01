@@ -37,9 +37,9 @@ namespace ChilliSource
     	}
         //--------------------------------------------------
         //--------------------------------------------------
-        bool GooglePlayRemoteNotificationSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+        bool GooglePlayRemoteNotificationSystem::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return (GooglePlayRemoteNotificationSystem::InterfaceID == in_interfaceID || Core::RemoteNotificationSystem::InterfaceID == in_interfaceID);
+            return (GooglePlayRemoteNotificationSystem::InterfaceID == in_interfaceId || Core::RemoteNotificationSystem::InterfaceID == in_interfaceId);
         }
         //--------------------------------------------------
         //--------------------------------------------------

@@ -282,11 +282,11 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------
-		const ComponentSPtr& Entity::GetComponent(InterfaceIDType in_interfaceID) const
+		const ComponentSPtr& Entity::GetComponent(InterfaceIDType in_interfaceId) const
 		{
 			for(ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
 			{
-                if((*itr)->IsA(in_interfaceID))
+                if((*itr)->IsA(in_interfaceId))
                 {
                     return *itr;
                 }
@@ -296,11 +296,11 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------
-		void Entity::GetComponents(InterfaceIDType in_interfaceID, std::vector<ComponentSPtr>& out_components) const
+		void Entity::GetComponents(InterfaceIDType in_interfaceId, std::vector<ComponentSPtr>& out_components) const
 		{
 			for (ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
 			{
-                if ((*itr)->IsA(in_interfaceID))
+                if ((*itr)->IsA(in_interfaceId))
                 {
                     out_components.push_back(*itr);
                 }
@@ -308,11 +308,11 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------------
 		//-------------------------------------------------------------
-		const ComponentSPtr& Entity::GetComponentRecursive(InterfaceIDType in_interfaceID) const
+		const ComponentSPtr& Entity::GetComponentRecursive(InterfaceIDType in_interfaceId) const
 		{
 			for(ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
 			{
-                if((*itr)->IsA(in_interfaceID))
+                if((*itr)->IsA(in_interfaceId))
                 {
                     return *itr;
                 }
@@ -320,7 +320,7 @@ namespace ChilliSource
             
             for(SharedEntityList::const_iterator itr = m_children.begin(); itr != m_children.end(); ++itr)
             {
-                const ComponentSPtr& component = (*itr)->GetComponentRecursive(in_interfaceID);
+                const ComponentSPtr& component = (*itr)->GetComponentRecursive(in_interfaceId);
                 
                 if(component != nullptr)
                 {

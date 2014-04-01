@@ -39,9 +39,9 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		bool ParticleSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool ParticleSystem::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceID == ParticleSystem::InterfaceID) || (in_interfaceID == Core::IComponentProducer::InterfaceID);
+			return (in_interfaceId == ParticleSystem::InterfaceID) || (in_interfaceId == Core::IComponentProducer::InterfaceID);
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------

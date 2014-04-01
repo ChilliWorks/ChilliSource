@@ -52,7 +52,7 @@ namespace ChilliSource
             /// @return Whether this implements the passed in
             /// interface id.
             //-----------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------
             /// Schedules an App Notification which should fire
             /// as soon as it can. An App Notification is
