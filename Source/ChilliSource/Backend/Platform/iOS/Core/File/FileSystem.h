@@ -12,7 +12,6 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/File/FileStream.h>
 
 #include <string>
 
@@ -129,41 +128,10 @@ namespace ChilliSource
             /// @param The directory
             /// @param Flag to determine whether or not to recurse into sub
             /// directories
-            /// @param [Out] dynamic array containing the filenames.
-            //--------------------------------------------------------------
-            void GetFilePaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, std::vector<std::string>& out_filePaths) const override;
-            //--------------------------------------------------------------
-            /// creates a dynamic array containing the filenames of each
-            /// file that has the provided extension in the given directory.
-            /// File paths will be returned relative to the input directory.
             ///
-            /// @author S Downie
-            ///
-            /// @param The Storage Location
-            /// @param The directory path.
-            /// @param Flag to determine whether or not to recurse into sub
-            /// directories
-            /// @param The extension
-            /// @param [Out] Dynamic array containing the filenames.
+            /// @return dynamic array containing the filenames.
             //--------------------------------------------------------------
-            void GetFilePathsWithExtension(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_extension,
-                                           std::vector<std::string>& out_filePaths) const override;
-            //--------------------------------------------------------------
-            /// Creates a dynamic array containing the filenames of each of
-            /// each file with the given name in the given directory. File
-            /// paths will be relative to the input directory.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The Storage Location.
-            /// @param The directory.
-            /// @param Flag to determine whether or not to recurse into sub
-            /// directories.
-            /// @param The filename.
-            /// @param [Out] Dynamic array containing the filenames.
-            //--------------------------------------------------------------
-            void GetFilePathsWithFileName(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_fileName,
-                                          std::vector<std::string>& out_filePaths) const override;
+            std::vector<std::string> GetFilePaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const override;
             //--------------------------------------------------------------
             /// Creates a dynamic array containing the names of each directory
             /// in the given directory. Directory paths will be relative to
@@ -173,10 +141,12 @@ namespace ChilliSource
             ///
             /// @param The Storage Location
             /// @param The directory
-            /// @param Flag to determine whether or not to recurse into sub directories
-            /// @param Output dynamic array containing the dir names.
+            /// @param Flag to determine whether or not to recurse into sub
+            /// directories
+            ///
+            /// @return Output dynamic array containing the dir names.
             //--------------------------------------------------------------
-            void GetDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, std::vector<std::string> &out_directoryPaths) const override;
+            std::vector<std::string> GetDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const override;
             //--------------------------------------------------------------
             /// returns whether or not the given file exists.
             ///

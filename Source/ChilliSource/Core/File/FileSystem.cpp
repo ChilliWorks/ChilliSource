@@ -147,15 +147,45 @@ namespace ChilliSource
             
             return true;
         }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void FileSystem::SetPackageDLCDirectory(const std::string& in_directory)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        std::vector<std::string> FileSystem::GetFilePathsWithExtension(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_extension) const
         {
-            m_packageDLCPath = StringUtils::StandardisePath(in_directory);
+            std::vector<std::string> filePaths = GetFilePaths(in_storageLocation, in_directoryPath, in_recursive);
+            
+            auto it = std::remove_if(filePaths.begin(), filePaths.end(), [&in_extension] (const std::string& in_path)
+            {
+                return (Core::StringUtils::EndsWith(in_path, "." + in_extension, true) == false);
+            });
+            
+            filePaths.resize(it - filePaths.begin());
+            
+            return filePaths;
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		const std::string& FileSystem::GetPackageDLCDirectory() const
+        std::vector<std::string> FileSystem::GetFilePathsWithFileName(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_fileName) const
+        {
+            std::vector<std::string> filePaths = GetFilePaths(in_storageLocation, in_directoryPath, in_recursive);
+            
+            auto it = std::remove_if(filePaths.begin(), filePaths.end(), [&in_fileName] (const std::string& in_path)
+            {
+                return (Core::StringUtils::EndsWith(in_path, in_fileName, true) == false);
+            });
+            
+            filePaths.resize(it - filePaths.begin());
+            
+            return filePaths;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void FileSystem::SetPackageDLCPath(const std::string& in_directoryPath)
+        {
+            m_packageDLCPath = StringUtils::StandardisePath(in_directoryPath);
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		const std::string& FileSystem::GetPackageDLCPath() const
 		{
 			return m_packageDLCPath;
 		}
@@ -189,11 +219,10 @@ namespace ChilliSource
         //--------------------------------------------------------------
         std::string FileSystem::GetDirectoryChecksumMD5(StorageLocation in_storageLocation, const std::string& in_directoryPath) const
 		{
-        	std::vector<std::string> hashes;
-			std::vector<std::string> filenames;
-			GetFilePaths(in_storageLocation, in_directoryPath, true, filenames);
+        	std::vector<std::string> filenames = GetFilePaths(in_storageLocation, in_directoryPath, true);
             
 			//get a hash for each of the files.
+            std::vector<std::string> hashes;
 			for (const std::string& filename : filenames)
 			{
                 std::string fileHash = GetFileChecksumMD5(in_storageLocation, in_directoryPath + filename);
@@ -250,11 +279,10 @@ namespace ChilliSource
         //--------------------------------------------------------------
 		u32 FileSystem::GetDirectoryChecksumCRC32(StorageLocation in_storageLocation, const std::string& in_directoryPath) const
 		{
-			std::vector<u32> hashes;
-			std::vector<std::string> filenames;
-			GetFilePaths(in_storageLocation, in_directoryPath, true, filenames);
+			std::vector<std::string> filenames = GetFilePaths(in_storageLocation, in_directoryPath, true);
 
 			//get a hash for each of the files.
+            std::vector<u32> hashes;
 			for (const std::string& filename : filenames)
 			{
 				u32 fileHash = GetFileChecksumCRC32(in_storageLocation, in_directoryPath + filename);
@@ -300,8 +328,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
 		u32 FileSystem::GetDirectorySize(StorageLocation in_storageLocation, const std::string& in_directory) const
 		{
-			std::vector<std::string> filenames;
-			GetFilePaths(in_storageLocation, in_directory, true, filenames);
+			std::vector<std::string> filenames = GetFilePaths(in_storageLocation, in_directory, true);
 
             u32 totalSize = 0;
 			for (const std::string& filename : filenames)

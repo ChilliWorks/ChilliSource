@@ -658,10 +658,10 @@ namespace ChilliSource
         {
             if(in_checkOnlyBundle)
             {
-                if(Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + in_filename))
+                if(Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_filename))
                 {
                     //Check if the file has become corrupted
-                    return (CalculateChecksum(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + in_filename) == in_checksum);
+                    return (CalculateChecksum(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_filename) == in_checksum);
                 }
                 
                 return false;

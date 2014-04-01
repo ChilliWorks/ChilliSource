@@ -199,9 +199,10 @@ namespace ChilliSource
             /// @param The directory
             /// @param Flag to determine whether or not to recurse into sub
             /// directories
-            /// @param [Out] dynamic array containing the file names.
+            ///
+            /// @return dynamic array containing the file names.
             //--------------------------------------------------------------
-            virtual void GetFilePaths(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, std::vector<std::string>& out_filePaths) const = 0;
+            virtual std::vector<std::string> GetFilePaths(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const = 0;
             //--------------------------------------------------------------
             /// creates a dynamic array containing the file names of each
             /// file that has the provided extension in the given directory.
@@ -214,10 +215,10 @@ namespace ChilliSource
             /// @param Flag to determine whether or not to recurse into sub
             /// directories
             /// @param The extension
-            /// @param [Out] Dynamic array containing the file names.
+            ///
+            /// @return Dynamic array containing the file names.
             //--------------------------------------------------------------
-            virtual void GetFilePathsWithExtension(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_extension,
-                                                   std::vector<std::string>& out_filePaths) const = 0;
+            std::vector<std::string> GetFilePathsWithExtension(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_extension) const;
             //--------------------------------------------------------------
             /// Creates a dynamic array containing the file names of each of
             /// each file with the given name in the given directory. File
@@ -230,10 +231,10 @@ namespace ChilliSource
             /// @param Flag to determine whether or not to recurse into sub
             /// directories.
             /// @param The file name.
-            /// @param [Out] Dynamic array containing the file names.
+            ///
+            /// @return Dynamic array containing the file names.
             //--------------------------------------------------------------
-            virtual void GetFilePathsWithFileName(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_fileName,
-                                                  std::vector<std::string>& out_filePaths) const = 0;
+            std::vector<std::string> GetFilePathsWithFileName(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_fileName) const;
             //--------------------------------------------------------------
             /// Creates a dynamic array containing the names of each directory
             /// in the given directory. Directory paths will be relative to
@@ -246,7 +247,7 @@ namespace ChilliSource
             /// @param Flag to determine whether or not to recurse into sub directories
             /// @param Output dynamic array containing the dir names.
             //--------------------------------------------------------------
-            virtual void GetDirectoryPaths(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, std::vector<std::string> &out_directoryPaths) const = 0;
+            virtual std::vector<std::string> GetDirectoryPaths(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const = 0;
             //--------------------------------------------------------------
             /// returns whether or not the given file exists.
             ///
@@ -327,15 +328,13 @@ namespace ChilliSource
             ///
             /// @param The package DLC directory.
 			//--------------------------------------------------------------
-			void SetPackageDLCDirectory(const std::string& in_directory);
+			void SetPackageDLCPath(const std::string& in_directoryPath);
             //--------------------------------------------------------------
-			/// Get Package DLC Directory
-            ///
             /// @author S Downie
 			///
             /// @return The package DLC directory.
 			//--------------------------------------------------------------
-			const std::string& GetPackageDLCDirectory() const;
+			const std::string& GetPackageDLCPath() const;
             //--------------------------------------------------------------
             /// Calculate the MD5 checksum of the file at the
             /// give directory
