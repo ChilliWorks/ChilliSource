@@ -436,6 +436,31 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
+        void FileSystem::GetFilePaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive, std::vector<std::string> &out_fileNames) const
+        {
+            std::vector<std::string> astrDirectoriesToCheck;
+            GetPathsForStorageLocation(in_storageLocation, in_directoryPath, astrDirectoriesToCheck);
+            
+            NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
+            NSMutableArray* Contents = [[NSMutableArray alloc] init];
+            
+            GetDirectoryContents(astrDirectoriesToCheck, in_recursive, Contents);
+            
+            if([Contents count] > 0)
+            {
+                NSArray* Filtered = FilterPathsByFile(Contents);
+                ConvertObjCToPath(Filtered, out_fileNames);
+            }
+            
+            [Contents release];
+            [pPool release];
+            
+            std::sort(out_fileNames.begin(), out_fileNames.end());
+            std::vector<std::string>::iterator it = std::unique(out_fileNames.begin(), out_fileNames.end());
+            out_fileNames.resize(it - out_fileNames.begin());
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
         void FileSystem::GetFilePathsWithExtension(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive,
                                                   const std::string& in_extension, std::vector<std::string> &out_filePaths) const
         {
@@ -485,31 +510,6 @@ namespace ChilliSource
             std::sort(out_filePaths.begin(), out_filePaths.end());
             std::vector<std::string>::iterator it = std::unique(out_filePaths.begin(), out_filePaths.end());
             out_filePaths.resize(it - out_filePaths.begin());
-        }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        void FileSystem::GetFilePaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive, std::vector<std::string> &out_fileNames) const
-        {
-            std::vector<std::string> astrDirectoriesToCheck;
-            GetPathsForStorageLocation(in_storageLocation, in_directoryPath, astrDirectoriesToCheck);
-            
-            NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
-            NSMutableArray* Contents = [[NSMutableArray alloc] init];
-            
-            GetDirectoryContents(astrDirectoriesToCheck, in_recursive, Contents);
-            
-            if([Contents count] > 0)
-            {
-                NSArray* Filtered = FilterPathsByFile(Contents);
-                ConvertObjCToPath(Filtered, out_fileNames);
-            }
-            
-            [Contents release];
-            [pPool release];
-            
-            std::sort(out_fileNames.begin(), out_fileNames.end());
-            std::vector<std::string>::iterator it = std::unique(out_fileNames.begin(), out_fileNames.end());
-            out_fileNames.resize(it - out_fileNames.begin());
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------

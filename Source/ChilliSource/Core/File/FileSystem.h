@@ -189,6 +189,20 @@ namespace ChilliSource
             //--------------------------------------------------------------
             virtual bool DeleteDirectory(StorageLocation in_storageLocation, const std::string& in_directoryPath) const = 0;
             //--------------------------------------------------------------
+            /// Creates a dynamic array containing the file names of each file
+            /// in the given directory. File paths will be relative to the
+            /// input directory.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The Storage Location
+            /// @param The directory
+            /// @param Flag to determine whether or not to recurse into sub
+            /// directories
+            /// @param [Out] dynamic array containing the file names.
+            //--------------------------------------------------------------
+            virtual void GetFilePaths(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, std::vector<std::string>& out_filePaths) const = 0;
+            //--------------------------------------------------------------
             /// creates a dynamic array containing the file names of each
             /// file that has the provided extension in the given directory.
             /// File paths will be returned relative to the input directory.
@@ -220,20 +234,6 @@ namespace ChilliSource
             //--------------------------------------------------------------
             virtual void GetFilePathsWithFileName(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_fileName,
                                                   std::vector<std::string>& out_filePaths) const = 0;
-            //--------------------------------------------------------------
-            /// Creates a dynamic array containing the file names of each file
-            /// in the given directory. File paths will be relative to the
-            /// input directory.
-            ///
-            /// @author I Copland
-            ///
-            /// @param The Storage Location
-            /// @param The directory
-            /// @param Flag to determine whether or not to recurse into sub
-            /// directories
-            /// @param [Out] dynamic array containing the file names.
-            //--------------------------------------------------------------
-            virtual void GetFilePaths(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, std::vector<std::string>& out_filePaths) const = 0;
             //--------------------------------------------------------------
             /// Creates a dynamic array containing the names of each directory
             /// in the given directory. Directory paths will be relative to
