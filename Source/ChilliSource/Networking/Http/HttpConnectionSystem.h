@@ -1,14 +1,13 @@
-/*
- *  HttpConnectionSystem.h
- *  moFlow
- *
- *  Created by Stuart McGaw on 23/05/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  HttpRequestSystem.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 23/05/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
-#ifndef _MOFLOW_NETWORKING_HTTPCONNECTIONSYSTEM_H_
-#define _MOFLOW_NETWORKING_HTTPCONNECTIONSYSTEM_H_
+#ifndef _CHILLISOURCE_NETWORKING_HTTP_HTTPREQUESTSYSTEM_H_
+#define _CHILLISOURCE_NETWORKING_HTTP_HTTPREQUESTSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
