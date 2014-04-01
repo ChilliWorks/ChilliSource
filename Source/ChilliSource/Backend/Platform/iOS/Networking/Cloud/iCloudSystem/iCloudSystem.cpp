@@ -334,7 +334,7 @@ namespace ChilliSource
                 struct stat output;
                 
                 //get the filepath
-                std::string path = Application::Get()->GetFileSystem()->GetStorageLocationDirectory(it->second.meLocalStorageLocation) + it->second.mstrLocalFilePath;
+                std::string path = Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(it->second.meLocalStorageLocation) + it->second.mstrLocalFilePath;
                 
                 //Get the stat for the file
                 stat(path.c_str(), &output);

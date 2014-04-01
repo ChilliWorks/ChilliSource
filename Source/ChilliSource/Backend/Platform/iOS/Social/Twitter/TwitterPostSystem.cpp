@@ -131,7 +131,7 @@ namespace ChilliSource
                 bool bImageAttached = true;
                 if(in_desc.m_localImagePath.length() > 0)
                 {
-                    std::string strPath = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(in_desc.m_localImageStorageLocation) + in_desc.m_localImagePath;
+                    std::string strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_desc.m_localImageStorageLocation) + in_desc.m_localImagePath;
                     
                     NSString* pImagePath = Core::StringUtils::StringToNSString(strPath);
                     UIImage* pImage = [UIImage imageWithContentsOfFile:pImagePath];

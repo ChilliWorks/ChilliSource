@@ -99,12 +99,6 @@ namespace ChilliSource
             : m_packageDLCPath(k_defaultPackageDLCDirectory)
         {
         }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-		bool FileSystem::IsA(Core::InterfaceIDType inInterfaceID) const
-		{
-			return inInterfaceID == FileSystem::InterfaceID;
-		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         bool FileSystem::ReadFile(StorageLocation in_storageLocation, const std::string& in_directory, std::string& out_contents) const
@@ -184,7 +178,7 @@ namespace ChilliSource
             
             while(size != 0)
             {
-                dwSize = file->ReadSome(data, k_chunkSize);
+                size = file->ReadSome(data, k_chunkSize);
                 hash.update(data, size);
             }
             
@@ -331,6 +325,12 @@ namespace ChilliSource
                 default:
                     return false;
             }
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        const std::string* FileSystem::GetResourceDirectories() const
+        {
+            return s_resourceDirectory;
         }
     }
 }

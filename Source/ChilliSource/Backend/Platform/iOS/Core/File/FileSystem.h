@@ -148,7 +148,7 @@ namespace ChilliSource
             /// @param The filename.
             /// @param [Out] Dynamic array containing the filenames.
             //--------------------------------------------------------------
-            void GetFilePathsWithFilename(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_filename,
+            void GetFilePathsWithFileName(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_fileName,
                                           std::vector<std::string>& out_filePaths) const override;
             //--------------------------------------------------------------
             /// Creates a dynamic array containing the filenames of each file
@@ -233,7 +233,7 @@ namespace ChilliSource
 			/// @return The directory. returns an empty string if the location
 			/// is not available.
 			//--------------------------------------------------------------
-			std::string GetPathToStorageLocation(Core::StorageLocation in_storageLocation) const override;
+			std::string GetAbsolutePathToStorageLocation(Core::StorageLocation in_storageLocation) const override;
             //--------------------------------------------------------------
 			/// Returns the full absolute path to the given file in the
             /// given storage location. The value returned from this will
@@ -248,7 +248,7 @@ namespace ChilliSource
             ///
 			/// @return The full path to the file.
 			//--------------------------------------------------------------
-			std::string GetAbsolutePathForFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
+			std::string GetAbsolutePathToFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
 
 		private:
             friend Core::FileSystemUPtr Core::FileSystem::Create();
@@ -279,26 +279,6 @@ namespace ChilliSource
             /// @return whether or not it exists.
 			//--------------------------------------------------------------
             bool DoesFileExistInHashedStore(const std::string& in_path) const;
-            //--------------------------------------------------------------
-			/// returns whether the path exists on the filesystem
-            ///
-            /// @author S Downie
-            ///
-            /// @param the filepath.
-            ///
-            /// @return whether or not it exists.
-			//--------------------------------------------------------------
-            bool DoesFileExist(const std::string& in_path) const;
-            //--------------------------------------------------------------
-			/// returns whether the path exists on the filesystem
-            ///
-            /// @author S Downie
-            ///
-            /// @param the filepath.
-            ///
-            /// @return whether or not it exists.
-			//--------------------------------------------------------------
-            bool DoesFolderExist(const std::string& in_path) const;
             //------------------------------------------------------------
             /// @author S Downie
             ///
@@ -306,9 +286,10 @@ namespace ChilliSource
             /// @param File name to append
             /// @param [Out] All the paths for the given location
             //------------------------------------------------------------
-            void GetPathsForStorageLocation(Core::StorageLocation in_storageLocation, const std::string& in_filePath, std::vector<std::string>& out_paths) const;
+            void GetPathsForStorageLocation(Core::StorageLocation in_storageLocation, const std::string& in_path, std::vector<std::string>& out_paths) const;
             //--------------------------------------------------------------
             /// Creates the hashed bundle file list.
+            ///
             /// @author S Downie
             //--------------------------------------------------------------
             void CreateHashedBundleFileList();
@@ -318,7 +299,7 @@ namespace ChilliSource
 			std::string m_documentsPath;
             std::string m_libraryPath;
             
-            std::vector<u32> m_hashedPackageFileNames;
+            std::vector<u32> m_hashedPackageFilePaths;
 		};
 	}
 }

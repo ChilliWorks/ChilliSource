@@ -104,8 +104,7 @@ namespace ChilliSource
             ErrorCheck(m_FMODSystem->GetFMODSystem()->createSound(strFilePath.c_str(), FMOD_SOFTWARE|FMOD_3D, nullptr, &static_cast<AudioResource*>(outpResource.get())->mpFMODSound));
 			return true;
 #else
-            std::string strFilePath;
-            Core::Application::Get()->GetFileSystem()->GetBestPathToFile(in_storageLocation, in_filePath, strFilePath);
+            std::string strFilePath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(in_storageLocation, in_filePath);
             
             if(strFilePath.empty())
             {
@@ -156,8 +155,7 @@ namespace ChilliSource
             ErrorCheck(m_FMODSystem->GetFMODSystem()->createStream(strFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL, nullptr, &static_cast<AudioResource*>(outpResource.get())->mpFMODSound));
 			return true;
 #else
-            std::string strFilePath;
-            Core::Application::Get()->GetFileSystem()->GetBestPathToFile(in_storageLocation, in_filePath, strFilePath);
+            std::string strFilePath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(in_storageLocation, in_filePath);
             
             if(strFilePath.empty())
             {
@@ -183,8 +181,7 @@ namespace ChilliSource
 			CS_ASSERT(in_storageLocation != Core::StorageLocation::k_package, "FMOD Android cannot load from package");
 #endif
             
-            std::string strFilePath;
-            Core::Application::Get()->GetFileSystem()->GetBestPathToFile(in_storageLocation, in_filePath, strFilePath);
+            std::string strFilePath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(in_storageLocation, in_filePath);
             ::FMOD::EventProject* project = m_FMODSystem->GetFMODEventProject();
             ErrorCheck(m_FMODSystem->GetFMODEventSystem()->load(strFilePath.c_str(), nullptr, &project));
 		}

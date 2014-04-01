@@ -189,7 +189,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             virtual bool DeleteDirectory(StorageLocation in_storageLocation, const std::string& in_directoryPath) const = 0;
             //--------------------------------------------------------------
-            /// creates a dynamic array containing the filenames of each
+            /// creates a dynamic array containing the file names of each
             /// file that has the provided extension in the given directory.
             /// File paths will be returned relative to the input directory.
             ///
@@ -200,12 +200,12 @@ namespace ChilliSource
             /// @param Flag to determine whether or not to recurse into sub
             /// directories
             /// @param The extension
-            /// @param [Out] Dynamic array containing the filenames.
+            /// @param [Out] Dynamic array containing the file names.
             //--------------------------------------------------------------
             virtual void GetFilePathsWithExtension(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_extension,
                                                    std::vector<std::string>& out_filePaths) const = 0;
             //--------------------------------------------------------------
-            /// Creates a dynamic array containing the filenames of each of
+            /// Creates a dynamic array containing the file names of each of
             /// each file with the given name in the given directory. File
             /// paths will be relative to the input directory.
             ///
@@ -215,13 +215,13 @@ namespace ChilliSource
             /// @param The directory.
             /// @param Flag to determine whether or not to recurse into sub
             /// directories.
-            /// @param The filename.
-            /// @param [Out] Dynamic array containing the filenames.
+            /// @param The file name.
+            /// @param [Out] Dynamic array containing the file names.
             //--------------------------------------------------------------
-            virtual void GetFilePathsWithFilename(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_filename,
+            virtual void GetFilePathsWithFileName(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_fileName,
                                                   std::vector<std::string>& out_filePaths) const = 0;
             //--------------------------------------------------------------
-            /// Creates a dynamic array containing the filenames of each file
+            /// Creates a dynamic array containing the file names of each file
             /// in the given directory. File paths will be relative to the
             /// input directory.
             ///
@@ -231,7 +231,7 @@ namespace ChilliSource
             /// @param The directory
             /// @param Flag to determine whether or not to recurse into sub
             /// directories
-            /// @param [Out] dynamic array containing the filenames.
+            /// @param [Out] dynamic array containing the file names.
             //--------------------------------------------------------------
             virtual void GetFilePaths(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, std::vector<std::string>& out_filePaths) const = 0;
             //--------------------------------------------------------------
@@ -303,7 +303,7 @@ namespace ChilliSource
 			/// @return The directory. returns an empty string if the location
 			/// is not available.
 			//--------------------------------------------------------------
-			virtual std::string GetPathToStorageLocation(StorageLocation in_storageLocation) const = 0;
+			virtual std::string GetAbsolutePathToStorageLocation(StorageLocation in_storageLocation) const = 0;
             //--------------------------------------------------------------
 			/// Returns the full absolute path to the given file in the
             /// given storage location. The value returned from this will
@@ -318,7 +318,7 @@ namespace ChilliSource
             ///
 			/// @return The full path to the file.
 			//--------------------------------------------------------------
-			virtual std::string GetAbsolutePathForFile(StorageLocation in_storageLocation, const std::string& in_filePath) const = 0;
+			virtual std::string GetAbsolutePathToFile(StorageLocation in_storageLocation, const std::string& in_filePath) const = 0;
             //--------------------------------------------------------------
             /// Sets the directory used by the DLC system to fall back on
             /// if it is not in the DLC cache directory.
@@ -423,7 +423,13 @@ namespace ChilliSource
             /// @author S Downie
             //--------------------------------------------------------------
             FileSystem();
-
+            //--------------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return The resource directories.
+            //--------------------------------------------------------------
+            const std::string* GetResourceDirectories() const;
+        private:
             std::string m_packageDLCPath;
             
             static f32 s_assetsDensity;

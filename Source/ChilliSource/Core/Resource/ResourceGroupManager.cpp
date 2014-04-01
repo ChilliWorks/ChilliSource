@@ -83,7 +83,7 @@ namespace ChilliSource
 				CS_LOG_DEBUG("Loading resource group " + instrGroupName + "...");
 				//Get the file names within that directory
 				std::vector<std::string> FileNames;
-				Application::Get()->GetFileSystem()->GetFileNamesInDirectory(StorageLocation::k_package, pExistingResource->second->mstrDirectory, true, FileNames);
+				Application::Get()->GetFileSystem()->GetFilePaths(StorageLocation::k_package, pExistingResource->second->mstrDirectory, true, FileNames);
 				
 				//Load this bad boy. 
 				for(std::vector<std::string>::const_iterator it = FileNames.begin(); it != FileNames.end(); ++it)
