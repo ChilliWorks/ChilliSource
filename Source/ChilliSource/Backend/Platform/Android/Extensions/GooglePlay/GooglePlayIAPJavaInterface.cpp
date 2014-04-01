@@ -1,6 +1,6 @@
 //
 //  GooglePlayIAPJavaInterface.cpp
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Scott Downie on 14/06/2013.
 //  Copyright (c) 2012 Tag Games. All rights reserved.
@@ -18,92 +18,103 @@
 
 #include <jni.h>
 
-const std::string kstrPendingCacheFile = "GoogleIAPPendingTransactions.json";
-
 extern "C"
 {
-	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices);
-	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt);
-	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID, jboolean in_success);
+	//--------------------------------------------------------------------------------------
+	/// Called by Java when the product descriptions have been fetched
+	///
+	/// @author S Downie
+	///
+	/// @param JNI environment
+	/// @param Pointer to the calling function
+	/// @param Array of product IDs
+	/// @param Array of product Names
+	/// @param Array of product Descriptions
+	/// @param Array of product Prices
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices);
+	//--------------------------------------------------------------------------------------
+	/// Called by Java when the transaction status updates
+	///
+	/// @author S Downie
+	///
+	/// @param JNI environment
+	/// @param Pointer to the calling function
+	/// @param Result (SUCCESS - 0, FAILED - 1)
+	/// @param Product ID
+	/// @param Transaction ID
+	/// @param Receipt
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint in_result, jstring in_productId, jstring in_transactionId, jstring instrReceipt);
+	//--------------------------------------------------------------------------------------
+	/// Called by Java when the transaction close result returns
+	///
+	/// @param JNI environment
+	/// @param Pointer to the calling function
+	/// @param Product ID
+	/// @param Transaction ID
+	/// @param Success or failure
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId, jboolean in_success);
 }
 
 //--------------------------------------------------------------------------------------
-/// On Products Descriptions Request Complete
-///
-/// @param JNI environment
-/// @param Pointer to the calling function
-/// @param Array of product IDs
-/// @param Array of product Names
-/// @param Array of product Descriptions
-/// @param Array of product Prices
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices)
+void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices)
 {
-	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
-	if (pInterface != nullptr)
+	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
+	if (javaInterface != nullptr)
 	{
-		u32 udwNumProducts = inpEnv->GetArrayLength(inaIDs);
-		std::vector<CSNetworking::IAPProductDesc> aProducts;
-		aProducts.reserve(udwNumProducts);
+		u32 numProducts = in_env->GetArrayLength(in_productIds);
+		std::vector<CSNetworking::IAPSystem::ProductDesc> products;
+		products.reserve(numProducts);
 
-		for(u32 i=0; i<udwNumProducts; ++i)
+		for(u32 i=0; i<numProducts; ++i)
 		{
-			CSNetworking::IAPProductDesc sDesc;
-			jstring jstrID = (jstring)inpEnv->GetObjectArrayElement(inaIDs, i);
-			sDesc.strID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrID);
+			CSNetworking::IAPSystem::ProductDesc desc;
+			jstring id = (jstring)in_env->GetObjectArrayElement(in_productIds, i);
+			desc.m_id = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(id);
 
-			jstring jstrName = (jstring)inpEnv->GetObjectArrayElement(inaNames, i);
-			sDesc.strName = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
+			jstring name = (jstring)in_env->GetObjectArrayElement(in_names, i);
+			desc.m_name = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(name);
 
-			jstring jstrDesc = (jstring)inpEnv->GetObjectArrayElement(inaDescs, i);
-			sDesc.strDescription = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrDesc);
+			jstring description = (jstring)in_env->GetObjectArrayElement(in_descs, i);
+			desc.m_description = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(description);
 
-			jstring jstrPrice = (jstring)inpEnv->GetObjectArrayElement(inaPrices, i);
-			sDesc.strFormattedPrice = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrPrice);
+			jstring price = (jstring)in_env->GetObjectArrayElement(in_prices, i);
+			desc.m_formattedPrice = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(price);
 
-			aProducts.push_back(sDesc);
+			products.push_back(desc);
 		}
 
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::vector<CSNetworking::IAPProductDesc>&>(pInterface.get(), &ChilliSource::Android::GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, aProducts));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::vector<CSNetworking::IAPSystem::ProductDesc>&>(javaInterface.get(), &ChilliSource::Android::GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, products));
 	}
 }
 //--------------------------------------------------------------------------------------
-/// On Transaction Status Update
-///
-/// @param JNI environment
-/// @param Pointer to the calling function
-/// @param Result (SUCCESS - 0, FAILED - 1)
-/// @param Product ID
-/// @param Transaction ID
-/// @param Receipt
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt)
+void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint in_result, jstring in_productId, jstring in_transactionId, jstring in_receipt)
 {
-	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
-	if (pInterface != nullptr)
+	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
+	if (javaInterface != nullptr)
 	{
-		CSNetworking::IAPTransaction sTransaction;
-		sTransaction.strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
-		sTransaction.strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
-		sTransaction.strReceipt = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrReceipt);
+		CSNetworking::IAPSystem::Transaction transaction;
+		transaction.m_productId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
+		transaction.m_transactionId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
+		transaction.m_receipt = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_receipt);
 
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<u32, const CSNetworking::IAPTransaction&>(pInterface.get(), &ChilliSource::Android::GooglePlayIAPJavaInterface::OnTransactionStatusUpdated, inudwResult, sTransaction));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<u32, const CSNetworking::IAPSystem::Transaction&>(javaInterface.get(), &ChilliSource::Android::GooglePlayIAPJavaInterface::OnTransactionStatusUpdated, in_result, transaction));
 	}
 }
 //--------------------------------------------------------------------------------------
-/// On Transaction Closed
-///
-/// @param JNI environment
-/// @param Pointer to the calling function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID, jboolean in_success)
+void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId, jboolean in_success)
 {
-	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
-	if (pInterface != nullptr)
+	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
+	if (javaInterface != nullptr)
 	{
-		const std::string strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
-		const std::string strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<std::string, std::string, bool>(pInterface.get(), &ChilliSource::Android::GooglePlayIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID, in_success));
+		std::string productId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
+		std::string transactionId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::string&, const std::string&, bool>(javaInterface.get(), &ChilliSource::Android::GooglePlayIAPJavaInterface::OnTransactionClosed, productId, transactionId, in_success));
 	}
 }
 
@@ -113,44 +124,48 @@ namespace ChilliSource
 	{
 		namespace
 		{
+			const std::string k_pendingCacheFile("GoogleIAPPendingTransactions.json");
+
 			//---------------------------------------------------------------
-			/// Add To Pending Cache
-			///
 			/// Adds the given transaction ID to the "pending transaction"
 			/// cache.
 			///
+			/// @author S Downie
+			///
 			/// @param The transaction ID.
 			//---------------------------------------------------------------
-			void AddToPendingCache(const std::string& instrTransactionID)
+			void AddToPendingCache(const std::string& in_transactionId)
 			{
 				Json::Value jData;
-				Core::Utils::ReadJson(Core::StorageLocation::k_cache, kstrPendingCacheFile, &jData);
-				jData[instrTransactionID] = 0;
-				Core::Utils::StringToFile(Core::StorageLocation::k_cache, kstrPendingCacheFile, jData.toUnformattedString());
+				Core::Utils::ReadJson(Core::StorageLocation::k_cache, k_pendingCacheFile, &jData);
+				jData[in_transactionId] = 0;
+				Core::Utils::StringToFile(Core::StorageLocation::k_cache, k_pendingCacheFile, jData.toUnformattedString());
 			}
 			//---------------------------------------------------------------
-			/// Remove From Pending Cache
-			///
 			/// Removes the given transaction ID from the "pending transaction"
 			/// cache.
 			///
+			/// @author S Downie
+			///
 			/// @param The transaction ID.
 			//---------------------------------------------------------------
-			void RemoveFromPendingCache(const std::string& instrTransactionID)
+			void RemoveFromPendingCache(const std::string& in_transactionId)
 			{
 				//Remove the transaction from the pending cache
 				Json::Value jData;
-				if(Core::Utils::ReadJson(Core::StorageLocation::k_cache, kstrPendingCacheFile, &jData))
+				if(Core::Utils::ReadJson(Core::StorageLocation::k_cache, k_pendingCacheFile, &jData))
 				{
-					jData.removeMember(instrTransactionID);
-					Core::Utils::StringToFile(Core::StorageLocation::k_cache, kstrPendingCacheFile, jData.toUnformattedString());
+					jData.removeMember(in_transactionId);
+					Core::Utils::StringToFile(Core::StorageLocation::k_cache, k_pendingCacheFile, jData.toUnformattedString());
 				}
 			}
 		}
 
 		CS_DEFINE_NAMEDTYPE(GooglePlayIAPJavaInterface);
 
-		GooglePlayIAPJavaInterface::GooglePlayIAPJavaInterface(const std::string& instrPublicKey)
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		GooglePlayIAPJavaInterface::GooglePlayIAPJavaInterface(const std::string& in_publicKey)
 		{
 			CreateNativeInterface("com/chillisource/googleplay/GooglePlayIAPNativeInterface");
 			CreateMethodReference("Init", "(Ljava/lang/String;)V");
@@ -164,20 +179,18 @@ namespace ChilliSource
 			CreateMethodReference("RestorePendingManagedTransactions", "([Ljava/lang/String;)V");
 
 			//initialise the system
-			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrPublicKey = JavaInterfaceUtils::CreateJStringFromSTDString(instrPublicKey);
-			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Init"), jstrPublicKey);
-			pEnv->DeleteLocalRef(jstrPublicKey);
+			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			jstring publicKey = JavaInterfaceUtils::CreateJStringFromSTDString(in_publicKey);
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("Init"), publicKey);
+			env->DeleteLocalRef(publicKey);
 		}
 		//--------------------------------------------------------------
-		/// Is A
 		//--------------------------------------------------------------
-		bool GooglePlayIAPJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool GooglePlayIAPJavaInterface::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (inInterfaceID == GooglePlayIAPJavaInterface::InterfaceID);
+			return (in_interfaceId == GooglePlayIAPJavaInterface::InterfaceID);
 		}
         //---------------------------------------------------------------
-		/// Is Purchasing Enabled
         //---------------------------------------------------------------
         bool GooglePlayIAPJavaInterface::IsPurchasingEnabled()
         {
@@ -185,79 +198,78 @@ namespace ChilliSource
 			return env->CallBooleanMethod(GetJavaObject(), GetMethodID("IsPurchasingEnabled"));
         }
         //---------------------------------------------------------------
-		/// Start Listening For Transaction Updates
         //---------------------------------------------------------------
-        void GooglePlayIAPJavaInterface::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
+        void GooglePlayIAPJavaInterface::StartListeningForTransactionUpdates(const Networking::IAPSystem::TransactionStatusDelegate& in_delegate)
         {
-        	mTransactionStatusDelegate = inRequestDelegate;
+        	CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction delegate");
+
+        	m_transactionStatusDelegate = in_delegate;
 
         	JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	env->CallVoidMethod(GetJavaObject(), GetMethodID("RestorePendingUnmanagedTransactions"));
 
         	Json::Value jData;
-        	if(Core::Utils::ReadJson(Core::StorageLocation::k_cache, kstrPendingCacheFile, &jData))
+        	if(Core::Utils::ReadJson(Core::StorageLocation::k_cache, k_pendingCacheFile, &jData))
         	{
-        		const Json::Value::Members aMembers = jData.getMemberNames();
-        		jobjectArray jaTransactionIDs = env->NewObjectArray(aMembers.size(), env->FindClass("java/lang/String"), env->NewStringUTF(""));
+        		const Json::Value::Members& members = jData.getMemberNames();
+        		jobjectArray transactionIDs = env->NewObjectArray(members.size(), env->FindClass("java/lang/String"), env->NewStringUTF(""));
 
-        		u32 udwIndex = 0;
-        		for(Json::Value::Members::const_iterator it = aMembers.begin(); it != aMembers.end(); ++it, ++udwIndex)
+        		u32 index = 0;
+        		for(Json::Value::Members::const_iterator it = members.begin(); it != members.end(); ++it, ++index)
         		{
-    				jstring jstrTransactionID = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
-    				env->SetObjectArrayElement(jaTransactionIDs, udwIndex, jstrTransactionID);
-    				env->DeleteLocalRef(jstrTransactionID);
+    				jstring jtransactionId = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
+    				env->SetObjectArrayElement(transactionIDs, index, jtransactionId);
+    				env->DeleteLocalRef(jtransactionId);
         		}
 
-            	env->CallVoidMethod(GetJavaObject(), GetMethodID("RestorePendingManagedTransactions"), jaTransactionIDs);
-            	env->DeleteLocalRef(jaTransactionIDs);
+            	env->CallVoidMethod(GetJavaObject(), GetMethodID("RestorePendingManagedTransactions"), transactionIDs);
+            	env->DeleteLocalRef(transactionIDs);
         	}
         }
         //---------------------------------------------------------------
-		/// Stop Listening For Transaction Updates
         //---------------------------------------------------------------
         void GooglePlayIAPJavaInterface::StopListeningForTransactionUpdates()
         {
-        	mTransactionStatusDelegate = nullptr;
+        	m_transactionStatusDelegate = nullptr;
         }
         //---------------------------------------------------------------
-		/// Request Product Descriptions
         //---------------------------------------------------------------
-        void GooglePlayIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void GooglePlayIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& in_productIds, const Networking::IAPSystem::ProductDescDelegate& in_delegate)
         {
-        	mProductsRequestDelegate = inRequestDelegate;
+            CS_ASSERT(in_productIds.empty() == false, "Cannot request no product descriptions");
+            CS_ASSERT(in_delegate != nullptr, "Cannot have null product description delegate");
+            CS_ASSERT(m_productsRequestDelegate == nullptr, "Only 1 product description request can be active at a time");
 
-        	if(mProductsRequestDelegate == nullptr)
-        		return;
+        	m_productsRequestDelegate = in_delegate;
 
         	JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 
-			jobjectArray jaProductIDs = env->NewObjectArray(inaProductIDs.size(), env->FindClass("java/lang/String"), env->NewStringUTF(""));
+			jobjectArray productIDs = env->NewObjectArray(in_productIds.size(), env->FindClass("java/lang/String"), env->NewStringUTF(""));
 
-			u32 udwProductIDIndex = 0;
-			for(std::vector<std::string>::const_iterator it = inaProductIDs.begin(); it != inaProductIDs.end(); ++it)
+			u32 productIDIndex = 0;
+			for(std::vector<std::string>::const_iterator it = in_productIds.begin(); it != in_productIds.end(); ++it)
 			{
-				jstring jstrProductID = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
-				env->SetObjectArrayElement(jaProductIDs, udwProductIDIndex, jstrProductID);
-				env->DeleteLocalRef(jstrProductID);
-				udwProductIDIndex++;
+				jstring jproductId = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
+				env->SetObjectArrayElement(productIDs, productIDIndex, jproductId);
+				env->DeleteLocalRef(jproductId);
+				productIDIndex++;
 			}
 
-			env->CallVoidMethod(GetJavaObject(), GetMethodID("RequestProductDescriptions"), jaProductIDs);
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("RequestProductDescriptions"), productIDs);
 
-			env->DeleteLocalRef(jaProductIDs);
+			env->DeleteLocalRef(productIDs);
         }
         //---------------------------------------------------------------
-		/// On Product Descriptions Request Complete
         //---------------------------------------------------------------
-        void GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPProductDesc>& inaProducts)
+        void GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPSystem::ProductDesc>& in_products)
         {
-        	if(mProductsRequestDelegate == nullptr)
+        	if(m_productsRequestDelegate == nullptr)
         		return;
 
-        	mProductsRequestDelegate(inaProducts);
+        	m_productsRequestDelegate(in_products);
+        	m_productsRequestDelegate = nullptr;
         }
         //---------------------------------------------------------------
-		/// Cancel Product Descriptions Request
         //---------------------------------------------------------------
         void GooglePlayIAPJavaInterface::CancelProductDescriptionsRequest()
         {
@@ -265,38 +277,36 @@ namespace ChilliSource
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("CancelProductDescriptionsRequest"));
         }
         //---------------------------------------------------------------
-		/// Request Product Purchase
         //---------------------------------------------------------------
-        void GooglePlayIAPJavaInterface::RequestProductPurchase(const std::string& instrProductID, Networking::IAPProductRegInfo::Type ineType)
+        void GooglePlayIAPJavaInterface::RequestProductPurchase(const std::string& in_productId, Networking::IAPSystem::ProductRegInfo::Type in_type)
         {
-        	const u32 kManagedType = 0;
-        	const u32 kUnManagedType = 1;
-        	u32 udwType = kUnManagedType;
+        	const u32 k_managedType = 0;
+        	const u32 k_unManagedType = 1;
+        	u32 type = k_unManagedType;
 
-        	switch(ineType)
+        	switch(in_type)
         	{
-        		case Networking::IAPProductRegInfo::Type::k_managed:
-        			udwType = kManagedType;
+        		case Networking::IAPSystem::ProductRegInfo::Type::k_managed:
+        			type = k_managedType;
         			break;
-        		case Networking::IAPProductRegInfo::Type::k_unmanaged:
-        			udwType = kUnManagedType;
+        		case Networking::IAPSystem::ProductRegInfo::Type::k_unmanaged:
+        			type = k_unManagedType;
         			break;
         	}
 
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrProductID = JavaInterfaceUtils::CreateJStringFromSTDString(instrProductID);
-			env->CallVoidMethod(GetJavaObject(), GetMethodID("RequestProductPurchase"), jstrProductID, udwType);
-			env->DeleteLocalRef(jstrProductID);
+			jstring jproductId = JavaInterfaceUtils::CreateJStringFromSTDString(in_productId);
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("RequestProductPurchase"), jproductId, type);
+			env->DeleteLocalRef(jproductId);
         }
         //---------------------------------------------------------------
-		/// On Transaction Status Updated
         //---------------------------------------------------------------
-        void GooglePlayIAPJavaInterface::OnTransactionStatusUpdated(u32 inudwStatus, const Networking::IAPTransaction& inTransaction)
+        void GooglePlayIAPJavaInterface::OnTransactionStatusUpdated(u32 in_statusId, const Networking::IAPSystem::Transaction& in_transaction)
         {
-        	if(mTransactionStatusDelegate == nullptr)
+        	if(m_transactionStatusDelegate == nullptr)
         		return;
 
-        	Networking::IAPTransaction::Status eStatus = Networking::IAPTransaction::Status::k_failed;
+        	Networking::IAPSystem::Transaction::Status status = Networking::IAPSystem::Transaction::Status::k_failed;
 
         	//This requires a little bit of faith. These numbers correspond to the constants defined
         	//in the java transaction description
@@ -306,64 +316,65 @@ namespace ChilliSource
     		//		public final static int RESTORED = 3;
     		//		public final static int RESUMED = 4;
         	//		public final static int REFUNDED = 5;
-        	switch(inudwStatus)
+        	switch(in_statusId)
         	{
         		case 0:
-        			eStatus = Networking::IAPTransaction::Status::k_succeeded;
-        			AddToPendingCache(inTransaction.strTransactionID);
+        			status = Networking::IAPSystem::Transaction::Status::k_succeeded;
+        			AddToPendingCache(in_transaction.m_transactionId);
         			break;
         		case 1:
-        			eStatus = Networking::IAPTransaction::Status::k_failed;
+        			status = Networking::IAPSystem::Transaction::Status::k_failed;
         			break;
         		case 2:
-        			eStatus = Networking::IAPTransaction::Status::k_cancelled;
+        			status = Networking::IAPSystem::Transaction::Status::k_cancelled;
         			break;
         		case 3:
-        			eStatus = Networking::IAPTransaction::Status::k_restored;
+        			status = Networking::IAPSystem::Transaction::Status::k_restored;
         			break;
         		case 4:
-        			eStatus = Networking::IAPTransaction::Status::k_resumed;
+        			status = Networking::IAPSystem::Transaction::Status::k_resumed;
         			break;
            		case 5:
-            		eStatus = Networking::IAPTransaction::Status::k_refunded;
+           			status = Networking::IAPSystem::Transaction::Status::k_refunded;
             		break;
         	}
 
-        	Networking::IAPTransactionPtr pTransaction(new Networking::IAPTransaction());
-        	pTransaction->strProductID = inTransaction.strProductID;
-        	pTransaction->strTransactionID = inTransaction.strTransactionID;
-        	pTransaction->strReceipt = inTransaction.strReceipt;
+        	Networking::IAPSystem::TransactionSPtr transaction(new Networking::IAPSystem::Transaction());
+        	transaction->m_productId = in_transaction.m_productId;
+        	transaction->m_transactionId = in_transaction.m_transactionId;
+        	transaction->m_receipt = in_transaction.m_receipt;
 
-        	mTransactionStatusDelegate(eStatus, pTransaction);
+        	m_transactionStatusDelegate(status, transaction);
         }
         //---------------------------------------------------------------
-		/// Close Transaction
         //---------------------------------------------------------------
-        void GooglePlayIAPJavaInterface::CloseTransaction(const std::string& instrProductID, const std::string& instrTransactionID, const Networking::IAPTransactionCloseDelegate& inDelegate)
+        void GooglePlayIAPJavaInterface::CloseTransaction(const std::string& in_productId, const std::string& in_transactionId, const Networking::IAPSystem::TransactionCloseDelegate& in_delegate)
         {
-        	mTransactionCloseDelegate = inDelegate;
+        	CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction close delegate");
+        	CS_ASSERT(m_transactionCloseDelegate == nullptr, "Only 1 transaction can be closed at a time");
+
+        	m_transactionCloseDelegate = in_delegate;
 
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrProductID = JavaInterfaceUtils::CreateJStringFromSTDString(instrProductID);
-			jstring jstrTransactionID = JavaInterfaceUtils::CreateJStringFromSTDString(instrTransactionID);
-			env->CallVoidMethod(GetJavaObject(), GetMethodID("CloseTransaction"), jstrProductID, jstrTransactionID);
-			env->DeleteLocalRef(jstrProductID);
-			env->DeleteLocalRef(jstrTransactionID);
+			jstring jproductId = JavaInterfaceUtils::CreateJStringFromSTDString(in_productId);
+			jstring jtransactionId = JavaInterfaceUtils::CreateJStringFromSTDString(in_transactionId);
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("CloseTransaction"), jproductId, jtransactionId);
+			env->DeleteLocalRef(jproductId);
+			env->DeleteLocalRef(jtransactionId);
 
-			RemoveFromPendingCache(instrTransactionID);
+			RemoveFromPendingCache(in_transactionId);
         }
         //---------------------------------------------------------------
-		/// On Transaction Closed
         //---------------------------------------------------------------
-        void GooglePlayIAPJavaInterface::OnTransactionClosed(std::string instrProductID, std::string instrTransactionID, bool in_success)
+        void GooglePlayIAPJavaInterface::OnTransactionClosed(const std::string& in_productId, const std::string& in_transactionId, bool in_success)
         {
-        	if(mTransactionCloseDelegate)
+        	if(m_transactionCloseDelegate)
         	{
-        		mTransactionCloseDelegate(instrProductID, instrTransactionID, in_success);
+        		m_transactionCloseDelegate(in_productId, in_transactionId, in_success);
+        		m_transactionCloseDelegate = nullptr;
         	}
         }
         //---------------------------------------------------------------
-		/// Restore Managed Purchases
         //---------------------------------------------------------------
         void GooglePlayIAPJavaInterface::RestoreManagedPurchases()
         {

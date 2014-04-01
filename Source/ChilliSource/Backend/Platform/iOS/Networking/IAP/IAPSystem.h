@@ -1,13 +1,13 @@
 //
 //  IAPSystem.h
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Scott Downie on 12/06/2013.
 //  Copyright (c) 2013 Tag Games Ltd. All rights reserved.
 //
 
-#ifndef _MOFLOW_PLATFORM_IOS_IAPSYSTEM_
-#define _MOFLOW_PLATFORM_IOS_IAPSYSTEM_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_NETWORKING_IAP_IAPSYSTEM_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_IOS_NETWORKING_IAP_IAPSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
@@ -18,116 +18,127 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class IAPSystem : public Networking::IAPSystem
+        //----------------------------------------------------------------------------------
+        /// System that allows purchasing of IAPs from
+        /// the iOS App Store. System allows product info
+        /// to be requested in ordrer to build displays and then
+        /// for products to be purchased. NOTE: Must StartListeningForTransactionUpdates()
+        /// before any purchases are made as this can be called with previously incomplete
+        /// transactions.
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------------------------
+        class IAPSystem final : public Networking::IAPSystem
         {
         public:
 
-            ~IAPSystem();
-
+            CS_DECLARE_NAMEDTYPE(IAPSystem);
             //---------------------------------------------------------------
-            /// Register Products
+            /// @author S Downie
             ///
+            /// @param Interface ID to compare
+            ///
+            /// @return Whether the class is of the given type
+            //---------------------------------------------------------------
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            //---------------------------------------------------------------
             /// Inform the system of which products are available for
             /// purchase and whether they are managed or unmanaged
             ///
+            /// @author S Downie
+            ///
             /// @param List of products
             //---------------------------------------------------------------
-            void RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts);
-            
+            void RegisterProducts(const std::vector<ProductRegInfo>& in_productInfos) override;
             //---------------------------------------------------------------
-			/// Get Provider ID
+			/// @author S Downie
 			///
 			/// @return The ID off the IAP provider as a string.
             //---------------------------------------------------------------
-			std::string GetProviderID() const;
+			std::string GetProviderID() const override;
             //---------------------------------------------------------------
-			/// Get Provider Name
+			/// @author S Downie
 			///
 			/// @return A displayable name for the IAP Provider.
             //---------------------------------------------------------------
-			std::string GetProviderName() const;
+			std::string GetProviderName() const override;
             //---------------------------------------------------------------
-			/// Is Purchasing Enabled
+			/// @author S Downie
 			///
 			/// @return Whether the purchasing is allowed by the device/OS
             //---------------------------------------------------------------
-            bool IsPurchasingEnabled();
-            
+            bool IsPurchasingEnabled() override;
             //---------------------------------------------------------------
-			/// Start Listening For Transaction Updates
-			///
 			/// Calling this function will set the listener to which any
             /// transaction events are directed. This is not necessarily
             /// in response to a user action it may be previously outstanding
             /// transactions.
             ///
+            /// @author S Downie
+            ///
             /// @param Delegate
             //---------------------------------------------------------------
-            void StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate);
+            void StartListeningForTransactionUpdates(const TransactionStatusDelegate& in_delegate) override;
             //---------------------------------------------------------------
-			/// Stop Listening For Transaction Updates
-            ///
             /// Prevent any more transaction uppdates from being triggered.
+            ///
+            /// @author S Downie
             //---------------------------------------------------------------
-            void StopListeningForTransactionUpdates();
-            
+            void StopListeningForTransactionUpdates() override;
             //---------------------------------------------------------------
-			/// Request Product Descriptions
-			///
             /// Starts a request to the store for details of the products.
             /// These details are name, description and price
+            ///
+            /// @author S Downie
             ///
 			/// @param List of product IDs to request descriptions for
             /// @param Delegate to invoke when the request completes
             //---------------------------------------------------------------
-            void RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate);
+            void RequestProductDescriptions(const std::vector<std::string>& in_productIds, const ProductDescDelegate& in_delegate) override;
             //---------------------------------------------------------------
-			/// Request All Product Descriptions
-			///
             /// Starts a request to the store for details of all registered
             /// products. These details are name, description and price
             ///
+            /// @author S Downie
+            ///
             /// @param Delegate to invoke when the request completes
             //---------------------------------------------------------------
-            void RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate);
+            void RequestAllProductDescriptions(const ProductDescDelegate& in_delegate) override;
             //---------------------------------------------------------------
-			/// Cancel Product Descriptions Request
-			///
 			/// Prevent the completion delegate being called for
             /// any pending product description requests and attempt to
             /// cancel the request to the store.
+            ///
+            /// @author S Downie
             //---------------------------------------------------------------
-            void CancelProductDescriptionsRequest();
-            
+            void CancelProductDescriptionsRequest() override;
             //---------------------------------------------------------------
-			/// Request Product Purchase
-			///
 			/// Make a request to the store to purchase the item.
             /// This will trigger a call to the transaction listener delegate
             ///
+            /// @author S Downie
+            ///
             /// @param Product ID
             //---------------------------------------------------------------
-            void RequestProductPurchase(const std::string& instrProductID);
-            
+            void RequestProductPurchase(const std::string& in_productId) override;
             //---------------------------------------------------------------
-			/// Close Transaction
-			///
-			/// Tell the store to close the transaction as complete.
+            /// Tell the store to close the transaction as complete.
             /// NOTE: This should only be called after the goods have been
             /// awarded.
             ///
+            /// @author S Downie
+            ///
             /// @param Transaction to close
-            /// @param Delegate to call when closed successfully
+            /// @param Delegate to call when closed (either with success or failure)
             //---------------------------------------------------------------
-            void CloseTransaction(const Networking::IAPTransactionPtr& inpTransaction, const Networking::IAPTransactionCloseDelegate& inDelegate);
-            
+            void CloseTransaction(const TransactionSPtr& inpTransaction, const TransactionCloseDelegate& in_delegate) override;
             //---------------------------------------------------------------
-			/// Restore Managed Purchases
-			///
             /// Request that the store trigger new purchase requests for
             /// owned non-consumable items
+            ///
+            /// @author S Downie
             //---------------------------------------------------------------
-            void RestoreManagedPurchases();
+            void RestoreManagedPurchases() override;
             
         private:
             
@@ -137,32 +148,46 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            IAPSystem();
+            IAPSystem() = default;
+            //-------------------------------------------------------
+            /// Called when the system is created. Initialises
+            /// the StoreKit backend
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            void OnInit() override;
+            //-------------------------------------------------------
+            /// Called when the system is shutdown.
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            void OnDestroy() override;
             //---------------------------------------------------------------
-            /// On Product Description Request Complete
+            /// @author S Downie
             ///
             /// @param List of StoreKit product informtation
             //---------------------------------------------------------------
-            void OnProductDescriptionRequestComplete(NSArray* inProducts);
+            void OnProductDescriptionRequestComplete(NSArray* in_products);
             //---------------------------------------------------------------
-            /// On Transaction Update
-            ///
             /// Triggered by StoreKit with transactions update
+            ///
+            /// @author S Downie
             ///
             /// @param Product ID
             /// @param Result
             /// @param Transaction
             //---------------------------------------------------------------
-            void OnTransactionUpdate(NSString* inProductID, StoreKitIAP::TransactionResult ineResult, SKPaymentTransaction* inpTransaction);
+            void OnTransactionUpdate(NSString* in_productId, StoreKitIAP::TransactionResult in_result, SKPaymentTransaction* in_transaction);
             
         private:
             
-            std::vector<Networking::IAPProductRegInfo> mProductRegInfos;
+            std::vector<ProductRegInfo> m_productRegInfos;
             
-            StoreKitIAPSystem* mpStoreKitSystem;
+            StoreKitIAPSystem* m_storeKitSystem;
             
-            Networking::IAPProductDescDelegate mProductDescDelegate;
-            Networking::IAPTransactionDelegate mTransactionDelegate;
+            ProductDescDelegate m_productDescDelegate;
+            TransactionStatusDelegate m_transactionStatusDelegate;
+            TransactionCloseDelegate m_transactionCloseDelegate;
         };
     }
 }

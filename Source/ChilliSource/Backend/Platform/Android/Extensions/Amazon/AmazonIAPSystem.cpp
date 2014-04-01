@@ -1,6 +1,6 @@
 //
 //  AmazonIAPSystem.cpp
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Ian Copland on 10/12/2013.
 //  Copyright (c) 2013 Tag Games. All rights reserved.
@@ -17,164 +17,150 @@ namespace ChilliSource
 	{
 		namespace
 		{
-			const std::string kstrAmazonPrivateKeyKey = "AmazonPrivateKey";
+			const std::string k_amazonPrivateKeyKey("AmazonPrivateKey");
 
-	        //---------------------------------------------------------------
-	        /// Is Product ID Registered
-			///
-			/// @param The registered product infos.
-			/// @param The product id.
-			/// @return Whether or not the given product ID exists within the
-			/// given product infos.
-	        //---------------------------------------------------------------
-	        bool IsProductIDRegistered(const std::vector<Networking::IAPProductRegInfo>& inProductRegInfos, const std::string& instrProductID)
-	        {
-	            for(u32 i=0; i<inProductRegInfos.size(); ++i)
-	            {
-	                if(inProductRegInfos[i].strID == instrProductID)
-	                {
-	                    return true;
-	                }
-	            }
+            //---------------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @param List of product registrations
+            /// @param Product Id to find
+            ///
+            /// @return Whether a product reg info exists in the list
+            /// with the given Id.
+            //---------------------------------------------------------------
+            bool ContainsProductId(const std::vector<Networking::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId)
+            {
+                for(u32 i=0; i<in_productInfos.size(); ++i)
+                {
+                    if(in_productInfos[i].m_id == in_productId)
+                    {
+                        return true;
+                    }
+                }
 
-	            return false;
-	        }
+                return false;
+            }
 		}
+
+		CS_DEFINE_NAMEDTYPE(AmazonIAPSystem);
+
     	//---------------------------------------------------------------
-    	/// Constructor
     	//---------------------------------------------------------------
-		AmazonIAPSystem::AmazonIAPSystem(const Core::ParamDictionary& inParams)
+		AmazonIAPSystem::AmazonIAPSystem(const Core::ParamDictionary& in_params)
 		{
-			mpJavaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<AmazonIAPJavaInterface>();
-			if (mpJavaInterface == nullptr)
-			{
-				std::string strPrivateKey = "";
-				if (inParams.HasValue(kstrAmazonPrivateKeyKey) == true)
-				{
-					strPrivateKey = inParams.ValueForKey(kstrAmazonPrivateKeyKey);
-				}
-
-				mpJavaInterface = AmazonIAPJavaInterfaceSPtr(new AmazonIAPJavaInterface(strPrivateKey, Core::Device::GetUDID()));
-	        	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
-			}
+			CS_ASSERT(in_params.HasValue(k_amazonPrivateKeyKey) == true, "Cannot create Amazon IAP system without store key - AmazonPrivateKey");
+			m_privateKey = in_params.ValueForKey(k_amazonPrivateKeyKey);
 		}
         //---------------------------------------------------------------
-        /// Register Products
         //---------------------------------------------------------------
-        void AmazonIAPSystem::RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts)
+        bool AmazonIAPSystem::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            maProductRegInfos = inaProducts;
+            return in_interfaceId == Networking::IAPSystem::InterfaceID || in_interfaceId == AmazonIAPSystem::InterfaceID;
         }
         //---------------------------------------------------------------
-		/// Get Provider ID
+        //---------------------------------------------------------------
+        void AmazonIAPSystem::OnInit()
+        {
+			m_javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<AmazonIAPJavaInterface>();
+			if (m_javaInterface == nullptr)
+			{
+				m_javaInterface = AmazonIAPJavaInterfaceSPtr(new AmazonIAPJavaInterface(m_privateKey, Core::Device::GetUDID()));
+	        	JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
+			}
+        }
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        void AmazonIAPSystem::RegisterProducts(const std::vector<ProductRegInfo>& in_productInfos)
+        {
+        	CS_ASSERT(in_productInfos.empty() == false, "Must register at least one product");
+            m_productRegInfos = in_productInfos;
+        }
+        //---------------------------------------------------------------
+
         //---------------------------------------------------------------
 		std::string AmazonIAPSystem::GetProviderID() const
 		{
 			return "Amazon";
 		}
         //---------------------------------------------------------------
-		/// Get Provider Name
         //---------------------------------------------------------------
 		std::string AmazonIAPSystem::GetProviderName() const
 		{
 			return "Amazon";
 		}
         //---------------------------------------------------------------
-		/// Is Purchasing Enabled
         //---------------------------------------------------------------
         bool AmazonIAPSystem::IsPurchasingEnabled()
         {
-        	if (mpJavaInterface != nullptr)
-        	{
-        		return mpJavaInterface->IsPurchasingEnabled();
-        	}
-        	return false;
+        	return m_javaInterface->IsPurchasingEnabled();
         }
         //---------------------------------------------------------------
-		/// Start Listening For Transaction Updates
         //---------------------------------------------------------------
-        void AmazonIAPSystem::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
+        void AmazonIAPSystem::StartListeningForTransactionUpdates(const TransactionStatusDelegate& in_delegate)
         {
-        	if (mpJavaInterface != nullptr)
-        	{
-        		mpJavaInterface->StartListeningForTransactionUpdates(inRequestDelegate);
-        	}
+        	CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction delegate");
+        	m_javaInterface->StartListeningForTransactionUpdates(in_delegate);
         }
         //---------------------------------------------------------------
-		/// Stop Listening For Transaction Updates
         //---------------------------------------------------------------
         void AmazonIAPSystem::StopListeningForTransactionUpdates()
         {
-        	if (mpJavaInterface != nullptr)
-        	{
-        		mpJavaInterface->StopListeningForTransactionUpdates();
-        	}
+        	m_javaInterface->StopListeningForTransactionUpdates();
         }
         //---------------------------------------------------------------
-		/// Request Product Descriptions
         //---------------------------------------------------------------
-        void AmazonIAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void AmazonIAPSystem::RequestProductDescriptions(const std::vector<std::string>& in_productIds, const ProductDescDelegate& in_delegate)
         {
-        	if (mpJavaInterface != nullptr)
-        	{
-        		mpJavaInterface->RequestProductDescriptions(inaProductIDs, inRequestDelegate);
-        	}
+            CS_ASSERT(in_productIds.empty() == false, "Cannot request no product descriptions");
+            CS_ASSERT(in_delegate != nullptr, "Cannot have null product description delegate");
+        	m_javaInterface->RequestProductDescriptions(in_productIds, in_delegate);
         }
         //---------------------------------------------------------------
-        /// Request All Product Descriptions
         //---------------------------------------------------------------
-        void AmazonIAPSystem::RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void AmazonIAPSystem::RequestAllProductDescriptions(const ProductDescDelegate& in_delegate)
         {
-            std::vector<std::string> aIDs;
-            aIDs.reserve(maProductRegInfos.size());
+            std::vector<std::string> productIds;
+            productIds.reserve(m_productRegInfos.size());
 
-            for(u32 i=0; i<maProductRegInfos.size(); ++i)
+            for(u32 i=0; i<m_productRegInfos.size(); ++i)
             {
-                aIDs.push_back(maProductRegInfos[i].strID);
+            	productIds.push_back(m_productRegInfos[i].m_id);
             }
 
-            RequestProductDescriptions(aIDs, inRequestDelegate);
+            RequestProductDescriptions(productIds, in_delegate);
         }
         //---------------------------------------------------------------
-		/// Cancel Product Descriptions Request
         //---------------------------------------------------------------
         void AmazonIAPSystem::CancelProductDescriptionsRequest()
         {
-        	if (mpJavaInterface != nullptr)
-        	{
-        		mpJavaInterface->CancelProductDescriptionsRequest();
-        	}
+        	m_javaInterface->CancelProductDescriptionsRequest();
         }
         //---------------------------------------------------------------
-		/// Request Product Purchase
         //---------------------------------------------------------------
-        void AmazonIAPSystem::RequestProductPurchase(const std::string& instrProductID)
+        void AmazonIAPSystem::RequestProductPurchase(const std::string& in_productId)
         {
-        	if (mpJavaInterface != nullptr)
-        	{
-        		CS_ASSERT(IsProductIDRegistered(maProductRegInfos, instrProductID), "Products must be registered with the IAP system before purchasing.");
-        		mpJavaInterface->RequestProductPurchase(instrProductID);
-        	}
+        	CS_ASSERT(ContainsProductId(m_productRegInfos, in_productId), "Products must be registered with the IAP system before purchasing");
+        	m_javaInterface->RequestProductPurchase(in_productId);
         }
         //---------------------------------------------------------------
-		/// Close Transactione
         //---------------------------------------------------------------
-        void AmazonIAPSystem::CloseTransaction(const Networking::IAPTransactionPtr& inpTransaction, const Networking::IAPTransactionCloseDelegate& inDelegate)
+        void AmazonIAPSystem::CloseTransaction(const TransactionSPtr& in_transaction, const TransactionCloseDelegate& in_delegate)
         {
-        	if (mpJavaInterface != nullptr)
-        	{
-        		mpJavaInterface->CloseTransaction(inpTransaction->strProductID, inpTransaction->strTransactionID, inDelegate);
-        	}
+        	m_javaInterface->CloseTransaction(in_transaction->m_productId, in_transaction->m_transactionId, in_delegate);
         }
         //---------------------------------------------------------------
-		/// Restore Managed Purchases
         //---------------------------------------------------------------
         void AmazonIAPSystem::RestoreManagedPurchases()
         {
-        	if (mpJavaInterface != nullptr)
-        	{
-        		mpJavaInterface->RestoreManagedPurchases();
-        	}
+        	m_javaInterface->RestoreManagedPurchases();
+        }
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        void AmazonIAPSystem::OnDestroy()
+        {
+        	m_javaInterface = nullptr;
+            m_productRegInfos.clear();
+            m_productRegInfos.shrink_to_fit();
         }
 	}
 }

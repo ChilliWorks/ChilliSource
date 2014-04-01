@@ -1,6 +1,6 @@
 //
 //  GooglePlayIAPSystem.cpp
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Scott Downie on 14/06/2013.
 //  Copyright (c) 2012 Tag Games. All rights reserved.
@@ -16,26 +16,27 @@ namespace ChilliSource
 	{
 		namespace
 		{
-			const std::string kstrGooglePlayPublicKeyKey = "GooglePlayPublicKey";
+			const std::string k_playStorePublicKeyKey("GooglePlayPublicKey");
 
 			//---------------------------------------------------------------
-			/// Try Get Registered Product Type
-			///
-			/// Locate the product in the registered list and return its
+			/// Try and locate the product in the list and return its
 			/// type - managed or unmanaged
+			///
+			/// @author S Downie
 			///
 			/// @param List of registered products
 			/// @param Product ID to find
-			/// @param Out: Type if found
+			/// @param [Out] Type if found
+			///
 			/// @return Whether product was found
 			//---------------------------------------------------------------
-			bool TryGetRegisteredProductType(const std::vector<Networking::IAPProductRegInfo>& inProductRegInfos, const std::string& instrProductID, Networking::IAPProductRegInfo::Type& outeType)
+			bool TryGetProductType(const std::vector<Networking::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId, Networking::IAPSystem::ProductRegInfo::Type& out_type)
 			{
-				for(std::vector<Networking::IAPProductRegInfo>::const_iterator it = inProductRegInfos.begin(); it != inProductRegInfos.end(); ++it)
+				for(std::vector<Networking::IAPSystem::ProductRegInfo>::const_iterator it = in_productInfos.begin(); it != in_productInfos.end(); ++it)
 				{
-					if(it->strID == instrProductID)
+					if(it->m_id == in_productId)
 					{
-						outeType = it->eType;
+						out_type = it->m_type;
 						return true;
 					}
 				}
@@ -43,118 +44,134 @@ namespace ChilliSource
 				return false;
 			}
 		}
-        //---------------------------------------------------------------
-        /// Constructor
-        //---------------------------------------------------------------
-		GooglePlayIAPSystem::GooglePlayIAPSystem(const Core::ParamDictionary& inParams)
-		{
-			std::string strPublicKey = "";
-			if (inParams.HasValue(kstrGooglePlayPublicKeyKey) == true)
-			{
-				strPublicKey = inParams.ValueForKey(kstrGooglePlayPublicKeyKey);
-			}
 
-    		mpJavaInterface = GooglePlayIAPJavaInterfaceSPtr(new GooglePlayIAPJavaInterface(strPublicKey));
-	        ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
+		CS_DEFINE_NAMEDTYPE(GooglePlayIAPSystem);
+
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+		GooglePlayIAPSystem::GooglePlayIAPSystem(const Core::ParamDictionary& in_params)
+		{
+			CS_ASSERT(in_params.HasValue(k_playStorePublicKeyKey) == true, "Cannot create GooglePlay IAP system without Play store public key - GooglePlayPublicKey");
+			m_publicKey = in_params.ValueForKey(k_playStorePublicKeyKey);
 		}
         //---------------------------------------------------------------
-        /// Register Products
         //---------------------------------------------------------------
-        void GooglePlayIAPSystem::RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts)
+        bool GooglePlayIAPSystem::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            mProductRegInfos = inaProducts;
+            return in_interfaceId == Networking::IAPSystem::InterfaceID || in_interfaceId == GooglePlayIAPSystem::InterfaceID;
         }
         //---------------------------------------------------------------
-		/// Get Provider ID
+        //---------------------------------------------------------------
+		void GooglePlayIAPSystem::OnInit()
+		{
+			m_javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<GooglePlayIAPJavaInterface>();
+			if(m_javaInterface == nullptr)
+			{
+				m_javaInterface = GooglePlayIAPJavaInterfaceSPtr(new GooglePlayIAPJavaInterface(m_publicKey));
+				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
+			}
+		}
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        void GooglePlayIAPSystem::RegisterProducts(const std::vector<ProductRegInfo>& in_productInfos)
+        {
+        	CS_ASSERT(in_productInfos.empty() == false, "Must register at least one product");
+            m_productRegInfos = in_productInfos;
+        }
+        //---------------------------------------------------------------
         //---------------------------------------------------------------
 		std::string GooglePlayIAPSystem::GetProviderID() const
 		{
 			return "GooglePlayV3";
 		}
         //---------------------------------------------------------------
-		/// Get Provider Name
         //---------------------------------------------------------------
 		std::string GooglePlayIAPSystem::GetProviderName() const
 		{
 			return "PlayStoreV3";
 		}
         //---------------------------------------------------------------
-		/// Is Purchasing Enabled
         //---------------------------------------------------------------
         bool GooglePlayIAPSystem::IsPurchasingEnabled()
         {
-        	return mpJavaInterface->IsPurchasingEnabled();
+        	return m_javaInterface->IsPurchasingEnabled();
         }
         //---------------------------------------------------------------
-		/// Start Listening For Transaction Updates
         //---------------------------------------------------------------
-        void GooglePlayIAPSystem::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
+        void GooglePlayIAPSystem::StartListeningForTransactionUpdates(const TransactionStatusDelegate& in_delegate)
         {
-        	mpJavaInterface->StartListeningForTransactionUpdates(inRequestDelegate);
+        	CS_ASSERT(in_delegate != nullptr, "Cannot listen for transactions with null delegate");
+        	m_javaInterface->StartListeningForTransactionUpdates(in_delegate);
         }
         //---------------------------------------------------------------
-		/// Stop Listening For Transaction Updates
         //---------------------------------------------------------------
         void GooglePlayIAPSystem::StopListeningForTransactionUpdates()
         {
-        	mpJavaInterface->StopListeningForTransactionUpdates();
+        	m_javaInterface->StopListeningForTransactionUpdates();
         }
         //---------------------------------------------------------------
-		/// Request Product Descriptions
         //---------------------------------------------------------------
-        void GooglePlayIAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void GooglePlayIAPSystem::RequestProductDescriptions(const std::vector<std::string>& in_productIds, const ProductDescDelegate& in_delegate)
         {
-        	mpJavaInterface->RequestProductDescriptions(inaProductIDs, inRequestDelegate);
-        }
-        //---------------------------------------------------------------
-        /// Request All Product Descriptions
-        //---------------------------------------------------------------
-        void GooglePlayIAPSystem::RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate)
-        {
-            std::vector<std::string> aIDs;
-            aIDs.reserve(mProductRegInfos.size());
+            CS_ASSERT(in_productIds.empty() == false, "Cannot request no product descriptions");
+            CS_ASSERT(in_delegate != nullptr, "Cannot have null product description delegate");
 
-            for(u32 i=0; i<mProductRegInfos.size(); ++i)
+        	m_javaInterface->RequestProductDescriptions(in_productIds, in_delegate);
+        }
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        void GooglePlayIAPSystem::RequestAllProductDescriptions(const ProductDescDelegate& in_delegate)
+        {
+            std::vector<std::string> productIds;
+            productIds.reserve(m_productRegInfos.size());
+
+            for(u32 i=0; i<m_productRegInfos.size(); ++i)
             {
-                aIDs.push_back(mProductRegInfos[i].strID);
+            	productIds.push_back(m_productRegInfos[i].m_id);
             }
 
-            RequestProductDescriptions(aIDs, inRequestDelegate);
+            RequestProductDescriptions(productIds, in_delegate);
         }
         //---------------------------------------------------------------
-		/// Cancel Product Descriptions Request
         //---------------------------------------------------------------
         void GooglePlayIAPSystem::CancelProductDescriptionsRequest()
         {
-        	mpJavaInterface->CancelProductDescriptionsRequest();
+        	m_javaInterface->CancelProductDescriptionsRequest();
         }
         //---------------------------------------------------------------
-		/// Request Product Purchase
         //---------------------------------------------------------------
-        void GooglePlayIAPSystem::RequestProductPurchase(const std::string& instrProductID)
+        void GooglePlayIAPSystem::RequestProductPurchase(const std::string& in_productId)
         {
-        	Networking::IAPProductRegInfo::Type eType;
-        	if(!TryGetRegisteredProductType(mProductRegInfos, instrProductID, eType))
+        	ProductRegInfo::Type type;
+        	if(!TryGetProductType(m_productRegInfos, in_productId, type))
         	{
-        		CS_LOG_FATAL("Cannot find IAP product with ID " + instrProductID + ". Please register it");
+        		CS_LOG_FATAL("Cannot find IAP product with ID " + in_productId + ". Please register it");
         		return;
         	}
 
-        	mpJavaInterface->RequestProductPurchase(instrProductID, eType);
+        	m_javaInterface->RequestProductPurchase(in_productId, type);
         }
         //---------------------------------------------------------------
-		/// Close Transactione
         //---------------------------------------------------------------
-        void GooglePlayIAPSystem::CloseTransaction(const Networking::IAPTransactionPtr& inpTransaction, const Networking::IAPTransactionCloseDelegate& inDelegate)
+        void GooglePlayIAPSystem::CloseTransaction(const TransactionSPtr& in_transaction, const TransactionCloseDelegate& in_delegate)
         {
-        	 mpJavaInterface->CloseTransaction(inpTransaction->strProductID, inpTransaction->strTransactionID, inDelegate);
+        	CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction close delegate");
+
+        	m_javaInterface->CloseTransaction(in_transaction->m_productId, in_transaction->m_transactionId, in_delegate);
         }
         //---------------------------------------------------------------
-		/// Restore Managed Purchases
         //---------------------------------------------------------------
         void GooglePlayIAPSystem::RestoreManagedPurchases()
         {
-        	mpJavaInterface->RestoreManagedPurchases();
+        	m_javaInterface->RestoreManagedPurchases();
+        }
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        void GooglePlayIAPSystem::OnDestroy()
+        {
+        	m_javaInterface = nullptr;
+            m_productRegInfos.clear();
+            m_productRegInfos.shrink_to_fit();
         }
 	}
 }

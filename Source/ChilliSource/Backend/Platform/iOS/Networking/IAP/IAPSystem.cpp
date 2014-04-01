@@ -1,6 +1,6 @@
 //
 //  IAPSystem.cpp
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Scott Downie on 12/06/2013.
 //  Copyright (c) 2013 Tag Games Ltd. All rights reserved.
@@ -16,237 +16,242 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        IAPSystem::IAPSystem()
+        namespace
         {
-            mpStoreKitSystem = [[StoreKitIAPSystem alloc] init];
+            //---------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param List of product registrations
+            /// @param Product Id to find
+            ///
+            /// @return Whether a product reg info exists in the list
+            /// with the given Id.
+            //---------------------------------------------------------------
+            bool ContainsProductId(const std::vector<Networking::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId)
+            {
+                for(u32 i=0; i<in_productInfos.size(); ++i)
+                {
+                    if(in_productInfos[i].m_id == in_productId)
+                    {
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+        }
+        
+        CS_DEFINE_NAMEDTYPE(IAPSystem);
+        
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        bool IAPSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        {
+            return in_interfaceId == Networking::IAPSystem::InterfaceID || in_interfaceId == IAPSystem::InterfaceID;
         }
         //---------------------------------------------------------------
-        /// Register Products
         //---------------------------------------------------------------
-        void IAPSystem::RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts)
+        void IAPSystem::OnInit()
         {
-            mProductRegInfos = inaProducts;
+            m_storeKitSystem = [[StoreKitIAPSystem alloc] init];
         }
         //---------------------------------------------------------------
-        /// Get Provider ID
+        //---------------------------------------------------------------
+        void IAPSystem::RegisterProducts(const std::vector<ProductRegInfo>& in_productInfos)
+        {
+            CS_ASSERT(in_productInfos.empty() == false, "Must register at least one product");
+            m_productRegInfos = in_productInfos;
+        }
+        //---------------------------------------------------------------
         //---------------------------------------------------------------
         std::string IAPSystem::GetProviderID() const
         {
             return "Apple";
         }
         //---------------------------------------------------------------
-        /// Get Provider Name
         //---------------------------------------------------------------
         std::string IAPSystem::GetProviderName() const
         {
             return "iTunes";
         }
         //---------------------------------------------------------------
-        /// Is Purchasing Enabled
         //---------------------------------------------------------------
         bool IAPSystem::IsPurchasingEnabled()
         {
-            return [mpStoreKitSystem isPurchasingEnabled] == YES;
+            return [m_storeKitSystem isPurchasingEnabled] == YES;
         }
         //---------------------------------------------------------------
-        /// Start Listening For Transaction Updates
         //---------------------------------------------------------------
-        void IAPSystem::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
+        void IAPSystem::StartListeningForTransactionUpdates(const TransactionStatusDelegate& in_delegate)
         {
-            mTransactionDelegate = inRequestDelegate;
+            CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction delegate");
+            m_transactionStatusDelegate = in_delegate;
             
-            if(mTransactionDelegate == nullptr)
-                return;
-            
-            [mpStoreKitSystem startListeningForTransactions:Core::MakeDelegate(this, &IAPSystem::OnTransactionUpdate)];
+            [m_storeKitSystem startListeningForTransactions:Core::MakeDelegate(this, &IAPSystem::OnTransactionUpdate)];
         }
         //---------------------------------------------------------------
-        /// On Transaction Update
         //---------------------------------------------------------------
-        void IAPSystem::OnTransactionUpdate(NSString* inProductID, StoreKitIAP::TransactionResult ineResult, SKPaymentTransaction* inpTransaction)
+        void IAPSystem::OnTransactionUpdate(NSString* in_productID, StoreKitIAP::TransactionResult in_result, SKPaymentTransaction* in_skTransaction)
         {
-            if(mTransactionDelegate == nullptr)
+            if(m_transactionStatusDelegate == nullptr)
                 return;
             
-            Networking::IAPTransactionPtr pTransaction(new Networking::IAPTransaction());
-            pTransaction->strProductID = Core::StringUtils::NSStringToString(inProductID);
-            
-            bool bHasReceipt = false;
-            Networking::IAPTransaction::Status eResult = Networking::IAPTransaction::Status::k_failed;
-            switch(ineResult)
+            bool hasReceipt = false;
+            Transaction::Status result = Transaction::Status::k_failed;
+            switch(in_result)
             {
                 case StoreKitIAP::TransactionResult::k_succeeded:
-                    bHasReceipt = true;
-                    eResult = Networking::IAPTransaction::Status::k_succeeded;
+                    hasReceipt = true;
+                    result = Transaction::Status::k_succeeded;
                     break;
                 case StoreKitIAP::TransactionResult::k_failed:
-                    eResult = Networking::IAPTransaction::Status::k_failed;
+                    result = Transaction::Status::k_failed;
                     break;
                 case StoreKitIAP::TransactionResult::k_cancelled:
-                    eResult = Networking::IAPTransaction::Status::k_cancelled;
+                    result = Transaction::Status::k_cancelled;
                     break;
                 case StoreKitIAP::TransactionResult::k_restored:
-                    bHasReceipt = true;
-                    eResult = Networking::IAPTransaction::Status::k_restored;
+                    hasReceipt = true;
+                    result = Transaction::Status::k_restored;
                     break;
                 case StoreKitIAP::TransactionResult::k_resumed:
-                    bHasReceipt = true;
-                    eResult = Networking::IAPTransaction::Status::k_resumed;
+                    hasReceipt = true;
+                    result = Transaction::Status::k_resumed;
                     break;
             }
             
-            if(pTransaction)
+            TransactionSPtr transaction(new Transaction());
+            transaction->m_productId = Core::StringUtils::NSStringToString(in_productID);
+            transaction->m_transactionId = Core::StringUtils::NSStringToString(in_skTransaction.transactionIdentifier);
+            if(hasReceipt)
             {
-                pTransaction->strTransactionID = Core::StringUtils::NSStringToString(inpTransaction.transactionIdentifier);
-                
-                if(bHasReceipt)
-                {
-                    pTransaction->strReceipt = Core::BaseEncoding::Base64Encode((s8*)[inpTransaction.transactionReceipt bytes], [inpTransaction.transactionReceipt length]);
-                }
+                transaction->m_receipt = Core::BaseEncoding::Base64Encode((s8*)[in_skTransaction.transactionReceipt bytes], [in_skTransaction.transactionReceipt length]);
             }
             
-            mTransactionDelegate(eResult, pTransaction);
+            m_transactionStatusDelegate(result, transaction);
         }
         //---------------------------------------------------------------
-        /// Stop Listening For Transaction Updates
         //---------------------------------------------------------------
         void IAPSystem::StopListeningForTransactionUpdates()
         {
-            [mpStoreKitSystem stopListeningForTransactions];
+            [m_storeKitSystem stopListeningForTransactions];
         }
         //---------------------------------------------------------------
-        /// Request Product Descriptions
         //---------------------------------------------------------------
-        void IAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void IAPSystem::RequestProductDescriptions(const std::vector<std::string>& in_productIds, const ProductDescDelegate& in_delegate)
         {
-            mProductDescDelegate = inRequestDelegate;
+            CS_ASSERT(in_productIds.empty() == false, "Cannot request no product descriptions");
+            CS_ASSERT(in_delegate != nullptr, "Cannot have null product description delegate");
+            CS_ASSERT(m_productDescDelegate == nullptr, "Only 1 product description request can be active at a time");
             
-            if(mProductDescDelegate == nullptr)
-                return;
+            m_productDescDelegate = in_delegate;
             
-            if(inaProductIDs.empty())
-            {
-                mProductDescDelegate(std::vector<Networking::IAPProductDesc>());
-                return;
-            }
-            
-            NSMutableSet* idSet = [[NSMutableSet alloc] initWithCapacity:inaProductIDs.size()];
+            NSMutableSet* idSet = [[NSMutableSet alloc] initWithCapacity:in_productIds.size()];
 			
-			for (u32 nID = 0; nID < inaProductIDs.size(); nID++)
+			for (u32 i=0; i<in_productIds.size(); ++i)
             {
-				[idSet addObject:Core::StringUtils::StringToNSString(inaProductIDs[nID])];
+				[idSet addObject:Core::StringUtils::StringToNSString(in_productIds[i])];
 			}
 			
-            [mpStoreKitSystem requestProducts:idSet forDelegate:Core::MakeDelegate(this, &IAPSystem::OnProductDescriptionRequestComplete)];
+            [m_storeKitSystem requestProducts:idSet forDelegate:Core::MakeDelegate(this, &IAPSystem::OnProductDescriptionRequestComplete)];
             
             [idSet release];
         }
         //---------------------------------------------------------------
-        /// Request All Product Descriptions
         //---------------------------------------------------------------
-        void IAPSystem::RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void IAPSystem::RequestAllProductDescriptions(const ProductDescDelegate& in_delegate)
         {
-            std::vector<std::string> aIDs;
-            aIDs.reserve(mProductRegInfos.size());
+            std::vector<std::string> productIds;
+            productIds.reserve(m_productRegInfos.size());
             
-            for(u32 i=0; i<mProductRegInfos.size(); ++i)
+            for(u32 i=0; i<m_productRegInfos.size(); ++i)
             {
-                aIDs.push_back(mProductRegInfos[i].strID);
+                productIds.push_back(m_productRegInfos[i].m_id);
             }
             
-            RequestProductDescriptions(aIDs, inRequestDelegate);
+            RequestProductDescriptions(productIds, in_delegate);
         }
         //---------------------------------------------------------------
-        /// On Product Description Request Complete
         //---------------------------------------------------------------
-        void IAPSystem::OnProductDescriptionRequestComplete(NSArray* inProducts)
+        void IAPSystem::OnProductDescriptionRequestComplete(NSArray* in_products)
         {
-            if(mProductDescDelegate == nullptr)
+            if(m_productDescDelegate == nullptr)
                 return;
  
-            std::vector<Networking::IAPProductDesc> aResults;
+            std::vector<ProductDesc> descriptions;
             
-            if(inProducts != nil)
+            if(in_products != nil)
             {
-                NSNumberFormatter *pFormatter = [[NSNumberFormatter alloc] init];
-                [pFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-                [pFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+                NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
+                [formatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+                [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
                 
-                for(SKProduct* pProduct in inProducts)
+                for(SKProduct* product in in_products)
                 {
-                    Networking::IAPProductDesc sDesc;
-                    sDesc.strID = Core::StringUtils::NSStringToString(pProduct.productIdentifier);
-                    sDesc.strName = Core::StringUtils::NSStringToString(pProduct.localizedTitle);
-                    sDesc.strDescription = Core::StringUtils::NSStringToString(pProduct.localizedDescription);
+                    ProductDesc description;
+                    description.m_id = Core::StringUtils::NSStringToString(product.productIdentifier);
+                    description.m_name = Core::StringUtils::NSStringToString(product.localizedTitle);
+                    description.m_description = Core::StringUtils::NSStringToString(product.localizedDescription);
                     
-                    [pFormatter setLocale:pProduct.priceLocale];
-                    sDesc.strFormattedPrice = Core::StringUtils::NSStringToString([pFormatter stringFromNumber:pProduct.price]);
+                    [formatter setLocale:product.priceLocale];
+                    description.m_formattedPrice = Core::StringUtils::NSStringToString([formatter stringFromNumber:product.price]);
                     
-                    NSLocale* storeLocale = pProduct.priceLocale;
-                    sDesc.strCountryCode = Core::StringUtils::NSStringToString((NSString*)CFLocaleGetValue((CFLocaleRef)storeLocale, kCFLocaleCountryCode));
+                    NSLocale* storeLocale = product.priceLocale;
+                    description.m_countryCode = Core::StringUtils::NSStringToString((NSString*)CFLocaleGetValue((CFLocaleRef)storeLocale, kCFLocaleCountryCode));
                     
-                    aResults.push_back(sDesc);
+                    descriptions.push_back(description);
                 }
                 
-                [pFormatter release];
+                [formatter release];
             }
-            
 
-            mProductDescDelegate(aResults);
+            m_productDescDelegate(descriptions);
+            m_productDescDelegate = nullptr;
         }
         //---------------------------------------------------------------
-        /// Cancel Product Descriptions Request
         //---------------------------------------------------------------
         void IAPSystem::CancelProductDescriptionsRequest()
         {
-            [mpStoreKitSystem cancelProductsRequest];
+            [m_storeKitSystem cancelProductsRequest];
         }
         //---------------------------------------------------------------
-        /// Is Product ID Registered
         //---------------------------------------------------------------
-        bool IsProductIDRegistered(const std::vector<Networking::IAPProductRegInfo>& inProductRegInfos, const std::string& instrProductID)
+        void IAPSystem::RequestProductPurchase(const std::string& in_productId)
         {
-            for(u32 i=0; i<inProductRegInfos.size(); ++i)
-            {
-                if(inProductRegInfos[i].strID == instrProductID)
-                {
-                    return true;
-                }
-            }
+            CS_ASSERT(ContainsProductId(m_productRegInfos, in_productId), "Products must be registered with the IAP system before purchasing");
+            NSString* productID = Core::StringUtils::StringToNSString(in_productId);
+            [m_storeKitSystem requestPurchaseWithProductID:productID andQuantity:1];
+        }
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        void IAPSystem::CloseTransaction(const TransactionSPtr& in_transaction, const TransactionCloseDelegate& in_delegate)
+        {
+            CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction close delegate");
+            CS_ASSERT(m_transactionCloseDelegate == nullptr, "Only 1 transaction can be closed at a time");
             
-            return false;
-        }
-        //---------------------------------------------------------------
-        /// Request Product Purchase
-        //---------------------------------------------------------------
-        void IAPSystem::RequestProductPurchase(const std::string& instrProductID)
-        {
-            CS_ASSERT(IsProductIDRegistered(mProductRegInfos, instrProductID), "Products must be registered with the IAP system before purchasing");
-            NSString* productID = Core::StringUtils::StringToNSString(instrProductID);
-            [mpStoreKitSystem requestPurchaseWithProductID:productID andQuantity:1];
-        }
-        //---------------------------------------------------------------
-        /// Close Transaction
-        //---------------------------------------------------------------
-        void IAPSystem::CloseTransaction(const Networking::IAPTransactionPtr& inpTransaction, const Networking::IAPTransactionCloseDelegate& inDelegate)
-        {
-            [mpStoreKitSystem closeTransactionWithID:Core::StringUtils::StringToNSString(inpTransaction->strTransactionID)];
+            m_transactionCloseDelegate = in_delegate;
             
-            if(inDelegate)
-            {
-                inDelegate(inpTransaction->strProductID, inpTransaction->strTransactionID, true);
-            }
+            [m_storeKitSystem closeTransactionWithID:Core::StringUtils::StringToNSString(in_transaction->m_transactionId)];
+            
+            m_transactionCloseDelegate(in_transaction->m_productId, in_transaction->m_transactionId, true);
+            m_transactionCloseDelegate = nullptr;
         }
         //---------------------------------------------------------------
-        /// Restore Non Consumable Purchases
         //---------------------------------------------------------------
         void IAPSystem::RestoreManagedPurchases()
         {
-            [mpStoreKitSystem restoreNonConsumablePurchases];
+            [m_storeKitSystem restoreNonConsumablePurchases];
         }
-        IAPSystem::~IAPSystem()
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        void IAPSystem::OnDestroy()
         {
-            [mpStoreKitSystem release];
+            [m_storeKitSystem release];
+            m_productDescDelegate = nullptr;
+            m_transactionStatusDelegate = nullptr;
+            m_transactionCloseDelegate = nullptr;
+            m_productRegInfos.clear();
+            m_productRegInfos.shrink_to_fit();
         }
     }
 }
