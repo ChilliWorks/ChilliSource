@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
-#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequestSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
 
 #include <UIKit/UIKit.h>
@@ -26,8 +26,8 @@ namespace ChilliSource
     {
 		//------------------------------------------------------------------------
 		//------------------------------------------------------------------------
-		TwitterPostSystem::TwitterPostSystem(Networking::HttpConnectionSystem* in_httpConnectionSystem, Core::OAuthSystem* in_oauthSystem)
-        : Social::TwitterPostSystem(in_httpConnectionSystem, in_oauthSystem)
+		TwitterPostSystem::TwitterPostSystem(Networking::HttpRequestSystem* in_HttpRequestSystem, Core::OAuthSystem* in_oauthSystem)
+        : Social::TwitterPostSystem(in_HttpRequestSystem, in_oauthSystem)
 		{
 			
 		}

@@ -72,7 +72,7 @@ namespace ChilliSource
             ///
             /// @return The new instance.
 			//------------------------------------------------
-            static TwitterPostSystemUPtr Create(Networking::HttpConnectionSystem* in_httpConnectionSystem, Core::OAuthSystem* in_oauthSystem);
+            static TwitterPostSystemUPtr Create(Networking::HttpRequestSystem* in_HttpRequestSystem, Core::OAuthSystem* in_oauthSystem);
             //------------------------------------------------------------------------
             /// Run the OAuth process and, if successful, leave the system in state
             /// ready to communicate with Twitter. Result will be returned through
@@ -127,7 +127,7 @@ namespace ChilliSource
             /// @param The http connection system.
             /// @param The OAuth system.
 			//-----------------------------------------------
-            TwitterPostSystem(Networking::HttpConnectionSystem* in_httpConnectionSystem, Core::OAuthSystem* in_oauthSystem);
+            TwitterPostSystem(Networking::HttpRequestSystem* in_HttpRequestSystem, Core::OAuthSystem* in_oauthSystem);
             //------------------------------------------------------------------------
 			/// Trys to load saved token and secret keys
             ///
@@ -207,7 +207,7 @@ namespace ChilliSource
 
         private:
             
-			Networking::HttpConnectionSystem* m_httpConnectionSystem;
+			Networking::HttpRequestSystem* m_HttpRequestSystem;
 			
         protected:
             

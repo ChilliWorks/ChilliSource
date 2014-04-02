@@ -13,7 +13,7 @@
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Cloud/iCloudSystem/MoFlowUIDocument.h>
 #include <ChilliSource/Networking/Cloud/CloudStorageSystem.h>
-#include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 #import <UIKit/UIKit.h>
 
@@ -30,7 +30,7 @@ namespace ChilliSource
             
             typedef std::function<void(MoFlowUIDocument*, bool)> OnOpenCloudFileCompletedDelegate;
             
-            iCloudSystem(ChilliSource::Networking::HttpConnectionSystem* inpcHttpConnectionSystem);
+            iCloudSystem(ChilliSource::Networking::HttpRequestSystem* inpcHttpRequestSystem);
             
             //----------------------------------------------------------
             /// Is A
@@ -57,13 +57,13 @@ namespace ChilliSource
             void RefreshCloudContent();
 
             //-------------------------------------------------------------
-            /// GetHttpConnectionSystem
+            /// GetHttpRequestSystem
             ///
             /// Returns a pointer to the http connection system as used here.
             /// @return a pointer to the http connection system as used here
             ///
             //-------------------------------------------------------------            
-            ChilliSource::Networking::HttpConnectionSystem* GetHttpConnectionSystem() const { return mpcHttpConnectionSystem; }
+            ChilliSource::Networking::HttpRequestSystem* GetHttpRequestSystem() const { return mpcHttpRequestSystem; }
             
             //-------------------------------------------------------------
             /// GetAppendedFilePathToStorageArea
@@ -168,7 +168,7 @@ namespace ChilliSource
             
             std::string mstrICloudDirectoryPath;
             
-            Networking::HttpConnectionSystem* mpcHttpConnectionSystem;
+            Networking::HttpRequestSystem* mpcHttpRequestSystem;
         };
     }
 }

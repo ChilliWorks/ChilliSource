@@ -10,7 +10,7 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 #include <CFNetwork/CFNetwork.h>
 

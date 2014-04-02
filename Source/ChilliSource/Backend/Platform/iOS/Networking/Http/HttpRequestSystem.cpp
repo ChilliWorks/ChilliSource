@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequestSystem.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Networking/Base/CSReachability.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequest.h>
@@ -114,26 +114,26 @@ namespace ChilliSource
             ///
             /// @return Unique ID based on the url properties
             //--------------------------------------------------------------------------------------------------
-            HttpConnectionSystem::ConnectionId GeneratePropId(const std::string& in_scheme, CFURLRef in_url)
+            HttpRequestSystem::ConnectionId GeneratePropId(const std::string& in_scheme, CFURLRef in_url)
             {
                 s32 portNum = CFURLGetPortNumber(in_url);
                 CFStringRef cfHostName = CFURLCopyHostName(in_url);
                 std::string hostName = Core::StringUtils::NSStringToString((NSString*)cfHostName);
                 CFRelease(cfHostName);
                 
-                HttpConnectionSystem::ConnectionId propId = Core::HashCRC32::GenerateHashCode(in_scheme + hostName + Core::ToString(portNum));
+                HttpRequestSystem::ConnectionId propId = Core::HashCRC32::GenerateHashCode(in_scheme + hostName + Core::ToString(portNum));
                 return propId;
             }
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		bool HttpConnectionSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool HttpRequestSystem::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == Networking::HttpConnectionSystem::InterfaceID || in_interfaceId == HttpConnectionSystem::InterfaceID;
+			return in_interfaceId == Networking::HttpRequestSystem::InterfaceID || in_interfaceId == HttpRequestSystem::InterfaceID;
 		}
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		Networking::HttpRequest* HttpConnectionSystem::MakeRequest(const Networking::HttpRequest::Desc& in_requestDesc, const Networking::HttpRequest::Delegate& in_delegate)
+		Networking::HttpRequest* HttpRequestSystem::MakeRequest(const Networking::HttpRequest::Desc& in_requestDesc, const Networking::HttpRequest::Delegate& in_delegate)
         {
             CS_ASSERT(in_requestDesc.m_url.empty() == false, "Cannot make an http request to a blank url");
             
@@ -240,7 +240,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		void HttpConnectionSystem::CancelAllRequests()
+		void HttpRequestSystem::CancelAllRequests()
         {
 			for(u32 nRequest=0; nRequest<m_requests.size(); ++nRequest)
             {
@@ -249,7 +249,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
-        bool HttpConnectionSystem::CheckReachability() const
+        bool HttpRequestSystem::CheckReachability() const
         {
             CSReachability* reachability = [CSReachability reachabilityForInternetConnection];
             NetworkStatus status = [reachability currentReachabilityStatus];
@@ -258,7 +258,7 @@ namespace ChilliSource
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		void HttpConnectionSystem::OnUpdate(f32 in_timeSinceLastUpdate)
+		void HttpRequestSystem::OnUpdate(f32 in_timeSinceLastUpdate)
 		{
             //We should do this in two loops incase anyone tries to insert into the requests from the completion callback
 			for(u32 i=0; i<m_requests.size(); ++i)
@@ -315,7 +315,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
-        void HttpConnectionSystem::OnDestroy()
+        void HttpRequestSystem::OnDestroy()
         {
             CancelAllRequests();
             

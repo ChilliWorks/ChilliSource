@@ -42,11 +42,11 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //--------------------------------------------------------------------------------------------------
-		class HttpConnectionSystem : public Core::AppSystem
+		class HttpRequestSystem : public Core::AppSystem
         {
 		public:
             
-			CS_DECLARE_NAMEDTYPE(HttpConnectionSystem);
+			CS_DECLARE_NAMEDTYPE(HttpRequestSystem);
             
             //--------------------------------------------------------------------------------------------------
             /// Factory method
@@ -55,7 +55,7 @@ namespace ChilliSource
             ///
             /// @return New backend with ownership transferred
             //--------------------------------------------------------------------------------------------------
-            static HttpConnectionSystemUPtr Create();
+            static HttpRequestSystemUPtr Create();
             //--------------------------------------------------------------------------------------------------
             /// Causes the system to issue a request with the given details.
             ///
@@ -107,7 +107,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //--------------------------------------------------------------------------------------------------
-            HttpConnectionSystem() = default;
+            HttpRequestSystem() = default;
             //--------------------------------------------------------------------------------------------------
             /// @author S Downie
             ///

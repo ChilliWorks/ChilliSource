@@ -30,7 +30,7 @@ namespace ChilliSource
         
         using namespace ChilliSource::Core;
         
-        iCloudSystem::iCloudSystem(ChilliSource::Networking::HttpConnectionSystem* inpcHttpConnectionSystem)
+        iCloudSystem::iCloudSystem(ChilliSource::Networking::HttpRequestSystem* inpcHttpRequestSystem)
         {
             //You should be checking if IsSupported before creating the system as it is only compatible with >= iOS 5.0 OS's
             if(!IsSupported())
@@ -55,7 +55,7 @@ namespace ChilliSource
             //Initially query for all iCloud files to keep initial cache
             QueryForAllCloudFiles();
             
-            mpcHttpConnectionSystem = inpcHttpConnectionSystem;
+            mpcHttpRequestSystem = inpcHttpRequestSystem;
         }
 
         //-----------------------------------------------
@@ -213,7 +213,7 @@ namespace ChilliSource
             if(!IsCloudStorageEnabled())
                 return false;
             
-            if(mpcHttpConnectionSystem && !mpcHttpConnectionSystem->CheckReachability())
+            if(mpcHttpRequestSystem && !mpcHttpRequestSystem->CheckReachability())
             {
                 CS_LOG_ERROR("Cannot sync file to cloud, network unreachable");
                 return false;

@@ -23,8 +23,8 @@ namespace ChilliSource
         /// @param Asset server URL
         /// @param Dynamic array of tags that determine content
         //----------------------------------------------------------------
-        MoContentDownloader::MoContentDownloader(HttpConnectionSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags)
-        : mpHttpConnectionSystem(inpRequestSystem), mstrAssetServerURL(instrAssetServerURL), mastrTags(inastrTags)
+        MoContentDownloader::MoContentDownloader(HttpRequestSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags)
+        : mpHttpRequestSystem(inpRequestSystem), mstrAssetServerURL(instrAssetServerURL), mastrTags(inastrTags)
         {
             
         }
@@ -42,7 +42,7 @@ namespace ChilliSource
             mOnContentManifestDownloadCompleteDelegate = inDelegate;
             
             //Request the content manifest
-            if(mpHttpConnectionSystem->CheckReachability())
+            if(mpHttpRequestSystem->CheckReachability())
             {
                 //Build the JSON request with the device info so the server can decide what
                 //assets are suitable for us
@@ -67,7 +67,7 @@ namespace ChilliSource
 				requestDesc.m_type = HttpRequest::Type::k_post;
                 requestDesc.m_body = JWriter.write(JDeviceData);
                 
-                mpHttpConnectionSystem->MakeRequest(requestDesc, Core::MakeDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
+                mpHttpRequestSystem->MakeRequest(requestDesc, Core::MakeDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
                 return true;
             }
             else
@@ -90,7 +90,7 @@ namespace ChilliSource
             HttpRequest::Desc requestDesc;
             requestDesc.m_url = instrURL;
             requestDesc.m_type = HttpRequest::Type::k_get;
-            mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(requestDesc, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
+            mpCurrentRequest = mpHttpRequestSystem->MakeRequest(requestDesc, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
         }
         //----------------------------------------------------------------
         /// On Content Manifest Download Complete
@@ -191,7 +191,7 @@ namespace ChilliSource
                                 requestDetails.m_url = requestDetails.m_redirectionUrl;
                                 requestDetails.m_redirectionUrl = "";
                                 requestDetails.m_type = HttpRequest::Type::k_get;
-                                mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
+                                mpCurrentRequest = mpHttpRequestSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
                                 break;
                             }
                         }

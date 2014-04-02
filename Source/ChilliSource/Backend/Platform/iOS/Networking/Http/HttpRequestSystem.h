@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 #include <unordered_map>
 #include <vector>
@@ -28,7 +28,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //--------------------------------------------------------------------------------------------------
-		class HttpConnectionSystem final : public Networking::HttpConnectionSystem
+		class HttpRequestSystem final : public Networking::HttpRequestSystem
 		{
 		public:
             
@@ -84,13 +84,13 @@ namespace ChilliSource
             
         private:
             
-            friend Networking::HttpConnectionSystemUPtr Networking::HttpConnectionSystem::Create();
+            friend Networking::HttpRequestSystemUPtr Networking::HttpRequestSystem::Create();
             //--------------------------------------------------------------------------------------------------
             /// Private constructor to fore use of factory method
             ///
             /// @author S Downie
             //--------------------------------------------------------------------------------------------------
-            HttpConnectionSystem() = default;
+            HttpRequestSystem() = default;
             
         private:
             
