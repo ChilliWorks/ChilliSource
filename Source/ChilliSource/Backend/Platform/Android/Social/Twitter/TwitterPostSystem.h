@@ -67,7 +67,7 @@ namespace ChilliSource
 			void Post(const Social::TwitterPostSystem::PostDesc& in_desc, const Social::TwitterPostSystem::PostResultDelegate& in_delegate) override;
 
 		private:
-			friend Social::TwitterPostSystemUPtr Social::TwitterPostSystem::Create(Networking::HttpConnectionSystem*, Core::OAuthSystem*);
+			friend Social::TwitterPostSystemUPtr Social::TwitterPostSystem::Create(Networking::HttpRequestSystem*, Core::OAuthSystem*);
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
@@ -77,7 +77,7 @@ namespace ChilliSource
             /// @param The http connection system.
             /// @param The OAuth system.
             //----------------------------------------------------
-            TwitterPostSystem(Networking::HttpConnectionSystem* in_httpConnectionSystem, Core::OAuthSystem* in_oauthSystem);
+            TwitterPostSystem(Networking::HttpRequestSystem* in_httpConnectionSystem, Core::OAuthSystem* in_oauthSystem);
 			//------------------------------------------------------------------------
 			/// Delegate called when the user confirms entry of the PIN
 			///

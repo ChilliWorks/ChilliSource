@@ -1,5 +1,5 @@
 /*
- *  HttpConnectionSystemWindows.h
+ *  HttpRequestSystemWindows.h
  *  moFlow
  *
  *  Created by Scott Downie on 23/05/2011.
@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
-#include <ChilliSource/Networking/HTTP/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 namespace ChilliSource
 {
@@ -21,7 +21,7 @@ namespace ChilliSource
 		//Windows typedefs so we don't have to include windows.h in the header
 		typedef void* HINTERNET;
 
-		class HttpConnectionSystem : public Networking::HttpConnectionSystem, public Core::IUpdateable
+		class HttpRequestSystem : public Networking::HttpRequestSystem, public Core::IUpdateable
 		{
 		public:
 			//--------------------------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ namespace ChilliSource
 			///
 			/// Destroys WinHTTP session
 			//--------------------------------------------------------------------------------------------------
-			~HttpConnectionSystem();
+			~HttpRequestSystem();
 			//--------------------------------------------------------------------------------------------------
 			/// Is A
 			///
@@ -71,13 +71,13 @@ namespace ChilliSource
 			void Update(f32 infDT) override;
 
 		private:
-			friend Networking::HttpConnectionSystemUPtr Networking::HttpConnectionSystem::Create();
+			friend Networking::HttpRequestSystemUPtr Networking::HttpRequestSystem::Create();
 			//-------------------------------------------------------
 			/// Private constructor to fore use of factory method
 			///
 			/// @author I Copland
 			//-------------------------------------------------------
-			HttpConnectionSystem();
+			HttpRequestSystem();
 			//--------------------------------------------------------------------------------------------------
 			/// Apply SSL Settings
 			///
@@ -101,7 +101,7 @@ namespace ChilliSource
 			class CHttpRequest : public Networking::HttpRequest
             {
 			public:
-				CHttpRequest(const Networking::HttpRequestDetails & insDetails, const HttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate);
+				CHttpRequest(const Networking::HttpRequestDetails & insDetails, const HttpRequestSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate);
 
 				//------------------------------------------------------------------
 				/// Update
@@ -175,7 +175,7 @@ namespace ChilliSource
 				
 				Networking::HttpRequest::CompletionDelegate mCompletionDelegate;
                 Networking::HttpRequestDetails msDetails;
-                HttpConnectionSystem::ConnectionInfo mConnectionInfo;
+                HttpRequestSystem::ConnectionInfo mConnectionInfo;
                 
                 f32 mfActiveTime;
                 

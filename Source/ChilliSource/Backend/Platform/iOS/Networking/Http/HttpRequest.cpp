@@ -29,7 +29,7 @@ namespace ChilliSource
         
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-		HttpRequest::HttpRequest(const Desc& in_requestDesc, f32 in_timeoutSecs, u32 in_bufferFlushSize, const Delegate& in_delegate)
+		HttpRequest::HttpRequest(const Desc& in_requestDesc, u32 in_timeoutSecs, u32 in_bufferFlushSize, const Delegate& in_delegate)
 		: m_desc(in_requestDesc), m_timeoutSecs(in_timeoutSecs), m_bufferFlushSize(in_bufferFlushSize), m_completionDelegate(in_delegate), m_isPollingCompleted(false),
         m_isRequestCompleted(false), m_shouldKillThread(false), m_isConnectionEstablished(false),
         m_connectingTime(0.0f), m_totalBytesRead(0), m_totalBytesReadThisBlock(0), m_responseCode(0), m_result(Result::k_failed)

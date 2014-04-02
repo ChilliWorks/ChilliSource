@@ -125,6 +125,9 @@ namespace ChilliSource
                 return propId;
             }
         }
+        
+        CS_DEFINE_NAMEDTYPE(HttpRequestSystem);
+        
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
 		bool HttpRequestSystem::IsA(Core::InterfaceIDType in_interfaceId) const
@@ -172,7 +175,7 @@ namespace ChilliSource
             //a connection.
             ConnectionId connectionId = GeneratePropId(scheme, url);
             
-            HttpRequest* httpRequest = new HttpRequest(in_requestDesc, GetTimeout(), GetMaxBufferSize(), in_delegate);
+            HttpRequest* httpRequest = new HttpRequest(in_requestDesc, m_connectionTimeoutSecs, GetMaxBufferSize(), in_delegate);
             
             bool streamOpened = false;
             

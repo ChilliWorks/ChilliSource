@@ -2,42 +2,37 @@
 //  HttpRequestSystem.h
 //  Chilli Source
 //
-//  Created by Scott Downie on 23/05/2011.
+//  Created by Ian Copland on 08/11/2011.
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_HTTP_HTTPREQUESTSYSTEM_H_
-#define _CHILLISOURCE_BACKEND_PLATFORM_IOS_HTTP_HTTPREQUESTSYSTEM_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_HTTP_HTTPREQUESTSYSTEM_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_HTTP_HTTPREQUESTSYSTEM_H_
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
-#include <unordered_map>
 #include <vector>
-
-#include <CoreFoundation/CoreFoundation.h>
 
 namespace ChilliSource
 {
-	namespace iOS
-	{
-        //--------------------------------------------------------------------------------------------------
-        /// iOS implementation of the http connection system. Reponsible for making http requests to remote
-        /// urls and managing the lifetime of the requests and the connections. Uses the CFNetworking library
-        ///
-        /// @author S Downie
-        //--------------------------------------------------------------------------------------------------
+	namespace Android
+	{	
+		//--------------------------------------------------------------------------------------------------
+		/// Android implementation of the http connection system. Reponsible for making http requests to remote
+		/// urls and managing the lifetime of the requests and the connections. Uses the Java
+		/// HttpUrlConnection library
+		///
+		/// @author I Copland
+		//--------------------------------------------------------------------------------------------------
 		class HttpRequestSystem final : public Networking::HttpRequestSystem
 		{
 		public:
-            
-            typedef u32 ConnectionId;
-            
-            CS_DECLARE_NAMEDTYPE(HttpRequestSystem);
-			
+
+			CS_DECLARE_NAMEDTYPE(HttpRequestSystem);
+
 			//--------------------------------------------------------------------------------------------------
-			/// @author S Downie
+			/// @author I Copland
 			///
 			/// @param Interface ID
             ///
@@ -50,14 +45,11 @@ namespace ChilliSource
             /// @param The number of seconds that will elapse before a request is deemed to have timed out
             /// on connection
             //--------------------------------------------------------------------------------------------------
-            inline void SetConnectionTimeout(u32 in_timeoutSecs) override
-            {
-                m_connectionTimeoutSecs = in_timeoutSecs;
-            }
+            void SetConnectionTimeout(u32 in_timeoutSecs) override;
             //--------------------------------------------------------------------------------------------------
             /// Causes the system to issue a request with the given details.
             ///
-            /// @author S Downie
+            /// @author I Copland
             ///
             /// @param A descriptor detailing the request params
 			/// @param A function to call when the request is completed. Note that the request can be completed with failure as well as success.
@@ -68,13 +60,13 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------------------
             /// Equivalent to calling cancel on every incomplete request in progress.
             ///
-            /// @author S Downie
+            /// @author I Copland
             //--------------------------------------------------------------------------------------------------
             void CancelAllRequests() override;
             //--------------------------------------------------------------------------------------------------
             /// Checks if the device is internet ready
             ///
-            /// @author S Downie
+            /// @author I Copland
             ///
             /// @return Success if net available
             //--------------------------------------------------------------------------------------------------
@@ -82,7 +74,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------------------
             /// Poll the connection on active requests
             ///
-            /// @author S Downie
+            /// @author I Copland
 			///
 			/// @param Time since last update in seconds
 			//--------------------------------------------------------------------------------------------------
@@ -90,39 +82,24 @@ namespace ChilliSource
             //--------------------------------------------------------------------------------------------------
             /// Called when the system is destroyed. Cancels all pending requests
             ///
-            /// @author S Downie
+            /// @author I Copland
 			//--------------------------------------------------------------------------------------------------
             void OnDestroy() override;
-            
-        private:
-            
+
+		private:
             friend Networking::HttpRequestSystemUPtr Networking::HttpRequestSystem::Create();
             //--------------------------------------------------------------------------------------------------
             /// Private constructor to fore use of factory method
             ///
-            /// @author S Downie
+            /// @author I Copland
             //--------------------------------------------------------------------------------------------------
             HttpRequestSystem() = default;
-            
-        private:
-            
-            struct ConnectionInfo
-            {
-                TimeIntervalSecs m_connectionOpenTime;
-                ConnectionId m_streamId;
-                ConnectionId m_connectionId;
-                CFReadStreamRef m_readStream;
-            };
-            
+
+		private:
+
 			std::vector<HttpRequest*> m_requests;
-            
-            std::unordered_map<ConnectionId, ConnectionInfo> m_unusedConnections;
-            std::unordered_map<HttpRequest*, ConnectionInfo> m_activeConnections;
-            
-            u32 m_totalNumConnectionsEstablished = 0;
-            u32 m_connectionTimeoutSecs = 15;
 		};
 	}
-    
+
 }
 #endif

@@ -40,7 +40,7 @@ namespace ChilliSource
             /// @param Max buffer size before flush required
             /// @param Completion delegate
             //----------------------------------------------------------------------------------------
-            HttpRequest(const Desc& in_requestDesc, f32 in_timeoutSecs, u32 in_bufferFlushSize, const Delegate& in_delegate);
+            HttpRequest(const Desc& in_requestDesc, u32 in_timeoutSecs, u32 in_bufferFlushSize, const Delegate& in_delegate);
             //----------------------------------------------------------------------------------------
             /// Begin the request
             ///
@@ -51,6 +51,8 @@ namespace ChilliSource
             void Start(CFReadStreamRef in_readStream);
             //----------------------------------------------------------------------------------------
             /// Close the request. Note: The completion delegate is not invoked
+            ///
+            /// @author S Downie
             //----------------------------------------------------------------------------------------
             void Cancel() override;
             //----------------------------------------------------------------------------------------
@@ -135,7 +137,7 @@ namespace ChilliSource
             std::string m_responseData;
             
             f32 m_connectingTime;
-            const f32 m_timeoutSecs;
+            const u32 m_timeoutSecs;
             const u32 m_bufferFlushSize;
             
             Result m_result;

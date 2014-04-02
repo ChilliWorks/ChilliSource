@@ -94,20 +94,12 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param The number of seconds that will elapse before a request is deemed to have timed out
+            /// on connection
             //--------------------------------------------------------------------------------------------------
-            inline void SetTimeout(f32 in_timeoutSecs)
-            {
-                m_timeoutSecs = in_timeoutSecs;
-            }
+            virtual void SetConnectionTimeout(u32 in_timeoutSecs) = 0;
             
         protected:
             
-            //--------------------------------------------------------------------------------------------------
-            /// Private constructor to fore use of factory method
-            ///
-            /// @author S Downie
-            //--------------------------------------------------------------------------------------------------
-            HttpRequestSystem() = default;
             //--------------------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -117,20 +109,10 @@ namespace ChilliSource
             {
                 return m_maxBufferSize;
             }
-            //--------------------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The number of seconds that will elapse before a request is deemed to have timed out
-            //--------------------------------------------------------------------------------------------------
-            inline f32 GetTimeout() const
-            {
-                return m_timeoutSecs;
-            }
             
         private:
             
             u32 m_maxBufferSize = 0;
-            f32 m_timeoutSecs = 15.0f;
 		};
 	}
 }

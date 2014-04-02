@@ -15,7 +15,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import com.chillisource.social.ContactInformationProviderNativeInterface;
-import com.chillisource.networking.HttpConnectionNativeInterface;
+import com.chillisource.networking.HttpRequestNativeInterface;
 import com.chillisource.social.SMSCompositionNativeInterface;
 import com.chillisource.core.SharedPreferencesNativeInterface;
 import com.chillisource.social.TwitterAuthenticationViewNativeInterface;
@@ -58,7 +58,7 @@ public class CSActivity extends Activity
         	CSApplication.get().activityIntent(getIntent());
     		
           	//initialise the old style native interfaces (These should be removed over time as each of these is changed over to the new system!)
-        	HttpConnectionNativeInterface.Setup(this);
+        	HttpRequestNativeInterface.Setup(this);
         	SharedPreferencesNativeInterface.Setup(this);
         	SMSCompositionNativeInterface.Setup(this);
         	ContactInformationProviderNativeInterface.Setup(this);
