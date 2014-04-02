@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/Http/HttpRequest.h>
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
 
@@ -178,7 +178,7 @@ namespace ChilliSource
 			/// @param HTTP request
 			/// @param The result from the request
 			//------------------------------------------------------------------------
-            void OnStatusUpdateComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::CompletionResult in_result);
+            void OnStatusUpdateComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::Result in_result);
 			//------------------------------------------------------------------------
 			/// Delegate method called when an OAuth token request has completed.
 			/// This is used during the initial OAuth request before the user has
@@ -191,7 +191,7 @@ namespace ChilliSource
 			/// @param HTTP request
 			/// @param The result from the request
 			//------------------------------------------------------------------------
-            void OnRequestOAuthTokenComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::CompletionResult in_result);
+            void OnRequestOAuthTokenComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::Result in_result);
 			//------------------------------------------------------------------------
 			/// Delegate method called when an OAuth access token request has
 			/// completed.
@@ -203,7 +203,7 @@ namespace ChilliSource
 			/// @param HTTP request
 			/// @param The result from the request
 			//------------------------------------------------------------------------
-			virtual void OnRequestOAuthAccessTokenComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::CompletionResult in_result);
+			virtual void OnRequestOAuthAccessTokenComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::Result in_result);
 
         private:
             

@@ -93,9 +93,9 @@ namespace ChilliSource
 
         template <typename... TArgTypes> class Task
         {
-            typedef std::function<void(TArgTypes...)> TaskDelegate;
-            
         public:
+            
+            typedef std::function<void(TArgTypes...)> TaskDelegate;
             
 			//------------------------------------------------------------------
 			/// Constructor (Delegate object)

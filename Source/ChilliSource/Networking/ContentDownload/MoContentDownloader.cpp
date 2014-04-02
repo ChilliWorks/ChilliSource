@@ -62,12 +62,12 @@ namespace ChilliSource
                 
                 Json::FastWriter JWriter;
                 
-                HttpRequestDetails RequestDetails;
-				RequestDetails.strURL = mstrAssetServerURL;
-				RequestDetails.eType = HttpRequestDetails::Type::k_post;
-                RequestDetails.strBody = JWriter.write(JDeviceData);
+                HttpRequest::Desc requestDesc;
+				requestDesc.m_url = mstrAssetServerURL;
+				requestDesc.m_type = HttpRequest::Type::k_post;
+                requestDesc.m_body = JWriter.write(JDeviceData);
                 
-                mpHttpConnectionSystem->MakeRequest(RequestDetails, Core::MakeDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
+                mpHttpConnectionSystem->MakeRequest(requestDesc, Core::MakeDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
                 return true;
             }
             else
@@ -87,10 +87,10 @@ namespace ChilliSource
         {
             mOnContentDownloadCompleteDelegate = inDelegate;
             
-            HttpRequestDetails RequestDetails;
-            RequestDetails.strURL = instrURL;
-            RequestDetails.eType = HttpRequestDetails::Type::k_get;
-            mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
+            HttpRequest::Desc requestDesc;
+            requestDesc.m_url = instrURL;
+            requestDesc.m_type = HttpRequest::Type::k_get;
+            mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(requestDesc, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
         }
         //----------------------------------------------------------------
         /// On Content Manifest Download Complete
@@ -100,54 +100,54 @@ namespace ChilliSource
         /// @param Request response
         /// @param Request result
         //----------------------------------------------------------------
-        void MoContentDownloader::OnContentManifestDownloadComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
+        void MoContentDownloader::OnContentManifestDownloadComplete(HttpRequest* inpRequest, HttpRequest::Result ineResult)
         {
             switch(ineResult)
             {
-                case HttpRequest::CompletionResult::k_completed:
+                case HttpRequest::Result::k_completed:
                 {
                     //Check the response code for errors
                     switch(inpRequest->GetResponseCode())
                     {
                         default:   //OK 
-                        case Networking::kHTTPResponseOK:
+                        case HttpResponseCode::k_ok:
                         {
-                            mOnContentManifestDownloadCompleteDelegate(Result::k_succeeded, inpRequest->GetResponseString());
+                            mOnContentManifestDownloadCompleteDelegate(Result::k_succeeded, inpRequest->GetResponse());
                             break;
                         }
-                        case Networking::kHTTPError:      //Error
-                        case Networking::kHTTPBusy:       //Temporary error try again later
-                        case Networking::kHTTPNotFound:   //End point doesn't exist
+                        case HttpResponseCode::k_error:      //Error
+                        case HttpResponseCode::k_busy:       //Temporary error try again later
+                        case HttpResponseCode::k_notFound:   //End point doesn't exist
                         {
-                            mOnContentManifestDownloadCompleteDelegate(Result::k_failed, inpRequest->GetResponseString());
+                            mOnContentManifestDownloadCompleteDelegate(Result::k_failed, inpRequest->GetResponse());
                             break;
                         }
                     }
                     break;
                 }
-                case HttpRequest::CompletionResult::k_timeout:
-                case HttpRequest::CompletionResult::k_failed:
-                case HttpRequest::CompletionResult::k_cancelled:
+                case HttpRequest::Result::k_timeout:
+                case HttpRequest::Result::k_failed:
+                case HttpRequest::Result::k_cancelled:
                 {
-                    mOnContentManifestDownloadCompleteDelegate(Result::k_failed, inpRequest->GetResponseString());
+                    mOnContentManifestDownloadCompleteDelegate(Result::k_failed, inpRequest->GetResponse());
                     break;
                 }
-                case HttpRequest::CompletionResult::k_flushed:
+                case HttpRequest::Result::k_flushed:
                 {
                     //Check the response code for errors
                     switch(inpRequest->GetResponseCode())
                     {
                         default:   //OK 
-                        case Networking::kHTTPResponseOK:
+                        case HttpResponseCode::k_ok:
                         {
-                            mOnContentManifestDownloadCompleteDelegate(Result::k_flushed, inpRequest->GetResponseString());
+                            mOnContentManifestDownloadCompleteDelegate(Result::k_flushed, inpRequest->GetResponse());
                             break;
                         }
-                        case Networking::kHTTPError:      //Error
-                        case Networking::kHTTPBusy:       //Temporary error try again later
-                        case Networking::kHTTPNotFound:   //End point doesn't exist
+                        case HttpResponseCode::k_error:      //Error
+                        case HttpResponseCode::k_busy:       //Temporary error try again later
+                        case HttpResponseCode::k_notFound:   //End point doesn't exist
                         {
-                            mOnContentManifestDownloadCompleteDelegate(Result::k_failed, inpRequest->GetResponseString());
+                            mOnContentManifestDownloadCompleteDelegate(Result::k_failed, inpRequest->GetResponse());
                             break;
                         }
                     }
@@ -163,51 +163,51 @@ namespace ChilliSource
         /// @param Request response
         /// @param Request result
         //----------------------------------------------------------------
-        void MoContentDownloader::OnContentDownloadComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
+        void MoContentDownloader::OnContentDownloadComplete(HttpRequest* inpRequest, HttpRequest::Result ineResult)
         {
             if(mpCurrentRequest == inpRequest)
                 mpCurrentRequest = nullptr;
             
             switch(ineResult)
             {
-                case HttpRequest::CompletionResult::k_completed:
+                case HttpRequest::Result::k_completed:
                 {
                     // Check the response code for errors
                     switch(inpRequest->GetResponseCode())
                     {
                         default:   //OK
-                        case Networking::kHTTPResponseOK:
+                        case HttpResponseCode::k_ok:
                         {
-                            mOnContentDownloadCompleteDelegate(Result::k_succeeded, inpRequest->GetResponseString());
+                            mOnContentDownloadCompleteDelegate(Result::k_succeeded, inpRequest->GetResponse());
                             break;
                         }
-                        case Networking::kHTTPMovedTemporarily:      // Redirected
-                        case Networking::kHTTPRedirectTemporarily:   // Redirected
+                        case HttpResponseCode::k_movedTemporarily:      // Redirected
+                        case HttpResponseCode::k_redirectTemporarily:   // Redirected
                         {
                             // Redirect here
-                            if(!inpRequest->GetDetails().strRedirectionURL.empty())
+                            if(!inpRequest->GetDescription().m_redirectionUrl.empty())
                             {
-                                HttpRequestDetails RequestDetails = inpRequest->GetDetails();
-                                RequestDetails.strURL = RequestDetails.strRedirectionURL;
-                                RequestDetails.strRedirectionURL = "";
-                                RequestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_get;
-                                mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
+                                HttpRequest::Desc requestDetails = inpRequest->GetDescription();
+                                requestDetails.m_url = requestDetails.m_redirectionUrl;
+                                requestDetails.m_redirectionUrl = "";
+                                requestDetails.m_type = HttpRequest::Type::k_get;
+                                mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
                                 break;
                             }
                         }
                     }
                     break;
                 }
-                case HttpRequest::CompletionResult::k_timeout:
-                case HttpRequest::CompletionResult::k_failed:
-                case HttpRequest::CompletionResult::k_cancelled:
+                case HttpRequest::Result::k_timeout:
+                case HttpRequest::Result::k_failed:
+                case HttpRequest::Result::k_cancelled:
                 {
-                    mOnContentDownloadCompleteDelegate(Result::k_failed, inpRequest->GetResponseString());
+                    mOnContentDownloadCompleteDelegate(Result::k_failed, inpRequest->GetResponse());
                     break;
                 }
-                case HttpRequest::CompletionResult::k_flushed:
+                case HttpRequest::Result::k_flushed:
                 {
-                    mOnContentDownloadCompleteDelegate(Result::k_flushed, inpRequest->GetResponseString());
+                    mOnContentDownloadCompleteDelegate(Result::k_flushed, inpRequest->GetResponse());
                     break;
                 }
             }

@@ -75,7 +75,7 @@ namespace ChilliSource
             /// @param Request response
             /// @param Request result
             //----------------------------------------------------------------
-            void OnContentManifestDownloadComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnContentManifestDownloadComplete(HttpRequest* inpRequest, HttpRequest::Result ineResult);
             //----------------------------------------------------------------
             /// On Content Download Complete
             ///
@@ -84,7 +84,7 @@ namespace ChilliSource
             /// @param Request response
             /// @param Request result
             //----------------------------------------------------------------
-            void OnContentDownloadComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnContentDownloadComplete(HttpRequest* inpRequest, HttpRequest::Result ineResult);
             
         private:
             

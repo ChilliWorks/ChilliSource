@@ -10,6 +10,7 @@
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/File/LocalDataStore.h>
+#include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
@@ -78,12 +79,12 @@ namespace ChilliSource
 
 				if(m_oauthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, k_statusUpdateURL, status, OAuthHeader))
 				{
-					Networking::HttpRequestDetails request;
-					request.strURL = k_statusUpdateURL;
-					request.strBody = status;
-					request.eType = Networking::HttpRequestDetails::Type::k_post;
-					request.sHeaders.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
-					request.sHeaders.SetValueForKey(k_oauthAuthHeaderKey, OAuthHeader);
+					Networking::HttpRequest::Desc request;
+					request.m_url = k_statusUpdateURL;
+					request.m_body = status;
+					request.m_type = Networking::HttpRequest::Type::k_post;
+					request.m_headers.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
+					request.m_headers.SetValueForKey(k_oauthAuthHeaderKey, OAuthHeader);
 
 					m_httpConnectionSystem->MakeRequest(request, Core::MakeDelegate(this, &TwitterPostSystem::OnStatusUpdateComplete));
                     return;
@@ -98,7 +99,7 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------
 		//------------------------------------------------------------------------
-		void TwitterPostSystem::OnStatusUpdateComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::CompletionResult in_result)
+		void TwitterPostSystem::OnStatusUpdateComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::Result in_result)
 		{
             if(m_postDelegate == nullptr)
             {
@@ -107,19 +108,19 @@ namespace ChilliSource
             
             switch(in_result)
             {
-                case Networking::HttpRequest::CompletionResult::k_completed:
+                case Networking::HttpRequest::Result::k_completed:
                     m_postDelegate(Social::TwitterPostSystem::PostResult::k_success);
                     break;
-                case Networking::HttpRequest::CompletionResult::k_failed:
+                case Networking::HttpRequest::Result::k_failed:
                     m_postDelegate(Social::TwitterPostSystem::PostResult::k_failed);
                     break;
-                case Networking::HttpRequest::CompletionResult::k_cancelled:
+                case Networking::HttpRequest::Result::k_cancelled:
                     m_postDelegate(Social::TwitterPostSystem::PostResult::k_cancelled);
                     break;
-                case Networking::HttpRequest::CompletionResult::k_timeout:
+                case Networking::HttpRequest::Result::k_timeout:
                     m_postDelegate(Social::TwitterPostSystem::PostResult::k_failed);
                     break;
-                case Networking::HttpRequest::CompletionResult::k_flushed:
+                case Networking::HttpRequest::Result::k_flushed:
                     m_postDelegate(Social::TwitterPostSystem::PostResult::k_failed);
                     break;
             }
@@ -143,13 +144,13 @@ namespace ChilliSource
 												 strURL,
 												 "", strOAuthHeader))
 				{
-					Networking::HttpRequestDetails sHttpRequest;
-					sHttpRequest.strURL = k_oauthTokenRequestURL;
-					sHttpRequest.eType = Networking::HttpRequestDetails::Type::k_get;
-					sHttpRequest.sHeaders.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
-					sHttpRequest.sHeaders.SetValueForKey(k_oauthAuthHeaderKey, strOAuthHeader);
+					Networking::HttpRequest::Desc httpRequest;
+					httpRequest.m_url = k_oauthTokenRequestURL;
+					httpRequest.m_type = Networking::HttpRequest::Type::k_get;
+					httpRequest.m_headers.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
+					httpRequest.m_headers.SetValueForKey(k_oauthAuthHeaderKey, strOAuthHeader);
 
-					m_httpConnectionSystem->MakeRequest(sHttpRequest, Core::MakeDelegate(this, &TwitterPostSystem::OnRequestOAuthTokenComplete));
+					m_httpConnectionSystem->MakeRequest(httpRequest, Core::MakeDelegate(this, &TwitterPostSystem::OnRequestOAuthTokenComplete));
 					bResult = true;
 				}
 			}
@@ -158,16 +159,16 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------
 		//------------------------------------------------------------------------
-		void TwitterPostSystem::OnRequestOAuthTokenComplete(ChilliSource::Networking::HttpRequest* in_request, ChilliSource::Networking::HttpRequest::CompletionResult in_result)
+		void TwitterPostSystem::OnRequestOAuthTokenComplete(ChilliSource::Networking::HttpRequest* in_request, Networking::HttpRequest::Result in_result)
 		{
-			if(in_result == ChilliSource::Networking::HttpRequest::CompletionResult::k_completed)
+			if(in_result == Networking::HttpRequest::Result::k_completed)
 			{
                 //TODO: The OAuthSystem should know nothing of twitter and should not be
                 //extracting the key and secret for us. Once we learn to extract the key and secret ourselves there is no need to retrieve it from the
                 //OAuthSystem
                 
 				// Tell OAuth system to save access token and secret from web response
-				m_oauthSystem->ExtractOAuthTokenKeySecret(in_request->GetResponseString());
+				m_oauthSystem->ExtractOAuthTokenKeySecret(in_request->GetResponse());
                 m_oauthSystem->GetOAuthTokenKey(m_savedOAuthTokenKey);
                 m_oauthSystem->GetOAuthTokenSecret(m_savedOAuthTokenSecret);
                 
@@ -196,13 +197,13 @@ namespace ChilliSource
 
 				if(m_oauthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpGet, k_oauthTokenAccessURL, "", strOAuthHeader, true))
 				{
-					Networking::HttpRequestDetails sHttpRequest;
-					sHttpRequest.strURL = k_oauthTokenAccessURL;
-					sHttpRequest.eType = Networking::HttpRequestDetails::Type::k_get;
-					sHttpRequest.sHeaders.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
-					sHttpRequest.sHeaders.SetValueForKey(k_oauthAuthHeaderKey, strOAuthHeader);
+					Networking::HttpRequest::Desc request;
+					request.m_url = k_oauthTokenAccessURL;
+					request.m_type = Networking::HttpRequest::Type::k_get;
+					request.m_headers.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
+					request.m_headers.SetValueForKey(k_oauthAuthHeaderKey, strOAuthHeader);
 
-					m_httpConnectionSystem->MakeRequest(sHttpRequest, Core::MakeDelegate(this, &TwitterPostSystem::OnRequestOAuthAccessTokenComplete));
+					m_httpConnectionSystem->MakeRequest(request, Core::MakeDelegate(this, &TwitterPostSystem::OnRequestOAuthAccessTokenComplete));
                     return;
 				}
 			}
@@ -215,16 +216,16 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------
 		//------------------------------------------------------------------------
-		void TwitterPostSystem::OnRequestOAuthAccessTokenComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::CompletionResult in_result)
+		void TwitterPostSystem::OnRequestOAuthAccessTokenComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::Result in_result)
 		{
-			if(in_result == ChilliSource::Networking::HttpRequest::CompletionResult::k_completed)
+			if(in_result == Networking::HttpRequest::Result::k_completed)
 			{
                 //TODO: The OAuthSystem should know nothing of twitter and should not be
                 //extracting the key and secret for us. Once we learn to extract the key and secret ourselves there is no need to retrieve it from the
                 //OAuthSystem
 
 				// Tell OAuth system to save access token and secret from web response
-				m_oauthSystem->ExtractOAuthTokenKeySecret(in_request->GetResponseString());
+				m_oauthSystem->ExtractOAuthTokenKeySecret(in_request->GetResponse());
                 m_oauthSystem->GetOAuthTokenKey(m_savedOAuthTokenKey);
                 m_oauthSystem->GetOAuthTokenSecret(m_savedOAuthTokenSecret);
                 

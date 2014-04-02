@@ -1,355 +1,292 @@
-/*
- *  CurlHttpConnectionSystem.cpp
- *  moFlow
- *
- *  Created by Stuart McGaw on 23/05/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  HttpRequestSystem.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 23/05/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Networking/Base/MoFloReachability.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/Base/CSReachability.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequest.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-#include <sstream>
-#include <thread>
-
-#ifdef CS_ENABLE_DEBUG
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#endif
+#include <CFNetwork/CFNetwork.h>
 
 namespace ChilliSource
 {
-	using namespace Networking;
-	
 	namespace iOS
 	{
-		const u32 kudwBufferSize = 1024 * 50;
-        const u32 kudwKeepAliveTimeInSeconds = 120;
-        const u32 kudwReadThreadSleepInMS = 100;
-        
-        u32 HttpConnectionSystem::udwStaticNumConnectionsEstablished = 0;
-        
+        namespace
+        {
+            const u32 k_keepAliveTimeSecs = 120;
+            
+            //--------------------------------------------------------------------------------------------------
+            /// Setup the read stream to use SSL level 3
+            ///
+            /// @author S Downie
+            ///
+            /// @param [Out] Read stream
+            //--------------------------------------------------------------------------------------------------
+            void ApplySSLSettings(CFReadStreamRef out_readStream)
+            {
+                CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+                CFDictionarySetValue(dict, kCFStreamSSLValidatesCertificateChain, kCFBooleanFalse);
+                CFDictionarySetValue(dict, kCFStreamPropertySocketSecurityLevel, kCFStreamSocketSecurityLevelSSLv3);
+                CFReadStreamSetProperty(out_readStream, kCFStreamPropertySSLSettings, dict);
+                CFRelease(dict);
+            }
+            //--------------------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Read stream
+            ///
+            /// @return Whether the read stream still open or has it errored or closed
+            //--------------------------------------------------------------------------------------------------
+            bool IsStreamOpen(CFReadStreamRef in_readStream)
+            {
+                CFStreamStatus status = CFReadStreamGetStatus(in_readStream);
+                return (status != kCFStreamStatusError &&
+                        status != kCFStreamStatusNotOpen &&
+                        status != kCFStreamStatusClosed);
+            }
+            //--------------------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Request description
+            ///
+            /// @return New CFNetwork request message initialised based on the description
+            //--------------------------------------------------------------------------------------------------
+            CFHTTPMessageRef CreateRequestMessage(const Networking::HttpRequest::Desc& in_requestDesc, CFURLRef in_url)
+            {
+                CFHTTPMessageRef requestMessage = nullptr;
+                
+                switch(in_requestDesc.m_type)
+                {
+                    case Networking::HttpRequest::Type::k_post:
+                    {
+                        //Set message body if we're posting
+                        requestMessage = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("POST"), in_url, kCFHTTPVersion1_1);
+                        CFDataRef body = CFDataCreate(kCFAllocatorDefault, (const UInt8*)in_requestDesc.m_body.c_str(), in_requestDesc.m_body.length());
+                        CFHTTPMessageSetBody(requestMessage, body);
+                        CFRelease(body);
+                        break;
+                    }
+                    case Networking::HttpRequest::Type::k_get:
+                    {
+                        requestMessage = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("GET"), in_url, kCFHTTPVersion1_1);
+                        break;
+                    }
+                }
+                
+                return requestMessage;
+            }
+            //--------------------------------------------------------------------------------------------------
+            /// Initliase the request headers
+            ///
+            /// @author S Downie
+            ///
+            /// @param Request description
+            /// @param [Out] Request message
+            //--------------------------------------------------------------------------------------------------
+            void SetRequestHeaders(const Networking::HttpRequest::Desc& in_requestDesc, CFHTTPMessageRef out_requestMessage)
+            {
+                if(!in_requestDesc.m_headers.empty())
+                {
+                    for(auto it = in_requestDesc.m_headers.begin(); it != in_requestDesc.m_headers.end(); ++it)
+                    {
+                        CFStringRef key = CFStringCreateWithCString(nullptr, it->first.c_str(), kCFStringEncodingASCII);
+                        CFStringRef value = CFStringCreateWithCString(nullptr, it->second.c_str(), kCFStringEncodingASCII);
+                        CFHTTPMessageSetHeaderFieldValue(out_requestMessage, key, value);
+                        CFRelease(key);
+                        CFRelease(value);
+                    }
+                }
+            }
+            //--------------------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Scheme (http, https, etc)
+            /// @param URL object
+            ///
+            /// @return Unique ID based on the url properties
+            //--------------------------------------------------------------------------------------------------
+            HttpConnectionSystem::ConnectionId GeneratePropId(const std::string& in_scheme, CFURLRef in_url)
+            {
+                s32 portNum = CFURLGetPortNumber(in_url);
+                CFStringRef cfHostName = CFURLCopyHostName(in_url);
+                std::string hostName = Core::StringUtils::NSStringToString((NSString*)cfHostName);
+                CFRelease(cfHostName);
+                
+                HttpConnectionSystem::ConnectionId propId = Core::HashCRC32::GenerateHashCode(in_scheme + hostName + Core::ToString(portNum));
+                return propId;
+            }
+        }
 		//--------------------------------------------------------------------------------------------------
-		/// Is A
-		///
-		/// @param Interace ID
-		/// @return Whether object if of argument type
 		//--------------------------------------------------------------------------------------------------
-		bool HttpConnectionSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool HttpConnectionSystem::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return inInterfaceID == Networking::HttpConnectionSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+			return in_interfaceId == Networking::HttpConnectionSystem::InterfaceID || in_interfaceId == HttpConnectionSystem::InterfaceID;
 		}
 		//--------------------------------------------------------------------------------------------------
-		/// Make Request
-		///
-		/// Causes the system to issue a request with the given details.
-		/// @param A HttpRequestDetails struct with valid params per the documentation of HttpRequestDetails
-		/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
-		/// @return A pointer to the request. The system owns this pointer. Returns nullptr if the request cannot be created.
 		//--------------------------------------------------------------------------------------------------
-		HttpRequest* HttpConnectionSystem::MakeRequest(const HttpRequestDetails & insRequestDetails, HttpRequest::CompletionDelegate inOnComplete)
+		Networking::HttpRequest* HttpConnectionSystem::MakeRequest(const Networking::HttpRequest::Desc& in_requestDesc, const Networking::HttpRequest::Delegate& in_delegate)
         {
+            CS_ASSERT(in_requestDesc.m_url.empty() == false, "Cannot make an http request to a blank url");
+            
             //NOTE: The CFNetwork framework handles persistent connections under the hood but it must be
             //coaxed into multiple persistent connections across domains. CFNetwork will reuse connections to the same domain
             //that are already open. This means we must keep old connections around until new ones are established
             //before we can release them.
             
-            //Create the URL object
-            CFStringRef pstrURL = CFStringCreateWithCString(kCFAllocatorDefault, insRequestDetails.strURL.c_str(), kCFStringEncodingASCII);
-			CFURLRef pURL = CFURLCreateWithString(kCFAllocatorDefault, pstrURL, nullptr);
-            CFRelease(pstrURL);
+            CFStringRef urlString = CFStringCreateWithCString(kCFAllocatorDefault, in_requestDesc.m_url.c_str(), kCFStringEncodingASCII);
+			CFURLRef url = CFURLCreateWithString(kCFAllocatorDefault, urlString, nullptr);
+            CFRelease(urlString);
             
-            //Create the request
-            CFHTTPMessageRef pRequest = nullptr;
+            CS_ASSERT(url != nullptr, "Invalid http request url: " + in_requestDesc.m_url);
             
-			switch(insRequestDetails.eType)
-			{
-				case HttpRequestDetails::Type::k_post:
-                {
-                    //Set message body if we're posting
-					pRequest = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("POST"), pURL, kCFHTTPVersion1_1);
-                    CFDataRef pBodyRef = CFDataCreate(kCFAllocatorDefault, (const UInt8*)insRequestDetails.strBody.c_str(), insRequestDetails.strBody.length());
-                    CFHTTPMessageSetBody(pRequest, pBodyRef);
-                    CFRelease(pBodyRef);
-					break;
-                }
-				case HttpRequestDetails::Type::k_get:
-                {
-                    pRequest = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("GET"), pURL, kCFHTTPVersion1_1);
-                    break;
-                }
-			}
-			
-			// Set request headers
-			if(!insRequestDetails.sHeaders.empty())
-			{
-				// Set headers
-				for(Core::StringToStringMap::const_iterator it = insRequestDetails.sHeaders.begin(); it != insRequestDetails.sHeaders.end(); ++it)
-				{
-					std::string strKey = it->first;
-					std::string strValue = it->second;
-					CFStringRef cfsKey = CFStringCreateWithCString(nullptr, strKey.c_str(), kCFStringEncodingASCII);
-					CFStringRef cfsValue = CFStringCreateWithCString(nullptr, strValue.c_str(), kCFStringEncodingASCII);
-					CFHTTPMessageSetHeaderFieldValue(pRequest, cfsKey, cfsValue);
-					CFRelease(cfsKey);
-					CFRelease(cfsValue);
-				}
-			}
+            CFHTTPMessageRef requestMessage = CreateRequestMessage(in_requestDesc, url);
+            SetRequestHeaders(in_requestDesc, requestMessage);
             
-            //Grab the connection information that allows us to identify the domain and the scheme
-            s32 dwPortNum = CFURLGetPortNumber(pURL);
-            CFStringRef pstrHostName = CFURLCopyHostName(pURL);
-            CFStringRef pstrScheme = CFURLCopyScheme(pURL);
-            std::string strHostName = Core::StringUtils::NSStringToString((NSString*)pstrHostName);
-            std::string strScheme = Core::StringUtils::NSStringToString((NSString*)pstrScheme);
-            CFRelease(pstrHostName);
-            CFRelease(pstrScheme);
-            
-            //Create the read stream...
-            CFReadStreamRef ReadStream = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, pRequest);
-            
-            //...use persistent connections..
-            CFReadStreamSetProperty(ReadStream, kCFStreamPropertyHTTPAttemptPersistentConnection, kCFBooleanTrue);
+            //Create the read stream
+            CFReadStreamRef readStream = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, requestMessage);
+            //Use persistent connections..
+            CFReadStreamSetProperty(readStream, kCFStreamPropertyHTTPAttemptPersistentConnection, kCFBooleanTrue);
             
 			//...enable SSL if the URL is https
-            if(strScheme == "https")
+            //Grab the connection information that allows us to identify the domain and the scheme
+            CFStringRef cfScheme = CFURLCopyScheme(url);
+            CS_ASSERT(cfScheme != nullptr, "Invalid http request url scheme: " + in_requestDesc.m_url);
+            std::string scheme = Core::StringUtils::NSStringToString((NSString*)cfScheme);
+            CFRelease(cfScheme);
+            if(scheme == "https")
             {
                 //Hey an https request
-                ApplySSLSettings(ReadStream);
+                ApplySSLSettings(readStream);
             }
             
-            //Tell CFNetwork to re-use the connection with this ID or create one with this ID if none exist.
-            //This is actually a bit of a hack to force CFNetwork to open a new connection
             //We use the scheme, host and port to identify connections by generating a hash that uniquely identifes
-            //a connection. Then because CFNumber does not allow unsigned ints we must create an incremental counter
-            //to act as a UDID!
-            ConnectionID PropID = Core::HashCRC32::GenerateHashCode(strScheme + strHostName + Core::ToString(dwPortNum));
-            ConnectionID StreamID = 0;
-            bool bConnectionAlreadyExists = false;
+            //a connection.
+            ConnectionId connectionId = GeneratePropId(scheme, url);
             
-            //Check the connection pool for any open connections to this domain using the unique connection ID
-            for(ConnectionPool::iterator itExisting = mPersistentConnectionPool.begin(); itExisting != mPersistentConnectionPool.end(); ++itExisting)
+            HttpRequest* httpRequest = new HttpRequest(in_requestDesc, GetTimeout(), GetMaxBufferSize(), in_delegate);
+            
+            bool streamOpened = false;
+            
+            auto itExisting = m_unusedConnections.find(connectionId);
+            if(itExisting != m_unusedConnections.end())
             {
-                if(itExisting->PropertyID == PropID)
-                {
-                    //We have found an unused existing connection to re-use. We have to cheat the CFNetwork framework by opening
-                    //a "new" stream (which we have done above) and closing the "old" one then remove it from the cache
-                    //Streams are only added to the cache once they have been completed but not yet closed
-                    StreamID = itExisting->StreamID;
-                    CFReadStreamClose(itExisting->ReadStream);
-                    CFRelease(itExisting->ReadStream);
-                    mPersistentConnectionPool.erase(itExisting);
-                    bConnectionAlreadyExists = true;
-                    break;
-                }
+                //This is actually a bit of a hack to force CFNetwork to reuse an open connection.
+                //We have found an unused existing connection to re-use. We have to cheat the CFNetwork framework by opening
+                //a "new" stream (which we have done above) and closing the "old" one after.
+                
+                ConnectionInfo& connectionInfo = itExisting->second;
+                CFNumberRef cfStreamID = CFNumberCreate(kCFAllocatorDefault,  kCFNumberSInt32Type,  &connectionInfo.m_streamId);
+                CFReadStreamSetProperty(readStream, CFSTR("PersistentConnectionID"), cfStreamID);
+                CFRelease(cfStreamID);
+                
+                //Open the new stream
+                streamOpened = CFReadStreamOpen(readStream);
+                
+                //Close the old connection
+                CFReadStreamClose(connectionInfo.m_readStream);
+                CFRelease(connectionInfo.m_readStream);
+                connectionInfo.m_readStream = readStream;
+                
+                //Add to the active pool and remove from the recycle pool
+                m_unusedConnections.erase(itExisting);
+                m_activeConnections.insert(std::make_pair(httpRequest, connectionInfo));
+            }
+            else
+            {
+                //There is no unused connection with this Id create a new one
+                m_totalNumConnectionsEstablished++;
+                ConnectionId streamId = m_totalNumConnectionsEstablished;
+                CFNumberRef cfStreamID = CFNumberCreate(kCFAllocatorDefault,  kCFNumberSInt32Type,  &streamId);
+                CFReadStreamSetProperty(readStream, CFSTR("PersistentConnectionID"), cfStreamID);
+                CFRelease(cfStreamID);
+                
+                //Open the new stream
+                streamOpened = CFReadStreamOpen(readStream);
+                
+                ConnectionInfo connectionInfo;
+                connectionInfo.m_connectionId = connectionId;
+                connectionInfo.m_streamId = streamId;
+                connectionInfo.m_readStream = readStream;
+                connectionInfo.m_connectionOpenTime = Core::Application::Get()->GetSystemTime();
+                m_activeConnections.insert(std::make_pair(httpRequest, connectionInfo));
             }
             
-            if(!bConnectionAlreadyExists)
+			CFRelease(requestMessage);
+			CFRelease(url);
+            
+            if(streamOpened == true)
             {
-                udwStaticNumConnectionsEstablished++;
-                StreamID = udwStaticNumConnectionsEstablished;
-            }
-            
-            CFNumberRef pStreamID = CFNumberCreate(kCFAllocatorDefault,  kCFNumberSInt32Type,  &StreamID);
-            CFReadStreamSetProperty(ReadStream, CFSTR("PersistentConnectionID"), pStreamID);
-            
-			//Release request and its ilk.
-            CFRelease(pStreamID);
-			CFRelease(pRequest);
-			CFRelease(pURL);
-            
-            //We always need to open a connection but we can rely on CFNetwork to re-use open sockets
-            //We must make sure we release the "old" connection on re-use
-            if(CFReadStreamOpen(ReadStream))
-            {
-                //Cache the connection info so we can identify streams
-                ConnectionInfo sInfo;
-                sInfo.PropertyID = PropID;
-                sInfo.StreamID = StreamID;
-                sInfo.ReadStream = ReadStream;
-                sInfo.ConnectionOpenTime = Core::Application::Get()->GetSystemTime();
-                
-#ifdef CS_ENABLE_DEBUG
-                //LogConnectionAddress(ReadStream);
-#endif
-                
                 //Begin the request with the read stream
-                CHttpRequest* pHttpRequest = new CHttpRequest(insRequestDetails, sInfo, inOnComplete);
-                mapRequests.push_back(pHttpRequest);
-                return pHttpRequest;
+                httpRequest->Start(readStream);
+                m_requests.push_back(httpRequest);
+                return httpRequest;
             }
             else
             {
                 //The stream could not be opened
-                CFRelease(ReadStream);
+                delete httpRequest;
+                CFRelease(readStream);
                 return nullptr;
             }
 		}
-        //--------------------------------------------------------------------------------------------------
-        /// Log Connection Address
-        ///
-        /// Log the unique TCP connection established by the read stream. This is for debug purposes only
-        ///
-        /// @param Read stream
-        //--------------------------------------------------------------------------------------------------
-        void HttpConnectionSystem::LogConnectionAddress(CFReadStreamRef inReadStreamRef) const
-        {
-#ifdef CS_ENABLE_DEBUG
-            CFDataRef       sockObj;
-            s32             sock;
-            BOOL            success;
-            struct sockaddr_storage localAddr;
-            struct sockaddr_storage remoteAddr;
-            socklen_t       localAddrLen;
-            socklen_t       remoteAddrLen;
-            s8            localAddrStr[NI_MAXHOST];
-            s8            localPortStr[NI_MAXSERV];
-            s8            remoteAddrStr[NI_MAXHOST];
-            s8            remotePortStr[NI_MAXSERV];
-            
-            sockObj = (CFDataRef) CFReadStreamCopyProperty(inReadStreamRef, kCFStreamPropertySocketNativeHandle);
-            if (sockObj != nullptr)
-            {
-                assert(CFGetTypeID(sockObj) == CFDataGetTypeID());
-                assert(CFDataGetLength(sockObj) == sizeof(s32));
-                
-                sock = * (const s32 *) CFDataGetBytePtr(sockObj);
-                assert(sock >= 0);
-                
-                localAddrLen = sizeof(localAddr);
-                success = getsockname(sock, (struct sockaddr *) &localAddr, &localAddrLen) >= 0;
-                assert(success);
-                
-                remoteAddrLen = sizeof(remoteAddr);
-                success = getpeername(sock, (struct sockaddr *) &remoteAddr, &remoteAddrLen) >= 0;
-                assert(success);
-                
-                success = getnameinfo((const struct sockaddr *) &localAddr,  localAddrLen,  localAddrStr,  sizeof(localAddrStr),  localPortStr,  sizeof(localPortStr),  NI_NUMERICHOST | NI_NUMERICSERV) == 0;
-                assert(success);
-                
-                success = getnameinfo((const struct sockaddr *) &remoteAddr, remoteAddrLen, remoteAddrStr, sizeof(remoteAddrStr), remotePortStr, sizeof(remotePortStr), NI_NUMERICHOST | NI_NUMERICSERV) == 0;
-                assert(success);
-                
-                CFRelease(sockObj);
-                
-                NSLog(@"Address %s:%s -> %s:%s", localAddrStr, localPortStr, remoteAddrStr, remotePortStr);
-            }
-#endif
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Apply SSL Settings
-        ///
-        /// Setup the read stream to use SSL level 3
-        ///
-        /// @param Read stream
-        //--------------------------------------------------------------------------------------------------
-        void HttpConnectionSystem::ApplySSLSettings(CFReadStreamRef inReadStreamRef) const
-        {
-            CFMutableDictionaryRef pDict = CFDictionaryCreateMutable(kCFAllocatorDefault, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-            CFDictionarySetValue(pDict, kCFStreamSSLValidatesCertificateChain, kCFBooleanFalse);
-            CFDictionarySetValue(pDict, kCFStreamPropertySocketSecurityLevel, kCFStreamSocketSecurityLevelSSLv3);
-            CFReadStreamSetProperty(inReadStreamRef, kCFStreamPropertySSLSettings, pDict);
-            CFRelease(pDict);
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Is Stream Open
-        ///
-        /// Is the read stream still open or has it errored or closed
-        ///
-        /// @param Read stream
-        /// @return Whether it is open
-        //--------------------------------------------------------------------------------------------------
-        bool HttpConnectionSystem::IsStreamOpen(CFReadStreamRef inReadStreamRef) const
-        {
-            CFStreamStatus CFStatus = CFReadStreamGetStatus(inReadStreamRef);
-            return (CFStatus != kCFStreamStatusError &&
-                    CFStatus != kCFStreamStatusNotOpen &&
-                    CFStatus != kCFStreamStatusClosed);
-        }
 		//--------------------------------------------------------------------------------------------------
-		/// Cancel All Request
-		///
-		/// Equivalent to calling the above on every incomplete request in progress.
 		//--------------------------------------------------------------------------------------------------
 		void HttpConnectionSystem::CancelAllRequests()
         {
-			for(u32 nRequest = 0; nRequest < mapRequests.size(); nRequest++)
+			for(u32 nRequest=0; nRequest<m_requests.size(); ++nRequest)
             {
-				mapRequests[nRequest]->Cancel();
+				m_requests[nRequest]->Cancel();
 			}
 		}
         //--------------------------------------------------------------------------------------------------
-        /// Check Reachability
-        ///
-        /// Checks if the device is internet ready and pings google for a response.
-        ///
-        /// @return Success if URL is reachable
         //--------------------------------------------------------------------------------------------------
         bool HttpConnectionSystem::CheckReachability() const
         {
-            MoFloReachability* pReachability = [MoFloReachability reachabilityForInternetConnection];
-            NetworkStatus NetStatus = [pReachability currentReachabilityStatus];
+            CSReachability* reachability = [CSReachability reachabilityForInternetConnection];
+            NetworkStatus status = [reachability currentReachabilityStatus];
             
-            return (NetStatus != NotReachable);
+            return (status != NotReachable);
         }
 		//--------------------------------------------------------------------------------------------------
-		/// Update
-		///
-		/// For all active requests in the system call update on them allowing them to check the status
-		/// of thier requests
-		///
-		/// @param Time between frames
 		//--------------------------------------------------------------------------------------------------
-		void HttpConnectionSystem::Update(f32 infDT)
+		void HttpConnectionSystem::OnUpdate(f32 in_timeSinceLastUpdate)
 		{
-            RequestVector RequestCopy = mapRequests;
-            
-            //We should do this in two loops incase anyone tries to insert from the callback hence the copy above
-			for(RequestVector::iterator it = RequestCopy.begin(); it != RequestCopy.end(); ++it)
+            //We should do this in two loops incase anyone tries to insert into the requests from the completion callback
+			for(u32 i=0; i<m_requests.size(); ++i)
             {
-                (*it)->Update(infDT);
+                m_requests[i]->Update(in_timeSinceLastUpdate);
             }
             
-            for(RequestVector::iterator it = mapRequests.begin(); it != mapRequests.end(); )
+            for(auto it = m_requests.begin(); it != m_requests.end(); /*No increment*/)
             {
                 if((*it)->HasCompleted())
                 {
-                    const ConnectionInfo& sInfoRef = (*it)->GetConnectionInfo();
-                    
-                    //Add the stream to the recycle pool if there isn't one in there
-                    //already for this connection
-                    bool bConnectionAlreadyExists = false;
-                    
-                    for(ConnectionPool::iterator itExisting = mPersistentConnectionPool.begin(); itExisting != mPersistentConnectionPool.end(); ++itExisting)
+                    //We have finished with this connection so we can add it back to the pool if there is not already one there
+                    auto itConnection = m_activeConnections.find(*it);
+                    const ConnectionInfo& connectionInfo = itConnection->second;
+                    if(m_unusedConnections.find(connectionInfo.m_connectionId) == m_unusedConnections.end())
                     {
-                        if(itExisting->PropertyID == sInfoRef.PropertyID)
-                        {
-                            //This connection already exists in the recycle pool
-                            //so we don't need to cache it and we can release it
-                            CFReadStreamClose(sInfoRef.ReadStream);
-                            CFRelease(sInfoRef.ReadStream);
-                            bConnectionAlreadyExists = true;
-                            break;
-                        }
+                        m_unusedConnections.insert(std::make_pair(connectionInfo.m_connectionId, connectionInfo));
                     }
-                    
-                    if(!bConnectionAlreadyExists)
+                    else
                     {
-                        //Connection is recycled
-                        mPersistentConnectionPool.push_back(sInfoRef);
+                        CFReadStreamClose(connectionInfo.m_readStream);
+                        CFRelease(connectionInfo.m_readStream);
                     }
+                    m_activeConnections.erase(itConnection);
                     
-                    //...and remove the completed request
+                    //remove the completed request
                     CS_SAFEDELETE(*it);
-                    it = mapRequests.erase(it);
+                    it = m_requests.erase(it);
                 }
                 else
                 {
@@ -357,16 +294,18 @@ namespace ChilliSource
                 }
 			}
             
-            //Check the connection pool for any open connections that are no longer required because they have
+            //Check the connection pool for any unused connections that are no longer required because they have
             //exceeded their lifespan
-            for(ConnectionPool::iterator it = mPersistentConnectionPool.begin(); it != mPersistentConnectionPool.end(); /*No increment*/)
+            for(auto it = m_unusedConnections.begin(); it != m_unusedConnections.end(); /*No increment*/)
             {
-                if(Core::Application::Get()->GetSystemTime() > (it->ConnectionOpenTime + kudwKeepAliveTimeInSeconds))
+                const ConnectionInfo& connectionInfo = it->second;
+                
+                if(Core::Application::Get()->GetSystemTime() > (connectionInfo.m_connectionOpenTime + k_keepAliveTimeSecs))
                 {
                     //Close the old stream
-                    CFReadStreamClose(it->ReadStream);
-                    CFRelease(it->ReadStream);
-                    it = mPersistentConnectionPool.erase(it);
+                    CFReadStreamClose(connectionInfo.m_readStream);
+                    CFRelease(connectionInfo.m_readStream);
+                    it = m_unusedConnections.erase(it);
                 }
                 else
                 {
@@ -374,248 +313,37 @@ namespace ChilliSource
                 }
             }
 		}
-		//=====================================================================================================
-		/// Http Request
-		///
-		/// Constructor
-		///
-		/// @param Request details
-		/// @param Completion delegate
-		//=====================================================================================================
-		HttpConnectionSystem::CHttpRequest::CHttpRequest(const Networking::HttpRequestDetails & insDetails, const HttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate)
-		: msDetails(insDetails), mbCompleted(false), mCompletionDelegate(inCompletionDelegate), mfActiveTime(0.0f), mbReceivedResponse(false), mbThreadCompleted(false),
-        mudwResponseCode(0), mudwBytesRead(0), mbRequestCompleted(false), mConnectionInfo(insConnectionInfo), mudwBytesReadThisBlock(0)
-		{
-			//Begin the read loop
-			//Run this as a threaded task
-			Core::TaskScheduler::ScheduleTask(Core::Task<CFReadStreamRef>(this, &HttpConnectionSystem::CHttpRequest::PollReadStream, mConnectionInfo.ReadStream));
-		}
-		//------------------------------------------------------------------
-		/// Update
-		///
-		/// Checks the stream to see if any data is available for reading
-		/// and reads this into a buffer. Once all the data is read
-		/// the request will call the complete delegate
-		///
-		/// @param Time since last frame
-		//------------------------------------------------------------------
-		void HttpConnectionSystem::CHttpRequest::Update(f32 infDT)
-		{
-			//Check if the data has finished streaming and invoke the completion delegate on the main thread
-			if(mbCompleted)
-			{
-                mfActiveTime = 0.0f;
-                mbRequestCompleted = true;
-                
-                if(mCompletionDelegate)
-                {
-                    if(meRequestResult != HttpRequest::CompletionResult::k_cancelled)
-                    {
-                        mCompletionDelegate(this, meRequestResult);
-                    }
-                    
-                    mCompletionDelegate = nullptr;
-                }
-			}
-            //Track the time the request has been active so we can manually timeout
-            else if(!mbCompleted && !mbReceivedResponse && ((mfActiveTime += (Core::MathUtils::Min(infDT, 0.5f))) > kfDefaultHTTPTimeout))
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        void HttpConnectionSystem::OnDestroy()
+        {
+            CancelAllRequests();
+            
+            for(auto it = m_requests.begin(); it != m_requests.end(); ++it)
             {
-                CS_LOG_DEBUG("HTTP Connection timed out on request: " + msDetails.strURL);
-				//Flag to stop the polling thread which should
-				//exit gracefully
-				mfActiveTime = 0.0f;
-				mbCompleted = true;
-                mbReceivedResponse = true;
-                mbRequestCompleted = true;
-                
-                if(mCompletionDelegate)
-                {
-                    mCompletionDelegate(this, HttpRequest::CompletionResult::k_timeout);
-                    mCompletionDelegate = nullptr;
-                }
+                CS_SAFEDELETE(*it);
             }
-		}
-		//------------------------------------------------------------------
-		/// Poll Read Stream
-		///
-		/// Reads data from the open stream when it becomes available
-		/// buffers the data flags on complete
-		//------------------------------------------------------------------
-		void HttpConnectionSystem::CHttpRequest::PollReadStream(CFReadStreamRef inReadStreamRef)
-		{
-            //Poll the stream for data
-            CFStreamStatus CFStatus = CFReadStreamGetStatus(inReadStreamRef);
             
-			switch(CFStatus)
-			{
-				case kCFStreamStatusOpen:
-				{
-                    std::stringstream strBuffer;
-                    
-					while(!mbReceivedResponse)
-					{
-						//Check of data is available and begin to stream the bytes
-						if(CFReadStreamHasBytesAvailable(inReadStreamRef))
-						{
-							CFHTTPMessageRef CFResponse = (CFHTTPMessageRef)CFReadStreamCopyProperty(inReadStreamRef, kCFStreamPropertyHTTPResponseHeader);
-							if(CFResponse)
-							{
-								//We have a response from the server we can stop the timeout timer
-								mbReceivedResponse = true;
-								
-								//Grab the http response (i.e. 400 etc)
-								u32 udwResponseCode = CFHTTPMessageGetResponseStatusCode(CFResponse);
-								
-								//Buffer into which the data is read each time data is available from the read stream
-								u8 abyDataBuffer[kudwBufferSize];
-                                
-                                if(udwResponseCode == Networking::kHTTPMovedTemporarily || udwResponseCode == Networking::kHTTPRedirectTemporarily)
-                                {
-                                    CFStringRef CFUrl = CFHTTPMessageCopyHeaderFieldValue(CFResponse, CFSTR("Location"));
-                                    
-                                    std::string strCFUrl = Core::StringUtils::NSStringToString((NSString*)CFUrl);
-                                    
-                                    msDetails.strRedirectionURL = strCFUrl;
-                                    
-                                    CFRelease(CFUrl);
-                                }
-								
-								while(!mbCompleted)
-								{
-									s32 dwBytesRead = CFReadStreamRead(inReadStreamRef, abyDataBuffer, kudwBufferSize);
-									if(dwBytesRead > 0)
-									{
-										//We only want to pipe the actual data to the buffer and not
-										//any trailing garbage that may be resident
-										strBuffer.write((s8*)abyDataBuffer, dwBytesRead);
-                                        mudwBytesRead += dwBytesRead;
-                                        mudwBytesReadThisBlock += dwBytesRead;
-                                        
-                                        //If the number of bytes read exceeds the buffer size then we have to flush
-                                        if(mudwMaxBufferSize != 0 && mudwBytesReadThisBlock >= mudwMaxBufferSize)
-                                        {
-                                            mResponseData = strBuffer.str();
-                                            strBuffer.clear();
-                                            strBuffer.str("");
-                                            mudwBytesReadThisBlock = 0;
-                                            mCompletionDelegate(this, HttpRequest::CompletionResult::k_flushed);
-                                        }
-									}
-									else if(dwBytesRead < 0)
-									{
-										//error condition, log and diagnose
-                                        meRequestResult = HttpRequest::CompletionResult::k_failed;
-										mbCompleted = true;
-									}
-									else if(dwBytesRead == 0)
-									{
-										//Great success. The data is finished
-										//The stream is empty we should now have all the data
-										//Copy the buffer into the response
-										mResponseData = strBuffer.str();
-										mudwResponseCode = udwResponseCode;
-                                        meRequestResult = HttpRequest::CompletionResult::k_completed;
-										mbCompleted = true;
-									}
-								}
-								
-								CFRelease(CFResponse);
-							}
-						}
-                        
-                        if(!mbReceivedResponse)
-                        {
-                            std::chrono::milliseconds sleepDuration(kudwReadThreadSleepInMS);
-                            std::this_thread::sleep_for(sleepDuration);
-                        }
-					}
-					break;
-				}
-				case kCFStreamStatusError:
-				case kCFStreamStatusNotOpen:
-                default:
-                {
-                    meRequestResult = HttpRequest::CompletionResult::k_failed;
-                    mbCompleted = true;
-					break;
-                }
-			}
+            m_requests.clear();
+            m_requests.shrink_to_fit();
             
-            mbThreadCompleted = true;
-		}
-		//----------------------------------------------------------------------------------------
-		/// Cancel
-		///
-		/// Close the request and invoke the completion delegate with the cancel response
-		//----------------------------------------------------------------------------------------
-		void HttpConnectionSystem::CHttpRequest::Cancel()
-		{
-            mbCompleted = true;
-            mbReceivedResponse = true;
-            meRequestResult = HttpRequest::CompletionResult::k_cancelled;
-		}
-		//----------------------------------------------------------------------------------------
-		/// Has Completed
-		///
-		/// @return Whether the request has completed - regardless of success or failure
-		//----------------------------------------------------------------------------------------
-		bool HttpConnectionSystem::CHttpRequest::HasCompleted() const
-		{
-			return mbRequestCompleted && mbThreadCompleted;
-		}
-		//----------------------------------------------------------------------------------------
-		/// Get Details
-		///
-		/// @return The original request details (i.e. whether it is post/get the body and header)
-		//----------------------------------------------------------------------------------------
-		const Networking::HttpRequestDetails & HttpConnectionSystem::CHttpRequest::GetDetails() const
-		{
-			return msDetails;
-		}
-		//----------------------------------------------------------------------------------------
-		/// Get Completion Delegate
-		///
-		/// @return The delegate that will be invoked on request complete
-		//----------------------------------------------------------------------------------------
-		const Networking::HttpRequest::CompletionDelegate & HttpConnectionSystem::CHttpRequest::GetCompletionDelegate() const
-		{
-			return mCompletionDelegate;
-		}
-		//----------------------------------------------------------------------------------------
-		/// Get Response String
-		///
-		/// @return The contents of the response as a string. This could be binary data
-		//----------------------------------------------------------------------------------------
-		const std::string & HttpConnectionSystem::CHttpRequest::GetResponseString() const
-		{
-			return mResponseData;
-		}
-		//----------------------------------------------------------------------------------------
-		/// Get Response Code
-		///
-		/// @return HTTP response code (i.e. 200 = OK, 400 = Error)
-		//----------------------------------------------------------------------------------------
-		u32 HttpConnectionSystem::CHttpRequest::GetResponseCode() const
-		{
-			return mudwResponseCode;
-		}
-        //----------------------------------------------------------------------------------------
-        /// Get Bytes Read
-        ///
-        /// @return Number of bytes read til now
-        //----------------------------------------------------------------------------------------
-        u32 HttpConnectionSystem::CHttpRequest::GetBytesRead() const
-        {
-            return mudwBytesRead;
-        }
-        //----------------------------------------------------------------------------------------
-        /// Get Connection Info
-        ///
-        /// @return Connection Info
-        //----------------------------------------------------------------------------------------
-        const HttpConnectionSystem::ConnectionInfo& HttpConnectionSystem::CHttpRequest::GetConnectionInfo()
-        {
-            return mConnectionInfo;
+            for(auto it = m_unusedConnections.begin(); it != m_unusedConnections.end(); ++it)
+            {
+                CFReadStreamClose(it->second.m_readStream);
+                CFRelease(it->second.m_readStream);
+            }
+            
+            m_unusedConnections.clear();
+            
+            for(auto it = m_activeConnections.begin(); it != m_activeConnections.end(); ++it)
+            {
+                CFReadStreamClose(it->second.m_readStream);
+                CFRelease(it->second.m_readStream);
+            }
+            
+            m_activeConnections.clear();
+            
+            m_totalNumConnectionsEstablished = 0;
         }
 	}
 }

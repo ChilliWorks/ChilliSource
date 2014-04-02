@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
+#ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_GOOGLEPLAYIAPSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_GOOGLEPLAYIAPSYSTEM_H_
 
@@ -25,7 +27,7 @@ namespace ChilliSource
 		/// before any purchases are made as this can be called with previously incomplete
 		/// transactions.
 		///
-		/// Note: The CS pre-processor flag DCS_ANDROIDEXTENSION_GOOGLEPLAY should be set for this to be used.
+		/// Note: The CS pre-processor flag CS_ANDROIDEXTENSION_GOOGLEPLAY should be set for this to be used.
 		///
 		/// @author S Downie
 		//----------------------------------------------------------------------------------
@@ -57,12 +59,6 @@ namespace ChilliSource
 			/// @return The ID off the IAP provider as a string.
             //---------------------------------------------------------------
 			std::string GetProviderID() const override;
-            //---------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return A displayable name for the IAP Provider.
-            //---------------------------------------------------------------
-			std::string GetProviderName() const override;
             //---------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -179,4 +175,5 @@ namespace ChilliSource
 	}
 }
 
+#endif
 #endif

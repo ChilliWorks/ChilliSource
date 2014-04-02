@@ -34,6 +34,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(TouchScreen);
         CS_FORWARDDECLARE_CLASS(iCloudSystem);
         CS_FORWARDDECLARE_CLASS(HttpConnectionSystem);
+        CS_FORWARDDECLARE_CLASS(HttpRequest);
         CS_FORWARDDECLARE_CLASS(IAPSystem);
         //------------------------------------------------------
 		/// Social

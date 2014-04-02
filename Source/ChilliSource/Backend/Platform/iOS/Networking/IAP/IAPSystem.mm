@@ -1,5 +1,5 @@
 //
-//  IAPSystem.cpp
+//  IAPSystem.mm
 //  Chilli Source
 //
 //  Created by Scott Downie on 12/06/2013.
@@ -66,13 +66,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         std::string IAPSystem::GetProviderID() const
         {
-            return "Apple";
-        }
-        //---------------------------------------------------------------
-        //---------------------------------------------------------------
-        std::string IAPSystem::GetProviderName() const
-        {
-            return "iTunes";
+            return "AppleAppStore";
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------

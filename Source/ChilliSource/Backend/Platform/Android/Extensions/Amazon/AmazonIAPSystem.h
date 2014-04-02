@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Tag Games. All rights reserved.
 //
 
+#ifdef CS_ANDROIDEXTENSION_AMAZON
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_EXTENSIONS_AMAZON_AMAZONIAPSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_EXTENSIONS_AMAZON_AMAZONIAPSYSTEM_H_
 
@@ -24,7 +26,7 @@ namespace ChilliSource
 		/// before any purchases are made as this can be called with previously incomplete
 		/// transactions.
 		///
-		/// Note: The CS pre-processor flag DCS_ANDROIDEXTENSION_AMAZON should be set for this to be used.
+		/// Note: The CS pre-processor flag CS_ANDROIDEXTENSION_AMAZON should be set for this to be used.
 		///
 		/// @author I Copland
 		//----------------------------------------------------------------------------------
@@ -57,12 +59,6 @@ namespace ChilliSource
 			/// @return The ID off the IAP provider as a string.
             //---------------------------------------------------------------
 			std::string GetProviderID() const override;
-            //---------------------------------------------------------------
-			/// @author I Copland
-			///
-			/// @return A displayable name for the IAP Provider.
-            //---------------------------------------------------------------
-			std::string GetProviderName() const override;
             //---------------------------------------------------------------
 			/// @author I Copland
 			///
@@ -178,5 +174,7 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif
 
 #endif

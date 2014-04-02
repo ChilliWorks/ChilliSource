@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
+#ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
+
 #include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPSystem.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
@@ -83,12 +85,6 @@ namespace ChilliSource
 		std::string GooglePlayIAPSystem::GetProviderID() const
 		{
 			return "GooglePlayV3";
-		}
-        //---------------------------------------------------------------
-        //---------------------------------------------------------------
-		std::string GooglePlayIAPSystem::GetProviderName() const
-		{
-			return "PlayStoreV3";
 		}
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -175,3 +171,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif
