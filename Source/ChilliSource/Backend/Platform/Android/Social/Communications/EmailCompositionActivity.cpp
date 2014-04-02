@@ -75,11 +75,11 @@ namespace ChilliSource
 				{
 					Core::Application::Get()->GetFileSystem()->CreateDirectory(Core::StorageLocation::k_cache, kstrTempAttachmentDirectory);
 					Core::Application::Get()->GetFileSystem()->CopyFile(inAttachment.m_storageLocation, inAttachment.m_filename, Core::StorageLocation::k_cache, kstrTempAttachmentDirectory + inAttachment.m_filename);
-					strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + kstrTempAttachmentDirectory + inAttachment.m_filename;
+					strFilename = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_cache) + kstrTempAttachmentDirectory + inAttachment.m_filename;
 				}
 				else
 				{
-					strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(inAttachment.m_storageLocation) + inAttachment.m_filename;
+					strFilename = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(inAttachment.m_storageLocation) + inAttachment.m_filename;
 				}
 			}
 

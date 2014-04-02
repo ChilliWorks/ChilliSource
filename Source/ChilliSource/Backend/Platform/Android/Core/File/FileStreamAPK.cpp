@@ -286,7 +286,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Write
 		//--------------------------------------------------------------------------------------------------
-		void FileStreamAPK::Write(s8* inpbyChar, s32 indwStreamSize)
+		void FileStreamAPK::Write(const s8* inpbyChar, s32 indwStreamSize)
 		{
 			CS_LOG_ERROR("Cannot write to Android APK");
 		}

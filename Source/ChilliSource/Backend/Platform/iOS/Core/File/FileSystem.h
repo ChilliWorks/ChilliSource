@@ -205,29 +205,98 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			std::string GetAbsolutePathToStorageLocation(Core::StorageLocation in_storageLocation) const override;
             //--------------------------------------------------------------
-			/// Returns the full absolute path to the given file in the
-            /// given storage location. The value returned from this will
-            /// be platform specfic so it should be used with care in
-            /// cross platform projects.
+			/// Returns the absolute path to the file in the given storage
+            /// location. The file must exist otherwise an empty string
+            /// will be returned. The result of this is platform specific
+            /// so care should be taken when using this in cross platform
+            /// projects.
             ///
             /// @author S Downie
 			///
             /// @param The storage location for the file.
-            /// @param The file path of the file relative to the storage
-            /// location.
+            /// @param The file path relative to the storage location.
             ///
 			/// @return The full path to the file.
 			//--------------------------------------------------------------
-			std::string GetAbsolutePathToFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
+			std::string GetAbsolutePathToFile(Core::StorageLocation in_storageLocation, const std::string& in_path) const override;
+            //--------------------------------------------------------------
+			/// Returns the absolute path to the directory in the given storage
+            /// location. The directory must exist otherwise an empty string
+            /// will be returned. The result of this is platform specific
+            /// so care should be taken when using this in cross platform
+            /// projects.
+            ///
+            /// @author I Copland
+			///
+            /// @param The storage location for the directory.
+            /// @param The directory path relative to the storage location.
+            ///
+			/// @return The full path to the directory.
+			//--------------------------------------------------------------
+			std::string GetAbsolutePathToDirectory(Core::StorageLocation in_storageLocation, const std::string& in_path) const override;
 
 		private:
             friend Core::FileSystemUPtr Core::FileSystem::Create();
+            //--------------------------------------------------------------
+            /// A container for information on a single item in the package
+            /// manifest.
+            ///
+            /// @author I Copland
+            //--------------------------------------------------------------
+            struct PackageManifestItem
+            {
+                u32 m_pathHash;
+                bool m_isFile;
+            };
             //--------------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             //--------------------------------------------------------------
             FileSystem();
+            //--------------------------------------------------------------
+            /// Creates the manifest of all files and directories in the
+            /// package.
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------
+            void CreatePackageManifest();
+            //--------------------------------------------------------------
+	        /// Tries to get an item from the package manifest for the given
+            /// path.
+	        ///
+            /// @author I Copland
+            ///
+            /// @param The path to look up.
+	        /// @param [Out] The manifest item if successful.
+	        ///
+            /// @return Whether or not the look up was successful.
+            //--------------------------------------------------------------
+            bool TryGetPackageManifestItem(const std::string& in_path, PackageManifestItem& out_manifestItem) const;
+            //--------------------------------------------------------------
+			/// Returns whether or not this given file path exist in the
+            /// package. This looks up the package manifest rather than
+            /// reading from disk.
+            ///
+            /// @author S Downie
+            ///
+            /// @param the filepath.
+            ///
+            /// @return whether or not it exists.
+			//--------------------------------------------------------------
+            bool DoesFileExistInPackage(const std::string& in_filePath) const;
+            //--------------------------------------------------------------
+			/// Returns whether or not this given directory path exist in the
+            /// package. This looks up the package manifest rather than
+            /// reading from disk.
+            ///
+            /// @author I Copland
+            ///
+            /// @param the directory path.
+            ///
+            /// @return whether or not it exists.
+			//--------------------------------------------------------------
+            bool DoesDirectoryExistInPackage(const std::string& in_directoryPath) const;
             //--------------------------------------------------------------
 			/// Returns whether or not a file or directory exists specifically
             /// in the DLC cache.
@@ -239,16 +308,6 @@ namespace ChilliSource
             /// @return whether or not it exists.
 			//--------------------------------------------------------------
             bool DoesItemExistInDLCCache(const std::string& in_path, bool in_folder) const;
-            //--------------------------------------------------------------
-			/// returns whether the path exists in the stored hashed manifest
-            ///
-            /// @author S Downie
-            ///
-            /// @param the filepath.
-            ///
-            /// @return whether or not it exists.
-			//--------------------------------------------------------------
-            bool DoesFileExistInHashedStore(const std::string& in_path) const;
             //------------------------------------------------------------
             /// @author S Downie
             ///
@@ -257,19 +316,13 @@ namespace ChilliSource
             /// @param [Out] All the paths for the given location
             //------------------------------------------------------------
             void GetPathsForStorageLocation(Core::StorageLocation in_storageLocation, const std::string& in_path, std::vector<std::string>& out_paths) const;
-            //--------------------------------------------------------------
-            /// Creates the hashed bundle file list.
-            ///
-            /// @author S Downie
-            //--------------------------------------------------------------
-            void CreateHashedBundleFileList();
             
             
 			std::string m_bundlePath;
 			std::string m_documentsPath;
             std::string m_libraryPath;
             
-            std::vector<u32> m_hashedPackageFilePaths;
+            std::vector<PackageManifestItem> m_packageManifestItems;
 		};
 	}
 }

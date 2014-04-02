@@ -217,21 +217,36 @@ namespace ChilliSource
 			/// is not available.
 			//--------------------------------------------------------------
 			std::string GetAbsolutePathToStorageLocation(Core::StorageLocation in_storageLocation) const override;
-			//--------------------------------------------------------------
-			/// Returns the full absolute path to the given file in the
-			/// given storage location. The value returned from this will
-			/// be platform specfic so it should be used with care in
-			/// cross platform projects.
+            //--------------------------------------------------------------
+			/// Returns the absolute path to the file in the given storage
+            /// location. The file must exist otherwise an empty string
+            /// will be returned. The result of this is platform specific
+            /// so care should be taken when using this in cross platform
+            /// projects.
+            ///
+            /// @author S Downie
 			///
-			/// @author S Downie
-			///
-			/// @param The storage location for the file.
-			/// @param The file path of the file relative to the storage
-			/// location.
-			///
+            /// @param The storage location for the file.
+            /// @param The file path relative to the storage location.
+            ///
 			/// @return The full path to the file.
 			//--------------------------------------------------------------
-			std::string GetAbsolutePathToFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
+			std::string GetAbsolutePathToFile(Core::StorageLocation in_storageLocation, const std::string& in_path) const override;
+            //--------------------------------------------------------------
+			/// Returns the absolute path to the directory in the given storage
+            /// location. The directory must exist otherwise an empty string
+            /// will be returned. The result of this is platform specific
+            /// so care should be taken when using this in cross platform
+            /// projects.
+            ///
+            /// @author S Downie
+			///
+            /// @param The storage location for the directory.
+            /// @param The directory path relative to the storage location.
+            ///
+			/// @return The full path to the directory.
+			//--------------------------------------------------------------
+			std::string GetAbsolutePathToDirectory(Core::StorageLocation in_storageLocation, const std::string& in_path) const override;
 
 		private:
 			friend Core::FileSystemUPtr Core::FileSystem::Create();
@@ -333,39 +348,6 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			bool DoesDirectoryExistInAPK(const std::string& in_directoryPath) const;
 			//--------------------------------------------------------------
-			/// Creates a base directory.
-			///
-			/// @author I Copland
-			///
-			/// @param The directory
-			///
-			/// @return Returns whether or not this was successful. Inability
-			/// to create the directory due to it already existing is still
-			/// considered successful.
-			//--------------------------------------------------------------
-			bool CreateBaseDirectory(const std::string& in_directoryPath) const;
-			//--------------------------------------------------------------
-			/// Copies a file from one location to another.
-			///
-			/// @author I Copland
-			///
-			/// @param The source directory.
-			/// @param The destination directory.
-			///
-			/// @return Whether or not the file was successfully copied.
-			//--------------------------------------------------------------
-			bool CopyFile(const std::string& in_sourceFilePath, const std::string& in_destinationFilePath) const;
-			//--------------------------------------------------------------
-			/// Deletes a directory and all its contents.
-			///
-			/// @author I Copland
-			///
-			/// @param The directory path.
-			///
-			/// @return Whether or not the directory was successfully deleted.
-			//--------------------------------------------------------------
-			bool DeleteDirectory(const std::string& in_directoryPath) const;
-			//--------------------------------------------------------------
 			/// returns all files and directories in a directory.
 			///
 			/// @author I Copland
@@ -376,35 +358,16 @@ namespace ChilliSource
 			///
 			/// @return The output paths.
 			//--------------------------------------------------------------
-			std::vector<std::string> GetPaths(const std::string& in_directoryPath, bool in_recurse, const std::string& in_parentDirectoryPath) const;
-			//--------------------------------------------------------------
-			/// returns whether or not a file exists
-			///
-			/// @author I Copland
-			///
-			/// @param the filepath.
-			///
-			/// @return Whether or not it exists.
-			//--------------------------------------------------------------
-			bool DoesFileExist(const std::string& in_filePath) const;
-			//--------------------------------------------------------------
-			/// returns whether or not a directory exists
-			///
-			/// @author I Copland
-			///
-			/// @param the directory path.
-			///
-			/// @return whether or not it exists.
-			//--------------------------------------------------------------
-			bool DoesDirectoryExist(const std::string& in_directoryPath) const;
+			std::vector<std::string> GetPaths(const std::string& in_directoryPath, bool in_recurse, const std::string& in_parentDirectoryPath = "") const;
 	        //------------------------------------------------------------
 	        /// @author S Downie
 	        ///
 	        /// @param Storage location
 	        /// @param File name to append
-			/// @param [Out] All the paths for the given location
+			///
+			/// @return All the paths for the given location
 			//------------------------------------------------------------
-			void GetPathsForStorageLocation(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, std::vector<DirInfo>& out_paths) const;
+			std::vector<PathInfo> GetPathsForStorageLocation(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
 	        //------------------------------------------------------------
 	        /// @author S Downie
 	        ///
@@ -413,15 +376,13 @@ namespace ChilliSource
 			///
 	        /// @return Content file names
 	        //------------------------------------------------------------
-			std::vector<std::string> void GetDirectoryContents(const std::vector<DirInfo>& in_directoryInfos, bool in_recursive) const;
-
-		private:
+			std::vector<std::string> GetDirectoryContents(const std::vector<PathInfo>& in_directoryInfos, bool in_recursive) const;
 
 			mutable std::mutex m_minizipMutex;
 
 			std::string m_apkPath;
 			std::string m_storagePath;
-			std::vector<APKFileInfo> m_apkManifestItems;
+			std::vector<APKManifestItem> m_apkManifestItems;
 		};
 	}
 }

@@ -24,7 +24,8 @@ namespace ChilliSource
 		/// A system for handling cross platform access to the file
         /// system. This provides sandboxed access to specific locations
         /// on disk, such as access to application assets, or save
-        /// data.
+        /// data. It is safe to use the File System during the OnInit
+		/// and OnDestroy lifecycle events.
         ///
         /// @author I Copland
 		//-----------------------------------------------------------------
@@ -306,20 +307,35 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			virtual std::string GetAbsolutePathToStorageLocation(StorageLocation in_storageLocation) const = 0;
             //--------------------------------------------------------------
-			/// Returns the full absolute path to the given file in the
-            /// given storage location. The value returned from this will
-            /// be platform specfic so it should be used with care in
-            /// cross platform projects.
+			/// Returns the absolute path to the file in the given storage
+            /// location. The file must exist otherwise an empty string
+            /// will be returned. The result of this is platform specific
+            /// so care should be taken when using this in cross platform
+            /// projects.
             ///
             /// @author S Downie
 			///
             /// @param The storage location for the file.
-            /// @param The file path of the file relative to the storage
-            /// location.
+            /// @param The file path relative to the storage location.
             ///
 			/// @return The full path to the file.
 			//--------------------------------------------------------------
-			virtual std::string GetAbsolutePathToFile(StorageLocation in_storageLocation, const std::string& in_filePath) const = 0;
+			virtual std::string GetAbsolutePathToFile(StorageLocation in_storageLocation, const std::string& in_path) const = 0;
+            //--------------------------------------------------------------
+			/// Returns the absolute path to the directory in the given storage
+            /// location. The directory must exist otherwise an empty string
+            /// will be returned. The result of this is platform specific
+            /// so care should be taken when using this in cross platform
+            /// projects.
+            ///
+            /// @author I Copland
+			///
+            /// @param The storage location for the directory.
+            /// @param The directory path relative to the storage location.
+            ///
+			/// @return The full path to the directory.
+			//--------------------------------------------------------------
+			virtual std::string GetAbsolutePathToDirectory(StorageLocation in_storageLocation, const std::string& in_path) const = 0;
             //--------------------------------------------------------------
             /// Sets the directory used by the DLC system to fall back on
             /// if it is not in the DLC cache directory.

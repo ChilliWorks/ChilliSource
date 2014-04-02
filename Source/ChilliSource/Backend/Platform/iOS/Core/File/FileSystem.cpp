@@ -237,7 +237,7 @@ namespace ChilliSource
             CreateDirectory(Core::StorageLocation::k_cache, "");
             CreateDirectory(Core::StorageLocation::k_DLC, "");
             
-            CreateHashedBundleFileList();
+            CreatePackageManifest();
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -467,7 +467,7 @@ namespace ChilliSource
                 const std::string* resourceDirectories = GetResourceDirectories();
                 for(u32 i = 0; i < 3; ++i)
                 {
-                    if(DoesFileExistInHashedStore(resourceDirectories[i] + in_filePath))
+                    if(DoesFileExistInPackage(resourceDirectories[i] + in_filePath))
                     {
                         return true;
                     }
@@ -571,40 +571,171 @@ namespace ChilliSource
         //--------------------------------------------------------------
         std::string FileSystem::GetAbsolutePathToFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const
         {
-            switch (in_storageLocation)
+            if (DoesFileExist(in_storageLocation, in_filePath) == true)
             {
-                case Core::StorageLocation::k_package:
+                switch (in_storageLocation)
                 {
-                    std::string filePath = GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + in_filePath;
-                    
-                    for(u32 i = 0; i < 3; ++i)
+                    case Core::StorageLocation::k_package:
                     {
-                        const std::string* resourceDirectories = GetResourceDirectories();
-                        std::string strPath = Core::StringUtils::StandardisePath(resourceDirectories[i] + in_filePath);
-                        if(DoesFileExistInHashedStore(strPath))
+                        std::string absoluteFilePath;
+                        for(u32 i = 0; i < 3; ++i)
                         {
-                            filePath = GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + strPath;
-                            break;
+                            const std::string* resourceDirectories = GetResourceDirectories();
+                            std::string filePath = Core::StringUtils::StandardisePath(resourceDirectories[i] + in_filePath);
+                            if(DoesFileExistInPackage(filePath))
+                            {
+                                absoluteFilePath = GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + filePath;
+                                break;
+                            }
                         }
+                        
+                        return absoluteFilePath;
                     }
-                    
-                    return filePath;
-                }
-                case Core::StorageLocation::k_DLC:
-                {
-                    std::string filePath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_filePath);
-                    if(iOS::DoesFileExist(filePath) == true)
+                    case Core::StorageLocation::k_DLC:
                     {
-                        return filePath;
+                        std::string filePath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_filePath);
+                        if(iOS::DoesFileExist(filePath) == true)
+                        {
+                            return filePath;
+                        }
+                        
+                        return GetAbsolutePathToFile(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
                     }
-                    
-                    return GetAbsolutePathToFile(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
-                }
-                default:
-                {
-                    return GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+                    default:
+                    {
+                        return GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+                    }
                 }
             }
+            
+            return "";
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        std::string FileSystem::GetAbsolutePathToDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+        {
+            if (DoesDirectoryExist(in_storageLocation, in_directoryPath) == true)
+            {
+                switch (in_storageLocation)
+                {
+                    case Core::StorageLocation::k_package:
+                    {
+                        std::string filePath;
+                        for(u32 i = 0; i < 3; ++i)
+                        {
+                            const std::string* resourceDirectories = GetResourceDirectories();
+                            filePath = Core::StringUtils::StandardisePath(resourceDirectories[i] + in_directoryPath);
+                            if(DoesDirectoryExistInPackage(filePath))
+                            {
+                                break;
+                            }
+                        }
+                        
+                        return filePath;
+                    }
+                    case Core::StorageLocation::k_DLC:
+                    {
+                        std::string filePath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_directoryPath);
+                        if(iOS::DoesDirectoryExist(filePath) == true)
+                        {
+                            return filePath;
+                        }
+                        
+                        return GetAbsolutePathToDirectory(Core::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
+                    }
+                    default:
+                    {
+                        return GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
+                    }
+                }
+            }
+            
+            return "";
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        void FileSystem::CreatePackageManifest()
+        {
+            @autoreleasepool
+            {
+                NSMutableArray* contents = [[NSMutableArray alloc] init];
+                NSString* directory = [NSString stringWithCString:m_bundlePath.c_str() encoding:NSASCIIStringEncoding];
+                
+                [contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:directory error:nil]];
+                
+                for(NSString* nsPath in contents)
+                {
+                    BOOL isDirectory = NO;
+                    NSFileManager* fileManager = [NSFileManager defaultManager];
+                    NSString* nsFullPath = [NSString stringWithFormat:@"%@%@", directory, nsPath];
+                    
+                    if ([fileManager fileExistsAtPath:nsFullPath isDirectory:&isDirectory] == true)
+                    {
+                        std::string path([nsPath UTF8String]);
+                        PackageManifestItem item;
+                        item.m_pathHash = Core::HashCRC32::GenerateHashCode(Core::StringUtils::StandardisePath(path));
+                        item.m_isFile = (isDirectory == NO);
+                        m_packageManifestItems.push_back(item);
+                    }
+                }
+                
+                std::sort(m_packageManifestItems.begin(), m_packageManifestItems.end(), [](const FileSystem::PackageManifestItem& in_lhs, const FileSystem::PackageManifestItem& in_rhs)
+                {
+                    return in_lhs.m_pathHash < in_rhs.m_pathHash;
+                });
+                
+                [contents release];
+            }
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        bool FileSystem::TryGetPackageManifestItem(const std::string& in_path, PackageManifestItem& out_manifestItem) const
+        {
+            PackageManifestItem searchItem;
+			searchItem.m_pathHash = Core::HashCRC32::GenerateHashCode(Core::StringUtils::StandardisePath(in_path));
+            
+			auto it = std::lower_bound(m_packageManifestItems.begin(), m_packageManifestItems.end(), searchItem, [](const FileSystem::PackageManifestItem& in_lhs, const FileSystem::PackageManifestItem& in_rhs)
+            {
+                return in_lhs.m_pathHash < in_rhs.m_pathHash;
+            });
+            
+			if(it !=  m_packageManifestItems.end() && it->m_pathHash == searchItem.m_pathHash)
+			{
+				out_manifestItem = *it;
+				return true;
+			}
+            
+			return false;
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        bool FileSystem::DoesFileExistInPackage(const std::string& in_filePath) const
+        {
+            PackageManifestItem item;
+            if (TryGetPackageManifestItem(in_filePath, item) == true)
+            {
+                if (item.m_isFile == true)
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        bool FileSystem::DoesDirectoryExistInPackage(const std::string& in_directoryPath) const
+        {
+            PackageManifestItem item;
+            if (TryGetPackageManifestItem(in_directoryPath, item) == true)
+            {
+                if (item.m_isFile == false)
+                {
+                    return true;
+                }
+            }
+            
+            return false;
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
@@ -619,19 +750,6 @@ namespace ChilliSource
             {
                 return iOS::DoesFileExist(Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_path));
             }
-        }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        bool FileSystem::DoesFileExistInHashedStore(const std::string& in_filePath) const
-        {
-            u32 udwHashedFile = Core::HashCRC32::GenerateHashCode(in_filePath);
-            
-            std::vector<u32>::const_iterator it = std::lower_bound(m_hashedPackageFilePaths.begin(), m_hashedPackageFilePaths.end(), udwHashedFile);
-            
-            if(it!= m_hashedPackageFilePaths.end() && *it == udwHashedFile)
-                return true;
-
-            return false;
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
@@ -664,27 +782,6 @@ namespace ChilliSource
                     break;
                 }
             }
-        }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        void FileSystem::CreateHashedBundleFileList()
-        {
-            NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
-            NSMutableArray* Contents = [[NSMutableArray alloc] init];
-            NSString* Dir = [NSString stringWithCString:m_bundlePath.c_str() encoding:NSASCIIStringEncoding];
-            
-            [Contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:Dir error:nil]];
-            
-            for(NSString* file in Contents)
-            {
-                std::string strFile([file UTF8String]);
-                m_hashedPackageFilePaths.push_back(Core::HashCRC32::GenerateHashCode(strFile));
-            }
-            
-            std::sort(m_hashedPackageFilePaths.begin(), m_hashedPackageFilePaths.end());
-            
-            [Contents release];
-            [pPool release];
         }
 	}
 }

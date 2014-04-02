@@ -411,7 +411,7 @@ namespace ChilliSource
 				Unzip(mpJavaInterface->GetExpansionPath(i), jManifest);
 			}
 
-			Core::Application::Get()->GetFileSystem()->CreateFile(Core::StorageLocation::k_cache, "AndroidExpansion.manifest", (s8*)jManifest.toUnformattedString().data(), jManifest.toUnformattedString().size());
+			Core::Application::Get()->GetFileSystem()->WriteFile(Core::StorageLocation::k_cache, "AndroidExpansion.manifest", (s8*)jManifest.toUnformattedString().data(), jManifest.toUnformattedString().size());
 
 			CachePackageDescriptions();
 
@@ -561,7 +561,7 @@ namespace ChilliSource
 
 					if(IsFile(strFilePath))
 					{
-						Core::Application::Get()->GetFileSystem()->CreateFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
+						Core::Application::Get()->GetFileSystem()->WriteFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
 					}
 
 					outjManifest.append(jManifestEntry);
@@ -594,7 +594,7 @@ namespace ChilliSource
 				jDesc.append(jExpansion);
 			}
 
-			Core::Application::Get()->GetFileSystem()->CreateFile(Core::StorageLocation::k_cache, "GoogleExpansionDownloader.cache", (s8*)jDesc.toUnformattedString().data(), jDesc.toUnformattedString().size());
+			Core::Application::Get()->GetFileSystem()->WriteFile(Core::StorageLocation::k_cache, "GoogleExpansionDownloader.cache", (s8*)jDesc.toUnformattedString().data(), jDesc.toUnformattedString().size());
         }
 		//-------------------------------------------------------------
 		/// Unzip Finished Task

@@ -78,23 +78,23 @@ namespace ChilliSource
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
             std::string strFilePath;
-            Core::FileSystem* fileSystem = Core::Application::Get()->GetSystem_Old<Core::FileSystem>();
+            Core::FileSystem* fileSystem = Core::Application::Get()->GetFileSystem();
             
             switch (in_storageLocation)
 			{
                 case Core::StorageLocation::k_package:
                     CS_LOG_WARNING("Android fmod cannot load or stream audio from the package so trying cache instead.");
-                    strFilePath = fileSystem->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + in_filePath;
+                    strFilePath = fileSystem->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_cache) + in_filePath;
                     break;
                 case Core::StorageLocation::k_cache:
-                    strFilePath = fileSystem->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + in_filePath;
+                    strFilePath = fileSystem->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_cache) + in_filePath;
                     break;
                 case Core::StorageLocation::k_DLC:
                     CS_LOG_WARNING("Android fmod cannot fall back on audio contained in the package DLC Directory.");
-                    strFilePath = fileSystem->GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + in_filePath;
+                    strFilePath = fileSystem->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_filePath;
                     break;
                 case Core::StorageLocation::k_saveData:
-                    strFilePath = fileSystem->GetStorageLocationDirectory(Core::StorageLocation::k_saveData) + in_filePath;
+                    strFilePath = fileSystem->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_saveData) + in_filePath;
                     break;
                 default:
                     CS_LOG_ERROR("Android fmod does not have access to this storage location.");
@@ -135,17 +135,17 @@ namespace ChilliSource
 			{
                 case Core::StorageLocation::k_package:
                     CS_LOG_WARNING("Android fmod cannot load or stream audio from the package so trying cache instead.");
-                    strFilePath = fileSystem->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + in_filePath;
+                    strFilePath = fileSystem->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_cache) + in_filePath;
                     break;
                 case Core::StorageLocation::k_cache:
-                    strFilePath = fileSystem->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + in_filePath;
+                    strFilePath = fileSystem->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_cache) + in_filePath;
                     break;
                 case Core::StorageLocation::k_DLC:
                     CS_LOG_WARNING("Android fmod cannot fall back on audio contained in the package DLC Directory.");
-                    strFilePath = fileSystem->GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + in_filePath;
+                    strFilePath = fileSystem->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_filePath;
                     break;
                 case Core::StorageLocation::k_saveData:
-                    strFilePath = fileSystem->GetStorageLocationDirectory(Core::StorageLocation::k_saveData) + in_filePath;
+                    strFilePath = fileSystem->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_saveData) + in_filePath;
                     break;
                 default:
                     CS_LOG_ERROR("Android fmod does not have access to this storage location.");
