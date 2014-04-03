@@ -359,15 +359,19 @@ namespace ChilliSource
 			/// @return The output paths.
 			//--------------------------------------------------------------
 			std::vector<std::string> GetPaths(const std::string& in_directoryPath, bool in_recurse, const std::string& in_parentDirectoryPath = "") const;
-	        //------------------------------------------------------------
-	        /// @author S Downie
-	        ///
-	        /// @param Storage location
-	        /// @param File name to append
-			///
-			/// @return All the paths for the given location
-			//------------------------------------------------------------
-			std::vector<PathInfo> GetPathsForStorageLocation(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
+            //------------------------------------------------------------
+            /// Builds a list of the paths that the given path might refer
+			/// to in the given storage location. For example, a path in
+			/// DLC might refer to the DLC cache or the Package DLC.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Storage location
+            /// @param File name to append
+            ///
+            /// @return All the paths for the given location
+            //------------------------------------------------------------
+			std::vector<PathInfo> GetPossibleAbsoluteDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
 	        //------------------------------------------------------------
 	        /// @author S Downie
 	        ///

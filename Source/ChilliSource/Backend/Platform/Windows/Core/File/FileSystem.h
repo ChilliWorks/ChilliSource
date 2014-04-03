@@ -265,7 +265,8 @@ namespace ChilliSource
 			///
 			/// @param Storage location
 			/// @param File name to append
-			/// @param [Out] All the paths for the given location
+			///
+			/// @return All the paths for the given location
 			//------------------------------------------------------------
 			std::vector<std::string> GetPossibleAbsoluteDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
 
