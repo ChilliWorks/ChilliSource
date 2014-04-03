@@ -574,7 +574,7 @@ namespace ChilliSource
 						for (u32 i = 0; i < 3; ++i)
 						{
 							absoluteDirectoryPath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + resourceDirectories[i] + in_directoryPath);
-							if (Windows::DoesFileExist(absoluteDirectoryPath) == true)
+							if (Windows::DoesDirectoryExist(absoluteDirectoryPath) == true)
 							{
 								break;
 							}

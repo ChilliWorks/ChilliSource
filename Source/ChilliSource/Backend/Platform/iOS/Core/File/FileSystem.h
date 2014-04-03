@@ -309,13 +309,18 @@ namespace ChilliSource
 			//--------------------------------------------------------------
             bool DoesItemExistInDLCCache(const std::string& in_path, bool in_isDirectory) const;
             //------------------------------------------------------------
+            /// Builds a list of the paths that the given path might refer
+			/// to in the given storage location. For example, a path in
+			/// DLC might refer to the DLC cache or the Package DLC.
+            ///
             /// @author S Downie
             ///
             /// @param Storage location
             /// @param File name to append
-            /// @param [Out] All the paths for the given location
+            ///
+            /// @return All the paths for the given location
             //------------------------------------------------------------
-            void GetPathsForStorageLocation(Core::StorageLocation in_storageLocation, const std::string& in_path, std::vector<std::string>& out_paths) const;
+            std::vector<std::string> GetPossibleAbsoluteDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
             
             
 			std::string m_bundlePath;
