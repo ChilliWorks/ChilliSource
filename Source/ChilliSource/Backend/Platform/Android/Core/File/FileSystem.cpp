@@ -410,7 +410,6 @@ namespace ChilliSource
 				CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
 
 				std::string filePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
-				CS_LOG_DEBUG("[FileSystem::CreateFileStream] Creating write file stream: " + filePath);
 				Core::FileStreamUPtr fileStream = Core::FileStreamUPtr(new Core::FileStream());
 				fileStream->Open(filePath, in_fileMode);
                 return fileStream;
@@ -495,7 +494,7 @@ namespace ChilliSource
 			else
 			{
 				std::string sourceAbsolutePath = GetAbsolutePathToFile(in_sourceStorageLocation, in_sourceFilePath);
-				std::string destinationAbsolutePath = GetAbsolutePathToFile(in_destinationStorageLocation, in_destinationFilePath);
+				std::string destinationAbsolutePath = GetAbsolutePathToStorageLocation(in_destinationStorageLocation) + in_destinationFilePath;
 
 				//check the source file exists
 				if(Android::DoesFileExist(sourceAbsolutePath) == false)
@@ -505,11 +504,11 @@ namespace ChilliSource
 				}
 
 				//get the path to the file
-				std::string strPath, strName;
-				Core::StringUtils::SplitFilename(in_destinationFilePath, strName, strPath);
+				std::string path, name;
+				Core::StringUtils::SplitFilename(in_destinationFilePath, name, path);
 
 				//create the output directory
-				CreateDirectory(in_destinationStorageLocation, strPath);
+				CreateDirectory(in_destinationStorageLocation, path);
 
 				//try and copy the file
 				Android::CopyFile(sourceAbsolutePath, destinationAbsolutePath);
@@ -1011,11 +1010,11 @@ namespace ChilliSource
 			std::string parentDirectoryPath = Core::StringUtils::StandardisePath(in_parentDirectoryPath);
 
 			//these have the potential to be paths with a dot in them so make sure that it will always have a "/" on the end regardless.
-			if (directoryPath[directoryPath.size() - 1] != '/')
+			if (directoryPath.size() > 0 && directoryPath[directoryPath.size() - 1] != '/')
 			{
 				directoryPath += '/';
 			}
-			if (parentDirectoryPath[parentDirectoryPath.size() - 1] != '/')
+			if (parentDirectoryPath.size() > 0 && parentDirectoryPath[parentDirectoryPath.size() - 1] != '/')
 			{
 				parentDirectoryPath += '/';
 			}
