@@ -1,14 +1,13 @@
-/*
- *  Colour.h
- *  moFlo
- *
- *  Created by Scott Downie on 27/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Colour.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 27/09/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
-#ifndef _MO_FLO_CORE_COLOUR_H_
-#define _MO_FLO_CORE_COLOUR_H_
+#ifndef _CHILLISOURCE_CORE_BASE_COLOUR_H_
+#define _CHILLISOURCE_CORE_BASE_COLOUR_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -16,246 +15,298 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		//==========================================================
-		/// Description:
-		///
-		/// A wrapper around normalised rgba colours.
-		//==========================================================
+        //-----------------------------------------------------------
+        /// Container for RGBA colour as normalised 0.0 - 1.0 values
+        ///
+        /// @author S Downie
+		//-----------------------------------------------------------
 		class Colour
 		{
 		public:
-            struct ByteColour
-            {
-                u8 r;
-                u8 g;
-                u8 b;
-                u8 a;
-            };
+
+            //Commonly used colours
+            static const Colour k_white;
+			static const Colour k_transparent;
+			static const Colour k_black;
+			static const Colour k_grey;
+			static const Colour k_red;
+			static const Colour k_green;
+			static const Colour k_blue;
+			static const Colour k_magenta;
+			static const Colour k_yellow;
+			static const Colour k_cyan;
+			static const Colour k_cornflowerBlue;
+            static const Colour k_lightGrey;
+            static const Colour k_turquoise;
+            static const Colour k_orange;
+            static const Colour k_purple;
+            static const Colour k_pink;
             
-            Colour();
-			explicit Colour(f32 inR, f32 inG, f32 inB, f32 inA);
-			explicit Colour(u8 inR, u8 inG, u8 inB, u8 inA);
-            explicit Colour(u32 inudwRGBA);
-			static Colour FromByteRGBA(u8 inR, u8 inG, u8 inB, u8 inA);
-            static Colour::ByteColour ColourToByteColour(const Colour& inCol);
-			
-			//---------------------------------
-			// Operators
-			//---------------------------------
-			Colour operator=(Colour Col){r = Col.r; g = Col.g; b = Col.b; a = Col.a; return *this;};
-			
-			Colour operator+(const Colour Col) const
-			{Colour Result; Result.r = this->r + Col.r; Result.g = this->g + Col.g; Result.b = this->b + Col.b; Result.a = this->a + Col.a; return Result;}
-			
-			Colour operator+(const f32 Scale) const
-			{Colour Result; Result.r = this->r + Scale; Result.g = this->g + Scale; Result.b = this->b + Scale; Result.a = this->a + Scale; return Result;}
-			
-			Colour operator-(const Colour Col) const
-			{Colour Result; Result.r = this->r - Col.r; Result.g = this->g - Col.g; Result.b = this->b - Col.b; Result.a = this->a - Col.a; return Result;}
-			
-			Colour operator-(const f32 Scale) const
-			{Colour Result; Result.r = this->r - Scale; Result.g = this->g - Scale; Result.b = this->b - Scale; Result.a = this->a - Scale; return Result;}
-			
-			Colour operator*(const Colour Col) const
-			{Colour Result; Result.r = this->r * Col.r; Result.g = this->g * Col.g; Result.b = this->b * Col.b; Result.a = this->a * Col.a; return Result;}
-			
-			Colour operator*(const f32 Scale) const
-			{Colour Result; Result.r = this->r * Scale; Result.g = this->g * Scale; Result.b = this->b * Scale; Result.a = this->a * Scale; return Result;}
-			
-			const Colour& operator+=(const Colour &Col){this->r += Col.r; this->g += Col.g; this->b += Col.b; this->a += Col.a; return *this;}
-			
-			const Colour& operator-=(const Colour &Col){this->r -= Col.r; this->g -= Col.g; this->b -= Col.b; this->a -= Col.a; return *this;}
-			
-			const Colour& operator*=(const Colour &Col){this->r *= Col.r; this->g *= Col.g; this->b *= Col.b; this->a *= Col.a; return *this;}
-			
-			const Colour& operator+=(const f32 Scale){this->r += Scale; this->g += Scale; this->b += Scale; this->a += Scale; return *this;}
-			
-			const Colour& operator-=(const f32 Scale){this->r -= Scale; this->g -= Scale; this->b -= Scale; this->a -= Scale; return *this;}
-			
-			const Colour& operator*=(const f32 Scale){this->r *= Scale; this->g *= Scale; this->b *= Scale; this->a *= Scale; return *this;}
-			
-			bool operator==(const Colour &Col) const{return (Col.r == r && Col.g == g && Col.b == b && Col.a == a);}
-			
-			bool operator!=(const Colour &Col) const{return (Col.r != r || Col.g != g || Col.b != b || Col.a != a);}
-			
-			bool operator>(const Colour &Col) const{return Col.r > r || Col.g > g || Col.b > b || Col.a > a;}
-			
-			bool operator<(const Colour &Col) const{return Col.r < r || Col.g < g || Col.b < b || Col.a < a;}
-			
-			bool operator>=(const Colour &Col) const{return Col.r >= r || Col.g >= g || Col.b >= b || Col.a >= a;}
-			
-			bool operator<=(const Colour &Col) const{return Col.r <= r || Col.g <= g || Col.b <= b || Col.a <= a;}
-			
-			static const Colour WHITE;
-			static const Colour TRANSPARENT;
-			static const Colour BLACK;
-			static const Colour GREY;
-			static const Colour RED;
-			static const Colour GREEN;
-			static const Colour BLUE;
-			static const Colour MAGENTA;
-			static const Colour YELLOW;
-			static const Colour CYAN;
-			static const Colour CORNFLOWER_BLUE;
-            static const Colour LIGHTGREY;
-            static const Colour TURQUOISE;
-            static const Colour ORANGE;
-            static const Colour PURPLE;
-            static const Colour PINK;
-			
-			//All the named HTML colours, the ultimate goal for Mr Downie
-			
-//			AliceBlue 	#F0F8FF	 		
-//			AntiqueWhite 	#FAEBD7	 		
-//			Aqua 	#00FFFF	 		
-//			Aquamarine 	#7FFFD4	 		
-//			Azure 	#F0FFFF	 		
-//			Beige 	#F5F5DC	 		
-//			Bisque 	#FFE4C4	 		
-//			Black 	#000000	 		
-//			BlanchedAlmond 	#FFEBCD	 		
-//			Blue 	#0000FF	 		
-//			BlueViolet 	#8A2BE2	 		
-//			Brown 	#A52A2A	 		
-//			BurlyWood 	#DEB887	 		
-//			CadetBlue 	#5F9EA0	 		
-//			Chartreuse 	#7FFF00	 		
-//			Chocolate 	#D2691E	 		
-//			Coral 	#FF7F50	 		
-//			CornflowerBlue 	#6495ED	 		
-//			Cornsilk 	#FFF8DC	 		
-//			Crimson 	#DC143C	 		
-//			Cyan 	#00FFFF	 		
-//			DarkBlue 	#00008B	 		
-//			DarkCyan 	#008B8B	 		
-//			DarkGoldenRod 	#B8860B	 		
-//			DarkGray 	#A9A9A9	 		
-//			DarkGrey 	#A9A9A9	 		
-//			DarkGreen 	#006400	 		
-//			DarkKhaki 	#BDB76B	 		
-//			DarkMagenta 	#8B008B	 		
-//			DarkOliveGreen 	#556B2F	 		
-//			Darkorange 	#FF8C00	 		
-//			DarkOrchid 	#9932CC	 		
-//			DarkRed 	#8B0000	 		
-//			DarkSalmon 	#E9967A	 		
-//			DarkSeaGreen 	#8FBC8F	 		
-//			DarkSlateBlue 	#483D8B	 		
-//			DarkSlateGray 	#2F4F4F	 		
-//			DarkSlateGrey 	#2F4F4F	 		
-//			DarkTurquoise 	#00CED1	 		
-//			DarkViolet 	#9400D3	 		
-//			DeepPink 	#FF1493	 		
-//			DeepSkyBlue 	#00BFFF	 		
-//			DimGray 	#696969	 		
-//			DimGrey 	#696969	 		
-//			DodgerBlue 	#1E90FF	 		
-//			FireBrick 	#B22222	 		
-//			FloralWhite 	#FFFAF0	 		
-//			ForestGreen 	#228B22	 		
-//			Fuchsia 	#FF00FF	 		
-//			Gainsboro 	#DCDCDC	 		
-//			GhostWhite 	#F8F8FF	 		
-//			Gold 	#FFD700	 		
-//			GoldenRod 	#DAA520	 		
-//			Gray 	#808080	 		
-//			Grey 	#808080	 		
-//			Green 	#008000	 		
-//			GreenYellow 	#ADFF2F	 		
-//			HoneyDew 	#F0FFF0	 		
-//			HotPink 	#FF69B4	 		
-//			IndianRed  	#CD5C5C	 		
-//			Indigo  	#4B0082	 		
-//			Ivory 	#FFFFF0	 		
-//			Khaki 	#F0E68C	 		
-//			Lavender 	#E6E6FA	 		
-//			LavenderBlush 	#FFF0F5	 		
-//			LawnGreen 	#7CFC00	 		
-//			LemonChiffon 	#FFFACD	 		
-//			LightBlue 	#ADD8E6	 		
-//			LightCoral 	#F08080	 		
-//			LightCyan 	#E0FFFF	 		
-//			LightGoldenRodYellow 	#FAFAD2	 		
-//			LightGray 	#D3D3D3	 		
-//			LightGrey 	#D3D3D3	 		
-//			LightGreen 	#90EE90	 		
-//			LightPink 	#FFB6C1	 		
-//			LightSalmon 	#FFA07A	 		
-//			LightSeaGreen 	#20B2AA	 		
-//			LightSkyBlue 	#87CEFA	 		
-//			LightSlateGray 	#778899	 		
-//			LightSlateGrey 	#778899	 		
-//			LightSteelBlue 	#B0C4DE	 		
-//			LightYellow 	#FFFFE0	 		
-//			Lime 	#00FF00	 		
-//			LimeGreen 	#32CD32	 		
-//			Linen 	#FAF0E6	 		
-//			Magenta 	#FF00FF	 		
-//			Maroon 	#800000	 		
-//			MediumAquaMarine 	#66CDAA	 		
-//			MediumBlue 	#0000CD	 		
-//			MediumOrchid 	#BA55D3	 		
-//			MediumPurple 	#9370D8	 		
-//			MediumSeaGreen 	#3CB371	 		
-//			MediumSlateBlue 	#7B68EE	 		
-//			MediumSpringGreen 	#00FA9A	 		
-//			MediumTurquoise 	#48D1CC	 		
-//			MediumVioletRed 	#C71585	 		
-//			MidnightBlue 	#191970	 		
-//			MintCream 	#F5FFFA	 		
-//			MistyRose 	#FFE4E1	 		
-//			Moccasin 	#FFE4B5	 		
-//			NavajoWhite 	#FFDEAD	 		
-//			Navy 	#000080	 		
-//			OldLace 	#FDF5E6	 		
-//			Olive 	#808000	 		
-//			OliveDrab 	#6B8E23	 		
-//			Orange 	#FFA500	 		
-//			OrangeRed 	#FF4500	 		
-//			Orchid 	#DA70D6	 		
-//			PaleGoldenRod 	#EEE8AA	 		
-//			PaleGreen 	#98FB98	 		
-//			PaleTurquoise 	#AFEEEE	 		
-//			PaleVioletRed 	#D87093	 		
-//			PapayaWhip 	#FFEFD5	 		
-//			PeachPuff 	#FFDAB9	 		
-//			Peru 	#CD853F	 		
-//			Pink 	#FFC0CB	 		
-//			Plum 	#DDA0DD	 		
-//			PowderBlue 	#B0E0E6	 		
-//			Purple 	#800080	 		
-//			Red 	#FF0000	 		
-//			RosyBrown 	#BC8F8F	 		
-//			RoyalBlue 	#4169E1	 		
-//			SaddleBrown 	#8B4513	 		
-//			Salmon 	#FA8072	 		
-//			SandyBrown 	#F4A460	 		
-//			SeaGreen 	#2E8B57	 		
-//			SeaShell 	#FFF5EE	 		
-//			Sienna 	#A0522D	 		
-//			Silver 	#C0C0C0	 		
-//			SkyBlue 	#87CEEB	 		
-//			SlateBlue 	#6A5ACD	 		
-//			SlateGray 	#708090	 		
-//			SlateGrey 	#708090	 		
-//			Snow 	#FFFAFA	 		
-//			SpringGreen 	#00FF7F	 		
-//			SteelBlue 	#4682B4	 		
-//			Tan 	#D2B48C	 		
-//			Teal 	#008080	 		
-//			Thistle 	#D8BFD8	 		
-//			Tomato 	#FF6347	 		
-//			Turquoise 	#40E0D0	 		
-//			Violet 	#EE82EE	 		
-//			Wheat 	#F5DEB3	 		
-//			White 	#FFFFFF	 		
-//			WhiteSmoke 	#F5F5F5	 		
-//			Yellow 	#FFFF00	 		
-//			YellowGreen 	#9ACD32
+            //-----------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
+            ///
+            /// @param Normalised red 0.0 - 1.0
+            /// @param Normalised green 0.0 - 1.0
+            /// @param Normalised blue 0.0 - 1.0
+            /// @param Normalised alpha 0.0 - 1.0
+            //-----------------------------------------------------------
+            Colour(f32 in_red = 1.0f, f32 in_green = 1.0f, f32 in_blue = 1.0f, f32 in_alpha = 1.0f);
+            //-----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param RHS of addition
+            ///
+            /// @return Component wise addition of colour to this
+            //-----------------------------------------------------------
+			inline const Colour& operator+=(const Colour& in_rhs)
+            {
+                r += in_rhs.r;
+                g += in_rhs.g;
+                b += in_rhs.b;
+                a += in_rhs.a;
+                
+                return *this;
+            }
+            //-----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param RHS of addition (scaler)
+            ///
+            /// @return Scaler addition to this
+            //-----------------------------------------------------------
+			inline const Colour& operator+=(f32 in_scaler)
+            {
+                r += in_scaler;
+                g += in_scaler;
+                b += in_scaler;
+                a += in_scaler;
+                
+                return *this;
+            }
+            //-----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param RHS of subtraction
+            ///
+            /// @return Component wise subtraction of colour to this
+            //-----------------------------------------------------------
+			inline const Colour& operator-=(const Colour& in_rhs)
+            {
+                r -= in_rhs.r;
+                g -= in_rhs.g;
+                b -= in_rhs.b;
+                a -= in_rhs.a;
+                
+                return *this;
+            }
+            //-----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param RHS of subtraction (scaler)
+            ///
+            /// @return Scaler subtraction to this
+            //-----------------------------------------------------------
+			inline const Colour& operator-=(f32 in_scaler)
+            {
+                r -= in_scaler;
+                g -= in_scaler;
+                b -= in_scaler;
+                a -= in_scaler;
+                
+                return *this;
+            }
+            //-----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param RHS of multiplication
+            ///
+            /// @return Component wise multiplication of colour to this
+            //-----------------------------------------------------------
+			inline const Colour& operator*=(const Colour& in_rhs)
+            {
+                r *= in_rhs.r;
+                g *= in_rhs.g;
+                b *= in_rhs.b;
+                a *= in_rhs.a;
+                
+                return *this;
+            }
+            //-----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param RHS of multiplication (scaler)
+            ///
+            /// @return Scaler multiplication to this
+            //-----------------------------------------------------------
+			inline const Colour& operator*=(f32 in_scaler)
+            {
+                r *= in_scaler;
+                g *= in_scaler;
+                b *= in_scaler;
+                a *= in_scaler;
+                
+                return *this;
+            }
+            //-----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param RHS of division
+            ///
+            /// @return Component wise division of colour to this
+            //-----------------------------------------------------------
+			inline const Colour& operator/=(const Colour& in_rhs)
+            {
+                r /= in_rhs.r;
+                g /= in_rhs.g;
+                b /= in_rhs.b;
+                a /= in_rhs.a;
+                
+                return *this;
+            }
+            //-----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param RHS of division (scaler)
+            ///
+            /// @return Scaler division to this
+            //-----------------------------------------------------------
+			inline const Colour& operator/=(f32 in_scaler)
+            {
+                r /= in_scaler;
+                g /= in_scaler;
+                b /= in_scaler;
+                a /= in_scaler;
+                
+                return *this;
+            }
+
 		public:
 			
-			float r, g, b, a;
+			f32 r, g, b, a;
 		};
+        
+        //-----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param LHS of addition
+        /// @param RHS of addition
+        ///
+        /// @return Component wise addition of colours
+        //-----------------------------------------------------------
+        inline Colour operator+(const Colour& in_lhs, const Colour& in_rhs)
+        {
+            return Colour(in_lhs.r + in_rhs.r, in_lhs.g + in_rhs.g, in_lhs.b + in_rhs.b, in_lhs.a + in_rhs.a);
+        }
+        //-----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param LHS of addition (colour)
+        /// @param RHS of addition (scaler)
+        ///
+        /// @return Scaler addition of colours
+        //-----------------------------------------------------------
+        inline Colour operator+(const Colour& in_colour, f32 in_scaler)
+        {
+            return Colour(in_colour.r + in_scaler, in_colour.g + in_scaler, in_colour.b + in_scaler, in_colour.a + in_scaler);
+        }
+        //-----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param LHS of subtraction
+        /// @param RHS of subtraction
+        ///
+        /// @return Component wise subtraction of colours
+        //-----------------------------------------------------------
+        inline Colour operator-(const Colour& in_lhs, const Colour& in_rhs)
+        {
+            return Colour(in_lhs.r - in_rhs.r, in_lhs.g - in_rhs.g, in_lhs.b - in_rhs.b, in_lhs.a - in_rhs.a);
+        }
+        //-----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param LHS of subtraction (colour)
+        /// @param RHS of subtraction (scaler)
+        ///
+        /// @return Scaler subtraction of colours
+        //-----------------------------------------------------------
+        inline Colour operator-(const Colour& in_colour, f32 in_scaler)
+        {
+            return Colour(in_colour.r - in_scaler, in_colour.g - in_scaler, in_colour.b - in_scaler, in_colour.a - in_scaler);
+        }
+        //-----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param LHS of mulitplication
+        /// @param RHS of mulitplication
+        ///
+        /// @return Component wise mulitplication of colours
+        //-----------------------------------------------------------
+        inline Colour operator*(const Colour& in_lhs, const Colour& in_rhs)
+        {
+            return Colour(in_lhs.r * in_rhs.r, in_lhs.g * in_rhs.g, in_lhs.b * in_rhs.b, in_lhs.a * in_rhs.a);
+        }
+        //-----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param LHS of mulitplication (colour)
+        /// @param RHS of mulitplication (scaler)
+        ///
+        /// @return Scaler mulitplication of colours
+        //-----------------------------------------------------------
+        inline Colour operator*(const Colour& in_colour, f32 in_scaler)
+        {
+            return Colour(in_colour.r * in_scaler, in_colour.g * in_scaler, in_colour.b * in_scaler, in_colour.a * in_scaler);
+        }
+        //-----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param LHS of division
+        /// @param RHS of division
+        ///
+        /// @return Component wise division of colours
+        //-----------------------------------------------------------
+        inline Colour operator/(const Colour& in_lhs, const Colour& in_rhs)
+        {
+            return Colour(in_lhs.r / in_rhs.r, in_lhs.g / in_rhs.g, in_lhs.b / in_rhs.b, in_lhs.a / in_rhs.a);
+        }
+        //-----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param LHS of division (colour)
+        /// @param RHS of division (scaler)
+        ///
+        /// @return Scaler division of colours
+        //-----------------------------------------------------------
+        inline Colour operator/(const Colour& in_colour, f32 in_scaler)
+        {
+            return Colour(in_colour.r / in_scaler, in_colour.g / in_scaler, in_colour.b / in_scaler, in_colour.a / in_scaler);
+        }
+        //-----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param LHS of comparison
+        /// @param RHS of comparison
+        ///
+        /// @return Whether the two colours have equal RGBA components
+        //-----------------------------------------------------------
+        inline bool operator==(const Colour& in_lhs, const Colour& in_rhs)
+        {
+            return in_lhs.r == in_rhs.r && in_lhs.g == in_rhs.g && in_lhs.b == in_rhs.b && in_lhs.a == in_rhs.a;
+        }
+        //-----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param LHS of comparison
+        /// @param RHS of comparison
+        ///
+        /// @return Whether the two colours have unequal RGBA components
+        //-----------------------------------------------------------
+        inline bool operator!=(const Colour& in_lhs, const Colour& in_rhs)
+        {
+            return in_lhs.r != in_rhs.r || in_lhs.g != in_rhs.g || in_lhs.b != in_rhs.b || in_lhs.a != in_rhs.a;
+        }
 	}
 }
 

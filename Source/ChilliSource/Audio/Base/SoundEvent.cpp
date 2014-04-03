@@ -90,9 +90,9 @@ namespace ChilliSource
 							//All the sounds have played from this batch. We are done
 							mbIsPlaying = false;
 							u32 i = 0;
-							for(std::vector< std::pair<AudioComponentSPtr, f32> >::iterator it = mSoundAndDelay.begin(); it != mSoundAndDelay.end(); ++it)
+							for(std::vector< std::pair<AudioComponentSPtr, f32> >::iterator itInner = mSoundAndDelay.begin(); itInner != mSoundAndDelay.end(); ++itInner)
 							{
-								it->second = mPlayedIndices[i];
+								itInner->second = mPlayedIndices[i];
 								i++;
 							}
 							mPlayedIndices.clear();

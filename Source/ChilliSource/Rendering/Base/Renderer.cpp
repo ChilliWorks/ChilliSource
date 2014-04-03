@@ -376,7 +376,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void Renderer::RenderUI(GUI::Window* inpWindow)
         {
-            mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), ChilliSource::Core::Colour::CORNFLOWER_BLUE);
+            mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), Core::Colour::k_cornflowerBlue);
 			mCanvas.Render(inpWindow, 1.0f);
         }
         //----------------------------------------------------------

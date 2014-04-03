@@ -19,7 +19,6 @@ namespace ChilliSource
         //--------------------------------------------------
         /// Cloud
         //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(CloudStorageSystem);
         //--------------------------------------------------
         /// Content Download
         //--------------------------------------------------
@@ -29,7 +28,7 @@ namespace ChilliSource
         //--------------------------------------------------
         /// Http
         //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(HttpConnectionSystem);
+        CS_FORWARDDECLARE_CLASS(HttpRequestSystem);
         CS_FORWARDDECLARE_CLASS(HttpRequest);
         CS_FORWARDDECLARE_STRUCT(HttpRequestDetails);
         //--------------------------------------------------

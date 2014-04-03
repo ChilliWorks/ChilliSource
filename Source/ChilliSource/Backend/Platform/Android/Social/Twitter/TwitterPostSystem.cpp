@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterPostSystem.h>
 
-#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 
@@ -18,7 +18,7 @@ namespace ChilliSource
 	{
 		//------------------------------------------------------------------------
 		//------------------------------------------------------------------------
-		TwitterPostSystem::TwitterPostSystem(Networking::HttpConnectionSystem* in_httpConnectionSystem, Core::OAuthSystem* in_oauthSystem)
+		TwitterPostSystem::TwitterPostSystem(Networking::HttpRequestSystem* in_httpConnectionSystem, Core::OAuthSystem* in_oauthSystem)
 		: Social::TwitterPostSystem(in_httpConnectionSystem, in_oauthSystem)
 		{
 		}

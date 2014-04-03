@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Networking/ContentDownload/IContentDownloader.h>
-#include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 namespace ChilliSource
 {
@@ -27,7 +27,7 @@ namespace ChilliSource
             /// @param Asset server URL
             /// @param Dynamic array of tags that determine content
             //----------------------------------------------------------------
-            MoContentDownloader(HttpConnectionSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags);
+            MoContentDownloader(HttpRequestSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags);
             //----------------------------------------------------------------
             /// Download Content Manifest
             ///
@@ -75,7 +75,7 @@ namespace ChilliSource
             /// @param Request response
             /// @param Request result
             //----------------------------------------------------------------
-            void OnContentManifestDownloadComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnContentManifestDownloadComplete(HttpRequest* inpRequest, HttpRequest::Result ineResult);
             //----------------------------------------------------------------
             /// On Content Download Complete
             ///
@@ -84,7 +84,7 @@ namespace ChilliSource
             /// @param Request response
             /// @param Request result
             //----------------------------------------------------------------
-            void OnContentDownloadComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnContentDownloadComplete(HttpRequest* inpRequest, HttpRequest::Result ineResult);
             
         private:
             
@@ -94,7 +94,7 @@ namespace ChilliSource
             Delegate mOnContentManifestDownloadCompleteDelegate;
             Delegate mOnContentDownloadCompleteDelegate;
             
-            HttpConnectionSystem* mpHttpConnectionSystem;
+            HttpRequestSystem* mpHttpRequestSystem;
             
             HttpRequest* mpCurrentRequest;
         };

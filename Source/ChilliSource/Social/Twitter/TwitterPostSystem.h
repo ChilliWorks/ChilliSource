@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/Http/HttpRequest.h>
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
 
@@ -72,7 +72,7 @@ namespace ChilliSource
             ///
             /// @return The new instance.
 			//------------------------------------------------
-            static TwitterPostSystemUPtr Create(Networking::HttpConnectionSystem* in_httpConnectionSystem, Core::OAuthSystem* in_oauthSystem);
+            static TwitterPostSystemUPtr Create(Networking::HttpRequestSystem* in_HttpRequestSystem, Core::OAuthSystem* in_oauthSystem);
             //------------------------------------------------------------------------
             /// Run the OAuth process and, if successful, leave the system in state
             /// ready to communicate with Twitter. Result will be returned through
@@ -127,7 +127,7 @@ namespace ChilliSource
             /// @param The http connection system.
             /// @param The OAuth system.
 			//-----------------------------------------------
-            TwitterPostSystem(Networking::HttpConnectionSystem* in_httpConnectionSystem, Core::OAuthSystem* in_oauthSystem);
+            TwitterPostSystem(Networking::HttpRequestSystem* in_HttpRequestSystem, Core::OAuthSystem* in_oauthSystem);
             //------------------------------------------------------------------------
 			/// Trys to load saved token and secret keys
             ///
@@ -178,7 +178,7 @@ namespace ChilliSource
 			/// @param HTTP request
 			/// @param The result from the request
 			//------------------------------------------------------------------------
-            void OnStatusUpdateComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::CompletionResult in_result);
+            void OnStatusUpdateComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::Result in_result);
 			//------------------------------------------------------------------------
 			/// Delegate method called when an OAuth token request has completed.
 			/// This is used during the initial OAuth request before the user has
@@ -191,7 +191,7 @@ namespace ChilliSource
 			/// @param HTTP request
 			/// @param The result from the request
 			//------------------------------------------------------------------------
-            void OnRequestOAuthTokenComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::CompletionResult in_result);
+            void OnRequestOAuthTokenComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::Result in_result);
 			//------------------------------------------------------------------------
 			/// Delegate method called when an OAuth access token request has
 			/// completed.
@@ -203,11 +203,11 @@ namespace ChilliSource
 			/// @param HTTP request
 			/// @param The result from the request
 			//------------------------------------------------------------------------
-			virtual void OnRequestOAuthAccessTokenComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::CompletionResult in_result);
+			virtual void OnRequestOAuthAccessTokenComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::Result in_result);
 
         private:
             
-			Networking::HttpConnectionSystem* m_httpConnectionSystem;
+			Networking::HttpRequestSystem* m_HttpRequestSystem;
 			
         protected:
             

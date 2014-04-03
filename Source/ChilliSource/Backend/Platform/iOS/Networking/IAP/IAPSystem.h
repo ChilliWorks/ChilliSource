@@ -59,12 +59,6 @@ namespace ChilliSource
             //---------------------------------------------------------------
 			/// @author S Downie
 			///
-			/// @return A displayable name for the IAP Provider.
-            //---------------------------------------------------------------
-			std::string GetProviderName() const override;
-            //---------------------------------------------------------------
-			/// @author S Downie
-			///
 			/// @return Whether the purchasing is allowed by the device/OS
             //---------------------------------------------------------------
             bool IsPurchasingEnabled() override;

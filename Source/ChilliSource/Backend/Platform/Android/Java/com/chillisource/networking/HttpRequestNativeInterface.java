@@ -28,14 +28,18 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 
-public class HttpConnectionNativeInterface 
+public class HttpRequestNativeInterface 
 {
-	static final int kdwTimeoutInMilliseconds = 15000;
 	static final int kdwDataBlockSize = 128;
+	
+	static final int k_readTimeoutMilliSecs = 60000;
 	
 	private static Activity msActivity;
 	private static X509TrustManager[] msTrustManagers;
 	private static HostnameVerifier msHostnameVerifier;
+	
+	private static int m_connectTimeoutMilliSecs = 15000;
+	
 	//-------------------------------------------------------------------
 	/// Setup
 	///
@@ -50,25 +54,15 @@ public class HttpConnectionNativeInterface
 		msHostnameVerifier = new InsecureHostnameVerifier();
 	}
 	//-------------------------------------------------------------------
-	/// Http Request
+	/// Set the time taken for a request connection to timeout in seconds
 	///
-	/// method accessible from native for processing a HTTP request.
+	/// @author S Downie
 	///
-	/// @param the url
-	/// @param Whether or not its a post request
-	/// @param The post body. Not used if inbIsPost is false
-	/// @param The result length. This is stored as an array in order to
-	///		   pass by reference. 
-	/// @param The result code. This is stored as an array in order to
-	///		   pass by reference.
-	/// @param The http response code. This is stored as an array in order 
-	///		   to pass by reference.
-	/// @return The response as a byte array.
+	/// @param Timeout (Seconds)
 	//-------------------------------------------------------------------
-	public static byte[] HttpRequest(String instrUrl, boolean inbIsPost, String instrBody,
-									 int[] outadwResultLength, String[] outstrRedirectionLocation, int[] outadwResultCode, int[] outadwHttpResponseCode)
+	public static void setConnectionTimeout(int in_timeoutInSecs)
 	{
-		return HttpRequestWithHeaders(instrUrl, inbIsPost, null, null, instrBody, outadwResultLength, outstrRedirectionLocation, outadwResultCode, outadwHttpResponseCode, true);
+		m_connectTimeoutMilliSecs = in_timeoutInSecs * 1000;
 	}
 	//-------------------------------------------------------------------
 	/// Http Request with headers
@@ -87,13 +81,11 @@ public class HttpConnectionNativeInterface
 	///		   pass by reference.
 	/// @param The http response code. This is stored as an array in order 
 	///		   to pass by reference.
-	/// @param Whether or not to establish a persistent connection
 	/// @return The response as a byte array.
 	//-------------------------------------------------------------------
 	public static byte[] HttpRequestWithHeaders(String instrUrl, boolean inbIsPost,
 									 			String[] inastrHeaderKeys, String[] inastrHeaderValues, String instrBody,
-									 			int[] outadwResultLength, String[] outstrRedirectionLocation, int[] outadwResultCode, int[] outadwHttpResponseCode,
-									 			boolean inbKeepAlive)
+									 			int[] outadwResultLength, String[] outstrRedirectionLocation, int[] outadwResultCode, int[] outadwHttpResponseCode)
 	{
 		boolean bRetry = false;
 
@@ -115,7 +107,7 @@ public class HttpConnectionNativeInterface
 
 				// In 2.2 and below keep-alive is bugged, so force it off.
 				// Otherwise keep-alives are enabled by default
-				if (!inbKeepAlive || (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD))
+				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
 				{
 					System.setProperty("http.keepAlive", "false");
 				}
@@ -125,8 +117,8 @@ public class HttpConnectionNativeInterface
 				try 
 				{	        	
 					HttpURLConnection.setFollowRedirects(false);
-					urlConnection.setReadTimeout(kdwTimeoutInMilliseconds);
-					urlConnection.setConnectTimeout(kdwTimeoutInMilliseconds);
+					urlConnection.setReadTimeout(k_readTimeoutMilliSecs);
+					urlConnection.setConnectTimeout(m_connectTimeoutMilliSecs);
 
 					//if the protocol is HTTPS then set that up.
 					if (instrUrl.startsWith("https") == true)
@@ -179,10 +171,14 @@ public class HttpConnectionNativeInterface
 						abyOutputData = ReadStream(dwResponseCode, urlConnection, outadwResultLength);
 					}
 
-					if(dwResponseCode == HttpsURLConnection.HTTP_MOVED_TEMP)
+					String strLocation = urlConnection.getHeaderField("Location");
+					if(strLocation != null)
 					{
-						String strLocation = urlConnection.getHeaderField("Location");
 						outstrRedirectionLocation[0] = strLocation;
+					}
+					else
+					{
+						outstrRedirectionLocation[0] = "";
 					}
 				}
 				catch (UnknownHostException eUnknownHostException)
@@ -280,7 +276,6 @@ public class HttpConnectionNativeInterface
 			return null;
 		}
 	}
-	
 	//-------------------------------------------------------------------
 	/// Is Connected
 	///

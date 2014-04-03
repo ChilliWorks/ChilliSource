@@ -1,11 +1,10 @@
-/*
- *  ForwardDeclarations.h
- *  moFlow
- *
- *  Created by Ian Copland on 09/08/2012.
- *  Copyright 2012 Tag Games. All rights reserved.
- *
- */
+//
+//  ForwardDeclarations.h
+//  Chilli Source
+//
+//  Created by Ian Copland on 09/08/2012.
+//  Copyright (c) 2012 Tag Games Ltd. All rights reserved.
+//
 
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_FORWARDDECLARATIONS_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_FORWARDDECLARATIONS_H_
@@ -58,8 +57,9 @@ namespace ChilliSource
 		//------------------------------------------------------
 		/// Networking
 		//------------------------------------------------------
-		CS_FORWARDDECLARE_CLASS(HttpConnectionJavaInterface);
-		CS_FORWARDDECLARE_CLASS(HttpConnectionSystem);
+		CS_FORWARDDECLARE_CLASS(HttpRequestJavaInterface);
+		CS_FORWARDDECLARE_CLASS(HttpRequest);
+		CS_FORWARDDECLARE_CLASS(HttpRequestSystem);
 		//------------------------------------------------------
 		/// Social
 		//------------------------------------------------------

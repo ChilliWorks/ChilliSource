@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Tag Games. All rights reserved.
 //
 
+#ifdef CS_ANDROIDEXTENSION_AMAZON
+
 #include <ChilliSource/Backend/Platform/Android/Extensions/Amazon/AmazonIAPJavaInterface.h>
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
@@ -188,7 +190,10 @@ namespace ChilliSource
 
         	JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 
-        	jobjectArray productIDs = env->NewObjectArray(in_productIds.size(), env->FindClass("java/lang/String"), env->NewStringUTF(""));
+			jstring jstrEmptyString = env->NewStringUTF("");
+			jclass jStringClass = env->FindClass("java/lang/String");
+
+        	jobjectArray productIDs = env->NewObjectArray(in_productIds.size(), jStringClass, jstrEmptyString);
         	u32 productIDIndex = 0;
         	for(std::vector<std::string>::const_iterator it = in_productIds.begin(); it != in_productIds.end(); ++it)
         	{
@@ -200,6 +205,8 @@ namespace ChilliSource
 
         	env->CallVoidMethod(GetJavaObject(), GetMethodID("RequestProductDescriptions"), productIDs);
         	env->DeleteLocalRef(productIDs);
+			env->DeleteLocalRef(jstrEmptyString);
+			env->DeleteLocalRef(jStringClass);
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -302,3 +309,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

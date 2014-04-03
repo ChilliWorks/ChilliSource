@@ -188,7 +188,7 @@ namespace ChilliSource
         {
             u32 udwSize = EnumerateItems(in_string);
             
-			Colour cRet(Colour::BLACK);
+			Colour cRet(Colour::k_black);
             
 			if (udwSize == 4)
 			{

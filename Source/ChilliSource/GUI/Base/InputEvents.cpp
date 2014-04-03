@@ -106,7 +106,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         bool InputEvents::OnPointerMoved(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer)
         {
-            std::vector<u32>::iterator it = std::find(mOpenTouches.begin(), mOpenTouches.end(), in_pointer.m_uniqueId);
+            auto it = std::find(mOpenTouches.begin(), mOpenTouches.end(), in_pointer.m_uniqueId);
             
             bool bContains = in_view->Contains(in_pointer.m_location);
             
@@ -134,7 +134,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void InputEvents::OnPointerUp(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer)
         {
-            std::vector<u32>::iterator it = std::find(mOpenTouches.begin(), mOpenTouches.end(), in_pointer.m_uniqueId);
+            auto it = std::find(mOpenTouches.begin(), mOpenTouches.end(), in_pointer.m_uniqueId);
             
             if(in_view->Contains(in_pointer.m_location))
             {

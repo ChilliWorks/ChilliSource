@@ -12,6 +12,7 @@
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 
+#include <ChilliSource/Core/Base/ColourUtils.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
@@ -441,15 +442,15 @@ namespace ChilliSource
                         //and if it exceed the bounds then wrap
                         f32 fLengthToNextSpace = vCursorPos.x;
                         Core::UTF8String::iterator jt = it;
-                        Core::UTF8String::Char NextChar = 0;
+                        Core::UTF8String::Char NextCharacter = 0;
                         
-                        while(jt != insString.end() && NextChar != kSpaceCharacter && NextChar != kTabCharacter && NextChar != kReturnCharacter)
+                        while(jt != insString.end() && NextCharacter != kSpaceCharacter && NextCharacter != kTabCharacter && NextCharacter != kReturnCharacter)
                         {
-                            NextChar = insString.next(jt);
+                            NextCharacter = insString.next(jt);
                             
                             //Add it to the length
                             Font::CharacterInfo sInfo;
-                            inpFont->GetInfoForCharacter(NextChar, sInfo);
+                            inpFont->GetInfoForCharacter(NextCharacter, sInfo);
                             fLengthToNextSpace += (sInfo.vSize.x * infSize) + infCharSpacing;
                             
                             if(fLengthToNextSpace > infWidth)
@@ -644,11 +645,11 @@ namespace ChilliSource
             f32 fHeight = udwCurrentNumLines * fLineHeight;
             if (inbFlipVertical == true)
             {
-                for(CharacterList::iterator it = outCharacters.begin(); it != outCharacters.end(); ++it)
+                for(CharacterList::iterator itChar = outCharacters.begin(); itChar != outCharacters.end(); ++itChar)
                 {
-                    it->vPosition.y = -it->vPosition.y + it->vSize.y - fHeight;
-                    it->sUVs.vOrigin.y += it->sUVs.vSize.y;
-                    it->sUVs.vSize.y = -it->sUVs.vSize.y;
+                    itChar->vPosition.y = -itChar->vPosition.y + itChar->vSize.y - fHeight;
+                    itChar->sUVs.vOrigin.y += itChar->sUVs.vSize.y;
+                    itChar->sUVs.vSize.y = -itChar->sUVs.vSize.y;
                 }
             }
             
@@ -669,9 +670,9 @@ namespace ChilliSource
                     break;
             };
             
-			for(CharacterList::iterator it = outCharacters.begin(); it != outCharacters.end(); ++it)
+			for(CharacterList::iterator itChar = outCharacters.begin(); itChar != outCharacters.end(); ++itChar)
 			{
-                it->vPosition.y += fOffsetY;
+                itChar->vPosition.y += fOffsetY;
 			}
             
             if(outpClipped)
@@ -793,7 +794,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void CanvasRenderer::UpdateSpriteData(const Core::Matrix4x4 & inTransform, const Core::Vector2 & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
 		{
-			Core::Colour::ByteColour Col = Core::Colour::ColourToByteColour(insTintColour);
+			Core::ByteColour Col = Core::ColourUtils::ColourToByteColour(insTintColour);
 			
 			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].Col = Col;
             msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].Col = Col;

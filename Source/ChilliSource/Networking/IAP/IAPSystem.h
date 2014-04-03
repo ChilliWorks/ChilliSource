@@ -55,7 +55,7 @@ namespace ChilliSource
                     k_resumed
                 };
             };
-            typedef std::shared_ptr<Transaction> TransactionSPtr;
+            using TransactionSPtr = std::shared_ptr<Transaction>;
             //------------------------------------------------------
             /// Holds the description of a product as obtained
             /// from the store
@@ -95,7 +95,7 @@ namespace ChilliSource
             ///
             /// @param List of product descriptions
             //------------------------------------------------------
-            typedef std::function<void(const std::vector<ProductDesc>&)> ProductDescDelegate;
+            using ProductDescDelegate = std::function<void(const std::vector<ProductDesc>&)>;
             //------------------------------------------------------
             /// Delegate triggered when the status of a transaction
             /// changes i.e. from pending to success.
@@ -105,7 +105,7 @@ namespace ChilliSource
             /// @param Transaction status
             /// @param Transaction
             //------------------------------------------------------
-            typedef std::function<void(Transaction::Status, const TransactionSPtr&)> TransactionStatusDelegate;
+            using TransactionStatusDelegate = std::function<void(Transaction::Status, const TransactionSPtr&)>;
             //------------------------------------------------------
             /// Delegate triggered when the transaction is closed.
             ///
@@ -115,7 +115,7 @@ namespace ChilliSource
             /// @param Transaction ID
             /// @param Success or failure
             //------------------------------------------------------
-            typedef std::function<void(const std::string&, const std::string&, bool)> TransactionCloseDelegate;
+            using TransactionCloseDelegate = std::function<void(const std::string&, const std::string&, bool)>;
             
             CS_DECLARE_NAMEDTYPE(IAPSystem);
             
@@ -147,12 +147,6 @@ namespace ChilliSource
 			/// @return The ID off the IAP provider as a string.
             //---------------------------------------------------------------
 			virtual std::string GetProviderID() const = 0;
-            //---------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return A displayable name for the IAP Provider.
-            //---------------------------------------------------------------
-			virtual std::string GetProviderName() const = 0;
             //---------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -230,6 +224,12 @@ namespace ChilliSource
             /// @author S Downie
             //---------------------------------------------------------------
             virtual void RestoreManagedPurchases() = 0;
+            //---------------------------------------------------------------
+            /// Virtual destructor
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------------
+            virtual ~IAPSystem(){}
         };
     }
 }

@@ -533,7 +533,7 @@ namespace ChilliSource
 			desc.fFOV = infFOV/desc.fAspect;
 			desc.fNearClipping = infNear;
 			desc.fFarClipping = infFar;
-			desc.ClearCol = Core::Colour::WHITE;
+			desc.ClearCol = Core::Colour::k_white;
 			desc.IsOrthographic = inbIsOrthographic;
 			desc.bShouldResizeToScreen = true;
 			desc.bShouldRotateToScreen = true;
