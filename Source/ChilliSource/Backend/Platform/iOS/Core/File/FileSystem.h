@@ -307,7 +307,7 @@ namespace ChilliSource
             ///
             /// @return whether or not it exists.
 			//--------------------------------------------------------------
-            bool DoesItemExistInDLCCache(const std::string& in_path, bool in_folder) const;
+            bool DoesItemExistInDLCCache(const std::string& in_path, bool in_isDirectory) const;
             //------------------------------------------------------------
             /// @author S Downie
             ///

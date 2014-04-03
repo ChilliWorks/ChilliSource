@@ -45,6 +45,25 @@ namespace ChilliSource
 			/// @return The UTF-8 string.
 			//------------------------------------------------------------
 			std::string UTF16ToUTF8(const std::wstring& in_utf16String);
+			//------------------------------------------------------------
+			/// Converts the given standard string to a windows format
+			/// wide string.
+			///
+			/// @author I Copland
+			///
+			/// @param The standard path string.
+			/// @return The same path in a windows format wide string.
+			//------------------------------------------------------------
+			std::wstring ConvertStandardPathToWindows(const std::string& in_standardPath);
+			//------------------------------------------------------------
+			/// Converts the given path to windows format.
+			///
+			/// @author I Copland
+			///
+			/// @param The windows format wide string.
+			/// @return The same path standardised in a string.
+			//------------------------------------------------------------
+			std::string ConvertWindowsPathToStandard(const std::wstring& in_windowsPath);
 		}
 	}
 }

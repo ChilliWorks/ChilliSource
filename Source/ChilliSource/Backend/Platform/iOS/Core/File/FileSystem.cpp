@@ -43,8 +43,7 @@ namespace ChilliSource
                     case Core::FileMode::k_writeBinaryTruncate:
                     case Core::FileMode::k_writeTruncate:
                         return true;
-                    case Core::FileMode::k_read:
-                    case Core::FileMode::k_readBinary:
+                    default:
                         return false;
                         
                 }
@@ -267,7 +266,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool FileSystem::CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const //<--- Continue here!
+        bool FileSystem::CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
         {
             CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
             
@@ -296,13 +295,14 @@ namespace ChilliSource
         {
             CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
             
-            if(DoesFileExist(in_sourceStorageLocation, in_sourceFilePath) == false)
+            std::string strSrcPath = GetAbsolutePathToFile(in_sourceStorageLocation, in_sourceFilePath);
+            if(strSrcPath.empty() == true)
             {
                 CS_LOG_ERROR("File System: Trying to copy file '" + in_sourceFilePath + "' but it does not exist.");
                 return false;
             }
             
-            std::string strSrcPath = GetAbsolutePathToFile(in_sourceStorageLocation, in_sourceFilePath);
+            
             
             //get the path to the file
             std::string strPath, strName;
@@ -739,10 +739,9 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool FileSystem::DoesItemExistInDLCCache(const std::string& in_path, bool in_isFolder) const
+        bool FileSystem::DoesItemExistInDLCCache(const std::string& in_path, bool in_isDirectory) const
         {
-            //return whether or not the file exists
-            if(in_isFolder)
+            if(in_isDirectory == true)
             {
                 return iOS::DoesDirectoryExist(Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_path));
             }
