@@ -32,9 +32,9 @@ namespace ChilliSource
         }
         //--------------------------------------------------
         //--------------------------------------------------
-        bool RemoteNotificationSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+        bool RemoteNotificationSystem::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return (RemoteNotificationSystem::InterfaceID == in_interfaceID || Core::RemoteNotificationSystem::InterfaceID == in_interfaceID);
+            return (RemoteNotificationSystem::InterfaceID == in_interfaceId || Core::RemoteNotificationSystem::InterfaceID == in_interfaceId);
         }
         //--------------------------------------------------
         //--------------------------------------------------

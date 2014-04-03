@@ -386,7 +386,7 @@ namespace ChilliSource
             ///
 			/// @return the first component of the given type
 			//-------------------------------------------------------------
-			const ComponentSPtr& GetComponent(InterfaceIDType in_interfaceID) const;
+			const ComponentSPtr& GetComponent(InterfaceIDType in_interfaceId) const;
             //-------------------------------------------------------------
 			/// Search the list of components and add ones to the list
 			/// that are of given interface type
@@ -396,7 +396,7 @@ namespace ChilliSource
 			/// @param Component type to find
 			/// @param [Out] Vector to populate with components
 			//-------------------------------------------------------------
-			void GetComponents(InterfaceIDType in_interfaceID, std::vector<ComponentSPtr>& out_components) const;
+			void GetComponents(InterfaceIDType in_interfaceId, std::vector<ComponentSPtr>& out_components) const;
             //-------------------------------------------------------------
 			/// Recursively descend from the entity through its children
             /// searching for components with given interface ID
@@ -406,7 +406,7 @@ namespace ChilliSource
 			/// @return the first component of the given type. This will recurse
             /// into child entities
 			//-------------------------------------------------------------
-			const ComponentSPtr& GetComponentRecursive(InterfaceIDType in_interfaceID) const;
+			const ComponentSPtr& GetComponentRecursive(InterfaceIDType in_interfaceId) const;
             //-------------------------------------------------------------
 			/// @author S Downie
 			///

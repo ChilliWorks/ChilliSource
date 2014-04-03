@@ -24,9 +24,9 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------
         //------------------------------------------------------------------------
-        bool TwitterPostSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+        bool TwitterPostSystem::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceID == Social::TwitterPostSystem::InterfaceID || in_interfaceID == TwitterPostSystem::InterfaceID;
+            return in_interfaceId == Social::TwitterPostSystem::InterfaceID || in_interfaceId == TwitterPostSystem::InterfaceID;
         }
 		//------------------------------------------------------------------------
 		//------------------------------------------------------------------------

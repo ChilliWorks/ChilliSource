@@ -33,7 +33,7 @@ namespace ChilliSource
             /// @return Whether this implements the passed in
             /// interface id.
             //-----------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //-----------------------------------------------------
             /// Display a system dialog with the given ID and delegate
             ///

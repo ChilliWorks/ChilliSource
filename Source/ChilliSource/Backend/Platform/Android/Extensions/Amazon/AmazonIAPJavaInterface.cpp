@@ -1,6 +1,6 @@
 //
 //  AmazonIAPJavaInterface.cpp
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Ian Copland on 10/12/2013.
 //  Copyright (c) 2013 Tag Games. All rights reserved.
@@ -14,91 +14,104 @@
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/JSON/json.h>
+
 #include <jni.h>
 
 extern "C"
 {
-	void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices);
-	void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt);
-	void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID);
+	//--------------------------------------------------------------------------------------
+	/// Called by Java when product descriptions request completes
+	///
+	/// @author I Copland
+	///
+	/// @param JNI Environment
+	/// @param Pointer to the calling object
+	/// @param Array of product IDs
+	/// @param Array of product Names
+	/// @param Array of product Descriptions
+	/// @param Array of product Prices
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices);
+	//--------------------------------------------------------------------------------------
+	/// Called by Java when a transaction status changes
+	///
+	/// @author I Copland
+	///
+	/// @param JNI Environment
+	/// @param Pointer to the calling object
+	/// @param Result
+	/// @param Product ID
+	/// @param Transaction ID
+	/// @param Receipt
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint inudwResult, jstring in_productId, jstring in_transactionId, jstring in_receipt);
+	//--------------------------------------------------------------------------------------
+	/// Called by Java when a transaction complete request completes
+	///
+	/// @author I Copland
+	///
+	/// @param JNI Environment
+	/// @param Pointer to the calling function
+	//--------------------------------------------------------------------------------------
+	void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId);
 }
 
 //--------------------------------------------------------------------------------------
-/// On Products Descriptions Request Complete
-///
-/// @param JNI pEnvironment
-/// @param Pointer to the calling object
-/// @param Array of product IDs
-/// @param Array of product Names
-/// @param Array of product Descriptions
-/// @param Array of product Prices
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices)
+void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices)
 {
-	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
-	if (pInterface != nullptr)
+	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
+	if (javaInterface != nullptr)
 	{
-		u32 udwNumProducts = inpEnv->GetArrayLength(inaIDs);
-		std::vector<CSNetworking::IAPProductDesc> aProducts;
-		aProducts.reserve(udwNumProducts);
+		u32 numProducts = in_env->GetArrayLength(in_productIds);
+		std::vector<CSNetworking::IAPSystem::ProductDesc> products;
+		products.reserve(numProducts);
 
-		for(u32 i=0; i<udwNumProducts; ++i)
+		for(u32 i=0; i<numProducts; ++i)
 		{
-			CSNetworking::IAPProductDesc sDesc;
-			jstring jstrID = (jstring)inpEnv->GetObjectArrayElement(inaIDs, i);
-			sDesc.strID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrID);
+			CSNetworking::IAPSystem::ProductDesc desc;
+			jstring id = (jstring)in_env->GetObjectArrayElement(in_productIds, i);
+			desc.m_id = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(id);
 
-			jstring jstrName = (jstring)inpEnv->GetObjectArrayElement(inaNames, i);
-			sDesc.strName = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
+			jstring name = (jstring)in_env->GetObjectArrayElement(in_names, i);
+			desc.m_name = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(name);
 
-			jstring jstrDesc = (jstring)inpEnv->GetObjectArrayElement(inaDescs, i);
-			sDesc.strDescription = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrDesc);
+			jstring description = (jstring)in_env->GetObjectArrayElement(in_descs, i);
+			desc.m_description = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(description);
 
-			jstring jstrPrice = (jstring)inpEnv->GetObjectArrayElement(inaPrices, i);
-			sDesc.strFormattedPrice = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrPrice);
+			jstring price = (jstring)in_env->GetObjectArrayElement(in_prices, i);
+			desc.m_formattedPrice = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(price);
 
-			aProducts.push_back(sDesc);
+			products.push_back(desc);
 		}
 
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::vector<CSNetworking::IAPProductDesc>&>(pInterface.get(), &ChilliSource::Android::AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete, aProducts));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::vector<CSNetworking::IAPSystem::ProductDesc>&>(javaInterface.get(), &ChilliSource::Android::AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete, products));
 	}
 }
 //--------------------------------------------------------------------------------------
-/// On Transaction Status Update
-///
-/// @param JNI pEnvironment
-/// @param Pointer to the calling object
-/// @param Result
-/// @param Product ID
-/// @param Transaction ID
-/// @param Receipt
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt)
+void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint in_result, jstring in_productId, jstring in_transactionId, jstring in_receipt)
 {
-	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
-	if (pInterface != nullptr)
+	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
+	if (javaInterface != nullptr)
 	{
-		CSNetworking::IAPTransaction sTransaction;
-		sTransaction.strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
-		sTransaction.strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
-		sTransaction.strReceipt = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrReceipt);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<u32, const CSNetworking::IAPTransaction&>(pInterface.get(), &ChilliSource::Android::AmazonIAPJavaInterface::OnTransactionStatusUpdated, inudwResult, sTransaction));
+		CSNetworking::IAPSystem::Transaction transaction;
+		transaction.m_productId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
+		transaction.m_transactionId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
+		transaction.m_receipt = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_receipt);
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<u32, const CSNetworking::IAPSystem::Transaction&>(javaInterface.get(), &ChilliSource::Android::AmazonIAPJavaInterface::OnTransactionStatusUpdated, in_result, transaction));
 	}
 }
 //--------------------------------------------------------------------------------------
-/// On Transaction Closed
-///
-/// @param JNI pEnvironment
-/// @param Pointer to the calling function
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID)
+void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId)
 {
-	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
-	if (pInterface != nullptr)
+	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
+	if (javaInterface != nullptr)
 	{
-		std::string strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
-		std::string strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::string&, const std::string&>(pInterface.get(), &ChilliSource::Android::AmazonIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID));
+		std::string productId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
+		std::string transactionId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::string&, const std::string&>(javaInterface.get(), &ChilliSource::Android::AmazonIAPJavaInterface::OnTransactionClosed, productId, transactionId));
 	}
 }
 
@@ -108,9 +121,8 @@ namespace ChilliSource
 	{
 		CS_DEFINE_NAMEDTYPE(AmazonIAPJavaInterface);
 		//--------------------------------------------------------------
-		/// Constructor
 		//--------------------------------------------------------------
-		AmazonIAPJavaInterface::AmazonIAPJavaInterface(const std::string& instrPrivateKey, const std::string& instrUDID)
+		AmazonIAPJavaInterface::AmazonIAPJavaInterface(const std::string& in_privateKey, const std::string& in_udid)
 		{
 			CreateNativeInterface("com/chillisource/amazon/AmazonIAPNativeInterface");
 			CreateMethodReference("Init", "(Ljava/lang/String;Ljava/lang/String;)V");
@@ -124,174 +136,169 @@ namespace ChilliSource
 			CreateMethodReference("StopListeningForTransactionUpdates", "()V");
 
 			//initialise the system
-			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrPrivateKey = JavaInterfaceUtils::CreateJStringFromSTDString(instrPrivateKey);
-			jstring jstrUDID = JavaInterfaceUtils::CreateJStringFromSTDString(instrUDID);
-			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Init"), jstrPrivateKey, jstrUDID);
-			pEnv->DeleteLocalRef(jstrPrivateKey);
-			pEnv->DeleteLocalRef(jstrUDID);
+			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			jstring privateKey = JavaInterfaceUtils::CreateJStringFromSTDString(in_privateKey);
+			jstring udid = JavaInterfaceUtils::CreateJStringFromSTDString(in_udid);
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("Init"), privateKey, udid);
+			env->DeleteLocalRef(privateKey);
+			env->DeleteLocalRef(udid);
 		}
 		//--------------------------------------------------------------
-		/// Is A
 		//--------------------------------------------------------------
-		bool AmazonIAPJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool AmazonIAPJavaInterface::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (inInterfaceID == AmazonIAPJavaInterface::InterfaceID);
+			return in_interfaceId == AmazonIAPJavaInterface::InterfaceID;
 		}
         //---------------------------------------------------------------
-		/// Is Purchasing Enabled
         //---------------------------------------------------------------
         bool AmazonIAPJavaInterface::IsPurchasingEnabled()
         {
-			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			return pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("IsPurchasingEnabled"));
+			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			return env->CallBooleanMethod(GetJavaObject(), GetMethodID("IsPurchasingEnabled"));
         }
         //---------------------------------------------------------------
-		/// Start Listening For Transaction Updates
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
+        void AmazonIAPJavaInterface::StartListeningForTransactionUpdates(const Networking::IAPSystem::TransactionStatusDelegate& in_delegate)
         {
-        	mTransactionStatusDelegate = inRequestDelegate;
+        	CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction delegate");
 
-        	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-        	pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("StartListeningForTransactionUpdates"));
+        	m_transactionStatusDelegate = in_delegate;
+
+        	JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+        	env->CallVoidMethod(GetJavaObject(), GetMethodID("StartListeningForTransactionUpdates"));
         }
         //---------------------------------------------------------------
-		/// Stop Listening For Transaction Updates
         //---------------------------------------------------------------
         void AmazonIAPJavaInterface::StopListeningForTransactionUpdates()
         {
-        	mTransactionStatusDelegate = nullptr;
+        	m_transactionStatusDelegate = nullptr;
 
-        	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-        	pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("StopListeningForTransactionUpdates"));
+        	JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+        	env->CallVoidMethod(GetJavaObject(), GetMethodID("StopListeningForTransactionUpdates"));
         }
         //---------------------------------------------------------------
-		/// Request Product Descriptions
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void AmazonIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& in_productIds, const Networking::IAPSystem::ProductDescDelegate& in_delegate)
         {
-        	mProductsRequestDelegate = inRequestDelegate;
-        	if(mProductsRequestDelegate != nullptr)
+            CS_ASSERT(in_productIds.empty() == false, "Cannot request no product descriptions");
+            CS_ASSERT(in_delegate != nullptr, "Cannot have null product description delegate");
+            CS_ASSERT(m_productsRequestDelegate == nullptr, "Only 1 product description request can be active at a time");
+
+        	m_productsRequestDelegate = in_delegate;
+
+        	JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+
+        	jobjectArray productIDs = env->NewObjectArray(in_productIds.size(), env->FindClass("java/lang/String"), env->NewStringUTF(""));
+        	u32 productIDIndex = 0;
+        	for(std::vector<std::string>::const_iterator it = in_productIds.begin(); it != in_productIds.end(); ++it)
         	{
-				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+        		jstring productID = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
+        		env->SetObjectArrayElement(productIDs, productIDIndex, productID);
+        		env->DeleteLocalRef(productID);
+        		productIDIndex++;
+        	}
 
-				jobjectArray jaProductIDs = pEnv->NewObjectArray(inaProductIDs.size(), pEnv->FindClass("java/lang/String"), pEnv->NewStringUTF(""));
-				u32 udwProductIDIndex = 0;
-				for(std::vector<std::string>::const_iterator it = inaProductIDs.begin(); it != inaProductIDs.end(); ++it)
-				{
-					jstring jstrProductID = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
-					pEnv->SetObjectArrayElement(jaProductIDs, udwProductIDIndex, jstrProductID);
-					pEnv->DeleteLocalRef(jstrProductID);
-					udwProductIDIndex++;
-				}
-
-				pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("RequestProductDescriptions"), jaProductIDs);
-				pEnv->DeleteLocalRef(jaProductIDs);
+        	env->CallVoidMethod(GetJavaObject(), GetMethodID("RequestProductDescriptions"), productIDs);
+        	env->DeleteLocalRef(productIDs);
+        }
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        void AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPSystem::ProductDesc>& in_products)
+        {
+        	if(m_productsRequestDelegate != nullptr)
+        	{
+        		m_productsRequestDelegate(in_products);
+        		m_productsRequestDelegate = nullptr;
         	}
         }
         //---------------------------------------------------------------
-		/// On Product Descriptions Request Complete
-        //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPProductDesc>& inaProducts)
-        {
-        	if(mProductsRequestDelegate != nullptr)
-        	{
-        		mProductsRequestDelegate(inaProducts);
-        		mProductsRequestDelegate = nullptr;
-        	}
-        }
-        //---------------------------------------------------------------
-		/// Cancel Product Descriptions Request
         //---------------------------------------------------------------
         void AmazonIAPJavaInterface::CancelProductDescriptionsRequest()
         {
-			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("CancelProductDescriptionsRequest"));
+			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("CancelProductDescriptionsRequest"));
         }
         //---------------------------------------------------------------
-		/// Request Product Purchase
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::RequestProductPurchase(const std::string& instrProductID)
+        void AmazonIAPJavaInterface::RequestProductPurchase(const std::string& in_productId)
         {
-			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrProductID = JavaInterfaceUtils::CreateJStringFromSTDString(instrProductID);
-			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("RequestProductPurchase"), jstrProductID);
-			pEnv->DeleteLocalRef(jstrProductID);
+			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			jstring productID = JavaInterfaceUtils::CreateJStringFromSTDString(in_productId);
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("RequestProductPurchase"), productID);
+			env->DeleteLocalRef(productID);
         }
         //---------------------------------------------------------------
-		/// On Transaction Status Updated
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::OnTransactionStatusUpdated(u32 inudwStatus, const Networking::IAPTransaction& inTransaction)
+        void AmazonIAPJavaInterface::OnTransactionStatusUpdated(u32 in_statusId, const Networking::IAPSystem::Transaction& in_transaction)
         {
-        	if(mTransactionStatusDelegate != nullptr)
+        	if(m_transactionStatusDelegate != nullptr)
         	{
-				Networking::IAPTransaction::Status eStatus = Networking::IAPTransaction::Status::k_failed;
+				Networking::IAPSystem::Transaction::Status status = Networking::IAPSystem::Transaction::Status::k_failed;
 
 				//This requires a little bit of faith. These numbers correspond to the constants defined
 				//in the java class CPurchaseTransaction
-				const u32 kudwPurchaseSucceeded = 0;
-				const u32 kudwPurchaseResumed = 1;
-				const u32 kudwPurchaseRestored = 2;
-				const u32 kudwPurchaseFailed = 3;
+				const u32 k_purchaseSucceeded = 0;
+				const u32 k_purchaseResumed = 1;
+				const u32 k_purchaseRestored = 2;
+				const u32 k_purchaseFailed = 3;
 
-				switch(inudwStatus)
+				switch(in_statusId)
 				{
-					case kudwPurchaseSucceeded:
-						eStatus = Networking::IAPTransaction::Status::k_succeeded;
+					case k_purchaseSucceeded:
+						status = Networking::IAPSystem::Transaction::Status::k_succeeded;
 						break;
-					case kudwPurchaseResumed:
-						eStatus = Networking::IAPTransaction::Status::k_resumed;
+					case k_purchaseResumed:
+						status = Networking::IAPSystem::Transaction::Status::k_resumed;
 						break;
-					case kudwPurchaseRestored:
-						eStatus = Networking::IAPTransaction::Status::k_restored;
+					case k_purchaseRestored:
+						status = Networking::IAPSystem::Transaction::Status::k_restored;
 						break;
-					case kudwPurchaseFailed:
+					case k_purchaseFailed:
 					default:
-						eStatus = Networking::IAPTransaction::Status::k_failed;
+						status = Networking::IAPSystem::Transaction::Status::k_failed;
 						break;
 				}
 
-				Networking::IAPTransactionPtr pTransaction(new Networking::IAPTransaction());
-				pTransaction->strProductID = inTransaction.strProductID;
-				pTransaction->strTransactionID = inTransaction.strTransactionID;
-				pTransaction->strReceipt = inTransaction.strReceipt;
+				Networking::IAPSystem::TransactionSPtr transaction(new Networking::IAPSystem::Transaction());
+				transaction->m_productId = in_transaction.m_productId;
+				transaction->m_transactionId = in_transaction.m_transactionId;
+				transaction->m_receipt = in_transaction.m_receipt;
 
-				mTransactionStatusDelegate(eStatus, pTransaction);
+				m_transactionStatusDelegate(status, transaction);
         	}
         }
         //---------------------------------------------------------------
-		/// Close Transaction
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::CloseTransaction(const std::string& instrProductID, const std::string& instrTransactionID, const Networking::IAPTransactionCloseDelegate& inDelegate)
+        void AmazonIAPJavaInterface::CloseTransaction(const std::string& in_productId, const std::string& in_transactionId, const Networking::IAPSystem::TransactionCloseDelegate& in_delegate)
         {
-        	mTransactionCloseDelegate = inDelegate;
+        	CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction close delegate");
+        	CS_ASSERT(m_transactionCloseDelegate == nullptr, "Only 1 transaction can be closed at a time");
 
-			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrProductID = JavaInterfaceUtils::CreateJStringFromSTDString(instrProductID);
-			jstring jstrTransactionID = JavaInterfaceUtils::CreateJStringFromSTDString(instrTransactionID);
-			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("CloseTransaction"), jstrProductID, jstrTransactionID);
-			pEnv->DeleteLocalRef(jstrProductID);
-			pEnv->DeleteLocalRef(jstrTransactionID);
+        	m_transactionCloseDelegate = in_delegate;
+
+			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			jstring productId = JavaInterfaceUtils::CreateJStringFromSTDString(in_productId);
+			jstring transactionId = JavaInterfaceUtils::CreateJStringFromSTDString(in_transactionId);
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("CloseTransaction"), productId, transactionId);
+			env->DeleteLocalRef(productId);
+			env->DeleteLocalRef(transactionId);
         }
         //---------------------------------------------------------------
-		/// On Transaction Closed
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::OnTransactionClosed(const std::string& instrProductID, const std::string& instrTransactionID)
+        void AmazonIAPJavaInterface::OnTransactionClosed(const std::string& in_productId, const std::string& in_transactionId)
         {
-        	if(mTransactionCloseDelegate != nullptr)
+        	if(m_transactionCloseDelegate != nullptr)
         	{
-        		mTransactionCloseDelegate(instrProductID, instrTransactionID, true);
-        		mTransactionCloseDelegate = nullptr;
+        		m_transactionCloseDelegate(in_productId, in_transactionId, true);
+        		m_transactionCloseDelegate = nullptr;
         	}
         }
         //---------------------------------------------------------------
-		/// Restore Managed Purchases
         //---------------------------------------------------------------
         void AmazonIAPJavaInterface::RestoreManagedPurchases()
         {
-        	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-        	pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("RestoreManagedPurchases"));
+        	JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+        	env->CallVoidMethod(GetJavaObject(), GetMethodID("RestoreManagedPurchases"));
         }
 	}
 }

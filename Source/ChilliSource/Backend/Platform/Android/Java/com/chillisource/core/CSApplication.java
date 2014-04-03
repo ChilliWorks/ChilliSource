@@ -450,13 +450,13 @@ public class CSApplication
 	 * 
 	 * @return The first system that implements the given interface ID.
 	 */
-	public INativeInterface getSystem(InterfaceIDType in_interfaceID)
+	public INativeInterface getSystem(InterfaceIDType in_interfaceId)
 	{
 		synchronized(m_systems)
 		{
 			for (INativeInterface system : m_systems)
 			{
-				if (system.IsA(in_interfaceID))
+				if (system.IsA(in_interfaceId))
 				{
 					return system;
 				}

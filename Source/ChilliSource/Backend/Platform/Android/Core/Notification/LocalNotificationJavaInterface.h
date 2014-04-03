@@ -40,7 +40,7 @@ namespace ChilliSource
 			/// @return whether or not this object implements the
 			/// given interface.
 			//---------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//---------------------------------------------------
 			/// Schedules a notification to be displayed to the user
 			///

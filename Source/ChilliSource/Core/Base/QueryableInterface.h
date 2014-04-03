@@ -69,7 +69,7 @@ namespace ChilliSource
             /// @return Whether the object implements an interface
             /// that has the given ID
             //-------------------------------------------------------
-			virtual bool IsA(InterfaceIDType in_interfaceID) const = 0;
+			virtual bool IsA(InterfaceIDType in_interfaceId) const = 0;
             //----------------------------------------------------
             /// @author A Glass
             ///

@@ -95,7 +95,8 @@ namespace ChilliSource{
 				CFRelease(pPersonPhone);
 				CFRelease(pPersonEmail);
 			}
-			
+            
+            CFRelease(allPeople);
 		}
 		
 		u32 ContactInformationProvider::GetNumberContacts(){

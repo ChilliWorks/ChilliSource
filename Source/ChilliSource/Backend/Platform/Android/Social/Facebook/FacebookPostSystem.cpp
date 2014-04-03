@@ -86,9 +86,9 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		bool FacebookPostSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool FacebookPostSystem::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return Social::FacebookPostSystem::InterfaceID == in_interfaceID || FacebookPostSystem::InterfaceID == in_interfaceID;
+			return Social::FacebookPostSystem::InterfaceID == in_interfaceId || FacebookPostSystem::InterfaceID == in_interfaceId;
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------

@@ -1,17 +1,17 @@
 //
 //  IAPSystem.h
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Scott Downie on 10/06/2013.
 //  Copyright (c) 2013 Tag Games. All rights reserved.
 //
 
-#ifndef _MOFLOW_NETWORKING_IAPSYSTEM_H_
-#define _MOFLOW_NETWORKING_IAPSYSTEM_H_
+#ifndef _CHILLISOURCE_NETWORKING_IAP_IAPSYSTEM_H_
+#define _CHILLISOURCE_NETWORKING_IAP_IAPSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 #include <functional>
 
@@ -19,61 +19,110 @@ namespace ChilliSource
 {
 	namespace Networking
     {
-        struct IAPProductDesc
-        {
-            std::string strID;
-            std::string strName;
-            std::string strDescription;
-            std::string strFormattedPrice;
-            std::string strCountryCode;
-        };
-        
-        struct IAPProductRegInfo
-        {
-            enum class Type
-            {
-                k_managed,
-                k_unmanaged
-            };
-            
-            std::string strID;
-            Type eType;
-        };
-        
-        typedef std::function<void(const std::vector<IAPProductDesc>&)> IAPProductDescDelegate;
-        
-
-        struct IAPTransaction
-        {
-            std::string strProductID;
-            std::string strTransactionID;
-            std::string strReceipt;
-            
-            enum class Status
-            {
-                k_succeeded,
-                k_failed,
-                k_cancelled,
-                k_refunded,
-                k_restored,
-                k_resumed
-            };
-        };
-        
-        typedef std::shared_ptr<IAPTransaction> IAPTransactionPtr;
-        typedef std::function<void(IAPTransaction::Status, const IAPTransactionPtr&)> IAPTransactionDelegate;
-        typedef std::function<void(const std::string&, const std::string&, bool)> IAPTransactionCloseDelegate;
-        
-        
-		class IAPSystem : public ChilliSource::Core::System
+        //----------------------------------------------------------------------------------
+        /// System that allows purchasing of IAPs from
+        /// the backend App Store. System allows product info
+        /// to be requested in ordrer to build displays and then
+        /// for products to be purchased. NOTE: Must StartListeningForTransactionUpdates()
+        /// before any purchases are made as this can be called with previously incomplete
+        /// transactions.
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------------------------
+		class IAPSystem : public Core::AppSystem
         {
         public:
+            
+            //------------------------------------------------------
+            /// Holds the information relating to a single
+            /// transaction.
+            ///
+            /// @author S Downie
+            //------------------------------------------------------
+            struct Transaction
+            {
+                std::string m_productId;
+                std::string m_transactionId;
+                std::string m_receipt;
+                
+                enum class Status
+                {
+                    k_succeeded,
+                    k_failed,
+                    k_cancelled,
+                    k_refunded,
+                    k_restored,
+                    k_resumed
+                };
+            };
+            typedef std::shared_ptr<Transaction> TransactionSPtr;
+            //------------------------------------------------------
+            /// Holds the description of a product as obtained
+            /// from the store
+            ///
+            /// @author S Downie
+            //------------------------------------------------------
+            struct ProductDesc
+            {
+                std::string m_id;
+                std::string m_name;
+                std::string m_description;
+                std::string m_formattedPrice;
+                std::string m_countryCode;
+            };
+            //------------------------------------------------------
+            /// Used to describe a product when registering it.
+            /// Products can be either managed or unmanaged
+            ///
+            /// @author S Downie
+            //------------------------------------------------------
+            struct ProductRegInfo
+            {
+                enum class Type
+                {
+                    k_managed,
+                    k_unmanaged
+                };
+                
+                std::string m_id;
+                Type m_type;
+            };
+            //------------------------------------------------------
+            /// Delegate that is triggered when a request for product
+            /// informations completes.
+            ///
+            /// @author S Downie
+            ///
+            /// @param List of product descriptions
+            //------------------------------------------------------
+            typedef std::function<void(const std::vector<ProductDesc>&)> ProductDescDelegate;
+            //------------------------------------------------------
+            /// Delegate triggered when the status of a transaction
+            /// changes i.e. from pending to success.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Transaction status
+            /// @param Transaction
+            //------------------------------------------------------
+            typedef std::function<void(Transaction::Status, const TransactionSPtr&)> TransactionStatusDelegate;
+            //------------------------------------------------------
+            /// Delegate triggered when the transaction is closed.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Product ID
+            /// @param Transaction ID
+            /// @param Success or failure
+            //------------------------------------------------------
+            typedef std::function<void(const std::string&, const std::string&, bool)> TransactionCloseDelegate;
+            
             CS_DECLARE_NAMEDTYPE(IAPSystem);
             
             //---------------------------------------------------------------
-            /// Create
-            ///
             /// Creates a new platform specfic instance of the IAP system.
+            ///
+            /// @author S Downie
             ///
             /// @param A param dictionary that contains platform specific
             /// parameters for the IAP system. The possible values are:
@@ -82,127 +131,105 @@ namespace ChilliSource
             ///		AmazonPrivateKey		The private key used to encrypt
             ///								the on disk Amazon IAP cache.
             //---------------------------------------------------------------
-            static IAPSystemUPtr Create(const Core::ParamDictionary& inParams);
-
+            static IAPSystemUPtr Create(const Core::ParamDictionary& in_params);
             //---------------------------------------------------------------
-            /// Is A
-            ///
-            /// @return Whether this implements the passed in interface id.
-            //---------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType inInterfaceID) const override;
-            
-            //---------------------------------------------------------------
-            /// Register Products
-            ///
             /// Inform the system of which products are available for
             /// purchase and whether they are managed or unmanaged
             ///
+            /// @author S Downie
+            ///
             /// @param List of products
             //---------------------------------------------------------------
-            virtual void RegisterProducts(const std::vector<IAPProductRegInfo>& inaProducts) = 0;
+            virtual void RegisterProducts(const std::vector<ProductRegInfo>& in_productInfos) = 0;
             //---------------------------------------------------------------
-			/// Get Provider ID
+			/// @author S Downie
 			///
 			/// @return The ID off the IAP provider as a string.
             //---------------------------------------------------------------
 			virtual std::string GetProviderID() const = 0;
             //---------------------------------------------------------------
-			/// Get Provider Name
+			/// @author S Downie
 			///
 			/// @return A displayable name for the IAP Provider.
             //---------------------------------------------------------------
 			virtual std::string GetProviderName() const = 0;
             //---------------------------------------------------------------
-			/// Is Purchasing Enabled
+			/// @author S Downie
 			///
 			/// @return Whether the purchasing is allowed by the device/OS
             //---------------------------------------------------------------
             virtual bool IsPurchasingEnabled() = 0;
-            
             //---------------------------------------------------------------
-			/// Start Listening For Transaction Updates
-			///
 			/// Calling this function will set the listener to which any
             /// transaction events are directed. This is not necessarily
             /// in response to a user action it may be previously outstanding
             /// transactions.
             ///
-            /// @param Delegate
-            //---------------------------------------------------------------
-            virtual void StartListeningForTransactionUpdates(const IAPTransactionDelegate& inRequestDelegate) = 0;
-            //---------------------------------------------------------------
-			/// Stop Listening For Transaction Updates
+            /// @author S Downie
             ///
+            /// @param Transaction status changed delegate
+            //---------------------------------------------------------------
+            virtual void StartListeningForTransactionUpdates(const TransactionStatusDelegate& in_delegate) = 0;
+            //---------------------------------------------------------------
             /// Prevent any more transaction uppdates from being triggered.
+            ///
+            /// @author S Downie
             //---------------------------------------------------------------
             virtual void StopListeningForTransactionUpdates() = 0;
-            
             //---------------------------------------------------------------
-			/// Request All Product Descriptions
-			///
             /// Starts a request to the store for details of all registered
             /// products. These details are name, description and price
             ///
+            /// @author S Downie
+            ///
             /// @param Delegate to invoke when the request completes
             //---------------------------------------------------------------
-            virtual void RequestAllProductDescriptions(const IAPProductDescDelegate& inRequestDelegate) = 0;
+            virtual void RequestAllProductDescriptions(const ProductDescDelegate& in_delegate) = 0;
             //---------------------------------------------------------------
-			/// Request Product Descriptions
-			///
             /// Starts a request to the store for details of the products.
             /// These details are name, description and price
+            ///
+            /// @author S Downie
             ///
 			/// @param List of product IDs to request descriptions for
             /// @param Delegate to invoke when the request completes
             //---------------------------------------------------------------
-            virtual void RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const IAPProductDescDelegate& inRequestDelegate) = 0;
+            virtual void RequestProductDescriptions(const std::vector<std::string>& in_productIds, const ProductDescDelegate& in_delegate) = 0;
             //---------------------------------------------------------------
-			/// Cancel Product Descriptions Request
-			///
 			/// Prevent the completion delegate being called for
             /// any pending product description requests and attempt to
             /// cancel the request to the store.
+            ///
+            /// @author S Downie
             //---------------------------------------------------------------
             virtual void CancelProductDescriptionsRequest() = 0;
-            
             //---------------------------------------------------------------
-			/// Request Product Purchase
-			///
 			/// Make a request to the store to purchase the item.
             /// This will trigger a call to the transaction listener delegate
             ///
+            /// @author S Downie
+            ///
             /// @param Product ID
             //---------------------------------------------------------------
-            virtual void RequestProductPurchase(const std::string& instrProductID) = 0;
-            
+            virtual void RequestProductPurchase(const std::string& in_productId) = 0;
             //---------------------------------------------------------------
-			/// Close Transaction
-			///
 			/// Tell the store to close the transaction as complete.
             /// NOTE: This should only be called after the goods have been
             /// awarded.
             ///
+            /// @author S Downie
+            ///
             /// @param Transaction to close
-            /// @param Delegate to call when closed successfully
+            /// @param Delegate to call when closed (either with failure or success)
             //---------------------------------------------------------------
-            virtual void CloseTransaction(const IAPTransactionPtr& inpTransaction, const IAPTransactionCloseDelegate& inDelegate) = 0;
-            
+            virtual void CloseTransaction(const TransactionSPtr& in_transaction, const TransactionCloseDelegate& in_delegate) = 0;
             //---------------------------------------------------------------
-			/// Restore Managed Purchases
-			///
             /// Request that the store trigger new purchase requests for
             /// owned non-consumable items
-            //---------------------------------------------------------------
-            virtual void RestoreManagedPurchases() = 0;
-            
-        protected:
-            
-            //-------------------------------------------------------
-            /// Private constructor to force use of factory method
             ///
             /// @author S Downie
-            //-------------------------------------------------------
-            IAPSystem(){}
+            //---------------------------------------------------------------
+            virtual void RestoreManagedPurchases() = 0;
         };
     }
 }

@@ -40,7 +40,7 @@ namespace ChilliSource
             ///
             /// @return Whether this object is of given type
             //-------------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//-------------------------------------------------------
 			/// Play Sound
 			///

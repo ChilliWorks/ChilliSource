@@ -80,9 +80,9 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
-		bool DialogueBoxJavaInterface::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool DialogueBoxJavaInterface::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceID == DialogueBoxJavaInterface::InterfaceID);
+			return (in_interfaceId == DialogueBoxJavaInterface::InterfaceID);
 		}
         //------------------------------------------------------
         //------------------------------------------------------

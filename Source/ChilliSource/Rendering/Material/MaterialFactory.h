@@ -45,7 +45,7 @@ namespace ChilliSource
             /// @param Interface ID
             /// @return Whether the object is of the same interface
             //---------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------
             /// Create a material with no shader programs.
             /// The shader programs must be specified by the

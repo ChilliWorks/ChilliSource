@@ -150,15 +150,15 @@ namespace ChilliSource
         }
 		//-------------------------------------------------------------------------
 		//-------------------------------------------------------------------------
-		bool CSAnimProvider::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool CSAnimProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == CSAnimProvider::InterfaceID;
+			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSAnimProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSAnimProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
+		bool CSAnimProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceID == SkinnedAnimation::InterfaceID);
+			return (in_interfaceId == SkinnedAnimation::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------

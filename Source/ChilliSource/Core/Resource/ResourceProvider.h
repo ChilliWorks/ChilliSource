@@ -39,7 +39,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the resource can be created.
             //----------------------------------------------------
-			virtual bool CanCreateResourceOfKind(InterfaceIDType in_interfaceID) const = 0;
+			virtual bool CanCreateResourceOfKind(InterfaceIDType in_interfaceId) const = 0;
             //----------------------------------------------------
             /// Allows querying of the resource type this provider
             /// can create.

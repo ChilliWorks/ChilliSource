@@ -42,9 +42,9 @@ namespace ChilliSource
         
 		//----------------------------------------------------
         //----------------------------------------------------
-		bool FacebookAuthenticationSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool FacebookAuthenticationSystem::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceID == FacebookAuthenticationSystem::InterfaceID) || (in_interfaceID == Social::FacebookAuthenticationSystem::InterfaceID);
+			return (in_interfaceId == FacebookAuthenticationSystem::InterfaceID) || (in_interfaceId == Social::FacebookAuthenticationSystem::InterfaceID);
 		}
 		//----------------------------------------------------
         //----------------------------------------------------

@@ -25,9 +25,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool DialogueBoxSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+        bool DialogueBoxSystem::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return (DialogueBoxSystem::InterfaceID == in_interfaceID || Core::DialogueBoxSystem::InterfaceID == in_interfaceID);
+            return (DialogueBoxSystem::InterfaceID == in_interfaceId || Core::DialogueBoxSystem::InterfaceID == in_interfaceId);
         }
         //-----------------------------------------------------
         //-----------------------------------------------------

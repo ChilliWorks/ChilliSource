@@ -487,15 +487,15 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------------------------
 		//-------------------------------------------------------------------------
-		bool MaterialProvider::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool MaterialProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == MaterialProvider::InterfaceID;
+			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == MaterialProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool MaterialProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
+		bool MaterialProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceID == Material::InterfaceID);
+			return (in_interfaceId == Material::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------

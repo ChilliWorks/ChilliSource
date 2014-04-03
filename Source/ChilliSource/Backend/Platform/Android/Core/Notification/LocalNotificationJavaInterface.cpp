@@ -63,9 +63,9 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------
 		//--------------------------------------------------------
-		bool LocalNotificationJavaInterface::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool LocalNotificationJavaInterface::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceID == LocalNotificationJavaInterface::InterfaceID);
+			return (in_interfaceId == LocalNotificationJavaInterface::InterfaceID);
 		}
 		//--------------------------------------------------------
 		//--------------------------------------------------------

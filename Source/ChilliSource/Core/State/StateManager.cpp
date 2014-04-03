@@ -35,9 +35,9 @@ namespace ChilliSource
 		}
         //---------------------------------------------------------
         //---------------------------------------------------------
-        bool StateManager::IsA(InterfaceIDType in_interfaceID) const
+        bool StateManager::IsA(InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceID == StateManager::InterfaceID;
+            return in_interfaceId == StateManager::InterfaceID;
         }
         //---------------------------------------------------------
         //---------------------------------------------------------

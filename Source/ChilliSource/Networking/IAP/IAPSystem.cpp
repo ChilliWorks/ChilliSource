@@ -1,6 +1,6 @@
 //
 //  IAPSystem.cpp
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Scott Downie on 10/06/2013.
 //  Copyright (c) 2013 Tag Games. All rights reserved.
@@ -24,7 +24,6 @@ namespace ChilliSource
     {
         CS_DEFINE_NAMEDTYPE(IAPSystem);
         //---------------------------------------------------------------
-        /// Create
         //---------------------------------------------------------------
         IAPSystemUPtr IAPSystem::Create(const Core::ParamDictionary& inParams)
         {
@@ -38,13 +37,6 @@ namespace ChilliSource
 #	endif
 #endif
         	return nullptr;
-        }
-        //---------------------------------------------------------------
-        /// Is A
-        //---------------------------------------------------------------
-        bool IAPSystem::IsA(Core::InterfaceIDType inInterfaceID) const
-        {
-            return inInterfaceID == IAPSystem::InterfaceID;
         }
     }
 }

@@ -35,9 +35,9 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        bool MaterialFactory::IsA(Core::InterfaceIDType in_interfaceID) const
+        bool MaterialFactory::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceID == MaterialFactory::InterfaceID;
+            return in_interfaceId == MaterialFactory::InterfaceID;
         }
         //---------------------------------------------------
         //---------------------------------------------------

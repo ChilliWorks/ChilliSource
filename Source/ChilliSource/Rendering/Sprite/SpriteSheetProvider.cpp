@@ -38,15 +38,15 @@ namespace ChilliSource
         }
 		//-------------------------------------------------------------------------
 		//-------------------------------------------------------------------------
-		bool SpriteSheetProvider::IsA(Core::InterfaceIDType in_interfaceID) const
+		bool SpriteSheetProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceID == ResourceProvider::InterfaceID || in_interfaceID == SpriteSheetProvider::InterfaceID;
+			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == SpriteSheetProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool SpriteSheetProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceID) const
+		bool SpriteSheetProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceID == SpriteSheet::InterfaceID;
+			return in_interfaceId == SpriteSheet::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
