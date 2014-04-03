@@ -71,6 +71,15 @@ namespace ChilliSource
             /// @return Success if net available
             //--------------------------------------------------------------------------------------------------
             bool CheckReachability() const override;
+
+		private:
+            friend Networking::HttpRequestSystemUPtr Networking::HttpRequestSystem::Create();
+            //--------------------------------------------------------------------------------------------------
+            /// Private constructor to fore use of factory method
+            ///
+            /// @author I Copland
+            //--------------------------------------------------------------------------------------------------
+            HttpRequestSystem() = default;
 			//--------------------------------------------------------------------------------------------------
             /// Poll the connection on active requests
             ///
@@ -85,15 +94,6 @@ namespace ChilliSource
             /// @author I Copland
 			//--------------------------------------------------------------------------------------------------
             void OnDestroy() override;
-
-		private:
-            friend Networking::HttpRequestSystemUPtr Networking::HttpRequestSystem::Create();
-            //--------------------------------------------------------------------------------------------------
-            /// Private constructor to fore use of factory method
-            ///
-            /// @author I Copland
-            //--------------------------------------------------------------------------------------------------
-            HttpRequestSystem() = default;
 
 		private:
 

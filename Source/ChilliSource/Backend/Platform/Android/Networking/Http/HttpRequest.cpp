@@ -21,6 +21,8 @@ namespace ChilliSource
 		: m_desc(in_requestDesc), m_completionDelegate(in_delegate), m_isRequestComplete(false), m_isPollingComplete(false), m_shouldKillThread(false),
 		  m_responseCode(0), m_requestResult(Result::k_failed)
 		{
+			CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
+
 			//Begin the read loop as a threaded task
 			Core::TaskScheduler::ScheduleTask(Core::Task<>(this, &HttpRequest::PerformRequest));
 		}
@@ -33,15 +35,12 @@ namespace ChilliSource
 			{
                 m_isRequestComplete = true;
 
-                if(m_completionDelegate != nullptr)
-                {
-                    if(m_requestResult != Result::k_cancelled)
-                    {
-                    	m_completionDelegate(this, m_requestResult);
-                    }
+				if(m_requestResult != Result::k_cancelled)
+				{
+					m_completionDelegate(this, m_requestResult);
+				}
 
-                    m_completionDelegate = nullptr;
-                }
+				m_completionDelegate = nullptr;
 			}
 		}
 		//------------------------------------------------------------------

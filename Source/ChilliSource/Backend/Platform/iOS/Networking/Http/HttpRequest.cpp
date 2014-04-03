@@ -34,7 +34,7 @@ namespace ChilliSource
         m_isRequestCompleted(false), m_shouldKillThread(false), m_isConnectionEstablished(false),
         m_connectingTime(0.0f), m_totalBytesRead(0), m_totalBytesReadThisBlock(0), m_responseCode(0), m_result(Result::k_failed)
 		{
-
+            CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
 		}
         //------------------------------------------------------------------
 		//------------------------------------------------------------------
@@ -52,15 +52,12 @@ namespace ChilliSource
 			{
                 m_isRequestCompleted = true;
                 
-                if(m_completionDelegate != nullptr)
+                if(m_result != Result::k_cancelled)
                 {
-                    if(m_result != Result::k_cancelled)
-                    {
-                        m_completionDelegate(this, m_result);
-                    }
-                    
-                    m_completionDelegate = nullptr;
+                    m_completionDelegate(this, m_result);
                 }
+                
+                m_completionDelegate = nullptr;
 			}
             //Track the time the request has been active so we can manually timeout. Make sure we limit the time diff
             if(m_isConnectionEstablished == false)
@@ -75,11 +72,8 @@ namespace ChilliSource
                     m_shouldKillThread = true;
                     m_isConnectionEstablished = true;
                     
-                    if(m_completionDelegate != nullptr)
-                    {
-                        m_completionDelegate(this, Result::k_timeout);
-                        m_completionDelegate = nullptr;
-                    }
+                    m_completionDelegate(this, Result::k_timeout);
+                    m_completionDelegate = nullptr;
                 }
             }
 		}
@@ -161,9 +155,9 @@ namespace ChilliSource
                             m_desc.m_redirectionUrl = Core::StringUtils::NSStringToString((NSString*)redirectUrlString);
                             CFRelease(redirectUrlString);
                         }
+                        
+                        CFRelease(response);
                     }
-                    
-                    CFRelease(response);
                 }
                 
                 //Sleep the thread if we are still waiting to connect

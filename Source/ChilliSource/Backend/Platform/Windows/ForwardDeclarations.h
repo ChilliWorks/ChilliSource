@@ -29,6 +29,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		/// Networking
 		//------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(HttpRequest);
 		CS_FORWARDDECLARE_CLASS(HttpRequestSystem);
 	}
 }

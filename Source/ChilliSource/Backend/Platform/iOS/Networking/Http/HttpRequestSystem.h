@@ -79,20 +79,6 @@ namespace ChilliSource
             /// @return Success if net available
             //--------------------------------------------------------------------------------------------------
             bool CheckReachability() const override;
-			//--------------------------------------------------------------------------------------------------
-            /// Poll the connection on active requests
-            ///
-            /// @author S Downie
-			///
-			/// @param Time since last update in seconds
-			//--------------------------------------------------------------------------------------------------
-            void OnUpdate(f32 in_timeSinceLastUpdate) override;
-            //--------------------------------------------------------------------------------------------------
-            /// Called when the system is destroyed. Cancels all pending requests
-            ///
-            /// @author S Downie
-			//--------------------------------------------------------------------------------------------------
-            void OnDestroy() override;
             
         private:
             
@@ -103,7 +89,21 @@ namespace ChilliSource
             /// @author S Downie
             //--------------------------------------------------------------------------------------------------
             HttpRequestSystem() = default;
-            
+            //--------------------------------------------------------------------------------------------------
+            /// Poll the connection on active requests
+            ///
+            /// @author S Downie
+            ///
+            /// @param Time since last update in seconds
+            //--------------------------------------------------------------------------------------------------
+            void OnUpdate(f32 in_timeSinceLastUpdate) override;
+            //--------------------------------------------------------------------------------------------------
+            /// Called when the system is destroyed. Cancels all pending requests
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------------------------------------------
+            void OnDestroy() override;
+        
         private:
             
             struct ConnectionInfo
