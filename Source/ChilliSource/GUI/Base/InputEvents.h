@@ -119,7 +119,7 @@ namespace ChilliSource
             
         private: 
             
-            std::vector<u32> mOpenTouches;  
+            std::vector<Input::PointerSystem::PointerId> mOpenTouches;
         };
     }
 }

@@ -122,7 +122,7 @@ namespace ChilliSource
             for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
 			{
                 TimeIntervalSecs triggerTime = (TimeIntervalSecs)[nsNotification.fireDate timeIntervalSince1970];
-                s32 dwDeltaSecs = in_time - triggerTime;
+                s32 dwDeltaSecs = (s32)(in_time - triggerTime);
                 
 				if(std::abs(dwDeltaSecs) <= in_period)
 				{

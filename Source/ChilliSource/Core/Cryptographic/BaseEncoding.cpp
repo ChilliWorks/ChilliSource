@@ -257,9 +257,9 @@ namespace ChilliSource
                     }
                 }
                 
-                for(u32 i = 0; i < std::min(inudwSize, udwDataIndex); i++)
+                for(u32 dataIdx = 0; dataIdx < std::min(inudwSize, udwDataIndex); dataIdx++)
                 {
-                    inpDataOut[i] = psbyOutData[i];
+                    inpDataOut[dataIdx] = psbyOutData[dataIdx];
                 }
                 
                 delete[] psbyOutData;
