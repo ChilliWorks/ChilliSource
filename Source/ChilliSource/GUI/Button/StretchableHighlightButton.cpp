@@ -44,7 +44,7 @@ namespace ChilliSource
         /// Constructor
         //-----------------------------------------------------------
         StretchableHighlightButton::StretchableHighlightButton()
-        :   HighlightColour(0.7f, 0.7f, 0.7f, 1.0f), mbSelected(false), HeightMaintain(false), WidthMaintain(false), mCurrentColour(Core::Colour::WHITE)
+        :   HighlightColour(0.7f, 0.7f, 0.7f, 1.0f), mbSelected(false), HeightMaintain(false), WidthMaintain(false), mCurrentColour(Core::Colour::k_white)
         {
             memset(&msNormalIndices, 0, sizeof(u32) * 9);
             memset(&msHighlightIndices, 0, sizeof(u32) * 9);
@@ -694,7 +694,7 @@ namespace ChilliSource
 				
 				if (NormalSpriteSheet)
 				{
-					mCurrentColour = Core::Colour::WHITE;
+					mCurrentColour = Core::Colour::k_white;
 					mCurrentSpriteSheet = NormalSpriteSheet;
 					msCurrentIndices = msNormalIndices;
 				}

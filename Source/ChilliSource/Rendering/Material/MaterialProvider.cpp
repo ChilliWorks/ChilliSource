@@ -307,26 +307,26 @@ namespace ChilliSource
                     TiXmlElement* emissiveEl = Core::XMLUtils::FirstChildElementWithName(lightingEl, "Emissive");
                     if(emissiveEl)
                     {
-                        out_material->SetEmissive(Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(emissiveEl, "value", Core::Colour::WHITE));
+                        out_material->SetEmissive(Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(emissiveEl, "value", Core::Colour::k_white));
                     }
                     //---Ambient Lighting
                     TiXmlElement* ambientEl = Core::XMLUtils::FirstChildElementWithName(lightingEl, "Ambient");
                     if(ambientEl)
                     {
-                        out_material->SetAmbient(Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(ambientEl, "value", Core::Colour::WHITE));
+                        out_material->SetAmbient(Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(ambientEl, "value", Core::Colour::k_white));
                     }
                     //---Diffuse Lighting
                     TiXmlElement* diffuseEl = Core::XMLUtils::FirstChildElementWithName(lightingEl, "Diffuse");
                     if(diffuseEl)
                     {
-                        out_material->SetDiffuse(Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(diffuseEl, "value", Core::Colour::WHITE));
+                        out_material->SetDiffuse(Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(diffuseEl, "value", Core::Colour::k_white));
                     }
                     //---Specular Lighting
                     Core::Colour specular(1.0f, 1.0f, 1.0f, 0.0f);
                     TiXmlElement* specularEl = Core::XMLUtils::FirstChildElementWithName(lightingEl, "Specular");
                     if(specularEl)
                     {
-                        specular = Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(specularEl, "value", Core::Colour::WHITE);
+                        specular = Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(specularEl, "value", Core::Colour::k_white);
                     }
                     
                     //---Intensity
@@ -406,7 +406,7 @@ namespace ChilliSource
                         }
                         else if(strType == "Colour")
                         {
-                            out_material->mMapColShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(shaderVarEl, "value", Core::Colour::WHITE)));
+                            out_material->mMapColShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(shaderVarEl, "value", Core::Colour::k_white)));
                         }
                         else if(strType == "Matrix")
                         {

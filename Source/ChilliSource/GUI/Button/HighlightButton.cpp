@@ -583,11 +583,11 @@ namespace ChilliSource
 				{
 					mpBackgroundImage->SetTexture(NormalTexture);
                     mpBackgroundImage->SetUVs(msDefaultUVs);
-                    mpBackgroundImage->SetColour(Core::Colour::WHITE);
+                    mpBackgroundImage->SetColour(Core::Colour::k_white);
 				}
 				else if(NormalSpriteSheet)
 				{
-					mpBackgroundImage->SetColour(Core::Colour::WHITE);
+					mpBackgroundImage->SetColour(Core::Colour::k_white);
 					mpBackgroundImage->SetSpriteSheetIndex(NormalSpriteSheetIndex);
 					mpBackgroundImage->SetSpriteSheet(NormalSpriteSheet);
 				}
