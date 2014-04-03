@@ -7,6 +7,7 @@
  *
  */
 
+#include <ChilliSource/Core/Base/ColourUtils.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
@@ -437,7 +438,7 @@ namespace ChilliSource
         void SpriteComponent::SetColourWithOpacity(const Core::Colour &inCol)
         {
             mColourWithOpacity = inCol;
-            mByteColourWithOpacity = Core::Colour::ColourToByteColour(mColourWithOpacity);
+            mByteColourWithOpacity = Core::ColourUtils::ColourToByteColour(mColourWithOpacity);
         }
         //-----------------------------------------------------------
         /// Set Colour With Opacity
@@ -445,7 +446,7 @@ namespace ChilliSource
         void SpriteComponent::SetColourWithOpacity(const f32 infR, const f32 infG, const f32 infB, const f32 infA)
         {
 			mColourWithOpacity = Core::Colour(infR, infG, infB, infA);
-            mByteColourWithOpacity = Core::Colour::ColourToByteColour(mColourWithOpacity);
+            mByteColourWithOpacity = Core::ColourUtils::ColourToByteColour(mColourWithOpacity);
         }
         //-----------------------------------------------------------
         /// Get Colour With Opacity

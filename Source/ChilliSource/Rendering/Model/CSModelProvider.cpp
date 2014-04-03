@@ -221,22 +221,22 @@ namespace ChilliSource
                 //in the meantime just read and discard.
                 if (true == in_meshDesc.mFeatures.mbHasTexture)
                 {
-                    u8 nextChar = 0;
+                    u8 nextCharacter = 0;
                     do
                     {
-                        nextChar = ReadValue<u8>(in_meshStream);
+                        nextCharacter = ReadValue<u8>(in_meshStream);
                         
-                    } while(nextChar != 0);
+                    } while(nextCharacter != 0);
                 }
                 
                 if (true == in_meshDesc.mFeatures.mbHasMaterial)
                 {
-                    u8 nextChar = 0;
+                    u8 nextCharacter = 0;
                     do
                     {
-                        nextChar = ReadValue<u8>(in_meshStream);
+                        nextCharacter = ReadValue<u8>(in_meshStream);
                         
-                    } while(nextChar != 0);
+                    } while(nextCharacter != 0);
                 }
             }
             //-----------------------------------------------------------------------------

@@ -13,6 +13,7 @@
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 
+#include <ChilliSource/Core/Base/ColourUtils.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
@@ -465,7 +466,7 @@ namespace ChilliSource
 		void ParticleEmitter::UpdateSpriteData(const Core::Vector3& invPos, const Core::Colour & insTintColour, SpriteComponent::SpriteData& outsData,
                                                 const Core::Vector3& invRight, const Core::Vector3& invUp, const Core::Vector3& invScale)
 		{
-			Core::Colour::ByteColour Col = Core::Colour::ColourToByteColour(insTintColour);
+			Core::ByteColour Col = Core::ColourUtils::ColourToByteColour(insTintColour);
 			
 			outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].Col = Col;
             outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].Col = Col;

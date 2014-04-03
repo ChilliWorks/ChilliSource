@@ -13,6 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Base/ByteColour.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
@@ -51,7 +52,7 @@ namespace ChilliSource
             {
                 Core::Vector4 vPos;
                 Core::Vector2 vTex;
-                Core::Colour::ByteColour Col;
+                Core::ByteColour Col;
             };
             
             struct SpriteData
@@ -371,7 +372,7 @@ namespace ChilliSource
             Core::Colour mColour;
             
             Core::Colour mColourWithOpacity;
-            Core::Colour::ByteColour mByteColourWithOpacity;
+            Core::ByteColour mByteColourWithOpacity;
 			
             AlignmentAnchor     meAlignment;
             
