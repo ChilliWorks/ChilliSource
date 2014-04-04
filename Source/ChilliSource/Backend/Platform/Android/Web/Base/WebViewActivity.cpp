@@ -79,8 +79,7 @@ namespace ChilliSource
 			pHTMLFile->GetAll(strHTMLFileContents);
 			pHTMLFile->Close();
 
-			std::string strPath;
-		    pFileSystem->GetBestPathToFile(ineStorageLocation, strFile, strPath);
+			std::string strPath = pFileSystem->GetAbsolutePathToFile(ineStorageLocation, strFile);
 
             switch(ineStorageLocation)
             {

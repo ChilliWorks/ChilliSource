@@ -235,7 +235,7 @@ namespace ChilliSource
 			/// @param the data buffer.
 			/// @param the stream size.
 			//--------------------------------------------------------------------------------------------------
-			void Write(s8* inpbyChar, s32 indwStreamSize) override;
+			void Write(const s8* inpbyChar, s32 indwStreamSize) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Write
 			///

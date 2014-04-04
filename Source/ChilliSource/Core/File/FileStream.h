@@ -264,7 +264,7 @@ namespace ChilliSource
 			/// @param the data buffer.
 			/// @param the stream size.
 			//--------------------------------------------------------------------------------------------------
-			virtual void Write(s8* inpbyChar, s32 indwStreamSize);
+			virtual void Write(const s8* inpbyChar, s32 indwStreamSize);
 			//--------------------------------------------------------------------------------------------------
 			/// Write
 			///

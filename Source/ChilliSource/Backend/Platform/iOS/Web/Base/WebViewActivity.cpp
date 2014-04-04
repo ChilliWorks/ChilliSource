@@ -99,13 +99,13 @@ namespace ChilliSource
                 switch(ineStorageLocation)
                 {
                     default:
-                        strPath = pFileSystem->GetStorageLocationDirectory(ineStorageLocation);
+                        strPath = pFileSystem->GetAbsolutePathToStorageLocation(ineStorageLocation);
                         break;
                     case Core::StorageLocation::k_package:
-                        strPath = Core::Application::Get()->GetFileSystem()->GetDirectoryForPackageFile(strFile);
+                        strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(Core::StorageLocation::k_package, strFile);
                         break;
                     case Core::StorageLocation::k_DLC:
-                        strPath = Core::Application::Get()->GetFileSystem()->GetDirectoryForDLCFile(strFile);
+                        strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(Core::StorageLocation::k_DLC, strFile);
                         break;
                 }
 

@@ -135,11 +135,11 @@ namespace ChilliSource
 					std::string sMaterialName;
 					if (insParamDictionary.TryGetValue("MaterialName", sMaterialName)) 
                     {
-						return CreateStaticMeshComponent(Core::GetStorageLocationFromString(strMeshLocation), sMeshName, Core::GetStorageLocationFromString(strMaterialLocation), sMaterialName);
+						return CreateStaticMeshComponent(Core::ParseStorageLocation(strMeshLocation), sMeshName, Core::ParseStorageLocation(strMaterialLocation), sMaterialName);
 					} 
                     else 
                     {
-						return CreateStaticMeshComponent(Core::GetStorageLocationFromString(strMeshLocation), sMeshName);
+						return CreateStaticMeshComponent(Core::ParseStorageLocation(strMeshLocation), sMeshName);
 					}
 				} 
                 else 

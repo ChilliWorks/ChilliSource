@@ -103,8 +103,7 @@ namespace ChilliSource
         {
             mBackgroundColour = inBackgroundColour;
             
-            std::string strPath;
-            static_cast<FileSystem*>(Core::Application::Get()->GetFileSystem())->GetBestPathToFile(ineLocation, instrFileName, strPath);
+            std::string strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(ineLocation, instrFileName);
             
             NSURL* pMovieURL = [NSURL fileURLWithPath:Core::StringUtils::StringToNSString(strPath)];
             mpMoviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL:pMovieURL];

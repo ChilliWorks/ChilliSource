@@ -51,6 +51,20 @@ namespace ChilliSource
 				f32 Y;
 			};
 		protected:
+            
+            //============================================
+            /// Storage Location And Filename
+            ///
+            /// struct which states the storage location
+            /// and filename of a file.
+            //============================================
+            struct StorageLocationAndFilename
+            {
+                std::string mstrFilename;
+                StorageLocation meStorageLocation;
+            };
+            typedef std::shared_ptr<StorageLocationAndFilename> StorageLocationAndFilenamePtr;
+            
 			static TweakableConstants * msSingleton;
 			void LoadValues();
 			void LoadFile(StorageLocation ineStorageLocation, const std::string & inFileName);
@@ -87,7 +101,7 @@ namespace ChilliSource
 
 			MapNamespaceToConstantsGroup mNamespaces;
 			
-			std::vector<Core::StorageLocationAndFilenamePtr> mFileNames;
+			std::vector<StorageLocationAndFilenamePtr> mFileNames;
 			std::string mBlank;//blank string to return for failed string constant lookups
 		};
 	}

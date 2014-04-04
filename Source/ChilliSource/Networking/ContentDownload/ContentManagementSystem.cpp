@@ -123,7 +123,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void ContentManagementSystem::OnInit()
         {
-            m_contentDirectory = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
+            m_contentDirectory = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -154,7 +154,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		std::string ContentManagementSystem::CalculateChecksum(Core::StorageLocation in_location, const std::string& in_filePath)
 		{
-            std::string strMD5Checksum = Core::Application::Get()->GetFileSystem()->GetFileMD5Checksum(in_location, in_filePath);
+            std::string strMD5Checksum = Core::Application::Get()->GetFileSystem()->GetFileChecksumMD5(in_location, in_filePath);
 			std::string strBase64Encoded = Core::BaseEncoding::Base64Encode(strMD5Checksum);
 			Core::StringUtils::ChopTrailingChars(strBase64Encoded, '=');
 			return strBase64Encoded;
@@ -622,7 +622,7 @@ namespace ChilliSource
                 
                 if(IsFile(strFilePath))
                 {
-                    Core::Application::Get()->GetFileSystem()->CreateFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
+                    Core::Application::Get()->GetFileSystem()->WriteFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
                 }
                 
                 //Close current file and jump to the next
@@ -658,10 +658,10 @@ namespace ChilliSource
         {
             if(in_checkOnlyBundle)
             {
-                if(Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + in_filename))
+                if(Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_filename))
                 {
                     //Check if the file has become corrupted
-                    return (CalculateChecksum(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + in_filename) == in_checksum);
+                    return (CalculateChecksum(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_filename) == in_checksum);
                 }
                 
                 return false;

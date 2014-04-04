@@ -1,11 +1,10 @@
-/*
-*  FileSystem.cpp
-*  iOSTemplate
-*
-*  Created by Ian Copland on 25/03/2011.
-*  Copyright 2011 Tag Games Ltd. All rights reserved.
-*
-*/
+//
+//  FileSystem.cpp
+//  Chilli Source
+//
+//  Created by I Copland on 25/03/2011.
+//  Copyright 2011 Tag Games Ltd. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/Windows/Core/File/FileSystem.h>
 
@@ -21,8 +20,7 @@
 //This includes windows so needs to come last, else it might cause problems with other includes
 #include <ChilliSource/Backend/Platform/Windows/Core/File/WindowsFileUtils.h>
 
-//Stupid windows! Why would you #define function names. Heaven forbid that
-//someone else would want to use that function name in their code
+//Undefine the windows file system functions that share names with ours.
 #undef CreateDirectory
 #undef CreateFile
 #undef CopyFile
@@ -32,264 +30,237 @@ namespace ChilliSource
 {
 	namespace Windows 
 	{
-		//constants
-		const std::string kstrSaveDataPath  = "SaveData\\";
-		const std::string kstrCachePath = "Caches\\Cache\\";
-		const std::string kstrDLCPath = "Caches\\DLC\\";
-
-		FileSystem::FileSystem()
+		namespace
 		{
-			Initialise();
+			const std::string k_saveDataPath = "SaveData/";
+			const std::string k_cachePath = "Cache/";
+			const std::string k_dlcPath = "DLC/";
+
+			//--------------------------------------------------------------
+			/// @author I Copland
+			///
+			/// @return whether or not the given file mode is a write mode
+			//--------------------------------------------------------------
+			bool IsWriteMode(Core::FileMode in_fileMode)
+			{
+				switch (in_fileMode)
+				{
+				case Core::FileMode::k_write:
+				case Core::FileMode::k_writeAppend:
+				case Core::FileMode::k_writeAtEnd:
+				case Core::FileMode::k_writeBinary:
+				case Core::FileMode::k_writeBinaryAppend:
+				case Core::FileMode::k_writeBinaryAtEnd:
+				case Core::FileMode::k_writeBinaryTruncate:
+				case Core::FileMode::k_writeTruncate:
+					return true;
+				default:
+					return false;
+
+				}
+			}
+			//--------------------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param The file path.
+			///
+			/// @return Whether or not the given file path exists.
+			//--------------------------------------------------------------
+			bool DoesFileExist(const std::string& in_filePath)
+			{
+				std::wstring filePath = WindowsStringUtils::ConvertStandardPathToWindows(in_filePath);
+				DWORD attributes = GetFileAttributes(filePath.c_str());
+				return (attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY));
+			}
+			//--------------------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param The directory path.
+			///
+			/// @return Whether or not the given directory path exists.
+			//--------------------------------------------------------------
+			bool DoesDirectoryExist(const std::string& in_directoryPath)
+			{
+				std::wstring directoryPath = WindowsStringUtils::ConvertStandardPathToWindows(in_directoryPath);
+				DWORD attributes = GetFileAttributes(directoryPath.c_str());
+				return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
+			}
+			//--------------------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param The directory path.
+			///
+			/// @return Whether or not the given directory path exists.
+			//--------------------------------------------------------------
+			bool DeleteDirectory(const std::string& in_directoryPath)
+			{
+				std::wstring directoryQuery = WindowsStringUtils::ConvertStandardPathToWindows(in_directoryPath) + L"\\*";
+
+				WIN32_FIND_DATA fileData;
+				HANDLE fileHandle = WindowsFileUtils::WindowsFindFirstFile(directoryQuery.c_str(), &fileData);
+				if (fileHandle == INVALID_HANDLE_VALUE || GetLastError() == ERROR_FILE_NOT_FOUND)
+				{
+					return false;
+				}
+
+				do
+				{
+					if (wcscmp(fileData.cFileName, L".") != 0 && wcscmp(fileData.cFileName, L"..") != 0)
+					{
+						if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+						{
+							std::string directoryName = WindowsStringUtils::UTF16ToUTF8(fileData.cFileName);
+							
+							if (DeleteDirectory(Core::StringUtils::StandardisePath(in_directoryPath + directoryName)) == false)
+							{
+								return false;
+							}
+						}
+						else
+						{
+							std::string fileName = WindowsStringUtils::UTF16ToUTF8(fileData.cFileName);
+							std::string filePath = Core::StringUtils::StandardisePath(in_directoryPath + fileName);
+							if (WindowsFileUtils::WindowsDeleteFile(WindowsStringUtils::ConvertStandardPathToWindows(filePath).c_str()) == FALSE)
+							{
+								return false;
+							}
+						}
+					}
+				} while (WindowsFileUtils::WindowsFindNextFile(fileHandle, &fileData) == TRUE);
+
+				bool success = (GetLastError() == ERROR_NO_MORE_FILES);
+				FindClose(fileHandle);
+
+				if (success == false)
+				{
+					return false;
+				}
+
+				if (WindowsFileUtils::WindowsRemoveDirectory(WindowsStringUtils::ConvertStandardPathToWindows(in_directoryPath).c_str()) == FALSE)
+				{
+					return false;
+				}
+
+				return true;
+			}
+			//--------------------------------------------------------------
+			/// Lists all files and sub-directories inside the given directory.
+			/// All paths will be relative to the given directory.
+			///
+			/// @author I Copland
+			///
+			/// @param The directory.
+			/// @param Whether or not to recurse into sub directories.
+			/// @param [Out] The sub directories.
+			/// @param [Out] The files.
+			/// @param [Optional] The relative directory path. This is used
+			/// in recursion and shouldn't be set outside of this function.
+			/// @return Whether or not this succeeded.
+			//--------------------------------------------------------------
+			bool ListDirectoryContents(const std::string& in_directoryPath, bool in_recursive, std::vector<std::string>& out_directoryPaths, std::vector<std::string>& out_filePaths, 
+				const std::string& in_relativeDirectoryPath = "")
+			{
+				std::wstring directoryQuery = WindowsStringUtils::ConvertStandardPathToWindows(in_directoryPath) + L"\\*";
+
+				WIN32_FIND_DATA fileData;
+				HANDLE fileHandle = WindowsFileUtils::WindowsFindFirstFile(directoryQuery.c_str(), &fileData);
+				if (fileHandle == INVALID_HANDLE_VALUE || GetLastError() == ERROR_FILE_NOT_FOUND)
+				{
+					return false;
+				}
+
+				do
+				{
+					if (wcscmp(fileData.cFileName, L".") != 0 && wcscmp(fileData.cFileName, L"..") != 0)
+					{
+						if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+						{
+							std::string directoryName = WindowsStringUtils::UTF16ToUTF8(fileData.cFileName);
+							std::string relativeDirectoryPath = Core::StringUtils::StandardisePath(in_relativeDirectoryPath + directoryName);
+							out_directoryPaths.push_back(relativeDirectoryPath);
+
+							if (in_recursive == true)
+							{
+								std::string absoluteDirectoryPath = Core::StringUtils::StandardisePath(in_directoryPath + directoryName);
+								if (ListDirectoryContents(absoluteDirectoryPath, true, out_directoryPaths, out_filePaths, relativeDirectoryPath) == false)
+								{
+									return false;
+								}
+							}
+						}
+						else
+						{
+							std::string fileName = WindowsStringUtils::UTF16ToUTF8(fileData.cFileName);
+							std::string relativeFilePath = Core::StringUtils::StandardisePath(in_relativeDirectoryPath + fileName);
+							out_filePaths.push_back(relativeFilePath);
+						}
+					}
+				} 
+				while (WindowsFileUtils::WindowsFindNextFile(fileHandle, &fileData) == TRUE);
+
+				bool success = (GetLastError() == ERROR_NO_MORE_FILES);
+				FindClose(fileHandle);
+
+				return success;
+			}
 		}
-		//--------------------------------------------------------------------------------------------------
-		/// Description:
-		///
-		/// Initialise the File Manager for use on the current file system.
-		//--------------------------------------------------------------------------------------------------
-		void FileSystem::Initialise()
+		CS_DEFINE_NAMEDTYPE(FileSystem);
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		FileSystem::FileSystem()
 		{
 			wchar_t pathChars[MAX_PATH];
 			GetModuleFileName(nullptr, pathChars, MAX_PATH);
-			std::string path = WindowsStringUtils::UTF16ToUTF8(std::wstring(pathChars));
+			std::string path = WindowsStringUtils::ConvertWindowsPathToStandard(std::wstring(pathChars));
 			std::string::size_type pos = path.find_last_of("\\/");
-			std::string strWorkingDir(path.substr(0, pos));
+			std::string strWorkingDir = Core::StringUtils::StandardisePath(path.substr(0, pos));
 
-			mstrBundlePath = strWorkingDir + "\\assets\\";
-			mstrDocumentsPath = strWorkingDir + "\\Documents\\";
-			mstrLibraryPath = strWorkingDir + "\\Library\\";
+			m_packagePath = strWorkingDir + "assets/";
+			m_documentsPath = strWorkingDir + "Documents/";
 
 			CreateDirectory(Core::StorageLocation::k_saveData, "");
 			CreateDirectory(Core::StorageLocation::k_cache, "");
 			CreateDirectory(Core::StorageLocation::k_DLC, "");
 		}
-		//--------------------------------------------------------------
-		/// Create File Stream
-		//--------------------------------------------------------------
-		Core::FileStreamSPtr FileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		bool FileSystem::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			//create the file stream
-			Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new Core::FileStream());
+			return (Core::FileSystem::InterfaceID == in_interfaceId || FileSystem::InterfaceID == in_interfaceId);
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		Core::FileStreamUPtr FileSystem::CreateFileStream(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::FileMode in_fileMode) const
+		{
+			Core::FileStreamUPtr fileStream = Core::FileStreamUPtr(new Core::FileStream());
 
-			//check the requested storage location is available
-			if (IsStorageLocationAvailable(ineStorageLocation) == false)
+			if (IsWriteMode(in_fileMode) == true)
 			{
-				CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
-				return newFilestream;
-			}
+				CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
 
-			//get the filepath
-			std::string filepath = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
-
-			//if this is not a read stream, insure that the storage location is writable.
-			if (ineFileMode != Core::FileMode::k_read && ineFileMode != Core::FileMode::k_readBinary)
-			{
-				if (IsStorageLocationWritable(ineStorageLocation) == false)
-				{
-					CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-					return newFilestream;
-				}
+				std::string filePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+				fileStream->Open(filePath, in_fileMode);
 			}
 			else
 			{
-                if(ineStorageLocation == Core::StorageLocation::k_package)
-                {
-                    //Attempt to load the device specific asset first
-                    for(u32 i=0; i<3; ++i)
-                    {
-                        if(DoesFileExist(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + instrFilepath))
-                        {
-                            filepath = GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + instrFilepath;
-                            break;
-                        }
-                    }
-                }
-                //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-                else if (ineStorageLocation == Core::StorageLocation::k_DLC && DoesItemExistInDLCCache(instrFilepath, false) == false)
-                {
-                    //Attempt to load the device specific asset first
-                    for(u32 i=0; i<3; ++i)
-                    {
-                        if(DoesFileExist(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilepath))
-                        {
-                            filepath = GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilepath;
-                            break;
-                        }
-                    }
-                }
+				std::string filePath = GetAbsolutePathToFile(in_storageLocation, in_filePath);
+				fileStream->Open(filePath, in_fileMode);
 			}
 
-			//Load the file
-			newFilestream->Open(filepath, ineFileMode);
-			return newFilestream;
+			return fileStream;
 		}
 		//--------------------------------------------------------------
-		/// Create File
 		//--------------------------------------------------------------
-		bool FileSystem::CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const
+		bool FileSystem::CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
 		{
-			Core::FileStreamSPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FileMode::k_writeBinary);
+			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
 
-			if (pFileStream.get() == nullptr || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
+			std::string directoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
+			if (Windows::DoesDirectoryExist(directoryPath) == false)
 			{
-				CS_LOG_ERROR("Failed to create file: " + instrDirectory);
-				return false;
-			}
-
-			pFileStream->Write(inpbyData, (s32)inudwDataSize);
-			pFileStream->Close();
-			return true;
-		}
-		//--------------------------------------------------------------
-		/// Create Directory
-		//--------------------------------------------------------------
-		bool FileSystem::CreateDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
-		{
-			//check the requested storage location is available
-			if (IsStorageLocationAvailable(ineStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
-				return false;
-			}
-
-			//insure that the storage location is writable.
-			if (IsStorageLocationWritable(ineStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-				return false;
-			}
-
-			//create the directory
-			return SHCreateDirectoryExA(nullptr, (GetStorageLocationDirectory(ineStorageLocation) + instrDirectory).c_str(), nullptr) == ERROR_SUCCESS;
-		}
-		//--------------------------------------------------------------
-		/// Copy File
-		//--------------------------------------------------------------
-		bool FileSystem::CopyFile(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceFilepath, 
-			Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const
-		{
-            //check the requested source storage location is available
-            if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested source Storage Location is not available on this platform!");
-                return false;
-            }
-            
-            //check the requested destination storage location is available
-            if (IsStorageLocationAvailable(ineDestinationStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested destination Storage Location is not available on this platform!");
-                return false;
-            }
-            
-            //insure that the destination location is writable.
-            if (IsStorageLocationWritable(ineDestinationStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Cannot write to the destination Storage Location!");
-                return false;
-            }
-            
-            if(!DoesFileExist(ineSourceStorageLocation, instrSourceFilepath))
-            {
-                CS_LOG_ERROR("Source file does not exist");
-                return false;
-            }
-            
-            std::string strSrcPath;
-            if(ineSourceStorageLocation == Core::StorageLocation::k_package)
-            {
-                //Attempt to load the device specific asset first
-                for(u32 i=0; i<3; ++i)
-                {
-                    if(DoesFileExist(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + instrSourceFilepath))
-                    {
-                        strSrcPath = GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + instrSourceFilepath;
-                        break;
-                    }
-                }
-            }
-            else if(ineSourceStorageLocation == Core::StorageLocation::k_DLC && DoesItemExistInDLCCache(instrSourceFilepath, false) == false)
-            {
-                //Attempt to load the device specific asset first
-                for(u32 i=0; i<3; ++i)
-                {
-                    if(DoesFileExist(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrSourceFilepath))
-                    {
-                        strSrcPath = GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrSourceFilepath;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                strSrcPath = GetStorageLocationDirectory(ineSourceStorageLocation) + instrSourceFilepath;
-            }
-            
-            //get the path to the file
-            std::string strPath, strName;
-            ChilliSource::Core::StringUtils::SplitFilename(instrDestinationFilepath, strName, strPath);
-            
-            //create the output directory
-            CreateDirectory(ineDestinationStorageLocation, strPath);
-            
-            //try and copy the files
-			std::wstring sourcePath = WindowsStringUtils::UTF8ToUTF16(instrSourceFilepath);
-			std::wstring destPath = WindowsStringUtils::UTF8ToUTF16(GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath);
-			if (WindowsFileUtils::WindowsCopyFile(sourcePath.c_str(), destPath.c_str(), FALSE) == FALSE)
-			{
-				return false;
-			}
-
-			return false;
-		}
-		//--------------------------------------------------------------
-		/// Copy Directory
-		//--------------------------------------------------------------
-		bool FileSystem::CopyDirectory(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceDirectory, 
-			Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationDirectory) const
-		{
-			//NOTE: This doesnt work.
-
-
-			//check the requested source storage location is available
-			if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Requested source Storage Location is not available on this platform!");
-				return false;
-			}
-
-			//check the requested destination storage location is available
-			if (IsStorageLocationAvailable(ineDestinationStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Requested destination Storage Location is not available on this platform!");
-				return false;
-			}
-
-			//insure that the destination location is writable.
-			if (IsStorageLocationWritable(ineDestinationStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Cannot write to the destination Storage Location!");
-				return false;
-			}
-
-			//get all the files in the directory
-			std::vector<std::string> astrFilenames;
-			GetFileNamesInDirectory(ineSourceStorageLocation, instrSourceDirectory, true, astrFilenames);
-
-			//error if there are no files
-			if (astrFilenames.size() == 0)
-			{
-				CS_LOG_ERROR("Cannot copy contents of directory as there are no files: " + instrSourceDirectory);
-				return false;
-			}
-
-			//copy each of these files individually
-			std::string strSourceProperPath = Core::StringUtils::StandardisePath(instrSourceDirectory);
-			std::string strDestProperPath = Core::StringUtils::StandardisePath(instrDestinationDirectory);
-			for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
-			{
-				if (CopyFile(ineSourceStorageLocation, strSourceProperPath + *it, 
-					ineDestinationStorageLocation, strDestProperPath + *it) == false)
+				if (WindowsFileUtils::WindowsCreateDirectory(WindowsStringUtils::ConvertStandardPathToWindows(directoryPath).c_str(), NULL) == FALSE)
 				{
+					CS_LOG_ERROR("File System: Failed to create directory '" + in_directoryPath + "'");
 					return false;
 				}
 			}
@@ -297,599 +268,388 @@ namespace ChilliSource
 			return true;
 		}
 		//--------------------------------------------------------------
-		/// Delete File
 		//--------------------------------------------------------------
-		bool FileSystem::DeleteFile(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
+		bool FileSystem::CopyFile(Core::StorageLocation in_sourceStorageLocation, const std::string& in_sourceFilePath, 
+			Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const
 		{
-			//check the requested storage location is available
-			if (IsStorageLocationAvailable(ineStorageLocation) == false)
+			CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
+            
+			std::string sourceFilePath = GetAbsolutePathToFile(in_sourceStorageLocation, in_sourceFilePath);
+			if (sourceFilePath.empty() == true)
+            {
+				CS_LOG_ERROR("File System: Trying to copy file '" + in_sourceFilePath + "' but it does not exist.");
+                return false;
+            }
+
+            //get the path to the file
+			std::string destinationFileName, destinationDirectoryPath;
+			ChilliSource::Core::StringUtils::SplitFilename(in_destinationFilePath, destinationFileName, destinationDirectoryPath);
+            
+            //create the output directory
+			CreateDirectory(in_destinationStorageLocation, destinationDirectoryPath);
+            
+            //try and copy the files
+			std::wstring sourceWPath = WindowsStringUtils::ConvertStandardPathToWindows(sourceFilePath);
+			std::wstring destWPath = WindowsStringUtils::ConvertStandardPathToWindows(GetAbsolutePathToStorageLocation(in_destinationStorageLocation) + in_destinationFilePath);
+			if (WindowsFileUtils::WindowsCopyFile(sourceWPath.c_str(), destWPath.c_str(), FALSE) == FALSE)
 			{
-				CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
+				CS_LOG_ERROR("File System: Failed to copy file '" + in_sourceFilePath + "'");
 				return false;
 			}
 
-			//insure that the storage location is writable.
-			if (IsStorageLocationWritable(ineStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-				return false;
-			}
-
-			//remove the file
-			std::wstring filename = WindowsStringUtils::UTF8ToUTF16(GetStorageLocationDirectory(ineStorageLocation) + instrFilepath);
-			WindowsFileUtils::WindowsDeleteFile(filename.c_str());
-
-			//return successful
 			return true;
 		}
 		//--------------------------------------------------------------
-		/// Delete Directory
 		//--------------------------------------------------------------
-		bool FileSystem::DeleteDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
+		bool FileSystem::CopyDirectory(Core::StorageLocation in_sourceStorageLocation, const std::string& in_sourceDirectoryPath, 
+			Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationDirectoryPath) const
 		{
-			//check the requested storage location is available
-			if (IsStorageLocationAvailable(ineStorageLocation) == false)
+			CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
+
+			if (DoesDirectoryExist(in_sourceStorageLocation, in_sourceDirectoryPath) == false)
 			{
-				CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
+				CS_LOG_ERROR("File System: Trying to copy directory '" + in_sourceDirectoryPath + "' but it doesn't exist.");
 				return false;
 			}
 
-			//insure that the storage location is writable.
-			if (IsStorageLocationWritable(ineStorageLocation) == false)
+			std::vector<std::string> filePaths = GetFilePaths(in_sourceStorageLocation, in_sourceDirectoryPath, true);
+
+			//if the source directory is empty, just create the equivelent directory in the destination
+			if (filePaths.size() == 0)
 			{
-				CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-				return false;
+				CreateDirectory(in_destinationStorageLocation, in_destinationDirectoryPath);
+			}
+			else
+			{
+				std::string sourceDirectoryPath = Core::StringUtils::StandardisePath(in_sourceDirectoryPath);
+				std::string destinationDirectoryPath = Core::StringUtils::StandardisePath(in_destinationDirectoryPath);
+				for (const std::string& filePath : filePaths)
+				{
+					if (CopyFile(in_sourceStorageLocation, sourceDirectoryPath + filePath, in_destinationStorageLocation, destinationDirectoryPath + filePath) == false)
+					{
+						CS_LOG_ERROR("File System: Failed to copy directory '" + in_sourceDirectoryPath + "'");
+						return false;
+					}
+				}
 			}
 
-			//remove the directory
-			std::wstring directory = WindowsStringUtils::UTF8ToUTF16(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
-			WindowsFileUtils::WindowsRemoveDirectory(directory.c_str());
-
-			//return successful
 			return true;
 		}
 		//--------------------------------------------------------------
-		/// Get File Names With Extension In Directory
 		//--------------------------------------------------------------
-		void FileSystem::GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-			const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
+		bool FileSystem::DeleteFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const
 		{
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return;
-            }
-            
-            std::vector<std::string> astrDirectoriesToCheck;
-            
-            switch(ineStorageLocation)
-            {
-                case Core::StorageLocation::k_package:
-                    for(u32 i=0; i<3; ++i)
-                    {
-                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + mastrResourceDirectory[i] + instrDirectory);
-                    }
-                    break;
-                case Core::StorageLocation::k_DLC:
-                    for(u32 i=0; i<3; ++i)
-                    {
-                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrDirectory);
-                    }
-                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrDirectory);
-                    break;
-                default:
-                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
-                    break;
-            }
-            
-            for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
-            {
-				std::vector<std::string> files;
-				std::vector<std::string> directories;
-				ListDirectoryContents(*it, inbRecurseIntoSubDirectories, directories, files);
+			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to delete from a read only storage location.");
 
-				for (const std::string& file : files)
-				{
-					if (Core::StringUtils::EndsWith(file, instrExtension, false) == true)
-					{
-						if (inbAppendFullPath)
-						{
-							outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + file);
-						}
-						else
-						{
-							outstrFileNames.push_back(file);
-						}
-					}
-				}
-            }
-            
-            std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
-            outstrFileNames.resize(it - outstrFileNames.begin()); 
-		}
-		//--------------------------------------------------------------
-		/// Get Path For Files With Name In Directory
-		///
-		/// Creates a dynamic array containing the filenames of each of
-		/// each file with the given name in the given
-		/// directory.
-		///
-		/// @param The Storage Location
-		/// @param The directory
-		/// @param Flag to determine whether or not to recurse into sub directories
-		/// @param The name
-		/// @param Output dynamic array containing the filenames.
-		//--------------------------------------------------------------
-		void FileSystem::GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-			const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
-		{
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return;
-            }
-            
-            std::vector<std::string> astrDirectoriesToCheck;
-            
-            switch(ineStorageLocation)
-            {
-                case Core::StorageLocation::k_package:
-                    for(u32 i=0; i<3; ++i)
-                    {
-                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + mastrResourceDirectory[i] + instrDirectory);
-                    }
-                    break;
-                case Core::StorageLocation::k_DLC:
-                    for(u32 i=0; i<3; ++i)
-                    {
-                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrDirectory);
-                    }
-                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrDirectory);
-                    break;
-                default:
-                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
-                    break;
-            }
-            
-            for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
-            {
-				std::vector<std::string> files;
-				std::vector<std::string> directories;
-				ListDirectoryContents(*it, inbRecurseIntoSubDirectories, directories, files);
-
-				for (const std::string& file : files)
-				{
-					if (Core::StringUtils::EndsWith(file, instrName, false) == true)
-					{
-						if (inbAppendFullPath)
-						{
-							outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + file);
-						}
-						else
-						{
-							outstrFileNames.push_back(file);
-						}
-					}
-				}
-            }
-            
-            std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
-            outstrFileNames.resize(it - outstrFileNames.begin()); 
-		}
-		//--------------------------------------------------------------
-		/// Get File Names In Directory
-		//--------------------------------------------------------------
-		void FileSystem::GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
-			std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
-		{
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return;
-            }
-            
-            std::vector<std::string> astrDirectoriesToCheck;
-            
-            switch(ineStorageLocation)
-            {
-                case Core::StorageLocation::k_package:
-                    for(u32 i=0; i<3; ++i)
-                    {
-                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + mastrResourceDirectory[i] + instrDirectory);
-                    }
-                    break;
-                case Core::StorageLocation::k_DLC:
-                    for(u32 i=0; i<3; ++i)
-                    {
-                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrDirectory);
-                    }
-                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrDirectory);
-                    break;
-                default:
-                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
-                    break;
-            }
-            
-            for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
-            {
-				std::vector<std::string> files;
-				std::vector<std::string> directories;
-				ListDirectoryContents(*it, inbRecurseIntoSubDirectories, directories, files);
-
-				for (const std::string& file : files)
-				{
-					if (inbAppendFullPath)
-					{
-						outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + file);
-					}
-					else
-					{
-						outstrFileNames.push_back(file);
-					}
-				}
-            }
-            
-            std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
-            outstrFileNames.resize(it - outstrFileNames.begin()); 
-		}
-		//--------------------------------------------------------------
-		/// Get Directories In Directory
-		//--------------------------------------------------------------
-		void FileSystem::GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-			std::vector<std::string> &outstrDirectories, bool inbAppendFullPath) const
-		{
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return;
-            }
-            
-            std::vector<std::string> astrDirectoriesToCheck;
-            
-            switch(ineStorageLocation)
-            {
-                case Core::StorageLocation::k_package:
-                    for(u32 i=0; i<3; ++i)
-                    {
-                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + mastrResourceDirectory[i] + instrDirectory);
-                    }
-                    break;
-                case Core::StorageLocation::k_DLC:
-                    for(u32 i=0; i<3; ++i)
-                    {
-                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrDirectory);
-                    }
-                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrDirectory);
-                    break;
-                default:
-                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
-                    break;
-            }
-            
-            for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
-            {
-				std::vector<std::string> files;
-				std::vector<std::string> directories;
-				ListDirectoryContents(*it, inbRecurseIntoSubDirectories, directories, files);
-
-				for (const std::string& directory : directories)
-				{
-					if (inbAppendFullPath)
-					{
-						outstrDirectories.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + directory);
-					}
-					else
-					{
-						outstrDirectories.push_back(directory);
-					}
-				}
-            }
-            
-            std::sort(outstrDirectories.begin(), outstrDirectories.end());
-            std::vector<std::string>::iterator it = std::unique(outstrDirectories.begin(), outstrDirectories.end());
-            outstrDirectories.resize(it - outstrDirectories.begin()); 
-		}
-        //--------------------------------------------------------------
-        /// Get Directory For DLC File
-        ///
-        /// @param The filename of the DLC asset.
-        /// @return The directory to either the package DLC or cache DLC.
-        //--------------------------------------------------------------
-        std::string FileSystem::GetDirectoryForDLCFile(const std::string& instrFilePath) const
-        {
-            std::string strResult;
-            std::string strPath = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFilePath);
-            
-            if(DoesFileExist(strPath))
-            {
-                strResult = strPath;
-            }
-            else
-            {
-                for(u32 i=0; i<3; ++i)
-                {
-                    strPath = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilePath);
-                    if(DoesFileExist(strPath))
-                    {
-                        strResult = strPath;
-                        break;
-                    }
-                }                                                    
-            }
-            
-            return strResult;
-        }
-        //--------------------------------------------------------------
-        /// Get Directory For Package File
-        ///
-        /// @param The filename of the package asset.
-        /// @return The directory to either the correct device package directory.
-        //--------------------------------------------------------------
-        std::string FileSystem::GetDirectoryForPackageFile(const std::string& instrFilePath) const
-        {
-            std::string strResult;
-            
-            for(u32 i=0; i<3; ++i)
-            {
-                std::string strPath = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + instrFilePath);
-                if(DoesFileExist(strPath))
-                {
-                    strResult = strPath;
-                    break;
-                }
-            }
-            
-            return strResult;
-        }
-		//--------------------------------------------------------------
-		/// Does File Exist
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExist(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
-		{
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return false;
-            }
-            
-            if(ineStorageLocation == Core::StorageLocation::k_package)
-            {
-                for(u32 i=0; i<3; ++i)
-                {
-                    if(DoesFileExist(mstrBundlePath + mastrResourceDirectory[i] + instrFilepath))
-                    {
-                        return true;
-                    }
-                }
-                
-                return false;
-            }
-            
-            //get the filepath
-            std::string path = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
-            
-            //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-            if (ineStorageLocation == Core::StorageLocation::k_DLC)
-            {
-                if (DoesItemExistInDLCCache(instrFilepath, false) == true)
-                {
-                    return true;
-                }
-                
-                return DoesFileExist(Core::StorageLocation::k_package, mstrPackageDLCPath + instrFilepath);
-            }
-            
-            //return whether or not the file exists
-			return DoesFileExist(ChilliSource::Core::StringUtils::StandardisePath(path));
-		}
-		//--------------------------------------------------------------
-		/// Does Directory Exist
-		//--------------------------------------------------------------
-		bool FileSystem::DoesDirectoryExist(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
-		{
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return false;
-            }
-            
-            if(ineStorageLocation == Core::StorageLocation::k_package)
-            {
-                for(u32 i=0; i<3; ++i)
-                {
-                    if(DoesDirectoryExist(mstrBundlePath + mastrResourceDirectory[i] + instrDirectory))
-                    {
-                        return true;
-                    }
-                }
-                
-                return false;
-            }
-            
-            //get the filepath
-            std::string path = GetStorageLocationDirectory(ineStorageLocation) + instrDirectory;
-            
-            //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-            if (ineStorageLocation == Core::StorageLocation::k_DLC)
-            {
-                if (DoesItemExistInDLCCache(instrDirectory, true) == true)
-                {
-                    return true;
-                }
-                
-                return DoesDirectoryExist(Core::StorageLocation::k_package, mstrPackageDLCPath + instrDirectory);
-            }
-            
-            //return whether or not the dir exists
-			return DoesDirectoryExist(ChilliSource::Core::StringUtils::StandardisePath(path));
-		}
-        //--------------------------------------------------------------
-		/// Does File Exist
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExist(const std::string& instrFilepath) const
-		{
-			//return whether or not the file exists
-			std::wstring filepath = WindowsStringUtils::UTF8ToUTF16(Core::StringUtils::StandardisePath(instrFilepath));
-			DWORD attributes = GetFileAttributes(filepath.c_str());
-			return (attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY));
-		}
-		//--------------------------------------------------------------
-		/// Does File Exist In Cached DLC
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInCachedDLC(const std::string& instrFilepath) const
-		{
-			return DoesItemExistInDLCCache(instrFilepath, false);
-		}
-		//--------------------------------------------------------------
-		/// Does File Exist In Package DLC
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInPackageDLC(const std::string& instrFilepath) const
-		{
-			std::string path = GetStorageLocationDirectory(Core::StorageLocation::k_package) + mstrPackageDLCPath + instrFilepath;
-			return DoesFileExist(path);
-		}
-		//--------------------------------------------------------------
-		/// Does Directory Exist
-		//--------------------------------------------------------------
-		bool FileSystem::DoesDirectoryExist(const std::string& instrDirectory) const
-		{
-			//return whether or not the file exists
-			std::wstring directoryPath = WindowsStringUtils::UTF8ToUTF16(Core::StringUtils::StandardisePath(instrDirectory));
-			DWORD attributes = GetFileAttributes(directoryPath.c_str());
-			return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
-		}
-		//--------------------------------------------------------------
-		/// Is Storage Location Available
-		//--------------------------------------------------------------
-		bool FileSystem::IsStorageLocationAvailable(Core::StorageLocation ineStorageLocation) const
-		{
-			switch (ineStorageLocation) 
+			std::wstring filePath = WindowsStringUtils::ConvertStandardPathToWindows(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath);
+			if (WindowsFileUtils::WindowsDeleteFile(filePath.c_str()) == FALSE)
 			{
-			case Core::StorageLocation::k_package:
-			case Core::StorageLocation::k_saveData:
-			case Core::StorageLocation::k_cache:
-			case Core::StorageLocation::k_DLC:
-			case Core::StorageLocation::k_root:
+				CS_LOG_ERROR("File System: Failed to delete file '" + in_filePath + "'");
+				return false;
+			}
+
+			return true;
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DeleteDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+		{
+			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to delete from a read only storage location.");
+
+			std::string directoryPath = GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath);
+			if (directoryPath != "")
+			{
+				if (Windows::DeleteDirectory(directoryPath) == false)
+				{
+					CS_LOG_ERROR("File System: Failed to delete directory '" + in_directoryPath + "'");
+					return false;
+				}
 				return true;
-			default:
-				return false;
+			}
+
+			return false;
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		std::vector<std::string> FileSystem::GetFilePaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
+		{
+			std::vector<std::string> possibleDirectories = GetPossibleAbsoluteDirectoryPaths(in_storageLocation, in_directoryPath);
+            
+			std::vector<std::string> output;
+			std::vector<std::string> filePaths;
+			std::vector<std::string> directoryPaths;
+			for (const std::string& possibleDirectory : possibleDirectories)
+			{
+				filePaths.clear();
+				directoryPaths.clear();
+
+				ListDirectoryContents(possibleDirectory, in_recursive, directoryPaths, filePaths);
+				output.insert(output.end(), filePaths.begin(), filePaths.end());
+			}
+
+			std::sort(output.begin(), output.end());
+			std::vector<std::string>::iterator it = std::unique(output.begin(), output.end());
+			output.resize(it - output.begin());
+			return output;
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		std::vector<std::string> FileSystem::GetDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
+		{
+			std::vector<std::string> possibleDirectories = GetPossibleAbsoluteDirectoryPaths(in_storageLocation, in_directoryPath);
+
+			std::vector<std::string> output;
+			std::vector<std::string> filePaths;
+			std::vector<std::string> directoryPaths;
+			for (const std::string& possibleDirectory : possibleDirectories)
+			{
+				filePaths.clear();
+				directoryPaths.clear();
+
+				ListDirectoryContents(possibleDirectory, in_recursive, directoryPaths, filePaths);
+				output.insert(output.end(), directoryPaths.begin(), directoryPaths.end());
+			}
+
+			std::sort(output.begin(), output.end());
+			std::vector<std::string>::iterator it = std::unique(output.begin(), output.end());
+			output.resize(it - output.begin());
+			return output;
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesFileExist(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const
+		{
+			switch (in_storageLocation)
+			{
+				case Core::StorageLocation::k_package:
+				{
+					const std::string* resourceDirectories = GetResourceDirectories();
+					for (u32 i = 0; i < 3; ++i)
+					{
+						if (Windows::DoesFileExist(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + resourceDirectories[i] + in_filePath) == true)
+						{
+							return true;
+						}
+					}
+					return false;
+				}
+				case Core::StorageLocation::k_DLC:
+				{
+					if (DoesItemExistInDLCCache(in_filePath, false) == true)
+					{
+						return true;
+					}
+
+					return DoesFileExist(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+				}
+				default:
+				{
+					std::string path = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath);
+					return Windows::DoesFileExist(path);
+				}
 			}
 		}
 		//--------------------------------------------------------------
-		/// Get Storage Location Directory
 		//--------------------------------------------------------------
-		std::string FileSystem::GetStorageLocationDirectory(Core::StorageLocation ineStorageLocation) const
+		bool FileSystem::DoesDirectoryExist(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
 		{
-			//get the storage location path
-			std::string strStorageLocationPath;
-			switch (ineStorageLocation) 
+			switch (in_storageLocation)
+			{
+				case Core::StorageLocation::k_package:
+				{
+					const std::string* resourceDirectories = GetResourceDirectories();
+					for (u32 i = 0; i < 3; ++i)
+					{
+						if (Windows::DoesDirectoryExist(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + resourceDirectories[i] + in_directoryPath) == true)
+						{
+							return true;
+						}
+					}
+					return false;
+				}
+				case Core::StorageLocation::k_DLC:
+				{
+					if (DoesItemExistInDLCCache(in_directoryPath, true) == true)
+					{
+						return true;
+					}
+
+					return DoesDirectoryExist(Core::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
+				}
+				default:
+				{
+					std::string path = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath);
+					return Windows::DoesDirectoryExist(path);
+				}
+			}
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesFileExistInCachedDLC(const std::string& in_filePath) const
+		{
+			return DoesItemExistInDLCCache(in_filePath, false);
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesFileExistInPackageDLC(const std::string& in_filePath) const
+		{
+			return DoesFileExist(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		std::string FileSystem::GetAbsolutePathToStorageLocation(Core::StorageLocation in_storageLocation) const
+		{
+			switch (in_storageLocation)
 			{
 			case Core::StorageLocation::k_package:
-				strStorageLocationPath = mstrBundlePath;
-				break;
+				return m_packagePath;
 			case Core::StorageLocation::k_saveData:
-				strStorageLocationPath = mstrDocumentsPath + kstrSaveDataPath;
-				break;
+				return m_documentsPath + k_saveDataPath;
 			case Core::StorageLocation::k_cache:
-				strStorageLocationPath = mstrLibraryPath + kstrCachePath;
-				break;
+				return m_documentsPath + k_cachePath;
 			case Core::StorageLocation::k_DLC:
-				strStorageLocationPath = mstrLibraryPath + kstrDLCPath;
-				break;
+				return m_documentsPath + k_dlcPath;
 			case Core::StorageLocation::k_root:
-				strStorageLocationPath = "";
+				return "";
 				break;
 			default:
 				CS_LOG_ERROR("Storage Location not available on this platform!");
-				break;
+				return "";
 			}
-
-			return strStorageLocationPath;
-		}
-		//--------------------------------------------------------------
-		/// Does Item Exist In DLC Cache
-		//--------------------------------------------------------------
-		bool FileSystem::DoesItemExistInDLCCache(const std::string& instrPath, bool inbFolder) const
-		{
-			//Check that this storage location is available
-			if (IsStorageLocationAvailable(Core::StorageLocation::k_DLC) == false)
-			{
-				CS_LOG_ERROR("Requested Storage Location is not available!");
-				return false;
-			}
-
-			std::wstring itemPath = WindowsStringUtils::UTF8ToUTF16(Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
-			DWORD attributes = GetFileAttributes(itemPath.c_str());
-			return (attributes != INVALID_FILE_ATTRIBUTES);
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::ListDirectoryContents(const std::string& in_directory, bool in_recursive, std::vector<std::string>& out_directories, std::vector<std::string>& out_files) const
+		std::string FileSystem::GetAbsolutePathToFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const
 		{
-			std::wstring path = WindowsStringUtils::UTF8ToUTF16(ChilliSource::Core::StringUtils::StandardisePath(in_directory));
-
-			std::stack<std::wstring> directoryStack;
-			directoryStack.push(path);
-
-			while (directoryStack.size() > 0)
+			if (DoesFileExist(in_storageLocation, in_filePath) == true)
 			{
-				path = directoryStack.top();
-				directoryStack.pop();
-
-				std::wstring relativePath = path.substr(in_directory.length(), path.length() - in_directory.length());
-
-				WIN32_FIND_DATA fileData;
-				HANDLE fileHandle = WindowsFileUtils::WindowsFindFirstFile(path.c_str(), &fileData);
-				if (fileHandle == INVALID_HANDLE_VALUE)
+				switch (in_storageLocation)
 				{
-					return false;
-				}
-				else
-				{
-					do
+					case Core::StorageLocation::k_package:
 					{
-						if (wcscmp(fileData.cFileName, L".") != 0 && wcscmp(fileData.cFileName, L"..") != 0)
+						const std::string* resourceDirectories = GetResourceDirectories();
+						std::string absoluteFilePath;
+						for (u32 i = 0; i < 3; ++i)
 						{
-							if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+							absoluteFilePath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + resourceDirectories[i] + in_filePath);
+							if (Windows::DoesFileExist(absoluteFilePath) == true)
 							{
-								std::wstring directoryPath = relativePath + L"/" + fileData.cFileName;
-								if (in_recursive == true)
-								{
-									directoryStack.push(directoryPath);
-								}
-
-								out_directories.push_back(WindowsStringUtils::UTF16ToUTF8(directoryPath));
-							}
-							else
-							{
-								std::wstring filePath = relativePath + L"/" + fileData.cFileName;
-								out_files.push_back(WindowsStringUtils::UTF16ToUTF8(filePath));
+								break;
 							}
 						}
-					} 
-					while (WindowsFileUtils::WindowsFindNextFile(fileHandle, &fileData) != 0);
 
-					if (GetLastError() != ERROR_NO_MORE_FILES)
-					{
-						FindClose(fileHandle);
-						return false;
+						return absoluteFilePath;
 					}
-					
-					FindClose(fileHandle);
-					fileHandle = INVALID_HANDLE_VALUE;
+					case Core::StorageLocation::k_DLC:
+					{
+						std::string filePath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_filePath);
+						if (Windows::DoesFileExist(filePath) == true)
+						{
+							return filePath;
+						}
+
+						return GetAbsolutePathToFile(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+					}
+					default:
+					{
+						return GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+					}
 				}
 			}
 
-			return false;
+			return "";
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		std::string FileSystem::GetAbsolutePathToDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+		{
+			if (DoesDirectoryExist(in_storageLocation, in_directoryPath) == true)
+			{
+				switch (in_storageLocation)
+				{
+					case Core::StorageLocation::k_package:
+					{
+						const std::string* resourceDirectories = GetResourceDirectories();
+						std::string absoluteDirectoryPath;
+						for (u32 i = 0; i < 3; ++i)
+						{
+							absoluteDirectoryPath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + resourceDirectories[i] + in_directoryPath);
+							if (Windows::DoesDirectoryExist(absoluteDirectoryPath) == true)
+							{
+								break;
+							}
+						}
+
+						return absoluteDirectoryPath;
+					}
+					case Core::StorageLocation::k_DLC:
+					{
+						std::string filePath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_directoryPath);
+						if (Windows::DoesDirectoryExist(filePath) == true)
+						{
+							return filePath;
+						}
+
+						return GetAbsolutePathToDirectory(Core::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
+					}
+					default:
+					{
+						return GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
+					}
+				}
+			}
+
+			return "";
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesItemExistInDLCCache(const std::string& in_path, bool in_isDirectory) const
+		{
+			std::string path = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_path);
+			if (in_isDirectory == true)
+			{
+				return Windows::DoesDirectoryExist(path);
+			}
+			else
+			{
+				return Windows::DoesFileExist(path);
+			}
+		}
+		//------------------------------------------------------------
+		//------------------------------------------------------------
+		std::vector<std::string> FileSystem::GetPossibleAbsoluteDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_path) const
+		{
+			std::vector<std::string> output;
+
+			switch (in_storageLocation)
+			{
+				case Core::StorageLocation::k_package:
+				{
+					const std::string* resourceDirectories = GetResourceDirectories();
+					for (u32 i = 0; i < 3; ++i)
+					{
+						output.push_back(GetAbsolutePathToStorageLocation(in_storageLocation) + resourceDirectories[i] + in_path);
+					}
+					break;
+				}
+				case Core::StorageLocation::k_DLC:
+				{
+					const std::string* resourceDirectories = GetResourceDirectories();
+					for (u32 i = 0; i < 3; ++i)
+					{
+						output.push_back(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + resourceDirectories[i] + GetPackageDLCPath() + in_path);
+					}
+					output.push_back(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_path);
+					break;
+				}
+				default:
+				{
+					output.push_back(GetAbsolutePathToStorageLocation(in_storageLocation) + in_path);
+					break;
+				}
+			}
+
+			return output;
 		}
 	}
 }

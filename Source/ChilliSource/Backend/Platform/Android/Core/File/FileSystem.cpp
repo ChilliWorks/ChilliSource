@@ -1,11 +1,10 @@
-/*
- *  FileSystem.cpp
- *  iOSTemplate
- *
- *  Created by Ian Copland on 25/03/2011.
- *  Copyright 2011 Tag Games Ltd. All rights reserved.
- *
- */
+//
+//  FileSystem.cpp
+//  Chilli Source
+//
+//  Created by I Copland on 25/03/2011.
+//  Copyright 2011 Tag Games Ltd. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
 
@@ -30,642 +29,599 @@ namespace ChilliSource
 {
 	namespace Android 
 	{
-		const std::string kstrAssetsDir = "assets/";
-		const std::string kstrSaveDataDir = "files/SaveData/";
-		const std::string kstrDLCDir = "cache/DLC/";
-		const std::string kstrCacheDir = "cache/Cache/";
-
-		FileSystem::FileSystem()
+		namespace
 		{
-			CoreJavaInterfaceSPtr pCoreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
+			const std::string k_assetsPath = "assets/";
+			const std::string k_saveDataPath = "files/SaveData/";
+			const std::string k_dlcPath = "cache/DLC/";
+			const std::string k_cachePath = "cache/Cache/";
 
-			//get the path to the bundle dir
-			mstrPathToAPK = pCoreJI->GetAPKDirectory();
-
-			//get the storage directory
-			std::string externalStorage = pCoreJI->GetExternalStorageDirectory();
-			if (externalStorage != "")
-			{
-				//if external storage is available
-				std::string packageName = pCoreJI->GetPackageName();
-				mstrStorageDir = Core::StringUtils::StandardisePath(externalStorage + "/Android/data/" + packageName + "/");
-
-				//Create the directories
-				CreateBaseDirectory(GetStorageLocationDirectory(Core::StorageLocation::k_saveData));
-				CreateBaseDirectory(GetStorageLocationDirectory(Core::StorageLocation::k_cache));
-				CreateBaseDirectory(GetStorageLocationDirectory(Core::StorageLocation::k_DLC));
-
-				mbStorageAvailable = true;
-			}
-			else
-			{
-				//if neither is available
-				CS_LOG_FATAL("Cannot access external storage!");
-				mbStorageAvailable = false;
-			}
-
-			CreateHashedAPKFileList();
-		}
-		//--------------------------------------------------------------
-		/// File Info Sort Predicate
-		///
-		/// Sort by file name hash lowest to highest
-		//--------------------------------------------------------------
-		bool FileInfoSortPredicate(const APKFileInfo& inLHS, const APKFileInfo& inRHS)
-		{
-			return inLHS.udwFileNameHash < inRHS.udwFileNameHash;
-		}
-        //--------------------------------------------------------------
-        /// Create Hashed APK File List
-        ///
-        //--------------------------------------------------------------
-        void FileSystem::CreateHashedAPKFileList()
-        {
-        	std::vector<std::string> aContent;
-        	std::vector<unz_file_pos> aZipPos;
-        	GetAllItemsInDirectoryInAPK("", true, aContent, aZipPos);
-
-        	APKFileInfo sInfo;
-        	u32 i=0;
-        	for(std::vector<std::string>::const_iterator it = aContent.begin(); it != aContent.end(); ++it, ++i)
-        	{
-        		sInfo.udwFileNameHash = Core::HashCRC32::GenerateHashCode(*it);
-        		sInfo.sZipPos = aZipPos[i];
-        		mAPKFileInfo.push_back(sInfo);
-        	}
-
-            std::sort(mAPKFileInfo.begin(), mAPKFileInfo.end(), FileInfoSortPredicate);
-        }
-		//--------------------------------------------------------------
-		/// Create File Stream
-		//--------------------------------------------------------------
-		Core::FileStreamSPtr FileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
-		{
-			Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new Core::FileStream());
-
-			//check the requested storage location is available
-			if (IsStorageLocationAvailable(ineStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Requested Storage Location is not available for " + instrFilepath);
-				return newFilestream;
-			}
-
-			std::string filepath = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
-
-			//if this is not a read stream, insure that the storage location is writable.
-			if (ineFileMode != Core::FileMode::k_read && ineFileMode != Core::FileMode::k_readBinary)
-			{
-                if(IsStorageLocationWritable(ineStorageLocation) == true)
+            //--------------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return whether or not the given file mode is a write mode
+            //--------------------------------------------------------------
+            bool IsWriteMode(Core::FileMode in_fileMode)
+            {
+                switch (in_fileMode)
                 {
-                    newFilestream->Open(filepath, ineFileMode);
+                    case Core::FileMode::k_write:
+                    case Core::FileMode::k_writeAppend:
+                    case Core::FileMode::k_writeAtEnd:
+                    case Core::FileMode::k_writeBinary:
+                    case Core::FileMode::k_writeBinaryAppend:
+                    case Core::FileMode::k_writeBinaryAtEnd:
+                    case Core::FileMode::k_writeBinaryTruncate:
+                    case Core::FileMode::k_writeTruncate:
+                        return true;
+                    default:
+                    	return false;
                 }
-                else
-                {
-                    CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-                }
-
-                return newFilestream;
-			}
-
-			if (ineStorageLocation == Core::StorageLocation::k_package)
+            }
+            //--------------------------------------------------------------
+            /// Returns the error from errno() in string form.
+            ///
+			/// @author I Copland
+			///
+			/// @param The error number.
+			///
+			/// @return The error string.
+			//--------------------------------------------------------------
+            std::string GetFileErrorString(u32 in_errorNumber)
+            {
+            	switch (in_errorNumber)
+            	{
+            	case EACCES:
+            	  	return "EACCES - Access permission error.";
+            	case ELOOP:
+            		return "ELOOP - Symbolic link error.";
+            	case ENAMETOOLONG:
+            		return "ENAMETOOLONG - The path is too long.";
+            	case ENOENT:
+            		return "ENOENT - Path does not exist.";
+            	case ENOTDIR:
+            		return "ENOTDIR - Path is not a directory.";
+            	case EMFILE:
+            		return "EMFILE - To many files in Program Opened Error.";
+            	default:
+            		return "Unknown error.";
+            	}
+            }
+			//--------------------------------------------------------------
+			/// Creates a new directory at the given directory path.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The directory path.
+            ///
+            /// @return Whether or not the creation succeeded.
+			//--------------------------------------------------------------
+			bool CreateDirectory(const std::string& in_directoryPath)
 			{
-				unz_file_pos ZipPos = GetZipPosForPackageFile(instrFilepath);
-				return CreateAPKFileStream(ZipPos, ineFileMode);
-			}
-
-			//if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-			if (ineStorageLocation == Core::StorageLocation::k_DLC && DoesFileExistInDLCCache(instrFilepath) == false)
-			{
-				unz_file_pos ZipPos = GetZipPosForPackageFile(mstrPackageDLCPath + instrFilepath);
-				return CreateAPKFileStream(ZipPos, ineFileMode);
-			}
-
-			newFilestream->Open(filepath, ineFileMode);
-			return newFilestream;
-		}
-		//--------------------------------------------------------------
-		/// Create File
-		//--------------------------------------------------------------
-		bool FileSystem::CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const
-		{
-			Core::FileStreamSPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FileMode::k_writeBinary);
-
-			if (pFileStream.get() == nullptr || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
-			{
-				CS_LOG_ERROR("Failed to create file: " + instrDirectory);
-				return false;
-			}
-
-			pFileStream->Write(inpbyData, (s32)inudwDataSize);
-			pFileStream->Close();
-			return true;
-		}
-		//--------------------------------------------------------------
-		/// Create Directory
-		//--------------------------------------------------------------
-		bool FileSystem::CreateDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
-		{
-			//check the requested storage location is available
-			if (IsStorageLocationAvailable(ineStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Requested Storage Location is not available for " + instrDirectory);
-				return false;
-			}
-
-			//insure that the storage location is writable.
-			if (IsStorageLocationWritable(ineStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Cannot write to the requested Storage Location " + instrDirectory);
-				return false;
-			}
-
-			//create the directory
-			std::string path = GetStorageLocationDirectory(ineStorageLocation);
-
-			//get each level of the new directory seperately
-			std::string correctedPath = Core::StringUtils::StandardisePath(instrDirectory);
-			std::vector<std::string> pathSections = Core::StringUtils::Split(correctedPath, "/");
-
-			//iterate through each section of the path and try and create it.
-			for (std::vector<std::string>::iterator it = pathSections.begin(); it != pathSections.end(); ++it)
-			{
-				path += (*it) + "/";
-
-				s32 error = mkdir(path.c_str(), 0777);
+				s32 error = mkdir(in_directoryPath.c_str(), 0777);
 				if (error == -1)
 				{
 					s32 errorType = errno;
 					if (errorType != EEXIST)
 					{
-						CS_LOG_ERROR("Error creating directory: " + path);
+						CS_LOG_ERROR("File System: Error creating directory '" + in_directoryPath + "': " + GetFileErrorString(errorType));
+						return false;
+					}
+				}
+
+				return true;
+			}
+			//--------------------------------------------------------------
+			/// returns whether or not a file exists
+			///
+			/// @author I Copland
+			///
+			/// @param the filepath.
+			///
+			/// @return Whether or not it exists.
+			//--------------------------------------------------------------
+    		bool DoesFileExist(const std::string& in_path)
+    		{
+    			struct stat itemStat;
+    			if (stat(in_path.c_str(), &itemStat) == 0)
+    			{
+    				if (S_ISDIR(itemStat.st_mode) == false)
+    				{
+    					return true;
+    				}
+    			}
+
+    			return false;
+    		}
+			//--------------------------------------------------------------
+			/// returns whether or not a directory exists
+			///
+			/// @author I Copland
+			///
+			/// @param the directory path.
+			///
+			/// @return whether or not it exists.
+			//--------------------------------------------------------------
+    		bool DoesDirectoryExist(const std::string& in_path)
+    		{
+    			struct stat itemStats;
+    			if (stat(in_path.c_str(), &itemStats) == 0)
+    			{
+    				if (S_ISDIR(itemStats.st_mode) == true)
+    				{
+    					return true;
+    				}
+    			}
+
+    			return false;
+    		}
+            //--------------------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param The path to check.
+			///
+			/// @return Whether or not the given path is to a file.
+			//--------------------------------------------------------------
+			bool IsFilePathString(const std::string& in_path)
+			{
+				return (Core::StringUtils::Match(in_path, "*.*") == true);
+			}
+            //--------------------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param The path to check.
+			///
+			/// @return Whether or not the given path is to a directory.
+			//--------------------------------------------------------------
+			bool IsDirectoryPathString(const std::string& in_path)
+			{
+				return (Core::StringUtils::Match(in_path, "*.*") == false);
+			}
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param The unfiltered list of file paths.
+            ///
+            /// @return Filtered file paths.
+            //--------------------------------------------------------------
+            std::vector<std::string> FilterPathsByFile(const std::vector<std::string>& in_paths)
+            {
+            	std::vector<std::string> output;
+    			for (std::vector<std::string>::const_iterator it = in_paths.begin(); it != in_paths.end(); ++it)
+    			{
+    				if (IsFilePathString(*it) == true)
+    				{
+    					output.push_back(*it);
+    				}
+    			}
+    			return output;
+            }
+            //--------------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @param The unfiltered list of file paths.
+            ///
+            /// @return Filtered file paths.
+            //--------------------------------------------------------------
+            std::vector<std::string> FilterPathsByDirectory(const std::vector<std::string>& in_paths)
+            {
+            	std::vector<std::string> output;
+    			for (std::vector<std::string>::const_iterator it = in_paths.begin(); it != in_paths.end(); ++it)
+    			{
+    				if (IsDirectoryPathString(*it) == true)
+    				{
+    					output.push_back(*it);
+    				}
+    			}
+    			return output;
+            }
+			//--------------------------------------------------------------
+			/// Sort by APK path manifest hash lowest to highest.
+			///
+			/// @author S Downie
+			///
+			/// @param The left hand side.
+			/// @param The right hand side.
+			///
+			/// @return Whether or not the left hand side is less than the
+			/// right hand side.
+			//--------------------------------------------------------------
+			bool APKManifestSortPredicate(const FileSystem::APKManifestItem& in_lhs, const FileSystem::APKManifestItem& in_rhs)
+			{
+				return in_lhs.m_pathHash < in_rhs.m_pathHash;
+			}
+			//--------------------------------------------------------------
+			/// Copies a file from one location to another.
+			///
+			/// @author I Copland
+			///
+			/// @param The source directory.
+			/// @param The destination directory.
+			///
+			/// @return Whether or not the file was successfully copied.
+			//--------------------------------------------------------------
+			bool CopyFile(const std::string& in_sourceFilePath, const std::string& in_destinationFilePath)
+			{
+				const s32 k_chunkSize = 250 * 1024;
+
+				//open the source file
+				Core::FileStreamSPtr sourceStream = Core::FileStreamSPtr(new Core::FileStream());
+				sourceStream->Open(in_sourceFilePath, Core::FileMode::k_readBinary);
+				if (sourceStream.get() == nullptr || sourceStream->IsBad() == true || sourceStream->IsOpen() == false)
+				{
+					return false;
+				}
+
+				//open the destination file
+				Core::FileStreamSPtr destinationStream = Core::FileStreamSPtr(new Core::FileStream());
+				destinationStream->Open(in_destinationFilePath, Core::FileMode::k_writeBinary);
+				if (destinationStream.get() == nullptr || destinationStream->IsBad() == true || destinationStream->IsOpen() == false)
+				{
+					return false;
+				}
+
+				//find the length of the source stream
+				sourceStream->SeekG(0, Core::SeekDir::k_end);
+				s32 length = sourceStream->TellG();
+				sourceStream->SeekG(0, Core::SeekDir::k_beginning);
+
+				s32 progress = 0;
+				while (progress < length)
+				{
+					//get the amount to copy
+					s32 copySize = length - progress;
+					if (copySize > k_chunkSize)
+						copySize = k_chunkSize;
+
+					//copy
+					s8 byData[copySize];
+					sourceStream->Read(byData, copySize);
+					destinationStream->Write(byData, copySize);
+
+					//update progress
+					progress += copySize;
+				}
+
+				//cleanup
+				sourceStream->Close();
+				destinationStream->Close();
+
+				return true;
+			}
+			//--------------------------------------------------------------
+			/// Deletes a directory and all its contents.
+			///
+			/// @author I Copland
+			///
+			/// @param The directory path.
+			///
+			/// @return Whether or not the directory was successfully deleted.
+			//--------------------------------------------------------------
+			bool DeleteDirectory(const std::string& in_directoryPath)
+			{
+				std::string directoryPath = Core::StringUtils::StandardisePath(in_directoryPath);
+
+				//this has the potential to have a path with a dot in it - make sure that it will always have a "/" on the end.
+				if (directoryPath[directoryPath.size() - 1] != '/')
+				{
+					directoryPath += '/';
+				}
+
+				if (DoesDirectoryExist(directoryPath) == false)
+				{
+					return false;
+				}
+
+				DIR* directory = opendir(directoryPath.c_str());
+				if(directory == nullptr)
+				{
+					return false;
+				}
+
+				struct dirent* directoryItem;
+				while ((directoryItem = readdir(directory)) != nullptr)
+				{
+					std::string itemName = directoryItem->d_name;
+
+					//filter out "." and ".."
+					if (itemName == "." || itemName == "..")
+					{
+						continue;
+					}
+
+					//check to see if the item is a directory. if it is, then recurse into it. if its not, unlink it.
+					struct stat itemStats;
+					std::string itemPath = directoryPath + itemName + "\0";
+					if (stat(itemPath.c_str(), &itemStats) == 0)
+					{
+						if (S_ISDIR(itemStats.st_mode) == true)
+						{
+							if (DeleteDirectory(itemPath) == false)
+							{
+								return false;
+							}
+						}
+						else
+						{
+							unlink(itemPath.c_str());
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+				closedir(directory);
+
+				//remove the directory
+				if (rmdir(directoryPath.c_str()) != 0)
+				{
+					return false;
+				}
+
+				return true;
+			}
+		}
+
+		CS_DEFINE_NAMEDTYPE(FileSystem);
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		FileSystem::FileSystem()
+		{
+			CoreJavaInterfaceSPtr coreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
+
+			m_apkPath = coreJI->GetAPKDirectory();
+
+			std::string externalStorage = coreJI->GetExternalStorageDirectory();
+			if (externalStorage == "")
+			{
+				CS_LOG_FATAL("File System: Cannot access External Storage.");
+			}
+
+			//create the base directories
+			externalStorage = Core::StringUtils::StandardisePath(externalStorage);
+			m_storagePath = externalStorage + "Android/data/" + coreJI->GetPackageName() + "/";
+
+			Android::CreateDirectory(externalStorage + "Android/");
+			Android::CreateDirectory(externalStorage + "Android/data/");
+			Android::CreateDirectory(externalStorage + "Android/data/" + coreJI->GetPackageName() + "/");
+			Android::CreateDirectory(externalStorage + "Android/data/" + coreJI->GetPackageName() + "/files/");
+			Android::CreateDirectory(externalStorage + "Android/data/" + coreJI->GetPackageName() + "/cache/");
+
+			CreateAPKManifest();
+
+			Android::CreateDirectory(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_saveData));
+			Android::CreateDirectory(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_cache));
+			Android::CreateDirectory(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC));
+		}
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		bool FileSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		{
+			return (Core::FileSystem::InterfaceID == in_interfaceId || FileSystem::InterfaceID == in_interfaceId);
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		Core::FileStreamUPtr FileSystem::CreateFileStream(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::FileMode in_fileMode) const
+		{
+			if (IsWriteMode(in_fileMode) == true)
+			{
+				CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
+
+				std::string filePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+				Core::FileStreamUPtr fileStream = Core::FileStreamUPtr(new Core::FileStream());
+				fileStream->Open(filePath, in_fileMode);
+                return fileStream;
+			}
+			else
+			{
+				//if trying to read from the package or from DLC when the file is not in the cache DLC, open a APK file stream. Otherwise open a standard file stream.
+				if (in_storageLocation == Core::StorageLocation::k_package)
+				{
+					std::string absoluteFilePath = GetAbsolutePathToFile(Core::StorageLocation::k_package, in_filePath);
+					return CreateFileStreamInAPK(absoluteFilePath, in_fileMode);
+				}
+				else if (in_storageLocation == Core::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false)
+				{
+					std::string absoluteFilePath = GetAbsolutePathToFile(Core::StorageLocation::k_DLC, in_filePath);
+					return CreateFileStreamInAPK(absoluteFilePath, in_fileMode);
+				}
+				else
+				{
+					std::string filePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+					Core::FileStreamUPtr fileStream = Core::FileStreamUPtr(new Core::FileStream());
+					fileStream->Open(filePath, in_fileMode);
+					return fileStream;
+				}
+			}
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directory) const
+		{
+			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
+
+			std::string path = GetAbsolutePathToStorageLocation(in_storageLocation);
+
+			//get each level of the new directory seperately
+			std::string relativePath = Core::StringUtils::StandardisePath(in_directory);
+			std::vector<std::string> relativePathSections = Core::StringUtils::Split(relativePath, "/");
+
+			//iterate through each section of the path and try and create it.
+			for (const std::string& relativePathSection : relativePathSections)
+			{
+				path += relativePathSection + "/";
+
+				if (Android::CreateDirectory(path) == false)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::CopyFile(Core::StorageLocation in_sourceStorageLocation, const std::string& in_sourceFilePath,
+								  Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const
+		{
+			CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
+
+			//check if we're loading from DLC, and insure that the file exists in the dlc cache. if it does not, fall back on package.
+			if (in_sourceStorageLocation == Core::StorageLocation::k_package)
+			{
+				std::string filePath = GetAbsolutePathToFile(Core::StorageLocation::k_package, in_sourceFilePath);
+				if(filePath.empty())
+				{
+					CS_LOG_ERROR("File System: Trying to copy file '" + in_sourceFilePath + "' but it does not exist.");
+					return false;
+				}
+
+				return CopyFileFromAPK(filePath, in_destinationStorageLocation, in_destinationFilePath);
+			}
+			else if (in_sourceStorageLocation == Core::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_sourceFilePath) == false)
+			{
+				std::string filePath = GetAbsolutePathToFile(Core::StorageLocation::k_package, in_sourceFilePath);
+				if(filePath.empty())
+				{
+					CS_LOG_ERROR("File System: Trying to copy file '" + in_sourceFilePath + "' but it does not exist.");
+					return false;
+				}
+
+				return CopyFileFromAPK(filePath, in_destinationStorageLocation, in_destinationFilePath);
+			}
+			else
+			{
+				std::string sourceAbsolutePath = GetAbsolutePathToFile(in_sourceStorageLocation, in_sourceFilePath);
+				std::string destinationAbsolutePath = GetAbsolutePathToStorageLocation(in_destinationStorageLocation) + in_destinationFilePath;
+
+				//check the source file exists
+				if(Android::DoesFileExist(sourceAbsolutePath) == false)
+				{
+					CS_LOG_ERROR("File System: Trying to copy file '" + in_sourceFilePath + "' but it does not exist.");
+					return false;
+				}
+
+				//get the path to the file
+				std::string path, name;
+				Core::StringUtils::SplitFilename(in_destinationFilePath, name, path);
+
+				//create the output directory
+				CreateDirectory(in_destinationStorageLocation, path);
+
+				//try and copy the file
+				Android::CopyFile(sourceAbsolutePath, destinationAbsolutePath);
+
+				return Android::DoesFileExist(destinationAbsolutePath);
+			}
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::CopyDirectory(Core::StorageLocation in_sourceStorageLocation, const std::string& in_sourceDirectoryPath,
+						   Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationDirectoryPath) const
+		{
+			CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
+
+            if (DoesDirectoryExist(in_sourceStorageLocation, in_sourceDirectoryPath) == false)
+			{
+				CS_LOG_ERROR("File System: Trying to copy directory '" + in_sourceDirectoryPath + "' but it doesn't exist.");
+				return false;
+			}
+
+			std::vector<std::string> filenames = GetFilePaths(in_sourceStorageLocation, in_sourceDirectoryPath, true);
+
+			//error if there are no files
+			if (filenames.size() == 0)
+			{
+				CreateDirectory(in_destinationStorageLocation, in_destinationDirectoryPath);
+			}
+			else
+			{
+				//copy each of these files individually
+				std::string sourcePath = Core::StringUtils::StandardisePath(in_sourceDirectoryPath);
+				std::string destPath = Core::StringUtils::StandardisePath(in_destinationDirectoryPath);
+				for (const std::string& filename : filenames)
+				{
+					if (CopyFile(in_sourceStorageLocation, sourcePath + filename, in_destinationStorageLocation, destPath + filename) == false)
+					{
 						return false;
 					}
 				}
 			}
 
-			//return successful
 			return true;
 		}
 		//--------------------------------------------------------------
-		/// Copy File
 		//--------------------------------------------------------------
-		bool FileSystem::CopyFile(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceFilepath,
-					  Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const
+		bool FileSystem::DeleteFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const
 		{
-			//check the requested source storage location is available
-			if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Requested source Storage Location is not available for " + instrSourceFilepath);
-				return false;
-			}
+			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to delete from a read only storage location.");
 
-			//check the requested destination storage location is available
-			if (IsStorageLocationAvailable(ineDestinationStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Requested destination Storage Location is not available for " + instrDestinationFilepath);
-				return false;
-			}
-
-			//insure that the destination location is writable.
-			if (IsStorageLocationWritable(ineDestinationStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Cannot write to the destination Storage Location!");
-				return false;
-			}
-
-			//check if we're loading from DLC, and insure that the file exists in the dlc cache. if it does not, fall back on package
-			if (ineSourceStorageLocation == Core::StorageLocation::k_package)
-			{
-				std::string filePath = GetDirectoryForPackageFile(instrSourceFilepath);
-				if(filePath.empty())
-				{
-					CS_LOG_ERROR("Source filepath does not exist! - " + instrSourceFilepath);
-					return false;
-				}
-
-				return CopyFileFromAPK(filePath, ineDestinationStorageLocation, instrDestinationFilepath);
-			}
-			else if(ineSourceStorageLocation == Core::StorageLocation::k_DLC && DoesFileExistInDLCCache(instrSourceFilepath) == false)
-			{
-				std::string filepath = GetDirectoryForPackageFile(mstrPackageDLCPath + instrSourceFilepath);
-				if(filepath.empty())
-				{
-					CS_LOG_ERROR("Source filepath does not exist! - " + instrSourceFilepath);
-					return false;
-				}
-
-				return CopyFileFromAPK(filepath, ineDestinationStorageLocation, instrDestinationFilepath);
-			}
-			else
-			{
-				//check the source file exists
-				if(DoesFileExist(GetStorageLocationDirectory(ineSourceStorageLocation) + instrSourceFilepath) == false)
-				{
-					CS_LOG_ERROR("Source filepath does not exist!");
-					return false;
-				}
-
-				//get the path to the file
-				std::string strPath, strName;
-				ChilliSource::Core::StringUtils::SplitFilename(instrDestinationFilepath, strName, strPath);
-
-				//create the output directory
-				CreateDirectory(ineDestinationStorageLocation, strPath);
-
-				//try and copy the file
-				CopyFile(GetStorageLocationDirectory(ineSourceStorageLocation) + instrSourceFilepath, GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath);
-
-				return DoesFileExist(GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath);
-			}
-		}
-		//--------------------------------------------------------------
-		/// Copy Directory
-		//--------------------------------------------------------------
-		bool FileSystem::CopyDirectory(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceDirectory,
-						   Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationDirectory) const
-		{
-			//check the requested source storage location is available
-			if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Requested source Storage Location is not available for " + instrSourceDirectory);
-				return false;
-			}
-
-			//check the requested destination storage location is available
-			if (IsStorageLocationAvailable(ineDestinationStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Requested destination Storage Location is not available for " + instrDestinationDirectory);
-				return false;
-			}
-
-			//insure that the destination location is writable.
-			if (IsStorageLocationWritable(ineDestinationStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Cannot write to the destination Storage Location!");
-				return false;
-			}
-
-			//get all the files in the directory
-			std::vector<std::string> astrFilenames;
-			GetFileNamesInDirectory(ineSourceStorageLocation, instrSourceDirectory, true, astrFilenames);
-
-			//error if there are no files
-			if (astrFilenames.size() == 0)
-			{
-				CS_LOG_ERROR("Cannot copy contents of directory as there are no files: " + instrSourceDirectory);
-				return false;
-			}
-
-			//copy each of these files individually
-			std::string strSourceProperPath = Core::StringUtils::StandardisePath(instrSourceDirectory);
-			std::string strDestProperPath = Core::StringUtils::StandardisePath(instrDestinationDirectory);
-			for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
-			{
-				if (CopyFile(ineSourceStorageLocation, strSourceProperPath + *it,
-						 ineDestinationStorageLocation, strDestProperPath + *it) == false)
-				{
-					return false;
-				}
-			}
-
-			return true;
-		}
-		//--------------------------------------------------------------
-		/// Delete File
-		//--------------------------------------------------------------
-		bool FileSystem::DeleteFile(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
-		{
-			//check the requested storage location is available
-			if (IsStorageLocationAvailable(ineStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Requested Storage Location is not available for " + instrFilepath);
-				return false;
-			}
-
-			//insure that the storage location is writable.
-			if (IsStorageLocationWritable(ineStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-				return false;
-			}
-
-			//get the filepath
-			std::string strPath = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
-
-			s32 error = unlink(strPath.c_str());
+			std::string filePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+			s32 error = unlink(filePath.c_str());
 			if (error != 0)
 			{
 				s32 errorType = errno;
 				if (errorType != ENOENT)
 				{
-					CS_LOG_ERROR("Error deleting: " + instrFilepath);
+					CS_LOG_ERROR("File System: Error deleting file '" + in_filePath + "': " + GetFileErrorString(errorType));
 					return false;
 				}
 			}
 
-			//return successful
 			return true;
 		}
 		//--------------------------------------------------------------
-		/// Delete Directory
 		//--------------------------------------------------------------
-		bool FileSystem::DeleteDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
+		bool FileSystem::DeleteDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
 		{
-			//check the requested storage location is available
-			if (IsStorageLocationAvailable(ineStorageLocation) == false)
+			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to delete from a read only storage location.");
+
+			std::string directoryPath = GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath);
+			if (directoryPath != "")
 			{
-				CS_LOG_ERROR("Requested Storage Location is not available for " + instrDirectory);
-				return false;
+				Android::DeleteDirectory(directoryPath);
+				return true;
 			}
 
-			//insure that the storage location is writable.
-			if (IsStorageLocationWritable(ineStorageLocation) == false)
-			{
-				CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-				return false;
-			}
-
-			//get the directory path
-			std::string strPath = Core::StringUtils::StandardisePath(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
-
-			//remove the directory
-			DeleteDirectory(strPath);
-
-			//return successful
-			return true;
+			return false;
 		}
-        //------------------------------------------------------------
-        /// Get Directory Contents
-        ///
-        /// @param Directories
-        /// @param Recurse into sub directories
-        /// @param Out: Content file names
-        //------------------------------------------------------------
-        void FileSystem::GetDirectoryContents(const std::vector<DirInfo>& inaDirs, bool inbRecursive, std::vector<std::string>& outstrContents) const
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		std::vector<std::string> FileSystem::GetFilePaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
 		{
-        	std::vector<unz_file_pos> aZipPos;
-            for(std::vector<DirInfo>::const_iterator it = inaDirs.begin(); it != inaDirs.end(); ++it)
+            std::vector<PathInfo> directoriesToCheck = GetPossibleAbsoluteDirectoryPaths(in_storageLocation, in_directoryPath);
+            std::vector<std::string> paths = GetDirectoryContents(directoriesToCheck, in_recursive);
+            std::vector<std::string> output = FilterPathsByFile(paths);
+            
+            std::sort(output.begin(), output.end());
+            std::vector<std::string>::iterator it = std::unique(output.begin(), output.end());
+            output.resize(it - output.begin());
+            return output;
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		std::vector<std::string> FileSystem::GetDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const
+		{
+            std::vector<PathInfo> directoriesToCheck = GetPossibleAbsoluteDirectoryPaths(in_storageLocation, in_directoryPath);
+            std::vector<std::string> paths = GetDirectoryContents(directoriesToCheck, in_recursive);
+            std::vector<std::string> output = FilterPathsByDirectory(paths);
+            
+            std::sort(output.begin(), output.end());
+            std::vector<std::string>::iterator it = std::unique(output.begin(), output.end());
+            output.resize(it - output.begin());
+            return output;
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesFileExist(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const
+		{
+            if(in_storageLocation == Core::StorageLocation::k_package)
             {
-            	aZipPos.clear();
-                std::string path = ChilliSource::Core::StringUtils::StandardisePath(it->strPath);
-
-                if(it->eLocation == Core::StorageLocation::k_package)
+            	const std::string* resourceDirectories = GetResourceDirectories();
+                for(u32 i = 0; i < 3; ++i)
                 {
-                    GetAllItemsInDirectoryInAPK(path, inbRecursive, outstrContents, aZipPos);
-                }
-                else
-                {
-                    GetAllItemsInDirectory(path, inbRecursive, "", outstrContents);
-                }
-            }
-		}
-        //--------------------------------------------------------------
-        /// Filter File Names By Extension
-        ///
-        /// @param Unfiltered names
-        /// @param Extension
-        /// @param Out: Filtered names
-        //--------------------------------------------------------------
-        void FilterFileNamesByExtension(const std::vector<std::string> &instrFileNames, const std::string& instrExtension, const std::string& instrDirectory, std::vector<std::string> &outstrFileNames)
-        {
-        	std::string strDirectory;
-        	if(instrDirectory.empty() == false)
-        	{
-        		strDirectory = ChilliSource::Core::StringUtils::StandardisePath(instrDirectory);
-        	}
-
-			for (std::vector<std::string>::const_iterator it = instrFileNames.begin(); it != instrFileNames.end(); ++it)
-			{
-				if (Core::StringUtils::EndsWith((*it), "." + instrExtension, true) == true)
-				{
-					outstrFileNames.push_back(strDirectory + *it);
-				}
-			}
-        }
-        //--------------------------------------------------------------
-        /// Filter File Names By Name
-        ///
-        /// @param Unfiltered names
-        /// @param Name
-        /// @param Out: Filtered names
-        //--------------------------------------------------------------
-        void FilterFileNamesByName(const std::vector<std::string> &instrFileNames, const std::string& instrName, const std::string& instrDirectory, std::vector<std::string> &outstrFileNames)
-        {
-        	std::string strDirectory;
-        	if(instrDirectory.empty() == false)
-        	{
-        		strDirectory = ChilliSource::Core::StringUtils::StandardisePath(instrDirectory);
-        	}
-
-			for (std::vector<std::string>::const_iterator it = instrFileNames.begin(); it != instrFileNames.end(); ++it)
-			{
-				if (Core::StringUtils::EndsWith((*it), instrName, true) == true)
-				{
-					outstrFileNames.push_back(strDirectory + *it);
-				}
-			}
-        }
-        //--------------------------------------------------------------
-        /// Filter File Names By File
-        ///
-        /// @param Unfiltered names
-        /// @param Append directory
-        /// @param Out: Filtered names
-        //--------------------------------------------------------------
-        void FilterFileNamesByFile(const std::vector<std::string> &instrFileNames, const std::string& instrDirectory, std::vector<std::string> &outstrFileNames)
-        {
-        	std::string strDirectory;
-        	if(instrDirectory.empty() == false)
-        	{
-        		strDirectory = ChilliSource::Core::StringUtils::StandardisePath(instrDirectory);
-        	}
-
-			for (std::vector<std::string>::const_iterator it = instrFileNames.begin(); it != instrFileNames.end(); ++it)
-			{
-				if (Core::StringUtils::Match((*it), "*.*") == true)
-				{
-					outstrFileNames.push_back(strDirectory + *it);
-				}
-			}
-        }
-		//--------------------------------------------------------------
-		/// Get File Names With Extension In Directory
-		//--------------------------------------------------------------
-		void FileSystem::GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-												  const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
-		{
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return;
-            }
-            
-            std::vector<DirInfo> aDirectoriesToCheck;
-            GetPathsForStorageLocation(ineStorageLocation, instrDirectory, aDirectoriesToCheck);
-            
-            std::vector<std::string> allItems;
-            GetDirectoryContents(aDirectoriesToCheck, inbRecurseIntoSubDirectories, allItems);
-            
-            inbAppendFullPath ? FilterFileNamesByExtension(allItems, instrExtension, instrDirectory, outstrFileNames) :
-            					FilterFileNamesByExtension(allItems, instrExtension, "", outstrFileNames);
-            
-            std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
-            outstrFileNames.resize(it - outstrFileNames.begin()); 
-		}
-        //--------------------------------------------------------------
-        /// Get Path For Files With Name In Directory
-        ///
-        /// Creates a dynamic array containing the filenames of each of
-        /// each file with the given name in the given
-        /// directory.
-        ///
-        /// @param The Storage Location
-        /// @param The directory
-        /// @param Flag to determine whether or not to recurse into sub directories
-        /// @param The name
-        /// @param Output dynamic array containing the filenames.
-        //--------------------------------------------------------------
-        void FileSystem::GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                        const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
-        {
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return;
-            }
-            
-            std::vector<DirInfo> aDirectoriesToCheck;
-            GetPathsForStorageLocation(ineStorageLocation, instrDirectory, aDirectoriesToCheck);
-            
-            std::vector<std::string> allItems;
-            GetDirectoryContents(aDirectoriesToCheck, inbRecurseIntoSubDirectories, allItems);
-
-            inbAppendFullPath ? FilterFileNamesByName(allItems, instrName, instrDirectory, outstrFileNames) :
-            					FilterFileNamesByName(allItems, instrName, "", outstrFileNames);
-            
-            std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
-            outstrFileNames.resize(it - outstrFileNames.begin()); 
-        }
-		//--------------------------------------------------------------
-		/// Get File Names In Directory
-		//--------------------------------------------------------------
-		void FileSystem::GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-											 std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
-		{
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return;
-            }
-            
-            std::vector<DirInfo> aDirectoriesToCheck;
-            GetPathsForStorageLocation(ineStorageLocation, instrDirectory, aDirectoriesToCheck);
-            
-            std::vector<std::string> allItems;
-            GetDirectoryContents(aDirectoriesToCheck, inbRecurseIntoSubDirectories, allItems);
-            
-            inbAppendFullPath ? FilterFileNamesByFile(allItems, instrDirectory, outstrFileNames) :
-            					FilterFileNamesByFile(allItems, "", outstrFileNames);
-            
-            std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
-            outstrFileNames.resize(it - outstrFileNames.begin()); 
-		}
-		//--------------------------------------------------------------
-		/// Get Directories In Directory
-		//--------------------------------------------------------------
-		void FileSystem::GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-											   std::vector<std::string> &outstrDirectories, bool inbAppendFullPath) const
-		{
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return;
-            }
-            
-            std::vector<DirInfo> aDirectoriesToCheck;
-            GetPathsForStorageLocation(ineStorageLocation, instrDirectory, aDirectoriesToCheck);
-
-            std::vector<std::string> allItems;
-            GetDirectoryContents(aDirectoriesToCheck, inbRecurseIntoSubDirectories, allItems);
-            
-            inbAppendFullPath ? FilterFileNamesByFile(allItems, instrDirectory, outstrDirectories) :
-            					FilterFileNamesByFile(allItems, "", outstrDirectories);
-            
-            std::sort(outstrDirectories.begin(), outstrDirectories.end());
-            std::vector<std::string>::iterator it = std::unique(outstrDirectories.begin(), outstrDirectories.end());
-            outstrDirectories.resize(it - outstrDirectories.begin());
-		}
-        //------------------------------------------------------------
-        /// Get Paths For Storage Location
-        ///
-        /// @param Storage location
-        /// @param File name to append
-		/// @param Out: All the paths for the given location
-		//------------------------------------------------------------
-		void FileSystem::GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, std::vector<DirInfo>& outaPaths) const
-		{
-			switch(ineStorageLocation)
-			{
-			case Core::StorageLocation::k_package:
-				for(u32 i=0; i<3; ++i)
-				{
-					DirInfo Info;
-					Info.strPath = mastrResourceDirectory[i] + instrFileName;
-					Info.eLocation = Core::StorageLocation::k_package;
-					outaPaths.push_back(Info);
-				}
-				break;
-			case Core::StorageLocation::k_DLC:
-			{
-				for(u32 i=0; i<3; ++i)
-				{
-					DirInfo Info;
-					Info.strPath = mastrResourceDirectory[i] + mstrPackageDLCPath + instrFileName;
-					Info.eLocation = Core::StorageLocation::k_package;
-					outaPaths.push_back(Info);
-				}
-
-				DirInfo Info;
-				Info.strPath = GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFileName;
-				Info.eLocation = Core::StorageLocation::k_DLC;
-				outaPaths.push_back(Info);
-				break;
-			}
-			default:
-			{
-				DirInfo Info;
-				Info.strPath = GetStorageLocationDirectory(ineStorageLocation) + instrFileName;
-				Info.eLocation = ineStorageLocation;
-				outaPaths.push_back(Info);
-				break;
-			}
-			}
-		}
-		//--------------------------------------------------------------
-		/// Does File Exist
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExist(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
-		{
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return false;
-            }
-            
-            if(ineStorageLocation == Core::StorageLocation::k_package)
-            {
-            	unz_file_pos sZipPos;
-                for(u32 i=0; i<3; ++i)
-                {
-                	if(DoesFileExistInAPKHashedStore(mastrResourceDirectory[i] + instrFilepath, sZipPos))
+                	if(DoesFileExistInAPK(resourceDirectories[i] + in_filePath) == true)
                 	{
                 		return true;
                 	}
@@ -673,712 +629,511 @@ namespace ChilliSource
                 
                 return false;
             }
-            
-            //get the filepath
-            std::string path = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
-            
-            //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-            if (ineStorageLocation == Core::StorageLocation::k_DLC)
+            else if (in_storageLocation == Core::StorageLocation::k_DLC)
+			{
+				if (DoesFileExistInCachedDLC(in_filePath) == true)
+				{
+					return true;
+				}
+
+				return DoesFileExist(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+			}
+            else
             {
-                if (DoesFileExistInDLCCache(instrFilepath) == true)
+				return Android::DoesFileExist(Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath));
+            }
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesFileExistInCachedDLC(const std::string& in_filePath) const
+		{
+			return Android::DoesFileExist(Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_filePath));
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesFileExistInPackageDLC(const std::string& in_filePath) const
+		{
+			return DoesFileExist(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);;
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesDirectoryExist(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+		{
+            if (in_storageLocation == Core::StorageLocation::k_package)
+            {
+            	const std::string* resourceDirectories = GetResourceDirectories();
+                for(u32 i = 0; i < 3; ++i)
                 {
-                    return true;
-                }
-                
-                return DoesFileExist(Core::StorageLocation::k_package, mstrPackageDLCPath + instrFilepath);
-            }
-            
-            //return whether or not the file exists
-			return DoesFileExist(ChilliSource::Core::StringUtils::StandardisePath(path));
-		}
-		//--------------------------------------------------------------
-		/// Does File Exist In Cached DLC
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInCachedDLC(const std::string& instrFilepath) const
-		{
-			return DoesFileExistInDLCCache(instrFilepath);
-		}
-		//--------------------------------------------------------------
-		/// Does File Exist In Package DLC
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInPackageDLC(const std::string& instrFilepath) const
-		{
-			unz_file_pos sZipPos;
-            for(u32 i=0; i<3; ++i)
-            {
-            	if(DoesFileExistInAPKHashedStore(mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilepath, sZipPos))
-            	{
-            		return true;
-            	}
-            }
-			return false;
-		}
-		//--------------------------------------------------------------
-		/// Does Directory Exist
-		//--------------------------------------------------------------
-		bool FileSystem::DoesDirectoryExist(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
-		{
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return false;
-            }
-            
-            if(ineStorageLocation == Core::StorageLocation::k_package)
-            {
-                for(u32 i=0; i<3; ++i)
-                {
-                    if(DoesDirectoryExistInAPK(mastrResourceDirectory[i] + "/" + instrDirectory))
+                    if(DoesDirectoryExistInAPK(resourceDirectories[i] + in_directoryPath) == true)
                     {
                         return true;
                     }
                 }
-                
+
                 return false;
             }
-            
-            //get the filepath
-            std::string path = GetStorageLocationDirectory(ineStorageLocation) + instrDirectory;
-            
-            //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-            if (ineStorageLocation == Core::StorageLocation::k_DLC)
-            {
-                if (DoesDirectoryExistInDLCCache(instrDirectory) == true)
-                {
-                    return true;
-                }
-                
-                return DoesDirectoryExist(Core::StorageLocation::k_package, mstrPackageDLCPath + instrDirectory);
-            }
-            
-            //return whether or not the dir exists
-			return DoesDirectoryExist(ChilliSource::Core::StringUtils::StandardisePath(path));
-		}
-		//--------------------------------------------------------------
-		/// Is Storage Location Available
-		//--------------------------------------------------------------
-		bool FileSystem::IsStorageLocationAvailable(Core::StorageLocation ineStorageLocation) const
-		{
-			switch (ineStorageLocation)
+            else if (in_storageLocation == Core::StorageLocation::k_DLC)
 			{
-				case Core::StorageLocation::k_package:
+				if (Android::DoesDirectoryExist(Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_directoryPath)) == true)
+				{
 					return true;
-				case Core::StorageLocation::k_saveData:
-				case Core::StorageLocation::k_cache:
-				case Core::StorageLocation::k_DLC:
-				case Core::StorageLocation::k_root:
-					return mbStorageAvailable;
-				default:
-					return false;
+				}
+
+				return DoesDirectoryExist(Core::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
 			}
+            else
+            {
+            	return Android::DoesDirectoryExist(Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath));
+            }
 		}
 		//--------------------------------------------------------------
-		/// Get Storage Location Directory
 		//--------------------------------------------------------------
-		std::string FileSystem::GetStorageLocationDirectory(Core::StorageLocation ineStorageLocation) const
+		std::string FileSystem::GetAbsolutePathToStorageLocation(Core::StorageLocation in_storageLocation) const
 		{
 			//get the storage location path
-			std::string strStorageLocationPath;
-			switch (ineStorageLocation)
+			std::string storageLocationPath;
+			switch (in_storageLocation)
 			{
 				case Core::StorageLocation::k_package:
-					strStorageLocationPath = kstrAssetsDir;
+					storageLocationPath = "";
 					break;
 				case Core::StorageLocation::k_saveData:
-					strStorageLocationPath = mstrStorageDir + kstrSaveDataDir;
+					storageLocationPath = m_storagePath + k_saveDataPath;
 					break;
 				case Core::StorageLocation::k_cache:
-					strStorageLocationPath = mstrStorageDir + kstrCacheDir;
+					storageLocationPath = m_storagePath + k_cachePath;
 					break;
 				case Core::StorageLocation::k_DLC:
-					strStorageLocationPath = mstrStorageDir + kstrDLCDir;
+					storageLocationPath = m_storagePath + k_dlcPath;
 					break;
 				case Core::StorageLocation::k_root:
-					strStorageLocationPath = "";
+					storageLocationPath = "";
 					break;
 				default:
-					CS_LOG_ERROR("Storage Location not available on this platform!");
+					CS_LOG_FATAL("File System: Requested storage location that does not exist on this platform.");
 					break;
 			}
 
-			return strStorageLocationPath;
-		}
-        //--------------------------------------------------------------
-		/// Is Storage Available
-		//--------------------------------------------------------------
-		bool FileSystem::IsStorageAvailable() const
-		{
-			return mbStorageAvailable;
+			return storageLocationPath;
 		}
 		//--------------------------------------------------------------
-		/// Create APK File Stream
 		//--------------------------------------------------------------
-		Core::FileStreamSPtr FileSystem::CreateAPKFileStream(const unz_file_pos& inPos, Core::FileMode ineFileMode) const
+		std::string FileSystem::GetAbsolutePathToFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const
 		{
-			Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new FileStreamAPK(&mMinizipMutex));
-			FileStreamAPKSPtr apkStream = std::static_pointer_cast<FileStreamAPK>(newFilestream);
-			apkStream->OpenFromAPK(mstrPathToAPK, inPos, ineFileMode);
-
-			return newFilestream;
-		}
-		//--------------------------------------------------------------
-		/// Copy File From APK
-		//--------------------------------------------------------------
-		bool FileSystem::CopyFileFromAPK(const std::string& instrPath, Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const
-		{
-			std::unique_lock<std::mutex> lock(mMinizipMutex);
-
-			bool bSuccess = false;
-			std::string strSourceFile = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + instrPath);
-
-			unzFile unzip = unzOpen(mstrPathToAPK.c_str());
-			if (unzip != nullptr)
+			if (DoesFileExist(in_storageLocation, in_filePath) == true)
 			{
-				s32 status = unzGoToFirstFile(unzip);
-
-				while (status == UNZ_OK)
+				switch (in_storageLocation)
 				{
-					//open file
-					if (unzOpenCurrentFile(unzip) != UNZ_OK)
-						break;
-
-					//get file information
-					unz_file_info info;
-					const u32 dwFilenameLength = 256;
-					char cfilename[dwFilenameLength];
-					unzGetCurrentFileInfo(unzip, &info, cfilename, dwFilenameLength, nullptr, 0, nullptr, 0);
-					std::string strFilepath = ChilliSource::Core::StringUtils::StandardisePath(std::string(cfilename));
-
-					//check and see if this file is in the directory we want
-					if (ChilliSource::Core::StringUtils::Match(strFilepath, strSourceFile))
+					case Core::StorageLocation::k_package:
 					{
-						//create the directory
-						std::string strOutputPath, strOutputFilename;
-						Core::StringUtils::SplitFilename(instrDestinationFilepath, strOutputFilename, strOutputPath);
-						if (CreateDirectory(ineDestinationStorageLocation, strOutputPath) == true)
+						std::string filePath;
+						for(u32 i = 0; i < 3; ++i)
 						{
-							//get the filename
-							std::string strDestFile = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath);
-
-							//load the file into memory
-							char * dataBuffer = new char[info.uncompressed_size];
-							unzReadCurrentFile(unzip, (voidp)dataBuffer, info.uncompressed_size);
-
-							// write the file in the documents directory
-							if (CreateFile(ineDestinationStorageLocation, instrDestinationFilepath, dataBuffer, info.uncompressed_size) == true)
+							const std::string* resourceDirectories = GetResourceDirectories();
+							filePath = Core::StringUtils::StandardisePath(resourceDirectories[i] + in_filePath);
+							if(DoesFileExistInAPK(filePath) == true)
 							{
-								bSuccess = true;
+								break;
 							}
-							else
-							{
-								CS_LOG_ERROR("Failed to create file: " + strDestFile);
-							}
+						}
 
-							CS_SAFEDELETE_ARRAY(dataBuffer);
-						}
-						else
-						{
-							CS_LOG_ERROR("Could not create directory: " + strOutputPath);
-						}
+						return filePath;
 					}
+					case Core::StorageLocation::k_DLC:
+					{
+						std::string filePath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_filePath);
+						if(Android::DoesFileExist(filePath) == true)
+						{
+							return filePath;
+						}
 
-					//close file
-					unzCloseCurrentFile(unzip);
-					status = unzGoToNextFile(unzip);
+						return GetAbsolutePathToFile(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+					}
+					default:
+					{
+						return GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+					}
 				}
 			}
 
-			unzClose(unzip);
-			return bSuccess;
+			return "";
 		}
 		//--------------------------------------------------------------
-		/// Get All Items In Directory In APK
 		//--------------------------------------------------------------
-		void FileSystem::GetAllItemsInDirectoryInAPK(const std::string& instrPath, bool inbRecurse, std::vector<std::string>& outItems, std::vector<unz_file_pos>& outPos) const
+		std::string FileSystem::GetAbsolutePathToDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
 		{
-			std::unique_lock<std::mutex> lock(mMinizipMutex);
-
-			//insure the input dir is correctly formatted
-			std::string directory = instrPath;
-			directory = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + directory);
-
-			//open apk
-			unzFile unzipper = unzOpen(mstrPathToAPK.c_str());
-			if (unzipper == nullptr)
+			if (DoesDirectoryExist(in_storageLocation, in_directoryPath) == true)
 			{
-				CS_LOG_ERROR("Cannot get filenames in package: Failed to open APK.");
-				return;
+				switch (in_storageLocation)
+				{
+					case Core::StorageLocation::k_package:
+					{
+						std::string directoryPath;
+						for(u32 i = 0; i < 3; ++i)
+						{
+							const std::string* resourceDirectories = GetResourceDirectories();
+							directoryPath = Core::StringUtils::StandardisePath(resourceDirectories[i] + in_directoryPath);
+							if(DoesDirectoryExistInAPK(directoryPath) == true)
+							{
+								break;
+							}
+						}
+
+						return directoryPath;
+					}
+					case Core::StorageLocation::k_DLC:
+					{
+						std::string directoryPath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_directoryPath);
+						if(Android::DoesDirectoryExist(directoryPath) == true)
+						{
+							return directoryPath;
+						}
+
+						return GetAbsolutePathToDirectory(Core::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
+					}
+					default:
+					{
+						return GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
+					}
+				}
 			}
 
-			std::vector<std::string> directoriesViewed;
+			return "";
+		}
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        void FileSystem::CreateAPKManifest()
+        {
+        	std::unique_lock<std::mutex> lock(m_minizipMutex);
 
-			//to the first file!
+			unzFile unzipper = unzOpen(m_apkPath.c_str());
+			if (unzipper == nullptr)
+			{
+				CS_LOG_FATAL("File System: Failed to open APK.");
+			}
+
 			s32 status = unzGoToFirstFile(unzipper);
 			while (status == UNZ_OK)
 			{
-				//get file information
+				const u32 k_filePathLength = 1024;
+
+				char filePathBytes[k_filePathLength];
 				unz_file_info info;
-				const u32 udwFilenameLength = 256;
-				char cfilename[udwFilenameLength];
-				unzGetCurrentFileInfo(unzipper, &info, cfilename, udwFilenameLength, nullptr, 0, nullptr, 0);
+				unzGetCurrentFileInfo(unzipper, &info, filePathBytes, k_filePathLength, nullptr, 0, nullptr, 0);
 
 				//get the path and filename
-				std::string filename(cfilename);
-				filename = ChilliSource::Core::StringUtils::StandardisePath(filename);
-				std::string path = filename.substr(0, filename.rfind("/") + 1);
+				std::string filePath = Core::StringUtils::StandardisePath(filePathBytes);
 
 				//if this file is at the same path as requested, then add it to the output
-				if ((inbRecurse == false && path == directory) || (inbRecurse == true && Core::StringUtils::Match(filename, directory + "*") == true))
+				if (Core::StringUtils::StartsWith(filePath, k_assetsPath, false) == true)
 				{
-					filename = filename.erase(0, directory.size());
-					path = filename.substr(0, filename.rfind("/") + 1);
+					filePath = filePath.erase(0, k_assetsPath.size());
+					std::string directoryPath = Core::StringUtils::StandardisePath(filePath.substr(0, filePath.rfind("/") + 1));
 
 					//check to see if this directory has previously been seen. If it has not, add it.
-					if (path.size() != 0)
+					if (directoryPath.size() != 0 && DoesDirectoryExistInAPK(directoryPath) == false)
 					{
-						bool bDirectoryAlreadySeen = false;
-						for (std::vector<std::string>::iterator it = directoriesViewed.begin(); it != directoriesViewed.end(); ++it)
-						{
-							if ((*it) == path)
-								bDirectoryAlreadySeen = false;
-						}
-
-						if (bDirectoryAlreadySeen == false)
-						{
-							unz_file_pos pos;
-							unzGetFilePos(unzipper, &pos);
-							outPos.push_back(pos);
-							outItems.push_back(path);
-							directoriesViewed.push_back(path);
-						}
+						APKManifestItem item;
+						item.m_path = directoryPath;
+						item.m_pathHash = Core::HashCRC32::GenerateHashCode(item.m_path);
+						item.m_isFile = false;
+						unzGetFilePos(unzipper, &(item.m_apkPosition));
+						m_apkManifestItems.push_back(item);
 					}
 
-					unz_file_pos pos;
-					unzGetFilePos(unzipper, &pos);
-					outPos.push_back(pos);
-					outItems.push_back(filename);
+					APKManifestItem item;
+					item.m_path = filePath;
+					item.m_pathHash = Core::HashCRC32::GenerateHashCode(item.m_path);
+					item.m_isFile = true;
+					unzGetFilePos(unzipper, &(item.m_apkPosition));
+					m_apkManifestItems.push_back(item);
 				}
-
-				//onto the next file!
-				status = unzGoToNextFile(unzipper);
-			}
-			unzClose(unzipper);
-		}
-		//--------------------------------------------------------------
-		/// Does File Exist In APK
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInAPKHashedStore(const std::string& instrPath, unz_file_pos& outZipPos) const
-		{
-            u32 udwHashedFile = Core::HashCRC32::GenerateHashCode(instrPath);
-
-            APKFileInfo SearchItem;
-            SearchItem.udwFileNameHash = udwHashedFile;
-
-            std::vector<APKFileInfo>::const_iterator it = std::lower_bound(mAPKFileInfo.begin(), mAPKFileInfo.end(), SearchItem, FileInfoSortPredicate);
-
-            if(it !=  mAPKFileInfo.end() && it->udwFileNameHash == udwHashedFile)
-            {
-            	outZipPos = it->sZipPos;
-            	return true;
-            }
-
-            return false;
-		}
-		//--------------------------------------------------------------
-		/// Does Directory Exist In APK
-		//--------------------------------------------------------------
-		bool FileSystem::DoesDirectoryExistInAPK(const std::string& instrPath) const
-		{
-			std::unique_lock<std::mutex> lock(mMinizipMutex);
-
-			bool bResult = false;
-
-			//insure the input dir is correctly formatted
-			std::string strDirectory = instrPath;
-			strDirectory = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + strDirectory);
-
-			//open apk
-			unzFile unzipper = unzOpen(mstrPathToAPK.c_str());
-			if (unzipper == nullptr)
-			{
-				CS_LOG_ERROR("Cannot get filenames in package: Failed to open APK.");
-				return false;
-			}
-
-			//to the first file!
-			s32 status = unzGoToFirstFile(unzipper);
-			while (status == UNZ_OK && bResult == false)
-			{
-				//get file information
-				unz_file_info info;
-				const u32 udwFilenameLength = 256;
-				char cfilename[udwFilenameLength];
-				unzGetCurrentFileInfo(unzipper, &info, cfilename, udwFilenameLength, nullptr, 0, nullptr, 0);
-
-				//get the path and filename
-				std::string strFilename(cfilename);
-				strFilename = ChilliSource::Core::StringUtils::StandardisePath(strFilename);
-
-				// if this filename contains the path to the requested directory
-				if (Core::StringUtils::Match(strFilename, strDirectory + "*") == true)
-				{
-					bResult = true;
-				}
-
-				//onto the next file!
 				status = unzGoToNextFile(unzipper);
 			}
 			unzClose(unzipper);
 
-			return bResult;
-		}
-		//--------------------------------------------------------------
-		/// Create Base Directory
-		//--------------------------------------------------------------
-		bool FileSystem::CreateBaseDirectory(const std::string& instrDirectory) const
-		{
-			std::string correctedPath = Core::StringUtils::StandardisePath(instrDirectory);
-			std::vector<std::string> pathSections = Core::StringUtils::Split(correctedPath, "/");
+			std::sort(m_apkManifestItems.begin(), m_apkManifestItems.end(), APKManifestSortPredicate);
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        bool FileSystem::TryGetManifestItem(const std::string& in_path, APKManifestItem& out_manifestItem) const
+        {
+			APKManifestItem searchItem;
+			searchItem.m_pathHash = Core::HashCRC32::GenerateHashCode(Core::StringUtils::StandardisePath(in_path));
 
-			//iterate through each section of the path and try and create it.
-			std::string path = "";
-			for (std::vector<std::string>::iterator it = pathSections.begin(); it != pathSections.end(); ++it)
+			auto it = std::lower_bound(m_apkManifestItems.begin(), m_apkManifestItems.end(), searchItem, APKManifestSortPredicate);
+			if(it !=  m_apkManifestItems.end() && it->m_pathHash == searchItem.m_pathHash)
 			{
-				path += (*it) + "/";
+				out_manifestItem = *it;
+				return true;
+			}
 
-				s32 error = mkdir(path.c_str(),0777);
-				if (error != 0)
+			return false;
+        }
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		Core::FileStreamUPtr FileSystem::CreateFileStreamInAPK(const std::string& in_filePath, Core::FileMode in_fileMode) const
+		{
+			Core::FileStreamUPtr fileStream = Core::FileStreamUPtr(new FileStreamAPK(&m_minizipMutex));
+
+			APKManifestItem manifestItem;
+			if (TryGetManifestItem(in_filePath, manifestItem) == true)
+			{
+				if (manifestItem.m_isFile == true)
 				{
-					s32 errorType = errno;
-					if (errorType != EEXIST)
-					{
-						CS_LOG_ERROR("Error creating directory: " + path);
-						return false;
-					}
+					FileStreamAPK* fileStreamAPK = static_cast<FileStreamAPK*>(fileStream.get());
+					fileStreamAPK->OpenFromAPK(m_apkPath, manifestItem.m_apkPosition, in_fileMode);
 				}
 			}
 
-			return true;
+			return fileStream;
 		}
 		//--------------------------------------------------------------
-		/// Copy File
 		//--------------------------------------------------------------
-		bool FileSystem::CopyFile(const std::string& instrSourceFilepath, const std::string& instrDestinationFilepath) const
+		bool FileSystem::CopyFileFromAPK(const std::string& in_filePath, Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const
 		{
-			const s32 kdwChunkSize = 250 * 1024; //250Kb chunk size
+			std::unique_lock<std::mutex> lock(m_minizipMutex);
 
-			//open the source file
-			Core::FileStreamSPtr sourceStream = Core::FileStreamSPtr(new Core::FileStream());
-			sourceStream->Open(instrSourceFilepath, Core::FileMode::k_readBinary);
-			if (sourceStream.get() == nullptr || sourceStream->IsBad() == true || sourceStream->IsOpen() == false)
-				return false;
+			bool isSuccess = false;
 
-			//open the source file
-			Core::FileStreamSPtr destinationStream = Core::FileStreamSPtr(new Core::FileStream());
-			destinationStream->Open(instrDestinationFilepath, Core::FileMode::k_writeBinary);
-			if (destinationStream.get() == nullptr || destinationStream->IsBad() == true || destinationStream->IsOpen() == false)
-				return false;
-
-			//find the length of the source stream
-			sourceStream->SeekG(0, Core::SeekDir::k_end);
-			s32 dwLength = sourceStream->TellG();
-			sourceStream->SeekG(0, Core::SeekDir::k_beginning);
-
-			//iterate through the source file copying to the dest file until there's nothing left to copy
-			s32 dwProgress = 0;
-			while (dwProgress < dwLength)
+			APKManifestItem manifestItem;
+			if (TryGetManifestItem(in_filePath, manifestItem) == true)
 			{
-				//get the amount to copy
-				s32 dwCopySize = dwLength - dwProgress;
-				if (dwCopySize > kdwChunkSize)
-					dwCopySize = kdwChunkSize;
+				if (manifestItem.m_isFile == true)
+				{
+					unzFile unzip = unzOpen(m_apkPath.c_str());
+					if (unzip != nullptr)
+					{
+						if (unzGoToFilePos(unzip, &manifestItem.m_apkPosition) == UNZ_OK)
+						{
+							if (unzOpenCurrentFile(unzip) == UNZ_OK)
+							{
+								const u32 k_filePathLength = 1024;
 
-				//copy
-				s8 byData[dwCopySize];
-				sourceStream->Read(byData, dwCopySize);
-				destinationStream->Write(byData, dwCopySize);
+								unz_file_info info;
+								char filePathBytes[k_filePathLength];
+								unzGetCurrentFileInfo(unzip, &info, filePathBytes, k_filePathLength, nullptr, 0, nullptr, 0);
 
-				//update progress
-				dwProgress += dwCopySize;
+								std::string outputDirectoryPath, outputFileName;
+								Core::StringUtils::SplitFilename(in_destinationFilePath, outputFileName, outputDirectoryPath);
+								if (CreateDirectory(in_destinationStorageLocation, outputDirectoryPath) == true)
+								{
+									char* dataBuffer = new char[info.uncompressed_size];
+									unzReadCurrentFile(unzip, (voidp)dataBuffer, info.uncompressed_size);
+
+									if (WriteFile(in_destinationStorageLocation, in_destinationFilePath, dataBuffer, info.uncompressed_size) == true)
+									{
+										isSuccess = true;
+									}
+
+									CS_SAFEDELETE_ARRAY(dataBuffer);
+								}
+
+								//close file
+								unzCloseCurrentFile(unzip);
+							}
+						}
+					}
+					unzClose(unzip);
+				}
 			}
 
-			//cleanup
-			sourceStream->Close();
-			destinationStream->Close();
+			if (isSuccess == false)
+			{
+				CS_LOG_ERROR("File System: Failed to copy file '" + in_filePath + "' from APK.");
+			}
 
-			return true;
+			return isSuccess;
 		}
 		//--------------------------------------------------------------
-		/// Delete Directory
 		//--------------------------------------------------------------
-		bool FileSystem::DeleteDirectory(const std::string& instrDirectory) const
+		std::vector<std::string> FileSystem::GetPathsInAPK(const std::string& in_directoryPath, bool in_recursive) const
 		{
+			std::vector<std::string> output;
+
+			std::string directoryPath = Core::StringUtils::StandardisePath(in_directoryPath);
+			for (const APKManifestItem& item : m_apkManifestItems)
+			{
+				std::string itemFileName;
+				std::string itemDirectoryPath;
+				Core::StringUtils::SplitFilename(item.m_path, itemFileName, itemDirectoryPath);
+
+				if ((in_recursive == true && Core::StringUtils::Match(item.m_path, directoryPath + "*") == true) || (in_recursive == false && directoryPath == itemDirectoryPath))
+				{
+					output.push_back(item.m_path.substr(directoryPath.length()));
+				}
+			}
+
+			return output;
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesFileExistInAPK(const std::string& in_filePath) const
+		{
+			APKManifestItem manifestItem;
+			if (TryGetManifestItem(in_filePath, manifestItem) == true)
+			{
+				if (manifestItem.m_isFile == true)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesDirectoryExistInAPK(const std::string& in_directoryPath) const
+		{
+			APKManifestItem manifestItem;
+			if (TryGetManifestItem(in_directoryPath, manifestItem) == true)
+			{
+				if (manifestItem.m_isFile == false)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		std::vector<std::string> FileSystem::GetPaths(const std::string& in_directoryPath, bool in_recursive, const std::string& in_parentDirectoryPath) const
+		{
+			std::vector<std::string> output;
+
 			//insure the path is in the correct format
-			std::string strCorrectedDirectory = Core::StringUtils::StandardisePath(instrDirectory);
+			std::string directoryPath = Core::StringUtils::StandardisePath(in_directoryPath);
+			std::string parentDirectoryPath = Core::StringUtils::StandardisePath(in_parentDirectoryPath);
 
-			//this has the potential to have a path with a dot in it - make sure that it will always have a "/" on the end.
-			if (strCorrectedDirectory[strCorrectedDirectory.size() - 1] != '/')
-				strCorrectedDirectory += '/';
+			//these have the potential to be paths with a dot in them so make sure that it will always have a "/" on the end regardless.
+			if (directoryPath.size() > 0 && directoryPath[directoryPath.size() - 1] != '/')
+			{
+				directoryPath += '/';
+			}
+			if (parentDirectoryPath.size() > 0 && parentDirectoryPath[parentDirectoryPath.size() - 1] != '/')
+			{
+				parentDirectoryPath += '/';
+			}
 
 			//check the directory exists
-			if (DoesDirectoryExist(strCorrectedDirectory) == false)
+			if (Android::DoesDirectoryExist(directoryPath) == false)
 			{
-				return false;
+				CS_LOG_ERROR("File System: Directory path doesn't exist '" + directoryPath + "'");
+				return output;
 			}
 
 			//open up the directory
-			DIR* directory = opendir(strCorrectedDirectory.c_str());
+			DIR* directory = opendir(directoryPath.c_str());
 			if(directory == nullptr)
 			{
-				return false;
+				CS_LOG_ERROR("File System: Error getting paths in directory '" + in_directoryPath + "': " + GetFileErrorString(errno));
+				return output;
 			}
 
 			//iterate through the directory
 			struct dirent* directoryItem;
 			while ((directoryItem = readdir(directory)) != nullptr)
 			{
+				std::string itemName = Core::StringUtils::StandardisePath(directoryItem->d_name);
+
 				//filter out "." and ".."
-				if (std::string(directoryItem->d_name) == "." || std::string(directoryItem->d_name) == "..")
-					continue;
-
-				//check to see if the item is a directory. if it is, then recurse into it. if its not, unlink it.
-				struct stat itemStats;
-				std::string strFullDirectory = strCorrectedDirectory + Core::StringUtils::StandardisePath(directoryItem->d_name) + "\0";
-				if (stat(strFullDirectory.c_str(), &itemStats) == 0)
-				{
-					if (S_ISDIR(itemStats.st_mode) == true)
-					{
-						if (DeleteDirectory(strFullDirectory)== false)
-						{
-							return false;
-						}
-					}
-					else
-					{
-						unlink(strFullDirectory.c_str());
-					}
-				}
-				else
-				{
-					return false;
-				}
-			}
-			closedir(directory);
-
-			//remove the directory
-			if (rmdir(strCorrectedDirectory.c_str()) != 0)
-			{
-				return false;
-			}
-
-			return true;
-		}
-		//--------------------------------------------------------------
-		/// Get All Items In Directory
-		//--------------------------------------------------------------
-		void FileSystem::GetAllItemsInDirectory(const std::string& instrPath, bool inbRecurse, const std::string& instrPathSoFar, std::vector<std::string>& outItems) const
-		{
-			//insure the path is in the correct format
-			std::string strCorrectedDirectory = Core::StringUtils::StandardisePath(instrPath);
-
-			//this has the potential to have a path with a dot in it - make sure that it will always have a "/" on the end.
-			if (strCorrectedDirectory[strCorrectedDirectory.size() - 1] != '/')
-				strCorrectedDirectory += '/';
-
-			//check the directory exists
-			if (DoesDirectoryExist(strCorrectedDirectory) == false)
-			{
-				//CS_LOG_ERROR("Directory does not exist: " + strCorrectedDirectory);
-				return;
-			}
-
-			//open up the directory
-			DIR* directory = opendir(strCorrectedDirectory.c_str());
-			if(directory == nullptr)
-			{
-				s32 errorType = errno;
-
-				if(errorType == EACCES)
-					CS_LOG_ERROR("Access Permission Error");
-				else if(errorType == ELOOP)
-					CS_LOG_ERROR("Symbolic Link Error");
-				else if(errorType == ENAMETOOLONG)
-					CS_LOG_ERROR("Name Too Long Error");
-				else if(errorType == ENOENT)
-					CS_LOG_ERROR("Dirname non existing/Dirname Empty String Error");
-				else if(errorType == ENOTDIR)
-					CS_LOG_ERROR("Dirname non existing Error");
-				else if(errorType == EMFILE)
-					CS_LOG_ERROR("To many files in Program Opened Error");
-				else if(errorType == ENAMETOOLONG)
-					CS_LOG_ERROR("Nametolong Error");
-				else if(errorType == ENFILE)
-					CS_LOG_ERROR("To many files in System Opened Error");
-
-				return;
-			}
-
-			//iterate through the directory
-			struct dirent* directoryItem;
-			while ((directoryItem = readdir(directory)) != nullptr)
-			{
-				//filter out "." and ".."
-				if (std::string(directoryItem->d_name) == "." || std::string(directoryItem->d_name) == "..")
+				if (itemName == "." || itemName == "..")
 					continue;
 
 				//add the item to our list
-				outItems.push_back(instrPathSoFar + std::string(directoryItem->d_name));
+				output.push_back(parentDirectoryPath + itemName);
 
 				//check if this item is a directory, if so, recurse!
 				struct stat itemStats;
-				std::string strFullDirectory = strCorrectedDirectory + Core::StringUtils::StandardisePath(directoryItem->d_name) + "\0";
-				if (stat(strFullDirectory.c_str(), &itemStats) == 0)
+				std::string itemPath = directoryPath + itemName + "\0";
+				if (stat(itemPath.c_str(), &itemStats) == 0)
 				{
 					if (S_ISDIR(itemStats.st_mode) == true)
-						GetAllItemsInDirectory(strFullDirectory, inbRecurse, Core::StringUtils::StandardisePath(instrPathSoFar) + Core::StringUtils::StandardisePath(directoryItem->d_name), outItems);
+					{
+						std::vector<std::string> subDirectoryPaths = GetPaths(itemPath, in_recursive, parentDirectoryPath + itemName);
+						output.insert(output.end(), subDirectoryPaths.begin(), subDirectoryPaths.end());
+					}
 				}
 				else
 				{
-					CS_LOG_ERROR("Error: " + strFullDirectory);
+					CS_LOG_ERROR("Error: Failed to stat path '" + itemPath + "'");
 				}
 
 			}
+
 			closedir(directory);
+
+			return output;
 		}
-        //--------------------------------------------------------------
-        /// Get Directory For DLC File
-        ///
-        /// @param The filename of the DLC asset.
-        /// @return The directory to either the package DLC or cache DLC.
-        //--------------------------------------------------------------
-        std::string FileSystem::GetDirectoryForDLCFile(const std::string& instrFilePath) const
-        {
-        	if(DoesFileExistInCachedDLC(instrFilePath))
-        	{
-        		return ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFilePath);
-        	}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		std::vector<FileSystem::PathInfo> FileSystem::GetPossibleAbsoluteDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+		{
+			std::vector<PathInfo> output;
+			switch(in_storageLocation)
+			{
+				case Core::StorageLocation::k_package:
+				{
+					const std::string* resourceDirectories = GetResourceDirectories();
+					for(u32 i = 0; i < 3; ++i)
+					{
+						PathInfo info;
+						info.m_path = Core::StringUtils::StandardisePath(resourceDirectories[i] + in_directoryPath);
+						info.m_storageLocation = Core::StorageLocation::k_package;
+						output.push_back(info);
+					}
+					break;
+				}
+				case Core::StorageLocation::k_DLC:
+				{
+					const std::string* resourceDirectories = GetResourceDirectories();
+					for(u32 i = 0; i < 3; ++i)
+					{
+						PathInfo info;
+						info.m_path = Core::StringUtils::StandardisePath(resourceDirectories[i] + GetPackageDLCPath() + in_directoryPath);
+						info.m_storageLocation = Core::StorageLocation::k_package;
+						output.push_back(info);
+					}
 
-        	std::string strPath;
-            for(u32 i=0; i<3; ++i)
+					PathInfo info;
+					info.m_path = GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_directoryPath;
+					info.m_storageLocation = Core::StorageLocation::k_DLC;
+					output.push_back(info);
+					break;
+				}
+				default:
+				{
+					PathInfo info;
+					info.m_path = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
+					info.m_storageLocation = in_storageLocation;
+					output.push_back(info);
+					break;
+				}
+			}
+			return output;
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		std::vector<std::string> FileSystem::GetDirectoryContents(const std::vector<PathInfo>& in_directoryInfos, bool in_recursive) const
+		{
+			std::vector<std::string> output;
+            for(const PathInfo& directoryInfo : in_directoryInfos)
             {
-                unz_file_pos sZipPos;
-                strPath = mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilePath;
+                std::string path = ChilliSource::Core::StringUtils::StandardisePath(directoryInfo.m_path);
 
-                if(DoesFileExistInAPKHashedStore(strPath, sZipPos))
+                if(directoryInfo.m_storageLocation == Core::StorageLocation::k_package)
                 {
-                    return strPath;
+                	std::vector<std::string> paths = GetPathsInAPK(path, in_recursive);
+                	output.insert(output.end(), paths.begin(), paths.end());
+                }
+                else
+                {
+                	std::vector<std::string> paths = GetPaths(path, in_recursive);
+                	output.insert(output.end(), paths.begin(), paths.end());
                 }
             }
-
-        	return "";
-        }
-        //--------------------------------------------------------------
-        /// Get Directory For Package File
-        ///
-        /// @param The filename of the package asset.
-        /// @return The directory to either the correct device package directory.
-        //--------------------------------------------------------------
-        std::string FileSystem::GetDirectoryForPackageFile(const std::string& instrFilePath) const
-        {
-            std::string strResult;
-            unz_file_pos sZipPos;
-            for(u32 i=0; i<3; ++i)
-            {
-                std::string strPath = ChilliSource::Core::StringUtils::StandardisePath(mastrResourceDirectory[i] + instrFilePath);
-
-                if(DoesFileExistInAPKHashedStore(strPath, sZipPos))
-                {
-                    strResult = strPath;
-                    break;
-                }
-            }
-            
-            return strResult;
-        }
-        //--------------------------------------------------------------
-        /// Get Zip Pos For Package File
-        ///
-        /// @param The filename of the package asset.
-        /// @return The zip pos to the package file
-        //--------------------------------------------------------------
-        unz_file_pos FileSystem::GetZipPosForPackageFile(const std::string& instrFilePath) const
-        {
-        	unz_file_pos Result;
-
-            for(u32 i=0; i<3; ++i)
-            {
-                std::string strPath = ChilliSource::Core::StringUtils::StandardisePath(mastrResourceDirectory[i] + instrFilePath);
-
-                if(DoesFileExistInAPKHashedStore(strPath, Result))
-                {
-                    break;
-                }
-            }
-
-            return Result;
-        }
-		//--------------------------------------------------------------
-		/// Does File Exist
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExist(const std::string& instrPath) const
-		{
-			struct stat fileStats;
-
-			//if it is 0, no error occurred and the item exists
-			if (stat(instrPath.c_str(), &fileStats) == 0)
-			{
-				//is it a file?
-				if (S_ISDIR(fileStats.st_mode) == false)
-					return true;
-			}
-
-			return false;
-		}
-		//--------------------------------------------------------------
-		/// Does Directory Exist
-		//--------------------------------------------------------------
-		bool FileSystem::DoesDirectoryExist(const std::string& instrPath) const
-		{
-			struct stat fileStats;
-
-			//if it is 0, no error occurred and the item exists
-			if (stat(instrPath.c_str(), &fileStats) == 0)
-			{
-				//is it a file?
-				if (S_ISDIR(fileStats.st_mode) == true)
-					return true;
-			}
-
-			return false;
-		}
-		//--------------------------------------------------------------
-		/// Does File Exist In DLC Cache
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInDLCCache(const std::string& instrPath) const
-		{
-			//Check that this storage location is available
-			if (IsStorageLocationAvailable(Core::StorageLocation::k_DLC) == false)
-			{
-				CS_LOG_ERROR("DLC Storage Location is not available!");
-				return false;
-			}
-			std::string filepath = GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath;
-			return DoesFileExist(filepath);
-		}
-		//--------------------------------------------------------------
-		/// Does Directory Exist In DLC Cache
-		//--------------------------------------------------------------
-		bool FileSystem::DoesDirectoryExistInDLCCache(const std::string& instrPath) const
-		{
-			//Check that this storage location is available
-			if (IsStorageLocationAvailable(Core::StorageLocation::k_DLC) == false)
-			{
-				CS_LOG_ERROR("DLC Storage Location is not available!");
-				return false;
-			}
-			std::string filepath = GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath;
-			return DoesDirectoryExist(filepath);
+            return output;
 		}
 	}
 }

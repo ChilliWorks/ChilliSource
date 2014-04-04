@@ -256,7 +256,7 @@ namespace ChilliSource
                     
                     //read the skeleton nodes
                     std::unordered_map<u32, s32> jointToNodeMap;
-                    for(u32 i=0; i<in_quantities.m_numSkeletonNodes; ++i)
+					for (u32 i = 0; i<(u32)in_quantities.m_numSkeletonNodes; ++i)
                     {
                         //get the skeleton node name name
                         std::string nodeName;

@@ -1,17 +1,17 @@
-/*
- *  FileSystem.h
- *  iOSTemplate
- *
- *  Created by Ian Copland on 25/03/2011.
- *  Copyright 2011 Tag Games Ltd. All rights reserved.
- *
- */
+//
+//  FileSystem.h
+//  Chilli Source
+//
+//  Created by I Copland on 25/03/2011.
+//  Copyright 2011 Tag Games Ltd. All rights reserved.
+//
 
-#ifndef _MOFLO_PLATFORM_ANDROID_FILEIO_FILESYSTEM_
-#define _MOFLO_PLATFORM_ANDROID_FILEIO_FILESYSTEM_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_FILE_FILESYSTEM_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_FILE_FILESYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/Minizip/unzip.h>
 
 #include <mutex>
@@ -21,419 +21,372 @@ namespace ChilliSource
 {
 	namespace Android 
 	{
-		struct DirInfo
-		{
-			std::string strPath;
-			Core::StorageLocation eLocation;
-		};
-
-        struct APKFileInfo
-        {
-        	u32 udwFileNameHash;
-        	unz_file_pos sZipPos;
-        };
-
-		//=========================================================================================
-		/// File System
+		//------------------------------------------------------------------
+		/// The Android implementation of the file system.
 		///
-		/// The Android Backend for the file system
-		//=========================================================================================
-		class FileSystem : public Core::FileSystem
+		/// @author I Copland
+		//------------------------------------------------------------------
+		class FileSystem final : public Core::FileSystem
 		{
 		public:
-
-			//--------------------------------------------------------------
-            /// Create File Stream
-            ///
-            /// This will create a filestream to the file at the specified
-            /// filepath.
-            ///
-            /// @param The storage location.
-            /// @param The filepath.
-            /// @param The file mode.
-            //--------------------------------------------------------------
-            Core::FileStreamSPtr CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const override;
-            //--------------------------------------------------------------
-            /// Create File
-            ///
-            /// Creates a new file at the given location with the provided
-            /// data.
-            ///
-            /// @param The Storage Location
-            /// @param The directory
-            /// @param The data.
-            /// @param The size of the data.
-            /// @return Whether or not the file was successfully created.
-            //--------------------------------------------------------------
-            bool CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const override;
-            //--------------------------------------------------------------
-            /// Create Directory
-            ///
-            /// Creates the given directory. The full directory hierarchy will
-            /// be created.
-            ///
-            /// @param The Storage Location
-            /// @param The directory
-            /// @return Returns whether or not this was successful. Inability
-            ///         to create the directory due to it already existing
-            ///         is still considered successful.
-            //--------------------------------------------------------------
-            bool CreateDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const override;
-            //--------------------------------------------------------------
-            /// Copy File
-            ///
-            /// Copies a file from one location to another.
-            ///
-            /// @param The source storage location.
-            /// @param The source directory.
-            /// @param The destination storage location.
-            /// @param The destination directory.
-            /// @return Whether or not the file was successfully copied.
-            //--------------------------------------------------------------
-            bool CopyFile(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceFilepath,
-            			  Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const override;
-            //--------------------------------------------------------------
-            /// Copy Directory
-            ///
-            /// Copies a directory from one location to another. If the
-            /// destination directory does not exist, it will be created.
-            ///
-            /// @param The source storage location.
-            /// @param The source directory.
-            /// @param The destination storage location.
-            /// @param The destination directory.
-            /// @return Whether or not the files were successfully copied.
-            //--------------------------------------------------------------
-            bool CopyDirectory(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceDirectory,
-            				   Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationDirectory) const override;
-            //--------------------------------------------------------------
-            /// Delete File
-            ///
-            /// Deletes the specified file.
-            ///
-            /// @param The storage location.
-            /// @param The filepath.
-            /// @return Whether or not the file was successfully deleted.
-            //--------------------------------------------------------------
-            bool DeleteFile(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const override;
-            //--------------------------------------------------------------
-            /// Delete Directory
-            ///
-            /// Deletes a directory and all its contents.
-            ///
-            /// @param The storage location.
-            /// @param The directory.
-            /// @return Whether or not the directory was successfully deleted.
-            //--------------------------------------------------------------
-            bool DeleteDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const override;
-            //--------------------------------------------------------------
-            /// Get File Names With Extension In Directory
-            ///
-            /// creates a dynamic array containing the filenames of each of
-            /// each file that has the provided extension in the given
-            /// directory.
-            ///
-            /// @param The Storage Location
-            /// @param The directory
-            /// @param Flag to determine whether or not to recurse into sub directories
-            /// @param The extension
-            /// @param Output dynamic array containing the filenames.
-            //--------------------------------------------------------------
-            void GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                      const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const override;
-            //--------------------------------------------------------------
-            /// Get Path For Files With Name In Directory
-            ///
-            /// Creates a dynamic array containing the filenames of each of
-            /// each file with the given name in the given
-            /// directory.
-            ///
-            /// @param The Storage Location
-            /// @param The directory
-            /// @param Flag to determine whether or not to recurse into sub directories
-            /// @param The name
-            /// @param Output dynamic array containing the filenames.
-            //--------------------------------------------------------------
-            void GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                            const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const override;
-            //--------------------------------------------------------------
-            /// Get File Names In Directory
-            ///
-            /// creates a dynamic array containing the filenames of each file
-            /// in the given directory.
-            ///
-            /// @param The Storage Location
-            /// @param The directory
-            /// @param Flag to determine whether or not to recurse into sub directories
-            /// @param Output dynamic array containing the filenames.
-            //--------------------------------------------------------------
-            void GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                 std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const override;
-            //--------------------------------------------------------------
-            /// Get Directories In Directory
-            ///
-            /// creates a dynamic array containing the names of each directory
-            /// in the given directory.
-            ///
-            /// @param The Storage Location
-            /// @param The directory
-            /// @param Flag to determine whether or not to recurse into sub directories
-            /// @param Output dynamic array containing the dir names.
-            //--------------------------------------------------------------
-            void GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                   std::vector<std::string> &outstrDirectories, bool inbAppendFullPath = false) const override;
-            //--------------------------------------------------------------
-            /// Does File Exist
-            ///
-            /// returns whether or not the given file exists.
-            ///
-            /// @param The Storage Location
-            /// @param The filepath
-            /// @return Whether or not it exists.
-            //--------------------------------------------------------------
-            bool DoesFileExist(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const override;
-			//--------------------------------------------------------------
-			/// Does File Exist In Cached DLC
+			CS_DECLARE_NAMEDTYPE(FileSystem);
+			//-----------------------------------------------------------
+			/// A container for the information on a file within the APK.
 			///
+			/// @author S Downie
+			//-----------------------------------------------------------
+	        struct APKManifestItem
+	        {
+	        	u32 m_pathHash;
+	        	std::string m_path;
+	        	bool m_isFile;
+	        	unz_file_pos m_apkPosition;
+	        };
+			//----------------------------------------------------------
+			/// Queries whether or not this system implements the
+			/// interface with the given Id.
+			///
+			/// @author I Copland
+			///
+			/// @param The interface Id.
+			///
+			/// @return Whether or not the interface is implemented.
+			//----------------------------------------------------------
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			//--------------------------------------------------------------
+			/// Creates a new file stream to the given file in the given
+			/// storage location.
+			///
+			/// @author I Copland
+			///
+			/// @param The storage location.
+			/// @param The file path.
+			/// @param The file mode.
+			///
+			/// @return The new file stream.
+			//--------------------------------------------------------------
+			Core::FileStreamUPtr CreateFileStream(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::FileMode in_fileMode) const override;
+			//--------------------------------------------------------------
+			/// Creates the given directory. The full directory hierarchy will
+			/// be created.
+			///
+			/// @author I Copland
+			///
+			/// @param The Storage Location
+			/// @param The directory path.
+			///
+			/// @return Returns whether or not this was successful. Failure to
+			/// create the directory becuase it already exists is considered
+			/// a success.
+			//--------------------------------------------------------------
+			bool CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
+			//--------------------------------------------------------------
+			/// Copies a file from one location to another.
+			///
+			/// @author I Copland
+			///
+			/// @param The source storage location.
+			/// @param The source directory.
+			/// @param The destination storage location.
+			/// @param The destination directory.
+			///
+			/// @return Whether or not the file was successfully copied.
+			//--------------------------------------------------------------
+			bool CopyFile(Core::StorageLocation in_sourceStorageLocation, const std::string& in_sourceFilePath,
+						  Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const override;
+			//--------------------------------------------------------------
+			/// Copies a directory from one location to another. If the
+			/// destination directory does not exist, it will be created.
+			///
+			/// @author I Copland
+			///
+			/// @param The source storage location.
+			/// @param The source directory.
+			/// @param The destination storage location.
+			/// @param The destination directory.
+			///
+			/// @return Whether or not the files were successfully copied.
+			//--------------------------------------------------------------
+			bool CopyDirectory(Core::StorageLocation in_sourceStorageLocation, const std::string& in_sourceDirectoryPath,
+							   Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationDirectoryPath) const override;
+			//--------------------------------------------------------------
+			/// Deletes the specified file.
+			///
+			/// @author I Copland
+			///
+			/// @param The storage location.
 			/// @param The filepath.
+			///
+			/// @return Whether or not the file was successfully deleted.
+			//--------------------------------------------------------------
+			bool DeleteFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath) const override;
+			//--------------------------------------------------------------
+			/// Deletes a directory and all its contents.
+			///
+			/// @author I Copland
+			///
+			/// @param The storage location.
+			/// @param The directory.
+			///
+			/// @return Whether or not the directory was successfully deleted.
+			//--------------------------------------------------------------
+			bool DeleteDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
+			//--------------------------------------------------------------
+			/// Creates a dynamic array containing the filenames of each file
+			/// in the given directory. File paths will be relative to the
+			/// input directory.
+			///
+			/// @author I Copland
+			///
+			/// @param The Storage Location
+			/// @param The directory
+			/// @param Flag to determine whether or not to recurse into sub
+			/// directories
+			///
+			/// @return dynamic array containing the filenames.
+			//--------------------------------------------------------------
+			std::vector<std::string> GetFilePaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const override;
+			//--------------------------------------------------------------
+			/// Creates a dynamic array containing the names of each directory
+			/// in the given directory. Directory paths will be relative to
+			/// the input directory.
+			///
+			/// @author I Copland
+			///
+			/// @param The Storage Location
+			/// @param The directory
+			/// @param Flag to determine whether or not to recurse into sub directories
+			///
+			/// @return Output dynamic array containing the dir names.
+			//--------------------------------------------------------------
+			std::vector<std::string> GetDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const override;
+			//--------------------------------------------------------------
+			/// returns whether or not the given file exists.
+			///
+			/// @author I Copland
+			///
+			/// @param The Storage Location
+			/// @param The file path
+			///
+			/// @return Whether or not it exists.
+			//--------------------------------------------------------------
+			bool DoesFileExist(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
+			//--------------------------------------------------------------
+			/// Returns whether or not the file exists in the Cached DLC
+			/// directory.
+			///
+			/// @author I Copland
+			///
+			/// @param The file path.
+			///
 			/// @return Whether or not it is in the cached DLC.
 			//--------------------------------------------------------------
-			bool DoesFileExistInCachedDLC(const std::string& instrFilepath) const override;
+			bool DoesFileExistInCachedDLC(const std::string& in_filePath) const override;
 			//--------------------------------------------------------------
-			/// Does File Exist In Package DLC
+			/// Returns whether or not the file exists in the package DLC
+			/// directory.
 			///
-			/// @param The filepath.
+			/// @author I Copland
+			///
+			/// @param The file path.
+			///
 			/// @return Whether or not it is in the package DLC.
 			//--------------------------------------------------------------
-			bool DoesFileExistInPackageDLC(const std::string& instrFilepath) const override;
-            //--------------------------------------------------------------
-            /// Does Directory Exist
-            ///
-            /// returns whether or not the given directory exists.
-            ///
-            /// @param The Storage Location
-            /// @param The directory
-            /// @return Whether or not it exists.
-            //--------------------------------------------------------------
-            bool DoesDirectoryExist(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const override;
-            //--------------------------------------------------------------
-			/// Is Storage Location Available
-			///
-            /// @param The source storage location.
-			/// @return whether or not the storage location is available on
-            ///         this device.
+			bool DoesFileExistInPackageDLC(const std::string& in_filePath) const override;
 			//--------------------------------------------------------------
-			bool IsStorageLocationAvailable(Core::StorageLocation ineStorageLocation) const override;
-            //--------------------------------------------------------------
-			/// Get Storage Location Directory
+			/// Returns whether or not the given directory exists.
 			///
-            /// @param The source storage location.
+			/// @author I Copland
+			///
+			/// @param The Storage Location
+			/// @param The directory path
+			///
+			/// @return Whether or not it exists.
+			//--------------------------------------------------------------
+			bool DoesDirectoryExist(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
+			//--------------------------------------------------------------
+			/// Returns the absolute path to the given storage location. The
+			/// value this returns is platform specific and use of this
+			/// should be kept to a minimum in cross platform projects.
+			///
+			/// @author I Copland
+			///
+			/// @param The source storage location.
+			///
 			/// @return The directory. returns an empty string if the location
-            ///         is not available.
+			/// is not available.
 			//--------------------------------------------------------------
-			std::string GetStorageLocationDirectory(Core::StorageLocation ineStorageLocation) const override;
+			std::string GetAbsolutePathToStorageLocation(Core::StorageLocation in_storageLocation) const override;
             //--------------------------------------------------------------
-            /// Get Directory For DLC File
+			/// Returns the absolute path to the file in the given storage
+            /// location. The file must exist otherwise an empty string
+            /// will be returned. The result of this is platform specific
+            /// so care should be taken when using this in cross platform
+            /// projects.
             ///
-            /// @param The filename of the DLC asset.
-            /// @return The directory to either the package DLC or cache DLC.
-            //--------------------------------------------------------------
-            std::string GetDirectoryForDLCFile(const std::string& instrFilePath) const override;
-            //--------------------------------------------------------------
-			/// Get Directory For Package File
+            /// @author S Downie
 			///
-            /// @param The filename of the package asset.
-			/// @return The directory to either the correct device package directory.
-			//--------------------------------------------------------------
-            std::string GetDirectoryForPackageFile(const std::string& instrFilePath) const override;
-            //--------------------------------------------------------------
-            /// Get Zip Pos For Package File
+            /// @param The storage location for the file.
+            /// @param The file path relative to the storage location.
             ///
-            /// @param The filename of the package asset.
-            /// @return The zip pos to the package file
-            //--------------------------------------------------------------
-            unz_file_pos GetZipPosForPackageFile(const std::string& instrFilePath) const;
-            //--------------------------------------------------------------
-			/// Is Storage Available
-			///
-            /// @return whether or not android storage is available
+			/// @return The full path to the file.
 			//--------------------------------------------------------------
-			bool IsStorageAvailable() const;
+			std::string GetAbsolutePathToFile(Core::StorageLocation in_storageLocation, const std::string& in_path) const override;
+            //--------------------------------------------------------------
+			/// Returns the absolute path to the directory in the given storage
+            /// location. The directory must exist otherwise an empty string
+            /// will be returned. The result of this is platform specific
+            /// so care should be taken when using this in cross platform
+            /// projects.
+            ///
+            /// @author S Downie
+			///
+            /// @param The storage location for the directory.
+            /// @param The directory path relative to the storage location.
+            ///
+			/// @return The full path to the directory.
+			//--------------------------------------------------------------
+			std::string GetAbsolutePathToDirectory(Core::StorageLocation in_storageLocation, const std::string& in_path) const override;
 
 		private:
-            friend Core::FileSystemUPtr Core::FileSystem::Create();
-            //-------------------------------------------------------
+			friend Core::FileSystemUPtr Core::FileSystem::Create();
+
+			//--------------------------------------------------------------
+			/// A container for the storage location and path of a single
+			/// file or directory.
+			///
+			/// @author S Downie
+			//--------------------------------------------------------------
+			struct PathInfo
+			{
+				std::string m_path;
+				Core::StorageLocation m_storageLocation;
+			};
+            //--------------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
-            //-------------------------------------------------------
+            //--------------------------------------------------------------
             FileSystem();
+	        //--------------------------------------------------------------
+	        /// Creates the APK Manifest. This contains information on each
+            /// path in the APK, including it's path, it's hash and it's
+            /// position within the APK zip.
+	        ///
+	        /// @author S Downie
+	        //--------------------------------------------------------------
+	        void CreateAPKManifest();
+            //--------------------------------------------------------------
+	        /// Tries to get the manifest item for the given path.
+	        ///
+            /// @author I Copland
+            ///
+            /// @param The path to loop up.
+	        /// @param [Out] The manifest item if successful.
+	        ///
+            /// @return Whether or not the look up was successful.
+            //--------------------------------------------------------------
+            bool TryGetManifestItem(const std::string& in_path, APKManifestItem& out_manifestItem) const;
 			//--------------------------------------------------------------
-			/// Create APK File Stream
-			///
 			/// Creates a file stream to a file within the APK (zip) file.
 			/// This provides a uniform api for handling files within
 			/// the apk and normal filestreams.
+            ///
+            /// @author I Copland
 			///
-			/// @param the file pos.
+			/// @param The file path of in the APK.
 			/// @param the file mode.
+            ///
 			/// @return the APK filestream.
 			//--------------------------------------------------------------
-			Core::FileStreamSPtr CreateAPKFileStream(const unz_file_pos& inPos, Core::FileMode ineFileMode) const;
+			Core::FileStreamUPtr CreateFileStreamInAPK(const std::string& in_filePath, Core::FileMode in_fileMode) const;
 			//--------------------------------------------------------------
-			/// Copy File From APK
-			///
 			/// Copies a file from the APK to one of the writable storage
 			/// locations.
 			///
-			/// @param the source file.
+			/// @author I Copland
+			///
+			/// @param the source file path in the APK.
 			/// @param the destination storage location
 			/// @param the destination file.
+			///
 			/// @return whether or not this has succeeded.
 			//--------------------------------------------------------------
-			bool CopyFileFromAPK(const std::string& instrPath, Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const;
+			bool CopyFileFromAPK(const std::string& in_sourcefilePath, Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilepath) const;
 			//--------------------------------------------------------------
-			/// Get All Items In Directory In APK
-			///
 			/// returns all files and directories in a directory of the APK.
 			/// Note: Unlike other similar methods, empty directories will
 			/// not be listed.
 			///
+			/// @author I Copland
+			///
 			/// @param the directory.
 			/// @param whether or not to recurse
 			/// @param out parameter containing all the found items.
 			//--------------------------------------------------------------
-			void GetAllItemsInDirectoryInAPK(const std::string& instrPath, bool inbRecurse, std::vector<std::string>& outItems, std::vector<unz_file_pos>& outPos) const;
+			std::vector<std::string> GetPathsInAPK(const std::string& in_directoryPath, bool in_recursive) const;
 			//--------------------------------------------------------------
-			/// Does File Exist In APK
+			/// returns whether or not a file exists in the APK.
 			///
-			/// returns whether or not a file exists in the APK
+			/// @author S Downie
 			///
-			/// @param the filepath.
-			/// @param Out: The zip pos
+			/// @param the file path.
+			///
 			/// @return whether or not it exists.
 			//--------------------------------------------------------------
-			bool DoesFileExistInAPKHashedStore(const std::string& instrPath, unz_file_pos& outZipPos) const;
+			bool DoesFileExistInAPK(const std::string& in_filePath) const;
 			//--------------------------------------------------------------
-			/// Does Directory Exist In APK
-			///
 			/// returns whether or not a directory exists in the APK.
-			/// Note: Unlike other similar methods, empty directories will be
-			/// considered to be not existing.
+			/// Note: Unlike other similar methods, empty directories will not
+			/// be considered.
+			///
+			/// @author I Copland
 			///
 			/// @param the directory path.
+			///
 			/// @return whether or not it exists.
 			//--------------------------------------------------------------
-			bool DoesDirectoryExistInAPK(const std::string& instrPath) const;
+			bool DoesDirectoryExistInAPK(const std::string& in_directoryPath) const;
 			//--------------------------------------------------------------
-			/// Create Base Directory
+			/// returns all files and directories in a directory.
 			///
-			/// Creates a base directory.
-			///
-			/// @param The directory
-			/// @return Returns whether or not this was successful. Inability
-			///         to create the directory due to it already existing
-			///         is still considered successful.
-			//--------------------------------------------------------------
-			bool CreateBaseDirectory(const std::string& instrDirectory) const;
-			//--------------------------------------------------------------
-			/// Copy File
-			///
-			/// Copies a file from one location to another.
-			///
-			/// @param The source directory.
-			/// @param The destination directory.
-			/// @return Whether or not the file was successfully copied.
-			//--------------------------------------------------------------
-			bool CopyFile(const std::string& instrSourceFilepath, const std::string& instrDestinationFilepath) const;
-			//--------------------------------------------------------------
-			/// Delete Directory
-			///
-			/// Deletes a directory and all its contents.
-			///
-			/// @param The directory.
-			/// @return Whether or not the directory was successfully deleted.
-			//--------------------------------------------------------------
-			bool DeleteDirectory(const std::string& instrDirectory) const;
-			//--------------------------------------------------------------
-			/// Get All Items In Directory
-			///
-			/// returns all files and directories in a directory
+			/// @author I Copland
 			///
 			/// @param the directory.
-			/// @param whether or not to recurse
-			/// @param the path to add to the items
-			/// @param out parameter containing all the found items.
-			//--------------------------------------------------------------
-			void GetAllItemsInDirectory(const std::string& instrPath, bool inbRecurse, const std::string& instrPathSoFar, std::vector<std::string>& outItems) const;
-			//--------------------------------------------------------------
-			/// Does File Exist
+			/// @param Whether or not to recurse into sub directories.
+			/// @param The parent directory.
 			///
-			/// returns whether or not a file exists
-			///
-			/// @param the filepath.
-			/// @return whether or not it exists.
+			/// @return The output paths.
 			//--------------------------------------------------------------
-			bool DoesFileExist(const std::string& instrPath) const;
-			//--------------------------------------------------------------
-			/// Does Directory Exist
-			///
-			/// returns whether or not a directory exists
-			///
-			/// @param the directory path.
-			/// @return whether or not it exists.
-			//--------------------------------------------------------------
-			bool DoesDirectoryExist(const std::string& instrPath) const;
-			//--------------------------------------------------------------
-			/// Does File Exist In DLC Cache
-			///
-			/// returns whether or not a file exists specifically
-			/// in the DCL cache.
-			///
-			/// @param the filepath.
-			/// @return whether or not it exists.
-			//--------------------------------------------------------------
-			bool DoesFileExistInDLCCache(const std::string& instrPath) const;
-			//--------------------------------------------------------------
-			/// Does Directory Exist In DLC Cache
-			///
-			/// returns whether or not a directory exists specifically
-			/// in the DCL cache.
-			///
-			/// @param the directory path.
-			/// @return whether or not it exists.
-			//--------------------------------------------------------------
-			bool DoesDirectoryExistInDLCCache(const std::string& instrPath) const;
+			std::vector<std::string> GetPaths(const std::string& in_directoryPath, bool in_recurse, const std::string& in_parentDirectoryPath = "") const;
+            //------------------------------------------------------------
+            /// Builds a list of the paths that the given path might refer
+			/// to in the given storage location. For example, a path in
+			/// DLC might refer to the DLC cache or the Package DLC.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Storage location
+            /// @param File name to append
+            ///
+            /// @return All the paths for the given location
+            //------------------------------------------------------------
+			std::vector<PathInfo> GetPossibleAbsoluteDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
 	        //------------------------------------------------------------
-	        /// Get Paths For Storage Location
-	        ///
-	        /// @param Storage location
-	        /// @param File name to append
-			/// @param Out: All the paths for the given location
-			//------------------------------------------------------------
-			void GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, std::vector<DirInfo>& outaPaths) const;
-	        //------------------------------------------------------------
-	        /// Get Directory Contents
+	        /// @author S Downie
 	        ///
 	        /// @param Directories
 	        /// @param Recurse into sub directories
-	        /// @param Out: Content file names
+			///
+	        /// @return Content file names
 	        //------------------------------------------------------------
-	        void GetDirectoryContents(const std::vector<DirInfo>& inaDirs, bool inbRecursive, std::vector<std::string>& outstrContents) const;
-	        //--------------------------------------------------------------
-	        /// Create Hashed APK File List
-	        ///
-	        //--------------------------------------------------------------
-	        void CreateHashedAPKFileList();
+			std::vector<std::string> GetDirectoryContents(const std::vector<PathInfo>& in_directoryInfos, bool in_recursive) const;
 
-		private:
+			mutable std::mutex m_minizipMutex;
 
-			mutable std::mutex mMinizipMutex;
-			std::string mstrPathToAPK;
-			std::string mstrStorageDir;
-			bool mbStorageAvailable;
-
-			std::vector<APKFileInfo> mAPKFileInfo;
+			std::string m_apkPath;
+			std::string m_storagePath;
+			std::vector<APKManifestItem> m_apkManifestItems;
 		};
 	}
 }

@@ -1,18 +1,18 @@
-/*
- *  FileSystem.h
- *  iOSTemplate
- *
- *  Created by Ian Copland on 25/03/2011.
- *  Copyright 2011 Tag Games Ltd. All rights reserved.
- *
- */
+//
+//  FileSystem.h
+//  Chilli Source
+//
+//  Created by I Copland on 25/03/2011.
+//  Copyright 2011 Tag Games Ltd. All rights reserved.
+//
 
-#ifndef _MOFLO_CORE_FILEIO_FILE_SYSTEM_
-#define _MOFLO_CORE_FILEIO_FILE_SYSTEM_
+#ifndef _CHILLISOURCE_CORE_FILE_FILESYSTEM_H_
+#define _CHILLISOURCE_CORE_FILE_FILESYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/File/FileStream.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/File/StorageLocation.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 #include <string>
 
@@ -20,360 +20,371 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-        //============================================
-		/// Storage Location
-		///
-		/// enum stating where a file should be loaded
-        /// from.
-		//============================================
-        enum class StorageLocation
-        {
-            k_none,
-            k_package,
-            k_saveData,
-            k_cache,
-            k_DLC,
-            k_root
-        };
-        //============================================
-		/// Storage Location From String
-		///
-		/// Parses a string and returns a storage
-        /// location.
-		//============================================
-        ChilliSource::Core::StorageLocation GetStorageLocationFromString(const std::string & instrStorage);
-        //============================================
-		/// Storage Location And Filename
-		///
-		/// struct which states the storage location
-        /// and filename of a file.
-		//============================================
-        struct StorageLocationAndFilename
-        {
-            std::string mstrFilename;
-            StorageLocation meStorageLocation;
-        };
-        typedef std::shared_ptr<StorageLocationAndFilename> StorageLocationAndFilenamePtr;
-		//=========================================================================================
-		/// FileSystem
+		//-----------------------------------------------------------------
+		/// A system for handling cross platform access to the file
+        /// system. This provides sandboxed access to specific locations
+        /// on disk, such as access to application assets, or save
+        /// data. It is safe to use the File System during the OnInit
+		/// and OnDestroy lifecycle events.
         ///
-        /// Frontend for MoFlows file system. All file input and output in MoFlow should be handled
-        /// through this to maintain cross platform support.
-		//=========================================================================================
-		class FileSystem : public System
+        /// @author I Copland
+		//-----------------------------------------------------------------
+		class FileSystem : public AppSystem
 		{
 		public:
-            
             CS_DECLARE_NAMEDTYPE(FileSystem);
-            
-            //-------------------------------------------------------
-            /// Create the platform dependent backend
-            ///
+            //----------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return New backend instance
-            //-------------------------------------------------------
-            static FileSystemUPtr Create();
-            
-			virtual ~FileSystem(){}
-			//-------------------------------------------------------------------------
-			/// Is A
-			///
-			/// @param Interface to compare
-			/// @return Whether the object implements the given interface
-			//-------------------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
-            //--------------------------------------------
-            /// Get Device Resource Directory
-            ///
             /// @return Directory to load device dependent assets from
-            //--------------------------------------------
+            //----------------------------------------------------------
             static const std::string& GetDeviceResourceDirectory();
-            //--------------------------------------------
-            /// Get Default Device Resource Directory
+            //----------------------------------------------------------
+            /// @author S Downie
             ///
             /// @return Directory to load device dependent assets from
-            //--------------------------------------------
+            //----------------------------------------------------------
             static const std::string& GetDefaultDeviceResourceDirectory();
-            //--------------------------------------------
-            /// Get Default Resource Directory
+            //----------------------------------------------------------
+            /// @author S Downie
             ///
             /// @return Directory to load shared assets from
-            //--------------------------------------------
+            //----------------------------------------------------------
             static const std::string& GetDefaultResourceDirectory();
-            //--------------------------------------------
-            /// Get Resources Density
+            //----------------------------------------------------------
+            /// @author S Downie
             ///
-            /// @return Density of assets in device
-            /// dependent folder
-            //--------------------------------------------
+            /// @return Density of assets in device dependent folder
+            //----------------------------------------------------------
             static f32 GetDeviceResourcesDensity();
-            //--------------------------------------------
-            /// Set Resource Directories
+            //----------------------------------------------------------
+            /// @author S Downie
             ///
             /// @param Directory to load device dependent assets from
             /// @param Fallback to load device depenedent assets from
             /// @param Directory to load shared assets from
             /// @param Density of assets in the device dependent folder
-            //--------------------------------------------
-            static void SetResourceDirectories(const std::string& instrDeviceDirectory, const std::string& instrDefaultDeviceDirectory, const std::string& instrDefaultDirectory, f32 infAssetsDensity);
+            //----------------------------------------------------------
+            static void SetResourceDirectories(const std::string& in_deviceDirectory, const std::string& in_defaultDeviceDirectory, const std::string& in_defaultDirectory, f32 in_assetsDensity);
+            //----------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend instance
+            //----------------------------------------------------------
+            static FileSystemUPtr Create();
             //--------------------------------------------------------------
-            /// Create File Stream
+            /// Reads the contents of a file from disc if the file exists.
             ///
-            /// This will create a filestream to the file at the specified
-            /// filepath.
+            /// @author I Copland
             ///
-            /// @param The storage location.
-            /// @param The filepath.
-            /// @param The file mode.
+            /// @param The Storage Location.
+            /// @param The file path.
+            /// @param [Out] The contents of the file.
+            ///
+            /// @return Whether or not the file read was successful.
             //--------------------------------------------------------------
-            virtual FileStreamSPtr CreateFileStream(StorageLocation ineStorageLocation, const std::string& instrFilepath, FileMode ineFileMode) const = 0;
+            bool ReadFile(StorageLocation in_storageLocation, const std::string& in_filePath, std::string& out_contents) const;
             //--------------------------------------------------------------
-            /// Create File
+            /// Write a file to disc with the given data.
             ///
-            /// Creates a new file at the given location with the provided
-            /// data.
+            /// @author I Copland
             ///
-            /// @param The Storage Location
-            /// @param The directory
+            /// @param The Storage Location.
+            /// @param The file path.
+            /// @param The contents of the file.
+            ///
+            /// @return Whether or not the file was successfully written.
+            //--------------------------------------------------------------
+            bool WriteFile(StorageLocation in_storageLocation, const std::string& in_filePath, const std::string& in_contents) const;
+            //--------------------------------------------------------------
+            /// Write a file to disc with the given data.
+            ///
+            /// @author S Downie
+            ///
+            /// @param The Storage Location.
+            /// @param The file path.
             /// @param The data.
             /// @param The size of the data.
-            /// @return Whether or not the file was successfully created.
-            //--------------------------------------------------------------
-            virtual bool CreateFile(StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const = 0;
-            //--------------------------------------------------------------
-            /// Create Directory
             ///
+            /// @return Whether or not the file was successfully written.
+            //--------------------------------------------------------------
+            bool WriteFile(StorageLocation in_storageLocation, const std::string& in_filePath, const s8* in_data, u32 in_dataSize) const;
+            //--------------------------------------------------------------
+            /// Creates a new file stream to the given file in the given
+            /// storage location.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The storage location.
+            /// @param The file path.
+            /// @param The file mode.
+            ///
+            /// @return The new file stream.
+            //--------------------------------------------------------------
+            virtual FileStreamUPtr CreateFileStream(StorageLocation in_storageLocation, const std::string& in_filePath, FileMode in_fileMode) const = 0;
+            //--------------------------------------------------------------
             /// Creates the given directory. The full directory hierarchy will
             /// be created.
             ///
-            /// @param The Storage Location
-            /// @param The directory
-            /// @return Returns whether or not this was successful. Inability
-            ///         to create the directory due to it already existing
-            ///         is still considered successful.
-            //--------------------------------------------------------------
-            virtual bool CreateDirectory(StorageLocation ineStorageLocation, const std::string& instrDirectory) const = 0;
-            //--------------------------------------------------------------
-            /// Copy File
+            /// @author I Copland
             ///
+            /// @param The Storage Location
+            /// @param The directory path.
+            ///
+            /// @return Returns whether or not this was successful. Failure to
+            /// create the directory becuase it already exists is considered
+            /// a success.
+            //--------------------------------------------------------------
+            virtual bool CreateDirectory(StorageLocation in_storageLocation, const std::string& in_directoryPath) const = 0;
+            //--------------------------------------------------------------
             /// Copies a file from one location to another.
+            ///
+            /// @author I Copland
             ///
             /// @param The source storage location.
             /// @param The source directory.
             /// @param The destination storage location.
             /// @param The destination directory.
+            ///
             /// @return Whether or not the file was successfully copied.
             //--------------------------------------------------------------
-            virtual bool CopyFile(StorageLocation ineSourceStorageLocation, const std::string& instrSourceFilepath,
-                                  StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const = 0;
+            virtual bool CopyFile(StorageLocation in_sourceStorageLocation, const std::string& in_sourceFilePath,
+                                  StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const = 0;
             //--------------------------------------------------------------
-            /// Copy Directory
-            ///
             /// Copies a directory from one location to another. If the 
             /// destination directory does not exist, it will be created.
             ///
+            /// @author I Copland
+            ///
             /// @param The source storage location.
             /// @param The source directory.
             /// @param The destination storage location.
             /// @param The destination directory.
+            ///
             /// @return Whether or not the files were successfully copied.
             //--------------------------------------------------------------
-            virtual bool CopyDirectory(StorageLocation ineSourceStorageLocation, const std::string& instrSourceDirectory,
-                                       StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationDirectory) const = 0;
+            virtual bool CopyDirectory(StorageLocation in_sourceStorageLocation, const std::string& in_sourceDirectoryPath,
+                                       StorageLocation in_destinationStorageLocation, const std::string& in_destinationDirectoryPath) const = 0;
             //--------------------------------------------------------------
-            /// Delete File
-            ///
             /// Deletes the specified file.
+            ///
+            /// @author I Copland
             ///
             /// @param The storage location.
             /// @param The filepath.
+            ///
             /// @return Whether or not the file was successfully deleted.
             //--------------------------------------------------------------
-            virtual bool DeleteFile(StorageLocation ineStorageLocation, const std::string& instrFilepath) const = 0;
+            virtual bool DeleteFile(StorageLocation in_storageLocation, const std::string& in_filepath) const = 0;
             //--------------------------------------------------------------
-            /// Delete Directory
-            ///
             /// Deletes a directory and all its contents.
+            ///
+            /// @author I Copland
             ///
             /// @param The storage location.
             /// @param The directory.
+            ///
             /// @return Whether or not the directory was successfully deleted.
             //--------------------------------------------------------------
-            virtual bool DeleteDirectory(StorageLocation ineStorageLocation, const std::string& instrDirectory) const = 0;
+            virtual bool DeleteDirectory(StorageLocation in_storageLocation, const std::string& in_directoryPath) const = 0;
             //--------------------------------------------------------------
-            /// Get File Names With Extension In Directory
+            /// Creates a dynamic array containing the file names of each file
+            /// in the given directory. File paths will be relative to the
+            /// input directory.
             ///
-            /// creates a dynamic array containing the filenames of each 
-            /// file that has the provided extension in the given
-            /// directory.
+            /// @author I Copland
             ///
             /// @param The Storage Location
             /// @param The directory
-            /// @param Flag to determine whether or not to recurse into sub directories
+            /// @param Flag to determine whether or not to recurse into sub
+            /// directories
+            ///
+            /// @return dynamic array containing the file names.
+            //--------------------------------------------------------------
+            virtual std::vector<std::string> GetFilePaths(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const = 0;
+            //--------------------------------------------------------------
+            /// creates a dynamic array containing the file names of each
+            /// file that has the provided extension in the given directory.
+            /// File paths will be returned relative to the input directory.
+            ///
+            /// @author S Downie
+            ///
+            /// @param The Storage Location
+            /// @param The directory path.
+            /// @param Flag to determine whether or not to recurse into sub
+            /// directories
             /// @param The extension
-            /// @param Output dynamic array containing the filenames.
-            //--------------------------------------------------------------
-            virtual void GetFileNamesWithExtensionInDirectory(StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                              const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const = 0;
-            //--------------------------------------------------------------
-            /// Get Path For Files With Name In Directory
             ///
-            /// Creates a dynamic array containing the filenames of each of
-            /// each file with the given name in the given
-            /// directory.
-            ///
-            /// @param The Storage Location
-            /// @param The directory
-            /// @param Flag to determine whether or not to recurse into sub directories
-            /// @param The name
-            /// @param Output dynamic array containing the filenames.
+            /// @return Dynamic array containing the file names.
             //--------------------------------------------------------------
-            virtual void GetPathForFilesWithNameInDirectory(StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                              const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const = 0;
+            std::vector<std::string> GetFilePathsWithExtension(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_extension) const;
             //--------------------------------------------------------------
-            /// Get File Names In Directory
+            /// Creates a dynamic array containing the file names of each of
+            /// each file with the given name in the given directory. File
+            /// paths will be relative to the input directory.
             ///
-            /// creates a dynamic array containing the filenames of each file
-            /// in the given directory.
+            /// @author S Downie
             ///
-            /// @param The Storage Location
-            /// @param The directory
-            /// @param Flag to determine whether or not to recurse into sub directories
-            /// @param Output dynamic array containing the filenames.
+            /// @param The Storage Location.
+            /// @param The directory.
+            /// @param Flag to determine whether or not to recurse into sub
+            /// directories.
+            /// @param The file name.
+            ///
+            /// @return Dynamic array containing the file names.
             //--------------------------------------------------------------
-            virtual void GetFileNamesInDirectory(StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                 std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const = 0;
+            std::vector<std::string> GetFilePathsWithFileName(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive, const std::string& in_fileName) const;
             //--------------------------------------------------------------
-            /// Get Directories In Directory
+            /// Creates a dynamic array containing the names of each directory
+            /// in the given directory. Directory paths will be relative to
+            /// the input directory.
             ///
-            /// creates a dynamic array containing the names of each directory
-            /// in the given directory.
+            /// @author I Copland
             ///
             /// @param The Storage Location
             /// @param The directory
             /// @param Flag to determine whether or not to recurse into sub directories
             /// @param Output dynamic array containing the dir names.
             //--------------------------------------------------------------
-            virtual void GetDirectoriesInDirectory(StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                   std::vector<std::string> &outstrDirectories, bool inbAppendFullPath = false) const = 0;
+            virtual std::vector<std::string> GetDirectoryPaths(StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const = 0;
             //--------------------------------------------------------------
-            /// Does File Exist
-            ///
             /// returns whether or not the given file exists.
+            ///
+            /// @author I Copland
             /// 
             /// @param The Storage Location
-            /// @param The filepath
+            /// @param The file path
+            ///
             /// @return Whether or not it exists.
             //--------------------------------------------------------------
-            virtual bool DoesFileExist(StorageLocation ineStorageLocation, const std::string& instrFilepath) const = 0;
+            virtual bool DoesFileExist(StorageLocation in_storageLocation, const std::string& in_filePath) const = 0;
 			//--------------------------------------------------------------
-			/// Does File Exist In Cached DLC
+			/// Returns whether or not the file exists in the Cached DLC
+            /// directory.
+            ///
+            /// @author I Copland
 			///
-			/// @param The filepath.
+			/// @param The file path.
+            ///
 			/// @return Whether or not it is in the cached DLC.
 			//--------------------------------------------------------------
-			virtual bool DoesFileExistInCachedDLC(const std::string& instrFilepath) const = 0;
+			virtual bool DoesFileExistInCachedDLC(const std::string& in_filePath) const = 0;
 			//--------------------------------------------------------------
-			/// Does File Exist In Package DLC
-			///
-			/// @param The filepath.
-			/// @return Whether or not it is in the local DLC.
-			//--------------------------------------------------------------
-			virtual bool DoesFileExistInPackageDLC(const std::string& instrFilepath) const = 0;
-            //--------------------------------------------------------------
-            /// Does Directory Exist
+			/// Returns whether or not the file exists in the package DLC
+            /// directory.
             ///
-            /// returns whether or not the given directory exists.
+            /// @author I Copland
+			///
+			/// @param The file path.
+            ///
+			/// @return Whether or not it is in the package DLC.
+			//--------------------------------------------------------------
+			virtual bool DoesFileExistInPackageDLC(const std::string& in_filePath) const = 0;
+            //--------------------------------------------------------------
+            /// Returns whether or not the given directory exists.
+            ///
+            /// @author I Copland
             /// 
             /// @param The Storage Location
-            /// @param The directory
+            /// @param The directory path
+            ///
             /// @return Whether or not it exists.
             //--------------------------------------------------------------
-            virtual bool DoesDirectoryExist(StorageLocation ineStorageLocation, const std::string& instrDirectory) const = 0;
-            //--------------------------------------------------------------
-			/// Is Storage Location Available
-			///
-            /// @param The source storage location.
-			/// @return whether or not the storage location is available on
-            ///         this device.
+            virtual bool DoesDirectoryExist(StorageLocation in_storageLocation, const std::string& in_directoryPath) const = 0;
 			//--------------------------------------------------------------
-			virtual bool IsStorageLocationAvailable(StorageLocation ineStorageLocation) const = 0;
-			//--------------------------------------------------------------
-			/// Get Storage Location Directory
-			///
+			/// Returns the absolute path to the given storage location. The
+            /// value this returns is platform specific and use of this
+            /// should be kept to a minimum in cross platform projects.
+            ///
+            /// @author S Downie
+            ///
 			/// @param The source storage location.
+            ///
 			/// @return The directory. returns an empty string if the location
-			///         is not available.
+			/// is not available.
 			//--------------------------------------------------------------
-			virtual std::string GetStorageLocationDirectory(StorageLocation ineStorageLocation) const = 0;
+			virtual std::string GetAbsolutePathToStorageLocation(StorageLocation in_storageLocation) const = 0;
             //--------------------------------------------------------------
-			/// Get Directory For DLC File
+			/// Returns the absolute path to the file in the given storage
+            /// location. The file must exist otherwise an empty string
+            /// will be returned. The result of this is platform specific
+            /// so care should be taken when using this in cross platform
+            /// projects.
+            ///
+            /// @author S Downie
 			///
-            /// @param The filename of the DLC asset.
-			/// @return The directory to either the package DLC or cache DLC.
+            /// @param The storage location for the file.
+            /// @param The file path relative to the storage location.
+            ///
+			/// @return The full path to the file.
 			//--------------------------------------------------------------
-			virtual std::string GetDirectoryForDLCFile(const std::string& instrFilePath) const = 0;
+			virtual std::string GetAbsolutePathToFile(StorageLocation in_storageLocation, const std::string& in_path) const = 0;
             //--------------------------------------------------------------
-			/// Get Directory For Package File
+			/// Returns the absolute path to the directory in the given storage
+            /// location. The directory must exist otherwise an empty string
+            /// will be returned. The result of this is platform specific
+            /// so care should be taken when using this in cross platform
+            /// projects.
+            ///
+            /// @author I Copland
 			///
-            /// @param The filename of the package asset.
-			/// @return The directory to either the correct device package directory.
+            /// @param The storage location for the directory.
+            /// @param The directory path relative to the storage location.
+            ///
+			/// @return The full path to the directory.
 			//--------------------------------------------------------------
-			virtual std::string GetDirectoryForPackageFile(const std::string& instrFilePath) const = 0;
+			virtual std::string GetAbsolutePathToDirectory(StorageLocation in_storageLocation, const std::string& in_path) const = 0;
             //--------------------------------------------------------------
-			/// Is Storage Location Writeable
-			///
-            /// @param The source storage location.
-			/// @return whether or not the storage location can be written to
-			//--------------------------------------------------------------
-			bool IsStorageLocationWritable(StorageLocation ineSourceStorageLocation) const;
-            //--------------------------------------------------------------
-			/// Set Package DLC Directory
-			///
             /// Sets the directory used by the DLC system to fall back on
             /// if it is not in the DLC cache directory.
             ///
+            /// @author S Downie
+            ///
             /// @param The package DLC directory.
 			//--------------------------------------------------------------
-			void SetPackageDLCDirectory(const std::string&  instrDirectory);
+			void SetPackageDLCPath(const std::string& in_directoryPath);
             //--------------------------------------------------------------
-            /// Get File MD5 Checksum 
-            ///
-            /// Calculate the MD5 checksum of the file at the
-            /// give directory
-            ///
-            /// @param Storage location
-            /// @param File path
-            /// @return MD5 checksum
-            //--------------------------------------------------------------
-            std::string GetFileMD5Checksum(StorageLocation ineLocation, const std::string& instrFilePath) const;
-            //--------------------------------------------------------------
-            /// Get Directory MD5 Checksum 
-            ///
-            /// Calculate the MD5 checksum of the given directory
-            ///
-            /// @param Storage location
-            /// @param File path
-            /// @return MD5 checksum
-            //--------------------------------------------------------------
-            std::string GetDirectoryMD5Checksum(StorageLocation ineStorageLocation, const std::string& instrDirectory) const;
-            //--------------------------------------------------------------
-			/// Get Package DLC Directory
+            /// @author S Downie
 			///
             /// @return The package DLC directory.
 			//--------------------------------------------------------------
-			const std::string& GetPackageDLCDirectory() const;
+			const std::string& GetPackageDLCPath() const;
             //--------------------------------------------------------------
-			/// Get File CRC32 Checksum
-			///
+            /// Calculate the MD5 checksum of the file at the
+            /// give directory
+            ///
+            /// @author S Downie
+            ///
+            /// @param Storage location
+            /// @param File path
+            ///
+            /// @return MD5 checksum
+            //--------------------------------------------------------------
+            std::string GetFileChecksumMD5(StorageLocation in_storageLocation, const std::string& in_filePath) const;
+            //--------------------------------------------------------------
+            /// Calculate the MD5 checksum of the given directory
+            ///
+            /// @author S Downie
+            ///
+            /// @param Storage location
+            /// @param File path
+            ///
+            /// @return MD5 checksum
+            //--------------------------------------------------------------
+            std::string GetDirectoryChecksumMD5(StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
+            //--------------------------------------------------------------
             /// Gets the CRC32 Checksum for the given file.
+            ///
+            /// @author S Downie
             ///
             /// @param The storage location.
 			/// @param the filepath.
+            ///
 			/// @return the checksum.
 			//--------------------------------------------------------------
-			u32 GetFileCRC32Checksum(StorageLocation ineStorageLocation, const std::string&  instrFilepath) const;
+			u32 GetFileChecksumCRC32(StorageLocation in_storageLocation, const std::string& in_filePath) const;
             //--------------------------------------------------------------
 			/// Get Directory CRC32 Checksum
 			///
@@ -383,44 +394,61 @@ namespace ChilliSource
 			/// @param the filepath.
 			/// @return the checksum.
 			//--------------------------------------------------------------
-			u32 GetDirectoryCRC32Checksum(StorageLocation ineStorageLocation, const std::string&  instrDirectory) const;
+			u32 GetDirectoryChecksumCRC32(StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
 	        //--------------------------------------------------------------
-			/// Get File length
+			/// @author I Copland
+            ///
             /// @param The storage location.
-			/// @param the filepath.
+			/// @param the file path.
+            ///
+            /// @return The size of the given file.
 			//--------------------------------------------------------------
-			u32 GetFileSize(StorageLocation ineStorageLocation, const std::string&  instrFilepath) const;
+			u32 GetFileSize(StorageLocation in_storageLocation, const std::string& in_filePath) const;
 	        //--------------------------------------------------------------
-			/// Get Total File size of all Files in Directory
+			/// @author I Copland
+            ///
             /// @param The storage location.
 			/// @param the Directory path.
-			//--------------------------------------------------------------
-			u32 GetDirectorySize(StorageLocation ineStorageLocation, const std::string&  instrDirectory) const;
-            //--------------------------------------------------------------
-            /// Get Best Path To File
             ///
-            /// @param Storage location
-            /// @param File name
-            /// @param Out: The path to the most up to date file with the
-            /// given name. This argument is unchanged if file is not found
+            /// @return The size of the contents of the given directory.
+			//--------------------------------------------------------------
+			u32 GetDirectorySize(StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
             //--------------------------------------------------------------
-            void GetBestPathToFile(StorageLocation ineStorageLocation, const std::string& instrFileName, std::string& outFilePath) const;
-            
+			/// Returns whether or not the given storage location can be
+            /// written to.
+            ///
+            /// @author I Copland
+			///
+            /// @param The storage location.
+            ///
+			/// @return Whether or not it can be written to.
+			//--------------------------------------------------------------
+			bool IsStorageLocationWritable(StorageLocation in_storageLocation) const;
+            //--------------------------------------------------------------
+            /// Destructor
+            ///
+            /// @author I Copland
+            //--------------------------------------------------------------
+            virtual ~FileSystem() {}
         protected:
             
-            //-------------------------------------------------------
+            //--------------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
-            //-------------------------------------------------------
+            //--------------------------------------------------------------
             FileSystem();
-
-        protected:
+            //--------------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return The resource directories.
+            //--------------------------------------------------------------
+            const std::string* GetResourceDirectories() const;
+        private:
+            std::string m_packageDLCPath;
             
-            std::string mstrPackageDLCPath;
-            
-            static f32 mfAssetsDensity;
-            static std::string mastrResourceDirectory[3];
+            static f32 s_assetsDensity;
+            static std::string s_resourceDirectory[3];
 		};
 	}
 		

@@ -1,212 +1,284 @@
-/*
- *  FileSystem.cpp
- *  iOSTemplate
- *
- *  Created by Ian Copland on 25/03/2011.
- *  Copyright 2011 Tag Games Ltd. All rights reserved.
- *
- */
+//
+//  FileSystem.cpp
+//  Chilli Source
+//
+//  Created by I Copland on 25/03/2011.
+//  Copyright 2011 Tag Games Ltd. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 
-#include <ChilliSource/Core/Base/Utils.h>
-#include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
+#include <iostream>
 #include <UIKit/UIKit.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
-#include <iostream>
 
 namespace ChilliSource
 {
 	namespace iOS 
 	{
-        //constants
-        const std::string kstrSaveDataPath  = "SaveData/";
-        const std::string kstrCachePath  = "Caches/Cache/";
-        const std::string kstrDLCPath  = "Caches/DLC/";
+        namespace
+        {
+            const std::string k_saveDataPath  = "SaveData/";
+            const std::string k_cachePath  = "Caches/Cache/";
+            const std::string k_dlcPath  = "Caches/DLC/";
+            
+            //--------------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return whether or not the given file mode is a write mode
+            //--------------------------------------------------------------
+            bool IsWriteMode(Core::FileMode in_fileMode)
+            {
+                switch (in_fileMode)
+                {
+                    case Core::FileMode::k_write:
+                    case Core::FileMode::k_writeAppend:
+                    case Core::FileMode::k_writeAtEnd:
+                    case Core::FileMode::k_writeBinary:
+                    case Core::FileMode::k_writeBinaryAppend:
+                    case Core::FileMode::k_writeBinaryAtEnd:
+                    case Core::FileMode::k_writeBinaryTruncate:
+                    case Core::FileMode::k_writeTruncate:
+                        return true;
+                    default:
+                        return false;
+                        
+                }
+            }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The device bundle path as returned by iOS
+            //--------------------------------------------------------------
+            std::string RetrieveBundlePath()
+            {
+                CFBundleRef mainBundle = CFBundleGetMainBundle();
+                CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
+                char path[PATH_MAX];
+                if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX))
+                {
+                    CS_LOG_ERROR("Changing working directory to resource folder");
+                }
+                CFRelease(resourcesURL);
+                return std::string(path)  + "/";
+            }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The device documents path as returned by iOS
+            //--------------------------------------------------------------
+            std::string RetrieveDocumentsPath()
+            {
+                NSArray* documentDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                if (documentDir)
+                {
+                    NSString*	nsDocumentPath = nil;
+                    nsDocumentPath = [documentDir objectAtIndex:0];
+                    if (nsDocumentPath != nil)
+                    {
+                        const char* pPath = [nsDocumentPath fileSystemRepresentation];
+                        return std::string(pPath) + "/";
+                    }
+                }
+                
+                return "";
+            }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The device library path as returned by iOS
+            //--------------------------------------------------------------
+            std::string RetrieveLibraryPath()
+            {
+                NSArray* libraryDir = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+                if (libraryDir)
+                {
+                    NSString*	nsLibraryPath = nil;
+                    nsLibraryPath = [libraryDir objectAtIndex:0];
+                    if (nsLibraryPath != nil)
+                    {
+                        const char* pPath = [nsLibraryPath fileSystemRepresentation];
+                        return std::string(pPath) + "/";
+                    }
+                }
+                
+                return "";
+            }
+            //------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Directories
+            /// @param Recurse into sub directories
+            /// @param Out: Content file names
+            //------------------------------------------------------------
+            void GetDirectoryContents(const std::vector<std::string>& in_directoryPaths, bool in_recursive, NSMutableArray* out_contents)
+            {
+                for(std::vector<std::string>::const_iterator it = in_directoryPaths.begin(); it != in_directoryPaths.end(); ++it)
+                {
+                    std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
+                    NSString* Dir = [NSString stringWithCString:path.c_str() encoding:NSASCIIStringEncoding];
+                    
+                    if (in_recursive == true)
+                    {
+                        [out_contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:Dir error:nil]];
+                    }
+                    else
+                    {
+                        [out_contents addObjectsFromArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:Dir error:nil]];
+                    }
+                }
+            }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Unfiltered names
+            /// @return Filtered names
+            //--------------------------------------------------------------
+            NSArray* FilterPathsByFile(NSArray* in_fileNames)
+            {
+                //Filter out the files we don't want
+                NSString* Predicate = [NSString stringWithFormat:@"self contains '.'"];
+                NSArray* Filtered = [in_fileNames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:Predicate]];
+                return Filtered;
+            }
+            //--------------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @param Unfiltered names
+            /// @return Filtered names
+            //--------------------------------------------------------------
+            NSArray* FilterPathsByDirectory(NSArray* in_fileNames)
+            {
+                //Filter out the files we don't want
+                NSString* Predicate = [NSString stringWithFormat:@"not (self contains '.')"];
+                NSArray* Filtered = [in_fileNames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:Predicate]];
+                return Filtered;
+            }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Filenames ObjC
+            ///
+            /// @return vector of file paths.
+            //--------------------------------------------------------------
+            std::vector<std::string> ConvertObjCToPath(NSArray* in_objFilePaths)
+            {
+                std::vector<std::string> output;
+                for(NSString* filePath in in_objFilePaths)
+                {
+                    output.push_back(ChilliSource::Core::StringUtils::NSStringToString(filePath));
+                }
+                return output;
+            }
+            //--------------------------------------------------------------
+			/// returns whether the path exists on the filesystem
+            ///
+            /// @author S Downie
+            ///
+            /// @param the filepath.
+            ///
+            /// @return whether or not it exists.
+			//--------------------------------------------------------------
+            bool DoesFileExist(const std::string& in_filePath)
+            {
+                BOOL bDirectory = NO;
+                bool bExists = false;
+                NSFileManager *fileManager= [NSFileManager defaultManager];
+                NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
+                
+                if ([fileManager fileExistsAtPath:[NSString stringWithUTF8String:in_filePath.c_str()] isDirectory:&bDirectory])
+                {
+                    bExists = true;
+                }
+                
+                [pPool release];
+                return (bExists && !bDirectory);
+            }
+            //--------------------------------------------------------------
+			/// returns whether the path exists on the filesystem
+            ///
+            /// @author S Downie
+            ///
+            /// @param the filepath.
+            ///
+            /// @return whether or not it exists.
+			//--------------------------------------------------------------
+            bool DoesDirectoryExist(const std::string& in_directoryPath)
+            {
+                BOOL bDirectory = NO;
+                bool bExists = false;
+                NSFileManager *fileManager= [NSFileManager defaultManager];
+                NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
+                
+                if ([fileManager fileExistsAtPath:[NSString stringWithUTF8String:in_directoryPath.c_str()] isDirectory:&bDirectory])
+                {
+                    bExists = true;
+                }
+                
+                [pPool release];
+                return (bExists && bDirectory);
+            }
+        }
         
-        std::string RetrieveBundlePath();
-        std::string RetrieveDocumentsPath();
-        std::string RetrieveLibraryPath();
-        
+        CS_DEFINE_NAMEDTYPE(FileSystem);
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
 		FileSystem::FileSystem()
 		{
-            mstrBundlePath = RetrieveBundlePath();
-            mstrDocumentsPath = RetrieveDocumentsPath();
-            mstrLibraryPath = RetrieveLibraryPath();
+            m_bundlePath = RetrieveBundlePath();
+            m_documentsPath = RetrieveDocumentsPath();
+            m_libraryPath = RetrieveLibraryPath();
             
             CreateDirectory(Core::StorageLocation::k_saveData, "");
             CreateDirectory(Core::StorageLocation::k_cache, "");
             CreateDirectory(Core::StorageLocation::k_DLC, "");
             
-            CreateHashedBundleFileList();
+            CreatePackageManifest();
 		}
-        //--------------------------------------------------------------
-        /// Retrieve Bundle Path
-        ///
-        /// @return The device bundle path as returned by iOS
-        //--------------------------------------------------------------
-        std::string RetrieveBundlePath()
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        bool FileSystem::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            CFBundleRef mainBundle = CFBundleGetMainBundle();
-			CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
-			char path[PATH_MAX];
-			if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX))
-			{
-				CS_LOG_ERROR("Changing working directory to resource folder");
-			}
-			CFRelease(resourcesURL);
-			return std::string(path)  + "/";
+            return (Core::FileSystem::InterfaceID == in_interfaceId || FileSystem::InterfaceID == in_interfaceId);
         }
         //--------------------------------------------------------------
-        /// Retrieve Documents Path
-        ///
-        /// @return The device documents path as returned by iOS
         //--------------------------------------------------------------
-        std::string RetrieveDocumentsPath()
+        Core::FileStreamUPtr FileSystem::CreateFileStream(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::FileMode in_fileMode) const
         {
-            NSArray* documentDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-			if (documentDir)
-			{
-                NSString*	nsDocumentPath = nil;
-				nsDocumentPath = [documentDir objectAtIndex:0];
-                if (nsDocumentPath != nil)
-                {
-                    const char* pPath = [nsDocumentPath fileSystemRepresentation];
-                    return std::string(pPath) + "/";
-                }
-			}
-            
-            return "";
-        }
-        //--------------------------------------------------------------
-        /// Retrieve Library Path
-        ///
-        /// @return The device library path as returned by iOS
-        //--------------------------------------------------------------
-        std::string RetrieveLibraryPath()
-        {
-            NSArray* libraryDir = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-			if (libraryDir)
-			{
-                NSString*	nsLibraryPath = nil;
-				nsLibraryPath = [libraryDir objectAtIndex:0];
-                if (nsLibraryPath != nil)
-                {
-                    const char* pPath = [nsLibraryPath fileSystemRepresentation];
-                    return std::string(pPath) + "/";
-                }
-			}
-            
-            return "";
-        }
-        //--------------------------------------------------------------
-        /// Create Hashed Bundle File List
-        ///
-        //--------------------------------------------------------------
-        void FileSystem::CreateHashedBundleFileList()
-        {
-            NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
-            NSMutableArray* Contents = [[NSMutableArray alloc] init];
-            NSString* Dir = [NSString stringWithCString:mstrBundlePath.c_str() encoding:NSASCIIStringEncoding];
-            
-            [Contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:Dir error:nil]];
-            
-            for(NSString* file in Contents)
+            Core::FileStreamUPtr fileStream = Core::FileStreamUPtr(new Core::FileStream());
+            if (IsWriteMode(in_fileMode) == true)
             {
-                std::string strFile([file UTF8String]);
-                mHashedPackageFileNames.push_back(Core::HashCRC32::GenerateHashCode(strFile));
-            }
-            
-            std::sort(mHashedPackageFileNames.begin(), mHashedPackageFileNames.end());
-            
-            [Contents release];
-            [pPool release];
-        }
-        //--------------------------------------------------------------
-        /// Create File Stream
-        //--------------------------------------------------------------
-        Core::FileStreamSPtr FileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
-        {
-            //create the file stream
-            Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new Core::FileStream());
-            
-            //check the requested storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
-                return newFilestream;
-            }
-            
-            //if this is not a read stream, insure that the storage location is writable.
-            if (ineFileMode != Core::FileMode::k_read && ineFileMode != Core::FileMode::k_readBinary)
-            {
-                if(IsStorageLocationWritable(ineStorageLocation) == true)
-                {
-                    std::string filepath = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
-                    newFilestream->Open(filepath, ineFileMode);
-                }
-                else
-                {
-                    CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-                }
+                CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
+ 
+                std::string filePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+                fileStream->Open(filePath, in_fileMode);
             }
             else
             {
-                std::string filepath;
-                GetBestPathToFile(ineStorageLocation, instrFilepath, filepath);
-                newFilestream->Open(filepath, ineFileMode);
+                std::string filePath = GetAbsolutePathToFile(in_storageLocation, in_filePath);
+                fileStream->Open(filePath, in_fileMode);
             }
             
-			return newFilestream;
+			return fileStream;
         }
         //--------------------------------------------------------------
-        /// Create File
         //--------------------------------------------------------------
-        bool FileSystem::CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const
+        bool FileSystem::CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
         {
-            Core::FileStreamSPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FileMode::k_writeBinary);
-			
-            if (pFileStream.get() == nullptr || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
-            {
-                CS_LOG_ERROR("Failed to create file: " + instrDirectory);
-                return false;
-            }
-            
-            pFileStream->Write(inpbyData, (s32)inudwDataSize);
-            pFileStream->Close();
-            return true;
-        }
-        //--------------------------------------------------------------
-        /// Create Directory
-        //--------------------------------------------------------------
-        bool FileSystem::CreateDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
-        {
-            //check the requested storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
-                return false;
-            }
-            
-            //insure that the storage location is writable.
-            if (IsStorageLocationWritable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-                return false;
-            }
+            CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
             
             //create the directory
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
-            std::string path = GetStorageLocationDirectory(ineStorageLocation) + instrDirectory;
-			NSFileManager *fileManager = [NSFileManager defaultManager];
+            std::string path = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
+			NSFileManager* fileManager = [NSFileManager defaultManager];
             if (![fileManager fileExistsAtPath:[NSString stringWithUTF8String:path.c_str()]])
             {
                 if (![fileManager createDirectoryAtPath:[NSString stringWithUTF8String:path.c_str()] withIntermediateDirectories:YES attributes:nil error:nil])
                 {
-                    CS_LOG_ERROR("Error creating directory.");
+                    CS_LOG_ERROR("File System: Error creating directory '" + in_directoryPath + "'");
                     [pPool release];
                     return false;
                 }
@@ -217,49 +289,27 @@ namespace ChilliSource
 			return true;
         }
         //--------------------------------------------------------------
-        /// Copy File
         //--------------------------------------------------------------
-        bool FileSystem::CopyFile(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceFilepath, 
-                                   Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const
+        bool FileSystem::CopyFile(Core::StorageLocation in_sourceStorageLocation, const std::string& in_sourceFilePath,
+                                   Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const
         {
-            //check the requested source storage location is available
-            if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
+            CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
+            
+            std::string strSrcPath = GetAbsolutePathToFile(in_sourceStorageLocation, in_sourceFilePath);
+            if(strSrcPath.empty() == true)
             {
-                CS_LOG_ERROR("Requested source Storage Location is not available on this platform!");
+                CS_LOG_ERROR("File System: Trying to copy file '" + in_sourceFilePath + "' but it does not exist.");
                 return false;
             }
-            
-            //check the requested destination storage location is available
-            if (IsStorageLocationAvailable(ineDestinationStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested destination Storage Location is not available on this platform!");
-                return false;
-            }
-            
-            //insure that the destination location is writable.
-            if (IsStorageLocationWritable(ineDestinationStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Cannot write to the destination Storage Location!");
-                return false;
-            }
-            
-            if(!DoesFileExist(ineSourceStorageLocation, instrSourceFilepath))
-            {
-                CS_LOG_ERROR("Source file does not exist -  " + instrSourceFilepath);
-                return false;
-            }
-            
-            std::string strSrcPath;
-            GetBestPathToFile(ineSourceStorageLocation, instrSourceFilepath, strSrcPath);
             
             //get the path to the file
             std::string strPath, strName;
-            Core::StringUtils::SplitFilename(instrDestinationFilepath, strName, strPath);
+            Core::StringUtils::SplitFilename(in_destinationFilePath, strName, strPath);
             
             //create the output directory
-            CreateDirectory(ineDestinationStorageLocation, strPath);
+            CreateDirectory(in_destinationStorageLocation, strPath);
             
-            std::string strDstPath = GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath;
+            std::string strDstPath = GetAbsolutePathToStorageLocation(in_destinationStorageLocation) + in_destinationFilePath;
             std::string strDstAtomicPath = strDstPath + ".tmp";
             
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
@@ -268,12 +318,15 @@ namespace ChilliSource
             NSString* pDstPath = [[NSString alloc] initWithCString:strDstPath.c_str() encoding:NSUTF8StringEncoding];
             NSString* pDstAtomicPath = [[NSString alloc] initWithCString:strDstAtomicPath.c_str() encoding:NSUTF8StringEncoding];
             
-            NSURL* pDstURL = [NSURL URLWithString:[pDstPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-            NSURL* pDstAtomicURL = [NSURL URLWithString:[pDstAtomicPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-            
             NSError* pCopyError = nil;
             [[NSFileManager defaultManager] copyItemAtPath:pSrcPath toPath:pDstAtomicPath error:&pCopyError];
-    
+
+            NSString* pDstURLPath = [[NSString alloc] initWithCString:("file://" + strDstPath).c_str() encoding:NSUTF8StringEncoding];
+            NSString* pDstURLAtomicPath = [[NSString alloc] initWithCString:("file://" + strDstAtomicPath).c_str() encoding:NSUTF8StringEncoding];
+            
+            NSURL* pDstURL = [NSURL URLWithString:[pDstURLPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            NSURL* pDstAtomicURL = [NSURL URLWithString:[pDstURLAtomicPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            
             NSError* pReplaceError = nil;
             [[NSFileManager defaultManager] replaceItemAtURL:pDstURL withItemAtURL:pDstAtomicURL backupItemName:nil options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:nil error:&pReplaceError];
             
@@ -285,78 +338,50 @@ namespace ChilliSource
             return pCopyError == nil && pReplaceError == nil;
         }
         //--------------------------------------------------------------
-        /// Copy Directory
         //--------------------------------------------------------------
-        bool FileSystem::CopyDirectory(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceDirectory, 
-                                        Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationDirectory) const
+        bool FileSystem::CopyDirectory(Core::StorageLocation in_sourceStorageLocation, const std::string& in_sourceDirectoryPath,
+                                        Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationDirectoryPath) const
         {
-            //check the requested source storage location is available
-            if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested source Storage Location is not available on this platform!");
-                return false;
-            }
+            CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
             
-            //check the requested destination storage location is available
-            if (IsStorageLocationAvailable(ineDestinationStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested destination Storage Location is not available on this platform!");
-                return false;
-            }
-            
-            //insure that the destination location is writable.
-            if (IsStorageLocationWritable(ineDestinationStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Cannot write to the destination Storage Location!");
-                return false;
-            }
-            
+            if (DoesDirectoryExist(in_sourceStorageLocation, in_sourceDirectoryPath) == false)
+			{
+				CS_LOG_ERROR("File System: Trying to copy directory '" + in_sourceDirectoryPath + "' but it doesn't exist.");
+				return false;
+			}
+
             //get all the files in the directory
-            std::vector<std::string> astrFilenames;
-            GetFileNamesInDirectory(ineSourceStorageLocation, instrSourceDirectory, true, astrFilenames);
+            std::vector<std::string> astrFilenames = GetFilePaths(in_sourceStorageLocation, in_sourceDirectoryPath, true);
             
             //error if there are no files
             if (astrFilenames.size() == 0)
             {
-                CS_LOG_ERROR("Cannot copy contents of directory as there are no files: " + instrSourceDirectory);
-                return false;
+                CreateDirectory(in_destinationStorageLocation, in_destinationDirectoryPath);
             }
-            
-            //copy each of these files individually
-            std::string strSourceProperPath = Core::StringUtils::StandardisePath(instrSourceDirectory);
-            std::string strDestProperPath = Core::StringUtils::StandardisePath(instrDestinationDirectory);
-            for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
+            else
             {
-                if (CopyFile(ineSourceStorageLocation, strSourceProperPath + *it, 
-                         ineDestinationStorageLocation, strDestProperPath + *it) == false)
+                //copy each of these files individually
+                std::string sourcePath = Core::StringUtils::StandardisePath(in_sourceDirectoryPath);
+                std::string destPath = Core::StringUtils::StandardisePath(in_destinationDirectoryPath);
+                for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
                 {
-                    return false;
+                    if (CopyFile(in_sourceStorageLocation, sourcePath + *it, in_destinationStorageLocation, destPath + *it) == false)
+                    {
+                        return false;
+                    }
                 }
             }
             
             return true;
         }
         //--------------------------------------------------------------
-        /// Delete File
         //--------------------------------------------------------------
-        bool FileSystem::DeleteFile(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
+        bool FileSystem::DeleteFile(Core::StorageLocation in_storageLocation, const std::string& in_FilePath) const
         {
-            //check the requested storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
-                return false;
-            }
-            
-            //insure that the storage location is writable.
-            if (IsStorageLocationWritable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-                return false;
-            }
+            CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to delete from a read only storage location.");
             
             //get the filepath
-            std::string strPath = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
+            std::string strPath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_FilePath;
             
             //remove the file
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
@@ -369,26 +394,13 @@ namespace ChilliSource
             return true;
         }
         //--------------------------------------------------------------
-        /// Delete Directory
         //--------------------------------------------------------------
-        bool FileSystem::DeleteDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
+        bool FileSystem::DeleteDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
         {
-            //check the requested storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
-                return false;
-            }
-            
-            //insure that the storage location is writable.
-            if (IsStorageLocationWritable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Cannot write to the requested Storage Location!");
-                return false;
-            }
+            CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to delete from a read only storage location.");
             
             //get the directory
-            std::string strDirectory = GetStorageLocationDirectory(ineStorageLocation) + instrDirectory;
+            std::string strDirectory = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
             
             //remove the directory
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
@@ -400,317 +412,68 @@ namespace ChilliSource
             //return successful
             return true;
         }
-        //------------------------------------------------------------
-        /// Get Directory Contents
-        ///
-        /// @param Directories
-        /// @param Recurse into sub directories
-        /// @param Out: Content file names
-        //------------------------------------------------------------
-        void GetDirectoryContents(const std::vector<std::string>& inastrDirs, bool inbRecursive, NSMutableArray* outpContents)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        std::vector<std::string> FileSystem::GetFilePaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
         {
-            for(std::vector<std::string>::const_iterator it = inastrDirs.begin(); it != inastrDirs.end(); ++it)
-            {
-                std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
-                NSString* Dir = [NSString stringWithCString:path.c_str() encoding:NSASCIIStringEncoding];
-                
-                if (inbRecursive == true)
-                {
-                    [outpContents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:Dir error:nil]];
-                }
-                else
-                {
-                    [outpContents addObjectsFromArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:Dir error:nil]];
-                }
-            }
-        }
-        //--------------------------------------------------------------
-        /// Filter File Names By Extension
-        ///
-        /// @param Unfiltered names
-        /// @param Extension
-        /// @return Filtered names
-        //--------------------------------------------------------------
-        NSArray* FilterFileNamesByExtension(NSArray* inpFilenames, const std::string& instrExtension)
-        {
-            //Filter out the files we don't want
-            NSString* Extension = [NSString stringWithCString:instrExtension.c_str() encoding:NSASCIIStringEncoding];
-            NSString* Predicate = [NSString stringWithFormat:@"self ENDSWITH '.%@'", Extension];
-            NSArray* Filtered = [inpFilenames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:Predicate]];
-            return Filtered;
-        }
-        //--------------------------------------------------------------
-        /// Filter File Names By Name
-        ///
-        /// @param Unfiltered names
-        /// @param Name
-        /// @return Filtered names
-        //--------------------------------------------------------------
-        NSArray* FilterFileNamesByName(NSArray* inpFilenames, const std::string& instrName)
-        {
-            //Filter out the files we don't want
-            NSString* Name = [NSString stringWithCString:instrName.c_str() encoding:NSASCIIStringEncoding];
-            NSString* Predicate = [NSString stringWithFormat:@"self ENDSWITH '%@'", Name];
-            NSArray* Filtered = [inpFilenames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:Predicate]];
-            return Filtered;
-        }
-        //--------------------------------------------------------------
-        /// Filter File Names By File
-        ///
-        /// @param Unfiltered names
-        /// @return Filtered names
-        //--------------------------------------------------------------
-        NSArray* FilterFileNamesByFile(NSArray* inpFilenames)
-        {
-            //Filter out the files we don't want
-            NSString* Predicate = [NSString stringWithFormat:@"self contains '.'"];
-            NSArray* Filtered = [inpFilenames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:Predicate]];
-            return Filtered;
-        }
-        //--------------------------------------------------------------
-        /// Convert ObjC To Path
-        ///
-        /// @param Filenames ObjC
-        /// @param Directory to append
-        /// @param Out: Filenames
-        //--------------------------------------------------------------
-        void ConvertObjCToPath(NSArray* inpFilenames, const std::string& instrDirectory, std::vector<std::string> &outstrFileNames)
-        {
-            std::string strDir;
-            if(instrDirectory.empty() == false)
-            {
-                strDir = ChilliSource::Core::StringUtils::StandardisePath(instrDirectory);
-            }
-            
-            for(NSString* FileNames in inpFilenames)
-            {
-                outstrFileNames.push_back(strDir + ChilliSource::Core::StringUtils::NSStringToString(FileNames));
-            }
-        }
-        //--------------------------------------------------------------
-        /// Get File Names With Extension In Directory
-        //--------------------------------------------------------------
-        void FileSystem::GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-                                                  const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
-        {
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return;
-            }
-            
-            std::vector<std::string> astrDirectoriesToCheck;
-            GetPathsForStorageLocation(ineStorageLocation, instrDirectory, astrDirectoriesToCheck);
+            std::vector<std::string> astrDirectoriesToCheck = GetPossibleAbsoluteDirectoryPaths(in_storageLocation, in_directoryPath);
             
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
             NSMutableArray* Contents = [[NSMutableArray alloc] init];
             
-            GetDirectoryContents(astrDirectoriesToCheck, inbRecurseIntoSubDirectories, Contents);
+            GetDirectoryContents(astrDirectoriesToCheck, in_recursive, Contents);
             
+            std::vector<std::string> output;
             if([Contents count] > 0)
             {
-                NSArray* Filtered = FilterFileNamesByExtension(Contents, instrExtension);
-
-                if(inbAppendFullPath)
-                {
-                    ConvertObjCToPath(Filtered, instrDirectory, outstrFileNames);
-                }
-                else
-                {
-                    ConvertObjCToPath(Filtered, "", outstrFileNames);
-                }
+                NSArray* Filtered = FilterPathsByFile(Contents);
+                output = ConvertObjCToPath(Filtered);
             }
             
             [Contents release];
             [pPool release];
             
-            std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
-            outstrFileNames.resize(it - outstrFileNames.begin()); 
+            std::sort(output.begin(), output.end());
+            std::vector<std::string>::iterator it = std::unique(output.begin(), output.end());
+            output.resize(it - output.begin());
+            return output;
         }
         //--------------------------------------------------------------
-        /// Get Path For Files With Name In Directory
-        ///
-        /// Creates a dynamic array containing the filenames of each of
-        /// each file with the given name in the given
-        /// directory.
-        ///
-        /// @param The Storage Location
-        /// @param The directory
-        /// @param Flag to determine whether or not to recurse into sub directories
-        /// @param The name
-        /// @param Output dynamic array containing the filenames.
         //--------------------------------------------------------------
-        void FileSystem::GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                        const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
+        std::vector<std::string> FileSystem::GetDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
         {
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return;
-            }
-            
-            std::vector<std::string> astrDirectoriesToCheck;
-            GetPathsForStorageLocation(ineStorageLocation, instrDirectory, astrDirectoriesToCheck);
+            std::vector<std::string> astrDirectoriesToCheck = GetPossibleAbsoluteDirectoryPaths(in_storageLocation, in_directoryPath);
             
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
             NSMutableArray* Contents = [[NSMutableArray alloc] init];
             
-            GetDirectoryContents(astrDirectoriesToCheck, inbRecurseIntoSubDirectories, Contents);
+            GetDirectoryContents(astrDirectoriesToCheck, in_recursive, Contents);
             
+            std::vector<std::string> output;
             if([Contents count] > 0)
             {
-                NSArray* Filtered = FilterFileNamesByName(Contents, instrName);
-                
-                if(inbAppendFullPath)
-                {
-                    ConvertObjCToPath(Filtered, instrDirectory, outstrFileNames);
-                }
-                else
-                {
-                    ConvertObjCToPath(Filtered, "", outstrFileNames);
-                }
+                NSArray* Filtered = FilterPathsByDirectory(Contents);
+                output = ConvertObjCToPath(Filtered);
             }
             
             [Contents release];
             [pPool release];
             
-            std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
-            outstrFileNames.resize(it - outstrFileNames.begin()); 
+            std::sort(output.begin(), output.end());
+            std::vector<std::string>::iterator it = std::unique(output.begin(), output.end());
+            output.resize(it - output.begin());
+            return output;
         }
         //--------------------------------------------------------------
-        /// Get File Names In Directory
         //--------------------------------------------------------------
-        void FileSystem::GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
-                                     std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
+        bool FileSystem::DoesFileExist(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const
         {
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
+            if(in_storageLocation == Core::StorageLocation::k_package)
             {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return;
-            }
-            
-            std::vector<std::string> astrDirectoriesToCheck;
-            GetPathsForStorageLocation(ineStorageLocation, instrDirectory, astrDirectoriesToCheck);
-            
-            NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
-            NSMutableArray* Contents = [[NSMutableArray alloc] init];
-            
-            GetDirectoryContents(astrDirectoriesToCheck, inbRecurseIntoSubDirectories, Contents);
-            
-            if([Contents count] > 0)
-            {
-                NSArray* Filtered = FilterFileNamesByFile(Contents);
-                
-                if(inbAppendFullPath)
+                const std::string* resourceDirectories = GetResourceDirectories();
+                for(u32 i = 0; i < 3; ++i)
                 {
-                    ConvertObjCToPath(Filtered, instrDirectory, outstrFileNames);
-                }
-                else
-                {
-                    ConvertObjCToPath(Filtered, "", outstrFileNames);
-                }
-            }
-            
-            [Contents release];
-            [pPool release];
-            
-            std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
-            outstrFileNames.resize(it - outstrFileNames.begin()); 
-        }
-        //--------------------------------------------------------------
-        /// Get Directories In Directory
-        //--------------------------------------------------------------
-        void FileSystem::GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-                                                    std::vector<std::string> &outstrDirectories, bool inbAppendFullPath) const
-        {
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return;
-            }
-            
-            std::vector<std::string> astrDirectoriesToCheck;
-            GetPathsForStorageLocation(ineStorageLocation, instrDirectory, astrDirectoriesToCheck);
-            
-            NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
-            NSMutableArray* Contents = [[NSMutableArray alloc] init];
-            
-            GetDirectoryContents(astrDirectoriesToCheck, inbRecurseIntoSubDirectories, Contents);
-            
-            if([Contents count] > 0)
-            {
-                NSArray* Filtered = FilterFileNamesByFile(Contents);
-                
-                if(inbAppendFullPath)
-                {
-                    ConvertObjCToPath(Filtered, instrDirectory, outstrDirectories);
-                }
-                else
-                {
-                    ConvertObjCToPath(Filtered, "", outstrDirectories);
-                }
-            }
-            
-            [Contents release];
-            [pPool release];
-            
-            std::sort(outstrDirectories.begin(), outstrDirectories.end());
-            std::vector<std::string>::iterator it = std::unique(outstrDirectories.begin(), outstrDirectories.end());
-            outstrDirectories.resize(it - outstrDirectories.begin()); 
-        }
-        //------------------------------------------------------------
-        /// Get Paths For Storage Location
-        ///
-        /// @param Storage location
-        /// @param File name to append
-        /// @param Out: All the paths for the given location
-        //------------------------------------------------------------
-        void FileSystem::GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, std::vector<std::string>& outaPaths) const
-        {
-            switch(ineStorageLocation)
-            {
-                case Core::StorageLocation::k_package:
-                    for(u32 i=0; i<3; ++i)
-                    {
-                        outaPaths.push_back(GetStorageLocationDirectory(ineStorageLocation) + mastrResourceDirectory[i] + instrFileName);
-                    }
-                    break;
-                case Core::StorageLocation::k_DLC:
-                    for(u32 i=0; i<3; ++i)
-                    {
-                        outaPaths.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFileName);
-                    }
-                    outaPaths.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFileName);
-                    break;
-                default:
-                    outaPaths.push_back(GetStorageLocationDirectory(ineStorageLocation) + instrFileName);
-                    break;
-            }
-        }
-        //--------------------------------------------------------------
-        /// Does File Exist
-        //--------------------------------------------------------------
-        bool FileSystem::DoesFileExist(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
-        {
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
-            {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return false;
-            }
-            
-            if(ineStorageLocation == Core::StorageLocation::k_package)
-            {
-                for(u32 i=0; i<3; ++i)
-                {
-                    if(DoesFileExistInHashedStore(mastrResourceDirectory[i] + instrFilepath))
+                    if(DoesFileExistInPackage(resourceDirectories[i] + in_filePath))
                     {
                         return true;
                     }
@@ -720,59 +483,44 @@ namespace ChilliSource
             }
             
             //get the filepath
-            std::string path = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
+            std::string path = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
             
             //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-            if (ineStorageLocation == Core::StorageLocation::k_DLC)
+            if (in_storageLocation == Core::StorageLocation::k_DLC)
             {
-                if (DoesItemExistInDLCCache(instrFilepath, false) == true)
+                if (DoesItemExistInDLCCache(in_filePath, false) == true)
                 {
                     return true;
                 }
                 
-                return DoesFileExist(Core::StorageLocation::k_package, mstrPackageDLCPath + instrFilepath);
+                return DoesFileExist(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
             }
             
             //return whether or not the file exists
-			return DoesFileExist(ChilliSource::Core::StringUtils::StandardisePath(path));
+			return iOS::DoesFileExist(Core::StringUtils::StandardisePath(path));
         }
         //--------------------------------------------------------------
-        /// Does File Exist In Cached DLC
-        ///
-        /// @param The filepath.
-        /// @return Whether or not it is in the cached DLC.
         //--------------------------------------------------------------
-        bool FileSystem::DoesFileExistInCachedDLC(const std::string& instrFilepath) const
+        bool FileSystem::DoesFileExistInCachedDLC(const std::string& in_filePath) const
         {
-            return DoesItemExistInDLCCache(instrFilepath, false);
+            return DoesItemExistInDLCCache(in_filePath, false);
         }
         //--------------------------------------------------------------
-        /// Does File Exist In Package DLC
-        ///
-        /// @param The filepath.
-        /// @return Whether or not it is in the local DLC.
         //--------------------------------------------------------------
-        bool FileSystem::DoesFileExistInPackageDLC(const std::string& instrFilepath) const
+        bool FileSystem::DoesFileExistInPackageDLC(const std::string& in_filePath) const
         {
-            return DoesFileExist(ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mstrPackageDLCPath + instrFilepath));
+            return DoesFileExist(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
         }
         //--------------------------------------------------------------
-        /// Does Directory Exist
         //--------------------------------------------------------------
-        bool FileSystem::DoesDirectoryExist(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
+        bool FileSystem::DoesDirectoryExist(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
         {
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(ineStorageLocation) == false)
+            if(in_storageLocation == Core::StorageLocation::k_package)
             {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return false;
-            }
-            
-            if(ineStorageLocation == Core::StorageLocation::k_package)
-            {
-                for(u32 i=0; i<3; ++i)
+                const std::string* resourceDirectories = GetResourceDirectories();
+                for (u32 i = 0; i < 3; ++i)
                 {
-                    if(DoesFolderExist(mstrBundlePath + mastrResourceDirectory[i] + instrDirectory))
+                    if(iOS::DoesDirectoryExist(m_bundlePath + resourceDirectories[i] + in_directoryPath))
                     {
                         return true;
                     }
@@ -782,58 +530,41 @@ namespace ChilliSource
             }
             
             //get the filepath
-            std::string path = GetStorageLocationDirectory(ineStorageLocation) + instrDirectory;
+            std::string path = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
             
             //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-            if (ineStorageLocation == Core::StorageLocation::k_DLC)
+            if (in_storageLocation == Core::StorageLocation::k_DLC)
             {
-                if (DoesItemExistInDLCCache(instrDirectory, true) == true)
+                if (DoesItemExistInDLCCache(in_directoryPath, true) == true)
                 {
                     return true;
                 }
                 
-                return DoesDirectoryExist(Core::StorageLocation::k_package, mstrPackageDLCPath + instrDirectory);
+                return DoesDirectoryExist(Core::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
             }
             
             //return whether or not the dir exists
-			return DoesFolderExist(ChilliSource::Core::StringUtils::StandardisePath(path));
+			return iOS::DoesDirectoryExist(Core::StringUtils::StandardisePath(path));
         }
         //--------------------------------------------------------------
-        /// Is Storage Location Available
         //--------------------------------------------------------------
-        bool FileSystem::IsStorageLocationAvailable(Core::StorageLocation ineStorageLocation) const
-        {
-            switch (ineStorageLocation) 
-            {
-                case Core::StorageLocation::k_package:
-                case Core::StorageLocation::k_saveData:
-                case Core::StorageLocation::k_cache:
-                case Core::StorageLocation::k_DLC:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-        //--------------------------------------------------------------
-        /// Get Storage Location Directory
-        //--------------------------------------------------------------
-        std::string FileSystem::GetStorageLocationDirectory(Core::StorageLocation ineStorageLocation) const
+        std::string FileSystem::GetAbsolutePathToStorageLocation(Core::StorageLocation in_storageLocation) const
         {
             //get the storage location path
             std::string strStorageLocationPath;
-            switch (ineStorageLocation) 
+            switch (in_storageLocation)
             {
                 case Core::StorageLocation::k_package:
-                    strStorageLocationPath = mstrBundlePath;
+                    strStorageLocationPath = m_bundlePath;
                     break;
                 case Core::StorageLocation::k_saveData:
-                    strStorageLocationPath = mstrDocumentsPath + kstrSaveDataPath;
+                    strStorageLocationPath = m_documentsPath + k_saveDataPath;
                     break;
                 case Core::StorageLocation::k_cache:
-                    strStorageLocationPath = mstrLibraryPath + kstrCachePath;
+                    strStorageLocationPath = m_libraryPath + k_cachePath;
                     break;
                 case Core::StorageLocation::k_DLC:
-                    strStorageLocationPath = mstrLibraryPath + kstrDLCPath;
+                    strStorageLocationPath = m_libraryPath + k_dlcPath;
                     break;
                 default:
                     CS_LOG_ERROR("Storage Location not available on this platform!");
@@ -843,135 +574,222 @@ namespace ChilliSource
             return strStorageLocationPath;
         }
         //--------------------------------------------------------------
-        /// Does Item Exist In DLC Cache
         //--------------------------------------------------------------
-        bool FileSystem::DoesItemExistInDLCCache(const std::string& instrPath, bool inbFolder) const
+        std::string FileSystem::GetAbsolutePathToFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const
         {
-            //Check that this storage location is available
-            if (IsStorageLocationAvailable(Core::StorageLocation::k_DLC) == false)
+            if (DoesFileExist(in_storageLocation, in_filePath) == true)
             {
-                CS_LOG_ERROR("Requested Storage Location is not available!");
-                return false;
-            }
-            
-            //return whether or not the file exists
-            if(inbFolder)
-            {
-                return DoesFolderExist(ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
-            }
-            else
-            {
-                return DoesFileExist(ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
-            }
-        }
-        //--------------------------------------------------------------
-        /// Get Directory For DLC File
-        ///
-        /// @param The filename of the DLC asset.
-        /// @return The directory to either the package DLC or cache DLC.
-        //--------------------------------------------------------------
-        std::string FileSystem::GetDirectoryForDLCFile(const std::string& instrFilePath) const
-        {
-            std::string strResult;
-            std::string strPath = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFilePath);
-            
-            if(DoesFileExist(strPath))
-            {
-                strResult = strPath;
-            }
-            else
-            {
-                strResult = GetDirectoryForPackageFile(mstrPackageDLCPath + instrFilePath);
-            }
-            
-            return strResult;
-        }
-        //--------------------------------------------------------------
-        /// Get Directory For Package File
-        ///
-        /// @param The filename of the package asset.
-        /// @return The directory to either the correct device package directory.
-        //--------------------------------------------------------------
-        std::string FileSystem::GetDirectoryForPackageFile(const std::string& instrFilePath) const
-        {
-            std::string strResult = GetStorageLocationDirectory(Core::StorageLocation::k_package) + instrFilePath;
-            
-            for(u32 i=0; i<3; ++i)
-            {
-                std::string strPath = ChilliSource::Core::StringUtils::StandardisePath(mastrResourceDirectory[i] + instrFilePath);
-                if(DoesFileExistInHashedStore(strPath))
+                switch (in_storageLocation)
                 {
-                    strResult = GetStorageLocationDirectory(Core::StorageLocation::k_package) + strPath;
-                    break;
+                    case Core::StorageLocation::k_package:
+                    {
+                        std::string absoluteFilePath;
+                        for(u32 i = 0; i < 3; ++i)
+                        {
+                            const std::string* resourceDirectories = GetResourceDirectories();
+                            std::string filePath = Core::StringUtils::StandardisePath(resourceDirectories[i] + in_filePath);
+                            if(DoesFileExistInPackage(filePath) == true)
+                            {
+                                absoluteFilePath = GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + filePath;
+                                break;
+                            }
+                        }
+                        
+                        return absoluteFilePath;
+                    }
+                    case Core::StorageLocation::k_DLC:
+                    {
+                        std::string filePath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_filePath);
+                        if(iOS::DoesFileExist(filePath) == true)
+                        {
+                            return filePath;
+                        }
+                        
+                        return GetAbsolutePathToFile(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+                    }
+                    default:
+                    {
+                        return GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+                    }
                 }
             }
             
-            return strResult;
+            return "";
         }
         //--------------------------------------------------------------
-        /// Does File Exist In Hashed Store
-        ///
-        /// returns whether the path exists in the stored hashed manifest
-        ///
-        /// @param the filepath.
-        /// @return whether or not it exists.
         //--------------------------------------------------------------
-        bool FileSystem::DoesFileExistInHashedStore(const std::string& instrPath) const
+        std::string FileSystem::GetAbsolutePathToDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
         {
-            u32 udwHashedFile = Core::HashCRC32::GenerateHashCode(instrPath);
+            if (DoesDirectoryExist(in_storageLocation, in_directoryPath) == true)
+            {
+                switch (in_storageLocation)
+                {
+                    case Core::StorageLocation::k_package:
+                    {
+                        std::string absoluteDirectoryPath;
+                        for(u32 i = 0; i < 3; ++i)
+                        {
+                            const std::string* resourceDirectories = GetResourceDirectories();
+                            std::string directoryPath = Core::StringUtils::StandardisePath(resourceDirectories[i] + in_directoryPath);
+                            if(DoesDirectoryExistInPackage(directoryPath) == true)
+                            {
+                                absoluteDirectoryPath = GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + directoryPath;
+                                break;
+                            }
+                        }
+                        
+                        return absoluteDirectoryPath;
+                    }
+                    case Core::StorageLocation::k_DLC:
+                    {
+                        std::string filePath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_directoryPath);
+                        if(iOS::DoesDirectoryExist(filePath) == true)
+                        {
+                            return filePath;
+                        }
+                        
+                        return GetAbsolutePathToDirectory(Core::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
+                    }
+                    default:
+                    {
+                        return GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
+                    }
+                }
+            }
             
-            std::vector<u32>::const_iterator it = std::lower_bound(mHashedPackageFileNames.begin(), mHashedPackageFileNames.end(), udwHashedFile);
+            return "";
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        void FileSystem::CreatePackageManifest()
+        {
+            @autoreleasepool
+            {
+                NSMutableArray* contents = [[NSMutableArray alloc] init];
+                NSString* directory = [NSString stringWithCString:m_bundlePath.c_str() encoding:NSASCIIStringEncoding];
+                
+                [contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:directory error:nil]];
+                
+                for(NSString* nsPath in contents)
+                {
+                    BOOL isDirectory = NO;
+                    NSFileManager* fileManager = [NSFileManager defaultManager];
+                    NSString* nsFullPath = [NSString stringWithFormat:@"%@%@", directory, nsPath];
+                    
+                    if ([fileManager fileExistsAtPath:nsFullPath isDirectory:&isDirectory] == true)
+                    {
+                        std::string path([nsPath UTF8String]);
+                        PackageManifestItem item;
+                        item.m_pathHash = Core::HashCRC32::GenerateHashCode(Core::StringUtils::StandardisePath(path));
+                        item.m_isFile = (isDirectory == NO);
+                        m_packageManifestItems.push_back(item);
+                    }
+                }
+                
+                std::sort(m_packageManifestItems.begin(), m_packageManifestItems.end(), [](const FileSystem::PackageManifestItem& in_lhs, const FileSystem::PackageManifestItem& in_rhs)
+                {
+                    return in_lhs.m_pathHash < in_rhs.m_pathHash;
+                });
+                
+                [contents release];
+            }
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        bool FileSystem::TryGetPackageManifestItem(const std::string& in_path, PackageManifestItem& out_manifestItem) const
+        {
+            PackageManifestItem searchItem;
+			searchItem.m_pathHash = Core::HashCRC32::GenerateHashCode(Core::StringUtils::StandardisePath(in_path));
             
-            if(it!= mHashedPackageFileNames.end() && *it == udwHashedFile)
-                return true;
-
+			auto it = std::lower_bound(m_packageManifestItems.begin(), m_packageManifestItems.end(), searchItem, [](const FileSystem::PackageManifestItem& in_lhs, const FileSystem::PackageManifestItem& in_rhs)
+            {
+                return in_lhs.m_pathHash < in_rhs.m_pathHash;
+            });
+            
+			if(it !=  m_packageManifestItems.end() && it->m_pathHash == searchItem.m_pathHash)
+			{
+				out_manifestItem = *it;
+				return true;
+			}
+            
+			return false;
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        bool FileSystem::DoesFileExistInPackage(const std::string& in_filePath) const
+        {
+            PackageManifestItem item;
+            if (TryGetPackageManifestItem(in_filePath, item) == true)
+            {
+                if (item.m_isFile == true)
+                {
+                    return true;
+                }
+            }
+            
             return false;
         }
         //--------------------------------------------------------------
-        /// Does File Exist
-        ///
-        /// returns whether the path exists on the filesystem
-        ///
-        /// @param the filepath.
-        /// @return whether or not it exists.
         //--------------------------------------------------------------
-        bool FileSystem::DoesFileExist(const std::string& instrPath) const
+        bool FileSystem::DoesDirectoryExistInPackage(const std::string& in_directoryPath) const
         {
-            BOOL bDirectory = NO;
-            bool bExists = false;
-            NSFileManager *fileManager= [NSFileManager defaultManager];
-            NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
-            
-            if ([fileManager fileExistsAtPath:[NSString stringWithUTF8String:instrPath.c_str()] isDirectory:&bDirectory])
+            PackageManifestItem item;
+            if (TryGetPackageManifestItem(in_directoryPath, item) == true)
             {
-                bExists = true;
+                if (item.m_isFile == false)
+                {
+                    return true;
+                }
             }
             
-            [pPool release];
-            return (bExists && !bDirectory);
+            return false;
         }
         //--------------------------------------------------------------
-        /// Does Folder Exist
-        ///
-        /// returns whether the path exists on the filesystem
-        ///
-        /// @param the filepath.
-        /// @return whether or not it exists.
         //--------------------------------------------------------------
-        bool FileSystem::DoesFolderExist(const std::string& instrPath) const
+        bool FileSystem::DoesItemExistInDLCCache(const std::string& in_path, bool in_isDirectory) const
         {
-            BOOL bDirectory = NO;
-            bool bExists = false;
-            NSFileManager *fileManager= [NSFileManager defaultManager];
-            NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
-            
-            if ([fileManager fileExistsAtPath:[NSString stringWithUTF8String:instrPath.c_str()] isDirectory:&bDirectory])
+            if(in_isDirectory == true)
             {
-                bExists = true;
+                return iOS::DoesDirectoryExist(Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_path));
             }
-            
-            [pPool release];
-            return (bExists && bDirectory);
+            else
+            {
+                return iOS::DoesFileExist(Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_path));
+            }
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        std::vector<std::string> FileSystem::GetPossibleAbsoluteDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+        {
+            std::vector<std::string> output;
+            switch(in_storageLocation)
+            {
+                case Core::StorageLocation::k_package:
+                {
+                    const std::string* resourceDirectories = GetResourceDirectories();
+                    for(u32 i = 0; i < 3; ++i)
+                    {
+                        output.push_back(GetAbsolutePathToStorageLocation(in_storageLocation) + resourceDirectories[i] + in_directoryPath);
+                    }
+                    break;
+                }
+                case Core::StorageLocation::k_DLC:
+                {
+                    const std::string* resourceDirectories = GetResourceDirectories();
+                    for(u32 i = 0; i < 3; ++i)
+                    {
+                        output.push_back(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + resourceDirectories[i] + GetPackageDLCPath() + in_directoryPath);
+                    }
+                    output.push_back(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_directoryPath);
+                    break;
+                }
+                default:
+                {
+                    output.push_back(GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath);
+                    break;
+                }
+            }
+            return output;
         }
 	}
 }

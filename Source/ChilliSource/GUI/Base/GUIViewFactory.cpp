@@ -9,6 +9,7 @@
 #include <ChilliSource/GUI/Base/GUIViewFactory.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/XML/rapidxml.hpp>
 
 #include <ChilliSource/GUI/Button/HighlightButton.h>
@@ -159,7 +160,7 @@ namespace ChilliSource
                 else if(pAttr->isNamed("StorageLocation"))
                 {
                     bExtern = true;
-                    eStorageLoc = Core::GetStorageLocationFromString(pAttr->value());
+                    eStorageLoc = Core::ParseStorageLocation(pAttr->value());
                 }
             }
             

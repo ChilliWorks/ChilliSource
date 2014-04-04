@@ -58,7 +58,7 @@ namespace ChilliSource
                     SkinnedAnimationFrameUPtr frame(new SkinnedAnimationFrame());
                     
                     //add all skeleton nodes matrices
-                    for (u32 skelNodeCount=0; skelNodeCount<in_numSkeletonNodes; ++skelNodeCount)
+                    for (u32 skelNodeCount=0; skelNodeCount<(u32)in_numSkeletonNodes; ++skelNodeCount)
                     {
                         //create new translation
                         Core::Vector3 translation;

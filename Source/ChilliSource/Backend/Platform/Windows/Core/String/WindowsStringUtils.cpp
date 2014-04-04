@@ -8,6 +8,10 @@
 
 #include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
 
+#include <ChilliSource/Core/String/StringUtils.h>
+
+#include <algorithm>
+
 namespace ChilliSource
 {
 	namespace Windows
@@ -27,6 +31,27 @@ namespace ChilliSource
 			{
 				std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 				return converter.to_bytes(in_utf16String);
+			}
+			//------------------------------------------------------------
+			//------------------------------------------------------------
+			std::wstring ConvertStandardPathToWindows(const std::string& in_standardPath)
+			{
+				std::wstring path = UTF8ToUTF16(in_standardPath);
+
+				std::replace(path.begin(), path.end(), L'/', L'\\');
+
+				if (path[path.size() - 1] == L'\\')
+				{
+					path = path.substr(0, path.size() - 1);
+				}
+
+				return path;
+			}
+			//------------------------------------------------------------
+			//------------------------------------------------------------
+			std::string ConvertWindowsPathToStandard(const std::wstring& in_windowsPath)
+			{
+				return Core::StringUtils::StandardisePath(UTF16ToUTF8(in_windowsPath));
 			}
 		}
 	}

@@ -68,7 +68,7 @@ namespace ChilliSource
             
             //Quick test for identical filenames.
 			//TODO Need to resolve paths properly using Windows stuff to ensure no repeated definitions
-            for (std::vector<Core::StorageLocationAndFilenamePtr>::iterator it = mFileNames.begin(); it != mFileNames.end(); ++it)
+            for (std::vector<StorageLocationAndFilenamePtr>::iterator it = mFileNames.begin(); it != mFileNames.end(); ++it)
             {
                 if ((*it)->mstrFilename == fileName)
                 {
@@ -78,7 +78,7 @@ namespace ChilliSource
             }
             
 			if (bAlreadyExists == false){
-                Core::StorageLocationAndFilenamePtr SLAndFile(new Core::StorageLocationAndFilename());
+                StorageLocationAndFilenamePtr SLAndFile(new StorageLocationAndFilename());
                 SLAndFile->mstrFilename = fileName;
                 SLAndFile->meStorageLocation = ineStorageLocation;
 				mFileNames.push_back(SLAndFile);

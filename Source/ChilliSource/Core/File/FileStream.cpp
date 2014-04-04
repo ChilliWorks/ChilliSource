@@ -270,7 +270,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Write
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::Write(s8* inpbyChar, s32 indwStreamSize)
+		void FileStream::Write(const s8* inpbyChar, s32 indwStreamSize)
 		{
 			mFileStream.write(inpbyChar, indwStreamSize);
 		}

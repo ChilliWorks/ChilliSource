@@ -102,15 +102,15 @@ namespace ChilliSource
                 std::string strFilename;
 				if (inAttachment.m_storageLocation == Core::StorageLocation::k_package)
 				{
-					strFilename = Core::Application::Get()->GetFileSystem()->GetDirectoryForPackageFile(inAttachment.m_filename);
+					strFilename = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(Core::StorageLocation::k_package, inAttachment.m_filename);
 				}
 				else if (inAttachment.m_storageLocation == Core::StorageLocation::k_DLC && Core::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(inAttachment.m_filename) == false)
                 {
-                    strFilename = Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + inAttachment.m_filename;
+                    strFilename = Core::Application::Get()->GetFileSystem()->GetPackageDLCPath() + inAttachment.m_filename;
                 }
                 else
 				{
-					strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(inAttachment.m_storageLocation) + inAttachment.m_filename;
+					strFilename = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(inAttachment.m_storageLocation) + inAttachment.m_filename;
 				}
                 
                 std::string strPath, strBasename;
