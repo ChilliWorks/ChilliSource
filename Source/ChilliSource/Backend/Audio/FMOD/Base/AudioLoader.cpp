@@ -54,7 +54,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool AudioLoader::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == Audio::AudioLoader::InterfaceID || in_interfaceId == AudioLoader::InterfaceID);
+			return (in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == Audio::AudioLoader::InterfaceID || in_interfaceId == AudioLoader::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -74,7 +74,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool AudioLoader::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& outpResource)
+		bool AudioLoader::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& outpResource)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
             std::string strFilePath;
@@ -119,14 +119,14 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------------------------
         //-------------------------------------------------------------------------
-        bool AudioLoader::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+        bool AudioLoader::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
         {
             CS_LOG_FATAL("AudioLoader::AsyncCreateResourceFromFile - Not yet implemented");
             return false;
         }
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool AudioLoader::StreamResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& outpResource)
+		bool AudioLoader::StreamResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& outpResource)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
             std::string strFilePath;

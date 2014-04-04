@@ -8,7 +8,7 @@
  */
 
 #include <ChilliSource/Rendering/Model/SkinnedAnimationManager.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 
@@ -56,14 +56,14 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Get Resource From File
 		//-----------------------------------------------------------------
-		Core::ResourceSPtr SkinnedAnimationManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceOldSPtr SkinnedAnimationManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetSkinnedAnimationFromFile(ineStorageLocation, instrFilePath);
 		}
 		//-----------------------------------------------------------------
 		/// Async Get Resource From File
 		//-----------------------------------------------------------------
-		Core::ResourceSPtr SkinnedAnimationManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceOldSPtr SkinnedAnimationManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetSkinnedAnimationFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -76,17 +76,17 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourceSPtr pResource(new SkinnedAnimation());
+				Core::ResourceOldSPtr pResource(new SkinnedAnimation());
 				
-				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
+				for(u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++) 
 				{
 					//Check if the resource provider can load this extension
 					std::string strName, strExt;
 					Core::StringUtils::SplitBaseFilename(instrFilePath, strName, strExt);
 					
-					if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
+					if(mResourceProviderOlds[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
 					{
-						if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource)) 
+						if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource)) 
 						{
 							//Add it to the cache
 							CS_LOG_DEBUG("Loading skinned animation " + instrFilePath);
@@ -119,15 +119,15 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourceSPtr pResource(new SkinnedAnimation());
+				Core::ResourceOldSPtr pResource(new SkinnedAnimation());
 				
-				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
+				for(u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++) 
 				{
 					//Check if the resource provider can load this extension
 					std::string strName, strExt;
 					Core::StringUtils::SplitBaseFilename(instrFilePath, strName, strExt);
 					
-					if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
+					if(mResourceProviderOlds[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
 					{
 						CS_LOG_DEBUG("Loading skinned animation " + instrFilePath);
 						
@@ -136,7 +136,7 @@ namespace ChilliSource
 						pResource->SetStorageLocation(ineStorageLocation);
 						pResource->SetOwningResourceManager(this);
 						
-						if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, instrFilePath, pResource)) 
+						if(mResourceProviderOlds[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, instrFilePath, pResource)) 
 						{
 							//Add it to the cache
 							mMapFilenameToResource.insert(std::make_pair(instrFilePath, pResource));

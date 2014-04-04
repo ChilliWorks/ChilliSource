@@ -38,12 +38,12 @@ namespace ChilliSource
             return inInterfaceID == SceneDesc::InterfaceID;
         }
         
-        ResourceSPtr SceneDescManager::GetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        ResourceOldSPtr SceneDescManager::GetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return GetSceneDescFromFile(ineStorageLocation, instrFilePath);
         }
         
-        ResourceSPtr SceneDescManager::AsyncGetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        ResourceOldSPtr SceneDescManager::AsyncGetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return AsyncGetSceneDescFromFile(ineStorageLocation, instrFilePath);
         }
@@ -54,10 +54,10 @@ namespace ChilliSource
             
             if(pExistingResource == mMapFilenameToResource.end())
             {
-                ResourceSPtr pResource(new SceneDesc());
-                for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
+                ResourceOldSPtr pResource(new SceneDesc());
+                for(u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++)
                 {
-                    if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
+                    if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {
                         CS_LOG_DEBUG("Loading Scene Description " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
@@ -87,8 +87,8 @@ namespace ChilliSource
             
             if(pExistingResource == mMapFilenameToResource.end())
             {
-                ResourceSPtr pResource(new SceneDesc());
-                for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
+                ResourceOldSPtr pResource(new SceneDesc());
+                for(u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++)
                 {
                     SceneDescSPtr pSceneDesc = std::static_pointer_cast<SceneDesc>(pResource);
                     pSceneDesc->SetName(instrFilePath);
@@ -96,7 +96,7 @@ namespace ChilliSource
                     pSceneDesc->SetFilename(instrFilePath);
                     pSceneDesc->SetStorageLocation(ineStorageLocation);
 
-                    if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
+                    if(mResourceProviderOlds[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {
                         CS_LOG_DEBUG("Loading Scene Description " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);

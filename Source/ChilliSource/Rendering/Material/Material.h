@@ -81,7 +81,7 @@ namespace ChilliSource
             k_total
         };
 		
-		class Material : public Core::Resource
+		class Material : public Core::ResourceOld
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(Material);

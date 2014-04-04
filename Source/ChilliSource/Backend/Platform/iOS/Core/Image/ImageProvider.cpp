@@ -180,7 +180,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageProvider::IsA(Core::InterfaceIDType in_interaceId) const
 		{
-			return (in_interaceId == Core::ResourceProvider::InterfaceID || in_interaceId == Core::ImageProvider::InterfaceID || in_interaceId == ImageProvider::InterfaceID);
+			return (in_interaceId == Core::ResourceProviderOld::InterfaceID || in_interaceId == Core::ImageProvider::InterfaceID || in_interaceId == ImageProvider::InterfaceID);
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
@@ -196,7 +196,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool ImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceSPtr& out_resource)
+		bool ImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceOldSPtr& out_resource)
 		{
 			Core::FileStreamSPtr pImageFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, Core::FileMode::k_readBinary);
             
@@ -234,7 +234,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-        bool ImageProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filePath, Core::ResourceSPtr& out_resource)
+        bool ImageProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filePath, Core::ResourceOldSPtr& out_resource)
         {
             CS_LOG_WARNING("Async loading is not implemented by the Image Provider.");
             

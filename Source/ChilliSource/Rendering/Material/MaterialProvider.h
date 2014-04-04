@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_RENDERING_MATERIAL_MATERIALPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource
 {
@@ -21,7 +21,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------------------------
-		class MaterialProvider final : public Core::ResourceProvider
+		class MaterialProvider final : public Core::ResourceProviderOld
 		{
 		public:
             
@@ -107,7 +107,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the resource was loaded 
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
             /// Load the material resource from the given material file on a background
             /// thread
@@ -120,7 +120,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the resource was scheduled for load
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// Build Material Task
 			///
@@ -129,7 +129,7 @@ namespace ChilliSource
             ///
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void BuildMaterialTask(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource);
+			void BuildMaterialTask(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource);
 			//----------------------------------------------------------------------------
 			/// Build Material From File
 			///
@@ -146,7 +146,7 @@ namespace ChilliSource
                                        std::vector<ShaderDesc>& out_shaderFiles,
                                        std::vector<TextureDesc>& out_textureFiles,
                                        std::vector<TextureDesc>& out_cubemapFiles,
-                                       Core::ResourceSPtr& out_resource);
+                                       Core::ResourceOldSPtr& out_resource);
 
         private:
 

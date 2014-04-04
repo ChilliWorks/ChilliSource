@@ -11,7 +11,7 @@
 #define _MOFLO_CORE_IMAGE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 
 namespace ChilliSource
 {
@@ -25,7 +25,7 @@ namespace ChilliSource
             k_ETC1
 		};
 		
-		class Image : public Resource
+		class Image : public ResourceOld
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(Image);

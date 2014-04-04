@@ -30,7 +30,7 @@ namespace ChilliSource
 			///
 			/// @param Source images (Must be 6)
 			//--------------------------------------------------
-			void Init(const std::vector<Core::ResourceSPtr>& inapSourceImages);
+			void Init(const std::vector<Core::ResourceOldSPtr>& inapSourceImages);
 			//--------------------------------------------------
 			/// Is A
 			///

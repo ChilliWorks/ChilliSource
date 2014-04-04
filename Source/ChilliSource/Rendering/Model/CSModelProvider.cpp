@@ -435,7 +435,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool CSModelProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSModelProvider::InterfaceID;
+			return in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == CSModelProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -451,7 +451,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSModelProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool CSModelProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
 		{
 			MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
             meshResource->SetLoaded(false);
@@ -469,7 +469,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSModelProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool CSModelProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
 		{
 			MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
             meshResource->SetLoaded(false);

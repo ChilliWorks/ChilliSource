@@ -15,7 +15,7 @@
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Image/Image.h>
 
@@ -81,7 +81,7 @@ namespace ChilliSource
         /// @param The storage location to load from
 		/// @param File name
 		//-----------------------------------------------------------------
-		Core::ResourceSPtr FontManager::GetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceOldSPtr FontManager::GetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			//It's the texture that is passed in so we need to load the alphabet file
             std::string strFontFile;
@@ -93,11 +93,11 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end())
 			{
-				Core::ResourceSPtr pResource(new Font());
+				Core::ResourceOldSPtr pResource(new Font());
 				
-				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
+				for(u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++)
 				{
-					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, strFontFile, pResource))
+					if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, strFontFile, pResource))
 					{
 						CS_LOG_DEBUG("Loading font " + strFontFile);
                         

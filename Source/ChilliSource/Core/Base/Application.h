@@ -230,7 +230,10 @@ namespace ChilliSource
 			///
 			/// @return Handle to application state manager
 			//-----------------------------------------------------
-			StateManager* GetStateManager();
+			inline StateManager* GetStateManager()
+            {
+                return m_stateManager;
+            }
 			//-----------------------------------------------------
 			/// Returns a pointer to the renderer.
             ///
@@ -238,7 +241,10 @@ namespace ChilliSource
 			///
 			/// @return Handle application renderer
 			//-----------------------------------------------------
-			Rendering::Renderer* GetRenderer();
+			inline Rendering::Renderer* GetRenderer()
+            {
+                return m_renderer.get();
+            }
 			//-----------------------------------------------------
 			/// Returns a pointer to the render system.
             ///
@@ -246,7 +252,10 @@ namespace ChilliSource
 			///
 			/// @return Handle to platfrom specific render system
 			//-----------------------------------------------------
-			Rendering::RenderSystem* GetRenderSystem();
+			inline Rendering::RenderSystem* GetRenderSystem()
+            {
+                return m_renderSystem;
+            }
             //-----------------------------------------------------
 			/// Returns a pointer to the platform system.
             ///
@@ -254,7 +263,10 @@ namespace ChilliSource
 			///
             /// @return Pointer to the platform system
             //-----------------------------------------------------
-			PlatformSystem* GetPlatformSystem();
+			inline PlatformSystem* GetPlatformSystem()
+            {
+                return m_platformSystem.get();
+            }
 			//-----------------------------------------------------
 			/// Returns a pointer to the audio system.
             ///
@@ -262,7 +274,10 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the input system
 			//-----------------------------------------------------
-			Audio::AudioSystem* GetAudioSystem();
+			inline Audio::AudioSystem* GetAudioSystem()
+            {
+                return m_audioSystem;
+            }
 			//-----------------------------------------------------
 			/// Returns a pointer to the file system.
             ///
@@ -270,7 +285,21 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the file system
 			//-----------------------------------------------------
-			FileSystem* GetFileSystem();
+			inline FileSystem* GetFileSystem()
+            {
+                return m_fileSystem;
+            }
+            //-----------------------------------------------------
+			/// Returns a pointer to the resource pool system.
+            ///
+            /// @author S Downie
+			///
+			/// @return Pointer to the resource pool
+			//-----------------------------------------------------
+			inline ResourcePool* GetResourcePool()
+            {
+                return m_resourcePool;
+            }
             //----------------------------------------------------
 			/// Initialises the application and kicks off the update
             /// loop. This should not be called by a users application.
@@ -490,6 +519,7 @@ namespace ChilliSource
             std::vector<SystemUPtr> m_systemsOld;
             std::vector<IUpdateable*> m_updateableSystems;
             
+            ResourcePool* m_resourcePool;
 			StateManager* m_stateManager;
 			Rendering::RendererUPtr m_renderer;
             Rendering::RenderSystem* m_renderSystem;
@@ -502,7 +532,7 @@ namespace ChilliSource
             
             ResourceManagerDispenser* m_resourceManagerDispenser;
             ComponentFactoryDispenser* m_componentFactoryDispenser;
-			std::vector<ResourceProvider*> m_resourceProviders;
+			std::vector<ResourceProviderOld*> m_ResourceProviderOlds;
 
 			TimeIntervalSecs m_currentAppTime;
             Rendering::FontSPtr m_defaultFont;

@@ -61,7 +61,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool CSSubtitlesProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSSubtitlesProvider::InterfaceID;
+			return in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == CSSubtitlesProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
@@ -77,7 +77,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool CSSubtitlesProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool CSSubtitlesProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
 		{
             SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(out_resource);
             
@@ -87,7 +87,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool CSSubtitlesProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool CSSubtitlesProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
 		{
 			SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(out_resource);
 			

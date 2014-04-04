@@ -9,7 +9,7 @@
 
 
 #include <ChilliSource/Core/System/SystemConcepts.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource
 {
@@ -17,6 +17,6 @@ namespace ChilliSource
 	{
 		CS_DEFINE_NAMEDTYPE(IUpdateable);
 		CS_DEFINE_NAMEDTYPE(IComponentProducer);
-		CS_DEFINE_NAMEDTYPE(ResourceProvider);
+		CS_DEFINE_NAMEDTYPE(ResourceProviderOld);
 	}
 }

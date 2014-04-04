@@ -34,9 +34,9 @@ namespace ChilliSource
             
             SceneDescSPtr AsyncGetSceneDescFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
             
-            ResourceSPtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+            ResourceOldSPtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
             
-            ResourceSPtr AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+            ResourceOldSPtr AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
             
         };
     }

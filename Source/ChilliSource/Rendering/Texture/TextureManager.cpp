@@ -73,17 +73,17 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourceSPtr TextureManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceOldSPtr TextureManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end())
 			{
-				Core::ResourceSPtr pSourceImage(new Core::Image());
+				Core::ResourceOldSPtr pSourceImage(new Core::Image());
 				
-				for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
+				for (u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++)
 				{
-					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pSourceImage))
+					if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pSourceImage))
 					{
 						Core::Image* pImage = (Core::Image*)(pSourceImage.get());
 						pImage->SetName(instrFilePath);
@@ -93,7 +93,7 @@ namespace ChilliSource
 						{
 							CS_LOG_DEBUG("Loading texture " + instrFilePath);
 							
-							mMapFilenameToResource.insert(std::make_pair(instrFilePath, std::static_pointer_cast<Core::Resource>(pTexture)));
+							mMapFilenameToResource.insert(std::make_pair(instrFilePath, std::static_pointer_cast<Core::ResourceOld>(pTexture)));
 							pTexture->SetName(instrFilePath);
 							pTexture->SetOwningResourceManager(this);
 							pTexture->SetLoaded(true);
@@ -120,7 +120,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourceSPtr TextureManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceOldSPtr TextureManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
@@ -129,7 +129,7 @@ namespace ChilliSource
 				ImageDesc Desc;
 				Desc.strFilename = instrFilePath;
 				Desc.eStorageLocation = ineStorageLocation;
-				Desc.pImageResource = Core::ResourceSPtr(new Core::Image());
+				Desc.pImageResource = Core::ResourceOldSPtr(new Core::Image());
 				Desc.pTextureResource = CreateTextureResource();
 				
 				Desc.pTextureResource->SetFilename(instrFilePath);
@@ -140,7 +140,7 @@ namespace ChilliSource
 				Core::TaskScheduler::ScheduleTask(ImageLoadTask);
 				
 				//add resource to the resource map
-				mMapFilenameToResource.insert(std::make_pair(instrFilePath, std::static_pointer_cast<Core::Resource>(Desc.pTextureResource)));
+				mMapFilenameToResource.insert(std::make_pair(instrFilePath, std::static_pointer_cast<Core::ResourceOld>(Desc.pTextureResource)));
 				
 				return Desc.pTextureResource;
 			}
@@ -158,9 +158,9 @@ namespace ChilliSource
 		//-----------------------------------------------------------------------------------
 		void TextureManager::ImageLoadTask(ImageDesc& inDesc)
 		{
-			for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
+			for (u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++) 
 			{
-				if(mResourceProviders[nProvider]->CreateResourceFromFile(inDesc.eStorageLocation, inDesc.strFilename, inDesc.pImageResource))
+				if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(inDesc.eStorageLocation, inDesc.strFilename, inDesc.pImageResource))
 				{
 					CS_LOG_DEBUG("Loading image " + inDesc.strFilename);
 					
@@ -168,7 +168,7 @@ namespace ChilliSource
 					pImage->SetName(inDesc.strFilename);
 					
 					//Load the texture from this image
-					Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&, TextureSPtr&>(this, &TextureManager::TextureLoadTask, inDesc.pImageResource, inDesc.pTextureResource));
+					Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceOldSPtr&, TextureSPtr&>(this, &TextureManager::TextureLoadTask, inDesc.pImageResource, inDesc.pTextureResource));
 					return;
 				}
 			}
@@ -184,7 +184,7 @@ namespace ChilliSource
 		/// @param With mipmapping
 		/// @param Texture to create
 		//-----------------------------------------------------------------------------------
-		void TextureManager::TextureLoadTask(const Core::ResourceSPtr& inpImage, TextureSPtr& outpTexture)
+		void TextureManager::TextureLoadTask(const Core::ResourceOldSPtr& inpImage, TextureSPtr& outpTexture)
 		{
 			Core::Image* pImage = (Core::Image*)(inpImage.get());
 			if(CreateTextureFromImage(pImage, outpTexture))

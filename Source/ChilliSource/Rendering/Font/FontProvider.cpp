@@ -84,7 +84,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool FontProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == FontProvider::InterfaceID;
+			return in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == FontProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -100,7 +100,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool FontProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool FontProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
 		{
             out_resource->SetLoaded(false);
             
@@ -135,7 +135,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        bool FontProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+        bool FontProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
         {
             //TODO: Implement this once we have a way of resolving whether loading of kerning and alphabet file on separate threads
             //has worked

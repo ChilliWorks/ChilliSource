@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
@@ -25,7 +25,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class Mesh : public Core::Resource
+		class Mesh : public Core::ResourceOld
 		{
 		public:
 			

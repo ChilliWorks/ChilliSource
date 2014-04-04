@@ -8,7 +8,7 @@
  */
 
 #include <ChilliSource/Rendering/Model/MeshManager.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
@@ -74,7 +74,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourceSPtr MeshManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceOldSPtr MeshManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetModelFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -86,7 +86,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourceSPtr MeshManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceOldSPtr MeshManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetModelFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -105,17 +105,17 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourceSPtr pResource(new Mesh());
+				Core::ResourceOldSPtr pResource(new Mesh());
 				
-				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
+				for(u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++) 
 				{
 					//Check if the resource provider can load this extension
 					std::string strName, strExt;
 					Core::StringUtils::SplitBaseFilename(inFilePath, strName, strExt);
 					
-					if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
+					if(mResourceProviderOlds[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
 					{
-						if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
+						if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
 						{
 							//Add it to the cache
 							CS_LOG_DEBUG("Loading model " + inFilePath);
@@ -155,15 +155,15 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourceSPtr pResource(new Mesh());
+				Core::ResourceOldSPtr pResource(new Mesh());
 				
-				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
+				for(u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++) 
 				{
 					//Check if the resource provider can load this extension
 					std::string strName, strExt;
 					Core::StringUtils::SplitBaseFilename(inFilePath, strName, strExt);
 					
-					if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
+					if(mResourceProviderOlds[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
 					{
 						
 						CS_LOG_DEBUG("Loading model " + inFilePath);
@@ -173,7 +173,7 @@ namespace ChilliSource
 						pResource->SetStorageLocation(ineStorageLocation);
 						pResource->SetOwningResourceManager(this);
 						
-						if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
+						if(mResourceProviderOlds[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
 						{
 							//Add it to the cache
 							mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));

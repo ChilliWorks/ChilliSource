@@ -61,7 +61,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceOldSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -70,7 +70,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourceSPtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceOldSPtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//----------------------------------------------------------------
 			/// Create Cubemap Resource
 			///
@@ -85,14 +85,14 @@ namespace ChilliSource
 			///
 			/// @param Image to create moFlo Cubemap from
 			//----------------------------------------------------------------
-			virtual bool CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, CubemapSPtr& outpCubemap) = 0;
+			virtual bool CreateCubemapFromImages(const std::vector<Core::ResourceOldSPtr>& inaImages, CubemapSPtr& outpCubemap) = 0;
 		protected:
 			
 			struct ImageDesc
 			{
 				std::string strFilenames[6];
                 Core::StorageLocation eStorageLocation;
-				std::vector<Core::ResourceSPtr> pImageResources;
+				std::vector<Core::ResourceOldSPtr> pImageResources;
 				CubemapSPtr pCubemapResource;
 			};
 			
@@ -113,7 +113,7 @@ namespace ChilliSource
 			/// @param With mipmapping
 			/// @param Cubemap to create
 			//-----------------------------------------------------------------------------------
-			void CubemapLoadTask(const std::vector<Core::ResourceSPtr>& inaImages, CubemapSPtr& outpCubemap);
+			void CubemapLoadTask(const std::vector<Core::ResourceOldSPtr>& inaImages, CubemapSPtr& outpCubemap);
 		};
 	}
 	

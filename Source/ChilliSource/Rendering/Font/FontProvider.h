@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_RENDERING_FONT_FONTPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource
 {
@@ -23,7 +23,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------
-		class FontProvider final : public Core::ResourceProvider
+		class FontProvider final : public Core::ResourceProviderOld
 		{
 		public:
 
@@ -80,7 +80,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the resource was created successfully
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Load the font from the external file into a resource on a background
             /// thread
@@ -93,7 +93,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the resource loading was scheduled
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
 		};
 	}
 }

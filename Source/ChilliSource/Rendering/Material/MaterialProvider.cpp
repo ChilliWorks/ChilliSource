@@ -489,7 +489,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool MaterialProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == MaterialProvider::InterfaceID;
+			return in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == MaterialProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -505,7 +505,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool MaterialProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool MaterialProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
 		{
             out_resource->SetLoaded(false);
             
@@ -570,19 +570,19 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool MaterialProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool MaterialProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
 		{
             out_resource->SetLoaded(false);
             
 			//Start the material building task.
-			Core::Task<Core::StorageLocation, const std::string&, Core::ResourceSPtr&> BuildMaterialTask(this, &MaterialProvider::BuildMaterialTask, in_location, in_filePath, out_resource);
+			Core::Task<Core::StorageLocation, const std::string&, Core::ResourceOldSPtr&> BuildMaterialTask(this, &MaterialProvider::BuildMaterialTask, in_location, in_filePath, out_resource);
 			Core::TaskScheduler::ScheduleTask(BuildMaterialTask);
 			
 			return true;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void MaterialProvider::BuildMaterialTask(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		void MaterialProvider::BuildMaterialTask(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
 		{
             //TODO: This can get into a deadlock situation if we block and wait on the texture etc. This will need to be changed
             //once we have callbacks
@@ -653,7 +653,7 @@ namespace ChilliSource
                                                     std::vector<ShaderDesc>& out_shaderFiles,
                                                     std::vector<TextureDesc>& out_textureFiles,
                                                     std::vector<TextureDesc>& out_cubemapFiles,
-                                                    Core::ResourceSPtr& out_resource)
+                                                    Core::ResourceOldSPtr& out_resource)
 		{
 			Material* material = (Material*)(out_resource.get());
 			

@@ -62,7 +62,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceOldSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 		};
 	}
 }

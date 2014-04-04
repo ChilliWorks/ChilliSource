@@ -1,151 +1,87 @@
-/*
- * File: Resource.cpp
- * Date: 15/11/2010 2010 
- * Description: 
- */
-
-/*
- * Author: Scott Downie
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
+//
+//  Resource.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 30/09/2010.
+//  Copyright (c) 2010 Tag Games Ltd. All rights reserved.
+//
 
 #include <ChilliSource/Core/Resource/Resource.h>
-#include <ChilliSource/Core/Resource/ResourceManager.h>
+
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 
 namespace ChilliSource
 {
 	namespace Core
 	{
 		//-------------------------------------------------------
-		/// Constructor
-		///
-		/// Default
 		//-------------------------------------------------------
-		Resource::Resource(): mpOwningResMgr(nullptr), mbIsHighRes(false), mbIsLoaded(false), mpMutex(new std::mutex()),
-        mpCondition(new std::condition_variable()), meStorageLocation(StorageLocation::k_none), mstrFilename("")
+		Resource::Resource(ResourcePool* in_resourcePool)
+        : m_resourcePool(in_resourcePool), m_location(StorageLocation::k_none), m_loadState(LoadState::k_loading)
 		{
 		}
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        Resource::LoadState Resource::GetLoadState() const
+        {
+            return m_loadState;
+        }
+        //-------------------------------------------------------
+        /// If we set the load state to loaded or failed
+        /// we need to notify any waiting parties that the resource
+        /// is now ready
+        //-------------------------------------------------------
+        void Resource::SetLoadState(LoadState in_loadState)
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
+            m_loadState = in_loadState;
+            
+            if(m_loadState == LoadState::k_loaded || m_loadState == LoadState::k_failed)
+            {
+                m_loadWaitCondition.notify_all();
+            }
+        }
 		//-------------------------------------------------------
-		/// Get Name
-		///
-		/// @return The resource's name
 		//-------------------------------------------------------
-		const std::string& Resource::GetName() const
+		void Resource::SetFilePath(const std::string& in_filePath)
 		{
-			return mstrName;
+			m_filePath = in_filePath;
 		}
 		//-------------------------------------------------------
-		/// Set Name
-		///
-		/// @param The resource's name (usually the filename)
 		//-------------------------------------------------------
-		void Resource::SetName(const std::string& instrName)
+		const std::string& Resource::GetFilePath() const
 		{
-			mstrName = instrName;
+			return m_filePath;
 		}
 		//-------------------------------------------------------
-		/// Is Loaded
-		///
-		/// @return Whether the resource is loaded into memory
 		//-------------------------------------------------------
-		bool Resource::IsLoaded() const
+		void Resource::SetStorageLocation(StorageLocation in_location)
 		{
-			return mbIsLoaded;
+			m_location = in_location;
 		}
 		//-------------------------------------------------------
-		/// Set Loaded
-		///
-		/// @param Whether the resource is loaded into memory
 		//-------------------------------------------------------
-		void Resource::SetLoaded(bool inbLoaded)
+        StorageLocation Resource::GetStorageLocation() const
 		{
-			mbIsLoaded = inbLoaded;
-
-			if(mbIsLoaded == true)
-			{
-				mpCondition->notify_all();
-			}
+			return m_location;
 		}
 		//-------------------------------------------------------
-		/// Set Filename
-		///
-		/// @param The filename of the resource.
-		//-------------------------------------------------------
-		void Resource::SetFilename(std::string instrFilename)
-		{
-			mstrFilename = instrFilename;
-		}
-		//-------------------------------------------------------
-		/// Get Filename
-		///
-		/// @return The filename of the resource.
-		//-------------------------------------------------------
-		const std::string& Resource::GetFilename() const
-		{
-			return mstrFilename;
-		}
-		//-------------------------------------------------------
-		/// Set Storage Location
-		///
-		/// @param The storage location of the resource.
-		//-------------------------------------------------------
-		void Resource::SetStorageLocation(StorageLocation ineStorageLocation)
-		{
-			meStorageLocation = ineStorageLocation;
-		}
-		//-------------------------------------------------------
-		/// Get Storage Location
-		///
-		/// @return The storage location of the resource.
-		//-------------------------------------------------------
-		const StorageLocation& Resource::GetStorageLocation() const
-		{
-			return meStorageLocation;
-		}
-		//-------------------------------------------------------
-		/// Set Owning Resource Manager
-		///
-		/// @param The resource manager who has ownership of us
-		//-------------------------------------------------------
-		void Resource::SetOwningResourceManager(ResourceManager* inpResMgr)
-		{
-			mpOwningResMgr = inpResMgr;
-		}
-		//-------------------------------------------------------
-		/// Get Owning Resource Manager
-		///
-		/// @return The resource manager who has ownership of us
-		//-------------------------------------------------------
-		ResourceManager* Resource::GetOwningResourceManager()
-		{
-			return mpOwningResMgr;
-		}
-		//-------------------------------------------------------
-		/// Wait Til Loaded
-		///
-		/// Block the calling thread until the resource has loaded
 		//-------------------------------------------------------
 		void Resource::WaitTilLoaded()
 		{
-            std::unique_lock<std::mutex> Lock(*mpMutex);
+            std::unique_lock<std::mutex> lock(m_mutex);
 
-			while(mbIsLoaded == false)
+			while(m_loadState == LoadState::k_loading)
 			{
-				mpCondition->wait(Lock);
+				m_loadWaitCondition.wait(lock);
 			}
 		}
 		//-------------------------------------------------------
-		/// Release
-		///
-		/// Tell our owning resource manager to free us
 		//-------------------------------------------------------
 		void Resource::Release()
 		{
-			if (mpOwningResMgr) 
-            {
-				mpOwningResMgr->Release(this);
-			}
+            m_resourcePool->Release(this);
 		}
 	}
 }

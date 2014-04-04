@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_RENDERING_MODEL_CSMODELPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource
 {
@@ -19,7 +19,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Loads model files into a Mesh resource.
 		//-------------------------------------------------------------------------
-		class CSModelProvider final : public Core::ResourceProvider
+		class CSModelProvider final : public Core::ResourceProviderOld
 		{
 		public:
             
@@ -75,7 +75,7 @@ namespace ChilliSource
             ///
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// Create mesh resource from model file on a background thread
 			///
@@ -87,7 +87,7 @@ namespace ChilliSource
             ///
 			/// @return whether or not this was successfully scheduled
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// @author I Copland
 			///

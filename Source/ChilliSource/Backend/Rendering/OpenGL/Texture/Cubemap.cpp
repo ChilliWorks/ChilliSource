@@ -88,7 +88,7 @@ namespace ChilliSource
             ///
             /// @param Array of 6 images
             //--------------------------------------------------
-            void CubemapImage2D(const std::vector<Core::ResourceSPtr>& inapSourceImages)
+            void CubemapImage2D(const std::vector<Core::ResourceOldSPtr>& inapSourceImages)
             {
                 for(u32 i=0; i<6; ++i)
                 {
@@ -103,7 +103,7 @@ namespace ChilliSource
             /// @param Format
             /// @param Array of 6 images
             //--------------------------------------------------
-            void CubemapCompressedImage2D(GLenum inFormat, const std::vector<Core::ResourceSPtr>& inapSourceImages)
+            void CubemapCompressedImage2D(GLenum inFormat, const std::vector<Core::ResourceOldSPtr>& inapSourceImages)
             {
                 for(u32 i=0; i<6; ++i)
                 {
@@ -128,7 +128,7 @@ namespace ChilliSource
 		//--------------------------------------------------
 		/// Init
 		//--------------------------------------------------
-		void Cubemap::Init(const std::vector<Core::ResourceSPtr>& inapSourceImages)
+		void Cubemap::Init(const std::vector<Core::ResourceOldSPtr>& inapSourceImages)
 		{
             CS_ASSERT(inapSourceImages.size() == 6, "Cubemaps must have 6 face textures");
             

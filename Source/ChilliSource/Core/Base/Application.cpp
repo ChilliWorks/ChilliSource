@@ -27,10 +27,10 @@
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Resource/ResourceGroupManager.h>
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/System/System.h>
@@ -82,7 +82,7 @@ namespace ChilliSource
         //----------------------------------------------------
         //----------------------------------------------------
 		Application::Application()
-        : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_audioSystem(nullptr),
+        : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_audioSystem(nullptr), m_resourcePool(nullptr),
         m_renderer(nullptr), m_fileSystem(nullptr), m_stateManager(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_resourceManagerDispenser(nullptr), m_updateIntervalRemainder(0.0f),
         m_shouldNotifyConnectionsResumeEvent(false), m_shouldNotifyConnectionsForegroundEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
 		{
@@ -158,42 +158,6 @@ namespace ChilliSource
         const Rendering::MaterialSPtr& Application::GetDefaultMaterial()
         {
             return m_defaultMaterial;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        StateManager* Application::GetStateManager()
-        {
-            return m_stateManager;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        Rendering::Renderer* Application::GetRenderer()
-        {
-            return m_renderer.get();
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        Rendering::RenderSystem* Application::GetRenderSystem()
-        {
-            return m_renderSystem;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        PlatformSystem* Application::GetPlatformSystem()
-        {
-            return m_platformSystem.get();
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        Audio::AudioSystem* Application::GetAudioSystem()
-        {
-            return m_audioSystem;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        FileSystem* Application::GetFileSystem()
-        {
-            return m_fileSystem;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -459,6 +423,8 @@ namespace ChilliSource
             CS_SAFEDELETE(m_resourceManagerDispenser);
             CS_SAFEDELETE(m_componentFactoryDispenser);
             
+            m_resourcePool->Destroy();
+            
 			//We have an issue with the order of destruction of systems.
 			while(m_systemsOld.empty() == false)
 			{
@@ -484,6 +450,8 @@ namespace ChilliSource
             //Core
             AddSystem_Old(FileSystem::Create());
             m_stateManager = CreateSystem<StateManager>();
+            
+            m_resourcePool = CreateSystem<ResourcePool>();
 
             //TODO: Change this to a PNG image provider.
             CreateSystem<ImageProvider>();
@@ -538,9 +506,9 @@ namespace ChilliSource
 				}
                 
                 //Resource providers
-				if(pSystem->IsA(ResourceProvider::InterfaceID))
+				if(pSystem->IsA(ResourceProviderOld::InterfaceID))
 				{
-					m_resourceProviders.push_back(dynamic_cast<ResourceProvider*>(pSystem));
+					m_ResourceProviderOlds.push_back(dynamic_cast<ResourceProviderOld*>(pSystem));
 				}
                 
                 //Common systems
@@ -554,9 +522,9 @@ namespace ChilliSource
 			for(const AppSystemUPtr& system : m_systems)
 			{
                 //Resource providers
-				if(system->IsA(ResourceProvider::InterfaceID))
+				if(system->IsA(ResourceProviderOld::InterfaceID))
 				{
-					m_resourceProviders.push_back(dynamic_cast<ResourceProvider*>(system.get()));
+					m_ResourceProviderOlds.push_back(dynamic_cast<ResourceProviderOld*>(system.get()));
 				}
                 
                 //TODO: Remove this when all Component producers have been changed to systems
@@ -573,7 +541,7 @@ namespace ChilliSource
 			}
 
             //Give the resource managers their providers
-            m_resourceManagerDispenser->SetResourceProviders(m_resourceProviders);
+            m_resourceManagerDispenser->SetResourceProviderOlds(m_ResourceProviderOlds);
 
             Audio::AudioPlayer::Init();
 

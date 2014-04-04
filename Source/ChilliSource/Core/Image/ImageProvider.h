@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_CORE_IMAGE_IMAGEPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource
 {
@@ -22,7 +22,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //---------------------------------------------------------------
-        class ImageProvider : public Core::ResourceProvider
+        class ImageProvider : public Core::ResourceProviderOld
         {
         public:
             //-------------------------------------------------------

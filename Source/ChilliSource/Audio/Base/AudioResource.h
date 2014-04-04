@@ -14,13 +14,13 @@
 #define _MO_FLO_AUDIO_RESOURCE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 
 namespace ChilliSource 
 {
 	namespace Audio
 	{
-		class AudioResource : public Core::Resource
+		class AudioResource : public Core::ResourceOld
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(AudioResource);

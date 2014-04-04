@@ -11,7 +11,7 @@
 #define _CHILLISOURCE_RENDERING_MODEL_CSANIMPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource
 {
@@ -22,7 +22,7 @@ namespace ChilliSource
         ///
         /// @author I Copland
 		//-------------------------------------------------------------------------
-		class CSAnimProvider final : public Core::ResourceProvider
+		class CSAnimProvider final : public Core::ResourceProviderOld
 		{
 		public:
             
@@ -71,7 +71,7 @@ namespace ChilliSource
             ///
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// Load a skinned animation from the given CSAnim file on a background
             /// thread
@@ -84,7 +84,7 @@ namespace ChilliSource
             ///
 			/// @return whether or not async load was started
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// Loads an anim file into a SkinnedAnimation.
             ///

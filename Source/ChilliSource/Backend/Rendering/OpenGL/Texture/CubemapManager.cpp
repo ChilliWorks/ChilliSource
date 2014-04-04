@@ -35,7 +35,7 @@ namespace ChilliSource
 		/// @param Out: Cubemap resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool CubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, ChilliSource::Rendering::CubemapSPtr& outpCubemap)
+		bool CubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourceOldSPtr>& inaImages, ChilliSource::Rendering::CubemapSPtr& outpCubemap)
 		{
 			std::static_pointer_cast<Cubemap>(outpCubemap)->Init(inaImages);
 			return true;
@@ -59,25 +59,25 @@ namespace ChilliSource
                         //If the Cubemap was loaded from file then reload it.
                         if(pOpenGLCubemap->GetFilename() != "" && pOpenGLCubemap->GetStorageLocation() != Core::StorageLocation::k_none)
                         {
-                            std::vector<Core::ResourceSPtr> aImages;
+                            std::vector<Core::ResourceOldSPtr> aImages;
                             aImages.reserve(6);
                             
                             std::string strPath;
                             std::string strExt;
                             Core::StringUtils::SplitBaseFilename(pOpenGLCubemap->GetFilename(), strPath, strExt);
                             
-                            for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
+                            for (u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++)
                             {
-                                if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
+                                if(mResourceProviderOlds[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
                                 {
                                     strExt = "." + strExt;
                                     
                                     for(u32 i=0; i<6; ++i)
                                     {
-                                        Core::ResourceSPtr pSourceImage(new Core::Image());
+                                        Core::ResourceOldSPtr pSourceImage(new Core::Image());
                                         Core::Image* pImage = (Core::Image*)(pSourceImage.get());
                                         std::string strFileName = strPath + Core::ToString(i+1) + strExt;
-                                        if(mResourceProviders[nProvider]->CreateResourceFromFile(pOpenGLCubemap->GetStorageLocation(), strFileName, pSourceImage))
+                                        if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(pOpenGLCubemap->GetStorageLocation(), strFileName, pSourceImage))
                                         {
                                             pImage->SetName(strFileName);
                                             pImage->SetLoaded(true);

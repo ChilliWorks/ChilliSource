@@ -74,7 +74,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourceSPtr CubemapManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceOldSPtr CubemapManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
@@ -84,21 +84,21 @@ namespace ChilliSource
                 std::string strExt;
                 Core::StringUtils::SplitBaseFilename(instrFilePath, strPath, strExt);
                 
-				for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
+				for (u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++)
 				{
-                    if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
+                    if(mResourceProviderOlds[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
                     {
                         CubemapSPtr pCubemap = CreateCubemapResource();
-                        std::vector<Core::ResourceSPtr> aImages;
+                        std::vector<Core::ResourceOldSPtr> aImages;
                         aImages.reserve(6);
                         
                         strExt = "." + strExt;
                         
                         for(u32 i=0; i<6; ++i)
                         {
-                            Core::ResourceSPtr pSourceImage(new Core::Image());
+                            Core::ResourceOldSPtr pSourceImage(new Core::Image());
                             std::string strFileName = strPath + Core::ToString(i+1) + strExt;
-                            if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, strFileName, pSourceImage))
+                            if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, strFileName, pSourceImage))
                             {
                                 Core::Image* pImage = (Core::Image*)(pSourceImage.get());
                                 pImage->SetName(strFileName);
@@ -117,7 +117,7 @@ namespace ChilliSource
                         {
                             CS_LOG_DEBUG("Loading Cubemap with base " + instrFilePath);
                             
-                            mMapFilenameToResource.insert(std::make_pair(instrFilePath, std::static_pointer_cast<Core::Resource>(pCubemap)));
+                            mMapFilenameToResource.insert(std::make_pair(instrFilePath, std::static_pointer_cast<Core::ResourceOld>(pCubemap)));
                             pCubemap->SetName(instrFilePath);
                             pCubemap->SetOwningResourceManager(this);
                             pCubemap->SetLoaded(true);
@@ -144,7 +144,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourceSPtr CubemapManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceOldSPtr CubemapManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
@@ -159,7 +159,7 @@ namespace ChilliSource
                 for(u32 i=0; i<6; ++i)
                 {
                     Desc.strFilenames[i] = strPath + Core::ToString(i+1) + strExt;
-                    Desc.pImageResources.push_back(Core::ResourceSPtr(new Core::Image()));
+                    Desc.pImageResources.push_back(Core::ResourceOldSPtr(new Core::Image()));
                 }
                 
 				Desc.eStorageLocation = ineStorageLocation;
@@ -172,7 +172,7 @@ namespace ChilliSource
 				Core::TaskScheduler::ScheduleTask(ImageLoadTask);
 				
 				//add resource to the resource map
-				mMapFilenameToResource.insert(std::make_pair(instrFilePath, std::static_pointer_cast<Core::Resource>(Desc.pCubemapResource)));
+				mMapFilenameToResource.insert(std::make_pair(instrFilePath, std::static_pointer_cast<Core::ResourceOld>(Desc.pCubemapResource)));
 				
 				return Desc.pCubemapResource;
 			}
@@ -194,13 +194,13 @@ namespace ChilliSource
             std::string strExt;
             Core::StringUtils::SplitBaseFilename(inDesc.strFilenames[0], strPath, strExt);
             
-			for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
+			for (u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++)
 			{
-                if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
+                if(mResourceProviderOlds[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
                 {
                     for(u32 i=0; i<6; ++i)
                     {
-                        if(mResourceProviders[nProvider]->CreateResourceFromFile(inDesc.eStorageLocation, inDesc.strFilenames[i], inDesc.pImageResources[i]))
+                        if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(inDesc.eStorageLocation, inDesc.strFilenames[i], inDesc.pImageResources[i]))
                         {
                             CS_LOG_DEBUG("Loading image " + inDesc.strFilenames[i]);
                             
@@ -211,7 +211,7 @@ namespace ChilliSource
                     }
                     
                     //Load the Cubemap from this image
-                    Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const std::vector<Core::ResourceSPtr>&, CubemapSPtr&>(this, &CubemapManager::CubemapLoadTask, inDesc.pImageResources, inDesc.pCubemapResource));
+                    Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const std::vector<Core::ResourceOldSPtr>&, CubemapSPtr&>(this, &CubemapManager::CubemapLoadTask, inDesc.pImageResources, inDesc.pCubemapResource));
                     return;
                 }
 			}
@@ -227,7 +227,7 @@ namespace ChilliSource
 		/// @param With mipmapping
 		/// @param Cubemap to create
 		//-----------------------------------------------------------------------------------
-		void CubemapManager::CubemapLoadTask(const std::vector<Core::ResourceSPtr>& inaImages, CubemapSPtr& outpCubemap)
+		void CubemapManager::CubemapLoadTask(const std::vector<Core::ResourceOldSPtr>& inaImages, CubemapSPtr& outpCubemap)
 		{
             if(CreateCubemapFromImages(inaImages, outpCubemap))
             {

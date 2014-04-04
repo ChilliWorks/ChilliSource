@@ -152,7 +152,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool CSAnimProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSAnimProvider::InterfaceID;
+			return in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == CSAnimProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -168,7 +168,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSAnimProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool CSAnimProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
 		{
 			SkinnedAnimationSPtr anim = std::static_pointer_cast<SkinnedAnimation>(out_resource);
 			anim->SetLoaded(false);
@@ -178,7 +178,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSAnimProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool CSAnimProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
 		{
 			SkinnedAnimationSPtr anim = std::static_pointer_cast<SkinnedAnimation>(out_resource);
 			anim->SetLoaded(false);

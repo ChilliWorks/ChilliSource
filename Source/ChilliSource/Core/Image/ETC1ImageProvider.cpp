@@ -47,7 +47,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         bool ETC1ImageProvider::IsA(InterfaceIDType in_interfaceId) const
         {
-            return (in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == ETC1ImageProvider::InterfaceID);
+            return (in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == ETC1ImageProvider::InterfaceID);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -63,7 +63,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool ETC1ImageProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource)
+        bool ETC1ImageProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceOldSPtr& out_resource)
         {
             //ensure the extension is correct.
             if (StringUtils::EndsWith(in_filepath, k_etc1Extension, true) == false)
@@ -120,7 +120,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool ETC1ImageProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource)
+        bool ETC1ImageProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceOldSPtr& out_resource)
         {
             CS_LOG_WARNING("Async load not implemented for ETC1 Image Provider");
             return false;

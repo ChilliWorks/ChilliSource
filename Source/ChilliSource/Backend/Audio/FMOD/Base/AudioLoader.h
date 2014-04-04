@@ -63,7 +63,7 @@ namespace ChilliSource
             ///
 			/// @return Success
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
             //-------------------------------------------------------------------------
             /// Load the audio resource on a background thread from the given
             /// file location
@@ -76,7 +76,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the resource was loaded
 			//-------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// Stream audio resource from the given file
             ///
@@ -88,7 +88,7 @@ namespace ChilliSource
             ///
 			/// @return Success
 			//----------------------------------------------------------------------------
-			bool StreamResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool StreamResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// @author S Downie
 			///
