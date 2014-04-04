@@ -29,7 +29,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------
-		SubMesh::SubMesh(std::string instrName) : mstrName(instrName), mpMeshBuffer(nullptr), mpRenderSystem(nullptr)
+		SubMesh::SubMesh(const std::string& instrName) : mstrName(instrName), mpMeshBuffer(nullptr)
 		{
 			
 		}
@@ -43,21 +43,21 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Get AABB
 		//-----------------------------------------------------------------
-		const Core::AABB& SubMesh::GetAABB()
+		const Core::AABB& SubMesh::GetAABB() const
 		{
 			return mBoundingBox;
 		}
 		//-----------------------------------------------------------------
 		/// Get Name
 		//-----------------------------------------------------------------
-		const std::string& SubMesh::GetName()
+		const std::string& SubMesh::GetName() const
 		{
 			return mstrName;
 		}
 		//-----------------------------------------------------------------
 		/// Get Number of Vertices
 		//-----------------------------------------------------------------
-		u32 SubMesh::GetNumVerts()
+		u32 SubMesh::GetNumVerts() const
 		{
 			if (mpMeshBuffer != nullptr)
 				return mpMeshBuffer->GetVertexCount();
@@ -67,7 +67,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Get Number of Indices
 		//-----------------------------------------------------------------
-		u32 SubMesh::GetNumIndices()
+		u32 SubMesh::GetNumIndices() const
 		{
 			if (mpMeshBuffer != nullptr)
 				return mpMeshBuffer->GetIndexCount();
@@ -80,8 +80,6 @@ namespace ChilliSource
 		void SubMesh::Prepare(RenderSystem* inpRenderSystem, const VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
 							   u32 inudwVertexCapacityInBytes, u32 inudwIndexCapacityInBytes, BufferAccess inAccessFlag, PrimitiveType inPrimativeType)
 		{
-			mpRenderSystem = inpRenderSystem;
-			
 			BufferDescription desc;
 			desc.eUsageFlag = BufferUsage::k_static;
 			desc.VertexDataCapacity = inudwVertexCapacityInBytes; 
@@ -91,7 +89,7 @@ namespace ChilliSource
 			desc.VertexLayout = inVertexDeclaration;
 			desc.IndexSize = inudwIndexSizeInBytes;
 			
-			mpMeshBuffer = mpRenderSystem->CreateBuffer(desc);
+			mpMeshBuffer = inpRenderSystem->CreateBuffer(desc);
 			mpMeshBuffer->SetVertexCount(0);
 			mpMeshBuffer->SetIndexCount(0); 
 		}

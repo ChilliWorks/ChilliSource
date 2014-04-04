@@ -46,11 +46,11 @@ namespace ChilliSource
 			
 			for(MapMeshToTransform::const_iterator it = mmapMeshCache.begin(); it != mmapMeshCache.end(); ++it)
 			{
-				MeshSPtr pMesh = it->first->GetMesh();
+				MeshCSPtr pMesh = it->first->GetMesh();
 				
 				for (u32 i = 0; i < pMesh->GetNumSubMeshes(); i++)
 				{
-					SubMeshSPtr pSubMesh = pMesh->GetSubMeshAtIndex(i);
+					SubMeshCSPtr pSubMesh = pMesh->GetSubMeshAtIndex(i);
 					VBufferSize += pSubMesh->GetInternalMeshBuffer()->GetVertexCapacity();
 					IBufferSize += pSubMesh->GetInternalMeshBuffer()->GetIndexCapacity();
 					

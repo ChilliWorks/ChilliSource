@@ -144,19 +144,19 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        const Rendering::FontSPtr& Application::GetDefaultFont()
+        const Rendering::FontSPtr& Application::GetDefaultFont() const
         {
             return m_defaultFont;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        const Rendering::MeshSPtr& Application::GetDefaultMesh()
+        const Rendering::MeshCSPtr& Application::GetDefaultMesh() const
         {
             return m_defaultMesh;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        const Rendering::MaterialSPtr& Application::GetDefaultMaterial()
+        const Rendering::MaterialSPtr& Application::GetDefaultMaterial() const
         {
             return m_defaultMaterial;
         }
@@ -553,6 +553,8 @@ namespace ChilliSource
         //----------------------------------------------------
         void Application::LoadDefaultResources()
         {
+            CS_ASSERT(m_resourcePool, "Resource pool must be available when loading default resources");
+            
             Json::Value jRoot;
             if(Utils::ReadJson(StorageLocation::k_package, "App.config", &jRoot) == true)
             {
@@ -573,7 +575,7 @@ namespace ChilliSource
                 {
                     StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultMesh"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultMesh"].get("Path", "").asString();
-                    m_defaultMesh = LOAD_RESOURCE(Rendering::Mesh, eStorageLocation, strPath);
+                    m_defaultMesh = m_resourcePool->LoadResource<Rendering::Mesh>(eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultFont"))

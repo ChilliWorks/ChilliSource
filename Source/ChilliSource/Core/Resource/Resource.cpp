@@ -16,8 +16,8 @@ namespace ChilliSource
 	{
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		Resource::Resource(ResourcePool* in_resourcePool)
-        : m_resourcePool(in_resourcePool), m_location(StorageLocation::k_none), m_loadState(LoadState::k_loading)
+		Resource::Resource()
+        : m_location(StorageLocation::k_none), m_loadState(LoadState::k_loading)
 		{
 		}
         //-------------------------------------------------------
@@ -33,14 +33,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         void Resource::SetLoadState(LoadState in_loadState)
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
-            
             m_loadState = in_loadState;
-            
-            if(m_loadState == LoadState::k_loaded || m_loadState == LoadState::k_failed)
-            {
-                m_loadWaitCondition.notify_all();
-            }
         }
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -65,23 +58,6 @@ namespace ChilliSource
         StorageLocation Resource::GetStorageLocation() const
 		{
 			return m_location;
-		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		void Resource::WaitTilLoaded()
-		{
-            std::unique_lock<std::mutex> lock(m_mutex);
-
-			while(m_loadState == LoadState::k_loading)
-			{
-				m_loadWaitCondition.wait(lock);
-			}
-		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		void Resource::Release()
-		{
-            m_resourcePool->Release(this);
 		}
 	}
 }

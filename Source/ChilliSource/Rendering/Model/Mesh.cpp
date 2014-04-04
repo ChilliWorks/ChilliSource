@@ -9,10 +9,12 @@
 
 #include <ChilliSource/Rendering/Model/Mesh.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Base/VertexLayouts.h>
 #include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
@@ -26,11 +28,16 @@ namespace ChilliSource
 	namespace Rendering
 	{
         CS_DEFINE_NAMEDTYPE(Mesh);
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        MeshUPtr Mesh::Create()
+        {
+            return MeshUPtr(new Mesh());
+        }
 		//--------------------------------------------------------------------
-		/// Constructor
 		//--------------------------------------------------------------------
-		Mesh::Mesh() 
-		: mpRenderSystem(nullptr), mudwTotalVerts(0), mudwTotalIndices(0), mpSkeleton(new Skeleton())
+		Mesh::Mesh()
+		: mudwTotalVerts(0), mudwTotalIndices(0), mpSkeleton(new Skeleton())
 		{
 		}
 		//---------------------------------------------------------------------
@@ -40,24 +47,78 @@ namespace ChilliSource
 		{
 			return inInterfaceID == Mesh::InterfaceID;
 		}
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        bool Mesh::Build(const MeshDescriptor& in_meshDesc)
+        {
+            bool bSuccess = true;
+            
+            //set the bounds
+            SetBounds(in_meshDesc.mvMinBounds, in_meshDesc.mvMaxBounds);
+            
+            if (in_meshDesc.mFeatures.mbHasAnimationData == true)
+            {
+                mpSkeleton = in_meshDesc.mpSkeleton;
+            }
+            
+            //iterate through each mesh
+            int count = 0;
+            for (auto it = in_meshDesc.mMeshes.begin(); it != in_meshDesc.mMeshes.end(); ++it)
+            {
+                //caclulate the mesh capacities
+                u32 udwVertexDataCapacity = it->mudwNumVertices * in_meshDesc.mVertexDeclaration.GetTotalSize();
+                u32 udwIndexDataCapacity  = it->mudwNumIndices * in_meshDesc.mudwIndexSize;
+                
+                //prepare the mesh if it needs it, otherwise just update the vertex and index declarations.
+                SubMeshSPtr	newSubMesh = CreateSubMesh(it->mstrName);
+                newSubMesh->Prepare(Core::Application::Get()->GetRenderSystem(), in_meshDesc.mVertexDeclaration, in_meshDesc.mudwIndexSize, udwVertexDataCapacity, udwIndexDataCapacity, BufferAccess::k_read, it->ePrimitiveType);
+                
+                //check that the buffers are big enough to hold this data. if not throw an error.
+                if (udwVertexDataCapacity <= newSubMesh->GetInternalMeshBuffer()->GetVertexCapacity() &&
+                    udwIndexDataCapacity <= newSubMesh->GetInternalMeshBuffer()->GetIndexCapacity())
+                {
+                    newSubMesh->Build(it->mpVertexData, it->mpIndexData, it->mudwNumVertices, it->mudwNumIndices, it->mvMinBounds, it->mvMaxBounds);
+                }
+                else
+                {
+                    CS_LOG_ERROR("Sub mesh data exceeds its buffer capacity. Mesh will return empty!");
+                    bSuccess = false;
+                }
+                
+                //add the skeleton controller
+                if (in_meshDesc.mFeatures.mbHasAnimationData == true)
+                {
+                    InverseBindPosePtr ibp(new InverseBindPose());
+                    ibp->mInverseBindPoseMatrices = it->mInverseBindPoseMatrices;
+                    newSubMesh->SetInverseBindPose(ibp);
+                }
+                
+                count++;
+            }
+            
+            CalcVertexAndIndexCounts();
+            
+            //return success
+            return bSuccess;
+        }
 		//-----------------------------------------------------------------
 		/// Get AABB
 		//-----------------------------------------------------------------
-		const Core::AABB& Mesh::GetAABB()
+		const Core::AABB& Mesh::GetAABB() const
 		{
 			return mBoundingBox;
 		}
 		//-----------------------------------------------------------------
         /// Get Number of Vertices
         //-----------------------------------------------------------------
-        u32 Mesh::GetNumVerts()
+        u32 Mesh::GetNumVerts() const
         {
             return mudwTotalVerts;
         }
         //-----------------------------------------------------------------
         /// Get Number of Indices
         //-----------------------------------------------------------------
-        u32 Mesh::GetNumIndices()
+        u32 Mesh::GetNumIndices() const
         {
             return mudwTotalIndices;
         }
@@ -78,19 +139,15 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Get Sub-mesh at Index
 		//-----------------------------------------------------------------
-		SubMeshSPtr Mesh::GetSubMeshAtIndex(u32 inIndex) const
+		SubMeshCSPtr Mesh::GetSubMeshAtIndex(u32 inIndex) const
 		{
-			if(inIndex > mSubMeshes.size())
-			{
-				return SubMeshSPtr();
-			}
-			
+            CS_ASSERT(inIndex < mSubMeshes.size(), "Sub mesh index out of bounds");
 			return mSubMeshes[inIndex];
 		}
 		//-----------------------------------------------------------------
 		/// Get Sub-mesh by Name
 		//-----------------------------------------------------------------
-		SubMeshSPtr Mesh::GetSubMeshByName(const std::string& instrName) const
+		SubMeshCSPtr Mesh::GetSubMeshByName(const std::string& instrName) const
 		{
 			for (std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
@@ -98,7 +155,7 @@ namespace ChilliSource
 					return (*it);
 			}
 			
-			return SubMeshSPtr();
+			return SubMeshCSPtr();
 		}
         //-----------------------------------------------------------------
 		/// Get Sub-mesh Index by Name

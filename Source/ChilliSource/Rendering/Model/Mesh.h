@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
-#include <ChilliSource/Core/Resource/ResourceOld.h>
+#include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
@@ -25,38 +25,54 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class Mesh : public Core::ResourceOld
+		class Mesh : public Core::Resource
 		{
 		public:
 			
 			virtual ~Mesh();
 			
 			CS_DECLARE_NAMEDTYPE(Mesh);
-			
+			//---------------------------------------------------------------------
+            /// Factory method for creating mesh resource instance
+            ///
+            /// @author S Downie
+            ///
+            /// @return Ownership of new instance
+            //---------------------------------------------------------------------
+            static MeshUPtr Create();
 			//---------------------------------------------------------------------
 			/// Is A
 			///
 			/// @return Whether this object is of given type
 			//---------------------------------------------------------------------
 			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+            //----------------------------------------------------------------------------
+            /// Build the mesh from the given description. This will build the mesh buffers
+            /// and sub meshes
+            ///
+            /// @author I Copland
+            ///
+            /// @param Mesh descriptor
+            //----------------------------------------------------------------------------
+            bool Build(const MeshDescriptor& in_meshDesc);
 			//-----------------------------------------------------------------
 			/// Get AABB
 			///
 			/// @return AABB
 			//-----------------------------------------------------------------
-			const Core::AABB& GetAABB();
+			const Core::AABB& GetAABB() const;
             //-----------------------------------------------------------------
             /// Get Number of Vertices
             ///
             /// @return Number of verts in this meshes sub-meshes.
             //-----------------------------------------------------------------
-            u32 GetNumVerts();
+            u32 GetNumVerts() const;
             //-----------------------------------------------------------------
             /// Get Number of Indices
             ///
             /// @return Number of indices in this this meshes sub-meshes.
             //-----------------------------------------------------------------
-            u32 GetNumIndices();
+            u32 GetNumIndices() const;
 			//-----------------------------------------------------------------
 			/// Get Skeleton
 			///
@@ -75,14 +91,14 @@ namespace ChilliSource
 			/// @param Index
 			/// @return Handle to submesh
 			//-----------------------------------------------------------------
-			SubMeshSPtr GetSubMeshAtIndex(u32 inIndex) const;
+			SubMeshCSPtr GetSubMeshAtIndex(u32 inIndex) const;
 			//-----------------------------------------------------------------
 			/// Get Sub-mesh by Name
 			///
 			/// @param Index
 			/// @return Handle to submesh
 			//-----------------------------------------------------------------
-			SubMeshSPtr GetSubMeshByName(const std::string& instrName) const;
+			SubMeshCSPtr GetSubMeshByName(const std::string& instrName) const;
             //-----------------------------------------------------------------
 			/// Get Submesh Index by Name
 			///
@@ -103,7 +119,7 @@ namespace ChilliSource
 			void Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const std::vector<MaterialSPtr>& inMaterials, 
                         const SkinnedAnimationGroupSPtr& inpAnimationGroup = SkinnedAnimationGroupSPtr()) const;
 		private:
-			//Only the mesh loader can create this
+			//Only the pool can create this
 			Mesh();
 			
 			//-----------------------------------------------------------------
@@ -143,7 +159,6 @@ namespace ChilliSource
 			
 			//Only model loaders can alter the mesh construct
 			friend class CSModelProvider;
-			friend class MeshManager;
 			friend class MeshBatch;
 		private:
 			
@@ -153,7 +168,6 @@ namespace ChilliSource
 			Core::AABB mBoundingBox;
 			u32 mudwTotalVerts;
 			u32 mudwTotalIndices;
-			RenderSystem* mpRenderSystem;
 		};
 	}
 }

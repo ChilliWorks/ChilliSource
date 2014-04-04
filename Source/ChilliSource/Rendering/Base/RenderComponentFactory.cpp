@@ -26,6 +26,7 @@
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringParser.h>
@@ -41,7 +42,7 @@ namespace ChilliSource
         /// Managers that are required
 		//--------------------------------------------------------
         RenderComponentFactory::RenderComponentFactory(RenderSystem* inpRenderSystem) 
-        : mpRenderSystem(inpRenderSystem), mpMeshManager(nullptr), mpMaterialManager(nullptr), mpSpriteSheetManager(nullptr), mpTextureManager(nullptr), mpRenderCapabilities(nullptr)
+        : mpRenderSystem(inpRenderSystem), mpMaterialManager(nullptr), mpSpriteSheetManager(nullptr), mpTextureManager(nullptr), mpRenderCapabilities(nullptr)
         {
 			if(!mpSpriteSheetManager)
             {
@@ -54,10 +55,6 @@ namespace ChilliSource
             if(!mpMaterialManager)
             {
                 mpMaterialManager = static_cast<MaterialManager*>(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Material::InterfaceID));
-            }
-            if(!mpMeshManager)
-            {
-                mpMeshManager = static_cast<MeshManager*>(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Mesh::InterfaceID));
             }
             if (!mpRenderCapabilities)
             {
@@ -341,7 +338,7 @@ namespace ChilliSource
 		/// @param Mesh 
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshSPtr& inpModel)
+		StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshCSPtr& inpModel)
 		{
 			StaticMeshComponentUPtr pResult(new StaticMeshComponent());
 			pResult->AttachMesh(inpModel);
@@ -354,7 +351,7 @@ namespace ChilliSource
         /// @param Material 
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial)
+		StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshCSPtr& inpModel, const MaterialSPtr& inpMaterial)
 		{
 			StaticMeshComponentUPtr pResult(new StaticMeshComponent());
 			pResult->AttachMesh(inpModel, inpMaterial);
@@ -368,7 +365,7 @@ namespace ChilliSource
         /// @param Material file
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshSPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName)
+		StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshCSPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName)
 		{
 			MaterialSPtr pMaterial = mpMaterialManager->GetMaterialFromFile(ineStorageLocation, insMaterialName);
 			return CreateStaticMeshComponent(inpModel, pMaterial);
@@ -384,7 +381,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
 		StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFilePath)
 		{
-            MeshSPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFilePath);
+            MeshCSPtr pModel = Core::Application::Get()->GetResourcePool()->LoadResource<Mesh>(ineStorageLocation, instrModelFilePath);
             StaticMeshComponentUPtr pResult(new StaticMeshComponent());
 			pResult->AttachMesh(pModel);
 			return pResult;
@@ -397,9 +394,9 @@ namespace ChilliSource
         /// @param Material
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialSPtr& inpMaterial)
+		StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFilePath, const MaterialSPtr& inpMaterial)
         {
-			MeshSPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFileName);
+			MeshCSPtr pModel = Core::Application::Get()->GetResourcePool()->LoadResource<Mesh>(ineStorageLocation, instrModelFilePath);
 			return CreateStaticMeshComponent(pModel, inpMaterial);
 		}
         //---------------------------------------------------------------------------
@@ -413,7 +410,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
 		StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFilePath, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFilePath)
 		{
-			MeshSPtr pModel = mpMeshManager->GetModelFromFile(ineModelStorageLocation, instrModelFilePath);
+            MeshCSPtr pModel = Core::Application::Get()->GetResourcePool()->LoadResource<Mesh>(ineModelStorageLocation, instrModelFilePath);
 			MaterialSPtr pMaterial = mpMaterialManager->GetMaterialFromFile(ineMaterialStorageLocation, instrMaterialFilePath);
 			
 			if (pModel && pMaterial)
@@ -433,7 +430,7 @@ namespace ChilliSource
 		/// @param Mesh 
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshSPtr& inpModel)
+		AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshCSPtr& inpModel)
 		{
 			AnimatedMeshComponentUPtr pResult(new AnimatedMeshComponent());
 			pResult->AttachMesh(inpModel);
@@ -446,7 +443,7 @@ namespace ChilliSource
         /// @param Material 
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial)
+		AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshCSPtr& inpModel, const MaterialSPtr& inpMaterial)
 		{
 			AnimatedMeshComponentUPtr pResult(new AnimatedMeshComponent());
 			pResult->AttachMesh(inpModel, inpMaterial);
@@ -460,7 +457,7 @@ namespace ChilliSource
         /// @param Material file
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshSPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName)
+		AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshCSPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName)
 		{
 			MaterialSPtr pMaterial = mpMaterialManager->GetMaterialFromFile(ineStorageLocation, insMaterialName);
 			return CreateAnimatedMeshComponent(inpModel, pMaterial);
@@ -476,7 +473,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
 		AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFilePath)
 		{
-            MeshSPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFilePath);
+            MeshCSPtr pModel = Core::Application::Get()->GetResourcePool()->LoadResource<Mesh>(ineStorageLocation, instrModelFilePath);
             AnimatedMeshComponentUPtr pResult(new AnimatedMeshComponent());
 			pResult->AttachMesh(pModel);
 			return pResult;
@@ -489,9 +486,9 @@ namespace ChilliSource
         /// @param Material
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialSPtr& inpMaterial)
+		AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFilePath, const MaterialSPtr& inpMaterial)
         {
-			MeshSPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFileName);
+            MeshCSPtr pModel = Core::Application::Get()->GetResourcePool()->LoadResource<Mesh>(ineStorageLocation, instrModelFilePath);
 			return CreateAnimatedMeshComponent(pModel, inpMaterial);
 		}
         //---------------------------------------------------------------------------
@@ -505,7 +502,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
 		AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFilePath, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFilePath)
 		{
-			MeshSPtr pModel = mpMeshManager->GetModelFromFile(ineModelStorageLocation, instrModelFilePath);
+            MeshCSPtr pModel = Core::Application::Get()->GetResourcePool()->LoadResource<Mesh>(ineModelStorageLocation, instrModelFilePath);
 			MaterialSPtr pMaterial = mpMaterialManager->GetMaterialFromFile(ineMaterialStorageLocation, instrMaterialFilePath);
 			
 			if (pModel && pMaterial)

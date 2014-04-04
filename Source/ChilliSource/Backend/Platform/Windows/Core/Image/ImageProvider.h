@@ -70,7 +70,7 @@ namespace ChilliSource
 			///
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceSPtr& out_resource) override;
+			bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceOldSPtr& out_resource) override;
 			//----------------------------------------------------
 			/// Creates a new resource from file asynchronously.
 			/// The resource will be returned immediately but
@@ -86,7 +86,7 @@ namespace ChilliSource
 			/// @return Whether or not the resource async load was
 			/// successfully started.
 			//----------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filePath, Core::ResourceOldSPtr& out_resource) override;
 		private:
 			friend Core::ImageProviderUPtr Core::ImageProvider::Create();
 			//-------------------------------------------------------

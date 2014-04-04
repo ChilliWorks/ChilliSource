@@ -33,13 +33,13 @@ namespace ChilliSource
         void ResourcePool::AddProvider(ResourceProvider* in_provider)
         {
             CS_ASSERT(in_provider != nullptr, "Cannot add null resource provider to pool");
-            auto itDescriptor = m_descriptors.find(in_provider->GetInterfaceID());
+            auto itDescriptor = m_descriptors.find(in_provider->GetResourceType());
             
             if(itDescriptor == m_descriptors.end())
             {
                 PoolDesc desc;
                 desc.m_providers.push_back(in_provider);
-                m_descriptors.insert(std::make_pair(in_provider->GetInterfaceID(), desc));
+                m_descriptors.insert(std::make_pair(in_provider->GetResourceType(), desc));
             }
             else
             {
@@ -80,6 +80,12 @@ namespace ChilliSource
             std::string combined(ToString((u32)in_location) + in_filePath);
             return HashCRC32::GenerateHashCode(combined);
         }
+        //------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------
+        ResourcePool::ResourceId ResourcePool::GenerateResourceId(const std::string& in_uniqueId) const
+        {
+            return HashCRC32::GenerateHashCode(in_uniqueId);
+        }
         //-------------------------------------------------------------------------------------
         /// Resources often have references to other resources and therefore multiple release passes
         /// are required until no more resources are released
@@ -114,8 +120,9 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------
-        void ResourcePool::Release(Resource* in_resource)
+        void ResourcePool::Release(const Resource* in_resource)
         {
+            CS_ASSERT(in_resource != nullptr, "Pool cannot release raw resource");
             //Find the descriptor that handles this type of resource
             auto itDescriptor = m_descriptors.find(in_resource->GetInterfaceID());
             CS_ASSERT(itDescriptor != m_descriptors.end(), "Failed to find resource provider for " + in_resource->GetInterfaceTypeName());

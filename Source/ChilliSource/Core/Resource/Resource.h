@@ -14,8 +14,6 @@
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
 #include <atomic>
-#include <condition_variable>
-#include <mutex>
 
 namespace ChilliSource
 {
@@ -56,10 +54,8 @@ namespace ChilliSource
             /// Constructor
             ///
             /// @author S Downie
-            ///
-            /// @param Owning resource pool
             //-------------------------------------------------------
-			Resource(ResourcePool* in_resourcePool);
+			Resource();
 			//-------------------------------------------------------
             /// NOTE: Not for general application used by the providers
             /// to set the file path as the resource may need to be
@@ -110,27 +106,6 @@ namespace ChilliSource
             /// @return Current load state
             //-------------------------------------------------------
             LoadState GetLoadState() const;
-			//-------------------------------------------------------
-			/// Block the calling thread until the resource load state
-            /// is changed from loading to loaded or failed
-            ///
-            /// @author S Downie
-			//-------------------------------------------------------
-			void WaitTilLoaded();
-			//-------------------------------------------------------
-            /// Remove the resource from the resource pool and cause it
-            /// to be destroyed. This will assert if it has any references
-            /// so must be called from a raw pointer i.e.
-            ///
-            ///
-            ///  rawPtr = sharedPtr.get();
-            ///  sharedPtr.reset();
-            ///  rawPtr->Release();
-            ///
-            ///
-            /// @author S Downie
-			//-------------------------------------------------------
-			void Release();
             //-------------------------------------------------------
             /// Virtual desctructor
             ///
@@ -140,15 +115,10 @@ namespace ChilliSource
 			
 		private:
 			
-            std::condition_variable m_loadWaitCondition;
-			std::mutex m_mutex;
-            
 			std::string m_filePath;
 			StorageLocation m_location;
         
             std::atomic<LoadState> m_loadState;
-            
-            ResourcePool* m_resourcePool;
 		};
 	}
 }

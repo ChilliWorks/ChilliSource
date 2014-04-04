@@ -204,7 +204,7 @@ namespace ChilliSource
             ///
             /// @return The default font.
             //-----------------------------------------------------
-            const Rendering::FontSPtr& GetDefaultFont();
+            const Rendering::FontSPtr& GetDefaultFont() const;
             //-----------------------------------------------------
 			/// Returns the default mesh described in the App.config
             /// file.
@@ -213,7 +213,7 @@ namespace ChilliSource
 			///
             /// @return The default mesh.
             //-----------------------------------------------------
-            const Rendering::MeshSPtr& GetDefaultMesh();
+            const Rendering::MeshCSPtr& GetDefaultMesh() const;
             //-----------------------------------------------------
 			/// Returns the default material described in the
             /// App.config file.
@@ -222,7 +222,7 @@ namespace ChilliSource
 			///
             /// @return The default material.
             //-----------------------------------------------------
-            const Rendering::MaterialSPtr& GetDefaultMaterial();
+            const Rendering::MaterialSPtr& GetDefaultMaterial() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the state manager.
             ///
@@ -536,7 +536,7 @@ namespace ChilliSource
 
 			TimeIntervalSecs m_currentAppTime;
             Rendering::FontSPtr m_defaultFont;
-            Rendering::MeshSPtr m_defaultMesh;
+            Rendering::MeshCSPtr m_defaultMesh;
             Rendering::MaterialSPtr m_defaultMaterial;
 			f32 m_updateInterval;
             f32 m_updateSpeed;

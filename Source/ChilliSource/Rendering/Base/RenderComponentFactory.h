@@ -88,9 +88,9 @@ namespace ChilliSource
 			///
 			/// A number of overloads 
 			//---------------------------------------------------------------------------
-            StaticMeshComponentUPtr CreateStaticMeshComponent(const MeshSPtr& inpModel);
-			StaticMeshComponentUPtr CreateStaticMeshComponent(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial);
-			StaticMeshComponentUPtr CreateStaticMeshComponent(const MeshSPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName);
+            StaticMeshComponentUPtr CreateStaticMeshComponent(const MeshCSPtr& inpModel);
+			StaticMeshComponentUPtr CreateStaticMeshComponent(const MeshCSPtr& inpModel, const MaterialSPtr& inpMaterial);
+			StaticMeshComponentUPtr CreateStaticMeshComponent(const MeshCSPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName);
 			StaticMeshComponentUPtr CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName);
 			StaticMeshComponentUPtr CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialSPtr& inpMaterial);
 			StaticMeshComponentUPtr CreateStaticMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFileName, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFileName);
@@ -100,9 +100,9 @@ namespace ChilliSource
 			///
 			/// A number of overloads 
 			//---------------------------------------------------------------------------
-            AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(const MeshSPtr& inpModel);
-			AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial);
-			AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(const MeshSPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName);
+            AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(const MeshCSPtr& inpModel);
+			AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(const MeshCSPtr& inpModel, const MaterialSPtr& inpMaterial);
+			AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(const MeshCSPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName);
 			AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName);
 			AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialSPtr& inpMaterial);
 			AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFileName, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFileName);
@@ -127,7 +127,6 @@ namespace ChilliSource
 			
 			RenderSystem* mpRenderSystem;
             
-            MeshManager* mpMeshManager;
 			MaterialManager* mpMaterialManager;
 			TextureManager* mpTextureManager;
 			SpriteSheetManager* mpSpriteSheetManager;

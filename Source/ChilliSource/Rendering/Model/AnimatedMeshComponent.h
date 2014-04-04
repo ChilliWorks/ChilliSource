@@ -149,7 +149,7 @@ namespace ChilliSource
 			/// Attach a mesh to this component
 			/// @param Mesh object
 			//----------------------------------------------------------
-			void AttachMesh(const MeshSPtr& inpModel);
+			void AttachMesh(const MeshCSPtr& inpModel);
             //----------------------------------------------------------
             /// Attach Mesh
             ///
@@ -157,13 +157,13 @@ namespace ChilliSource
             /// material
             /// @param Mesh object
             //----------------------------------------------------------
-            void AttachMesh(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial);
+            void AttachMesh(const MeshCSPtr& inpModel, const MaterialSPtr& inpMaterial);
             //----------------------------------------------------------
             /// Get Mesh
             ///
             /// @return The components internal mesh
             //----------------------------------------------------------
-            const MeshSPtr& GetMesh() const;
+            const MeshCSPtr& GetMesh() const;
 			//----------------------------------------------------------
 			/// Attach Animation
 			///
@@ -449,7 +449,7 @@ namespace ChilliSource
 		private:
             typedef std::vector<std::pair<Core::EntityWPtr, s32> > AttachedEntityList;
             AttachedEntityList maAttachedEntities;
-			MeshSPtr mpModel;
+			MeshCSPtr mpModel;
 			std::vector<MaterialSPtr> mMaterials;
 			SkinnedAnimationGroupSPtr mActiveAnimationGroup;
             SkinnedAnimationGroupSPtr mFadingAnimationGroup;

@@ -13,6 +13,8 @@
 #include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
+#include <functional>
+
 namespace ChilliSource
 {
 	namespace Core
@@ -26,18 +28,25 @@ namespace ChilliSource
 		class ResourceProvider : public AppSystem
 		{
 		public:
-            CS_DECLARE_NAMEDTYPE(ResourceProvider);
+            
             //----------------------------------------------------
-            /// Allows querying of the resource type this provider
-            /// can create.
+            /// Delegate called from async load methods when the
+            /// load finishes. Check the load state of the resource
+            /// for success or failure
             ///
             /// @author S Downie
             ///
-            /// @param The interface ID of the resourouce.
-            ///
-            /// @return Whether or not the resource can be created.
+            /// @param Resource
             //----------------------------------------------------
-			virtual bool CanCreateResourceType(InterfaceIDType in_interfaceId) const = 0;
+            using AsyncLoadDelegate = std::function<void(const std::shared_ptr<const Resource>&)>;
+            
+            CS_DECLARE_NAMEDTYPE(ResourceProvider);
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The resource type this provider can create
+            //----------------------------------------------------
+			virtual InterfaceIDType GetResourceType() const = 0;
             //----------------------------------------------------
             /// Allows querying of the resource type this provider
             /// can create.
@@ -56,6 +65,7 @@ namespace ChilliSource
             ///
             /// @param The storage location.
             /// @param The filepath.
+            /// @param Delegate to callback on completion either success or failure
             /// @param [Out] The output resource.
             //----------------------------------------------------
 			virtual void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) = 0;
@@ -71,7 +81,7 @@ namespace ChilliSource
             /// @param The filepath.
             /// @param [Out] The output resource.
             //----------------------------------------------------
-			virtual void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) = 0;
+			virtual void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource) = 0;
             //----------------------------------------------------
             /// Destructor.
             ///

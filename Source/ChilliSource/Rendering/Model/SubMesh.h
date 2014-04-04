@@ -50,29 +50,29 @@ namespace ChilliSource
 			///
 			/// @return AABB
 			//-----------------------------------------------------------------
-			const Core::AABB& GetAABB();
+			const Core::AABB& GetAABB() const;
 			//-----------------------------------------------------------------
 			/// Get Name
 			///
 			/// @return The meshes name
 			//-----------------------------------------------------------------
-			const std::string& GetName();
+			const std::string& GetName() const;
 			//-----------------------------------------------------------------
             /// Get Number of Vertices
             ///
             /// @return Number of verts in this sub-mesh
             //-----------------------------------------------------------------
-            u32 GetNumVerts();
+            u32 GetNumVerts() const;
             //-----------------------------------------------------------------
             /// Get Number of Indices
             ///
             /// @return Number of indices in this sub-mesh
             //-----------------------------------------------------------------
-            u32 GetNumIndices();
+            u32 GetNumIndices() const;
 			
 		private:
 			//Only the mesh can create this
-			SubMesh(std::string instrName);
+			SubMesh(const std::string& instrName);
 			//-----------------------------------------------------------------
 			/// Prepare
 			///
@@ -133,17 +133,12 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			void Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const MaterialSPtr& inpMaterial, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const;
 			
-			//Only model loaders can alter the mesh construct
-			friend class MeshManager;
 			friend class Mesh;
 			
 		private:
 			
 			std::string mstrName;
 			Core::AABB mBoundingBox;
-			
-			//Used to create hardware buffers and render
-			RenderSystem* mpRenderSystem;
 			
 			//We own this!!!
 			MeshBuffer* mpMeshBuffer;
