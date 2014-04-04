@@ -138,20 +138,20 @@ namespace ChilliSource
             
             if(in_view->Contains(in_pointer.m_location))
             {
-                //We contained the touch when it was released we can raise an event
-                mTouchReleasedInside.NotifyConnections(in_view, in_pointer);
-                
                 if(it != mOpenTouches.end())
                 {
                     mOpenTouches.erase(it);
                 }
                 
+                //We contained the touch when it was released we can raise an event
+                mTouchReleasedInside.NotifyConnections(in_view, in_pointer);
             }
             else if(it != mOpenTouches.end())
             {
+                mOpenTouches.erase(it);
+                
                 //If the touch started within us then we can trigger an event
                 mTouchReleasedOutside.NotifyConnections(in_view, in_pointer);
-                mOpenTouches.erase(it);
             }
         }  
     }
