@@ -99,7 +99,7 @@ namespace ChilliSource
             /// @param The http connection system.
             /// @param The OAuth system.
             //----------------------------------------------------
-            TwitterPostSystem(Networking::HttpRequestSystem* in_HttpRequestSystem, Core::OAuthSystem* in_oauthSystem);
+            TwitterPostSystem(Networking::HttpRequestSystem* in_httpRequestSystem, Core::OAuthSystem* in_oauthSystem);
 			//------------------------------------------------------------------------
 			/// Attempt to post a tweet to Twitter using the iOS Twitter framework
             ///

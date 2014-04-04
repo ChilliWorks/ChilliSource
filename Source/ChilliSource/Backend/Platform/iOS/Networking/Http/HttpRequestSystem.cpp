@@ -134,6 +134,12 @@ namespace ChilliSource
 		{
 			return in_interfaceId == Networking::HttpRequestSystem::InterfaceID || in_interfaceId == HttpRequestSystem::InterfaceID;
 		}
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        void HttpRequestSystem::SetConnectionTimeout(u32 in_timeoutSecs)
+        {
+            m_connectionTimeoutSecs = in_timeoutSecs;
+        }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
 		Networking::HttpRequest* HttpRequestSystem::MakeRequest(const Networking::HttpRequest::Desc& in_requestDesc, const Networking::HttpRequest::Delegate& in_delegate)

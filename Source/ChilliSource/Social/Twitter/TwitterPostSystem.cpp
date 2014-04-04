@@ -49,29 +49,29 @@ namespace ChilliSource
 
         //------------------------------------------------
         //------------------------------------------------
-        TwitterPostSystemUPtr TwitterPostSystem::Create(Networking::HttpRequestSystem* inpHttpRequestSystem, Core::OAuthSystem* inpOAuthSystem)
+        TwitterPostSystemUPtr TwitterPostSystem::Create(Networking::HttpRequestSystem* in_httpRequestSystem, Core::OAuthSystem* in_oauthSystem)
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return TwitterPostSystemUPtr(new ChilliSource::iOS::TwitterPostSystem(inpHttpRequestSystem, inpOAuthSystem));
+            return TwitterPostSystemUPtr(new ChilliSource::iOS::TwitterPostSystem(in_httpRequestSystem, in_oauthSystem));
 #elif CS_TARGETPLATFORM_ANDROID
-            return TwitterPostSystemUPtr(new ChilliSource::Android::TwitterPostSystem(inpHttpRequestSystem, inpOAuthSystem));
+            return TwitterPostSystemUPtr(new ChilliSource::Android::TwitterPostSystem(in_httpRequestSystem, in_oauthSystem));
 #endif
 			return TwitterPostSystemUPtr();
         }
 		//---------------------------------------------------
 		//---------------------------------------------------
-		TwitterPostSystem::TwitterPostSystem(Networking::HttpRequestSystem* in_HttpRequestSystem, Core::OAuthSystem* in_oauthSystem)
+		TwitterPostSystem::TwitterPostSystem(Networking::HttpRequestSystem* in_httpRequestSystem, Core::OAuthSystem* in_oauthSystem)
         : m_isAuthenticated(false)
 		{
-            m_HttpRequestSystem = in_HttpRequestSystem;
+            m_httpRequestSystem = in_httpRequestSystem;
             m_oauthSystem = in_oauthSystem;
-            CS_ASSERT(m_HttpRequestSystem != nullptr && m_oauthSystem != nullptr, "Twitter post system requires the http request system and oauth system.");
+            CS_ASSERT(m_httpRequestSystem != nullptr && m_oauthSystem != nullptr, "Twitter post system requires the http request system and oauth system.");
 		}
         //------------------------------------------------------------------------
 		//------------------------------------------------------------------------
 		void TwitterPostSystem::PostUsingChilliSource(const PostDesc& in_desc)
 		{
-            if(in_desc.m_text.size() > 0 && in_desc.m_text.size() <= k_characterLimit && m_HttpRequestSystem->CheckReachability())
+            if(in_desc.m_text.size() > 0 && in_desc.m_text.size() <= k_characterLimit && m_httpRequestSystem->CheckReachability())
 			{
 				// Construct our Tweet request URL
 				std::string status = k_statusKey + Core::BaseEncoding::URLEncode(in_desc.m_text);
@@ -86,7 +86,7 @@ namespace ChilliSource
 					request.m_headers.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
 					request.m_headers.SetValueForKey(k_oauthAuthHeaderKey, OAuthHeader);
 
-					m_HttpRequestSystem->MakeRequest(request, Core::MakeDelegate(this, &TwitterPostSystem::OnStatusUpdateComplete));
+					m_httpRequestSystem->MakeRequest(request, Core::MakeDelegate(this, &TwitterPostSystem::OnStatusUpdateComplete));
                     return;
 				}
 			}
@@ -133,7 +133,7 @@ namespace ChilliSource
 		{
 			bool bResult = false;
 
-			if(m_HttpRequestSystem->CheckReachability())
+			if(m_httpRequestSystem->CheckReachability())
 			{
 				// Construct our OAuth request URL - 'oob' means out-of-band and tells Twitter we
 				// are on a mobile device.
@@ -150,7 +150,7 @@ namespace ChilliSource
 					httpRequest.m_headers.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
 					httpRequest.m_headers.SetValueForKey(k_oauthAuthHeaderKey, strOAuthHeader);
 
-					m_HttpRequestSystem->MakeRequest(httpRequest, Core::MakeDelegate(this, &TwitterPostSystem::OnRequestOAuthTokenComplete));
+					m_httpRequestSystem->MakeRequest(httpRequest, Core::MakeDelegate(this, &TwitterPostSystem::OnRequestOAuthTokenComplete));
 					bResult = true;
 				}
 			}
@@ -191,7 +191,7 @@ namespace ChilliSource
 		{
 			m_isAuthenticated = false;
 
-			if(m_HttpRequestSystem->CheckReachability())
+			if(m_httpRequestSystem->CheckReachability())
 			{
 				std::string strOAuthHeader;
 
@@ -203,7 +203,7 @@ namespace ChilliSource
 					request.m_headers.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
 					request.m_headers.SetValueForKey(k_oauthAuthHeaderKey, strOAuthHeader);
 
-					m_HttpRequestSystem->MakeRequest(request, Core::MakeDelegate(this, &TwitterPostSystem::OnRequestOAuthAccessTokenComplete));
+					m_httpRequestSystem->MakeRequest(request, Core::MakeDelegate(this, &TwitterPostSystem::OnRequestOAuthAccessTokenComplete));
                     return;
 				}
 			}

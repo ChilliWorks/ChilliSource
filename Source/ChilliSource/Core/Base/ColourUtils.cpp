@@ -20,17 +20,23 @@ namespace ChilliSource
             //-----------------------------------------------------------
             ByteColour ColourToByteColour(const Colour& in_colour)
             {
-                CS_ASSERT(in_colour.r >= 0.0f && in_colour.r <= 1.0f, "Colour must be in range 0.0 - 1.0");
-                CS_ASSERT(in_colour.g >= 0.0f && in_colour.g <= 1.0f, "Colour must be in range 0.0 - 1.0");
-                CS_ASSERT(in_colour.b >= 0.0f && in_colour.b <= 1.0f, "Colour must be in range 0.0 - 1.0");
-                CS_ASSERT(in_colour.a >= 0.0f && in_colour.a <= 1.0f, "Colour must be in range 0.0 - 1.0");
+                return ColourToByteColour(in_colour.r, in_colour.g, in_colour.b, in_colour.a);
+            }
+            //-----------------------------------------------------------
+            //-----------------------------------------------------------
+            ByteColour ColourToByteColour(f32 in_red, f32 in_green, f32 in_blue, f32 in_alpha)
+            {
+                CS_ASSERT(in_red >= 0.0f && in_red <= 1.0f, "Colour must be in range 0.0 - 1.0");
+                CS_ASSERT(in_green >= 0.0f && in_green <= 1.0f, "Colour must be in range 0.0 - 1.0");
+                CS_ASSERT(in_blue >= 0.0f && in_blue <= 1.0f, "Colour must be in range 0.0 - 1.0");
+                CS_ASSERT(in_alpha >= 0.0f && in_alpha <= 1.0f, "Colour must be in range 0.0 - 1.0");
                 
                 ByteColour result;
                 
-                result.r = MathUtils::Round(in_colour.r * 255.0f);
-                result.g = MathUtils::Round(in_colour.g * 255.0f);
-                result.b = MathUtils::Round(in_colour.b * 255.0f);
-                result.a = MathUtils::Round(in_colour.a * 255.0f);
+                result.r = MathUtils::Round(in_red * 255.0f);
+                result.g = MathUtils::Round(in_green * 255.0f);
+                result.b = MathUtils::Round(in_blue * 255.0f);
+                result.a = MathUtils::Round(in_alpha * 255.0f);
                 
                 return result;
             }

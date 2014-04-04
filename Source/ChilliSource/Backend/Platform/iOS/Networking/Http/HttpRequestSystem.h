@@ -50,10 +50,7 @@ namespace ChilliSource
             /// @param The number of seconds that will elapse before a request is deemed to have timed out
             /// on connection
             //--------------------------------------------------------------------------------------------------
-            inline void SetConnectionTimeout(u32 in_timeoutSecs) override
-            {
-                m_connectionTimeoutSecs = in_timeoutSecs;
-            }
+            void SetConnectionTimeout(u32 in_timeoutSecs) override;
             //--------------------------------------------------------------------------------------------------
             /// Causes the system to issue a request with the given details.
             ///

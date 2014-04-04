@@ -13,6 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
+#include <atomic>
 #include <condition_variable>
 #include <mutex>
 

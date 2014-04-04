@@ -36,7 +36,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
-		HttpRequestResultCode HttpRequestJavaInterface::MakeHttpRequest(const std::string& in_url, HttpRequestType in_type, const Core::ParamDictionary& in_headers, const std::string& in_body,
+		HttpRequestJavaInterface::RequestResultCode HttpRequestJavaInterface::MakeHttpRequest(const std::string& in_url, RequestType in_type, const Core::ParamDictionary& in_headers, const std::string& in_body,
 																		std::string& out_response, std::string& out_redirectUrl, s32& out_responseCode)
 		{
 			MethodReference methodRef = GetStaticMethodReference("HttpRequestWithHeaders");
@@ -69,7 +69,7 @@ namespace ChilliSource
 			jintArray resultLengthBuffer = env->NewIntArray(1);
 			jintArray responseCodeBuffer = env->NewIntArray(1);
 			jintArray resultCodeBuffer = env->NewIntArray(1);
-			bool isPost = in_type == HttpRequestType::k_post;
+			bool isPost = in_type == RequestType::k_post;
 
 			//send the request
 			jbyteArray responseBuffer = static_cast<jbyteArray>(env->CallStaticObjectMethod(methodRef.mClassID, methodRef.mMethodID,
@@ -77,11 +77,11 @@ namespace ChilliSource
 					resultLengthBuffer, redirectBuffer, resultCodeBuffer, responseCodeBuffer));
 
 			//get the result codes
-			HttpRequestResultCode result = (HttpRequestResultCode)GetIntElementFromJArray(resultCodeBuffer, 0);
+			RequestResultCode result = (RequestResultCode)GetIntElementFromJArray(resultCodeBuffer, 0);
 			out_responseCode = GetIntElementFromJArray(responseCodeBuffer, 0);
 
 			//if successful, get the response
-			if (result == HttpRequestResultCode::k_success)
+			if (result == RequestResultCode::k_success)
 			{
 				s32 length = GetIntElementFromJArray(resultLengthBuffer, 0);
 				out_response = CreateSTDStringFromJByteArray(responseBuffer, length);

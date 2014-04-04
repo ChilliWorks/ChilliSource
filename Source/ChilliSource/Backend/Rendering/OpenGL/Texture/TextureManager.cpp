@@ -115,7 +115,7 @@ namespace ChilliSource
 					{
 						std::shared_ptr<Texture> pOpenGLTexture = std::static_pointer_cast<Texture>(pTexture);
 						Core::ImageSPtr pImage = Core::ImageSPtr(new Core::Image());
-						Core::ResourceOldSPtr pImageResource = std::static_pointer_cast<Core::Resource>(pImage);
+						Core::ResourceOldSPtr pImageResource = std::static_pointer_cast<Core::ResourceOld>(pImage);
 
 						//If the texture was loaded from file then reload it.
 						if(pOpenGLTexture->GetFilename() != "" && pOpenGLTexture->GetStorageLocation() != Core::StorageLocation::k_none)
