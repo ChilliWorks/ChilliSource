@@ -7,9 +7,10 @@
 //
 
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/String/StringUtils.h>
+
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
