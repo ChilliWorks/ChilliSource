@@ -689,7 +689,7 @@ namespace ChilliSource
                 f32 fTextHeight = 0.0f;
                 
                 //Calculate the width of the label based on the bounds and the length of the text
-                f32 fTextWidth = inpCanvas->CalculateStringWidth(Text, Font, TextScale * mfGlobalTextScale, CharacterSpacing);
+                f32 fTextWidth = inpCanvas->CalculateStringWidth(Text, Font, TextScale * mfGlobalTextScale, CharacterSpacing, false);
                 
                 if(fTextWidth > vAbsMaxSize.x)
                 {

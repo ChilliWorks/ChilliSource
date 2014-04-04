@@ -465,6 +465,24 @@ namespace ChilliSource
             
             return strResult;
         }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        bool UTF8String::IsNonBreakingSpace(Char in_char)
+        {
+            //Check for the 2-byte Non-breaking space
+            if(in_char > 0x7F && in_char <= 0x7FF)
+            {
+                u8 byte1 = 0xC0 | ((in_char>>6) & 0x1F);
+                u8 byte2 = 0x80 | ((in_char) & 0x3F);
+                
+                if(byte1 == 0xC2 && byte2 == 0xA0)
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
         
         UTF8String operator+(const UTF8String& instrUTF8String, const UTF8String& instrUTF8String2)
         {

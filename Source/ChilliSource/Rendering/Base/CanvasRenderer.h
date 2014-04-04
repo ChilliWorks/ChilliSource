@@ -119,7 +119,7 @@ namespace ChilliSource
             ///
             /// @return String length
             //------------------------------------------------------------
-            f32 CalculateStringWidth(const Core::UTF8String& insString, const FontSPtr& inpFont, f32 infSize, f32 infCharSpacing);
+            f32 CalculateStringWidth(const Core::UTF8String& insString, const FontSPtr& inpFont, f32 infSize, f32 infCharSpacing, bool inbIgnoreLineBreaks);
             //-----------------------------------------------------------
             /// Calculate String Height
             ///

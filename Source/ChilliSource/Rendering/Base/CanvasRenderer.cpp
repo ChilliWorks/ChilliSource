@@ -22,6 +22,8 @@
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
+#include <algorithm>
+
 namespace ChilliSource
 {
 	namespace Rendering
@@ -318,12 +320,14 @@ namespace ChilliSource
         /// Calculate the length of a string based on the font
         /// and attributes
         //------------------------------------------------------------
-        f32 CanvasRenderer::CalculateStringWidth(const Core::UTF8String& insString, const FontSPtr& inpFont, f32 infSize, f32 infCharSpacing)
+        f32 CanvasRenderer::CalculateStringWidth(const Core::UTF8String& insString, const FontSPtr& inpFont, f32 infSize, f32 infCharSpacing, bool inbIgnoreLinesBreaks)
         {
             Core::Vector2 vSize;
             
             //Track the character width
-            f32 fWidth = 0.0f;
+            std::vector<f32> aLineWidths;
+            aLineWidths.push_back(0.0f);
+            
 			f32 fLastCharacterWidth = 0.0f;
             
             //Make sure we scale the spacing if we have scaled the text
@@ -336,9 +340,16 @@ namespace ChilliSource
             Core::UTF8String::iterator it = (Core::UTF8String::iterator)insString.begin();
 			while(insString.end() != it)
 			{
-                //Get character for iterator codepoint and bump the iterator to the beginning of 
+                //Get character for iterator codepoint and bump the iterator to the beginning of
                 //the next character
                 Core::UTF8String::Char Char = insString.next(it);
+                
+                // If we are breaking on new lines, create a new counter.
+                if(!inbIgnoreLinesBreaks && (Char == kReturnCharacter))
+                {
+                    aLineWidths.push_back(0.0f);
+                    continue;
+                }
                 
                 // If kerning is supported, then we need the next character
                 Core::UTF8String::Char NextChar = Char;
@@ -351,10 +362,11 @@ namespace ChilliSource
                 //Construct the characters position and size from the font sheet and add it to the line
                 BuildCharacter(inpFont, Char, NextChar, vSize, infSize, infCharSpacing, fLastCharacterWidth, CurrentLine);
                 
-                fWidth += fLastCharacterWidth;
+                aLineWidths.back() += fLastCharacterWidth;
             }
             
-            return fWidth;
+            // Return the largest line.
+            return *std::max_element(aLineWidths.begin(), aLineWidths.end());
         }
         //-----------------------------------------------------------
         /// Calculate String Height
@@ -719,6 +731,7 @@ namespace ChilliSource
 					outCharacters.push_back(sOutCharacter);
 					break;
 				}
+                case CharacterResult::k_nbsp:
 				case CharacterResult::k_space:
 				{
 					//No sprite just space. The cursor will increment anyway

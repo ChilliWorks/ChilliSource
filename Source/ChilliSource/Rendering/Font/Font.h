@@ -45,6 +45,7 @@ namespace ChilliSource
 		enum class CharacterResult
 		{
             k_space,
+            k_nbsp,
             k_tab,
             k_return,
             k_invalid,

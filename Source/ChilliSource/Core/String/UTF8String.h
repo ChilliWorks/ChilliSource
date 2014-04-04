@@ -169,6 +169,14 @@ namespace ChilliSource
             /// @return std string
             //---------------------------------------------------------
             std::string ToASCII() const;
+            //-------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param UTF-8 character
+            ///
+            /// @return Whether the char is a nbsp
+            //-------------------------------------------------------
+            static bool IsNonBreakingSpace(Char in_char);
             
             //---Operators
             Char operator[](u32 inudwIndex) const

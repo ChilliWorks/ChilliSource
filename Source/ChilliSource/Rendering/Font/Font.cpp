@@ -159,19 +159,20 @@ namespace ChilliSource
 		//-------------------------------------------
 		CharacterResult Font::GetInfoForCharacter(Core::UTF8String::Char inChar, CharacterInfo& outInfo) const
 		{
-			//Check for space character. That won't be in the glyph file or the font bitmap.
-			if(inChar == kSpaceCharacter)
-			{
-				return CharacterResult::k_space;
-			}
-			else if(inChar == kTabCharacter)
-			{
-				return CharacterResult::k_tab;
-			}
-			else if(inChar == kReturnCharacter)
-			{
-				return CharacterResult::k_return;
-			}
+			switch(inChar)
+            {
+                case kSpaceCharacter:
+                    return CharacterResult::k_space;
+                case kTabCharacter:
+                    return CharacterResult::k_tab;
+                case kReturnCharacter:
+                    return CharacterResult::k_return;
+            }
+
+            if(Core::UTF8String::IsNonBreakingSpace(inChar) == true)
+            {
+                return CharacterResult::k_nbsp;
+            }
 			
 			CharToCharInfoMap::const_iterator pCharEntry = mMapCharToCharInfo.find(inChar);
 			
