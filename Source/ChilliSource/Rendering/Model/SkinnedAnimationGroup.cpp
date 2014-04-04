@@ -207,7 +207,7 @@ namespace ChilliSource
             //check that they have the same number of joints
 			if (kadwJoints.size() != inInverseBindPoseMatrices.size())
 			{
-				CS_LOG_ERROR("Cannot apply bind pose matrices to joint matrices, becuase they are not from the same skeleton.");
+				CS_LOG_ERROR("Cannot apply bind pose matrices to joint matrices, because they are not from the same skeleton.");
 			}
 			
 			//iterate through and multiply together to get the new array

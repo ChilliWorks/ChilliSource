@@ -79,7 +79,7 @@ namespace ChilliSource
 			/// create the directory becuase it already exists is considered
 			/// a success.
 			//--------------------------------------------------------------
-			bool CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
+			bool CreateDirectoryPath(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
 			//--------------------------------------------------------------
 			/// Copies a file from one location to another.
 			///

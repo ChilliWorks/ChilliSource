@@ -249,9 +249,9 @@ namespace ChilliSource
             m_documentsPath = RetrieveDocumentsPath();
             m_libraryPath = RetrieveLibraryPath();
             
-            CreateDirectory(Core::StorageLocation::k_saveData, "");
-            CreateDirectory(Core::StorageLocation::k_cache, "");
-            CreateDirectory(Core::StorageLocation::k_DLC, "");
+            CreateDirectoryPath(Core::StorageLocation::k_saveData, "");
+            CreateDirectoryPath(Core::StorageLocation::k_cache, "");
+            CreateDirectoryPath(Core::StorageLocation::k_DLC, "");
             
             CreatePackageManifest();
 		}
@@ -283,7 +283,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool FileSystem::CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+        bool FileSystem::CreateDirectoryPath(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
         {
             CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
             
@@ -326,7 +326,7 @@ namespace ChilliSource
                 Core::StringUtils::SplitFilename(in_destinationFilePath, destinationFileName, destinationDirectoryPath);
                 
                 //create the output directory
-                CreateDirectory(in_destinationStorageLocation, destinationDirectoryPath);
+                CreateDirectoryPath(in_destinationStorageLocation, destinationDirectoryPath);
                 
                 std::string destinationPath = GetAbsolutePathToStorageLocation(in_destinationStorageLocation) + in_destinationFilePath;
                 std::string atomicDestinationPath = destinationPath + ".tmp";
@@ -377,7 +377,7 @@ namespace ChilliSource
             //error if there are no files
             if (astrFilenames.size() == 0)
             {
-                CreateDirectory(in_destinationStorageLocation, in_destinationDirectoryPath);
+                CreateDirectoryPath(in_destinationStorageLocation, in_destinationDirectoryPath);
             }
             else
             {

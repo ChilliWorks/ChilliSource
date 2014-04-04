@@ -501,7 +501,7 @@ namespace ChilliSource
         //-------------------------------------------------------------
         void GooglePlayExpansionSystem::Unzip(const std::string& instrZipPath, Json::Value& outjManifest)
         {
-        	Core::Application::Get()->GetFileSystem()->CreateDirectory(Core::StorageLocation::k_DLC, "");
+        	Core::Application::Get()->GetFileSystem()->CreateDirectoryPath(Core::StorageLocation::k_DLC, "");
 
         	unzFile ZippedFile = unzOpen(instrZipPath.c_str());
 
@@ -550,7 +550,7 @@ namespace ChilliSource
 						jManifestEntry["Path"] = GetRootFolderExcludingPath(strFilePath);
 
 						std::string strPath = GetPathExcludingFileName(strFilePath);
-						Core::Application::Get()->GetFileSystem()->CreateDirectory(Core::StorageLocation::k_DLC, "/" + strPath);
+						Core::Application::Get()->GetFileSystem()->CreateDirectoryPath(Core::StorageLocation::k_DLC, "/" + strPath);
 					}
 					else
 					{

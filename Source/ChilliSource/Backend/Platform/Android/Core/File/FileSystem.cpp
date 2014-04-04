@@ -415,7 +415,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directory) const
+		bool FileSystem::CreateDirectoryPath(Core::StorageLocation in_storageLocation, const std::string& in_directory) const
 		{
 			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
 
@@ -485,7 +485,7 @@ namespace ChilliSource
 				Core::StringUtils::SplitFilename(in_destinationFilePath, name, path);
 
 				//create the output directory
-				CreateDirectory(in_destinationStorageLocation, path);
+				CreateDirectoryPath(in_destinationStorageLocation, path);
 
 				//try and copy the file
 				Android::CopyFile(sourceAbsolutePath, destinationAbsolutePath);
@@ -511,7 +511,7 @@ namespace ChilliSource
 			//error if there are no files
 			if (filenames.size() == 0)
 			{
-				CreateDirectory(in_destinationStorageLocation, in_destinationDirectoryPath);
+				CreateDirectoryPath(in_destinationStorageLocation, in_destinationDirectoryPath);
 			}
 			else
 			{
@@ -894,7 +894,7 @@ namespace ChilliSource
 
 								std::string outputDirectoryPath, outputFileName;
 								Core::StringUtils::SplitFilename(in_destinationFilePath, outputFileName, outputDirectoryPath);
-								if (CreateDirectory(in_destinationStorageLocation, outputDirectoryPath) == true)
+								if (CreateDirectoryPath(in_destinationStorageLocation, outputDirectoryPath) == true)
 								{
 									char* dataBuffer = new char[info.uncompressed_size];
 									unzReadCurrentFile(unzip, (voidp)dataBuffer, info.uncompressed_size);

@@ -154,9 +154,10 @@ namespace ChilliSource
         {
             std::vector<std::string> filePaths = GetFilePaths(in_storageLocation, in_directoryPath, in_recursive);
             
-            auto it = std::remove_if(filePaths.begin(), filePaths.end(), [&in_extension] (const std::string& in_path)
+            std::string extension = "." + in_extension;
+            auto it = std::remove_if(filePaths.begin(), filePaths.end(), [&] (const std::string& in_path)
             {
-                return (Core::StringUtils::EndsWith(in_path, "." + in_extension, true) == false);
+                return (Core::StringUtils::EndsWith(in_path, extension, true) == false);
             });
             
             filePaths.resize(it - filePaths.begin());

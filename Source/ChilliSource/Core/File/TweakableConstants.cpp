@@ -70,7 +70,7 @@ namespace ChilliSource
 			//TODO Need to resolve paths properly using Windows stuff to ensure no repeated definitions
             for (std::vector<StorageLocationAndFilenamePtr>::iterator it = mFileNames.begin(); it != mFileNames.end(); ++it)
             {
-                if ((*it)->mstrFilename == fileName)
+                if ((*it)->mstrFilename == fileName && (*it)->meStorageLocation == ineStorageLocation)
                 {
                     bAlreadyExists = true;
                     break;

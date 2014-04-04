@@ -21,8 +21,6 @@
 #include <ChilliSource/Backend/Platform/Windows/Core/File/WindowsFileUtils.h>
 
 //Undefine the windows file system functions that share names with ours.
-#undef CreateDirectory
-#undef CreateFile
 #undef CopyFile
 #undef DeleteFile
 
@@ -218,9 +216,9 @@ namespace ChilliSource
 			m_packagePath = strWorkingDir + "assets/";
 			m_documentsPath = strWorkingDir + "Documents/";
 
-			CreateDirectory(Core::StorageLocation::k_saveData, "");
-			CreateDirectory(Core::StorageLocation::k_cache, "");
-			CreateDirectory(Core::StorageLocation::k_DLC, "");
+			CreateDirectoryPath(Core::StorageLocation::k_saveData, "");
+			CreateDirectoryPath(Core::StorageLocation::k_cache, "");
+			CreateDirectoryPath(Core::StorageLocation::k_DLC, "");
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
@@ -251,7 +249,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+		bool FileSystem::CreateDirectoryPath(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
 		{
 			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
 
@@ -286,7 +284,7 @@ namespace ChilliSource
 			ChilliSource::Core::StringUtils::SplitFilename(in_destinationFilePath, destinationFileName, destinationDirectoryPath);
             
             //create the output directory
-			CreateDirectory(in_destinationStorageLocation, destinationDirectoryPath);
+			CreateDirectoryPath(in_destinationStorageLocation, destinationDirectoryPath);
             
             //try and copy the files
 			std::wstring sourceWPath = WindowsStringUtils::ConvertStandardPathToWindows(sourceFilePath);
@@ -317,7 +315,7 @@ namespace ChilliSource
 			//if the source directory is empty, just create the equivelent directory in the destination
 			if (filePaths.size() == 0)
 			{
-				CreateDirectory(in_destinationStorageLocation, in_destinationDirectoryPath);
+				CreateDirectoryPath(in_destinationStorageLocation, in_destinationDirectoryPath);
 			}
 			else
 			{

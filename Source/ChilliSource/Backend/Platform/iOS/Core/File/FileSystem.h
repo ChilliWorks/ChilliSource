@@ -62,10 +62,10 @@ namespace ChilliSource
             /// @param The directory path.
             ///
             /// @return Returns whether or not this was successful. Failure to
-            /// create the directory becuase it already exists is considered
+            /// create the directory because it already exists is considered
             /// a success.
             //--------------------------------------------------------------
-            bool CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
+            bool CreateDirectoryPath(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
             //--------------------------------------------------------------
             /// Copies a file from one location to another.
             ///
