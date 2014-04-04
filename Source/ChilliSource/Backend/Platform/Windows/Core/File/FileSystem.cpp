@@ -212,7 +212,7 @@ namespace ChilliSource
 			wchar_t pathChars[MAX_PATH];
 			GetModuleFileName(nullptr, pathChars, MAX_PATH);
 			std::string path = WindowsStringUtils::ConvertWindowsPathToStandard(std::wstring(pathChars));
-			std::string::size_type pos = path.find_last_of("\\/");
+			std::string::size_type pos = path.find_last_of("/");
 			std::string strWorkingDir = Core::StringUtils::StandardisePath(path.substr(0, pos));
 
 			m_packagePath = strWorkingDir + "assets/";

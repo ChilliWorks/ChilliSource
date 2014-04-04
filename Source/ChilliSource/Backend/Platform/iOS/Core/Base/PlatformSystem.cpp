@@ -7,6 +7,7 @@
 //
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSString+MD5Addition.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/UIDevice+IdentifierAddition.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
@@ -96,7 +97,7 @@ namespace ChilliSource
 		{
 			NSString * type = [[UIDevice currentDevice] model];
 
-			return (ChilliSource::Core::StringUtils::NSStringToString(type));
+			return (NSStringUtils::NSStringToString(type));
 		}
 		//----------------------------------------------
 		//----------------------------------------------
@@ -110,7 +111,7 @@ namespace ChilliSource
 			free(machine);
 
 			std::string output;
-			std::string modelType = ChilliSource::Core::StringUtils::NSStringToString(platform);
+			std::string modelType = NSStringUtils::NSStringToString(platform);
 			bool record = false;
 			for(std::string::const_iterator it = modelType.begin(); it != modelType.end(); ++it)
 			{
@@ -137,7 +138,7 @@ namespace ChilliSource
         std::string PlatformSystem::GetOSVersion() const
         {
             NSString* version = [[UIDevice currentDevice] systemVersion];
-			return ChilliSource::Core::StringUtils::NSStringToString(version);
+			return NSStringUtils::NSStringToString(version);
         }
         //---------------------------------------------
 		//---------------------------------------------
@@ -205,12 +206,12 @@ namespace ChilliSource
                     uid = [UIDevice currentDevice].identifierForVendor;
                 }
                 
-                return ChilliSource::Core::StringUtils::NSStringToString([uid UUIDString]);
+                return NSStringUtils::NSStringToString([uid UUIDString]);
             }
             else
             {
                 NSString* udid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
-                return ChilliSource::Core::StringUtils::NSStringToString(udid);
+                return NSStringUtils::NSStringToString(udid);
             }
         }
         //-------------------------------------------------
@@ -218,7 +219,7 @@ namespace ChilliSource
         std::string PlatformSystem::GetAppVersion() const
         {
             NSString* version = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-            return ChilliSource::Core::StringUtils::NSStringToString(version);
+            return NSStringUtils::NSStringToString(version);
         }
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -255,7 +256,7 @@ namespace ChilliSource
                 NSString *platform = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
                 free(machine);
                 
-                std::string deviceName = ChilliSource::Core::StringUtils::NSStringToString(platform);
+                std::string deviceName = NSStringUtils::NSStringToString(platform);
                 
                 //3.5 inch screens
                 if (deviceName == "iPhone1,1" || deviceName == "iPhone1,2" || deviceName == "iPhone2,1" || deviceName == "iPhone3,1" || deviceName == "iPhone3,2" ||

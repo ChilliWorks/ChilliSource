@@ -10,12 +10,13 @@
 #include <ChilliSource/Backend/Platform/iOS/Web/Base/WebViewActivity.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 
-#include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/Base/Screen.h>
-
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/FileStream.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+
 #include <UIKit/UIKit.h>
 #include <QuartzCore/CALayer.h>
 
@@ -48,7 +49,7 @@ namespace ChilliSource
 				
                 mstrAnchor = "";
                 
-				NSURL* pUrl = [NSURL URLWithString:Core::StringUtils::StringToNSString(instrURL)];
+				NSURL* pUrl = [NSURL URLWithString:NSStringUtils::StringToNSString(instrURL)];
 				
 				[mpWebView loadRequest:[NSURLRequest requestWithURL:pUrl]];
 				
@@ -113,9 +114,9 @@ namespace ChilliSource
                 Core::FileStreamSPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
                 pHTMLFile->GetAll(strHTMLFileContents);
                 
-                NSString* pstrHTML = Core::StringUtils::StringToNSString(strHTMLFileContents);
+                NSString* pstrHTML = NSStringUtils::StringToNSString(strHTMLFileContents);
 
-                [mpWebView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:Core::StringUtils::StringToNSString(strPath)]];
+                [mpWebView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:NSStringUtils::StringToNSString(strPath)]];
                 
                 mpWebView.backgroundColor = [UIColor clearColor];
                 mpWebView.opaque = NO;
@@ -299,7 +300,7 @@ namespace ChilliSource
 {
 	if(navigationType == UIWebViewNavigationTypeLinkClicked)
 	{
-        std::string strScheme = ChilliSource::Core::StringUtils::NSStringToString([[request URL] scheme]);
+        std::string strScheme = ChilliSource::iOS::NSStringUtils::NSStringToString([[request URL] scheme]);
         
         if(strScheme != "file")
         {
@@ -316,7 +317,7 @@ namespace ChilliSource
     if(mpDelegate->HasAnchor())
     {
         std::string strJavaScript = "window.location.href = '" + mpDelegate->GetAnchor() + "';";
-        [webView stringByEvaluatingJavaScriptFromString:ChilliSource::Core::StringUtils::StringToNSString(strJavaScript)];
+        [webView stringByEvaluatingJavaScriptFromString:ChilliSource::iOS::NSStringUtils::StringToNSString(strJavaScript)];
     }
     
     mpDelegate->AddDismissButton();

@@ -359,5 +359,24 @@ namespace ChilliSource
         {
             return s_resourceDirectory;
         }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        bool FileSystem::IsWriteMode(Core::FileMode in_fileMode) const
+        {
+            switch (in_fileMode)
+            {
+                case Core::FileMode::k_write:
+                case Core::FileMode::k_writeAppend:
+                case Core::FileMode::k_writeAtEnd:
+                case Core::FileMode::k_writeBinary:
+                case Core::FileMode::k_writeBinaryAppend:
+                case Core::FileMode::k_writeBinaryAtEnd:
+                case Core::FileMode::k_writeBinaryTruncate:
+                case Core::FileMode::k_writeTruncate:
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 }

@@ -358,7 +358,7 @@ namespace ChilliSource
 			///
 			/// @return The output paths.
 			//--------------------------------------------------------------
-			std::vector<std::string> GetPaths(const std::string& in_directoryPath, bool in_recurse, const std::string& in_parentDirectoryPath = "") const;
+			std::vector<std::string> GetAllPaths(const std::string& in_directoryPath, bool in_recurse, const std::string& in_parentDirectoryPath = "") const;
             //------------------------------------------------------------
             /// Builds a list of the paths that the given path might refer
 			/// to in the given storage location. For example, a path in

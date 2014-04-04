@@ -10,6 +10,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Social/Communications/SMSCompositionActivity.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 namespace ChilliSource{
@@ -52,11 +53,11 @@ namespace ChilliSource{
 			NSMutableArray * pNamesArray = [[NSMutableArray alloc] initWithCapacity:inastrRecipientNumbers.size()];
 			
 			for (u32 nRecipient = 0; nRecipient < inastrRecipientNumbers.size(); nRecipient++){			
-				[pNamesArray addObject:Core::StringUtils::UTF8StringToNSString(inastrRecipientNumbers[nRecipient])];
+				[pNamesArray addObject:NSStringUtils::UTF8StringToNSString(inastrRecipientNumbers[nRecipient])];
 			}
 			mpVC.recipients = pNamesArray;
 			
-			mpVC.body = Core::StringUtils::UTF8StringToNSString(instrContents);
+			mpVC.body = NSStringUtils::UTF8StringToNSString(instrContents);
 			[pRootVC presentModalViewController:mpVC animated:YES];
 			
 			[mpVC release];

@@ -444,6 +444,12 @@ namespace ChilliSource
             /// @return The resource directories.
             //--------------------------------------------------------------
             const std::string* GetResourceDirectories() const;
+            //--------------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return whether or not the given file mode is a write mode
+            //--------------------------------------------------------------
+            bool IsWriteMode(Core::FileMode in_fileMode) const;
         private:
             std::string m_packageDLCPath;
             

@@ -666,60 +666,7 @@ namespace ChilliSource
                     }
                 }
             }
-            
-    #if CS_TARGETPLATFORM_IOS && __OBJC__
-            /**
-             //Given a NSString it converts it to a UTF-8 string
-             @param input string
-             @returns utf8 string
-             */
-            UTF8String NSStringToUTF8String(NSString* inpString)
-            {   
-                NSStringEncoding pEncode    =   CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);   
-                NSData* pSData              =   [inpString dataUsingEncoding : pEncode];    
-                
-                return UTF8String ((UTF8String::CodePoint*) [pSData bytes], [pSData length]);   
-            }
-            /**
-             //Given a NSString UTF-8 map each code point to a char in the std::string
-             @param NSString utf8 string
-             @returns std::string
-             */
-            std::string NSStringToString(NSString* inpString)
-            {
-                if(inpString == nil)
-                    return "";
-                return [inpString cStringUsingEncoding:NSUTF8StringEncoding];
-            }
-            /**
-             //Given a UTF-8 convert to NSString
-             @param utf8 string
-             @returns NSString
-             */
-            NSString* UTF8StringToNSString(const UTF8String& instrString)
-            {
-                s8* pData = (s8*)instrString.data();
-                size_t Length = instrString.data_size();
-                
-                if(pData == nullptr || Length == 0)
-                    return [[[NSString alloc] init] autorelease];
-                
-                NSStringEncoding pEncode = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);  
-                
-                NSString* result = [[[NSString alloc] initWithBytes:pData length:Length encoding:pEncode] autorelease];
-                return result;
-            }
-            /**
-             //Given a std::string UTF-8 convert to a NSString utf8
-             @param std::string
-             @returns NSString
-             */
-            NSString* StringToNSString(const std::string& instrString)
-            {
-                return [NSString stringWithCString:instrString.c_str() encoding: NSUTF8StringEncoding];
-            }
-    #endif
-            
+
             //-- Private
             
 

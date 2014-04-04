@@ -8,6 +8,8 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Core/Notification/LocalNotificationSystem.h>
 
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+
 #import <UIKit/UIKit.h>
 
 namespace ChilliSource
@@ -36,7 +38,7 @@ namespace ChilliSource
                 NSDictionary* nsParams = (NSDictionary*)[in_uiLocal.userInfo objectForKey:@"Params"];
                 for(id key in nsParams)
                 {
-                    notification->m_params.SetValueForKey(Core::StringUtils::NSStringToString([nsParams objectForKey:key]), Core::StringUtils::NSStringToString(key));
+                    notification->m_params.SetValueForKey(NSStringUtils::NSStringToString([nsParams objectForKey:key]), NSStringUtils::NSStringToString(key));
                 }
                 
                 return notification;
@@ -79,11 +81,11 @@ namespace ChilliSource
                     nsNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)in_time];
                     nsNotification.timeZone = [NSTimeZone defaultTimeZone];
                     nsNotification.alertAction = @"View";
-                    nsNotification.alertBody = Core::StringUtils::StringToNSString(in_params.ValueForKey("Body"));
+                    nsNotification.alertBody = NSStringUtils::StringToNSString(in_params.ValueForKey("Body"));
                     
                     if(in_params.HasValue("Sound") == true)
                     {
-                        nsNotification.soundName = Core::StringUtils::StringToNSString(in_params.ValueForKey("Sound"));
+                        nsNotification.soundName = NSStringUtils::StringToNSString(in_params.ValueForKey("Sound"));
                     }
                     else
                     {
@@ -95,7 +97,7 @@ namespace ChilliSource
                     NSMutableDictionary* nsParams = [[NSMutableDictionary alloc] init];
                     for(Core::StringToStringMap::const_iterator it = in_params.begin(); it != in_params.end(); ++it)
                     {
-                        [nsParams setObject:Core::StringUtils::StringToNSString(it->first) forKey:Core::StringUtils::StringToNSString(it->second)];
+                        [nsParams setObject:NSStringUtils::StringToNSString(it->first) forKey:NSStringUtils::StringToNSString(it->second)];
                     }
                     
                     //Encode the type ID into the notification so we can retrieve it at the other end

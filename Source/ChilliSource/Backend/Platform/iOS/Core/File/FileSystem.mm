@@ -8,6 +8,7 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #include <iostream>
@@ -26,29 +27,6 @@ namespace ChilliSource
             const std::string k_dlcPath  = "Caches/DLC/";
             
             //--------------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return whether or not the given file mode is a write mode
-            //--------------------------------------------------------------
-            bool IsWriteMode(Core::FileMode in_fileMode)
-            {
-                switch (in_fileMode)
-                {
-                    case Core::FileMode::k_write:
-                    case Core::FileMode::k_writeAppend:
-                    case Core::FileMode::k_writeAtEnd:
-                    case Core::FileMode::k_writeBinary:
-                    case Core::FileMode::k_writeBinaryAppend:
-                    case Core::FileMode::k_writeBinaryAtEnd:
-                    case Core::FileMode::k_writeBinaryTruncate:
-                    case Core::FileMode::k_writeTruncate:
-                        return true;
-                    default:
-                        return false;
-                        
-                }
-            }
-            //--------------------------------------------------------------
             /// Returns a string containing the error in the given NSError.
             ///
             /// @author I Copland
@@ -59,7 +37,7 @@ namespace ChilliSource
             {
                 if (in_error != nil)
                 {
-                    return Core::StringUtils::NSStringToString([in_error localizedDescription]);
+                    return NSStringUtils::NSStringToString([in_error localizedDescription]);
                 }
                 
                 return nil;
@@ -161,7 +139,7 @@ namespace ChilliSource
                 std::vector<std::string> output;
                 for(NSString* filePath in in_objFilePaths)
                 {
-                    output.push_back(ChilliSource::Core::StringUtils::NSStringToString(filePath));
+                    output.push_back(NSStringUtils::NSStringToString(filePath));
                 }
                 return output;
             }
@@ -176,18 +154,23 @@ namespace ChilliSource
 			//--------------------------------------------------------------
             bool DoesFileExist(const std::string& in_filePath)
             {
-                BOOL bDirectory = NO;
-                bool bExists = false;
-                NSFileManager *fileManager= [NSFileManager defaultManager];
-                NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
+                bool fileExists = false;
                 
-                if ([fileManager fileExistsAtPath:[NSString stringWithUTF8String:in_filePath.c_str()] isDirectory:&bDirectory])
+                @autoreleasepool
                 {
-                    bExists = true;
+                    BOOL bDirectory = NO;
+                    bool bExists = false;
+                    
+                    NSFileManager *fileManager = [NSFileManager defaultManager];
+                    if ([fileManager fileExistsAtPath:[NSString stringWithUTF8String:in_filePath.c_str()] isDirectory:&bDirectory])
+                    {
+                        bExists = true;
+                    }
+                    
+                    fileExists = (bExists && !bDirectory);
                 }
                 
-                [pPool release];
-                return (bExists && !bDirectory);
+                return fileExists;
             }
             //--------------------------------------------------------------
 			/// returns whether the path exists on the filesystem
@@ -200,18 +183,23 @@ namespace ChilliSource
 			//--------------------------------------------------------------
             bool DoesDirectoryExist(const std::string& in_directoryPath)
             {
-                BOOL bDirectory = NO;
-                bool bExists = false;
-                NSFileManager *fileManager= [NSFileManager defaultManager];
-                NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
+                bool directoryExists = false;
                 
-                if ([fileManager fileExistsAtPath:[NSString stringWithUTF8String:in_directoryPath.c_str()] isDirectory:&bDirectory])
+                @autoreleasepool
                 {
-                    bExists = true;
+                    BOOL bDirectory = NO;
+                    bool bExists = false;
+                    
+                    NSFileManager *fileManager= [NSFileManager defaultManager];
+                    if ([fileManager fileExistsAtPath:[NSString stringWithUTF8String:in_directoryPath.c_str()] isDirectory:&bDirectory])
+                    {
+                        bExists = true;
+                    }
+                    
+                    directoryExists = (bExists && bDirectory);
                 }
                 
-                [pPool release];
-                return (bExists && bDirectory);
+                return directoryExists;
             }
             //------------------------------------------------------------
             /// @author S Downie
@@ -299,23 +287,22 @@ namespace ChilliSource
         {
             CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
             
-            //create the directory
-            NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
-            std::string path = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
-			NSFileManager* fileManager = [NSFileManager defaultManager];
-            NSError* error = nil;
-            if (![fileManager fileExistsAtPath:[NSString stringWithUTF8String:path.c_str()]])
+            @autoreleasepool
             {
-                if (![fileManager createDirectoryAtPath:[NSString stringWithUTF8String:path.c_str()] withIntermediateDirectories:YES attributes:nil error:&error])
+                //create the directory
+                std::string path = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
+                NSFileManager* fileManager = [NSFileManager defaultManager];
+                NSError* error = nil;
+                if (![fileManager fileExistsAtPath:[NSString stringWithUTF8String:path.c_str()]])
                 {
-                    CS_LOG_ERROR("File System: Error creating directory '" + in_directoryPath + "' - " + GetErrorString(error));
-                    [pPool release];
-                    return false;
+                    if (![fileManager createDirectoryAtPath:[NSString stringWithUTF8String:path.c_str()] withIntermediateDirectories:YES attributes:nil error:&error])
+                    {
+                        CS_LOG_ERROR("File System: Error creating directory '" + in_directoryPath + "' - " + GetErrorString(error));
+                        return false;
+                    }
                 }
             }
-            [pPool release];
             
-            //return successful
 			return true;
         }
         //--------------------------------------------------------------
@@ -420,7 +407,7 @@ namespace ChilliSource
                 std::string path = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
                 
                 NSError* error = nil;
-                [[NSFileManager defaultManager] removeItemAtPath:Core::StringUtils::StringToNSString(path) error:&error];
+                [[NSFileManager defaultManager] removeItemAtPath:NSStringUtils::StringToNSString(path) error:&error];
                 if (error != nil)
                 {
                     CS_LOG_ERROR("File System: Error copying file '" + in_filePath + "' - " + GetErrorString(error));
@@ -441,7 +428,7 @@ namespace ChilliSource
             {
                 std::string directoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
                 NSError* error = nil;
-                [[NSFileManager defaultManager] removeItemAtPath:Core::StringUtils::StringToNSString(directoryPath) error:&error];
+                [[NSFileManager defaultManager] removeItemAtPath:NSStringUtils::StringToNSString(directoryPath) error:&error];
                 if (error != nil)
                 {
                     CS_LOG_ERROR("File System: Error copying file '" + in_directoryPath + "' - " + GetErrorString(error));
@@ -455,52 +442,54 @@ namespace ChilliSource
         //--------------------------------------------------------------
         std::vector<std::string> FileSystem::GetFilePaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
         {
-            std::vector<std::string> astrDirectoriesToCheck = GetPossibleAbsoluteDirectoryPaths(in_storageLocation, in_directoryPath);
-            
-            NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
-            NSMutableArray* Contents = [[NSMutableArray alloc] init];
-            
-            GetDirectoryContents(astrDirectoriesToCheck, in_recursive, Contents);
-            
             std::vector<std::string> output;
-            if([Contents count] > 0)
+            
+            @autoreleasepool
             {
-                NSArray* Filtered = FilterPathsByFile(Contents);
-                output = ConvertObjCToPath(Filtered);
+                std::vector<std::string> astrDirectoriesToCheck = GetPossibleAbsoluteDirectoryPaths(in_storageLocation, in_directoryPath);
+                
+                NSMutableArray* Contents = [NSMutableArray array];
+                
+                GetDirectoryContents(astrDirectoriesToCheck, in_recursive, Contents);
+                
+                if([Contents count] > 0)
+                {
+                    NSArray* Filtered = FilterPathsByFile(Contents);
+                    output = ConvertObjCToPath(Filtered);
+                }
+                
+                std::sort(output.begin(), output.end());
+                std::vector<std::string>::iterator it = std::unique(output.begin(), output.end());
+                output.resize(it - output.begin());
             }
             
-            [Contents release];
-            [pPool release];
-            
-            std::sort(output.begin(), output.end());
-            std::vector<std::string>::iterator it = std::unique(output.begin(), output.end());
-            output.resize(it - output.begin());
             return output;
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         std::vector<std::string> FileSystem::GetDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
         {
-            std::vector<std::string> astrDirectoriesToCheck = GetPossibleAbsoluteDirectoryPaths(in_storageLocation, in_directoryPath);
-            
-            NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
-            NSMutableArray* Contents = [[NSMutableArray alloc] init];
-            
-            GetDirectoryContents(astrDirectoriesToCheck, in_recursive, Contents);
-            
             std::vector<std::string> output;
-            if([Contents count] > 0)
+            
+            @autoreleasepool
             {
-                NSArray* Filtered = FilterPathsByDirectory(Contents);
-                output = ConvertObjCToPath(Filtered);
+                std::vector<std::string> astrDirectoriesToCheck = GetPossibleAbsoluteDirectoryPaths(in_storageLocation, in_directoryPath);
+                
+                NSMutableArray* Contents = [NSMutableArray array];
+                
+                GetDirectoryContents(astrDirectoriesToCheck, in_recursive, Contents);
+                
+                if([Contents count] > 0)
+                {
+                    NSArray* Filtered = FilterPathsByDirectory(Contents);
+                    output = ConvertObjCToPath(Filtered);
+                }
+                
+                std::sort(output.begin(), output.end());
+                std::vector<std::string>::iterator it = std::unique(output.begin(), output.end());
+                output.resize(it - output.begin());
             }
             
-            [Contents release];
-            [pPool release];
-            
-            std::sort(output.begin(), output.end());
-            std::vector<std::string>::iterator it = std::unique(output.begin(), output.end());
-            output.resize(it - output.begin());
             return output;
         }
         //--------------------------------------------------------------
@@ -705,7 +694,7 @@ namespace ChilliSource
             @autoreleasepool
             {
                 NSMutableArray* contents = [NSMutableArray array];
-                NSString* directory = Core::StringUtils::StringToNSString(m_bundlePath);
+                NSString* directory = NSStringUtils::StringToNSString(m_bundlePath);
                 
                 NSError* error = nil;
                 [contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:directory error:&error]];

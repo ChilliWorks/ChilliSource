@@ -191,32 +191,6 @@ namespace ChilliSource
                 return instrString.ToASCII();
             }
             
-#if CS_TARGETPLATFORM_IOS && __OBJC__
-            /**
-			 //Given a NSString it converts it to a UTF-8 string
-			 @param input string
-			 @returns utf8 string
-			 */
-			UTF8String NSStringToUTF8String(NSString* inpString);
-            /**
-			 //Given a NSString UTF-8 map each code point to a char in the std::string
-			 @param NSString utf8 string
-			 @returns std::string
-			 */
-			std::string NSStringToString(NSString* inpString);
-            /**
-			 //Given a UTF-8 convert to NSString
-			 @param utf8 string
-			 @returns NSString
-			 */
-			NSString* UTF8StringToNSString(const UTF8String& instrString);
-            /**
-			 //Given a std::string UTF-8 convert to a NSString utf8
-			 @param std::string
-			 @returns NSString
-			 */
-            NSString* StringToNSString(const std::string& instrString);
-#endif
 			// Utility function for comparing two characters in a case insensitive way
             bool CaseInsensitiveCompare(const char & inA, const char & inB);
             

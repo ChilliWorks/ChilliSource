@@ -8,6 +8,7 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/Keyboard.h>
 
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboardDelegate.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
@@ -89,7 +90,7 @@ namespace ChilliSource
         void Keyboard::SetText(const Core::UTF8String& in_text)
         {
             m_text = in_text;
-            m_textView.text = Core::StringUtils::UTF8StringToNSString(m_text);
+            m_textView.text = NSStringUtils::UTF8StringToNSString(m_text);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -164,7 +165,7 @@ namespace ChilliSource
             //Inform subscripted to this event and receive if text was rejected lower down
             bool rejectText = false;
             
-            Core::UTF8String text = Core::StringUtils::NSStringToUTF8String(in_text);
+            Core::UTF8String text = NSStringUtils::NSStringToUTF8String(in_text);
             m_textInputReceivedDelegate.NotifyConnections(text, &rejectText);
             
             if(rejectText == false)

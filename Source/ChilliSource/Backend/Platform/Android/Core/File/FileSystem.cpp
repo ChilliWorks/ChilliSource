@@ -37,28 +37,6 @@ namespace ChilliSource
 			const std::string k_cachePath = "cache/Cache/";
 
             //--------------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return whether or not the given file mode is a write mode
-            //--------------------------------------------------------------
-            bool IsWriteMode(Core::FileMode in_fileMode)
-            {
-                switch (in_fileMode)
-                {
-                    case Core::FileMode::k_write:
-                    case Core::FileMode::k_writeAppend:
-                    case Core::FileMode::k_writeAtEnd:
-                    case Core::FileMode::k_writeBinary:
-                    case Core::FileMode::k_writeBinaryAppend:
-                    case Core::FileMode::k_writeBinaryAtEnd:
-                    case Core::FileMode::k_writeBinaryTruncate:
-                    case Core::FileMode::k_writeTruncate:
-                        return true;
-                    default:
-                    	return false;
-                }
-            }
-            //--------------------------------------------------------------
             /// Returns the error from errno() in string form.
             ///
 			/// @author I Copland
@@ -998,7 +976,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		std::vector<std::string> FileSystem::GetPaths(const std::string& in_directoryPath, bool in_recursive, const std::string& in_parentDirectoryPath) const
+		std::vector<std::string> FileSystem::GetAllPaths(const std::string& in_directoryPath, bool in_recursive, const std::string& in_parentDirectoryPath) const
 		{
 			std::vector<std::string> output;
 
@@ -1051,7 +1029,7 @@ namespace ChilliSource
 				{
 					if (S_ISDIR(itemStats.st_mode) == true)
 					{
-						std::vector<std::string> subDirectoryPaths = GetPaths(itemPath, in_recursive, parentDirectoryPath + itemName);
+						std::vector<std::string> subDirectoryPaths = GetAllPaths(itemPath, in_recursive, parentDirectoryPath + itemName);
 						output.insert(output.end(), subDirectoryPaths.begin(), subDirectoryPaths.end());
 					}
 				}
@@ -1129,7 +1107,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                	std::vector<std::string> paths = GetPaths(path, in_recursive);
+                	std::vector<std::string> paths = GetAllPaths(path, in_recursive);
                 	output.insert(output.end(), paths.begin(), paths.end());
                 }
             }
