@@ -8,6 +8,7 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequest.h>
 
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
@@ -152,7 +153,7 @@ namespace ChilliSource
                         
                         if(redirectUrlString != nullptr)
                         {
-                            m_desc.m_redirectionUrl = Core::StringUtils::NSStringToString((NSString*)redirectUrlString);
+                            m_desc.m_redirectionUrl = NSStringUtils::NSStringToString((NSString*)redirectUrlString);
                             CFRelease(redirectUrlString);
                         }
                         

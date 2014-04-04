@@ -10,6 +10,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailCompositionActivity.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/String/StringUtils.h>
@@ -90,11 +91,11 @@ namespace ChilliSource
 			NSMutableArray * pNamesArray = [[NSMutableArray alloc] initWithCapacity:inastrRecipientAddresses.size()];
 			
 			for (u32 nRecipient = 0; nRecipient < inastrRecipientAddresses.size(); nRecipient++){
-				[pNamesArray addObject:Core::StringUtils::UTF8StringToNSString(inastrRecipientAddresses[nRecipient])];
+				[pNamesArray addObject:NSStringUtils::UTF8StringToNSString(inastrRecipientAddresses[nRecipient])];
 			}
 			[mpVC setToRecipients:pNamesArray];
-			[mpVC setMessageBody: Core::StringUtils::UTF8StringToNSString(instrContents) isHTML:inbFormatAsHtml];
-			[mpVC setSubject: Core::StringUtils::UTF8StringToNSString(instrSubject)];
+			[mpVC setMessageBody: NSStringUtils::UTF8StringToNSString(instrContents) isHTML:inbFormatAsHtml];
+			[mpVC setSubject: NSStringUtils::UTF8StringToNSString(instrSubject)];
             
             //add the attachment if one is available.
             if (inAttachment.m_filename.size() > 0)

@@ -37,28 +37,6 @@ namespace ChilliSource
 			const std::string k_cachePath = "cache/Cache/";
 
             //--------------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return whether or not the given file mode is a write mode
-            //--------------------------------------------------------------
-            bool IsWriteMode(Core::FileMode in_fileMode)
-            {
-                switch (in_fileMode)
-                {
-                    case Core::FileMode::k_write:
-                    case Core::FileMode::k_writeAppend:
-                    case Core::FileMode::k_writeAtEnd:
-                    case Core::FileMode::k_writeBinary:
-                    case Core::FileMode::k_writeBinaryAppend:
-                    case Core::FileMode::k_writeBinaryAtEnd:
-                    case Core::FileMode::k_writeBinaryTruncate:
-                    case Core::FileMode::k_writeTruncate:
-                        return true;
-                    default:
-                    	return false;
-                }
-            }
-            //--------------------------------------------------------------
             /// Returns the error from errno() in string form.
             ///
 			/// @author I Copland
@@ -437,7 +415,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::CreateDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directory) const
+		bool FileSystem::CreateDirectoryPath(Core::StorageLocation in_storageLocation, const std::string& in_directory) const
 		{
 			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
 
@@ -507,7 +485,7 @@ namespace ChilliSource
 				Core::StringUtils::SplitFilename(in_destinationFilePath, name, path);
 
 				//create the output directory
-				CreateDirectory(in_destinationStorageLocation, path);
+				CreateDirectoryPath(in_destinationStorageLocation, path);
 
 				//try and copy the file
 				Android::CopyFile(sourceAbsolutePath, destinationAbsolutePath);
@@ -533,7 +511,7 @@ namespace ChilliSource
 			//error if there are no files
 			if (filenames.size() == 0)
 			{
-				CreateDirectory(in_destinationStorageLocation, in_destinationDirectoryPath);
+				CreateDirectoryPath(in_destinationStorageLocation, in_destinationDirectoryPath);
 			}
 			else
 			{
@@ -916,7 +894,7 @@ namespace ChilliSource
 
 								std::string outputDirectoryPath, outputFileName;
 								Core::StringUtils::SplitFilename(in_destinationFilePath, outputFileName, outputDirectoryPath);
-								if (CreateDirectory(in_destinationStorageLocation, outputDirectoryPath) == true)
+								if (CreateDirectoryPath(in_destinationStorageLocation, outputDirectoryPath) == true)
 								{
 									char* dataBuffer = new char[info.uncompressed_size];
 									unzReadCurrentFile(unzip, (voidp)dataBuffer, info.uncompressed_size);
@@ -998,7 +976,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		std::vector<std::string> FileSystem::GetPaths(const std::string& in_directoryPath, bool in_recursive, const std::string& in_parentDirectoryPath) const
+		std::vector<std::string> FileSystem::GetAllPaths(const std::string& in_directoryPath, bool in_recursive, const std::string& in_parentDirectoryPath) const
 		{
 			std::vector<std::string> output;
 
@@ -1051,7 +1029,7 @@ namespace ChilliSource
 				{
 					if (S_ISDIR(itemStats.st_mode) == true)
 					{
-						std::vector<std::string> subDirectoryPaths = GetPaths(itemPath, in_recursive, parentDirectoryPath + itemName);
+						std::vector<std::string> subDirectoryPaths = GetAllPaths(itemPath, in_recursive, parentDirectoryPath + itemName);
 						output.insert(output.end(), subDirectoryPaths.begin(), subDirectoryPaths.end());
 					}
 				}
@@ -1129,7 +1107,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                	std::vector<std::string> paths = GetPaths(path, in_recursive);
+                	std::vector<std::string> paths = GetAllPaths(path, in_recursive);
                 	output.insert(output.end(), paths.begin(), paths.end());
                 }
             }

@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Communications/ContactInformationProvider.h>
 
-#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 
 #include <AddressBook/AddressBook.h>
 #include <Foundation/NSString.h>
@@ -77,15 +77,15 @@ namespace ChilliSource{
 				
 				Social::ContactRecord sPersonRecord;
 				
-				sPersonRecord.m_name = Core::StringUtils::NSStringToUTF8String(pCombinedName);
+				sPersonRecord.m_name = NSStringUtils::NSStringToUTF8String(pCombinedName);
 				sPersonRecord.m_hasEmail = pEmail != nil;
 				if (sPersonRecord.m_hasEmail){
-					sPersonRecord.m_email = Core::StringUtils::NSStringToUTF8String(pEmail);
+					sPersonRecord.m_email = NSStringUtils::NSStringToUTF8String(pEmail);
 				}
 				
 				sPersonRecord.m_hasMobileNumber = pMobileNumber != nil;
 				if (sPersonRecord.m_hasMobileNumber){
-					sPersonRecord.m_mobileNumber = Core::StringUtils::NSStringToUTF8String(pMobileNumber);
+					sPersonRecord.m_mobileNumber = NSStringUtils::NSStringToUTF8String(pMobileNumber);
 				}				
 								
 				masContacts.push_back(sPersonRecord);

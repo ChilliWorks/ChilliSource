@@ -8,11 +8,12 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
 
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequestSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 
 #include <UIKit/UIKit.h>
 
@@ -125,7 +126,7 @@ namespace ChilliSource
                 //Set the text
                 if(in_desc.m_text.length() > 0)
                 {
-                    [pComposeViewController setInitialText:Core::StringUtils::UTF8StringToNSString(in_desc.m_text)];
+                    [pComposeViewController setInitialText:NSStringUtils::UTF8StringToNSString(in_desc.m_text)];
                 }
                 
                 bool bImageAttached = true;
@@ -133,7 +134,7 @@ namespace ChilliSource
                 {
                     std::string strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_desc.m_localImageStorageLocation) + in_desc.m_localImagePath;
                     
-                    NSString* pImagePath = Core::StringUtils::StringToNSString(strPath);
+                    NSString* pImagePath = NSStringUtils::StringToNSString(strPath);
                     UIImage* pImage = [UIImage imageWithContentsOfFile:pImagePath];
                     
                     if(pImage != nil)
@@ -149,7 +150,7 @@ namespace ChilliSource
                 //Add a url if available
                 if(in_desc.m_url.length() > 0)
                 {
-                    [pComposeViewController addURL:[NSURL URLWithString:Core::StringUtils::UTF8StringToNSString(in_desc.m_url)]];
+                    [pComposeViewController addURL:[NSURL URLWithString:NSStringUtils::UTF8StringToNSString(in_desc.m_url)]];
                 }
                 
                 

@@ -206,7 +206,7 @@ namespace ChilliSource
             {
             	//Add a temp directory so that the packages are stored atomically and only overwrite
                 //the originals on full success
-                Core::Application::Get()->GetFileSystem()->CreateDirectory(Core::StorageLocation::k_DLC, "Temp");
+                Core::Application::Get()->GetFileSystem()->CreateDirectoryPath(Core::StorageLocation::k_DLC, "Temp");
                 m_contentDownloader->DownloadPackage(m_packageDetails[m_currentPackageDownload].m_url, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete));
             }
             else
@@ -617,7 +617,7 @@ namespace ChilliSource
                 {
                     //There is a nested folder so we need to create the directory structure
                     std::string strPath = GetPathExcludingFileName(strFilePath);
-                    Core::Application::Get()->GetFileSystem()->CreateDirectory(Core::StorageLocation::k_DLC, "/" + strPath);
+                    Core::Application::Get()->GetFileSystem()->CreateDirectoryPath(Core::StorageLocation::k_DLC, "/" + strPath);
                 }
                 
                 if(IsFile(strFilePath))

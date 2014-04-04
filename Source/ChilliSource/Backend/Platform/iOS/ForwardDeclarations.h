@@ -9,6 +9,10 @@
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_FORWARDDECLARATIONS_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_IOS_FORWARDDECLARATIONS_H_
 
+#include <ChilliSource/Core/Base/StandardMacros.h>
+
+#include <memory>
+
 namespace ChilliSource
 {
     namespace iOS

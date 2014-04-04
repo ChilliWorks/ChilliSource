@@ -7,6 +7,8 @@
 //
 
 #include <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
+
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Core/Base/Screen.h>
@@ -106,8 +108,8 @@
     pNewTextView.backgroundColor = [UIColor clearColor];
     
     //setup the text.
-    [pNewTextView setText: ChilliSource::Core::StringUtils::UTF8StringToNSString(ChilliSource::Core::LocalisedText::GetText(inpSubtitle->strTextID))];
-    [pNewTextView setFont:[UIFont fontWithName: ChilliSource::Core::StringUtils::StringToNSString(pStyle->strFontName) size: pStyle->udwFontSize]];
+    [pNewTextView setText: ChilliSource::iOS::NSStringUtils::UTF8StringToNSString(ChilliSource::Core::LocalisedText::GetText(inpSubtitle->strTextID))];
+    [pNewTextView setFont:[UIFont fontWithName: ChilliSource::iOS::NSStringUtils::StringToNSString(pStyle->strFontName) size: pStyle->udwFontSize]];
     [pNewTextView setTextColor:[UIColor colorWithRed:pStyle->Colour.r green:pStyle->Colour.g blue:pStyle->Colour.b alpha:0.0f]];
     [pNewTextView setEditable:NO];
     [pNewTextView setUserInteractionEnabled:NO];

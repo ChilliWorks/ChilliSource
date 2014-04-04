@@ -8,6 +8,7 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequestSystem.h>
 
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Base/CSReachability.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequest.h>
 #include <ChilliSource/Core/Base/Application.h>
@@ -118,7 +119,7 @@ namespace ChilliSource
             {
                 s32 portNum = CFURLGetPortNumber(in_url);
                 CFStringRef cfHostName = CFURLCopyHostName(in_url);
-                std::string hostName = Core::StringUtils::NSStringToString((NSString*)cfHostName);
+                std::string hostName = NSStringUtils::NSStringToString((NSString*)cfHostName);
                 CFRelease(cfHostName);
                 
                 HttpRequestSystem::ConnectionId propId = Core::HashCRC32::GenerateHashCode(in_scheme + hostName + Core::ToString(portNum));
@@ -169,7 +170,7 @@ namespace ChilliSource
             //Grab the connection information that allows us to identify the domain and the scheme
             CFStringRef cfScheme = CFURLCopyScheme(url);
             CS_ASSERT(cfScheme != nullptr, "Invalid http request url scheme: " + in_requestDesc.m_url);
-            std::string scheme = Core::StringUtils::NSStringToString((NSString*)cfScheme);
+            std::string scheme = NSStringUtils::NSStringToString((NSString*)cfScheme);
             CFRelease(cfScheme);
             if(scheme == "https")
             {

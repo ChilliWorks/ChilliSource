@@ -386,13 +386,13 @@ namespace ChilliSource
         {
             if (nullptr == GetEntity())
             {
-                CS_LOG_ERROR("Could not attach entity to animated mesh becuase the mesh is not yet attached to an entity.");
+                CS_LOG_ERROR("Could not attach entity to animated mesh because the mesh is not yet attached to an entity.");
                 return;
             }
             
             if (nullptr != inpEntity->GetParent() || nullptr != inpEntity->GetScene())
             {
-                CS_LOG_ERROR("Could not attach entity to animated mesh becuase the entity already has a parent.");
+                CS_LOG_ERROR("Could not attach entity to animated mesh because the entity already has a parent.");
                 return;
             }
             
@@ -411,7 +411,7 @@ namespace ChilliSource
             s32 dwNodeIndex = mpModel->GetSkeletonPtr()->GetNodeIndexByName(instrNodeName);
             if (dwNodeIndex == -1)
             {
-                CS_LOG_ERROR("Could not attach entity to the animated mesh becuase the skeleton node name could not be found.");
+                CS_LOG_ERROR("Could not attach entity to the animated mesh because the skeleton node name could not be found.");
                 return;
             }
             

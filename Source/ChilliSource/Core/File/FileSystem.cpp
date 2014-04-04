@@ -7,9 +7,10 @@
 //
 
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/String/StringUtils.h>
+
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
@@ -153,9 +154,10 @@ namespace ChilliSource
         {
             std::vector<std::string> filePaths = GetFilePaths(in_storageLocation, in_directoryPath, in_recursive);
             
-            auto it = std::remove_if(filePaths.begin(), filePaths.end(), [&in_extension] (const std::string& in_path)
+            std::string extension = "." + in_extension;
+            auto it = std::remove_if(filePaths.begin(), filePaths.end(), [&] (const std::string& in_path)
             {
-                return (Core::StringUtils::EndsWith(in_path, "." + in_extension, true) == false);
+                return (Core::StringUtils::EndsWith(in_path, extension, true) == false);
             });
             
             filePaths.resize(it - filePaths.begin());
@@ -358,6 +360,25 @@ namespace ChilliSource
         const std::string* FileSystem::GetResourceDirectories() const
         {
             return s_resourceDirectory;
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        bool FileSystem::IsWriteMode(Core::FileMode in_fileMode) const
+        {
+            switch (in_fileMode)
+            {
+                case Core::FileMode::k_write:
+                case Core::FileMode::k_writeAppend:
+                case Core::FileMode::k_writeAtEnd:
+                case Core::FileMode::k_writeBinary:
+                case Core::FileMode::k_writeBinaryAppend:
+                case Core::FileMode::k_writeBinaryAtEnd:
+                case Core::FileMode::k_writeBinaryTruncate:
+                case Core::FileMode::k_writeTruncate:
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }

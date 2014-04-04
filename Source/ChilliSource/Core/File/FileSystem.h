@@ -134,10 +134,10 @@ namespace ChilliSource
             /// @param The directory path.
             ///
             /// @return Returns whether or not this was successful. Failure to
-            /// create the directory becuase it already exists is considered
+            /// create the directory because it already exists is considered
             /// a success.
             //--------------------------------------------------------------
-            virtual bool CreateDirectory(StorageLocation in_storageLocation, const std::string& in_directoryPath) const = 0;
+            virtual bool CreateDirectoryPath(StorageLocation in_storageLocation, const std::string& in_directoryPath) const = 0;
             //--------------------------------------------------------------
             /// Copies a file from one location to another.
             ///
@@ -386,8 +386,6 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			u32 GetFileChecksumCRC32(StorageLocation in_storageLocation, const std::string& in_filePath) const;
             //--------------------------------------------------------------
-			/// Get Directory CRC32 Checksum
-			///
             /// Gets the CRC32 Checksum for the given directory.
             ///
             /// @param The storage location.
@@ -401,7 +399,7 @@ namespace ChilliSource
             /// @param The storage location.
 			/// @param the file path.
             ///
-            /// @return The size of the given file.
+            /// @return The size in bytes of the given file.
 			//--------------------------------------------------------------
 			u32 GetFileSize(StorageLocation in_storageLocation, const std::string& in_filePath) const;
 	        //--------------------------------------------------------------
@@ -410,7 +408,8 @@ namespace ChilliSource
             /// @param The storage location.
 			/// @param the Directory path.
             ///
-            /// @return The size of the contents of the given directory.
+            /// @return The size in bytes of the contents of the given
+            /// directory.
 			//--------------------------------------------------------------
 			u32 GetDirectorySize(StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
             //--------------------------------------------------------------
@@ -444,6 +443,12 @@ namespace ChilliSource
             /// @return The resource directories.
             //--------------------------------------------------------------
             const std::string* GetResourceDirectories() const;
+            //--------------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return whether or not the given file mode is a write mode
+            //--------------------------------------------------------------
+            bool IsWriteMode(Core::FileMode in_fileMode) const;
         private:
             std::string m_packageDLCPath;
             

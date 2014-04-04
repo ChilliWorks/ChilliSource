@@ -8,6 +8,8 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookAuthenticationSystem.h>
 
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+
 #ifdef __IPHONE_6_0
 #	include <Accounts/Accounts.h>
 #endif
@@ -31,7 +33,7 @@ namespace ChilliSource
                 
                 for (u32 i=0; i<in_strings.size(); ++i)
                 {
-                    [result addObject: ChilliSource::Core::StringUtils::StringToNSString(in_strings[i])];
+                    [result addObject: NSStringUtils::StringToNSString(in_strings[i])];
                 }
                 
                 return result;
@@ -132,7 +134,7 @@ namespace ChilliSource
                     if(m_authenticateDelegate)
                     {
                         AuthenticateResponse response;
-                        response.m_token = Core::StringUtils::NSStringToString([[in_session accessTokenData] accessToken]);
+                        response.m_token = NSStringUtils::NSStringToString([[in_session accessTokenData] accessToken]);
                         response.m_result = AuthenticateResult::k_success;
                         m_authenticateDelegate(response);
                         m_authenticateDelegate = nullptr;
@@ -168,7 +170,7 @@ namespace ChilliSource
         //----------------------------------------------------
         std::string FacebookAuthenticationSystem::GetActiveToken() const
 		{
-			return Core::StringUtils::NSStringToString(FBSession.activeSession.accessTokenData.accessToken);
+			return NSStringUtils::NSStringToString(FBSession.activeSession.accessTokenData.accessToken);
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -281,7 +283,7 @@ namespace ChilliSource
         //----------------------------------------------------
         bool FacebookAuthenticationSystem::HasPermission(const std::string& in_permission) const
         {
-            return ([FBSession.activeSession.permissions indexOfObject:Core::StringUtils::StringToNSString(in_permission)] != NSNotFound);
+            return ([FBSession.activeSession.permissions indexOfObject:NSStringUtils::StringToNSString(in_permission)] != NSNotFound);
         }
 		//----------------------------------------------------
         //----------------------------------------------------

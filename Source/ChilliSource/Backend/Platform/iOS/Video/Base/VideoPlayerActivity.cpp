@@ -11,6 +11,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
 #include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
 #include <ChilliSource/Core/Base/Application.h>
@@ -105,7 +106,7 @@ namespace ChilliSource
             
             std::string strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(ineLocation, instrFileName);
             
-            NSURL* pMovieURL = [NSURL fileURLWithPath:Core::StringUtils::StringToNSString(strPath)];
+            NSURL* pMovieURL = [NSURL fileURLWithPath:NSStringUtils::StringToNSString(strPath)];
             mpMoviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL:pMovieURL];
             
             AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, AudioRouteCallback, mpMoviePlayerController);

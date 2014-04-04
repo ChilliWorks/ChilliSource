@@ -9,6 +9,7 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
 
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Base/Screen.h>
@@ -217,7 +218,7 @@ namespace ChilliSource
 			{
 				if(mpPINTextFeild.text != nil)
 				{
-					strPIN = Core::StringUtils::NSStringToString(mpPINTextFeild.text);
+					strPIN = NSStringUtils::NSStringToString(mpPINTextFeild.text);
 				}
 			}
 			else
@@ -456,7 +457,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				NSURL* pUrl = [NSURL URLWithString:Core::StringUtils::StringToNSString(instrURL)];
+				NSURL* pUrl = [NSURL URLWithString:NSStringUtils::StringToNSString(instrURL)];
 				[mpWebView loadRequest:[NSURLRequest requestWithURL:pUrl]];
 				mpWebView.hidden = NO;
 				mpWebDelegate = [[UITwitterAuthenticationWebDelegate alloc] init];
