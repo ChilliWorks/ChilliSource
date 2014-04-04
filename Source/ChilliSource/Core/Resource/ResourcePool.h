@@ -51,6 +51,12 @@ namespace ChilliSource
             //------------------------------------------------------------------------------------
             bool IsA(InterfaceIDType in_interfaceId) const override;
             //------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Resource provider that will be assigned to load a specific resource type
+            //------------------------------------------------------------------------------------
+            void AddProvider(ResourceProvider* in_provider);
+            //------------------------------------------------------------------------------------
             /// Load the resource of given type from the file location. If the resource at this
             /// location has previously been loaded then the cached version will be returned.
             ///

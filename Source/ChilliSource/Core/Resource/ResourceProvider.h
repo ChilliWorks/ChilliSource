@@ -10,10 +10,8 @@
 #define _CHILLISOURCE_CORE_RESOURCE_RESOURCEPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Core/Base/QueryableInterface.h>
-#include <ChilliSource/Core/Resource/ResourceOld.h>
-#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
 {

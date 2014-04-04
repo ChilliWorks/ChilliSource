@@ -30,6 +30,24 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------
+        void ResourcePool::AddProvider(ResourceProvider* in_provider)
+        {
+            CS_ASSERT(in_provider != nullptr, "Cannot add null resource provider to pool");
+            auto itDescriptor = m_descriptors.find(in_provider->GetInterfaceID());
+            
+            if(itDescriptor == m_descriptors.end())
+            {
+                PoolDesc desc;
+                desc.m_providers.push_back(in_provider);
+                m_descriptors.insert(std::make_pair(in_provider->GetInterfaceID(), desc));
+            }
+            else
+            {
+                itDescriptor->second.m_providers.push_back(in_provider);
+            }
+        }
+        //------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------
         ResourceProvider* ResourcePool::FindProvider(const std::string& in_filePath, const PoolDesc& in_desc)
         {
             //Find the resource provider that can handle this extension

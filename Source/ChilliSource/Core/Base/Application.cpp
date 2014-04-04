@@ -484,6 +484,7 @@ namespace ChilliSource
 		void Application::PostCreateSystems()
 		{
             //Loop round all the created systems and categorise them
+            //TODO: Remove when all old systems have been changed
 			for(std::vector<SystemUPtr>::iterator it = m_systemsOld.begin(); it != m_systemsOld.end(); ++it)
 			{
                 System* pSystem = it->get();
@@ -516,10 +517,16 @@ namespace ChilliSource
             //Loop round all the created app systems and categorise them
 			for(const AppSystemUPtr& system : m_systems)
 			{
-                //Resource providers
+                //TODO: Remove when all providers have been changed
 				if(system->IsA(ResourceProviderOld::InterfaceID))
 				{
 					m_ResourceProviderOlds.push_back(dynamic_cast<ResourceProviderOld*>(system.get()));
+				}
+                
+                //Resource providers
+				if(system->IsA(ResourceProvider::InterfaceID))
+				{
+                    m_resourcePool->AddProvider(dynamic_cast<ResourceProvider*>(system.get()));
 				}
                 
                 //TODO: Remove this when all Component producers have been changed to systems
