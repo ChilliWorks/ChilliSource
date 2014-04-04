@@ -12,7 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 
 namespace ChilliSource
@@ -61,7 +61,7 @@ namespace ChilliSource
 		
 		typedef std::vector<PlacedCharacter> CharacterList;
         
-		class Font : public Core::Resource
+		class Font : public Core::ResourceOld
 		{
 		public:
 

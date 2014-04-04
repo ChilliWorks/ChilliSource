@@ -63,7 +63,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceOldSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//----------------------------------------------------------------
 			/// Get Sound From File
 			///
@@ -96,7 +96,7 @@ namespace ChilliSource
 			///
 			/// @param Handle to the sound effect you want to destroy
 			//-----------------------------------------------------------------
-			void Destroy(const Core::ResourceSPtr& inpSoundEffect);
+			void Destroy(const Core::ResourceOldSPtr& inpSoundEffect);
 			//-----------------------------------------------------------------
 			/// Destroy All 
 			///

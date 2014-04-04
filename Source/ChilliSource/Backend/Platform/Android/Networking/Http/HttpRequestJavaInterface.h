@@ -19,30 +19,6 @@ namespace ChilliSource
 	namespace Android
 	{
 		//--------------------------------------------------------------------------------------
-		/// An enum for the different response codes from the android
-		/// HttpRequest.
-		///
-		/// @author I Copland
-		//--------------------------------------------------------------------------------------
-		enum class HttpRequestResultCode
-		{
-			k_success,
-			k_couldNotConnect,
-			k_timeout,
-			k_couldNotMakeRequest
-		};
-
-		//--------------------------------------------------------------------------------------
-		/// An enum for the types of http request
-		///
-		/// @author I Copland
-		//--------------------------------------------------------------------------------------
-		enum class HttpRequestType
-		{
-			k_get,
-			k_post
-		};
-		//--------------------------------------------------------------------------------------
 		/// Java interface for communication between the Http Request system and the Java
 		/// HttpURLConnection library
 		///
@@ -51,6 +27,30 @@ namespace ChilliSource
 		class HttpRequestJavaInterface final : public _IJavaInterface
 		{
 		public:
+			//--------------------------------------------------------------------------------------
+			/// An enum for the different response codes from the android
+			/// HttpRequest.
+			///
+			/// @author I Copland
+			//--------------------------------------------------------------------------------------
+			enum class RequestResultCode
+			{
+				k_success,
+				k_couldNotConnect,
+				k_timeout,
+				k_couldNotMakeRequest
+			};
+
+			//--------------------------------------------------------------------------------------
+			/// An enum for the types of http request
+			///
+			/// @author I Copland
+			//--------------------------------------------------------------------------------------
+			enum class RequestType
+			{
+				k_get,
+				k_post
+			};
 			//--------------------------------------------------------------------------------------
 			/// Sets up the java interface: stores the Virtual Machine, and initialises any java
 			/// methods callable from native.
@@ -84,7 +84,7 @@ namespace ChilliSource
 			///
 			/// @return The result code.
 			//--------------------------------------------------------------------------------------
-			static HttpRequestResultCode MakeHttpRequest(const std::string& in_url, HttpRequestType in_type, const Core::ParamDictionary& in_headers, const std::string& in_body,
+			static RequestResultCode MakeHttpRequest(const std::string& in_url, RequestType in_type, const Core::ParamDictionary& in_headers, const std::string& in_body,
 													std::string& out_response, std::string& out_redirectUrl, s32& out_reponseCode);
 			//--------------------------------------------------------------------------------------
 			/// Calls into java to find whether or not the device is currently connected to the

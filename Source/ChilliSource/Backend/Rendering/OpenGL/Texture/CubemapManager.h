@@ -34,7 +34,7 @@ namespace ChilliSource
 			/// @param Out: Cubemap resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, ChilliSource::Rendering::CubemapSPtr& outpCubemap);
+			bool CreateCubemapFromImages(const std::vector<Core::ResourceOldSPtr>& inaImages, ChilliSource::Rendering::CubemapSPtr& outpCubemap);
 			//----------------------------------------------------------------
 			/// Restore
 			///

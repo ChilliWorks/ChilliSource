@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_CORE_SCENE_SCENEPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource 
 {
@@ -21,7 +21,7 @@ namespace ChilliSource
         ///
         /// @author A Glass
         //----------------------------------------------------------
-        class SceneProvider final : public ResourceProvider
+        class SceneProvider final : public ResourceProviderOld
         {
         public:
             CS_DECLARE_NAMEDTYPE(SceneProvider);
@@ -71,7 +71,7 @@ namespace ChilliSource
             /// @return Whether or not the resource can be
             /// created.
             //-------------------------------------------------
-            bool CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource) override;
+            bool CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceOldSPtr& out_resource) override;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
             /// The resource will be returned immediately but
@@ -87,7 +87,7 @@ namespace ChilliSource
             /// @return Whether or not the resource async load was
             /// successfully started.
             //----------------------------------------------------
-            bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource) override;
+            bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceOldSPtr& out_resource) override;
             
         private:
             //----------------------------------------------------
@@ -105,7 +105,7 @@ namespace ChilliSource
             /// @return Whether or not the resource async load was
             /// successfully started.
             //----------------------------------------------------
-            void LoadAsyncScene(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceSPtr& out_resource);
+            void LoadAsyncScene(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceOldSPtr& out_resource);
         };
     }
 }

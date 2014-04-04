@@ -25,7 +25,7 @@ namespace ChilliSource
         //----------------------------------------------------
         bool SceneProvider::IsA(InterfaceIDType in_interfaceId) const
         {
-            return (ResourceProvider::InterfaceID == in_interfaceId || SceneProvider::InterfaceID == in_interfaceId);
+            return (ResourceProviderOld::InterfaceID == in_interfaceId || SceneProvider::InterfaceID == in_interfaceId);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -41,7 +41,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool SceneProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource)
+        bool SceneProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceOldSPtr& out_resource)
         {
             SceneDesc* sceneDesc = reinterpret_cast<SceneDesc*>(out_resource.get());
             bool success = sceneDesc->LoadFromFile(in_storageLocation, in_filepath);
@@ -50,15 +50,15 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool SceneProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceSPtr& out_resource)
+        bool SceneProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceOldSPtr& out_resource)
         {
-            Task<StorageLocation, const std::string&, ResourceSPtr&> ReadFileTask(this, &SceneProvider::LoadAsyncScene, in_storageLocation, in_filepath, out_resource);
+            Task<StorageLocation, const std::string&, ResourceOldSPtr&> ReadFileTask(this, &SceneProvider::LoadAsyncScene, in_storageLocation, in_filepath, out_resource);
             TaskScheduler::ScheduleTask(ReadFileTask);
             return true;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void SceneProvider::LoadAsyncScene(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceSPtr& out_resource)
+        void SceneProvider::LoadAsyncScene(StorageLocation in_storageLocation, const std::string & in_filepath, ResourceOldSPtr& out_resource)
         {
             SceneDesc * sceneDesc = reinterpret_cast<SceneDesc*>(out_resource.get());
             sceneDesc->LoadFromFile(in_storageLocation, in_filepath);

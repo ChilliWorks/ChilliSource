@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
@@ -78,7 +78,7 @@ namespace ChilliSource
 			///
 			/// @param Vector of the resource loaders that this manager will use
 			//-----------------------------------------------------------------
-			void SetResourceProviders(const std::vector<ResourceProvider*> & inVecResourceProviders);
+			void SetResourceProviderOlds(const std::vector<ResourceProviderOld*> & inVecResourceProviderOlds);
 			//-----------------------------------------------------------------
 			/// Release
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			///
 			/// @param Resource pointer
 			//-----------------------------------------------------------------
-			virtual void Release(Resource* inpResource);
+			virtual void Release(ResourceOld* inpResource);
 			//-----------------------------------------------------------------
 			/// Release All
 			///
@@ -115,7 +115,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to resource type
 			//-----------------------------------------------------------------
-			virtual ResourceSPtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) = 0;
+			virtual ResourceOldSPtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) = 0;
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -128,7 +128,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to resource type
 			//-----------------------------------------------------------------
-			virtual ResourceSPtr AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath) {return ResourceSPtr();};
+			virtual ResourceOldSPtr AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath) {return ResourceOldSPtr();};
 			//-----------------------------------------------------------------
 			/// Get Resource Provider By Extension
 			///
@@ -138,7 +138,7 @@ namespace ChilliSource
 			/// @param file extension string
 			/// @return resource provider
 			//-----------------------------------------------------------------
-			ResourceProvider* GetResourceProviderByExtension(const std::string &instrExtension);
+			ResourceProviderOld* GetResourceProviderOldByExtension(const std::string &instrExtension);
             //-----------------------------------------------------------------
             /// Get All Loaded Resources
             ///
@@ -149,10 +149,10 @@ namespace ChilliSource
 			virtual std::vector<ResourceDesc> GetAllLoadedResources() const;
 		protected:
 			
-			std::vector<ResourceProvider*> mResourceProviders;
+			std::vector<ResourceProviderOld*> mResourceProviderOlds;
 			Application* mpApplicationOwner;
 			
-			typedef std::unordered_map<std::string, ResourceSPtr> MapStringToResourceSPtr;
+			typedef std::unordered_map<std::string, ResourceOldSPtr> MapStringToResourceSPtr;
 			MapStringToResourceSPtr mMapFilenameToResource;
 		};
 	}

@@ -77,18 +77,6 @@ namespace ChilliSource
 			/// @param Resource extension string
 			//--------------------------------------------------------------------------------------------------
 			ResourceManager* GetResourceManagerForExtension(const std::string &instrExtension);
-            //--------------------------------------------------------------------------------------------------
-			/// Get Resource Group Manager
-			///
-			/// @return A reference to the resource group manager
-			//--------------------------------------------------------------------------------------------------
-			ResourceGroupManager& GetResourceGroupManager();
-			//--------------------------------------------------------------------------------------------------
-			/// Get Resource Group Manager Pointer
-			///
-			/// @return A pointer to the resource group manager
-			//--------------------------------------------------------------------------------------------------
-			ResourceGroupManager* GetResourceGroupManagerPtr();
             //----------------------------------------------------------------------
             /// Free Resource Caches
             ///
@@ -104,7 +92,7 @@ namespace ChilliSource
             ///
             /// @param Vector of resource provider pointers
             //----------------------------------------------------------------------
-            void SetResourceProviders(const std::vector<ResourceProvider*> inProviders);
+            void SetResourceProviderOlds(const std::vector<ResourceProviderOld*> inProviders);
             
         private:
             //----------------------------------------------------------------------
@@ -117,7 +105,6 @@ namespace ChilliSource
 
             std::vector<ResourceManager*> mResourceManagers;
             Application* mpApp;
-            ResourceGroupManager* mpResourceGroupMgr;
             
             static ResourceManagerDispenser* pInstance;
         };

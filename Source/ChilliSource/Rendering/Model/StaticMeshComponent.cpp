@@ -252,7 +252,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Attach Mesh
 		//----------------------------------------------------------
-		void StaticMeshComponent::AttachMesh(const MeshSPtr& inpModel)
+		void StaticMeshComponent::AttachMesh(const MeshCSPtr& inpModel)
 		{
 			mpModel = inpModel;
             
@@ -273,7 +273,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Attach Mesh
         //----------------------------------------------------------
-        void StaticMeshComponent::AttachMesh(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial)
+        void StaticMeshComponent::AttachMesh(const MeshCSPtr& inpModel, const MaterialSPtr& inpMaterial)
         {
             mpModel = inpModel;
 			mpMaterial = inpMaterial;
@@ -297,7 +297,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Mesh
         //----------------------------------------------------------
-        const MeshSPtr& StaticMeshComponent::GetMesh() const
+        const MeshCSPtr& StaticMeshComponent::GetMesh() const
         {
             return mpModel;
         }

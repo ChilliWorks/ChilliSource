@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 #include <ChilliSource/Core/XML/rapidxml_utils.hpp>
 
 #include <functional>
@@ -35,7 +35,7 @@ namespace ChilliSource
 			void FromXml(rapidxml::xml_node<> * inpEl);
 		};
 		
-		class SceneDesc : public Resource
+		class SceneDesc : public ResourceOld
 		{
 		public:
             struct ComponentDesc

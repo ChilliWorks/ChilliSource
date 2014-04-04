@@ -61,7 +61,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceOldSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -70,7 +70,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourceSPtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceOldSPtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//----------------------------------------------------------------
 			/// Create Empty Texture
 			///
@@ -117,7 +117,7 @@ namespace ChilliSource
 			{
 				std::string strFilename;
                 Core::StorageLocation eStorageLocation;
-				Core::ResourceSPtr pImageResource;
+				Core::ResourceOldSPtr pImageResource;
 				TextureSPtr pTextureResource;
 			};
 			
@@ -138,7 +138,7 @@ namespace ChilliSource
 			/// @param With mipmapping
 			/// @param Texture to create
 			//-----------------------------------------------------------------------------------
-			void TextureLoadTask(const Core::ResourceSPtr& inpImage, TextureSPtr& outpTexture);
+			void TextureLoadTask(const Core::ResourceOldSPtr& inpImage, TextureSPtr& outpTexture);
 			//-----------------------------------------------------------------
 			/// CreateDefaultTexture
 			///

@@ -15,13 +15,13 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class SpriteSheet : public Core::Resource
+		class SpriteSheet : public Core::ResourceOld
 		{
 		public:
 			

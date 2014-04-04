@@ -11,14 +11,14 @@
 #define _MOFLO_RENDERING_CUBEMAP_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class Cubemap : public Core::Resource
+		class Cubemap : public Core::ResourceOld
 		{
 		public:
 			

@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_RENDERING_SPRITE_SPRITESHEETPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource
 {
@@ -24,7 +24,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------
-		class SpriteSheetProvider final : public Core::ResourceProvider
+		class SpriteSheetProvider final : public Core::ResourceProviderOld
 		{
 		public:
             
@@ -82,7 +82,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the resource loaded
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Loads the two files that constitute a sprite sheet resource and
             /// parses them into the output resource on a background thread. The IsLoaded
@@ -96,7 +96,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the resource is about to be loaded
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Loads the file containing the frame data for each sprite in the sheet
             ///

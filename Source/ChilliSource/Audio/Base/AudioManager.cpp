@@ -13,7 +13,7 @@
 #include <ChilliSource/Audio/Base/AudioManager.h>
 #include <ChilliSource/Audio/Base/AudioLoader.h>
 
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource
 {
@@ -66,7 +66,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourceSPtr AudioManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceOldSPtr AudioManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetSoundFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -81,13 +81,13 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		AudioResourceSPtr AudioManager::StreamSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
-			Core::ResourceSPtr pResource = CreateAudioResource();
+			Core::ResourceOldSPtr pResource = CreateAudioResource();
 			
-			for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
+			for(u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++) 
 			{
-                if(mResourceProviders[nProvider]->IsA(AudioLoader::InterfaceID) == true)
+                if(mResourceProviderOlds[nProvider]->IsA(AudioLoader::InterfaceID) == true)
                 {
-                    AudioLoader* audioLoader = static_cast<AudioLoader*>(mResourceProviders[nProvider]);
+                    AudioLoader* audioLoader = static_cast<AudioLoader*>(mResourceProviderOlds[nProvider]);
                     if (audioLoader->StreamResourceFromFile(ineStorageLocation, inFilePath, pResource))
                     {
                         //Add it to the cache
@@ -121,11 +121,11 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFileNamesToSoundEffect.end()) 
 			{
-				Core::ResourceSPtr pResource = CreateAudioResource();
+				Core::ResourceOldSPtr pResource = CreateAudioResource();
 				
-				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
+				for(u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++) 
 				{
-					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
+					if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
 					{
 						//Add it to the cache
 						CS_LOG_DEBUG("Loading sound " + inFilePath);
@@ -155,9 +155,9 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		AudioListenerUPtr AudioManager::CreateListener()
 		{
-			for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
+			for(u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++) 
 			{
-				AudioListenerUPtr pListener = static_cast<AudioLoader*>(mResourceProviders[nProvider])->CreateAudioListener();
+				AudioListenerUPtr pListener = static_cast<AudioLoader*>(mResourceProviderOlds[nProvider])->CreateAudioListener();
 				if(pListener) 
 				{
 					return pListener;
@@ -171,7 +171,7 @@ namespace ChilliSource
 		///
 		/// @param Handle to the sound you want to destroy
 		//-----------------------------------------------------------------
-		void AudioManager::Destroy(const Core::ResourceSPtr& inpSoundEffect)
+		void AudioManager::Destroy(const Core::ResourceOldSPtr& inpSoundEffect)
 		{
 			AudioResourceSPtr pSound = std::static_pointer_cast<AudioResource>(inpSoundEffect);
 			for(MapStringToSoundEffectPtrItr it = mMapFileNamesToSoundEffect.begin(); it != mMapFileNamesToSoundEffect.end(); ++it)

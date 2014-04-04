@@ -130,10 +130,12 @@ namespace ChilliSource
         /// Resource
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Resource);
-        CS_FORWARDDECLARE_CLASS(ResourceGroupManager);
+        CS_FORWARDDECLARE_CLASS(ResourceOld);
+        CS_FORWARDDECLARE_CLASS(ResourcePool);
         CS_FORWARDDECLARE_CLASS(ResourceManager);
         CS_FORWARDDECLARE_CLASS(ResourceManagerDispenser);
         CS_FORWARDDECLARE_CLASS(ResourceProvider);
+        CS_FORWARDDECLARE_CLASS(ResourceProviderOld);
         //---------------------------------------------------------
         /// Scene
         //---------------------------------------------------------

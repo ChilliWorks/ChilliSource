@@ -24,7 +24,7 @@ namespace ChilliSource
         //----------------------------------------------------
         bool SceneAnimationProvider::IsA(InterfaceIDType in_interfaceId) const
         {
-            return (in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == SceneAnimationProvider::InterfaceID);
+            return (in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == SceneAnimationProvider::InterfaceID);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -40,7 +40,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool SceneAnimationProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource)
+        bool SceneAnimationProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceOldSPtr& out_resource)
         {
             SceneAnimation * sceneAnim = reinterpret_cast<SceneAnimation*>(out_resource.get());
             
@@ -56,7 +56,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool SceneAnimationProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource)
+        bool SceneAnimationProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceOldSPtr& out_resource)
         {
             CS_LOG_WARNING("Async Loading not implemented by the scene animation provider.");
             

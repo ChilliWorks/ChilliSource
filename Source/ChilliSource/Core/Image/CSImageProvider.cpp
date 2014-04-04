@@ -103,7 +103,7 @@ namespace ChilliSource
             /// @param Pointer to image data file
             /// @param Pointer to resource destination
             //-------------------------------------------------------
-            void ReadFileVersion2(const Core::FileStreamSPtr& in_stream, Core::ResourceSPtr& out_resource)
+            void ReadFileVersion2(const Core::FileStreamSPtr& in_stream, Core::ResourceOldSPtr& out_resource)
             {
                 //Read the header
                 ImageHeaderVersion2 sHeader;
@@ -138,7 +138,7 @@ namespace ChilliSource
             /// @param Pointer to image data file
             /// @param Pointer to resource destination
             //-------------------------------------------------------
-            void ReadFileVersion3(const Core::FileStreamSPtr& in_stream, Core::ResourceSPtr& out_resource)
+            void ReadFileVersion3(const Core::FileStreamSPtr& in_stream, Core::ResourceOldSPtr& out_resource)
             {
                 //Read the header
                 ImageHeaderVersion3 sHeader;
@@ -217,7 +217,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         bool CSImageProvider::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return (in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSImageProvider::InterfaceID);
+            return (in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == CSImageProvider::InterfaceID);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -233,7 +233,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool CSImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, Core::ResourceSPtr& out_resource)
+        bool CSImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, Core::ResourceOldSPtr& out_resource)
         {
             //ensure the extension is correct.
             if (ChilliSource::Core::StringUtils::EndsWith(in_filepath, k_csImageExtension, true) == false)
@@ -270,7 +270,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool CSImageProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource)
+        bool CSImageProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceOldSPtr& out_resource)
         {
             CS_LOG_WARNING("Async load is not implemented in CSImage Provider.");
             return false;

@@ -9,8 +9,10 @@
 #include <ChilliSource/Rendering/Model/CSModelProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
-#include <ChilliSource/Rendering/Model/MeshManager.h>
+#include <ChilliSource/Rendering/Model/Skeleton.h>
 
 namespace ChilliSource
 {
@@ -437,77 +439,82 @@ namespace ChilliSource
 		{
 			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSModelProvider::InterfaceID;
 		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::InterfaceIDType CSModelProvider::GetResourceType() const
+        {
+            return Mesh::InterfaceID;
+        }
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSModelProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
-		{
-			return in_interfaceId == Mesh::InterfaceID;
-		}
-		//----------------------------------------------------------------------------
-		//----------------------------------------------------------------------------
-		bool CSModelProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
+		bool CSModelProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
 		{
 			return in_extension == k_modelFileExtension;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSModelProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		void CSModelProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
 			MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
-            meshResource->SetLoaded(false);
 			
             MeshDescriptor descriptor;
 			
 			if (ReadFile(in_location, in_filePath, descriptor) == false)
 			{
-				return false;
+                meshResource->SetLoadState(Core::Resource::LoadState::k_failed);
+				return;
 			}
 			
-            BuildMesh(descriptor, meshResource);
-            
-            return meshResource->IsLoaded();
+            BuildMesh(nullptr, descriptor, meshResource);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSModelProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		void CSModelProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
 		{
+            CS_ASSERT(in_delegate != nullptr, "Cannot load mesh async with null delegate");
+            
 			MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
-            meshResource->SetLoaded(false);
 			
             //Load model as task
-			Core::Task<Core::StorageLocation, const std::string&, const MeshSPtr&> MeshTask(this, &CSModelProvider::LoadMeshDataTask, in_location, in_filePath, meshResource);
+			Core::Task<Core::StorageLocation, const std::string&, const AsyncLoadDelegate&, const MeshSPtr&> MeshTask(this, &CSModelProvider::LoadMeshDataTask, in_location, in_filePath, in_delegate, meshResource);
 			Core::TaskScheduler::ScheduleTask(MeshTask);
-			
-			return true;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void CSModelProvider::LoadMeshDataTask(Core::StorageLocation in_location, const std::string& in_filePath, const MeshSPtr& out_resource)
+		void CSModelProvider::LoadMeshDataTask(Core::StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const MeshSPtr& out_resource)
 		{
 			//read the mesh data into a MoStaticDeclaration
 			MeshDescriptor descriptor;
 			if (false == ReadFile(in_location, in_filePath, descriptor))
 			{
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const MeshSPtr&>(in_delegate, out_resource));
 				return;
 			}
 			
 			//start a main thread task for loading the data into a mesh
-			Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<MeshDescriptor&,const MeshSPtr&>(this, &CSModelProvider::BuildMesh, descriptor, out_resource));
+			Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const AsyncLoadDelegate&, MeshDescriptor&, const MeshSPtr&>(this, &CSModelProvider::BuildMesh, in_delegate, descriptor, out_resource));
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void CSModelProvider::BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource)
+		void CSModelProvider::BuildMesh(const AsyncLoadDelegate& in_delegate, MeshDescriptor& out_meshDesc, const MeshSPtr& out_resource)
 		{
-			bool bSuccess = MeshManager::BuildMesh(Core::Application::Get()->GetRenderSystem(), inMeshDescriptor, outpResource.get());
-			
+			bool success = out_resource->Build(out_meshDesc);
+
 			//cleanup
-			for (std::vector<SubMeshDescriptor>::const_iterator it = inMeshDescriptor.mMeshes.begin(); it != inMeshDescriptor.mMeshes.end(); ++it)
+			for (auto it = out_meshDesc.mMeshes.begin(); it != out_meshDesc.mMeshes.end(); ++it)
 			{
 				delete[] it->mpVertexData;
 				delete[] it->mpIndexData;
 			}
 			
-            outpResource->SetLoaded(bSuccess);
+            Core::Resource::LoadState loadState = success ? Core::Resource::LoadState::k_loaded : Core::Resource::LoadState::k_failed;
+            out_resource->SetLoadState(loadState);
+            
+            if(in_delegate != nullptr)
+            {
+                in_delegate(out_resource);
+            }
 		}
 	}
 }

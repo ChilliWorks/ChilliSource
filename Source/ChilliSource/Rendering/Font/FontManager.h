@@ -64,7 +64,7 @@ namespace ChilliSource
             /// @param The storage location to load from
 			/// @param File name
 			//-----------------------------------------------------------------
-			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceOldSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 		};
 	}
 }

@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 
@@ -27,7 +27,7 @@ namespace ChilliSource
         /// subtitles over videos played using the video player
         /// activity.
 		//=======================================================
-		class Subtitles : public Core::Resource
+		class Subtitles : public Core::ResourceOld
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(Subtitles);

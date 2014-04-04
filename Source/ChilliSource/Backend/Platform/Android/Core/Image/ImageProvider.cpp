@@ -67,7 +67,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == Core::ResourceProvider::InterfaceID || in_interfaceId == Core::ImageProvider::InterfaceID || in_interfaceId == ImageProvider::InterfaceID);
+			return (in_interfaceId == Core::ResourceProviderOld::InterfaceID || in_interfaceId == Core::ImageProvider::InterfaceID || in_interfaceId == ImageProvider::InterfaceID);
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
@@ -83,7 +83,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool ImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceSPtr& out_resource)
+		bool ImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceOldSPtr& out_resource)
 		{
 			if (Core::StringUtils::EndsWith(in_filepath, k_pngExtension, true) == true)
 			{
@@ -94,7 +94,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		bool ImageProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filePath, Core::ResourceSPtr& out_resource)
+		bool ImageProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filePath, Core::ResourceOldSPtr& out_resource)
 		{
 			CS_LOG_WARNING("Async loading is not implemented by the Image Provider.");
 

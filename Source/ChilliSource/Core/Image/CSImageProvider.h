@@ -21,7 +21,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------------
-        class CSImageProvider final : public ResourceProvider
+        class CSImageProvider final : public ResourceProviderOld
         {
         public:
             CS_DECLARE_NAMEDTYPE(CSImageProvider);
@@ -78,7 +78,7 @@ namespace ChilliSource
             ///
             /// @return Whether the resource loaded
             //-------------------------------------------------------
-            bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, Core::ResourceSPtr& out_resource) override;
+            bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, Core::ResourceOldSPtr& out_resource) override;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
             /// The resource will be returned immediately but
@@ -94,7 +94,7 @@ namespace ChilliSource
             /// @return Whether or not the resource async load was
             /// successfully started.
             //----------------------------------------------------
-			bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) override;
+			bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceOldSPtr& out_resource) override;
         private:
 
             //-------------------------------------------------------

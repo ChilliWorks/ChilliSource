@@ -249,7 +249,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Attach Mesh
 		//----------------------------------------------------------
-		void AnimatedMeshComponent::AttachMesh(const MeshSPtr& inpModel)
+		void AnimatedMeshComponent::AttachMesh(const MeshCSPtr& inpModel)
 		{
 			mpModel = inpModel;
             // Update OOBB
@@ -275,7 +275,7 @@ namespace ChilliSource
         /// material
         /// @param Mesh object
         //----------------------------------------------------------
-        void AnimatedMeshComponent::AttachMesh(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial)
+        void AnimatedMeshComponent::AttachMesh(const MeshCSPtr& inpModel, const MaterialSPtr& inpMaterial)
         {
             mpModel = inpModel;
 			mpMaterial = inpMaterial;
@@ -300,7 +300,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Mesh
         //----------------------------------------------------------
-        const MeshSPtr& AnimatedMeshComponent::GetMesh() const
+        const MeshCSPtr& AnimatedMeshComponent::GetMesh() const
         {
             return mpModel;
         }

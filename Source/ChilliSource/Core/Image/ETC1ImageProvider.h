@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_CORE_IMAGE_ETC1IMAGEPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource
 {
@@ -23,7 +23,7 @@ namespace ChilliSource
         ///
         /// @author I Copland
         //--------------------------------------------------------------------
-        class ETC1ImageProvider final : public Core::ResourceProvider
+        class ETC1ImageProvider final : public Core::ResourceProviderOld
         {
         public:
             CS_DECLARE_NAMEDTYPE(ETC1ImageProvider);
@@ -79,7 +79,7 @@ namespace ChilliSource
             ///
             /// @return Whether the resource loaded
             //----------------------------------------------------------------
-            bool CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource) override;
+            bool CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceOldSPtr& out_resource) override;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
             /// The resource will be returned immediately but
@@ -95,7 +95,7 @@ namespace ChilliSource
             /// @return Whether or not the resource async load was
             /// successfully started.
             //----------------------------------------------------
-			bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) override;
+			bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceOldSPtr& out_resource) override;
         private:
             //-------------------------------------------------------
             /// Private constructor to force use of factory method

@@ -27,8 +27,8 @@ namespace ChilliSource
     {
 		//------------------------------------------------------------------------
 		//------------------------------------------------------------------------
-		TwitterPostSystem::TwitterPostSystem(Networking::HttpRequestSystem* in_HttpRequestSystem, Core::OAuthSystem* in_oauthSystem)
-        : Social::TwitterPostSystem(in_HttpRequestSystem, in_oauthSystem)
+		TwitterPostSystem::TwitterPostSystem(Networking::HttpRequestSystem* in_httpRequestSystem, Core::OAuthSystem* in_oauthSystem)
+        : Social::TwitterPostSystem(in_httpRequestSystem, in_oauthSystem)
 		{
 			
 		}

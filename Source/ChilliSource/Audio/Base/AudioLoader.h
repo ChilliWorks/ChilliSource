@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_AUDIO_BASE_AUDIOLOADER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 #include <ChilliSource/Audio/Base/AudioManager.h>
 #include <ChilliSource/Audio/Base/AudioSystem.h>
 
@@ -24,7 +24,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------
-		class AudioLoader : public Core::ResourceProvider
+		class AudioLoader : public Core::ResourceProviderOld
 		{
 		public:
             
@@ -49,7 +49,7 @@ namespace ChilliSource
             ///
 			/// @return Success
 			//----------------------------------------------------------------------------
-			virtual bool StreamResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource) = 0;
+			virtual bool StreamResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) = 0;
 			//----------------------------------------------------------------------------
 			/// Create Audio Listener
 			///

@@ -47,27 +47,27 @@ namespace ChilliSource
 		//------------------------------------------------------------------
 		void HttpRequest::PerformRequest()
 		{
-			HttpRequestType type = HttpRequestType::k_get;
+			HttpRequestJavaInterface::RequestType type = HttpRequestJavaInterface::RequestType::k_get;
 			if (m_desc.m_type == Networking::HttpRequest::Type::k_post)
 			{
-				type = HttpRequestType::k_post;
+				type = HttpRequestJavaInterface::RequestType::k_post;
 			}
 
 			//This is a blocking call
-			HttpRequestResultCode requestResultCode = HttpRequestJavaInterface::MakeHttpRequest(m_desc.m_url, type, m_desc.m_headers, m_desc.m_body, m_responseData, m_desc.m_redirectionUrl, (s32&)m_responseCode);
+			HttpRequestJavaInterface::RequestResultCode requestResultCode = HttpRequestJavaInterface::MakeHttpRequest(m_desc.m_url, type, m_desc.m_headers, m_desc.m_body, m_responseData, m_desc.m_redirectionUrl, (s32&)m_responseCode);
 
 			if (m_shouldKillThread == false)
 			{
 				switch (requestResultCode)
 				{
-				case HttpRequestResultCode::k_success:
+				case HttpRequestJavaInterface::RequestResultCode::k_success:
 					m_requestResult = Result::k_completed;
 					break;
-				case HttpRequestResultCode::k_couldNotConnect:
-				case HttpRequestResultCode::k_couldNotMakeRequest:
+				case HttpRequestJavaInterface::RequestResultCode::k_couldNotConnect:
+				case HttpRequestJavaInterface::RequestResultCode::k_couldNotMakeRequest:
 					m_requestResult = Result::k_failed;
 					break;
-				case HttpRequestResultCode::k_timeout:
+				case HttpRequestJavaInterface::RequestResultCode::k_timeout:
 					m_requestResult = Result::k_timeout;
 					break;
 				default:

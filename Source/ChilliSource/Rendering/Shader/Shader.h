@@ -14,7 +14,7 @@
 #define _MO_FLO_RENDERING_SHADER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 
 namespace ChilliSource
 {
@@ -27,7 +27,7 @@ namespace ChilliSource
             k_fragment
 		};
 		
-		class Shader : public Core::Resource
+		class Shader : public Core::ResourceOld
 		{
 		public:
 			

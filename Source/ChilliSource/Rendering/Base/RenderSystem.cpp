@@ -42,7 +42,6 @@ namespace ChilliSource
 		RenderSystem::RenderSystem()
         : mpRenderFactory(nullptr), mpSpriteBatcher(nullptr)
 		{
-            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMeshManager);
 			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mSkinnedAnimationManager);
 			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mFontManager);
 			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMaterialManager);

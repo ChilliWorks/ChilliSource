@@ -8,7 +8,7 @@
  */
 
 #include <ChilliSource/Core/Resource/ResourceManager.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource
 {
@@ -36,9 +36,9 @@ namespace ChilliSource
 		///
 		/// @param Vector of the resource loaders that this manager will use
 		//-----------------------------------------------------------------
-		void ResourceManager::SetResourceProviders(const std::vector<ResourceProvider*> & inVecResourceProviders)
+		void ResourceManager::SetResourceProviderOlds(const std::vector<ResourceProviderOld*> & inVecResourceProviderOlds)
 		{
-			mResourceProviders = inVecResourceProviders;
+			mResourceProviderOlds = inVecResourceProviderOlds;
 		}
 		//-----------------------------------------------------------------
 		/// Manages Resource with Extension
@@ -48,9 +48,9 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		bool ResourceManager::ManagesResourceWithExtension(const std::string &instrExtension) const
 		{
-			for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
+			for (u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++) 
 			{
-				if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(instrExtension))
+				if(mResourceProviderOlds[nProvider]->CanCreateResourceFromFileWithExtension(instrExtension))
 				{
 					return true;
 				}
@@ -68,13 +68,13 @@ namespace ChilliSource
 		///
 		/// @param Resource pointer
 		//-----------------------------------------------------------------
-		void ResourceManager::Release(Resource* inpResource)
+		void ResourceManager::Release(ResourceOld* inpResource)
 		{
 			for(MapStringToResourceSPtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)
 			{
 				if(it->second.get() == inpResource)
 				{
-					ResourceSPtr pResource = it->second;
+					ResourceOldSPtr pResource = it->second;
 					CS_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
 					CS_LOG_DEBUG("Releasing resource from cache " + inpResource->GetName());
 					mMapFilenameToResource.erase(it);
@@ -94,7 +94,7 @@ namespace ChilliSource
 		{
 			for(MapStringToResourceSPtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)
 			{
-				ResourceSPtr pResource = it->second;
+				ResourceOldSPtr pResource = it->second;
 				CS_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
 				CS_LOG_DEBUG("Releasing resource from cache " + pResource->GetName());
 			}
@@ -135,9 +135,9 @@ namespace ChilliSource
 		/// @param file extension string
 		/// @return resource provider
 		//-----------------------------------------------------------------
-		ResourceProvider* ResourceManager::GetResourceProviderByExtension(const std::string &instrExtension)
+		ResourceProviderOld* ResourceManager::GetResourceProviderOldByExtension(const std::string &instrExtension)
 		{
-			for (std::vector<ResourceProvider*>::iterator it = mResourceProviders.begin(); it != mResourceProviders.end(); it++)
+			for (std::vector<ResourceProviderOld*>::iterator it = mResourceProviderOlds.begin(); it != mResourceProviderOlds.end(); it++)
 			{
 				if ((*it)->CanCreateResourceFromFileWithExtension(instrExtension) == true)
 				{

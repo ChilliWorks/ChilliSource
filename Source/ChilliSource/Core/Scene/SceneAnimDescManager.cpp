@@ -38,12 +38,12 @@ namespace ChilliSource
             return inInterfaceID == SceneAnimation::InterfaceID;
         }
         
-        ResourceSPtr SceneAnimDescManager::GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        ResourceOldSPtr SceneAnimDescManager::GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return GetSceneAnimationFromFile(ineStorageLocation, instrFilePath);
         }
         
-        ResourceSPtr SceneAnimDescManager::AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        ResourceOldSPtr SceneAnimDescManager::AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return AsyncGetSceneAnimationFromFile(ineStorageLocation, instrFilePath);
         }
@@ -54,10 +54,10 @@ namespace ChilliSource
             
             if(pExistingResource == mMapFilenameToResource.end())
             {
-                ResourceSPtr pResource(new SceneAnimation());
-                for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
+                ResourceOldSPtr pResource(new SceneAnimation());
+                for(u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++)
                 {
-                    if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
+                    if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {
                         CS_LOG_DEBUG("Loading Scene Animation " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
@@ -87,8 +87,8 @@ namespace ChilliSource
             
             if(pExistingResource == mMapFilenameToResource.end())
             {
-                ResourceSPtr pResource(new SceneAnimation());
-                for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
+                ResourceOldSPtr pResource(new SceneAnimation());
+                for(u32 nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++)
                 {
                     
                     SceneAnimationSPtr pSceneAnim = std::static_pointer_cast<SceneAnimation>(pResource);
@@ -97,7 +97,7 @@ namespace ChilliSource
                     pSceneAnim->SetFilename(instrFilePath);
                     pSceneAnim->SetStorageLocation(ineStorageLocation);
                     
-                    if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
+                    if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {
                         CS_LOG_DEBUG("Loading Scene Description " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);

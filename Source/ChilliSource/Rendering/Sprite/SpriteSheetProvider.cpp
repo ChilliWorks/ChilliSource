@@ -40,7 +40,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool SpriteSheetProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == SpriteSheetProvider::InterfaceID;
+			return in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == SpriteSheetProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -56,7 +56,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool SpriteSheetProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		bool SpriteSheetProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
 		{
             SpriteSheetSPtr spriteResource(std::static_pointer_cast<SpriteSheet>(out_resource));
             spriteResource->SetLoaded(false);
@@ -71,7 +71,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        bool SpriteSheetProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+        bool SpriteSheetProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
         {
             //TODO: Implement this once we have a way of resolving whether loading of bin and id file on separate threads
             //has worked

@@ -11,7 +11,7 @@
 #define _MO_FLO_RENDERING_SKELETALANIMATION_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Math/Vector3.h>
@@ -34,7 +34,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		/// Skeletal Animation Resource.
 		//---------------------------------------------------------------------
-		class SkinnedAnimation : public Core::Resource
+		class SkinnedAnimation : public Core::ResourceOld
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(SkinnedAnimation);

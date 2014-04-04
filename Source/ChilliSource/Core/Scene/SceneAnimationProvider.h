@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_CORE_SCENE_SCENEANIMATIONPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource
 {
@@ -22,7 +22,7 @@ namespace ChilliSource
         ///
         /// @author A Glass
         //-------------------------------------------------------
-        class SceneAnimationProvider final : public ResourceProvider
+        class SceneAnimationProvider final : public ResourceProviderOld
         {
         public:
             CS_DECLARE_NAMEDTYPE(SceneAnimationProvider);
@@ -72,7 +72,7 @@ namespace ChilliSource
             /// @return Whether or not the resource can be
             /// created.
             //-------------------------------------------------
-            bool CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource) override;
+            bool CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceOldSPtr& out_resource) override;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
             /// The resource will be returned immediately but
@@ -88,7 +88,7 @@ namespace ChilliSource
             /// @return Whether or not the resource async load was
             /// successfully started.
             //----------------------------------------------------
-			bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) override;
+			bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceOldSPtr& out_resource) override;
         };
     }
 }

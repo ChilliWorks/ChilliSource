@@ -13,7 +13,7 @@
 #define MoshiMonsters_SceneAnimation_h
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 #include <ChilliSource/Core/Entity/EntityAnimation.h>
 
 namespace ChilliSource
@@ -57,7 +57,7 @@ namespace ChilliSource
             std::vector<EntityAnimationDesc>	asEntityAnimations;
         };
         
-        class SceneAnimation : public ChilliSource::Core::Resource
+        class SceneAnimation : public Core::ResourceOld
         {
         public:
             CS_DECLARE_NAMEDTYPE(SceneAnimation);

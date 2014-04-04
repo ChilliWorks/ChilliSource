@@ -14,7 +14,7 @@
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace ChilliSource
@@ -77,7 +77,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourceSPtr SpriteSheetManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceOldSPtr SpriteSheetManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			//It's the texture that is passed in so we need to load the binary file
             std::string strSpriteSheetFile;
@@ -89,11 +89,11 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end())
 			{
-				Core::ResourceSPtr pResource(new SpriteSheet());
+				Core::ResourceOldSPtr pResource(new SpriteSheet());
 				
-				for(size_t nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
+				for(size_t nProvider = 0; nProvider < mResourceProviderOlds.size(); nProvider++)
 				{
-					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, strSpriteSheetFile, pResource))
+					if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, strSpriteSheetFile, pResource))
 					{
 						//Add it to the cache
 						CS_LOG_DEBUG("Loading sprite data " + strSpriteSheetFile);

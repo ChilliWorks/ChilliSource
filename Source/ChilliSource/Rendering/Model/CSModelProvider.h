@@ -39,14 +39,12 @@ namespace ChilliSource
 			/// @return Whether the object implements the given interface
 			//-------------------------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-			//----------------------------------------------------------------------------
-			/// @author I Copland
-			///
-			/// @param Type to compare
+            //----------------------------------------------------
+            /// @author S Downie
             ///
-			/// @return Whether the object can create a resource of given type
-			//----------------------------------------------------------------------------
-			bool CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const override;
+            /// @return The resource type this provider can create
+            //----------------------------------------------------
+            Core::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------------------------
 			/// @author I Copland
 			///
@@ -54,7 +52,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the object can create a resource with the given extension
 			//----------------------------------------------------------------------------
-			bool CanCreateResourceFromFileWithExtension(const std::string& in_extension) const override;
+			bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
 
 		private:
             
@@ -70,45 +68,40 @@ namespace ChilliSource
             /// @author I Copland
 			///
             /// @param The storage location to load from
-			/// @param Filename
-			/// @param the output resource pointer
-            ///
-			/// @return whether or not this was successful
+			/// @param File path
+			/// @param [Out] the output resource pointer
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// Create mesh resource from model file on a background thread
 			///
             /// @author I Copland
             ///
             /// @param The storage location to load from
-			/// @param Filename
-			/// @param the output resource pointer
-            ///
-			/// @return whether or not this was successfully scheduled
+			/// @param File path
+            /// @param Delegate to callback on completion either success or failure
+			/// @param [Out] the output resource pointer
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// @author I Copland
 			///
             /// @param The storage location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Delegate to callback on completion either success or failure
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void LoadMeshDataTask(Core::StorageLocation in_location, const std::string& in_filePath, const MeshSPtr& out_resource);
+			void LoadMeshDataTask(Core::StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const MeshSPtr& out_resource);
 			//----------------------------------------------------------------------------
 			/// Constructs the mesh buffer from the mesh description
 			///
 			/// @author I Copland
 			///
-			/// @param The MeshDescriptor used to build the mesh
-			/// @param the mesh resource
+            /// @param Delegate to callback on completion either success or failure
+			/// @param [Out] The MeshDescriptor used to build the mesh
+			/// @param [Out] The mesh resource
 			//----------------------------------------------------------------------------
-			void BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshSPtr& out_resource);
-
-		private:	
-			
-			friend class MeshManager;
+			void BuildMesh(const AsyncLoadDelegate& in_delegate, MeshDescriptor& out_meshDesc, const MeshSPtr& out_resource);
 		};
 	}
 }

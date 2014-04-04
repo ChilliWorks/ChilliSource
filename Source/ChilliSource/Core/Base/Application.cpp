@@ -27,10 +27,10 @@
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Resource/ResourceGroupManager.h>
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/String/StringParser.h>
@@ -83,7 +83,7 @@ namespace ChilliSource
         //----------------------------------------------------
         //----------------------------------------------------
 		Application::Application()
-        : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_audioSystem(nullptr),
+        : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_audioSystem(nullptr), m_resourcePool(nullptr),
         m_renderer(nullptr), m_fileSystem(nullptr), m_stateManager(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_resourceManagerDispenser(nullptr), m_updateIntervalRemainder(0.0f),
         m_shouldNotifyConnectionsResumeEvent(false), m_shouldNotifyConnectionsForegroundEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
 		{
@@ -144,57 +144,21 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        const Rendering::FontSPtr& Application::GetDefaultFont()
+        const Rendering::FontSPtr& Application::GetDefaultFont() const
         {
             return m_defaultFont;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        const Rendering::MeshSPtr& Application::GetDefaultMesh()
+        const Rendering::MeshCSPtr& Application::GetDefaultMesh() const
         {
             return m_defaultMesh;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        const Rendering::MaterialSPtr& Application::GetDefaultMaterial()
+        const Rendering::MaterialSPtr& Application::GetDefaultMaterial() const
         {
             return m_defaultMaterial;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        StateManager* Application::GetStateManager()
-        {
-            return m_stateManager;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        Rendering::Renderer* Application::GetRenderer()
-        {
-            return m_renderer.get();
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        Rendering::RenderSystem* Application::GetRenderSystem()
-        {
-            return m_renderSystem;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        PlatformSystem* Application::GetPlatformSystem()
-        {
-            return m_platformSystem.get();
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        Audio::AudioSystem* Application::GetAudioSystem()
-        {
-            return m_audioSystem;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        FileSystem* Application::GetFileSystem()
-        {
-            return m_fileSystem;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -460,6 +424,8 @@ namespace ChilliSource
             CS_SAFEDELETE(m_resourceManagerDispenser);
             CS_SAFEDELETE(m_componentFactoryDispenser);
             
+            m_resourcePool->Destroy();
+            
 			//We have an issue with the order of destruction of systems.
 			while(m_systemsOld.empty() == false)
 			{
@@ -485,6 +451,8 @@ namespace ChilliSource
             //Core
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
+            
+            m_resourcePool = CreateSystem<ResourcePool>();
 
             //TODO: Change this to a PNG image provider.
             CreateSystem<ImageProvider>();
@@ -516,6 +484,7 @@ namespace ChilliSource
 		void Application::PostCreateSystems()
 		{
             //Loop round all the created systems and categorise them
+            //TODO: Remove when all old systems have been changed
 			for(std::vector<SystemUPtr>::iterator it = m_systemsOld.begin(); it != m_systemsOld.end(); ++it)
 			{
                 System* pSystem = it->get();
@@ -539,19 +508,25 @@ namespace ChilliSource
 				}
                 
                 //Resource providers
-				if(pSystem->IsA(ResourceProvider::InterfaceID))
+				if(pSystem->IsA(ResourceProviderOld::InterfaceID))
 				{
-					m_resourceProviders.push_back(dynamic_cast<ResourceProvider*>(pSystem));
+					m_ResourceProviderOlds.push_back(dynamic_cast<ResourceProviderOld*>(pSystem));
 				}
 			}
             
             //Loop round all the created app systems and categorise them
 			for(const AppSystemUPtr& system : m_systems)
 			{
+                //TODO: Remove when all providers have been changed
+				if(system->IsA(ResourceProviderOld::InterfaceID))
+				{
+					m_ResourceProviderOlds.push_back(dynamic_cast<ResourceProviderOld*>(system.get()));
+				}
+                
                 //Resource providers
 				if(system->IsA(ResourceProvider::InterfaceID))
 				{
-					m_resourceProviders.push_back(dynamic_cast<ResourceProvider*>(system.get()));
+                    m_resourcePool->AddProvider(dynamic_cast<ResourceProvider*>(system.get()));
 				}
                 
                 //TODO: Remove this when all Component producers have been changed to systems
@@ -568,7 +543,7 @@ namespace ChilliSource
 			}
 
             //Give the resource managers their providers
-            m_resourceManagerDispenser->SetResourceProviders(m_resourceProviders);
+            m_resourceManagerDispenser->SetResourceProviderOlds(m_ResourceProviderOlds);
 
             Audio::AudioPlayer::Init();
 
@@ -578,6 +553,8 @@ namespace ChilliSource
         //----------------------------------------------------
         void Application::LoadDefaultResources()
         {
+            CS_ASSERT(m_resourcePool, "Resource pool must be available when loading default resources");
+            
             Json::Value jRoot;
             if(Utils::ReadJson(StorageLocation::k_package, "App.config", &jRoot) == true)
             {
@@ -598,7 +575,7 @@ namespace ChilliSource
                 {
                     StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultMesh"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultMesh"].get("Path", "").asString();
-                    m_defaultMesh = LOAD_RESOURCE(Rendering::Mesh, eStorageLocation, strPath);
+                    m_defaultMesh = m_resourcePool->LoadResource<Rendering::Mesh>(eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultFont"))

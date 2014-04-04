@@ -11,7 +11,7 @@
 #define _MOFLO_RENDERING_ITEXTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Resource/ResourceOld.h>
 
 namespace ChilliSource
 {
@@ -20,7 +20,7 @@ namespace ChilliSource
 		const f32 kTexelOffset		= 1.0f;
 		const f32 kHalfTexelOffset	= kTexelOffset * 0.5f;
 		
-		class Texture : public Core::Resource
+		class Texture : public Core::ResourceOld
 		{
 		public:
 			
