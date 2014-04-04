@@ -136,42 +136,25 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void FacebookPostSystem::OnPostToFeedComplete(bool inbSuccess)
+		void FacebookPostSystem::OnPostToFeedComplete(PostResult in_result)
 		{
 			if(!m_postCompleteDelegate)
 			{
 				return;
 			}
 
-			if(inbSuccess)
-			{
-				m_postCompleteDelegate(PostResult::k_success);
-			}
-			else
-			{
-				m_postCompleteDelegate(PostResult::k_failed);
-            }
-
+			m_postCompleteDelegate(in_result);
 			m_postCompleteDelegate = nullptr;
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void FacebookPostSystem::OnPostRequestComplete(bool inbSuccess)
+		void FacebookPostSystem::OnPostRequestComplete(PostResult in_result)
 		{
 			if(!m_requestCompleteDelegate)
 			{
 				return;
 			}
-
-			if(inbSuccess)
-			{
-				m_requestCompleteDelegate(PostResult::k_success);
-			}
-			else
-			{
-				m_requestCompleteDelegate(PostResult::k_failed);
-            }
-
+			m_requestCompleteDelegate(in_result);
 			m_requestCompleteDelegate = nullptr;
 		}
 		//----------------------------------------------------

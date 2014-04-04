@@ -25,8 +25,8 @@ extern "C"
 	void Java_com_chillisource_social_FacebookNativeInterface_OnAuthenticationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
 	void Java_com_chillisource_social_FacebookNativeInterface_OnReadAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
 	void Java_com_chillisource_social_FacebookNativeInterface_OnWriteAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
-	void Java_com_chillisource_social_FacebookNativeInterface_OnPostToFeedComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
-	void Java_com_chillisource_social_FacebookNativeInterface_OnPostRequestComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
+	void Java_com_chillisource_social_FacebookNativeInterface_OnPostToFeedComplete(JNIEnv* inpEnv, jobject inpThis, s32 in_result);
+	void Java_com_chillisource_social_FacebookNativeInterface_OnPostRequestComplete(JNIEnv* inpEnv, jobject inpThis, s32 in_result);
 }
 
 //------------------------------------------------------------
@@ -84,13 +84,27 @@ void Java_com_chillisource_social_FacebookNativeInterface_OnWriteAuthorisationCo
 //
 // @param Java environment
 // @param The java object calling the function
-// @param The success of the authorised
+// @param The result of the authorised
 //------------------------------------------------------------
-void Java_com_chillisource_social_FacebookNativeInterface_OnPostToFeedComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
+void Java_com_chillisource_social_FacebookNativeInterface_OnPostToFeedComplete(JNIEnv* inpEnv, jobject inpThis, s32 in_result)
 {
 	if(gpAndroidPostSystem)
 	{
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidPostSystem, &ChilliSource::Android::FacebookPostSystem::OnPostToFeedComplete, inbSuccess));
+		CSSocial::FacebookPostSystem::PostResult result = CSSocial::FacebookPostSystem::PostResult::k_failed;
+		switch(in_result)
+		{
+		case 0:
+			result = CSSocial::FacebookPostSystem::PostResult::k_success;
+			break;
+		case 1:
+			result = CSSocial::FacebookPostSystem::PostResult::k_cancelled;
+			break;
+		default:
+			result = CSSocial::FacebookPostSystem::PostResult::k_failed;
+			break;
+		}
+
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<CSSocial::FacebookPostSystem::PostResult>(gpAndroidPostSystem, &ChilliSource::Android::FacebookPostSystem::OnPostToFeedComplete, result));
 	}
 }
 //------------------------------------------------------------
@@ -100,13 +114,27 @@ void Java_com_chillisource_social_FacebookNativeInterface_OnPostToFeedComplete(J
 //
 // @param Java environment
 // @param The java object calling the function
-// @param The success of the authorised
+// @param The result of the authorised
 //------------------------------------------------------------
-void Java_com_chillisource_social_FacebookNativeInterface_OnPostRequestComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
+void Java_com_chillisource_social_FacebookNativeInterface_OnPostRequestComplete(JNIEnv* inpEnv, jobject inpThis, s32 in_result)
 {
 	if(gpAndroidPostSystem)
 	{
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidPostSystem, &ChilliSource::Android::FacebookPostSystem::OnPostRequestComplete, inbSuccess));
+		CSSocial::FacebookPostSystem::PostResult result = CSSocial::FacebookPostSystem::PostResult::k_failed;
+		switch(in_result)
+		{
+		case 0:
+			result = CSSocial::FacebookPostSystem::PostResult::k_success;
+			break;
+		case 1:
+			result = CSSocial::FacebookPostSystem::PostResult::k_cancelled;
+			break;
+		default:
+			result = CSSocial::FacebookPostSystem::PostResult::k_failed;
+			break;
+		}
+
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<CSSocial::FacebookPostSystem::PostResult>(gpAndroidPostSystem, &ChilliSource::Android::FacebookPostSystem::OnPostRequestComplete, result));
 	}
 }
 

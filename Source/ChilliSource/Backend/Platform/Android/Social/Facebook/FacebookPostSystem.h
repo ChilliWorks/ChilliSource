@@ -88,18 +88,18 @@ namespace ChilliSource
             ///
             /// @author R Henning
             ///
-            /// @param Whether the post was successful
+            /// @param Result
             //---------------------------------------------------
-			void OnPostToFeedComplete(bool in_success);
+			void OnPostToFeedComplete(PostResult in_result);
             //---------------------------------------------------
             /// Called by JNI when the Facebook SDK has
             /// finished requesting.
             ///
             /// @author A Mackie
             ///
-            /// @param Whether the request was successful
+            /// @param Result
             //---------------------------------------------------
-			void OnPostRequestComplete(bool in_success);
+			void OnPostRequestComplete(PostResult in_result);
             //----------------------------------------------------
             /// Called when the system is destroyed freeing any
 			/// resources

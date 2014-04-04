@@ -41,11 +41,15 @@ public class FacebookNativeInterface extends INativeInterface
 {
 	private static final InterfaceIDType InterfaceID = new InterfaceIDType("FacebookNativeInterface");
 	
+	private static final int k_resultSuccess = 0;
+	private static final int k_resultCancel = 1;
+	private static final int k_resultFailure = 2;
+	
 	public native void OnAuthenticationComplete(boolean inbSuccess);
 	public native void OnReadAuthorisationComplete(boolean inbSuccess);
 	public native void OnWriteAuthorisationComplete(boolean inbSuccess);
-	public native void OnPostToFeedComplete(boolean inbSuccess);
-	public native void OnPostRequestComplete(boolean inbSuccess);
+	public native void OnPostToFeedComplete(int in_result);
+	public native void OnPostRequestComplete(int in_result);
 	
 	public FacebookNativeInterface()
 	{
@@ -419,31 +423,36 @@ public class FacebookNativeInterface extends INativeInterface
 	    		    @Override
 	    		    public void onComplete(Bundle values, FacebookException error)
 	    		    {
-	    		        if (error != null && !(error instanceof FacebookOperationCanceledException))
+	    		        if (error != null)
 	    		        {	
+	    		        	final int result = ((error instanceof FacebookOperationCanceledException) == true) ? k_resultCancel : k_resultFailure;
+	    		        	
 	    		        	CSApplication.get().scheduleMainThreadTask(new Runnable()
 		    		    	{
 					    		@Override
 					    		public void run()
 					    		{
 					    			if(action == "feed")
-							    		OnPostToFeedComplete(false);
+							    		OnPostToFeedComplete(result);
 							    	else
-							    		OnPostRequestComplete(false);
+							    		OnPostRequestComplete(result);
 					    		}
 					    	});
 	    		        }
 	    		        else
 	    		        {
+	    		        	String postID = values.getString("post_id");
+	    		        	final int result = (postID != null) ? k_resultSuccess : k_resultCancel;
+	    		        	
 	    		        	CSApplication.get().scheduleMainThreadTask(new Runnable()
 	        		    	{
 	        		    		@Override
 	        		    		public void run()
 	        		    		{
 	        		    			if(action == "feed")
-	        				    		OnPostToFeedComplete(true);
+	        				    		OnPostToFeedComplete(result);
 	        				    	else
-	        				    		OnPostRequestComplete(true);
+	        				    		OnPostRequestComplete(result);
 	        		    		}
 	        		    	});
 	    		        }
