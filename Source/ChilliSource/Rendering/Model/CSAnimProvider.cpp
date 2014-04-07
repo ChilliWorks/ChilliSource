@@ -204,6 +204,11 @@ namespace ChilliSource
 			if(ReadHeader(stream, in_filePath, out_resource, numFrames, numSkeletonNodes) == false)
             {
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                if(in_delegate != nullptr)
+                {
+                    Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
+                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+                }
                 return;
             }
             
