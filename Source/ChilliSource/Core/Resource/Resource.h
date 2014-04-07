@@ -70,7 +70,8 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			/// @author S Downie
 			///
-			/// @return The file path of the resource.
+			/// @return The file path of the resource. If the resource
+            /// was not loaded from file then this is empty.
 			//-------------------------------------------------------
 			const std::string& GetFilePath() const;
 			//-------------------------------------------------------
@@ -87,10 +88,10 @@ namespace ChilliSource
             StorageLocation GetStorageLocation() const;
             //-------------------------------------------------------
             /// NOTE: This is used by the resource providers and
-            /// should not be called by the general application.
-            /// Used to flag the load state mostly from async load operations
-            ///
-            /// Will notify any waiting parties if load is complete
+            /// should not be called by the general application unless
+            /// they are manually constructing resources. The application
+            /// can check this flag to determine if the resource was
+            /// loaded correctly
             ///
             /// @author S Downie
             ///

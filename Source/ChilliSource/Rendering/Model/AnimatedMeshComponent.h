@@ -164,18 +164,6 @@ namespace ChilliSource
             /// @return The components internal mesh
             //----------------------------------------------------------
             const MeshCSPtr& GetMesh() const;
-			//----------------------------------------------------------
-			/// Attach Animation
-			///
-			/// Attaches an animation to the active animation group.
-            /// The active animation group must have at least one 
-            /// animation in it for the mesh to render.
-			///
-            /// @param The storage location from which to load.
-			/// @param the animation filename
-            /// @param the position of the animation on the blendline.
-			//----------------------------------------------------------
-			void AttachAnimation(Core::StorageLocation ineStorageLocation, const std::string& instrAnimation, f32 infBlendlinePosition = 0.0f);
             //----------------------------------------------------------
 			/// Attach Animation
 			///
@@ -186,7 +174,7 @@ namespace ChilliSource
             /// @param The animation pointer.
             /// @param the position of the animation on the blendline.
 			//----------------------------------------------------------
-			void AttachAnimation(const SkinnedAnimationSPtr& inpAnimation, f32 infBlendlinePosition = 0.0f);
+			void AttachAnimation(const SkinnedAnimationCSPtr& inpAnimation, f32 infBlendlinePosition = 0.0f);
             //----------------------------------------------------------
 			/// Detatch Animation
 			///
@@ -195,13 +183,13 @@ namespace ChilliSource
             /// @param The animation pointer.
             /// @param the position of the animation on the blendline.
 			//----------------------------------------------------------
-			void DetatchAnimation(const SkinnedAnimationSPtr& inpAnimation);
+			void DetatchAnimation(const SkinnedAnimationCSPtr& inpAnimation);
             //----------------------------------------------------------
 			/// Get Animations
             ///
             /// @param OUT: A list of all attached animations.
 			//----------------------------------------------------------
-            void GetAnimations(std::vector<SkinnedAnimationSPtr>& outapSkinnedAnimationList);
+            void GetAnimations(std::vector<SkinnedAnimationCSPtr>& outapSkinnedAnimationList);
             //----------------------------------------------------------
 			/// Fade Out
 			///

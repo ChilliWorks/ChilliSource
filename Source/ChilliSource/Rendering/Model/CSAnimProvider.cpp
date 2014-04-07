@@ -55,7 +55,7 @@ namespace ChilliSource
                 for (u32 frameCount=0; frameCount<in_numFrames; ++frameCount)
                 {
                     //create new frame
-                    SkinnedAnimationFrameUPtr frame(new SkinnedAnimationFrame());
+                    SkinnedAnimation::FrameUPtr frame(new SkinnedAnimation::Frame());
                     
                     //add all skeleton nodes matrices
                     for (u32 skelNodeCount=0; skelNodeCount<(u32)in_numSkeletonNodes; ++skelNodeCount)
@@ -80,9 +80,9 @@ namespace ChilliSource
                         scale.z = ReadValue<f32>(in_fileStream);
                         
                         //add to the frame
-                        frame->mNodeTranslations.push_back(translation);
-                        frame->mNodeOrientations.push_back(orientation);
-                        frame->mNodeScalings.push_back(scale);
+                        frame->m_nodeTranslations.push_back(translation);
+                        frame->m_nodeOrientations.push_back(orientation);
+                        frame->m_nodeScalings.push_back(scale);
                     }
                     
                     //add frame to animation
@@ -152,46 +152,50 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool CSAnimProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == CSAnimProvider::InterfaceID;
+			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSAnimProvider::InterfaceID;
 		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::InterfaceIDType CSAnimProvider::GetResourceType() const
+        {
+            return SkinnedAnimation::InterfaceID;
+        }
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSAnimProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
-		{
-			return (in_interfaceId == SkinnedAnimation::InterfaceID);
-		}
-		//----------------------------------------------------------------------------
-		//----------------------------------------------------------------------------
-		bool CSAnimProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
+		bool CSAnimProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
 		{
 			return (in_extension == k_fileExtension);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSAnimProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
+		void CSAnimProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
 			SkinnedAnimationSPtr anim = std::static_pointer_cast<SkinnedAnimation>(out_resource);
-			anim->SetLoaded(false);
             
-            ReadSkinnedAnimationFromFile(in_location, in_filePath, anim);
-            return anim->IsLoaded();
+            ReadSkinnedAnimationFromFile(in_location, in_filePath, nullptr, anim);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool CSAnimProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
+		void CSAnimProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
 		{
 			SkinnedAnimationSPtr anim = std::static_pointer_cast<SkinnedAnimation>(out_resource);
-			anim->SetLoaded(false);
             
 			//Load model as task
-			Core::Task<Core::StorageLocation, const std::string&, const SkinnedAnimationSPtr&> AnimTask(this, &CSAnimProvider::ReadSkinnedAnimationFromFile,in_location, in_filePath, anim);
+			Core::Task
+            <
+            Core::StorageLocation,
+            const std::string&,
+            const Core::ResourceProvider::AsyncLoadDelegate&,
+            const SkinnedAnimationSPtr&
+            >
+            AnimTask(this, &CSAnimProvider::ReadSkinnedAnimationFromFile, in_location, in_filePath, in_delegate, anim);
+            
+            
 			Core::TaskScheduler::ScheduleTask(AnimTask);
-			
-			return true;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void CSAnimProvider::ReadSkinnedAnimationFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const SkinnedAnimationSPtr& out_resource) const
+		void CSAnimProvider::ReadSkinnedAnimationFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const SkinnedAnimationSPtr& out_resource) const
 		{
 			Core::FileStreamSPtr stream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_readBinary);
 			
@@ -199,12 +203,19 @@ namespace ChilliSource
 			s32 numSkeletonNodes = 0;
 			if(ReadHeader(stream, in_filePath, out_resource, numFrames, numSkeletonNodes) == false)
             {
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 return;
             }
             
 			ReadAnimationData(stream, numFrames, numSkeletonNodes, out_resource);
 			
-			out_resource->SetLoaded(true);
+            out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+            
+            if(in_delegate != nullptr)
+            {
+                Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
+                Core::TaskScheduler::ScheduleMainThreadTask(task);
+            }
 		}
 	}
 }

@@ -8,6 +8,7 @@
  */
 
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
+
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
@@ -18,6 +19,7 @@
 
 #include <ChilliSource/Core/Entity/Entity.h>
 
+#include <ChilliSource/Rendering/Model/Skeleton.h>
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Application.h>
@@ -304,17 +306,10 @@ namespace ChilliSource
         {
             return mpModel;
         }
-		//----------------------------------------------------------
-        /// Attach Animation
-        //----------------------------------------------------------
-        void AnimatedMeshComponent::AttachAnimation(Core::StorageLocation ineStorageLocation, const std::string& instrAnimation, f32 infBlendlinePosition)
-        {
-            AttachAnimation(LOAD_RESOURCE(SkinnedAnimation, ineStorageLocation, instrAnimation), infBlendlinePosition);
-        }
         //----------------------------------------------------------
         /// Attach Animation
         //----------------------------------------------------------
-        void AnimatedMeshComponent::AttachAnimation(const SkinnedAnimationSPtr& inpAnimation, f32 infBlendlinePosition)
+        void AnimatedMeshComponent::AttachAnimation(const SkinnedAnimationCSPtr& inpAnimation, f32 infBlendlinePosition)
         {
             if (nullptr != mActiveAnimationGroup)
             {
@@ -325,7 +320,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Animations
         //----------------------------------------------------------
-        void AnimatedMeshComponent::GetAnimations(std::vector<SkinnedAnimationSPtr>& outapSkinnedAnimationList)
+        void AnimatedMeshComponent::GetAnimations(std::vector<SkinnedAnimationCSPtr>& outapSkinnedAnimationList)
         {
             if (nullptr != mActiveAnimationGroup)
             {
@@ -335,7 +330,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Detatch Animation
         //----------------------------------------------------------
-        void AnimatedMeshComponent::DetatchAnimation(const SkinnedAnimationSPtr& inpAnimation)
+        void AnimatedMeshComponent::DetatchAnimation(const SkinnedAnimationCSPtr& inpAnimation)
         {
             if (nullptr != mActiveAnimationGroup)
             {

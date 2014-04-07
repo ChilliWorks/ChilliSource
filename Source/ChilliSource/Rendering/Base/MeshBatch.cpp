@@ -134,7 +134,7 @@ namespace ChilliSource
 				//---------------------------------------------------
                 // Sub-Meshes
                 //---------------------------------------------------
-				for(std::vector<SubMeshSPtr>::const_iterator jt = it->first->GetMesh()->mSubMeshes.begin(); jt != it->first->GetMesh()->mSubMeshes.end(); ++jt)
+				for(auto jt = it->first->GetMesh()->m_subMeshes.begin(); jt != it->first->GetMesh()->m_subMeshes.end(); ++jt)
 				{
 					MeshBuffer* pSubBuffer = (*jt)->GetInternalMeshBuffer();
 					pSubBuffer->Bind();

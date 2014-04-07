@@ -17,7 +17,6 @@
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Font/FontManager.h>
 #include <ChilliSource/Rendering/Material/MaterialManager.h>
-#include <ChilliSource/Rendering/Model/SkinnedAnimationManager.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 
 namespace ChilliSource
@@ -137,7 +136,6 @@ namespace ChilliSource
 			RenderComponentFactory* mpRenderFactory;
 			
 			//---Render resource managers
-			SkinnedAnimationManager mSkinnedAnimationManager;
             FontManager mFontManager;
 			MaterialManager mMaterialManager;
 			SpriteSheetManager mSpriteManager;

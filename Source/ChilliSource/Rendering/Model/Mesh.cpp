@@ -1,27 +1,24 @@
-/*
- *  Mesh.cpp
- *  moFlo
- *
- *  Created by Scott Downie on 06/10/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Mesh.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 06/10/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Rendering/Model/Mesh.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
-#include <ChilliSource/Rendering/Base/VertexLayouts.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 #include <ChilliSource/Rendering/Model/SubMesh.h>
+#include <ChilliSource/Rendering/Model/Skeleton.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
-
-#include <limits>
 
 namespace ChilliSource
 {
@@ -37,15 +34,14 @@ namespace ChilliSource
 		//--------------------------------------------------------------------
 		//--------------------------------------------------------------------
 		Mesh::Mesh()
-		: mudwTotalVerts(0), mudwTotalIndices(0), mpSkeleton(new Skeleton())
+		: m_totalNumVerts(0), m_totalNumIndices(0), m_skeleton(new Skeleton())
 		{
 		}
 		//---------------------------------------------------------------------
-		/// Is A
 		//---------------------------------------------------------------------
-		bool Mesh::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Mesh::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return inInterfaceID == Mesh::InterfaceID;
+			return in_interfaceId == Mesh::InterfaceID;
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
@@ -58,7 +54,7 @@ namespace ChilliSource
             
             if (in_meshDesc.mFeatures.mbHasAnimationData == true)
             {
-                mpSkeleton = in_meshDesc.mpSkeleton;
+                m_skeleton = in_meshDesc.mpSkeleton;
             }
             
             //iterate through each mesh
@@ -102,135 +98,118 @@ namespace ChilliSource
             return bSuccess;
         }
 		//-----------------------------------------------------------------
-		/// Get AABB
 		//-----------------------------------------------------------------
 		const Core::AABB& Mesh::GetAABB() const
 		{
-			return mBoundingBox;
+			return m_aabb;
 		}
 		//-----------------------------------------------------------------
-        /// Get Number of Vertices
         //-----------------------------------------------------------------
         u32 Mesh::GetNumVerts() const
         {
-            return mudwTotalVerts;
+            return m_totalNumVerts;
         }
         //-----------------------------------------------------------------
-        /// Get Number of Indices
         //-----------------------------------------------------------------
         u32 Mesh::GetNumIndices() const
         {
-            return mudwTotalIndices;
+            return m_totalNumIndices;
         }
 		//-----------------------------------------------------------------
-		/// Get Skeleton
 		//-----------------------------------------------------------------
 		const SkeletonSPtr& Mesh::GetSkeletonPtr() const
 		{
-			return mpSkeleton;
+			return m_skeleton;
 		}
 		//-----------------------------------------------------------------
-		/// Get Number of Sub Meshes
 		//-----------------------------------------------------------------
 		u32 Mesh::GetNumSubMeshes() const
 		{
-			return mSubMeshes.size();
+			return m_subMeshes.size();
 		}
 		//-----------------------------------------------------------------
-		/// Get Sub-mesh at Index
 		//-----------------------------------------------------------------
-		SubMeshCSPtr Mesh::GetSubMeshAtIndex(u32 inIndex) const
+		SubMeshCSPtr Mesh::GetSubMeshAtIndex(u32 in_index) const
 		{
-            CS_ASSERT(inIndex < mSubMeshes.size(), "Sub mesh index out of bounds");
-			return mSubMeshes[inIndex];
+            CS_ASSERT(in_index < m_subMeshes.size(), "Sub mesh index out of bounds");
+			return m_subMeshes[in_index];
 		}
 		//-----------------------------------------------------------------
-		/// Get Sub-mesh by Name
 		//-----------------------------------------------------------------
-		SubMeshCSPtr Mesh::GetSubMeshByName(const std::string& instrName) const
+		SubMeshCSPtr Mesh::GetSubMeshByName(const std::string& in_name) const
 		{
-			for (std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for (auto it = m_subMeshes.begin(); it != m_subMeshes.end(); ++it)
 			{
-				if ((*it)->GetName() == instrName)
+				if ((*it)->GetName() == in_name)
 					return (*it);
 			}
 			
 			return SubMeshCSPtr();
 		}
         //-----------------------------------------------------------------
-		/// Get Sub-mesh Index by Name
 		//-----------------------------------------------------------------
-		s32 Mesh::GetSubMeshIndexByName(const std::string& instrName) const
+		s32 Mesh::GetSubMeshIndexByName(const std::string& in_name) const
 		{
-            u32 dwCount = 0;
-			for (std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
-			{
-				if ((*it)->GetName() == instrName)
-					return dwCount;
-                dwCount++;
-			}
-			
-			return -1;
+            for(u32 i=0; i<m_subMeshes.size(); ++i)
+            {
+                if(m_subMeshes[i]->GetName() == in_name)
+                {
+                    return i;
+                }
+            }
+            
+            return -1;
 		}
         //-----------------------------------------------------------------
-		/// Create Sub Mesh
 		//-----------------------------------------------------------------
-		SubMeshSPtr Mesh::CreateSubMesh(const std::string& instrName)
+		SubMeshSPtr Mesh::CreateSubMesh(const std::string& in_name)
 		{
-			SubMeshSPtr newMesh(new SubMesh(instrName));
-			mSubMeshes.push_back(newMesh);
+			SubMeshSPtr newMesh(new SubMesh(in_name));
+			m_subMeshes.push_back(newMesh);
 			return newMesh;
 		}
 		//-----------------------------------------------------------------
-		/// Remove Sub Mesh By Name
 		//-----------------------------------------------------------------
-		void Mesh::RemoveSubMeshByName(const std::string& instrName)
+		void Mesh::RemoveSubMeshByName(const std::string& in_name)
 		{
-			int index = -1;
-			int currentIndex = 0;
-			for (std::vector<SubMeshSPtr>::iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for (auto it = m_subMeshes.begin(); it != m_subMeshes.end(); ++it)
 			{
-				if ((*it)->GetName() == instrName)
-					index = currentIndex;
-				currentIndex++;
-			}
-			
-			if (index != -1)
-			{
-				mSubMeshes.erase(mSubMeshes.begin() + index);
+				if ((*it)->GetName() == in_name)
+                {
+                    m_subMeshes.erase(it);
+                    return;
+                }
 			}
 		}
 		//-----------------------------------------------------------------
-		/// Set Bounds
 		//-----------------------------------------------------------------
-		void Mesh::SetBounds(const ChilliSource::Core::Vector3& invMinBounds, const ChilliSource::Core::Vector3& invMaxBounds)
+		void Mesh::SetBounds(const Core::Vector3& in_minBounds, const Core::Vector3& in_maxBounds)
 		{
 			//Calculate the size of this meshes bounding box
-			Core::Vector3 vSize = invMaxBounds - invMinBounds;
+			Core::Vector3 vSize = in_maxBounds - in_minBounds;
 			
 			//Build our bounding box based on the size of all our sub-meshes
-			mBoundingBox = Core::AABB((invMaxBounds + invMinBounds) * 0.5f, vSize);
+			m_aabb = Core::AABB((in_maxBounds + in_minBounds) * 0.5f, vSize);
 		}
 		//-----------------------------------------------------------------
-		/// Render
 		//-----------------------------------------------------------------
-		void Mesh::Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const std::vector<MaterialSPtr>& inMaterials, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
+		void Mesh::Render(RenderSystem* in_renderSystem, const Core::Matrix4x4& in_worldMat, const std::vector<MaterialSPtr>& in_materials, const SkinnedAnimationGroupSPtr& in_animGroup) const
 		{
-            CS_ASSERT(inMaterials.size() > 0, "Must have at least one material to render");
+            CS_ASSERT(in_materials.size() > 0, "Must have at least one material to render");
 
             std::vector<SubMesh*> aOpaqueSubMeshes;
-            aOpaqueSubMeshes.reserve(mSubMeshes.size());
+            aOpaqueSubMeshes.reserve(m_subMeshes.size());
             
             std::vector<SubMesh*> aTransparentSubMeshes;
-            aTransparentSubMeshes.reserve(mSubMeshes.size());
+            aTransparentSubMeshes.reserve(m_subMeshes.size());
             
             //render all opaque stuff first
 			u32 udwCurrMaterial = 0;
-			for(std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for(auto it = m_subMeshes.begin(); it != m_subMeshes.end(); ++it)
 			{
-                const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
+                const MaterialSPtr& pMaterial = in_materials[udwCurrMaterial];
                 ++udwCurrMaterial;
-                udwCurrMaterial = (u32)std::min(udwCurrMaterial, (u32)inMaterials.size()-1);
+                udwCurrMaterial = (u32)std::min(udwCurrMaterial, (u32)in_materials.size()-1);
                 
 				if (pMaterial->GetActiveShaderProgram() != nullptr)
                 {
@@ -247,52 +226,44 @@ namespace ChilliSource
             
 			//render all opaque stuff first
             udwCurrMaterial = 0;
-			for(std::vector<SubMesh*>::const_iterator it = aOpaqueSubMeshes.begin(); it != aOpaqueSubMeshes.end(); ++it)
+			for(auto it = aOpaqueSubMeshes.begin(); it != aOpaqueSubMeshes.end(); ++it)
 			{
-                const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
+                const MaterialSPtr& pMaterial = in_materials[udwCurrMaterial];
                 ++udwCurrMaterial;
-                udwCurrMaterial = std::min(udwCurrMaterial, (u32)inMaterials.size()-1);
+                udwCurrMaterial = std::min(udwCurrMaterial, (u32)in_materials.size()-1);
 					
 #ifdef CS_ENABLE_DEBUGSTATS
                 DebugStats::AddToEvent("Meshes", 1);
 #endif
-                (*it)->Render(inpRenderSystem, inmatWorld, pMaterial, inpAnimationGroup);
+                (*it)->Render(in_renderSystem, in_worldMat, pMaterial, in_animGroup);
 			}
 			
 			//then transparent stuff
 			udwCurrMaterial = 0;
-			for(std::vector<SubMesh*>::const_iterator it = aTransparentSubMeshes.begin(); it != aTransparentSubMeshes.end(); ++it)
+			for(auto it = aTransparentSubMeshes.begin(); it != aTransparentSubMeshes.end(); ++it)
 			{
-                const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
+                const MaterialSPtr& pMaterial = in_materials[udwCurrMaterial];
                 ++udwCurrMaterial;
-                udwCurrMaterial = (u32)std::min(udwCurrMaterial, (u32)inMaterials.size()-1);
+                udwCurrMaterial = (u32)std::min(udwCurrMaterial, (u32)in_materials.size()-1);
 				
 #ifdef CS_ENABLE_DEBUGSTATS
                 DebugStats::AddToEvent("Meshes_Trans", 1);
 #endif
-                (*it)->Render(inpRenderSystem, inmatWorld, pMaterial, inpAnimationGroup);
+                (*it)->Render(in_renderSystem, in_worldMat, pMaterial, in_animGroup);
 			}
 		}
 		//-----------------------------------------------------------------
-		/// Calc Vertex And Index Counts
 		//-----------------------------------------------------------------
 		void Mesh::CalcVertexAndIndexCounts()
 		{
-			mudwTotalVerts = 0;
-			mudwTotalIndices = 0;
+			m_totalNumVerts = 0;
+			m_totalNumIndices = 0;
 			
-			for(std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for(auto it = m_subMeshes.begin(); it != m_subMeshes.end(); ++it)
 			{
-				mudwTotalVerts += (*it)->GetNumVerts();
-				mudwTotalIndices += (*it)->GetNumIndices();
+				m_totalNumVerts += (*it)->GetNumVerts();
+				m_totalNumIndices += (*it)->GetNumIndices();
 			}
-		}
-		//-----------------------------------------------------------------
-		/// Destructor
-		//-----------------------------------------------------------------
-		Mesh::~Mesh()
-		{
-			mSubMeshes.clear();
 		}
 	}
 }

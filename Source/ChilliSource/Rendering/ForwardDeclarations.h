@@ -78,10 +78,8 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(CSModelProvider);
         CS_FORWARDDECLARE_CLASS(Skeleton);
         CS_FORWARDDECLARE_CLASS(SkinnedAnimation);
-        CS_FORWARDDECLARE_STRUCT(SkinnedAnimationFrame);
         CS_FORWARDDECLARE_STRUCT(SkeletonNode);
         CS_FORWARDDECLARE_CLASS(SkinnedAnimationGroup);
-        CS_FORWARDDECLARE_CLASS(SkinnedAnimationManager);
         CS_FORWARDDECLARE_CLASS(StaticMeshComponent);
         CS_FORWARDDECLARE_CLASS(SubMesh);
         //------------------------------------------------------------
