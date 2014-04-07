@@ -17,11 +17,9 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
-#include <ChilliSource/Video/Base/SubtitlesManager.h>
 
 namespace ChilliSource
 {
@@ -89,10 +87,10 @@ namespace ChilliSource
 		/// Present
 		//--------------------------------------------------------------
 		void VideoPlayerActivity::PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
-														Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
+														const Video::SubtitlesCSPtr& in_subtitles,
 														bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
 		{
-			mpSubtitles = LOAD_RESOURCE(Video::Subtitles, ineSubtitlesLocation, instrSubtitlesFilename);
+			mpSubtitles = in_subtitles;
 			mpVideoPlayerJavaInterface->SetUpdateSubtitlesDelegate(Core::MakeDelegate(this, &VideoPlayerActivity::OnUpdateSubtitles));
 			Present(ineVideoLocation, instrVideoFilename, inbCanDismissWithTap, inBackgroundColour);
 		}
@@ -182,32 +180,32 @@ namespace ChilliSource
 				mCurrentSubtitleTimeMS = currentTimeMS;
 
 				//get the current subtitles
-				std::vector<Video::Subtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentSubtitleTimeMS);
+				auto pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentSubtitleTimeMS);
 
 				//add any new subtitles
-				for (std::vector<Video::Subtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
+				for (auto it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
 				{
-					std::unordered_map<Video::Subtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
+					auto mapEntry = maSubtitleMap.find(*it);
 					if (mapEntry == maSubtitleMap.end())
 					{
-						Core::UTF8String strText = Core::LocalisedText::GetText((*it)->strTextID);
-						Video::Subtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName((*it)->strStyleName);
-						s64 lwSubtitleID = mpVideoPlayerJavaInterface->CreateSubtitle(strText, pStyle->strFontName,pStyle->udwFontSize, Rendering::StringFromAlignmentAnchor(pStyle->eAlignment), pStyle->Bounds.vOrigin.x, pStyle->Bounds.vOrigin.y, pStyle->Bounds.vSize.x, pStyle->Bounds.vSize.y);
+						Core::UTF8String strText = Core::LocalisedText::GetText((*it)->m_textId);
+						const Video::Subtitles::StyleCUPtr& pStyle = mpSubtitles->GetStyleWithName((*it)->m_styleName);
+						s64 lwSubtitleID = mpVideoPlayerJavaInterface->CreateSubtitle(strText, pStyle->m_fontName, pStyle->m_fontSize, Rendering::StringFromAlignmentAnchor(pStyle->m_alignment), pStyle->m_bounds.vOrigin.x, pStyle->m_bounds.vOrigin.y, pStyle->m_bounds.vSize.x, pStyle->m_bounds.vSize.y);
 						mpVideoPlayerJavaInterface->SetSubtitleColour(lwSubtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
-						maSubtitleMap.insert(std::pair<Video::Subtitles::SubtitlePtr, s64>(*it, lwSubtitleID));
+						maSubtitleMap.insert(std::make_pair(*it, lwSubtitleID));
 					}
 				}
 
 				//update the current text views
-				for (std::unordered_map<Video::Subtitles::SubtitlePtr, s64>::iterator it = maSubtitleMap.begin(); it != maSubtitleMap.end(); ++it)
+				for (auto it = maSubtitleMap.begin(); it != maSubtitleMap.end(); ++it)
 				{
 					UpdateSubtitle(it->first, it->second, mCurrentSubtitleTimeMS);
 				}
 
 				//removes any text views that are no longer needed.
-				for (std::vector<Video::Subtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
+				for (auto it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
 				{
-					std::unordered_map<Video::Subtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
+					auto mapEntry = maSubtitleMap.find(*it);
 					if (mapEntry != maSubtitleMap.end())
 					{
 						mpVideoPlayerJavaInterface->RemoveSubtitle(mapEntry->second);
@@ -220,13 +218,13 @@ namespace ChilliSource
 		//---------------------------------------------------------------
 		/// Update Subtitle
 		//---------------------------------------------------------------
-		void VideoPlayerActivity::UpdateSubtitle(const Video::Subtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS)
+		void VideoPlayerActivity::UpdateSubtitle(const Video::Subtitles::Subtitle* inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS)
 		{
-			Video::Subtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
+			const Video::Subtitles::StyleCUPtr& pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
 
 			f32 fFade = 0.0f;
-			s64 lwRelativeTime = ((s64)inTimeMS) - ((s64)inpSubtitle->StartTimeMS);
-			s64 lwDisplayTime = ((s64)inpSubtitle->EndTimeMS) - ((s64)inpSubtitle->StartTimeMS);
+			s64 lwRelativeTime = ((s64)inTimeMS) - ((s64)inpSubtitle->m_startTimeMS);
+			s64 lwDisplayTime = ((s64)inpSubtitle->m_endTimeMS) - ((s64)inpSubtitle->m_startTimeMS);
 
 			//subtitle should not be displayed yet so remove
 			if (lwRelativeTime < 0)
@@ -235,13 +233,13 @@ namespace ChilliSource
 			}
 
 			//fading in
-			else if (lwRelativeTime < pStyle->FadeTimeMS)
+			else if (lwRelativeTime < pStyle->m_fadeTimeMS)
 			{
-				fFade = ((f32)lwRelativeTime) / ((f32)pStyle->FadeTimeMS);
+				fFade = ((f32)lwRelativeTime) / ((f32)pStyle->m_fadeTimeMS);
 			}
 
 			//active
-			else if (lwRelativeTime < lwDisplayTime - pStyle->FadeTimeMS)
+			else if (lwRelativeTime < lwDisplayTime - pStyle->m_fadeTimeMS)
 			{
 				fFade = 1.0f;
 			}
@@ -249,7 +247,7 @@ namespace ChilliSource
 			//fading out
 			else if (lwRelativeTime < lwDisplayTime)
 			{
-				fFade = 1.0f - (((f32)lwRelativeTime - (lwDisplayTime - pStyle->FadeTimeMS)) / ((f32)pStyle->FadeTimeMS));
+				fFade = 1.0f - (((f32)lwRelativeTime - (lwDisplayTime - pStyle->m_fadeTimeMS)) / ((f32)pStyle->m_fadeTimeMS));
 			}
 
 			//should no longer be displayed so remove
@@ -258,7 +256,7 @@ namespace ChilliSource
 				maSubtitlesToRemove.push_back(inpSubtitle);
 			}
 
-			mpVideoPlayerJavaInterface->SetSubtitleColour(inlwSubtitleID, pStyle->Colour.r, pStyle->Colour.g, pStyle->Colour.b, fFade * pStyle->Colour.a);
+			mpVideoPlayerJavaInterface->SetSubtitleColour(inlwSubtitleID, pStyle->m_colour.r, pStyle->m_colour.g, pStyle->m_colour.b, fFade * pStyle->m_colour.a);
 		}
     }
 }

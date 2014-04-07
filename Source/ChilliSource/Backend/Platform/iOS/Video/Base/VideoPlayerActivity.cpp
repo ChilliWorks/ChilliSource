@@ -73,8 +73,7 @@ namespace ChilliSource
         /// Default
         //--------------------------------------------------------------
         VideoPlayerActivity::VideoPlayerActivity()
-        : mpMoviePlayerController(nil), mpTapListener(nil), mbKeepAppRunning(false), mbIsAppSuspended(false), mbPlaying(false), mbCanDismissWithTap(false), mpVideoOverlayView(nil), mpSubtitlesRenderer(nil),
-        meSubtitlesLocation(Core::StorageLocation::k_none)
+        : mpMoviePlayerController(nil), mpTapListener(nil), mbKeepAppRunning(false), mbIsAppSuspended(false), mbPlaying(false), mbCanDismissWithTap(false), mpVideoOverlayView(nil), mpSubtitlesRenderer(nil)
         
         {
             m_appResumedConnection = Core::ApplicationEvents::GetResumeEvent().OpenConnection(Core::MakeDelegate(this, &VideoPlayerActivity::OnResume));
@@ -118,24 +117,12 @@ namespace ChilliSource
             ListenForMoviePlayerNotifications();
         }
         //--------------------------------------------------------------
-        /// Present
-        ///
-        /// Begin streaming the video from file with subtitles
-        ///
-        /// @param Video Storage location
-        /// @param Video filename
-        /// @param Subtitles storage location.
-        /// @param Subtitles filename.
-        /// @param Whether or not the video can be dismissed by tapping.
-        /// @param Background colour
         //--------------------------------------------------------------
         void VideoPlayerActivity::PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
-                                                        Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
-                                                        bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
+                                                       const Video::SubtitlesCSPtr& in_subtitles,
+                                                       bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
         {
-            //setup the subtitles
-            meSubtitlesLocation = ineSubtitlesLocation;
-            mstrSubtitlesFilename = instrSubtitlesFilename;
+            m_subtitles = in_subtitles;
             
             //Present the video
             Present(ineVideoLocation, instrVideoFilename, inbCanDismissWithTap, inBackgroundColour);
@@ -388,9 +375,9 @@ namespace ChilliSource
                 }
                 
                 //create the subtitles renderer
-                if (meSubtitlesLocation != Core::StorageLocation::k_none && mstrSubtitlesFilename.size() != 0 && mpSubtitlesRenderer == nil)
+                if (m_subtitles != nullptr && mpSubtitlesRenderer == nil)
                 {
-                    mpSubtitlesRenderer = [[CSubtitlesRenderer alloc] InitWithVideoPlayer:this View:mpVideoOverlayView StorageLocation:meSubtitlesLocation Filename:mstrSubtitlesFilename];
+                    mpSubtitlesRenderer = [[CSubtitlesRenderer alloc] initWithVideoPlayer:this view:mpVideoOverlayView andSubtitles:m_subtitles];
                 }
             }
         }
@@ -425,8 +412,6 @@ namespace ChilliSource
                 
                 //reset the overlay options
                 mbCanDismissWithTap = false;
-                meSubtitlesLocation = Core::StorageLocation::k_none;
-                mstrSubtitlesFilename = "";
             }
         }
         //--------------------------------------------------------------

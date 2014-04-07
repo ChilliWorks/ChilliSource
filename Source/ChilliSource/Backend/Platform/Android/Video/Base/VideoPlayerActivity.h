@@ -57,13 +57,12 @@ namespace ChilliSource
 			///
 			/// @param Video Storage location
 			/// @param Video filename
-			/// @param Subtitles storage location.
-			/// @param Subtitles filename.
+			/// @param Subtitles resource.
 			/// @param Whether or not the video can be dismissed by tapping.
             /// @param Background colour
 			//--------------------------------------------------------------
 			void PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
-									  Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
+									  const Video::SubtitlesCSPtr& in_subtitles,
 									  bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour) override;
             //--------------------------------------------------------------
             /// Is Playing
@@ -133,13 +132,13 @@ namespace ChilliSource
 			///
 			/// Updates a single subtitle.
 			//---------------------------------------------------------------
-			void UpdateSubtitle(const Video::Subtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS);
+			void UpdateSubtitle(const Video::Subtitles::Subtitle* inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS);
             
         private:
             VideoPlayerJavaInterfaceSPtr mpVideoPlayerJavaInterface;
-            Video::SubtitlesSPtr mpSubtitles;
-            std::unordered_map<Video::Subtitles::SubtitlePtr, s64> maSubtitleMap;
-            std::vector<Video::Subtitles::SubtitlePtr> maSubtitlesToRemove;
+            Video::SubtitlesCSPtr mpSubtitles;
+            std::unordered_map<const Video::Subtitles::Subtitle*, s64> maSubtitleMap;
+            std::vector<const Video::Subtitles::Subtitle*> maSubtitlesToRemove;
             TimeIntervalMs mCurrentSubtitleTimeMS;
         };
     }

@@ -55,13 +55,12 @@ namespace ChilliSource
             ///
             /// @param Video Storage location
             /// @param Video filename
-            /// @param Subtitles storage location.
-            /// @param Subtitles filename.
+            /// @param Subtitles resource.
             /// @param Whether or not the video can be dismissed by tapping.
             /// @param Background colour
             //--------------------------------------------------------------
             virtual void PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
-                                              Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
+                                              const SubtitlesCSPtr& in_subtitles,
                                               bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour = Core::Colour::k_black) = 0;
             //--------------------------------------------------------------
             /// Is Playing

@@ -52,13 +52,12 @@ namespace ChilliSource
             ///
             /// @param Video Storage location
             /// @param Video filename
-            /// @param Subtitles storage location.
-            /// @param Subtitles filename.
+            /// @param Subtitles resource
             /// @param Whether or not the video can be dismissed by tapping.
             /// @param Background colour
             //--------------------------------------------------------------
             void PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
-                                      Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
+                                      const Video::SubtitlesCSPtr& in_subtitles,
                                       bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour) override;
             //--------------------------------------------------------------
             /// Is Playing
@@ -196,8 +195,7 @@ namespace ChilliSource
             MPMoviePlayerController* mpMoviePlayerController;
             
             bool mbCanDismissWithTap;
-            Core::StorageLocation meSubtitlesLocation;
-            std::string mstrSubtitlesFilename;
+            Video::SubtitlesCSPtr m_subtitles;
             UIView* mpVideoOverlayView;
             CVideoPlayerTapListener* mpTapListener;
             CSubtitlesRenderer* mpSubtitlesRenderer;

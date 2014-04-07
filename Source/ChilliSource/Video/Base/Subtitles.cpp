@@ -1,11 +1,10 @@
-/*
- *  Subtitles.cpp
- *  moFlow
- *
- *  Created by Ian Copland 21/02/2013.
- *  Copyright 2013 Tag Games. All rights reserved.
- *
- */
+//
+//  Subtitles.cpp
+//  Chilli Source
+//
+//  Created by Ian Copland 21/02/2013.
+//  Copyright 2013 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Video/Base/Subtitles.h>
 
@@ -13,64 +12,67 @@ namespace ChilliSource
 {
 	namespace Video
 	{
+        namespace
+        {
+            const Subtitles::StyleCUPtr k_nullStyleCUPtr;
+        }
+        
 		CS_DEFINE_NAMEDTYPE(Subtitles);
-		//------------------------------------------------
-		/// Constructor
-		//------------------------------------------------
-		Subtitles::Subtitles()
-		{
-		}
+        
         //----------------------------------------------------------
-        /// Is A
         //----------------------------------------------------------
-        bool Subtitles::IsA(Core::InterfaceIDType inInterfaceID) const
+        SubtitlesCUPtr Subtitles::Create()
         {
-            return (inInterfaceID == Subtitles::InterfaceID);
+            return SubtitlesCUPtr(new Subtitles());
         }
         //----------------------------------------------------------
-        /// Add Style
         //----------------------------------------------------------
-        void Subtitles::AddStyle(const StylePtr& inpStyle)
+        bool Subtitles::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            mStyleMap.insert(std::pair<std::string, StylePtr>(inpStyle->strName, inpStyle));
+            return in_interfaceId == Subtitles::InterfaceID;
         }
         //----------------------------------------------------------
-        /// Add Subtitle
         //----------------------------------------------------------
-        void Subtitles::AddSubtitle(const SubtitlePtr& inpSubtitle)
+        void Subtitles::AddStyle(StyleCUPtr in_style)
         {
-            mSubtitles.push_back(inpSubtitle);
+            CS_ASSERT(in_style != nullptr, "Cannot add null style to subtitles");
+            m_styles.insert(std::make_pair(in_style->m_name, std::move(in_style)));
         }
         //----------------------------------------------------------
-        /// Get Subtitles At Time
         //----------------------------------------------------------
-        std::vector<Subtitles::SubtitlePtr> Subtitles::GetSubtitlesAtTime(TimeIntervalMs inTimeMS) const
+        void Subtitles::AddSubtitle(SubtitleCUPtr in_subtitle)
         {
-            std::vector<SubtitlePtr> subtitles;
+            CS_ASSERT(in_subtitle != nullptr, "Cannot add null subtitle to subtitles");
+            m_subtitles.push_back(std::move(in_subtitle));
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        std::vector<const Subtitles::Subtitle*> Subtitles::GetSubtitlesAtTime(TimeIntervalMs in_timeMS) const
+        {
+            std::vector<const Subtitles::Subtitle*> subtitles;
             
-            for (std::vector<SubtitlePtr>::const_iterator it = mSubtitles.begin(); it != mSubtitles.end(); ++it)
+            for (auto it = m_subtitles.begin(); it != m_subtitles.end(); ++it)
             {
-                if (inTimeMS >= (*it)->StartTimeMS && inTimeMS <= (*it)->EndTimeMS)
+                if (in_timeMS >= (*it)->m_startTimeMS && in_timeMS <= (*it)->m_endTimeMS)
                 {
-                    subtitles.push_back((*it));
+                    subtitles.push_back(it->get());
                 }
             }
             
             return subtitles;
         }
         //----------------------------------------------------------
-        /// Get Style With Name
         //----------------------------------------------------------
-        Subtitles::StylePtr Subtitles::GetStyleWithName(const std::string& instrName) const
+        const Subtitles::StyleCUPtr& Subtitles::GetStyleWithName(const std::string& in_name) const
         {
-            std::unordered_map<std::string, StylePtr>::const_iterator found = mStyleMap.find(instrName);
-            if (found != mStyleMap.end())
+            auto found = m_styles.find(in_name);
+            if (found != m_styles.end())
             {
                 return found->second;
             }
             
-            CS_LOG_WARNING("Could not find style '" + instrName + "' in Subtitles '" + GetName() + "'");
-            return StylePtr();
+            CS_LOG_WARNING("Could not find style '" + in_name + "' in Subtitles '" + GetFilePath() + "'");
+            return k_nullStyleCUPtr;
         }
 	}
 }

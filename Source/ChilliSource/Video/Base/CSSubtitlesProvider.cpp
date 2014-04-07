@@ -61,45 +61,41 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool CSSubtitlesProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == CSSubtitlesProvider::InterfaceID;
+			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSSubtitlesProvider::InterfaceID;
 		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::InterfaceIDType CSSubtitlesProvider::GetResourceType() const
+        {
+            return Subtitles::InterfaceID;
+        }
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool CSSubtitlesProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
+		bool CSSubtitlesProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
 		{
-			return (in_interfaceId == Subtitles::InterfaceID);
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		bool CSSubtitlesProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
-		{
-			return (in_extension == k_CSSubtitlesExtension);
+			return in_extension == k_CSSubtitlesExtension;
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool CSSubtitlesProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
+		void CSSubtitlesProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
             SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(out_resource);
-            
-            LoadSubtitles(in_storageLocation, in_filePath, pSubtitles);
-            
-            return out_resource->IsLoaded();
+            LoadSubtitles(in_storageLocation, in_filePath, nullptr, pSubtitles);
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool CSSubtitlesProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
+		void CSSubtitlesProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
 		{
 			SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(out_resource);
 			
 			//Load model as task
-            Core::Task<Core::StorageLocation, const std::string&, SubtitlesSPtr&> task(this, &CSSubtitlesProvider::LoadSubtitles, in_storageLocation, in_filePath, pSubtitles);
+            Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, SubtitlesSPtr&>
+            task(this, &CSSubtitlesProvider::LoadSubtitles, in_storageLocation, in_filePath, in_delegate, pSubtitles);
 			Core::TaskScheduler::ScheduleTask(task);
-			
-			return true;
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void CSSubtitlesProvider::LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, SubtitlesSPtr& out_resource) const
+        void CSSubtitlesProvider::LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, SubtitlesSPtr& out_resource) const
         {
             //read the JSON
             Json::Value root;
@@ -109,8 +105,13 @@ namespace ChilliSource
             u32 udwVersionNumber = root.get(k_tagVersionNumber, 0).asUInt();
             if (udwVersionNumber != 1)
             {
-                CS_LOG_ERROR("MoSubtitles file '" + in_filePath + "' has version number '" + Core::ToString(udwVersionNumber) + "'. Only version 1 is supported.");
-                out_resource->SetLoaded(false);
+                CS_LOG_ERROR("Subtitles file '" + in_filePath + "' has version number '" + Core::ToString(udwVersionNumber) + "'. Only version 1 is supported.");
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                if(in_delegate != nullptr)
+                {
+                    Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
+                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+                }
                 return;
             }
             
@@ -119,23 +120,33 @@ namespace ChilliSource
             {
                 for (Json::ValueIterator it = root[k_tagStyles].begin(); it != root[k_tagStyles].end(); ++it)
                 {
-                    Subtitles::StylePtr pStyle = LoadStyle((*it));
+                    Subtitles::StyleCUPtr pStyle = LoadStyle((*it));
                     if (pStyle != nullptr)
                     {
-                        out_resource->AddStyle(pStyle);
+                        out_resource->AddStyle(std::move(pStyle));
                     }
                     else
                     {
-                        CS_LOG_ERROR("MoSubtitles file '" + in_filePath + "' failed to load.");
-                        out_resource->SetLoaded(false);
+                        CS_LOG_ERROR("Subtitles file '" + in_filePath + "' failed to load.");
+                        out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                        if(in_delegate != nullptr)
+                        {
+                            Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
+                            Core::TaskScheduler::ScheduleMainThreadTask(task);
+                        }
                         return;
                     }
                 }
             }
             else
             {
-                CS_LOG_ERROR("MoSubtitles file '" + in_filePath + "' does not have styles.");
-                out_resource->SetLoaded(false);
+                CS_LOG_ERROR("Subtitles file '" + in_filePath + "' does not have styles.");
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                if(in_delegate != nullptr)
+                {
+                    Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
+                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+                }
                 return;
             }
             
@@ -144,77 +155,93 @@ namespace ChilliSource
             {
                 for (Json::ValueIterator it = root[k_tagSubtitles].begin(); it != root[k_tagSubtitles].end(); ++it)
                 {
-                    Subtitles::SubtitlePtr pSubtitle = LoadSubtitle((*it));
+                    Subtitles::SubtitleCUPtr pSubtitle = LoadSubtitle((*it));
                     if (pSubtitle != nullptr)
                     {
-                        out_resource->AddSubtitle(pSubtitle);
+                        out_resource->AddSubtitle(std::move(pSubtitle));
                     }
                     else
                     {
-                        CS_LOG_ERROR("MoSubtitles file '" + in_filePath + "' failed to load.");
-                        out_resource->SetLoaded(false);
+                        CS_LOG_ERROR("Subtitles file '" + in_filePath + "' failed to load.");
+                        out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                        if(in_delegate != nullptr)
+                        {
+                            Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
+                            Core::TaskScheduler::ScheduleMainThreadTask(task);
+                        }
                         return;
                     }
                 }
             }
             else
             {
-                CS_LOG_ERROR("MoSubtitles file '" + in_filePath + "' does not have subtitles.");
-                out_resource->SetLoaded(false);
+                CS_LOG_ERROR("Subtitles file '" + in_filePath + "' does not have subtitles.");
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                if(in_delegate != nullptr)
+                {
+                    Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
+                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+                }
                 return;
             }
             
-            out_resource->SetLoaded(true);
+            out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+            
+            if(in_delegate != nullptr)
+            {
+                Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
+                Core::TaskScheduler::ScheduleMainThreadTask(task);
+            }
         }
         //-------------------------------------------------------------------------
         //-------------------------------------------------------------------------
-        Subtitles::StylePtr CSSubtitlesProvider::LoadStyle(const Json::Value& in_styleJSON) const
+        Subtitles::StyleCUPtr CSSubtitlesProvider::LoadStyle(const Json::Value& in_styleJSON) const
         {
-            Subtitles::StylePtr pStyle(new Subtitles::Style());
+            Subtitles::StyleUPtr pStyle(new Subtitles::Style());
             
             //name
-            pStyle->strName = in_styleJSON.get(k_tagStyleName,"").asString();
-            if(pStyle->strName == "")
+            pStyle->m_name = in_styleJSON.get(k_tagStyleName,"").asString();
+            if(pStyle->m_name == "")
             {
                 CS_LOG_ERROR("Subtitle style must have a name.");
-                return Subtitles::StylePtr();
+                return Subtitles::StyleUPtr();
             }
             
-            pStyle->strFontName = in_styleJSON.get(k_tagStyleFont, k_defaultFont).asString();
-            pStyle->udwFontSize = in_styleJSON.get(k_tagStyleFontSize, k_defaultFontSize).asUInt();
-            pStyle->Colour = Core::ParseColour(in_styleJSON.get(k_tagStyleFontColour, k_defaultColour).asString());
-            pStyle->FadeTimeMS = ParseTime(in_styleJSON.get(k_tagStyleFadeTime, (s32)k_defaultFadeTimeMS).asString());
-            pStyle->eAlignment = Rendering::AlignmentAnchorFromString(in_styleJSON.get(k_tagStyleAlignment, k_defaultAlignment).asString());
-            pStyle->Bounds = LoadBounds(in_styleJSON.get(k_tagStyleBounds, ""));
+            pStyle->m_fontName = in_styleJSON.get(k_tagStyleFont, k_defaultFont).asString();
+            pStyle->m_fontSize = in_styleJSON.get(k_tagStyleFontSize, k_defaultFontSize).asUInt();
+            pStyle->m_colour = Core::ParseColour(in_styleJSON.get(k_tagStyleFontColour, k_defaultColour).asString());
+            pStyle->m_fadeTimeMS = ParseTime(in_styleJSON.get(k_tagStyleFadeTime, (s32)k_defaultFadeTimeMS).asString());
+            pStyle->m_alignment = Rendering::AlignmentAnchorFromString(in_styleJSON.get(k_tagStyleAlignment, k_defaultAlignment).asString());
+            pStyle->m_bounds = LoadBounds(in_styleJSON.get(k_tagStyleBounds, ""));
             
-            return pStyle;
+            return Subtitles::StyleUPtr(std::move(pStyle));
         }
         //-------------------------------------------------------------------------
         //-------------------------------------------------------------------------
-        Subtitles::SubtitlePtr CSSubtitlesProvider::LoadSubtitle(const Json::Value& in_subtitleJSON) const
+        Subtitles::SubtitleCUPtr CSSubtitlesProvider::LoadSubtitle(const Json::Value& in_subtitleJSON) const
         {
-            Subtitles::SubtitlePtr pSubtitle(new Subtitles::Subtitle());
+            Subtitles::SubtitleUPtr pSubtitle(new Subtitles::Subtitle());
             
             //style
-            pSubtitle->strStyleName = in_subtitleJSON.get(k_tagSubtitlestyle, "").asString();
-            if (pSubtitle->strStyleName == "")
+            pSubtitle->m_styleName = in_subtitleJSON.get(k_tagSubtitlestyle, "").asString();
+            if (pSubtitle->m_styleName == "")
             {
             	CS_LOG_ERROR("Subtitle must have a style.");
-            	return Subtitles::SubtitlePtr();
+            	return Subtitles::SubtitleCUPtr();
             }
             
             //text id
-            pSubtitle->strTextID = in_subtitleJSON.get(k_tagSubtitleTextID, "").asString();
-            if (pSubtitle->strTextID == "")
+            pSubtitle->m_textId = in_subtitleJSON.get(k_tagSubtitleTextID, "").asString();
+            if (pSubtitle->m_textId == "")
             {
                 CS_LOG_ERROR("Subtitle must have a text ID.");
-                return Subtitles::SubtitlePtr();
+                return Subtitles::SubtitleCUPtr();
             }
             
-            pSubtitle->StartTimeMS = ParseTime(in_subtitleJSON.get(k_tagSubtitlestartTime, "0").asString());
-            pSubtitle->EndTimeMS = ParseTime(in_subtitleJSON.get(k_tagSubtitleEndTime, "0").asString());
+            pSubtitle->m_startTimeMS = ParseTime(in_subtitleJSON.get(k_tagSubtitlestartTime, "0").asString());
+            pSubtitle->m_endTimeMS = ParseTime(in_subtitleJSON.get(k_tagSubtitleEndTime, "0").asString());
 
-            return pSubtitle;
+            return Subtitles::SubtitleCUPtr(std::move(pSubtitle));
         }
         //-------------------------------------------------------------------------
         //-------------------------------------------------------------------------

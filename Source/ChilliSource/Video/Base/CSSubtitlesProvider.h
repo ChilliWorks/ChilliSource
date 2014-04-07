@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/JSON/json.h>
-#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
 
 namespace ChilliSource
@@ -23,7 +23,7 @@ namespace ChilliSource
         ///
         /// @param I Copland
         //-------------------------------------------------------------------------
-		class CSSubtitlesProvider final : public Core::ResourceProviderOld
+		class CSSubtitlesProvider final : public Core::ResourceProvider
 		{
 		public:
             
@@ -37,14 +37,12 @@ namespace ChilliSource
 			/// @return Whether the object implements the given interface
 			//-------------------------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-			//-------------------------------------------------------------------------
-			/// @author I Copland
-			///
-			/// @param Type to compare
+            //----------------------------------------------------
+            /// @author S Downie
             ///
-			/// @return Whether the object can create a resource of given type
-			//-------------------------------------------------------------------------
-			bool CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const override;
+            /// @return The resource type this provider can create
+            //----------------------------------------------------
+            Core::InterfaceIDType GetResourceType() const override;
 			//-------------------------------------------------------------------------
 			/// @author I Copland
 			///
@@ -53,41 +51,41 @@ namespace ChilliSource
             ///
 			/// @return Whether the object can create a resource with the given extension
 			//-------------------------------------------------------------------------
-			bool CanCreateResourceFromFileWithExtension(const std::string& in_extension) const override;
+			bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
 		private:
 			//-------------------------------------------------------------------------
-            /// Load the subtitles resource from the given file location
+            /// Load the subtitles resource from the given file location. Check
+            /// the resource load state for success
             ///
 			/// @author I Copland
 			///
             /// @param The storage location to load from
-			/// @param Filename
+			/// @param File path
 			/// @param [Out] Resource object
-            ///
-			/// @return Whether the resource was loaded 
 			//-------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
 			//-------------------------------------------------------------------------
             /// Load the subtitles resource on a background thread from the given
-            /// file location
+            /// file location. Calls the completion delegate on completion. Check
+            /// the resource load state for success.
             ///
 			/// @author I Copland
 			///
             /// @param The storage location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Delegate
 			/// @param [Out] Resource object
-            ///
-			/// @return Whether the resource was loaded
 			//-------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource) override;
             //-------------------------------------------------------------------------
 			/// @author I Copland
 			///
             /// @param The storage location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Completion delegate
 			/// @param [Out] Resource object
 			//-------------------------------------------------------------------------
-			void LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, SubtitlesSPtr& out_resource) const;
+			void LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, SubtitlesSPtr& out_resource) const;
             //-------------------------------------------------------------------------
 			/// @author I Copland
 			///
@@ -95,7 +93,7 @@ namespace ChilliSource
             ///
 			/// @return the style.
 			//-------------------------------------------------------------------------
-			Subtitles::StylePtr LoadStyle(const Json::Value& in_styleJSON) const;
+			Subtitles::StyleCUPtr LoadStyle(const Json::Value& in_styleJSON) const;
             //-------------------------------------------------------------------------
 			/// @author I Copland
 			///
@@ -103,7 +101,7 @@ namespace ChilliSource
             ///
 			/// @return the subtitle.
 			//-------------------------------------------------------------------------
-			Subtitles::SubtitlePtr LoadSubtitle(const Json::Value& in_subtitleJSON) const;
+			Subtitles::SubtitleCUPtr LoadSubtitle(const Json::Value& in_subtitleJSON) const;
             //-------------------------------------------------------------------------
 			/// @author I Copland
 			///
