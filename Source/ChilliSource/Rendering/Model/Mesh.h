@@ -17,6 +17,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
+        //---------------------------------------------------------------------
+        /// Holds the sub meshes and skeleton that make up a mesh resource.
+        /// Provides methods for building and rendering the mesh
+        ///
+        /// @author S Downie
+        //---------------------------------------------------------------------
 		class Mesh final : public Core::Resource
 		{
 		public:
