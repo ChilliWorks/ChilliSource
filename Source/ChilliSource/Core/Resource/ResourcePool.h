@@ -65,6 +65,9 @@ namespace ChilliSource
             ///
             /// The resource is mutable
             ///
+            /// NOTE: Resource should not start with '_'. This is reserved for internal engine
+            /// resources.
+            ///
             /// @author S Downie
             ///
             /// @param Unique Id
@@ -72,6 +75,19 @@ namespace ChilliSource
             /// @return Resource or null
             //-------------------------------------------------------------------------------------
             template <typename TResourceType> std::shared_ptr<TResourceType> CreateResource(const std::string& in_uniqueId);
+            //------------------------------------------------------------------------------------
+            /// Return the cached resource with the given unique ID. If the resource
+            /// does not exist then null is returned.
+            ///
+            /// The resource is immutable
+            ///
+            /// @author S Downie
+            ///
+            /// @param Unique ID
+            ///
+            /// @return Resource or null
+            //-------------------------------------------------------------------------------------
+            template <typename TResourceType> std::shared_ptr<const TResourceType> GetResource(const std::string& in_uniqueId) const;
             //------------------------------------------------------------------------------------
             /// Load the resource of given type from the file location. If the resource at this
             /// location has previously been loaded then the cached version will be returned.
@@ -228,6 +244,32 @@ namespace ChilliSource
             desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
             
             return resource;
+        }
+        //------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------
+        template <typename TResourceType> std::shared_ptr<const TResourceType> ResourcePool::GetResource(const std::string& in_uniqueId) const
+        {
+            CS_ASSERT(in_uniqueId.empty() == false, "Cannot find resource with empty unique Id");
+            
+            auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
+            
+            if(itDescriptor == m_descriptors.end())
+            {
+                CS_LOG_ERROR("Failed to find resource provider for " + TResourceType::TypeName);
+                return nullptr;
+            }
+            
+            PoolDesc& desc(itDescriptor->second);
+            
+            //Check descriptor and see if this resource already exists
+            ResourceId resourceId = GenerateResourceId(in_uniqueId);
+            auto itResource = desc.m_cachedResources.find(resourceId);
+            if(itResource != desc.m_cachedResources.end())
+            {
+                return std::static_pointer_cast<const TResourceType>(itResource->second);
+            }
+            
+            return nullptr;
         }
         //-------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------

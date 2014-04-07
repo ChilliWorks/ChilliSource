@@ -122,10 +122,10 @@ namespace ChilliSource
         //-------------------------------------------------------------------------------------
         void ResourcePool::Release(const Resource* in_resource)
         {
-            CS_ASSERT(in_resource != nullptr, "Pool cannot release raw resource");
+            CS_ASSERT(in_resource != nullptr, "Pool cannot release null resource");
             //Find the descriptor that handles this type of resource
             auto itDescriptor = m_descriptors.find(in_resource->GetInterfaceID());
-            CS_ASSERT(itDescriptor != m_descriptors.end(), "Failed to find resource provider for " + in_resource->GetInterfaceTypeName());
+            CS_ASSERT(itDescriptor != m_descriptors.end(), "Failed to find resource pool for " + in_resource->GetInterfaceTypeName());
             
             auto& cachedResources(itDescriptor->second.m_cachedResources);
             
@@ -157,7 +157,7 @@ namespace ChilliSource
                 for(auto itResource = descEntry.second.m_cachedResources.begin(); itResource != descEntry.second.m_cachedResources.end(); /*NO INCREMENT*/)
                 {
                     //The pool is the sole owner so we can safely release the object
-                    CS_LOG_ERROR("Resource still in user: " + itResource->second->GetFilePath());
+                    CS_LOG_ERROR("Resource still in use: " + itResource->second->GetFilePath());
                 }
             }
             
