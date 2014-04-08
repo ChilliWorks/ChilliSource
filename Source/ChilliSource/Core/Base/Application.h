@@ -204,7 +204,7 @@ namespace ChilliSource
             ///
             /// @return The default font.
             //-----------------------------------------------------
-            const Rendering::FontSPtr& GetDefaultFont() const;
+            const Rendering::FontCSPtr& GetDefaultFont() const;
             //-----------------------------------------------------
 			/// Returns the default mesh described in the App.config
             /// file.
@@ -535,7 +535,7 @@ namespace ChilliSource
 			std::vector<ResourceProviderOld*> m_ResourceProviderOlds;
 
 			TimeIntervalSecs m_currentAppTime;
-            Rendering::FontSPtr m_defaultFont;
+            Rendering::FontCSPtr m_defaultFont;
             Rendering::MeshCSPtr m_defaultMesh;
             Rendering::MaterialSPtr m_defaultMaterial;
 			f32 m_updateInterval;

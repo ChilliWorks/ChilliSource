@@ -1,255 +1,239 @@
 //
 //  Font.h
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Scott Downie on 26/10/2010.
 //  Copyright (c) 2010 Tag Games. All rights reserved.
 //
 
-#ifndef _MO_FLO_RENDERING_FONT_H_
-#define _MO_FLO_RENDERING_FONT_H_
+#ifndef _CHILLISOURCE_RENDERING_FONT_FONT_H_
+#define _CHILLISOURCE_RENDERING_FONT_FONT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
-#include <ChilliSource/Core/Resource/ResourceOld.h>
+#include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-		//---Font Types
-		typedef u32 FontAlignment;
-		typedef f32 FontSpacing;
-		
-		typedef Core::UTF8String CharacterSet;
-		
-		const Core::UTF8String::Char kSimilarSpaceCharacter = '-';
-		const Core::UTF8String::Char kReturnCharacter = '\n';
-		const Core::UTF8String::Char kTabCharacter = '\t';
-        const Core::UTF8String::Char kSpaceCharacter = ' ';
+        const Core::UTF8String::Char k_returnCharacter = '\n';
+        const Core::UTF8String::Char k_tabCharacter = '\t';
+        const Core::UTF8String::Char k_spaceCharacter = ' ';
         
-        const u32 kudwSpacesPerTab = 5;
-		
-		//---Font Attributes
-		struct FontAttributes
-		{
-			FontAttributes() : TabSpacing(10.0f), SpaceSpacing(6.0f){}
-			
-			FontSpacing TabSpacing;
-            FontSpacing SpaceSpacing;
-		};
-		
-		//---Font Values
-		enum class CharacterResult
-		{
-            k_space,
-            k_nbsp,
-            k_tab,
-            k_return,
-            k_invalid,
-            k_ok
-		};
-		
-		//Details how a particular character must be drawn
-		struct PlacedCharacter
-		{
-			Core::Rectangle sUVs;
-			Core::Vector2 vSize;
-			Core::Vector2 vPosition;
-		};
-		
-		typedef std::vector<PlacedCharacter> CharacterList;
+        //The nbsp character has the hex code C2A0 which converts to
+        //160 in decimal after utf-8 conversion
+        const Core::UTF8String::Char k_nbspCharacter = 160;
         
-		class Font : public Core::ResourceOld
+        //---------------------------------------------------------------------
+        /// The font resource describing the size, spacing and kerning of
+        /// font characters.
+        ///
+        /// @author S Downie
+        //---------------------------------------------------------------------
+		class Font : public Core::Resource
 		{
 		public:
-
-			//Internal cache of what a character should be built of
+            
+            typedef Core::UTF8String CharacterSet;
+            
+            //---------------------------------------------------------------------
+            /// Holds the information relating to a single character such as
+            /// width, height and UVs
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------------------
 			struct CharacterInfo
 			{
-				Core::Rectangle sUVs;
-                Core::Vector2 vSize;
-                Core::Vector2 vOffset;
+				Core::Rectangle m_UVs;
+                Core::Vector2 m_size;
+                Core::Vector2 m_offset;
 			};
-            
+            //---------------------------------------------------------------------
+            /// TODO: Find out how the kerning works and actually document it
+            ///
+            /// @author R Henning
+            //---------------------------------------------------------------------
             struct KernLookup
 			{
                 //---------------------------------------------------------------------
                 /// Constructor
+                ///
+                /// @author R Henning
+                ///
+                /// @param TODO
+                /// @param TODO
                 //---------------------------------------------------------------------
-				KernLookup(s16 inwCharacter, u16 inuwStart)
-				: wCharacter(inwCharacter)
-				, uwStart(inuwStart)
-				, uwLength(0)
+				KernLookup(s16 in_character, u16 in_start)
+				: m_character(in_character), m_start(in_start), m_length(0)
 				{
 				}
 				//---------------------------------------------------------------------
-                /// Less then operator overload
+                /// @author R Henning
+                ///
+                /// @param Lookup value
+                ///
+                /// @return Whether this value is less than the one given
                 //---------------------------------------------------------------------
-				bool operator < (const KernLookup& inB) const
+				bool operator < (const KernLookup& in_lookup) const
 				{
-                    return wCharacter < inB.wCharacter;
+                    return m_character < in_lookup.m_character;
                 }
                     
-                s16 wCharacter;
-                u16 uwStart;
-                u16 uwLength;
+                s16 m_character;
+                u16 m_start;
+                u16 m_length;
             };
-                    
+            //---------------------------------------------------------------------
+            /// TODO: Find out how the kerning works and actually document it
+            ///
+            /// @author R Henning
+            //---------------------------------------------------------------------
             struct KernPair
             {
                 //---------------------------------------------------------------------
                 /// Constructor
+                ///
+                /// @author R Henning
+                ///
+                /// @param TODO
+                /// @param TODO
                 //---------------------------------------------------------------------
-                KernPair(s16 inwCharacter, f32 infSpacing)
-                : wCharacter(inwCharacter)
-                , fSpacing(infSpacing)
+                KernPair(s16 in_character, f32 in_spacing)
+                : m_character(in_character)
+                , m_spacing(in_spacing)
                 {
                 }
                 //---------------------------------------------------------------------
-                /// Less then operator overload
+                /// @author R Henning
+                ///
+                /// @param Pair value
+                ///
+                /// @return Whether this value is less than the one given
                 //---------------------------------------------------------------------
-                bool operator < (const KernPair& inB) const
+                bool operator < (const KernPair& in_pair) const
                 {
-                    return wCharacter < inB.wCharacter;
+                    return m_character < in_pair.m_character;
                 }
                 
-                f32 fSpacing;
-                s16 wCharacter;				
+                f32 m_spacing;
+                s16 m_character;
             };
 			
-			virtual ~Font(){}
 			CS_DECLARE_NAMEDTYPE(Font);
 			//---------------------------------------------------------------------
-			/// Is A
+			/// @author S Downie
+            ///
+            /// @param Interface ID
 			///
 			/// @return Whether this object is of given type
 			//---------------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
-            //-------------------------------------------
-            /// Set Texture
-            ///
-            /// @param Texture containing the font
-            //-------------------------------------------
-            void SetTexture(const TextureSPtr& inpTex);
-			//-------------------------------------------
-			/// Get Texture
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			//---------------------------------------------------------------------
+			/// @author S Downie
 			///
 			/// @return Font texture 
-			//-------------------------------------------
+			//---------------------------------------------------------------------
 			const TextureSPtr& GetTexture() const;
-			//-------------------------------------------
-			/// Set Character Data
+			//---------------------------------------------------------------------
+			/// Each character is a sprite in a spritesheet. The spritesheet
+            /// also holds the texture
+            ///
+            /// @author S Downie
 			///
-			/// Each character is a sprite on a tpage
-			/// therefore we need the UV offsets
+			/// @param Sprite data containing UV's, size, etc
+			//---------------------------------------------------------------------
+			void SetCharacterData(const SpriteSheetSPtr& in_characterData);
+			//---------------------------------------------------------------------
+			/// @author S Downie
 			///
-			/// @param Sprite data containing UV's etc
-			//-------------------------------------------
-			void SetSpriteSheet(const SpriteSheetSPtr& inpData);
-			//-------------------------------------------
-			/// Get Mode Character Height
-			///
-			/// @return Mode height
-			//-------------------------------------------
+			/// @return The height of a line as determined by the font
+			//---------------------------------------------------------------------
 			f32 GetLineHeight() const;
-            //-------------------------------------------
-            /// Supports Kerning
+            //---------------------------------------------------------------------
+            /// @author R Henning
             ///
             /// @return True is kerning supported, false otherwise
-            //-------------------------------------------
-            const bool SupportsKerning() const;
-            //-------------------------------------------
-			/// Get Info For Character
+            //---------------------------------------------------------------------
+            bool SupportsKerning() const;
+            //---------------------------------------------------------------------
+			/// @author S McGaw
 			///
-			/// Get the info struct-a-majig for this character
-			/// @param Character
-			/// @param info struct to be filled with data for the character
-			/// @return Success or invisible chars
-			//-------------------------------------------
-			CharacterResult GetInfoForCharacter(Core::UTF8String::Char inChar, CharacterInfo& outInfo) const;
-			//-------------------------------------------
-			/// Get Attributes
-			///
-			/// @return Attributes - Spacing etc
-			//-------------------------------------------
-			const FontAttributes& GetAttributes() const;
-			//-------------------------------------------
-			/// Set Character Set
-			///
-			/// The list of characters that this font
-			/// can display
-			/// @param An array of the characters
-			//-------------------------------------------
-			void SetCharacterSet(const CharacterSet &inSet);
-            //-------------------------------------------
-            /// Get Kerning Between Characters
+			/// @param UTF-8 Character
+			/// @param [Out] Info struct to be filled with data for the character
             ///
+			/// @return Whether the character exists in the font
+			//---------------------------------------------------------------------
+			bool TryGetCharacterInfo(Core::UTF8String::Char in_char, CharacterInfo& out_info) const;
+			//---------------------------------------------------------------------
+            /// @author S Downie
+            ///
+			/// @param The list of characters that are supported by this font
+			//---------------------------------------------------------------------
+			void SetCharacterSet(const CharacterSet& in_charSet);
+            //---------------------------------------------------------------------
             /// Returns the amount that the glyph represented
             /// by inChar2 can be moved towards inChar1 without
             /// overlapping.
             /// This data is generated by the SpriteTool
             ///
+            /// @author R Henning
+            ///
             /// @param First character to test
             /// @param Second character to test
-            /// @return Spacing between characters
-            //-------------------------------------------
-            f32 GetKerningBetweenCharacters(Core::UTF8String::Char inChar1, Core::UTF8String::Char inChar2) const;
-            //-------------------------------------------
-            /// Set Global Kerning Offset
             ///
+            /// @return Spacing between characters
+            //---------------------------------------------------------------------
+            f32 GetKerningBetweenCharacters(Core::UTF8String::Char in_char1, Core::UTF8String::Char in_char2) const;
+            //---------------------------------------------------------------------
             /// Sets a value that will be used to offset all kerning values
             ///
-            /// @param Offset
-            //-------------------------------------------
-            static void SetGlobalKerningOffset(f32 infOffset);
-            //-------------------------------------------
-            /// Set Kerning Info
+            /// @author R Henning
             ///
+            /// @param Offset
+            //---------------------------------------------------------------------
+            static void SetGlobalKerningOffset(f32 in_offset);
+            //---------------------------------------------------------------------
             /// Sets kerning lookup and pair info
+            ///
+            /// @author R Henning
             ///
             /// @param Kerning lookup array
             /// @param Kerning pair array
-            //-------------------------------------------
-            void SetKerningInfo(const std::vector<KernLookup>& inaFirstReg, const std::vector<KernPair>& inaPairs);
+            //---------------------------------------------------------------------
+            void SetKerningInfo(const std::vector<KernLookup>& in_lookups, const std::vector<KernPair>& in_pairs);
 		
         private:
-            friend class FontManager;
-                    
-			//Only the font manager can create this
-            Font() : mfLineHeight(0.0f)
-            {
-                maFirstLookup.clear();
-                maPairs.clear();
-            }
             
-			typedef std::unordered_map<Core::UTF8String::Char, CharacterInfo> CharToCharInfoMap;
-			
-			CharToCharInfoMap mMapCharToCharInfo;
-			
-			//Holds the size, spacing, kerning etc
-			FontAttributes mAttributes;
-			
-			//Holds all the characters that the font supports
-			CharacterSet mCharacterSet;
-			
-            // Kerning lookup
-            std::vector<KernLookup> maFirstLookup;
-                    
-            // Kerning pairs
-            std::vector<KernPair> maPairs;
-                    
-			//The font bitmap
-			TextureSPtr mpTexture;
-			
-			//The location and width etc of each character on the tpage
-			SpriteSheetSPtr mpCharacterData;
+            friend class Core::ResourcePool;
+            //---------------------------------------------------------------------
+            /// Factory method to create empty font resource. Used only by the
+            /// resource pool.
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------------------
+            static FontUPtr Create();
+			//---------------------------------------------------------------------
+            /// Private constructor to enforce the use of factory method
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------------------
+            Font() = default;
             
-            f32 mfLineHeight;
+        private:
             
-            static f32 mfGlobalKerningOffset;
+			std::unordered_map<Core::UTF8String::Char, CharacterInfo> m_characterInfos;
+			CharacterSet m_characters;
+			
+            std::vector<KernLookup> m_kerningLookups;
+            std::vector<KernPair> m_kerningPairs;
+            
+			SpriteSheetSPtr m_spriteSheet;
+            
+            f32 m_lineHeight = 0.0f;
+            
+            static f32 s_globalKerningOffset;
 		};
 	}
 }

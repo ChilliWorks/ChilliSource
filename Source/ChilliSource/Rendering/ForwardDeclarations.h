@@ -47,7 +47,6 @@ namespace ChilliSource
         //------------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Font);
         CS_FORWARDDECLARE_CLASS(FontProvider);
-        CS_FORWARDDECLARE_CLASS(FontManager);
         //------------------------------------------------------------
         /// Lighting
         //------------------------------------------------------------

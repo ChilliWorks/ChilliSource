@@ -1,6 +1,6 @@
 //
 //  Font.cpp
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Scott Downie on 26/10/2010.
 //  Copyright (c) 2010 Tag Games. All rights reserved.
@@ -9,217 +9,170 @@
 #include <ChilliSource/Rendering/Font/Font.h>
 
 #include <ChilliSource/Core/String/UTF8String.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 
-#include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
+#include <algorithm>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
+        namespace
+        {
+            const Core::UTF8String::Char k_similarSpaceCharacter = 'n';
+            const u32 k_spacesPerTab = 5;
+        }
         
-        f32 Font::mfGlobalKerningOffset = 0.0f;
+        f32 Font::s_globalKerningOffset = 0.0f;
         
         CS_DEFINE_NAMEDTYPE(Font);
         
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        FontUPtr Font::Create()
+        {
+            return FontUPtr(new Font());
+        }
 		//---------------------------------------------------------------------
-		/// Is A
-		///
-		/// @return Whether this object is of given type
 		//---------------------------------------------------------------------
-		bool Font::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Font::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return inInterfaceID == Font::InterfaceID;
+			return in_interfaceId == Font::InterfaceID;
 		}
 		//-------------------------------------------
-		/// Set Character Set
-		///
-		/// The list of characters that this font
-		/// can display
-		/// @param An array of the characters
 		//-------------------------------------------
-		void Font::SetCharacterSet(const CharacterSet &inSet)
+		void Font::SetCharacterSet(const CharacterSet& in_charSet)
 		{
-			mCharacterSet = inSet;
+			m_characters = in_charSet;
 		}
 		//-------------------------------------------
-		/// Set Texture
-		///
-		/// @param Texture containing the font 
-		//-------------------------------------------
-		void Font::SetTexture(const TextureSPtr& inpTex)
-		{
-			mpTexture = inpTex;
-			mpTexture->SetFilter(Texture::Filter::k_linear, Texture::Filter::k_linear);
-		}
-		//-------------------------------------------
-		/// Get Texture
-		///
-		/// @return Font texture 
 		//-------------------------------------------
 		const TextureSPtr& Font::GetTexture() const
 		{
-			return mpTexture;
+            CS_ASSERT(m_spriteSheet, "Font must have a spritesheet to have a texture");
+			return m_spriteSheet->GetTexture();
 		}
 		//-------------------------------------------
-		/// Get Attributes
-		///
-		/// @return Attributes - Spacing etc
-		//-------------------------------------------
-		const FontAttributes& Font::GetAttributes() const
-		{
-			return mAttributes;
-		}
-		//-------------------------------------------
-		/// Get Mode Character Height
-		///
-		/// @return Mode height
 		//-------------------------------------------
 		f32 Font::GetLineHeight() const
 		{
-			return mfLineHeight;
+			return m_lineHeight;
         }
         //-------------------------------------------
-        /// Supports Kerning
-        ///
-        /// @return True is kerning supported, false otherwise
         //-------------------------------------------
-        const bool Font::SupportsKerning() const
+        bool Font::SupportsKerning() const
         {
-            return (!maFirstLookup.empty() && !maPairs.empty());
+            return (!m_kerningLookups.empty() && !m_kerningPairs.empty());
         }
 		//-------------------------------------------
-		/// Set Character Data
-		///
-		/// Each character is a sprite on a tpage
-		/// therefore we need the UV offsets
-		///
-		/// @param Sprite data containing UV's etc
 		//-------------------------------------------
-		void Font::SetSpriteSheet(const SpriteSheetSPtr& inpData)
+		void Font::SetCharacterData(const SpriteSheetSPtr& in_charData)
 		{
-			mpCharacterData = inpData;
-			mpTexture = inpData->GetTexture();
+            CS_ASSERT(m_characters.size() > 0, "Font: Cannot build characters with empty character set");
+            
+            m_characterInfos.clear();
+			m_spriteSheet = in_charData;
 			
-			mMapCharToCharInfo.clear();
-			
-            const f32 fSpriteSheetWidth = mpCharacterData->GetSpriteSheetWidth();
-            const f32 fSpriteSheetHeight = mpCharacterData->GetSpriteSheetHeight();
+            const f32 spriteSheetWidth = in_charData->GetSpriteSheetWidth();
+            const f32 spriteSheetHeight = in_charData->GetSpriteSheetHeight();
 
-			for (u32 nChar = 0; nChar < mCharacterSet.length(); nChar++) 
+			for (u32 i=0; i<m_characters.length(); ++i)
             {
-				CharacterInfo sCI;
+				CharacterInfo info;
 				
-				SpriteSheet::Frame sFrame = mpCharacterData->GetSpriteFrameByID(nChar);
+				SpriteSheet::Frame frame = in_charData->GetSpriteFrameByID(i);
 				
-				//Get the UV co-ordinates of the character on the font tpage
-				mpCharacterData->GetUVsForFrame(nChar, sCI.sUVs);
+				in_charData->GetUVsForFrame(i, info.m_UVs);
 								
-				sCI.sUVs.vOrigin.x = (f32)(sFrame.U - 0.5f) / fSpriteSheetWidth;
-				sCI.sUVs.vOrigin.y = (f32)(sFrame.V - 0.5f) / fSpriteSheetHeight;
-				sCI.sUVs.vSize.x = (f32)(sFrame.Width + 1.0f) / fSpriteSheetWidth;
-				sCI.sUVs.vSize.y = (f32)(sFrame.Height + 1.0f) / fSpriteSheetHeight;
+				info.m_UVs.vOrigin.x = (f32)(frame.U - 0.5f) / spriteSheetWidth;
+				info.m_UVs.vOrigin.y = (f32)(frame.V - 0.5f) / spriteSheetHeight;
+				info.m_UVs.vSize.x = (f32)(frame.Width + 1.0f) / spriteSheetWidth;
+				info.m_UVs.vSize.y = (f32)(frame.Height + 1.0f) / spriteSheetHeight;
 				
-				sCI.vSize.x = sFrame.Width;
-                sCI.vSize.y = sFrame.Height;
+				info.m_size.x = frame.Width;
+                info.m_size.y = frame.Height;
                 
-				sCI.vOffset.x = sCI.vSize.x * 0.5f;
-				sCI.vOffset.y = (sFrame.OffsetY);
+				info.m_offset.x = info.m_size.x * 0.5f;
+				info.m_offset.y = frame.OffsetY;
                 
-                mfLineHeight = std::max((f32)sFrame.OriginalHeight, mfLineHeight);
+                m_lineHeight = std::max((f32)frame.OriginalHeight, m_lineHeight);
 
-                Core::UTF8String::Char Char = mCharacterSet[nChar];
-				mMapCharToCharInfo.insert(std::make_pair(Char, sCI));
+                Core::UTF8String::Char utf8Char = m_characters[i];
+				m_characterInfos.insert(std::make_pair(utf8Char, info));
 			}
 		
 			
-			//Just assign the width of a space based on the similar space character in the 
+			//Just assign the width of a whitespaces based on the similar space character in the
 			//font. This means it will scale relative to the font
-			CharacterInfo sInfo;
-			if(GetInfoForCharacter(kSimilarSpaceCharacter, sInfo) == CharacterResult::k_ok)
-			{
-				mAttributes.SpaceSpacing = sInfo.vSize.x;
-				mAttributes.TabSpacing = sInfo.vSize.x * kudwSpacesPerTab;
-			}
-			else
-			{
-				CS_LOG_ERROR("Invalid space character chosen in font please include a '-' in the font");
-			}
+            CharacterInfo info;
+            if(TryGetCharacterInfo(k_similarSpaceCharacter, info) == false)
+            {
+                CS_LOG_ERROR("Cannot find similar space character in font: " + GetFilePath());
+                info.m_size.x = 1.0f;
+                info.m_offset = Core::Vector2::ZERO;
+                info.m_UVs = Core::Rectangle();
+            }
             
+            //Space
+            info.m_size.y = 0.0f;
+            m_characterInfos.insert(std::make_pair(k_spaceCharacter, info));
+            
+            //Non-breaking space
+            m_characterInfos.insert(std::make_pair(k_nbspCharacter, info));
+            
+            //Tab
+            info.m_size.x *= k_spacesPerTab;
+            m_characterInfos.insert(std::make_pair(k_tabCharacter, info));
+            
+            //Return
+            m_characterInfos.insert(std::make_pair(k_returnCharacter, CharacterInfo()));
         }
 		//-------------------------------------------
-		/// Get Frame By Character
-		///
-		/// Get the tpage data for the given char
-		/// @param Wide char
-		/// @param Frame to be filled with data 
-		/// @return Success or invisible chars
 		//-------------------------------------------
-		CharacterResult Font::GetInfoForCharacter(Core::UTF8String::Char inChar, CharacterInfo& outInfo) const
+		bool Font::TryGetCharacterInfo(Core::UTF8String::Char in_char, CharacterInfo& out_info) const
 		{
-			switch(inChar)
-            {
-                case kSpaceCharacter:
-                    return CharacterResult::k_space;
-                case kTabCharacter:
-                    return CharacterResult::k_tab;
-                case kReturnCharacter:
-                    return CharacterResult::k_return;
-            }
-
-            if(Core::UTF8String::IsNonBreakingSpace(inChar) == true)
-            {
-                return CharacterResult::k_nbsp;
-            }
+			auto itCharEntry = m_characterInfos.find(in_char);
 			
-			CharToCharInfoMap::const_iterator pCharEntry = mMapCharToCharInfo.find(inChar);
-			
-			if (pCharEntry != mMapCharToCharInfo.end()) 
+			if (itCharEntry != m_characterInfos.end())
             {
-				outInfo = pCharEntry->second;
-				
-				return CharacterResult::k_ok;
+				out_info = itCharEntry->second;
+				return true;
 			}
 			
-			return CharacterResult::k_invalid;
+			return false;
 		}
         //-------------------------------------------
-        /// Get Kerning Between Characters
         //-------------------------------------------
-        f32 Font::GetKerningBetweenCharacters(Core::UTF8String::Char inChar1, Core::UTF8String::Char inChar2) const
+        f32 Font::GetKerningBetweenCharacters(Core::UTF8String::Char in_char1, Core::UTF8String::Char in_char2) const
         {
-            const KernLookup* pLookup = &(*std::lower_bound(maFirstLookup.begin(), maFirstLookup.end(), KernLookup(inChar1, 0)));
-			if(nullptr == pLookup || pLookup->wCharacter != inChar1)
+            const KernLookup* pLookup = &(*std::lower_bound(m_kerningLookups.begin(), m_kerningLookups.end(), KernLookup(in_char1, 0)));
+			if(nullptr == pLookup || pLookup->m_character != in_char1)
             {
-				return mfGlobalKerningOffset;
+				return s_globalKerningOffset;
             }
 			
-            u32 udwStart = pLookup->uwStart;
-			u32 udwEnd = udwStart + pLookup->uwLength;
-			const KernPair* pPair = &(*std::lower_bound(maPairs.begin() + udwStart, maPairs.begin() + udwEnd, KernPair(inChar2, 0.0f)));
-			if(nullptr == pPair || pPair->wCharacter != inChar2)
+            u32 udwStart = pLookup->m_start;
+			u32 udwEnd = udwStart + pLookup->m_length;
+			const KernPair* pPair = &(*std::lower_bound(m_kerningPairs.begin() + udwStart, m_kerningPairs.begin() + udwEnd, KernPair(in_char2, 0.0f)));
+			if(nullptr == pPair || pPair->m_character != in_char2)
             {
-				return mfGlobalKerningOffset;
+				return s_globalKerningOffset;
 			}
 
-            return pPair->fSpacing + mfGlobalKerningOffset;
+            return pPair->m_spacing + s_globalKerningOffset;
         }
         //-------------------------------------------
-        /// Set Kerning Info
         //-------------------------------------------
-        void Font::SetKerningInfo(const std::vector<KernLookup>& inaFirstReg, const std::vector<KernPair>& inaPairs)
+        void Font::SetKerningInfo(const std::vector<KernLookup>& in_lookups, const std::vector<KernPair>& in_pairs)
         {
-            maFirstLookup = inaFirstReg;
-            maPairs = inaPairs;
+            m_kerningLookups = in_lookups;
+            m_kerningPairs = in_pairs;
         }
         //-------------------------------------------
-        /// Set Global Kerning Offset
         //-------------------------------------------
-        void Font::SetGlobalKerningOffset(f32 infOffset)
+        void Font::SetGlobalKerningOffset(f32 in_offset)
         {
-            mfGlobalKerningOffset = infOffset;
+            s_globalKerningOffset = in_offset;
         }
 	}
 }

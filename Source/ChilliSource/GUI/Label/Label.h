@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
-#include <ChilliSource/Rendering/Font/Font.h>
+#include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 namespace ChilliSource
 {
@@ -70,13 +70,13 @@ namespace ChilliSource
             ///
             /// @param Font used to display text
             //-------------------------------------------------------
-            void SetFont(const Rendering::FontSPtr& inpFont);
+            void SetFont(const Rendering::FontCSPtr& inpFont);
             //-------------------------------------------------------
             /// Get Font
             ///
             /// @return Font used to display text
             //-------------------------------------------------------
-            const Rendering::FontSPtr& GetFont() const;
+            const Rendering::FontCSPtr& GetFont() const;
             //-------------------------------------------------------
             /// Set Number of Lines
             ///
@@ -369,7 +369,7 @@ namespace ChilliSource
             
         protected:
             
-            Rendering::CharacterList mCachedChars;
+            Rendering::CanvasRenderer::CharacterList mCachedChars;
             
             Rendering::TextureSPtr mpWhiteTex;
             
@@ -395,7 +395,7 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(f32, LineSpacing, SetLineSpacing, GetLineSpacing);
 			DECLARE_PROPERTY_A(TextJustification, HorizontalJustification, SetHorizontalJustification, GetHorizontalJustification);
 			DECLARE_PROPERTY_A(TextJustification, VerticalJustification, SetVerticalJustification, GetVerticalJustification);
-			DECLARE_PROPERTY_A(Rendering::FontSPtr, Font, SetFont, GetFont);
+			DECLARE_PROPERTY_A(Rendering::FontCSPtr, Font, SetFont, GetFont);
             DECLARE_PROPERTY_A(bool, ScalableFont, SetScalableFont, GetScalableFont)
             DECLARE_PROPERTY_A(f32, ScalableHeight, SetScalableHeight, GetScalableHeight);
 			DECLARE_PROPERTY_A(Core::Colour, TextColour, SetTextColour, GetTextColour);

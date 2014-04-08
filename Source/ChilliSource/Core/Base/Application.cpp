@@ -144,7 +144,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        const Rendering::FontSPtr& Application::GetDefaultFont() const
+        const Rendering::FontCSPtr& Application::GetDefaultFont() const
         {
             return m_defaultFont;
         }
@@ -582,7 +582,7 @@ namespace ChilliSource
                 {
                     StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultFont"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultFont"].get("Path", "").asString();
-                    m_defaultFont = LOAD_RESOURCE(Rendering::Font, eStorageLocation, strPath);
+                    m_defaultFont = m_resourcePool->LoadResource<Rendering::Font>(eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultMaterial"))

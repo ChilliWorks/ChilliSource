@@ -9,6 +9,7 @@
 #include <ChilliSource/GUI/Label/Label.h>
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Application.h>
@@ -16,8 +17,6 @@
 
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
-#include <ChilliSource/Rendering/Base/CanvasRenderer.h>
-#include <ChilliSource/Rendering/Font/FontManager.h>
 
 namespace ChilliSource
 {
@@ -145,7 +144,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("Font", strValue))
             {
-                Font = LOAD_RESOURCE(Rendering::Font, eFontLocation, strValue);
+                Font = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Font>(eFontLocation, strValue);
             }
             //---Text Colour
             if(insParams.TryGetValue("TextColour", strValue))
@@ -248,7 +247,7 @@ namespace ChilliSource
         ///
         /// @param Font used to display text
         //-------------------------------------------------------
-        void Label::SetFont(const Rendering::FontSPtr& inpFont)
+        void Label::SetFont(const Rendering::FontCSPtr& inpFont)
         {
             Font = inpFont;
             
@@ -259,7 +258,7 @@ namespace ChilliSource
         ///
         /// @return Font used to display text
         //-------------------------------------------------------
-        const Rendering::FontSPtr& Label::GetFont() const
+        const Rendering::FontCSPtr& Label::GetFont() const
         {
             return Font;
         }

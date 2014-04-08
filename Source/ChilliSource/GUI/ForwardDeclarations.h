@@ -57,6 +57,8 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(EditableLabel);
         CS_FORWARDDECLARE_CLASS(FormattedLabel);
         CS_FORWARDDECLARE_CLASS(Label);
+        enum class TextOverflowBehaviour;
+        enum class TextJustification;
         //--------------------------------------------------------
         /// Progress Bar
         //--------------------------------------------------------
