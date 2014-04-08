@@ -11,8 +11,9 @@
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Cryptographic/HMAC_SHA1.h>
 
+#include <algorithm>
 #include <ctime>
-#include <list>
+#include <vector>
 #include <unordered_map>
 
 namespace ChilliSource
@@ -32,7 +33,7 @@ namespace ChilliSource
                 const std::string k_tokenKey = "oauth_token";
                 const std::string k_verifierKey = "oauth_verifier";
                 const std::string k_authHeader = "OAuth ";
-                const u32 k_buffSizeLarge = 1024;
+                const std::string k_oauthVersion = "1.0";
                 
                 //-----------------------------------------------------------
                 /// A map for containing key value pair parameters.
@@ -100,7 +101,7 @@ namespace ChilliSource
                         out_params[k_verifierKey] = in_oauthVerifier;
                     }
                     
-                    out_params[k_versionKey] = std::string("1.0");
+                    out_params[k_versionKey] = k_oauthVersion;
                     
                     if(in_rawData.length())
                     {
@@ -132,7 +133,8 @@ namespace ChilliSource
                     
                     if(in_paramsMap.size())
                     {
-                        std::list<std::string> keyValueList;
+                        std::vector<std::string> keyValueList;
+                        keyValueList.reserve(in_paramsMap.size());
                         std::string dummyString;
                         
                         //Push key-value pairs to a list of strings
@@ -152,8 +154,8 @@ namespace ChilliSource
                             keyValueList.push_back(dummyString);
                         }
                         
-                        // Sort key-value pairs based on key name
-                        keyValueList.sort();
+                        //OAuth parameters need to be in order, so sort them
+                        std::sort(keyValueList.begin(), keyValueList.end());
                         
                         // Now, form a string
                         for(const auto& param : keyValueList)
@@ -209,8 +211,9 @@ namespace ChilliSource
                     std::string secretSigningKey = in_consumerSecret + "&" + in_oauthTokenSecret;
                     
                     //Now, hash the signature base string using HMAC_SHA1 class
-                    u8 digest[k_buffSizeLarge];
-                    memset(digest, 0, k_buffSizeLarge);
+                    const u32 k_bufferSize = 1024;
+                    u8 digest[k_bufferSize];
+                    memset(digest, 0, k_bufferSize);
                     
                     HMAC_SHA1 objHMACSHA1;
                     objHMACSHA1.Generate((u8*)sigBase.c_str(), sigBase.length(), (u8*)secretSigningKey.c_str(), secretSigningKey.length(), (u8*)digest);
@@ -224,8 +227,8 @@ namespace ChilliSource
             }
             //-----------------------------------------------------------
             //-----------------------------------------------------------
-            std::string GenerateOAuthAuthorisationHeader(RequestType in_requestType, const std::string& in_url, const std::string& in_rawData, const std::string& in_consumerKey, const std::string& in_consumerSecret,
-                                                         const std::string& in_oauthToken, const std::string& in_oauthTokenSecret, const std::string& in_oauthVerifier)
+            std::string GenerateAuthorisationHeader(RequestType in_requestType, const std::string& in_url, const std::string& in_rawData, const std::string& in_consumerKey, const std::string& in_consumerSecret,
+                                                    const std::string& in_oauthToken, const std::string& in_oauthTokenSecret, const std::string& in_oauthVerifier)
             {
                 std::string pureUrl = in_url;
 

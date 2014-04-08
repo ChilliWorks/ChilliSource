@@ -12,10 +12,6 @@
 #include <algorithm>
 #include <cctype>
 
-#if CS_TARGETPLATFORM_IOS && __OBJC__
-#import <Foundation/Foundation.h>
-#endif
-
 namespace ChilliSource
 {
 	namespace Core

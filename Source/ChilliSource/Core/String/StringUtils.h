@@ -16,10 +16,6 @@
 #include <sstream>
 #include <string>
 
-#if CS_TARGETPLATFORM_IOS && __OBJC__
-@class NSString;
-#endif
-
 namespace ChilliSource 
 {
 	namespace Core

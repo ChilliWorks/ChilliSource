@@ -51,8 +51,8 @@ namespace ChilliSource
             /// @return The generated header string. If this failed an
             /// empty string will be returned.
             //-----------------------------------------------------------
-            std::string GenerateOAuthAuthorisationHeader(RequestType in_requestType, const std::string& in_url, const std::string& in_rawData, const std::string& in_consumerKey, const std::string& in_consumerSecret,
-                                                         const std::string& in_oauthToken = "", const std::string& in_oauthTokenSecret = "", const std::string& in_oauthVerifier = "");
+            std::string GenerateAuthorisationHeader(RequestType in_requestType, const std::string& in_url, const std::string& in_rawData, const std::string& in_consumerKey, const std::string& in_consumerSecret,
+                                                    const std::string& in_oauthToken = "", const std::string& in_oauthTokenSecret = "", const std::string& in_oauthVerifier = "");
         }
     }
 }
