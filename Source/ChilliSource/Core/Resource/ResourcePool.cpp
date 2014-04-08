@@ -105,7 +105,7 @@ namespace ChilliSource
                         if(itResource->second.use_count() == 1)
                         {
                             //The pool is the sole owner so we can safely release the object
-                            CS_LOG_DEBUG("Releasing resource from pool " + itResource->second->GetFilePath());
+                            CS_LOG_VERBOSE("Releasing resource from pool " + itResource->second->GetFilePath());
                             itResource = descEntry.second.m_cachedResources.erase(itResource);
                             numReleased++;
                         }
@@ -135,7 +135,7 @@ namespace ChilliSource
                 {
 					ResourceSPtr& resource = itResource->second;
 					CS_ASSERT((resource.use_count() <= 1), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + resource->GetFilePath() + ")");
-					CS_LOG_DEBUG("Releasing resource from pool " + resource->GetFilePath());
+					CS_LOG_VERBOSE("Releasing resource from pool " + resource->GetFilePath());
 					cachedResources.erase(itResource);
                     return;
                 }

@@ -182,13 +182,13 @@ namespace ChilliSource
 			}
 			
 			//Load the shader source 
-			CS_LOG_DEBUG("Loading shader " + instrShaderFile);
+			CS_LOG_VERBOSE("Loading shader " + instrShaderFile);
 			std::string strSource = sstrShaderSource.str();
 			const GLchar* pGLSource = strSource.c_str();
 			glShaderSource(*pGLShader, 1, &pGLSource, nullptr);
 			
 			//Compile the shader and check for errors
-			CS_LOG_DEBUG("Compiling shader " + instrShaderFile);
+			CS_LOG_VERBOSE("Compiling shader " + instrShaderFile);
 			glCompileShader(*pGLShader);
 			
 			GLint Compiled;
@@ -214,7 +214,7 @@ namespace ChilliSource
 				return false;
 			}
 			
-			CS_LOG_DEBUG("Shader compiled successfully\n");
+			CS_LOG_VERBOSE("Shader compiled successfully\n");
 			return true;
 		}
 		//----------------------------------------------------------
@@ -256,12 +256,12 @@ namespace ChilliSource
 			}
 			
 			//Load the shader source
-			CS_LOG_DEBUG("Loading shader from pre loaded source.");
+			CS_LOG_VERBOSE("Loading shader from pre loaded source.");
 			const GLchar* pGLSource = instrShaderSource.c_str();
 			glShaderSource(*pGLShader, 1, &pGLSource, nullptr);
 			
 			//Compile the shader and check for errors
-			CS_LOG_DEBUG("Compiling shader...");
+			CS_LOG_VERBOSE("Compiling shader...");
 			glCompileShader(*pGLShader);
 			
 			GLint Compiled;
@@ -287,7 +287,7 @@ namespace ChilliSource
 				return false;
 			}
 			
-			CS_LOG_DEBUG("Shader compiled successfully\n");
+			CS_LOG_VERBOSE("Shader compiled successfully\n");
 			return true;
 		}
 		//----------------------------------------------------------
@@ -332,7 +332,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_LOG_DEBUG("Linking shader complete\n");
+			CS_LOG_VERBOSE("Linking shader complete\n");
 			return true;
 		}
 		//----------------------------------------------------------

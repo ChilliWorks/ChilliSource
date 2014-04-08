@@ -174,7 +174,7 @@ namespace ChilliSource
 			m_defaultOrientation = Core::ScreenOrientation::k_portraitUp;
 #endif
             
-			Core::Logging::Init();
+			Logging::Create();
             
             GUI::GUIViewFactory::RegisterDefaults();
 
@@ -326,7 +326,7 @@ namespace ChilliSource
 			SetOrientation(in_orientation);
 			ApplicationEvents::GetScreenOrientationChangedEvent().NotifyConnections(in_orientation);
             
-			CS_LOG_DEBUG("Screen Oriented Notification");
+			CS_LOG_VERBOSE("Screen Oriented Notification");
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -341,13 +341,13 @@ namespace ChilliSource
 
 			ApplicationEvents::GetScreenResizedEvent().NotifyConnections(in_width, in_height);
             
-			CS_LOG_DEBUG("Screen resized Notification");
+			CS_LOG_VERBOSE("Screen resized Notification");
 		}
         //----------------------------------------------------
         //----------------------------------------------------
 		void Application::ApplicationMemoryWarning()
 		{
-			CS_LOG_DEBUG("Memory Warning. Clearing resource cache...");
+			CS_LOG_VERBOSE("Memory Warning. Clearing resource cache...");
 			ResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
 			ApplicationEvents::GetLowMemoryEvent().NotifyConnections();
             
@@ -361,7 +361,7 @@ namespace ChilliSource
         //----------------------------------------------------
 		void Application::GoBack()
 		{
-			CS_LOG_DEBUG("Go back event.");
+			CS_LOG_VERBOSE("Go back event.");
 			//TODO: Feed this to the application another way. m_stateManager.GetActiveState()->OnGoBack();
 			ApplicationEvents::GetGoBackEvent().NotifyConnections();
 		}
@@ -378,7 +378,7 @@ namespace ChilliSource
         //----------------------------------------------------
 		void Application::Suspend()
 		{
-            CS_LOG_DEBUG("App Suspending...");
+            CS_LOG_VERBOSE("App Suspending...");
             
 			m_isSuspending = true;
             
@@ -396,7 +396,7 @@ namespace ChilliSource
 			ApplicationEvents::GetSuspendEvent().NotifyConnections();
 			ApplicationEvents::GetLateSuspendEvent().NotifyConnections();
 			
-			CS_LOG_DEBUG("App Finished Suspending...");
+			CS_LOG_VERBOSE("App Finished Suspending...");
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -424,6 +424,8 @@ namespace ChilliSource
             CS_SAFEDELETE(m_componentFactoryDispenser);
             
             m_resourcePool->Destroy();
+            
+            Logging::Destroy();
             
             s_application = nullptr;
         }
@@ -600,7 +602,7 @@ namespace ChilliSource
         //----------------------------------------------------
 		void Application::OnResume()
 		{
-			CS_LOG_DEBUG("App Resuming...");
+			CS_LOG_VERBOSE("App Resuming...");
             
 			m_isSuspending = false;
 			ApplicationEvents::GetResumeEvent().NotifyConnections();
@@ -613,7 +615,7 @@ namespace ChilliSource
                 system->OnResume();
             }
 			
-			CS_LOG_DEBUG("App Finished Resuming...");
+			CS_LOG_VERBOSE("App Finished Resuming...");
 		}
         //---------------------------------------------------
         //---------------------------------------------------

@@ -225,7 +225,7 @@ namespace ChilliSource
             if(nullptr != mpMusicComponent)
             {
                 mpMusicComponent->Stop();
-                CS_LOG_DEBUG("Music stopped");
+                CS_LOG_VERBOSE("Music stopped");
             }
             else
             {

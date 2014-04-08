@@ -237,12 +237,12 @@ void Java_com_chillisource_core_CoreNativeInterface_orientationChanged(JNIEnv* i
 	if (in_orientationID == 1)
 	{
 		screenOrientation = ChilliSource::Core::ScreenOrientation::k_portraitUp;
-		CS_LOG_DEBUG("Changing orientation to portrait");
+		CS_LOG_VERBOSE("Changing orientation to portrait");
 	}
 	else
 	{
 		screenOrientation = ChilliSource::Core::ScreenOrientation::k_landscapeLeft;
-		CS_LOG_DEBUG("Changing orientation to landscape");
+		CS_LOG_VERBOSE("Changing orientation to landscape");
 	}
 
 	ChilliSource::Core::Application::Get()->ScreenChangedOrientation(screenOrientation);

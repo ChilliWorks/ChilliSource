@@ -12,20 +12,20 @@
 //------------------------------------------------------------
 /// Memory macros
 //------------------------------------------------------------
-#define CS_SAFEDELETE(in_object)                   {if(in_object) delete(in_object); in_object = nullptr;}
-#define CS_SAFEDELETE_ARRAY(in_object)				{if(in_object) delete[] (in_object); in_object = nullptr;}
+#define CS_SAFEDELETE(in_object)        {if(in_object) delete(in_object); in_object = nullptr;}
+#define CS_SAFEDELETE_ARRAY(in_object)  {if(in_object) delete[] (in_object); in_object = nullptr;}
 //------------------------------------------------------------
 /// Logging macros
 //------------------------------------------------------------
-#define CS_LOG_DEBUG(in_object)						(ChilliSource::Core::Logging::LogVerbose(in_object))
-#define CS_LOG_WARNING(in_object)                   (ChilliSource::Core::Logging::LogWarning(in_object))
-#define CS_LOG_ERROR(in_object)						(ChilliSource::Core::Logging::LogError(in_object))
-#define CS_LOG_FATAL(in_object)						(ChilliSource::Core::Logging::LogFatal(in_object))
+#define CS_LOG_VERBOSE(in_message)      (ChilliSource::Core::Logging::Get()->LogVerbose(in_message))
+#define CS_LOG_WARNING(in_message)      (ChilliSource::Core::Logging::Get()->LogWarning(in_message))
+#define CS_LOG_ERROR(in_message)        (ChilliSource::Core::Logging::Get()->LogError(in_message))
+#define CS_LOG_FATAL(in_message)        (ChilliSource::Core::Logging::Get()->LogFatal(in_message))
 //------------------------------------------------------------
 /// Assertion macros
 //------------------------------------------------------------
 #ifdef CS_ENABLE_DEBUG
-#define CS_ASSERT(in_query, in_message) if((in_query) == 0){ChilliSource::Core::Logging::LogFatal(in_message);}
+#define CS_ASSERT(in_query, in_message) if((in_query) == 0){ChilliSource::Core::Logging::Get()->LogFatal(in_message);}
 #else
 #define CS_ASSERT(in_query, in_message)
 #endif

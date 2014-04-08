@@ -59,7 +59,7 @@ namespace ChilliSource
                 {
                     if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {
-                        CS_LOG_DEBUG("Loading Scene Description " + instrFilePath);
+                        CS_LOG_VERBOSE("Loading Scene Description " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
                         
                         SceneDescSPtr pSceneDesc = std::static_pointer_cast<SceneDesc>(pResource);
@@ -98,7 +98,7 @@ namespace ChilliSource
 
                     if(mResourceProviderOlds[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {
-                        CS_LOG_DEBUG("Loading Scene Description " + instrFilePath);
+                        CS_LOG_VERBOSE("Loading Scene Description " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
                                                 
                         return pSceneDesc;

@@ -96,7 +96,7 @@ namespace ChilliSource
 					if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, strSpriteSheetFile, pResource))
 					{
 						//Add it to the cache
-						CS_LOG_DEBUG("Loading sprite data " + strSpriteSheetFile);
+						CS_LOG_VERBOSE("Loading sprite data " + strSpriteSheetFile);
 						mMapFilenameToResource.insert(std::make_pair(strSpriteSheetFile, pResource));
 						
 						SpriteSheetSPtr pSpriteSheet = std::static_pointer_cast<SpriteSheet>(pResource);

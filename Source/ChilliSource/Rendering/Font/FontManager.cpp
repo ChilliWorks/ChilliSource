@@ -99,7 +99,7 @@ namespace ChilliSource
 				{
 					if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, strFontFile, pResource))
 					{
-						CS_LOG_DEBUG("Loading font " + strFontFile);
+						CS_LOG_VERBOSE("Loading font " + strFontFile);
                         
 						mMapFilenameToResource.insert(std::make_pair(strFontFile, pResource));
 						

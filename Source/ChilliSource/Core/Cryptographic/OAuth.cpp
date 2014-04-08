@@ -11,6 +11,7 @@
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Cryptographic/HMAC_SHA1.h>
 
+#include <ctime>
 #include <list>
 #include <unordered_map>
 

@@ -118,7 +118,7 @@ namespace ChilliSource
 					DWORD bufferSize = headerSize / sizeof(WCHAR);
 					WCHAR* headerBuffer = new WCHAR[bufferSize];
 
-					if (WinHttpQueryHeaders(in_requestHandle, WINHTTP_QUERY_RAW_HEADERS_CRLF, WINHTTP_HEADER_NAME_BY_INDEX, headerBuffer, &headerSize, WINHTTP_NO_HEADER_INDEX) == true)
+					if (WinHttpQueryHeaders(in_requestHandle, WINHTTP_QUERY_RAW_HEADERS_CRLF, WINHTTP_HEADER_NAME_BY_INDEX, headerBuffer, &headerSize, WINHTTP_NO_HEADER_INDEX) == TRUE)
 					{
 						headers = ParseHeaders(headerBuffer, bufferSize);
 					}

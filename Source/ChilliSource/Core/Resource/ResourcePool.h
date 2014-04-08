@@ -390,7 +390,7 @@ namespace ChilliSource
                     if(itResource->second.use_count() == 1)
                     {
                         //The pool is the sole owner so we can safely release the object
-                        CS_LOG_DEBUG("Releasing resource from pool " + itResource->second->GetFilePath());
+                        CS_LOG_VERBOSE("Releasing resource from pool " + itResource->second->GetFilePath());
                         itResource = cachedResources.erase(itResource);
                         numReleased++;
                     }

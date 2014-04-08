@@ -59,7 +59,7 @@ namespace ChilliSource
                 {
                     if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {
-                        CS_LOG_DEBUG("Loading Scene Animation " + instrFilePath);
+                        CS_LOG_VERBOSE("Loading Scene Animation " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
                         
                         SceneAnimationSPtr pSceneAnim = std::static_pointer_cast<SceneAnimation>(pResource);
@@ -99,7 +99,7 @@ namespace ChilliSource
                     
                     if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {
-                        CS_LOG_DEBUG("Loading Scene Description " + instrFilePath);
+                        CS_LOG_VERBOSE("Loading Scene Description " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
                         return pSceneAnim;
                     }

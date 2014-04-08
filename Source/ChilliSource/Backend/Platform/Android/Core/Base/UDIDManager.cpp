@@ -47,7 +47,7 @@ namespace ChilliSource
 			if (LoadUDID() == false)
 				CalculateUDID();
 
-			CS_LOG_DEBUG("UDID: " + mstrUDID);
+			CS_LOG_VERBOSE("UDID: " + mstrUDID);
 			mbInitialised = true;
 		}
 		//-----------------------------------------

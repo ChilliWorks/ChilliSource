@@ -1,14 +1,10 @@
-/*
-* File: Logging.cpp
-* Date: 18/10/2010 2010 
-* Description: 
-*/
-
-/*
-* Author: Scott Downie
-* Version: v 1.0
-* Copyright ©2010 Tag Games Limited - All rights reserved 
-*/
+//
+//  Logging.cpp
+//  Chilli Source
+//
+//  Created by S Downie on 18/10/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Core/Base/Logging.h>
 
@@ -23,9 +19,9 @@
 #include <cstdlib>
 extern "C"
 {
-    #define CS_ANDROID_LOG_DEBUG(...) __android_log_print(ANDROID_LOG_DEBUG, "ChilliSource", "%s", __VA_ARGS__)
-    #define CS_ANDROID_LOG_WARNING(...) __android_log_print(ANDROID_LOG_WARN, "ChilliSource", "%s", __VA_ARGS__)
-    #define CS_ANDROID_LOG_ERROR(...) __android_log_print(ANDROID_LOG_ERROR, "ChilliSource", "%s", __VA_ARGS__)
+#define CS_ANDROID_LOG_VERBOSE(...) __android_log_print(ANDROID_LOG_DEBUG, "Chilli Source", "%s", __VA_ARGS__)
+#define CS_ANDROID_LOG_WARNING(...) __android_log_print(ANDROID_LOG_WARN, "Chilli Source", "%s", __VA_ARGS__)
+#define CS_ANDROID_LOG_ERROR(...) __android_log_print(ANDROID_LOG_ERROR, "Chilli Source", "%s", __VA_ARGS__)
 }
 #endif
 
@@ -49,179 +45,68 @@ namespace ChilliSource
 {
     namespace Core
     {
-        bool Logging::mbInitialised = false;
-
-#ifdef CS_ENABLE_LOGTOFILE
-        const u32 kudwMaxLogBufferSize = 2048;
-        const s8* kstrFileName = "ChilliSourceLog.txt";
-        
-        std::string gstrLogBuffer;
-        
-        //----------------------------------------------
-        /// Flush Buffer
-        ///
-        /// Write the contents of the log buffer to
-        /// file
-        //----------------------------------------------
-        void FlushBuffer()
-        {
-            Core::FileStreamSPtr pLogFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FileMode::FileMode::k_writeAppend);
-            pLogFile->Write(gstrLogBuffer);
-            gstrLogBuffer.clear();
-            pLogFile->Close();
-        }
-#endif
-    
-        //----------------------------------------------
-        /// Init
-        ///
-        /// Initialise the logging system
-        //----------------------------------------------
-        void Logging::Init()
+        namespace
         {
 #ifdef CS_ENABLE_LOGTOFILE
-            //Clear the old file
-            Core::FileStreamSPtr pLogFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FileMode::k_write);
-            pLogFile->Write("Chilli Source Log");
-            pLogFile->Close();
+            const u32 k_maxLogBufferSize = 2048;
+            const std::string k_logFileName = "ChilliSourceLog.txt";
 #endif
-            mbInitialised = true;
+        }
+        
+        Logging* Logging::s_logging = nullptr;
+        //-----------------------------------------------
+        //-----------------------------------------------
+        void Logging::Create()
+        {
+            assert(s_logging == nullptr);
+            s_logging = new Logging();
+        }
+        //-----------------------------------------------
+        //-----------------------------------------------
+        Logging* Logging::Get()
+        {
+            assert(s_logging != nullptr);
+            return s_logging;
         }
         //----------------------------------------------
-        /// Log Verbose
-        ///
-        /// Used to output helpful but not neccessary 
-        /// messages.
-        /// @param Message
-        /// Logging Level: VERBOSE
         //----------------------------------------------
-        void Logging::LogVerbose(const std::string &instrMessage)
+        Logging::Logging()
+        {
+#ifdef CS_ENABLE_LOGTOFILE
+            CreateLogFile();
+#endif
+        }
+        //----------------------------------------------
+        //----------------------------------------------
+        void Logging::LogVerbose(const std::string &in_message)
         {
 #if defined CS_LOGLEVEL_VERBOSE
-#ifdef CS_TARGETPLATFORM_ANDROID
-            CS_ANDROID_LOG_DEBUG(instrMessage.c_str());
-#elif CS_TARGETPLATFORM_IOS
-            NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
-            NSLog(@"ChilliSource: %@ ", pLog);
-            [pLog release];
-#else
-            std::cout << "ChilliSource: " + instrMessage << std::endl;
-#endif
-
-#ifdef CS_ENABLE_LOGTOFILE
-            gstrLogBuffer += ("\nChilliSource: " + instrMessage);
-            
-            //Check whether to flush the buffer
-            if(gstrLogBuffer.length() > kudwMaxLogBufferSize)
-            {
-                if (mbInitialised == true)
-                    FlushBuffer();
-            }
-#endif
+            LogMessage(LogLevel::k_verbose, in_message);
 #endif
         }
         //----------------------------------------------
-        /// Log Warning
-        ///
-        /// Used to output warning messages; that the 
-        /// user may have handled (i.e. cannot find 
-        /// resource provider)
-        /// @param Message
-        /// Logging Level: WARNING
         //----------------------------------------------
-        void Logging::LogWarning(const std::string &instrMessage)
+        void Logging::LogWarning(const std::string &in_message)
         {
 #if defined CS_LOGLEVEL_VERBOSE || defined CS_LOGLEVEL_WARNING
-#ifdef CS_TARGETPLATFORM_ANDROID
-            CS_ANDROID_LOG_WARNING(("WARNING: " + instrMessage).c_str());
-#elif CS_TARGETPLATFORM_IOS
-            NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
-            NSLog(@"ChilliSource: WARNING %@ ", pLog);
-            [pLog release];
-#else
-            std::cout << "ChilliSource WARNING: " + instrMessage << std::endl;
-#endif
-
-#ifdef CS_ENABLE_LOGTOFILE
-            gstrLogBuffer += ("\nChilliSource WARNING: " + instrMessage);
-            
-            //Check whether to flush the buffer
-            if(gstrLogBuffer.length() > kudwMaxLogBufferSize)
-            {
-                if (mbInitialised == true)
-                    FlushBuffer();
-            }
-#endif
+            LogMessage(LogLevel::k_warning, "WARNING: " + in_message);
 #endif
         }
         //----------------------------------------------
-        /// Log Error
-        ///
-        /// Used to output error messages (i.e. trying 
-        /// to create a component that the render system
-        /// cannot instantiate)
-        /// @param Message
-        /// Logging Level: ERROR
         //----------------------------------------------
-        void Logging::LogError(const std::string &instrMessage)
+        void Logging::LogError(const std::string &in_message)
         {
 #if defined CS_LOGLEVEL_VERBOSE || defined CS_LOGLEVEL_WARNING || defined CS_LOGLEVEL_ERROR
-#ifdef CS_TARGETPLATFORM_ANDROID
-            CS_ANDROID_LOG_ERROR(("ERROR: " + instrMessage).c_str());
-#elif CS_TARGETPLATFORM_IOS
-            NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
-            NSLog(@"ChilliSource: ERROR %@ ", pLog);
-            [pLog release];
-#else
-            std::cout << "ChilliSource ERROR: " + instrMessage << std::endl;
-#endif
-   
-#ifdef CS_ENABLE_LOGTOFILE
-            gstrLogBuffer += ("\nChilliSource ERROR: " + instrMessage);
-            
-            //Force flush the buffer on an error
-            if (mbInitialised == true)
-                FlushBuffer();
-            
-#endif
+            LogMessage(LogLevel::k_error, "ERROR: " + in_message);
 #endif
         }
         //----------------------------------------------
-        /// Log Fatal
-        ///
-        /// Used to output fatal messages before exiting
-        /// the application
-        /// @param Message
-        /// Logging Level: FATAL
         //----------------------------------------------
-        void Logging::LogFatal(const std::string &instrMessage)
+        void Logging::LogFatal(const std::string &in_message)
         {
-#ifdef CS_TARGETPLATFORM_ANDROID
-            CS_ANDROID_LOG_ERROR(("FATAL: " + instrMessage).c_str());
-            CS_ANDROID_LOG_ERROR("ChilliSource is exiting...");
-#endif
-        
-#ifdef CS_TARGETPLATFORM_IOS
-            NSLog(@"%@", [NSThread callStackSymbols]);
-
-            NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
-            NSLog(@"ChilliSource: FATAL %@ ", pLog);
-
-            NSLog(@"ChilliSource is exiting ...");
-            [pLog release];
-#endif
-        
-#ifdef CS_TARGETPLATFORM_WINDOWS 
-            MessageBoxA(nullptr, instrMessage.c_str(), "ChilliSource fatal error!", MB_OK);
-#endif
-
-#ifdef CS_ENABLE_LOGTOFILE
-            gstrLogBuffer += ("\nChilliSource FATAL: " + instrMessage);
-            gstrLogBuffer += ("\nChilliSource is exiting...");
-            
-            //Force flush the buffer on an error
-            if (mbInitialised == true)
-                FlushBuffer();
+#if defined CS_LOGLEVEL_VERBOSE || defined CS_LOGLEVEL_WARNING || defined CS_LOGLEVEL_ERROR || defined CS_LOGLEVEL_FATAL
+            LogMessage(LogLevel::k_error, "FATAL: " + in_message);
+            LogMessage(LogLevel::k_error, "Chilli Source is exiting...");
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
@@ -230,22 +115,71 @@ namespace ChilliSource
             assert(false);
 #endif
         }
-    
-#ifdef CS_ENABLE_LOGTOFILE
-        //----------------------------------------------
-        /// Get Log Data
-        ///
-        /// Fetch all the log data as a string stream
-        ///
-        /// @param Out: Populated string stream
-        //----------------------------------------------
-        void Logging::GetLogData(std::stringstream& outStream)
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Logging::Destroy()
         {
-            //Clear the old file
-            Core::FileStreamSPtr pLogFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FM_READ);
-            pLogFile->Get(outStream);
-            outStream << gstrLogBuffer;
-            pLogFile->Close();
+            CS_SAFEDELETE(s_logging);
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Logging::LogMessage(LogLevel in_logLevel, const std::string& in_message)
+        {
+#ifdef CS_TARGETPLATFORM_ANDROID
+            switch (in_logLevel)
+            {
+                case LogLevel::k_verbose:
+                	CS_ANDROID_LOG_VERBOSE(in_message.c_str());
+                    break;
+                case LogLevel::k_warning:
+                    CS_ANDROID_LOG_WARNING(in_message.c_str());
+                    break;
+                case LogLevel::k_error:
+                    CS_ANDROID_LOG_ERROR(in_message.c_str());
+                    break;
+                
+            }
+#elif defined (CS_TARGETPLATFORM_IOS)
+            @autoreleasepool
+            {
+                NSLog(@"[Chilli Source] %@", [NSString stringWithUTF8String:in_message.c_str()]);
+            }
+#else
+            std::cout << "[Chilli Source] " + in_message << std::endl;
+#endif
+            
+#ifdef CS_ENABLE_LOGTOFILE
+            LogToFile(in_message);
+#endif
+        }
+        
+#ifdef CS_ENABLE_LOGTOFILE
+        //-----------------------------------------------
+        //-----------------------------------------------
+        void Logging::CreateLogFile()
+        {
+            FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, Core::FileMode::k_write);
+            stream->Write("Chilli Source Log");
+            stream->Close();
+        }
+        //-----------------------------------------------
+        //-----------------------------------------------
+        void Logging::LogToFile(const std::string& in_message)
+        {
+            m_logBuffer += "\n" + in_message;
+            if(m_logBuffer.length() > k_maxLogBufferSize)
+            {
+                FlushBuffer();
+            }
+        }
+        //----------------------------------------------
+        //----------------------------------------------
+        void Logging::FlushBuffer()
+        {
+            FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, FileMode::FileMode::k_writeAppend);
+            stream->Write(m_logBuffer);
+            stream->Close();
+            m_logBuffer.clear();
         }
 #endif
     }
