@@ -9,13 +9,14 @@
 #include <ChilliSource/GUI/ProgressBar/HorizontalProgressBar.h>
 #include <ChilliSource/GUI/Image/ImageView.h>
 
-#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 
 namespace ChilliSource
 {
@@ -25,12 +26,12 @@ namespace ChilliSource
 
 		DEFINE_PROPERTY(BackgroundTexture);
 		DEFINE_PROPERTY(ProgressTexture);
-		DEFINE_PROPERTY(BackgroundSpriteSheet);
-		DEFINE_PROPERTY(ProgressSpriteSheet);
-		DEFINE_PROPERTY(BackgroundSpriteSheetIndex);
-		DEFINE_PROPERTY(ProgressSpriteSheetIndex);
-		DEFINE_PROPERTY(BackgroundSpriteSheetIndexID);
-		DEFINE_PROPERTY(ProgressSpriteSheetIndexID);
+		DEFINE_PROPERTY(BackgroundTextureAtlas);
+		DEFINE_PROPERTY(ProgressTextureAtlas);
+		DEFINE_PROPERTY(BackgroundTextureAtlasIndex);
+		DEFINE_PROPERTY(ProgressTextureAtlasIndex);
+		DEFINE_PROPERTY(BackgroundTextureAtlasID);
+		DEFINE_PROPERTY(ProgressTextureAtlasID);
 
         //------------------------------------------------------
         /// Constructor
@@ -38,7 +39,7 @@ namespace ChilliSource
         /// Create the subviews that make up the container
         //------------------------------------------------------
         HorizontalProgressBar::HorizontalProgressBar() : mpBackgroundImage(new ImageView()), mpProgressImage(new ImageView()),
-			BackgroundSpriteSheetIndex(0), ProgressSpriteSheetIndex(0)
+			BackgroundTextureAtlasIndex(0), ProgressTextureAtlasIndex(0)
         {
 			SetSize(0.8f, 0.1f, 0.0f, 0.0f);
 
@@ -60,7 +61,7 @@ namespace ChilliSource
         /// From param dictionary
         //------------------------------------------------------
         HorizontalProgressBar::HorizontalProgressBar(const Core::ParamDictionary& insParams) 
-		: ProgressBar(insParams), mpBackgroundImage(new ImageView()), mpProgressImage(new ImageView()), BackgroundSpriteSheetIndex(0), ProgressSpriteSheetIndex(0) 
+		: ProgressBar(insParams), mpBackgroundImage(new ImageView()), mpProgressImage(new ImageView()), BackgroundTextureAtlasIndex(0), ProgressTextureAtlasIndex(0) 
         {
             mfProgressAbsHeight = 0.0f;
             mfProgressRelHeight = 1.0f;
@@ -98,47 +99,49 @@ namespace ChilliSource
                 mpProgressImage->SetTexture(LOAD_RESOURCE(Rendering::Texture, eProgressTextureLocation, strValue));
             }
             //---Background sprite sheet
-            Core::StorageLocation eBackgroundSpriteSheetLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("BackgroundSpriteSheetLocation", strValue))
+            Core::StorageLocation eBackgroundTextureAtlasLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("BackgroundTextureAtlasLocation", strValue))
             {
-                eBackgroundSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eBackgroundTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
-            if(insParams.TryGetValue("BackgroundSpriteSheet", strValue))
+            if(insParams.TryGetValue("BackgroundTextureAtlas", strValue))
             {
-                SetBackgroundSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eBackgroundSpriteSheetLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetBackgroundTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eBackgroundTextureAtlasLocation, strValue));
             }
 			//---Progress sprite sheet
-            Core::StorageLocation eProgressSpriteSheetLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("ProgressSpriteSheetLocation", strValue))
+            Core::StorageLocation eProgressTextureAtlasLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("ProgressTextureAtlasLocation", strValue))
             {
-                eProgressSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eProgressTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
-			if(insParams.TryGetValue("ProgressSpriteSheet", strValue))
+			if(insParams.TryGetValue("ProgressTextureAtlas", strValue))
 			{
-				SetProgressSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eProgressSpriteSheetLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetProgressTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eProgressTextureAtlasLocation, strValue));
 			}
             //---Background index
-            if(insParams.TryGetValue("BackgroundSpriteSheetIndex", strValue))
+            if(insParams.TryGetValue("BackgroundTextureAtlasIndex", strValue))
             {
-				CS_ASSERT(BackgroundSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-				SetBackgroundSpriteSheetIndex(Core::ParseU32(strValue));
+				CS_ASSERT(BackgroundTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
+				SetBackgroundTextureAtlasIndex(Core::ParseU32(strValue));
             }
 			//---Progress index
-			if(insParams.TryGetValue("ProgressSpriteSheetIndex", strValue))
+			if(insParams.TryGetValue("ProgressTextureAtlasIndex", strValue))
 			{
-				CS_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-				SetProgressSpriteSheetIndex(Core::ParseU32(strValue));
+				CS_ASSERT(ProgressTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
+				SetProgressTextureAtlasIndex(Core::ParseU32(strValue));
 			}
 			//---Background index ID
-			if(insParams.TryGetValue("BackgroundSpriteSheetIndexID", strValue))
+			if(insParams.TryGetValue("BackgroundTextureAtlasID", strValue))
 			{
-				SetBackgroundSpriteSheetIndexID(strValue);
+				SetBackgroundTextureAtlasID(strValue);
 			}
 			//---Progress index ID
-			if(insParams.TryGetValue("ProgressSpriteSheetIndexID", strValue))
+			if(insParams.TryGetValue("ProgressTextureAtlasID", strValue))
 			{
-				CS_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-				SetProgressSpriteSheetIndexID(strValue);
+				CS_ASSERT(ProgressTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
+				SetProgressTextureAtlasID(strValue);
 			}
 		}
 		//--------------------------------------------------------
@@ -146,14 +149,14 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet
 		//--------------------------------------------------------
-		void HorizontalProgressBar::SetBackgroundSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
+		void HorizontalProgressBar::SetBackgroundTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas)
 		{
-			BackgroundSpriteSheet = inpSpriteSheet;
-			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
+			BackgroundTextureAtlas = inpTextureAtlas;
+			mpBackgroundImage->SetTextureAtlas(inpTextureAtlas);
             
-            if(!ProgressSpriteSheet)
+            if(!ProgressTextureAtlas)
             {
-                SetProgressSpriteSheet(inpSpriteSheet);
+                SetProgressTextureAtlas(inpTextureAtlas);
             }
 		}
 		//--------------------------------------------------------
@@ -161,14 +164,14 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet
 		//--------------------------------------------------------
-		void HorizontalProgressBar::SetProgressSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
+		void HorizontalProgressBar::SetProgressTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas)
 		{
-			ProgressSpriteSheet = inpSpriteSheet;
-			mpProgressImage->SetSpriteSheet(inpSpriteSheet);
+			ProgressTextureAtlas = inpTextureAtlas;
+			mpProgressImage->SetTextureAtlas(inpTextureAtlas);
             
-            if(!BackgroundSpriteSheet)
+            if(!BackgroundTextureAtlas)
             {
-                SetBackgroundSpriteSheet(inpSpriteSheet);
+                SetBackgroundTextureAtlas(inpTextureAtlas);
             }
 		}
 		//--------------------------------------------------------
@@ -176,96 +179,96 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetSPtr& HorizontalProgressBar::GetBackgroundSpriteSheet() const
+		const Rendering::TextureAtlasCSPtr& HorizontalProgressBar::GetBackgroundTextureAtlas() const
 		{
-			return BackgroundSpriteSheet;
+			return BackgroundTextureAtlas;
 		}
 		//--------------------------------------------------------
 		/// Get Progress Sprite Sheet
 		///
 		/// @return Sprite sheet
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetSPtr& HorizontalProgressBar::GetProgressSpriteSheet() const
+		const Rendering::TextureAtlasCSPtr& HorizontalProgressBar::GetProgressTextureAtlas() const
 		{
-			return ProgressSpriteSheet;
+			return ProgressTextureAtlas;
 		}
         //--------------------------------------------------------
         /// Set Background Sprite Sheet Index
         ///
         /// @param The index of the image within the sprite sheet
         //--------------------------------------------------------
-        void HorizontalProgressBar::SetBackgroundSpriteSheetIndex(u32 inudwIndex)
+        void HorizontalProgressBar::SetBackgroundTextureAtlasIndex(u32 inudwIndex)
         {
-			BackgroundSpriteSheetIndex = inudwIndex;
-            mpBackgroundImage->SetSpriteSheetIndex(inudwIndex);
+			BackgroundTextureAtlasIndex = inudwIndex;
+            mpBackgroundImage->SetTextureAtlasIndex(inudwIndex);
         }
         //--------------------------------------------------------
         /// Set Progress Sprite Sheet Index
         ///
         /// @param The index of the image within the sprite sheet
         //--------------------------------------------------------
-        void HorizontalProgressBar::SetProgressSpriteSheetIndex(u32 inudwIndex)
+        void HorizontalProgressBar::SetProgressTextureAtlasIndex(u32 inudwIndex)
         {
-			ProgressSpriteSheetIndex = inudwIndex;
-            mpProgressImage->SetSpriteSheetIndex(inudwIndex);
+			ProgressTextureAtlasIndex = inudwIndex;
+            mpProgressImage->SetTextureAtlasIndex(inudwIndex);
         }
 		//--------------------------------------------------------
 		/// Get Progress Sprite Sheet Index
 		///
 		/// @return The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		u32 HorizontalProgressBar::GetBackgroundSpriteSheetIndex() const
+		u32 HorizontalProgressBar::GetBackgroundTextureAtlasIndex() const
 		{
-			return BackgroundSpriteSheetIndex;
+			return BackgroundTextureAtlasIndex;
 		}
 		//--------------------------------------------------------
 		/// Get Progress Sprite Sheet Index
 		///
 		/// @return The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		u32 HorizontalProgressBar::GetProgressSpriteSheetIndex() const
+		u32 HorizontalProgressBar::GetProgressTextureAtlasIndex() const
 		{
-			return ProgressSpriteSheetIndex;
+			return ProgressTextureAtlasIndex;
 		}
 		//--------------------------------------------------------
 		/// Set Background Sprite Sheet Index ID
 		///
 		/// @param The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		void HorizontalProgressBar::SetBackgroundSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalProgressBar::SetBackgroundTextureAtlasID(const std::string& instrID)
 		{
-			CS_ASSERT(BackgroundSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-			BackgroundSpriteSheetIndexID = instrID;
-			SetBackgroundSpriteSheetIndex(BackgroundSpriteSheet->GetFrameIndexByID(instrID));
+			CS_ASSERT(BackgroundTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
+			BackgroundTextureAtlasID = instrID;
+			SetBackgroundTextureAtlasIndex(BackgroundTextureAtlas->GetFrameIndexById(instrID));
 		}
 		//--------------------------------------------------------
 		/// Set Progress Sprite Sheet Index ID
 		///
 		/// @param The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		void HorizontalProgressBar::SetProgressSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalProgressBar::SetProgressTextureAtlasID(const std::string& instrID)
 		{
-			CS_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-			ProgressSpriteSheetIndexID = instrID;
-			SetProgressSpriteSheetIndex(ProgressSpriteSheet->GetFrameIndexByID(instrID));
+			CS_ASSERT(ProgressTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
+			ProgressTextureAtlasID = instrID;
+			SetProgressTextureAtlasIndex(ProgressTextureAtlas->GetFrameIndexById(instrID));
 		}
 		//--------------------------------------------------------
 		/// Get Progress Sprite Sheet Index ID
 		///
 		/// @return The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		const std::string& HorizontalProgressBar::GetBackgroundSpriteSheetIndexID() const
+		const std::string& HorizontalProgressBar::GetBackgroundTextureAtlasID() const
 		{
-			return BackgroundSpriteSheetIndexID;
+			return BackgroundTextureAtlasID;
 		}
 		//--------------------------------------------------------
 		/// Get Progress Sprite Sheet Index ID
 		///
 		/// @return The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		const std::string& HorizontalProgressBar::GetProgressSpriteSheetIndexID() const
+		const std::string& HorizontalProgressBar::GetProgressTextureAtlasID() const
 		{
-			return ProgressSpriteSheetIndexID;
+			return ProgressTextureAtlasID;
 		}
         //------------------------------------------------------
         /// Set Background Image

@@ -81,73 +81,73 @@ namespace ChilliSource
             ///
             /// @param Sprite sheet with with normal image
             //-----------------------------------------------------------
-            void SetNormalSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
+            void SetNormalTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas);
 			//-----------------------------------------------------------
 			/// Set Highlight Sprite Sheet
 			///
 			/// @param Sprite sheet with with highlight image
 			//-----------------------------------------------------------
-			void SetHighlightSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
+			void SetHighlightTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas);
             //-----------------------------------------------------------
             /// Get Normal Sprite Sheet
             ///
             /// @return Sprite sheet with default image
             //-----------------------------------------------------------
-			const Rendering::SpriteSheetSPtr& GetNormalSpriteSheet() const;
+			const Rendering::TextureAtlasCSPtr& GetNormalTextureAtlas() const;
 			//-----------------------------------------------------------
 			/// Get Highlight Sprite Sheet
 			///
 			/// @return Sprite sheet with highlight image
 			//-----------------------------------------------------------
-			const Rendering::SpriteSheetSPtr& GetHighlightSpriteSheet() const;
+			const Rendering::TextureAtlasCSPtr& GetHighlightTextureAtlas() const;
             //-----------------------------------------------------------
             /// Set Normal Sprite Sheet Index
             ///
             /// @param Index of default state on sprite sheet
             //-----------------------------------------------------------
-            void SetNormalSpriteSheetIndex(u32 inudwIndex);
+            void SetNormalTextureAtlasIndex(u32 inudwIndex);
             //-----------------------------------------------------------
             /// Set Highlight Sprite Sheet Index
             ///
             /// @param Index of highlight state on sprite sheet
             //-----------------------------------------------------------
-            void SetHighlightSpriteSheetIndex(u32 inudwIndex);
+            void SetHighlightTextureAtlasIndex(u32 inudwIndex);
             //-----------------------------------------------------------
             /// Get Normal Sprite Sheet Index
             ///
             /// @return Index of default state on sprite sheet
             //-----------------------------------------------------------
-            u32 GetNormalSpriteSheetIndex() const;
+            u32 GetNormalTextureAtlasIndex() const;
 			//-----------------------------------------------------------
 			/// Get Highlight Sprite Sheet Index
 			///
 			/// @return Index of highlight state on sprite sheet
 			//-----------------------------------------------------------
-			u32 GetHighlightSpriteSheetIndex() const;
+			u32 GetHighlightTextureAtlasIndex() const;
 			//-----------------------------------------------------------
 			/// Set Normal Sprite Sheet Index
 			///
 			/// @param Index of default state on sprite sheet
 			//-----------------------------------------------------------
-			void SetNormalSpriteSheetIndexID(const std::string& instrID);
+			void SetNormalTextureAtlasID(const std::string& instrID);
 			//-----------------------------------------------------------
 			/// Set Highlight Sprite Sheet Index ID
 			///
 			/// @param Index ID of highlight state on sprite sheet
 			//-----------------------------------------------------------
-			void SetHighlightSpriteSheetIndexID(const std::string& instrID);
+			void SetHighlightTextureAtlasID(const std::string& instrID);
 			//-----------------------------------------------------------
 			/// Get Normal Sprite Sheet Index ID
 			///
 			/// @return Index ID of default state on sprite sheet
 			//-----------------------------------------------------------
-			const std::string& GetNormalSpriteSheetIndexID() const;
+			const std::string& GetNormalTextureAtlasID() const;
 			//-----------------------------------------------------------
 			/// Get Highlight Sprite Sheet Index ID
 			///
 			/// @return Index ID of highlight state on sprite sheet
 			//-----------------------------------------------------------
-			const std::string& GetHighlightSpriteSheetIndexID() const;
+			const std::string& GetHighlightTextureAtlasID() const;
             //-----------------------------------------------------------
             /// Set Default Select Audio Effect
             ///
@@ -415,16 +415,16 @@ namespace ChilliSource
 			//---Properties
 			DECLARE_PROPERTY_A(Rendering::TextureSPtr, NormalTexture, SetNormalImage, GetNormalImage);
 			DECLARE_PROPERTY_A(Rendering::TextureSPtr, HighlightTexture, SetHighlightImage, GetHighlightImage);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, NormalSpriteSheet, SetNormalSpriteSheet, GetNormalSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, HighlightSpriteSheet, SetHighlightSpriteSheet, GetHighlightSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, NormalTextureAtlas, SetNormalTextureAtlas, GetNormalTextureAtlas);
+			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, HighlightTextureAtlas, SetHighlightTextureAtlas, GetHighlightTextureAtlas);
 
 			DECLARE_PROPERTY_A(Core::Colour, HighlightColour, SetHighlightColour, GetHighlightColour);
 
-			DECLARE_PROPERTY_A(u32, NormalSpriteSheetIndex, SetNormalSpriteSheetIndex, GetNormalSpriteSheetIndex);
-			DECLARE_PROPERTY_A(u32, HighlightSpriteSheetIndex, SetHighlightSpriteSheetIndex, GetHighlightSpriteSheetIndex);
+			DECLARE_PROPERTY_A(u32, NormalTextureAtlasIndex, SetNormalTextureAtlasIndex, GetNormalTextureAtlasIndex);
+			DECLARE_PROPERTY_A(u32, HighlightTextureAtlasIndex, SetHighlightTextureAtlasIndex, GetHighlightTextureAtlasIndex);
 
-			DECLARE_PROPERTY_A(std::string, NormalSpriteSheetIndexID, SetNormalSpriteSheetIndexID, GetNormalSpriteSheetIndexID);
-			DECLARE_PROPERTY_A(std::string, HighlightSpriteSheetIndexID, SetHighlightSpriteSheetIndexID, GetHighlightSpriteSheetIndexID);
+			DECLARE_PROPERTY_A(std::string, NormalTextureAtlasID, SetNormalTextureAtlasID, GetNormalTextureAtlasID);
+			DECLARE_PROPERTY_A(std::string, HighlightTextureAtlasID, SetHighlightTextureAtlasID, GetHighlightTextureAtlasID);
 
 			DECLARE_PROPERTY_A(bool, SizeFromImage, EnableSizeFromImage, IsSizeFromImageEnabled);
             DECLARE_PROPERTY_A(bool, WidthFromImage, EnableSizeFromImage, IsSizeFromImageEnabled);

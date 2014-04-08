@@ -26,18 +26,36 @@ namespace ChilliSource
 			HorizontalStretchableImage();
 			HorizontalStretchableImage(const Core::ParamDictionary& insParams);
 
+            //---------------------------------------------------------
+            /// Set Texture
+            ///
+            /// @param Texture containing the nine patches
+            //---------------------------------------------------------
+            inline void SetTexture(const Rendering::TextureSPtr& inpTexture)
+            {
+                Texture = inpTexture;
+            }
+            //---------------------------------------------------------
+            /// Get Texture
+            ///
+            /// @return Texture containing the nine patches
+            //---------------------------------------------------------
+			inline const Rendering::TextureSPtr& GetTexture() const
+            {
+                return Texture;
+            }
 			//---------------------------------------------------------
 			/// Set Sprite Sheet
 			///
 			/// @param Sprite sheet containing the patches
 			//---------------------------------------------------------
-			void SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
+			void SetTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas);
 			//---------------------------------------------------------
 			/// Get Sprite Sheet
 			///
 			/// @return Sprite sheet containing the patches
 			//---------------------------------------------------------
-			const Rendering::SpriteSheetSPtr& GetSpriteSheet() const;
+			const Rendering::TextureAtlasCSPtr& GetTextureAtlas() const;
 			//---------------------------------------------------------
 			/// Set Base Sprite Sheet Index ID
 			///
@@ -49,7 +67,7 @@ namespace ChilliSource
 			///
 			/// the base ID would be "BLUE_PANEL_"
 			//---------------------------------------------------------
-			void SetBaseSpriteSheetIndexID(const std::string& instrID);
+			void SetBaseTextureAtlasID(const std::string& instrID);
 			//---------------------------------------------------------
 			/// Get Base Sprite Sheet Index ID
 			///
@@ -61,7 +79,7 @@ namespace ChilliSource
 			///
 			/// the base ID would be "BLUE_PANEL_"
 			//---------------------------------------------------------
-			const std::string& GetBaseSpriteSheetIndexID() const;
+			const std::string& GetBaseTextureAtlasID() const;
 			//---------------------------------------------------------
 			/// Set Patch Sprite Sheet Indices
 			///
@@ -71,7 +89,7 @@ namespace ChilliSource
 			///
 			/// @param Array containing the tpage index of each patch
 			//---------------------------------------------------------
-			void SetSpriteSheetIndices(const u32* inpIndices);
+			void SetTextureAtlasIndices(const u32* inpIndices);
 			//---------------------------------------------------------
 			/// Set Patch Sprite Sheet Indices
 			///
@@ -79,25 +97,25 @@ namespace ChilliSource
 			/// @param Sprite sheet index of centre patch
 			/// @param Sprite sheet index of right patch
 			//---------------------------------------------------------
-			void SetSpriteSheetIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight);
+			void SetTextureAtlasIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight);
 			//---------------------------------------------------------
 			/// Set Patch Sprite Sheet Left Index
 			///
 			/// @param tpage index of left patch
 			//---------------------------------------------------------
-			void SetSpriteSheetLeftIndex(u32 inudwIndex);
+			void SetTextureAtlasLeftIndex(u32 inudwIndex);
 			//---------------------------------------------------------
 			/// Set Patch Sprite Sheet Centre Index
 			///
 			/// @param tpage index of centre patch
 			//---------------------------------------------------------
-			void SetSpriteSheetCentreIndex(u32 inudwIndex);
+			void SetTextureAtlasCentreIndex(u32 inudwIndex);
 			//---------------------------------------------------------
 			/// Set Patch Sprite Sheet Right Index
 			///
 			/// @param tpage index of right patch
 			//---------------------------------------------------------
-			void SetSpriteSheetRightIndex(u32 inudwIndex);
+			void SetTextureAtlasRightIndex(u32 inudwIndex);
             //--------------------------------------------------------
             /// Enable Height From Image
             ///
@@ -170,9 +188,10 @@ namespace ChilliSource
 			
 		private:
 
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
+            DECLARE_PROPERTY_A(Rendering::TextureSPtr, Texture, SetTexture, GetTexture);
+			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
 			
-			DECLARE_PROPERTY_A(std::string, BaseSpriteSheetIndexID, SetBaseSpriteSheetIndexID, GetBaseSpriteSheetIndexID);
+			DECLARE_PROPERTY_A(std::string, BaseTextureAtlasID, SetBaseTextureAtlasID, GetBaseTextureAtlasID);
             DECLARE_PROPERTY_A(bool, HeightFromImage, EnableHeightFromImage, IsHeightFromImageEnabled);
             DECLARE_PROPERTY_A(bool, ActAsSpacer, EnableActAsSpacer, IsActAsSpacerEnabled);
 				

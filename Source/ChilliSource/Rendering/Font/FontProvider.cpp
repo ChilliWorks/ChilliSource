@@ -10,10 +10,12 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/Resource/Resourcepool.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Rendering/Font/Font.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 namespace ChilliSource
 {
@@ -23,7 +25,8 @@ namespace ChilliSource
         {
             const std::string k_charFileExtension("alphabet");
             const std::string k_kerningFileExtension("kerninginfo");
-            const std::string k_spriteSheetFileExtension("bin");
+            const std::string k_textureAtlasFileExtension("bin");
+            const std::string k_textureFileExtension("moimage");
             
             //----------------------------------------------------------------------------
             /// Load the font kerning information from the external file
@@ -125,10 +128,7 @@ namespace ChilliSource
             
             Font* font = (Font*)(out_resource.get());
             
-            std::string fileName, fileExtension;
-            Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
-            const std::string alphabetFilePath(fileName + "." + k_charFileExtension);
-			Core::FileStreamSPtr characterStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, alphabetFilePath, Core::FileMode::k_read);
+			Core::FileStreamSPtr characterStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_read);
             if(characterStream == nullptr || characterStream->IsBad())
             {
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
@@ -146,6 +146,9 @@ namespace ChilliSource
             characterStream->Close();
             font->SetCharacterSet(characters);
             
+            std::string fileName, fileExtension;
+            Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
+            
             // Get the kerning file - optional
             const std::string kerningFilePath(fileName + "." + k_kerningFileExtension);
             Core::FileStreamSPtr kerningStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, kerningFilePath, Core::FileMode::k_read);
@@ -155,13 +158,30 @@ namespace ChilliSource
                 LoadKerningInfo(kerningStream, font);
             }
             
-            SpriteSheetSPtr fontData = LOAD_RESOURCE(SpriteSheet, in_location, in_filePath);
+            const std::string atlasFilePath(fileName + "." + k_textureAtlasFileExtension);
+            TextureAtlasCSPtr fontData = Core::Application::Get()->GetResourcePool()->LoadResource<TextureAtlas>(in_location, atlasFilePath);
             font->SetCharacterData(fontData);
             
             if(fontData != nullptr)
             {
-                out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+                const std::string textureFilePath(fileName + "." + k_textureFileExtension);
+                TextureSPtr textureData = LOAD_RESOURCE(Texture, in_location, textureFilePath);
+                font->SetTexture(textureData);
+                
+                if(textureData != nullptr)
+                {
+                    out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+                }
+                else
+                {
+                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                }
             }
+            else
+            {
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            }
+
             
             if(in_delegate != nullptr)
             {

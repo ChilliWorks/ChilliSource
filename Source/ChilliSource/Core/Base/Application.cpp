@@ -54,7 +54,7 @@
 #include <ChilliSource/Rendering/Material/MaterialProvider.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetProvider.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 
 #include <ctime>
 
@@ -476,7 +476,7 @@ namespace ChilliSource
             OpenGL::RenderSystem* renderSystem = (OpenGL::RenderSystem*)m_renderSystem;
             CreateSystem<Rendering::MaterialFactory>(renderSystem->GetShaderManager(), renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
-            CreateSystem<Rendering::SpriteSheetProvider>();
+            CreateSystem<Rendering::TextureAtlasProvider>();
             CreateSystem<Rendering::FontProvider>();
         }
         //----------------------------------------------------

@@ -9,7 +9,7 @@
 #include <ChilliSource/Rendering/Font/Font.h>
 
 #include <ChilliSource/Core/String/UTF8String.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 #include <algorithm>
 
@@ -45,12 +45,17 @@ namespace ChilliSource
 		{
 			m_characters = in_charSet;
 		}
+        //-------------------------------------------
+		//-------------------------------------------
+		void Font::SetTexture(const TextureSPtr& in_texture)
+		{
+            m_texture = in_texture;
+		}
 		//-------------------------------------------
 		//-------------------------------------------
 		const TextureSPtr& Font::GetTexture() const
 		{
-            CS_ASSERT(m_spriteSheet, "Font must have a spritesheet to have a texture");
-			return m_spriteSheet->GetTexture();
+			return m_texture;
 		}
 		//-------------------------------------------
 		//-------------------------------------------
@@ -66,36 +71,34 @@ namespace ChilliSource
         }
 		//-------------------------------------------
 		//-------------------------------------------
-		void Font::SetCharacterData(const SpriteSheetSPtr& in_charData)
+		void Font::SetCharacterData(const TextureAtlasCSPtr& in_charData)
 		{
             CS_ASSERT(m_characters.size() > 0, "Font: Cannot build characters with empty character set");
             
             m_characterInfos.clear();
-			m_spriteSheet = in_charData;
+			m_textureAtlas = in_charData;
 			
-            const f32 spriteSheetWidth = in_charData->GetSpriteSheetWidth();
-            const f32 spriteSheetHeight = in_charData->GetSpriteSheetHeight();
+            const f32 textureAtlasWidth = in_charData->GetWidth();
+            const f32 textureAtlasHeight = in_charData->GetHeight();
 
 			for (u32 i=0; i<m_characters.length(); ++i)
             {
 				CharacterInfo info;
 				
-				SpriteSheet::Frame frame = in_charData->GetSpriteFrameByID(i);
+				const TextureAtlas::Frame& frame = in_charData->GetFrame(i);
+							
+				info.m_UVs.vOrigin.x = (f32)(frame.m_texCoordU - 0.5f) / textureAtlasWidth;
+				info.m_UVs.vOrigin.y = (f32)(frame.m_texCoordV - 0.5f) / textureAtlasHeight;
+				info.m_UVs.vSize.x = (f32)(frame.m_width + 1.0f) / textureAtlasWidth;
+				info.m_UVs.vSize.y = (f32)(frame.m_height + 1.0f) / textureAtlasHeight;
 				
-				in_charData->GetUVsForFrame(i, info.m_UVs);
-								
-				info.m_UVs.vOrigin.x = (f32)(frame.U - 0.5f) / spriteSheetWidth;
-				info.m_UVs.vOrigin.y = (f32)(frame.V - 0.5f) / spriteSheetHeight;
-				info.m_UVs.vSize.x = (f32)(frame.Width + 1.0f) / spriteSheetWidth;
-				info.m_UVs.vSize.y = (f32)(frame.Height + 1.0f) / spriteSheetHeight;
-				
-				info.m_size.x = frame.Width;
-                info.m_size.y = frame.Height;
+				info.m_size.x = frame.m_width;
+                info.m_size.y = frame.m_height;
                 
 				info.m_offset.x = info.m_size.x * 0.5f;
-				info.m_offset.y = frame.OffsetY;
+				info.m_offset.y = frame.m_offsetY;
                 
-                m_lineHeight = std::max((f32)frame.OriginalHeight, m_lineHeight);
+                m_lineHeight = std::max((f32)frame.m_originalHeight, m_lineHeight);
 
                 Core::UTF8String::Char utf8Char = m_characters[i];
 				m_characterInfos.insert(std::make_pair(utf8Char, info));

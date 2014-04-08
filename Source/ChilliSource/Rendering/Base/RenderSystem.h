@@ -16,7 +16,6 @@
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Material/MaterialManager.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 
 namespace ChilliSource
 {
@@ -136,7 +135,6 @@ namespace ChilliSource
 			
 			//---Render resource managers
 			MaterialManager mMaterialManager;
-			SpriteSheetManager mSpriteManager;
             
             DynamicSpriteBatch* mpSpriteBatcher;
 		};

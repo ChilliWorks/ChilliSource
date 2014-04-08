@@ -28,7 +28,7 @@ namespace ChilliSource
 
 			DECLARE_META_CLASS(StretchableImage)
 
-            struct SpriteSheetIndex
+            struct TextureAtlasIndex
             {
                 u32 udwTopLeft;
                 u32 udwTopRight;
@@ -43,17 +43,35 @@ namespace ChilliSource
             StretchableImage();
             StretchableImage(const Core::ParamDictionary& insParams);
             //---------------------------------------------------------
+            /// Set Texture
+            ///
+            /// @param Texture containing the nine patches
+            //---------------------------------------------------------
+            inline void SetTexture(const Rendering::TextureSPtr& inpTexture)
+            {
+                Texture = inpTexture;
+            }
+            //---------------------------------------------------------
+            /// Get Texture
+            ///
+            /// @return Texture containing the nine patches
+            //---------------------------------------------------------
+			inline const Rendering::TextureSPtr& GetTexture() const
+            {
+                return Texture;
+            }
+            //---------------------------------------------------------
             /// Set Sprite Sheet
             ///
             /// @param Sprite sheet containing the nine patches
             //---------------------------------------------------------
-            void SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
+            void SetTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas);
             //---------------------------------------------------------
             /// Get Sprite Sheet
             ///
             /// @return Sprite sheet containing the nine patches
             //---------------------------------------------------------
-			const Rendering::SpriteSheetSPtr& GetSpriteSheet() const;
+			const Rendering::TextureAtlasCSPtr& GetTextureAtlas() const;
 			//---------------------------------------------------------
 			/// Set Base Sprite Sheet Index ID
 			///
@@ -71,7 +89,7 @@ namespace ChilliSource
 			///
 			/// the base ID would be "BLUE_PANEL_"
 			//---------------------------------------------------------
-			void SetBaseSpriteSheetIndexID(const std::string& instrID);
+			void SetBaseTextureAtlasID(const std::string& instrID);
 			//---------------------------------------------------------
 			/// Get Base Sprite Sheet Index ID
 			///
@@ -89,13 +107,13 @@ namespace ChilliSource
 			///
 			/// the base ID would be "BLUE_PANEL_"
 			//---------------------------------------------------------
-			const std::string& GetBaseSpriteSheetIndexID() const;
+			const std::string& GetBaseTextureAtlasID() const;
             //---------------------------------------------------------
             /// Set Patch Sprite Sheet Indices
             ///
             /// @param Struct containing the tpage index of each patch
             //---------------------------------------------------------
-            void SetSpriteSheetIndices(const SpriteSheetIndex& insIndices);
+            void SetTextureAtlasIndices(const TextureAtlasIndex& insIndices);
             //---------------------------------------------------------
             /// Set Patch Sprite Sheet Indices
             ///
@@ -111,7 +129,7 @@ namespace ChilliSource
             ///
             /// @param Array containing the tpage index of each patch
             //---------------------------------------------------------
-            void SetSpriteSheetIndices(const u32* inpIndices);
+            void SetTextureAtlasIndices(const u32* inpIndices);
             //---------------------------------------------------------
             /// Draw
             /// 
@@ -224,15 +242,16 @@ namespace ChilliSource
 			
 		private:
 
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
+            DECLARE_PROPERTY_A(Rendering::TextureSPtr, Texture, SetTexture, GetTexture);
+			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
 
-			DECLARE_PROPERTY_A(std::string, BaseSpriteSheetIndexID, SetBaseSpriteSheetIndexID, GetBaseSpriteSheetIndexID);
+			DECLARE_PROPERTY_A(std::string, BaseTextureAtlasID, SetBaseTextureAtlasID, GetBaseTextureAtlasID);
 
 			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, CentreTouchConsumption, EnableCentreTouchConsumption, IsCentreTouchConsumptionEnabled);
 			
-            SpriteSheetIndex msIndices;
+            TextureAtlasIndex msIndices;
         };
     }
 }

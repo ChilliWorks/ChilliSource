@@ -81,73 +81,73 @@ namespace ChilliSource
             ///
             /// @param Sprite sheet with with On image
             //-----------------------------------------------------------
-            void SetOnSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
+            void SetOnTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas);
 			//-----------------------------------------------------------
 			/// Set Off Sprite Sheet
 			///
 			/// @param Sprite sheet with with Off image
 			//-----------------------------------------------------------
-			void SetOffSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
+			void SetOffTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas);
             //-----------------------------------------------------------
             /// Get On Sprite Sheet
             ///
             /// @return Sprite sheet with default image
             //-----------------------------------------------------------
-			const Rendering::SpriteSheetSPtr& GetOnSpriteSheet() const;
+			const Rendering::TextureAtlasCSPtr& GetOnTextureAtlas() const;
 			//-----------------------------------------------------------
 			/// Get Off Sprite Sheet
 			///
 			/// @return Sprite sheet with Off image
 			//-----------------------------------------------------------
-			const Rendering::SpriteSheetSPtr& GetOffSpriteSheet() const;
+			const Rendering::TextureAtlasCSPtr& GetOffTextureAtlas() const;
             //-----------------------------------------------------------
             /// Set On Sprite Sheet Index
             ///
             /// @param Index of default state on sprite sheet
             //-----------------------------------------------------------
-            void SetOnSpriteSheetIndex(u32 inudwIndex);
+            void SetOnTextureAtlasIndex(u32 inudwIndex);
             //-----------------------------------------------------------
             /// Set Off Sprite Sheet Index
             ///
             /// @param Index of Off state on sprite sheet
             //-----------------------------------------------------------
-            void SetOffSpriteSheetIndex(u32 inudwIndex);
+            void SetOffTextureAtlasIndex(u32 inudwIndex);
             //-----------------------------------------------------------
             /// Get On Sprite Sheet Index
             ///
             /// @return Index of default state on sprite sheet
             //-----------------------------------------------------------
-            u32 GetOnSpriteSheetIndex() const;
+            u32 GetOnTextureAtlasIndex() const;
 			//-----------------------------------------------------------
 			/// Get Off Sprite Sheet Index
 			///
 			/// @return Index of Off state on sprite sheet
 			//-----------------------------------------------------------
-			u32 GetOffSpriteSheetIndex() const;
+			u32 GetOffTextureAtlasIndex() const;
 			//-----------------------------------------------------------
 			/// Set On Sprite Sheet Index
 			///
 			/// @param Index of default state on sprite sheet
 			//-----------------------------------------------------------
-			void SetOnSpriteSheetIndexID(const std::string& instrID);
+			void SetOnTextureAtlasID(const std::string& instrID);
 			//-----------------------------------------------------------
 			/// Set Off Sprite Sheet Index ID
 			///
 			/// @param Index ID of Off state on sprite sheet
 			//-----------------------------------------------------------
-			void SetOffSpriteSheetIndexID(const std::string& instrID);
+			void SetOffTextureAtlasID(const std::string& instrID);
 			//-----------------------------------------------------------
 			/// Get On Sprite Sheet Index ID
 			///
 			/// @return Index ID of default state on sprite sheet
 			//-----------------------------------------------------------
-			const std::string& GetOnSpriteSheetIndexID() const;
+			const std::string& GetOnTextureAtlasID() const;
 			//-----------------------------------------------------------
 			/// Get Off Sprite Sheet Index ID
 			///
 			/// @return Index ID of Off state on sprite sheet
 			//-----------------------------------------------------------
-			const std::string& GetOffSpriteSheetIndexID() const;
+			const std::string& GetOffTextureAtlasID() const;
             //-----------------------------------------------------------
             /// Set Default Select Audio Effect
             ///
@@ -339,14 +339,14 @@ namespace ChilliSource
 			//---Properties
 			DECLARE_PROPERTY_A(Rendering::TextureSPtr, OnTexture, SetOnImage, GetOnImage);
 			DECLARE_PROPERTY_A(Rendering::TextureSPtr, OffTexture, SetOffImage, GetOffImage);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, OnSpriteSheet, SetOnSpriteSheet, GetOnSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, OffSpriteSheet, SetOffSpriteSheet, GetOffSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, OnTextureAtlas, SetOnTextureAtlas, GetOnTextureAtlas);
+			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, OffTextureAtlas, SetOffTextureAtlas, GetOffTextureAtlas);
 
-			DECLARE_PROPERTY_A(u32,OnSpriteSheetIndex, SetOnSpriteSheetIndex, GetOnSpriteSheetIndex);
-			DECLARE_PROPERTY_A(u32, OffSpriteSheetIndex, SetOffSpriteSheetIndex, GetOffSpriteSheetIndex);
+			DECLARE_PROPERTY_A(u32,OnTextureAtlasIndex, SetOnTextureAtlasIndex, GetOnTextureAtlasIndex);
+			DECLARE_PROPERTY_A(u32, OffTextureAtlasIndex, SetOffTextureAtlasIndex, GetOffTextureAtlasIndex);
 
-			DECLARE_PROPERTY_A(std::string, OnSpriteSheetIndexID, SetOnSpriteSheetIndexID, GetOnSpriteSheetIndexID);
-			DECLARE_PROPERTY_A(std::string, OffSpriteSheetIndexID, SetOffSpriteSheetIndexID, GetOffSpriteSheetIndexID);
+			DECLARE_PROPERTY_A(std::string, OnTextureAtlasID, SetOnTextureAtlasID, GetOnTextureAtlasID);
+			DECLARE_PROPERTY_A(std::string, OffTextureAtlasID, SetOffTextureAtlasID, GetOffTextureAtlasID);
 
 			DECLARE_PROPERTY_A(bool, SizeFromImage, EnableSizeFromImage, IsSizeFromImageEnabled);
 			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);

@@ -55,23 +55,17 @@ namespace ChilliSource
             std::string fileExtension;
             Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
             
-            ResourceProvider* provider = nullptr;
             u32 numProviders = in_desc.m_providers.size();
             for(u32 i=0; i<numProviders; ++i)
             {
-                provider = in_desc.m_providers[i];
-                if(provider->CanCreateResourceWithFileExtension(fileExtension))
+                if(in_desc.m_providers[i]->CanCreateResourceWithFileExtension(fileExtension))
                 {
-                    break;
+                    return in_desc.m_providers[i];
                 }
             }
             
-            if(provider == nullptr)
-            {
-                CS_LOG_ERROR("Failed to find resource provider for extension " + fileExtension);
-            }
-            
-            return provider;
+            CS_LOG_ERROR("Failed to find resource provider for extension " + fileExtension);
+            return nullptr;
         }
         //------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------

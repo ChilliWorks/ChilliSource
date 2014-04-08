@@ -9,12 +9,13 @@
 #include <ChilliSource/GUI/SliderBar/HorizontalSliderBar.h>
 #include <ChilliSource/GUI/Image/ImageView.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
-#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
@@ -24,12 +25,12 @@ namespace ChilliSource
     {
 		DEFINE_META_CLASS(HorizontalSliderBar)
         
-		DEFINE_PROPERTY(BarSpriteSheet);
-		DEFINE_PROPERTY(SliderSpriteSheet);
-		DEFINE_PROPERTY(BarSpriteSheetIndex);
-		DEFINE_PROPERTY(SliderSpriteSheetIndex);
-		DEFINE_PROPERTY(BarSpriteSheetIndexID);
-		DEFINE_PROPERTY(SliderSpriteSheetIndexID);
+		DEFINE_PROPERTY(BarTextureAtlas);
+		DEFINE_PROPERTY(SliderTextureAtlas);
+		DEFINE_PROPERTY(BarTextureAtlasIndex);
+		DEFINE_PROPERTY(SliderTextureAtlasIndex);
+		DEFINE_PROPERTY(BarTextureAtlasID);
+		DEFINE_PROPERTY(SliderTextureAtlasID);
 		DEFINE_PROPERTY(UnifiedSliderSize);
         
         //------------------------------------------------------
@@ -38,7 +39,7 @@ namespace ChilliSource
         /// Create the subviews that make up the container
         //------------------------------------------------------
         HorizontalSliderBar::HorizontalSliderBar() : mpBackgroundImage(new ImageView()), mpSliderImage(new ImageView()),
-        BarSpriteSheetIndex(0), SliderSpriteSheetIndex(0), UnifiedSliderSize(0.15f, 1.5f, 0.0f, 0.0f)
+        BarTextureAtlasIndex(0), SliderTextureAtlasIndex(0), UnifiedSliderSize(0.15f, 1.5f, 0.0f, 0.0f)
         {
 			SetSize(0.8f, 0.1f, 0.0f, 0.0f);
             mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
@@ -61,7 +62,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		HorizontalSliderBar::HorizontalSliderBar(const Core::ParamDictionary& insParams)
         : SliderBar(insParams), mpBackgroundImage(new ImageView()), mpSliderImage(new ImageView()),
-        BarSpriteSheetIndex(0), SliderSpriteSheetIndex(0), UnifiedSliderSize(0.15f, 1.5f, 0.0f, 0.0f)
+        BarTextureAtlasIndex(0), SliderTextureAtlasIndex(0), UnifiedSliderSize(0.15f, 1.5f, 0.0f, 0.0f)
 		{
 			SetSize(0.8f, 0.1f, 0.0f, 0.0f);
 			mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
@@ -77,47 +78,70 @@ namespace ChilliSource
             
 			std::string strValue;
             
-			//---Bar Sprite sheet
-            Core::StorageLocation eBarSpriteSheetLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("BarSpriteSheetLocation", strValue))
+            //---Bar Texture
+            Core::StorageLocation eBarTextureLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("BarTextureLocation", strValue))
             {
-                eBarSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eBarTextureLocation = Core::ParseStorageLocation(strValue);
             }
-			if(insParams.TryGetValue("BarSpriteSheet", strValue))
+            if(insParams.TryGetValue("BarTexture", strValue))
+            {
+                SetBarTexture(LOAD_RESOURCE(Rendering::Texture, eBarTextureLocation, strValue));
+            }
+			//---Slider Texture
+            Core::StorageLocation eSliderTextureLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("SliderTextureLocation", strValue))
+            {
+                eSliderTextureLocation = Core::ParseStorageLocation(strValue);
+            }
+			if(insParams.TryGetValue("SliderTexture", strValue))
 			{
-				SetBarSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eBarSpriteSheetLocation, strValue));
+                SetSliderTexture(LOAD_RESOURCE(Rendering::Texture, eSliderTextureLocation, strValue));
+			}
+            
+			//---Bar Sprite sheet
+            Core::StorageLocation eBarTextureAtlasLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("BarTextureAtlasLocation", strValue))
+            {
+                eBarTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+            }
+			if(insParams.TryGetValue("BarTextureAtlas", strValue))
+			{
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetBarTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eBarTextureAtlasLocation, strValue));
 			}
 			//---Slider Sprite sheet
-            Core::StorageLocation eSliderSpriteSheetLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("SliderSpriteSheetLocation", strValue))
+            Core::StorageLocation eSliderTextureAtlasLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("SliderTextureAtlasLocation", strValue))
             {
-                eSliderSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eSliderTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
-			if(insParams.TryGetValue("SliderSpriteSheet", strValue))
+			if(insParams.TryGetValue("SliderTextureAtlas", strValue))
 			{
-				SetSliderSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eSliderSpriteSheetLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetSliderTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eSliderTextureAtlasLocation, strValue));
 			}
 			//---Background index
-			if(insParams.TryGetValue("BarSpriteSheetIndex", strValue))
+			if(insParams.TryGetValue("BarTextureAtlasIndex", strValue))
 			{
-				CS_ASSERT(BarSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-				SetBarSpriteSheetIndex(Core::ParseU32(strValue));
+				CS_ASSERT(BarTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
+				SetBarTextureAtlasIndex(Core::ParseU32(strValue));
 			}
 			//---Slider index
-			if(insParams.TryGetValue("SliderSpriteSheetIndex", strValue))
+			if(insParams.TryGetValue("SliderTextureAtlasIndex", strValue))
 			{
-				CS_ASSERT(SliderSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-				SetSliderSpriteSheetIndex(Core::ParseU32(strValue));
+				CS_ASSERT(SliderTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
+				SetSliderTextureAtlasIndex(Core::ParseU32(strValue));
 			}
 			//---Background ID
-			if(insParams.TryGetValue("BarSpriteSheetIndexID", strValue))
+			if(insParams.TryGetValue("BarTextureAtlasID", strValue))
 			{
-				SetBarSpriteSheetIndexID(strValue);
+				SetBarTextureAtlasID(strValue);
 			}
 			//---Slider ID
-			if(insParams.TryGetValue("SliderSpriteSheetIndexID", strValue))
+			if(insParams.TryGetValue("SliderTextureAtlasID", strValue))
 			{
-				SetSliderSpriteSheetIndexID(strValue);
+				SetSliderTextureAtlasID(strValue);
 			}
 			//---Slider size
 			if(insParams.TryGetValue("UnifiedSliderSize", strValue))
@@ -128,19 +152,49 @@ namespace ChilliSource
             
 			m_movedWithinConnection = mInputEvents.GetMovedWithinEvent().OpenConnection(Core::MakeDelegate(this, &HorizontalSliderBar::OnSliderMoved));
 		}
+        //--------------------------------------------------------
+        /// Set Bar Texture
+        ///
+        /// @param Texture for the bar
+        //--------------------------------------------------------
+        void HorizontalSliderBar::SetBarTexture(const Rendering::TextureSPtr& inpTexture)
+        {
+            BarTexture = inpTexture;
+            mpBackgroundImage->SetTexture(inpTexture);
+            
+            if(!SliderTexture)
+            {
+                SetSliderTexture(inpTexture);
+            }
+        }
+        //--------------------------------------------------------
+        /// Set Slider Texture
+        ///
+        /// @param Texture for the slider
+        //--------------------------------------------------------
+        void HorizontalSliderBar::SetSliderTexture(const Rendering::TextureSPtr& inpTexture)
+        {
+            SliderTexture = inpTexture;
+            mpSliderImage->SetTexture(inpTexture);
+            
+            if(!BarTexture)
+            {
+                SetBarTexture(inpTexture);
+            }
+        }
 		//--------------------------------------------------------
 		/// Set Bar Sprite Sheet
 		///
 		/// @param Sprite sheet for the bar
 		//--------------------------------------------------------
-		void HorizontalSliderBar::SetBarSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
+		void HorizontalSliderBar::SetBarTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas)
 		{
-			BarSpriteSheet = inpSpriteSheet;
-			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
+			BarTextureAtlas = inpTextureAtlas;
+			mpBackgroundImage->SetTextureAtlas(inpTextureAtlas);
             
-            if(!SliderSpriteSheet)
+            if(!SliderTextureAtlas)
             {
-                SetSliderSpriteSheet(inpSpriteSheet);
+                SetSliderTextureAtlas(inpTextureAtlas);
             }
 		}
 		//--------------------------------------------------------
@@ -148,23 +202,23 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet for the bar
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetSPtr& HorizontalSliderBar::GetBarSpriteSheet() const
+		const Rendering::TextureAtlasCSPtr& HorizontalSliderBar::GetBarTextureAtlas() const
 		{
-			return BarSpriteSheet;
+			return BarTextureAtlas;
 		}
 		//--------------------------------------------------------
 		/// Set Slider Sprite Sheet
 		///
 		/// @param Sprite sheet for the slider
 		//--------------------------------------------------------
-		void HorizontalSliderBar::SetSliderSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
+		void HorizontalSliderBar::SetSliderTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas)
 		{
-			SliderSpriteSheet = inpSpriteSheet;
-			mpSliderImage->SetSpriteSheet(inpSpriteSheet);
+			SliderTextureAtlas = inpTextureAtlas;
+			mpSliderImage->SetTextureAtlas(inpTextureAtlas);
             
-            if(!BarSpriteSheet)
+            if(!BarTextureAtlas)
             {
-                SetBarSpriteSheet(inpSpriteSheet);
+                SetBarTextureAtlas(inpTextureAtlas);
             }
 		}
 		//--------------------------------------------------------
@@ -172,87 +226,87 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet for the slider
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetSPtr& HorizontalSliderBar::GetSliderSpriteSheet() const
+		const Rendering::TextureAtlasCSPtr& HorizontalSliderBar::GetSliderTextureAtlas() const
 		{
-			return SliderSpriteSheet;
+			return SliderTextureAtlas;
 		}
 		//--------------------------------------------------------
 		/// Set Bar Sprite Sheet Index
 		///
 		/// @param The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		void HorizontalSliderBar::SetBarSpriteSheetIndex(u32 inudwIndex)
+		void HorizontalSliderBar::SetBarTextureAtlasIndex(u32 inudwIndex)
 		{
-			BarSpriteSheetIndex = inudwIndex;
-			mpBackgroundImage->SetSpriteSheetIndex(inudwIndex);
+			BarTextureAtlasIndex = inudwIndex;
+			mpBackgroundImage->SetTextureAtlasIndex(inudwIndex);
 		}
 		//--------------------------------------------------------
 		/// Set Slider Sprite Sheet Index
 		///
 		/// @param The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		void HorizontalSliderBar::SetSliderSpriteSheetIndex(u32 inudwIndex)
+		void HorizontalSliderBar::SetSliderTextureAtlasIndex(u32 inudwIndex)
 		{
-			SliderSpriteSheetIndex = inudwIndex;
-			mpSliderImage->SetSpriteSheetIndex(inudwIndex);
+			SliderTextureAtlasIndex = inudwIndex;
+			mpSliderImage->SetTextureAtlasIndex(inudwIndex);
 		}
 		//--------------------------------------------------------
 		/// Get Bar Sprite Sheet Index
 		///
 		/// @return The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		u32 HorizontalSliderBar::GetBarSpriteSheetIndex() const
+		u32 HorizontalSliderBar::GetBarTextureAtlasIndex() const
 		{
-			return BarSpriteSheetIndex;
+			return BarTextureAtlasIndex;
 		}
 		//--------------------------------------------------------
 		/// Get Slider Sprite Sheet Index
 		///
 		/// @return The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		u32 HorizontalSliderBar::GetSliderSpriteSheetIndex() const
+		u32 HorizontalSliderBar::GetSliderTextureAtlasIndex() const
 		{
-			return SliderSpriteSheetIndex;
+			return SliderTextureAtlasIndex;
 		}
 		//--------------------------------------------------------
 		/// Set Bar Sprite Sheet Index ID
 		///
 		/// @param The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		void HorizontalSliderBar::SetBarSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalSliderBar::SetBarTextureAtlasID(const std::string& instrID)
 		{
-			CS_ASSERT(BarSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-			BarSpriteSheetIndexID = instrID;
-			SetBarSpriteSheetIndex(BarSpriteSheet->GetFrameIndexByID(instrID));
+			CS_ASSERT(BarTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
+			BarTextureAtlasID = instrID;
+			SetBarTextureAtlasIndex(BarTextureAtlas->GetFrameIndexById(instrID));
 		}
 		//--------------------------------------------------------
 		/// Set Slider Sprite Sheet Index ID
 		///
 		/// @param The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		void HorizontalSliderBar::SetSliderSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalSliderBar::SetSliderTextureAtlasID(const std::string& instrID)
 		{
-			CS_ASSERT(SliderSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-			SliderSpriteSheetIndexID = instrID;
-			SetSliderSpriteSheetIndex(SliderSpriteSheet->GetFrameIndexByID(instrID));
+			CS_ASSERT(SliderTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
+			SliderTextureAtlasID = instrID;
+			SetSliderTextureAtlasIndex(SliderTextureAtlas->GetFrameIndexById(instrID));
 		}
 		//--------------------------------------------------------
 		/// Get Bar Sprite Sheet Index ID
 		///
 		/// @return The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		const std::string& HorizontalSliderBar::GetBarSpriteSheetIndexID() const
+		const std::string& HorizontalSliderBar::GetBarTextureAtlasID() const
 		{
-			return BarSpriteSheetIndexID;
+			return BarTextureAtlasID;
 		}
 		//--------------------------------------------------------
 		/// Get Slider Sprite Sheet Index ID
 		///
 		/// @return The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		const std::string& HorizontalSliderBar::GetSliderSpriteSheetIndexID() const
+		const std::string& HorizontalSliderBar::GetSliderTextureAtlasID() const
 		{
-			return SliderSpriteSheetIndexID;
+			return SliderTextureAtlasID;
 		}
 		//--------------------------------------------------------
 		/// Set Slider Size

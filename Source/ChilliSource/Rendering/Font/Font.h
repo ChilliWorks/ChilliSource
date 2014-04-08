@@ -130,6 +130,12 @@ namespace ChilliSource
 			/// @return Whether this object is of given type
 			//---------------------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            //---------------------------------------------------------------------
+            /// @author S Downie
+			///
+			/// @param Font texture
+            //---------------------------------------------------------------------
+            void SetTexture(const TextureSPtr& in_texture);
 			//---------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -137,14 +143,14 @@ namespace ChilliSource
 			//---------------------------------------------------------------------
 			const TextureSPtr& GetTexture() const;
 			//---------------------------------------------------------------------
-			/// Each character is a sprite in a spritesheet. The spritesheet
+			/// Each character is a sprite in a TextureAtlas. The TextureAtlas
             /// also holds the texture
             ///
             /// @author S Downie
 			///
 			/// @param Sprite data containing UV's, size, etc
 			//---------------------------------------------------------------------
-			void SetCharacterData(const SpriteSheetSPtr& in_characterData);
+			void SetCharacterData(const TextureAtlasCSPtr& in_characterData);
 			//---------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -229,7 +235,8 @@ namespace ChilliSource
             std::vector<KernLookup> m_kerningLookups;
             std::vector<KernPair> m_kerningPairs;
             
-			SpriteSheetSPtr m_spriteSheet;
+            TextureSPtr      m_texture;
+			TextureAtlasCSPtr m_textureAtlas;
             
             f32 m_lineHeight = 0.0f;
             

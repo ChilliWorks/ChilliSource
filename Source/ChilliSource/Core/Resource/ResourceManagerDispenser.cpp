@@ -10,11 +10,6 @@
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
-#include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-
-#include <ChilliSource/Rendering/Font/Font.h>
-
 namespace ChilliSource
 {
     namespace Core

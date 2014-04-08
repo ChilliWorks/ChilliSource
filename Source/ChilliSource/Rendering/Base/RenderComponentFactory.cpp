@@ -11,6 +11,7 @@
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
@@ -42,25 +43,16 @@ namespace ChilliSource
         /// Managers that are required
 		//--------------------------------------------------------
         RenderComponentFactory::RenderComponentFactory(RenderSystem* inpRenderSystem) 
-        : mpRenderSystem(inpRenderSystem), mpMaterialManager(nullptr), mpSpriteSheetManager(nullptr), mpTextureManager(nullptr), mpRenderCapabilities(nullptr)
+        : mpRenderSystem(inpRenderSystem)
         {
-			if(!mpSpriteSheetManager)
-            {
-                mpSpriteSheetManager = static_cast<SpriteSheetManager*>(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(SpriteSheet::InterfaceID));
-            }
-            if(!mpTextureManager)
-            {
-                mpTextureManager = static_cast<TextureManager*>(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Texture::InterfaceID));
-            }
-            if(!mpMaterialManager)
-            {
-                mpMaterialManager = static_cast<MaterialManager*>(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Material::InterfaceID));
-            }
-            if (!mpRenderCapabilities)
-            {
-            	mpRenderCapabilities = Core::Application::Get()->GetSystem<RenderCapabilities>();
-            	CS_ASSERT(mpRenderCapabilities, "Render Component Factory is missing required system: Render Capabilities.");
-            }
+            m_resourcePool = Core::Application::Get()->GetResourcePool();
+            CS_ASSERT(m_resourcePool, "Render component factory is missing required system: Resource Pool");
+            
+            mpTextureManager = static_cast<TextureManager*>(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Texture::InterfaceID));
+            mpMaterialManager = static_cast<MaterialManager*>(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Material::InterfaceID));
+
+            mpRenderCapabilities = Core::Application::Get()->GetSystem<RenderCapabilities>();
+            CS_ASSERT(mpRenderCapabilities, "Render Component Factory is missing required system: Render Capabilities.");
         }
         //--------------------------------------------------------
         /// Is A
@@ -107,145 +99,6 @@ namespace ChilliSource
             (LightComponent::TypeName == incName) ||
             (DirectionalLightComponent::TypeName == incName);
 		}
-        //--------------------------------------------------------
-        /// Create Component
-        ///
-        /// Creates a component with the given name from the
-        /// given parameters
-        ///
-        /// @param Type Name
-        /// @param Param Dictionary
-        //--------------------------------------------------------
-        Core::ComponentUPtr RenderComponentFactory::CreateComponent(const std::string & insTypeName, const Core::ParamDictionary & insParamDictionary)
-        {
-            if (insTypeName == StaticMeshComponent::TypeName) 
-            {
-				std::string sMeshName;
-				if (insParamDictionary.TryGetValue("MeshName", sMeshName))
-                {
-                    std::string strMeshLocation("Package");
-                    insParamDictionary.TryGetValue("MeshLocation", strMeshLocation);
-                    
-                    std::string strMaterialLocation("Package");
-                    insParamDictionary.TryGetValue("MaterialLocation", strMaterialLocation);
-                    
-					std::string sMaterialName;
-					if (insParamDictionary.TryGetValue("MaterialName", sMaterialName)) 
-                    {
-						return CreateStaticMeshComponent(Core::ParseStorageLocation(strMeshLocation), sMeshName, Core::ParseStorageLocation(strMaterialLocation), sMaterialName);
-					} 
-                    else 
-                    {
-						return CreateStaticMeshComponent(Core::ParseStorageLocation(strMeshLocation), sMeshName);
-					}
-				} 
-                else 
-                {
-					CS_LOG_WARNING("Insufficient parameters to create a StaticMeshComponent");
-				}
-			} 
-            else if (insTypeName == CameraComponent::TypeName) 
-            {
-				f32 fHorFOV = 45.0f;
-				if (insParamDictionary.HasValue("FOV")) 
-                {
-					fHorFOV = Core::ParseF32(insParamDictionary.ValueForKey("FOV"));
-				}
-				
-				f32 fNearClipZ = 0.1f;
-				if (insParamDictionary.HasValue("NearClippingZ")) 
-                {
-					fNearClipZ = Core::ParseF32(insParamDictionary.ValueForKey("NearClippingZ"));
-				}
-				
-				f32 fFarClipZ = 1000.0f;
-				if (insParamDictionary.HasValue("FarClippingZ")) 
-                {
-					fFarClipZ = Core::ParseF32(insParamDictionary.ValueForKey("FarClippingZ"));
-				}
-				
-				CameraComponentUPtr pResult = CreateCameraComponent(fHorFOV, fNearClipZ, fFarClipZ);
-				
-				if (insParamDictionary.HasValue("ClearColour")) 
-                {
-					Core::Colour cClearCol = Core::ParseColour(insParamDictionary.ValueForKey("ClearColour"));
-					pResult->SetClearColour(cClearCol);
-				}
-				
-				return Core::ComponentUPtr(std::move(pResult));
-            }
-            else if (insTypeName == SpriteComponent::TypeName)
-            {
-				SpriteComponentUPtr pSprite(new SpriteComponent());
-				
-				std::string strMaterialName;
-				if (insParamDictionary.TryGetValue("MaterialName", strMaterialName))
-				{
-					std::string strSpriteSheet;
-					std::string strSpriteSheetIndex;
-					if (insParamDictionary.TryGetValue("SpriteSheet", strSpriteSheet) && insParamDictionary.TryGetValue("SpriteSheetIndex", strSpriteSheetIndex))
-					{
-						SpriteSheetSPtr pSpriteSheet = std::static_pointer_cast<SpriteSheet>(mpSpriteSheetManager->GetResourceFromFile(Core::StorageLocation::k_package, strSpriteSheet));
-						u32 udwIndex = pSpriteSheet->GetFrameIndexByID(strSpriteSheetIndex);
-						
-						MaterialSPtr pMaterial = mpMaterialManager->GetMaterialFromFile(Core::StorageLocation::k_package, strMaterialName);
-						pSprite = CreateSpriteComponent(pSpriteSheet, udwIndex, pMaterial);
-						
-						u32 udwTargetDensity = 1;
-						std::string strTargetDensity;
-						if(insParamDictionary.TryGetValue("TargetDensity", strTargetDensity))
-						{
-							udwTargetDensity = Core::ParseS32(strTargetDensity);
-						}
-						f32 fScale = udwTargetDensity / Core::FileSystem::GetDeviceResourcesDensity();
-						
-						pSprite->GetMaterial()->SetTexture(pSpriteSheet->GetTexture());
-						pSprite->SetDimensions(pSpriteSheet->GetSizeForFrame(udwIndex) * fScale);
-						pSprite->SetUVs(pSpriteSheet->GetUVsForFrame(udwIndex));
-					}
-					else
-					{
-						pSprite = CreateSpriteComponent(Core::Vector2::ZERO, Core::StorageLocation::k_package, strMaterialName);
-					}
-				
-					if (insParamDictionary.HasValue("Transparent"))
-					{
-						pSprite->GetMaterial()->SetTransparent(true);
-					}
-				}
-				
-				std::string strSize;
-				if (insParamDictionary.TryGetValue("Size", strSize))
-				{
-					pSprite->SetDimensions(Core::ParseVector2(strSize));					
-				}
-				
-				std::string strColour;
-				if (insParamDictionary.TryGetValue("Colour", strColour))
-				{
-					pSprite->SetColour(Core::ParseColour(strColour));
-				}		
-				
-				std::string strOriginAlignment;
-				if (insParamDictionary.TryGetValue("LocalAlignment", strOriginAlignment))
-				{
-					pSprite->SetOriginAlignment(AlignmentAnchorFromString(strOriginAlignment));
-				}
-												
-				return Core::ComponentUPtr(std::move(pSprite));
-			}
-			
-			return nullptr;
-        }
-		//--------------------------------------------------------
-		/// Get Owning Render System Pointer
-		///
-		/// @return The render system which created us
-		//--------------------------------------------------------
-		RenderSystem* RenderComponentFactory::GetOwningRenderSystemPtr()
-		{
-			return mpRenderSystem;
-		}
         //---------------------------------------------------------------------------
         /// Create Sprite Component
         ///
@@ -283,12 +136,12 @@ namespace ChilliSource
         /// @param Material
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const SpriteSheetSPtr& pSpriteSheet, u32 inTpageIndex, const MaterialSPtr& inpMaterial)
+        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const TextureAtlasCSPtr& pTextureAtlas, u32 inTpageIndex, const MaterialSPtr& inpMaterial)
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(inpMaterial);
-            pSprite->SetDimensions(pSpriteSheet->GetSizeForFrame(inTpageIndex));
-            pSprite->SetUVs(pSpriteSheet->GetUVsForFrame(inTpageIndex));
+            pSprite->SetDimensions(pTextureAtlas->GetFrameSize(inTpageIndex));
+            pSprite->SetUVs(pTextureAtlas->GetFrameUVs(inTpageIndex));
             
             return pSprite;
         }
@@ -301,13 +154,13 @@ namespace ChilliSource
         /// @param Material
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheetTexture, u32 inTpageIndex, const MaterialSPtr& inpMaterial)
+        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrTextureAtlas, u32 inTpageIndex, const MaterialSPtr& inpMaterial)
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(inpMaterial);
-            SpriteSheetSPtr pSpriteSheet = LOAD_RESOURCE(SpriteSheet, ineStorageLocation, instrSpriteSheetTexture);
-            pSprite->SetDimensions(pSpriteSheet->GetSizeForFrame(inTpageIndex));
-            pSprite->SetUVs(pSpriteSheet->GetUVsForFrame(inTpageIndex));
+            TextureAtlasCSPtr pTextureAtlas = m_resourcePool->LoadResource<TextureAtlas>(ineStorageLocation, instrTextureAtlas);
+            pSprite->SetDimensions(pTextureAtlas->GetFrameSize(inTpageIndex));
+            pSprite->SetUVs(pTextureAtlas->GetFrameUVs(inTpageIndex));
             
             return pSprite;
         }//---------------------------------------------------------------------------
@@ -319,14 +172,14 @@ namespace ChilliSource
         /// @param Material
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheetTexture, const std::string& instrTpageID, const MaterialSPtr& inpMaterial)
+        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrTextureAtlas, const std::string& instrTpageID, const MaterialSPtr& inpMaterial)
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(inpMaterial);
-            SpriteSheetSPtr pSpriteSheet = LOAD_RESOURCE(SpriteSheet, ineStorageLocation, instrSpriteSheetTexture);
-            u32 udwTpageID = pSpriteSheet->GetFrameIndexByID(instrTpageID);
-            pSprite->SetDimensions(pSpriteSheet->GetSizeForFrame(udwTpageID));
-            pSprite->SetUVs(pSpriteSheet->GetUVsForFrame(udwTpageID));
+            TextureAtlasCSPtr pTextureAtlas = m_resourcePool->LoadResource<TextureAtlas>(ineStorageLocation, instrTextureAtlas);
+            u32 udwTpageID = pTextureAtlas->GetFrameIndexById(instrTpageID);
+            pSprite->SetDimensions(pTextureAtlas->GetFrameSize(udwTpageID));
+            pSprite->SetUVs(pTextureAtlas->GetFrameUVs(udwTpageID));
             
             return pSprite;
         }
