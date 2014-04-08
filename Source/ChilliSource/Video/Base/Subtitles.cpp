@@ -12,11 +12,6 @@ namespace ChilliSource
 {
 	namespace Video
 	{
-        namespace
-        {
-            const Subtitles::StyleCUPtr k_nullStyleCUPtr;
-        }
-        
 		CS_DEFINE_NAMEDTYPE(Subtitles);
         
         //----------------------------------------------------------
@@ -63,16 +58,16 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        const Subtitles::StyleCUPtr& Subtitles::GetStyleWithName(const std::string& in_name) const
+        const Subtitles::Style* Subtitles::GetStyleWithName(const std::string& in_name) const
         {
             auto found = m_styles.find(in_name);
             if (found != m_styles.end())
             {
-                return found->second;
+                return found->second.get();
             }
             
             CS_LOG_WARNING("Could not find style '" + in_name + "' in Subtitles '" + GetFilePath() + "'");
-            return k_nullStyleCUPtr;
+            return nullptr;
         }
 	}
 }
