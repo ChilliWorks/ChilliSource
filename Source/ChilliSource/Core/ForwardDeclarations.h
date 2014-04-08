@@ -52,7 +52,6 @@ namespace ChilliSource
         /// Cryptographic
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(HMAC_SHA1);
-        CS_FORWARDDECLARE_CLASS(OAuthSystem);
         CS_FORWARDDECLARE_CLASS(SHA1);
         //---------------------------------------------------------
         /// Dialogue
@@ -152,8 +151,6 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(AppSystem);
         CS_FORWARDDECLARE_CLASS(StateSystem);
-        CS_FORWARDDECLARE_CLASS(System);
-        CS_FORWARDDECLARE_CLASS(IUpdateable);
         CS_FORWARDDECLARE_CLASS(IComponentProducer);
         //---------------------------------------------------------
         /// Threading

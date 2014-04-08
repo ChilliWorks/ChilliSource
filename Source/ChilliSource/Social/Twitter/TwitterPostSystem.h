@@ -12,7 +12,6 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Networking/Http/HttpRequest.h>
-#include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
 
 #include <functional>
@@ -68,11 +67,10 @@ namespace ChilliSource
             /// @author I Copland
             ///
             /// @param The http connection system.
-            /// @param The OAuth system.
             ///
             /// @return The new instance.
 			//------------------------------------------------
-            static TwitterPostSystemUPtr Create(Networking::HttpRequestSystem* in_httpRequestSystem, Core::OAuthSystem* in_oauthSystem);
+            static TwitterPostSystemUPtr Create(Networking::HttpRequestSystem* in_httpRequestSystem);
             //------------------------------------------------------------------------
             /// Run the OAuth process and, if successful, leave the system in state
             /// ready to communicate with Twitter. Result will be returned through
@@ -125,9 +123,8 @@ namespace ChilliSource
             /// @author I Copland
             ///
             /// @param The http connection system.
-            /// @param The OAuth system.
 			//-----------------------------------------------
-            TwitterPostSystem(Networking::HttpRequestSystem* in_httpRequestSystem, Core::OAuthSystem* in_oauthSystem);
+            TwitterPostSystem(Networking::HttpRequestSystem* in_httpRequestSystem);
             //------------------------------------------------------------------------
 			/// Trys to load saved token and secret keys
             ///
@@ -157,9 +154,11 @@ namespace ChilliSource
 			/// for an access token. We then save this access token and use it in
 			/// future to talk to Twitter.
             ///
+            /// @param the PIN.
+            ///
             /// @author R Henning
 			//------------------------------------------------------------------------
-            void RequestOAuthAccessToken();
+            void RequestOAuthAccessToken(const std::string& in_pin);
             //------------------------------------------------------------------------
 			/// Gets a request token and secret. This is used to authorise the user
 			/// and get a PIN from Twitter
@@ -204,17 +203,15 @@ namespace ChilliSource
 			/// @param The result from the request
 			//------------------------------------------------------------------------
 			virtual void OnRequestOAuthAccessTokenComplete(Networking::HttpRequest* in_request, Networking::HttpRequest::Result in_result);
-
+            
         private:
             
 			Networking::HttpRequestSystem* m_httpRequestSystem;
 			
         protected:
-            
+
             AuthenticationResultDelegate m_authDelegate;
             PostResultDelegate m_postDelegate;
-            
-            Core::OAuthSystem* m_oauthSystem;
             
             bool m_isAuthenticated;
             

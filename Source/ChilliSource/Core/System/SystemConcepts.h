@@ -21,19 +21,6 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		///Something that can be updated
-		class IUpdateable
-		{
-		public:
-			IUpdateable(){}
-			virtual ~IUpdateable(){}
-			
-			CS_DECLARE_NAMEDTYPE(IUpdateable);
-			//Update this thing given the passed time delta in seconds
-			virtual void Update(f32 infDT) = 0;
-		};
-		
-		
 		///An IComponentProducer can provide a component factory to construct components
 		class IComponentProducer
 		{

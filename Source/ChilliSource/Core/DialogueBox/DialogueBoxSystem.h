@@ -2,7 +2,7 @@
 //  DialogueBoxSystem.h
 //  Chilli Source
 //
-//  Created by Ian Copland on 04/03/2014
+//  Created by I Copland on 04/03/2014
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_CORE_DIALOGUE_DIALOGUESYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 #include <functional>
 
@@ -21,14 +21,18 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// A system used to display platform specific system
         /// dialogue boxes.
+        ///
+        /// @author I Copland
 		//-----------------------------------------------------------
-		class DialogueBoxSystem : public System
+		class DialogueBoxSystem : public AppSystem
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(DialogueBoxSystem);
             //----------------------------------------------------
 			/// An enum describing the possible results from a
             /// dialogue box.
+            ///
+            /// @author I Copland
 			//----------------------------------------------------
             enum class DialogueResult
             {
@@ -36,17 +40,15 @@ namespace ChilliSource
                 k_cancel
             };
             //----------------------------------------------------
-			/// Delegates
-			//----------------------------------------------------
-            typedef std::function<void(u32, DialogueResult)> DialogueDelegate;
-            //----------------------------------------------------
-			/// Creates a new instance of this system.
+			/// A delegate called when a dialogue box has been
+            /// dismissed.
             ///
             /// @author I Copland
             ///
-            /// @return The new instance.
+            /// @param The Id of the dialogue box.
+            /// @param The result.
 			//----------------------------------------------------
-            static DialogueBoxSystemUPtr Create();
+            typedef std::function<void(u32, DialogueResult)> DialogueDelegate;
             //-----------------------------------------------------
             /// Display a system dialog with the given ID and delegate
             ///
@@ -89,13 +91,22 @@ namespace ChilliSource
             virtual ~DialogueBoxSystem();
             
         protected:
+            friend class Application;
             
+            //----------------------------------------------------
+			/// Creates a new instance of this system.
+            ///
+            /// @author I Copland
+            ///
+            /// @return The new instance.
+			//----------------------------------------------------
+            static DialogueBoxSystemUPtr Create();
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            DialogueBoxSystem(){}
+            DialogueBoxSystem() = default;
 		};
 	}
 }
