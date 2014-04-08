@@ -34,7 +34,6 @@
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Time/CoreTimer.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -426,23 +425,7 @@ namespace ChilliSource
             
             m_resourcePool->Destroy();
             
-			//We have an issue with the order of destruction of systems.
-			while(m_systemsOld.empty() == false)
-			{
-				m_systemsOld.pop_back();
-			}
-            
             s_application = nullptr;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void Application::AddSystem_Old(SystemUPtr in_system)
-        {
-            CS_ASSERT(m_isSystemCreationAllowed == true, "Application systems cannot be created outwith the creation phase");
-			if (in_system != nullptr)
-			{
-				m_systemsOld.push_back(std::move(in_system));
-			}
         }
         //------------------------------------------------------
         //------------------------------------------------------
@@ -451,13 +434,12 @@ namespace ChilliSource
             //Core
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
-            
             m_resourcePool = CreateSystem<ResourcePool>();
-
+            CreateSystem<CSImageProvider>();
+            CreateSystem<DialogueBoxSystem>();
+            
             //TODO: Change this to a PNG image provider.
             CreateSystem<ImageProvider>();
-            CreateSystem<CSImageProvider>();
-            AddSystem_Old(DialogueBoxSystem::Create());
 
             //Audio
             m_audioSystem = CreateSystem<Audio::AudioSystem>();
@@ -483,37 +465,6 @@ namespace ChilliSource
         //----------------------------------------------------
 		void Application::PostCreateSystems()
 		{
-            //Loop round all the created systems and categorise them
-            //TODO: Remove when all old systems have been changed
-			for(std::vector<SystemUPtr>::iterator it = m_systemsOld.begin(); it != m_systemsOld.end(); ++it)
-			{
-                System* pSystem = it->get();
-                
-                //Updateables
-				if(pSystem->IsA(IUpdateable::InterfaceID))
-				{
-					m_updateableSystems.push_back(dynamic_cast<IUpdateable*>(pSystem));
-				}
-                
-                //Component producers
-				if(pSystem->IsA(IComponentProducer::InterfaceID))
-				{
-                    IComponentProducer* pProducer = dynamic_cast<IComponentProducer*>(pSystem);
-                    u32 udwNumFactoriesInSystem = pProducer->GetNumComponentFactories();
-                    
-                    for(u32 i=0; i<udwNumFactoriesInSystem; ++i)
-                    {
-                        m_componentFactoryDispenser->RegisterComponentFactory(pProducer->GetComponentFactoryPtr(i));
-                    }
-				}
-                
-                //Resource providers
-				if(pSystem->IsA(ResourceProviderOld::InterfaceID))
-				{
-					m_ResourceProviderOlds.push_back(dynamic_cast<ResourceProviderOld*>(pSystem));
-				}
-			}
-            
             //Loop round all the created app systems and categorise them
 			for(const AppSystemUPtr& system : m_systems)
 			{
@@ -638,12 +589,6 @@ namespace ChilliSource
             in_deltaTime *= m_updateSpeed;
             
 			CoreTimer::Update(in_deltaTime);
-            
-			//Update sub systems
-            for(std::vector<IUpdateable*>::iterator it = m_updateableSystems.begin(); it != m_updateableSystems.end(); ++it)
-            {
-                (*it)->Update(in_deltaTime);
-            }
             
             //update all of the application systems
             for (const AppSystemUPtr& system : m_systems)

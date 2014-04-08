@@ -14,7 +14,6 @@
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 #include <limits>
@@ -61,15 +60,6 @@ namespace ChilliSource
 			//----------------------------------------------------
 			Application();
             //----------------------------------------------------
-            /// Adds a system to the application. This should only
-            /// be called inside the CreateSystem() method.
-            ///
-            /// @author I Copland
-            ///
-            /// @param The new system to add to the application.
- 			//----------------------------------------------------
-            void AddSystem_Old(SystemUPtr in_system);
-            //----------------------------------------------------
             /// Creates a new instance of the given system and
             /// adds it to the application.
             ///
@@ -80,26 +70,6 @@ namespace ChilliSource
             /// @return A raw pointer to the new system.
  			//----------------------------------------------------
             template <typename TSystem, typename... TArgs> TSystem* CreateSystem(TArgs... in_args);
-			//----------------------------------------------------
-			/// Looks for a system that implements the queryable
-            /// interface provided as a template parameter.
-            ///
-            /// @author I Copland
-            ///
-			/// @return The first system found that implements
-            /// the named interface.
-			//----------------------------------------------------
-			template <typename TNamedType> TNamedType* GetSystem_Old();
-			//-----------------------------------------------------
-			/// Looks for a all systems that implement the given
-            /// queryable interface provided as a template parameter.
-			///
-            /// @author I Copland
-            ///
-			/// @param [Out] The list of systems that implement the
-            /// queryable interface.
-			//-----------------------------------------------------
-            template <typename TNamedType> void GetSystems_Old(std::vector<TNamedType*> & out_systems);
             //----------------------------------------------------
 			/// Looks for a system that implements the queryable
             /// interface provided as a template parameter.
@@ -516,9 +486,6 @@ namespace ChilliSource
         private:
             std::vector<AppSystemUPtr> m_systems;
             
-            std::vector<SystemUPtr> m_systemsOld;
-            std::vector<IUpdateable*> m_updateableSystems;
-            
             ResourcePool* m_resourcePool;
 			StateManager* m_stateManager;
 			Rendering::RendererUPtr m_renderer;
@@ -567,33 +534,6 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename TNamedType> TNamedType* Application::GetSystem_Old()
-        {
-            for (std::vector<SystemUPtr>::const_iterator it = m_systemsOld.begin(); it != m_systemsOld.end(); ++it)
-			{
-				if ((*it)->IsA(TNamedType::InterfaceID))
-				{
-					return static_cast<TNamedType*>((*it).get());
-				}
-			}
-			
-			CS_LOG_WARNING("Application cannot find system: " + TNamedType::TypeName);
-			return nullptr;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        template <typename TNamedType> void Application::GetSystems_Old(std::vector<TNamedType*>& out_systems)
-        {
-            for (size_t systemIndex = 0; systemIndex < m_systemsOld.size(); systemIndex++)
-            {
-                if (m_systemsOld[systemIndex]->IsA(TNamedType::InterfaceID))
-                {
-                    out_systems.push_back(static_cast<TNamedType*>(m_systemsOld[systemIndex].get()));
-                }
-            }
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
         template <typename TNamedType> TNamedType* Application::GetSystem()
         {
             for (std::vector<AppSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
@@ -615,7 +555,7 @@ namespace ChilliSource
             {
                 if (m_systems[systemIndex]->IsA(TNamedType::InterfaceID))
                 {
-                    out_systems.push_back(static_cast<TNamedType*>(m_systemsOld[systemIndex].get()));
+                    out_systems.push_back(static_cast<TNamedType*>(m_systems[systemIndex].get()));
                 }
             }
         }
