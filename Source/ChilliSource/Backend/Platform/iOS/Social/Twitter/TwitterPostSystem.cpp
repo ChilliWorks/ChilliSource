@@ -27,8 +27,8 @@ namespace ChilliSource
     {
 		//------------------------------------------------------------------------
 		//------------------------------------------------------------------------
-		TwitterPostSystem::TwitterPostSystem(Networking::HttpRequestSystem* in_httpRequestSystem, Core::OAuthSystem* in_oauthSystem)
-        : Social::TwitterPostSystem(in_httpRequestSystem, in_oauthSystem)
+		TwitterPostSystem::TwitterPostSystem(Networking::HttpRequestSystem* in_httpRequestSystem)
+        : Social::TwitterPostSystem(in_httpRequestSystem)
 		{
 			
 		}
@@ -53,8 +53,6 @@ namespace ChilliSource
             {
                 //We have cached Auth tokens so don't need to prompt
                 m_isAuthenticated = true;
-                m_oauthSystem->SetOAuthTokenKey(m_savedOAuthTokenKey);
-				m_oauthSystem->SetOAuthTokenSecret(m_savedOAuthTokenSecret);
                 
                 if(m_authDelegate)
                 {
@@ -217,8 +215,7 @@ namespace ChilliSource
 		{
 			if(in_result.strPIN.empty() == false)
 			{
-				m_oauthSystem->SetOAuthPin(in_result.strPIN);
-				RequestOAuthAccessToken();
+				RequestOAuthAccessToken(in_result.strPIN);
 			}
 		}
 		//------------------------------------------------------------------------

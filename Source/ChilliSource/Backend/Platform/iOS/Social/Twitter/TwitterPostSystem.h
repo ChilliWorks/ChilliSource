@@ -97,9 +97,8 @@ namespace ChilliSource
             /// @author I Copland
             ///
             /// @param The http connection system.
-            /// @param The OAuth system.
             //----------------------------------------------------
-            TwitterPostSystem(Networking::HttpRequestSystem* in_httpRequestSystem, Core::OAuthSystem* in_oauthSystem);
+            TwitterPostSystem(Networking::HttpRequestSystem* in_httpRequestSystem);
 			//------------------------------------------------------------------------
 			/// Attempt to post a tweet to Twitter using the iOS Twitter framework
             ///
@@ -119,7 +118,7 @@ namespace ChilliSource
 			//------------------------------------------------------------------------
 			void PostUsingChilliSource(const Social::TwitterPostSystem::PostDesc& in_desc, const Social::TwitterPostSystem::PostResultDelegate& in_delegate);
             
-            friend Social::TwitterPostSystemUPtr Social::TwitterPostSystem::Create(Networking::HttpRequestSystem* inpHttpRequestSystem, Core::OAuthSystem* inpOAuthSystem);
+            friend Social::TwitterPostSystemUPtr Social::TwitterPostSystem::Create(Networking::HttpRequestSystem* inpHttpRequestSystem);
         private:
             
             Core::ConnectionUPtr m_authorisationDismissedConnection;
