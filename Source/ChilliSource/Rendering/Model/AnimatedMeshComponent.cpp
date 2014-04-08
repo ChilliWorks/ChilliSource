@@ -345,7 +345,7 @@ namespace ChilliSource
             if (nullptr != mActiveAnimationGroup && true == mActiveAnimationGroup->IsPrepared())
             {
                 mFadingAnimationGroup = mActiveAnimationGroup;
-                mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeletonPtr()));
+                mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeleton()));
                 mfFadePlaybackPosition = mfPlaybackPosition;
                 mfFadeBlendlinePosition = mfBlendlinePosition;
                 mfFadeMaxTime = infFadeOutTime;
@@ -403,7 +403,7 @@ namespace ChilliSource
                 }
             }
             
-            s32 dwNodeIndex = mpModel->GetSkeletonPtr()->GetNodeIndexByName(instrNodeName);
+            s32 dwNodeIndex = mpModel->GetSkeleton()->GetNodeIndexByName(instrNodeName);
             if (dwNodeIndex == -1)
             {
                 CS_LOG_ERROR("Could not attach entity to the animated mesh because the skeleton node name could not be found.");
@@ -773,7 +773,7 @@ namespace ChilliSource
         void AnimatedMeshComponent::Reset()
         {
             DetatchAllEntities();
-			mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeletonPtr()));
+			mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeleton()));
             mFadingAnimationGroup.reset();
             mfBlendlinePosition = 0.0f;
             mfFadeTimer = 0.0f;

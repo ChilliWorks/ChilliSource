@@ -12,7 +12,6 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
-#include <ChilliSource/Rendering/Model/Skeleton.h>
 
 namespace ChilliSource
 {
@@ -163,7 +162,7 @@ namespace ChilliSource
                 //read the inverse bind matrices
                 if(true == in_meshDesc.mFeatures.mbHasAnimationData)
                 {
-                    for(u32 i=0; i<in_meshDesc.mpSkeleton->GetNumJoints(); ++i)
+                    for(u32 i=0; i<in_meshDesc.m_skeletonDesc.m_jointIndices.size(); ++i)
                     {
                         ChilliSource::Core::Matrix4x4 IBPMat;
                         ReadBlock<f32>(in_meshStream, 16, IBPMat.m);
@@ -248,47 +247,47 @@ namespace ChilliSource
 			///
 			/// @param File stream
             /// @param Container holding the num of meshes, joints and bones
-			/// @param [Out] Mesh description
+			/// @param [Out] Skeleton description
             //-----------------------------------------------------------------------------
-            void ReadSkeletonData(const Core::FileStreamSPtr& in_meshStream, const MeshDataQuantities& in_quantities, MeshDescriptor& out_meshDesc)
+            void ReadSkeletonData(const Core::FileStreamSPtr& in_meshStream, const MeshDataQuantities& in_quantities, SkeletonDescriptor& out_skeletonDesc)
             {
-                if (true == out_meshDesc.mFeatures.mbHasAnimationData)
+                //read the skeleton nodes
+                out_skeletonDesc.m_nodeNames.reserve(in_quantities.m_numSkeletonNodes);
+                out_skeletonDesc.m_parentNodeIndices.reserve(in_quantities.m_numSkeletonNodes);
+                
+                std::unordered_map<u32, s32> jointToNodeMap;
+                for (u32 i = 0; i<(u32)in_quantities.m_numSkeletonNodes; ++i)
                 {
-                    out_meshDesc.mpSkeleton = SkeletonSPtr(new Skeleton());
-                    
-                    //read the skeleton nodes
-                    std::unordered_map<u32, s32> jointToNodeMap;
-					for (u32 i = 0; i<(u32)in_quantities.m_numSkeletonNodes; ++i)
+                    //get the skeleton node name name
+                    std::string nodeName;
+                    u8 nextChar = 0;
+                    do
                     {
-                        //get the skeleton node name name
-                        std::string nodeName;
-                        u8 nextChar = 0;
-                        do
-                        {
-                            nextChar = ReadValue<u8>(in_meshStream);
-                            nodeName += nextChar;
-                        } while(nextChar != 0);
-                        
-                        //get the parent index
-                        s32 parentIndex = (s32)ReadValue<s16>(in_meshStream);
-                        
-                        //get the type
-                        const u32 k_isJoint = 1;
-                        u8 type = ReadValue<u8>(in_meshStream);
-                        if (type == k_isJoint)
-                        {
-                            u32 jointIndex = (u32)ReadValue<u8>(in_meshStream);
-                            jointToNodeMap.insert(std::pair<u32, s32>(jointIndex, (s32)i));
-                        }
-                        
-                        //add joint
-                        out_meshDesc.mpSkeleton->AddNode(nodeName, parentIndex);
+                        nextChar = ReadValue<u8>(in_meshStream);
+                        nodeName += nextChar;
+                    } while(nextChar != 0);
+                    
+                    //get the parent index
+                    s32 parentIndex = (s32)ReadValue<s16>(in_meshStream);
+                    
+                    //get the type
+                    const u32 k_isJoint = 1;
+                    u8 type = ReadValue<u8>(in_meshStream);
+                    if (type == k_isJoint)
+                    {
+                        u32 jointIndex = (u32)ReadValue<u8>(in_meshStream);
+                        jointToNodeMap.insert(std::pair<u32, s32>(jointIndex, (s32)i));
                     }
                     
-                    for (u32 i=0; i<in_quantities.m_numJoints; ++i)
-                    {
-                        out_meshDesc.mpSkeleton->AddJointIndex(jointToNodeMap[i]);
-                    }
+                    out_skeletonDesc.m_nodeNames.push_back(nodeName);
+                    out_skeletonDesc.m_parentNodeIndices.push_back(parentIndex);
+                }
+                
+                CS_ASSERT(out_skeletonDesc.m_nodeNames.size() == out_skeletonDesc.m_parentNodeIndices.size(), "Invalid number of node names and indices in skeleton");
+                
+                for (u32 i=0; i<in_quantities.m_numJoints; ++i)
+                {
+                    out_skeletonDesc.m_jointIndices.push_back(jointToNodeMap[i]);
                 }
             }
             //-----------------------------------------------------------------------------
@@ -407,7 +406,10 @@ namespace ChilliSource
                     return false;
                 }
                 
-                ReadSkeletonData(meshStream, quantities, out_meshDesc);
+                if (true == out_meshDesc.mFeatures.mbHasAnimationData)
+                {
+                    ReadSkeletonData(meshStream, quantities, out_meshDesc.m_skeletonDesc);
+                }
                 
                 for(u32 i=0; i<quantities.m_numMeshes; ++i)
                 {

@@ -82,7 +82,7 @@ namespace ChilliSource
                         //add to the frame
                         frame->m_nodeTranslations.push_back(translation);
                         frame->m_nodeOrientations.push_back(orientation);
-                        frame->m_nodeScalings.push_back(scale);
+                        frame->m_nodeScales.push_back(scale);
                     }
                     
                     //add frame to animation

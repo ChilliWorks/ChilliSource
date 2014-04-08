@@ -50,7 +50,7 @@ namespace ChilliSource
 				
 				for (u32 i = 0; i < pMesh->GetNumSubMeshes(); i++)
 				{
-					SubMeshCSPtr pSubMesh = pMesh->GetSubMeshAtIndex(i);
+					const SubMesh* pSubMesh = pMesh->GetSubMeshAtIndex(i);
 					VBufferSize += pSubMesh->GetInternalMeshBuffer()->GetVertexCapacity();
 					IBufferSize += pSubMesh->GetInternalMeshBuffer()->GetIndexCapacity();
 					

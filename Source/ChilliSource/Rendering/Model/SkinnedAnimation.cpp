@@ -33,10 +33,10 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
-		const SkinnedAnimation::FrameCUPtr& SkinnedAnimation::GetFrameAtIndex(u32 in_index) const
+		const SkinnedAnimation::Frame* SkinnedAnimation::GetFrameAtIndex(u32 in_index) const
 		{
             CS_ASSERT(in_index < m_frames.size(), "Skinned animation frame out of bounds");
-            return m_frames[in_index];
+            return m_frames[in_index].get();
 		}
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------

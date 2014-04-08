@@ -38,7 +38,7 @@ namespace ChilliSource
             {
                 std::vector<Core::Vector3> m_nodeTranslations;
                 std::vector<Core::Quaternion> m_nodeOrientations;
-                std::vector<Core::Vector3> m_nodeScalings;
+                std::vector<Core::Vector3> m_nodeScales;
             };
             using FrameUPtr = std::unique_ptr<Frame>;
             using FrameSPtr = std::shared_ptr<Frame>;
@@ -61,7 +61,7 @@ namespace ChilliSource
 			/// @param the index to the frame
 			/// @return the AnimationFramePtr at the given index
 			//---------------------------------------------------------------------
-			const SkinnedAnimation::FrameCUPtr& GetFrameAtIndex(u32 in_index) const;
+			const SkinnedAnimation::Frame* GetFrameAtIndex(u32 in_index) const;
 			//---------------------------------------------------------------------
 			/// @author I Copland
 			///

@@ -36,8 +36,14 @@ namespace ChilliSource
 		class Skeleton
 		{
 		public:
-			Skeleton();
-			~Skeleton();
+            //-------------------------------------------------------------------------
+            /// Construct the skeleton from the given descriptor.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Skeleton descriptor
+            //-------------------------------------------------------------------------
+            void Build(const SkeletonDescriptor& in_desc);
 			//-------------------------------------------------------------------------
 			/// Get Node By Name
 			///
@@ -46,7 +52,7 @@ namespace ChilliSource
 			/// @param the nodes name
 			/// @return a smart pointer to the node
 			//-------------------------------------------------------------------------
-			SkeletonNodeSPtr GetNodeByName(const std::string& instrName) const;
+			const SkeletonNode* GetNodeByName(const std::string& instrName) const;
             //-------------------------------------------------------------------------
 			/// Get Node Index By Name
 			///
@@ -65,7 +71,7 @@ namespace ChilliSource
 			/// @param the index.
 			/// @param a smart pointer to the node.
 			//-------------------------------------------------------------------------
-			SkeletonNodeSPtr GetNodeByIndex(u32 indwIndex) const;
+			const SkeletonNode* GetNodeByIndex(u32 indwIndex) const;
 			//-------------------------------------------------------------------------
 			/// Get Num Nodes
 			///
@@ -89,32 +95,17 @@ namespace ChilliSource
 			///
 			/// @return the dynamic array of nodes
 			//-------------------------------------------------------------------------
-			const std::vector<SkeletonNodeSPtr>& GetNodes() const;
+			const std::vector<SkeletonNodeCUPtr>& GetNodes() const;
             //-------------------------------------------------------------------------
 			/// Get Joint Indices
 			///
 			/// @return the array of joint indices
 			//-------------------------------------------------------------------------
 			const std::vector<s32>& GetJointIndices() const;
-			//-------------------------------------------------------------------------
-			/// Add Node
-			///
-			/// Adds a new node to the skeleton with the given name and parent.
-			///
-			/// @param the name
-			/// @param the parent index
-			//-------------------------------------------------------------------------
-			void AddNode(const std::string& instrName, s32 indwParentIndex);
-            //-------------------------------------------------------------------------
-			/// Add Joint Index
-			///
-			/// @param An index into the skeleton node list denoting a joint.
-			//-------------------------------------------------------------------------
-			void AddJointIndex(s32 indwJointIndex);
 			
 		private:
 			
-			std::vector<SkeletonNodeSPtr> mapNodes;
+			std::vector<SkeletonNodeCUPtr> mapNodes;
             std::vector<s32> madwJoints;
 		};
 	}

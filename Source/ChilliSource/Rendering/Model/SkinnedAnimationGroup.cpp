@@ -20,7 +20,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Constructor
         //-----------------------------------------------------------
-        SkinnedAnimationGroup::SkinnedAnimationGroup(const SkeletonSPtr& inpSkeleton)
+        SkinnedAnimationGroup::SkinnedAnimationGroup(const Skeleton* inpSkeleton)
         : mpSkeleton(inpSkeleton), mbAnimationLengthDirty(true), mfAnimationLength(0.0f), mbPrepared(false)
         {
             for (s32 i = 0; i < mpSkeleton->GetNumNodes(); ++i)
@@ -157,9 +157,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         void SkinnedAnimationGroup::BuildMatrices(s32 indwCurrentParent, const Core::Matrix4x4& inParentMatrix)
         {
-            const std::vector<SkeletonNodeSPtr>& nodes = mpSkeleton->GetNodes();
+            const std::vector<SkeletonNodeCUPtr>& nodes = mpSkeleton->GetNodes();
 			u32 currIndex = 0;
-			for (std::vector<SkeletonNodeSPtr>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+			for (auto it = nodes.begin(); it != nodes.end(); ++it)
 			{
 				if ((*it)->mdwParentIndex == indwCurrentParent)
 				{
@@ -167,7 +167,7 @@ namespace ChilliSource
 					Core::Matrix4x4 localMat;
                     if(mCurrentAnimationData->m_nodeTranslations.empty() == false)
                     {
-                        localMat.SetTransform(mCurrentAnimationData->m_nodeTranslations[currIndex], mCurrentAnimationData->m_nodeScalings[currIndex], mCurrentAnimationData->m_nodeOrientations[currIndex]);
+                        localMat.SetTransform(mCurrentAnimationData->m_nodeTranslations[currIndex], mCurrentAnimationData->m_nodeScales[currIndex], mCurrentAnimationData->m_nodeOrientations[currIndex]);
                     }
 					
 					//convert to matrix and store
@@ -322,8 +322,8 @@ namespace ChilliSource
             }
             
 			//get the frames
-			const SkinnedAnimation::Frame* frameA = inpAnimation->GetFrameAtIndex(dwFrameAIndex).get();
-			const SkinnedAnimation::Frame* frameB = inpAnimation->GetFrameAtIndex(dwFrameBIndex).get();
+			const SkinnedAnimation::Frame* frameA = inpAnimation->GetFrameAtIndex(dwFrameAIndex);
+			const SkinnedAnimation::Frame* frameB = inpAnimation->GetFrameAtIndex(dwFrameBIndex);
 			
 			//get the ratio of one frame to the next
 			f32 interpFactor = (infPlaybackPosition - (dwFrameAIndex * inpAnimation->GetFrameTime())) / inpAnimation->GetFrameTime();
@@ -375,16 +375,16 @@ namespace ChilliSource
                 }
                 
                 //iterate through each scale
-                outFrame->m_nodeScalings.reserve(inFrameB->m_nodeScalings.size());
-                std::vector<Core::Vector3>::const_iterator scaleAIt = inFrameA->m_nodeScalings.begin();
-                for (std::vector<Core::Vector3>::const_iterator scaleBIt = inFrameB->m_nodeScalings.begin();
-                     scaleAIt != inFrameA->m_nodeScalings.end() && scaleBIt != inFrameB->m_nodeScalings.end();)
+                outFrame->m_nodeScales.reserve(inFrameB->m_nodeScales.size());
+                std::vector<Core::Vector3>::const_iterator scaleAIt = inFrameA->m_nodeScales.begin();
+                for (std::vector<Core::Vector3>::const_iterator scaleBIt = inFrameB->m_nodeScales.begin();
+                     scaleAIt != inFrameA->m_nodeScales.end() && scaleBIt != inFrameB->m_nodeScales.end();)
                 {
                     //lerp
                     Core::Vector3 newScale = Core::MathUtils::Lerp(infInterpFactor, *scaleAIt, *scaleBIt);
                     
                     //add to frame
-                    outFrame->m_nodeScalings.push_back(newScale);
+                    outFrame->m_nodeScales.push_back(newScale);
                     
                     //incriment the iterators
                     ++scaleAIt;

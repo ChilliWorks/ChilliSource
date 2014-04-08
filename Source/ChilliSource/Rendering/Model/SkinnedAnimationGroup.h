@@ -35,10 +35,13 @@ namespace ChilliSource
         class SkinnedAnimationGroup final
         {
         public:
+            
+            CS_DECLARE_NOCOPY(SkinnedAnimationGroup);
+            
             //-----------------------------------------------------------
             /// Constructor
             //-----------------------------------------------------------
-            SkinnedAnimationGroup(const SkeletonSPtr& inpSkeleton);
+            SkinnedAnimationGroup(const Skeleton* inpSkeleton);
             //----------------------------------------------------------
 			/// Attach Animation
 			///
@@ -176,7 +179,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------
             SkinnedAnimation::FrameCUPtr LerpBetweenFrames(const SkinnedAnimation::Frame* inFrameA, const SkinnedAnimation::Frame* inFrameB, f32 infInterpFactor);
             
-            SkeletonSPtr mpSkeleton;
+            const Skeleton* mpSkeleton;
             std::vector<AnimationItemPtr> mAnimations;
             SkinnedAnimation::FrameCUPtr mCurrentAnimationData;
             std::vector<Core::Matrix4x4> mCurrentAnimationMatrices;
