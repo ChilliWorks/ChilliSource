@@ -65,8 +65,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(ComponentFactory);
         CS_FORWARDDECLARE_CLASS(ComponentFactoryDispenser);
         CS_FORWARDDECLARE_CLASS(Entity);
-        CS_FORWARDDECLARE_CLASS(EntityAnimation);
-        CS_FORWARDDECLARE_CLASS(EntityAnimationController);
         CS_FORWARDDECLARE_CLASS(Transform);
         //---------------------------------------------------------
         /// Event
@@ -140,13 +138,6 @@ namespace ChilliSource
         /// Scene
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Scene);
-        CS_FORWARDDECLARE_CLASS(SceneAnimation);
-        CS_FORWARDDECLARE_STRUCT(SceneAnimationDesc);
-        CS_FORWARDDECLARE_CLASS(SceneAnimationProvider);
-        CS_FORWARDDECLARE_CLASS(SceneAnimDescManager);
-        CS_FORWARDDECLARE_CLASS(SceneDescManager);
-        CS_FORWARDDECLARE_CLASS(SceneDesc);
-        CS_FORWARDDECLARE_CLASS(SceneProvider);
         //---------------------------------------------------------
         /// State
         //---------------------------------------------------------

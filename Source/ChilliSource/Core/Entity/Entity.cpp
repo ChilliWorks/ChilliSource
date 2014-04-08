@@ -196,18 +196,6 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-		const EntityAnimationControllerSPtr& Entity::GetEntityAnimationController() const
-		{
-			return m_entityAnimController;
-		}
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-		EntityAnimationControllerSPtr& Entity::GetEntityAnimationController()
-		{
-			return m_entityAnimController;
-		}
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
         const SharedEntityList& Entity::GetEntities() const
         {
             return m_children;
@@ -418,7 +406,6 @@ namespace ChilliSource
             m_transform.Reset();
             
             m_isVisible = true;
-			m_entityAnimController = EntityAnimationControllerSPtr();
         }
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------

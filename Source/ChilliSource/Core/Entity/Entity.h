@@ -329,19 +329,6 @@ namespace ChilliSource
 			/// @return the number of components
 			//------------------------------------------------------------------
             u32 GetNumComponents() const;
-
-			//------------------------------------------------------------------
-			/// @param A Glass
-			///
-			/// @return Anim controller
-			//------------------------------------------------------------------
-			const EntityAnimationControllerSPtr& GetEntityAnimationController() const;
-            //------------------------------------------------------------------
-            /// @param A Glass
-            ///
-			/// @return Anim controller
-			//------------------------------------------------------------------
-			EntityAnimationControllerSPtr& GetEntityAnimationController();
             //------------------------------------------------------------------
 			/// @author S Downie
 			/// 
@@ -439,8 +426,6 @@ namespace ChilliSource
 			Scene* m_scene;
             
             bool m_isVisible;
-            
-			EntityAnimationControllerSPtr m_entityAnimController;
 		};
         
         //-------------------------------------------------------------
