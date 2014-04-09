@@ -107,7 +107,7 @@ namespace ChilliSource
 				{
 					if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
 					{
-						CS_LOG_DEBUG("Loading Material " + inFilePath);
+						CS_LOG_VERBOSE("Loading Material " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 						
 						MaterialSPtr pMaterial = std::static_pointer_cast<Material>(pResource);
@@ -158,7 +158,7 @@ namespace ChilliSource
 					
 					if(mResourceProviderOlds[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
 					{
-						CS_LOG_DEBUG("Loading Material " + inFilePath);
+						CS_LOG_VERBOSE("Loading Material " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 
 						return pMaterial;

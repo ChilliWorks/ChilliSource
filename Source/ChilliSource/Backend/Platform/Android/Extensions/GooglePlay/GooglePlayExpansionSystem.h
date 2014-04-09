@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
 #include <ChilliSource/Core/JSON/json.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 namespace ChilliSource
 {
@@ -31,7 +31,7 @@ namespace ChilliSource
     		k_failedInsufficientStorage
     	};
 
-        class GooglePlayExpansionSystem : public Core::System
+        class GooglePlayExpansionSystem : public Core::AppSystem
         {
         public:
         	CS_DECLARE_NAMEDTYPE(GooglePlayExpansionSystem);

@@ -76,7 +76,7 @@ namespace ChilliSource
 				{
 					ResourceOldSPtr pResource = it->second;
 					CS_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
-					CS_LOG_DEBUG("Releasing resource from cache " + inpResource->GetName());
+					CS_LOG_VERBOSE("Releasing resource from cache " + inpResource->GetName());
 					mMapFilenameToResource.erase(it);
 					return;
 				}
@@ -96,7 +96,7 @@ namespace ChilliSource
 			{
 				ResourceOldSPtr pResource = it->second;
 				CS_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
-				CS_LOG_DEBUG("Releasing resource from cache " + pResource->GetName());
+				CS_LOG_VERBOSE("Releasing resource from cache " + pResource->GetName());
 			}
 
 			mMapFilenameToResource.clear();
@@ -114,7 +114,7 @@ namespace ChilliSource
 			{
 				if(it->second.use_count() == 1)
 				{
-					CS_LOG_DEBUG("Releasing resource from cache " + it->second->GetName());
+					CS_LOG_VERBOSE("Releasing resource from cache " + it->second->GetName());
 					it = mMapFilenameToResource.erase(it);
                     ++udwNumReleased;
 				}

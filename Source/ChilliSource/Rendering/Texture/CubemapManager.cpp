@@ -115,7 +115,7 @@ namespace ChilliSource
                         
                         if(CreateCubemapFromImages(aImages, pCubemap))
                         {
-                            CS_LOG_DEBUG("Loading Cubemap with base " + instrFilePath);
+                            CS_LOG_VERBOSE("Loading Cubemap with base " + instrFilePath);
                             
                             mMapFilenameToResource.insert(std::make_pair(instrFilePath, std::static_pointer_cast<Core::ResourceOld>(pCubemap)));
                             pCubemap->SetName(instrFilePath);
@@ -202,7 +202,7 @@ namespace ChilliSource
                     {
                         if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(inDesc.eStorageLocation, inDesc.strFilenames[i], inDesc.pImageResources[i]))
                         {
-                            CS_LOG_DEBUG("Loading image " + inDesc.strFilenames[i]);
+                            CS_LOG_VERBOSE("Loading image " + inDesc.strFilenames[i]);
                             
                             Core::Image* pImage = (Core::Image*)(inDesc.pImageResources[i].get());
                             pImage->SetName(inDesc.strFilenames[i]);

@@ -124,7 +124,7 @@ namespace ChilliSource
 			{
 				// Construct our Tweet request URL
 				std::string status = k_statusKey + Core::BaseEncoding::URLEncode(in_desc.m_text);
-				std::string oauthHeader = Core::OAuth::GenerateOAuthAuthorisationHeader(Core::OAuth::RequestType::k_httpPost, k_statusUpdateURL, status, "", "", m_savedOAuthTokenKey, m_savedOAuthTokenSecret);
+				std::string oauthHeader = Core::OAuth::GenerateAuthorisationHeader(Core::OAuth::RequestType::k_httpPost, k_statusUpdateURL, status, "", "", m_savedOAuthTokenKey, m_savedOAuthTokenSecret);
 
 				if(oauthHeader.empty() == false)
 				{
@@ -188,7 +188,7 @@ namespace ChilliSource
 				// are on a mobile device.
 				std::string strURL = k_oauthTokenRequestURL + "?" + k_oauthCallbackKey + "=oob";
 				
-                std::string strOAuthHeader = Core::OAuth::GenerateOAuthAuthorisationHeader(Core::OAuth::RequestType::k_httpGet, strURL, "", "", "", m_savedOAuthTokenKey, m_savedOAuthTokenSecret);
+                std::string strOAuthHeader = Core::OAuth::GenerateAuthorisationHeader(Core::OAuth::RequestType::k_httpGet, strURL, "", "", "", m_savedOAuthTokenKey, m_savedOAuthTokenSecret);
                 if(strOAuthHeader.empty() == false)
 				{
 					Networking::HttpRequest::Desc httpRequest;
@@ -234,7 +234,7 @@ namespace ChilliSource
 
 			if(m_httpRequestSystem->CheckReachability())
 			{
-				std::string strOAuthHeader = Core::OAuth::GenerateOAuthAuthorisationHeader(Core::OAuth::RequestType::k_httpGet, k_oauthTokenAccessURL, "", "", "", m_savedOAuthTokenKey, m_savedOAuthTokenSecret, in_pin);
+				std::string strOAuthHeader = Core::OAuth::GenerateAuthorisationHeader(Core::OAuth::RequestType::k_httpGet, k_oauthTokenAccessURL, "", "", "", m_savedOAuthTokenKey, m_savedOAuthTokenSecret, in_pin);
 				if(strOAuthHeader.empty() == false)
 				{
 					Networking::HttpRequest::Desc request;

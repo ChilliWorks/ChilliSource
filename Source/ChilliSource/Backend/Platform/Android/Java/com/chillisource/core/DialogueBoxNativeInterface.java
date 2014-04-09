@@ -116,7 +116,7 @@ public class DialogueBoxNativeInterface extends INativeInterface
         		new AlertDialog.Builder(CSApplication.get().getActivityContext())
         		.setIcon(android.R.drawable.ic_dialog_alert)
         		.setTitle(in_title)
-        		.setMessage(in_title)
+        		.setMessage(in_message)
         		.setPositiveButton(in_confirm, new DialogInterface.OnClickListener() 
         		{
         			@Override public void onClick(DialogInterface dialog, int which) 

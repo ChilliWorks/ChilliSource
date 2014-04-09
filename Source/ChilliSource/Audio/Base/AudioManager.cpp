@@ -91,7 +91,7 @@ namespace ChilliSource
                     if (audioLoader->StreamResourceFromFile(ineStorageLocation, inFilePath, pResource))
                     {
                         //Add it to the cache
-                        CS_LOG_DEBUG("Streaming sound " + inFilePath);
+                        CS_LOG_VERBOSE("Streaming sound " + inFilePath);
                         AudioResourceSPtr pAudio = std::static_pointer_cast<AudioResource>(pResource);
                         pAudio->SetName(inFilePath);
                         pAudio->SetOwningResourceManager(this);
@@ -128,7 +128,7 @@ namespace ChilliSource
 					if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
 					{
 						//Add it to the cache
-						CS_LOG_DEBUG("Loading sound " + inFilePath);
+						CS_LOG_VERBOSE("Loading sound " + inFilePath);
 						
 						AudioResourceSPtr pAudio = std::static_pointer_cast<AudioResource>(pResource);
 						mMapFileNamesToSoundEffect.insert(std::make_pair(inFilePath, pAudio));
@@ -178,7 +178,7 @@ namespace ChilliSource
 			{
 				if(it->second == pSound)
 				{
-					CS_LOG_DEBUG("Destroying sound effect " + pSound->GetName());
+					CS_LOG_VERBOSE("Destroying sound effect " + pSound->GetName());
 					mMapFileNamesToSoundEffect.erase(it);
 					return;
 				}
@@ -192,7 +192,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void AudioManager::DestroyAll()
 		{
-			CS_LOG_DEBUG("Clearing sound effect cache");
+			CS_LOG_VERBOSE("Clearing sound effect cache");
 			for(MapStringToSoundEffectPtrItr it = mMapFileNamesToSoundEffect.begin(); it != mMapFileNamesToSoundEffect.end(); ++it)
 			{
 				//If we are the only person using this then kill it dead

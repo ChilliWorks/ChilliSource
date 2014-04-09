@@ -91,7 +91,7 @@ namespace ChilliSource
 						TextureSPtr pTexture = CreateTextureResource();
 						if(CreateTextureFromImage(pImage, pTexture))
 						{
-							CS_LOG_DEBUG("Loading texture " + instrFilePath);
+							CS_LOG_VERBOSE("Loading texture " + instrFilePath);
 							
 							mMapFilenameToResource.insert(std::make_pair(instrFilePath, std::static_pointer_cast<Core::ResourceOld>(pTexture)));
 							pTexture->SetName(instrFilePath);
@@ -162,7 +162,7 @@ namespace ChilliSource
 			{
 				if(mResourceProviderOlds[nProvider]->CreateResourceFromFile(inDesc.eStorageLocation, inDesc.strFilename, inDesc.pImageResource))
 				{
-					CS_LOG_DEBUG("Loading image " + inDesc.strFilename);
+					CS_LOG_VERBOSE("Loading image " + inDesc.strFilename);
 					
 					Core::Image* pImage = (Core::Image*)(inDesc.pImageResource.get());
 					pImage->SetName(inDesc.strFilename);
