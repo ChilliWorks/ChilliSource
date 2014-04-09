@@ -119,7 +119,7 @@ namespace ChilliSource
             {
                 s32 portNum = CFURLGetPortNumber(in_url);
                 CFStringRef cfHostName = CFURLCopyHostName(in_url);
-                std::string hostName = NSStringUtils::NSStringToString((NSString*)cfHostName);
+                std::string hostName = [NSStringUtils newStringWithNSString:(NSString*)cfHostName];
                 CFRelease(cfHostName);
                 
                 HttpRequestSystem::ConnectionId propId = Core::HashCRC32::GenerateHashCode(in_scheme + hostName + Core::ToString(portNum));
@@ -170,7 +170,7 @@ namespace ChilliSource
             //Grab the connection information that allows us to identify the domain and the scheme
             CFStringRef cfScheme = CFURLCopyScheme(url);
             CS_ASSERT(cfScheme != nullptr, "Invalid http request url scheme: " + in_requestDesc.m_url);
-            std::string scheme = NSStringUtils::NSStringToString((NSString*)cfScheme);
+            std::string scheme = [NSStringUtils newStringWithNSString:(NSString*)cfScheme];
             CFRelease(cfScheme);
             if(scheme == "https")
             {

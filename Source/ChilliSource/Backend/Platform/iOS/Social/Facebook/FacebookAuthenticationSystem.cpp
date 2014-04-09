@@ -33,7 +33,9 @@ namespace ChilliSource
                 
                 for (u32 i=0; i<in_strings.size(); ++i)
                 {
-                    [result addObject: NSStringUtils::StringToNSString(in_strings[i])];
+                    NSString* string = [NSStringUtils newNSStringWithString:in_strings[i]];
+                    [result addObject: string];
+                    [string release];
                 }
                 
                 return result;
@@ -134,7 +136,7 @@ namespace ChilliSource
                     if(m_authenticateDelegate)
                     {
                         AuthenticateResponse response;
-                        response.m_token = NSStringUtils::NSStringToString([[in_session accessTokenData] accessToken]);
+                        response.m_token = [NSStringUtils newStringWithNSString:[[in_session accessTokenData] accessToken]];
                         response.m_result = AuthenticateResult::k_success;
                         m_authenticateDelegate(response);
                         m_authenticateDelegate = nullptr;
@@ -170,7 +172,7 @@ namespace ChilliSource
         //----------------------------------------------------
         std::string FacebookAuthenticationSystem::GetActiveToken() const
 		{
-			return NSStringUtils::NSStringToString(FBSession.activeSession.accessTokenData.accessToken);
+			return [NSStringUtils newStringWithNSString:FBSession.activeSession.accessTokenData.accessToken];
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -283,7 +285,10 @@ namespace ChilliSource
         //----------------------------------------------------
         bool FacebookAuthenticationSystem::HasPermission(const std::string& in_permission) const
         {
-            return ([FBSession.activeSession.permissions indexOfObject:NSStringUtils::StringToNSString(in_permission)] != NSNotFound);
+            NSString* permission = [NSStringUtils newNSStringWithString:in_permission];
+            NSInteger result = [FBSession.activeSession.permissions indexOfObject:permission];
+            [permission release];
+            return (result != NSNotFound);
         }
 		//----------------------------------------------------
         //----------------------------------------------------

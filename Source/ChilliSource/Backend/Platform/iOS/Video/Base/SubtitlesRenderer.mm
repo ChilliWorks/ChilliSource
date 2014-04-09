@@ -106,11 +106,15 @@
     pNewTextView.backgroundColor = [UIColor clearColor];
     
     //setup the text.
-    [pNewTextView setText: ChilliSource::iOS::NSStringUtils::UTF8StringToNSString(ChilliSource::Core::LocalisedText::GetText(inpSubtitle->m_textId))];
-    [pNewTextView setFont:[UIFont fontWithName: ChilliSource::iOS::NSStringUtils::StringToNSString(pStyle->m_fontName) size: pStyle->m_fontSize]];
+    NSString* text = [NSStringUtils newNSStringWithUTF8String:CSCore::LocalisedText::GetText(inpSubtitle->m_textId)];
+    NSString* fontName = [NSStringUtils newNSStringWithUTF8String:pStyle->m_fontName];
+    [pNewTextView setText:text];
+    [pNewTextView setFont:[UIFont fontWithName:fontName size: pStyle->m_fontSize]];
     [pNewTextView setTextColor:[UIColor colorWithRed:pStyle->m_colour.r green:pStyle->m_colour.g blue:pStyle->m_colour.b alpha:0.0f]];
     [pNewTextView setEditable:NO];
     [pNewTextView setUserInteractionEnabled:NO];
+    [text release];
+    [fontName release];
     
     [self SetAlignment: pNewTextView WithAnchor: pStyle->m_alignment];
     maTextViewMap.insert(std::make_pair(inpSubtitle, pNewTextView));

@@ -153,7 +153,7 @@ namespace ChilliSource
                         
                         if(redirectUrlString != nullptr)
                         {
-                            m_desc.m_redirectionUrl = NSStringUtils::NSStringToString((NSString*)redirectUrlString);
+                            m_desc.m_redirectionUrl = [NSStringUtils newStringWithNSString:(NSString*)redirectUrlString];
                             CFRelease(redirectUrlString);
                         }
                         

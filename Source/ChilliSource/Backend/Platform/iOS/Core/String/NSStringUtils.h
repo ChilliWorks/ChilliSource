@@ -12,62 +12,58 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 
-@class NSString;
+#include <Foundation/Foundation.h>
 
-namespace ChilliSource
+//------------------------------------------------------------------
+/// A collection of functions for working with NSStrings on iOS,
+/// for example functions for converting to and from std::string.
+///
+/// @author I Copland
+//------------------------------------------------------------------
+@interface NSStringUtils : NSObject 
 {
-    namespace iOS
-    {
-        //------------------------------------------------------------------
-        /// A collection of functions for working with NSStrings on iOS,
-        /// for example functions for converting to and from std::string.
-        ///
-        /// @author I Copland
-        //------------------------------------------------------------------
-        namespace NSStringUtils
-        {
-            //----------------------------------------------------------
-            /// Converts from a NSString to a std::string
-            ///
-            /// @author S Downie
-            ///
-            /// @param The NSString
-            ///
-            /// @return The std::string
-            //----------------------------------------------------------
-            std::string NSStringToString(NSString* in_nsString);
-            //----------------------------------------------------------
-            /// Converts from a NSString to a UTF8 string.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The NSString
-            ///
-            /// @return The UTF8 String.
-            //----------------------------------------------------------
-			Core::UTF8String NSStringToUTF8String(NSString* in_nsString);
-            //----------------------------------------------------------
-            /// Converts from an std::string to a NSString.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The std::string.
-            ///
-            /// @return The NSString.
-            //----------------------------------------------------------
-            NSString* StringToNSString(const std::string& in_string);
-            //----------------------------------------------------------
-            /// Converts from an UTF8 String to a NSString.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The UTF8 String
-            ///
-            /// @return The NSString.
-            //----------------------------------------------------------
-            NSString* UTF8StringToNSString(const Core::UTF8String& in_string);
-        }
-    }
 }
+//----------------------------------------------------------
+/// Converts from a NSString to a std::string
+///
+/// @author S Downie
+///
+/// @param The NSString
+///
+/// @return The std::string
+//----------------------------------------------------------
++ (std::string) newStringWithNSString:(NSString*)string;
+//----------------------------------------------------------
+/// Converts from a NSString to a UTF8 string.
+///
+/// @author S Downie
+///
+/// @param The NSString
+///
+/// @return The UTF8 String.
+//----------------------------------------------------------
++ (CSCore::UTF8String) newUTF8StringWithNSString:(NSString*)string;
+//----------------------------------------------------------
+/// Converts from an std::string to a NSString.
+///
+/// @author S Downie
+///
+/// @param The std::string.
+///
+/// @return The NSString.
+//----------------------------------------------------------
++ (NSString*) newNSStringWithString:(const std::string&)string;
+//----------------------------------------------------------
+/// Converts from an UTF8 String to a NSString.
+///
+/// @author S Downie
+///
+/// @param The UTF8 String
+///
+/// @return The NSString.
+//----------------------------------------------------------
++ (NSString*) newNSStringWithUTF8String:(const CSCore::UTF8String&)string;
+
+@end
 
 #endif

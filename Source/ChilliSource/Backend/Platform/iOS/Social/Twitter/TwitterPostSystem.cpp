@@ -124,7 +124,9 @@ namespace ChilliSource
                 //Set the text
                 if(in_desc.m_text.length() > 0)
                 {
-                    [pComposeViewController setInitialText:NSStringUtils::UTF8StringToNSString(in_desc.m_text)];
+                    NSString* text = [NSStringUtils newNSStringWithUTF8String:in_desc.m_text];
+                    [pComposeViewController setInitialText:text];
+                    [text release];
                 }
                 
                 bool bImageAttached = true;
@@ -132,8 +134,9 @@ namespace ChilliSource
                 {
                     std::string strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_desc.m_localImageStorageLocation) + in_desc.m_localImagePath;
                     
-                    NSString* pImagePath = NSStringUtils::StringToNSString(strPath);
+                    NSString* pImagePath = [NSStringUtils newNSStringWithString:strPath];
                     UIImage* pImage = [UIImage imageWithContentsOfFile:pImagePath];
+                    [pImagePath release];
                     
                     if(pImage != nil)
                     {
@@ -148,7 +151,9 @@ namespace ChilliSource
                 //Add a url if available
                 if(in_desc.m_url.length() > 0)
                 {
-                    [pComposeViewController addURL:[NSURL URLWithString:NSStringUtils::UTF8StringToNSString(in_desc.m_url)]];
+                    NSString* urlString = [NSStringUtils newNSStringWithString:in_desc.m_url];
+                    [pComposeViewController addURL:[NSURL URLWithString:urlString]];
+                    [urlString release];
                 }
                 
                 

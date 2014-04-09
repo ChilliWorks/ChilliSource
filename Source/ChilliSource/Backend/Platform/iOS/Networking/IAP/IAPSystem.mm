@@ -116,8 +116,8 @@ namespace ChilliSource
             }
             
             TransactionSPtr transaction(new Transaction());
-            transaction->m_productId = NSStringUtils::NSStringToString(in_productID);
-            transaction->m_transactionId = NSStringUtils::NSStringToString(in_skTransaction.transactionIdentifier);
+            transaction->m_productId = [NSStringUtils newStringWithNSString:in_productID];
+            transaction->m_transactionId = [NSStringUtils newStringWithNSString:in_skTransaction.transactionIdentifier];
             if(hasReceipt)
             {
                 transaction->m_receipt = Core::BaseEncoding::Base64Encode((s8*)[in_skTransaction.transactionReceipt bytes], [in_skTransaction.transactionReceipt length]);
@@ -145,7 +145,9 @@ namespace ChilliSource
 			
 			for (u32 i=0; i<in_productIds.size(); ++i)
             {
-				[idSet addObject:NSStringUtils::StringToNSString(in_productIds[i])];
+                NSString* projectId = [NSStringUtils newNSStringWithString:in_productIds[i]];
+				[idSet addObject:projectId];
+                [projectId release];
 			}
 			
             [m_storeKitSystem requestProducts:idSet forDelegate:Core::MakeDelegate(this, &IAPSystem::OnProductDescriptionRequestComplete)];
@@ -184,15 +186,15 @@ namespace ChilliSource
                 for(SKProduct* product in in_products)
                 {
                     ProductDesc description;
-                    description.m_id = NSStringUtils::NSStringToString(product.productIdentifier);
-                    description.m_name = NSStringUtils::NSStringToString(product.localizedTitle);
-                    description.m_description = NSStringUtils::NSStringToString(product.localizedDescription);
+                    description.m_id = [NSStringUtils newStringWithNSString:product.productIdentifier];
+                    description.m_name = [NSStringUtils newStringWithNSString:product.localizedTitle];
+                    description.m_description = [NSStringUtils newStringWithNSString:product.localizedDescription];
                     
                     [formatter setLocale:product.priceLocale];
-                    description.m_formattedPrice = NSStringUtils::NSStringToString([formatter stringFromNumber:product.price]);
+                    description.m_formattedPrice = [NSStringUtils newStringWithNSString:[formatter stringFromNumber:product.price]];
                     
                     NSLocale* storeLocale = product.priceLocale;
-                    description.m_countryCode = NSStringUtils::NSStringToString((NSString*)CFLocaleGetValue((CFLocaleRef)storeLocale, kCFLocaleCountryCode));
+                    description.m_countryCode = [NSStringUtils newStringWithNSString:(NSString*)CFLocaleGetValue((CFLocaleRef)storeLocale, kCFLocaleCountryCode)];
                     
                     descriptions.push_back(description);
                 }
@@ -214,8 +216,9 @@ namespace ChilliSource
         void IAPSystem::RequestProductPurchase(const std::string& in_productId)
         {
             CS_ASSERT(ContainsProductId(m_productRegInfos, in_productId), "Products must be registered with the IAP system before purchasing");
-            NSString* productID = NSStringUtils::StringToNSString(in_productId);
+            NSString* productID = [NSStringUtils newNSStringWithString:in_productId];
             [m_storeKitSystem requestPurchaseWithProductID:productID andQuantity:1];
+            [productID release];
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -226,7 +229,9 @@ namespace ChilliSource
             
             m_transactionCloseDelegate = in_delegate;
             
-            [m_storeKitSystem closeTransactionWithID:NSStringUtils::StringToNSString(in_transaction->m_transactionId)];
+            NSString* transactionId = [NSStringUtils newNSStringWithString:in_transaction->m_transactionId];
+            [m_storeKitSystem closeTransactionWithID:transactionId];
+            [transactionId release];
             
             m_transactionCloseDelegate(in_transaction->m_productId, in_transaction->m_transactionId, true);
             m_transactionCloseDelegate = nullptr;

@@ -102,7 +102,7 @@ namespace ChilliSource
                             if(bodyObject != nil && [bodyObject isKindOfClass:[NSString class]])
                             {
                                 NSString* body = (NSString*) bodyObject;
-                                notification->m_params.SetValueForKey("message", NSStringUtils::NSStringToString(body));
+                                notification->m_params.SetValueForKey("message", [NSStringUtils newStringWithNSString:body]);
                             }
                         }
                     }
@@ -116,7 +116,7 @@ namespace ChilliSource
                             if([payloadObject isKindOfClass:[NSString class]])
                             {
                                 NSString* payloadString = (NSString*)payloadObject;
-                                notification->m_params.SetValueForKey(NSStringUtils::NSStringToString(key), NSStringUtils::NSStringToString(payloadString));
+                                notification->m_params.SetValueForKey([NSStringUtils newStringWithNSString:key], [NSStringUtils newStringWithNSString:payloadString]);
                             }
                         }
                     }

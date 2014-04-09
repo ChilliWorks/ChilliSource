@@ -49,8 +49,10 @@ namespace ChilliSource
 				
                 mstrAnchor = "";
                 
-				NSURL* pUrl = [NSURL URLWithString:NSStringUtils::StringToNSString(instrURL)];
-				
+                NSString* urlString = [NSStringUtils newNSStringWithString:instrURL];
+				NSURL* pUrl = [NSURL URLWithString:urlString];
+				[urlString release];
+                
 				[mpWebView loadRequest:[NSURLRequest requestWithURL:pUrl]];
 				
 				mpWebView.backgroundColor = [UIColor clearColor];
@@ -114,9 +116,11 @@ namespace ChilliSource
                 Core::FileStreamSPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
                 pHTMLFile->GetAll(strHTMLFileContents);
                 
-                NSString* pstrHTML = NSStringUtils::StringToNSString(strHTMLFileContents);
-
-                [mpWebView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:NSStringUtils::StringToNSString(strPath)]];
+                NSString* pstrHTML = [NSStringUtils newNSStringWithString:strHTMLFileContents];
+                NSString* urlString = [NSStringUtils newNSStringWithString:strPath];
+                [mpWebView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:urlString]];
+                [urlString release];
+                [pstrHTML release];
                 
                 mpWebView.backgroundColor = [UIColor clearColor];
                 mpWebView.opaque = NO;
@@ -300,7 +304,7 @@ namespace ChilliSource
 {
 	if(navigationType == UIWebViewNavigationTypeLinkClicked)
 	{
-        std::string strScheme = ChilliSource::iOS::NSStringUtils::NSStringToString([[request URL] scheme]);
+        std::string strScheme = [NSStringUtils newStringWithNSString:[[request URL] scheme]];
         
         if(strScheme != "file")
         {
@@ -317,7 +321,9 @@ namespace ChilliSource
     if(mpDelegate->HasAnchor())
     {
         std::string strJavaScript = "window.location.href = '" + mpDelegate->GetAnchor() + "';";
-        [webView stringByEvaluatingJavaScriptFromString:ChilliSource::iOS::NSStringUtils::StringToNSString(strJavaScript)];
+        NSString* nsJavaString = [NSStringUtils newNSStringWithString:strJavaScript];
+        [webView stringByEvaluatingJavaScriptFromString:nsJavaString];
+        [nsJavaString release];
     }
     
     mpDelegate->AddDismissButton();

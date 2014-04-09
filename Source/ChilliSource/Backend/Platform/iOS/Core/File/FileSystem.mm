@@ -37,7 +37,7 @@ namespace ChilliSource
             {
                 if (in_error != nil)
                 {
-                    return NSStringUtils::NSStringToString([in_error localizedDescription]);
+                    return [NSStringUtils newStringWithNSString:[in_error localizedDescription]];
                 }
                 
                 return nil;
@@ -139,7 +139,7 @@ namespace ChilliSource
                 std::vector<std::string> output;
                 for(NSString* filePath in in_objFilePaths)
                 {
-                    output.push_back(NSStringUtils::NSStringToString(filePath));
+                    output.push_back([NSStringUtils newStringWithNSString:filePath]);
                 }
                 return output;
             }
@@ -407,7 +407,11 @@ namespace ChilliSource
                 std::string path = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
                 
                 NSError* error = nil;
-                [[NSFileManager defaultManager] removeItemAtPath:NSStringUtils::StringToNSString(path) error:&error];
+                
+                NSString* nsPath = [NSStringUtils newNSStringWithString:path];
+                [[NSFileManager defaultManager] removeItemAtPath:nsPath error:&error];
+                [nsPath release];
+                
                 if (error != nil)
                 {
                     CS_LOG_ERROR("File System: Error copying file '" + in_filePath + "' - " + GetErrorString(error));
@@ -427,8 +431,13 @@ namespace ChilliSource
             @autoreleasepool
             {
                 std::string directoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
+                
                 NSError* error = nil;
-                [[NSFileManager defaultManager] removeItemAtPath:NSStringUtils::StringToNSString(directoryPath) error:&error];
+                
+                NSString* nsPath = [NSStringUtils newNSStringWithString:directoryPath];
+                [[NSFileManager defaultManager] removeItemAtPath:nsPath error:&error];
+                [nsPath release];
+                
                 if (error != nil)
                 {
                     CS_LOG_ERROR("File System: Error copying file '" + in_directoryPath + "' - " + GetErrorString(error));
@@ -694,7 +703,7 @@ namespace ChilliSource
             @autoreleasepool
             {
                 NSMutableArray* contents = [NSMutableArray array];
-                NSString* directory = NSStringUtils::StringToNSString(m_bundlePath);
+                NSString* directory = [NSStringUtils newNSStringWithString:m_bundlePath];
                 
                 NSError* error = nil;
                 [contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:directory error:&error]];
@@ -723,6 +732,8 @@ namespace ChilliSource
                 {
                     return in_lhs.m_pathHash < in_rhs.m_pathHash;
                 });
+                
+                [directory release];
             }
         }
         //--------------------------------------------------------------
