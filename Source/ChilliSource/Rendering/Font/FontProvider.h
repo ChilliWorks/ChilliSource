@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_RENDERING_FONT_FONTPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
 
 namespace ChilliSource
 {
@@ -23,7 +23,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------
-		class FontProvider final : public Core::ResourceProviderOld
+		class FontProvider final : public Core::ResourceProvider
 		{
 		public:
 
@@ -48,11 +48,9 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			/// @author S Downie
 			///
-			/// @param Type to compare
-            ///
-			/// @return Whether the object can create a resource of given type
+			/// @return The type of resource loaded by this provider
 			//----------------------------------------------------------------------------
-			bool CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const override;
+            Core::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -60,7 +58,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the object can create a resource with the given extension
 			//----------------------------------------------------------------------------
-			bool CanCreateResourceFromFileWithExtension(const std::string& in_extension) const override;
+			bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
 			
 		private:
             //-------------------------------------------------------
@@ -70,30 +68,41 @@ namespace ChilliSource
             //-------------------------------------------------------
             FontProvider() = default;
 			//----------------------------------------------------------------------------
-			/// Load the font from the external file into a resource.
+			/// Load the font from the external file into a resource. Check resource
+            /// load state for success or failure
             ///
             /// @author S Downie
 			///
             /// @param The storage location to load from
 			/// @param Filename
 			/// @param [Out] Resource object
-            ///
-			/// @return Whether the resource was created successfully
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Load the font from the external file into a resource on a background
-            /// thread
+            /// thread. Delegate is called when the load is complete. Check resource
+            /// load state for success or failure.
             ///
             /// @author S Downie
 			///
             /// @param The storage location to load from
 			/// @param Filename
+            /// @param Completion delegate
 			/// @param [Out] Resource object
-            ///
-			/// @return Whether the resource loading was scheduled
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource) override;
+            //----------------------------------------------------------------------------
+            /// Function that does the heavy lifting of font loading. The 2 creation
+            /// methods delegate to this one.
+            ///
+            /// @author S Downie
+			///
+            /// @param The storage location to load from
+			/// @param Filename
+            /// @param Completion delegate
+			/// @param [Out] Font resource
+			//----------------------------------------------------------------------------
+            void LoadFont(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource);
 		};
 	}
 }

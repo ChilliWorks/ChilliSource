@@ -13,8 +13,6 @@
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
-#include <ChilliSource/Rendering/Model/SubMesh.h>
-#include <ChilliSource/Rendering/Model/Skeleton.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
@@ -54,7 +52,8 @@ namespace ChilliSource
             
             if (in_meshDesc.mFeatures.mbHasAnimationData == true)
             {
-                m_skeleton = in_meshDesc.mpSkeleton;
+                m_skeleton = SkeletonUPtr(new Skeleton());
+                m_skeleton->Build(in_meshDesc.m_skeletonDesc);
             }
             
             //iterate through each mesh
@@ -66,7 +65,7 @@ namespace ChilliSource
                 u32 udwIndexDataCapacity  = it->mudwNumIndices * in_meshDesc.mudwIndexSize;
                 
                 //prepare the mesh if it needs it, otherwise just update the vertex and index declarations.
-                SubMeshSPtr	newSubMesh = CreateSubMesh(it->mstrName);
+                SubMesh* newSubMesh = CreateSubMesh(it->mstrName);
                 newSubMesh->Prepare(Core::Application::Get()->GetRenderSystem(), in_meshDesc.mVertexDeclaration, in_meshDesc.mudwIndexSize, udwVertexDataCapacity, udwIndexDataCapacity, BufferAccess::k_read, it->ePrimitiveType);
                 
                 //check that the buffers are big enough to hold this data. if not throw an error.
@@ -117,9 +116,9 @@ namespace ChilliSource
         }
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		const SkeletonSPtr& Mesh::GetSkeletonPtr() const
+		const Skeleton* Mesh::GetSkeleton() const
 		{
-			return m_skeleton;
+			return m_skeleton.get();
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
@@ -129,22 +128,22 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		SubMeshCSPtr Mesh::GetSubMeshAtIndex(u32 in_index) const
+		const SubMesh* Mesh::GetSubMeshAtIndex(u32 in_index) const
 		{
             CS_ASSERT(in_index < m_subMeshes.size(), "Sub mesh index out of bounds");
-			return m_subMeshes[in_index];
+			return m_subMeshes[in_index].get();
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		SubMeshCSPtr Mesh::GetSubMeshByName(const std::string& in_name) const
+		const SubMesh* Mesh::GetSubMeshByName(const std::string& in_name) const
 		{
 			for (auto it = m_subMeshes.begin(); it != m_subMeshes.end(); ++it)
 			{
 				if ((*it)->GetName() == in_name)
-					return (*it);
+					return it->get();
 			}
 			
-			return SubMeshCSPtr();
+			return nullptr;
 		}
         //-----------------------------------------------------------------
 		//-----------------------------------------------------------------
@@ -162,24 +161,11 @@ namespace ChilliSource
 		}
         //-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		SubMeshSPtr Mesh::CreateSubMesh(const std::string& in_name)
+		SubMesh* Mesh::CreateSubMesh(const std::string& in_name)
 		{
-			SubMeshSPtr newMesh(new SubMesh(in_name));
-			m_subMeshes.push_back(newMesh);
-			return newMesh;
-		}
-		//-----------------------------------------------------------------
-		//-----------------------------------------------------------------
-		void Mesh::RemoveSubMeshByName(const std::string& in_name)
-		{
-			for (auto it = m_subMeshes.begin(); it != m_subMeshes.end(); ++it)
-			{
-				if ((*it)->GetName() == in_name)
-                {
-                    m_subMeshes.erase(it);
-                    return;
-                }
-			}
+            SubMesh* mesh = new SubMesh(in_name);
+			m_subMeshes.push_back(SubMeshUPtr(mesh));
+			return mesh;
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------

@@ -92,7 +92,7 @@
 -(void) AddTextView:(const ChilliSource::Video::Subtitles::Subtitle*)inpSubtitle
 {
     //get the style
-    const ChilliSource::Video::Subtitles::StyleCUPtr& pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
+    const ChilliSource::Video::Subtitles::Style* pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
     if (pStyle == nullptr)
     {
         CS_LOG_ERROR("Cannot find style '" + inpSubtitle->m_styleName + "' in subtitles.");
@@ -124,7 +124,7 @@
 //--------------------------------------------------------
 -(void) UpdateTextView:(UITextView*)inpTextView Subtitle:(const ChilliSource::Video::Subtitles::Subtitle*)inpSubtitle Time:(TimeIntervalMs)inTimeMS
 {
-    const ChilliSource::Video::Subtitles::StyleCUPtr& pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
+    const ChilliSource::Video::Subtitles::Style* pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
     
     f32 fFade = 0.0f;
     s64 lwRelativeTime = ((s64)inTimeMS) - ((s64)inpSubtitle->m_startTimeMS);

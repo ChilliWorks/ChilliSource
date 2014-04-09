@@ -53,7 +53,7 @@
 #include <ChilliSource/Rendering/Material/MaterialProvider.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetProvider.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 
 #include <ctime>
 
@@ -143,7 +143,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        const Rendering::FontSPtr& Application::GetDefaultFont() const
+        const Rendering::FontCSPtr& Application::GetDefaultFont() const
         {
             return m_defaultFont;
         }
@@ -460,7 +460,7 @@ namespace ChilliSource
             OpenGL::RenderSystem* renderSystem = (OpenGL::RenderSystem*)m_renderSystem;
             CreateSystem<Rendering::MaterialFactory>(renderSystem->GetShaderManager(), renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
-            CreateSystem<Rendering::SpriteSheetProvider>();
+            CreateSystem<Rendering::TextureAtlasProvider>();
             CreateSystem<Rendering::FontProvider>();
         }
         //----------------------------------------------------
@@ -535,7 +535,7 @@ namespace ChilliSource
                 {
                     StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultFont"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultFont"].get("Path", "").asString();
-                    m_defaultFont = LOAD_RESOURCE(Rendering::Font, eStorageLocation, strPath);
+                    m_defaultFont = m_resourcePool->LoadResource<Rendering::Font>(eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultMaterial"))

@@ -42,9 +42,7 @@ namespace ChilliSource
 		RenderSystem::RenderSystem()
         : mpRenderFactory(nullptr), mpSpriteBatcher(nullptr)
 		{
-			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mFontManager);
 			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMaterialManager);
-			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mSpriteManager);
 		}
         //----------------------------------------------------
         /// Get Dynamic Sprite Batch Pointer

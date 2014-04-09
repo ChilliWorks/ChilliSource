@@ -56,43 +56,43 @@ namespace ChilliSource
             ///
             /// @param Sprite sheet name
             //--------------------------------------------------------
-            void SetSpriteSheet(const std::string& instrSpriteSheet, Core::StorageLocation ineLocation = Core::StorageLocation::k_package);
+            void SetTextureAtlas(const std::string& instrTextureAtlas, Core::StorageLocation ineLocation = Core::StorageLocation::k_package);
             //--------------------------------------------------------
             /// Set Sprite Sheet
             ///
             /// @param Sprite sheet
             //--------------------------------------------------------
-            void SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
+            void SetTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas);
             //--------------------------------------------------------
             /// Get Sprite Sheet
             ///
             /// @param Sprite sheet
             //--------------------------------------------------------
-            const Rendering::SpriteSheetSPtr& GetSpriteSheet() const;
+            const Rendering::TextureAtlasCSPtr& GetTextureAtlas() const;
             //--------------------------------------------------------
             /// Set Sprite Sheet Index
             ///
             /// @param The index of the image within the sprite sheet
             //--------------------------------------------------------
-            void SetSpriteSheetIndex(u32 inudwIndex);
+            void SetTextureAtlasIndex(u32 inudwIndex);
             //--------------------------------------------------------
             /// Get Sprite Sheet Index
             ///
             /// @return The index of the image within the sprite sheet
             //--------------------------------------------------------
-            u32 GetSpriteSheetIndex() const;
+            u32 GetTextureAtlasIndex() const;
 			//--------------------------------------------------------
 			/// Set Sprite Sheet Index ID
 			///
 			/// @param The ID of the index of the image within the sprite sheet
 			//--------------------------------------------------------
-			void SetSpriteSheetIndexID(const std::string& instrID);
+			void SetTextureAtlasID(const std::string& instrID);
 			//--------------------------------------------------------
 			/// Get Sprite Sheet Index ID
 			///
 			/// @return The ID of the index of the image within the sprite sheet
 			//--------------------------------------------------------
-			const std::string& GetSpriteSheetIndexID() const;
+			const std::string& GetTextureAtlasID() const;
             //--------------------------------------------------------
             /// Set UVs
             ///
@@ -352,13 +352,13 @@ namespace ChilliSource
             
 			//---Properties
             DECLARE_PROPERTY_A(Rendering::TextureSPtr, Texture, SetTexture, GetTexture);
-            DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
+            DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
 
             DECLARE_PROPERTY_A(Core::Rectangle, UVs, SetUVs, GetUVs);
 			DECLARE_PROPERTY_A(Core::Rectangle, UVOffsets, SetUVOffsets, GetUVOffsets);
             
-            DECLARE_PROPERTY_A(u32, SpriteSheetIndex, SetSpriteSheetIndex, GetSpriteSheetIndex);
-			DECLARE_PROPERTY_A(std::string, SpriteSheetIndexID, SetSpriteSheetIndexID, GetSpriteSheetIndexID);
+            DECLARE_PROPERTY_A(u32, TextureAtlasIndex, SetTextureAtlasIndex, GetTextureAtlasIndex);
+			DECLARE_PROPERTY_A(std::string, TextureAtlasID, SetTextureAtlasID, GetTextureAtlasID);
 
             DECLARE_PROPERTY_A(bool, ActAsSpacer, EnableActAsSpacer, IsActAsSpacerEnabled);
             DECLARE_PROPERTY_A(bool, SizeFromImage, EnableSizeFromImage, IsSizeFromImageEnabled);

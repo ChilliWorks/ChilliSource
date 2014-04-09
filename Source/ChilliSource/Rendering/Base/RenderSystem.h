@@ -15,9 +15,7 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
-#include <ChilliSource/Rendering/Font/FontManager.h>
 #include <ChilliSource/Rendering/Material/MaterialManager.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 
 namespace ChilliSource
 {
@@ -136,9 +134,7 @@ namespace ChilliSource
 			RenderComponentFactory* mpRenderFactory;
 			
 			//---Render resource managers
-            FontManager mFontManager;
 			MaterialManager mMaterialManager;
-			SpriteSheetManager mSpriteManager;
             
             DynamicSpriteBatch* mpSpriteBatcher;
 		};

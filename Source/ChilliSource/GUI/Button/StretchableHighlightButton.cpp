@@ -9,15 +9,16 @@
 #include <ChilliSource/GUI/Button/StretchableHighlightButton.h>
 #include <ChilliSource/GUI/Image/ImageView.h>
 
-#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
@@ -32,10 +33,10 @@ namespace ChilliSource
     {
         DEFINE_META_CLASS(StretchableHighlightButton);
         
-        DEFINE_PROPERTY(NormalSpriteSheet);
-        DEFINE_PROPERTY(HighlightSpriteSheet);
-        DEFINE_PROPERTY(BaseNormalSpriteSheetIndexID);
-        DEFINE_PROPERTY(BaseHighlightSpriteSheetIndexID);
+        DEFINE_PROPERTY(NormalTextureAtlas);
+        DEFINE_PROPERTY(HighlightTextureAtlas);
+        DEFINE_PROPERTY(BaseNormalTextureAtlasID);
+        DEFINE_PROPERTY(BaseHighlightTextureAtlasID);
         DEFINE_PROPERTY(HighlightColour);
         DEFINE_PROPERTY(HeightMaintain);
         DEFINE_PROPERTY(WidthMaintain);
@@ -67,35 +68,58 @@ namespace ChilliSource
             memset(&msHighlightIndices, 0, sizeof(u32) * 9);
             memset(&msCurrentIndices, 0, sizeof(u32) * 9);
             
+            //---Texture
+            Core::StorageLocation eNormalTextureLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("NormalTextureLocation", strValue))
+            {
+                eNormalTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+            }
+            if(insParams.TryGetValue("NormalTexture", strValue))
+            {
+                SetNormalTexture(LOAD_RESOURCE(Rendering::Texture, eNormalTextureLocation, strValue));
+            }
+            //---Texture
+            Core::StorageLocation eHighlightTextureLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("HighlightTextureLocation", strValue))
+            {
+                eHighlightTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+            }
+            if(insParams.TryGetValue("HighlightTexture", strValue))
+            {
+                SetHighlightTexture(LOAD_RESOURCE(Rendering::Texture, eHighlightTextureLocation, strValue));
+            }
+            
             //---Sprite sheet
-            Core::StorageLocation eNormalSpriteSheetLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("NormalSpriteSheetLocation", strValue))
+            Core::StorageLocation eNormalTextureAtlasLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("NormalTextureAtlasLocation", strValue))
             {
-                eNormalSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eNormalTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
-            if(insParams.TryGetValue("NormalSpriteSheet", strValue))
+            if(insParams.TryGetValue("NormalTextureAtlas", strValue))
             {
-                SetNormalSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eNormalSpriteSheetLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                SetNormalTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eNormalTextureAtlasLocation, strValue));
             }
             //---Sprite sheet
-            Core::StorageLocation eHighlightSpriteSheetLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("HighlightSpriteSheetLocation", strValue))
+            Core::StorageLocation eHighlightTextureAtlasLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("HighlightTextureAtlasLocation", strValue))
             {
-                eHighlightSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eHighlightTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
-            if(insParams.TryGetValue("HighlightSpriteSheet", strValue))
+            if(insParams.TryGetValue("HighlightTextureAtlas", strValue))
             {
-                SetHighlightSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eHighlightSpriteSheetLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                SetNormalTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eHighlightTextureAtlasLocation, strValue));
             }
 			//---Default index ID
-			if(insParams.TryGetValue("BaseNormalSpriteSheetIndexID", strValue))
+			if(insParams.TryGetValue("BaseNormalTextureAtlasID", strValue))
 			{
-				SetBaseNormalSpriteSheetIndexID(strValue);
+				SetBaseNormalTextureAtlasID(strValue);
 			}
 			//---Highlight index ID
-			if(insParams.TryGetValue("BaseHighlightSpriteSheetIndexID", strValue))
+			if(insParams.TryGetValue("BaseHighlightTextureAtlasID", strValue))
 			{
-				SetBaseHighlightSpriteSheetIndexID(strValue);
+				SetBaseHighlightTextureAtlasID(strValue);
 			}
             //---Highlight Colour
             if(insParams.TryGetValue("HighlightColour", strValue))
@@ -214,62 +238,97 @@ namespace ChilliSource
             m_movedOutsideConnection = mInputEvents.GetMovedOutsideEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonDeselect));
         }
         //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        void StretchableHighlightButton::SetNormalTexture(const Rendering::TextureSPtr& inpTexture)
+        {
+            NormalTexture = inpTexture;
+            mCurrentTexture = NormalTexture;
+            
+            if(!HighlightTexture)
+            {
+                SetHighlightTexture(inpTexture);
+            }
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        void StretchableHighlightButton::SetHighlightTexture(const Rendering::TextureSPtr& inpTexture)
+        {
+            HighlightTexture = inpTexture;
+            
+            if(!NormalTexture)
+            {
+                SetNormalTexture(inpTexture);
+            }
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        const Rendering::TextureSPtr& StretchableHighlightButton::GetNormalTexture() const
+        {
+            return NormalTexture;
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        const Rendering::TextureSPtr& StretchableHighlightButton::GetHighlightTexture() const
+        {
+            return HighlightTexture;
+        }
+        //-----------------------------------------------------------
         /// Set Normal Sprite Sheet
         //-----------------------------------------------------------
-        void StretchableHighlightButton::SetNormalSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
+        void StretchableHighlightButton::SetNormalTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas)
         {
-            NormalSpriteSheet = inpSpriteSheet;
-            mCurrentSpriteSheet = NormalSpriteSheet;
+            NormalTextureAtlas = inpTextureAtlas;
+            mCurrentTextureAtlas = NormalTextureAtlas;
             
-            if(!HighlightSpriteSheet)
+            if(!HighlightTextureAtlas)
             {
-                SetHighlightSpriteSheet(inpSpriteSheet);
+                SetHighlightTextureAtlas(inpTextureAtlas);
             }
         }
         //-----------------------------------------------------------
         /// Set Highlight Sprite Sheet
         //-----------------------------------------------------------
-        void StretchableHighlightButton::SetHighlightSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
+        void StretchableHighlightButton::SetHighlightTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas)
         {
-            HighlightSpriteSheet = inpSpriteSheet;
+            HighlightTextureAtlas = inpTextureAtlas;
             
-            if(!NormalSpriteSheet)
+            if(!NormalTextureAtlas)
             {
-                SetNormalSpriteSheet(inpSpriteSheet);
+                SetNormalTextureAtlas(inpTextureAtlas);
             }
         }
         //-----------------------------------------------------------
         /// Get Normal Sprite Sheet
         //-----------------------------------------------------------
-        const Rendering::SpriteSheetSPtr& StretchableHighlightButton::GetNormalSpriteSheet() const
+        const Rendering::TextureAtlasCSPtr& StretchableHighlightButton::GetNormalTextureAtlas() const
         {
-            return NormalSpriteSheet; 
+            return NormalTextureAtlas; 
         }
         //-----------------------------------------------------------
         /// Get Highlight Sprite Sheet
         //-----------------------------------------------------------
-        const Rendering::SpriteSheetSPtr& StretchableHighlightButton::GetHighlightSpriteSheet() const
+        const Rendering::TextureAtlasCSPtr& StretchableHighlightButton::GetHighlightTextureAtlas() const
         {
-            return HighlightSpriteSheet; 
+            return HighlightTextureAtlas; 
         }
         //-----------------------------------------------------------
         /// Set Base Normal Sprite Sheet Index ID
         //-----------------------------------------------------------
-        void StretchableHighlightButton::SetBaseNormalSpriteSheetIndexID(const std::string& instrID)
+        void StretchableHighlightButton::SetBaseNormalTextureAtlasID(const std::string& instrID)
         {
-            if(NormalSpriteSheet)
+            if(NormalTextureAtlas)
 			{
-				BaseNormalSpriteSheetIndexID = instrID;
+				BaseNormalTextureAtlasID = instrID;
                 
-				msNormalIndices.udwTopLeft = NormalSpriteSheet->GetFrameIndexByID(instrID + "TOP_LEFT");
-				msNormalIndices.udwTopRight = NormalSpriteSheet->GetFrameIndexByID(instrID + "TOP_RIGHT");
-				msNormalIndices.udwBottomLeft = NormalSpriteSheet->GetFrameIndexByID(instrID + "BOTTOM_LEFT");
-				msNormalIndices.udwBottomRight = NormalSpriteSheet->GetFrameIndexByID(instrID + "BOTTOM_RIGHT");
-				msNormalIndices.udwTopCentre = NormalSpriteSheet->GetFrameIndexByID(instrID + "TOP_CENTRE");
-				msNormalIndices.udwBottomCentre = NormalSpriteSheet->GetFrameIndexByID(instrID + "BOTTOM_CENTRE");
-				msNormalIndices.udwLeftCentre = NormalSpriteSheet->GetFrameIndexByID(instrID + "MIDDLE_LEFT");
-				msNormalIndices.udwRightCentre = NormalSpriteSheet->GetFrameIndexByID(instrID + "MIDDLE_RIGHT");
-				msNormalIndices.udwMiddleCentre = NormalSpriteSheet->GetFrameIndexByID(instrID + "MIDDLE_CENTRE");
+				msNormalIndices.udwTopLeft = NormalTextureAtlas->GetFrameIndexById(instrID + "TOP_LEFT");
+				msNormalIndices.udwTopRight = NormalTextureAtlas->GetFrameIndexById(instrID + "TOP_RIGHT");
+				msNormalIndices.udwBottomLeft = NormalTextureAtlas->GetFrameIndexById(instrID + "BOTTOM_LEFT");
+				msNormalIndices.udwBottomRight = NormalTextureAtlas->GetFrameIndexById(instrID + "BOTTOM_RIGHT");
+				msNormalIndices.udwTopCentre = NormalTextureAtlas->GetFrameIndexById(instrID + "TOP_CENTRE");
+				msNormalIndices.udwBottomCentre = NormalTextureAtlas->GetFrameIndexById(instrID + "BOTTOM_CENTRE");
+				msNormalIndices.udwLeftCentre = NormalTextureAtlas->GetFrameIndexById(instrID + "MIDDLE_LEFT");
+				msNormalIndices.udwRightCentre = NormalTextureAtlas->GetFrameIndexById(instrID + "MIDDLE_RIGHT");
+				msNormalIndices.udwMiddleCentre = NormalTextureAtlas->GetFrameIndexById(instrID + "MIDDLE_CENTRE");
 			}
             
             msCurrentIndices = msNormalIndices;
@@ -277,41 +336,41 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Base Highlight Sprite Sheet Index ID
         //-----------------------------------------------------------
-        void StretchableHighlightButton::SetBaseHighlightSpriteSheetIndexID(const std::string& instrID)
+        void StretchableHighlightButton::SetBaseHighlightTextureAtlasID(const std::string& instrID)
         {
-            if(HighlightSpriteSheet)
+            if(HighlightTextureAtlas)
 			{
-				BaseHighlightSpriteSheetIndexID = instrID;
+				BaseHighlightTextureAtlasID = instrID;
                 
-				msHighlightIndices.udwTopLeft = HighlightSpriteSheet->GetFrameIndexByID(instrID + "TOP_LEFT");
-				msHighlightIndices.udwTopRight = HighlightSpriteSheet->GetFrameIndexByID(instrID + "TOP_RIGHT");
-				msHighlightIndices.udwBottomLeft = HighlightSpriteSheet->GetFrameIndexByID(instrID + "BOTTOM_LEFT");
-				msHighlightIndices.udwBottomRight = HighlightSpriteSheet->GetFrameIndexByID(instrID + "BOTTOM_RIGHT");
-				msHighlightIndices.udwTopCentre = HighlightSpriteSheet->GetFrameIndexByID(instrID + "TOP_CENTRE");
-				msHighlightIndices.udwBottomCentre = HighlightSpriteSheet->GetFrameIndexByID(instrID + "BOTTOM_CENTRE");
-				msHighlightIndices.udwLeftCentre = HighlightSpriteSheet->GetFrameIndexByID(instrID + "MIDDLE_LEFT");
-				msHighlightIndices.udwRightCentre = HighlightSpriteSheet->GetFrameIndexByID(instrID + "MIDDLE_RIGHT");
-				msHighlightIndices.udwMiddleCentre = HighlightSpriteSheet->GetFrameIndexByID(instrID + "MIDDLE_CENTRE");
+				msHighlightIndices.udwTopLeft = HighlightTextureAtlas->GetFrameIndexById(instrID + "TOP_LEFT");
+				msHighlightIndices.udwTopRight = HighlightTextureAtlas->GetFrameIndexById(instrID + "TOP_RIGHT");
+				msHighlightIndices.udwBottomLeft = HighlightTextureAtlas->GetFrameIndexById(instrID + "BOTTOM_LEFT");
+				msHighlightIndices.udwBottomRight = HighlightTextureAtlas->GetFrameIndexById(instrID + "BOTTOM_RIGHT");
+				msHighlightIndices.udwTopCentre = HighlightTextureAtlas->GetFrameIndexById(instrID + "TOP_CENTRE");
+				msHighlightIndices.udwBottomCentre = HighlightTextureAtlas->GetFrameIndexById(instrID + "BOTTOM_CENTRE");
+				msHighlightIndices.udwLeftCentre = HighlightTextureAtlas->GetFrameIndexById(instrID + "MIDDLE_LEFT");
+				msHighlightIndices.udwRightCentre = HighlightTextureAtlas->GetFrameIndexById(instrID + "MIDDLE_RIGHT");
+				msHighlightIndices.udwMiddleCentre = HighlightTextureAtlas->GetFrameIndexById(instrID + "MIDDLE_CENTRE");
 			}
         }
         //-----------------------------------------------------------
         /// Get Base Normal Sprite Sheet Index ID
         //-----------------------------------------------------------
-        const std::string& StretchableHighlightButton::GetBaseNormalSpriteSheetIndexID() const
+        const std::string& StretchableHighlightButton::GetBaseNormalTextureAtlasID() const
         {
-            return BaseNormalSpriteSheetIndexID;
+            return BaseNormalTextureAtlasID;
         }
         //-----------------------------------------------------------
         /// Get Base Highlight Sprite Sheet Index ID
         //-----------------------------------------------------------
-        const std::string& StretchableHighlightButton::GetBaseHighlightSpriteSheetIndexID() const
+        const std::string& StretchableHighlightButton::GetBaseHighlightTextureAtlasID() const
         {
-            return BaseHighlightSpriteSheetIndexID;
+            return BaseHighlightTextureAtlasID;
         }
         //---------------------------------------------------------
         /// Set Normal Sprite Sheet Indices
         //---------------------------------------------------------
-        void StretchableHighlightButton::SetNormalSpriteSheetIndices(const SpriteSheetIndex& insIndices)
+        void StretchableHighlightButton::SetNormalTextureAtlasIndices(const TextureAtlasIndex& insIndices)
         {
             msNormalIndices = insIndices;
             msCurrentIndices = msNormalIndices;
@@ -319,7 +378,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Set Normal Sprite Sheet Indices
         //---------------------------------------------------------
-        void StretchableHighlightButton::SetNormalSpriteSheetIndices(const u32* inpIndices)
+        void StretchableHighlightButton::SetNormalTextureAtlasIndices(const u32* inpIndices)
         {
             msNormalIndices.udwTopLeft = inpIndices[0];
             msNormalIndices.udwTopRight = inpIndices[1];
@@ -335,14 +394,14 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Set Highlight Sprite Sheet Indices
         //---------------------------------------------------------
-        void StretchableHighlightButton::SetHighlightSpriteSheetIndices(const SpriteSheetIndex& insIndices)
+        void StretchableHighlightButton::SetHighlightTextureAtlasIndices(const TextureAtlasIndex& insIndices)
         {
             msHighlightIndices = insIndices;
         }
         //---------------------------------------------------------
         /// Set Highlight Sprite Sheet Indices
         //---------------------------------------------------------
-        void StretchableHighlightButton::SetHighlightSpriteSheetIndices(const u32* inpIndices)
+        void StretchableHighlightButton::SetHighlightTextureAtlasIndices(const u32* inpIndices)
         {
             msHighlightIndices.udwTopLeft = inpIndices[0];
             msHighlightIndices.udwTopRight = inpIndices[1];
@@ -397,7 +456,7 @@ namespace ChilliSource
 				return;
 			}
 			
-            if(Visible && mCurrentSpriteSheet)
+            if(Visible && mCurrentTextureAtlas && mCurrentTexture)
             {			
                 Core::Vector2 vPanelSize = GetAbsoluteSize();
                 Core::Vector2 vPanelPos = GetAbsoluteScreenSpacePosition();
@@ -415,12 +474,12 @@ namespace ChilliSource
                 matViewTransform.SetTransform(vPanelPos, Core::Vector2(1, 1), GetAbsoluteRotation());
                 
                 //Get the patch sizes
-                Core::Vector2 vTLPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwTopLeft);
-                Core::Vector2 vTRPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwTopRight);
-                Core::Vector2 vBLPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwBottomLeft);
-                Core::Vector2 vBRPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwBottomRight);
-                Core::Vector2 vMLPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwLeftCentre);
-                Core::Vector2 vMRPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwRightCentre);
+                Core::Vector2 vTLPatchSize = mCurrentTextureAtlas->GetFrameSize(msCurrentIndices.udwTopLeft);
+                Core::Vector2 vTRPatchSize = mCurrentTextureAtlas->GetFrameSize(msCurrentIndices.udwTopRight);
+                Core::Vector2 vBLPatchSize = mCurrentTextureAtlas->GetFrameSize(msCurrentIndices.udwBottomLeft);
+                Core::Vector2 vBRPatchSize = mCurrentTextureAtlas->GetFrameSize(msCurrentIndices.udwBottomRight);
+                Core::Vector2 vMLPatchSize = mCurrentTextureAtlas->GetFrameSize(msCurrentIndices.udwLeftCentre);
+                Core::Vector2 vMRPatchSize = mCurrentTextureAtlas->GetFrameSize(msCurrentIndices.udwRightCentre);
                 Core::Vector2 vTCPatchSize;
                 Core::Vector2 vBCPatchSize;
                 Core::Vector2 vMCPatchSize;
@@ -469,8 +528,8 @@ namespace ChilliSource
                 Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform,
                                    vTLPatchSize, 
-								   mCurrentSpriteSheet->GetTexture(),
-                                   mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwTopLeft), 
+								   mCurrentTexture,
+                                   mCurrentTextureAtlas->GetFrameUVs(msCurrentIndices.udwTopLeft), 
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topLeft);
                 
@@ -478,8 +537,8 @@ namespace ChilliSource
                 Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vTRPatchSize,  
-								   mCurrentSpriteSheet->GetTexture(),
-                                   mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwTopRight), 
+								   mCurrentTexture,
+                                   mCurrentTextureAtlas->GetFrameUVs(msCurrentIndices.udwTopRight), 
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topRight);
                 
@@ -487,8 +546,8 @@ namespace ChilliSource
                 Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vBLPatchSize, 
-								   mCurrentSpriteSheet->GetTexture(),
-                                   mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwBottomLeft), 
+								   mCurrentTexture,
+                                   mCurrentTextureAtlas->GetFrameUVs(msCurrentIndices.udwBottomLeft), 
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_bottomLeft);
                 
@@ -496,8 +555,8 @@ namespace ChilliSource
                 Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vBRPatchSize,  
-								   mCurrentSpriteSheet->GetTexture(),
-                                   mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwBottomRight), 
+								   mCurrentTexture,
+                                   mCurrentTextureAtlas->GetFrameUVs(msCurrentIndices.udwBottomRight), 
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_bottomRight);
                 
@@ -511,8 +570,8 @@ namespace ChilliSource
                 Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vTCPatchSize, 
-								   mCurrentSpriteSheet->GetTexture(),
-                                   mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwTopCentre), 
+								   mCurrentTexture,
+                                   mCurrentTextureAtlas->GetFrameUVs(msCurrentIndices.udwTopCentre), 
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topLeft);
                 
@@ -526,8 +585,8 @@ namespace ChilliSource
                 Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vBCPatchSize, 
-								   mCurrentSpriteSheet->GetTexture(),
-                                   mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwBottomCentre), 
+								   mCurrentTexture,
+                                   mCurrentTextureAtlas->GetFrameUVs(msCurrentIndices.udwBottomCentre), 
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_bottomLeft);
                 
@@ -541,8 +600,8 @@ namespace ChilliSource
                 Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vMLPatchSize, 
-								   mCurrentSpriteSheet->GetTexture(),
-                                   mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwLeftCentre), 
+								   mCurrentTexture,
+                                   mCurrentTextureAtlas->GetFrameUVs(msCurrentIndices.udwLeftCentre), 
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topLeft);
                 
@@ -555,8 +614,8 @@ namespace ChilliSource
                 Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vMRPatchSize, 
-								   mCurrentSpriteSheet->GetTexture(),
-                                   mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwRightCentre), 
+								   mCurrentTexture,
+                                   mCurrentTextureAtlas->GetFrameUVs(msCurrentIndices.udwRightCentre), 
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topRight);
                 
@@ -570,8 +629,8 @@ namespace ChilliSource
                 Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform,
                                    vMCPatchSize, 
-								   mCurrentSpriteSheet->GetTexture(),
-                                   mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwMiddleCentre), 
+								   mCurrentTexture,
+                                   mCurrentTextureAtlas->GetFrameUVs(msCurrentIndices.udwMiddleCentre), 
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topLeft);
                 
@@ -657,14 +716,14 @@ namespace ChilliSource
 					mpSelectAudioEffect->Play();
 				}
 				
-				if (NormalSpriteSheet)
+				if (NormalTextureAtlas)
 				{
-					bool bUniqueHighlight = BaseHighlightSpriteSheetIndexID != BaseNormalSpriteSheetIndexID;
+					bool bUniqueHighlight = BaseHighlightTextureAtlasID != BaseNormalTextureAtlasID;
 					
-					if (bUniqueHighlight && HighlightSpriteSheet)
+					if (bUniqueHighlight && HighlightTextureAtlas)
 					{
 						msCurrentIndices = msHighlightIndices;
-                        mCurrentSpriteSheet = HighlightSpriteSheet;
+                        mCurrentTextureAtlas = HighlightTextureAtlas;
 					} 
 					
                     mCurrentColour = HighlightColour;
@@ -692,10 +751,10 @@ namespace ChilliSource
 					mpDeselectAudioEffect->Play();
 				}
 				
-				if (NormalSpriteSheet)
+				if (NormalTextureAtlas)
 				{
 					mCurrentColour = Core::Colour::k_white;
-					mCurrentSpriteSheet = NormalSpriteSheet;
+					mCurrentTextureAtlas = NormalTextureAtlas;
 					msCurrentIndices = msNormalIndices;
 				}
 				

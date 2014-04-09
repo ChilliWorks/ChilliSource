@@ -14,7 +14,6 @@
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 #include <ChilliSource/Rendering/Font/Font.h>
-#include <ChilliSource/GUI/Label/Label.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Core/Math/Matrix3x3.h>
@@ -27,6 +26,15 @@ namespace ChilliSource
 		{
 		public:
 
+            struct PlacedCharacter
+            {
+                Core::Rectangle sUVs;
+                Core::Vector2 vSize;
+                Core::Vector2 vPosition;
+            };
+            
+            typedef std::vector<PlacedCharacter> CharacterList;
+            
             //----------------------------------------------------------
             /// Constructor
             ///
@@ -95,15 +103,15 @@ namespace ChilliSource
             /// @param Bool pointer. Bool set true if string is clipped, false if not, untouched if string not rebuilt
             /// @param Bool pointer. Bool set true if invalid character is found.
             //-----------------------------------------------------------
-			void DrawString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontSPtr& inpFont, CharacterList& outCharCache,
+			void DrawString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
 							const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
 							GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped = nullptr, bool * outpInvalidCharacterFound = nullptr);
             
-            void DrawDistanceString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontSPtr& inpFont, CharacterList& outCharCache,
+            void DrawDistanceString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
                                     const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
                                     GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines);
             
-            void DrawDistanceOutlinedString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontSPtr& inpFont, CharacterList& outCharCache,
+            void DrawDistanceOutlinedString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
                                             const Core::Colour & insColour, const Core::Colour& insOutlineColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
                                             GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines);
             //-----------------------------------------------------------
@@ -119,7 +127,7 @@ namespace ChilliSource
             ///
             /// @return String length
             //------------------------------------------------------------
-            f32 CalculateStringWidth(const Core::UTF8String& insString, const FontSPtr& inpFont, f32 infSize, f32 infCharSpacing, bool inbIgnoreLineBreaks);
+            f32 CalculateStringWidth(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infSize, f32 infCharSpacing, bool inbIgnoreLineBreaks);
             //-----------------------------------------------------------
             /// Calculate String Height
             ///
@@ -136,7 +144,7 @@ namespace ChilliSource
             ///
             /// @return String height
             //------------------------------------------------------------
-            f32 CalculateStringHeight(const Core::UTF8String& insString, const FontSPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines);
+            f32 CalculateStringHeight(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines);
 			//-------------------------------------------
 			/// Build String
 			///
@@ -156,7 +164,7 @@ namespace ChilliSource
             /// @param Whether or not to flip the text
             /// vertically.
 			//-------------------------------------------
-			static void BuildString(const FontSPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
+			static void BuildString(const FontCSPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
 							const Core::Vector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineJustification, GUI::TextJustification ineVerticalJustification,
 							bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour,  bool * outpClipped = nullptr, bool * outpInvalidCharacterFound = nullptr);
 			//----------------------------------------------------
@@ -172,7 +180,7 @@ namespace ChilliSource
 			/// @param The width of the new character
 			/// @param List of characters that we can add too
 			//----------------------------------------------------
-			static CharacterResult BuildCharacter(const FontSPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
+			static void BuildCharacter(const FontCSPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
                                                    const Core::Vector2& invCursor, f32 infTextScale, f32 infCharSpacing,
                                                    f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound = nullptr);
             //----------------------------------------------------
@@ -197,7 +205,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			void UpdateSpriteData(const Core::Matrix4x4& inTransform, const Core::Vector2 & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment);
             
-            void DrawDistanceStringInternal(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontSPtr& inpFont, CharacterList& outCharCache,
+            void DrawDistanceStringInternal(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
                                             const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
                                             GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines);
 			

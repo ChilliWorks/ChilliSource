@@ -55,22 +55,6 @@ namespace ChilliSource
             /// @return Whether the object can create component
             //--------------------------------------------------------
             bool CanProduceComponentWithTypeName(const std::string & incName) const override;
-            //--------------------------------------------------------
-            /// Create Component
-            ///
-            /// Creates a component with the given name from the
-            /// given parameters
-            ///
-            /// @param Type Name
-            /// @param Param Dictionary
-            //--------------------------------------------------------
-            Core::ComponentUPtr CreateComponent(const std::string & insTypeName, const Core::ParamDictionary & insParamDictionary);
-			//--------------------------------------------------------
-			/// Get Owning Render System Pointer
-			///
-			/// @return The render system which created us
-			//--------------------------------------------------------
-			RenderSystem* GetOwningRenderSystemPtr();
 			
             //---------------------------------------------------------------------------
 			/// Create Static Sprite Component
@@ -79,9 +63,9 @@ namespace ChilliSource
 			//---------------------------------------------------------------------------
 			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2 &invDims, const MaterialSPtr& inMaterial);
 			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath);
-			SpriteComponentUPtr CreateSpriteComponent(const SpriteSheetSPtr& pSpriteSheet, u32 inTpageIndex, const MaterialSPtr& inpMaterial);
-			SpriteComponentUPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheet, u32 inTpageIndex, const MaterialSPtr& inpMaterial);
-            SpriteComponentUPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheet, const std::string& inTpageID, const MaterialSPtr& inpMaterial);
+			SpriteComponentUPtr CreateSpriteComponent(const TextureAtlasCSPtr& pTextureAtlas, u32 inTpageIndex, const MaterialSPtr& inpMaterial);
+			SpriteComponentUPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrTextureAtlas, u32 inTpageIndex, const MaterialSPtr& inpMaterial);
+            SpriteComponentUPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrTextureAtlas, const std::string& inTpageID, const MaterialSPtr& inpMaterial);
 
             //---------------------------------------------------------------------------
 			/// Create Static Mesh Component
@@ -129,7 +113,7 @@ namespace ChilliSource
             
 			MaterialManager* mpMaterialManager;
 			TextureManager* mpTextureManager;
-			SpriteSheetManager* mpSpriteSheetManager;
+			Core::ResourcePool* m_resourcePool;
 			RenderCapabilities* mpRenderCapabilities;
 		};
 	}

@@ -99,7 +99,7 @@ namespace ChilliSource
             ///
 			/// @return The style with the given name or null
 			//----------------------------------------------------------
-            const StyleCUPtr& GetStyleWithName(const std::string& in_name) const;
+            const Style* GetStyleWithName(const std::string& in_name) const;
             
         private:
             

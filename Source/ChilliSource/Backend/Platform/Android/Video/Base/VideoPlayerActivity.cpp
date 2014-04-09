@@ -189,7 +189,7 @@ namespace ChilliSource
 					if (mapEntry == maSubtitleMap.end())
 					{
 						Core::UTF8String strText = Core::LocalisedText::GetText((*it)->m_textId);
-						const Video::Subtitles::StyleCUPtr& pStyle = mpSubtitles->GetStyleWithName((*it)->m_styleName);
+						const Video::Subtitles::Style* pStyle = mpSubtitles->GetStyleWithName((*it)->m_styleName);
 						s64 lwSubtitleID = mpVideoPlayerJavaInterface->CreateSubtitle(strText, pStyle->m_fontName, pStyle->m_fontSize, Rendering::StringFromAlignmentAnchor(pStyle->m_alignment), pStyle->m_bounds.vOrigin.x, pStyle->m_bounds.vOrigin.y, pStyle->m_bounds.vSize.x, pStyle->m_bounds.vSize.y);
 						mpVideoPlayerJavaInterface->SetSubtitleColour(lwSubtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
 						maSubtitleMap.insert(std::make_pair(*it, lwSubtitleID));
@@ -220,7 +220,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------
 		void VideoPlayerActivity::UpdateSubtitle(const Video::Subtitles::Subtitle* inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS)
 		{
-			const Video::Subtitles::StyleCUPtr& pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
+			const Video::Subtitles::Style* pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
 
 			f32 fFade = 0.0f;
 			s64 lwRelativeTime = ((s64)inTimeMS) - ((s64)inpSubtitle->m_startTimeMS);

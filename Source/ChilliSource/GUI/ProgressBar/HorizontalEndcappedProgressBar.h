@@ -32,13 +32,33 @@ namespace ChilliSource
 			///
 			/// @param Sprite Sheet
 			//------------------------------------------------------------------------
-			void SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
+			void SetTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas);
 			//------------------------------------------------------------------------
 			/// Get Sprite Sheet
 			///
 			/// @return Sprite Sheet
 			//------------------------------------------------------------------------
-			const Rendering::SpriteSheetSPtr& GetSpriteSheet() const;
+			const Rendering::TextureAtlasCSPtr& GetTextureAtlas() const;
+            //------------------------------------------------------------------------
+			/// Set Texture
+			///
+			/// @param Texture
+			//------------------------------------------------------------------------
+			inline void SetTexture(const Rendering::TextureSPtr& inpTexture)
+            {
+                Texture = inpTexture;
+                mpBGImage->SetTexture(inpTexture);
+                mpFillImage->SetTexture(inpTexture);
+            }
+			//------------------------------------------------------------------------
+			/// Get Texture
+			///
+			/// @return Texture
+			//------------------------------------------------------------------------
+			inline const Rendering::TextureSPtr& GetTexture() const
+            {
+                return Texture;
+            }
 			//---------------------------------------------------------
 			/// Set Base Fill Sprite Sheet Index ID
 			///
@@ -50,7 +70,7 @@ namespace ChilliSource
 			///
 			/// the base ID would be "BLUE_PANEL_"
 			//---------------------------------------------------------
-			void SetBaseFillSpriteSheetIndexID(const std::string& instrID);
+			void SetBaseFillTextureAtlasID(const std::string& instrID);
 			//---------------------------------------------------------
 			/// Get Base Fill Sprite Sheet Index ID
 			///
@@ -62,7 +82,7 @@ namespace ChilliSource
 			///
 			/// the base ID would be "BLUE_PANEL_"
 			//---------------------------------------------------------
-			const std::string& GetBaseFillSpriteSheetIndexID() const;
+			const std::string& GetBaseFillTextureAtlasID() const;
 			//---------------------------------------------------------
 			/// Set Base Background Sprite Sheet Index ID
 			///
@@ -74,7 +94,7 @@ namespace ChilliSource
 			///
 			/// the base ID would be "BLUE_PANEL_"
 			//---------------------------------------------------------
-			void SetBaseBackgroundSpriteSheetIndexID(const std::string& instrID);
+			void SetBaseBackgroundTextureAtlasID(const std::string& instrID);
 			//---------------------------------------------------------
 			/// Get Base Background Sprite Sheet Index ID
 			///
@@ -86,7 +106,7 @@ namespace ChilliSource
 			///
 			/// the base ID would be "BLUE_PANEL_"
 			//---------------------------------------------------------
-			const std::string& GetBaseBackgroundSpriteSheetIndexID() const;
+			const std::string& GetBaseBackgroundTextureAtlasID() const;
 			//------------------------------------------------------------------------
 			/// Set Fill Indices
 			///
@@ -157,10 +177,11 @@ namespace ChilliSource
 
 		private:
 
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
+            DECLARE_PROPERTY_A(Rendering::TextureSPtr, Texture, SetTexture, GetTexture);
 
-			DECLARE_PROPERTY_A(std::string, BaseFillSpriteSheetIndexID, SetBaseFillSpriteSheetIndexID, GetBaseFillSpriteSheetIndexID);
-			DECLARE_PROPERTY_A(std::string, BaseBackgroundSpriteSheetIndexID, SetBaseBackgroundSpriteSheetIndexID, GetBaseBackgroundSpriteSheetIndexID);
+			DECLARE_PROPERTY_A(std::string, BaseFillTextureAtlasID, SetBaseFillTextureAtlasID, GetBaseFillTextureAtlasID);
+			DECLARE_PROPERTY_A(std::string, BaseBackgroundTextureAtlasID, SetBaseBackgroundTextureAtlasID, GetBaseBackgroundTextureAtlasID);
 
 			DECLARE_PROPERTY_A(Core::Colour, FillColour, SetFillColour, GetFillColour);
 			DECLARE_PROPERTY_A(Core::Colour, BackgroundColour, SetBackgroundColour, GetBackgroundColour);

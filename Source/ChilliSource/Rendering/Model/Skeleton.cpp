@@ -9,33 +9,42 @@
 
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 
+#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
+
 #include <vector>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-		Skeleton::Skeleton()
-		{
-			
-		}
-		
-		Skeleton::~Skeleton()
-		{
-			
-		}
+        //-------------------------------------------------------------------------
+        //-------------------------------------------------------------------------
+        void Skeleton::Build(const SkeletonDescriptor& in_desc)
+        {
+            mapNodes.reserve(in_desc.m_nodeNames.size());
+            
+            for(u32 i=0; i<in_desc.m_nodeNames.size(); ++i)
+            {
+                SkeletonNode* node(new SkeletonNode());
+                node->mstrName = in_desc.m_nodeNames[i];
+                node->mdwParentIndex = in_desc.m_parentNodeIndices[i];
+                mapNodes.push_back(SkeletonNodeCUPtr(node));
+            }
+            
+            madwJoints = in_desc.m_jointIndices;
+        }
 		//-------------------------------------------------------------------------
 		/// Get Node By Name
 		//-------------------------------------------------------------------------
-		SkeletonNodeSPtr Skeleton::GetNodeByName(const std::string& instrName) const
+		const SkeletonNode* Skeleton::GetNodeByName(const std::string& instrName) const
 		{
-			for (std::vector<SkeletonNodeSPtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
+			for (auto it = mapNodes.begin(); it != mapNodes.end(); ++it)
 			{
 				if (instrName == (*it)->mstrName)
-					return *it;
+					return it->get();
 			}
 			
-			return SkeletonNodeSPtr();
+			return nullptr;
 		}
         //-------------------------------------------------------------------------
         /// Get Node Index By Name
@@ -43,7 +52,7 @@ namespace ChilliSource
         s32 Skeleton::GetNodeIndexByName(const std::string& instrName) const
         {
             s32 dwIndex = 0;
-            for (std::vector<SkeletonNodeSPtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
+            for (auto it = mapNodes.begin(); it != mapNodes.end(); ++it)
 			{
 				if (instrName == (*it)->mstrName)
 					return dwIndex;
@@ -54,14 +63,14 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Get Node By Index
 		//-------------------------------------------------------------------------
-		SkeletonNodeSPtr Skeleton::GetNodeByIndex(u32 indwIndex) const
+		const SkeletonNode* Skeleton::GetNodeByIndex(u32 indwIndex) const
 		{
 			if (indwIndex < mapNodes.size())
 			{
-				return mapNodes[indwIndex];
+				return mapNodes[indwIndex].get();
 			}
 			
-			return SkeletonNodeSPtr();
+			return nullptr;
 		}
 		//-------------------------------------------------------------------------
 		/// Get Num Nodes
@@ -84,7 +93,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Get Nodes
 		//-------------------------------------------------------------------------
-		const std::vector<SkeletonNodeSPtr>& Skeleton::GetNodes() const
+		const std::vector<SkeletonNodeCUPtr>& Skeleton::GetNodes() const
 		{
 			return mapNodes;
 		}
@@ -94,23 +103,6 @@ namespace ChilliSource
         const std::vector<s32>& Skeleton::GetJointIndices() const
         {
             return madwJoints;
-        }
-		//-------------------------------------------------------------------------
-		/// Add Node
-		//-------------------------------------------------------------------------
-		void Skeleton::AddNode(const std::string& instrName, s32 indwParentIndex)
-		{
-			SkeletonNodeSPtr newNode(new SkeletonNode());
-			newNode->mstrName = instrName;
-			newNode->mdwParentIndex = indwParentIndex;
-			mapNodes.push_back(newNode);
-		}
-        //-------------------------------------------------------------------------
-        /// Add Joint Index
-        //-------------------------------------------------------------------------
-        void Skeleton::AddJointIndex(s32 indwJointIndex)
-        {
-            madwJoints.push_back(indwJointIndex);
         }
 	}
 }

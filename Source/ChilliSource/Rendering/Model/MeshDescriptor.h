@@ -49,6 +49,15 @@ namespace ChilliSource
 			std::vector<ChilliSource::Core::Matrix4x4> mInverseBindPoseMatrices;
 			PrimitiveType ePrimitiveType;            
 		};
+        //-------------------------------------------------------------------------
+		/// Container for information required to build a skeleton.
+		//-------------------------------------------------------------------------
+		struct SkeletonDescriptor
+		{
+            std::vector<std::string> m_nodeNames;
+            std::vector<s32> m_parentNodeIndices;
+            std::vector<s32> m_jointIndices;
+		};
 		//-------------------------------------------------------------------------
 		/// Container for information required to build a mesh.
 		//-------------------------------------------------------------------------
@@ -56,13 +65,13 @@ namespace ChilliSource
 		{
 			MeshDescriptor();
 			
+            SkeletonDescriptor m_skeletonDesc;
 			MeshFeatureDescriptor mFeatures;
+            std::vector<SubMeshDescriptor> mMeshes;
 			VertexDeclaration mVertexDeclaration;
-			u32 mudwIndexSize;
-			ChilliSource::Core::Vector3 mvMinBounds;
-			ChilliSource::Core::Vector3 mvMaxBounds;
-			SkeletonSPtr mpSkeleton;
-			std::vector<SubMeshDescriptor> mMeshes;
+			Core::Vector3 mvMinBounds;
+			Core::Vector3 mvMaxBounds;
+            u32 mudwIndexSize;
 		};
 	}
 }

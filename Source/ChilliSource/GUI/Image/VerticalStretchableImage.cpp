@@ -8,9 +8,12 @@
 
 #include <ChilliSource/GUI/Image/VerticalStretchableImage.h>
 
-#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/String/StringParser.h>
@@ -21,10 +24,10 @@ namespace ChilliSource
     {
 		DEFINE_META_CLASS(VerticalStretchableImage)
 
-		DEFINE_PROPERTY(SpriteSheet);
+		DEFINE_PROPERTY(TextureAtlas);
 		DEFINE_PROPERTY(HeightMaintain);
 		DEFINE_PROPERTY(WidthMaintain);
-		DEFINE_PROPERTY(BaseSpriteSheetIndexID);
+		DEFINE_PROPERTY(BaseTextureAtlasID);
 
 		//--------------------------------------------------------
         /// Constructor
@@ -48,21 +51,33 @@ namespace ChilliSource
 
 			memset(&msIndices, 0, sizeof(u32) * 3);
             
-            //---Sprite sheet
-            Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("SpriteSheetLocation", strValue))
+            //---Texture
+            Core::StorageLocation eTextureLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("TextureLocation", strValue))
             {
-                eSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
-            if(insParams.TryGetValue("SpriteSheet", strValue))
+            if(insParams.TryGetValue("Texture", strValue))
             {
-				SetSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eSpriteSheetLocation, strValue));
+                Texture = LOAD_RESOURCE(Rendering::Texture, eTextureLocation, strValue);
+            }
+            
+            //---Sprite sheet
+            Core::StorageLocation eTextureAtlasLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("TextureAtlasLocation", strValue))
+            {
+                eTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+            }
+            if(insParams.TryGetValue("TextureAtlas", strValue))
+            {
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                SetTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eTextureAtlasLocation, strValue));
 			}
 
 			//---Sprite sheet base name
-			if(insParams.TryGetValue("BaseSpriteSheetIndexID", strValue))
+			if(insParams.TryGetValue("BaseTextureAtlasID", strValue))
             {
-				SetBaseSpriteSheetIndexID(strValue);
+				SetBaseTextureAtlasID(strValue);
 			}
 
             //---Sprite sheet indices
@@ -106,18 +121,18 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet containing the nine patches
         //---------------------------------------------------------
-        void VerticalStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
+        void VerticalStretchableImage::SetTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas)
         {
-            SpriteSheet = inpSpriteSheet;
+            TextureAtlas = inpTextureAtlas;
         }
 		//---------------------------------------------------------
 		/// Get Sprite Sheet
 		///
 		/// @return Sprite sheet containing the nine patches
 		//---------------------------------------------------------
-		const Rendering::SpriteSheetSPtr& VerticalStretchableImage::GetSpriteSheet() const
+		const Rendering::TextureAtlasCSPtr& VerticalStretchableImage::GetTextureAtlas() const
 		{
-			return SpriteSheet;
+			return TextureAtlas;
 		}
 		//---------------------------------------------------------
 		/// Set Base Sprite Sheet Index ID
@@ -136,15 +151,15 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		void VerticalStretchableImage::SetBaseSpriteSheetIndexID(const std::string& instrID)
+		void VerticalStretchableImage::SetBaseTextureAtlasID(const std::string& instrID)
 		{
-			if(SpriteSheet)
+			if(TextureAtlas)
 			{
-				BaseSpriteSheetIndexID = instrID;
+				BaseTextureAtlasID = instrID;
 
-				msIndices.udwTop = SpriteSheet->GetFrameIndexByID(instrID + "TOP");
-				msIndices.udwBottom = SpriteSheet->GetFrameIndexByID(instrID + "BOTTOM");
-				msIndices.udwMiddle = SpriteSheet->GetFrameIndexByID(instrID + "MIDDLE");
+				msIndices.udwTop = TextureAtlas->GetFrameIndexById(instrID + "TOP");
+				msIndices.udwBottom = TextureAtlas->GetFrameIndexById(instrID + "BOTTOM");
+				msIndices.udwMiddle = TextureAtlas->GetFrameIndexById(instrID + "MIDDLE");
 			}
 		}
 		//---------------------------------------------------------
@@ -164,16 +179,16 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		const std::string& VerticalStretchableImage::GetBaseSpriteSheetIndexID() const
+		const std::string& VerticalStretchableImage::GetBaseTextureAtlasID() const
 		{
-			return BaseSpriteSheetIndexID;
+			return BaseTextureAtlasID;
 		}
 		//---------------------------------------------------------
         /// Set Patch Sprite Sheet Indices
         ///
         /// @param Struct containing the tpage index of each patch
         //---------------------------------------------------------
-        void VerticalStretchableImage::SetSpriteSheetIndices(const VerticalStretchableImage::SpriteSheetIndex& insIndices)
+        void VerticalStretchableImage::SetTextureAtlasIndices(const VerticalStretchableImage::TextureAtlasIndex& insIndices)
         {
             msIndices = insIndices;
         }
@@ -192,7 +207,7 @@ namespace ChilliSource
         ///
         /// @param Array containing the tpage index of each patch
         //---------------------------------------------------------
-        void VerticalStretchableImage::SetSpriteSheetIndices(const u32* inpIndices)
+        void VerticalStretchableImage::SetTextureAtlasIndices(const u32* inpIndices)
         {
             msIndices.udwTop = inpIndices[0];
             msIndices.udwBottom = inpIndices[1];
@@ -205,7 +220,7 @@ namespace ChilliSource
 		/// @param Sprite sheet index of middle patch
 		/// @param Sprite sheet index of bottom patch
 		//---------------------------------------------------------
-		void VerticalStretchableImage::SetSpriteSheetIndices(u32 inudwTop, u32 inudwMid, u32 inudwBottom)
+		void VerticalStretchableImage::SetTextureAtlasIndices(u32 inudwTop, u32 inudwMid, u32 inudwBottom)
 		{
 			msIndices.udwTop = inudwTop;
 			msIndices.udwMiddle = inudwMid;
@@ -230,7 +245,7 @@ namespace ChilliSource
 				return;
 			}
 			
-            if(Visible && SpriteSheet)
+            if(Visible && TextureAtlas && Texture)
             {			
                 Core::Vector2 vPanelSize = GetAbsoluteSize();
                 Core::Vector2 vPanelPos = GetAbsoluteScreenSpacePosition();
@@ -248,8 +263,8 @@ namespace ChilliSource
                 matViewTransform.SetTransform(vPanelPos, Core::Vector2(1, 1), GetRotation());
                 
                 //Get the patch sizes
-                Core::Vector2 vTPatchSize = SpriteSheet->GetSizeForFrame(msIndices.udwTop);
-                Core::Vector2 vBPatchSize = SpriteSheet->GetSizeForFrame(msIndices.udwBottom);
+                Core::Vector2 vTPatchSize = TextureAtlas->GetFrameSize(msIndices.udwTop);
+                Core::Vector2 vBPatchSize = TextureAtlas->GetFrameSize(msIndices.udwBottom);
                 
                 vTPatchSize.x = vPanelSize.x;
                 vBPatchSize.x = vPanelSize.x;
@@ -293,8 +308,8 @@ namespace ChilliSource
                 Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform,
                                    vTPatchSize, 
-								   SpriteSheet->GetTexture(),
-                                   SpriteSheet->GetUVsForFrame(msIndices.udwTop), 
+								   Texture,
+                                   TextureAtlas->GetFrameUVs(msIndices.udwTop), 
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topLeft);
                 
@@ -303,8 +318,8 @@ namespace ChilliSource
                 Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vBPatchSize, 
-								   SpriteSheet->GetTexture(),
-                                   SpriteSheet->GetUVsForFrame(msIndices.udwBottom), 
+								   Texture,
+                                   TextureAtlas->GetFrameUVs(msIndices.udwBottom), 
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_bottomLeft);
 
@@ -319,8 +334,8 @@ namespace ChilliSource
                 Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform,
                                    vMCPatchSize, 
-								   SpriteSheet->GetTexture(),
-                                   SpriteSheet->GetUVsForFrame(msIndices.udwMiddle), 
+								   Texture,
+                                   TextureAtlas->GetFrameUVs(msIndices.udwMiddle), 
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topLeft);
                 
@@ -419,7 +434,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		f32 VerticalStretchableImage::GetCombinedCapHeight() const
 		{
-			return SpriteSheet->GetSizeForFrame(msIndices.udwTop).y + SpriteSheet->GetSizeForFrame(msIndices.udwBottom).y;
+			return TextureAtlas->GetFrameSize(msIndices.udwTop).y + TextureAtlas->GetFrameSize(msIndices.udwBottom).y;
 		}
 		//--------------------------------------------------------
 		/// Get Combined Cap Width
@@ -428,7 +443,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		f32 VerticalStretchableImage::GetCapWidth() const
 		{
-			return SpriteSheet->GetSizeForFrame(msIndices.udwTop).x;
+			return TextureAtlas->GetFrameSize(msIndices.udwTop).x;
 		}
     }
 }

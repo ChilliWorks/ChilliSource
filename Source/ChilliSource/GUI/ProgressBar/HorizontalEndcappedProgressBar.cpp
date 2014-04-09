@@ -9,10 +9,13 @@
 
 #include <ChilliSource/GUI/ProgressBar/HorizontalEndcappedProgressBar.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
 
 namespace ChilliSource
 {
@@ -20,9 +23,9 @@ namespace ChilliSource
 	{
 		DEFINE_META_CLASS(HorizontalEndcappedProgressBar)
 		
-		DEFINE_PROPERTY(SpriteSheet);
-		DEFINE_PROPERTY(BaseFillSpriteSheetIndexID);
-		DEFINE_PROPERTY(BaseBackgroundSpriteSheetIndexID);
+		DEFINE_PROPERTY(TextureAtlas);
+		DEFINE_PROPERTY(BaseFillTextureAtlasID);
+		DEFINE_PROPERTY(BaseBackgroundTextureAtlasID);
 		DEFINE_PROPERTY(FillColour);
    
 		DEFINE_PROPERTY(BackgroundColour);
@@ -68,25 +71,37 @@ namespace ChilliSource
 			AddSubview(mpFillImage);
 			
 			std::string strValue;
+            
+            //---Texture
+            Core::StorageLocation eTextureLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("TextureLocation", strValue))
+            {
+                eTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+            }
+			if(insParams.TryGetValue("Texture", strValue))
+			{
+				SetTexture(LOAD_RESOURCE(Rendering::Texture, eTextureLocation, strValue));
+			}
 			
 			//---Sprite sheet
-            Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("SpriteSheetLocation", strValue))
+            Core::StorageLocation eTextureAtlasLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("TextureAtlasLocation", strValue))
             {
-                eSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
-			if(insParams.TryGetValue("SpriteSheet", strValue))
+			if(insParams.TryGetValue("TextureAtlas", strValue))
 			{
-				SetSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eSpriteSheetLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eTextureAtlasLocation, strValue));
 			}
 			//---Sprite sheet ID
-			if(insParams.TryGetValue("BaseFillSpriteSheetIndexID", strValue))
+			if(insParams.TryGetValue("BaseFillTextureAtlasID", strValue))
 			{
-				SetBaseFillSpriteSheetIndexID(strValue);
+				SetBaseFillTextureAtlasID(strValue);
 			}
-			if(insParams.TryGetValue("BaseBackgroundSpriteSheetIndexID", strValue))
+			if(insParams.TryGetValue("BaseBackgroundTextureAtlasID", strValue))
 			{
-				SetBaseBackgroundSpriteSheetIndexID(strValue);
+				SetBaseBackgroundTextureAtlasID(strValue);
 			}
             
             if( insParams.TryGetValue("BaseBackgroundVisible", strValue) )
@@ -96,34 +111,34 @@ namespace ChilliSource
 			//---Background indices
 			if(insParams.TryGetValue("BackgroundLeftIndex", strValue))
 			{
-				CS_ASSERT(SpriteSheet, "Sprite sheet must be set first");
-				mpBGImage->SetSpriteSheetLeftIndex(mpBGImage->GetSpriteSheet()->GetFrameIndexByID(strValue));
+				CS_ASSERT(TextureAtlas, "Sprite sheet must be set first");
+				mpBGImage->SetTextureAtlasLeftIndex(mpBGImage->GetTextureAtlas()->GetFrameIndexById(strValue));
 			}
 			if(insParams.TryGetValue("BackgroundCentreIndex", strValue))
 			{
-				CS_ASSERT(SpriteSheet, "Sprite sheet must be set first");
-				mpBGImage->SetSpriteSheetCentreIndex(mpBGImage->GetSpriteSheet()->GetFrameIndexByID(strValue));
+				CS_ASSERT(TextureAtlas, "Sprite sheet must be set first");
+				mpBGImage->SetTextureAtlasCentreIndex(mpBGImage->GetTextureAtlas()->GetFrameIndexById(strValue));
 			}	
 			if(insParams.TryGetValue("BackgroundRightIndex", strValue))
 			{
-				CS_ASSERT(SpriteSheet, "Sprite sheet must be set first");
-				mpBGImage->SetSpriteSheetRightIndex(mpBGImage->GetSpriteSheet()->GetFrameIndexByID(strValue));
+				CS_ASSERT(TextureAtlas, "Sprite sheet must be set first");
+				mpBGImage->SetTextureAtlasRightIndex(mpBGImage->GetTextureAtlas()->GetFrameIndexById(strValue));
 			}	
 			//---Progress indices
 			if(insParams.TryGetValue("ProgressLeftIndex", strValue))
 			{
-				CS_ASSERT(SpriteSheet, "Sprite sheet must be set first");
-				mpFillImage->SetSpriteSheetLeftIndex(mpFillImage->GetSpriteSheet()->GetFrameIndexByID(strValue));
+				CS_ASSERT(TextureAtlas, "Sprite sheet must be set first");
+				mpFillImage->SetTextureAtlasLeftIndex(mpFillImage->GetTextureAtlas()->GetFrameIndexById(strValue));
 			}
 			if(insParams.TryGetValue("ProgressCentreIndex", strValue))
 			{
-				CS_ASSERT(SpriteSheet, "Sprite sheet must be set first");
-				mpFillImage->SetSpriteSheetCentreIndex(mpFillImage->GetSpriteSheet()->GetFrameIndexByID(strValue));
+				CS_ASSERT(TextureAtlas, "Sprite sheet must be set first");
+				mpFillImage->SetTextureAtlasCentreIndex(mpFillImage->GetTextureAtlas()->GetFrameIndexById(strValue));
 			}	
 			if(insParams.TryGetValue("ProgressRightIndex", strValue))
 			{
-				CS_ASSERT(SpriteSheet, "Sprite sheet must be set first");
-				mpFillImage->SetSpriteSheetRightIndex(mpFillImage->GetSpriteSheet()->GetFrameIndexByID(strValue));
+				CS_ASSERT(TextureAtlas, "Sprite sheet must be set first");
+				mpFillImage->SetTextureAtlasRightIndex(mpFillImage->GetTextureAtlas()->GetFrameIndexById(strValue));
 			}
             //---Height from image
             if(insParams.TryGetValue("HeightFromImage", strValue))
@@ -147,20 +162,20 @@ namespace ChilliSource
 		///
 		/// @param Sprite Sheet
 		//------------------------------------------------------------------------
-		void HorizontalEndcappedProgressBar::SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
+		void HorizontalEndcappedProgressBar::SetTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas)
 		{
-			SpriteSheet = inpSpriteSheet;
-			mpBGImage->SetSpriteSheet(inpSpriteSheet);
-			mpFillImage->SetSpriteSheet(inpSpriteSheet);
+			TextureAtlas = inpTextureAtlas;
+			mpBGImage->SetTextureAtlas(inpTextureAtlas);
+			mpFillImage->SetTextureAtlas(inpTextureAtlas);
 		}
 		//------------------------------------------------------------------------
 		/// Get Sprite Sheet
 		///
 		/// @return Sprite Sheet
 		//------------------------------------------------------------------------
-		const Rendering::SpriteSheetSPtr& HorizontalEndcappedProgressBar::GetSpriteSheet() const
+		const Rendering::TextureAtlasCSPtr& HorizontalEndcappedProgressBar::GetTextureAtlas() const
 		{
-			return SpriteSheet;
+			return TextureAtlas;
 		}
 		//---------------------------------------------------------
 		/// Set Base Fill Sprite Sheet Index ID
@@ -173,10 +188,10 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		void HorizontalEndcappedProgressBar::SetBaseFillSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalEndcappedProgressBar::SetBaseFillTextureAtlasID(const std::string& instrID)
 		{
-			BaseFillSpriteSheetIndexID = instrID;
-			mpFillImage->SetBaseSpriteSheetIndexID(instrID);
+			BaseFillTextureAtlasID = instrID;
+			mpFillImage->SetBaseTextureAtlasID(instrID);
 		}
 		//---------------------------------------------------------
 		/// Get Base Fill Sprite Sheet Index ID
@@ -189,9 +204,9 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		const std::string& HorizontalEndcappedProgressBar::GetBaseFillSpriteSheetIndexID() const
+		const std::string& HorizontalEndcappedProgressBar::GetBaseFillTextureAtlasID() const
 		{
-			return BaseFillSpriteSheetIndexID;
+			return BaseFillTextureAtlasID;
 		}
 		//---------------------------------------------------------
 		/// Set Base Background Sprite Sheet Index ID
@@ -204,10 +219,10 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		void HorizontalEndcappedProgressBar::SetBaseBackgroundSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalEndcappedProgressBar::SetBaseBackgroundTextureAtlasID(const std::string& instrID)
 		{
-			BaseBackgroundSpriteSheetIndexID = instrID;
-			mpBGImage->SetBaseSpriteSheetIndexID(instrID);
+			BaseBackgroundTextureAtlasID = instrID;
+			mpBGImage->SetBaseTextureAtlasID(instrID);
 		}
 		//---------------------------------------------------------
 		/// Get Base Background Sprite Sheet Index ID
@@ -220,9 +235,9 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		const std::string& HorizontalEndcappedProgressBar::GetBaseBackgroundSpriteSheetIndexID() const
+		const std::string& HorizontalEndcappedProgressBar::GetBaseBackgroundTextureAtlasID() const
 		{
-			return BaseBackgroundSpriteSheetIndexID;
+			return BaseBackgroundTextureAtlasID;
 		}
 		//------------------------------------------------------------------------
 		/// Set Fill Indices
@@ -233,7 +248,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		void HorizontalEndcappedProgressBar::SetFillIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight)
 		{
-			mpFillImage->SetSpriteSheetIndices(inudwLeft, inudwMid, inudwRight);	
+			mpFillImage->SetTextureAtlasIndices(inudwLeft, inudwMid, inudwRight);	
 		}
 		//------------------------------------------------------------------------
 		/// Set Background Indices
@@ -244,7 +259,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		void HorizontalEndcappedProgressBar::SetBackgroundIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight)
 		{
-			mpBGImage->SetSpriteSheetIndices(inudwLeft, inudwMid, inudwRight);
+			mpBGImage->SetTextureAtlasIndices(inudwLeft, inudwMid, inudwRight);
 		}
 		//------------------------------------------------------------------------
 		/// Set Fill Colour
@@ -318,7 +333,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		void HorizontalEndcappedProgressBar::Draw(Rendering::CanvasRenderer* inpCanvas)
 		{
-			if(Visible && SpriteSheet)
+			if(Visible && TextureAtlas && Texture)
 			{
 
 				Core::Vector2 vMyAbsSize = GetAbsoluteSize();

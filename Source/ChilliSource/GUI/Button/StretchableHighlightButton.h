@@ -33,7 +33,7 @@ namespace ChilliSource
             ///
             /// A container struct for the indices for the 9 patches.
             //-----------------------------------------------------------
-            struct SpriteSheetIndex
+            struct TextureAtlasIndex
             {
                 u32 udwTopLeft;
                 u32 udwTopRight;
@@ -60,59 +60,83 @@ namespace ChilliSource
             //-----------------------------------------------------------
             StretchableHighlightButton(const Core::ParamDictionary& insParams);
             //-----------------------------------------------------------
+            /// Set Normal Texture
+            ///
+            /// @param Texture with with normal image
+            //-----------------------------------------------------------
+            void SetNormalTexture(const Rendering::TextureSPtr& inpTexture);
+			//-----------------------------------------------------------
+			/// Set Highlight Texture
+			///
+			/// @param Texture with with highlight image
+			//-----------------------------------------------------------
+			void SetHighlightTexture(const Rendering::TextureSPtr& inpTexture);
+            //-----------------------------------------------------------
+            /// Get Normal Texture
+            ///
+            /// @return Texture with default image
+            //-----------------------------------------------------------
+			const Rendering::TextureSPtr& GetNormalTexture() const;
+			//-----------------------------------------------------------
+			/// Get Highlight Texture
+			///
+			/// @return Texture with highlight image
+			//-----------------------------------------------------------
+			const Rendering::TextureSPtr& GetHighlightTexture() const;
+            //-----------------------------------------------------------
             /// Set Normal Sprite Sheet
             ///
             /// @param Sprite sheet with with normal image
             //-----------------------------------------------------------
-            void SetNormalSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
+            void SetNormalTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas);
 			//-----------------------------------------------------------
 			/// Set Highlight Sprite Sheet
 			///
 			/// @param Sprite sheet with with highlight image
 			//-----------------------------------------------------------
-			void SetHighlightSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
+			void SetHighlightTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas);
             //-----------------------------------------------------------
             /// Get Normal Sprite Sheet
             ///
             /// @return Sprite sheet with default image
             //-----------------------------------------------------------
-			const Rendering::SpriteSheetSPtr& GetNormalSpriteSheet() const;
+			const Rendering::TextureAtlasCSPtr& GetNormalTextureAtlas() const;
 			//-----------------------------------------------------------
 			/// Get Highlight Sprite Sheet
 			///
 			/// @return Sprite sheet with highlight image
 			//-----------------------------------------------------------
-			const Rendering::SpriteSheetSPtr& GetHighlightSpriteSheet() const;
+			const Rendering::TextureAtlasCSPtr& GetHighlightTextureAtlas() const;
 			//-----------------------------------------------------------
 			/// Set Base Normal Sprite Sheet Index ID
 			///
 			/// @param The first section of the index id's.
 			//-----------------------------------------------------------
-			void SetBaseNormalSpriteSheetIndexID(const std::string& instrID);
+			void SetBaseNormalTextureAtlasID(const std::string& instrID);
 			//-----------------------------------------------------------
 			/// Set Base Highlight Sprite Sheet Index ID
 			///
 			/// @param The first section of the index id's.
 			//-----------------------------------------------------------
-			void SetBaseHighlightSpriteSheetIndexID(const std::string& instrID);
+			void SetBaseHighlightTextureAtlasID(const std::string& instrID);
 			//-----------------------------------------------------------
 			/// Get Normal Sprite Sheet Base Index ID
 			///
 			/// @return Index ID of default state on sprite sheet
 			//-----------------------------------------------------------
-			const std::string& GetBaseNormalSpriteSheetIndexID() const;
+			const std::string& GetBaseNormalTextureAtlasID() const;
 			//-----------------------------------------------------------
 			/// Get Highlight Sprite Sheet Base Index ID
 			///
 			/// @return Index ID of highlight state on sprite sheet
 			//-----------------------------------------------------------
-			const std::string& GetBaseHighlightSpriteSheetIndexID() const;
+			const std::string& GetBaseHighlightTextureAtlasID() const;
             //---------------------------------------------------------
             /// Set Normal Sprite Sheet Indices
             ///
             /// @param Struct containing the tpage index of each patch
             //---------------------------------------------------------
-            void SetNormalSpriteSheetIndices(const SpriteSheetIndex& insIndices);
+            void SetNormalTextureAtlasIndices(const TextureAtlasIndex& insIndices);
             //---------------------------------------------------------
             /// Set Normal Sprite Sheet Indices
             ///
@@ -128,13 +152,13 @@ namespace ChilliSource
             ///
             /// @param Array containing the tpage index of each patch
             //---------------------------------------------------------
-            void SetNormalSpriteSheetIndices(const u32* inpIndices);
+            void SetNormalTextureAtlasIndices(const u32* inpIndices);
             //---------------------------------------------------------
             /// Set Highlight Sprite Sheet Indices
             ///
             /// @param Struct containing the tpage index of each patch
             //---------------------------------------------------------
-            void SetHighlightSpriteSheetIndices(const SpriteSheetIndex& insIndices);
+            void SetHighlightTextureAtlasIndices(const TextureAtlasIndex& insIndices);
             //---------------------------------------------------------
             /// Set Highlight Sprite Sheet Indices
             ///
@@ -150,7 +174,7 @@ namespace ChilliSource
             ///
             /// @param Array containing the tpage index of each patch
             //---------------------------------------------------------
-            void SetHighlightSpriteSheetIndices(const u32* inpIndices);
+            void SetHighlightTextureAtlasIndices(const u32* inpIndices);
             //-----------------------------------------------------------
             /// Set Select Audio Effect
             ///
@@ -279,10 +303,11 @@ namespace ChilliSource
             void OnButtonDeselectThreshold(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
             
         private:
-            Rendering::SpriteSheetSPtr mCurrentSpriteSheet;
-            SpriteSheetIndex msCurrentIndices;
-            SpriteSheetIndex msNormalIndices;
-            SpriteSheetIndex msHighlightIndices;
+            Rendering::TextureSPtr mCurrentTexture;
+            Rendering::TextureAtlasCSPtr mCurrentTextureAtlas;
+            TextureAtlasIndex msCurrentIndices;
+            TextureAtlasIndex msNormalIndices;
+            TextureAtlasIndex msHighlightIndices;
             Audio::AudioComponentSPtr mpSelectAudioEffect;
 			Audio::AudioComponentSPtr mpDeselectAudioEffect;
             Core::Colour mCurrentColour;
@@ -296,10 +321,12 @@ namespace ChilliSource
             Core::ConnectionUPtr m_movedOutsideConnection;
             
             //---Properties
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, NormalSpriteSheet, SetNormalSpriteSheet, GetNormalSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, HighlightSpriteSheet, SetHighlightSpriteSheet, GetHighlightSpriteSheet);
-			DECLARE_PROPERTY_A(std::string, BaseNormalSpriteSheetIndexID, SetBaseNormalSpriteSheetIndexID, GetBaseNormalSpriteSheetIndexID);
-			DECLARE_PROPERTY_A(std::string, BaseHighlightSpriteSheetIndexID, SetBaseHighlightSpriteSheetIndexID, GetBaseHighlightSpriteSheetIndexID);
+			DECLARE_PROPERTY_A(Rendering::TextureSPtr, NormalTexture, SetNormalTexture, GetNormalTexture);
+			DECLARE_PROPERTY_A(Rendering::TextureSPtr, HighlightTexture, SetHighlightTexture, GetHighlightTexture);
+            DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, NormalTextureAtlas, SetNormalTextureAtlas, GetNormalTextureAtlas);
+			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, HighlightTextureAtlas, SetHighlightTextureAtlas, GetHighlightTextureAtlas);
+			DECLARE_PROPERTY_A(std::string, BaseNormalTextureAtlasID, SetBaseNormalTextureAtlasID, GetBaseNormalTextureAtlasID);
+			DECLARE_PROPERTY_A(std::string, BaseHighlightTextureAtlasID, SetBaseHighlightTextureAtlasID, GetBaseHighlightTextureAtlasID);
 			DECLARE_PROPERTY_A(Core::Colour, HighlightColour, SetHighlightColour, GetHighlightColour);
 			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);

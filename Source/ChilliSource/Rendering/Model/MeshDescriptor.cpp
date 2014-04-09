@@ -41,8 +41,6 @@ namespace ChilliSource
 		MeshDescriptor::MeshDescriptor()
 		{
 			mudwIndexSize = 0;
-			mvMinBounds = ChilliSource::Core::Vector3(0.0f, 0.0f, 0.0f);
-			mvMaxBounds = ChilliSource::Core::Vector3(0.0f, 0.0f, 0.0f);
 		}
 	}
 }

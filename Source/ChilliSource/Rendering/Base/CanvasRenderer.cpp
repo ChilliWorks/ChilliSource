@@ -18,6 +18,8 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 
+#include <ChilliSource/GUI/Label/Label.h>
+
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
@@ -183,7 +185,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw String
         //-----------------------------------------------------------
-		void CanvasRenderer::DrawString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontSPtr& inpFont, CharacterList& outCharCache,
+		void CanvasRenderer::DrawString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
                                          const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
 										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped, bool *outpInvalidCharacterFound)
 		{
@@ -233,7 +235,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw Distance Outlined String
         //-----------------------------------------------------------
-        void CanvasRenderer::DrawDistanceOutlinedString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontSPtr& inpFont, CharacterList& outCharCache,
+        void CanvasRenderer::DrawDistanceOutlinedString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
                                                  const Core::Colour & insColour, const Core::Colour& insOutlineColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
                                                  GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
 		{
@@ -254,7 +256,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw Distance String
         //-----------------------------------------------------------
-        void CanvasRenderer::DrawDistanceString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontSPtr& inpFont, CharacterList& outCharCache,
+        void CanvasRenderer::DrawDistanceString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
                                          const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
 										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
 		{
@@ -275,7 +277,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw Distance String Internal
         //-----------------------------------------------------------
-        void CanvasRenderer::DrawDistanceStringInternal(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontSPtr& inpFont, CharacterList& outCharCache,
+        void CanvasRenderer::DrawDistanceStringInternal(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
                                                  const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
                                                  GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
         {
@@ -320,7 +322,7 @@ namespace ChilliSource
         /// Calculate the length of a string based on the font
         /// and attributes
         //------------------------------------------------------------
-        f32 CanvasRenderer::CalculateStringWidth(const Core::UTF8String& insString, const FontSPtr& inpFont, f32 infSize, f32 infCharSpacing, bool inbIgnoreLinesBreaks)
+        f32 CanvasRenderer::CalculateStringWidth(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infSize, f32 infCharSpacing, bool inbIgnoreLinesBreaks)
         {
             Core::Vector2 vSize;
             
@@ -345,7 +347,7 @@ namespace ChilliSource
                 Core::UTF8String::Char Char = insString.next(it);
                 
                 // If we are breaking on new lines, create a new counter.
-                if(!inbIgnoreLinesBreaks && (Char == kReturnCharacter))
+                if(!inbIgnoreLinesBreaks && (Char == k_returnCharacter))
                 {
                     aLineWidths.push_back(0.0f);
                     continue;
@@ -374,7 +376,7 @@ namespace ChilliSource
         /// Calculate the height of a string based on the font, width
         /// and attributes
         //------------------------------------------------------------
-        f32 CanvasRenderer::CalculateStringHeight(const Core::UTF8String& insString, const FontSPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines)
+        f32 CanvasRenderer::CalculateStringHeight(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines)
         {
             Core::Vector2 vCursorPos;
             
@@ -431,7 +433,7 @@ namespace ChilliSource
                             return udwCurrentNumLines * fLineHeight;
                         }
                         
-                        if(insString.begin() != it && Char != kSpaceCharacter && Char != kTabCharacter)
+                        if(insString.begin() != it && Char != k_spaceCharacter && Char != k_tabCharacter)
                         {
                             it--;
                             vCursorPos.x -= fLastCharacterWidth;
@@ -440,7 +442,7 @@ namespace ChilliSource
                     }
                     
                     //If we are a return character or we exceed the bounds then we must wrap the text
-                    if(Char == kReturnCharacter || bExceededBounds)
+                    if(Char == k_returnCharacter || bExceededBounds)
                     {
                         udwCurrentNumLines++;  
                         vCursorPos.x = 0.0f;
@@ -448,7 +450,7 @@ namespace ChilliSource
                     }
                     //Check if we need to wrap before the next space so that words are not split
                     //across multiple lines
-                    else if(Char == kSpaceCharacter || Char == kTabCharacter)
+                    else if(Char == k_spaceCharacter || Char == k_tabCharacter)
                     {
                         //Find the length to the next space/tab from the cursor pos
                         //and if it exceed the bounds then wrap
@@ -456,14 +458,14 @@ namespace ChilliSource
                         Core::UTF8String::iterator jt = it;
                         Core::UTF8String::Char NextCharacter = 0;
                         
-                        while(jt != insString.end() && NextCharacter != kSpaceCharacter && NextCharacter != kTabCharacter && NextCharacter != kReturnCharacter)
+                        while(jt != insString.end() && NextCharacter != k_spaceCharacter && NextCharacter != k_tabCharacter && NextCharacter != k_returnCharacter)
                         {
                             NextCharacter = insString.next(jt);
                             
                             //Add it to the length
                             Font::CharacterInfo sInfo;
-                            inpFont->GetInfoForCharacter(NextCharacter, sInfo);
-                            fLengthToNextSpace += (sInfo.vSize.x * infSize) + infCharSpacing;
+                            inpFont->TryGetCharacterInfo(NextCharacter, sInfo);
+                            fLengthToNextSpace += (sInfo.m_size.x * infSize) + infCharSpacing;
                             
                             if(fLengthToNextSpace > infWidth)
                             {
@@ -486,7 +488,7 @@ namespace ChilliSource
 		/// Construct a list of character sprites
 		/// from the given string
         //-------------------------------------------
-		void CanvasRenderer::BuildString(const FontSPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
+		void CanvasRenderer::BuildString(const FontCSPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
 										  const Core::Vector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification,
                                           bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
 		{
@@ -553,7 +555,7 @@ namespace ChilliSource
                             bNoMoreLines=true;
                         }
                         
-                        else if(inText.begin() != it && Char != kSpaceCharacter && Char != kTabCharacter)
+                        else if(inText.begin() != it && Char != k_spaceCharacter && Char != k_tabCharacter)
                         {
                             it--;
                             vCursorPos.x -= fLastCharacterWidth;
@@ -564,7 +566,7 @@ namespace ChilliSource
                     if(!bNoMoreLines)
                     {
                         //If we are a return character or we exceed the bounds then we must wrap the text
-                        if(Char == kReturnCharacter || bExceededBounds)
+                        if(Char == k_returnCharacter || bExceededBounds)
                         {
                             Wrap(ineHorizontalJustification, fLineHeight, invBounds, CurrentLine, vCursorPos, outCharacters);
                             
@@ -581,7 +583,7 @@ namespace ChilliSource
                         }
                         //Check if we need to wrap before the next space so that words are not split
                         //across multiple lines
-                        else if(Char == kSpaceCharacter || Char == kTabCharacter)
+                        else if(Char == k_spaceCharacter || Char == k_tabCharacter)
                         {
                             //Find the length to the next space/tab from the cursor pos
                             //and if it exceed the bounds then wrap
@@ -597,7 +599,7 @@ namespace ChilliSource
                                 LookAheadChar = inText.next(jt);
                                 
                                 //Break if the next spacing or return character is reached
-                                if(LookAheadChar == kSpaceCharacter || LookAheadChar == kTabCharacter || LookAheadChar == kReturnCharacter)
+                                if(LookAheadChar == k_spaceCharacter || LookAheadChar == k_tabCharacter || LookAheadChar == k_returnCharacter)
                                     break;
                                 
                                 LookAheadNextChar = LookAheadChar;
@@ -693,74 +695,50 @@ namespace ChilliSource
 		//----------------------------------------------------
 		/// Build Character
 		//----------------------------------------------------
-		CharacterResult CanvasRenderer::BuildCharacter(const FontSPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
+		void CanvasRenderer::BuildCharacter(const FontCSPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
                                                          const Core::Vector2& invCursor, f32 infTextScale, f32 infCharSpacing,
                                                          f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound)
 		{
 			Font::CharacterInfo sInfo;
-			CharacterResult Result = inpFont->GetInfoForCharacter(inCharacter, sInfo);
+            if(inpFont->TryGetCharacterInfo(inCharacter, sInfo) == false)
+            {
+                outfCharacterWidth = 0.0f;
+                if(outpInvalidCharacterFound)
+                    (*outpInvalidCharacterFound)=true;
+                CS_LOG_ERROR("Invalid character in text component");
+                return;
+            }
+
+            sInfo.m_size *= infTextScale;
+            sInfo.m_offset *= infTextScale;
             
-            sInfo.vSize *= infTextScale;
-            sInfo.vOffset *= infTextScale;
-			
-			switch(Result)
-			{
-				case CharacterResult::k_ok:
-				{
-					PlacedCharacter sOutCharacter;
-					sOutCharacter.sUVs = sInfo.sUVs;
-					sOutCharacter.vSize = sInfo.vSize;
-					sOutCharacter.vPosition.x = invCursor.x + sInfo.vOffset.x;
-                    sOutCharacter.vPosition.y = invCursor.y - sInfo.vOffset.y;
-					
-                    f32 fCharWidth = sInfo.vSize.x + infCharSpacing;
+            f32 fCharWidth = sInfo.m_size.x + infCharSpacing;
+            
+            if(sInfo.m_size.y > 0.0f)
+            {
+                PlacedCharacter sOutCharacter;
+                sOutCharacter.sUVs = sInfo.m_UVs;
+                sOutCharacter.vSize = sInfo.m_size;
+                sOutCharacter.vPosition.x = invCursor.x + sInfo.m_offset.x;
+                sOutCharacter.vPosition.y = invCursor.y - sInfo.m_offset.y;
+                
+                if(inpFont->SupportsKerning() && fCharWidth > 2)
+                {
+                    f32 fKernAmount = (inpFont->GetKerningBetweenCharacters(inCharacter, inNextCharacter) * infTextScale);
                     
-                    if(inpFont->SupportsKerning() && fCharWidth>2)
+                    if(fKernAmount > (fCharWidth * k_maxKernRatio))
                     {
-                        f32 fKernAmount = (inpFont->GetKerningBetweenCharacters(inCharacter, inNextCharacter) * infTextScale);
-                        
-                        if(fKernAmount > (fCharWidth * k_maxKernRatio))
-                        {
-                            fKernAmount = fCharWidth * k_maxKernRatio;
-                        }
-                        
-                        fCharWidth -= fKernAmount;
+                        fKernAmount = fCharWidth * k_maxKernRatio;
                     }
                     
-					outfCharacterWidth = fCharWidth;
-					outCharacters.push_back(sOutCharacter);
-					break;
-				}
-                case CharacterResult::k_nbsp:
-				case CharacterResult::k_space:
-				{
-					//No sprite just space. The cursor will increment anyway
-					outfCharacterWidth = inpFont->GetAttributes().SpaceSpacing * infTextScale;
-					break;
-				}
-				case CharacterResult::k_tab:
-				{
-					outfCharacterWidth = inpFont->GetAttributes().TabSpacing * infTextScale;
-					break;
-				}
-				case CharacterResult::k_return:
-				{
-					outfCharacterWidth = 0.0f;
-					break;
-				}
-				case CharacterResult::k_invalid:
-				default:
-				{
-					outfCharacterWidth = 0.0f;
-                    if(outpInvalidCharacterFound)
-                        (*outpInvalidCharacterFound)=true;
-					CS_LOG_ERROR("Invalid character in text component");
-					break;
-				}
-			}
-			
-			return Result;
-		}
+                    fCharWidth -= fKernAmount;
+                }
+                
+                outCharacters.push_back(sOutCharacter);
+            }
+            
+            outfCharacterWidth = fCharWidth;
+        }
 		
         //----------------------------------------------------
         /// Wrap

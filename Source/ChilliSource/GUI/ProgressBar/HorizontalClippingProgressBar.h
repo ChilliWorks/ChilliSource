@@ -63,61 +63,61 @@ namespace ChilliSource
 			///
 			/// @param Sprite sheet
 			//--------------------------------------------------------
-			void SetBackgroundSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
+			void SetBackgroundTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas);
 			//--------------------------------------------------------
 			/// Set Progress Sprite Sheet
 			///
 			/// @param Sprite sheet
 			//--------------------------------------------------------
-			void SetProgressSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
+			void SetProgressTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas);
 			//--------------------------------------------------------
 			/// Get Background Sprite Sheet
 			///
 			/// @return Sprite sheet
 			//--------------------------------------------------------
-			const Rendering::SpriteSheetSPtr& GetBackgroundSpriteSheet() const;
+			const Rendering::TextureAtlasCSPtr& GetBackgroundTextureAtlas() const;
 			//--------------------------------------------------------
 			/// Get Progress Sprite Sheet
 			///
 			/// @return Sprite sheet
 			//--------------------------------------------------------
-			const Rendering::SpriteSheetSPtr& GetProgressSpriteSheet() const;
+			const Rendering::TextureAtlasCSPtr& GetProgressTextureAtlas() const;
 			//--------------------------------------------------------
 			/// Set Background Sprite Sheet Index
 			///
 			/// @param The index of the image within the sprite sheet
 			//--------------------------------------------------------
-			void SetBackgroundSpriteSheetIndex(u32 inudwIndex);
+			void SetBackgroundTextureAtlasIndex(u32 inudwIndex);
 			//--------------------------------------------------------
 			/// Set Progress Sprite Sheet Index
 			///
 			/// @param The index of the image within the sprite sheet
 			//--------------------------------------------------------
-			void SetProgressSpriteSheetIndex(u32 inudwIndex);
+			void SetProgressTextureAtlasIndex(u32 inudwIndex);
 			//--------------------------------------------------------
 			/// Get Background Sprite Sheet Index
 			///
 			/// @return The index of the image within the sprite sheet
 			//--------------------------------------------------------
-			u32 GetBackgroundSpriteSheetIndex() const;
+			u32 GetBackgroundTextureAtlasIndex() const;
 			//--------------------------------------------------------
 			/// Get Progress Sprite Sheet Index
 			///
 			/// @return The index of the image within the sprite sheet
 			//--------------------------------------------------------
-			u32 GetProgressSpriteSheetIndex() const;
+			u32 GetProgressTextureAtlasIndex() const;
 			//--------------------------------------------------------
 			/// Set Background Sprite Sheet Index ID
 			///
 			/// @param The index ID of the image within the sprite sheet
 			//--------------------------------------------------------
-			void SetBackgroundSpriteSheetIndexID(const std::string& instrID);
+			void SetBackgroundTextureAtlasID(const std::string& instrID);
 			//--------------------------------------------------------
 			/// Set Progress Sprite Sheet Index ID
 			///
 			/// @param The index ID of the image within the sprite sheet
 			//--------------------------------------------------------
-			void SetProgressSpriteSheetIndexID(const std::string& instrID);
+			void SetProgressTextureAtlasID(const std::string& instrID);
             //--------------------------------------------------------
             /// Enable Height From Image
             ///
@@ -142,13 +142,13 @@ namespace ChilliSource
 			///
 			/// @return The index of the image within the sprite sheet
 			//--------------------------------------------------------
-			const std::string& GetBackgroundSpriteSheetIndexID() const;
+			const std::string& GetBackgroundTextureAtlasID() const;
 			//--------------------------------------------------------
 			/// Get Progress Sprite Sheet Index ID
 			///
 			/// @return The index ID of the image within the sprite sheet
 			//--------------------------------------------------------
-			const std::string& GetProgressSpriteSheetIndexID() const;
+			const std::string& GetProgressTextureAtlasID() const;
             //--------------------------------------------------------
             /// Get Background View
             ///
@@ -161,14 +161,14 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(Rendering::TextureSPtr, BackgroundTexture, SetBackgroundImage, GetBackgroundImage);
 			DECLARE_PROPERTY_A(Rendering::TextureSPtr, ProgressTexture, SetProgressImage, GetProgressImage);
 
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, BackgroundSpriteSheet, SetBackgroundSpriteSheet, GetBackgroundSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, ProgressSpriteSheet, SetProgressSpriteSheet, GetProgressSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, BackgroundTextureAtlas, SetBackgroundTextureAtlas, GetBackgroundTextureAtlas);
+			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, ProgressTextureAtlas, SetProgressTextureAtlas, GetProgressTextureAtlas);
 
-			DECLARE_PROPERTY_A(u32, BackgroundSpriteSheetIndex, SetBackgroundSpriteSheetIndex, GetBackgroundSpriteSheetIndex);
-			DECLARE_PROPERTY_A(u32, ProgressSpriteSheetIndex, SetProgressSpriteSheetIndex, GetProgressSpriteSheetIndex);
+			DECLARE_PROPERTY_A(u32, BackgroundTextureAtlasIndex, SetBackgroundTextureAtlasIndex, GetBackgroundTextureAtlasIndex);
+			DECLARE_PROPERTY_A(u32, ProgressTextureAtlasIndex, SetProgressTextureAtlasIndex, GetProgressTextureAtlasIndex);
 
-			DECLARE_PROPERTY_A(std::string, BackgroundSpriteSheetIndexID, SetBackgroundSpriteSheetIndexID, GetBackgroundSpriteSheetIndexID);
-			DECLARE_PROPERTY_A(std::string, ProgressSpriteSheetIndexID, SetProgressSpriteSheetIndexID, GetProgressSpriteSheetIndexID);
+			DECLARE_PROPERTY_A(std::string, BackgroundTextureAtlasID, SetBackgroundTextureAtlasID, GetBackgroundTextureAtlasID);
+			DECLARE_PROPERTY_A(std::string, ProgressTextureAtlasID, SetProgressTextureAtlasID, GetProgressTextureAtlasID);
 			
             DECLARE_PROPERTY_A(bool, HeightFromImage, EnableHeightFromImage, IsHeightFromImageEnabled);
 

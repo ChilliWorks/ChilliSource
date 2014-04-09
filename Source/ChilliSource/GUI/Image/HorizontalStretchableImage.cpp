@@ -9,11 +9,14 @@
 
 #include <ChilliSource/GUI/Image/HorizontalStretchableImage.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 namespace ChilliSource
 {
@@ -21,8 +24,8 @@ namespace ChilliSource
 	{
 		DEFINE_META_CLASS(HorizontalStretchableImage)
 
-		DEFINE_PROPERTY(SpriteSheet);
-		DEFINE_PROPERTY(BaseSpriteSheetIndexID);
+		DEFINE_PROPERTY(TextureAtlas);
+		DEFINE_PROPERTY(BaseTextureAtlasID);
 		DEFINE_PROPERTY(HeightFromImage);
         DEFINE_PROPERTY(ActAsSpacer);
         
@@ -45,20 +48,32 @@ namespace ChilliSource
 		{
 			std::string strValue;
 
-            Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("SpriteSheetLocation", strValue))
+            //---Texture
+            Core::StorageLocation eTextureLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("TextureLocation", strValue))
             {
-                eSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+            }
+            if(insParams.TryGetValue("Texture", strValue))
+            {
+                Texture = LOAD_RESOURCE(Rendering::Texture, eTextureLocation, strValue);
             }
             
-			if(insParams.TryGetValue("SpriteSheet", strValue))
+            Core::StorageLocation eTextureAtlasLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("TextureAtlasLocation", strValue))
+            {
+                eTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+            }
+            
+			if(insParams.TryGetValue("TextureAtlas", strValue))
 			{
-				SetSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eSpriteSheetLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eTextureAtlasLocation, strValue));
 			}
 			
-			if(insParams.TryGetValue("BaseSpriteSheetIndexID", strValue))
+			if(insParams.TryGetValue("BaseTextureAtlasID", strValue))
 			{
-				SetBaseSpriteSheetIndexID(strValue);
+				SetBaseTextureAtlasID(strValue);
 			}
 			
             //---Height from image
@@ -77,18 +92,18 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet containing the patches
 		//---------------------------------------------------------
-		void HorizontalStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
+		void HorizontalStretchableImage::SetTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas)
 		{
-			SpriteSheet = inpSpriteSheet;
+			TextureAtlas = inpTextureAtlas;
 		}
 		//---------------------------------------------------------
 		/// Get Sprite Sheet
 		///
 		/// @return Sprite sheet containing the patches
 		//---------------------------------------------------------
-		const Rendering::SpriteSheetSPtr& HorizontalStretchableImage::GetSpriteSheet() const
+		const Rendering::TextureAtlasCSPtr& HorizontalStretchableImage::GetTextureAtlas() const
 		{
-			return SpriteSheet;
+			return TextureAtlas;
 		}
 		//---------------------------------------------------------
 		/// Set Base Sprite Sheet Index ID
@@ -101,15 +116,15 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		void HorizontalStretchableImage::SetBaseSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalStretchableImage::SetBaseTextureAtlasID(const std::string& instrID)
 		{
-			if(SpriteSheet)
+			if(TextureAtlas)
 			{
-				BaseSpriteSheetIndexID = instrID;
+				BaseTextureAtlasID = instrID;
 
-				mudwLeftCapIndex = SpriteSheet->GetFrameIndexByID(instrID + "LEFT");
-				mudwCentreIndex = SpriteSheet->GetFrameIndexByID(instrID + "CENTRE");
-				mudwRightCapIndex = SpriteSheet->GetFrameIndexByID(instrID + "RIGHT");
+				mudwLeftCapIndex = TextureAtlas->GetFrameIndexById(instrID + "LEFT");
+				mudwCentreIndex = TextureAtlas->GetFrameIndexById(instrID + "CENTRE");
+				mudwRightCapIndex = TextureAtlas->GetFrameIndexById(instrID + "RIGHT");
 			}
 		}
 		//---------------------------------------------------------
@@ -123,9 +138,9 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		const std::string& HorizontalStretchableImage::GetBaseSpriteSheetIndexID() const
+		const std::string& HorizontalStretchableImage::GetBaseTextureAtlasID() const
 		{
-			return BaseSpriteSheetIndexID;
+			return BaseTextureAtlasID;
 		}
 		//---------------------------------------------------------
 		/// Set Patch Sprite Sheet Indices
@@ -136,7 +151,7 @@ namespace ChilliSource
 		///
 		/// @param Array containing the tpage index of each patch
 		//---------------------------------------------------------
-		void HorizontalStretchableImage::SetSpriteSheetIndices(const u32* inpIndices)
+		void HorizontalStretchableImage::SetTextureAtlasIndices(const u32* inpIndices)
 		{
 			mudwLeftCapIndex = inpIndices[0];
 			mudwCentreIndex = inpIndices[1];
@@ -149,7 +164,7 @@ namespace ChilliSource
 		/// @param Sprite sheet index of centre patch
 		/// @param Sprite sheet index of right patch
 		//---------------------------------------------------------
-		void HorizontalStretchableImage::SetSpriteSheetIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight)
+		void HorizontalStretchableImage::SetTextureAtlasIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight)
 		{
 			mudwLeftCapIndex = inudwLeft;
 			mudwCentreIndex = inudwMid;
@@ -160,7 +175,7 @@ namespace ChilliSource
 		///
 		/// @param tpage index of left patch
 		//---------------------------------------------------------
-		void HorizontalStretchableImage::SetSpriteSheetLeftIndex(u32 inudwIndex)
+		void HorizontalStretchableImage::SetTextureAtlasLeftIndex(u32 inudwIndex)
 		{
 			mudwLeftCapIndex = inudwIndex;
 		}
@@ -169,7 +184,7 @@ namespace ChilliSource
 		///
 		/// @param tpage index of centre patch
 		//---------------------------------------------------------
-		void HorizontalStretchableImage::SetSpriteSheetCentreIndex(u32 inudwIndex)
+		void HorizontalStretchableImage::SetTextureAtlasCentreIndex(u32 inudwIndex)
 		{
 			mudwCentreIndex = inudwIndex;
 		}
@@ -178,7 +193,7 @@ namespace ChilliSource
 		///
 		/// @param tpage index of right patch
 		//---------------------------------------------------------
-		void HorizontalStretchableImage::SetSpriteSheetRightIndex(u32 inudwIndex)
+		void HorizontalStretchableImage::SetTextureAtlasRightIndex(u32 inudwIndex)
 		{
 			mudwRightCapIndex = inudwIndex;
 		}
@@ -214,7 +229,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		f32 HorizontalStretchableImage::GetCombinedCapWidth() const
 		{
-			return SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).x + SpriteSheet->GetSizeForFrame(mudwRightCapIndex).x;
+			return TextureAtlas->GetFrameSize(mudwLeftCapIndex).x + TextureAtlas->GetFrameSize(mudwRightCapIndex).x;
 		}
 		//--------------------------------------------------------
 		/// Get Combined Cap Height
@@ -223,7 +238,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		f32 HorizontalStretchableImage::GetCapHeight() const
 		{
-			return SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).y;
+			return TextureAtlas->GetFrameSize(mudwLeftCapIndex).y;
 		}
         //--------------------------------------------------------
         /// Layout Content
@@ -255,7 +270,7 @@ namespace ChilliSource
 		//---------------------------------------------------------
 		void HorizontalStretchableImage::Draw(Rendering::CanvasRenderer* inpCanvas)
 		{
-			if(Visible && SpriteSheet)
+			if(Visible && TextureAtlas && Texture)
 			{
 				Core::Vector2 vPanelSize = GetAbsoluteSize();
 				
@@ -282,12 +297,12 @@ namespace ChilliSource
                     matViewTransform.SetTransform(vPanelPos, Core::Vector2(1, 1), GetAbsoluteRotation());
                     
                     // Calculate dimentions and position for middle
-                    Core::Vector2 vPatchSize = SpriteSheet->GetSizeForFrame(mudwCentreIndex);
+                    Core::Vector2 vPatchSize = TextureAtlas->GetFrameSize(mudwCentreIndex);
                     vPatchSize.y = vPanelSize.y;
-                    vPatchSize.x = vPanelSize.x - (SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).x + SpriteSheet->GetSizeForFrame(mudwRightCapIndex).x);
+                    vPatchSize.x = vPanelSize.x - (TextureAtlas->GetFrameSize(mudwLeftCapIndex).x + TextureAtlas->GetFrameSize(mudwRightCapIndex).x);
                     // Record size the caps need to shrink
                     f32 fShrinkX = (vPatchSize.x < 0 ? vPatchSize.x : 0) * 0.5f;
-                    vPatchPos.x = vTopLeft.x + SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).x + fShrinkX;
+                    vPatchPos.x = vTopLeft.x + TextureAtlas->GetFrameSize(mudwLeftCapIndex).x + fShrinkX;
                     vPatchPos.y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topCentre).y;
                     // Clamp the size of the middle
                     vPatchSize.x = (vPatchSize.x < 0 ? 0 : vPatchSize.x);
@@ -298,9 +313,9 @@ namespace ChilliSource
                     matPatchTransform.Translate(vTopLeft);
                     Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                     inpCanvas->DrawBox(matTransform,
-                                       Core::Vector2(SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).x + fShrinkX,vPanelSize.y),
-                                       SpriteSheet->GetTexture(), 
-                                       SpriteSheet->GetUVsForFrame(mudwLeftCapIndex), 
+                                       Core::Vector2(TextureAtlas->GetFrameSize(mudwLeftCapIndex).x + fShrinkX,vPanelSize.y),
+                                       Texture,
+                                       TextureAtlas->GetFrameUVs(mudwLeftCapIndex), 
                                        AbsColour, 
                                        Rendering::AlignmentAnchor::k_topLeft);
                     
@@ -308,9 +323,9 @@ namespace ChilliSource
                     matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topRight));
                     Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                     inpCanvas->DrawBox(matTransform, 
-                                       Core::Vector2(SpriteSheet->GetSizeForFrame(mudwRightCapIndex).x + fShrinkX,vPanelSize.y),
-                                       SpriteSheet->GetTexture(), 
-                                       SpriteSheet->GetUVsForFrame(mudwRightCapIndex), 
+                                       Core::Vector2(TextureAtlas->GetFrameSize(mudwRightCapIndex).x + fShrinkX,vPanelSize.y),
+                                       Texture,
+                                       TextureAtlas->GetFrameUVs(mudwRightCapIndex), 
                                        AbsColour, 
                                        Rendering::AlignmentAnchor::k_topRight);
                     
@@ -319,8 +334,8 @@ namespace ChilliSource
                     Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                     inpCanvas->DrawBox(matTransform,
                                        vPatchSize,
-                                       SpriteSheet->GetTexture(),
-                                       SpriteSheet->GetUVsForFrame(mudwCentreIndex),
+                                       Texture,
+                                       TextureAtlas->GetFrameUVs(mudwCentreIndex),
                                        AbsColour,
                                        Rendering::AlignmentAnchor::k_topLeft);
 				}

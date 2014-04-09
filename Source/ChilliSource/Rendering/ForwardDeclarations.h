@@ -47,7 +47,6 @@ namespace ChilliSource
         //------------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Font);
         CS_FORWARDDECLARE_CLASS(FontProvider);
-        CS_FORWARDDECLARE_CLASS(FontManager);
         //------------------------------------------------------------
         /// Lighting
         //------------------------------------------------------------
@@ -74,6 +73,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_STRUCT(MeshFeatureDescriptor);
         CS_FORWARDDECLARE_STRUCT(SubMeshDescriptor);
         CS_FORWARDDECLARE_STRUCT(MeshDescriptor);
+        CS_FORWARDDECLARE_STRUCT(SkeletonDescriptor);
         CS_FORWARDDECLARE_CLASS(CSAnimProvider);
         CS_FORWARDDECLARE_CLASS(CSModelProvider);
         CS_FORWARDDECLARE_CLASS(Skeleton);
@@ -111,9 +111,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(DynamicSpriteBatch);
         CS_FORWARDDECLARE_CLASS(SpriteBatch);
         CS_FORWARDDECLARE_CLASS(SpriteComponent);
-        CS_FORWARDDECLARE_CLASS(SpriteSheet);
-        CS_FORWARDDECLARE_CLASS(SpriteSheetProvider);
-        CS_FORWARDDECLARE_CLASS(SpriteSheetManager);
         //------------------------------------------------------------
         /// Texture
         //------------------------------------------------------------
@@ -121,6 +118,8 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(CubemapManager);
         CS_FORWARDDECLARE_CLASS(Texture);
         CS_FORWARDDECLARE_CLASS(TextureManager);
+        CS_FORWARDDECLARE_CLASS(TextureAtlas);
+        CS_FORWARDDECLARE_CLASS(TextureAtlasProvider);
 	}
 }
 

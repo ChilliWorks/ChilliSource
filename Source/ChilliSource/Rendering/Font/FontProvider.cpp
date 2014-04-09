@@ -10,7 +10,12 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/Resource/Resourcepool.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Rendering/Font/Font.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 namespace ChilliSource
 {
@@ -20,6 +25,8 @@ namespace ChilliSource
         {
             const std::string k_charFileExtension("alphabet");
             const std::string k_kerningFileExtension("kerninginfo");
+            const std::string k_textureAtlasFileExtension("bin");
+            const std::string k_textureFileExtension("moimage");
             
             //----------------------------------------------------------------------------
             /// Load the font kerning information from the external file
@@ -60,9 +67,9 @@ namespace ChilliSource
                     {
                         kernLookups.push_back(Font::KernLookup(char1, kernPairs.size()));
                     }
-                    else if(kernLookups.back().wCharacter != char1)
+                    else if(kernLookups.back().m_character != char1)
                     {
-                        kernLookups.back().uwLength = kernPairs.size() - kernLookups.back().uwStart;
+                        kernLookups.back().m_length = kernPairs.size() - kernLookups.back().m_start;
                         kernLookups.push_back(Font::KernLookup(char1, kernPairs.size()));
                     }
                     kernPairs.push_back(Font::KernPair(char2, static_cast<f32>(spacing)));
@@ -84,43 +91,65 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool FontProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == FontProvider::InterfaceID;
+			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == FontProvider::InterfaceID;
 		}
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        Core::InterfaceIDType FontProvider::GetResourceType() const
+        {
+            return Font::InterfaceID;
+        }
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool FontProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
-		{
-			return in_interfaceId == Font::InterfaceID;
-		}
-		//----------------------------------------------------------------------------
-		//----------------------------------------------------------------------------
-		bool FontProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
+		bool FontProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
 		{
 			return in_extension == k_charFileExtension;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool FontProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
+		void FontProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
-            out_resource->SetLoaded(false);
+            LoadFont(in_location, in_filePath, nullptr, out_resource);
+		}
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void FontProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+        {
+            Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, Core::ResourceSPtr&>
+            task(this, &FontProvider::LoadFont, in_location, in_filePath, in_delegate, out_resource);
+            Core::TaskScheduler::ScheduleTask(task);
+        }
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void FontProvider::LoadFont(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+        {
+            //TODO: We will be combining a font resource into a single .font file. In the meantime we
+            //have to manually load the equivalent image file, data file and kerning file.
+            
+            Font* font = (Font*)(out_resource.get());
             
 			Core::FileStreamSPtr characterStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_read);
             if(characterStream == nullptr || characterStream->IsBad())
             {
-                return false;
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                if(in_delegate != nullptr)
+                {
+                    Core::Task<Core::ResourceSPtr&> task(in_delegate, out_resource);
+                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+                }
+                return;
             }
-
+            
             //Buffer for the character set
             std::string characters;
             characterStream->GetLine(characters);
             characterStream->Close();
-			
-            Font* font = (Font*)(out_resource.get());
             font->SetCharacterSet(characters);
             
-            // Get the kerning file
             std::string fileName, fileExtension;
             Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
+            
+            // Get the kerning file - optional
             const std::string kerningFilePath(fileName + "." + k_kerningFileExtension);
             Core::FileStreamSPtr kerningStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, kerningFilePath, Core::FileMode::k_read);
             
@@ -129,21 +158,36 @@ namespace ChilliSource
                 LoadKerningInfo(kerningStream, font);
             }
             
-            out_resource->SetLoaded(true);
-			
-			return true;
-		}
-        //----------------------------------------------------------------------------
-        //----------------------------------------------------------------------------
-        bool FontProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
-        {
-            //TODO: Implement this once we have a way of resolving whether loading of kerning and alphabet file on separate threads
-            //has worked
+            const std::string atlasFilePath(fileName + "." + k_textureAtlasFileExtension);
+            TextureAtlasCSPtr fontData = Core::Application::Get()->GetResourcePool()->LoadResource<TextureAtlas>(in_location, atlasFilePath);
+            font->SetCharacterData(fontData);
             
-            out_resource->SetLoaded(false);
+            if(fontData != nullptr)
+            {
+                const std::string textureFilePath(fileName + "." + k_textureFileExtension);
+                TextureSPtr textureData = LOAD_RESOURCE(Texture, in_location, textureFilePath);
+                font->SetTexture(textureData);
+                
+                if(textureData != nullptr)
+                {
+                    out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+                }
+                else
+                {
+                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                }
+            }
+            else
+            {
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            }
+
             
-            CS_LOG_WARNING("Async Font Loading Not Implemented");
-            return false;
+            if(in_delegate != nullptr)
+            {
+                Core::Task<Core::ResourceSPtr&> task(in_delegate, out_resource);
+                Core::TaskScheduler::ScheduleMainThreadTask(task);
+            }
         }
 	}
 }

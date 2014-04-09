@@ -9,14 +9,15 @@
 #include <ChilliSource/GUI/Button/HighlightButton.h>
 #include <ChilliSource/GUI/Image/ImageView.h>
 
-#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
@@ -36,15 +37,15 @@ namespace ChilliSource
 
 		DEFINE_PROPERTY(NormalTexture);
 		DEFINE_PROPERTY(HighlightTexture);
-		DEFINE_PROPERTY(NormalSpriteSheet);
-		DEFINE_PROPERTY(HighlightSpriteSheet);
+		DEFINE_PROPERTY(NormalTextureAtlas);
+		DEFINE_PROPERTY(HighlightTextureAtlas);
 
 		DEFINE_PROPERTY(HighlightColour);
 
-		DEFINE_PROPERTY(NormalSpriteSheetIndex);
-		DEFINE_PROPERTY(HighlightSpriteSheetIndex);
-		DEFINE_PROPERTY(NormalSpriteSheetIndexID);
-		DEFINE_PROPERTY(HighlightSpriteSheetIndexID);
+		DEFINE_PROPERTY(NormalTextureAtlasIndex);
+		DEFINE_PROPERTY(HighlightTextureAtlasIndex);
+		DEFINE_PROPERTY(NormalTextureAtlasID);
+		DEFINE_PROPERTY(HighlightTextureAtlasID);
 
 		DEFINE_PROPERTY(SizeFromImage);
 		DEFINE_PROPERTY(HeightMaintain);
@@ -55,7 +56,7 @@ namespace ChilliSource
         /// Create the widget by adding the background image
         //-----------------------------------------------------------
         HighlightButton::HighlightButton() 
-        : mpBackgroundImage(new ImageView()), NormalSpriteSheetIndex(0), HighlightSpriteSheetIndex(0), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
+        : mpBackgroundImage(new ImageView()), NormalTextureAtlasIndex(0), HighlightTextureAtlasIndex(0), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
         msDefaultUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         msHighlightUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
@@ -76,7 +77,7 @@ namespace ChilliSource
         /// From param dictionary
         //------------------------------------------------------------
         HighlightButton::HighlightButton(const Core::ParamDictionary& insParams) 
-        : Button(insParams), mpBackgroundImage(new ImageView()), NormalSpriteSheetIndex(0), HighlightSpriteSheetIndex(0),
+        : Button(insParams), mpBackgroundImage(new ImageView()), NormalTextureAtlasIndex(0), HighlightTextureAtlasIndex(0),
         msDefaultUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         msHighlightUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         mbSelected(false), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
@@ -111,46 +112,48 @@ namespace ChilliSource
                 SetHighlightImage(LOAD_RESOURCE(Rendering::Texture, eHighlightTextureLocation, strValue));
             }
             //---Sprite sheet
-            Core::StorageLocation eNormalSpriteSheetLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("NormalSpriteSheetLocation", strValue))
+            Core::StorageLocation eNormalTextureAtlasLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("NormalTextureAtlasLocation", strValue))
             {
-                eNormalSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eNormalTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
-            if(insParams.TryGetValue("NormalSpriteSheet", strValue))
+            if(insParams.TryGetValue("NormalTextureAtlas", strValue))
             {
-                SetNormalSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eNormalSpriteSheetLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetNormalTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eNormalTextureAtlasLocation, strValue));
             }
             //---Sprite sheet
-            Core::StorageLocation eHighlightSpriteSheetLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("HighlightSpriteSheetLocation", strValue))
+            Core::StorageLocation eHighlightTextureAtlasLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("HighlightTextureAtlasLocation", strValue))
             {
-                eHighlightSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eHighlightTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
-            if(insParams.TryGetValue("HighlightSpriteSheet", strValue))
+            if(insParams.TryGetValue("HighlightTextureAtlas", strValue))
             {
-                SetHighlightSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eHighlightSpriteSheetLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetHighlightTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eHighlightTextureAtlasLocation, strValue));
             }
             //---Default index
-            if(insParams.TryGetValue("NormalSpriteSheetIndex", strValue))
+            if(insParams.TryGetValue("NormalTextureAtlasIndex", strValue))
             {
-                CS_ASSERT(NormalSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
-                SetNormalSpriteSheetIndex(Core::ParseU32(strValue));
+                CS_ASSERT(NormalTextureAtlas, "Sprite sheet index cannot be set without sprite sheet");
+                SetNormalTextureAtlasIndex(Core::ParseU32(strValue));
             }
             //---Highlight index
-            if(insParams.TryGetValue("HighlightSpriteSheetIndex", strValue))
+            if(insParams.TryGetValue("HighlightTextureAtlasIndex", strValue))
             {
-				CS_ASSERT(HighlightSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
-				SetHighlightSpriteSheetIndex(Core::ParseU32(strValue));
+				CS_ASSERT(HighlightTextureAtlas, "Sprite sheet index cannot be set without sprite sheet");
+				SetHighlightTextureAtlasIndex(Core::ParseU32(strValue));
             }
 			//---Default index ID
-			if(insParams.TryGetValue("NormalSpriteSheetIndexID", strValue))
+			if(insParams.TryGetValue("NormalTextureAtlasID", strValue))
 			{
-				SetNormalSpriteSheetIndexID(strValue);
+				SetNormalTextureAtlasID(strValue);
 			}
 			//---Highlight index ID
-			if(insParams.TryGetValue("HighlightSpriteSheetIndexID", strValue))
+			if(insParams.TryGetValue("HighlightTextureAtlasID", strValue))
 			{
-				SetHighlightSpriteSheetIndexID(strValue);
+				SetHighlightTextureAtlasID(strValue);
 			}
             //---Highlight Colour
             if(insParams.TryGetValue("HighlightColour", strValue))
@@ -336,14 +339,14 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet with default image
         //-----------------------------------------------------------
-        void HighlightButton::SetNormalSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
+        void HighlightButton::SetNormalTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas)
         {
-            NormalSpriteSheet = inpSpriteSheet;
-            mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
+            NormalTextureAtlas = inpTextureAtlas;
+            mpBackgroundImage->SetTextureAtlas(inpTextureAtlas);
             
-            if(!HighlightSpriteSheet && NormalSpriteSheet)
+            if(!HighlightTextureAtlas && NormalTextureAtlas)
             {
-                SetHighlightSpriteSheet(inpSpriteSheet);
+                SetHighlightTextureAtlas(inpTextureAtlas);
             }
         }
 		//-----------------------------------------------------------
@@ -351,23 +354,23 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with default image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetSPtr& HighlightButton::GetNormalSpriteSheet() const
+		const Rendering::TextureAtlasCSPtr& HighlightButton::GetNormalTextureAtlas() const
 		{ 
-			return NormalSpriteSheet; 
+			return NormalTextureAtlas; 
 		}
 		//-----------------------------------------------------------
 		/// Set Highlight Sprite Sheet
 		///
 		/// @param Sprite sheet with highlight image
 		//-----------------------------------------------------------
-		void HighlightButton::SetHighlightSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
+		void HighlightButton::SetHighlightTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas)
 		{
-			HighlightSpriteSheet = inpSpriteSheet;
-			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
+			HighlightTextureAtlas = inpTextureAtlas;
+			mpBackgroundImage->SetTextureAtlas(inpTextureAtlas);
             
-            if(!NormalSpriteSheet && HighlightSpriteSheet)
+            if(!NormalTextureAtlas && HighlightTextureAtlas)
             {
-                SetNormalSpriteSheet(inpSpriteSheet);
+                SetNormalTextureAtlas(inpTextureAtlas);
             }
 		}
 		//-----------------------------------------------------------
@@ -375,86 +378,86 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with highlight image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetSPtr& HighlightButton::GetHighlightSpriteSheet() const 
+		const Rendering::TextureAtlasCSPtr& HighlightButton::GetHighlightTextureAtlas() const 
 		{ 
-			return HighlightSpriteSheet; 
+			return HighlightTextureAtlas; 
 		}
         //-----------------------------------------------------------
         /// Set Normal Sprite Sheet Index
         ///
         /// @param Index of default state on sprite sheet
         //-----------------------------------------------------------
-        void HighlightButton::SetNormalSpriteSheetIndex(u32 inudwIndex)
+        void HighlightButton::SetNormalTextureAtlasIndex(u32 inudwIndex)
         {
-            NormalSpriteSheetIndex = inudwIndex;
-            mpBackgroundImage->SetSpriteSheetIndex(inudwIndex);
+            NormalTextureAtlasIndex = inudwIndex;
+            mpBackgroundImage->SetTextureAtlasIndex(inudwIndex);
         }
         //-----------------------------------------------------------
         /// Set Highlight Sprite Sheet Index
         ///
         /// @param Index of highlight state on sprite sheet
         //-----------------------------------------------------------
-        void HighlightButton::SetHighlightSpriteSheetIndex(u32 inudwIndex)
+        void HighlightButton::SetHighlightTextureAtlasIndex(u32 inudwIndex)
         {
-            HighlightSpriteSheetIndex = inudwIndex;
+            HighlightTextureAtlasIndex = inudwIndex;
         }
 		//-----------------------------------------------------------
 		/// Get Normal Sprite Sheet Index
 		///
 		/// @return Index of default state on sprite sheet
 		//-----------------------------------------------------------
-		u32 HighlightButton::GetNormalSpriteSheetIndex() const
+		u32 HighlightButton::GetNormalTextureAtlasIndex() const
 		{
-			return NormalSpriteSheetIndex;
+			return NormalTextureAtlasIndex;
 		}
 		//-----------------------------------------------------------
 		/// Get Highlight Sprite Sheet Index
 		///
 		/// @return Index of highlight state on sprite sheet
 		//-----------------------------------------------------------
-		u32 HighlightButton::GetHighlightSpriteSheetIndex() const
+		u32 HighlightButton::GetHighlightTextureAtlasIndex() const
 		{
-			return HighlightSpriteSheetIndex;
+			return HighlightTextureAtlasIndex;
 		}
 		//-----------------------------------------------------------
 		/// Set Normal Sprite Sheet Index
 		///
 		/// @param Index of default state on sprite sheet
 		//-----------------------------------------------------------
-		void HighlightButton::SetNormalSpriteSheetIndexID(const std::string& instrID)
+		void HighlightButton::SetNormalTextureAtlasID(const std::string& instrID)
 		{
-			CS_ASSERT(NormalSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-			NormalSpriteSheetIndexID = instrID;
-			SetNormalSpriteSheetIndex(NormalSpriteSheet->GetFrameIndexByID(instrID));
+			CS_ASSERT(NormalTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
+			NormalTextureAtlasID = instrID;
+			SetNormalTextureAtlasIndex(NormalTextureAtlas->GetFrameIndexById(instrID));
 		}
 		//-----------------------------------------------------------
 		/// Set Highlight Sprite Sheet Index ID
 		///
 		/// @param Index ID of highlight state on sprite sheet
 		//-----------------------------------------------------------
-		void HighlightButton::SetHighlightSpriteSheetIndexID(const std::string& instrID)
+		void HighlightButton::SetHighlightTextureAtlasID(const std::string& instrID)
 		{
-			CS_ASSERT(HighlightSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-			HighlightSpriteSheetIndexID = instrID;
-			SetHighlightSpriteSheetIndex(HighlightSpriteSheet->GetFrameIndexByID(instrID));
+			CS_ASSERT(HighlightTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
+			HighlightTextureAtlasID = instrID;
+			SetHighlightTextureAtlasIndex(HighlightTextureAtlas->GetFrameIndexById(instrID));
 		}
 		//-----------------------------------------------------------
 		/// Get Normal Sprite Sheet Index ID
 		///
 		/// @return Index ID of default state on sprite sheet
 		//-----------------------------------------------------------
-		const std::string& HighlightButton::GetNormalSpriteSheetIndexID() const
+		const std::string& HighlightButton::GetNormalTextureAtlasID() const
 		{
-			return NormalSpriteSheetIndexID;
+			return NormalTextureAtlasID;
 		}
 		//-----------------------------------------------------------
 		/// Get Highlight Sprite Sheet Index ID
 		///
 		/// @return Index ID of highlight state on sprite sheet
 		//-----------------------------------------------------------
-		const std::string& HighlightButton::GetHighlightSpriteSheetIndexID() const
+		const std::string& HighlightButton::GetHighlightTextureAtlasID() const
 		{
-			return HighlightSpriteSheetIndexID;
+			return HighlightTextureAtlasID;
 		}
 		//--------------------------------------------------------
         /// Enable Size From Image
@@ -544,21 +547,17 @@ namespace ChilliSource
 				{
 					mpSelectAudioEffect->Play();
 				}
-				
-				if(HighlightTexture)
+                
+                mpBackgroundImage->SetTexture(HighlightTexture);
+                
+                if(NormalTextureAtlas)
 				{
-					mpBackgroundImage->SetTexture(HighlightTexture);
-                    mpBackgroundImage->SetUVs(msHighlightUVs);
-                    mpBackgroundImage->SetColour(HighlightColour);
-				}
-				else if(NormalSpriteSheet)
-				{
-					bool bUniqueHighlight = HighlightSpriteSheetIndex != NormalSpriteSheetIndex;
+					bool bUniqueHighlight = HighlightTextureAtlasIndex != NormalTextureAtlasIndex;
 					
-					if (bUniqueHighlight && HighlightSpriteSheet)
+					if (bUniqueHighlight && HighlightTextureAtlas)
 					{
-						mpBackgroundImage->SetSpriteSheet(HighlightSpriteSheet);
-						mpBackgroundImage->SetSpriteSheetIndex(HighlightSpriteSheetIndex);
+						mpBackgroundImage->SetTextureAtlas(HighlightTextureAtlas);
+						mpBackgroundImage->SetTextureAtlasIndex(HighlightTextureAtlasIndex);
 					} 
 					else 
 					{
@@ -566,6 +565,11 @@ namespace ChilliSource
 					}
 
 				}
+                else
+                {
+                    mpBackgroundImage->SetUVs(msHighlightUVs);
+                    mpBackgroundImage->SetColour(HighlightColour);
+                }
 			}
         }
         //-----------------------------------------------------------
@@ -578,19 +582,21 @@ namespace ChilliSource
 				{
 					mpDeselectAudioEffect->Play();
 				}
+                
+                mpBackgroundImage->SetTexture(NormalTexture);
 				
-				if(NormalTexture)
-				{
-					mpBackgroundImage->SetTexture(NormalTexture);
-                    mpBackgroundImage->SetUVs(msDefaultUVs);
-                    mpBackgroundImage->SetColour(Core::Colour::k_white);
-				}
-				else if(NormalSpriteSheet)
+
+                if(NormalTextureAtlas)
 				{
 					mpBackgroundImage->SetColour(Core::Colour::k_white);
-					mpBackgroundImage->SetSpriteSheetIndex(NormalSpriteSheetIndex);
-					mpBackgroundImage->SetSpriteSheet(NormalSpriteSheet);
+					mpBackgroundImage->SetTextureAtlasIndex(NormalTextureAtlasIndex);
+					mpBackgroundImage->SetTextureAtlas(NormalTextureAtlas);
 				}
+                else
+                {
+                    mpBackgroundImage->SetUVs(msDefaultUVs);
+                    mpBackgroundImage->SetColour(Core::Colour::k_white);
+                }
 				
 				mbSelected = false;
 			}

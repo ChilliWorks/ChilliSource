@@ -13,6 +13,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
