@@ -123,10 +123,16 @@ namespace ChilliSource
         void PointerSystem::ProcessQueuedInput()
         {
             std::unique_lock<std::mutex> lock(m_mutex);
-
+            std::queue<PointerEvent> eventQueue = m_eventQueue;
             while (m_eventQueue.empty() == false)
             {
-                PointerEvent& event = m_eventQueue.front();
+                m_eventQueue.pop();
+            }
+            lock.unlock();
+            
+            while (eventQueue.empty() == false)
+            {
+                PointerEvent& event = eventQueue.front();
                 
                 switch (event.m_type)
                 {
@@ -150,7 +156,7 @@ namespace ChilliSource
                         break;
                 }
                 
-                m_eventQueue.pop();
+                eventQueue.pop();
             }
         }
         //----------------------------------------------------
