@@ -8,6 +8,10 @@
 
 #include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayExpansionJavaInterface.h>
 
+#include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayExpansionSystem.h>
+#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
+
 #include <jni.h>
 
 ChilliSource::Android::GooglePlayExpansionSystem* g_expansionSystem = nullptr;
@@ -26,7 +30,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 {
 	if(g_expansionSystem)
 	{
-		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::DownloadStatus::k_downloading);
+		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::GooglePlayExpansionSystem::DownloadStatus::k_downloading);
 	}
 }
 
@@ -34,7 +38,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 {
 	if(g_expansionSystem)
 	{
-		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::DownloadStatus::k_complete);
+		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::GooglePlayExpansionSystem::DownloadStatus::k_complete);
 	}
 }
 
@@ -42,7 +46,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 {
 	if(g_expansionSystem)
 	{
-		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::DownloadStatus::k_failed);
+		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::GooglePlayExpansionSystem::DownloadStatus::k_failed);
 	}
 }
 
@@ -50,7 +54,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 {
 	if(g_expansionSystem)
 	{
-		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::DownloadStatus::k_failedInsufficientStorage);
+		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::GooglePlayExpansionSystem::DownloadStatus::k_failedInsufficientStorage);
 	}
 }
 
@@ -58,7 +62,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 {
 	if(g_expansionSystem)
 	{
-		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::DownloadStatus::k_paused);
+		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::GooglePlayExpansionSystem::DownloadStatus::k_paused);
 	}
 }
 
@@ -66,7 +70,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 {
 	if(g_expansionSystem)
 	{
-		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::DownloadStatus::k_pausedNoWiFi);
+		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::GooglePlayExpansionSystem::DownloadStatus::k_pausedNoWiFi);
 	}
 }
 

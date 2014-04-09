@@ -11,6 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
 
 namespace ChilliSource
 {

@@ -122,7 +122,7 @@ namespace ChilliSource
             //-------------------------------------------------------------
             void OnDownloadStatusChanged(DownloadStatus in_Status);
         private:
-        	friend class Application;
+        	friend class Core::Application;
         	//----------------------------------------------------------------
         	/// Creates a new instance of the system.
         	///
@@ -196,13 +196,13 @@ namespace ChilliSource
             ///
             /// @return Storage requirements for installation
             //-------------------------------------------------------------
-            u64 GetRequiredInstallSpaceInBytes() const;
+            u64 GetRequiredInstallSpaceInBytes();
             //-------------------------------------------------------------
             /// @author H McLaughlin
             ///
             /// @return Storage requirements for download
             //-------------------------------------------------------------
-            u64 GetRequiredDownloadSpaceInBytes() const;
+            u64 GetRequiredDownloadSpaceInBytes();
             //-------------------------------------------------------------
             /// A task for unzipping the expansions.
             ///

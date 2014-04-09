@@ -9,7 +9,7 @@
 #include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayExpansionSystem.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
+#include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayExpansionJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
@@ -194,7 +194,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
         void GooglePlayExpansionSystem::Download(const DownloadStatusDelegate& in_delegate)
         {
-        	m_downloadStatusDelegate = m_javaInterface;
+        	m_downloadStatusDelegate = in_delegate;
 
         	if(!IsDownloadRequired())
         	{
@@ -285,7 +285,7 @@ namespace ChilliSource
         {
         	u32 kudwSafetyPaddingInBytes = 256;
         	u64 uddwFileSize = kudwSafetyPaddingInBytes;
-        	for(u32 i=0; i<mudwNumExpansions; ++i)
+        	for(u32 i=0; i<m_numExpansions; ++i)
         	{
         		uddwFileSize += m_javaInterface->GetExpansionFileSizeInBytes(i);
         	}
@@ -299,7 +299,7 @@ namespace ChilliSource
         	u32 kudwSafetyPaddingInBytes = 256;
         	u64 uddwFileSize = kudwSafetyPaddingInBytes;
 
-        	for(u32 i=0; i<mudwNumExpansions; ++i)
+        	for(u32 i=0; i<m_numExpansions; ++i)
         	{
         		uddwFileSize += GetUncompressedZipSize(m_javaInterface->GetExpansionPath(i));
         	}
@@ -325,7 +325,7 @@ namespace ChilliSource
 
         	m_javaInterface->SetGooglePlayExpansionSystem(this);
         	m_javaInterface->Init();
-        	mudwNumExpansions = m_javaInterface->GetNumExpansions();
+        	m_numExpansions = m_javaInterface->GetNumExpansions();
         }
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
@@ -366,7 +366,7 @@ namespace ChilliSource
         	RemoveInstalledFiles();
 
         	Json::Value jManifest(Json::arrayValue);
-			for(u32 i=0; i<mudwNumExpansions; ++i)
+			for(u32 i=0; i<m_numExpansions; ++i)
 			{
 				Unzip(m_javaInterface->GetExpansionPath(i), jManifest);
 			}
@@ -475,7 +475,7 @@ namespace ChilliSource
         			unzCloseCurrentFile(ZippedFile);
         			dwStatus = unzGoToNextFile(ZippedFile);
 
-        			mfInstallProgress = (f32)dwCurrentEntry / (f32)dwTotalNumEntries;
+        			m_installProgress = (f32)dwCurrentEntry / (f32)dwTotalNumEntries;
         			dwCurrentEntry++;
         		}
 
@@ -488,11 +488,11 @@ namespace ChilliSource
         {
 			Json::Value jDesc(Json::arrayValue);
 
-			for(u32 i=0; i<mudwNumExpansions; ++i)
+			for(u32 i=0; i<m_numExpansions; ++i)
 			{
 				Json::Value jExpansion;
-				jExpansion["VersionCode"] = mpJavaInterface->GetExpansionVersionCode(i);
-				jExpansion["FileSize"] = (u32)mpJavaInterface->GetExpansionFileSizeInBytes(i);
+				jExpansion["VersionCode"] = m_javaInterface->GetExpansionVersionCode(i);
+				jExpansion["FileSize"] = (u32)m_javaInterface->GetExpansionFileSizeInBytes(i);
 				jDesc.append(jExpansion);
 			}
 
@@ -532,7 +532,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------
         //-------------------------------------------------------------
-        void OnDestroy()
+        void GooglePlayExpansionSystem::OnDestroy()
         {
         	m_javaInterface->SetGooglePlayExpansionSystem(nullptr);
         	m_javaInterface.reset();
