@@ -387,7 +387,7 @@ namespace ChilliSource
                 
                 if(HighlightTextureAtlas)
 				{
-					bool bUniqueHighlight = BaseHighlightTextureAtlasID != BaseNormalTextureAtlasID;
+                    bool bUniqueHighlight = BaseHighlightTextureAtlasID.empty() == false && BaseHighlightTextureAtlasID != BaseNormalTextureAtlasID;
 					
 					if (bUniqueHighlight && HighlightTextureAtlas)
 					{
