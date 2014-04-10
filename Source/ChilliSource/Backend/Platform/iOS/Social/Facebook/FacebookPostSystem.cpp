@@ -109,80 +109,83 @@ namespace ChilliSource
             CS_ASSERT(m_requestCompleteDelegate == nullptr, "Cannot request more than once at a time");
             CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to request");
             
-            //Construct a list of comma separated IDs
-            std::string recipients;
-            Core::StringUtils::ToCSV(in_desc.m_recipients, recipients);
-            
-            m_requestCompleteDelegate = in_delegate;
-            
-            NSString* requestType = @"to";
-            
-            switch (in_desc.m_type)
+            @autoreleasepool
             {
-                case RequestRecipientMode::k_fixed:
-                    requestType = @"to";
-                    break;
-                case RequestRecipientMode::k_optional:
-                    requestType = @"suggestions";
-                    break;
-            }
-            
-            NSString* nsReciptients = [NSStringUtils newNSStringWithString:recipients];
-            
-            NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjectsAndKeys:nsReciptients, requestType, nil];
-            
-            [nsReciptients release];
-            
-            NSString* description = [NSStringUtils newNSStringWithString:in_desc.m_description];
-            NSString* caption = [NSStringUtils newNSStringWithString:in_desc.m_caption];
-            
-            [FBWebDialogs presentRequestsDialogModallyWithSession:nil message:description title:caption parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error)
-             {
-                 if(!error)
+                //Construct a list of comma separated IDs
+                std::string recipients;
+                Core::StringUtils::ToCSV(in_desc.m_recipients, recipients);
+                
+                m_requestCompleteDelegate = in_delegate;
+                
+                NSString* requestType = @"to";
+                
+                switch (in_desc.m_type)
+                {
+                    case RequestRecipientMode::k_fixed:
+                        requestType = @"to";
+                        break;
+                    case RequestRecipientMode::k_optional:
+                        requestType = @"suggestions";
+                        break;
+                }
+                
+                NSString* nsReciptients = [NSStringUtils newNSStringWithString:recipients];
+                
+                NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjectsAndKeys:nsReciptients, requestType, nil];
+                
+                [nsReciptients release];
+                
+                NSString* description = [NSStringUtils newNSStringWithString:in_desc.m_description];
+                NSString* caption = [NSStringUtils newNSStringWithString:in_desc.m_caption];
+                
+                [FBWebDialogs presentRequestsDialogModallyWithSession:nil message:description title:caption parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error)
                  {
-                     if(m_requestCompleteDelegate)
+                     if(!error)
                      {
-                         if(result == FBWebDialogResultDialogCompleted)
+                         if(m_requestCompleteDelegate)
                          {
-                             NSDictionary* urlParams = [URLParser parseURLParams:[resultURL query]];
-                             if (![urlParams valueForKey:@"request"])
+                             if(result == FBWebDialogResultDialogCompleted)
                              {
-                                 // User clicked the Cancel button
-                                m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
-                                m_requestCompleteDelegate = nullptr;
+                                 NSDictionary* urlParams = [URLParser parseURLParams:[resultURL query]];
+                                 if (![urlParams valueForKey:@"request"])
+                                 {
+                                     // User clicked the Cancel button
+                                    m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                                    m_requestCompleteDelegate = nullptr;
+                                 }
+                                 else
+                                 {
+                                    // User clicked the Share button
+                                    m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
+                                    m_requestCompleteDelegate = nullptr;
+                                 }
+                 
+                                 [urlParams release];
                              }
                              else
                              {
-                                // User clicked the Share button
-                                m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
-                                m_requestCompleteDelegate = nullptr;
+                                 // User clicked the X button
+                                 m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                                 m_requestCompleteDelegate = nullptr;
                              }
-             
-                             [urlParams release];
                          }
-                         else
+                     }
+                     else
+                     {
+                         NSLog(@"%@", error.localizedDescription);
+                         NSLog(@"%@", error.description);
+                 
+                         if(m_requestCompleteDelegate)
                          {
-                             // User clicked the X button
-                             m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
+                             m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
                              m_requestCompleteDelegate = nullptr;
                          }
                      }
-                 }
-                 else
-                 {
-                     NSLog(@"%@", error.localizedDescription);
-                     NSLog(@"%@", error.description);
-             
-                     if(m_requestCompleteDelegate)
-                     {
-                         m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
-                         m_requestCompleteDelegate = nullptr;
-                     }
-                 }
-             }];
-            
-            [description release];
-            [caption release];
+                 }];
+                
+                [description release];
+                [caption release];
+            }
         }
         //----------------------------------------------------
         //----------------------------------------------------

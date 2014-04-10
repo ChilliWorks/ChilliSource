@@ -115,80 +115,83 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		void TwitterPostSystem::PostUsingiOS(const Social::TwitterPostSystem::PostDesc& in_desc, const Social::TwitterPostSystem::PostResultDelegate& in_delegate)
 		{
-			if([TWTweetComposeViewController canSendTweet])
+            @autoreleasepool
             {
-                TWTweetComposeViewController* pComposeViewController = [[TWTweetComposeViewController alloc] init];
-                
-                m_postDelegate = in_delegate;
-                
-                //Set the text
-                if(in_desc.m_text.length() > 0)
+                if([TWTweetComposeViewController canSendTweet])
                 {
-                    NSString* text = [NSStringUtils newNSStringWithUTF8String:in_desc.m_text];
-                    [pComposeViewController setInitialText:text];
-                    [text release];
-                }
-                
-                bool bImageAttached = true;
-                if(in_desc.m_localImagePath.length() > 0)
-                {
-                    std::string strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_desc.m_localImageStorageLocation) + in_desc.m_localImagePath;
+                    TWTweetComposeViewController* pComposeViewController = [[TWTweetComposeViewController alloc] init];
                     
-                    NSString* pImagePath = [NSStringUtils newNSStringWithString:strPath];
-                    UIImage* pImage = [UIImage imageWithContentsOfFile:pImagePath];
-                    [pImagePath release];
+                    m_postDelegate = in_delegate;
                     
-                    if(pImage != nil)
+                    //Set the text
+                    if(in_desc.m_text.length() > 0)
                     {
-                        bImageAttached = [pComposeViewController addImage:pImage];
-                        if(!bImageAttached)
+                        NSString* text = [NSStringUtils newNSStringWithUTF8String:in_desc.m_text];
+                        [pComposeViewController setInitialText:text];
+                        [text release];
+                    }
+                    
+                    bool bImageAttached = true;
+                    if(in_desc.m_localImagePath.length() > 0)
+                    {
+                        std::string strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_desc.m_localImageStorageLocation) + in_desc.m_localImagePath;
+                        
+                        NSString* pImagePath = [NSStringUtils newNSStringWithString:strPath];
+                        UIImage* pImage = [UIImage imageWithContentsOfFile:pImagePath];
+                        [pImagePath release];
+                        
+                        if(pImage != nil)
                         {
-                            CS_LOG_ERROR("TwitterPostSystem::TryPostUsingiOS - Failed to attach image to tweet, most likely because limit has been reached");
+                            bImageAttached = [pComposeViewController addImage:pImage];
+                            if(!bImageAttached)
+                            {
+                                CS_LOG_ERROR("TwitterPostSystem::TryPostUsingiOS - Failed to attach image to tweet, most likely because limit has been reached");
+                            }
                         }
                     }
-                }
-                
-                //Add a url if available
-                if(in_desc.m_url.length() > 0)
-                {
-                    NSString* urlString = [NSStringUtils newNSStringWithString:in_desc.m_url];
-                    [pComposeViewController addURL:[NSURL URLWithString:urlString]];
-                    [urlString release];
-                }
-                
-                
-                //Set the completion handler to call our completion delegate
-                pComposeViewController.completionHandler = ^(TWTweetComposeViewControllerResult inResult)
-                {
-					if(m_postDelegate)
-					{
-						switch(inResult)
-						{
-							case TWTweetComposeViewControllerResultDone:
-								m_postDelegate(Social::TwitterPostSystem::PostResult::k_success);
-								break;
-							case TWTweetComposeViewControllerResultCancelled:
-								m_postDelegate(Social::TwitterPostSystem::PostResult::k_cancelled);
-								break;
-							default:
-								m_postDelegate(Social::TwitterPostSystem::PostResult::k_failed);
-								break;
-						};
-                        
-                        m_postDelegate = nullptr;
-					}
                     
-                    [[EAGLView sharedInstance].viewController dismissModalViewControllerAnimated:YES];
-                };
-                
-                [[EAGLView sharedInstance].viewController presentModalViewController:pComposeViewController animated:YES];
-                [pComposeViewController release];
-            }
-            else
-            {
-                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"No Twitter account" message:@"Please sign in to your Twitter account from the device settings" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [alertView show];
-                [alertView release];
+                    //Add a url if available
+                    if(in_desc.m_url.length() > 0)
+                    {
+                        NSString* urlString = [NSStringUtils newNSStringWithString:in_desc.m_url];
+                        [pComposeViewController addURL:[NSURL URLWithString:urlString]];
+                        [urlString release];
+                    }
+                    
+                    
+                    //Set the completion handler to call our completion delegate
+                    pComposeViewController.completionHandler = ^(TWTweetComposeViewControllerResult inResult)
+                    {
+                        if(m_postDelegate)
+                        {
+                            switch(inResult)
+                            {
+                                case TWTweetComposeViewControllerResultDone:
+                                    m_postDelegate(Social::TwitterPostSystem::PostResult::k_success);
+                                    break;
+                                case TWTweetComposeViewControllerResultCancelled:
+                                    m_postDelegate(Social::TwitterPostSystem::PostResult::k_cancelled);
+                                    break;
+                                default:
+                                    m_postDelegate(Social::TwitterPostSystem::PostResult::k_failed);
+                                    break;
+                            };
+                            
+                            m_postDelegate = nullptr;
+                        }
+                        
+                        [[EAGLView sharedInstance].viewController dismissModalViewControllerAnimated:YES];
+                    };
+                    
+                    [[EAGLView sharedInstance].viewController presentModalViewController:pComposeViewController animated:YES];
+                    [pComposeViewController release];
+                }
+                else
+                {
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"No Twitter account" message:@"Please sign in to your Twitter account from the device settings" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [alertView show];
+                    [alertView release];
+                }
             }
 		}
 		//------------------------------------------------------------------------

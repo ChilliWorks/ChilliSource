@@ -41,27 +41,30 @@ namespace ChilliSource
 		//-----------------------------------------------
 		void WebViewActivity::Present(const std::string& instrURL, f32 infDismissButtonScale)
 		{
-            mfDismissButtonScale = infDismissButtonScale;
-            
-			if(!mpWebView)
-			{
-                CreateWebview();
-				
-                mstrAnchor = "";
+            @autoreleasepool
+            {
+                mfDismissButtonScale = infDismissButtonScale;
                 
-                NSString* urlString = [NSStringUtils newNSStringWithString:instrURL];
-				NSURL* pUrl = [NSURL URLWithString:urlString];
-				[urlString release];
+                if(!mpWebView)
+                {
+                    CreateWebview();
+                    
+                    mstrAnchor = "";
+                    
+                    NSString* urlString = [NSStringUtils newNSStringWithString:instrURL];
+                    NSURL* pUrl = [NSURL URLWithString:urlString];
+                    [urlString release];
+                    
+                    [mpWebView loadRequest:[NSURLRequest requestWithURL:pUrl]];
+                    
+                    mpWebView.backgroundColor = [UIColor clearColor];
+                    mpWebView.opaque = NO;
+                    
+                    AddActivityIndicator();
+                }
                 
-				[mpWebView loadRequest:[NSURLRequest requestWithURL:pUrl]];
-				
-				mpWebView.backgroundColor = [UIColor clearColor];
-				mpWebView.opaque = NO;
-                
-                AddActivityIndicator();
-			}
-            
-            Display();
+                Display();
+            }
 		}
 		//-----------------------------------------------
 		/// Present From File
@@ -73,62 +76,65 @@ namespace ChilliSource
 		//-----------------------------------------------
 		void WebViewActivity::PresentFromFile(Core::StorageLocation ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale)
 		{
-            mfDismissButtonScale = infDismissButtonScale;
-            
-			if(!mpWebView)
-			{
-                CreateWebview();
-				
-                std::string strFile;
+            @autoreleasepool
+            {
+                mfDismissButtonScale = infDismissButtonScale;
                 
-                size_t udwAnchorStart = instrFile.find_last_of('#');
-                bool bHasAnchor = (udwAnchorStart != std::string::npos);
-                
-                if(bHasAnchor)
+                if(!mpWebView)
                 {
-                    mstrAnchor = instrFile.substr(udwAnchorStart, instrFile.size() - udwAnchorStart);
-                    strFile = instrFile.substr(0, udwAnchorStart);
-                }
-                else
-                {
-                    mstrAnchor = "";
-                    strFile = instrFile;
-                }
-                
-				iOS::FileSystem* pFileSystem = static_cast<iOS::FileSystem*>(Core::Application::Get()->GetFileSystem());
+                    CreateWebview();
+                    
+                    std::string strFile;
+                    
+                    size_t udwAnchorStart = instrFile.find_last_of('#');
+                    bool bHasAnchor = (udwAnchorStart != std::string::npos);
+                    
+                    if(bHasAnchor)
+                    {
+                        mstrAnchor = instrFile.substr(udwAnchorStart, instrFile.size() - udwAnchorStart);
+                        strFile = instrFile.substr(0, udwAnchorStart);
+                    }
+                    else
+                    {
+                        mstrAnchor = "";
+                        strFile = instrFile;
+                    }
+                    
+                    iOS::FileSystem* pFileSystem = static_cast<iOS::FileSystem*>(Core::Application::Get()->GetFileSystem());
 
-				std::string strPath;
-                
-                switch(ineStorageLocation)
-                {
-                    default:
-                        strPath = pFileSystem->GetAbsolutePathToStorageLocation(ineStorageLocation);
-                        break;
-                    case Core::StorageLocation::k_package:
-                        strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(Core::StorageLocation::k_package, strFile);
-                        break;
-                    case Core::StorageLocation::k_DLC:
-                        strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(Core::StorageLocation::k_DLC, strFile);
-                        break;
-                }
+                    std::string strPath;
+                    
+                    switch(ineStorageLocation)
+                    {
+                        default:
+                            strPath = pFileSystem->GetAbsolutePathToStorageLocation(ineStorageLocation);
+                            break;
+                        case Core::StorageLocation::k_package:
+                            strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(Core::StorageLocation::k_package, strFile);
+                            break;
+                        case Core::StorageLocation::k_DLC:
+                            strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(Core::StorageLocation::k_DLC, strFile);
+                            break;
+                    }
 
-                std::string strHTMLFileContents;
-                Core::FileStreamSPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
-                pHTMLFile->GetAll(strHTMLFileContents);
+                    std::string strHTMLFileContents;
+                    Core::FileStreamSPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
+                    pHTMLFile->GetAll(strHTMLFileContents);
+                    
+                    NSString* pstrHTML = [NSStringUtils newNSStringWithString:strHTMLFileContents];
+                    NSString* urlString = [NSStringUtils newNSStringWithString:strPath];
+                    [mpWebView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:urlString]];
+                    [urlString release];
+                    [pstrHTML release];
+                    
+                    mpWebView.backgroundColor = [UIColor clearColor];
+                    mpWebView.opaque = NO;
+                    
+                    AddActivityIndicator();
+                }
                 
-                NSString* pstrHTML = [NSStringUtils newNSStringWithString:strHTMLFileContents];
-                NSString* urlString = [NSStringUtils newNSStringWithString:strPath];
-                [mpWebView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:urlString]];
-                [urlString release];
-                [pstrHTML release];
-                
-                mpWebView.backgroundColor = [UIColor clearColor];
-                mpWebView.opaque = NO;
-                
-                AddActivityIndicator();
-			}
-            
-			Display();
+                Display();
+            }
 		}
         
         //-----------------------------------------------
