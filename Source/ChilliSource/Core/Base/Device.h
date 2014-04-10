@@ -75,13 +75,6 @@ namespace ChilliSource
 			/// @return The number of cores available on device
 			//--------------------------------------------
 			static u32 GetNumCPUCores();
-			//--------------------------------------------
-			/// Get Physical Screen Size
-			///
-			/// @param The physical size of the screen in
-			/// inches.
-			//--------------------------------------------
-			static f32 GetPhysicalScreenSize();
             
         private:
             

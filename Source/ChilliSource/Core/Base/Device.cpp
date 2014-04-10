@@ -37,7 +37,6 @@ namespace ChilliSource
             mstrOSVersion = inpPlatformSystem->GetOSVersion();
             mstrDeviceID = inpPlatformSystem->GetDeviceID();
 			mudwNumCores = inpPlatformSystem->GetNumberOfCPUCores();
-			mfPhysicalScreenSize = inpPlatformSystem->GetPhysicalScreenSize();
         }
         //---------------------------------------------
         /// Get Model Name
@@ -110,16 +109,6 @@ namespace ChilliSource
 		u32 Device::GetNumCPUCores()
 		{
 			return mudwNumCores;
-		}
-		//--------------------------------------------
-		/// Get Physical Screen Size
-		///
-		/// @param The physical size of the screen in
-		/// inches.
-		//--------------------------------------------
-		f32 Device::GetPhysicalScreenSize()
-		{
-			return mfPhysicalScreenSize;
 		}
     }
 }

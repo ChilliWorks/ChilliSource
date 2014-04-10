@@ -170,13 +170,6 @@ namespace ChilliSource
             /// @return The version of the application
             //-------------------------------------------------
             virtual std::string GetAppVersion() const = 0;
-            //-------------------------------------------------
-            /// Get Physical Screen Size
-            ///
-            /// @return The physical size of the screen in
-            /// inches.
-            //-------------------------------------------------
-            virtual f32 GetPhysicalScreenSize() = 0;
             
         protected:
             
@@ -186,7 +179,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //-----------------------------------------
-            PlatformSystem(){}
+            PlatformSystem() = default;
         };
     }
 }
