@@ -200,13 +200,6 @@ namespace ChilliSource
             QueryPerformanceCounter(&currentTime);
             return (u64)((currentTime.QuadPart) * 1000.0 / gFrequency.QuadPart);
 		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		f32 PlatformSystem::GetPhysicalScreenSize()
-		{
-			CS_LOG_WARNING("GetPhysicalScreenSize() is not implemented on windows!");
-			return 0.0f;
-		}
 		//---GLFW Delegates
 		//-------------------------------------------------
 		//-------------------------------------------------

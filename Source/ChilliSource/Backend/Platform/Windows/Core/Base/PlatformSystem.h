@@ -19,16 +19,21 @@ namespace ChilliSource
 	{
 		struct GLFWwindow;
 
-		//---------------------------------------------------------
-		/// Allows generic access to platform specific code via 
-		/// common function calls
-		//---------------------------------------------------------
-		class PlatformSystem : public Core::PlatformSystem
+		//---------------------------------------------
+		/// Allows generic access to platform 
+		/// specific code via common function calls
+		///
+		/// @author S Downie
+		//---------------------------------------------
+		class PlatformSystem final : public Core::PlatformSystem
 		{
 		public:
-			PlatformSystem();
-			virtual ~PlatformSystem();
-
+			//--------------------------------------------------
+			/// Destructor
+			///
+			/// @author S Downie
+			//--------------------------------------------------
+			~PlatformSystem();
 			//--------------------------------------------------
 			/// Create the GLFW window.
 			///
@@ -156,14 +161,16 @@ namespace ChilliSource
 			/// @return the current time in milliseconds
 			//-------------------------------------------------
 			u64 GetSystemTimeMS() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The physical size of the screen in
-			/// inches.
-			//-------------------------------------------------
-			f32 GetPhysicalScreenSize() override;
+
 		private:
+			friend Core::PlatformSystemUPtr Core::PlatformSystem::Create();
+			//--------------------------------------------------
+			/// Private constructor to enforce use of create
+			/// method.
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			PlatformSystem();
 
 			//---GLFW Delegates
 			//-------------------------------------------------
@@ -194,7 +201,7 @@ namespace ChilliSource
 			/// @param Int representing focused or not
 			//-------------------------------------------------
 			static void OnWindowFocusChanged(GLFWwindow* in_window, s32 in_isFocused);
-
+				
 		private:
 			bool m_isRunning;
 			bool m_isSuspended;

@@ -151,11 +151,5 @@ namespace ChilliSource
 		{
 			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetSystemTimeInMilliseconds();
 		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		f32 PlatformSystem::GetPhysicalScreenSize()
-		{
-			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetPhysicalScreenSize();
-		}
 	}
 }

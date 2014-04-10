@@ -18,8 +18,10 @@ namespace ChilliSource
 		//---------------------------------------------
 		/// Allows generic access to platform
 		/// specific code via common function calls
+		///
+		/// @author I Copland
 		//-------------------------------------------
-		class PlatformSystem : public Core::PlatformSystem
+		class PlatformSystem final : public Core::PlatformSystem
 		{
 		public:
 
@@ -162,14 +164,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            PlatformSystem(){}
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The physical size of the screen in
-			/// inches.
-			//-------------------------------------------------
-			f32 GetPhysicalScreenSize();
+            PlatformSystem() = default;
 
 		private:
 			
