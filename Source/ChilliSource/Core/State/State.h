@@ -52,6 +52,15 @@ namespace ChilliSource
 			/// @return States scene
 			//------------------------------------------
 			Scene* GetScene();
+            //----------------------------------------------------
+            /// Searches the state systems and returns the first
+            /// one that implements the named interface
+            ///
+            /// @author S Downie
+            ///
+            /// @return System of type TNamedType
+            //----------------------------------------------------
+            template <typename TNamedType> TNamedType* GetSystem();
             //------------------------------------------
             /// @author S Downie
 			///
@@ -74,15 +83,6 @@ namespace ChilliSource
             /// @return New system owned by state
             //----------------------------------------------------
             template <typename TSystem, typename... TArgs> TSystem* CreateSystem(TArgs... in_args);
-            //----------------------------------------------------
-            /// Searches the state systems and returns the first
-            /// one that implements the named interface
-            ///
-            /// @author S Downie
-            ///
-            /// @return System of type TNamedType
-            //----------------------------------------------------
-            template <typename TNamedType> TNamedType* GetSystem();
             
         private:
 
