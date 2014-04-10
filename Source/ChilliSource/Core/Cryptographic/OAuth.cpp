@@ -13,8 +13,8 @@
 
 #include <algorithm>
 #include <ctime>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 namespace ChilliSource
 {

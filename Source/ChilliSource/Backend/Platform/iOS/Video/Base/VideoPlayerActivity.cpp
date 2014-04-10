@@ -105,7 +105,10 @@ namespace ChilliSource
             
             std::string strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(ineLocation, instrFileName);
             
-            NSURL* pMovieURL = [NSURL fileURLWithPath:NSStringUtils::StringToNSString(strPath)];
+            NSString* urlString = [NSStringUtils newNSStringWithString:strPath];
+            NSURL* pMovieURL = [NSURL fileURLWithPath:urlString];
+            [urlString release];
+            
             mpMoviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL:pMovieURL];
             
             AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, AudioRouteCallback, mpMoviePlayerController);

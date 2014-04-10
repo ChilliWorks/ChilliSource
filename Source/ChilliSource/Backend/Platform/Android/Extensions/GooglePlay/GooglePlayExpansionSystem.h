@@ -1,15 +1,16 @@
 //
-//  CGooglePlayExpansionSystem.h
-//  MoFlow
+//  GooglePlayExpansionSystem.h
+//  Chilli Source
 //
-//  Created by Hugh McLaughlin on 25/06/2012.
-//	Edited by Scott Downie on 12/04/2013
+//  Created by H McLaughlin on 25/06/2012.
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAYEXPANSION_GOOGLEPLAYEXPANSIONSYSTEM_H
-#define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAYEXPANSION_GOOGLEPLAYEXPANSIONSYSTEM_H
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_GOOGLEPLAYEXPANSIONSYSTEM_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_GOOGLEPLAYEXPANSIONSYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/System/AppSystem.h>
@@ -18,226 +19,239 @@ namespace ChilliSource
 {
     namespace Android
     {
-    	class GooglePlayExpansionJavaInterface;
-
-    	enum class DownloadStatus
-    	{
-    		k_downloading,
-    		k_installing,
-    		k_complete,
-    		k_pausedNoWiFi,
-    		k_paused,
-    		k_failed,
-    		k_failedInsufficientStorage
-    	};
-
-        class GooglePlayExpansionSystem : public Core::AppSystem
+    	//------------------------------------------------------------------------
+    	/// A system for using the Google Play Expansion downloader.
+    	///
+    	/// @author H McLaughlin
+    	//------------------------------------------------------------------------
+        class GooglePlayExpansionSystem final : public Core::AppSystem
         {
         public:
         	CS_DECLARE_NAMEDTYPE(GooglePlayExpansionSystem);
-
+        	//----------------------------------------------------------------
+        	/// An enum describing the possible states the download can be in.
+        	///
+        	/// @author H McLaughlin
+        	//----------------------------------------------------------------
+        	enum class DownloadStatus
+			{
+				k_downloading,
+				k_installing,
+				k_complete,
+				k_pausedNoWiFi,
+				k_paused,
+				k_failed,
+				k_failedInsufficientStorage
+			};
+        	//----------------------------------------------------------------
+        	/// A callback for the result of a download attempt.
+        	///
+        	/// @author H McLaughlin
+        	///
+        	/// @param The download status.
+        	//----------------------------------------------------------------
         	typedef std::function<void(DownloadStatus)> DownloadStatusDelegate;
-
-        	GooglePlayExpansionSystem();
-        	~GooglePlayExpansionSystem();
-
             //-------------------------------------------------------------
-            /// Is A
+            /// Queries whether or not the system implements the interface
+        	/// with the given Id.
+        	///
+        	/// @author H McLaughlin
             ///
-            /// @param Interface ID 
-            /// @return Whether system is off the given type
+            /// @param The Interface Id.
+        	///
+            /// @return Whether the system implements the given Id.
             //-------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType inID) const;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------------
-            /// Init
-            ///
-            //-------------------------------------------------------------
-            void Init();
-            //-------------------------------------------------------------
-            /// Is Download Required
-            ///
             /// Check to see if the files have already been downloaded
             /// and if they are complete
+            ///
+            /// @author H McLaughlin
             ///
             /// @return Whether a download is required
             //-------------------------------------------------------------
             bool IsDownloadRequired();
             //-------------------------------------------------------------
-            /// Download
-            ///
             /// Attempts to download the package and install to device
             /// from the google store.
+            ///
+            /// @author H McLaughlin
             ///
             /// @param Delegate gets called whenever the download status
             /// changes - such as complete, paused, failed, etc
             //-------------------------------------------------------------
-            void Download(const DownloadStatusDelegate& inDelegate);
+            void Download(const DownloadStatusDelegate& in_delegate);
             //-------------------------------------------------------------
-            /// Pause
+            /// Suspend the currently in-progress download.
             ///
-            /// Suspend the currently in-progress download
+            /// @author H McLaughlin
             //-------------------------------------------------------------
             void Pause();
             //-------------------------------------------------------------
-            /// Resume
+            /// Resume the currently in-progress download.
             ///
-            /// Resume the currently in-progress download
+            /// @author H McLaughlin
             //-------------------------------------------------------------
             void Resume();
             //-------------------------------------------------------------
-            /// Get Download Progress
+            /// @author H McLaughlin
             ///
             /// @return Get the percentage progress of the current download
             //-------------------------------------------------------------
             f32 GetDownloadProgress();
             //-------------------------------------------------------------
-            /// Get Install Progress
+            /// @author H McLaughlin
             ///
             /// @return Get the percentage progress of the current install
             //-------------------------------------------------------------
             f32 GetInstallProgress() const;
             //-------------------------------------------------------------
-            /// Get Required Storage Space in Bytes
+            /// @author H McLaughlin
             ///
             /// @return Storage requirements
             //-------------------------------------------------------------
             u64 GetRequiredStorageSpaceInBytes();
-
-            //----Called from Java
-            void OnDownloadStatusChanged(DownloadStatus ineStatus);
-
+            //-------------------------------------------------------------
+            /// This informs the system of changes to the download status.
+            /// This is for internal use and should not be called by a
+            /// user of the system.
+            ///
+            /// @author H McLaughlin
+            ///
+            /// @return Storage requirements
+            //-------------------------------------------------------------
+            void OnDownloadStatusChanged(DownloadStatus in_Status);
         private:
-
+        	friend class Core::Application;
+        	//----------------------------------------------------------------
+        	/// Creates a new instance of the system.
+        	///
+        	/// @author H McLaughlin
+        	//----------------------------------------------------------------
+        	static GooglePlayExpansionSystemUPtr Create();
+        	//----------------------------------------------------------------
+        	/// Constructor. Declared private to force the use of the factory
+        	/// method.
+        	///
+        	/// @author H McLaughlin
+        	//----------------------------------------------------------------
+        	GooglePlayExpansionSystem();
             //-------------------------------------------------------------
-            /// On Application Resume
+            /// Called when the application sends the initialise lifecycle
+        	/// event.
+        	///
+        	/// @author H McLaughlin
+            //-------------------------------------------------------------
+            void OnInit() override;
+            //-------------------------------------------------------------
+            /// Called when the application sends the resume lifecycle
+        	/// event.
             ///
-            /// Resume listening for the current download
+            /// @author S Downie
             //-------------------------------------------------------------
-            void OnApplicationResume();
+            void OnResume() override;
             //-------------------------------------------------------------
-            /// On Application Suspend
+            /// Called when the application sends the suspend lifecycle
+            /// event.
             ///
-            /// Stop listening for the current download
+            /// @author S Downie
             //-------------------------------------------------------------
-            void OnApplicationSuspend();
+            void OnSuspend() override;
             //-------------------------------------------------------------
-            /// Install Expansions
+            /// Called when the application sends the destroy lifecycle
+            /// event.
             ///
+            /// @author I Copland
+            //-------------------------------------------------------------
+            void OnDestroy() override;
+            //-------------------------------------------------------------
             /// Unzip the expansions into the DLC directory ready for
             /// use by the file system
+            ///
+            /// @author H McLaughlin
             //-------------------------------------------------------------
             void Install();
             //-------------------------------------------------------------
-            /// Do Installed Files Exist
+            /// @author H McLaughlin
             ///
             /// @return Whether the downloaded files require unzipping
             //-------------------------------------------------------------
             bool DoInstalledFilesExist() const;
             //-------------------------------------------------------------
-            /// Get Uncompressed Zip Size
+            /// @author H McLaughlin
             ///
             /// @param Path to zip file
             /// @return Unzipped package size
             //-------------------------------------------------------------
-            u64 GetUncompressedZipSize(const std::string& instrFilePath) const;
+            u64 GetUncompressedZipSize(const std::string& in_filePath) const;
             //-------------------------------------------------------------
-            /// Has Enough Storage Space
+            /// @author H McLaughlin
             ///
             /// @param Required space in bytes
             /// @return Whether enough space is available
             //-------------------------------------------------------------
-            bool HasEnoughStorageSpace(u64 uddwRequired);
+            bool HasEnoughStorageSpace(u64 in_required);
             //-------------------------------------------------------------
-            /// Get Required Install Space in Bytes
+            /// @author H McLaughlin
             ///
             /// @return Storage requirements for installation
             //-------------------------------------------------------------
             u64 GetRequiredInstallSpaceInBytes();
             //-------------------------------------------------------------
-            /// Get Required Download Space in Bytes
+            /// @author H McLaughlin
             ///
             /// @return Storage requirements for download
             //-------------------------------------------------------------
             u64 GetRequiredDownloadSpaceInBytes();
             //-------------------------------------------------------------
-            /// Unzip Task
-            ///
             /// A task for unzipping the expansions.
+            ///
+            /// @author S Downie
             //-------------------------------------------------------------
             void UnzipTask();
             //-------------------------------------------------------------
-            /// Unzip
-            ///
             /// Unzipping the expansion to a directory.
-            //-------------------------------------------------------------
-            void Unzip(const std::string& instrZipPath, Json::Value& outjManifest);
-    		//-------------------------------------------------------------
-    		/// Cache Package Descriptions
             ///
+            /// @author S Downie
+            ///
+            /// @param The zip path.
+            /// @param [Out] The manifest json
+            //-------------------------------------------------------------
+            void Unzip(const std::string& in_zipPath, Json::Value& out_manifest);
+    		//-------------------------------------------------------------
             /// Save the package version that will allow us to check
             /// whether we have the latest package
+            ///
+            /// @author S Downie
     		//-------------------------------------------------------------
             void CachePackageDescriptions();
     		//-------------------------------------------------------------
-    		/// Unzip Finished Task
+    		/// @author S Downie
             ///
             /// @param Status
     		//-------------------------------------------------------------
-            void UnzipCompleteTask(DownloadStatus ineStatus);
+            void UnzipCompleteTask(DownloadStatus in_status);
             //-------------------------------------------------------------
-            /// Do Expansion Download Files Exist
+            /// @author S Downie
             ///
             /// @param Whether the zip file exists on device
             //-------------------------------------------------------------
             bool DoExpansionDownloadFilesExist() const;
             //-------------------------------------------------------------
-            /// Remove Installed Files
-            ///
             /// Attempt to load the manifest and remove all the files
-            /// it contains from the installed location
+            /// it contains from the installed location.
+            ///
+            /// @author S Downie
             //-------------------------------------------------------------
             void RemoveInstalledFiles();
 
         private:
+            DownloadStatusDelegate m_downloadStatusDelegate;
 
-            DownloadStatusDelegate mDownloadStatusDelegate;
+            u32 m_numExpansions;
+            f32 m_installProgress;
 
-            Core::ConnectionUPtr m_appResumeConnection;
-            Core::ConnectionUPtr m_appSuspendConnection;
-
-            u32 mudwNumExpansions;
-            f32 mfInstallProgress;
-
-            GooglePlayExpansionJavaInterface* mpJavaInterface;
-        };
-
-        class GooglePlayExpansionJavaInterface : public ChilliSource::Android::IJavaInterface
-        {
-        public:
-
-        	CS_DECLARE_NAMEDTYPE(GooglePlayExpansionJavaInterface);
-
-        	GooglePlayExpansionJavaInterface();
-
-        	bool IsA(Core::InterfaceIDType inInterfaceID) const;
-
-        	void Init();
-
-        	void Download();
-        	void PauseDownload();
-        	void ResumeDownload();
-        	f32 GetDownloadProgress();
-
-        	bool DoExpansionFilesExist();
-        	u64 GetExternalFreeStorageInBytes();
-
-        	void KeepAppAwake();
-        	void AllowAppToSleep();
-
-        	u32 GetNumExpansions();
-        	u32 GetExpansionVersionCode(u32 inudwIndex);
-        	u64 GetExpansionFileSizeInBytes(u32 inudwIndex);
-        	std::string GetExpansionPath(u32 inudwIndex);
+            GooglePlayExpansionJavaInterfaceSPtr m_javaInterface;
         };
     }
 }

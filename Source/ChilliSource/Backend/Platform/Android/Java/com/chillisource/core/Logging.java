@@ -26,7 +26,7 @@ public class Logging
 	 * 
 	 * @param Message to display in LogCat
 	 */
-	public static void logDebug(String in_message)
+	public static void logVerbose(String in_message)
 	{
 		Log.d("Chilli Source", in_message);
 	}

@@ -90,7 +90,9 @@ namespace ChilliSource
         void Keyboard::SetText(const Core::UTF8String& in_text)
         {
             m_text = in_text;
-            m_textView.text = NSStringUtils::UTF8StringToNSString(m_text);
+            NSString* text = [NSStringUtils newNSStringWithUTF8String:m_text];
+            m_textView.text = text;
+            [text release];
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -165,7 +167,7 @@ namespace ChilliSource
             //Inform subscripted to this event and receive if text was rejected lower down
             bool rejectText = false;
             
-            Core::UTF8String text = NSStringUtils::NSStringToUTF8String(in_text);
+            Core::UTF8String text = [NSStringUtils newUTF8StringWithNSString:in_text];
             m_textInputReceivedDelegate.NotifyConnections(text, &rejectText);
             
             if(rejectText == false)

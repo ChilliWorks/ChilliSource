@@ -13,6 +13,10 @@
 
 #include <string>
 
+#ifdef CS_ENABLE_LOGTOFILE
+#include <mutex>
+#endif
+
 namespace ChilliSource
 {
     namespace Core
@@ -36,7 +40,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             static Logging* Get();
             //-----------------------------------------------------
-            /// Outputs messages while in debug mode the logging
+            /// Used to output messages while the logging
             /// level is set to verbose. Declare the preprocessor
             /// macro CS_LOGLEVEL_VERBOSE to set the logging
             /// level to verbose. This is typically used for
@@ -48,7 +52,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             void LogVerbose(const std::string& in_message);
             //-----------------------------------------------------
-            /// Outputs messages while the logging level is set
+            /// Used to output messages while the logging level is set
             /// to warning or higher. Declare the preprocessor
             /// macro CS_LOGLEVEL_WARNING to set the logging
             /// level to warning. This is typically used to warn of
@@ -60,7 +64,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             void LogWarning(const std::string& in_message);
             //-----------------------------------------------------
-            /// Outputs messages while the logging level is set to
+            /// Used to output messages while the logging level is set to
             /// error or higher. Declare the preprocessor macro
             /// CS_LOGLEVEL_ERROR to set the logging level to
             /// error. This is typically used to indicate that
@@ -74,7 +78,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             void LogError(const std::string& in_message);
             //-----------------------------------------------------
-            /// Outputs messages whle the logging level is set to
+            /// Used to output messages whle the logging level is set to
             /// fatal or higher and ends the application. Declare the
             /// preprocessor macro CS_LOGLEVEL_FATAL to set the
             /// logging level to fatal. This is typically used to
@@ -145,14 +149,9 @@ namespace ChilliSource
             /// @param The message to log.
             //-----------------------------------------------------
             void LogToFile(const std::string& in_message);
-            //-----------------------------------------------------
-            /// Write the contents of the log buffer to file.
-            ///
-            /// @author S Downie
-            //-----------------------------------------------------
-            void FlushBuffer();
             
             std::string m_logBuffer;
+            std::mutex m_mutex;
 #endif
             static Logging* s_logging;
         };

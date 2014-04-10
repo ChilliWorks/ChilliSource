@@ -37,8 +37,9 @@ extern "C"
 #include <cassert>
 #endif
 
-#if CS_TARGETPLATFORM_IOS && __OBJC__
+#if CS_TARGETPLATFORM_IOS
 #import <Foundation/Foundation.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #endif
 
 namespace ChilliSource
@@ -140,10 +141,9 @@ namespace ChilliSource
                 
             }
 #elif defined (CS_TARGETPLATFORM_IOS)
-            @autoreleasepool
-            {
-                NSLog(@"[Chilli Source] %@", [NSString stringWithUTF8String:in_message.c_str()]);
-            }
+            NSString* message = [NSStringUtils newNSStringWithString:in_message];
+            NSLog(@"[Chilli Source] %@", message);
+            [message release];
 #else
             std::cout << "[Chilli Source] " + in_message << std::endl;
 #endif
@@ -158,6 +158,8 @@ namespace ChilliSource
         //-----------------------------------------------
         void Logging::CreateLogFile()
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
             FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, Core::FileMode::k_write);
             stream->Write("Chilli Source Log");
             stream->Close();
@@ -166,20 +168,16 @@ namespace ChilliSource
         //-----------------------------------------------
         void Logging::LogToFile(const std::string& in_message)
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
             m_logBuffer += "\n" + in_message;
             if(m_logBuffer.length() > k_maxLogBufferSize)
             {
-                FlushBuffer();
+                FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, FileMode::FileMode::k_writeAppend);
+                stream->Write(m_logBuffer);
+                stream->Close();
+                m_logBuffer.clear();
             }
-        }
-        //----------------------------------------------
-        //----------------------------------------------
-        void Logging::FlushBuffer()
-        {
-            FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, FileMode::FileMode::k_writeAppend);
-            stream->Write(m_logBuffer);
-            stream->Close();
-            m_logBuffer.clear();
         }
 #endif
     }

@@ -52,12 +52,18 @@ namespace ChilliSource{
 			
 			NSMutableArray * pNamesArray = [[NSMutableArray alloc] initWithCapacity:inastrRecipientNumbers.size()];
 			
-			for (u32 nRecipient = 0; nRecipient < inastrRecipientNumbers.size(); nRecipient++){			
-				[pNamesArray addObject:NSStringUtils::UTF8StringToNSString(inastrRecipientNumbers[nRecipient])];
+			for (u32 nRecipient = 0; nRecipient < inastrRecipientNumbers.size(); nRecipient++)
+            {
+                NSString* recipientNumber = [NSStringUtils newNSStringWithUTF8String:inastrRecipientNumbers[nRecipient]];
+				[pNamesArray addObject:recipientNumber];
+                [recipientNumber release];
 			}
 			mpVC.recipients = pNamesArray;
 			
-			mpVC.body = NSStringUtils::UTF8StringToNSString(instrContents);
+            NSString* body = [NSStringUtils newNSStringWithUTF8String:instrContents];
+ 			mpVC.body = body;
+            [body release];
+            
 			[pRootVC presentModalViewController:mpVC animated:YES];
 			
 			[mpVC release];

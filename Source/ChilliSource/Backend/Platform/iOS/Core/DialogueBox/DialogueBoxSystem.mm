@@ -38,9 +38,9 @@ namespace ChilliSource
         //-----------------------------------------------------
         void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm)
         {
-            NSString* title = NSStringUtils::UTF8StringToNSString(in_title);
-            NSString* message = NSStringUtils::UTF8StringToNSString(in_message);
-            NSString* confirm = NSStringUtils::UTF8StringToNSString(in_confirm);
+            NSString* title = [NSStringUtils newNSStringWithUTF8String:in_title];
+            NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
+            NSString* confirm = [NSStringUtils newNSStringWithUTF8String:in_confirm];
             
             UIAlertView* pConfirm = [[UIAlertView alloc] initWithTitle:title message:message delegate:m_listener cancelButtonTitle:confirm otherButtonTitles:nil];
             
@@ -48,16 +48,20 @@ namespace ChilliSource
             [pConfirm show];
             [pConfirm release];
             
+            [title release];
+            [message release];
+            [confirm release];
+            
             m_activeSysConfirmDelegate = in_delegate;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
         void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm, const Core::UTF8String& in_cancel)
         {
-            NSString* title = NSStringUtils::UTF8StringToNSString(in_title);
-            NSString* message = NSStringUtils::UTF8StringToNSString(in_message);
-            NSString* confirm = NSStringUtils::UTF8StringToNSString(in_confirm);
-            NSString* cancel = NSStringUtils::UTF8StringToNSString(in_cancel);
+            NSString* title = [NSStringUtils newNSStringWithUTF8String:in_title];
+            NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
+            NSString* confirm = [NSStringUtils newNSStringWithUTF8String:in_confirm];
+            NSString* cancel = [NSStringUtils newNSStringWithUTF8String:in_cancel];
             
             UIAlertView* pConfirm = [[UIAlertView alloc] initWithTitle:title message:message delegate:m_listener cancelButtonTitle:cancel otherButtonTitles:confirm, nil];
             
@@ -65,15 +69,22 @@ namespace ChilliSource
             [pConfirm show];
             [pConfirm release];
         
+            [title release];
+            [message release];
+            [confirm release];
+            [cancel release];
+            
             m_activeSysConfirmDelegate = in_delegate;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
         void DialogueBoxSystem::MakeToast(const Core::UTF8String& in_text)
         {
-            ToastNotification* pToast = [[ToastNotification alloc] initWithMessage:NSStringUtils::UTF8StringToNSString(in_text)];
+            NSString* text = [NSStringUtils newNSStringWithUTF8String:in_text];
+            ToastNotification* pToast = [[ToastNotification alloc] initWithMessage:text];
             [[EAGLView sharedInstance] addSubview:pToast];
             [pToast animateIn];
+            [text release];
         }
         //------------------------------------------------------
         //------------------------------------------------------

@@ -38,7 +38,7 @@ namespace ChilliSource
                 NSDictionary* nsParams = (NSDictionary*)[in_uiLocal.userInfo objectForKey:@"Params"];
                 for(id key in nsParams)
                 {
-                    notification->m_params.SetValueForKey(NSStringUtils::NSStringToString([nsParams objectForKey:key]), NSStringUtils::NSStringToString(key));
+                    notification->m_params.SetValueForKey([NSStringUtils newStringWithNSString:[nsParams objectForKey:key]], [NSStringUtils newStringWithNSString:key]);
                 }
                 
                 return notification;
@@ -81,11 +81,16 @@ namespace ChilliSource
                     nsNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)in_time];
                     nsNotification.timeZone = [NSTimeZone defaultTimeZone];
                     nsNotification.alertAction = @"View";
-                    nsNotification.alertBody = NSStringUtils::StringToNSString(in_params.ValueForKey("Body"));
+                    
+                    NSString* body = [NSStringUtils newNSStringWithString:in_params.ValueForKey("Body")];
+                    nsNotification.alertBody = body;
+                    [body release];
                     
                     if(in_params.HasValue("Sound") == true)
                     {
-                        nsNotification.soundName = NSStringUtils::StringToNSString(in_params.ValueForKey("Sound"));
+                        NSString* sound = [NSStringUtils newNSStringWithString:in_params.ValueForKey("Sound")];
+                        nsNotification.soundName = sound;
+                        [sound release];
                     }
                     else
                     {
@@ -97,7 +102,11 @@ namespace ChilliSource
                     NSMutableDictionary* nsParams = [[NSMutableDictionary alloc] init];
                     for(Core::StringToStringMap::const_iterator it = in_params.begin(); it != in_params.end(); ++it)
                     {
-                        [nsParams setObject:NSStringUtils::StringToNSString(it->first) forKey:NSStringUtils::StringToNSString(it->second)];
+                        NSString* key = [NSStringUtils newNSStringWithString:it->first];
+                        NSString* value = [NSStringUtils newNSStringWithString:it->second];
+                        [nsParams setObject:key forKey:value];
+                        [key release];
+                        [value release];
                     }
                     
                     //Encode the type ID into the notification so we can retrieve it at the other end

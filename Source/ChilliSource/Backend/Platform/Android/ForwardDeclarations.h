@@ -41,6 +41,7 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(AmazonIAPJavaInterface);
 		CS_FORWARDDECLARE_CLASS(AmazonIAPSystem);
 		CS_FORWARDDECLARE_CLASS(GooglePlayExpansionSystem);
+		CS_FORWARDDECLARE_CLASS(GooglePlayExpansionJavaInterface);
 		CS_FORWARDDECLARE_CLASS(GooglePlayIAPJavaInterface);
 		CS_FORWARDDECLARE_CLASS(GooglePlayIAPSystem);
 		CS_FORWARDDECLARE_CLASS(GooglePlayRemoteNotificationSystem);

@@ -90,12 +90,22 @@ namespace ChilliSource
 			
 			NSMutableArray * pNamesArray = [[NSMutableArray alloc] initWithCapacity:inastrRecipientAddresses.size()];
 			
-			for (u32 nRecipient = 0; nRecipient < inastrRecipientAddresses.size(); nRecipient++){
-				[pNamesArray addObject:NSStringUtils::UTF8StringToNSString(inastrRecipientAddresses[nRecipient])];
+			for (u32 nRecipient = 0; nRecipient < inastrRecipientAddresses.size(); nRecipient++)
+            {
+                NSString* address = [NSStringUtils newNSStringWithUTF8String:inastrRecipientAddresses[nRecipient]];
+				[pNamesArray addObject:address];
+                [address release];
 			}
 			[mpVC setToRecipients:pNamesArray];
-			[mpVC setMessageBody: NSStringUtils::UTF8StringToNSString(instrContents) isHTML:inbFormatAsHtml];
-			[mpVC setSubject: NSStringUtils::UTF8StringToNSString(instrSubject)];
+            
+            NSString* body = [NSStringUtils newNSStringWithUTF8String:instrContents];
+            NSString* subject = [NSStringUtils newNSStringWithUTF8String:instrSubject];
+            
+			[mpVC setMessageBody:body isHTML:inbFormatAsHtml];
+			[mpVC setSubject:subject];
+            
+            [body release];
+            [subject release];
             
             //add the attachment if one is available.
             if (inAttachment.m_filename.size() > 0)
