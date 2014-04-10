@@ -38,6 +38,11 @@
 //----------------------------------------------------------
 + (NSString*) newNSStringWithString:(const std::string&)string
 {
+    if(string.length() == 0)
+    {
+        return [[NSString alloc] init];
+    }
+    
     NSStringEncoding encode = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
     return [[NSString alloc] initWithBytes:string.data() length:string.size() encoding:encode];
 }

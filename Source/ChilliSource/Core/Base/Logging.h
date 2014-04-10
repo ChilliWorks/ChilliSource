@@ -150,6 +150,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             void LogToFile(const std::string& in_message);
             
+            bool m_isFirstLog;
             std::string m_logBuffer;
             std::mutex m_mutex;
 #endif

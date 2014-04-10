@@ -101,23 +101,26 @@ namespace ChilliSource
         //--------------------------------------------------------------
         void VideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
         {
-            mBackgroundColour = inBackgroundColour;
-            
-            std::string strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(ineLocation, instrFileName);
-            
-            NSString* urlString = [NSStringUtils newNSStringWithString:strPath];
-            NSURL* pMovieURL = [NSURL fileURLWithPath:urlString];
-            [urlString release];
-            
-            mpMoviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL:pMovieURL];
-            
-            AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, AudioRouteCallback, mpMoviePlayerController);
-            
-            SetupWithMoviePlayer();
-            
-            mbCanDismissWithTap = inbCanDismissWithTap;
-            
-            ListenForMoviePlayerNotifications();
+            @autoreleasepool
+            {
+                mBackgroundColour = inBackgroundColour;
+                
+                std::string strPath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(ineLocation, instrFileName);
+                
+                NSString* urlString = [NSStringUtils newNSStringWithString:strPath];
+                NSURL* pMovieURL = [NSURL fileURLWithPath:urlString];
+                [urlString release];
+                
+                mpMoviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL:pMovieURL];
+                
+                AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, AudioRouteCallback, mpMoviePlayerController);
+                
+                SetupWithMoviePlayer();
+                
+                mbCanDismissWithTap = inbCanDismissWithTap;
+                
+                ListenForMoviePlayerNotifications();
+            }
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------

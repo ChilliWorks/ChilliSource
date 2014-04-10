@@ -72,10 +72,10 @@ namespace ChilliSource
         //----------------------------------------------
         //----------------------------------------------
         Logging::Logging()
-        {
 #ifdef CS_ENABLE_LOGTOFILE
-            CreateLogFile();
+            : m_isFirstLog(true)
 #endif
+        {
         }
         //----------------------------------------------
         //----------------------------------------------
@@ -158,8 +158,6 @@ namespace ChilliSource
         //-----------------------------------------------
         void Logging::CreateLogFile()
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
-            
             FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, Core::FileMode::k_write);
             stream->Write("Chilli Source Log");
             stream->Close();
@@ -169,14 +167,27 @@ namespace ChilliSource
         void Logging::LogToFile(const std::string& in_message)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
-            
             m_logBuffer += "\n" + in_message;
-            if(m_logBuffer.length() > k_maxLogBufferSize)
+            
+            FileSystem* fileSystem = Application::Get()->GetFileSystem();
+            if(fileSystem != nullptr && m_logBuffer.length() > k_maxLogBufferSize)
             {
-                FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, FileMode::FileMode::k_writeAppend);
-                stream->Write(m_logBuffer);
-                stream->Close();
-                m_logBuffer.clear();
+                if (m_isFirstLog == true)
+                {
+                    FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, Core::FileMode::k_write);
+                    stream->Write("Chilli Source Log");
+                    stream->Write(m_logBuffer);
+                    stream->Close();
+                    m_logBuffer.clear();
+                    m_isFirstLog = false;
+                }
+                else
+                {
+                    FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, Core::FileMode::k_writeAppend);
+                    stream->Write(m_logBuffer);
+                    stream->Close();
+                    m_logBuffer.clear();
+                }
             }
         }
 #endif

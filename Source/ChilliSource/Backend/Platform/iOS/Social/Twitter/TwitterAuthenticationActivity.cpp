@@ -451,22 +451,25 @@ namespace ChilliSource
 		//-----------------------------------------------
 		void TwitterAuthenticationActivity::ShowAuthoriseURL(const std::string& instrURL)
 		{
-			if(!mpWebView)
-			{
-				Dismiss();
-			}
-			else
-			{
-                NSString* urlString = [NSStringUtils newNSStringWithString:instrURL];
-				NSURL* pUrl = [NSURL URLWithString:urlString];
-                [urlString release];
-                
-				[mpWebView loadRequest:[NSURLRequest requestWithURL:pUrl]];
-				mpWebView.hidden = NO;
-				mpWebDelegate = [[UITwitterAuthenticationWebDelegate alloc] init];
-				[mpWebDelegate SetCPPDelegate:this];
-				mpWebView.delegate = mpWebDelegate;
-			}
+            @autoreleasepool
+            {
+                if(!mpWebView)
+                {
+                    Dismiss();
+                }
+                else
+                {
+                    NSString* urlString = [NSStringUtils newNSStringWithString:instrURL];
+                    NSURL* pUrl = [NSURL URLWithString:urlString];
+                    [urlString release];
+                    
+                    [mpWebView loadRequest:[NSURLRequest requestWithURL:pUrl]];
+                    mpWebView.hidden = NO;
+                    mpWebDelegate = [[UITwitterAuthenticationWebDelegate alloc] init];
+                    [mpWebDelegate SetCPPDelegate:this];
+                    mpWebView.delegate = mpWebDelegate;
+                }
+            }
 		}
 	}
 }
