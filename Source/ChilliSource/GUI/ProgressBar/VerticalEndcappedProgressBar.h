@@ -43,21 +43,13 @@ namespace ChilliSource
 			///
 			/// @param Texture
 			//------------------------------------------------------------------------
-			inline void SetTexture(const Rendering::TextureSPtr& inpTexture)
-            {
-                Texture = inpTexture;
-                mpBGImage->SetTexture(inpTexture);
-                mpFillImage->SetTexture(inpTexture);
-            }
+            void SetTexture(const Rendering::TextureSPtr& inpTexture);
 			//------------------------------------------------------------------------
 			/// Get Texture
 			///
 			/// @return Texture
 			//------------------------------------------------------------------------
-			inline const Rendering::TextureSPtr& GetTexture() const
-            {
-                return Texture;
-            }
+            const Rendering::TextureSPtr& GetTexture() const;
 			//---------------------------------------------------------
 			/// Set Base Fill Sprite Sheet Index ID
 			///
@@ -109,19 +101,19 @@ namespace ChilliSource
 			//------------------------------------------------------------------------
 			/// Set Fill Indices
 			///
-			/// @param Sprite sheet index of top patch
-			/// @param Sprite sheet index of mid patch
-			/// @param Sprite sheet index of bottom patch
+			/// @param Sprite sheet id of top patch
+			/// @param Sprite sheet id of mid patch
+			/// @param Sprite sheet id of bottom patch
 			//------------------------------------------------------------------------
-			void SetFillIndices(u32 inudwTop, u32 inudwMid, u32 inudwBottom);
+			void SetFillTextureAtlasIds(const std::string& in_top, const std::string& in_middle, const std::string& in_bottom);
 			//------------------------------------------------------------------------
 			/// Set Background Indices
 			///
-			/// @param Sprite sheet index of top patch
-			/// @param Sprite sheet index of mid patch
-			/// @param Sprite sheet index of bottom patch
+			/// @param Sprite sheet id of top patch
+			/// @param Sprite sheet id of mid patch
+			/// @param Sprite sheet id of bottom patch
 			//------------------------------------------------------------------------
-			void SetBackgroundIndices(u32 inudwTop, u32 inudwMid, u32 inudwBottom);
+			void SetBackgroundTextureAtlasIds(const std::string& in_top, const std::string& in_middle, const std::string& in_bottom);
             //--------------------------------------------------------
             /// Enable Width From Image
             ///

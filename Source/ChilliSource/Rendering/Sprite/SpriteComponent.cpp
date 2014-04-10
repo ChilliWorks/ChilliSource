@@ -17,6 +17,8 @@
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 
+#include <algorithm>
+
 namespace ChilliSource
 {
 	namespace Rendering

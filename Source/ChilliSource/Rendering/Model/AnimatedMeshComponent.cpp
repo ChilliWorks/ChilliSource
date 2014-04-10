@@ -24,6 +24,9 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Application.h>
 
+#include <algorithm>
+#include <limits>
+
 namespace ChilliSource
 {
 	namespace Rendering

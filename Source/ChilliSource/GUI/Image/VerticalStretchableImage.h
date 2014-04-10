@@ -10,6 +10,7 @@
 #define _MOFLO_GUI_VerticalStretchableImageVIEW_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
 
 //=============================================================
@@ -28,11 +29,15 @@ namespace ChilliSource
 
 			DECLARE_META_CLASS(VerticalStretchableImage)
 
-            struct TextureAtlasIndex
+            struct PanelDesc
             {
-                u32 udwTop;
-                u32 udwBottom;
-                u32 udwMiddle;
+                Core::Rectangle m_topUVs;
+                Core::Rectangle m_middleUVs;
+                Core::Rectangle m_bottomUVs;
+                
+                Core::Vector2 m_topSize;
+                Core::Vector2 m_middleSize;
+                Core::Vector2 m_bottomSize;
             };
             VerticalStretchableImage();
             VerticalStretchableImage(const Core::ParamDictionary& insParams);
@@ -41,19 +46,13 @@ namespace ChilliSource
             ///
             /// @param Texture containing the nine patches
             //---------------------------------------------------------
-            inline void SetTexture(const Rendering::TextureSPtr& inpTexture)
-            {
-                Texture = inpTexture;
-            }
+            void SetTexture(const Rendering::TextureSPtr& inpTexture);
             //---------------------------------------------------------
             /// Get Texture
             ///
             /// @return Texture containing the nine patches
             //---------------------------------------------------------
-			inline const Rendering::TextureSPtr& GetTexture() const
-            {
-                return Texture;
-            }
+            const Rendering::TextureSPtr& GetTexture() const;
             //---------------------------------------------------------
             /// Set Sprite Sheet
             ///
@@ -90,30 +89,14 @@ namespace ChilliSource
 			/// the base ID would be "BLUE_PANEL_"
 			//---------------------------------------------------------
 			const std::string& GetBaseTextureAtlasID() const;
-            //---------------------------------------------------------
-            /// Set Patch Sprite Sheet Indices
-            ///
-            /// @param Struct containing the tpage index of each patch
-            //---------------------------------------------------------
-            void SetTextureAtlasIndices(const TextureAtlasIndex& insIndices);
-            //---------------------------------------------------------
-            /// Set Patch Sprite Sheet Indices
-            ///
-            /// Top 
-            /// Bottom
-            /// Middle
-            ///
-            /// @param Array containing the tpage index of each patch
-            //---------------------------------------------------------
-            void SetTextureAtlasIndices(const u32* inpIndices);
 			//---------------------------------------------------------
 			/// Set Patch Sprite Sheet Indices
 			///
-			/// @param Sprite sheet index of top patch
-			/// @param Sprite sheet index of middle patch
-			/// @param Sprite sheet index of bottom patch
+			/// @param Sprite sheet id of top patch
+			/// @param Sprite sheet id of middle patch
+			/// @param Sprite sheet id of bottom patch
 			//---------------------------------------------------------
-			void SetTextureAtlasIndices(u32 inudwTop, u32 inudwMid, u32 inudwBottom);
+			void SetTextureAtlasIds(const std::string& in_top, const std::string& in_middle, const std::string& in_bottom);
             //---------------------------------------------------------
             /// Draw
             /// 
@@ -191,7 +174,7 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
 			
-            TextureAtlasIndex msIndices;
+            PanelDesc m_panels;
         };
     }
 }

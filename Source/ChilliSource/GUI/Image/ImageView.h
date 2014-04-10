@@ -69,18 +69,6 @@ namespace ChilliSource
             /// @param Sprite sheet
             //--------------------------------------------------------
             const Rendering::TextureAtlasCSPtr& GetTextureAtlas() const;
-            //--------------------------------------------------------
-            /// Set Sprite Sheet Index
-            ///
-            /// @param The index of the image within the sprite sheet
-            //--------------------------------------------------------
-            void SetTextureAtlasIndex(u32 inudwIndex);
-            //--------------------------------------------------------
-            /// Get Sprite Sheet Index
-            ///
-            /// @return The index of the image within the sprite sheet
-            //--------------------------------------------------------
-            u32 GetTextureAtlasIndex() const;
 			//--------------------------------------------------------
 			/// Set Sprite Sheet Index ID
 			///
@@ -350,6 +338,8 @@ namespace ChilliSource
             bool mbFillMaintain;
             bool mbFitMaintain;
             
+            Core::Vector2 m_imageSize;
+            
 			//---Properties
             DECLARE_PROPERTY_A(Rendering::TextureSPtr, Texture, SetTexture, GetTexture);
             DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
@@ -357,7 +347,6 @@ namespace ChilliSource
             DECLARE_PROPERTY_A(Core::Rectangle, UVs, SetUVs, GetUVs);
 			DECLARE_PROPERTY_A(Core::Rectangle, UVOffsets, SetUVOffsets, GetUVOffsets);
             
-            DECLARE_PROPERTY_A(u32, TextureAtlasIndex, SetTextureAtlasIndex, GetTextureAtlasIndex);
 			DECLARE_PROPERTY_A(std::string, TextureAtlasID, SetTextureAtlasID, GetTextureAtlasID);
 
             DECLARE_PROPERTY_A(bool, ActAsSpacer, EnableActAsSpacer, IsActAsSpacerEnabled);

@@ -121,6 +121,26 @@ namespace ChilliSource
 			}
             
 		}
+        //------------------------------------------------------------------------
+        /// Set Texture
+        ///
+        /// @param Texture
+        //------------------------------------------------------------------------
+        void VerticalEndcappedProgressBar::SetTexture(const Rendering::TextureSPtr& inpTexture)
+        {
+            Texture = inpTexture;
+            mpBGImage->SetTexture(inpTexture);
+            mpFillImage->SetTexture(inpTexture);
+        }
+        //------------------------------------------------------------------------
+        /// Get Texture
+        ///
+        /// @return Texture
+        //------------------------------------------------------------------------
+        const Rendering::TextureSPtr& VerticalEndcappedProgressBar::GetTexture() const
+        {
+            return Texture;
+        }
 		//------------------------------------------------------------------------
 		/// Set Sprite Sheet
 		///
@@ -206,24 +226,24 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Set Fill Indices
 		///
-		/// @param Sprite sheet index of left patch
-		/// @param Sprite sheet index of centre patch
-		/// @param Sprite sheet index of right patch
+		/// @param Sprite sheet id of left patch
+		/// @param Sprite sheet id of centre patch
+		/// @param Sprite sheet id of right patch
 		//------------------------------------------------------------------------
-		void VerticalEndcappedProgressBar::SetFillIndices(u32 inudwTop, u32 inudwMid, u32 inudwBottom)
+		void VerticalEndcappedProgressBar::SetFillTextureAtlasIds(const std::string& in_top, const std::string& in_middle, const std::string& in_bottom)
 		{
-            mpFillImage->SetTextureAtlasIndices(inudwTop, inudwMid, inudwBottom);
+            mpFillImage->SetTextureAtlasIds(in_top, in_middle, in_bottom);
 		}
 		//------------------------------------------------------------------------
 		/// Set Background Indices
 		///
-		/// @param Sprite sheet index of left patch
-		/// @param Sprite sheet index of centre patch
-		/// @param Sprite sheet index of right patch
+		/// @param Sprite sheet id of left patch
+		/// @param Sprite sheet id of centre patch
+		/// @param Sprite sheet id of right patch
 		//------------------------------------------------------------------------
-		void VerticalEndcappedProgressBar::SetBackgroundIndices(u32 inudwTop, u32 inudwMid, u32 inudwBottom)
+		void VerticalEndcappedProgressBar::SetBackgroundTextureAtlasIds(const std::string& in_top, const std::string& in_middle, const std::string& in_bottom)
 		{
-            mpBGImage->SetTextureAtlasIndices(inudwTop, inudwMid, inudwBottom);
+            mpBGImage->SetTextureAtlasIds(in_top, in_middle, in_bottom);
 		}
 		//------------------------------------------------------------------------
 		/// Set Fill Colour

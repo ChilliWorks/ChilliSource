@@ -44,21 +44,13 @@ namespace ChilliSource
 			///
 			/// @param Texture
 			//------------------------------------------------------------------------
-			inline void SetTexture(const Rendering::TextureSPtr& inpTexture)
-            {
-                Texture = inpTexture;
-                mpBGImage->SetTexture(inpTexture);
-                mpFillImage->SetTexture(inpTexture);
-            }
+            void SetTexture(const Rendering::TextureSPtr& inpTexture);
 			//------------------------------------------------------------------------
 			/// Get Texture
 			///
 			/// @return Texture
 			//------------------------------------------------------------------------
-			inline const Rendering::TextureSPtr& GetTexture() const
-            {
-                return Texture;
-            }
+            const Rendering::TextureSPtr& GetTexture() const;
 			//---------------------------------------------------------
 			/// Set Base Fill Sprite Sheet Index ID
 			///
@@ -107,22 +99,22 @@ namespace ChilliSource
 			/// the base ID would be "BLUE_PANEL_"
 			//---------------------------------------------------------
 			const std::string& GetBaseBackgroundTextureAtlasID() const;
-			//------------------------------------------------------------------------
-			/// Set Fill Indices
-			///
-			/// @param Sprite sheet index of left patch
-			/// @param Sprite sheet index of centre patch
-			/// @param Sprite sheet index of right patch
-			//------------------------------------------------------------------------
-			void SetFillIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight);
-			//------------------------------------------------------------------------
-			/// Set Background Indices
-			///
-			/// @param Sprite sheet index of left patch
-			/// @param Sprite sheet index of centre patch
-			/// @param Sprite sheet index of right patch
-			//------------------------------------------------------------------------
-			void SetBackgroundIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight);
+            //------------------------------------------------------------------------
+            /// Set Fill Indices
+            ///
+            /// @param Sprite sheet id of left patch
+            /// @param Sprite sheet id of centre patch
+            /// @param Sprite sheet id of right patch
+            //------------------------------------------------------------------------
+            void SetFillTextureAtlasIds(const std::string& in_left, const std::string& in_centre, const std::string& in_right);
+            //------------------------------------------------------------------------
+            /// Set Background Indices
+            ///
+            /// @param Sprite sheet id of left patch
+            /// @param Sprite sheet id of centre patch
+            /// @param Sprite sheet id of right patch
+            //------------------------------------------------------------------------
+            void SetBackgroundTextureAtlasIds(const std::string& in_left, const std::string& in_centre, const std::string& in_right);
             //--------------------------------------------------------
             /// Enable Height From Image
             ///

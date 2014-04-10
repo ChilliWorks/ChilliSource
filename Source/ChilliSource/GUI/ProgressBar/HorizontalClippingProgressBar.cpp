@@ -27,8 +27,6 @@ namespace ChilliSource
 		DEFINE_PROPERTY(ProgressTexture);
 		DEFINE_PROPERTY(BackgroundTextureAtlas);
 		DEFINE_PROPERTY(ProgressTextureAtlas);
-		DEFINE_PROPERTY(BackgroundTextureAtlasIndex);
-		DEFINE_PROPERTY(ProgressTextureAtlasIndex);
 		DEFINE_PROPERTY(BackgroundTextureAtlasID);
 		DEFINE_PROPERTY(ProgressTextureAtlasID);
 		DEFINE_PROPERTY(HeightFromImage);
@@ -115,18 +113,6 @@ namespace ChilliSource
                 Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
 				SetProgressTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eProgressTextureAtlasLocation, strValue));
 			}
-            //---Background index
-            if(insParams.TryGetValue("BackgroundTextureAtlasIndex", strValue))
-            {
-				CS_ASSERT(BackgroundTextureAtlas, "Cannot set sprite sheet index without sprite sheet");
-				SetBackgroundTextureAtlasIndex(Core::ParseU32(strValue));
-            }
-            //---Progress index
-            if(insParams.TryGetValue("ProgressTextureAtlasIndex", strValue))
-            {
-				CS_ASSERT(ProgressTextureAtlas, "Cannot set sprite sheet index without sprite sheet");
-				SetProgressTextureAtlasIndex(Core::ParseU32(strValue));
-            }
 			//---Background index ID
 			if(insParams.TryGetValue("BackgroundTextureAtlasID", strValue))
 			{
@@ -200,26 +186,6 @@ namespace ChilliSource
 		{
 			return ProgressTextureAtlas;
 		}
-        //--------------------------------------------------------
-        /// Set Background Sprite Sheet Index
-        ///
-        /// @param The index of the image within the sprite sheet
-        //--------------------------------------------------------
-        void HorizontalClippingProgressBar::SetBackgroundTextureAtlasIndex(u32 inudwIndex)
-        {
-			BackgroundTextureAtlasIndex = inudwIndex;
-            mpBackgroundImage->SetTextureAtlasIndex(inudwIndex);
-        }
-        //--------------------------------------------------------
-        /// Set Progress Sprite Sheet Index
-        ///
-        /// @param The index of the image within the sprite sheet
-        //--------------------------------------------------------
-        void HorizontalClippingProgressBar::SetProgressTextureAtlasIndex(u32 inudwIndex)
-        {
-			ProgressTextureAtlasIndex = inudwIndex;
-            mpProgressImage->SetTextureAtlasIndex(inudwIndex);
-        }
 		//--------------------------------------------------------
 		/// Set Background Sprite Sheet Index ID
 		///
@@ -229,7 +195,7 @@ namespace ChilliSource
 		{
 			CS_ASSERT(BackgroundTextureAtlas, "Cannot set sprite sheet index without sprite sheet");
 			BackgroundTextureAtlasID = instrID;
-			SetBackgroundTextureAtlasIndex(BackgroundTextureAtlas->GetFrameIndexById(instrID));
+            mpBackgroundImage->SetTextureAtlasID(instrID);
 		}
 		//--------------------------------------------------------
 		/// Set Progress Sprite Sheet Index ID
@@ -240,7 +206,7 @@ namespace ChilliSource
 		{
 			CS_ASSERT(ProgressTextureAtlas, "Cannot set sprite sheet index without sprite sheet");
 			ProgressTextureAtlasID = instrID;
-			SetProgressTextureAtlasIndex(ProgressTextureAtlas->GetFrameIndexById(instrID));
+            mpProgressImage->SetTextureAtlasID(instrID);
 		}
 		//--------------------------------------------------------
 		/// Get Background Sprite Sheet Index ID
@@ -259,24 +225,6 @@ namespace ChilliSource
 		const std::string& HorizontalClippingProgressBar::GetProgressTextureAtlasID() const
 		{
 			return ProgressTextureAtlasID;
-		}
-		//--------------------------------------------------------
-		/// Get Background Sprite Sheet Index
-		///
-		/// @return The index of the image within the sprite sheet
-		//--------------------------------------------------------
-		u32 HorizontalClippingProgressBar::GetBackgroundTextureAtlasIndex() const
-		{
-			return BackgroundTextureAtlasIndex;
-		}
-		//--------------------------------------------------------
-		/// Get Progress Sprite Sheet Index
-		///
-		/// @return The index of the image within the sprite sheet
-		//--------------------------------------------------------
-		u32 HorizontalClippingProgressBar::GetProgressTextureAtlasIndex() const
-		{
-			return ProgressTextureAtlasIndex;
 		}
         //------------------------------------------------------
         /// Set Background Image

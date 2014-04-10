@@ -45,10 +45,7 @@ namespace ChilliSource
 			///
 			/// @return Texture for the bar
 			//--------------------------------------------------------
-			inline const Rendering::TextureSPtr& GetBarTexture() const
-            {
-                return BarTexture;
-            }
+            const Rendering::TextureSPtr& GetBarTexture() const;
 			//--------------------------------------------------------
 			/// Set Slider Texture
 			///
@@ -60,10 +57,7 @@ namespace ChilliSource
 			///
 			/// @return Texture for the slider
 			//--------------------------------------------------------
-			inline const Rendering::TextureSPtr& GetSliderTexture() const
-            {
-                return SliderTexture;
-            }
+            const Rendering::TextureSPtr& GetSliderTexture() const;
 			//--------------------------------------------------------
 			/// Set Bar Sprite Sheet
 			///
@@ -88,30 +82,6 @@ namespace ChilliSource
 			/// @return Sprite sheet for the slider
 			//--------------------------------------------------------
 			const Rendering::TextureAtlasCSPtr& GetSliderTextureAtlas() const;
-			//--------------------------------------------------------
-			/// Set Bar Sprite Sheet Index
-			///
-			/// @param The index of the image within the sprite sheet
-			//--------------------------------------------------------
-			void SetBarTextureAtlasIndex(u32 inudwIndex);
-			//--------------------------------------------------------
-			/// Set Slider Sprite Sheet Index
-			///
-			/// @param The index of the image within the sprite sheet
-			//--------------------------------------------------------
-			void SetSliderTextureAtlasIndex(u32 inudwIndex);
-			//--------------------------------------------------------
-			/// Get Bar Sprite Sheet Index
-			///
-			/// @return The index of the image within the sprite sheet
-			//--------------------------------------------------------
-			u32 GetBarTextureAtlasIndex() const;
-			//--------------------------------------------------------
-			/// Get Slider Sprite Sheet Index
-			///
-			/// @return The index of the image within the sprite sheet
-			//--------------------------------------------------------
-			u32 GetSliderTextureAtlasIndex() const;
 			//--------------------------------------------------------
 			/// Set Bar Sprite Sheet Index ID
 			///
@@ -182,9 +152,6 @@ namespace ChilliSource
             
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, BarTextureAtlas, SetBarTextureAtlas, GetBarTextureAtlas);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, SliderTextureAtlas, SetSliderTextureAtlas, GetSliderTextureAtlas);
-            
-			DECLARE_PROPERTY_A(u32, BarTextureAtlasIndex, SetBarTextureAtlasIndex, GetBarTextureAtlasIndex);
-			DECLARE_PROPERTY_A(u32, SliderTextureAtlasIndex, SetSliderTextureAtlasIndex, GetSliderTextureAtlasIndex);
             
 			DECLARE_PROPERTY_A(std::string, BarTextureAtlasID, SetBarTextureAtlasID, GetBarTextureAtlasID);
 			DECLARE_PROPERTY_A(std::string, SliderTextureAtlasID, SetSliderTextureAtlasID, GetSliderTextureAtlasID);

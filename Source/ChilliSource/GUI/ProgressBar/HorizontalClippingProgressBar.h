@@ -83,30 +83,6 @@ namespace ChilliSource
 			//--------------------------------------------------------
 			const Rendering::TextureAtlasCSPtr& GetProgressTextureAtlas() const;
 			//--------------------------------------------------------
-			/// Set Background Sprite Sheet Index
-			///
-			/// @param The index of the image within the sprite sheet
-			//--------------------------------------------------------
-			void SetBackgroundTextureAtlasIndex(u32 inudwIndex);
-			//--------------------------------------------------------
-			/// Set Progress Sprite Sheet Index
-			///
-			/// @param The index of the image within the sprite sheet
-			//--------------------------------------------------------
-			void SetProgressTextureAtlasIndex(u32 inudwIndex);
-			//--------------------------------------------------------
-			/// Get Background Sprite Sheet Index
-			///
-			/// @return The index of the image within the sprite sheet
-			//--------------------------------------------------------
-			u32 GetBackgroundTextureAtlasIndex() const;
-			//--------------------------------------------------------
-			/// Get Progress Sprite Sheet Index
-			///
-			/// @return The index of the image within the sprite sheet
-			//--------------------------------------------------------
-			u32 GetProgressTextureAtlasIndex() const;
-			//--------------------------------------------------------
 			/// Set Background Sprite Sheet Index ID
 			///
 			/// @param The index ID of the image within the sprite sheet
@@ -163,9 +139,6 @@ namespace ChilliSource
 
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, BackgroundTextureAtlas, SetBackgroundTextureAtlas, GetBackgroundTextureAtlas);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, ProgressTextureAtlas, SetProgressTextureAtlas, GetProgressTextureAtlas);
-
-			DECLARE_PROPERTY_A(u32, BackgroundTextureAtlasIndex, SetBackgroundTextureAtlasIndex, GetBackgroundTextureAtlasIndex);
-			DECLARE_PROPERTY_A(u32, ProgressTextureAtlasIndex, SetProgressTextureAtlasIndex, GetProgressTextureAtlasIndex);
 
 			DECLARE_PROPERTY_A(std::string, BackgroundTextureAtlasID, SetBackgroundTextureAtlasID, GetBackgroundTextureAtlasID);
 			DECLARE_PROPERTY_A(std::string, ProgressTextureAtlasID, SetProgressTextureAtlasID, GetProgressTextureAtlasID);

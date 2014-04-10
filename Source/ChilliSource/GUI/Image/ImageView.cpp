@@ -28,7 +28,6 @@ namespace ChilliSource
         //---Properties
         DEFINE_PROPERTY(Texture);
         DEFINE_PROPERTY(TextureAtlas);
-        DEFINE_PROPERTY(TextureAtlasIndex);
         DEFINE_PROPERTY(TextureAtlasID);
         DEFINE_PROPERTY(SizeFromImage);
         DEFINE_PROPERTY(WidthFromImage);
@@ -45,7 +44,7 @@ namespace ChilliSource
         ///
         /// Default
         //--------------------------------------------------------
-        ImageView::ImageView() : UVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), UVOffsets(Core::Vector2(0, 0), Core::Vector2(1, 1)), TextureAtlasIndex(0), SizeFromImage(false),
+        ImageView::ImageView() : UVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), UVOffsets(Core::Vector2(0, 0), Core::Vector2(1, 1)), SizeFromImage(false),
         HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), ActAsSpacer(false), FlipHorizontal(false), FlipVertical(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             
@@ -58,7 +57,7 @@ namespace ChilliSource
         /// @param Param dictionary
         //------------------------------------------------------
         ImageView::ImageView(const Core::ParamDictionary& insParams)
-        : GUIView(insParams), UVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), UVOffsets(Core::Vector2(0, 0), Core::Vector2(1, 1)), TextureAtlasIndex(0),
+        : GUIView(insParams), UVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), UVOffsets(Core::Vector2(0, 0), Core::Vector2(1, 1)),
         SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), ActAsSpacer(false), FlipHorizontal(false), FlipVertical(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             std::string strValue;
@@ -82,12 +81,6 @@ namespace ChilliSource
             if(insParams.TryGetValue("TextureAtlas", strValue))
             {
                 SetTextureAtlas(strValue, eTextureAtlasLocation);
-            }
-            //---Sprite sheet index
-            if(insParams.TryGetValue("TextureAtlasIndex", strValue))
-            {
-                CS_ASSERT(TextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
-                TextureAtlasIndex = Core::ParseU32(strValue);
             }
             //---Sprite Sheet Index ID
             if(insParams.TryGetValue("TextureAtlasID", strValue))
@@ -188,9 +181,9 @@ namespace ChilliSource
         //--------------------------------------------------------
         void CalculateUVs(const Core::Rectangle& insUVs, const Core::Rectangle& insOffsets, Core::Rectangle& outsUVs)
         {
-            f32 fWidthOfArea = outsUVs.Right() - outsUVs.Left();
-            f32 fHeightOfArea = outsUVs.Bottom() - outsUVs.Top();
-            Core::Vector2 vTopLeft = Core::Vector2((fWidthOfArea*insOffsets.Left())+outsUVs.Left(), (fHeightOfArea*insOffsets.Top())+outsUVs.Top());
+            f32 fWidthOfArea = insUVs.Right() - insUVs.Left();
+            f32 fHeightOfArea = insUVs.Bottom() - insUVs.Top();
+            Core::Vector2 vTopLeft = Core::Vector2((fWidthOfArea*insOffsets.Left())+insUVs.Left(), (fHeightOfArea*insOffsets.Top())+insUVs.Top());
             Core::Vector2 vBottomRight = Core::Vector2((fWidthOfArea*insOffsets.Right()), (fHeightOfArea*insOffsets.Bottom()));
             outsUVs = Core::Rectangle(vTopLeft, vBottomRight);
         }
@@ -213,20 +206,7 @@ namespace ChilliSource
             if(ActAsSpacer == false)
             {
                 Core::Rectangle sNewUVs;
-                
-                if(TextureAtlas)
-                {
-                    sNewUVs = TextureAtlas->GetFrameUVs(TextureAtlasIndex);
-                }
-                else
-                {
-                    sNewUVs = UVs;
-                }
-                
-                if(UVOffsets.TopLeft() != Core::Vector2::ZERO || UVOffsets.BottomRight() != Core::Vector2::ONE)
-                {
-                    CalculateUVs(UVs, UVOffsets, sNewUVs);
-                }
+                CalculateUVs(UVs, UVOffsets, sNewUVs);
 				
 				if(IsHorizontalFlipEnabled())
 				{
@@ -273,24 +253,6 @@ namespace ChilliSource
             return TextureAtlas;
         }
         //--------------------------------------------------------
-        /// Set Sprite Sheet Index
-        ///
-        /// @param The index of the image within the sprite sheet
-        //--------------------------------------------------------
-        void ImageView::SetTextureAtlasIndex(u32 inudwIndex)
-        {
-            TextureAtlasIndex = inudwIndex;
-        }
-        //--------------------------------------------------------
-        /// Get Sprite Sheet Index
-        ///
-        /// @return The index of the image within the sprite sheet
-        //--------------------------------------------------------
-        u32 ImageView::GetTextureAtlasIndex() const
-        {
-            return TextureAtlasIndex;
-        }
-        //--------------------------------------------------------
         /// Set Sprite Sheet Index ID
         ///
         /// @param The ID of the index of the image within the sprite sheet
@@ -299,7 +261,9 @@ namespace ChilliSource
         {
             CS_ASSERT(TextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
             TextureAtlasID = instrID;
-            SetTextureAtlasIndex(TextureAtlas->GetFrameIndexById(instrID));
+            
+            UVs = TextureAtlas->GetFrameUVs(instrID);
+            m_imageSize = TextureAtlas->GetFrameSize(instrID);
             
             LayoutContent();
             LayoutChildrensContent();
@@ -323,6 +287,11 @@ namespace ChilliSource
         void ImageView::SetTexture(const Rendering::TextureSPtr& inpTexture)
         {
             Texture = inpTexture;
+            
+            if(TextureAtlas == nullptr)
+            {
+                m_imageSize = Core::Vector2((f32)Texture->GetWidth(), (f32)Texture->GetHeight());
+            }
             
             LayoutContent();
             LayoutChildrensContent();
@@ -427,18 +396,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         Core::Vector2 ImageView::GetSizeFromImage() const
         {
-            CS_ASSERT((Texture || TextureAtlas), "Must have a sprite sheet or texture");
-            
-            if(Texture)
-            {
-                return Core::Vector2((f32)Texture->GetWidth(), (f32)Texture->GetHeight());
-            }
-            else if(TextureAtlas)
-            {
-                return TextureAtlas->GetFrameSize(TextureAtlasIndex);
-            }
-            
-            return Core::Vector2::ZERO;
+            return m_imageSize;
         }
         //--------------------------------------------------------
         /// Enable Width From Image

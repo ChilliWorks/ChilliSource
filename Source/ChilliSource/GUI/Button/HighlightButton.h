@@ -100,30 +100,6 @@ namespace ChilliSource
 			/// @return Sprite sheet with highlight image
 			//-----------------------------------------------------------
 			const Rendering::TextureAtlasCSPtr& GetHighlightTextureAtlas() const;
-            //-----------------------------------------------------------
-            /// Set Normal Sprite Sheet Index
-            ///
-            /// @param Index of default state on sprite sheet
-            //-----------------------------------------------------------
-            void SetNormalTextureAtlasIndex(u32 inudwIndex);
-            //-----------------------------------------------------------
-            /// Set Highlight Sprite Sheet Index
-            ///
-            /// @param Index of highlight state on sprite sheet
-            //-----------------------------------------------------------
-            void SetHighlightTextureAtlasIndex(u32 inudwIndex);
-            //-----------------------------------------------------------
-            /// Get Normal Sprite Sheet Index
-            ///
-            /// @return Index of default state on sprite sheet
-            //-----------------------------------------------------------
-            u32 GetNormalTextureAtlasIndex() const;
-			//-----------------------------------------------------------
-			/// Get Highlight Sprite Sheet Index
-			///
-			/// @return Index of highlight state on sprite sheet
-			//-----------------------------------------------------------
-			u32 GetHighlightTextureAtlasIndex() const;
 			//-----------------------------------------------------------
 			/// Set Normal Sprite Sheet Index
 			///
@@ -419,9 +395,6 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, HighlightTextureAtlas, SetHighlightTextureAtlas, GetHighlightTextureAtlas);
 
 			DECLARE_PROPERTY_A(Core::Colour, HighlightColour, SetHighlightColour, GetHighlightColour);
-
-			DECLARE_PROPERTY_A(u32, NormalTextureAtlasIndex, SetNormalTextureAtlasIndex, GetNormalTextureAtlasIndex);
-			DECLARE_PROPERTY_A(u32, HighlightTextureAtlasIndex, SetHighlightTextureAtlasIndex, GetHighlightTextureAtlasIndex);
 
 			DECLARE_PROPERTY_A(std::string, NormalTextureAtlasID, SetNormalTextureAtlasID, GetNormalTextureAtlasID);
 			DECLARE_PROPERTY_A(std::string, HighlightTextureAtlasID, SetHighlightTextureAtlasID, GetHighlightTextureAtlasID);

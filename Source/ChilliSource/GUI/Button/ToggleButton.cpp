@@ -40,8 +40,6 @@ namespace ChilliSource
 		DEFINE_PROPERTY(OnTextureAtlas);
 		DEFINE_PROPERTY(OffTextureAtlas);
 
-		DEFINE_PROPERTY(OnTextureAtlasIndex);
-		DEFINE_PROPERTY(OffTextureAtlasIndex);
 		DEFINE_PROPERTY(OnTextureAtlasID);
 		DEFINE_PROPERTY(OffTextureAtlasID);
 
@@ -54,7 +52,7 @@ namespace ChilliSource
         /// Create the widget by adding the background image
         //-----------------------------------------------------------
         ToggleButton::ToggleButton() 
-        : mpBackgroundImage(new ImageView()), OnTextureAtlasIndex(0), OffTextureAtlasIndex(0),
+        : mpBackgroundImage(new ImageView()),
         msOnUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         msOffUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
@@ -75,7 +73,7 @@ namespace ChilliSource
         /// From param dictionary
         //------------------------------------------------------------
         ToggleButton::ToggleButton(const Core::ParamDictionary& insParams) 
-        : Button(insParams), mpBackgroundImage(new ImageView()), OnTextureAtlasIndex(0), OffTextureAtlasIndex(0),
+        : Button(insParams), mpBackgroundImage(new ImageView()),
         msOnUVs(Core::Vector2::ZERO, Core::Vector2::ONE), msOffUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
         {
@@ -128,18 +126,6 @@ namespace ChilliSource
             {
                 Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
                 SetOffTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eOffTextureAtlasLocation, strValue));
-            }
-            //---Default index
-            if(insParams.TryGetValue("OnTextureAtlasIndex", strValue))
-            {
-                CS_ASSERT(OnTextureAtlas, "Sprite sheet index cannot be set without sprite sheet");
-                SetOnTextureAtlasIndex(Core::ParseU32(strValue));
-            }
-            //---Off index
-            if(insParams.TryGetValue("OffTextureAtlasIndex", strValue))
-            {
-				CS_ASSERT(OffTextureAtlas, "Sprite sheet index cannot be set without sprite sheet");
-				SetOffTextureAtlasIndex(Core::ParseU32(strValue));
             }
 			//---Default index ID
 			if(insParams.TryGetValue("OnTextureAtlasID", strValue))
@@ -352,43 +338,6 @@ namespace ChilliSource
 		{ 
 			return OffTextureAtlas; 
 		}
-        //-----------------------------------------------------------
-        /// Set On Sprite Sheet Index
-        ///
-        /// @param Index of default state on sprite sheet
-        //-----------------------------------------------------------
-        void ToggleButton::SetOnTextureAtlasIndex(u32 inudwIndex)
-        {
-            OnTextureAtlasIndex = inudwIndex;
-        }
-        //-----------------------------------------------------------
-        /// Set Off Sprite Sheet Index
-        ///
-        /// @param Index of Off state on sprite sheet
-        //-----------------------------------------------------------
-        void ToggleButton::SetOffTextureAtlasIndex(u32 inudwIndex)
-        {
-            OffTextureAtlasIndex = inudwIndex;
-            mpBackgroundImage->SetTextureAtlasIndex(inudwIndex);
-        }
-		//-----------------------------------------------------------
-		/// Get On Sprite Sheet Index
-		///
-		/// @return Index of default state on sprite sheet
-		//-----------------------------------------------------------
-		u32 ToggleButton::GetOnTextureAtlasIndex() const
-		{
-			return OnTextureAtlasIndex;
-		}
-		//-----------------------------------------------------------
-		/// Get Off Sprite Sheet Index
-		///
-		/// @return Index of Off state on sprite sheet
-		//-----------------------------------------------------------
-		u32 ToggleButton::GetOffTextureAtlasIndex() const
-		{
-			return OffTextureAtlasIndex;
-		}
 		//-----------------------------------------------------------
 		/// Set On Sprite Sheet Index
 		///
@@ -396,9 +345,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void ToggleButton::SetOnTextureAtlasID(const std::string& instrID)
 		{
-			CS_ASSERT(OnTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
 			OnTextureAtlasID = instrID;
-			SetOnTextureAtlasIndex(OnTextureAtlas->GetFrameIndexById(instrID));
 		}
 		//-----------------------------------------------------------
 		/// Set Off Sprite Sheet Index ID
@@ -407,9 +354,8 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void ToggleButton::SetOffTextureAtlasID(const std::string& instrID)
 		{
-			CS_ASSERT(OffTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
 			OffTextureAtlasID = instrID;
-			SetOffTextureAtlasIndex(OffTextureAtlas->GetFrameIndexById(instrID));
+            mpBackgroundImage->SetTextureAtlasID(instrID);
 		}
 		//-----------------------------------------------------------
 		/// Get On Sprite Sheet Index ID
@@ -562,7 +508,7 @@ namespace ChilliSource
             if(OnTextureAtlas)
             {
                 mpBackgroundImage->SetTextureAtlas(OnTextureAtlas);
-                mpBackgroundImage->SetTextureAtlasIndex(OnTextureAtlasIndex);
+                mpBackgroundImage->SetTextureAtlasID(OnTextureAtlasID);
             }
             else
             {
@@ -584,7 +530,7 @@ namespace ChilliSource
             if(OffTextureAtlas)
             {
                 mpBackgroundImage->SetTextureAtlas(OffTextureAtlas);
-                mpBackgroundImage->SetTextureAtlasIndex(OffTextureAtlasIndex);
+                mpBackgroundImage->SetTextureAtlasID(OffTextureAtlasID);
             }
             else
             {
@@ -656,17 +602,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		Core::Vector2 ToggleButton::GetSizeFromImage() const
 		{
-			Core::Vector2 vAbsSize;
-            if(GetBackgroundImageView()->GetTexture())
-			{
-				return Core::Vector2((f32)GetBackgroundImageView()->GetTexture()->GetWidth(), (f32)GetBackgroundImageView()->GetTexture()->GetHeight());
-			}
-			else if(GetBackgroundImageView()->GetTextureAtlas())
-			{
-				return GetBackgroundImageView()->GetTextureAtlas()->GetFrameSize(GetBackgroundImageView()->GetTextureAtlasIndex());
-			}
-			
-			return Core::Vector2::ZERO;
+			return GetBackgroundImageView()->GetSizeFromImage();
 		}
         //--------------------------------------------------------
         /// Set Width Maintaining Aspect

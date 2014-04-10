@@ -100,30 +100,6 @@ namespace ChilliSource
 			/// @return Sprite sheet with Off image
 			//-----------------------------------------------------------
 			const Rendering::TextureAtlasCSPtr& GetOffTextureAtlas() const;
-            //-----------------------------------------------------------
-            /// Set On Sprite Sheet Index
-            ///
-            /// @param Index of default state on sprite sheet
-            //-----------------------------------------------------------
-            void SetOnTextureAtlasIndex(u32 inudwIndex);
-            //-----------------------------------------------------------
-            /// Set Off Sprite Sheet Index
-            ///
-            /// @param Index of Off state on sprite sheet
-            //-----------------------------------------------------------
-            void SetOffTextureAtlasIndex(u32 inudwIndex);
-            //-----------------------------------------------------------
-            /// Get On Sprite Sheet Index
-            ///
-            /// @return Index of default state on sprite sheet
-            //-----------------------------------------------------------
-            u32 GetOnTextureAtlasIndex() const;
-			//-----------------------------------------------------------
-			/// Get Off Sprite Sheet Index
-			///
-			/// @return Index of Off state on sprite sheet
-			//-----------------------------------------------------------
-			u32 GetOffTextureAtlasIndex() const;
 			//-----------------------------------------------------------
 			/// Set On Sprite Sheet Index
 			///
@@ -341,9 +317,6 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(Rendering::TextureSPtr, OffTexture, SetOffImage, GetOffImage);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, OnTextureAtlas, SetOnTextureAtlas, GetOnTextureAtlas);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, OffTextureAtlas, SetOffTextureAtlas, GetOffTextureAtlas);
-
-			DECLARE_PROPERTY_A(u32,OnTextureAtlasIndex, SetOnTextureAtlasIndex, GetOnTextureAtlasIndex);
-			DECLARE_PROPERTY_A(u32, OffTextureAtlasIndex, SetOffTextureAtlasIndex, GetOffTextureAtlasIndex);
 
 			DECLARE_PROPERTY_A(std::string, OnTextureAtlasID, SetOnTextureAtlasID, GetOnTextureAtlasID);
 			DECLARE_PROPERTY_A(std::string, OffTextureAtlasID, SetOffTextureAtlasID, GetOffTextureAtlasID);

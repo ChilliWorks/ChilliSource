@@ -63,8 +63,7 @@ namespace ChilliSource
 			//---------------------------------------------------------------------------
 			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2 &invDims, const MaterialCSPtr& inMaterial);
 			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath);
-			SpriteComponentUPtr CreateSpriteComponent(const TextureAtlasCSPtr& pTextureAtlas, u32 inTpageIndex, const MaterialCSPtr& inpMaterial);
-			SpriteComponentUPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrTextureAtlas, u32 inTpageIndex, const MaterialCSPtr& inpMaterial);
+			SpriteComponentUPtr CreateSpriteComponent(const TextureAtlasCSPtr& pTextureAtlas, const std::string& in_textureId, const MaterialCSPtr& inpMaterial);
             SpriteComponentUPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrTextureAtlas, const std::string& inTpageID, const MaterialCSPtr& inpMaterial);
 
             //---------------------------------------------------------------------------

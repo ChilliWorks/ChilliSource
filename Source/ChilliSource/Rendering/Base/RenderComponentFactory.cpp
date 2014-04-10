@@ -136,34 +136,16 @@ namespace ChilliSource
         /// @param Material
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const TextureAtlasCSPtr& pTextureAtlas, u32 inTpageIndex, const MaterialCSPtr& inpMaterial)
+        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const TextureAtlasCSPtr& pTextureAtlas, const std::string& in_textureId, const MaterialCSPtr& inpMaterial)
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(inpMaterial);
-            pSprite->SetDimensions(pTextureAtlas->GetFrameSize(inTpageIndex));
-            pSprite->SetUVs(pTextureAtlas->GetFrameUVs(inTpageIndex));
+            pSprite->SetDimensions(pTextureAtlas->GetFrameSize(in_textureId));
+            pSprite->SetUVs(pTextureAtlas->GetFrameUVs(in_textureId));
             
             return pSprite;
         }
         //---------------------------------------------------------------------------
-        /// Create Sprite Component
-        ///
-        /// @param The storage location to load from
-        /// @param Sprite sheet file
-        /// @param Index into data tpage
-        /// @param Material
-        /// @return an instantiated sprite object
-        //---------------------------------------------------------------------------
-        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrTextureAtlas, u32 inTpageIndex, const MaterialCSPtr& inpMaterial)
-        {
-            SpriteComponentUPtr pSprite(new SpriteComponent());
-            pSprite->SetMaterial(inpMaterial);
-            TextureAtlasCSPtr pTextureAtlas = m_resourcePool->LoadResource<TextureAtlas>(ineStorageLocation, instrTextureAtlas);
-            pSprite->SetDimensions(pTextureAtlas->GetFrameSize(inTpageIndex));
-            pSprite->SetUVs(pTextureAtlas->GetFrameUVs(inTpageIndex));
-            
-            return pSprite;
-        }//---------------------------------------------------------------------------
         /// Create Sprite Component
         ///
         /// @param The storage location to load from
@@ -177,9 +159,8 @@ namespace ChilliSource
             SpriteComponentUPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(inpMaterial);
             TextureAtlasCSPtr pTextureAtlas = m_resourcePool->LoadResource<TextureAtlas>(ineStorageLocation, instrTextureAtlas);
-            u32 udwTpageID = pTextureAtlas->GetFrameIndexById(instrTpageID);
-            pSprite->SetDimensions(pTextureAtlas->GetFrameSize(udwTpageID));
-            pSprite->SetUVs(pTextureAtlas->GetFrameUVs(udwTpageID));
+            pSprite->SetDimensions(pTextureAtlas->GetFrameSize(instrTpageID));
+            pSprite->SetUVs(pTextureAtlas->GetFrameUVs(instrTpageID));
             
             return pSprite;
         }

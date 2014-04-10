@@ -18,6 +18,8 @@
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
+#include <algorithm>
+
 namespace ChilliSource
 {
 	namespace Rendering

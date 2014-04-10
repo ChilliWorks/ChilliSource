@@ -40,29 +40,29 @@ namespace ChilliSource
         {
             m_desc = in_desc;
         }
-		//---------------------------------------------------------------------
-		//---------------------------------------------------------------------
-		const TextureAtlas::Frame& TextureAtlas::GetFrame(u32 in_frameIndex) const
-		{
-            CS_ASSERT(in_frameIndex < m_desc.m_frames.size(), "Texture frame index out of bounds");
-			return m_desc.m_frames[in_frameIndex];
-		}
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
-        u32 TextureAtlas::GetFrameIndexById(const std::string& in_textureId) const
+        const TextureAtlas::Frame& TextureAtlas::GetFrame(u32 in_index) const
         {
+            CS_ASSERT(in_index < m_desc.m_frames.size(), "Index outside atlas frame bounds");
+            return m_desc.m_frames[in_index];
+        }
+		//---------------------------------------------------------------------
+		//---------------------------------------------------------------------
+		const TextureAtlas::Frame& TextureAtlas::GetFrame(const std::string& in_textureId) const
+		{
             u32 hashedId = Core::HashCRC32::GenerateHashCode(in_textureId);
             for(u32 i=0; i<m_desc.m_keys.size(); ++i)
             {
                 if(m_desc.m_keys[i] == hashedId)
                 {
-                    return i;
+                    return m_desc.m_frames[i];
                 }
             }
             
             CS_LOG_FATAL("Texture in atlas not found for key: " + in_textureId);
-            return 0;
-        }
+            return m_desc.m_frames[0];
+		}
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
         bool TextureAtlas::HasFrameWithId(const std::string& in_textureId) const
@@ -80,11 +80,11 @@ namespace ChilliSource
         }	
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
-		Core::Rectangle TextureAtlas::GetFrameUVs(u32 in_frameIndex) const
+		Core::Rectangle TextureAtlas::GetFrameUVs(const std::string& in_textureId) const
         {
 			Core::Rectangle result;
     
-            const Frame& frame = m_desc.m_frames[in_frameIndex];
+            const Frame& frame = GetFrame(in_textureId);
 			
             f32 inverseWidth = 1.0f / m_desc.m_textureAtlasWidth;
             f32 inverseHeight = 1.0f / m_desc.m_textureAtlasHeight;
@@ -98,15 +98,17 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
-		Core::Vector2 TextureAtlas::GetFrameSize(u32 in_frameIndex) const
+		Core::Vector2 TextureAtlas::GetFrameSize(const std::string& in_textureId) const
         {
-			return Core::Vector2(m_desc.m_frames[in_frameIndex].m_width, m_desc.m_frames[in_frameIndex].m_height);
+            const Frame& frame = GetFrame(in_textureId);
+			return Core::Vector2(frame.m_width, frame.m_height);
 		}
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
-		Core::Vector2 TextureAtlas::GetFrameOffset(u32 in_frameIndex) const
+		Core::Vector2 TextureAtlas::GetFrameOffset(const std::string& in_textureId) const
         {
-            return Core::Vector2(m_desc.m_frames[in_frameIndex].m_offsetX, m_desc.m_frames[in_frameIndex].m_offsetY);
+            const Frame& frame = GetFrame(in_textureId);
+            return Core::Vector2(frame.m_offsetX, frame.m_offsetY);
 		}
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------

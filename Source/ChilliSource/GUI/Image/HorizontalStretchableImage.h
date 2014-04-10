@@ -11,6 +11,7 @@
 #define _MOFLO_GUI_DEFAULTS_HORIZONTALSTRETCHABLEIMAGE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
 
 namespace ChilliSource
@@ -21,6 +22,17 @@ namespace ChilliSource
 		{	
 		public:
 
+            struct PanelDesc
+            {
+                Core::Rectangle m_leftUVs;
+                Core::Rectangle m_centreUVs;
+                Core::Rectangle m_rightUVs;
+                
+                Core::Vector2 m_leftSize;
+                Core::Vector2 m_centreSize;
+                Core::Vector2 m_rightSize;
+            };
+            
 			DECLARE_META_CLASS(HorizontalStretchableImage)
 
 			HorizontalStretchableImage();
@@ -31,19 +43,13 @@ namespace ChilliSource
             ///
             /// @param Texture containing the nine patches
             //---------------------------------------------------------
-            inline void SetTexture(const Rendering::TextureSPtr& inpTexture)
-            {
-                Texture = inpTexture;
-            }
+            void SetTexture(const Rendering::TextureSPtr& inpTexture);
             //---------------------------------------------------------
             /// Get Texture
             ///
             /// @return Texture containing the nine patches
             //---------------------------------------------------------
-			inline const Rendering::TextureSPtr& GetTexture() const
-            {
-                return Texture;
-            }
+            const Rendering::TextureSPtr& GetTexture() const;
 			//---------------------------------------------------------
 			/// Set Sprite Sheet
 			///
@@ -80,42 +86,14 @@ namespace ChilliSource
 			/// the base ID would be "BLUE_PANEL_"
 			//---------------------------------------------------------
 			const std::string& GetBaseTextureAtlasID() const;
-			//---------------------------------------------------------
-			/// Set Patch Sprite Sheet Indices
-			///
-			/// Left
-			/// Centre
-			/// Right
-			///
-			/// @param Array containing the tpage index of each patch
-			//---------------------------------------------------------
-			void SetTextureAtlasIndices(const u32* inpIndices);
-			//---------------------------------------------------------
-			/// Set Patch Sprite Sheet Indices
-			///
-			/// @param Sprite sheet index of left patch
-			/// @param Sprite sheet index of centre patch
-			/// @param Sprite sheet index of right patch
-			//---------------------------------------------------------
-			void SetTextureAtlasIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight);
-			//---------------------------------------------------------
-			/// Set Patch Sprite Sheet Left Index
-			///
-			/// @param tpage index of left patch
-			//---------------------------------------------------------
-			void SetTextureAtlasLeftIndex(u32 inudwIndex);
-			//---------------------------------------------------------
-			/// Set Patch Sprite Sheet Centre Index
-			///
-			/// @param tpage index of centre patch
-			//---------------------------------------------------------
-			void SetTextureAtlasCentreIndex(u32 inudwIndex);
-			//---------------------------------------------------------
-			/// Set Patch Sprite Sheet Right Index
-			///
-			/// @param tpage index of right patch
-			//---------------------------------------------------------
-			void SetTextureAtlasRightIndex(u32 inudwIndex);
+            //---------------------------------------------------------
+            /// Set Patch Sprite Sheet Indices
+            ///
+            /// @param Sprite sheet id of left patch
+            /// @param Sprite sheet id of centre patch
+            /// @param Sprite sheet id of right patch
+            //---------------------------------------------------------
+            void SetTextureAtlasIds(const std::string& in_left, const std::string& in_centre, const std::string& in_right);
             //--------------------------------------------------------
             /// Enable Height From Image
             ///
@@ -194,10 +172,8 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(std::string, BaseTextureAtlasID, SetBaseTextureAtlasID, GetBaseTextureAtlasID);
             DECLARE_PROPERTY_A(bool, HeightFromImage, EnableHeightFromImage, IsHeightFromImageEnabled);
             DECLARE_PROPERTY_A(bool, ActAsSpacer, EnableActAsSpacer, IsActAsSpacerEnabled);
-				
-			u32 mudwLeftCapIndex;
-			u32 mudwCentreIndex;
-			u32 mudwRightCapIndex;
+            
+            PanelDesc m_panels;
 		};
 
 		typedef std::shared_ptr<HorizontalStretchableImage> HorizontalStretchableImagePtr;

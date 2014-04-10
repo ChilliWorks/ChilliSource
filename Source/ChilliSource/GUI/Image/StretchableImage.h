@@ -10,6 +10,7 @@
 #define _MOFLO_GUI_STRETCHABLEIMAGEVIEW_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
 
 //=============================================================
@@ -28,18 +29,33 @@ namespace ChilliSource
 
 			DECLARE_META_CLASS(StretchableImage)
 
-            struct TextureAtlasIndex
+            struct PanelDesc
             {
-                u32 udwTopLeft;
-                u32 udwTopRight;
-                u32 udwBottomLeft;
-                u32 udwBottomRight;
-                u32 udwTopCentre;
-                u32 udwBottomCentre;
-                u32 udwLeftCentre;
-                u32 udwRightCentre;
-                u32 udwMiddleCentre;
+                Core::Rectangle m_topLeftUVs;
+                Core::Rectangle m_topCentreUVs;
+                Core::Rectangle m_topRightUVs;
+                
+                Core::Rectangle m_bottomLeftUVs;
+                Core::Rectangle m_bottomCentreUVs;
+                Core::Rectangle m_bottomRightUVs;
+                
+                Core::Rectangle m_leftCentreUVs;
+                Core::Rectangle m_middleCentreUVs;
+                Core::Rectangle m_rightCentreUVs;
+                
+                Core::Vector2 m_topLeftSize;
+                Core::Vector2 m_topCentreSize;
+                Core::Vector2 m_topRightSize;
+                
+                Core::Vector2 m_bottomLeftSize;
+                Core::Vector2 m_bottomCentreSize;
+                Core::Vector2 m_bottomRightSize;
+                
+                Core::Vector2 m_leftCentreSize;
+                Core::Vector2 m_middleCentreSize;
+                Core::Vector2 m_rightCentreSize;
             };
+            
             StretchableImage();
             StretchableImage(const Core::ParamDictionary& insParams);
             //---------------------------------------------------------
@@ -93,8 +109,8 @@ namespace ChilliSource
 			//---------------------------------------------------------
 			/// Get Base Sprite Sheet Index ID
 			///
-			/// Get the "path" to the sprite sheet index IDs. 
-			/// e.g. For the following IDs: 
+			/// Get the "path" to the sprite sheet index IDs.
+			/// e.g. For the following IDs:
 			///			* "BLUE_PANEL_TOP_LEFT"
 			///			* "BLUE_PANEL_TOP_RIGHT"
 			///			* "BLUE_PANEL_BOTTOM_LEFT"
@@ -108,28 +124,6 @@ namespace ChilliSource
 			/// the base ID would be "BLUE_PANEL_"
 			//---------------------------------------------------------
 			const std::string& GetBaseTextureAtlasID() const;
-            //---------------------------------------------------------
-            /// Set Patch Sprite Sheet Indices
-            ///
-            /// @param Struct containing the tpage index of each patch
-            //---------------------------------------------------------
-            void SetTextureAtlasIndices(const TextureAtlasIndex& insIndices);
-            //---------------------------------------------------------
-            /// Set Patch Sprite Sheet Indices
-            ///
-            /// Top Left
-            /// Top Right
-            /// Bottom Left
-            /// Bottom Right
-            /// Top Centre
-            /// Bottom Centre
-            /// Left Centre
-            /// Right Centre
-            /// Middle Centre
-            ///
-            /// @param Array containing the tpage index of each patch
-            //---------------------------------------------------------
-            void SetTextureAtlasIndices(const u32* inpIndices);
             //---------------------------------------------------------
             /// Draw
             /// 
@@ -251,7 +245,7 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, CentreTouchConsumption, EnableCentreTouchConsumption, IsCentreTouchConsumptionEnabled);
 			
-            TextureAtlasIndex msIndices;
+            PanelDesc m_panels;
         };
     }
 }

@@ -42,8 +42,6 @@ namespace ChilliSource
 
 		DEFINE_PROPERTY(HighlightColour);
 
-		DEFINE_PROPERTY(NormalTextureAtlasIndex);
-		DEFINE_PROPERTY(HighlightTextureAtlasIndex);
 		DEFINE_PROPERTY(NormalTextureAtlasID);
 		DEFINE_PROPERTY(HighlightTextureAtlasID);
 
@@ -56,7 +54,7 @@ namespace ChilliSource
         /// Create the widget by adding the background image
         //-----------------------------------------------------------
         HighlightButton::HighlightButton() 
-        : mpBackgroundImage(new ImageView()), NormalTextureAtlasIndex(0), HighlightTextureAtlasIndex(0), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
+        : mpBackgroundImage(new ImageView()), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
         msDefaultUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         msHighlightUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
@@ -77,7 +75,7 @@ namespace ChilliSource
         /// From param dictionary
         //------------------------------------------------------------
         HighlightButton::HighlightButton(const Core::ParamDictionary& insParams) 
-        : Button(insParams), mpBackgroundImage(new ImageView()), NormalTextureAtlasIndex(0), HighlightTextureAtlasIndex(0),
+        : Button(insParams), mpBackgroundImage(new ImageView()),
         msDefaultUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         msHighlightUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         mbSelected(false), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
@@ -132,18 +130,6 @@ namespace ChilliSource
             {
                 Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
 				SetHighlightTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eHighlightTextureAtlasLocation, strValue));
-            }
-            //---Default index
-            if(insParams.TryGetValue("NormalTextureAtlasIndex", strValue))
-            {
-                CS_ASSERT(NormalTextureAtlas, "Sprite sheet index cannot be set without sprite sheet");
-                SetNormalTextureAtlasIndex(Core::ParseU32(strValue));
-            }
-            //---Highlight index
-            if(insParams.TryGetValue("HighlightTextureAtlasIndex", strValue))
-            {
-				CS_ASSERT(HighlightTextureAtlas, "Sprite sheet index cannot be set without sprite sheet");
-				SetHighlightTextureAtlasIndex(Core::ParseU32(strValue));
             }
 			//---Default index ID
 			if(insParams.TryGetValue("NormalTextureAtlasID", strValue))
@@ -382,43 +368,6 @@ namespace ChilliSource
 		{ 
 			return HighlightTextureAtlas; 
 		}
-        //-----------------------------------------------------------
-        /// Set Normal Sprite Sheet Index
-        ///
-        /// @param Index of default state on sprite sheet
-        //-----------------------------------------------------------
-        void HighlightButton::SetNormalTextureAtlasIndex(u32 inudwIndex)
-        {
-            NormalTextureAtlasIndex = inudwIndex;
-            mpBackgroundImage->SetTextureAtlasIndex(inudwIndex);
-        }
-        //-----------------------------------------------------------
-        /// Set Highlight Sprite Sheet Index
-        ///
-        /// @param Index of highlight state on sprite sheet
-        //-----------------------------------------------------------
-        void HighlightButton::SetHighlightTextureAtlasIndex(u32 inudwIndex)
-        {
-            HighlightTextureAtlasIndex = inudwIndex;
-        }
-		//-----------------------------------------------------------
-		/// Get Normal Sprite Sheet Index
-		///
-		/// @return Index of default state on sprite sheet
-		//-----------------------------------------------------------
-		u32 HighlightButton::GetNormalTextureAtlasIndex() const
-		{
-			return NormalTextureAtlasIndex;
-		}
-		//-----------------------------------------------------------
-		/// Get Highlight Sprite Sheet Index
-		///
-		/// @return Index of highlight state on sprite sheet
-		//-----------------------------------------------------------
-		u32 HighlightButton::GetHighlightTextureAtlasIndex() const
-		{
-			return HighlightTextureAtlasIndex;
-		}
 		//-----------------------------------------------------------
 		/// Set Normal Sprite Sheet Index
 		///
@@ -426,9 +375,8 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void HighlightButton::SetNormalTextureAtlasID(const std::string& instrID)
 		{
-			CS_ASSERT(NormalTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
 			NormalTextureAtlasID = instrID;
-			SetNormalTextureAtlasIndex(NormalTextureAtlas->GetFrameIndexById(instrID));
+            mpBackgroundImage->SetTextureAtlasID(instrID);
 		}
 		//-----------------------------------------------------------
 		/// Set Highlight Sprite Sheet Index ID
@@ -437,9 +385,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void HighlightButton::SetHighlightTextureAtlasID(const std::string& instrID)
 		{
-			CS_ASSERT(HighlightTextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
 			HighlightTextureAtlasID = instrID;
-			SetHighlightTextureAtlasIndex(HighlightTextureAtlas->GetFrameIndexById(instrID));
 		}
 		//-----------------------------------------------------------
 		/// Get Normal Sprite Sheet Index ID
@@ -550,14 +496,14 @@ namespace ChilliSource
                 
                 mpBackgroundImage->SetTexture(HighlightTexture);
                 
-                if(NormalTextureAtlas)
+                if(HighlightTextureAtlas)
 				{
-					bool bUniqueHighlight = HighlightTextureAtlasIndex != NormalTextureAtlasIndex;
+					bool bUniqueHighlight = HighlightTextureAtlasID != NormalTextureAtlasID;
 					
 					if (bUniqueHighlight && HighlightTextureAtlas)
 					{
 						mpBackgroundImage->SetTextureAtlas(HighlightTextureAtlas);
-						mpBackgroundImage->SetTextureAtlasIndex(HighlightTextureAtlasIndex);
+						mpBackgroundImage->SetTextureAtlasID(HighlightTextureAtlasID);
 					} 
 					else 
 					{
@@ -589,7 +535,7 @@ namespace ChilliSource
                 if(NormalTextureAtlas)
 				{
 					mpBackgroundImage->SetColour(Core::Colour::k_white);
-					mpBackgroundImage->SetTextureAtlasIndex(NormalTextureAtlasIndex);
+					mpBackgroundImage->SetTextureAtlasID(NormalTextureAtlasID);
 					mpBackgroundImage->SetTextureAtlas(NormalTextureAtlas);
 				}
                 else

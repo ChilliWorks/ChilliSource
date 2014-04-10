@@ -21,6 +21,7 @@
 
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
+#include <algorithm>
 #include <limits>
 
 namespace ChilliSource

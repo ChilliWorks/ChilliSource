@@ -38,7 +38,7 @@ namespace ChilliSource
         StretchableImage::StretchableImage()
 		: HeightMaintain(false), WidthMaintain(false), CentreTouchConsumption(false)
         {
-			memset(&msIndices, 0, sizeof(u32) * 9);
+	
         }
         //---------------------------------------------------------
         /// Constructor
@@ -51,8 +51,6 @@ namespace ChilliSource
 			CentreTouchConsumption = IsTouchConsumptionEnabled();
 			
             std::string strValue;
-			
-			memset(&msIndices, 0, sizeof(u32) * 9);
             
             //---Texture
             Core::StorageLocation eTextureLocation = Core::StorageLocation::k_package;
@@ -76,87 +74,11 @@ namespace ChilliSource
                 Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
                 SetTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(eTextureAtlasLocation, strValue));
 			}
-			
 			//---Sprite sheet base name
 			if(insParams.TryGetValue("BaseTextureAtlasID", strValue))
             {
 				SetBaseTextureAtlasID(strValue);
 			}
-			
-            //---Sprite sheet indices
-            if(insParams.TryGetValue("TopLeftIndex", strValue))
-            {
-                msIndices.udwTopLeft = Core::ParseU32(strValue);
-            }
-            if(insParams.TryGetValue("TopRightIndex", strValue))
-            {
-                msIndices.udwTopRight = Core::ParseU32(strValue);
-            }
-            if(insParams.TryGetValue("BottomLeftIndex", strValue))
-            {
-                msIndices.udwBottomLeft = Core::ParseU32(strValue);
-            }
-            if(insParams.TryGetValue("BottomRightIndex", strValue))
-            {
-                msIndices.udwBottomRight = Core::ParseU32(strValue);
-            }
-            if(insParams.TryGetValue("TopIndex", strValue))
-            {
-                msIndices.udwTopCentre = Core::ParseU32(strValue);
-            }
-            if(insParams.TryGetValue("BottomIndex", strValue))
-            {
-                msIndices.udwBottomCentre = Core::ParseU32(strValue);
-            }
-            if(insParams.TryGetValue("LeftIndex", strValue))
-            {
-                msIndices.udwLeftCentre = Core::ParseU32(strValue);
-            }
-            if(insParams.TryGetValue("RightIndex", strValue))
-            {
-                msIndices.udwRightCentre = Core::ParseU32(strValue);
-            }
-            if(insParams.TryGetValue("CentreIndex", strValue))
-            {
-                msIndices.udwMiddleCentre = Core::ParseU32(strValue);
-            }
-            //---Index IDs
-            if(insParams.TryGetValue("TopLeftIndexID", strValue))
-            {
-                msIndices.udwTopLeft = TextureAtlas->GetFrameIndexById(strValue);
-            }
-            if(insParams.TryGetValue("TopRightIndexID", strValue))
-            {
-                msIndices.udwTopRight = TextureAtlas->GetFrameIndexById(strValue);
-            }
-            if(insParams.TryGetValue("BottomLeftIndexID", strValue))
-            {
-                msIndices.udwBottomLeft = TextureAtlas->GetFrameIndexById(strValue);
-            }
-            if(insParams.TryGetValue("BottomRightIndexID", strValue))
-            {
-                msIndices.udwBottomRight = TextureAtlas->GetFrameIndexById(strValue);
-            }
-            if(insParams.TryGetValue("TopIndexID", strValue))
-            {
-                msIndices.udwTopCentre = TextureAtlas->GetFrameIndexById(strValue);
-            }
-            if(insParams.TryGetValue("BottomIndexID", strValue))
-            {
-                msIndices.udwBottomCentre = TextureAtlas->GetFrameIndexById(strValue);
-            }
-            if(insParams.TryGetValue("LeftIndexID", strValue))
-            {
-                msIndices.udwLeftCentre = TextureAtlas->GetFrameIndexById(strValue);
-            }
-            if(insParams.TryGetValue("RightIndexID", strValue))
-            {
-                msIndices.udwRightCentre = TextureAtlas->GetFrameIndexById(strValue);
-            }
-            if(insParams.TryGetValue("CentreIndexID", strValue))
-            {
-                msIndices.udwMiddleCentre = TextureAtlas->GetFrameIndexById(strValue);
-            }
 			//---Maintain Width
 			if(insParams.TryGetValue("HeightMaintain", strValue))
 			{
@@ -222,20 +144,45 @@ namespace ChilliSource
 		//---------------------------------------------------------
 		void StretchableImage::SetBaseTextureAtlasID(const std::string& instrID)
 		{
-			if(TextureAtlas)
-			{
-				BaseTextureAtlasID = instrID;
-				
-				msIndices.udwTopLeft = TextureAtlas->GetFrameIndexById(instrID + "TOP_LEFT");
-				msIndices.udwTopRight = TextureAtlas->GetFrameIndexById(instrID + "TOP_RIGHT");
-				msIndices.udwBottomLeft = TextureAtlas->GetFrameIndexById(instrID + "BOTTOM_LEFT");
-				msIndices.udwBottomRight = TextureAtlas->GetFrameIndexById(instrID + "BOTTOM_RIGHT");
-				msIndices.udwTopCentre = TextureAtlas->GetFrameIndexById(instrID + "TOP_CENTRE");
-				msIndices.udwBottomCentre = TextureAtlas->GetFrameIndexById(instrID + "BOTTOM_CENTRE");
-				msIndices.udwLeftCentre = TextureAtlas->GetFrameIndexById(instrID + "MIDDLE_LEFT");
-				msIndices.udwRightCentre = TextureAtlas->GetFrameIndexById(instrID + "MIDDLE_RIGHT");
-				msIndices.udwMiddleCentre = TextureAtlas->GetFrameIndexById(instrID + "MIDDLE_CENTRE");
-			}
+            CS_ASSERT(TextureAtlas != nullptr, "Must have texture atlas to set IDs");
+                
+            BaseTextureAtlasID = instrID;
+            
+            std::string atlasId = instrID + "TOP_LEFT";
+            m_panels.m_topLeftSize = TextureAtlas->GetFrameSize(atlasId);
+            m_panels.m_topLeftUVs = TextureAtlas->GetFrameUVs(atlasId);
+            
+            atlasId = instrID + "TOP_CENTRE";
+            m_panels.m_topCentreSize = TextureAtlas->GetFrameSize(atlasId);
+            m_panels.m_topCentreUVs = TextureAtlas->GetFrameUVs(atlasId);
+            
+            atlasId = instrID + "TOP_RIGHT";
+            m_panels.m_topRightSize = TextureAtlas->GetFrameSize(atlasId);
+            m_panels.m_topRightUVs = TextureAtlas->GetFrameUVs(atlasId);
+            
+            atlasId = instrID + "BOTTOM_LEFT";
+            m_panels.m_bottomLeftSize = TextureAtlas->GetFrameSize(atlasId);
+            m_panels.m_bottomLeftUVs = TextureAtlas->GetFrameUVs(atlasId);
+            
+            atlasId = instrID + "BOTTOM_CENTRE";
+            m_panels.m_bottomCentreSize = TextureAtlas->GetFrameSize(atlasId);
+            m_panels.m_bottomCentreUVs = TextureAtlas->GetFrameUVs(atlasId);
+            
+            atlasId = instrID + "BOTTOM_RIGHT";
+            m_panels.m_bottomRightSize = TextureAtlas->GetFrameSize(atlasId);
+            m_panels.m_bottomRightUVs = TextureAtlas->GetFrameUVs(atlasId);
+            
+            atlasId = instrID + "MIDDLE_LEFT";
+            m_panels.m_leftCentreSize = TextureAtlas->GetFrameSize(atlasId);
+            m_panels.m_leftCentreUVs = TextureAtlas->GetFrameUVs(atlasId);
+            
+            atlasId = instrID + "MIDDLE_CENTRE";
+            m_panels.m_middleCentreSize = TextureAtlas->GetFrameSize(atlasId);
+            m_panels.m_middleCentreUVs = TextureAtlas->GetFrameUVs(atlasId);
+            
+            atlasId = instrID + "MIDDLE_RIGHT";
+            m_panels.m_rightCentreSize = TextureAtlas->GetFrameSize(atlasId);
+            m_panels.m_rightCentreUVs = TextureAtlas->GetFrameUVs(atlasId);
 		}
 		//---------------------------------------------------------
 		/// Get Base Sprite Sheet Index ID
@@ -258,42 +205,6 @@ namespace ChilliSource
 		{
 			return BaseTextureAtlasID;
 		}
-		//---------------------------------------------------------
-        /// Set Patch Sprite Sheet Indices
-        ///
-        /// @param Struct containing the tpage index of each patch
-        //---------------------------------------------------------
-        void StretchableImage::SetTextureAtlasIndices(const StretchableImage::TextureAtlasIndex& insIndices)
-        {
-            msIndices = insIndices;
-        }
-        //---------------------------------------------------------
-        /// Set Patch Sprite Sheet Indices
-        ///
-        /// Top Left
-        /// Top Right
-        /// Bottom Left
-        /// Bottom Right
-        /// Top Centre
-        /// Bottom Centre
-        /// Left Centre
-        /// Right Centre
-        /// Middle Centre
-        ///
-        /// @param Array containing the tpage index of each patch
-        //---------------------------------------------------------
-        void StretchableImage::SetTextureAtlasIndices(const u32* inpIndices)
-        {
-            msIndices.udwTopLeft = inpIndices[0];
-            msIndices.udwTopRight = inpIndices[1];
-            msIndices.udwBottomLeft = inpIndices[2];
-            msIndices.udwBottomRight = inpIndices[3];
-            msIndices.udwTopCentre = inpIndices[4];
-            msIndices.udwBottomCentre = inpIndices[5];
-            msIndices.udwLeftCentre = inpIndices[6];
-            msIndices.udwRightCentre = inpIndices[7];
-            msIndices.udwMiddleCentre = inpIndices[8];
-        }
         //---------------------------------------------------------
         /// Draw
         /// 
@@ -341,7 +252,7 @@ namespace ChilliSource
                 inpCanvas->DrawBox(matTransform,
                                    sPatchSize.vSizeTopLeft, 
 								   Texture,
-                                   TextureAtlas->GetFrameUVs(msIndices.udwTopLeft), 
+                                   m_panels.m_topLeftUVs,
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topLeft);
                 
@@ -351,7 +262,7 @@ namespace ChilliSource
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeTopRight,  
 								   Texture,
-                                   TextureAtlas->GetFrameUVs(msIndices.udwTopRight), 
+                                   m_panels.m_topRightUVs,
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topRight);
                 
@@ -361,7 +272,7 @@ namespace ChilliSource
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeBottomLeft, 
 								   Texture,
-                                   TextureAtlas->GetFrameUVs(msIndices.udwBottomLeft), 
+                                   m_panels.m_bottomLeftUVs,
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_bottomLeft);
                 
@@ -371,7 +282,7 @@ namespace ChilliSource
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeBottomRight,  
 								   Texture,
-                                   TextureAtlas->GetFrameUVs(msIndices.udwBottomRight), 
+                                   m_panels.m_bottomRightUVs,
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_bottomRight);
                 
@@ -383,7 +294,7 @@ namespace ChilliSource
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeTopCentre, 
 								   Texture,
-                                   TextureAtlas->GetFrameUVs(msIndices.udwTopCentre), 
+                                   m_panels.m_topCentreUVs,
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topLeft);
 				
@@ -395,7 +306,7 @@ namespace ChilliSource
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeBottomCentre, 
 								   Texture,
-                                   TextureAtlas->GetFrameUVs(msIndices.udwBottomCentre), 
+                                   m_panels.m_bottomCentreUVs,
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_bottomLeft);
                 
@@ -407,7 +318,7 @@ namespace ChilliSource
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeLeftCentre, 
 								   Texture,
-                                   TextureAtlas->GetFrameUVs(msIndices.udwLeftCentre), 
+                                   m_panels.m_leftCentreUVs,
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topLeft);
                 
@@ -419,7 +330,7 @@ namespace ChilliSource
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeRightCentre, 
 								   Texture,
-                                   TextureAtlas->GetFrameUVs(msIndices.udwRightCentre), 
+                                   m_panels.m_rightCentreUVs,
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topRight);
                 
@@ -431,7 +342,7 @@ namespace ChilliSource
                 inpCanvas->DrawBox(matTransform,
                                    sPatchSize.vSizeMiddleCentre, 
 								   Texture,
-                                   TextureAtlas->GetFrameUVs(msIndices.udwMiddleCentre), 
+                                   m_panels.m_middleCentreUVs,
                                    AbsColour, 
                                    Rendering::AlignmentAnchor::k_topLeft);
                 
@@ -529,10 +440,10 @@ namespace ChilliSource
 			Core::Vector2 vPanelSize = GetAbsoluteSize();
 
 			//Get the patch sizes
-			outPatchSize.vSizeTopLeft = TextureAtlas->GetFrameSize(msIndices.udwTopLeft);
-			outPatchSize.vSizeTopRight = TextureAtlas->GetFrameSize(msIndices.udwTopRight);
-			outPatchSize.vSizeBottomLeft = TextureAtlas->GetFrameSize(msIndices.udwBottomLeft);
-			outPatchSize.vSizeBottomRight = TextureAtlas->GetFrameSize(msIndices.udwBottomRight);
+			outPatchSize.vSizeTopLeft = m_panels.m_topLeftSize;
+			outPatchSize.vSizeTopRight = m_panels.m_topRightSize;
+			outPatchSize.vSizeBottomLeft = m_panels.m_bottomLeftSize;
+			outPatchSize.vSizeBottomRight = m_panels.m_bottomRightSize;
 			
 			//Check to see if they are going to fit in the bounds of the view
 			f32 fTotal = outPatchSize.vSizeTopLeft.y + outPatchSize.vSizeBottomLeft.y;

@@ -29,23 +29,6 @@ namespace ChilliSource
 			DECLARE_META_CLASS(StretchableHighlightButton)
             
             //-----------------------------------------------------------
-            /// Sprite Sheet Index
-            ///
-            /// A container struct for the indices for the 9 patches.
-            //-----------------------------------------------------------
-            struct TextureAtlasIndex
-            {
-                u32 udwTopLeft;
-                u32 udwTopRight;
-                u32 udwBottomLeft;
-                u32 udwBottomRight;
-                u32 udwTopCentre;
-                u32 udwBottomCentre;
-                u32 udwLeftCentre;
-                u32 udwRightCentre;
-                u32 udwMiddleCentre;
-            };
-            //-----------------------------------------------------------
             /// Constructor
             //-----------------------------------------------------------
             StretchableHighlightButton();
@@ -131,50 +114,6 @@ namespace ChilliSource
 			/// @return Index ID of highlight state on sprite sheet
 			//-----------------------------------------------------------
 			const std::string& GetBaseHighlightTextureAtlasID() const;
-            //---------------------------------------------------------
-            /// Set Normal Sprite Sheet Indices
-            ///
-            /// @param Struct containing the tpage index of each patch
-            //---------------------------------------------------------
-            void SetNormalTextureAtlasIndices(const TextureAtlasIndex& insIndices);
-            //---------------------------------------------------------
-            /// Set Normal Sprite Sheet Indices
-            ///
-            /// Top Left
-            /// Top Right
-            /// Bottom Left
-            /// Bottom Right
-            /// Top Centre
-            /// Bottom Centre
-            /// Left Centre
-            /// Right Centre
-            /// Middle Centre
-            ///
-            /// @param Array containing the tpage index of each patch
-            //---------------------------------------------------------
-            void SetNormalTextureAtlasIndices(const u32* inpIndices);
-            //---------------------------------------------------------
-            /// Set Highlight Sprite Sheet Indices
-            ///
-            /// @param Struct containing the tpage index of each patch
-            //---------------------------------------------------------
-            void SetHighlightTextureAtlasIndices(const TextureAtlasIndex& insIndices);
-            //---------------------------------------------------------
-            /// Set Highlight Sprite Sheet Indices
-            ///
-            /// Top Left
-            /// Top Right
-            /// Bottom Left
-            /// Bottom Right
-            /// Top Centre
-            /// Bottom Centre
-            /// Left Centre
-            /// Right Centre
-            /// Middle Centre
-            ///
-            /// @param Array containing the tpage index of each patch
-            //---------------------------------------------------------
-            void SetHighlightTextureAtlasIndices(const u32* inpIndices);
             //-----------------------------------------------------------
             /// Set Select Audio Effect
             ///
@@ -305,9 +244,6 @@ namespace ChilliSource
         private:
             Rendering::TextureSPtr mCurrentTexture;
             Rendering::TextureAtlasCSPtr mCurrentTextureAtlas;
-            TextureAtlasIndex msCurrentIndices;
-            TextureAtlasIndex msNormalIndices;
-            TextureAtlasIndex msHighlightIndices;
             Audio::AudioComponentSPtr mpSelectAudioEffect;
 			Audio::AudioComponentSPtr mpDeselectAudioEffect;
             Core::Colour mCurrentColour;
@@ -319,6 +255,8 @@ namespace ChilliSource
             Core::ConnectionUPtr m_releasedInsideConnection;
             Core::ConnectionUPtr m_movedWithinConnection;
             Core::ConnectionUPtr m_movedOutsideConnection;
+            
+            StretchableImageSPtr m_image;
             
             //---Properties
 			DECLARE_PROPERTY_A(Rendering::TextureSPtr, NormalTexture, SetNormalTexture, GetNormalTexture);
