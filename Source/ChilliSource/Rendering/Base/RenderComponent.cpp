@@ -63,21 +63,14 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material
 		//-----------------------------------------------------------
-		void RenderComponent::SetMaterial(const MaterialSPtr &inpMaterial)
+		void RenderComponent::SetMaterial(const MaterialCSPtr &inpMaterial)
 		{
 			mpMaterial = inpMaterial;
 		}
 		//-----------------------------------------------------------
 		/// Get Material
 		//-----------------------------------------------------------
-		const MaterialSPtr& RenderComponent::GetMaterial() const
-		{
-			return mpMaterial;
-		}
-		//-----------------------------------------------------------
-		/// Get Material
-		//-----------------------------------------------------------
-		MaterialSPtr& RenderComponent::GetMaterial()
+		const MaterialCSPtr& RenderComponent::GetMaterial() const
 		{
 			return mpMaterial;
 		}
@@ -86,7 +79,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		bool RenderComponent::IsTransparent()
 		{
-			return mpMaterial->IsTransparent();
+			return mpMaterial->IsTransparencyEnabled();
 		}
         //-----------------------------------------------------
         /// Set Shadow Casting Enabled

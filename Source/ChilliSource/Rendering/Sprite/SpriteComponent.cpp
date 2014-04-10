@@ -305,14 +305,10 @@ namespace ChilliSource
         {
             CalculateSpriteData();
             
-            mSpriteData.pMaterial->SetActiveShaderProgram(ineShaderPass);
-            if (mSpriteData.pMaterial->GetActiveShaderProgram() != nullptr)
-            {
-                //Add us to the render systems dynamic batch
-                //If we force a batch flush here then the previous sprites
-                //will be rendered.
-                inpRenderSystem->GetDynamicSpriteBatchPtr()->Render(inpRenderSystem, mSpriteData);
-            }
+            //Add us to the render systems dynamic batch
+            //If we force a batch flush here then the previous sprites
+            //will be rendered.
+            inpRenderSystem->GetDynamicSpriteBatchPtr()->Render(mSpriteData);
         }
         //------------------------------------------------------------
         /// On Transform Changed

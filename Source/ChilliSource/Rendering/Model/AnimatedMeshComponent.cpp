@@ -30,7 +30,7 @@ namespace ChilliSource
 	{
 		CS_DEFINE_NAMEDTYPE(AnimatedMeshComponent);
         
-        MaterialSPtr AnimatedMeshComponent::mspShadowMapMaterial;
+        MaterialCSPtr AnimatedMeshComponent::mspShadowMapMaterial;
         
 		//----------------------------------------------------------
 		/// Constructor
@@ -165,7 +165,7 @@ namespace ChilliSource
 		{
 			for (u32 i = 0; i < mMaterials.size(); ++i)
 			{
-				if (mMaterials[i]->IsTransparent() == true)
+				if (mMaterials[i]->IsTransparencyEnabled() == true)
 					return true;
 			}
 			return false;
@@ -173,7 +173,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material
 		//-----------------------------------------------------------
-		void AnimatedMeshComponent::SetMaterial(const MaterialSPtr& inpMaterial)
+		void AnimatedMeshComponent::SetMaterial(const MaterialCSPtr& inpMaterial)
 		{
 			mpMaterial = inpMaterial;
 			
@@ -186,7 +186,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material For Sub Mesh
 		//-----------------------------------------------------------
-		void AnimatedMeshComponent::SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, u32 indwSubMeshIndex)
+		void AnimatedMeshComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, u32 indwSubMeshIndex)
 		{
 			if (indwSubMeshIndex < mMaterials.size())
 			{
@@ -201,7 +201,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Material For Sub Mesh
         //-----------------------------------------------------------
-        void AnimatedMeshComponent::SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, const std::string& instrSubMeshName)
+        void AnimatedMeshComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, const std::string& instrSubMeshName)
         {
             if (nullptr != mpModel)
             {
@@ -220,7 +220,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Material Of Sub Mesh
 		//-----------------------------------------------------------
-		const MaterialSPtr AnimatedMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
+		const MaterialCSPtr AnimatedMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
 		{
 			if (indwSubMeshIndex < mMaterials.size())
 			{
@@ -228,12 +228,12 @@ namespace ChilliSource
 			}
 			
             CS_LOG_ERROR("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
-			return MaterialSPtr();
+			return MaterialCSPtr();
 		}
         //-----------------------------------------------------------
         /// Get Material Of Sub Mesh
         //-----------------------------------------------------------
-        MaterialSPtr AnimatedMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
+        MaterialCSPtr AnimatedMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
         {
             if (nullptr != mpModel)
             {
@@ -246,7 +246,7 @@ namespace ChilliSource
             }
 			
             CS_LOG_ERROR("Failed to get material from sub mesh " + instrSubMeshName);
-			return MaterialSPtr();
+			return nullptr;
         }
 		//----------------------------------------------------------
 		/// Attach Mesh
@@ -259,16 +259,6 @@ namespace ChilliSource
             mOBBoundingBox.SetOrigin(mpModel->GetAABB().GetOrigin());
             
             Reset();
-            
-            //ensure we have the correct number of materials.
-            while (mMaterials.size() > inpModel->GetNumSubMeshes() && mMaterials.size() > 1)
-            {
-                mMaterials.pop_back();
-            }
-            while (mMaterials.size() < inpModel->GetNumSubMeshes())
-            {
-                mMaterials.push_back(MaterialSPtr());
-            }
 		}
         //----------------------------------------------------------
         /// Attach Mesh
@@ -277,7 +267,7 @@ namespace ChilliSource
         /// material
         /// @param Mesh object
         //----------------------------------------------------------
-        void AnimatedMeshComponent::AttachMesh(const MeshCSPtr& inpModel, const MaterialSPtr& inpMaterial)
+        void AnimatedMeshComponent::AttachMesh(const MeshCSPtr& inpModel, const MaterialCSPtr& inpMaterial)
         {
             mpModel = inpModel;
 			mpMaterial = inpMaterial;
@@ -286,16 +276,6 @@ namespace ChilliSource
             mOBBoundingBox.SetSize(mpModel->GetAABB().GetSize());
             mOBBoundingBox.SetOrigin(mpModel->GetAABB().GetOrigin());
             Reset();
-            
-            //ensure we have the correct number of materials.
-            while (mMaterials.size() > inpModel->GetNumSubMeshes() && mMaterials.size() > 1)
-            {
-                mMaterials.pop_back();
-            }
-            while (mMaterials.size() < inpModel->GetNumSubMeshes())
-            {
-                mMaterials.push_back(MaterialSPtr());
-            }
             
             SetMaterial(inpMaterial);
         }
@@ -618,23 +598,17 @@ namespace ChilliSource
                 if(IsTransparent())
                 {
                     //Flush the sprite cache to maintain order
-                    inpRenderSystem->GetDynamicSpriteBatchPtr()->ForceRender(inpRenderSystem);
-                }
-                
-                //apply the shader program for the current shader pass.
-                for(u32 i=0; i<mMaterials.size(); ++i)
-                {
-                    mMaterials[i]->SetActiveShaderProgram(ineShaderPass);
+                    inpRenderSystem->GetDynamicSpriteBatchPtr()->ForceRender();
                 }
                 
                 //render the model with the animation data.
                 if (mActiveAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials, mActiveAnimationGroup);
+                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials,ineShaderPass, mActiveAnimationGroup);
                 }
                 else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials, mFadingAnimationGroup);
+                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials, ineShaderPass, mFadingAnimationGroup);
                 }
             }
 		}
@@ -647,12 +621,8 @@ namespace ChilliSource
             {
                 if (mspShadowMapMaterial == nullptr)
                 {
-                    mspShadowMapMaterial = Core::Application::Get()->GetSystem<MaterialFactory>()->CreateAnimatedDirectionalShadowMap();
+                    mspShadowMapMaterial = Core::Application::Get()->GetSystem<MaterialFactory>()->CreateAnimatedDirectionalShadowMap("_AnimatedDirShadowMap");
                 }
-                
-                std::vector<MaterialSPtr> aMaterials;
-                mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
-                aMaterials.push_back(mspShadowMapMaterial);
                 
                 if (mbAnimationDataDirty == true)
                 {
@@ -662,11 +632,11 @@ namespace ChilliSource
                 //render the model with the animation data.
                 if (mActiveAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), aMaterials, mActiveAnimationGroup);
+                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {mspShadowMapMaterial}, ShaderPass::k_ambient, mActiveAnimationGroup);
                 }
                 else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), aMaterials, mFadingAnimationGroup);
+                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {mspShadowMapMaterial}, ShaderPass::k_ambient, mFadingAnimationGroup);
                 }
             }
         }

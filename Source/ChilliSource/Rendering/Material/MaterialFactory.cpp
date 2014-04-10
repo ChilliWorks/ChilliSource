@@ -8,7 +8,11 @@
 
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Rendering/Base/CullFace.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Base/ShaderPass.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Shader/ShaderManager.h>
@@ -41,170 +45,148 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateCustom() const
+        MaterialSPtr MaterialFactory::CreateCustom(const std::string& in_uniqueId) const
         {
-            Material* material = new Material();
-			return MaterialUPtr(material);
+            Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+            return resourcePool->CreateResource<Material>(in_uniqueId);
         }
-        
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateGUI() const
+        MaterialSPtr MaterialFactory::CreateGUI(const std::string& in_uniqueId) const
         {
-            Material* material = new Material();
+            MaterialSPtr material(CreateCustom(in_uniqueId));
             
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/GUI"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTransparent(true);
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/GUI"));
+            material->SetTransparencyEnabled(true);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(false);
+            material->SetFaceCullingEnabled(false);
             
-			return MaterialUPtr(material);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateGUIDistanceFont() const
+        MaterialSPtr MaterialFactory::CreateGUIDistanceFont(const std::string& in_uniqueId) const
         {
-            Material* material = new Material();
+            MaterialSPtr material(CreateCustom(in_uniqueId));
             
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/GUIDistanceFont"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTransparent(true);
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/GUIDistanceFont"));
+            material->SetTransparencyEnabled(true);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(false);
+            material->SetFaceCullingEnabled(false);
             
-			return MaterialUPtr(material);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateGUIDistanceFontOutlined() const
+        MaterialSPtr MaterialFactory::CreateSprite(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/GUIDistanceFontOutlined"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTransparent(true);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Sprite"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(false);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(false);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateSprite(const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateStatic(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Sprite"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Static"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(false);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(true);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateStatic(const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateStaticAmbient(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Static"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(true);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateStaticAmbient(const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateStaticBlinn(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
+            material->SetShader(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnDirectional"));
+            material->SetShader(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPoint"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(true);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateStaticBlinn(const TextureSPtr& in_texture) const
-        {
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
-            material->SetShaderProgram(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnDirectional"));
-            material->SetShaderProgram(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPoint"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
-            material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
-			return MaterialUPtr(material);
-        }
-        //---------------------------------------------------
-        //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateStaticBlinnShadowed(const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateStaticBlinnShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
         	if (m_renderCapabilities->IsShadowMappingSupported() == false)
 			{
-				return CreateStaticBlinn(in_texture);
+				return CreateStaticBlinn(in_uniqueId, in_texture);
 			}
 
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
-            material->SetShaderProgram(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnShadowedDirectional"));
-            material->SetShaderProgram(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPoint"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
+            material->SetShader(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnShadowedDirectional"));
+            material->SetShader(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPoint"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(true);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateStaticBlinnPerVertex(const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateStaticBlinnPerVertex(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
-            material->SetShaderProgram(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexDirectional"));
-            material->SetShaderProgram(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexPoint"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
+            material->SetShader(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexDirectional"));
+            material->SetShader(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexPoint"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(true);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateStaticBlinnPerVertexShadowed(const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateStaticBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
         	if (m_renderCapabilities->IsShadowMappingSupported() == false)
 			{
-				return CreateStaticBlinnPerVertex(in_texture);
+				return CreateStaticBlinnPerVertex(in_uniqueId, in_texture);
 			}
 
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
-            material->SetShaderProgram(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexShadowedDirectional"));
-            material->SetShaderProgram(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexPoint"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
+            material->SetShader(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexShadowedDirectional"));
+            material->SetShader(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexPoint"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(true);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateStaticDirectionalShadowMap() const
+        MaterialSPtr MaterialFactory::CreateStaticDirectionalShadowMap(const std::string& in_uniqueId) const
         {
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticDirectionalShadowMap"));
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticDirectionalShadowMap"));
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
+            material->SetFaceCullingEnabled(true);
             
 #ifdef CS_ENABLE_DEBUGSHADOW
             material->SetColourWriteEnabled(true);
@@ -212,113 +194,107 @@ namespace ChilliSource
             material->SetColourWriteEnabled(false);
 #endif
             
-			return MaterialUPtr(material);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateAnimated(const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateAnimated(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Animated"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Animated"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(true);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateAnimatedAmbient(const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateAnimatedAmbient(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(true);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateAnimatedBlinn(const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateAnimatedBlinn(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
-            material->SetShaderProgram(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnDirectional"));
-            material->SetShaderProgram(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPoint"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
+            material->SetShader(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnDirectional"));
+            material->SetShader(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPoint"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(true);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateAnimatedBlinnShadowed(const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateAnimatedBlinnShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
         	if (m_renderCapabilities->IsShadowMappingSupported() == false)
 			{
-				return CreateAnimatedBlinn(in_texture);
+				return CreateAnimatedBlinn(in_uniqueId, in_texture);
 			}
 
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
-            material->SetShaderProgram(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnShadowedDirectional"));
-            material->SetShaderProgram(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPoint"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
+            material->SetShader(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnShadowedDirectional"));
+            material->SetShader(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPoint"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(true);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateAnimatedBlinnPerVertex(const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateAnimatedBlinnPerVertex(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
-            material->SetShaderProgram(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexDirectional"));
-            material->SetShaderProgram(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexPoint"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
+            material->SetShader(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexDirectional"));
+            material->SetShader(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexPoint"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(true);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateAnimatedBlinnPerVertexShadowed(const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateAnimatedBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
         {
         	if (m_renderCapabilities->IsShadowMappingSupported() == false)
         	{
-        		return CreateAnimatedBlinnPerVertex(in_texture);
+        		return CreateAnimatedBlinnPerVertex(in_uniqueId, in_texture);
         	}
 
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
-            material->SetShaderProgram(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexShadowedDirectional"));
-            material->SetShaderProgram(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexPoint"));
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            material->SetTexture(in_texture);
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
+            material->SetShader(ShaderPass::k_directional, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexShadowedDirectional"));
+            material->SetShader(ShaderPass::k_point, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexPoint"));
+            material->AddTexture(in_texture);
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
-			return MaterialUPtr(material);
+            material->SetFaceCullingEnabled(true);
+			return material;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialUPtr MaterialFactory::CreateAnimatedDirectionalShadowMap() const
+        MaterialSPtr MaterialFactory::CreateAnimatedDirectionalShadowMap(const std::string& in_uniqueId) const
         {
-            Material* material = new Material();
-            material->SetShaderProgram(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedDirectionalShadowMap"));
-            material->SetTransparent(false);
+            MaterialSPtr material(CreateCustom(in_uniqueId));
+            material->SetShader(ShaderPass::k_ambient, m_shaderManager->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedDirectionalShadowMap"));
+            material->SetTransparencyEnabled(false);
             material->SetCullFace(CullFace::k_front);
-            material->SetCullingEnabled(true);
+            material->SetFaceCullingEnabled(true);
             
 #ifdef CS_ENABLE_DEBUGSHADOW
             material->SetColourWriteEnabled(true);
@@ -326,7 +302,7 @@ namespace ChilliSource
             material->SetColourWriteEnabled(false);
 #endif
             
-			return MaterialUPtr(material);
+			return material;
         }
     }
 }

@@ -11,12 +11,14 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
 #include <ChilliSource/Core/Base/ColourUtils.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 
 #include <ChilliSource/GUI/Label/Label.h>
 
@@ -38,7 +40,6 @@ namespace ChilliSource
         //----------------------------------------------------------
 		CanvasRenderer::CanvasRenderer(RenderSystem* inpRenderSystem)
         : mOverlayBatcher(inpRenderSystem)
-        , mpRenderSystem(inpRenderSystem)
         , mfNearClippingDistance(0.0f)
 		{
 
@@ -47,14 +48,71 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CanvasRenderer::Init()
         {
-            MaterialFactory* materialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
-            CS_ASSERT(materialFactory != nullptr, "Must have a material factory");
+            m_materialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
+            CS_ASSERT(m_materialFactory != nullptr, "Must have a material factory");
             
-            mpDistanceFont = materialFactory->CreateGUIDistanceFont();
-            mpDistanceFontOutlined = materialFactory->CreateGUIDistanceFontOutlined();
-            mpDefaultMaterial = materialFactory->CreateGUI();
+            m_resourcePool = Core::Application::Get()->GetResourcePool();
+            CS_ASSERT(m_resourcePool != nullptr, "Must have a resource pool");
+        }
+        //----------------------------------------------------------
+		//----------------------------------------------------------
+        MaterialCSPtr CanvasRenderer::GetGUIMaterialForTexture(const TextureSPtr& in_texture)
+        {
+            auto itExistingEntry = m_materialGUICache.find(in_texture);
+            if(itExistingEntry != m_materialGUICache.end())
+            {
+                return itExistingEntry->second;
+            }
+            else
+            {
+                std::string materialId("_GUI" + in_texture->GetFilename());
+                MaterialCSPtr materialExisting = m_resourcePool->GetResource<Material>(materialId);
+                
+                if(materialExisting != nullptr)
+                {
+                    m_materialGUICache.insert(std::make_pair(in_texture, materialExisting));
+                    return materialExisting;
+                }
+                
+                MaterialSPtr materialNew = m_materialFactory->CreateGUI(materialId);
+                materialNew->AddTexture(in_texture);
+                m_materialGUICache.insert(std::make_pair(in_texture, materialNew));
+                
+                return materialNew;
+            }
             
-            msCachedSprite.pMaterial = mpDefaultMaterial;
+            CS_LOG_FATAL("CanvasRenderer: No GUI material created. Some logic has gone wrong");
+            return nullptr;
+        }
+        //----------------------------------------------------------
+		//----------------------------------------------------------
+        MaterialCSPtr CanvasRenderer::GetDistFontMaterialForTexture(const TextureSPtr& in_texture)
+        {
+            auto itExistingEntry = m_materialDistFontCache.find(in_texture);
+            if(itExistingEntry != m_materialDistFontCache.end())
+            {
+                return itExistingEntry->second;
+            }
+            else
+            {
+                std::string materialId("_GUIDistFont" + in_texture->GetFilename());
+                MaterialCSPtr materialExisting = m_resourcePool->GetResource<Material>(materialId);
+                
+                if(materialExisting != nullptr)
+                {
+                    m_materialDistFontCache.insert(std::make_pair(in_texture, materialExisting));
+                    return materialExisting;
+                }
+                
+                MaterialSPtr materialNew = m_materialFactory->CreateGUIDistanceFont(materialId);
+                materialNew->AddTexture(in_texture);
+                m_materialDistFontCache.insert(std::make_pair(in_texture, materialNew));
+                
+                return materialNew;
+            }
+            
+            CS_LOG_FATAL("CanvasRenderer: No dist font material created. Some logic has gone wrong");
+            return nullptr;
         }
 		//----------------------------------------------------------
 		/// Render
@@ -68,18 +126,11 @@ namespace ChilliSource
             
             inpView->Draw(this);
 			
-			mOverlayBatcher.ForceRender(mpRenderSystem);
+            mOverlayBatcher.DisableScissoring();
+			mOverlayBatcher.ForceRender();
             
-            if(msCachedSprite.pMaterial)
-            {
-                msCachedSprite.pMaterial->SetScissoringEnabled(false);
-                msCachedSprite.pMaterial->SetTexture(TextureSPtr());
-            }
-            
-            mpRenderSystem->EnableScissorTesting(false);
-            
-            mpDefaultMaterial->SetTexture(TextureSPtr());
-            mpDistanceFont->SetTexture(TextureSPtr());
+            m_materialGUICache.clear();
+            m_materialDistFontCache.clear();
 		}
         //----------------------------------------------------------
         /// Enable Clipping To Bounds
@@ -90,15 +141,8 @@ namespace ChilliSource
         //---------------------------------------------------------
         void CanvasRenderer::EnableClippingToBounds(const Core::Vector2& invPosition, const Core::Vector2& invSize)
         {
-            mOverlayBatcher.ForceCommandChange();
-            
             if(mScissorPos.empty())
             {
-                //We need to force render now as previous stuff will not want to
-                //be affected by this
-                mpDefaultMaterial->SetScissoringEnabled(true);
-                mpDistanceFont->SetScissoringEnabled(true);
-                
                 mScissorPos.push_back(invPosition);
                 mScissorSize.push_back(invSize);
             } 
@@ -121,8 +165,7 @@ namespace ChilliSource
                 mScissorSize.push_back(vNewSize);
             }
             
-            mpDefaultMaterial->SetScissoringRegion(mScissorPos.back(), mScissorSize.back());
-            mpDistanceFont->SetScissoringRegion(mScissorPos.back(), mScissorSize.back());
+            mOverlayBatcher.EnableScissoring(mScissorPos.back(), mScissorSize.back());
         }
         //----------------------------------------------------------
         /// Disable Clipping To Bounds
@@ -138,19 +181,13 @@ namespace ChilliSource
                 
                 if(!mScissorPos.empty())
                 {
-                    mOverlayBatcher.ForceCommandChange();
-                    mpDefaultMaterial->SetScissoringRegion(mScissorPos.back(), mScissorSize.back());
-                    mpDistanceFont->SetScissoringRegion(mScissorPos.back(), mScissorSize.back());
+                    mOverlayBatcher.EnableScissoring(mScissorPos.back(), mScissorSize.back());
                 }
             }
             
             if(mScissorPos.empty())
             {
-                //We need to force render now as previous stuff will not want to
-                //be affected by this
-                mOverlayBatcher.ForceCommandChange();
-                mpDefaultMaterial->SetScissoringEnabled(false);
-                mpDistanceFont->SetScissoringEnabled(false);
+                mOverlayBatcher.DisableScissoring();
             }
         }
         //-----------------------------------------------------------
@@ -161,22 +198,12 @@ namespace ChilliSource
         void CanvasRenderer::DrawBox(const Core::Matrix3x3& inmatTransform, const Core::Vector2 & invSize, const TextureSPtr & inpTexture, 
                                       const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
         {
-            //Flush buffer
-            if(msCachedSprite.pMaterial != mpDefaultMaterial)
-                msCachedSprite.pMaterial = mpDefaultMaterial;
+            msCachedSprite.pMaterial = GetGUIMaterialForTexture(inpTexture);
             
-			if(inpTexture != msCachedSprite.pMaterial->GetTexture())
-            {
-				mOverlayBatcher.ForceCommandChange();
-                msCachedSprite.pMaterial->SetTexture(inpTexture);
-			}
-			
-            //Transformers
-			
 			UpdateSpriteData(inmatTransform, invSize, inUVs, insTintColour, ineAlignment);
             
             //Draw us!
-			mOverlayBatcher.Render(mpRenderSystem, msCachedSprite);
+			mOverlayBatcher.Render(msCachedSprite);
             
 #ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("GUI", 1);
@@ -189,15 +216,7 @@ namespace ChilliSource
                                          const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
 										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped, bool *outpInvalidCharacterFound)
 		{
-            //Flush buffer
-            if(msCachedSprite.pMaterial != mpDefaultMaterial)
-                msCachedSprite.pMaterial = mpDefaultMaterial;
-            
-			if(inpFont->GetTexture() != msCachedSprite.pMaterial->GetTexture())
-			{
-				mOverlayBatcher.ForceCommandChange();
-                msCachedSprite.pMaterial->SetTexture(inpFont->GetTexture());
-			}
+            msCachedSprite.pMaterial = GetGUIMaterialForTexture(inpFont->GetTexture());
             
 			//Get the data about how to draw each character
             //This will be in text space and will be in a single line
@@ -225,7 +244,7 @@ namespace ChilliSource
                 
                 UpdateSpriteData(matTransformedLocal, outCharCache[nChar].vSize, outCharCache[nChar].sUVs, insColour, AlignmentAnchor::k_middleCentre);
 				
-                mOverlayBatcher.Render(mpRenderSystem, msCachedSprite);
+                mOverlayBatcher.Render(msCachedSprite);
 			}
             
 #ifdef CS_ENABLE_DEBUGSTATS
@@ -233,43 +252,14 @@ namespace ChilliSource
 #endif
 		}
         //-----------------------------------------------------------
-        /// Draw Distance Outlined String
-        //-----------------------------------------------------------
-        void CanvasRenderer::DrawDistanceOutlinedString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
-                                                 const Core::Colour & insColour, const Core::Colour& insOutlineColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
-                                                 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
-		{
-            //Flush buffer
-            if(msCachedSprite.pMaterial != mpDistanceFontOutlined)
-                msCachedSprite.pMaterial = mpDistanceFontOutlined;
-            
-			if(inpFont->GetTexture() != msCachedSprite.pMaterial->GetTexture())
-			{
-				mOverlayBatcher.ForceCommandChange();
-                msCachedSprite.pMaterial->SetTexture(inpFont->GetTexture());
-			}
-            
-            mpDistanceFontOutlined->SetShaderColourValue("uvOutlineColour", insOutlineColour);
-            DrawDistanceStringInternal(insString, inmatTransform, infSize, inpFont, outCharCache, insColour, invBounds, infCharacterSpacing, infLineSpacing,
-                                       ineHorizontalJustification, ineVerticalJustification, inbFlipVertical, ineBehaviour, inudwNumLines);
-        }
-        //-----------------------------------------------------------
         /// Draw Distance String
         //-----------------------------------------------------------
         void CanvasRenderer::DrawDistanceString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
                                          const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
 										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
 		{
-            //Flush buffer
-            if(msCachedSprite.pMaterial != mpDistanceFont)
-                msCachedSprite.pMaterial = mpDistanceFont;
+            msCachedSprite.pMaterial = GetDistFontMaterialForTexture(inpFont->GetTexture());
             
-			if(inpFont->GetTexture() != msCachedSprite.pMaterial->GetTexture())
-			{
-				mOverlayBatcher.ForceCommandChange();
-                msCachedSprite.pMaterial->SetTexture(inpFont->GetTexture());
-			}
-			
             DrawDistanceStringInternal(insString, inmatTransform, infSize, inpFont, outCharCache, insColour, invBounds, infCharacterSpacing, infLineSpacing,
                                        ineHorizontalJustification, ineVerticalJustification, inbFlipVertical, ineBehaviour, inudwNumLines);
             
@@ -308,7 +298,7 @@ namespace ChilliSource
                 for(u32 i = 0; i <kudwVertsPerSprite; i++)
                 {
                     msCachedSprite.sVerts[i].vPos.w = infSize;
-                    mOverlayBatcher.Render(mpRenderSystem, msCachedSprite);
+                    mOverlayBatcher.Render(msCachedSprite);
                 }
             }
             

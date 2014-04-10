@@ -27,8 +27,8 @@ namespace ChilliSource
 		public:
 			virtual ~RendererSortPredicate(){}
 			virtual void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) = 0;
-			virtual bool SortItem(RenderComponent* p1, RenderComponent* p2) = 0;
-			bool operator()(RenderComponent* p1, RenderComponent* p2)
+			virtual bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const = 0;
+			bool operator()(const RenderComponent* p1, const RenderComponent* p2) const
             {
 				return SortItem(p1, p2);
 			}
@@ -37,21 +37,21 @@ namespace ChilliSource
 		//---------------------------------------------------------
 		/// This class doesn't really sort objects at all
 		//---------------------------------------------------------
-		class NullSortPredicate : public RendererSortPredicate
+		class NullSortPredicate final : public RendererSortPredicate
         {
 		public:
-            void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr){}
-            bool SortItem(RenderComponent* p1, RenderComponent* p2){return false;}
+            void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) override {}
+            bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const override {return false;}
 		};
 		
 		//---------------------------------------------------------
 		/// This class sorts objects in order of far to near projected screen Z depth
 		//---------------------------------------------------------
-		class BackToFrontSortPredicate : public RendererSortPredicate
+		class BackToFrontSortPredicate final : public RendererSortPredicate
         {
 		public:
-            void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr);
-            bool SortItem(RenderComponent* p1, RenderComponent* p2);
+            void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) override;
+            bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const override;
 		private:
 			Core::Matrix4x4 mCameraViewProj;
 		};
@@ -59,11 +59,11 @@ namespace ChilliSource
         //---------------------------------------------------------
 		/// This class sorts objects by material pointer
 		//---------------------------------------------------------
-		class MaterialSortPredicate : public RendererSortPredicate
+		class MaterialSortPredicate final : public RendererSortPredicate
         {
 		public:
-			virtual void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr){}
-			virtual bool SortItem(RenderComponent* p1, RenderComponent* p2);
+            void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) override {}
+            bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const override;
 		};
 	}
 }

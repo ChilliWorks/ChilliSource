@@ -1,20 +1,15 @@
-/*
- *  Material.cpp
- *  moFlo
- *
- *  Created by Scott Downie on 14/10/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Material.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 14/10/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Rendering/Material/Material.h>
 
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
-#include <ChilliSource/Rendering/Shader/ShaderManager.h>
-#include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
-#include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Rendering/Base/BlendMode.h>
+#include <ChilliSource/Rendering/Base/CullFace.h>
 
 namespace ChilliSource
 {
@@ -22,443 +17,328 @@ namespace ChilliSource
 	{
 		CS_DEFINE_NAMEDTYPE(Material);
 
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        MaterialUPtr Material::Create()
+        {
+            return MaterialUPtr(new Material());
+        }
 		//------------------------------------------------
-		/// Constructor
 		//------------------------------------------------
 		Material::Material() 
-        :
-        mSrcBlendFunc(AlphaBlend::k_one), mDstBlendFunc(AlphaBlend::k_oneMinusSourceAlpha), meCullFace(CullFace::k_front),
-        mAmbient(0.2f, 0.2f, 0.2f, 1.0f), mEmissive(1.0f, 1.0f, 1.0f, 1.0f), mSpecular(1.0f, 1.0f, 1.0f, 0.05f),
-        mbIsScissoringEnabled(false), mbIsAlphaBlended(false), mbIsColourWriteEnabled(true), mbIsDepthWriteEnabled(true), mbIsDepthTestEnabled(true), mbIsCullingEnabled(true),
-        mbIsCacheValid(false)
+        : m_srcBlendMode(BlendMode::k_one), m_dstBlendMode(BlendMode::k_oneMinusSourceAlpha), m_cullFace(CullFace::k_front)
 		{
 
 		}
         //----------------------------------------------------------
-        /// Is Cache Valid
         //----------------------------------------------------------
         bool Material::IsCacheValid() const
         {
-            return mbIsCacheValid;
+            return m_isCacheValid;
         }
         //----------------------------------------------------------
-        /// Is Variable Cache Valid
         //----------------------------------------------------------
         bool Material::IsVariableCacheValid() const
         {
-            return mbIsVariableCacheValid;
+            return m_isVariableCacheValid;
         }
         //----------------------------------------------------------
-        /// Set Cache Valid
         //----------------------------------------------------------
-        void Material::SetCacheValid() const
+        void Material::SetCacheValid()
         {
-            mbIsCacheValid = true;
-            mbIsVariableCacheValid = true;
+            m_isCacheValid = true;
+            m_isVariableCacheValid = true;
         }
 		//----------------------------------------------------------
-		/// Clone
 		//----------------------------------------------------------
-		MaterialSPtr Material::Clone() const
+		bool Material::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return MaterialSPtr(new Material(*this));
-		}
-		//----------------------------------------------------------
-		/// Is A
-		//----------------------------------------------------------
-		bool Material::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
-		{
-			return (inInterfaceID == Material::InterfaceID);
+			return in_interfaceId == Material::InterfaceID;
 		}
         //----------------------------------------------------------
-        /// Set Active Shader Program
         //----------------------------------------------------------
-        void Material::SetActiveShaderProgram(ShaderPass inePass)
+        const ShaderSPtr& Material::GetShader(ShaderPass in_pass) const
         {
-            mbIsCacheValid = false;
-            mpActiveShaderProgram = maShaderPrograms[(u32)inePass];
+            CS_ASSERT(in_pass != ShaderPass::k_total, "Invalid shader pass when fetching material shader");
+            return m_shaders[(u32)in_pass];
         }
         //----------------------------------------------------------
-        /// Get Active Shader Program
         //----------------------------------------------------------
-        const ShaderSPtr& Material::GetActiveShaderProgram() const
+        void Material::SetShader(ShaderPass in_pass, const ShaderSPtr& in_shader)
         {
-            return mpActiveShaderProgram;
-        }
-        //----------------------------------------------------------
-        /// Set Shader Program
-        //----------------------------------------------------------
-        void Material::SetShaderProgram(ShaderPass inePass, const ShaderSPtr &inpShaderProgram)
-        {
-            mbIsCacheValid = false;
-            maShaderPrograms[(u32)inePass] = inpShaderProgram;
-        }
-        //----------------------------------------------------------
-        /// Clear Textures
-        //----------------------------------------------------------
-        void Material::ClearTextures()
-        {
-            mTextures.clear();
-            mbIsCacheValid = false;
-        }
-		//----------------------------------------------------------
-		/// Set Texture
-		//----------------------------------------------------------
-		void Material::SetTexture(const TextureSPtr &inpTexture, u32 inudwIndex)
-		{
-            if(inpTexture == nullptr)
-                return;
+            CS_ASSERT(in_pass != ShaderPass::k_total, "Invalid shader pass when setting material shader");
             
-            if(mTextures.size() > inudwIndex)
-            {
-                mTextures[inudwIndex] = inpTexture;
-            }
-            else
-            {
-                mTextures.push_back(inpTexture);
-            }
-
-            mbIsCacheValid = false;
-		}
-		//----------------------------------------------------------
-		/// Add Texture
-		//----------------------------------------------------------
-		void Material::AddTexture(const TextureSPtr &inpTexture)
-		{
-            if(inpTexture == nullptr)
-                return;
-            
-			mTextures.push_back(inpTexture);
-            
-            mbIsCacheValid = false;
-		}
-		//----------------------------------------------------------
-		/// Get Texture
-		//----------------------------------------------------------
-		const TextureSPtr& Material::GetTexture(u32 inudwIndex) const
-		{
-			if(mTextures.size() <= inudwIndex)
-			{
-                TextureManager* pTextureManager = GET_RESOURCE_MANAGER(TextureManager);
-				return pTextureManager->GetDefaultTexture();
-			}
-			return mTextures[inudwIndex];
-		}
-		//----------------------------------------------------------
-		/// Get Textures
-		//----------------------------------------------------------
-		const std::vector<TextureSPtr>& Material::GetTextures() const
-		{
-			return mTextures;
-		}
-        //----------------------------------------------------------
-        /// Set Cubemap
-        //----------------------------------------------------------
-        void Material::SetCubemap(const CubemapSPtr &inpCubemap)
-        {
-            mpCubemap = inpCubemap;
-            
-            mbIsCacheValid = false;
+            m_isCacheValid = false;
+            m_shaders[(u32)in_pass] = in_shader;
         }
         //----------------------------------------------------------
-        /// Get Cubemap
+        //----------------------------------------------------------
+        void Material::RemoveAllTextures()
+        {
+            m_textures.clear();
+            m_isCacheValid = false;
+        }
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		void Material::AddTexture(const TextureSPtr& in_texture)
+		{
+            CS_ASSERT(in_texture != nullptr, "Cannot add null texture to material");
+            m_textures.push_back(in_texture);
+            
+            m_isCacheValid = false;
+		}
+        //----------------------------------------------------------
+		//----------------------------------------------------------
+		void Material::SetTexture(const TextureSPtr& in_texture, u32 in_texIndex)
+		{
+            CS_ASSERT(in_texIndex < m_textures.size(), "Texture index out of bounds");
+            
+            m_textures[in_texIndex] = in_texture;
+            
+            m_isCacheValid = false;
+		}
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		const TextureSPtr& Material::GetTexture(u32 in_index) const
+		{
+            CS_ASSERT(in_index < m_textures.size(), "Texture index out of bounds");
+			return m_textures[in_index];
+		}
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		u32 Material::GetNumTextures() const
+		{
+			return m_textures.size();
+		}
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Material::SetCubemap(const CubemapSPtr& in_cubemap)
+        {
+            m_cubemap = in_cubemap;
+            
+            m_isCacheValid = false;
+        }
+        //----------------------------------------------------------
         //----------------------------------------------------------
         const CubemapSPtr& Material::GetCubemap() const
         {
-            return mpCubemap;
+            return m_cubemap;
         }
 		//----------------------------------------------------------
-		/// Is Transparent
 		//----------------------------------------------------------
-		bool Material::IsTransparent() const
+		bool Material::IsTransparencyEnabled() const
 		{
-			return mbIsAlphaBlended;
+			return m_isAlphaBlendingEnabled;
 		}
 		//----------------------------------------------------------
-		/// Set Transparent
 		//----------------------------------------------------------
-		void Material::SetTransparent(bool inbIsTransparent)
+		void Material::SetTransparencyEnabled(bool in_enable)
 		{
-			mbIsAlphaBlended = inbIsTransparent;
-			mbIsDepthWriteEnabled = !inbIsTransparent;
+            m_isCacheValid = m_isAlphaBlendingEnabled != in_enable;
             
-            mbIsCacheValid = false;
+			m_isAlphaBlendingEnabled = in_enable;
+			m_isDepthWriteEnabled = !in_enable;
 		}
 		//----------------------------------------------------------
-		/// Is Colour Write Enabled
 		//----------------------------------------------------------
 		bool Material::IsColourWriteEnabled() const
 		{
-			return mbIsColourWriteEnabled;
+			return m_isColWriteEnabled;
 		}
 		//----------------------------------------------------------
-		/// Set Colour Write Enabled
 		//----------------------------------------------------------
-		void Material::SetColourWriteEnabled(bool inbIsColourhWrite)
+		void Material::SetColourWriteEnabled(bool in_enable)
 		{
-			mbIsColourWriteEnabled = inbIsColourhWrite;
+            m_isCacheValid = m_isColWriteEnabled != in_enable;
             
-            mbIsCacheValid = false;
+			m_isColWriteEnabled = in_enable;
 		}
 		//----------------------------------------------------------
-		/// Is Depth Write Enabled 
 		//----------------------------------------------------------
 		bool Material::IsDepthWriteEnabled() const
 		{
-			return mbIsDepthWriteEnabled;
+			return m_isDepthWriteEnabled;
 		}
 		//----------------------------------------------------------
-		/// Set Depth Write Enabled
 		//----------------------------------------------------------
-		void Material::SetDepthWriteEnabled(bool inbIsDepthWrite)
+		void Material::SetDepthWriteEnabled(bool in_enable)
 		{
-			mbIsDepthWriteEnabled = inbIsDepthWrite;
+            CS_ASSERT(m_isAlphaBlendingEnabled == false, "Cannot enable depth write on transparent object");
             
-            mbIsCacheValid = false;
+            m_isCacheValid = m_isDepthWriteEnabled != in_enable;
+            
+			m_isDepthWriteEnabled = in_enable;
 		}
 		//----------------------------------------------------------
-		/// Is Depth Test Enabled
 		//----------------------------------------------------------
 		bool Material::IsDepthTestEnabled() const
 		{
-			return mbIsDepthTestEnabled;
+			return m_isDepthTestEnabled;
 		}
 		//----------------------------------------------------------
-		/// Set Depth Test Enabled
 		//----------------------------------------------------------
-		void Material::SetDepthTestEnabled(bool inbIsDepthTest)
+		void Material::SetDepthTestEnabled(bool in_enable)
 		{
-			mbIsDepthTestEnabled = inbIsDepthTest;
+            m_isCacheValid = m_isDepthTestEnabled != in_enable;
             
-            mbIsCacheValid = false;
+			m_isDepthTestEnabled = in_enable;
 		}
 		//----------------------------------------------------------
-		/// Is Culling Enabled
 		//----------------------------------------------------------
-		bool Material::IsCullingEnabled() const
+		bool Material::IsFaceCullingEnabled() const
 		{
-			return mbIsCullingEnabled;
+			return m_isFaceCullingEnabled;
 		}
 		//----------------------------------------------------------
-		/// Set Culling Enabled
 		//----------------------------------------------------------
-		void Material::SetCullingEnabled(bool inbCullingEnabled)
+		void Material::SetFaceCullingEnabled(bool in_enable)
 		{
-			mbIsCullingEnabled = inbCullingEnabled;
+            m_isCacheValid = m_isFaceCullingEnabled != in_enable;
             
-            mbIsCacheValid = false;
+			m_isFaceCullingEnabled = in_enable;
 		}
-        //----------------------------------------------------------
-        /// Is Scissoring Enabled
-        //----------------------------------------------------------
-        bool Material::IsScissoringEnabled() const
-        {
-            return mbIsScissoringEnabled;
-        }
-        //----------------------------------------------------------
-        /// Set Scissoring Enabled
-        //----------------------------------------------------------
-        void Material::SetScissoringEnabled(bool inbEnabled)
-        {
-            mbIsScissoringEnabled = inbEnabled;
-            
-            mbIsCacheValid = false;
-        }
-        //----------------------------------------------------------
-        /// Set Scissoring Region
-        //----------------------------------------------------------
-        void Material::SetScissoringRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize)
-        {
-            mvScissorPos = invPosition;
-            mvScissorSize = invSize;
-            
-            mbIsCacheValid = false;
-        }
-        //----------------------------------------------------------
-        /// Get Scissoring Region Position
-        //----------------------------------------------------------
-        const Core::Vector2& Material::GetScissoringRegionPosition() const
-        {
-            return mvScissorPos;
-        }
-        //----------------------------------------------------------
-        /// Get Scissoring Region Size
-        //----------------------------------------------------------
-        const Core::Vector2& Material::GetScissoringRegionSize() const
-        {
-            return mvScissorSize;
-        }
 		//----------------------------------------------------------
-		/// Set Blend Function
 		//----------------------------------------------------------
-		void Material::SetBlendFunction(AlphaBlend ineSource, AlphaBlend ineDest)
+		void Material::SetBlendModes(BlendMode in_source, BlendMode in_dest)
 		{
-			mSrcBlendFunc = ineSource;
-			mDstBlendFunc = ineDest;
+			m_srcBlendMode = in_source;
+			m_dstBlendMode = in_dest;
             
-            mbIsCacheValid = false;
+            m_isCacheValid = false;
 		}
 		//----------------------------------------------------------
-		/// Get Source Blend Function
 		//----------------------------------------------------------
-		AlphaBlend Material::GetSourceBlendFunction() const
+		BlendMode Material::GetSourceBlendMode() const
 		{
-			return mSrcBlendFunc;
+			return m_srcBlendMode;
 		}
 		//----------------------------------------------------------
-		/// Get Destination Blend Function
 		//----------------------------------------------------------
-		AlphaBlend Material::GetDestBlendFunction() const
+		BlendMode Material::GetDestBlendMode() const
 		{
-			return mDstBlendFunc;
+			return m_dstBlendMode;
 		}
         //----------------------------------------------------------
-        /// Set Cull Face
         //----------------------------------------------------------
-        void Material::SetCullFace(CullFace ineCullFace)
+        void Material::SetCullFace(CullFace in_cullFace)
         {
-            meCullFace = ineCullFace;
+            m_cullFace = in_cullFace;
         }
         //----------------------------------------------------------
-        /// Get Cull Face
         //----------------------------------------------------------
         CullFace Material::GetCullFace() const
         {
-            return meCullFace;
+            return m_cullFace;
         }
 		//----------------------------------------------------------
-		/// Set Emissive
 		//----------------------------------------------------------
-		void Material::SetEmissive(const Core::Colour& inEmissive)
+		void Material::SetEmissive(const Core::Colour& in_emissive)
 		{
-			mEmissive = inEmissive;
+			m_emissive = in_emissive;
             
-            mbIsCacheValid = false;
+            m_isCacheValid = false;
 		}
 		//----------------------------------------------------------
-		/// Get Emissive
 		//----------------------------------------------------------
 		const Core::Colour& Material::GetEmissive() const
 		{
-			return mEmissive;
+			return m_emissive;
 		}
         //----------------------------------------------------------
-		/// Set Ambient
 		//----------------------------------------------------------
-		void Material::SetAmbient(const Core::Colour& inAmbient)
+		void Material::SetAmbient(const Core::Colour& in_ambient)
 		{
-			mAmbient = inAmbient;
+			m_ambient = in_ambient;
             
-            mbIsCacheValid = false;
+            m_isCacheValid = false;
 		}
 		//----------------------------------------------------------
-		/// Get Ambient
 		//----------------------------------------------------------
 		const Core::Colour& Material::GetAmbient() const
 		{
-			return mAmbient;
+			return m_ambient;
 		}
 		//----------------------------------------------------------
-		/// Set Diffuse
 		//----------------------------------------------------------
-		void Material::SetDiffuse(const Core::Colour& inDiffuse)
+		void Material::SetDiffuse(const Core::Colour& in_diffuse)
 		{
-			mDiffuse = inDiffuse;
+			m_diffuse = in_diffuse;
             
-            mbIsCacheValid = false;
+            m_isCacheValid = false;
 		}
 		//----------------------------------------------------------
-		/// Get Diffuse
 		//----------------------------------------------------------
 		const Core::Colour& Material::GetDiffuse() const
 		{
-			return mDiffuse;
+			return m_diffuse;
 		}
 		//----------------------------------------------------------
-		/// Set Specular
 		//----------------------------------------------------------
-		void Material::SetSpecular(const Core::Colour& inSpecular)
+		void Material::SetSpecular(const Core::Colour& in_specular)
 		{
-			mSpecular = inSpecular;
+			m_specular = in_specular;
             
-            mbIsCacheValid = false;
+            m_isCacheValid = false;
 		}
 		//----------------------------------------------------------
-		/// Get Specular
 		//----------------------------------------------------------
 		const Core::Colour& Material::GetSpecular() const
 		{
-			return mSpecular;
+			return m_specular;
 		}
 		//-----------------------------------------------------------
-		/// Set Shader Float Value
 		//-----------------------------------------------------------
-		void Material::SetShaderFloatValue(const std::string& instrVarName, f32 infValue)
+		void Material::SetShaderVar(const std::string& in_varName, f32 in_value)
 		{
-            mMapFloatShaderVars[instrVarName] = infValue;
+            m_floatVars[in_varName] = in_value;
             
-            mbIsCacheValid = false;
-            mbIsVariableCacheValid = false;
+            m_isCacheValid = false;
+            m_isVariableCacheValid = false;
 		}
 		//-----------------------------------------------------------
-		/// Set Shader Vec2 Value
 		//-----------------------------------------------------------
-		void Material::SetShaderVec2Value(const std::string& instrVarName, const Core::Vector2 &invValue)
+		void Material::SetShaderVar(const std::string& in_varName, const Core::Vector2& in_value)
 		{
-			mMapVec2ShaderVars[instrVarName] = invValue;
+			m_vec2Vars[in_varName] = in_value;
             
-            mbIsCacheValid = false;
-            mbIsVariableCacheValid = false;
+            m_isCacheValid = false;
+            m_isVariableCacheValid = false;
 		}
 		//-----------------------------------------------------------
-		/// Set Shader Vec3 Value
 		//-----------------------------------------------------------
-		void Material::SetShaderVec3Value(const std::string& instrVarName, const Core::Vector3 &invValue)
+		void Material::SetShaderVar(const std::string& in_varName, const Core::Vector3& in_value)
 		{
-			mMapVec3ShaderVars[instrVarName] = invValue;
+			m_vec3Vars[in_varName] = in_value;
             
-            mbIsCacheValid = false;
-            mbIsVariableCacheValid = false;
+            m_isCacheValid = false;
+            m_isVariableCacheValid = false;
 		}
 		//-----------------------------------------------------------
-		/// Set Shader Vec4 Value
 		//-----------------------------------------------------------
-		void Material::SetShaderVec4Value(const std::string& instrVarName, const Core::Vector4 &invValue)
+		void Material::SetShaderVar(const std::string& in_varName, const Core::Vector4& in_value)
 		{
-            mMapVec4ShaderVars[instrVarName] = invValue;
+            m_vec4Vars[in_varName] = in_value;
             
-            mbIsCacheValid = false;
-            mbIsVariableCacheValid = false;
+            m_isCacheValid = false;
+            m_isVariableCacheValid = false;
 		}
 		//-----------------------------------------------------------
-		/// Set Shader Matrix Value
 		//-----------------------------------------------------------
-		void Material::SetShaderMatrixValue(const std::string& instrVarName, const Core::Matrix4x4 &inmatValue)
+		void Material::SetShaderVar(const std::string& in_varName, const Core::Matrix4x4& in_value)
 		{
-			mMapMat4ShaderVars[instrVarName] = inmatValue;
+			m_mat4Vars[in_varName] = in_value;
             
-            mbIsCacheValid = false;
-            mbIsVariableCacheValid = false;
+            m_isCacheValid = false;
+            m_isVariableCacheValid = false;
 		}
 		//-----------------------------------------------------------
-		/// Set Shader Matrix Array Value
 		//-----------------------------------------------------------
-		void Material::SetShaderMatrixArrayValue(const std::string& instrVarName, const std::vector<Core::Matrix4x4>& inmatValue)
+		void Material::SetShaderVar(const std::string& in_varName, const Core::Colour& in_value)
 		{
-			mMapMat4ArrayShaderVars[instrVarName] = inmatValue;
+            m_colourVars[in_varName] = in_value;
             
-            mbIsCacheValid = false;
-            mbIsVariableCacheValid = false;
-		}
-		//-----------------------------------------------------------
-		/// Set Shader Colour Value
-		//-----------------------------------------------------------
-		void Material::SetShaderColourValue(const std::string& instrVarName, const Core::Colour &incolValue)
-		{
-            mMapColShaderVars[instrVarName] = incolValue;
-            
-            mbIsCacheValid = false;
-            mbIsVariableCacheValid = false;
+            m_isCacheValid = false;
+            m_isVariableCacheValid = false;
 		}
 	}
 }

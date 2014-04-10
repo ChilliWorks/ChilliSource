@@ -54,7 +54,7 @@ namespace ChilliSource
         /// Default
         //-------------------------------------------------------
         Label::Label() : MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
-		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), TextOutlined(false), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
+		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
         {
             SetColour(Core::Colour(0.18f, 0.3f, 0.4f, 0.6f));
             Rendering::TextureManager* pMgr = Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>();
@@ -76,7 +76,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         Label::Label(const Core::ParamDictionary& insParams) 
         : GUIView(insParams), MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
-		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), TextOutlined(false), FlipVertical(false)
+		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), FlipVertical(false)
         {
             std::string strValue;
             
@@ -150,17 +150,6 @@ namespace ChilliSource
             if(insParams.TryGetValue("TextColour", strValue))
             {
                 TextColour = Core::ParseColour(strValue);
-            }
-            //---Text Outline
-            if(insParams.TryGetValue("EnableTextOutline", strValue))
-            {
-                TextOutlined = Core::ParseBool(strValue);
-            }
-            //---Text Outline Colour
-            if(insParams.TryGetValue("TextOutlineColour", strValue))
-            {
-                TextOutlined = true;
-                TextOutlineColour = Core::ParseColour(strValue);
             }
             //---Enable Background Colour
             if(insParams.TryGetValue("EnableBackground", strValue))
@@ -632,16 +621,8 @@ namespace ChilliSource
                 {
 					f32 fCharacterSpacingScaled = CharacterSpacing * kfScalableFontResDensity;
                     
-                    if(TextOutlined)
-                    {
-                        inpCanvas->DrawDistanceOutlinedString(Text, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, TextColour * GetInheritedOpacity(), TextOutlineColour * GetAbsoluteColour(),
-                                          vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines);
-                    }
-                    else
-                    {
-                        inpCanvas->DrawDistanceString(Text, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, TextColour * GetAbsoluteColour(),
-                                                      vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines);
-                    }
+                    inpCanvas->DrawDistanceString(Text, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, TextColour * GetAbsoluteColour(),
+                                                  vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines);
                 }
                 else
                 {
@@ -818,24 +799,6 @@ namespace ChilliSource
                 return ScalableHeight == 0 ? fAssetScale : (ScalableHeight * fAssetScale) / Font->GetLineHeight();
             }
             return mfGlobalTextScale;
-        }
-        //-------------------------------------------------------
-        /// Enable Text Outline
-        ///
-        /// @param Whether the scaleable text has an outline
-        //-------------------------------------------------------
-        void Label::EnableTextOutline(bool inbEnabled)
-        {
-            TextOutlined = inbEnabled;
-        }
-        //-------------------------------------------------------
-        /// Is Text Outline Enabled
-        ///
-        /// @return Whether the scaleable text has an outline
-        //-------------------------------------------------------
-        bool Label::IsTextOutlineEnabled() const
-        {
-            return TextOutlined;
         }
         //-------------------------------------------------------
         /// Set Text Outline Colour

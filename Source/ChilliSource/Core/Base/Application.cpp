@@ -155,7 +155,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        const Rendering::MaterialSPtr& Application::GetDefaultMaterial() const
+        const Rendering::MaterialCSPtr& Application::GetDefaultMaterial() const
         {
             return m_defaultMaterial;
         }
@@ -542,7 +542,7 @@ namespace ChilliSource
                 {
                     StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultMaterial"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultMaterial"].get("Path", "").asString();
-                    m_defaultMaterial = LOAD_RESOURCE(Rendering::Material, eStorageLocation, strPath);
+                    m_defaultMaterial = m_resourcePool->LoadResource<Rendering::Material>(eStorageLocation, strPath);
                 }
             }
         }

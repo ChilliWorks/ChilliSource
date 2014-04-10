@@ -9,6 +9,7 @@
 
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 #include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
+#include <ChilliSource/Rendering/Base/ShaderPass.h>
 #include <ChilliSource/Rendering/Base/VertexLayouts.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 
@@ -26,7 +27,7 @@ namespace ChilliSource
 		/// Default
 		//------------------------------------------------------
 		SpriteBatch::SpriteBatch(u32 inudwCapacity, RenderSystem * inpRenderSystem, BufferUsage ineUsage) 
-        : mpSpriteBuffer(nullptr), mdwTag(0), mudwNumSpritesBuiltIndicesFor(0)
+        : m_renderSystem(inpRenderSystem), mpSpriteBuffer(nullptr), mdwTag(0), mudwNumSpritesBuiltIndicesFor(0)
 		{
 			BufferDescription desc;
 			desc.eUsageFlag = ineUsage;
@@ -36,7 +37,7 @@ namespace ChilliSource
 			desc.eAccessFlag = BufferAccess::k_read;
 			desc.VertexLayout = VertexLayout::kSprite;
 			
-			mpSpriteBuffer = inpRenderSystem->CreateBuffer(desc);
+			mpSpriteBuffer = m_renderSystem->CreateBuffer(desc);
 		}
 		//------------------------------------------------------
 		/// Build
@@ -145,24 +146,21 @@ namespace ChilliSource
 		///
 		/// Draw the contents of the mesh buffer
 		///
-		/// @param Active render system
         /// @param Offset into mesh buffer
         /// @param Stride within mesh buffer
 		//------------------------------------------------------
-		void SpriteBatch::Render(RenderSystem* inpRenderSystem, const Material& inMaterial, u32 inudwOffset, u32 inudwStride) const
+		void SpriteBatch::Render(const MaterialCSPtr& inMaterial, u32 inudwOffset, u32 inudwStride) const
 		{
             if(inudwStride > 0)
             {
-                CS_ASSERT(inMaterial.GetActiveShaderProgram(), "Cannot render a sprite batch with no active shader.");
-                
                 mpSpriteBuffer->Bind();
 			
                 //Tell the render system to draw the contents of the buffer
-                inpRenderSystem->ApplyMaterial(inMaterial);
+                m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
 #ifdef CS_ENABLE_DEBUGSTATS
                 DebugStats::AddToEvent("Verts", (inudwStride*2)/3);
 #endif
-                inpRenderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::Matrix4x4::IDENTITY);
+                m_renderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::Matrix4x4::IDENTITY);
             }
 		}
         //------------------------------------------------------
@@ -172,20 +170,18 @@ namespace ChilliSource
 		///
 		/// @param Active render system
 		//------------------------------------------------------
-		void SpriteBatch::Render(RenderSystem* inpRenderSystem, const Material& inMaterial) const
+		void SpriteBatch::Render(const MaterialCSPtr& inMaterial) const
 		{
             if(mpSpriteBuffer->GetIndexCount() > 0)
             {
-                CS_ASSERT(inMaterial.GetActiveShaderProgram(), "Cannot render a sprite batch with no active shader.");
-                
                 mpSpriteBuffer->Bind();
                 
                 //Tell the render system to draw the contents of the buffer
-                inpRenderSystem->ApplyMaterial(inMaterial);
+                m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
 #ifdef CS_ENABLE_DEBUGSTATS
                 DebugStats::AddToEvent("Verts", (mpSpriteBuffer->GetIndexCount()*2)/3);
 #endif
-                inpRenderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::Matrix4x4::IDENTITY);
+                m_renderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::Matrix4x4::IDENTITY);
             }
 		}
 		//------------------------------------------------------

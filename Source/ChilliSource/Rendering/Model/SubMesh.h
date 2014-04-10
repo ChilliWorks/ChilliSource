@@ -131,7 +131,7 @@ namespace ChilliSource
 			/// @param the render system.
 			/// @param World transform matrix
 			//-----------------------------------------------------------------
-			void Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const MaterialSPtr& inpMaterial, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const;
+			void Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const MaterialCSPtr& inpMaterial, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const;
 			
 			friend class Mesh;
 			

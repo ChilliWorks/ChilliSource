@@ -21,6 +21,9 @@
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 #include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Base/CullFace.h>
+#include <ChilliSource/Rendering/Base/DepthTestComparison.h>
+#include <ChilliSource/Rendering/Base/BlendMode.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
 #include <UIKit/UIKit.h>
@@ -43,8 +46,8 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		RenderSystem::RenderSystem(Rendering::RenderCapabilities* in_renderCapabilities)
 		: mpDefaultRenderTarget(nullptr), mpCurrentMaterial(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0), mpVertexAttribs(nullptr),
-        mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mSrcBlendFunc(Rendering::AlphaBlend::k_unknown), mDstBlendFunc(Rendering::AlphaBlend::k_unknown),
-        meCurrentCullFace(Rendering::CullFace::k_front), meDepthFunc(Rendering::DepthFunction::k_less), mpLightComponent(nullptr), mbBlendFunctionLocked(false), mpaTextureHandles(nullptr), mbInvalidateLigthingCache(true),
+        mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mpLightComponent(nullptr),
+        mbBlendFunctionLocked(false), mpaTextureHandles(nullptr), mbInvalidateLigthingCache(true),
         mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities)), m_hasContextBeenBackedUp(false)
 		{
 			//Register the GL texture and shader managers
@@ -87,6 +90,12 @@ namespace ChilliSource
 
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
             mpRenderCapabilities->DetermineCapabilities();
+            
+            m_textureUniformNames.reserve(mpRenderCapabilities->GetNumTextureUnits());
+            for(u32 i=0; i<mpRenderCapabilities->GetNumTextureUnits(); ++i)
+            {
+                m_textureUniformNames.push_back(std::string("uTexture" + Core::ToString(i)));
+            }
             
             ForceRefreshRenderStates();
 			
@@ -167,56 +176,60 @@ namespace ChilliSource
             mbInvalidateLigthingCache = true;
         }
         //----------------------------------------------------------
-		/// Apply Material
 		//----------------------------------------------------------
-		void RenderSystem::ApplyMaterial(const Rendering::Material& inMaterial)
+		void RenderSystem::ApplyMaterial(const Rendering::MaterialCSPtr& in_material, Rendering::ShaderPass in_shaderPass)
 		{
-			//Enable the hardware states
-            if(mbInvalidateAllCaches || !mpCurrentMaterial || mpCurrentMaterial != &inMaterial || !mpCurrentMaterial->IsCacheValid())
+            //TODO: We can remove alot of these cache checks one we move to our render command buffer
+            //as the apply material function will only be called once per "batch" rather than for each
+            //element in the batch as it is now.
+            
+            CS_ASSERT(in_material != nullptr, "Cannot apply null material");
+            
+            Shader* shader = static_cast<Shader*>(in_material->GetShader(in_shaderPass).get());
+            CS_ASSERT(shader != nullptr, "Cannot render with null shader");
+            
+            GLuint shaderProgram = shader->GetProgramID();
+            CS_ASSERT(shaderProgram != 0, "Cannot render with no GL shader program");
+            
+            bool hasMaterialChanged = mbInvalidateAllCaches == true || mpCurrentMaterial == nullptr || mpCurrentMaterial != in_material.get() || mpCurrentMaterial->IsCacheValid() == false;
+            if(hasMaterialChanged == true)
             {
                 mudwNumBoundTextures = 0;
-                mpCurrentMaterial = &inMaterial;
+                mpCurrentMaterial = in_material.get();
                 
                 //Bind this materials shader
-                if(inMaterial.GetActiveShaderProgram() != nullptr)
+                ApplyRenderStates(mpCurrentMaterial);
+                
+                //Don't bind the shader if we don't need to!
+                bool hasShaderChanged = mbInvalidateAllCaches || shaderProgram != mGLCurrentShaderProgram;
+                if(hasShaderChanged == true)
                 {
-                    ApplyRenderStates(inMaterial);
+                    glUseProgram(shaderProgram);
+                    mGLCurrentShaderProgram = shaderProgram;
                     
-                    ShaderSPtr pShader = std::static_pointer_cast<Shader>(inMaterial.GetActiveShaderProgram());
-                    GLuint GLShaderProgram = pShader->GetProgramID();
+                    GetAttributeLocations(shader);
+                    GetUniformLocations(shader);
                     
-                    if(GLShaderProgram != 0)
-                    {
-                        //Don't bind the shader if we don't need to!
-                        bool bShaderChanged = mbInvalidateAllCaches || GLShaderProgram != mGLCurrentShaderProgram;
-                        if(bShaderChanged == true)
-                        {
-                            glUseProgram(GLShaderProgram);
-                            mGLCurrentShaderProgram = GLShaderProgram;
-                            
-                            GetAttributeLocations(pShader);
-                            GetUniformLocations(inMaterial);
-                            
-                            mbEmissiveSet = false;
-                            mbAmbientSet = false;
-                            mbDiffuseSet = false;
-                            mbSpecularSet = false;
-                            mbInvalidateLigthingCache = true;
-                        }
-                        
-                        //Get and set all the custom shader variables
-                        if(inMaterial.IsVariableCacheValid() == false || bShaderChanged)
-                        {
-                            ApplyShaderVariables(inMaterial, GLShaderProgram);
-                        }
-                        
-                        ApplyTextures(inMaterial);
-                        ApplyLightingValues(inMaterial);
-                        ApplyLighting(inMaterial, mpLightComponent);
-                    }
-                    
-                    mpCurrentMaterial->SetCacheValid();
+                    mbEmissiveSet = false;
+                    mbAmbientSet = false;
+                    mbDiffuseSet = false;
+                    mbSpecularSet = false;
+                    mbInvalidateLigthingCache = true;
                 }
+                
+                //Get and set all the custom shader variables
+                if(mpCurrentMaterial->IsVariableCacheValid() == false || hasShaderChanged == true)
+                {
+                    ApplyShaderVariables(mpCurrentMaterial, shader);
+                }
+                
+                ApplyTextures(mpCurrentMaterial);
+                ApplyLightingValues(mpCurrentMaterial);
+                ApplyLighting(mpLightComponent);
+                
+                //TODO: Once we change the render system to be a list of commands this hack
+                //will not be required
+                const_cast<Rendering::Material*>(mpCurrentMaterial)->SetCacheValid();
             }
 		}
         //----------------------------------------------------------
@@ -241,24 +254,22 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Apply Render States
 		//----------------------------------------------------------
-		void RenderSystem::ApplyRenderStates(const Rendering::Material& inMaterial)
+		void RenderSystem::ApplyRenderStates(const Rendering::Material* inMaterial)
         {
-            EnableAlphaBlending(inMaterial.IsTransparent());
-            SetBlendFunction(inMaterial.GetSourceBlendFunction(), inMaterial.GetDestBlendFunction());
+            EnableAlphaBlending(inMaterial->IsTransparencyEnabled());
+            SetBlendFunction(inMaterial->GetSourceBlendMode(), inMaterial->GetDestBlendMode());
 
-            EnableFaceCulling(inMaterial.IsCullingEnabled());
-            SetCullFace(inMaterial.GetCullFace());
+            EnableFaceCulling(inMaterial->IsFaceCullingEnabled());
+            SetCullFace(inMaterial->GetCullFace());
             
-            EnableColourWriting(inMaterial.IsColourWriteEnabled());
-            EnableDepthWriting(inMaterial.IsDepthWriteEnabled());
-            EnableDepthTesting(inMaterial.IsDepthTestEnabled());
-            EnableScissorTesting(inMaterial.IsScissoringEnabled());
-            SetScissorRegion(inMaterial.GetScissoringRegionPosition(), inMaterial.GetScissoringRegionSize());
+            EnableColourWriting(inMaterial->IsColourWriteEnabled());
+            EnableDepthWriting(inMaterial->IsDepthWriteEnabled());
+            EnableDepthTesting(inMaterial->IsDepthTestEnabled());
         }
         //----------------------------------------------------------
 		/// Get Attribute Locations
 		//----------------------------------------------------------
-		void RenderSystem::GetAttributeLocations(const ShaderSPtr& inpShader)
+		void RenderSystem::GetAttributeLocations(Shader* inpShader)
         {
             //Get the handles to the shader attributes
             
@@ -296,104 +307,103 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Get Uniform Locations
 		//----------------------------------------------------------
-		void RenderSystem::GetUniformLocations(const Rendering::Material &inMaterial)
+		void RenderSystem::GetUniformLocations(Shader* in_shader)
         {
-            ShaderSPtr pShader = std::static_pointer_cast<Shader>(inMaterial.GetActiveShaderProgram());
-            
             //Get the required handles to the shader variables (Uniform)
-            mmatWVPHandle = pShader->GetUniformLocation("umatWorldViewProj");
-            mmatWorldHandle = pShader->GetUniformLocation("umatWorld");
-            mmatNormalHandle = pShader->GetUniformLocation("umatNormal");
+            mmatWVPHandle = in_shader->GetUniformLocation("umatWorldViewProj");
+            mmatWorldHandle = in_shader->GetUniformLocation("umatWorld");
+            mmatNormalHandle = in_shader->GetUniformLocation("umatNormal");
         
-            mEmissiveHandle = pShader->GetUniformLocation("uvEmissive");
-            mAmbientHandle = pShader->GetUniformLocation("uvAmbient");
-            mDiffuseHandle = pShader->GetUniformLocation("uvDiffuse");
-            mSpecularHandle = pShader->GetUniformLocation("uvSpecular");
+            mEmissiveHandle = in_shader->GetUniformLocation("uvEmissive");
+            mAmbientHandle = in_shader->GetUniformLocation("uvAmbient");
+            mDiffuseHandle = in_shader->GetUniformLocation("uvDiffuse");
+            mSpecularHandle = in_shader->GetUniformLocation("uvSpecular");
     
-            mJointsHandle = pShader->GetUniformLocation("uavJoints");
+            mJointsHandle = in_shader->GetUniformLocation("uavJoints");
             
-            mLightPosHandle = pShader->GetUniformLocation("uvLightPos");
-            mLightDirHandle = pShader->GetUniformLocation("uvLightDir");
-            mLightColHandle = pShader->GetUniformLocation("uvLightCol");
-            mAttenConHandle = pShader->GetUniformLocation("ufAttenuationConstant");
-            mAttenLinHandle = pShader->GetUniformLocation("ufAttenuationLinear");
-            mAttenQuadHandle = pShader->GetUniformLocation("ufAttenuationQuadratic");
-            mCameraPosHandle = pShader->GetUniformLocation("uvCameraPos");
+            mLightPosHandle = in_shader->GetUniformLocation("uvLightPos");
+            mLightDirHandle = in_shader->GetUniformLocation("uvLightDir");
+            mLightColHandle = in_shader->GetUniformLocation("uvLightCol");
+            mAttenConHandle = in_shader->GetUniformLocation("ufAttenuationConstant");
+            mAttenLinHandle = in_shader->GetUniformLocation("ufAttenuationLinear");
+            mAttenQuadHandle = in_shader->GetUniformLocation("ufAttenuationQuadratic");
+            mCameraPosHandle = in_shader->GetUniformLocation("uvCameraPos");
             
-            mLightMatrixHandle = pShader->GetUniformLocation("umatLight");
-            mShadowToleranceHandle = pShader->GetUniformLocation("ufShadowTolerance");
-            mShadowMapTexHandle = pShader->GetUniformLocation("uShadowMapTexture");
+            mLightMatrixHandle = in_shader->GetUniformLocation("umatLight");
+            mShadowToleranceHandle = in_shader->GetUniformLocation("ufShadowTolerance");
+            mShadowMapTexHandle = in_shader->GetUniformLocation("uShadowMapTexture");
             
-            mCubemapHandle = pShader->GetUniformLocation("uCubemap");
+            mCubemapHandle = in_shader->GetUniformLocation("uCubemap");
             
             if(mpaTextureHandles == nullptr)
             {
                 mpaTextureHandles = (std::pair<GLint, u32>*)calloc(mpRenderCapabilities->GetNumTextureUnits(), sizeof(std::pair<GLint, u32>));
             }
             
-            if(inMaterial.GetTextures().empty() == false)
+            for(u32 i=0; i<mpRenderCapabilities->GetNumTextureUnits(); ++i)
             {
-                CS_ASSERT(inMaterial.GetTextures().size() <= mpRenderCapabilities->GetNumTextureUnits(), "RenderSystem::ApplyMaterial -> Trying to bind more textures than there area texture units");
-                
-                for(u32 i=0; i<inMaterial.GetTextures().size(); ++i)
-                {
-                    mpaTextureHandles[i].first = pShader->GetUniformLocation(std::string("uTexture"+Core::ToString(i)).c_str());
-                }
+                mpaTextureHandles[i].first = in_shader->GetUniformLocation(m_textureUniformNames[i].c_str());
             }
         }
         //----------------------------------------------------------
 		/// Apply Shader Variables
 		//----------------------------------------------------------
-		void RenderSystem::ApplyShaderVariables(const Rendering::Material &inMaterial, GLuint inShaderProg)
+		void RenderSystem::ApplyShaderVariables(const Rendering::Material* inMaterial, Shader* in_shader)
 		{
-            ShaderSPtr pShader = std::static_pointer_cast<Shader>(inMaterial.GetActiveShaderProgram());
 			//Get and set all the custom shader variables
-			for(Rendering::MapStringToFloat::const_iterator it = inMaterial.mMapFloatShaderVars.begin(); it!= inMaterial.mMapFloatShaderVars.end(); ++it)
+			for(auto it = inMaterial->m_floatVars.begin(); it!= inMaterial->m_floatVars.end(); ++it)
 			{
-				GLint VarHandle = pShader->GetUniformLocation(it->first.c_str());
+				GLint VarHandle = in_shader->GetUniformLocation(it->first.c_str());
 				glUniform1f(VarHandle, it->second);
 			}
-			for(Rendering::MapStringToVec2::const_iterator it = inMaterial.mMapVec2ShaderVars.begin(); it!= inMaterial.mMapVec2ShaderVars.end(); ++it)
+			for(auto it = inMaterial->m_vec2Vars.begin(); it!= inMaterial->m_vec2Vars.end(); ++it)
 			{
-				GLint VarHandle = pShader->GetUniformLocation(it->first.c_str());
+				GLint VarHandle = in_shader->GetUniformLocation(it->first.c_str());
 				glUniform2fv(VarHandle, 1, (GLfloat*)(&it->second));
 			}
-			for(Rendering::MapStringToVec3::const_iterator it = inMaterial.mMapVec3ShaderVars.begin(); it!= inMaterial.mMapVec3ShaderVars.end(); ++it)
+			for(auto it = inMaterial->m_vec3Vars.begin(); it!= inMaterial->m_vec3Vars.end(); ++it)
 			{
-				GLint VarHandle = pShader->GetUniformLocation(it->first.c_str());
+				GLint VarHandle = in_shader->GetUniformLocation(it->first.c_str());
 				glUniform3fv(VarHandle, 1, (GLfloat*)(&it->second));
 			}
-			for(Rendering::MapStringToVec4::const_iterator it = inMaterial.mMapVec4ShaderVars.begin(); it!= inMaterial.mMapVec4ShaderVars.end(); ++it)
+			for(auto it = inMaterial->m_vec4Vars.begin(); it!= inMaterial->m_vec4Vars.end(); ++it)
 			{
-				GLint VarHandle = pShader->GetUniformLocation(it->first.c_str());
+				GLint VarHandle = in_shader->GetUniformLocation(it->first.c_str());
 				glUniform4fv(VarHandle, 1, (GLfloat*)(&it->second));
 			}
-			for(Rendering::MapStringToMat4::const_iterator it = inMaterial.mMapMat4ShaderVars.begin(); it!= inMaterial.mMapMat4ShaderVars.end(); ++it)
+			for(auto it = inMaterial->m_mat4Vars.begin(); it!= inMaterial->m_mat4Vars.end(); ++it)
 			{
-				GLint VarHandle = pShader->GetUniformLocation(it->first.c_str());
+				GLint VarHandle = in_shader->GetUniformLocation(it->first.c_str());
 				glUniformMatrix4fv(VarHandle, 1, GL_FALSE, (GLfloat*)(it->second.m));
 			}
-			for(Rendering::MapStringToMat4Array::const_iterator it = inMaterial.mMapMat4ArrayShaderVars.begin(); it!= inMaterial.mMapMat4ArrayShaderVars.end(); ++it)
+			for(auto it = inMaterial->m_colourVars.begin(); it!= inMaterial->m_colourVars.end(); ++it)
 			{
-				GLint VarHandle = pShader->GetUniformLocation(it->first.c_str());
-				glUniformMatrix4fv(VarHandle, it->second.size(), GL_FALSE, (GLfloat*)(it->second[0].m));
-			}
-			for(Rendering::MapStringToCol::const_iterator it = inMaterial.mMapColShaderVars.begin(); it!= inMaterial.mMapColShaderVars.end(); ++it)
-			{
-				GLint VarHandle = pShader->GetUniformLocation(it->first.c_str());
+				GLint VarHandle = in_shader->GetUniformLocation(it->first.c_str());
 				glUniform4fv(VarHandle, 1, (GLfloat*)(&it->second));
 			}
 		}
         //----------------------------------------------------------
         /// Apply Textures
         //----------------------------------------------------------
-        void RenderSystem::ApplyTextures(const Rendering::Material &inMaterial)
+        void RenderSystem::ApplyTextures(const Rendering::Material* inMaterial)
         {
-            for(u32 i=0; i<inMaterial.GetTextures().size(); ++i)
+            //Cubemap takes precedence over texture
+            if(mCubemapHandle >= 0 && inMaterial->GetCubemap() != nullptr)
+            {
+                inMaterial->GetCubemap()->Bind(mudwNumBoundTextures);
+                glUniform1i(mCubemapHandle, mudwNumBoundTextures);
+                ++mudwNumBoundTextures;
+            }
+            
+            //Cannot bind more textures than the number of texture units
+            u32 numTextureUnitsAvailable = mpRenderCapabilities->GetNumTextureUnits() - mudwNumBoundTextures;
+            u32 numTexturesToBind = std::min(inMaterial->GetNumTextures(), numTextureUnitsAvailable);
+            
+            for(u32 i=0; i<numTexturesToBind; ++i)
             {
                 if(mpaTextureHandles[i].first != -1)
                 {
-                    inMaterial.GetTextures()[i]->Bind(mudwNumBoundTextures);
+                    inMaterial->GetTexture(i)->Bind(mudwNumBoundTextures);
                     if(mpaTextureHandles[i].second != mudwNumBoundTextures || mbInvalidateAllCaches)
                     {
                         glUniform1i(mpaTextureHandles[i].first, mudwNumBoundTextures);
@@ -402,48 +412,41 @@ namespace ChilliSource
                     ++mudwNumBoundTextures;
                 }
             }
-            
-            if(mCubemapHandle >= 0 && inMaterial.GetCubemap() != nullptr)
-            {
-                inMaterial.GetCubemap()->Bind(mudwNumBoundTextures);
-                glUniform1i(mCubemapHandle, mudwNumBoundTextures);
-                ++mudwNumBoundTextures;
-            }
         }
         //----------------------------------------------------------
         /// Apply Lighting Values
         //----------------------------------------------------------
-        void RenderSystem::ApplyLightingValues(const Rendering::Material &inMaterial)
+        void RenderSystem::ApplyLightingValues(const Rendering::Material* inMaterial)
         {
-            if(mEmissiveHandle != -1 && (mbInvalidateAllCaches || mbEmissiveSet == false || mCurrentEmissive != inMaterial.GetEmissive()))
+            if(mEmissiveHandle != -1 && (mbInvalidateAllCaches || mbEmissiveSet == false || mCurrentEmissive != inMaterial->GetEmissive()))
             {
                 mbEmissiveSet = true;
-                mCurrentEmissive = inMaterial.GetEmissive();
+                mCurrentEmissive = inMaterial->GetEmissive();
                 glUniform4f(mEmissiveHandle, mCurrentEmissive.r, mCurrentEmissive.g, mCurrentEmissive.b, mCurrentEmissive.a);
             }
-            if(mAmbientHandle != -1 && (mbInvalidateAllCaches || mbAmbientSet == false || mCurrentAmbient != inMaterial.GetAmbient()))
+            if(mAmbientHandle != -1 && (mbInvalidateAllCaches || mbAmbientSet == false || mCurrentAmbient != inMaterial->GetAmbient()))
             {
                 mbAmbientSet = true;
-                mCurrentAmbient = inMaterial.GetAmbient();
+                mCurrentAmbient = inMaterial->GetAmbient();
                 glUniform4f(mAmbientHandle, mCurrentAmbient.r, mCurrentAmbient.g, mCurrentAmbient.b, mCurrentAmbient.a);
             }
-            if(mDiffuseHandle != -1 && (mbInvalidateAllCaches || mbDiffuseSet == false || mCurrentDiffuse != inMaterial.GetDiffuse()))
+            if(mDiffuseHandle != -1 && (mbInvalidateAllCaches || mbDiffuseSet == false || mCurrentDiffuse != inMaterial->GetDiffuse()))
             {
                 mbDiffuseSet = true;
-                mCurrentDiffuse = inMaterial.GetDiffuse();
+                mCurrentDiffuse = inMaterial->GetDiffuse();
                 glUniform4f(mDiffuseHandle, mCurrentDiffuse.r, mCurrentDiffuse.g, mCurrentDiffuse.b, mCurrentDiffuse.a);
             }
-            if(mSpecularHandle != -1 && (mbInvalidateAllCaches || mbSpecularSet == false || mCurrentSpecular != inMaterial.GetSpecular()))
+            if(mSpecularHandle != -1 && (mbInvalidateAllCaches || mbSpecularSet == false || mCurrentSpecular != inMaterial->GetSpecular()))
             {
                 mbSpecularSet = true;
-                mCurrentSpecular = inMaterial.GetSpecular();
+                mCurrentSpecular = inMaterial->GetSpecular();
                 glUniform4f(mSpecularHandle, mCurrentSpecular.r, mCurrentSpecular.g, mCurrentSpecular.b, mCurrentSpecular.a);
             }
         }
         //----------------------------------------------------------
         /// Apply Lighting
         //----------------------------------------------------------
-        void RenderSystem::ApplyLighting(const Rendering::Material &inMaterial, Rendering::LightComponent* inpLightComponent)
+        void RenderSystem::ApplyLighting(Rendering::LightComponent* inpLightComponent)
         {
             if(mbInvalidateLigthingCache == false || inpLightComponent == nullptr)
                 return;
@@ -468,9 +471,9 @@ namespace ChilliSource
                         glUniform1f(mShadowToleranceHandle, pLightComponent->GetShadowTolerance());
                     }
                     
-                    if(mShadowMapTexHandle >= 0)
+                    //If we have used all the texture units then we cannot bind the shadow map
+                    if(mShadowMapTexHandle >= 0 && mudwNumBoundTextures <= mpRenderCapabilities->GetNumTextureUnits())
                     {
-                        CS_ASSERT(mudwNumBoundTextures <= mpRenderCapabilities->GetNumTextureUnits(), "RenderSystem::ApplyMaterial -> Trying to bind more textures than there area texture units");
                         pLightComponent->GetShadowMapPtr()->Bind(mudwNumBoundTextures);
                         glUniform1i(mShadowMapTexHandle, mudwNumBoundTextures);
                         ++mudwNumBoundTextures;
@@ -890,19 +893,19 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Depth Function
         //----------------------------------------------------------
-        void RenderSystem::SetDepthFunction(Rendering::DepthFunction ineFunc)
+        void RenderSystem::SetDepthFunction(Rendering::DepthTestComparison ineFunc)
         {
             if(mbInvalidateAllCaches || meDepthFunc != ineFunc)
             {
                 switch (ineFunc)
                 {
-                    case Rendering::DepthFunction::k_less:
+                    case Rendering::DepthTestComparison::k_less:
                         glDepthFunc(GL_LESS);
                         break;
-                    case Rendering::DepthFunction::k_equal:
+                    case Rendering::DepthTestComparison::k_equal:
                         glDepthFunc(GL_EQUAL);
                         break;
-                    case Rendering::DepthFunction::k_lequal:
+                    case Rendering::DepthTestComparison::k_lequal:
                         glDepthFunc(GL_LEQUAL);
                         break;
                 }
@@ -927,7 +930,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Set Blend Function
 		//----------------------------------------------------------
-		void RenderSystem::SetBlendFunction(Rendering::AlphaBlend ineSrcFunc, Rendering::AlphaBlend ineDstFunc)
+		void RenderSystem::SetBlendFunction(Rendering::BlendMode ineSrcFunc, Rendering::BlendMode ineDstFunc)
 		{
             if(mbInvalidateAllCaches != true && mbBlendFunctionLocked == true)
             {
@@ -942,66 +945,58 @@ namespace ChilliSource
 				GLenum SrcFunc = GL_SRC_ALPHA;
 				switch(ineSrcFunc)
 				{
-					case Rendering::AlphaBlend::k_zero:
+					case Rendering::BlendMode::k_zero:
 						SrcFunc = GL_ZERO;
 						break;
-					case Rendering::AlphaBlend::k_one:
+					case Rendering::BlendMode::k_one:
 						SrcFunc = GL_ONE;
 						break;
-					case Rendering::AlphaBlend::k_sourceCol:
+					case Rendering::BlendMode::k_sourceCol:
 						SrcFunc = GL_SRC_COLOR;
 						break;
-					case Rendering::AlphaBlend::k_oneMinusSourceCol:
+					case Rendering::BlendMode::k_oneMinusSourceCol:
 						SrcFunc = GL_ONE_MINUS_SRC_COLOR;
 						break;
-					case Rendering::AlphaBlend::k_sourceAlpha:
+					case Rendering::BlendMode::k_sourceAlpha:
 						SrcFunc = GL_SRC_ALPHA;
 						break;
-					case Rendering::AlphaBlend::k_oneMinusSourceAlpha:
+					case Rendering::BlendMode::k_oneMinusSourceAlpha:
 						SrcFunc = GL_ONE_MINUS_SRC_ALPHA;
 						break;
-					case Rendering::AlphaBlend::k_destAlpha:
+					case Rendering::BlendMode::k_destAlpha:
 						SrcFunc = GL_DST_ALPHA;
 						break;
-					case Rendering::AlphaBlend::k_oneMinusDestAlpha:
+					case Rendering::BlendMode::k_oneMinusDestAlpha:
 						SrcFunc = GL_ONE_MINUS_DST_ALPHA;
-						break;
-					case Rendering::AlphaBlend::k_unknown:
-					default:
-						CS_LOG_ERROR("Open GL ES Unknown blend function");
 						break;
 				};
                 
 				GLenum DstFunc = GL_ONE_MINUS_SRC_ALPHA;
                 switch(ineDstFunc)
 				{
-					case Rendering::AlphaBlend::k_zero:
+					case Rendering::BlendMode::k_zero:
 						DstFunc = GL_ZERO;
 						break;
-					case Rendering::AlphaBlend::k_one:
+					case Rendering::BlendMode::k_one:
 						DstFunc = GL_ONE;
 						break;
-					case Rendering::AlphaBlend::k_sourceCol:
+					case Rendering::BlendMode::k_sourceCol:
 						DstFunc = GL_SRC_COLOR;
 						break;
-					case Rendering::AlphaBlend::k_oneMinusSourceCol:
+					case Rendering::BlendMode::k_oneMinusSourceCol:
 						DstFunc = GL_ONE_MINUS_SRC_COLOR;
 						break;
-					case Rendering::AlphaBlend::k_sourceAlpha:
+					case Rendering::BlendMode::k_sourceAlpha:
 						DstFunc = GL_SRC_ALPHA;
 						break;
-					case Rendering::AlphaBlend::k_oneMinusSourceAlpha:
+					case Rendering::BlendMode::k_oneMinusSourceAlpha:
 						DstFunc = GL_ONE_MINUS_SRC_ALPHA;
 						break;
-					case Rendering::AlphaBlend::k_destAlpha:
+					case Rendering::BlendMode::k_destAlpha:
 						DstFunc = GL_DST_ALPHA;
 						break;
-					case Rendering::AlphaBlend::k_oneMinusDestAlpha:
+					case Rendering::BlendMode::k_oneMinusDestAlpha:
 						DstFunc = GL_ONE_MINUS_DST_ALPHA;
-						break;
-					case Rendering::AlphaBlend::k_unknown:
-					default:
-						CS_LOG_ERROR("Open GL ES Unknown blend function");
 						break;
 				};
 				
@@ -1196,12 +1191,10 @@ namespace ChilliSource
             RenderTarget::ClearCache();
             
             //Set the default blend function and alpha function
-			SetBlendFunction(Rendering::AlphaBlend::k_sourceAlpha, Rendering::AlphaBlend::k_oneMinusSourceAlpha);
-            SetDepthFunction(Rendering::DepthFunction::k_lequal);
+            SetDepthFunction(Rendering::DepthTestComparison::k_lequal);
             
-			//we're using pre-multiplied alpha and therefore require a different blend mode
+			//we're using pre-multiplied alpha and multipass rendering and therefore require the add blend equation
             glBlendEquation(GL_FUNC_ADD);
-            glCullFace(GL_FRONT);
             
             mbInvalidateAllCaches = true;
 		}

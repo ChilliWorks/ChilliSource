@@ -179,7 +179,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		void Mesh::Render(RenderSystem* in_renderSystem, const Core::Matrix4x4& in_worldMat, const std::vector<MaterialSPtr>& in_materials, const SkinnedAnimationGroupSPtr& in_animGroup) const
+		void Mesh::Render(RenderSystem* in_renderSystem, const Core::Matrix4x4& in_worldMat, const std::vector<MaterialCSPtr>& in_materials, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& in_animGroup) const
 		{
             CS_ASSERT(in_materials.size() > 0, "Must have at least one material to render");
 
@@ -193,20 +193,17 @@ namespace ChilliSource
 			u32 udwCurrMaterial = 0;
 			for(auto it = m_subMeshes.begin(); it != m_subMeshes.end(); ++it)
 			{
-                const MaterialSPtr& pMaterial = in_materials[udwCurrMaterial];
+                const MaterialCSPtr& pMaterial = in_materials[udwCurrMaterial];
                 ++udwCurrMaterial;
                 udwCurrMaterial = (u32)std::min(udwCurrMaterial, (u32)in_materials.size()-1);
                 
-				if (pMaterial->GetActiveShaderProgram() != nullptr)
+                if(pMaterial->IsTransparencyEnabled() == false)
                 {
-                    if(pMaterial->IsTransparent() == false)
-                    {
-                        aOpaqueSubMeshes.push_back(it->get());
-                    }
-                    else
-                    {
-                        aTransparentSubMeshes.push_back(it->get());
-                    }
+                    aOpaqueSubMeshes.push_back(it->get());
+                }
+                else
+                {
+                    aTransparentSubMeshes.push_back(it->get());
                 }
 			}
             
@@ -214,28 +211,28 @@ namespace ChilliSource
             udwCurrMaterial = 0;
 			for(auto it = aOpaqueSubMeshes.begin(); it != aOpaqueSubMeshes.end(); ++it)
 			{
-                const MaterialSPtr& pMaterial = in_materials[udwCurrMaterial];
+                const MaterialCSPtr& pMaterial = in_materials[udwCurrMaterial];
                 ++udwCurrMaterial;
                 udwCurrMaterial = std::min(udwCurrMaterial, (u32)in_materials.size()-1);
 					
 #ifdef CS_ENABLE_DEBUGSTATS
                 DebugStats::AddToEvent("Meshes", 1);
 #endif
-                (*it)->Render(in_renderSystem, in_worldMat, pMaterial, in_animGroup);
+                (*it)->Render(in_renderSystem, in_worldMat, pMaterial, in_shaderPass, in_animGroup);
 			}
 			
 			//then transparent stuff
 			udwCurrMaterial = 0;
 			for(auto it = aTransparentSubMeshes.begin(); it != aTransparentSubMeshes.end(); ++it)
 			{
-                const MaterialSPtr& pMaterial = in_materials[udwCurrMaterial];
+                const MaterialCSPtr& pMaterial = in_materials[udwCurrMaterial];
                 ++udwCurrMaterial;
                 udwCurrMaterial = (u32)std::min(udwCurrMaterial, (u32)in_materials.size()-1);
 				
 #ifdef CS_ENABLE_DEBUGSTATS
                 DebugStats::AddToEvent("Meshes_Trans", 1);
 #endif
-                (*it)->Render(in_renderSystem, in_worldMat, pMaterial, in_animGroup);
+                (*it)->Render(in_renderSystem, in_worldMat, pMaterial, in_shaderPass, in_animGroup);
 			}
 		}
 		//-----------------------------------------------------------------

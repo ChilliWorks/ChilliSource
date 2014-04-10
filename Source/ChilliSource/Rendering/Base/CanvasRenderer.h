@@ -18,6 +18,8 @@
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Core/Math/Matrix3x3.h>
 
+#include <unordered_map>
+
 namespace ChilliSource
 {
 	namespace Rendering
@@ -111,9 +113,6 @@ namespace ChilliSource
                                     const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
                                     GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines);
             
-            void DrawDistanceOutlinedString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
-                                            const Core::Colour & insColour, const Core::Colour& insOutlineColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
-                                            GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines);
             //-----------------------------------------------------------
             /// Calculate String Width
             ///
@@ -198,6 +197,25 @@ namespace ChilliSource
 			
 		private:
 			
+            //----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Texture
+            ///
+            /// @return Cached or new GUI material that has the given
+            /// texture
+            //----------------------------------------------------------
+            MaterialCSPtr GetGUIMaterialForTexture(const TextureSPtr& in_texture);
+            //----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Texture
+            ///
+            /// @return Cached or new distance font material
+            /// that has the given texture
+            //----------------------------------------------------------
+            MaterialCSPtr GetDistFontMaterialForTexture(const TextureSPtr& in_texture);
+            
 			//-----------------------------------------------------
 			/// Update Sprite Data
 			///
@@ -211,18 +229,18 @@ namespace ChilliSource
 			
 		private:
 			
-			SpriteComponent::SpriteData   msCachedSprite;
-            MaterialSPtr                    mpDefaultMaterial;
-            MaterialSPtr                    mpDistanceFont;
-            MaterialSPtr                    mpDistanceFontOutlined;
-            
-            
+			SpriteComponent::SpriteData msCachedSprite;
+
             DynamicSpriteBatch mOverlayBatcher;
             
 			std::vector<Core::Vector2> mScissorPos;
             std::vector<Core::Vector2> mScissorSize;
-                        
-			RenderSystem* mpRenderSystem;
+            
+            std::unordered_map<TextureSPtr, MaterialCSPtr> m_materialGUICache;
+            std::unordered_map<TextureSPtr, MaterialCSPtr> m_materialDistFontCache;
+            
+            Core::ResourcePool* m_resourcePool;
+            MaterialFactory* m_materialFactory;
             
             f32 mfNearClippingDistance;
 		};

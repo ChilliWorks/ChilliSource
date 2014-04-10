@@ -1,24 +1,22 @@
-/*
- *  Material.h
- *  moFlo
- *
- *  Created by Scott Downie on 14/10/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Material.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 14/10/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
-#ifndef _MO_FLO_RENDERING_MATERIAL_H_
-#define _MO_FLO_RENDERING_MATERIAL_H_
+#ifndef _CHILLISOURCE_RENDERING_MATERIAL_MATERIAL_H_
+#define _CHILLISOURCE_RENDERING_MATERIAL_MATERIAL_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Rendering/Base/ShaderPass.h>
 
 #include <unordered_map>
 
@@ -26,448 +24,392 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		typedef std::unordered_map<std::string, f32> MapStringToFloat;
-		typedef std::unordered_map<std::string, Core::Vector2> MapStringToVec2;
-		typedef std::unordered_map<std::string, Core::Vector3> MapStringToVec3;
-		typedef std::unordered_map<std::string, Core::Vector4> MapStringToVec4;
-		typedef std::unordered_map<std::string, Core::Matrix4x4> MapStringToMat4;
-		typedef std::unordered_map<std::string, std::vector<Core::Matrix4x4> > MapStringToMat4Array;
-		typedef std::unordered_map<std::string, Core::Colour> MapStringToCol;
-        
-        //============================================
-		/// Alpha Blend
-		///
-		/// Destination and source types for defining
-		/// blend functions
-		//============================================
-		enum class AlphaBlend
-		{
-			k_unknown               = -1,
-			k_zero					= (1 << 0),
-			k_one					= (1 << 1),
-			k_sourceCol				= (1 << 2),
-			k_oneMinusSourceCol		= (1 << 3),
-			k_sourceAlpha			= (1 << 4),
-			k_oneMinusSourceAlpha	= (1 << 5),
-			k_destAlpha				= (1 << 6),
-			k_oneMinusDestAlpha		= (1 << 7),
-		};
-        
-        //============================================
-		/// Cull Face
-		//============================================
-		enum class CullFace
-		{
-            k_front,
-            k_back
-		};
-        //============================================
-		/// Depth Function
-		//============================================
-        enum class DepthFunction
-        {
-            k_less,
-            k_equal,
-            k_lequal
-        };
-        //============================================
-		/// Shader Pass
-		//============================================
-        enum class ShaderPass
-        {
-            k_ambient,
-            k_directional,
-            k_point,
-            k_total
-        };
-		
-		class Material : public Core::ResourceOld
+        //----------------------------------------------------------
+        /// Holds the render state of an object. Used to organise
+        /// the rendering of objects and to alter their surface
+        /// appearance via lighting, texture, shader, etc.
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------
+		class Material final : public Core::Resource
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(Material);
 		
-            Material();
-			
 			//----------------------------------------------------------
-			/// Clone
-			///
-			/// Make a deep copy of the material
-			///
-			/// @return Cloned instance
-			//----------------------------------------------------------
-			MaterialSPtr Clone() const;
-			//----------------------------------------------------------
-			/// Is A
-			///
-			/// Returns if it is of the type given
+            /// @author S Downie
+            ///
 			/// @param Comparison Type
+            ///
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
-            //----------------------------------------------------------
-			/// Set Active Shader Program
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			//----------------------------------------------------------
+			/// @author S Downie
 			///
-			/// @param Shader pass type
+			/// @return The shader associated with this rendering pass
 			//----------------------------------------------------------
-			void SetActiveShaderProgram(ShaderPass inePass);
-			//----------------------------------------------------------
-			/// Get Active Shader Program
-			///
-			/// @return Shader resource for rendering with 
-			//----------------------------------------------------------
-			const ShaderSPtr& GetActiveShaderProgram() const;
+			const ShaderSPtr& GetShader(ShaderPass in_pass) const;
             //----------------------------------------------------------
-			/// Set Shader Program
-			///
-			/// @param Shader resource
+            /// Associate the given shader with the given render pass
+            ///
+			/// @author S Downie
+            ///
+			/// @param Shader pass
+            /// @param Shader
 			//----------------------------------------------------------
-			void SetShaderProgram(ShaderPass inePass, const ShaderSPtr &inpShaderProgram);
+			void SetShader(ShaderPass in_pass, const ShaderSPtr& in_shader);
             //----------------------------------------------------------
-			/// Clear Textures
+			/// Clear the textures from the slots
+            ///
+            /// @author S Downie
 			//----------------------------------------------------------
-			void ClearTextures();
+			void RemoveAllTextures();
 			//----------------------------------------------------------
-			/// Set Texture
+			/// Add the texture to the end of the list. The index of the
+            /// texture in the list corresponds to the texture handle in
+            /// the shader.
+            ///
+            /// NOTE: Due to devices supporting different numbers of
+            /// textures it is possible that textures at the end will be
+            /// ignored by the renderer. The cubemap can also steal
+            /// a texture slot and will take precedence over a texture.
+            ///
+            /// @author S Downie
 			///
 			/// @param Texture 
-			/// @param At index
 			//----------------------------------------------------------
-			void SetTexture(const TextureSPtr &inpTexture, u32 inudwIndex = 0);
-			//----------------------------------------------------------
-			/// Add Texture
-			///
-			/// @param Texture 
-			//----------------------------------------------------------
-			void AddTexture(const TextureSPtr &inpTexture);
-			//----------------------------------------------------------
-			/// Get Texture
-			///
-			/// @param Index to check
-			/// @return Texture 
-			//----------------------------------------------------------
-			const TextureSPtr& GetTexture(u32 inudwIndex = 0) const;
-			//----------------------------------------------------------
-			/// Get Textures
-			///
-			/// @return Texture array
-			//----------------------------------------------------------
-			const std::vector<TextureSPtr>& GetTextures() const;
+			void AddTexture(const TextureSPtr& in_texture);
             //----------------------------------------------------------
-			/// Set Cubemap
+            /// Overwrite an exisiting added texture with the given
+            /// texture at the given index. If a texture does not
+            /// already exist at that slot then it asserts
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture
+            /// @param Index
+            //----------------------------------------------------------
+            void SetTexture(const TextureSPtr& in_texture, u32 in_texIndex = 0);
+			//----------------------------------------------------------
+			/// Get Texture at the given index. Will assert
+            /// if index is out of bounds.
+            ///
+            /// @author S Downie
+			///
+			/// @param Texture index
+            ///
+			/// @return Texture or null
+			//----------------------------------------------------------
+			const TextureSPtr& GetTexture(u32 in_texIndex = 0) const;
+			//----------------------------------------------------------
+            /// @author S Downie
+			///
+			/// @return Number of textures set on the material
+			//----------------------------------------------------------
+			u32 GetNumTextures() const;
+            //----------------------------------------------------------
+			/// @author S Downie
 			///
 			/// @param Cubemap
 			//----------------------------------------------------------
-			void SetCubemap(const CubemapSPtr &inpCubemap);
+			void SetCubemap(const CubemapSPtr& in_cubemap);
 			//----------------------------------------------------------
-			/// Get Cubemap
+			/// @author S Downie
 			///
-			/// @return Cubemap
+			/// @return Cubemap or null
 			//----------------------------------------------------------
 			const CubemapSPtr& GetCubemap() const;
 			//----------------------------------------------------------
-			/// Is Transparent
+			/// @author S Downie
 			///
 			/// @return Whether the object has transparency enabled 
 			//----------------------------------------------------------
-			bool IsTransparent() const;
+			bool IsTransparencyEnabled() const;
 			//----------------------------------------------------------
-			/// Set Transparent
+			/// @author S Downie
 			///
 			/// @param Whether transparency is enabled
 			//----------------------------------------------------------
-			void SetTransparent(bool inbIsTransparent);
+			void SetTransparencyEnabled(bool in_enable);
             //----------------------------------------------------------
-			/// Is Colour Write Enabled
+			/// @author S Downie
 			///
-			/// @return Whether the object has depth write enabled 
+			/// @return Whether the object has colour write enabled
 			//----------------------------------------------------------
 			bool IsColourWriteEnabled() const;
 			//----------------------------------------------------------
-			/// Set Colour Write Enabled
+			/// @author S Downie
 			///
-			/// @param Whether depth write is enabled
+			/// @param Whether colour write is enabled
 			//----------------------------------------------------------
-			void SetColourWriteEnabled(bool inbIsColourTest);
+			void SetColourWriteEnabled(bool in_enable);
 			//----------------------------------------------------------
-			/// Is Depth Write Enabled
+			/// @author S Downie
 			///
 			/// @return Whether the object has depth write enabled 
 			//----------------------------------------------------------
 			bool IsDepthWriteEnabled() const;
 			//----------------------------------------------------------
-			/// Set Depth Write Enabled
+			/// @author S Downie
 			///
 			/// @param Whether depth write is enabled
 			//----------------------------------------------------------
-			void SetDepthWriteEnabled(bool inbIsDepthTest);
+			void SetDepthWriteEnabled(bool in_enable);
 			//----------------------------------------------------------
-			/// Is Depth Test Enabled
+			/// @author S Downie
 			///
 			/// @return Whether the object has depth test enabled 
 			//----------------------------------------------------------
 			bool IsDepthTestEnabled() const;
 			//----------------------------------------------------------
-			/// Set Depth Test Enabled
+			/// @author S Downie
 			///
 			/// @param Whether depth test is enabled
 			//----------------------------------------------------------
-			void SetDepthTestEnabled(bool inbIsDepthTest);
+			void SetDepthTestEnabled(bool in_enable);
 			//----------------------------------------------------------
-			/// Is Culling Enabled
+			/// @author S Downie
 			///
 			/// @return Whether the object has face culling enabled 
 			//----------------------------------------------------------
-			bool IsCullingEnabled() const;
+			bool IsFaceCullingEnabled() const;
 			//----------------------------------------------------------
-			/// Set Culling Enabled
+			/// @author S Downie
 			///
 			/// @param Whether face culling is enabled
 			//----------------------------------------------------------
-			void SetCullingEnabled(bool inbCullingEnabled);
-            //----------------------------------------------------------
-			/// Is Scissoring Enabled
-			///
-			/// @return Whether the object has scissor testing enabled 
+			void SetFaceCullingEnabled(bool in_enable);
 			//----------------------------------------------------------
-            bool IsScissoringEnabled() const;
-            //----------------------------------------------------------
-			/// Set Scissoring Enabled
-			///
-			/// @param Whether scissor testing is enabled
-			//----------------------------------------------------------
-            void SetScissoringEnabled(bool inbEnabled);
-            //----------------------------------------------------------
-            /// Set Scissoring Region
+			/// Tells the render system how to blend pixels based on the
+            /// source and destination mode
             ///
-            /// @param Position of lower left corner
-            /// @param Dimensions
-            //----------------------------------------------------------
-            void SetScissoringRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize);
-            //----------------------------------------------------------
-            /// Get Scissoring Region Position
-            ///
-            /// @return Position of lower left corner
-            //----------------------------------------------------------
-            const Core::Vector2& GetScissoringRegionPosition() const;
-            //----------------------------------------------------------
-            /// Get Scissoring Region Size
-            ///
-            /// @return Dimensions
-            //----------------------------------------------------------
-            const Core::Vector2& GetScissoringRegionSize() const;
-			//----------------------------------------------------------
-			/// Set Blend Function
+            /// @author S Downie
 			///
-			/// Tells the render system how to blend transparent pixels
+			/// @param Source mode
+			/// @param Destination mode
+			//----------------------------------------------------------
+			void SetBlendModes(BlendMode in_source, BlendMode in_dest);
+			//----------------------------------------------------------
+			/// @author S Downie
 			///
-			/// @param Source function
-			/// @param Destination function
+			/// @return Source mode of blending functions
 			//----------------------------------------------------------
-			void SetBlendFunction(AlphaBlend ineSource, AlphaBlend ineDest);
+			BlendMode GetSourceBlendMode() const;
 			//----------------------------------------------------------
-			/// Get Source Blend Function
+			/// @author S Downie
 			///
-			/// @return Source function of blending functions
+			/// @return Dest BlendMode of blending functions
 			//----------------------------------------------------------
-			AlphaBlend GetSourceBlendFunction() const;
-			//----------------------------------------------------------
-			/// Get Destination Blend Function
-			///
-			/// @return Dest function of blending functions
-			//----------------------------------------------------------
-			AlphaBlend GetDestBlendFunction() const;
+			BlendMode GetDestBlendMode() const;
             //----------------------------------------------------------
-            /// Set Cull Face
+            /// @author S Downie
             ///
             /// @param The face of the polygon that should be culled
+            /// if culling is enabled
 			//----------------------------------------------------------
-			void SetCullFace(CullFace ineCullFace);
+			void SetCullFace(CullFace in_face);
 			//----------------------------------------------------------
-			/// Get Cull Face
+			/// @author S Downie
 			///
 			/// @return The face of the polygon that should be culled
+            /// if face culling is enabled
 			//----------------------------------------------------------
 			CullFace GetCullFace() const;
 			//----------------------------------------------------------
-			/// Set Emissive
-			///
-			/// Set the emissive colour
-			/// @param emissive colour
+            /// The emissive colour is used to simulate the light emitted
+            /// by the surface of an object (effectively its colour)
+            ///
+            /// @author S Downie
+            ///
+			/// @param Emissive colour used in ambient pass
 			//----------------------------------------------------------
-			void SetEmissive(const Core::Colour& inEmissive);
+			void SetEmissive(const Core::Colour& in_emissive);
 			//----------------------------------------------------------
-			/// Get Emissive
+			/// @author S Downie
 			///
-			/// Get the emissive colour of the material
-			/// @return Ambient light colour
+			/// @return Emissive colour used in ambient pass
 			//----------------------------------------------------------
 			const Core::Colour& GetEmissive() const;
             //----------------------------------------------------------
-			/// Set Ambient
-			///
-			/// Set the default colour of the material
-			/// @param Ambient light colour
+            /// The ambient colour is used to simulate the light absorbed
+            /// by the object from light reflections in the scene.
+            ///
+            /// @author S Downie
+            ///
+			/// @param Ambient colour used in ambient pass
 			//----------------------------------------------------------
-			void SetAmbient(const Core::Colour& inAmbient);
+			void SetAmbient(const Core::Colour& in_ambient);
 			//----------------------------------------------------------
-			/// Get Ambient
+			/// @author S Downie
 			///
-			/// Get the default colour of the material
-			/// @return Ambient light colour
+			/// @return Ambient colour used in ambient pass
 			//----------------------------------------------------------
 			const Core::Colour& GetAmbient() const;
 			//----------------------------------------------------------
-			/// Set Diffuse
-			///
-			/// Set the diffuse colour of the material that is affected
-			/// by light position
-			/// @param Diffuse light colour
+            /// The diffuse colour is used to simulate the light absorbed
+            /// by the object directly from the light source.
+            ///
+            /// @author S Downie
+            ///
+			/// @param Diffuse light colour used in subsequent light passes
 			//----------------------------------------------------------
-			void SetDiffuse(const Core::Colour& inDiffuse);
+			void SetDiffuse(const Core::Colour& in_diffuse);
 			//----------------------------------------------------------
-			/// Get Diffuse
+			/// @author S Downie
 			///
-			/// Get the diffuse colour of the material
-			/// @return Diffuse light colour
+			/// @return Diffuse light colour used in subsequent light passes
 			//----------------------------------------------------------
 			const Core::Colour& GetDiffuse() const;
 			//----------------------------------------------------------
-			/// Set Specular
-			///
-			/// Set the specular colour of the material highlight
-			/// @param Specular light colour
+            /// The specular colour is used to simulate the light reflected
+            /// back by the object creating a highlight.
+            ///
+			/// @author S Downie
+            ///
+			/// @param Specular light colour used in subsequent light passes
 			//----------------------------------------------------------
-			void SetSpecular(const Core::Colour& inSpecular);
+			void SetSpecular(const Core::Colour& in_specular);
 			//----------------------------------------------------------
-			/// Get Specular
+			/// @author S Downie
 			///
-			/// Get the specular colour of the material
-			/// @return Specular light colour
+			/// @return Specular light colour used in subsequent light passes
 			//----------------------------------------------------------
 			const Core::Colour& GetSpecular() const;
 			//-----------------------------------------------------------
-			/// Set Shader Float Value
-			///
-			/// Set the value of the variable with the given name
-			///
-			/// @param Variable name
-			/// @param Float data
-			//-----------------------------------------------------------
-			void SetShaderFloatValue(const std::string& instrVarName, f32 infValue);
-			//-----------------------------------------------------------
-			/// Set Shader Vec2 Value
-			///
-			/// Set the value of the variable with the given name
+			/// Set the value of the variable with the given name to the
+            /// given value
+            ///
+            /// @author S Downie
 			///
 			/// @param Variable name
-			/// @param Vector2 data
+			/// @param Float value
 			//-----------------------------------------------------------
-			void SetShaderVec2Value(const std::string& instrVarName, const Core::Vector2 &invValue);
+			void SetShaderVar(const std::string& in_varName, f32 in_value);
 			//-----------------------------------------------------------
-			/// Set Shader Vec3 Value
-			///
-			/// Set the value of the variable with the given name
-			///
-			/// @param Variable name
-			/// @param Vector3 data
-			//-----------------------------------------------------------
-			void SetShaderVec3Value(const std::string& instrVarName, const Core::Vector3 &invValue);
-			//-----------------------------------------------------------
-			/// Set Shader Vec4 Value
-			///
-			/// Set the value of the variable with the given name
+			/// Set the value of the variable with the given name to the
+            /// given value
+            ///
+            /// @author S Downie
 			///
 			/// @param Variable name
-			/// @param Vector4 data
+			/// @param Vec2 value
 			//-----------------------------------------------------------
-			void SetShaderVec4Value(const std::string& instrVarName, const Core::Vector4 &invValue);
+			void SetShaderVar(const std::string& in_varName, const Core::Vector2& in_value);
 			//-----------------------------------------------------------
-			/// Set Shader Matrix Value
-			///
-			/// Set the value of the variable with the given name
-			///
-			/// @param Variable name
-			/// @param Matrix data
-			//-----------------------------------------------------------
-			void SetShaderMatrixValue(const std::string& instrVarName, const Core::Matrix4x4 &inmatValue);
-			//-----------------------------------------------------------
-			/// Set Shader Matrix Array Value
-			///
-			/// Set the value of the variable with the given name
+			/// Set the value of the variable with the given name to the
+            /// given value
+            ///
+            /// @author S Downie
 			///
 			/// @param Variable name
-			/// @param Matrix data
+			/// @param Vec3 value
 			//-----------------------------------------------------------
-			void SetShaderMatrixArrayValue(const std::string& instrVarName, const std::vector<Core::Matrix4x4>& inmatValue);
+			void SetShaderVar(const std::string& in_varName, const Core::Vector3& in_value);
 			//-----------------------------------------------------------
-			/// Set Shader Colour Value
-			///
-			/// Set the value of the variable with the given name
+			/// Set the value of the variable with the given name to the
+            /// given value
+            ///
+            /// @author S Downie
 			///
 			/// @param Variable name
-			/// @param Colour data
+			/// @param Vec4 value
 			//-----------------------------------------------------------
-			void SetShaderColourValue(const std::string& instrVarName, const Core::Colour &incolValue);
+			void SetShaderVar(const std::string& in_varName, const Core::Vector4& in_value);
+			//-----------------------------------------------------------
+			/// Set the value of the variable with the given name to the
+            /// given value
+            ///
+            /// @author S Downie
+			///
+			/// @param Variable name
+			/// @param Mat4 value
+			//-----------------------------------------------------------
+			void SetShaderVar(const std::string& in_varName, const Core::Matrix4x4& in_value);
+			//-----------------------------------------------------------
+			/// Set the value of the variable with the given name to the
+            /// given value
+            ///
+            /// @author S Downie
+			///
+			/// @param Variable name
+			/// @param Colour value
+			//-----------------------------------------------------------
+			void SetShaderVar(const std::string& in_varName, const Core::Colour& in_value);
+            
+            //TODO: Remove these once we no longer rely on render system and material to hold our state
+            //i.e. when we have a proper render command queue
             //----------------------------------------------------------
-            /// Is Cache Valid
+            /// @author S Downie
             ///
             /// @return Whether this material has been dirtied
             //----------------------------------------------------------
             bool IsCacheValid() const;
             //----------------------------------------------------------
-            /// Is Variable Cache Valid
+            /// @author S Downie
             ///
-            /// @return Whether this materials variables has been dirtied
+            /// @return Whether this materials shader variables has been dirtied
             //----------------------------------------------------------
             bool IsVariableCacheValid() const;
             //----------------------------------------------------------
-            /// Set Cache Valid
+            /// @author S Downie
             ///
             /// @param This material has been applied and is no longer
             /// dirty
             //----------------------------------------------------------
-            void SetCacheValid() const;
+            void SetCacheValid();
             
-            MapStringToFloat mMapFloatShaderVars;
-			MapStringToVec2 mMapVec2ShaderVars;
-			MapStringToVec3 mMapVec3ShaderVars;
-			MapStringToVec4 mMapVec4ShaderVars;
-			MapStringToMat4 mMapMat4ShaderVars;
-			MapStringToMat4Array mMapMat4ArrayShaderVars;
-			MapStringToCol mMapColShaderVars;
+            //TODO: Make private when we rework the render system
+            std::unordered_map<std::string, f32> m_floatVars;
+			std::unordered_map<std::string, Core::Vector2> m_vec2Vars;
+			std::unordered_map<std::string, Core::Vector3> m_vec3Vars;
+			std::unordered_map<std::string, Core::Vector4> m_vec4Vars;
+			std::unordered_map<std::string, Core::Matrix4x4> m_mat4Vars;
+			std::unordered_map<std::string, Core::Colour> m_colourVars;
+            
+        private:
+            
+            friend class Core::ResourcePool;
+            //----------------------------------------------------------
+            /// Factory method to create an new instance of an empty
+            /// material resource. Only called by the resource pool
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+            static MaterialUPtr Create();
+            //----------------------------------------------------------
+            /// Private constructor to ensure that the factory method
+            /// is used
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+            Material();
 
 		private:
             
-            std::vector<TextureSPtr> mTextures;
+            std::vector<TextureSPtr> m_textures;
             
-            CubemapSPtr mpCubemap;
+            CubemapSPtr m_cubemap;
             
-            ShaderSPtr maShaderPrograms[(u32)ShaderPass::k_total];
-            ShaderSPtr mpActiveShaderProgram;
+            ShaderSPtr m_shaders[(u32)ShaderPass::k_total];
 			
-			Core::Colour mEmissive;
-            Core::Colour mAmbient;
-			Core::Colour mDiffuse;
-			Core::Colour mSpecular;
-            
-            Core::Vector2 mvScissorPos;
-            Core::Vector2 mvScissorSize;
+			Core::Colour m_emissive;
+            Core::Colour m_ambient;
+			Core::Colour m_diffuse;
+			Core::Colour m_specular;
 			
-			AlphaBlend mSrcBlendFunc;
-			AlphaBlend mDstBlendFunc;
-            CullFace meCullFace;
+			BlendMode m_srcBlendMode;
+			BlendMode m_dstBlendMode;
+            CullFace m_cullFace;
             
-            mutable bool mbIsCacheValid;
-            mutable bool mbIsVariableCacheValid;
+            bool m_isCacheValid = false;
+            bool m_isVariableCacheValid = true;
 
-            bool mbIsScissoringEnabled;
-            bool mbIsAlphaBlended;
-            bool mbIsColourWriteEnabled;
-			bool mbIsDepthWriteEnabled;
-			bool mbIsDepthTestEnabled;
-            bool mbIsCullingEnabled;
-            
-            friend class MaterialManager;
+            bool m_isAlphaBlendingEnabled = false;
+            bool m_isColWriteEnabled = true;
+			bool m_isDepthWriteEnabled = true;
+			bool m_isDepthTestEnabled = true;
+            bool m_isFaceCullingEnabled = true;
 		};
 	}
 }

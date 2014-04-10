@@ -10,7 +10,6 @@
 #include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Material/MaterialManager.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 
@@ -30,7 +29,7 @@ namespace ChilliSource
 	{
         CS_DEFINE_NAMEDTYPE(StaticMeshComponent);
     
-        MaterialSPtr StaticMeshComponent::mspShadowMapMaterial;
+        MaterialCSPtr StaticMeshComponent::mspShadowMapMaterial;
         
         StaticMeshComponent::StaticMeshComponent()
         : mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
@@ -166,7 +165,7 @@ namespace ChilliSource
 		{
 			for (u32 i = 0; i < mMaterials.size(); ++i)
 			{
-				if (mMaterials[i]->IsTransparent() == true)
+				if (mMaterials[i]->IsTransparencyEnabled() == true)
 					return true;
 			}
 			return false;
@@ -174,7 +173,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material
 		//-----------------------------------------------------------
-		void StaticMeshComponent::SetMaterial(const MaterialSPtr& inpMaterial)
+		void StaticMeshComponent::SetMaterial(const MaterialCSPtr& inpMaterial)
 		{
 			mpMaterial = inpMaterial;
 			
@@ -187,7 +186,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material For Sub Mesh
 		//-----------------------------------------------------------
-		void StaticMeshComponent::SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, u32 indwSubMeshIndex)
+		void StaticMeshComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, u32 indwSubMeshIndex)
 		{
 			if (indwSubMeshIndex < mMaterials.size())
 			{
@@ -202,7 +201,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Material For Sub Mesh
         //-----------------------------------------------------------
-        void StaticMeshComponent::SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, const std::string& instrSubMeshName)
+        void StaticMeshComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, const std::string& instrSubMeshName)
         {
             if (nullptr != mpModel)
             {
@@ -221,7 +220,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Material Of Sub Mesh
 		//-----------------------------------------------------------
-		MaterialSPtr StaticMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
+		MaterialCSPtr StaticMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
 		{
 			if (indwSubMeshIndex < mMaterials.size())
 			{
@@ -229,12 +228,12 @@ namespace ChilliSource
 			}
 			
             CS_LOG_ERROR("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
-			return MaterialSPtr();
+			return nullptr;
 		}
         //-----------------------------------------------------------
         /// Get Material Of Sub Mesh
         //-----------------------------------------------------------
-        MaterialSPtr StaticMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
+        MaterialCSPtr StaticMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
         {
             if (nullptr != mpModel)
             {
@@ -247,7 +246,7 @@ namespace ChilliSource
             }
 			
             CS_LOG_ERROR("Failed to get material from sub mesh " + instrSubMeshName);
-			return MaterialSPtr();
+			return nullptr;
         }
 		//----------------------------------------------------------
 		/// Attach Mesh
@@ -259,21 +258,11 @@ namespace ChilliSource
             // Update OOBB
             mOBBoundingBox.SetSize(mpModel->GetAABB().GetSize());
             mOBBoundingBox.SetOrigin(mpModel->GetAABB().GetOrigin());
-            
-            //ensure we have the correct number of materials.
-            while (mMaterials.size() > inpModel->GetNumSubMeshes() && mMaterials.size() > 1)
-            {
-                mMaterials.pop_back();
-            }
-            while (mMaterials.size() < inpModel->GetNumSubMeshes())
-            {
-                mMaterials.push_back(MaterialSPtr());
-            }
 		}
         //----------------------------------------------------------
         /// Attach Mesh
         //----------------------------------------------------------
-        void StaticMeshComponent::AttachMesh(const MeshCSPtr& inpModel, const MaterialSPtr& inpMaterial)
+        void StaticMeshComponent::AttachMesh(const MeshCSPtr& inpModel, const MaterialCSPtr& inpMaterial)
         {
             mpModel = inpModel;
 			mpMaterial = inpMaterial;
@@ -281,16 +270,6 @@ namespace ChilliSource
             // Update OOBB
             mOBBoundingBox.SetSize(mpModel->GetAABB().GetSize());
             mOBBoundingBox.SetOrigin(mpModel->GetAABB().GetOrigin());
-            
-            //ensure we have the correct number of materials.
-            while (mMaterials.size() > inpModel->GetNumSubMeshes() && mMaterials.size() > 1)
-            {
-                mMaterials.pop_back();
-            }
-            while (mMaterials.size() < inpModel->GetNumSubMeshes())
-            {
-                mMaterials.push_back(MaterialSPtr());
-            }
             
             SetMaterial(inpMaterial);
         }
@@ -309,15 +288,10 @@ namespace ChilliSource
             if(IsTransparent())
             {
                 //Flush the sprite cache to maintain order
-                inpRenderSystem->GetDynamicSpriteBatchPtr()->ForceRender(inpRenderSystem);
+                inpRenderSystem->GetDynamicSpriteBatchPtr()->ForceRender();
             }
             
-            for(u32 i=0; i<mMaterials.size(); ++i)
-            {
-                mMaterials[i]->SetActiveShaderProgram(ineShaderPass);
-            }
-
-			mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials);
+			mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials, ineShaderPass);
 		}
         //----------------------------------------------------------
         /// Render Shadow Map
@@ -326,14 +300,10 @@ namespace ChilliSource
 		{
             if (mspShadowMapMaterial == nullptr)
             {
-                mspShadowMapMaterial = Core::Application::Get()->GetSystem<MaterialFactory>()->CreateStaticDirectionalShadowMap();
+                mspShadowMapMaterial = Core::Application::Get()->GetSystem<MaterialFactory>()->CreateStaticDirectionalShadowMap("_StaticDirShadowMap");
             }
             
-            std::vector<MaterialSPtr> aMaterials;
-            mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
-            aMaterials.push_back(mspShadowMapMaterial);
-            
-			mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), aMaterials);
+			mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {mspShadowMapMaterial}, ShaderPass::k_ambient);
 		}
         //----------------------------------------------------
         //----------------------------------------------------

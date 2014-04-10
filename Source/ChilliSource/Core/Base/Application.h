@@ -192,7 +192,7 @@ namespace ChilliSource
 			///
             /// @return The default material.
             //-----------------------------------------------------
-            const Rendering::MaterialSPtr& GetDefaultMaterial() const;
+            const Rendering::MaterialCSPtr& GetDefaultMaterial() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the state manager.
             ///
@@ -504,7 +504,7 @@ namespace ChilliSource
 			TimeIntervalSecs m_currentAppTime;
             Rendering::FontCSPtr m_defaultFont;
             Rendering::MeshCSPtr m_defaultMesh;
-            Rendering::MaterialSPtr m_defaultMaterial;
+            Rendering::MaterialCSPtr m_defaultMaterial;
 			f32 m_updateInterval;
             f32 m_updateSpeed;
             

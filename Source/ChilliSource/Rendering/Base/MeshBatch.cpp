@@ -214,21 +214,14 @@ namespace ChilliSource
 		}
 		
 		//------------------------------------------------------
-		/// Render
-		///
-		/// Draw the contents of the mesh buffer
-		///
-		/// @param Active render system
 		//------------------------------------------------------
-		void MeshBatch::Render(RenderSystem* inpRenderSystem) const
+		void MeshBatch::Render(RenderSystem* inpRenderSystem, ShaderPass in_shaderPass) const
 		{
-            CS_ASSERT(mpMaterial && mpMaterial->GetActiveShaderProgram(), "Cannot render a mesh batch without a material or active shader.");
-            
 			//If we own the mesh buffer then the batcher won't be calling bind for us.
 			mpMeshBuffer->Bind();
 		
 			//Tell the render system to draw the contents of the buffer
-			inpRenderSystem->ApplyMaterial(*mpMaterial.get());
+			inpRenderSystem->ApplyMaterial(mpMaterial, in_shaderPass);
 #ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
 #endif
@@ -239,7 +232,7 @@ namespace ChilliSource
 		///
 		/// @return Material
 		//------------------------------------------------------
-		const MaterialSPtr& MeshBatch::GetMaterial() const
+		const MaterialCSPtr& MeshBatch::GetMaterial() const
 		{
 			return mpMaterial;
 		}
@@ -248,7 +241,7 @@ namespace ChilliSource
 		///
 		/// @param Material
 		//------------------------------------------------------
-		void MeshBatch::SetMaterial(MaterialSPtr inpMaterial)
+		void MeshBatch::SetMaterial(const MaterialCSPtr& inpMaterial)
 		{
 			mpMaterial = inpMaterial;
 		}

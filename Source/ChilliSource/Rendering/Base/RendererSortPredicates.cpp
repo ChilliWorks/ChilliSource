@@ -39,15 +39,15 @@ namespace ChilliSource
             }
 		}
         
-		bool BackToFrontSortPredicate::SortItem(RenderComponent* p1, RenderComponent* p2)
+		bool BackToFrontSortPredicate::SortItem(const RenderComponent* p1, const RenderComponent* p2) const
         {
 			return p1->GetSortValue() > p2->GetSortValue();
 		}
         
-        bool MaterialSortPredicate::SortItem(RenderComponent* p1, RenderComponent* p2)
+        bool MaterialSortPredicate::SortItem(const RenderComponent* p1, const RenderComponent* p2) const
         {
-            Material * pM1= p1->GetMaterial().get();
-            Material * pM2= p2->GetMaterial().get();
+            const Material* pM1 = p1->GetMaterial().get();
+            const Material* pM2 = p2->GetMaterial().get();
             if(pM1 == pM2)
             {
                 bool bp1Mesh = p1->IsA(StaticMeshComponent::InterfaceID);

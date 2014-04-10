@@ -7,16 +7,17 @@
  *
  */
 
-#include <ChilliSource/Rendering/Material/MaterialManager.h>
-#include <ChilliSource/Rendering/Material/Material.h>
-
-#include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 #include <ChilliSource/Rendering/Particles/ParticleComponentFactory.h>
+
+#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 #include <ChilliSource/Rendering/Particles/ParticleSystem.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace ChilliSource
@@ -31,7 +32,7 @@ namespace ChilliSource
 		/// Default
 		//--------------------------------------------------------
 		ParticleComponentFactory::ParticleComponentFactory(ParticleSystem* inpParticleSystem, ParticleEmitterFactory* inpEmitterFactory, ParticleEffectorFactory* inpEffectorFactory) :
-        mpParticleSystem(inpParticleSystem), mpMaterialMgr(nullptr), mpEmitterFactory(inpEmitterFactory), mpEffectorFactory(inpEffectorFactory)
+        mpParticleSystem(inpParticleSystem), mpEmitterFactory(inpEmitterFactory), mpEffectorFactory(inpEffectorFactory)
 		{
 
 		}
@@ -103,58 +104,32 @@ namespace ChilliSource
 			if(pDocRoot && pDocRoot->ValueStr() == "system") 
             {
                 //---Load the material
-                if(!mpMaterialMgr)
-                {
-                    mpMaterialMgr = static_cast<MaterialManager*>(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Material::InterfaceID));
-                }
-                
-                MaterialSPtr pMaterial;
                 TiXmlElement* pMaterialEl = Core::XMLUtils::FirstChildElementWithName(pDocRoot, "material");
-                if(pMaterialEl)
-                {
-                    pMaterial = mpMaterialMgr->GetMaterialFromFile(Core::StorageLocation::k_package, Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pMaterialEl, "filename", ""));
-                    if(pMaterial)
-                    {
-                        pParticleComp->SetMaterial(pMaterial);
-                    }
-                    else
-                    {
-                        CS_LOG_ERROR("Particle file: " + instrScriptFile + " no material found for file");
-                    }
-                }
-                else
-                {
-                    CS_LOG_ERROR("Particle file: " + instrScriptFile + " no material found"); 
-                }
+                CS_ASSERT(pMaterialEl != nullptr, "Particle file: " + instrScriptFile + " no material found for file");
                 
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                MaterialCSPtr pMaterial = resourcePool->LoadResource<Material>(Core::StorageLocation::k_package, Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pMaterialEl, "filename", ""));
+                CS_ASSERT(pMaterial != nullptr, "Particle file: " + instrScriptFile + " no material found for file");
+
+                pParticleComp->SetMaterial(pMaterial);
+
                 //---Emitters
 				TiXmlElement* pEmittersEl = Core::XMLUtils::FirstChildElementWithName(pDocRoot, "emitters");
-                if(pEmittersEl)
+                CS_ASSERT(pEmittersEl != nullptr, "Particle file: " + instrScriptFile + " no emitters found");
+ 
+                TiXmlElement* pEmitterEl = Core::XMLUtils::FirstChildElementWithName(pEmittersEl, "emitter");
+                while(pEmitterEl)
                 {
-                    TiXmlElement* pEmitterEl = Core::XMLUtils::FirstChildElementWithName(pEmittersEl, "emitter");
-                    while(pEmitterEl)
-                    {
-                        //Get the param dictionary config values
-                        Core::ParamDictionary sParams;
-                        sParams.FromString(pEmitterEl->GetText());
-                        
-                        std::string strShape;
-                        if(sParams.TryGetValue("Shape", strShape))
-                        {
-                            pParticleComp->AddEmitter(mpEmitterFactory->CreateParticleEmitter(strShape, sParams, pMaterial, pParticleComp.get()));
-                        }
-                        else
-                        {
-                            CS_LOG_ERROR("Particle file: " + instrScriptFile + " no emitters shape found");
-                        }
-                        
-                        //Jump to the next emitter
-                        pEmitterEl = Core::XMLUtils::NextSiblingElementWithName(pEmitterEl);
-                    }
-                }
-                else
-                {
-                    CS_LOG_ERROR("Particle file: " + instrScriptFile + " no emitters found");
+                    //Get the param dictionary config values
+                    Core::ParamDictionary sParams;
+                    sParams.FromString(pEmitterEl->GetText());
+                    
+                    std::string strShape = sParams.ValueForKey("Shape");
+                    CS_ASSERT(strShape.empty() == false, "Particle file: " + instrScriptFile + " no emitters shape found");
+                    pParticleComp->AddEmitter(mpEmitterFactory->CreateParticleEmitter(strShape, sParams, pMaterial, pParticleComp.get()));
+                    
+                    //Jump to the next emitter
+                    pEmitterEl = Core::XMLUtils::NextSiblingElementWithName(pEmitterEl);
                 }
                 
                 //---Effectors

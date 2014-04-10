@@ -127,7 +127,7 @@ namespace ChilliSource
 			///
 			/// @param Handle to material
 			//-----------------------------------------------------------
-			virtual void SetMaterial(const MaterialSPtr &inpMaterial);
+			virtual void SetMaterial(const MaterialCSPtr &inpMaterial);
 			//-----------------------------------------------------------
 			/// Get Material
 			///
@@ -135,15 +135,7 @@ namespace ChilliSource
 			///
 			/// @return Handle to material
 			//-----------------------------------------------------------
-			virtual const MaterialSPtr& GetMaterial() const;
-            //-----------------------------------------------------------
-			/// Get Material
-			///
-			/// Get the material that the sprite uses
-			///
-			/// @return Handle to material
-			//-----------------------------------------------------------
-			MaterialSPtr& GetMaterial();
+			virtual const MaterialCSPtr& GetMaterial() const;
 			//-----------------------------------------------------------
 			/// Is Transparent
 			///
@@ -175,7 +167,7 @@ namespace ChilliSource
 			Core::OOBB mOBBoundingBox;
 			Core::Sphere mBoundingSphere;
 
-			MaterialSPtr mpMaterial;
+			MaterialCSPtr mpMaterial;
             
         private:
             

@@ -28,7 +28,7 @@ namespace ChilliSource
 		/// Default
 		//-------------------------------------------------------
 		DynamicSpriteBatch::DynamicSpriteBatch(RenderSystem* inpRenderSystem) 
-        : mudwCurrentRenderSpriteBatch(0), mudwSpriteCommandCounter(0)
+        : m_renderSystem(inpRenderSystem), mudwCurrentRenderSpriteBatch(0), mudwSpriteCommandCounter(0)
 		{
             for(u32 i=0; i<kudwNumBuffers; ++i)
             {
@@ -45,15 +45,14 @@ namespace ChilliSource
         /// mesh buffer can be flushed and the correct material
         /// applied
         ///
-        /// @param Render system
         /// @param Sprite data to batch
         //-------------------------------------------------------
-		void DynamicSpriteBatch::Render(RenderSystem* inpRenderSystem, const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4x4 * inpTransform)
+		void DynamicSpriteBatch::Render(const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4x4 * inpTransform)
 		{
             //If we exceed the capacity of the buffer then we will be forced to flush it
             if(maSpriteCache.size() >= kudwMaxSpritesInDynamicBatch)
             {
-                ForceRender(inpRenderSystem);
+                ForceRender();
             }
             
             //As all the contents of the mesh buffer have the same vertex format we can push sprites into the buffer
@@ -61,7 +60,7 @@ namespace ChilliSource
             //subsets of the buffer based on materials
             if(mpLastMaterial && mpLastMaterial != inpSprite.pMaterial)
             {
-                ForceCommandChange();
+                InsertDrawCommand();
             }
             
             maSpriteCache.push_back(inpSprite);
@@ -74,12 +73,32 @@ namespace ChilliSource
             ++mudwSpriteCommandCounter;
 		}
         //-------------------------------------------------------
-        /// Force Command Change
-        ///
-        /// Force a render command change so that subsequent
-        /// additons to the buffer will not be drawn in this call
         //-------------------------------------------------------
-		void DynamicSpriteBatch::ForceCommandChange()
+        void DynamicSpriteBatch::EnableScissoring(const Core::Vector2& in_pos, const Core::Vector2& in_size)
+        {
+            InsertDrawCommand();
+            
+            maRenderCommands.resize(maRenderCommands.size() + 1);
+            
+            RenderCommand &sLastCommand = maRenderCommands.back();
+            sLastCommand.m_type = CommandType::k_scissorOn;
+            sLastCommand.m_scissorPos = in_pos;
+            sLastCommand.m_scissorSize = in_size;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void DynamicSpriteBatch::DisableScissoring()
+        {
+            InsertDrawCommand();
+            
+            maRenderCommands.resize(maRenderCommands.size() + 1);
+            
+            RenderCommand &sLastCommand = maRenderCommands.back();
+            sLastCommand.m_type = CommandType::k_scissorOff;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+		void DynamicSpriteBatch::InsertDrawCommand()
 		{
             if(!maSpriteCache.empty())
             {
@@ -87,12 +106,13 @@ namespace ChilliSource
                 
                 RenderCommand &sLastCommand = maRenderCommands.back();
                 
-                //Make a copy of the material that this batch will use
-                sLastCommand.m_material = *(mpLastMaterial.get());
+                sLastCommand.m_type = CommandType::k_draw;
+                sLastCommand.m_material = mpLastMaterial;
                 //The offset of the indices for this batch
                 sLastCommand.m_offset = ((maSpriteCache.size() - mudwSpriteCommandCounter) * kudwIndicesPerSprite) * sizeof(s16);
                 //The number of indices in this batch
                 sLastCommand.m_stride = mudwSpriteCommandCounter * kudwIndicesPerSprite;
+                
                 mudwSpriteCommandCounter = 0;
             }
 		}
@@ -104,7 +124,7 @@ namespace ChilliSource
         ///
         /// @param Render system
         //-------------------------------------------------------
-        void DynamicSpriteBatch::ForceRender(RenderSystem* inpRenderSystem)
+        void DynamicSpriteBatch::ForceRender()
         {
             if(!maSpriteCache.empty())
             {
@@ -123,9 +143,9 @@ namespace ChilliSource
                 }
 #endif
                 //Close off the batch
-                ForceCommandChange();
+                InsertDrawCommand();
                 //Copy geometry into the mesh buffer and render
-                BuildAndFlushBatch(inpRenderSystem);
+                BuildAndFlushBatch();
             }
         }
         //----------------------------------------------------------
@@ -135,10 +155,8 @@ namespace ChilliSource
         /// contents. This will then swap the active buffer
         /// so that it can be filled while the other one is 
         /// rendering
-        /// 
-        /// @param Render system
         //----------------------------------------------------------
-		void DynamicSpriteBatch::BuildAndFlushBatch(RenderSystem* inpRenderSystem)
+		void DynamicSpriteBatch::BuildAndFlushBatch()
         {
             if(!maSpriteCache.empty())
             {
@@ -148,10 +166,23 @@ namespace ChilliSource
             }   
             
             //Loop round all the render commands and draw the sections of the buffer with the correct material
-            for(std::vector<RenderCommand>::iterator it = maRenderCommands.begin(); it != maRenderCommands.end(); ++it)
+            for(auto it = maRenderCommands.begin(); it != maRenderCommands.end(); ++it)
             {
-                //Render the last filled buffer
-                mpBatch[mudwCurrentRenderSpriteBatch]->Render(inpRenderSystem, it->m_material, it->m_offset, it->m_stride);
+                switch(it->m_type)
+                {
+                case CommandType::k_draw:
+                    //Render the last filled buffer
+                    mpBatch[mudwCurrentRenderSpriteBatch]->Render(it->m_material, it->m_offset, it->m_stride);
+                    break;
+                case CommandType::k_scissorOn:
+                    m_renderSystem->EnableScissorTesting(true);
+                    m_renderSystem->SetScissorRegion(it->m_scissorPos, it->m_scissorSize);
+                    break;
+                case CommandType::k_scissorOff:
+                    m_renderSystem->EnableScissorTesting(false);
+                    break;
+                }
+
             }
                 
             maRenderCommands.clear();

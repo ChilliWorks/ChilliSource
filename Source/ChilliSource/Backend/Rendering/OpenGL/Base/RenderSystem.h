@@ -135,8 +135,9 @@ namespace ChilliSource
 			/// Apply the material to the next render batch
 			///
 			/// @param Material
+            /// @param Shader pass
 			//----------------------------------------------------------
-			void ApplyMaterial(const Rendering::Material& inMaterial) override;
+			void ApplyMaterial(const Rendering::MaterialCSPtr& inMaterial, Rendering::ShaderPass in_shaderPass) override;
             //----------------------------------------------------------
 			/// Apply Joints
 			///
@@ -290,13 +291,13 @@ namespace ChilliSource
 			/// @param Source function
 			/// @param Destination function
 			//----------------------------------------------------------
-			void SetBlendFunction(Rendering::AlphaBlend ineSrcFunc, Rendering::AlphaBlend ineDstFunc) override;
+			void SetBlendFunction(Rendering::BlendMode ineSrcFunc, Rendering::BlendMode ineDstFunc) override;
             //----------------------------------------------------------
 			/// Set Depth Function
 			///
             /// @param Function to be used for depth testing
 			//----------------------------------------------------------
-            void SetDepthFunction(Rendering::DepthFunction ineFunc) override;
+            void SetDepthFunction(Rendering::DepthTestComparison ineFunc) override;
             //----------------------------------------------------------
             /// Remove Buffer
             ///
@@ -341,19 +342,19 @@ namespace ChilliSource
             ///
             /// @param Material
             //----------------------------------------------------------
-            void ApplyRenderStates(const Rendering::Material& inMaterial);
+            void ApplyRenderStates(const Rendering::Material* inMaterial);
             //----------------------------------------------------------
             /// Get Attribute Locations
             ///
             /// @param Shader
             //----------------------------------------------------------
-            void GetAttributeLocations(const ShaderSPtr& inpShader);
+            void GetAttributeLocations(Shader* inpShader);
             //----------------------------------------------------------
             /// Get Uniform Locations
             ///
-            /// @param Material
+            /// @param Shader
             //----------------------------------------------------------
-            void GetUniformLocations(const Rendering::Material &inMaterial);
+            void GetUniformLocations(Shader* in_shader);
             //----------------------------------------------------------
             /// Apply Textures
             ///
@@ -361,7 +362,7 @@ namespace ChilliSource
             ///
             /// @param Material
             //----------------------------------------------------------
-            void ApplyTextures(const Rendering::Material &inMaterial);
+            void ApplyTextures(const Rendering::Material* inMaterial);
             //----------------------------------------------------------
             /// Apply Lighting Values
             ///
@@ -369,7 +370,7 @@ namespace ChilliSource
             ///
             /// @param Material
             //----------------------------------------------------------
-            void ApplyLightingValues(const Rendering::Material &inMaterial);
+            void ApplyLightingValues(const Rendering::Material* inMaterial);
 			//------------------------------------------------------------
 			/// Enable Vertex Attribute For Semantic (Programmable pipeline)
 			///
@@ -405,18 +406,17 @@ namespace ChilliSource
 			/// Send the custom variables to the given shader
 			///
 			/// @param Material
-			/// @param Shader program
+			/// @param Shader
 			//----------------------------------------------------------
-			void ApplyShaderVariables(const Rendering::Material &inMaterial, GLuint inShaderProg);
+			void ApplyShaderVariables(const Rendering::Material* inMaterial, Shader* in_shader);
             //----------------------------------------------------------
             /// Apply Lighting
             ///
             /// Pass the lighting variables to the shader
             ///
-            /// @param Material
             /// @param Lighting component
             //----------------------------------------------------------
-            void ApplyLighting(const Rendering::Material &inMaterial, Rendering::LightComponent* inpLightComponent);
+            void ApplyLighting(Rendering::LightComponent* inpLightComponent);
 			//----------------------------------------------------------
 			/// Force Refresh Render States
 			///
@@ -497,6 +497,8 @@ namespace ChilliSource
             bool* mpbLastVertexAttribState;
             bool* mpbCurrentVertexAttribState;
             
+            std::vector<std::string> m_textureUniformNames;
+            
 			GLint mGLCurrentShaderProgram;
 			
 			GLint mmatWVPHandle;
@@ -571,10 +573,10 @@ namespace ChilliSource
             
             bool m_hasContextBeenBackedUp;
             
-            Rendering::AlphaBlend mSrcBlendFunc;
-            Rendering::AlphaBlend mDstBlendFunc;
+            Rendering::BlendMode mSrcBlendFunc;
+            Rendering::BlendMode mDstBlendFunc;
             Rendering::CullFace meCurrentCullFace;
-            Rendering::DepthFunction meDepthFunc;
+            Rendering::DepthTestComparison meDepthFunc;
             
 #ifdef CS_TARGETPLATFORM_IOS
             EAGLContext* mContext;

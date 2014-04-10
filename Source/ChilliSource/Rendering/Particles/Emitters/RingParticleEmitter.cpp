@@ -23,7 +23,7 @@ namespace ChilliSource
         ///
         /// @param Param Dictionary
         //-------------------------------------------------------------
-        RingParticleEmitter::RingParticleEmitter(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent) 
+        RingParticleEmitter::RingParticleEmitter(const Core::ParamDictionary& inParams, const MaterialCSPtr &inpMaterial, ParticleComponent* inpComponent)
         :ParticleEmitter(inParams, inpMaterial, inpComponent), mfRadius(1.0f)
         {
             std::string strTemp;
@@ -44,7 +44,7 @@ namespace ChilliSource
         /// @param Owning system
         /// @return Ownership of point emitter
         //-----------------------------------------------------
-        ParticleEmitterUPtr RingParticleEmitter::Create(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent)
+        ParticleEmitterUPtr RingParticleEmitter::Create(const Core::ParamDictionary& inParams, const MaterialCSPtr &inpMaterial, ParticleComponent* inpComponent)
         {
             return ParticleEmitterUPtr(new RingParticleEmitter(inParams, inpMaterial, inpComponent));
         }

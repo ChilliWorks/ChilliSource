@@ -31,7 +31,7 @@ namespace ChilliSource
         {
         public:
             
-            ParticleEmitter(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent);
+            ParticleEmitter(const Core::ParamDictionary& inParams, const MaterialCSPtr &inpMaterial, ParticleComponent* inpComponent);
             virtual ~ParticleEmitter();
             //-----------------------------------------------------
             /// Update
@@ -121,7 +121,7 @@ namespace ChilliSource
             ///
             /// @param Material ptr
             //-----------------------------------------------------
-            void SetMaterial(const MaterialSPtr& inpMaterial);
+            void SetMaterial(const MaterialCSPtr& inpMaterial);
             //-----------------------------------------------------
             /// Set Emission Frequency
             ///
@@ -201,7 +201,7 @@ namespace ChilliSource
             
 			Core::Rectangle msParticleUVs;
 			
-            MaterialSPtr mpMaterial;
+            MaterialCSPtr mpMaterial;
             
             u32 mudwMaxNumParticles;
             u32 mudwMaxNumParticlesPerEmission;

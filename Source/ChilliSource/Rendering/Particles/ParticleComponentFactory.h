@@ -73,7 +73,6 @@ namespace ChilliSource
 		private:
 			
 			ParticleSystem* mpParticleSystem;
-            MaterialManager* mpMaterialMgr;
             
             ParticleEffectorFactory* mpEffectorFactory;
             ParticleEmitterFactory* mpEmitterFactory;

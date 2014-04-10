@@ -20,11 +20,24 @@ namespace ChilliSource
         const u32 kudwNumBuffers = 2;
         const u32 kudwBufferArrayBounds = kudwNumBuffers - 1;
         
+        enum class CommandType
+        {
+            k_draw,
+            k_scissorOn,
+            k_scissorOff
+        };
+        
         struct RenderCommand
         {
-            Material m_material;
+            MaterialCSPtr m_material;
+            
+            Core::Vector2 m_scissorPos;
+            Core::Vector2 m_scissorSize;
+            
             u32 m_offset;
             u32 m_stride;
+            
+            CommandType m_type;
         };
         
 		class DynamicSpriteBatch
@@ -41,29 +54,44 @@ namespace ChilliSource
             /// mesh buffer can be flushed and the correct material
             /// applied
             ///
-            /// @param Render system
             /// @param Sprite data to batch
 			//-------------------------------------------------------
-			void Render(RenderSystem* inpRenderSystem, const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4x4 * inpTransform = nullptr);
+			void Render(const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4x4 * inpTransform = nullptr);
             //-------------------------------------------------------
-            /// Force Command Change
+			/// Enable scissoring with the given region. Any
+            /// subsequent renders to the batcher will be clipped
+            /// based on the region
             ///
-            /// Force a render command change so that subsequent
-            /// additons to the buffer will not be drawn in this call
+            /// @author S Downie
+            ///
+            /// @param Bottom left pos of the scissor rect
+            /// @param Size of the scissor rect
+			//-------------------------------------------------------
+			void EnableScissoring(const Core::Vector2& in_pos, const Core::Vector2& in_size);
             //-------------------------------------------------------
-            void ForceCommandChange();
+			/// Disable scissoring. Any
+            /// subsequent renders to the batcher will not be clipped/
+            ///
+            /// @author S Downie
+			//-------------------------------------------------------
+			void DisableScissoring();
             //-------------------------------------------------------
 			/// Force Render
 			///
             /// Force the currently batched sprites to be rendered
             /// regardless of whether the batch is full
-            ///
-            /// @param Render system
 			//-------------------------------------------------------
-			void ForceRender(RenderSystem* inpRenderSystem);
+			void ForceRender();
 			
 		private:
             
+            //-------------------------------------------------------
+            /// Take the contents of the sprite cache as it stands
+            /// and generate a draw call commmand
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            void InsertDrawCommand();
             //----------------------------------------------------------
             /// Build and Flush Batch
             ///
@@ -71,10 +99,8 @@ namespace ChilliSource
             /// contents. This will then swap the active buffer
             /// so that it can be filled while the other one is 
             /// rendering
-            /// 
-            /// @param Render system
             //----------------------------------------------------------
-            void BuildAndFlushBatch(RenderSystem* inpRenderSystem);
+            void BuildAndFlushBatch();
 			
 		private:
         
@@ -82,10 +108,12 @@ namespace ChilliSource
 			std::vector<SpriteComponent::SpriteData> maSpriteCache;
             std::vector<RenderCommand> maRenderCommands;
             
-            MaterialSPtr mpLastMaterial;
+            MaterialCSPtr mpLastMaterial;
             
             u32 mudwCurrentRenderSpriteBatch;
             u32 mudwSpriteCommandCounter;
+            
+            RenderSystem* m_renderSystem;
 		};
 	}
 }

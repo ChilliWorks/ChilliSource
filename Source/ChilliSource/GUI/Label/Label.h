@@ -268,18 +268,6 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			const Core::UnifiedVector2& GetMaximumSize() const;
             //-------------------------------------------------------
-            /// Enable Text Outline
-            ///
-            /// @param Whether the scaleable text has an outline
-            //-------------------------------------------------------
-            void EnableTextOutline(bool inbEnabled);
-			//-------------------------------------------------------
-			/// Is Text Outline Enabled
-			///
-			/// @return Whether the scaleable text has an outline
-			//-------------------------------------------------------
-			bool IsTextOutlineEnabled() const;
-            //-------------------------------------------------------
             /// Enable Autosizing
             ///
             /// @param Whether the label should grow and shrink
@@ -402,7 +390,6 @@ namespace ChilliSource
             DECLARE_PROPERTY_A(Core::Colour, TextOutlineColour, SetTextOutlineColour, GetTextOutlineColour);
 			DECLARE_PROPERTY_A(bool, Background, EnableBackground, IsBackgroundEnabled);
 			DECLARE_PROPERTY_A(bool, Autosizing, EnableAutosizing, IsAutosizingEnabled);
-            DECLARE_PROPERTY_A(bool, TextOutlined, EnableTextOutline, IsTextOutlineEnabled);
 			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedMaxSize, SetMaximumSize, GetMaximumSize);
 			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedMinSize, SetMinimumSize, GetMinimumSize);
             DECLARE_PROPERTY_A(bool, FlipVertical, EnableVerticalFlip, IsVerticalFlipEnabled);

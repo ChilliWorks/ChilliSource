@@ -348,16 +348,8 @@ namespace ChilliSource
                     f32 fAssetTextScale = ScalableHeight == 0 ? fAssetScale : (ScalableHeight * fAssetScale) / Font->GetLineHeight();
 					f32 fCharacterSpacingScaled =  CharacterSpacing * fAssetScale;
                     
-                    if(TextOutlined)
-                    {
-                        inpCanvas->DrawDistanceOutlinedString(strutf8DisplayString, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, TextColour * GetInheritedOpacity(), TextOutlineColour * GetInheritedOpacity(),
-                                                              vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines);
-                    }
-                    else
-                    {
-                        inpCanvas->DrawDistanceString(strutf8DisplayString, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, TextColour * GetInheritedOpacity(),
-                                                      vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines);
-                    }
+                    inpCanvas->DrawDistanceString(strutf8DisplayString, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, TextColour * GetInheritedOpacity(),
+                                                  vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines);
                 }
                 else
                 {

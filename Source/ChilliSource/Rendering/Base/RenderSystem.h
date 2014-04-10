@@ -15,7 +15,6 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
-#include <ChilliSource/Rendering/Material/MaterialManager.h>
 
 namespace ChilliSource
 {
@@ -70,7 +69,7 @@ namespace ChilliSource
 			virtual void BeginFrame(RenderTarget* inpActiveRenderTarget) = 0;
 			virtual void EndFrame(RenderTarget* inpActiveRenderTarget) = 0;
 
-			virtual void ApplyMaterial(const Material& inMaterial) = 0;
+			virtual void ApplyMaterial(const MaterialCSPtr& inMaterial, ShaderPass in_shaderPass) = 0;
             virtual void ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints) = 0;
 			virtual void ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4x4& inmatInvView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol) = 0;
             virtual void SetLight(LightComponent* inpLightComponent) = 0;
@@ -90,8 +89,8 @@ namespace ChilliSource
             virtual void LockBlendFunction() = 0;
             virtual void UnlockBlendFunction() = 0;
             
-			virtual void SetBlendFunction(AlphaBlend ineSrcFunc, AlphaBlend ineDstFunc) = 0;
-            virtual void SetDepthFunction(DepthFunction ineFunc) = 0;
+			virtual void SetBlendFunction(BlendMode ineSrcFunc, BlendMode ineDstFunc) = 0;
+            virtual void SetDepthFunction(DepthTestComparison ineFunc) = 0;
             virtual void SetCullFace(CullFace ineCullFace) = 0;
             virtual void SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize) = 0;
 			
@@ -132,9 +131,6 @@ namespace ChilliSource
 			
 			//---Render Factories
 			RenderComponentFactory* mpRenderFactory;
-			
-			//---Render resource managers
-			MaterialManager mMaterialManager;
             
             DynamicSpriteBatch* mpSpriteBatcher;
 		};

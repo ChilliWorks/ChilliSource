@@ -38,11 +38,10 @@ namespace ChilliSource
 			///
 			/// Draw the contents of the mesh buffer
 			///
-			/// @param Active render system
             /// @param Offset into mesh buffer
             /// @param Stride within mesh buffer
 			//------------------------------------------------------
-			void Render(RenderSystem* inpRenderSystem, const Material& inMaterial, u32 inudwOffset, u32 inudwStride) const;
+			void Render(const MaterialCSPtr& inMaterial, u32 inudwOffset, u32 inudwStride) const;
             //------------------------------------------------------
             /// Render
             ///
@@ -50,7 +49,7 @@ namespace ChilliSource
             ///
             /// @param Active render system
             //------------------------------------------------------
-            void Render(RenderSystem* inpRenderSystem, const Material& inMaterial) const;
+            void Render(const MaterialCSPtr& inMaterial) const;
 			//------------------------------------------------------
 			/// Get Tag
 			///
@@ -100,6 +99,8 @@ namespace ChilliSource
 			
 			//---Render Buffer
 			MeshBuffer* mpSpriteBuffer;
+            
+            RenderSystem* m_renderSystem;
 		};
 	}
 }

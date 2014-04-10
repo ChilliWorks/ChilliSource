@@ -81,7 +81,7 @@ namespace ChilliSource
 			///
 			/// @param Handle to material
 			//-----------------------------------------------------------
-			void SetMaterial(const MaterialSPtr& inpMaterial) override;
+			void SetMaterial(const MaterialCSPtr& inpMaterial) override;
 			//-----------------------------------------------------------
 			/// Set Material For Sub Mesh
 			///
@@ -90,7 +90,7 @@ namespace ChilliSource
 			/// @param Handle to material
 			/// @Param Index to the submesh
 			//-----------------------------------------------------------
-			void SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, u32 indwSubMeshIndex);
+			void SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, u32 indwSubMeshIndex);
             //-----------------------------------------------------------
 			/// Set Material For Sub Mesh
 			///
@@ -99,7 +99,7 @@ namespace ChilliSource
 			/// @param Handle to material
 			/// @param The name of the submesh.
 			//-----------------------------------------------------------
-			void SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, const std::string& instrSubMeshName);
+			void SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, const std::string& instrSubMeshName);
 			//-----------------------------------------------------------
 			/// Get Material Of Sub Mesh
 			///
@@ -108,7 +108,7 @@ namespace ChilliSource
 			/// @param Index to the sub mesh
 			/// @return Handle to material
 			//-----------------------------------------------------------
-			MaterialSPtr GetMaterialOfSubMesh(u32 indwSubMeshIndex) const;
+			MaterialCSPtr GetMaterialOfSubMesh(u32 indwSubMeshIndex) const;
             //-----------------------------------------------------------
 			/// Get Material Of Sub Mesh
 			///
@@ -117,7 +117,7 @@ namespace ChilliSource
 			/// @param The name of the submesh.
 			/// @return Handle to material
 			//-----------------------------------------------------------
-			MaterialSPtr GetMaterialOfSubMesh(const std::string& instrSubMeshName) const;
+			MaterialCSPtr GetMaterialOfSubMesh(const std::string& instrSubMeshName) const;
 			//----------------------------------------------------------
 			/// Attach Mesh
 			///
@@ -132,7 +132,7 @@ namespace ChilliSource
             /// material
 			/// @param Mesh object
 			//----------------------------------------------------------
-            void AttachMesh(const MeshCSPtr& inpModel, const MaterialSPtr& inpMaterial);
+            void AttachMesh(const MeshCSPtr& inpModel, const MaterialCSPtr& inpMaterial);
             //----------------------------------------------------------
             /// Get Mesh
             ///
@@ -185,7 +185,7 @@ namespace ChilliSource
 		private:
 			
 			MeshCSPtr mpModel;
-			std::vector<MaterialSPtr> mMaterials;
+			std::vector<MaterialCSPtr> mMaterials;
             
             Core::ConnectionUPtr m_transformChangedConnection;
             
@@ -193,7 +193,7 @@ namespace ChilliSource
             bool mbAABBValid;
             bool mbOOBBValid;
             
-            static MaterialSPtr mspShadowMapMaterial;
+            static MaterialCSPtr mspShadowMapMaterial;
 		};
 	}
 }

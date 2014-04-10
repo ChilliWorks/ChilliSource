@@ -9,21 +9,21 @@
 #include <ChilliSource/Rendering/Material/MaterialProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
-#include <ChilliSource/Rendering/Shader/ShaderManager.h>
-#include <ChilliSource/Rendering/Shader/Shader.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
-#include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Texture/CubemapManager.h>
-#include <ChilliSource/Rendering/Texture/Cubemap.h>
-#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Base/BlendMode.h>
+#include <ChilliSource/Rendering/Base/CullFace.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
-
+#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Shader/Shader.h>
+#include <ChilliSource/Rendering/Shader/ShaderManager.h>
+#include <ChilliSource/Rendering/Texture/Cubemap.h>
+#include <ChilliSource/Rendering/Texture/CubemapManager.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
 
 namespace ChilliSource
 {
@@ -36,23 +36,23 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param String describing function
+            /// @param String describing mode
             ///
-            /// @return Blend type
+            /// @return Blend mode
             //----------------------------------------------------------------------------
-            AlphaBlend ConvertStringToBlendFunction(const std::string& in_blendFunc)
+            BlendMode ConvertStringToBlendMode(const std::string& in_blendMode)
             {
-                if(in_blendFunc == "Zero") return AlphaBlend::k_zero;
-                if(in_blendFunc == "One") return AlphaBlend::k_one;
-                if(in_blendFunc == "SourceColour") return AlphaBlend::k_sourceCol;
-                if(in_blendFunc == "OneMinusSourceColour") return AlphaBlend::k_oneMinusSourceCol;
-                if(in_blendFunc == "SourceAlpha") return AlphaBlend::k_sourceAlpha;
-                if(in_blendFunc == "OneMinusSourceAlpha") return AlphaBlend::k_oneMinusSourceAlpha;
-                if(in_blendFunc == "DestAlpha")	return AlphaBlend::k_destAlpha;
-                if(in_blendFunc == "OneMinusDestAlpha") return AlphaBlend::k_oneMinusDestAlpha;
+                if(in_blendMode == "Zero") return BlendMode::k_zero;
+                if(in_blendMode == "One") return BlendMode::k_one;
+                if(in_blendMode == "SourceColour") return BlendMode::k_sourceCol;
+                if(in_blendMode == "OneMinusSourceColour") return BlendMode::k_oneMinusSourceCol;
+                if(in_blendMode == "SourceAlpha") return BlendMode::k_sourceAlpha;
+                if(in_blendMode == "OneMinusSourceAlpha") return BlendMode::k_oneMinusSourceAlpha;
+                if(in_blendMode == "DestAlpha")	return BlendMode::k_destAlpha;
+                if(in_blendMode == "OneMinusDestAlpha") return BlendMode::k_oneMinusDestAlpha;
                 
                 //No blend function found
-                return AlphaBlend::k_unknown;
+                return BlendMode::k_one;
             }
             //----------------------------------------------------------------------------
             /// @author S Downie
@@ -237,13 +237,13 @@ namespace ChilliSource
                     TiXmlElement* transparentStateEl = Core::XMLUtils::FirstChildElementWithName(renderStatesEl, "Transparency");
                     if(transparentStateEl)
                     {
-                        out_material->SetTransparent(Core::XMLUtils::GetAttributeValueOrDefault<bool>(transparentStateEl, "enabled", false));
+                        out_material->SetTransparencyEnabled(Core::XMLUtils::GetAttributeValueOrDefault<bool>(transparentStateEl, "enabled", false));
                     }
                     //---Culling
                     TiXmlElement* cullingStateEl = Core::XMLUtils::FirstChildElementWithName(renderStatesEl, "Culling");
                     if(cullingStateEl)
                     {
-                        out_material->SetCullingEnabled(Core::XMLUtils::GetAttributeValueOrDefault<bool>(cullingStateEl, "enabled", true));
+                        out_material->SetFaceCullingEnabled(Core::XMLUtils::GetAttributeValueOrDefault<bool>(cullingStateEl, "enabled", true));
                     }
                 }
             }
@@ -261,14 +261,12 @@ namespace ChilliSource
                 if(blendFuncEl)
                 {
                     const std::string srcFuncString = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(blendFuncEl, "src", "One");
-                    AlphaBlend srcFunc = ConvertStringToBlendFunction(srcFuncString);
+                    BlendMode srcFunc = ConvertStringToBlendMode(srcFuncString);
                     
                     const std::string dstFuncString = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(blendFuncEl, "dst", "One");
-                    AlphaBlend dstFunc = ConvertStringToBlendFunction(dstFuncString);
+                    BlendMode dstFunc = ConvertStringToBlendMode(dstFuncString);
                     
-                    CS_ASSERT(srcFunc != AlphaBlend::k_unknown && dstFunc != AlphaBlend::k_unknown, "Unknown blend function in material");
-       
-                    out_material->SetBlendFunction(srcFunc, dstFunc);
+                    out_material->SetBlendModes(srcFunc, dstFunc);
                 }
             }
             //----------------------------------------------------------------------------
@@ -390,31 +388,27 @@ namespace ChilliSource
                         //Add the variable to the material
                         if(strType == "Float")
                         {
-                            out_material->mMapFloatShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<f32>(shaderVarEl, "value", 0.0f)));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<f32>(shaderVarEl, "value", 0.0f));
                         }
                         else if(strType == "Vec2")
                         {
-                            out_material->mMapVec2ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector2>(shaderVarEl, "value", Core::Vector2::ZERO)));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector2>(shaderVarEl, "value", Core::Vector2::ZERO));
                         }
                         else if(strType == "Vec3")
                         {
-                            out_material->mMapVec3ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector3>(shaderVarEl, "value", Core::Vector3::ZERO)));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector3>(shaderVarEl, "value", Core::Vector3::ZERO));
                         }
                         else if(strType == "Vec4")
                         {
-                            out_material->mMapVec4ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector4>(shaderVarEl, "value", Core::Vector4::ZERO)));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector4>(shaderVarEl, "value", Core::Vector4::ZERO));
                         }
                         else if(strType == "Colour")
                         {
-                            out_material->mMapColShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(shaderVarEl, "value", Core::Colour::k_white)));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(shaderVarEl, "value", Core::Colour::k_white));
                         }
                         else if(strType == "Matrix")
                         {
-                            out_material->mMapMat4ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Matrix4x4>(shaderVarEl, "value", Core::Matrix4x4::IDENTITY)));
-                        }
-                        else if(strType == "MatrixArray")
-                        {
-                            out_material->mMapMat4ArrayShaderVars.insert(std::make_pair(strName, std::vector<Core::Matrix4x4>()));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Matrix4x4>(shaderVarEl, "value", Core::Matrix4x4::IDENTITY));
                         }
                         //Move on to the next variable
                         shaderVarEl =  Core::XMLUtils::NextSiblingElementWithName(shaderVarEl);
@@ -489,33 +483,32 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool MaterialProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == MaterialProvider::InterfaceID;
+			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == MaterialProvider::InterfaceID;
+		}
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        Core::InterfaceIDType MaterialProvider::GetResourceType() const
+        {
+            return Material::InterfaceID;
+        }
+		//----------------------------------------------------------------------------
+		//----------------------------------------------------------------------------
+		bool MaterialProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
+		{
+			return in_extension == k_materialExtension;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool MaterialProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
+		void MaterialProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
-			return (in_interfaceId == Material::InterfaceID);
-		}
-		//----------------------------------------------------------------------------
-		//----------------------------------------------------------------------------
-		bool MaterialProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
-		{
-			return (in_extension == k_materialExtension);
-		}
-		//----------------------------------------------------------------------------
-		//----------------------------------------------------------------------------
-		bool MaterialProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
-		{
-            out_resource->SetLoaded(false);
-            
             std::vector<ShaderDesc> shaderFiles;
             std::vector<TextureDesc> textureFiles;
             std::vector<TextureDesc> cubemapFiles;
             
-            if(BuildMaterialFromFile(in_location, in_filePath, shaderFiles, textureFiles, cubemapFiles, out_resource) == false)
+            if(BuildMaterialFromFile(in_location, in_filePath, shaderFiles, textureFiles, cubemapFiles, (Material*)out_resource.get()) == false)
             {
-                return false;
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                return;
             }
             
             MaterialSPtr material = std::static_pointer_cast<Material>(out_resource);
@@ -527,9 +520,12 @@ namespace ChilliSource
                 if(shaderFiles[i].m_relativePath.empty() == false)
                 {
                     ShaderSPtr shader = pShaderManager->GetShaderFromFile(shaderFiles[i].m_location, shaderFiles[i].m_relativePath);
-                    CS_ASSERT(shader != nullptr, "Material cannot load shader with path: " + shaderFiles[i].m_relativePath);
-                    
-                    material->SetShaderProgram(shaderFiles[i].m_pass, shader);
+                    if(shader == nullptr)
+                    {
+                        out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                        return;
+                    }
+                    material->SetShader(shaderFiles[i].m_pass, shader);
                 }
             }
             
@@ -538,7 +534,11 @@ namespace ChilliSource
             for(u32 i=0; i<textureFiles.size(); ++i)
             {
                 TextureSPtr texture = std::static_pointer_cast<Texture>(textureManager->GetResourceFromFile(textureFiles[i].m_location, textureFiles[i].m_filePath));
-                CS_ASSERT(texture != nullptr, "Material cannot load texture with path: " + textureFiles[i].m_filePath);
+                if(texture == nullptr)
+                {
+                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                    return;
+                }
                 
                 material->AddTexture(texture);
                 if(textureFiles[i].m_shouldMipMap == true)
@@ -553,7 +553,11 @@ namespace ChilliSource
             for(u32 i=0; i<cubemapFiles.size(); ++i)
             {
                 CubemapSPtr cubemap = std::static_pointer_cast<Cubemap>(pCubemapManager->GetResourceFromFile(cubemapFiles[i].m_location, cubemapFiles[i].m_filePath));
-                CS_ASSERT(cubemap != nullptr, "Material cannot load cubemap with path: " + cubemapFiles[i].m_filePath);
+                if(cubemap == nullptr)
+                {
+                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                    return;
+                }
                 
                 material->SetCubemap(cubemap);
                 if(cubemapFiles[i].m_shouldMipMap == true)
@@ -562,38 +566,31 @@ namespace ChilliSource
                 }
             }
             
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            
-            material->SetLoaded(true);
-                
-            return true;
+            out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool MaterialProvider::AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
+		void MaterialProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
 		{
-            out_resource->SetLoaded(false);
-            
-			//Start the material building task.
-			Core::Task<Core::StorageLocation, const std::string&, Core::ResourceOldSPtr&> BuildMaterialTask(this, &MaterialProvider::BuildMaterialTask, in_location, in_filePath, out_resource);
+			Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, Core::ResourceSPtr&>
+            BuildMaterialTask(this, &MaterialProvider::BuildMaterialTask, in_location, in_filePath, in_delegate, out_resource);
 			Core::TaskScheduler::ScheduleTask(BuildMaterialTask);
-			
-			return true;
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void MaterialProvider::BuildMaterialTask(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource)
+		void MaterialProvider::BuildMaterialTask(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
 		{
             //TODO: This can get into a deadlock situation if we block and wait on the texture etc. This will need to be changed
             //once we have callbacks
-            
             
 			//build the material
             std::vector<ShaderDesc> shaderFiles;
             std::vector<TextureDesc> textureFiles;
             std::vector<TextureDesc> cubemapFiles;
-			if(BuildMaterialFromFile(in_location, in_filePath, shaderFiles, textureFiles, cubemapFiles, out_resource) == false)
+			if(BuildMaterialFromFile(in_location, in_filePath, shaderFiles, textureFiles, cubemapFiles, (Material*)out_resource.get()) == false)
             {
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                in_delegate(out_resource);
                 return;
             }
             
@@ -604,9 +601,7 @@ namespace ChilliSource
             for(u32 i=0; i<shaderFiles.size(); ++i)
             {
                 ShaderSPtr shader = pShaderManager->AsyncGetShaderFromFile(shaderFiles[i].m_location, shaderFiles[i].m_relativePath);
-                CS_ASSERT(shader != nullptr, "Material cannot load shader with path: " + shaderFiles[i].m_relativePath);
-                
-                material->SetShaderProgram(shaderFiles[i].m_pass, shader);
+                material->SetShader(shaderFiles[i].m_pass, shader);
                 shader->WaitTilLoaded();
             }
             
@@ -615,8 +610,6 @@ namespace ChilliSource
             for(u32 i=0; i<textureFiles.size(); ++i)
             {
                 TextureSPtr texture = std::static_pointer_cast<Texture>(textureManager->AsyncGetResourceFromFile(textureFiles[i].m_location, textureFiles[i].m_filePath));
-                CS_ASSERT(texture != nullptr, "Material cannot load texture with path: " + textureFiles[i].m_filePath);
-                
                 if(textureFiles[i].m_shouldMipMap == true)
                 {
                     //TODO: Generate mipmaps
@@ -632,8 +625,6 @@ namespace ChilliSource
             for(u32 i=0; i<cubemapFiles.size(); ++i)
             {
                 CubemapSPtr cubemap = std::static_pointer_cast<Cubemap>(cubemapManager->AsyncGetResourceFromFile(cubemapFiles[i].m_location, cubemapFiles[i].m_filePath));
-                CS_ASSERT(cubemap != nullptr, "Material cannot load cubemap with path: " + cubemapFiles[i].m_filePath);
-                
                 if(cubemapFiles[i].m_shouldMipMap == true)
                 {
                     //TODO: Generate mipmaps
@@ -643,9 +634,8 @@ namespace ChilliSource
                 cubemap->WaitTilLoaded();
             }
             
-            material->SetActiveShaderProgram(ShaderPass::k_ambient);
-            
-            out_resource->SetLoaded(true);
+            out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+            in_delegate(out_resource);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -653,10 +643,8 @@ namespace ChilliSource
                                                     std::vector<ShaderDesc>& out_shaderFiles,
                                                     std::vector<TextureDesc>& out_textureFiles,
                                                     std::vector<TextureDesc>& out_cubemapFiles,
-                                                    Core::ResourceOldSPtr& out_resource)
+                                                    Material* out_material)
 		{
-			Material* material = (Material*)(out_resource.get());
-			
 			//Load the XML file
 			TiXmlDocument document(in_filePath);
 			document.LoadFile(in_location);
@@ -671,11 +659,11 @@ namespace ChilliSource
             std::string materialType = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(rootElement, "type", "Static");
             GetShaderFilesForMaterialType(materialType, m_renderCapabilities, out_shaderFiles);
 
-            ParseRenderStates(rootElement, material);
-            ParseAlphaBlendFunction(rootElement, material);
-            ParseCullFunction(rootElement, material);
-            ParseSurface(rootElement, material);
-            ParseShaders(rootElement, out_shaderFiles, material);
+            ParseRenderStates(rootElement, out_material);
+            ParseAlphaBlendFunction(rootElement, out_material);
+            ParseCullFunction(rootElement, out_material);
+            ParseSurface(rootElement, out_material);
+            ParseShaders(rootElement, out_shaderFiles, out_material);
             ParseTextures(rootElement, out_textureFiles);
             ParseCubemaps(rootElement, out_cubemapFiles);
             

@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_RENDERING_MATERIAL_MATERIALPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
 
 namespace ChilliSource
 {
@@ -21,7 +21,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------------------------
-		class MaterialProvider final : public Core::ResourceProviderOld
+		class MaterialProvider final : public Core::ResourceProvider
 		{
 		public:
             
@@ -72,11 +72,9 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			/// @author S Downie
 			///
-			/// @param Type to compare
-            ///
-			/// @return Whether the object can create a resource of given type
+			/// @return The resource type this provider creates
 			//----------------------------------------------------------------------------
-			bool CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const override;
+			Core::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -84,7 +82,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the object can create a resource with the given extension
 			//----------------------------------------------------------------------------
-			bool CanCreateResourceFromFileWithExtension(const std::string& in_extension) const override;
+			bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
 			
 		private:
             
@@ -97,48 +95,48 @@ namespace ChilliSource
             //-------------------------------------------------------
             MaterialProvider(RenderCapabilities* in_renderCapabilities);
 			//----------------------------------------------------------------------------
-            /// Load the material resource from the given material file
+            /// Load the material resource from the given material file. Check the
+            /// resource load state for success or failure.
             ///
 			/// @author S Downie
 			///
             /// @param The storage location to load from
-			/// @param Filename
+			/// @param File path
 			/// @param [Out] Resource object
-            ///
-			/// @return Whether the resource was loaded 
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
             /// Load the material resource from the given material file on a background
-            /// thread
+            /// thread. Calls the delegate on completion. Check the
+            /// resource load state for success or failure.
             ///
 			/// @author S Downie
 			///
             /// @param The storage location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Completion delegate
 			/// @param [Out] Resource object
-            ///
-			/// @return Whether the resource was scheduled for load
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// Build Material Task
 			///
             /// @param The storage location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Completion delegate
             ///
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void BuildMaterialTask(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceOldSPtr& out_resource);
+			void BuildMaterialTask(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource);
 			//----------------------------------------------------------------------------
 			/// Build Material From File
 			///
             /// @param The storage location to load from
-			/// @param Filename
+			/// @param File path
             /// @param [Out] Shaders to load
             /// @param [Out] Textures to load
             /// @param [Out] Cubemaps to load
-			/// @param [Out] Resource object
+			/// @param [Out] Material resource
             ///
 			/// @return Whether the resource was loaded 
 			//----------------------------------------------------------------------------
@@ -146,7 +144,7 @@ namespace ChilliSource
                                        std::vector<ShaderDesc>& out_shaderFiles,
                                        std::vector<TextureDesc>& out_textureFiles,
                                        std::vector<TextureDesc>& out_cubemapFiles,
-                                       Core::ResourceOldSPtr& out_resource);
+                                       Material* out_material);
 
         private:
 

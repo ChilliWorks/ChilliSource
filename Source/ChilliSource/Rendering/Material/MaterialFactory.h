@@ -53,79 +53,84 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
             /// @param Empty new material
             //---------------------------------------------------
-            MaterialUPtr CreateCustom() const;
+            MaterialSPtr CreateCustom(const std::string& in_uniqueId) const;
             //---------------------------------------------------
             /// Create a material to render UI
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateGUI() const;
+            MaterialSPtr CreateGUI(const std::string& in_uniqueId) const;
             //---------------------------------------------------
             /// Create a material to render UI distance fonts
             ///
             /// @author S Downie
             ///
-            /// @return New material
-            //---------------------------------------------------
-            MaterialUPtr CreateGUIDistanceFont() const;
-            //---------------------------------------------------
-            /// Create a material to render UI distance fonts with
-            /// outlines
-            ///
-            /// @author S Downie
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateGUIDistanceFontOutlined() const;
+            MaterialSPtr CreateGUIDistanceFont(const std::string& in_uniqueId) const;
             //---------------------------------------------------
             /// Create a material for rendering sprites. Sprites
             /// have no lighting and vertex colours
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
             /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateSprite(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateSprite(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
             /// that use no lighting.
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
             /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStatic(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateStatic(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
             /// that use Ambient lighting.
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
             /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStaticAmbient(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateStaticAmbient(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
             /// that use blinn-phong per pixel lighting.
             ///
             /// @author S Downie
             ///
-            /// @param Texture file location
-            /// @param Texture file path
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
+            /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStaticBlinn(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateStaticBlinn(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
             /// that use blinn-phong per pixel lighting and recieved
@@ -133,23 +138,26 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Texture file location
-            /// @param Texture file path
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
+            /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStaticBlinnShadowed(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateStaticBlinnShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
             /// that use blinn-phong per vertex lighting.
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
             /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStaticBlinnPerVertex(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateStaticBlinnPerVertex(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
             /// that use blinn-phong per vertex lighting and
@@ -157,54 +165,64 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
             /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStaticBlinnPerVertexShadowed(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateStaticBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Create a material for rendering a static model
             /// to a directional shadow map.
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateStaticDirectionalShadowMap() const;
+            MaterialSPtr CreateStaticDirectionalShadowMap(const std::string& in_uniqueId) const;
             //---------------------------------------------------
             /// Creates a new material for animated textured models
             /// that use no lighting.
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
             /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimated(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateAnimated(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for animated textured models
             /// that use ambient lighting.
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
             /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimatedAmbient(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateAnimatedAmbient(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for animated textured models
             /// that use blinn-phong per pixel lighting.
             ///
             /// @author S Downie
             ///
-            /// @param Texture file location
-            /// @param Texture file path
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
+            /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimatedBlinn(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateAnimatedBlinn(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for animated textured models
             /// that use blinn-phong per pixel lighting and receives
@@ -212,23 +230,26 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Texture file location
-            /// @param Texture file path
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
+            /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimatedBlinnShadowed(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateAnimatedBlinnShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for animated textured models
             /// that use blinn-phong per vertex lighting.
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
             /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimatedBlinnPerVertex(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateAnimatedBlinnPerVertex(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for animated textured models
             /// that use blinn-phong per vertex lighting and
@@ -236,20 +257,25 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
             /// @param Texture
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimatedBlinnPerVertexShadowed(const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateAnimatedBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
             //---------------------------------------------------
             /// Create a material for rendering an animated model
             /// to a directional shadow map.
             ///
             /// @author S Downie
             ///
+            /// @param Unique Id to identify in resource pool
+            /// "_" prefix is reserved for engine resources
+            ///
             /// @return New material
             //---------------------------------------------------
-            MaterialUPtr CreateAnimatedDirectionalShadowMap() const;
+            MaterialSPtr CreateAnimatedDirectionalShadowMap(const std::string& in_uniqueId) const;
             
         private:
             

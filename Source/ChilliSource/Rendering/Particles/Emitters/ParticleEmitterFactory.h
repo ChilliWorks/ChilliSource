@@ -22,7 +22,7 @@ namespace ChilliSource
         class ParticleEmitterFactory
         {
         public:
-            typedef std::function<ParticleEmitterUPtr(const Core::ParamDictionary&, const MaterialSPtr&, ParticleComponent*)> EmitterCreateDelegate;
+            typedef std::function<ParticleEmitterUPtr(const Core::ParamDictionary&, const MaterialCSPtr&, ParticleComponent*)> EmitterCreateDelegate;
 
             //------------------------------------------------------------------
             /// Registers a new emitter factory method with the given key
@@ -51,7 +51,7 @@ namespace ChilliSource
             /// @return Ownership of particle emitter of that type
             //-------------------------------------------------------------------
             ParticleEmitterUPtr CreateParticleEmitter(const std::string& instrType, const Core::ParamDictionary& insParams,
-                                                      const MaterialSPtr& inpMaterial, ParticleComponent* inpOwner) const;
+                                                      const MaterialCSPtr& inpMaterial, ParticleComponent* inpOwner) const;
             
         private:
             

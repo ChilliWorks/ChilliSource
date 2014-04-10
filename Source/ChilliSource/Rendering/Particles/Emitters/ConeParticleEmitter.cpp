@@ -19,7 +19,7 @@ namespace ChilliSource
         ///
         /// @param Param Dictionary
         //-------------------------------------------------------------
-        ConeParticleEmitter::ConeParticleEmitter(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent)
+        ConeParticleEmitter::ConeParticleEmitter(const Core::ParamDictionary& inParams, const MaterialCSPtr &inpMaterial, ParticleComponent* inpComponent)
         :ParticleEmitter(inParams, inpMaterial, inpComponent)
         {
             std::string strTemp;
@@ -45,7 +45,7 @@ namespace ChilliSource
         /// @param Owning system
         /// @return Ownership of point emitter
         //-----------------------------------------------------
-        ParticleEmitterUPtr ConeParticleEmitter::Create(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent)
+        ParticleEmitterUPtr ConeParticleEmitter::Create(const Core::ParamDictionary& inParams, const MaterialCSPtr &inpMaterial, ParticleComponent* inpComponent)
         {
             return ParticleEmitterUPtr(new ConeParticleEmitter(inParams, inpMaterial, inpComponent));
         }

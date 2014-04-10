@@ -8,24 +8,23 @@
  */
 
 #include <ChilliSource/Rendering/Base/Renderer.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
-
-#include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Base/RenderComponent.h>
-#include <ChilliSource/Rendering/Camera/CameraComponent.h>
-#include <ChilliSource/Rendering/Lighting/LightComponent.h>
-#include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
-#include <ChilliSource/Rendering/Base/RenderTarget.h>
-#include <ChilliSource/Rendering/Base/RendererSortPredicates.h>
-#include <ChilliSource/Rendering/Base/CullingPredicates.h>
-#include <ChilliSource/Rendering/Material/MaterialFactory.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 #include <ChilliSource/GUI/Base/Window.h>
+#include <ChilliSource/Rendering/Base/BlendMode.h>
+#include <ChilliSource/Rendering/Base/CullingPredicates.h>
+#include <ChilliSource/Rendering/Base/RenderComponent.h>
+#include <ChilliSource/Rendering/Base/RenderTarget.h>
+#include <ChilliSource/Rendering/Base/RendererSortPredicates.h>
+#include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Camera/CameraComponent.h>
+#include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
+#include <ChilliSource/Rendering/Material/MaterialFactory.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
 #include <algorithm>
 
@@ -174,7 +173,7 @@ namespace ChilliSource
                 //Perform the diffuse pass
                 if(aDirLightCache.empty() == false || aPointLightCache.empty() == false)
                 {
-                    mpRenderSystem->SetBlendFunction(AlphaBlend::k_one, AlphaBlend::k_one);
+                    mpRenderSystem->SetBlendFunction(BlendMode::k_one, BlendMode::k_one);
                     mpRenderSystem->LockBlendFunction();
                     
                     mpRenderSystem->EnableDepthWriting(false);
@@ -369,7 +368,7 @@ namespace ChilliSource
             }
 			
             //The final dynamic sprite batch needs to be flushed
-            mpRenderSystem->GetDynamicSpriteBatchPtr()->ForceRender(mpRenderSystem);
+            mpRenderSystem->GetDynamicSpriteBatchPtr()->ForceRender();
         }
         //----------------------------------------------------------
         /// Render UI

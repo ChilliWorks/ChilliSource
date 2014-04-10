@@ -38,6 +38,10 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(RenderSystem);
         CS_FORWARDDECLARE_CLASS(RenderTarget);
         CS_FORWARDDECLARE_CLASS(VertexDeclaration);
+        enum class ShaderPass;
+        enum class BlendMode;
+        enum class CullFace;
+        enum class DepthTestComparison;
         //------------------------------------------------------------
         /// Camera
         //------------------------------------------------------------
@@ -60,11 +64,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(Material);
         CS_FORWARDDECLARE_CLASS(MaterialFactory);
         CS_FORWARDDECLARE_CLASS(MaterialProvider);
-        CS_FORWARDDECLARE_CLASS(MaterialManager);
-        enum class ShaderPass;
-        enum class AlphaBlend;
-        enum class CullFace;
-        enum class DepthFunction;
         //------------------------------------------------------------
         /// Model
         //------------------------------------------------------------

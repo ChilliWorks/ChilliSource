@@ -59,7 +59,7 @@ namespace ChilliSource
             {
                 SpriteVertex sVerts[kudwVertsPerSprite];
                 
-                MaterialSPtr pMaterial;
+                MaterialCSPtr pMaterial;
             };
 			
 			CS_DECLARE_NAMEDTYPE(SpriteComponent);

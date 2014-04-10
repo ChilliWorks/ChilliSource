@@ -54,21 +54,22 @@ namespace ChilliSource
 			///
 			/// @param Material
 			//------------------------------------------------------
-			void SetMaterial(MaterialSPtr inpMaterial);
+			void SetMaterial(const MaterialCSPtr& inpMaterial);
 			//------------------------------------------------------
 			/// Get Material
 			///
 			/// @return Material
 			//------------------------------------------------------
-			const MaterialSPtr& GetMaterial() const;
+			const MaterialCSPtr& GetMaterial() const;
 			//------------------------------------------------------
 			/// Render
 			///
 			/// Draw the contents of the mesh buffer
 			///
 			/// @param Active render system
+            /// @param Shader pass
 			//------------------------------------------------------
-			void Render(RenderSystem* inpRenderSystem) const;
+			void Render(RenderSystem* inpRenderSystem, ShaderPass in_shaderPass) const;
 			//------------------------------------------------------
 			/// Get Tag
 			///
@@ -106,7 +107,7 @@ namespace ChilliSource
 			u32 mudwIndexCount;
 			
 			//The shared material
-			MaterialSPtr mpMaterial;
+			MaterialCSPtr mpMaterial;
 			
 			//---Render Buffer
 			MeshBuffer* mpMeshBuffer;

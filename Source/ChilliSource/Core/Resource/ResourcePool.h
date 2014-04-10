@@ -232,7 +232,7 @@ namespace ChilliSource
                 
                 PoolDesc desc;
                 desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
-                m_descriptors.insert(std::make_pair(TResourceType::InterfaceIDType, desc));
+                m_descriptors.insert(std::make_pair(TResourceType::InterfaceID, desc));
                 return resource;
             }
             
@@ -259,7 +259,7 @@ namespace ChilliSource
                 return nullptr;
             }
             
-            PoolDesc& desc(itDescriptor->second);
+            const PoolDesc& desc(itDescriptor->second);
             
             //Check descriptor and see if this resource already exists
             ResourceId resourceId = GenerateResourceId(in_uniqueId);
