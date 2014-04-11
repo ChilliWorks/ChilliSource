@@ -33,7 +33,8 @@
 #include <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
-#include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
+#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
+#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoOverlayView.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
@@ -98,7 +99,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoDelegate& in_delegate, bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
+        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoCompleteDelegate& in_delegate, bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
         {
             @autoreleasepool
             {
@@ -128,7 +129,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, const VideoDelegate& in_delegate,
+        void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, const VideoCompleteDelegate& in_delegate,
                                                      bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
         {
             m_subtitles = in_subtitles;
@@ -173,7 +174,6 @@ namespace ChilliSource
         void VideoPlayer::Play()
         {
             CreateVideoOverlay();
-            Core::Application::Get()->Suspend();
             [m_moviePlayerController play];
         }
         //---------------------------------------------------------------
@@ -246,8 +246,6 @@ namespace ChilliSource
             
             DeleteVideoOverlay();
             
-            Core::Application::Get()->Resume();
-            
             if([m_moviePlayerController respondsToSelector:@selector(setFullscreen:animated:)])
             {
                 [m_moviePlayerController.view removeFromSuperview];
@@ -265,7 +263,7 @@ namespace ChilliSource
             
             if (m_completionDelegate != nullptr)
             {
-                VideoDelegate delegate = m_completionDelegate;
+                VideoCompleteDelegate delegate = m_completionDelegate;
                 m_completionDelegate = nullptr;
                 delegate();
             }
@@ -290,7 +288,7 @@ namespace ChilliSource
             {
                 //create the overlay
                 CGRect rect = CGRectMake(0, 0, Core::Screen::GetOrientedWidth() * Core::Screen::GetInverseDensity(), Core::Screen::GetOrientedHeight() * Core::Screen::GetInverseDensity());
-                m_videoOverlayView = [[UIView alloc] initWithFrame: rect];
+                m_videoOverlayView = [[VideoOverlayView alloc] initWithFrame: rect];
                 UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
                 [rootView addSubview:m_videoOverlayView];
                 [rootView bringSubviewToFront:m_videoOverlayView];

@@ -76,7 +76,7 @@ namespace ChilliSource
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoDelegate& in_delegate, bool in_dismissWithTap = true,
+            void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoCompleteDelegate& in_delegate, bool in_dismissWithTap = true,
                          const Core::Colour& in_backgroundColour = Core::Colour::k_black) override;
             //--------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
@@ -92,7 +92,7 @@ namespace ChilliSource
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, const VideoDelegate& in_delegate,
+            void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, const VideoCompleteDelegate& in_delegate,
                                       bool in_dismissWithTap, const Core::Colour& in_backgroundColour = Core::Colour::k_black) override;
             //-------------------------------------------------------
             /// @author S Downie
@@ -221,7 +221,7 @@ namespace ChilliSource
             Core::ConnectionUPtr m_moviePlayerLoadStateChangedConnection;
             Core::ConnectionUPtr m_moviePlayerPlaybackFinishedConnection;
 
-            VideoDelegate m_completionDelegate;
+            VideoCompleteDelegate m_completionDelegate;
         };
     }
 }
