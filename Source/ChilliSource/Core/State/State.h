@@ -278,8 +278,11 @@ namespace ChilliSource
             CS_ASSERT(m_canAddSystems == true, "Cannot add systems outwith the creation phase");
             
             std::unique_ptr<TSystem> newSystem = TSystem::Create(in_args...);
-            TSystem* output = newSystem.get();
-            m_systems.push_back(std::move(newSystem));
+			TSystem* output = newSystem.get();
+			if (newSystem != nullptr)
+			{
+				m_systems.push_back(std::move(newSystem));
+			}
             return output;
         }
         //----------------------------------------------------

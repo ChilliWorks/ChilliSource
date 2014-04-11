@@ -35,6 +35,8 @@
 #include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Core/System/StateSystem.h>
 
+#include <functional>
+
 namespace ChilliSource
 {
     namespace Video
