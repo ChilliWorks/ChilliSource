@@ -108,11 +108,6 @@ namespace ChilliSource
 			void DrawString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
 							const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
 							GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped = nullptr, bool * outpInvalidCharacterFound = nullptr);
-            
-            void DrawDistanceString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
-                                    const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
-                                    GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines);
-            
             //-----------------------------------------------------------
             /// Calculate String Width
             ///
@@ -206,15 +201,6 @@ namespace ChilliSource
             /// texture
             //----------------------------------------------------------
             MaterialCSPtr GetGUIMaterialForTexture(const TextureSPtr& in_texture);
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Texture
-            ///
-            /// @return Cached or new distance font material
-            /// that has the given texture
-            //----------------------------------------------------------
-            MaterialCSPtr GetDistFontMaterialForTexture(const TextureSPtr& in_texture);
             
 			//-----------------------------------------------------
 			/// Update Sprite Data
@@ -223,10 +209,6 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			void UpdateSpriteData(const Core::Matrix4x4& inTransform, const Core::Vector2 & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment);
             
-            void DrawDistanceStringInternal(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
-                                            const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
-                                            GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines);
-			
 		private:
 			
 			SpriteComponent::SpriteData msCachedSprite;
@@ -237,7 +219,6 @@ namespace ChilliSource
             std::vector<Core::Vector2> mScissorSize;
             
             std::unordered_map<TextureSPtr, MaterialCSPtr> m_materialGUICache;
-            std::unordered_map<TextureSPtr, MaterialCSPtr> m_materialDistFontCache;
             
             Core::ResourcePool* m_resourcePool;
             MaterialFactory* m_materialFactory;

@@ -54,7 +54,7 @@ namespace ChilliSource
         /// Default
         //-------------------------------------------------------
         Label::Label() : MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
-		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
+		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
         {
             SetColour(Core::Colour(0.18f, 0.3f, 0.4f, 0.6f));
             Rendering::TextureManager* pMgr = Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>();
@@ -76,7 +76,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         Label::Label(const Core::ParamDictionary& insParams) 
         : GUIView(insParams), MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
-		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), FlipVertical(false)
+		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), FlipVertical(false)
         {
             std::string strValue;
             
@@ -160,14 +160,6 @@ namespace ChilliSource
             if(insParams.TryGetValue("EnableAutosizing", strValue))
             {
                 Autosizing = Core::ParseBool(strValue);
-            }
-            if(insParams.TryGetValue("ScalableFont", strValue))
-            {
-                ScalableFont = Core::ParseBool(strValue);
-            }
-            if(insParams.TryGetValue("ScalableHeight", strValue))
-            {
-                ScalableHeight = Core::ParseF32(strValue);
             }
             //---UV Flipped Y
             if(insParams.TryGetValue("FlipVertical", strValue))
@@ -617,20 +609,9 @@ namespace ChilliSource
                 
                 f32 fAssetTextScale = GetGlobalTextScale();
                 
-                if(ScalableFont)
-                {
-					f32 fCharacterSpacingScaled = CharacterSpacing * kfScalableFontResDensity;
-                    
-                    inpCanvas->DrawDistanceString(Text, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, TextColour * GetAbsoluteColour(),
-                                                  vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines);
-                }
-                else
-                {
                     Core::Colour sDrawColour = TextColour * GetAbsoluteColour();
                     inpCanvas->DrawString(Text, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, sDrawColour,
                                           vAbsoluteLabelSize, CharacterSpacing, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines,&mbLastDrawWasClipped,&mbLastDrawHadInvalidCharacter);
-                    
-                }
             
                 //Draw the kids
                 for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
@@ -717,44 +698,6 @@ namespace ChilliSource
                 SetSize(fNewRelWidth, fNewRelHeight, fNewAbsWidth, fNewAbsHeight);
             }
         }
-		//-------------------------------------------------------
-		/// Enable Scalable Font
-		///
-		/// @param Whether the label should use a scalable font
-		/// or not
-		//-------------------------------------------------------
-		void Label::EnableScalableFont(bool inbEnabled)
-		{
-			ScalableFont = inbEnabled;
-		}
-		//-------------------------------------------------------
-		/// Enable Scalable Font
-		///
-		/// @return Whether the label should use a scalable font
-		/// or not
-		//-------------------------------------------------------
-		bool Label::IsScalableFontEnabled() const
-		{
-			return ScalableFont;
-		}
-		//-------------------------------------------------------
-		/// Set Scalable Font Height
-		///
-		/// @param Sets the height of the scalable font
-		//-------------------------------------------------------
-		void Label::SetScalableFontHeight(f32 infHeight)
-		{
-			ScalableHeight = infHeight;
-		}
-		//-------------------------------------------------------
-		/// Returns the Height of Scalable Font
-		///
-		/// @return Height of scalable font
-		//-------------------------------------------------------
-		f32 Label::GetScalableFontHeight() const
-		{
-			return ScalableHeight;
-		}
         //-----------------------------------------------------------
 		/// Set Flipped Vertical
 		///
@@ -793,11 +736,6 @@ namespace ChilliSource
         //-------------------------------------------------------
         f32 Label::GetGlobalTextScale()
         {
-            if(ScalableFont)
-            {
-                f32 fAssetScale = Core::FileSystem::GetDeviceResourcesDensity();
-                return ScalableHeight == 0 ? fAssetScale : (ScalableHeight * fAssetScale) / Font->GetLineHeight();
-            }
             return mfGlobalTextScale;
         }
         //-------------------------------------------------------

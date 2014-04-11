@@ -35,7 +35,7 @@ namespace ChilliSource
             //-------------------------------------------------------------------------
             struct ShaderDesc
             {
-                std::string m_relativePath;
+                std::string m_filePath;
                 Core::StorageLocation m_location;
                 ShaderPass m_pass;
             };

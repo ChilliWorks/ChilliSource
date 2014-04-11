@@ -21,7 +21,6 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/CubemapManager.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Shader/ShaderManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 
 namespace ChilliSource
@@ -172,12 +171,6 @@ namespace ChilliSource
 			/// @param Height
 			//----------------------------------------------------------
 			void ResizeFrameBuffer(u32 inudwWidth, u32 inudwHeight);
-            //----------------------------------------------------------
-            /// Get Path To Shaders
-            ///
-            /// @return Where the shaders live in the bundle
-            //----------------------------------------------------------
-            std::string GetPathToShaders() const override;
 			//----------------------------------------------------------
 			/// On Screen Orientation Changed
 			///
@@ -310,7 +303,6 @@ namespace ChilliSource
             
             inline TextureManager* GetTextureManager() {return &mTexManager;}
             inline CubemapManager* GetCubemapManager() {return &mCubemapManager;}
-            inline ShaderManager* GetShaderManager() {return &mShaderManager;}
 			
 		private:
             
@@ -344,33 +336,23 @@ namespace ChilliSource
             //----------------------------------------------------------
             void ApplyRenderStates(const Rendering::Material* inMaterial);
             //----------------------------------------------------------
-            /// Get Attribute Locations
-            ///
-            /// @param Shader
-            //----------------------------------------------------------
-            void GetAttributeLocations(Shader* inpShader);
-            //----------------------------------------------------------
-            /// Get Uniform Locations
-            ///
-            /// @param Shader
-            //----------------------------------------------------------
-            void GetUniformLocations(Shader* in_shader);
-            //----------------------------------------------------------
             /// Apply Textures
             ///
             /// Pass the texture variables to the shader
             ///
             /// @param Material
+            /// @param Shader
             //----------------------------------------------------------
-            void ApplyTextures(const Rendering::Material* inMaterial);
+            void ApplyTextures(const Rendering::Material* inMaterial, Shader* out_shader);
             //----------------------------------------------------------
             /// Apply Lighting Values
             ///
             /// Pass the lighting variables to the shader
             ///
             /// @param Material
+            /// @param [Out] Shader
             //----------------------------------------------------------
-            void ApplyLightingValues(const Rendering::Material* inMaterial);
+            void ApplyLightingValues(const Rendering::Material* inMaterial, Shader* out_shader);
 			//------------------------------------------------------------
 			/// Enable Vertex Attribute For Semantic (Programmable pipeline)
 			///
@@ -408,15 +390,16 @@ namespace ChilliSource
 			/// @param Material
 			/// @param Shader
 			//----------------------------------------------------------
-			void ApplyShaderVariables(const Rendering::Material* inMaterial, Shader* in_shader);
+			void ApplyShaderVariables(const Rendering::Material* inMaterial, Shader* out_shader);
             //----------------------------------------------------------
             /// Apply Lighting
             ///
             /// Pass the lighting variables to the shader
             ///
             /// @param Lighting component
+            /// @param [Out] Shader
             //----------------------------------------------------------
-            void ApplyLighting(Rendering::LightComponent* inpLightComponent);
+            void ApplyLighting(Rendering::LightComponent* inpLightComponent, Shader* out_shader);
 			//----------------------------------------------------------
 			/// Force Refresh Render States
 			///
@@ -481,47 +464,13 @@ namespace ChilliSource
             
 			TextureManager mTexManager;
             CubemapManager mCubemapManager;
-			ShaderManager mShaderManager;
 			
             RenderCapabilities* mpRenderCapabilities;
-            
-			GLint mwPosAttributeLocation;
-			GLint mwColAttributeLocation;
-			GLint mwNormAttributeLocation;
-			GLint mwTexAttributeLocation;
-			GLint mwWeiAttributeLocation;
-			GLint mwJIAttributeLocation;
 			
             GLint mdwMaxVertAttribs;
             
             bool* mpbLastVertexAttribState;
             bool* mpbCurrentVertexAttribState;
-            
-            std::vector<std::string> m_textureUniformNames;
-            
-			GLint mGLCurrentShaderProgram;
-			
-			GLint mmatWVPHandle;
-            GLint mmatWorldHandle;
-			GLint mmatNormalHandle;
-            GLint mEmissiveHandle;
-			GLint mAmbientHandle;
-			GLint mDiffuseHandle;
-			GLint mSpecularHandle;
-			GLint mJointsHandle;
-            
-            GLint mLightPosHandle;
-            GLint mLightDirHandle;
-            GLint mLightColHandle;
-            GLint mAttenConHandle;
-            GLint mAttenLinHandle;
-            GLint mAttenQuadHandle;
-            GLint mShadowMapTexHandle;
-            GLint mShadowToleranceHandle;
-            GLint mLightMatrixHandle;
-            GLint mCameraPosHandle;
-            GLint mCubemapHandle;
-            std::pair<GLint, u32>* mpaTextureHandles;
             
 			RenderTarget* mpDefaultRenderTarget;
             
@@ -529,6 +478,7 @@ namespace ChilliSource
             Core::Vector2 mvCachedScissorSize;
             
             const Rendering::Material* mpCurrentMaterial;
+            Shader* m_currentShader;
             
             u32 mudwViewWidth;
             u32 mudwViewHeight;

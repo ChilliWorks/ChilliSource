@@ -103,8 +103,6 @@ namespace ChilliSource
 			
 			Core::ComponentFactory* GetComponentFactoryPtr(u32 inudwIndex);
 			Core::ComponentFactory& GetComponentFactory(u32 inudwIndex);
-            
-            virtual std::string GetPathToShaders() const = 0;
 			
 			//----------------------------------------------------
 			/// Get Number Of Component Factories

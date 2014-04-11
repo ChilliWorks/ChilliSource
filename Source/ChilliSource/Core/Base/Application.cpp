@@ -57,9 +57,6 @@
 
 #include <ctime>
 
-//TODO: Remove
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
-
 namespace ChilliSource
 {
 	namespace Core
@@ -454,11 +451,8 @@ namespace ChilliSource
             //Rendering
             Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();
             
-            //TODO: Don't assume this will be a GL render system. We only do this temporarily
-            //in order to access the managers. This will change.
             m_renderSystem = CreateSystem<Rendering::RenderSystem>(renderCapabilities);
-            OpenGL::RenderSystem* renderSystem = (OpenGL::RenderSystem*)m_renderSystem;
-            CreateSystem<Rendering::MaterialFactory>(renderSystem->GetShaderManager(), renderCapabilities);
+            CreateSystem<Rendering::MaterialFactory>(renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
             CreateSystem<Rendering::TextureAtlasProvider>();
             CreateSystem<Rendering::FontProvider>();

@@ -32,17 +32,17 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Shader manager used to load material shaders
             /// @param Render capabilities used to determine which
             /// materials can be used
             ///
             /// @return New instance with ownership transferred
             //-------------------------------------------------------
-            static MaterialFactoryUPtr Create(ShaderManager* in_shaderMgr, RenderCapabilities* in_renderCapabilities);
+            static MaterialFactoryUPtr Create(RenderCapabilities* in_renderCapabilities);
             //---------------------------------------------------
             /// @author S Downie
             ///
             /// @param Interface ID
+            ///
             /// @return Whether the object is of the same interface
             //---------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceId) const override;
@@ -55,6 +55,7 @@ namespace ChilliSource
             ///
             /// @param Unique Id to identify in resource pool
             /// "_" prefix is reserved for engine resources
+            ///
             /// @param Empty new material
             //---------------------------------------------------
             MaterialSPtr CreateCustom(const std::string& in_uniqueId) const;
@@ -65,20 +66,10 @@ namespace ChilliSource
             ///
             /// @param Unique Id to identify in resource pool
             /// "_" prefix is reserved for engine resources
+            ///
             /// @return New material
             //---------------------------------------------------
             MaterialSPtr CreateGUI(const std::string& in_uniqueId) const;
-            //---------------------------------------------------
-            /// Create a material to render UI distance fonts
-            ///
-            /// @author S Downie
-            ///
-            /// @param Unique Id to identify in resource pool
-            /// "_" prefix is reserved for engine resources
-            ///
-            /// @return New material
-            //---------------------------------------------------
-            MaterialSPtr CreateGUIDistanceFont(const std::string& in_uniqueId) const;
             //---------------------------------------------------
             /// Create a material for rendering sprites. Sprites
             /// have no lighting and vertex colours
@@ -284,15 +275,13 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Shader manager used to load material shaders
             /// @param Render capabilities used to determine which
             /// materials can be used
             //-------------------------------------------------------
-            MaterialFactory(ShaderManager* in_shaderMgr, RenderCapabilities* in_renderCapabilities);
+            MaterialFactory(RenderCapabilities* in_renderCapabilities);
             
         private:
             
-            ShaderManager* m_shaderManager;
             RenderCapabilities* m_renderCapabilities;
         };
     }
