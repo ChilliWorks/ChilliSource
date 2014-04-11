@@ -53,6 +53,21 @@ namespace ChilliSource
 			//-------------------------------------------------------------------------
 			bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
 		private:
+            friend class Core::Application;
+            //-------------------------------------------------------
+            /// Creates a new instance of the subtitle provider.
+            ///
+            /// @author I Copland
+            ///
+            /// @return The new instance.
+            //-------------------------------------------------------
+            static CSSubtitlesProviderUPtr Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author I Copland
+            //-------------------------------------------------------
+            CSSubtitlesProvider() = default;
 			//-------------------------------------------------------------------------
             /// Load the subtitles resource from the given file location. Check
             /// the resource load state for success

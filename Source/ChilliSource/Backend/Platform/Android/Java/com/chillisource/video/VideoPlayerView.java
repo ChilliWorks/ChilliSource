@@ -8,8 +8,6 @@
  */
 
 package com.chillisource.video;
-import com.chillisource.video.VideoPlayerNativeInterface;
-import com.chillisource.core.CSApplication;
 import com.chillisource.core.Logging;
 
 import android.content.Context;
@@ -65,32 +63,6 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 		getHolder().addCallback(this);
 	}
 	//--------------------------------------------------------------
-	/// Is Playing
-	///
-	/// @return whether or not there is currently a video playing.
-	//--------------------------------------------------------------
-	public synchronized boolean IsPlaying() 
-	{
-		if (mMediaPlayer != null)
-		{
-			return mMediaPlayer.isPlaying();
-		}
-		return false;
-	}
-	//--------------------------------------------------------------
-	/// Get Duration
-	///
-	/// @return the total length of the currently running video.
-	//--------------------------------------------------------------
-	public synchronized int GetDuration() 
-	{
-		if (mMediaPlayer != null)
-		{
-			return mMediaPlayer.getDuration();
-		}
-		return 0;
-	}
-	//--------------------------------------------------------------
 	/// Get Time
 	///
 	/// @return the current position through the video.
@@ -102,42 +74,6 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 			return mMediaPlayer.getCurrentPosition();
 		}
 		return 0;
-	}
-	//--------------------------------------------------------------
-	/// Dismiss
-	///
-	/// Stops the current running video from playing.
-	//--------------------------------------------------------------
-	public void Dismiss() 
-	{
-		//create a task for dismissing this on the UI thread.
-		Runnable task = new Runnable()
-		{
-			@Override public void run() 
-			{
-				DismissMediaPlayerAndComplete();
-				
-				synchronized(this)
-				{
-					notifyAll();
-				}
-			}
-		};
-		
-		//wait for this task to finish
-		try
-		{
-			synchronized(task)
-			{
-				CSApplication.get().scheduleUIThreadTask(task);
-				
-				task.wait();
-			}
-		}
-		catch(Exception inE)
-		{
-			
-		}
 	}
 	//--------------------------------------------------------------
 	/// Prepare Media Player
@@ -362,7 +298,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 			{
 				if (System.currentTimeMillis() - mqwTapTime <= kqwTapLengthInMS)
 				{
-					DismissMediaPlayerAndComplete();
+					onCompletion(mMediaPlayer);
 				}
 			}
 		}
@@ -379,21 +315,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	{
 		if (mbCanDismissWithTap == true)
 		{
-			DismissMediaPlayerAndComplete();
+			onCompletion(mMediaPlayer);
 		}
-	}
-	/**
-	 * Dismiss the view and call the complete delegate
-	 * 
-	 * @author R Henning
-	 */
-	private void DismissMediaPlayerAndComplete()
-	{
-		VideoPlayerNativeInterface videoPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
-		if (videoPlayerNI != null)
-		{
-			videoPlayerNI.Dismissed();
-		}
-		onCompletion(mMediaPlayer);
 	}
 }

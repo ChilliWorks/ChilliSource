@@ -16,9 +16,9 @@ namespace ChilliSource
         
         //----------------------------------------------------------
         //----------------------------------------------------------
-        SubtitlesCUPtr Subtitles::Create()
+        SubtitlesUPtr Subtitles::Create()
         {
-            return SubtitlesCUPtr(new Subtitles());
+            return SubtitlesUPtr(new Subtitles());
         }
         //----------------------------------------------------------
         //----------------------------------------------------------

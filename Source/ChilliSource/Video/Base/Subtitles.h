@@ -110,7 +110,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //----------------------------------------------------------
-            static SubtitlesCUPtr Create();
+            static SubtitlesUPtr Create();
             //----------------------------------------------------------
 			/// Private constructor to force the use of the factory
             /// create method

@@ -59,42 +59,6 @@ public class VideoPlayerNativeInterface extends INativeInterface
 		CSApplication.get().getActivityContext().startActivity(mediaPlayerIntent); 
 	}
 	//--------------------------------------------------------------
-	/// Is Playing
-	///
-	/// @return whether or not there is currently a video playing.
-	//--------------------------------------------------------------
-	public boolean IsPlaying() 
-	{
-		VideoPlayerActivity activity = VideoPlayerActivity.GetActivity();
-		if (activity != null)
-		{
-			VideoPlayerView view = activity.GetVideoPlayerView();
-			if (view != null)
-			{
-				return view.IsPlaying();
-			}
-		}
-		return false;
-	}
-	//--------------------------------------------------------------
-	/// Get Duration
-	///
-	/// @return the total length of the currently running video.
-	//--------------------------------------------------------------
-	public float GetDuration() 
-	{
-		VideoPlayerActivity activity = VideoPlayerActivity.GetActivity();
-		if (activity != null)
-		{
-			VideoPlayerView view = activity.GetVideoPlayerView();
-			if (view != null)
-			{
-				return ((float)view.GetDuration()) / 1000.0f;
-			}
-		}
-		return 0.0f;
-	}
-	//--------------------------------------------------------------
 	/// Get Time
 	///
 	/// @return the current position through the video.
@@ -113,34 +77,17 @@ public class VideoPlayerNativeInterface extends INativeInterface
 		return 0.0f;
 	}
 	//--------------------------------------------------------------
-	/// Dismiss
+	/// Called when the video is complete.
 	///
-	/// Stops the current running video from playing.
+	/// @author I Copland
 	//--------------------------------------------------------------
-	public void Dismiss() 
-	{
-		VideoPlayerActivity activity = VideoPlayerActivity.GetActivity();
-		if (activity != null)
-		{
-			VideoPlayerView view = activity.GetVideoPlayerView();
-			if (view != null)
-			{
-				view.Dismiss();
-			}
-		}
-	}
+	public native void OnVideoComplete();
 	//--------------------------------------------------------------
-	/// Dismissed
+	/// Called every frame in a video that has subtitles.
 	///
-	/// Called when the video is dismissed.
+	/// @author I Copland
 	//--------------------------------------------------------------
-	public native void Dismissed();
-	//--------------------------------------------------------------
-	/// Stopped
-	///
-	/// Called when the video stops.
-	//--------------------------------------------------------------
-	public native void Stopped();
+	public native void OnUpdateSubtitles();
 	//--------------------------------------------------------------
 	/// Create Subtitle
 	///
@@ -210,10 +157,4 @@ public class VideoPlayerNativeInterface extends INativeInterface
 			}
 		}
 	}
-	//--------------------------------------------------------------
-	/// Update Subtitles
-	///
-	/// Called every frame in a video that has subtitles.
-	//--------------------------------------------------------------
-	public native void UpdateSubtitles();
 }

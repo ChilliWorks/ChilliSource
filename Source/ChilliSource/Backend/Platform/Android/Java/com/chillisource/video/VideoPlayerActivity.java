@@ -175,7 +175,7 @@ public class VideoPlayerActivity extends Activity
 		VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
 		if (mediaPlayerNI != null)
 		{
-			mediaPlayerNI.Stopped();
+			mediaPlayerNI.OnVideoComplete();
 		}
 		
     	synchronized(VideoPlayerActivity.class)

@@ -53,15 +53,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            typedef std::function<void()> VideoDelegate;
-            //-------------------------------------------------------
-            /// Create the platform dependent backend
-            ///
-            /// @author S Downie
-            ///
-            /// @return New backend instance
-            //-------------------------------------------------------
-            static VideoPlayerUPtr Create();
+            typedef std::function<void()> VideoCompleteDelegate;
             //-------------------------------------------------------
             /// Begin streaming the video from file
             ///
@@ -75,7 +67,7 @@ namespace ChilliSource
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            virtual void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoDelegate& in_delegate, bool in_dismissWithTap = true,
+            virtual void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoCompleteDelegate& in_delegate, bool in_dismissWithTap = true,
                                  const Core::Colour& in_backgroundColour = Core::Colour::k_black) = 0;
             //--------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
@@ -91,7 +83,7 @@ namespace ChilliSource
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            virtual void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const SubtitlesCSPtr& in_subtitles, const VideoDelegate& in_delegate,
+            virtual void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const SubtitlesCSPtr& in_subtitles, const VideoCompleteDelegate& in_delegate,
                                               bool in_dismissWithTap, const Core::Colour& in_backgroundColour = Core::Colour::k_black) = 0;
             //--------------------------------------------------------
             /// Destructor
@@ -100,6 +92,15 @@ namespace ChilliSource
             //--------------------------------------------------------
             virtual ~VideoPlayer(){}
         protected:
+            friend class Core::State;
+            //-------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend instance
+            //-------------------------------------------------------
+            static VideoPlayerUPtr Create();
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///

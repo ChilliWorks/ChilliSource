@@ -147,7 +147,7 @@ public class SubtitlesView extends ViewGroup
 	//--------------------------------------------------------------
 	@Override public void onDraw(Canvas inCanvas)
 	{
-		mVideoPlayerNativeInterface.UpdateSubtitles();
+		mVideoPlayerNativeInterface.OnUpdateSubtitles();
 		postInvalidate();
 	}
 	//--------------------------------------------------------------
