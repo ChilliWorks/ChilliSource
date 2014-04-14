@@ -23,7 +23,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(CSSubtitlesProvider);
         CS_FORWARDDECLARE_CLASS(Subtitles);
         CS_FORWARDDECLARE_CLASS(SubtitlesManager);
-        CS_FORWARDDECLARE_CLASS(VideoPlayerActivity);
+        CS_FORWARDDECLARE_CLASS(VideoPlayer);
     }
 }
 

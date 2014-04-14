@@ -20,12 +20,6 @@ namespace ChilliSource
 	namespace Android
 	{
 		//=================================================================
-		/// Delegates
-		//=================================================================
-		typedef std::function<void()> OnVideoStoppedDelegate;
-		typedef std::function<void()> OnVideoDismissedDelegate;
-		typedef std::function<void()> OnUpdateSubtitlesDelegate;
-		//=================================================================
 		/// Video Player Java Interface
 		///
 		/// A Java Interface for communicating with the Android media
@@ -35,6 +29,11 @@ namespace ChilliSource
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE();
+			//--------------------------------------------------------------
+			/// Delegates
+			//--------------------------------------------------------------
+			typedef std::function<void()> VideoCompleteDelegate;
+			typedef std::function<void()> UpdateSubtitlesDelegate;
 			//--------------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------------
@@ -50,7 +49,7 @@ namespace ChilliSource
 			///
 			/// @param The delegate.
 			//--------------------------------------------------------------
-			void SetUpdateSubtitlesDelegate(OnUpdateSubtitlesDelegate inDelegate);
+			void SetUpdateSubtitlesDelegate(const UpdateSubtitlesDelegate& inDelegate);
 			//--------------------------------------------------------------
 			/// Present
 			///
@@ -60,23 +59,9 @@ namespace ChilliSource
 			/// @param the filename of the video.
 			/// @param whether or not the video can be dismissed with a tap.
 			/// @param Background colour
-			/// @param video dismissed delegate.
-			/// @param video stopped delegate.
+			/// @param video complete delegate
 			//--------------------------------------------------------------
-			void Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour,
-						const OnVideoDismissedDelegate& inDismissedDelegate, const OnVideoStoppedDelegate& inStoppedDelegate);
-			//--------------------------------------------------------------
-			/// Is Playing
-			///
-			/// @return whether or not there is currently a video playing.
-			//--------------------------------------------------------------
-			bool IsPlaying();
-			//--------------------------------------------------------------
-			/// Get Duration
-			///
-			/// @return the total length of the currently running video.
-			//--------------------------------------------------------------
-			float GetDuration();
+			void Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour, const VideoCompleteDelegate& in_completeDelegate);
 			//--------------------------------------------------------------
 			/// Get Time
 			///
@@ -84,23 +69,19 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			float GetTime();
 			//--------------------------------------------------------------
-			/// Dismiss
+			/// Called when the video completes. This is for internal use
+			/// and should not be called by the user of the interface.
 			///
-			/// Stops the current running video from playing.
+			/// @author I Copland
 			//--------------------------------------------------------------
-			void Dismiss();
+			void OnVideoComplete();
 			//--------------------------------------------------------------
-			/// Stopped
+			/// Update Subtitles
 			///
-			/// Called when the video stops.
+			/// Called every frame in a video that has subtitles. This will
+			/// be called on the UI Thread.
 			//--------------------------------------------------------------
-			void Stopped();
-			//--------------------------------------------------------------
-			/// Dismissed
-			///
-			/// Called when the video is dismissed.
-			//--------------------------------------------------------------
-			void Dismissed();
+			void OnUpdateSubtitles();
 			//--------------------------------------------------------------
 			/// Create Subtitle
 			///
@@ -137,18 +118,10 @@ namespace ChilliSource
 			/// @param The subtitle object.
 			//--------------------------------------------------------------
 			void RemoveSubtitle(s64 inlwSubtitleID);
-			//--------------------------------------------------------------
-			/// Update Subtitles
-			///
-			/// Called every frame in a video that has subtitles. This will
-			/// be called on the UI Thread.
-			//--------------------------------------------------------------
-			void UpdateSubtitles();
 		private:
 
-			OnVideoStoppedDelegate mVideoStoppedDelegate;
-			OnVideoDismissedDelegate mVideoDismissedDelegate;
-			OnUpdateSubtitlesDelegate mUpdateSubtitlesDelegate;
+			VideoCompleteDelegate mVideoCompleteDelegate;
+			UpdateSubtitlesDelegate mUpdateSubtitlesDelegate;
 		};
 	}
 }

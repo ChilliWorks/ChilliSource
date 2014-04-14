@@ -56,7 +56,12 @@ namespace ChilliSource
         }
         
         CS_DEFINE_NAMEDTYPE(CSSubtitlesProvider);
-
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        CSSubtitlesProviderUPtr CSSubtitlesProvider::Create()
+        {
+        	return CSSubtitlesProviderUPtr(new CSSubtitlesProvider());
+        }
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
 		bool CSSubtitlesProvider::IsA(Core::InterfaceIDType in_interfaceId) const

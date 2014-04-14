@@ -13,7 +13,6 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
-#include <ChilliSource/Video/Base/VideoPlayerActivity.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
 
 #import <QuartzCore/QuartzCore.h>
@@ -21,14 +20,14 @@
 @implementation CSubtitlesRenderer
 //--------------------------------------------------------
 //--------------------------------------------------------
--(id) initWithVideoPlayer:(ChilliSource::iOS::VideoPlayerActivity*)inpVideoPlayer view:(UIView*)inpView andSubtitles:(const ChilliSource::Video::SubtitlesCSPtr&)in_subtitles
+-(id) initWithVideoPlayer:(ChilliSource::iOS::VideoPlayer*)in_videoPlayer view:(UIView*)inpView andSubtitles:(const ChilliSource::Video::SubtitlesCSPtr&)in_subtitles
 {
     if(!(self = [super init]))
 	{
 		return nil;
 	}
     
-    mpVideoPlayer = inpVideoPlayer;
+    m_videoPlayer = in_videoPlayer;
     mpBaseView = inpView;
     
     //create the display link
@@ -47,7 +46,7 @@
 -(void) OnUpdate
 {
     //get the current subtitles
-    f32 fPosition = mpVideoPlayer->GetTime();
+    f32 fPosition = m_videoPlayer->GetCurrentTime();
     TimeIntervalMs currentTimeMS = (TimeIntervalMs)(fPosition * 1000.0f);
     
     if (mCurrentTimeMS != currentTimeMS)
@@ -111,7 +110,7 @@
     [pNewTextView setText:text];
     [pNewTextView setFont:[UIFont fontWithName:fontName size: pStyle->m_fontSize]];
     [pNewTextView setTextColor:[UIColor colorWithRed:pStyle->m_colour.r green:pStyle->m_colour.g blue:pStyle->m_colour.b alpha:0.0f]];
-    [pNewTextView setEditable:NO];
+    [pNewTextView setEditable:YES];
     [pNewTextView setUserInteractionEnabled:NO];
     [text release];
     [fontName release];
@@ -160,7 +159,9 @@
         [self RemoveTextView:inpSubtitle];
     }
     
-    inpTextView.textColor = [UIColor colorWithRed:pStyle->m_colour.r green:pStyle->m_colour.g blue:pStyle->m_colour.b alpha:fFade * pStyle->m_colour.a];
+    [inpTextView setEditable:YES];
+    [inpTextView setTextColor:[UIColor colorWithRed:pStyle->m_colour.r green:pStyle->m_colour.g blue:pStyle->m_colour.b alpha:(fFade * pStyle->m_colour.a)]];
+    [inpTextView setEditable:NO];
 }
 //--------------------------------------------------------
 /// Remove Text View
@@ -252,7 +253,7 @@
 -(CGRect) CalculateTextBoxRect:(const ChilliSource::Core::Rectangle&)inRelativeBounds
 {
     ChilliSource::Core::Vector2 vScreenDimensions(ChilliSource::Core::Screen::GetOrientedWidth() * ChilliSource::Core::Screen::GetInverseDensity(), ChilliSource::Core::Screen::GetOrientedHeight() * ChilliSource::Core::Screen::GetInverseDensity());
-    ChilliSource::Core::Vector2 vVideoDimensions = mpVideoPlayer->GetVideoDimensions();
+    ChilliSource::Core::Vector2 vVideoDimensions = m_videoPlayer->GetVideoDimensions();
     float fScreenAspectRatio = vScreenDimensions.x / vScreenDimensions.y;
     float fVideoAspectRatio = vVideoDimensions.x / vVideoDimensions.y;
     

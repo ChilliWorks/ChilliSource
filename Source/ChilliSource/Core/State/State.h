@@ -52,6 +52,15 @@ namespace ChilliSource
 			/// @return States scene
 			//------------------------------------------
 			Scene* GetScene();
+            //----------------------------------------------------
+            /// Searches the state systems and returns the first
+            /// one that implements the named interface
+            ///
+            /// @author S Downie
+            ///
+            /// @return System of type TNamedType
+            //----------------------------------------------------
+            template <typename TNamedType> TNamedType* GetSystem();
             //------------------------------------------
             /// @author S Downie
 			///
@@ -74,15 +83,6 @@ namespace ChilliSource
             /// @return New system owned by state
             //----------------------------------------------------
             template <typename TSystem, typename... TArgs> TSystem* CreateSystem(TArgs... in_args);
-            //----------------------------------------------------
-            /// Searches the state systems and returns the first
-            /// one that implements the named interface
-            ///
-            /// @author S Downie
-            ///
-            /// @return System of type TNamedType
-            //----------------------------------------------------
-            template <typename TNamedType> TNamedType* GetSystem();
             
         private:
 
@@ -278,8 +278,11 @@ namespace ChilliSource
             CS_ASSERT(m_canAddSystems == true, "Cannot add systems outwith the creation phase");
             
             std::unique_ptr<TSystem> newSystem = TSystem::Create(in_args...);
-            TSystem* output = newSystem.get();
-            m_systems.push_back(std::move(newSystem));
+			TSystem* output = newSystem.get();
+			if (newSystem != nullptr)
+			{
+				m_systems.push_back(std::move(newSystem));
+			}
             return output;
         }
         //----------------------------------------------------

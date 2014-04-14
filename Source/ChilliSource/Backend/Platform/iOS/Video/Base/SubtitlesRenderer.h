@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
-#include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerActivity.h>
+#include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayer.h>
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -27,7 +27,7 @@
     UIView* mpBaseView;
     CADisplayLink* mpDisplayLink;
     ChilliSource::Video::SubtitlesCSPtr mpSubtitles;
-    ChilliSource::iOS::VideoPlayerActivity* mpVideoPlayer;
+    ChilliSource::iOS::VideoPlayer* m_videoPlayer;
     std::unordered_map<const ChilliSource::Video::Subtitles::Subtitle*, UITextView*> maTextViewMap;
     std::vector<const ChilliSource::Video::Subtitles::Subtitle*> maSubtitlesToRemove;
     TimeIntervalMs mCurrentTimeMS;
@@ -41,7 +41,7 @@
 /// @param The view.
 /// @param The subtitles.
 //--------------------------------------------------------
--(id) initWithVideoPlayer:(ChilliSource::iOS::VideoPlayerActivity*)inpVideoPlayer view:(UIView*)inpView andSubtitles:(const ChilliSource::Video::SubtitlesCSPtr&)in_subtitles;
+-(id) initWithVideoPlayer:(ChilliSource::iOS::VideoPlayer*)in_videoPlayer view:(UIView*)inpView andSubtitles:(const ChilliSource::Video::SubtitlesCSPtr&)in_subtitles;
 //--------------------------------------------------------
 /// On Update
 ///

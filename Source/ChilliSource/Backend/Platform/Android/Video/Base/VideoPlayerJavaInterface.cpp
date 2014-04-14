@@ -12,6 +12,7 @@
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <jni.h>
 
@@ -20,37 +21,26 @@
 //------------------------------------------
 extern "C"
 {
-	void Java_com_chillisource_video_VideoPlayerNativeInterface_Dismissed(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_video_VideoPlayerNativeInterface_Stopped(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_video_VideoPlayerNativeInterface_UpdateSubtitles(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_video_VideoPlayerNativeInterface_OnVideoComplete(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_video_VideoPlayerNativeInterface_OnUpdateSubtitles(JNIEnv* inpEnv, jobject inThis);
 }
 //-------------------------------------------
-/// Dismissed
-///
-/// Called when a video is dismissed
-///
-/// @param The jni environment.
-/// @param The java object calling the function.
-//-------------------------------------------
-void Java_com_chillisource_video_VideoPlayerNativeInterface_Dismissed(JNIEnv* inpEnv, jobject inThis)
-{
-	ChilliSource::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
-	if (pVideoPJI != nullptr)
-		pVideoPJI->Dismissed();
-}
-//-------------------------------------------
-/// Stopped
+/// On Video Complete
 ///
 /// Called when a video is stopped
 ///
 /// @param The jni environment.
 /// @param The java object calling the function.
 //-------------------------------------------
-void Java_com_chillisource_video_VideoPlayerNativeInterface_Stopped(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_video_VideoPlayerNativeInterface_OnVideoComplete(JNIEnv* inpEnv, jobject inThis)
 {
 	ChilliSource::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
+
 	if (pVideoPJI != nullptr)
-		pVideoPJI->Stopped();
+	{
+		ChilliSource::Core::Task<> task(pVideoPJI.get(), &ChilliSource::Android::VideoPlayerJavaInterface::OnVideoComplete);
+		ChilliSource::Core::TaskScheduler::ScheduleMainThreadTask(task);
+	}
 }
 //-------------------------------------------
 /// Update Subtitles
@@ -61,11 +51,13 @@ void Java_com_chillisource_video_VideoPlayerNativeInterface_Stopped(JNIEnv* inpE
 /// @param The jni environment.
 /// @param The java object calling the function.
 //-------------------------------------------
-void Java_com_chillisource_video_VideoPlayerNativeInterface_UpdateSubtitles(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_video_VideoPlayerNativeInterface_OnUpdateSubtitles(JNIEnv* inpEnv, jobject inThis)
 {
 	ChilliSource::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
 	if (pVideoPJI != nullptr)
-		pVideoPJI->UpdateSubtitles();
+	{
+		pVideoPJI->OnUpdateSubtitles();
+	}
 }
 
 namespace ChilliSource
@@ -80,10 +72,7 @@ namespace ChilliSource
 		{
 			CreateNativeInterface("com/chillisource/video/VideoPlayerNativeInterface");
 			CreateMethodReference("Present", "(ZLjava/lang/String;ZZFFFF)V");
-			CreateMethodReference("IsPlaying", "()Z");
-			CreateMethodReference("GetDuration", "()F");
 			CreateMethodReference("GetTime", "()F");
-			CreateMethodReference("Dismiss", "()V");
 			CreateMethodReference("CreateSubtitle", "(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;FFFF)J");
 			CreateMethodReference("SetSubtitleColour", "(JFFFF)V");
 			CreateMethodReference("RemoveSubtitle", "(J)V");
@@ -98,18 +87,16 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Set Update Subtitles Delegate
 		//--------------------------------------------------------------
-		void VideoPlayerJavaInterface::SetUpdateSubtitlesDelegate(OnUpdateSubtitlesDelegate inDelegate)
+		void VideoPlayerJavaInterface::SetUpdateSubtitlesDelegate(const UpdateSubtitlesDelegate& inDelegate)
 		{
 			mUpdateSubtitlesDelegate = inDelegate;
 		}
 		//--------------------------------------------------------------
 		/// Present
 		//--------------------------------------------------------------
-		void VideoPlayerJavaInterface::Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour,
-												const OnVideoDismissedDelegate& inDismissedDelegate, const OnVideoStoppedDelegate& inStoppedDelegate)
+		void VideoPlayerJavaInterface::Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour, const VideoCompleteDelegate& inVideoCompleteDelegate)
 		{
-			mVideoDismissedDelegate = inDismissedDelegate;
-			mVideoStoppedDelegate = inStoppedDelegate;
+			mVideoCompleteDelegate = inVideoCompleteDelegate;
 
 			bool bHasSubtitles = false;
 			if (mUpdateSubtitlesDelegate != nullptr)
@@ -123,22 +110,6 @@ namespace ChilliSource
 			pEnv->DeleteLocalRef(jstrFilename);
 		}
 		//--------------------------------------------------------------
-		/// Is Playing
-		//--------------------------------------------------------------
-		bool VideoPlayerJavaInterface::IsPlaying()
-		{
-			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			return pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("IsPlaying"));
-		}
-		//--------------------------------------------------------------
-		/// Get Duration
-		//--------------------------------------------------------------
-		float VideoPlayerJavaInterface::GetDuration()
-		{
-			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			return pEnv->CallFloatMethod(GetJavaObject(), GetMethodID("GetDuration"));
-		}
-		//--------------------------------------------------------------
 		/// Get Time
 		//--------------------------------------------------------------
 		float VideoPlayerJavaInterface::GetTime()
@@ -147,35 +118,25 @@ namespace ChilliSource
 			return pEnv->CallFloatMethod(GetJavaObject(), GetMethodID("GetTime"));
 		}
 		//--------------------------------------------------------------
-		/// Dismiss
+		/// Stopped
 		//--------------------------------------------------------------
-		void VideoPlayerJavaInterface::Dismiss()
+		void VideoPlayerJavaInterface::OnVideoComplete()
 		{
-			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Dismiss"));
-		}
-		//--------------------------------------------------------------
-		/// Dismissed
-		//--------------------------------------------------------------
-		void VideoPlayerJavaInterface::Dismissed()
-		{
-			if (mVideoDismissedDelegate != nullptr)
+			if (mVideoCompleteDelegate != nullptr)
 			{
-				mVideoDismissedDelegate();
-				mVideoDismissedDelegate = nullptr;
+				VideoCompleteDelegate delegate = mVideoCompleteDelegate;
+				mVideoCompleteDelegate = nullptr;
+				delegate();
 			}
 		}
 		//--------------------------------------------------------------
-		/// Stopped
+		/// Update Subtitles
 		//--------------------------------------------------------------
-		void VideoPlayerJavaInterface::Stopped()
+		void VideoPlayerJavaInterface::OnUpdateSubtitles()
 		{
-			if (mVideoStoppedDelegate != nullptr)
+			if (mUpdateSubtitlesDelegate != nullptr)
 			{
-				mVideoStoppedDelegate();
-				mVideoDismissedDelegate = nullptr;
-				mVideoStoppedDelegate = nullptr;
-				mUpdateSubtitlesDelegate = nullptr;
+				mUpdateSubtitlesDelegate();
 			}
 		}
 		//--------------------------------------------------------------
@@ -208,16 +169,6 @@ namespace ChilliSource
 		{
 			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("RemoveSubtitle"), inlwSubtitleID);
-		}
-		//--------------------------------------------------------------
-		/// Update Subtitles
-		//--------------------------------------------------------------
-		void VideoPlayerJavaInterface::UpdateSubtitles()
-		{
-			if (mUpdateSubtitlesDelegate != nullptr)
-			{
-				mUpdateSubtitlesDelegate();
-			}
 		}
 	}
 }
