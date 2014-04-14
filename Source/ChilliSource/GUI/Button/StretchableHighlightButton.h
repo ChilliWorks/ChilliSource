@@ -114,18 +114,6 @@ namespace ChilliSource
 			/// @return Index ID of highlight state on sprite sheet
 			//-----------------------------------------------------------
 			const std::string& GetBaseHighlightTextureAtlasID() const;
-            //-----------------------------------------------------------
-            /// Set Select Audio Effect
-            ///
-            /// @param Audio effect played when the button is selected
-            //-----------------------------------------------------------
-            void SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect);
-			//-----------------------------------------------------------
-            /// Set De-Select Audio Effect
-            ///
-            /// @param Audio effect played when the button is selected
-            //-----------------------------------------------------------
-            void SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect);
             //--------------------------------------------------------
 			/// Set Highlight Colour
 			///
@@ -244,8 +232,6 @@ namespace ChilliSource
         private:
             Rendering::TextureSPtr mCurrentTexture;
             Rendering::TextureAtlasCSPtr mCurrentTextureAtlas;
-            Audio::AudioComponentSPtr mpSelectAudioEffect;
-			Audio::AudioComponentSPtr mpDeselectAudioEffect;
             Core::Colour mCurrentColour;
 			bool mbSelected;
             

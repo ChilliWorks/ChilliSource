@@ -21,18 +21,12 @@
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
-#include <ChilliSource/Audio/3D/AudioComponent.h>
-#include <ChilliSource/Audio/3D/AudioComponentFactory.h>
-
 #include <cmath>
 
 namespace ChilliSource
 {
     namespace GUI
     {
-        Audio::AudioComponentSPtr HighlightButton::mspDefaultSelectSound;
-        Audio::AudioComponentSPtr HighlightButton::mspDefaultDeSelectSound;
-        
 		DEFINE_META_CLASS(HighlightButton)
 
 		DEFINE_PROPERTY(NormalTexture);
@@ -82,13 +76,7 @@ namespace ChilliSource
 		SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             std::string strValue;
-            
-            if(mspDefaultSelectSound)
-                SetSelectAudioEffect(mspDefaultSelectSound);
-            
-            if(mspDefaultDeSelectSound)
-                SetDeselectAudioEffect(mspDefaultDeSelectSound);
-            
+
             //---Default
             Core::StorageLocation eNormalTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("NormalTextureLocation", strValue))
@@ -196,27 +184,6 @@ namespace ChilliSource
             {
                 Core::Vector4 vSize = Core::ParseVector4(strValue);
                 SetFitMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
-            }
-            //---Audio effect
-            Core::StorageLocation eSelectAudioLocation = Core::StorageLocation::k_package;
-            Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
-            {
-                eSelectAudioLocation = ChilliSource::Core::ParseStorageLocation(strValue);
-            }
-			if(insParams.TryGetValue("DeselectAudioEffectLocation", strValue))
-            {
-                eDeselectAudioLocation = ChilliSource::Core::ParseStorageLocation(strValue);
-            }
-            if(insParams.TryGetValue("SelectAudioEffect", strValue))
-            {
-                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
-                SetSelectAudioEffect(pAudioFactory->CreateAudioComponent(eSelectAudioLocation, strValue, false, false));
-            }
-			if(insParams.TryGetValue("DeselectAudioEffect", strValue))
-            {
-                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
-                SetDeselectAudioEffect(pAudioFactory->CreateAudioComponent(eDeselectAudioLocation, strValue, false, false));
             }
             
             mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
@@ -451,35 +418,6 @@ namespace ChilliSource
 			return HighlightColour;
 		}
         //-----------------------------------------------------------
-        /// Set Select Audio Effect
-        ///
-        /// @param Audio effect played when the button is selected
-        //-----------------------------------------------------------
-        void HighlightButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
-        {
-            mpSelectAudioEffect = inpEffect;
-        }
-		//-----------------------------------------------------------
-		/// Set De-Select Audio Effect
-		///
-		/// @param Audio effect played when the button is selected
-		//-----------------------------------------------------------
-		void HighlightButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
-		{
-			mpDeselectAudioEffect = inpEffect;
-		}
-        void HighlightButton::SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
-        {
-            Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
-            mspDefaultSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
-        }
-        
-        void HighlightButton::SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
-        {
-            Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
-            mspDefaultDeSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
-        }
-        //-----------------------------------------------------------
         //-----------------------------------------------------------
         void HighlightButton::OnButtonSelect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
         {
@@ -488,11 +426,6 @@ namespace ChilliSource
                 mvSelectedPos = in_pointer.m_location;
                 
 				mbSelected = true;
-				
-				if(mpSelectAudioEffect && !mpSelectAudioEffect->IsPlaying())
-				{
-					mpSelectAudioEffect->Play();
-				}
                 
                 mpBackgroundImage->SetTexture(HighlightTexture);
                 
@@ -524,11 +457,6 @@ namespace ChilliSource
         {
 			if(mbSelected)
 			{
-				if(mpDeselectAudioEffect && !mpDeselectAudioEffect->IsPlaying())
-				{
-					mpDeselectAudioEffect->Play();
-				}
-                
                 mpBackgroundImage->SetTexture(NormalTexture);
 				
 
@@ -894,14 +822,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         HighlightButton::~HighlightButton()
         {
-            if(mpSelectAudioEffect)
-            {
-                mpSelectAudioEffect->Stop();
-            }
-			if(mpDeselectAudioEffect)
-            {
-                mpDeselectAudioEffect->Stop();
-            }
+
         }
     }
 }

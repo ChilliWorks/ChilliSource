@@ -22,8 +22,6 @@ import com.chillisource.social.TwitterAuthenticationViewNativeInterface;
 import com.chillisource.web.WebViewNativeInterface;
 import com.chillisource.core.CSPowerManager;
 
-import org.fmod.FMODAudioDevice;
-
 /**
  * The main activity for Chilli Source apps.
  * This feeds Android lifecycle events to the application
@@ -32,7 +30,6 @@ import org.fmod.FMODAudioDevice;
  */
 public class CSActivity extends Activity 
 {
-	private FMODAudioDevice m_FMODAudioDevice = new FMODAudioDevice();
 	private Surface m_surface;
 	
 	/**
@@ -81,7 +78,6 @@ public class CSActivity extends Activity
     {
     	super.onResume();
     	
-        m_FMODAudioDevice.start();
         m_surface.onResume();
 
         CSPowerManager.RequestWakeLock(CSPowerManager.LOCK_TYPE.SCREEN_DIM_LOCK);
@@ -120,7 +116,6 @@ public class CSActivity extends Activity
     	CSApplication.get().suspend();
     	
     	m_surface.onPause();
-    	m_FMODAudioDevice.stop();
         CSPowerManager.ReleaseLock(CSPowerManager.LOCK_TYPE.SCREEN_DIM_LOCK);
        
         super.onPause();

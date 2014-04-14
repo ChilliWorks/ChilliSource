@@ -22,9 +22,6 @@
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
-#include <ChilliSource/Audio/3D/AudioComponent.h>
-#include <ChilliSource/Audio/3D/AudioComponentFactory.h>
-
 #include <cmath>
 
 namespace ChilliSource
@@ -123,27 +120,6 @@ namespace ChilliSource
             if(insParams.TryGetValue("HighlightColour", strValue))
             {
                 SetHighlightColour(Core::ParseColour(strValue));
-            }
-            //---Audio effect
-            Core::StorageLocation eSelectAudioLocation = Core::StorageLocation::k_package;
-            Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
-            {
-                eSelectAudioLocation = ChilliSource::Core::ParseStorageLocation(strValue);
-            }
-			if(insParams.TryGetValue("DeselectAudioEffectLocation", strValue))
-            {
-                eDeselectAudioLocation = ChilliSource::Core::ParseStorageLocation(strValue);
-            }
-            if(insParams.TryGetValue("SelectAudioEffect", strValue))
-            {
-                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
-                SetSelectAudioEffect(pAudioFactory->CreateAudioComponent(eSelectAudioLocation, strValue, false, false));
-            }
-			if(insParams.TryGetValue("DeselectAudioEffect", strValue))
-            {
-                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
-                SetDeselectAudioEffect(pAudioFactory->CreateAudioComponent(eDeselectAudioLocation, strValue, false, false));
             }
 			//---Width maintain
 			if(insParams.TryGetValue("WidthMaintain", strValue))
@@ -270,20 +246,6 @@ namespace ChilliSource
         {
             return BaseHighlightTextureAtlasID;
         }
-        //-----------------------------------------------------------
-        /// Set Select Audio Effect
-        //-----------------------------------------------------------
-        void StretchableHighlightButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
-        {
-            mpSelectAudioEffect = inpEffect;
-        }
-        //-----------------------------------------------------------
-        /// Set De-Select Audio Effect
-        //-----------------------------------------------------------
-        void StretchableHighlightButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
-        {
-            mpDeselectAudioEffect = inpEffect;
-        }
         //--------------------------------------------------------
         /// Set Highlight Colour
         //--------------------------------------------------------
@@ -378,11 +340,6 @@ namespace ChilliSource
                 
 				mbSelected = true;
 				
-				if(mpSelectAudioEffect && !mpSelectAudioEffect->IsPlaying())
-				{
-					mpSelectAudioEffect->Play();
-				}
-                
                 m_image->SetTexture(HighlightTexture);
                 
                 if(HighlightTextureAtlas)
@@ -418,11 +375,6 @@ namespace ChilliSource
         {
             if(mbSelected)
 			{
-				if(mpDeselectAudioEffect && !mpDeselectAudioEffect->IsPlaying())
-				{
-					mpDeselectAudioEffect->Play();
-				}
-                
                 m_image->SetTexture(NormalTexture);
 				
                 
@@ -453,14 +405,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         StretchableHighlightButton::~StretchableHighlightButton()
         {
-            if(mpSelectAudioEffect)
-            {
-                mpSelectAudioEffect->Stop();
-            }
-			if(mpDeselectAudioEffect)
-            {
-                mpDeselectAudioEffect->Stop();
-            }
+
         }
     }
 }

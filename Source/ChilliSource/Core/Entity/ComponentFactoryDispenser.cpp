@@ -9,9 +9,6 @@
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactory.h>
 
-#include <ChilliSource/Audio/3D/AudioComponentFactory.h>
-#include <ChilliSource/Audio/3D/AudioComponent.h>
-
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 

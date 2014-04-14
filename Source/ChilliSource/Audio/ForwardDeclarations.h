@@ -2,7 +2,7 @@
 //  ForwardDeclarations.h
 //  Chilli Source
 //
-//  Created by Scott Downie on 21/04/2011.
+//  Created by Ian Copland on 27/02/2014.
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
@@ -13,26 +13,11 @@
 
 #include <memory>
 
-namespace ChilliSource
+namespace ChilliSource 
 {
 	namespace Audio
 	{
-        //--------------------------------------------------
-        /// 3D
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(AudioComponent);
-        CS_FORWARDDECLARE_CLASS(AudioComponentFactory);
-        CS_FORWARDDECLARE_CLASS(AudioListener);
-        CS_FORWARDDECLARE_CLASS(AudioListenerComponent);
-        //--------------------------------------------------
-        /// Base
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(AudioLoader);
-        CS_FORWARDDECLARE_CLASS(AudioManager);
-        CS_FORWARDDECLARE_CLASS(AudioPlayer);
-        CS_FORWARDDECLARE_CLASS(AudioResource);
-        CS_FORWARDDECLARE_CLASS(AudioSystem);
-        CS_FORWARDDECLARE_CLASS(SoundEvent);
+
 	}
 }
 
