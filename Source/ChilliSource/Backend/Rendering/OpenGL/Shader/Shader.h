@@ -179,6 +179,20 @@ namespace ChilliSource
             //----------------------------------------------------------
             bool HasUniform(const std::string& in_varName);
             //----------------------------------------------------------
+            /// Attempts to set the attribute shader variable with
+            /// the given name. Will fail silently if variable not found.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Variable name
+            /// @param Num of components in the attribute
+            /// @param Type
+            /// @param Whether normalised or not
+            /// @param Stride
+            /// @param Pointer to offset in buffer
+            //----------------------------------------------------------
+            void SetAttribute(const std::string& in_varName, GLint in_size, GLenum in_type, GLboolean in_isNormalized, GLsizei in_stride, const GLvoid* in_offset);
+            //----------------------------------------------------------
             /// Destructor. Destroys the GL program
             ///
             /// @author S Downie
@@ -215,13 +229,6 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			void CreateProgram(GLuint in_vs, GLuint in_fs);
             //----------------------------------------------------------
-            /// Assign the uniform handles based on the common
-            /// shader uniform names
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------
-            void PopulateUniformHandles();
-            //----------------------------------------------------------
             /// Assign the attribute handles based on the supported
             /// shader attribute names
             ///
@@ -249,15 +256,9 @@ namespace ChilliSource
             
             //---Uniforms
             std::unordered_map<std::string, GLint> m_uniformHandles;
-            std::vector<std::pair<GLint, s32>> m_textureHandles;
         
             //---Attributes
-            GLint m_posHandle;
-			GLint m_colHandle;
-			GLint m_normHandle;
-			GLint m_texCoordHandle;
-			GLint m_weightsHandle;
-			GLint m_jointIndicesHandle;
+            std::unordered_map<std::string, GLint> m_attribHandles;
 		};
 	}
 }

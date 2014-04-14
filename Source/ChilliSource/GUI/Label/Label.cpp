@@ -44,9 +44,6 @@ namespace ChilliSource
         DEFINE_PROPERTY(FlipVertical);
         
         f32 Label::mfGlobalTextScale = 1.0f;
-
-        //Res density of iPhone 4, used to normalise text spacing
-        const f32 kfScalableFontResDensity = 2.0f;
         
         //-------------------------------------------------------
         /// Constructor

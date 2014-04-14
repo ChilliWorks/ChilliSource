@@ -10,6 +10,7 @@
 #ifndef _CHILLISOURCE_CORE_THREADING_TASK_H_
 #define _CHILLISOURCE_CORE_THREADING_TASK_H_
 
+#include <condition_variable>
 #include <thread>
 #include <type_traits>
 

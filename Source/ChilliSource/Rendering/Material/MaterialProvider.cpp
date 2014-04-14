@@ -1,9 +1,29 @@
 //
 //  MaterialProvider.cpp
 //  Chilli Source
-//
 //  Created by Scott Downie on 22/11/2010.
-//  Copyright 2010 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/Rendering/Material/MaterialProvider.h>
@@ -31,7 +51,7 @@ namespace ChilliSource
 	{
 		namespace
 		{
-			const std::string k_materialExtension("momaterial");
+			const std::string k_materialExtension("csmaterial");
             
             //----------------------------------------------------------------------------
             /// @author S Downie
@@ -51,7 +71,6 @@ namespace ChilliSource
                 if(in_blendMode == "DestAlpha")	return BlendMode::k_destAlpha;
                 if(in_blendMode == "OneMinusDestAlpha") return BlendMode::k_oneMinusDestAlpha;
                 
-                //No blend function found
                 return BlendMode::k_one;
             }
             //----------------------------------------------------------------------------
@@ -83,118 +102,118 @@ namespace ChilliSource
             {
                 if(in_materialType == "Sprite")
                 {
-                    out_shaders.push_back({"Core/Sprite.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/Core/Sprite.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
                     return;
                 }
                 if(in_materialType == "Static")
                 {
-                    out_shaders.push_back({"Core/Static.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/Core/Static.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
                     return;
                 }
                 if(in_materialType == "StaticAmbient")
                 {
-                    out_shaders.push_back({"Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
                     return;
                 }
                 if(in_materialType == "StaticBlinn")
                 {
-                    out_shaders.push_back({"Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Core/StaticBlinnDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                    out_shaders.push_back({"Core/StaticBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                    out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/Core/StaticBlinnDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                    out_shaders.push_back({"Shaders/Core/StaticBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
                     return;
                 }
                 if(in_materialType == "StaticBlinnShadowed")
                 {
                     if (in_renderCapabilities->IsShadowMappingSupported() == true)
                     {
-                        out_shaders.push_back({"Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Core/StaticBlinnShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Core/StaticBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/Core/StaticBlinnShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/Core/StaticBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
                     }
                     else
                     {
-                        out_shaders.push_back({"Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Core/StaticBlinnDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Core/StaticBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/Core/StaticBlinnDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/Core/StaticBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
                     }
                     return;
                 }
                 if(in_materialType == "StaticBlinnPerVertex")
                 {
-                    out_shaders.push_back({"Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Core/StaticBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                    out_shaders.push_back({"Core/StaticBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                    out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/Core/StaticBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                    out_shaders.push_back({"Shaders/Core/StaticBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
                     return;
                 }
                 if(in_materialType == "StaticBlinnPerVertexShadowed")
                 {
                     if (in_renderCapabilities->IsShadowMappingSupported() == true)
                     {
-                        out_shaders.push_back({"Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Core/StaticBlinnPerVertexShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Core/StaticBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/Core/StaticBlinnPerVertexShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/Core/StaticBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
                     }
                     else
                     {
-                        out_shaders.push_back({"Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Core/StaticBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Core/StaticBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/Core/StaticBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/Core/StaticBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
                     }
                     return;
                 }
                 if(in_materialType == "Animated")
                 {
-                    out_shaders.push_back({"Core/Animated.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/Core/Animated.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
                     return;
                 }
                 if(in_materialType == "AnimatedAmbient")
                 {
-                    out_shaders.push_back({"Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
                     return;
                 }
                 if(in_materialType == "AnimatedBlinn")
                 {
-                    out_shaders.push_back({"Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Core/AnimatedBlinnDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                    out_shaders.push_back({"Core/AnimatedBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                    out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/Core/AnimatedBlinnDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                    out_shaders.push_back({"Shaders/Core/AnimatedBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
                     return;
                 }
                 if(in_materialType == "AnimatedBlinnShadowed")
                 {
                     if (in_renderCapabilities->IsShadowMappingSupported() == true)
                     {
-                        out_shaders.push_back({"Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Core/AnimatedBlinnShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Core/AnimatedBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
                     }
                     else
                     {
-                        out_shaders.push_back({"Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Core/AnimatedBlinnDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Core/AnimatedBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
                     }
                     return;
                 }
                 if(in_materialType == "AnimatedBlinnPerVertex")
                 {
-                    out_shaders.push_back({"Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Core/AnimatedBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                    out_shaders.push_back({"Core/AnimatedBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                    out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/Core/AnimatedBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                    out_shaders.push_back({"Shaders/Core/AnimatedBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
                     return;
                 }
                 if(in_materialType == "AnimatedBlinnPerVertexShadowed")
                 {
                     if (in_renderCapabilities->IsShadowMappingSupported() == true)
                     {
-                        out_shaders.push_back({"Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Core/AnimatedBlinnPerVertexShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Core/AnimatedBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnPerVertexShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
                     }
                     else
                     {
-                        out_shaders.push_back({"Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Core/AnimatedBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Core/AnimatedBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
                     }
                     return;
                 }
@@ -462,6 +481,51 @@ namespace ChilliSource
                     out_cubemapFiles.push_back(desc);
                 }
             }
+            //----------------------------------------------------------------------------
+            /// Load the shader from the given shader descs at the given index. On
+            /// completion this will recursively kick off the next shader load if one
+            /// is required, otherwise will call the delegate
+            ///
+            /// @author S Downie
+            ///
+            /// @param Index of shader desc to load
+            /// @param Shader descs
+            /// @param Completion delegate
+            /// @param [Out] Material
+            //----------------------------------------------------------------------------
+            void LoadShaderRecursive(u32 in_loadIndex, const std::vector<MaterialProvider::ShaderDesc>& in_descs, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const MaterialSPtr& out_material)
+            {
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                
+                resourcePool->LoadResourceAsync<Shader>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, [in_loadIndex, in_descs, in_delegate, out_material](const ShaderCSPtr& in_shader)
+                {
+                    if(in_shader->GetLoadState() == Core::Resource::LoadState::k_loaded)
+                    {
+                        //Set the material shader for this pass and load the next shader
+                        //in the list.
+                        out_material->SetShader(in_descs[in_loadIndex].m_pass, in_shader);
+                        
+                        u32 newLoadIndex = in_loadIndex + 1;
+                        
+                        if(newLoadIndex < in_descs.size())
+                        {
+                            LoadShaderRecursive(newLoadIndex, in_descs, in_delegate, out_material);
+                        }
+                        else
+                        {
+                            out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
+                            Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        out_material->SetLoadState(Core::Resource::LoadState::k_failed);
+                        Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
+                        return;
+                    }
+                });
+            }
 		}
         
         CS_DEFINE_NAMEDTYPE(MaterialProvider);
@@ -591,20 +655,6 @@ namespace ChilliSource
             
             MaterialSPtr material = std::static_pointer_cast<Material>(out_resource);
             
-            Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-            
-            resourcePool->LoadResourceAsync<Shader>(<#ChilliSource::Core::StorageLocation in_location#>, <#const std::string &in_filePath#>, <#const std::function<void (const std::shared_ptr<const TResourceType> &)> &in_delegate#>)
-            
-    
-            ShaderManager* pShaderManager = GET_RESOURCE_MANAGER(ShaderManager);
-            CS_ASSERT(pShaderManager != nullptr, "Shader manager must be created");
-            for(u32 i=0; i<shaderFiles.size(); ++i)
-            {
-                ShaderSPtr shader = pShaderManager->AsyncGetShaderFromFile(shaderFiles[i].m_location, shaderFiles[i].m_relativePath);
-                material->SetShader(shaderFiles[i].m_pass, shader);
-                shader->WaitTilLoaded();
-            }
-            
             TextureManager* textureManager = GET_RESOURCE_MANAGER(TextureManager);
             CS_ASSERT(textureManager != nullptr, "Texture manager must be created");
             for(u32 i=0; i<textureFiles.size(); ++i)
@@ -634,8 +684,10 @@ namespace ChilliSource
                 cubemap->WaitTilLoaded();
             }
             
-            out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
-            in_delegate(out_resource);
+            if(shaderFiles.size() > 0)
+            {
+                LoadShaderRecursive(0, shaderFiles, in_delegate, material);
+            }
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------

@@ -91,6 +91,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------------
             /// Load the resource of given type from the file location. If the resource at this
             /// location has previously been loaded then the cached version will be returned.
+            /// Check the load state of the resources of that type prior to use.
             ///
             /// The resource is immutable
             ///
@@ -106,8 +107,26 @@ namespace ChilliSource
             //-------------------------------------------------------------------------------------
             template <typename TResourceType> std::shared_ptr<const TResourceType> LoadResource(StorageLocation in_location, const std::string& in_filePath);
             //------------------------------------------------------------------------------------
+            /// Forec the reload of the resource of given type from the file location. This will
+            /// overwrite the currently cached version. This will fail if no cached resource
+            /// is found. Check the load state of the resources of that type prior to use
+            ///
+            /// The resource is immutable
+            ///
+            /// If the resource cannot be loaded or no loader exists for that type of resource
+            /// then null will be returned
+            ///
+            /// @author S Downie
+            ///
+            /// @param Storage location
+            /// @param File path
+            ///
+            /// @return Resource or null
+            //-------------------------------------------------------------------------------------
+            template <typename TResourceType> std::shared_ptr<const TResourceType> RefreshResource(StorageLocation in_location, const std::string& in_filePath);
+            //------------------------------------------------------------------------------------
             /// Force the reload of the resources of the given type that are currently cached.
-            /// Check the load state of the resources of that type prior to ise, although if they
+            /// Check the load state of the resources of that type prior to use, although if they
             /// have loaded once then chances are they will load again.
             ///
             /// @author S Downie
@@ -283,7 +302,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------------------
         template <typename TResourceType> std::shared_ptr<const TResourceType> ResourcePool::LoadResource(StorageLocation in_location, const std::string& in_filePath)
         {
-            CS_ASSERT(in_filePath.empty() == false, "Cannot load resource async with no file path");
+            CS_ASSERT(in_filePath.empty() == false, "Cannot load resource with no file path");
             
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             
@@ -323,6 +342,50 @@ namespace ChilliSource
             resource->SetStorageLocation(in_location);
             resource->SetFilePath(in_filePath);
             desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
+            
+            return std::static_pointer_cast<TResourceType>(resource);
+        }
+        //-------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------
+        template <typename TResourceType> std::shared_ptr<const TResourceType> ResourcePool::RefreshResource(StorageLocation in_location, const std::string& in_filePath)
+        {
+            CS_ASSERT(in_filePath.empty() == false, "Cannot refresh resource with no file path");
+            
+            auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
+            
+            if(itDescriptor == m_descriptors.end())
+            {
+                CS_LOG_ERROR("Failed to find resource provider for " + TResourceType::TypeName);
+                return nullptr;
+            }
+            
+            PoolDesc& desc(itDescriptor->second);
+            
+            //Check descriptor and see if this resource already exists
+            ResourceId resourceId = GenerateResourceId(in_location, in_filePath);
+            auto itResource = desc.m_cachedResources.find(resourceId);
+            if(itResource == desc.m_cachedResources.end())
+            {
+                CS_LOG_ERROR("Failed to refresh non-existing resource for " + in_filePath);
+                return nullptr;
+            }
+            
+            //Find a provider that can load this resource
+            ResourceProvider* provider = FindProvider(in_filePath, desc);
+            if(provider == nullptr)
+            {
+                return nullptr;
+            }
+            
+            //Load the resource
+            ResourceSPtr& resource(itResource->second);
+            resource->SetLoadState(Resource::LoadState::k_loading);
+            provider->CreateResourceFromFile(in_location, in_filePath, resource);
+            if(resource->GetLoadState() != Resource::LoadState::k_loaded)
+            {
+                CS_LOG_ERROR("Failed to refresh resource for " + in_filePath);
+                return nullptr;
+            }
             
             return std::static_pointer_cast<TResourceType>(resource);
         }

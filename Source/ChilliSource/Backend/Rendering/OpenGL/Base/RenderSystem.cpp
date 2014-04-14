@@ -42,11 +42,37 @@ namespace ChilliSource
 	{
         CS_DEFINE_NAMEDTYPE(RenderSystem);
         
+        namespace
+        {
+            const char* GetAttribNameForVertexSemantic(Rendering::VertexDataSemantic ineSemantic)
+            {
+                //Determine what client states are required and get their currently bound locations
+                switch(ineSemantic)
+                {
+                    case Rendering::VertexDataSemantic::k_position:
+                        return "avPosition";
+                    case Rendering::VertexDataSemantic::k_normal:
+                        return  "avNormal";
+                    case Rendering::VertexDataSemantic::k_uv:
+                        return "avTexCoord";
+                    case Rendering::VertexDataSemantic::k_colour:
+                        return "avColour";
+                    case Rendering::VertexDataSemantic::k_weight:
+                        return "avWeights";
+                    case Rendering::VertexDataSemantic::k_jointIndex:
+                        return "avJointIndices";
+                }
+
+                CS_LOG_FATAL("No such vertex semantic type");
+                return "";
+            }
+        }
+        
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
 		RenderSystem::RenderSystem(Rendering::RenderCapabilities* in_renderCapabilities)
-		: mpDefaultRenderTarget(nullptr), mpCurrentMaterial(nullptr), m_currentShader(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0), mpVertexAttribs(nullptr),
+		: mpDefaultRenderTarget(nullptr), mpCurrentMaterial(nullptr), m_currentShader(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0),
         mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mpLightComponent(nullptr),
         mbBlendFunctionLocked(false), mbInvalidateLigthingCache(true),
         mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities)), m_hasContextBeenBackedUp(false)
@@ -91,6 +117,12 @@ namespace ChilliSource
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
             mpRenderCapabilities->DetermineCapabilities();
             
+            m_textureUniformNames.clear();
+            for(u32 i=0; i<mpRenderCapabilities->GetNumTextureUnits(); ++i)
+            {
+                m_textureUniformNames.push_back("uTexture" + Core::ToString(i));
+            }
+            
             ForceRefreshRenderStates();
 			
             OnScreenOrientationChanged((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
@@ -126,7 +158,8 @@ namespace ChilliSource
             if(m_hasContextBeenBackedUp == false)
             {
                 //Context is about to be lost do a data backup
-                BackupMeshBuffers();
+                m_contextRestorer.Backup();
+                
                 mTexManager.Backup();
                 m_hasContextBeenBackedUp = true;
             }
@@ -141,10 +174,9 @@ namespace ChilliSource
             if(m_hasContextBeenBackedUp == true)
             {
                 ForceRefreshRenderStates();
-                RestoreMeshBuffers();
+                m_contextRestorer.Restore();
                 m_currentShader = nullptr;
                 mpCurrentMaterial = nullptr;
-                mShaderManager.Restore();
                 mTexManager.Restore();
                 mCubemapManager.Restore();
                 m_hasContextBeenBackedUp = false;
@@ -184,7 +216,7 @@ namespace ChilliSource
             Shader* shader = (Shader*)(in_material->GetShader(in_shaderPass).get());
             CS_ASSERT(shader != nullptr, "Cannot render with null shader");
             
-            m_currentShader->SetUniform("uvCameraPos", mvCameraPos, Shader::UniformNotFoundPolicy::k_failSilent);
+            shader->SetUniform("uvCameraPos", mvCameraPos, Shader::UniformNotFoundPolicy::k_failSilent);
             
             bool hasMaterialChanged = mbInvalidateAllCaches == true || mpCurrentMaterial == nullptr || mpCurrentMaterial != in_material.get() || mpCurrentMaterial->IsCacheValid() == false;
             if(hasMaterialChanged == true)
@@ -307,16 +339,9 @@ namespace ChilliSource
             
             for(u32 i=0; i<numTexturesToBind; ++i)
             {
-                if(mpaTextureHandles[i].first != -1)
-                {
-                    inMaterial->GetTexture(i)->Bind(mudwNumBoundTextures);
-                    if(mpaTextureHandles[i].second != mudwNumBoundTextures || mbInvalidateAllCaches)
-                    {
-                        glUniform1i(mpaTextureHandles[i].first, mudwNumBoundTextures);
-                        mpaTextureHandles[i].second = mudwNumBoundTextures;
-                    }
-                    ++mudwNumBoundTextures;
-                }
+                inMaterial->GetTexture(i)->Bind(mudwNumBoundTextures);
+                out_shader->SetUniform(m_textureUniformNames[i], (s32)mudwNumBoundTextures);
+                ++mudwNumBoundTextures;
             }
         }
         //----------------------------------------------------------
@@ -373,7 +398,7 @@ namespace ChilliSource
                     if(mudwNumBoundTextures <= mpRenderCapabilities->GetNumTextureUnits())
                     {
                         pLightComponent->GetShadowMapPtr()->Bind(mudwNumBoundTextures);
-                        glUniform1i(mShadowMapTexHandle, mudwNumBoundTextures);
+                        out_shader->SetUniform("uShadowMapTexture", (s32)mudwNumBoundTextures);
                         ++mudwNumBoundTextures;
                     }
                     else
@@ -447,7 +472,7 @@ namespace ChilliSource
             
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
-            memset(mpVertexAttribs, 0, sizeof(VertexAttribSet) * mdwMaxVertAttribs);
+            m_attributeCache.clear();
 		}
 		//----------------------------------------------------------
 		/// Create Render Target
@@ -468,7 +493,7 @@ namespace ChilliSource
 			pBuffer->SetOwningRenderSystem(this);
             
 #ifdef CS_TARGETPLATFORM_ANDROID
-			mMeshBuffers.push_back(pBuffer);
+            m_contextRestorer.AddMeshBuffer(pBuffer);
 #endif
 			return pBuffer;
 		}
@@ -874,52 +899,44 @@ namespace ChilliSource
                 glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &mdwMaxVertAttribs);
                 mpbCurrentVertexAttribState = (bool*)calloc(mdwMaxVertAttribs, sizeof(bool));
                 mpbLastVertexAttribState = (bool*)calloc(mdwMaxVertAttribs, sizeof(bool));
-                mpVertexAttribs = (VertexAttribSet*) calloc(mdwMaxVertAttribs, sizeof(VertexAttribSet));
             }
         }
-        
-        s32 RenderSystem::GetLocationForVertexSemantic(Rendering::VertexDataSemantic ineSemantic)
-        {
-            //Determine what client states are required and get their currently bound locations
-            switch(ineSemantic)
-            {
-                case Rendering::VertexDataSemantic::k_position:
-                    return mwPosAttributeLocation;
-                case Rendering::VertexDataSemantic::k_normal:
-                    return  mwNormAttributeLocation;
-                case Rendering::VertexDataSemantic::k_uv:
-                    return mwTexAttributeLocation;
-                case Rendering::VertexDataSemantic::k_colour:
-                    return mwColAttributeLocation;
-                case Rendering::VertexDataSemantic::k_weight:
-                    return mwWeiAttributeLocation;
-                case Rendering::VertexDataSemantic::k_jointIndex:
-                    return mwJIAttributeLocation;
-                default:
-                    return -1;
-            }
-        }
-        bool RenderSystem::ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
-                                                       GLuint inudwLocation, GLint indwSize, GLenum ineType, GLboolean inbNormalized,
+        void RenderSystem::ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
+                                                       const char* in_attribName, GLint indwSize, GLenum ineType, GLboolean inbNormalized,
                                                        GLsizei indwStride, const GLvoid* inpOffset)
         {
-            if(mpVertexAttribs[inudwLocation].pBuffer == inpBuffer &&
-               mpVertexAttribs[inudwLocation].size == indwSize &&
-               mpVertexAttribs[inudwLocation].type == ineType &&
-               mpVertexAttribs[inudwLocation].normalised == inbNormalized &&
-               mpVertexAttribs[inudwLocation].stride == indwStride &&
-               mpVertexAttribs[inudwLocation].offset ==(void*)indwStride)
-                return false;
+            auto it = m_attributeCache.find(in_attribName);
             
-            mpVertexAttribs[inudwLocation].pBuffer = inpBuffer;
-            mpVertexAttribs[inudwLocation].size = indwSize;
-            mpVertexAttribs[inudwLocation].type = ineType;
-            mpVertexAttribs[inudwLocation].normalised = inbNormalized;
-            mpVertexAttribs[inudwLocation].stride = indwStride;
-            mpVertexAttribs[inudwLocation].offset =(void*)indwStride;
-            
-            glVertexAttribPointer(inudwLocation, indwSize, ineType, inbNormalized, indwStride, inpOffset);
-            return true;
+            if(it != m_attributeCache.end())
+            {
+                if(it->second.pBuffer == inpBuffer &&
+                   it->second.size == indwSize &&
+                   it->second.type == ineType &&
+                   it->second.normalised == inbNormalized &&
+                   it->second.stride == indwStride &&
+                   it->second.offset == inpOffset)
+                    return;
+                
+                it->second.pBuffer = inpBuffer;
+                it->second.size = indwSize;
+                it->second.type = ineType;
+                it->second.normalised = inbNormalized;
+                it->second.stride = indwStride;
+                it->second.offset = inpOffset;
+            }
+            else
+            {
+                VertexAttribSet set;
+                set.pBuffer = inpBuffer;
+                set.size = indwSize;
+                set.type = ineType;
+                set.normalised = inbNormalized;
+                set.stride = indwStride;
+                set.offset = inpOffset;
+                m_attributeCache.insert(std::make_pair(in_attribName, set));
+            }
+  
+            m_currentShader->SetAttribute(in_attribName, indwSize, ineType, inbNormalized, indwStride, inpOffset);
         }
 		//------------------------------------------------------------
 		/// Enable Vertex Attribute For Semantic
@@ -935,10 +952,10 @@ namespace ChilliSource
             // If mesh buffer has changed we need to reset all its vertex attributes
             if(((ChilliSource::OpenGL::MeshBuffer*)inpBuffer)->IsCacheValid() == false)
             {
-                for(s32 i =0; i < mdwMaxVertAttribs; i++)
+                for(auto& entry : m_attributeCache)
                 {
-                    if(mpVertexAttribs[i].pBuffer == inpBuffer)
-                        mpVertexAttribs[i].pBuffer = nullptr;
+                    if(entry.second.pBuffer == inpBuffer)
+                        entry.second.pBuffer = nullptr;
                 }
                 ((ChilliSource::OpenGL::MeshBuffer*)inpBuffer)->SetCacheValid();
             }
@@ -953,15 +970,8 @@ namespace ChilliSource
 			//Enable all the client states required to match the vertex layout
 			for(u32 i=0; i<nElements; ++i)
 			{
-				const Rendering::VertexElement &Element = inpBuffer->GetVertexDeclaration().GetElementAtIndex(i);
-                GLint dwLocation = GetLocationForVertexSemantic(Element.eSemantic);
-                
-                // Check next vertex attribute if no location available
-                if(dwLocation < 0)
-                    continue;
-                
                 //Track the active attribute channels
-                mpbCurrentVertexAttribState[dwLocation] = true;
+                mpbCurrentVertexAttribState[i] = true;
                 
                 //Track to ensure we don't exceed maximum.
                 udwAttributeCount++;
@@ -990,11 +1000,7 @@ namespace ChilliSource
                 const Rendering::VertexElement &Element = inpBuffer->GetVertexDeclaration().GetElementAtIndex(i);
                 
                 // Get parameters for vertex attribute pointer call
-                const GLint         dwLocation = GetLocationForVertexSemantic(Element.eSemantic);
-                
-                // Check next vertex attribute if no location available
-                if(dwLocation < 0)
-                    continue;
+                const char* attribName = GetAttribNameForVertexSemantic(Element.eSemantic);
                 
 				const GLint         uwNumComponents = Element.NumDataTypesPerType();
                 GLenum              eType = GL_FLOAT;
@@ -1014,7 +1020,7 @@ namespace ChilliSource
                     eType = GL_UNSIGNED_BYTE;
                 }
                 
-                ApplyVertexAttributePointr(inpBuffer, dwLocation, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*)(s32)uwElementOffset);
+                ApplyVertexAttributePointr(inpBuffer, attribName, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*)(s32)uwElementOffset);
             }
 		}
 		//------------------------------------------------------------
@@ -1052,44 +1058,13 @@ namespace ChilliSource
             
             mbInvalidateAllCaches = true;
 		}
-		//----------------------------------------------------------
-		/// Backup Mesh Buffers
-		//----------------------------------------------------------
-		void RenderSystem::BackupMeshBuffers()
-		{
-#ifdef CS_TARGETPLATFORM_ANDROID
-			for(std::vector<MeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
-			{
-				(*it)->Backup();
-			}
-#endif
-		}
-		//----------------------------------------------------------
-		/// Restore Mesh Buffers
-		//----------------------------------------------------------
-		void RenderSystem::RestoreMeshBuffers()
-		{
-#ifdef CS_TARGETPLATFORM_ANDROID
-			for(std::vector<MeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
-			{
-				(*it)->Restore();
-			}
-#endif
-		}
         //----------------------------------------------------------
 		/// Remove Buffer
 		//----------------------------------------------------------
 		void RenderSystem::RemoveBuffer(Rendering::MeshBuffer* inpBuffer)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
-			for(std::vector<MeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
-			{
-				if ((*it) == inpBuffer)
-				{
-					mMeshBuffers.erase(it);
-					break;
-				}
-			}
+            m_contextRestorer.RemoveMeshBuffer((MeshBuffer*)inpBuffer);
 #endif
 		}
 		//----------------------------------------------------------
@@ -1160,7 +1135,6 @@ namespace ChilliSource
             
             free(mpbCurrentVertexAttribState);
             free(mpbLastVertexAttribState);
-            free(mpVertexAttribs);
 		}
 	}
 }

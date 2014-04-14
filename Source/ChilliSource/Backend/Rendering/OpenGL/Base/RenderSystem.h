@@ -22,6 +22,9 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/CubemapManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/ContextRestorer.h>
+
+#include <unordered_map>
 
 namespace ChilliSource
 {
@@ -406,21 +409,6 @@ namespace ChilliSource
 			/// Ignores all caching and force changes render states
 			//----------------------------------------------------------
 			void ForceRefreshRenderStates();
-			//----------------------------------------------------------
-			/// Backup Mesh Buffers
-			///
-			/// Copy all active mesh buffers into memory to be
-			/// restored at a later date. This should only be called
-			/// if the GL context is about to be lost
-			//----------------------------------------------------------
-			void BackupMeshBuffers();
-			//----------------------------------------------------------
-			/// Restore Mesh Buffers
-			///
-			/// Copy all backups from memory into buffers. This is
-			/// called after a context is recreated having been lost
-			//----------------------------------------------------------
-			void RestoreMeshBuffers();
             //----------------------------------------------------------
             /// Is Attrib Pointer Set
             ///
@@ -440,9 +428,9 @@ namespace ChilliSource
             void CreateAttribStateCache();
 			
 		private:
-			s32 GetLocationForVertexSemantic(Rendering::VertexDataSemantic ineSemantic);
-            bool ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
-                                            GLuint inudwLocation, GLint indwSize, GLenum ineType, GLboolean inbNormalized, GLsizei indwStride, const GLvoid* inpOffset);
+			
+            void ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
+                                            const char* in_attribName, GLint indwSize, GLenum ineType, GLboolean inbNormalized, GLsizei indwStride, const GLvoid* inpOffset);
             
             Rendering::LightComponent* mpLightComponent;
             
@@ -472,6 +460,8 @@ namespace ChilliSource
             bool* mpbLastVertexAttribState;
             bool* mpbCurrentVertexAttribState;
             
+            std::vector<std::string> m_textureUniformNames;
+            
 			RenderTarget* mpDefaultRenderTarget;
             
             Core::Vector2 mvCachedScissorPos;
@@ -489,14 +479,15 @@ namespace ChilliSource
             
             struct VertexAttribSet
             {
-                Rendering::MeshBuffer * pBuffer;
+                Rendering::MeshBuffer* pBuffer;
                 GLint size;
                 GLenum type;
                 GLboolean normalised;
-                GLsizei   stride;
-                GLvoid*   offset;
+                GLsizei stride;
+                const GLvoid* offset;
             };
-            VertexAttribSet * mpVertexAttribs;
+            
+            std::unordered_map<std::string, VertexAttribSet> m_attributeCache;
             
             struct RenderStates
 			{
@@ -531,7 +522,7 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_IOS
             EAGLContext* mContext;
 #elif defined CS_TARGETPLATFORM_ANDROID
-            std::vector<MeshBuffer*> mMeshBuffers;
+            ContextRestorer m_contextRestorer;
 #endif
 		};
 	}

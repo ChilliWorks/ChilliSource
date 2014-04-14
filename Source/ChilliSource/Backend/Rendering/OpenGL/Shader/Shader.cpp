@@ -28,13 +28,9 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Cryptographic/HashCRC32.h>
-#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 
-#include <algorithm>
+#include <array>
 
 namespace ChilliSource
 {
@@ -60,6 +56,7 @@ namespace ChilliSource
             CompileShader(in_vs, GL_VERTEX_SHADER);
             CompileShader(in_fs, GL_FRAGMENT_SHADER);
             CreateProgram(m_vertexShaderId, m_fragmentShaderId);
+            PopulateAttributeHandles();
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -69,33 +66,26 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::PopulateUniformHandles()
-        {
-            //Get the required handles to the shader variables (Uniform)
-            m_jointsHandle = glGetUniformLocation(m_programId, "uavJoints");
-            
-            m_shadowMapTexHandle = glGetUniformLocation(m_programId, "uShadowMapTexture");
-            
-            m_cubemapHandle = glGetUniformLocation(m_programId, "uCubemap");
-            
-            m_textureHandles.reserve(mpRenderCapabilities->GetNumTextureUnits());
-    
-            for(u32 i=0; i<mpRenderCapabilities->GetNumTextureUnits(); ++i)
-            {
-                m_textureHandles[i].first = glGetUniformLocation(m_programId, std::string("uTexture" + Core::ToString(i)).c_str());
-                m_textureHandles[i].second = -1;
-            }
-        }
-        //----------------------------------------------------------
-        //----------------------------------------------------------
         void Shader::PopulateAttributeHandles()
         {
-            m_posHandle = glGetAttribLocation(m_programId, "avPosition");
-            m_colHandle = glGetAttribLocation(m_programId, "avColour");
-            m_normHandle = glGetAttribLocation(m_programId, "avNormal");
-            m_texCoordHandle = glGetAttribLocation(m_programId, "avTexCoord");
-            m_weightsHandle = glGetAttribLocation(m_programId, "avWeights");
-            m_jointIndicesHandle = glGetAttribLocation(m_programId, "avJointIndices");
+            const std::array<std::string, 6> attribNames =
+            {{
+                "avPosition",
+                "avColour",
+                "avNormal",
+                "avTexCoord",
+                "avWeights",
+                "avJointIndices"
+            }};
+            
+            for(const auto& name : attribNames)
+            {
+                GLint handle = glGetAttribLocation(m_programId, name.c_str());
+                if(handle >= 0)
+                {
+                    m_attribHandles.insert(std::make_pair(name, handle));
+                }
+            }
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -262,6 +252,19 @@ namespace ChilliSource
         bool Shader::HasUniform(const std::string& in_varName)
         {
             return GetUniformHandle(in_varName) >= 0;
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::SetAttribute(const std::string& in_varName, GLint in_size, GLenum in_type, GLboolean in_isNormalized, GLsizei in_stride, const GLvoid* in_offset)
+        {
+            auto it = m_attribHandles.find(in_varName);
+            
+            if(it == m_attribHandles.end())
+            {
+                return;
+            }
+            
+            glVertexAttribPointer(it->second, in_size, in_type, in_isNormalized, in_stride, in_offset);
         }
         //----------------------------------------------------------
         //----------------------------------------------------------

@@ -11,6 +11,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSString+MD5Addition.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/UIDevice+IdentifierAddition.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #include <UIKit/UIKit.h>
@@ -38,7 +39,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
 		{
-
+            in_application->CreateSystem<OpenGL::GLSLShaderProvider>();
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------

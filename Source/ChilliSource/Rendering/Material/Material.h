@@ -18,6 +18,7 @@
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/Base/ShaderPass.h>
 
+#include <array>
 #include <unordered_map>
 
 namespace ChilliSource
@@ -391,7 +392,7 @@ namespace ChilliSource
             
             CubemapSPtr m_cubemap;
             
-            ShaderCSPtr m_shaders[(u32)ShaderPass::k_total];
+            std::array<ShaderCSPtr, (u32)ShaderPass::k_total> m_shaders;
 			
 			Core::Colour m_emissive;
             Core::Colour m_ambient;

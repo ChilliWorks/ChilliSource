@@ -31,6 +31,8 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Threading/Task.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace ChilliSource
 {
@@ -44,45 +46,48 @@ namespace ChilliSource
             const std::string k_fsTag("FragmentShader");
             
             //----------------------------------------------
-            /// Seeks through the given string from the
-            /// given position to get the next "chunk". A
-            /// chunk consists of text enclosed in braces
-            /// with a title in the following format:
+            /// Grabs the contents of a chunk identified by
+            /// the given tag
             ///
-            ///		Title
+            ///		Tag
             ///		{
-            ///			Text
+            ///			Contents
             ///		}
             ///
-            /// If no chunk can be found, empty strings
+            /// If no chunk can be found an empty string
             /// will be returned.
             ///
             /// @author I Copland
             ///
-            /// @param The string to search in.
-            /// @param The position in the string to start
-            /// searching.
-            /// @param [Out] The chunk name.
-            /// @param [Out] The chunk contents.
+            /// @param The chunk tag
+            /// @param The string data to search in.
             ///
-            /// @return The next position to continue looking
-            /// for chunks.
+            /// @return Contents of the chunk or empty
             //----------------------------------------------
-            u32 GetNextChunk(const std::string& in_text, u32 in_startIndex, std::string& out_title, std::string& out_contents)
+            std::string GetChunk(const std::string& in_chunkTag, const std::string& in_text)
             {
-                //find the first open brace
-                u32 openBraceLocation = in_text.find("{", in_startIndex);
-                if (openBraceLocation == in_text.npos)
+                //Find the chunk key
+                u32 tagStartIdx = in_text.find(in_chunkTag);
+                if(tagStartIdx == in_text.npos)
                 {
-                    return in_text.length();
+                    CS_LOG_ERROR("Missing " + in_chunkTag + " tag from shader");
+                    return "";
                 }
                 
-                //iterate over to find the matching close brace
+                //Find the open brace
+                u32 openBraceLocation = in_text.find("{", tagStartIdx);
+                if (openBraceLocation == in_text.npos)
+                {
+                    CS_LOG_ERROR("Missing open brace in tag " + in_chunkTag);
+                    return "";
+                }
+                
+                //Grab all the data between the open and close braces
                 u32 closeBraceLocation = openBraceLocation;
                 u32 additionalOpenBraceCount = 0;
                 for (u32 i = openBraceLocation + 1; i < in_text.size(); ++i)
                 {
-                    bool bContinue = true;
+                    bool shouldContinue = true;
                     switch (in_text[i])
                     {
                         case '{':
@@ -92,7 +97,7 @@ namespace ChilliSource
                             if (additionalOpenBraceCount <= 0)
                             {
                                 closeBraceLocation = i;
-                                bContinue = false;
+                                shouldContinue = false;
                             }
                             else
                             {
@@ -103,7 +108,7 @@ namespace ChilliSource
                             break;
                     }
                     
-                    if (bContinue == false)
+                    if (shouldContinue == false)
                     {
                         break;
                     }
@@ -111,38 +116,95 @@ namespace ChilliSource
                 
                 if (openBraceLocation == closeBraceLocation)
                 {
-                    return in_text.length();
+                    CS_LOG_ERROR("Missing closing brace in tag " + in_chunkTag);
+                    return "";
                 }
                 
-                //get the title and contents
-                out_title = in_text.substr(in_startIndex, openBraceLocation - in_startIndex);
-                out_contents = in_text.substr(openBraceLocation + 1, closeBraceLocation - (openBraceLocation + 1));
-                
-                return closeBraceLocation + 1;
+                return in_text.substr(openBraceLocation + 1, closeBraceLocation - (openBraceLocation + 1));
             }
             //----------------------------------------------
-            /// returns a new map containing the information
-            /// on all chunks in the given text.
+            /// Performs the actual loading for the 2
+            /// create methods
             ///
-            /// @author I Copland
+            /// @author S Downie
             ///
-            /// @param The text.
-            ///
-            /// @return Map of chunks
+            /// @param Location
+            /// @param File path
+            /// @param Completion delegate
+            /// @param [Out] Shader resource
             //----------------------------------------------
-            std::unordered_map<std::string, std::string> GetAllChunks(const std::string& in_text)
+            void LoadShader(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, ShaderSPtr& out_shader)
             {
-                std::unordered_map<std::string, std::string> chunks;
-                u32 seekPosition = 0;
-                while (seekPosition < in_text.length())
+                Core::FileStreamSPtr shaderStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_read);
+                if(shaderStream == nullptr || shaderStream->IsBad())
                 {
-                    std::string chunkName;
-                    std::string chunkContents;
-                    seekPosition = GetNextChunk(in_text, seekPosition, chunkName, chunkContents);
-                    chunks.emplace(chunkName, chunkContents);
+                    CS_LOG_ERROR("Failed to open shader file: " + in_filePath);
+                    out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
+                    }
+                    return;
                 }
                 
-                return chunks;
+                std::string fileContents;
+                shaderStream->GetAll(fileContents);
+                shaderStream->Close();
+                
+                std::string languageChunk = GetChunk(k_languageTag, fileContents);
+                if(languageChunk.empty() == true)
+                {
+                    CS_LOG_ERROR("Failed to find GLSL chunk in shader: " + in_filePath);
+                    out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
+                    }
+                    return;
+                }
+                
+                std::string vsChunk = GetChunk(k_vsTag, languageChunk);
+                if(vsChunk.empty() == true)
+                {
+                    CS_LOG_ERROR("Failed to find VertexShader chunk in shader: " + in_filePath);
+                    out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
+                    }
+                    return;
+                }
+                
+                std::string fsChunk = GetChunk(k_fsTag, languageChunk);
+                if(fsChunk.empty() == true)
+                {
+                    CS_LOG_ERROR("Failed to find FragmentShader chunk in shader: " + in_filePath);
+                    out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
+                    }
+                    return;
+                }
+                
+                if(in_delegate == nullptr)
+                {
+                    out_shader->Build(vsChunk, fsChunk);
+                    out_shader->SetLoadState(Core::Resource::LoadState::k_loaded);
+                }
+                else
+                {
+                    //All GL related tasks must be performed on the main thread.
+                    Core::Task<const std::string&, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, ShaderSPtr&>::TaskDelegate buildTask =
+                    [](const std::string& in_vs, const std::string& in_ps, const Core::ResourceProvider::AsyncLoadDelegate& in_completionDelegate, ShaderSPtr& out_shaderResource)
+                    {
+                        out_shaderResource->Build(in_vs, in_ps);
+                        out_shaderResource->SetLoadState(Core::Resource::LoadState::k_loaded);
+                        in_completionDelegate(out_shaderResource);
+                    };
+                    Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const std::string&, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, ShaderSPtr&>
+                                                                (buildTask, vsChunk, fsChunk, in_delegate, out_shader));
+                }
             }
         }
         
@@ -176,55 +238,15 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         void GLSLShaderProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
         {
-            Core::FileStreamSPtr shaderStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_read);
-            if(shaderStream == nullptr || shaderStream->IsBad())
-            {
-                CS_LOG_ERROR("Failed to open shader file: " + in_filePath);
-                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-                return;
-            }
-            
-            std::string fileContents;
-            shaderStream->GetAll(fileContents);
-            shaderStream->Close();
-            
-            auto fileChunks = GetAllChunks(fileContents);
-            
-			auto chunkIt = fileChunks.find(k_languageTag);
-            
-            if(chunkIt == fileChunks.end())
-            {
-                CS_LOG_ERROR("Failed to find GLSL chunk in shader: " + in_filePath);
-                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-                return;
-            }
-            
-            auto langaugeChunks = GetAllChunks(chunkIt->second);
-            
-            auto vertexChunkIt = langaugeChunks.find(k_vsTag);
-            if(vertexChunkIt == langaugeChunks.end())
-            {
-                CS_LOG_ERROR("Failed to find vertex chunk in shader: " + in_filePath);
-                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-                return;
-            }
-            
-            auto fragmentChunkIt = langaugeChunks.find(k_fsTag);
-            if(fragmentChunkIt == langaugeChunks.end())
-            {
-                CS_LOG_ERROR("Failed to find fragment chunk in shader: " + in_filePath);
-                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-                return;
-            }
-            
-            Shader* shader = (Shader*)(out_resource.get());
-            shader->Build(vertexChunkIt->second, fragmentChunkIt->second);
+            ShaderSPtr shaderResource = std::static_pointer_cast<Shader>(out_resource);
+            LoadShader(in_location, in_filePath, nullptr, shaderResource);
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
         void GLSLShaderProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
         {
-            
+            ShaderSPtr shaderResource = std::static_pointer_cast<Shader>(out_resource);
+            LoadShader(in_location, in_filePath, in_delegate, shaderResource);
         }
 	}
 }
