@@ -110,7 +110,6 @@
     [pNewTextView setText:text];
     [pNewTextView setFont:[UIFont fontWithName:fontName size: pStyle->m_fontSize]];
     [pNewTextView setTextColor:[UIColor colorWithRed:pStyle->m_colour.r green:pStyle->m_colour.g blue:pStyle->m_colour.b alpha:0.0f]];
-    [pNewTextView setEditable:YES];
     [pNewTextView setUserInteractionEnabled:NO];
     [text release];
     [fontName release];
@@ -159,9 +158,7 @@
         [self RemoveTextView:inpSubtitle];
     }
     
-    [inpTextView setEditable:YES];
     [inpTextView setTextColor:[UIColor colorWithRed:pStyle->m_colour.r green:pStyle->m_colour.g blue:pStyle->m_colour.b alpha:(fFade * pStyle->m_colour.a)]];
-    [inpTextView setEditable:NO];
 }
 //--------------------------------------------------------
 /// Remove Text View

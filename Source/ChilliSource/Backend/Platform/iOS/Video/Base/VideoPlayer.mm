@@ -33,17 +33,16 @@
 #include <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
-#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoOverlayView.h>
+#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Base/ApplicationEvents.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
-#include <MediaPlayer/MediaPlayer.h>
-#include <AudioToolbox/AudioSession.h>
+#import <AudioToolbox/AudioSession.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 namespace ChilliSource
 {
@@ -53,15 +52,15 @@ namespace ChilliSource
         {
             //--------------------------------------------------------------
             //--------------------------------------------------------------
-            void AudioRouteCallback(void *inpUserData, AudioSessionPropertyID inudwPropertyID, UInt32 inudwPropertyValueSize, const void *inpPropertyValue)
+            void AudioRouteCallback(void *in_userData, AudioSessionPropertyID in_propertyID, UInt32 in_propertyValueSize, const void *in_propertyValue)
             {
                 // Only interested in audio route changes.
-                if(inudwPropertyID != kAudioSessionProperty_AudioRouteChange)
+                if(in_propertyID != kAudioSessionProperty_AudioRouteChange)
                 {
                     return;
                 }
                 
-                const CFDictionaryRef kRouteChangeDictionary = (CFDictionaryRef)inpPropertyValue;
+                const CFDictionaryRef kRouteChangeDictionary = (CFDictionaryRef)in_propertyValue;
                 const CFNumberRef     kRouteChangeReasonRef  = (CFNumberRef)CFDictionaryGetValue(kRouteChangeDictionary, CFSTR (kAudioSession_AudioRouteChangeKey_Reason));
                 
                 SInt32 dwRouteChangeReason(0);
@@ -71,7 +70,7 @@ namespace ChilliSource
                 if(dwRouteChangeReason == kAudioSessionRouteChangeReason_OldDeviceUnavailable)
                 {
                     // Get the movie controller.
-                    MPMoviePlayerController *pMovieController = static_cast<MPMoviePlayerController*>(inpUserData);
+                    MPMoviePlayerController *pMovieController = static_cast<MPMoviePlayerController*>(in_userData);
                     
                     // Restart the movie.
                     if(pMovieController)
