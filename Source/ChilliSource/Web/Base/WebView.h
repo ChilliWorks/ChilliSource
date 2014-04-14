@@ -35,6 +35,8 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
+#include <functional>
+
 namespace ChilliSource
 {
     namespace Web
