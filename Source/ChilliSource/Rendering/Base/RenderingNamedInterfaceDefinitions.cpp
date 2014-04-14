@@ -7,15 +7,12 @@
  *
  */
 
-#include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
-#include <ChilliSource/Rendering/Shader/Shader.h>
 
 namespace ChilliSource 
 {
 	namespace Rendering
 	{
-		CS_DEFINE_NAMEDTYPE(Texture);
         CS_DEFINE_NAMEDTYPE(Cubemap);
 	}
 }
