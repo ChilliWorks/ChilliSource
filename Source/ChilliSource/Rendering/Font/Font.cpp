@@ -78,8 +78,8 @@ namespace ChilliSource
             m_characterInfos.clear();
 			m_textureAtlas = in_charData;
 			
-            const f32 textureAtlasWidth = in_charData->GetWidth();
-            const f32 textureAtlasHeight = in_charData->GetHeight();
+            const f32 textureAtlasWidth = (f32)in_charData->GetWidth();
+            const f32 textureAtlasHeight = (f32)in_charData->GetHeight();
 
 			for (u32 i=0; i<m_characters.length(); ++i)
             {
