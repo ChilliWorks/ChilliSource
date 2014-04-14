@@ -106,6 +106,14 @@ namespace ChilliSource
             //-------------------------------------------------------------------------------------
             template <typename TResourceType> std::shared_ptr<const TResourceType> LoadResource(StorageLocation in_location, const std::string& in_filePath);
             //------------------------------------------------------------------------------------
+            /// Force the reload of the resources of the given type that are currently cached.
+            /// Check the load state of the resources of that type prior to ise, although if they
+            /// have loaded once then chances are they will load again.
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------------------------------------
+            template <typename TResourceType> void RefreshResources();
+            //------------------------------------------------------------------------------------
             /// Load the resource of given type from the file location. If the resource at this
             /// location has previously been loaded then the cached version will be returned in the
             /// delegate.
@@ -317,6 +325,44 @@ namespace ChilliSource
             desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
             
             return std::static_pointer_cast<TResourceType>(resource);
+        }
+        //------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------
+        template <typename TResourceType> void ResourcePool::RefreshResources()
+        {
+            auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
+            
+            if(itDescriptor == m_descriptors.end())
+            {
+                CS_LOG_ERROR("Failed to find resource provider for " + TResourceType::TypeName);
+                return;
+            }
+            
+            PoolDesc& desc(itDescriptor->second);
+            
+            for(auto& resourceEntry : desc.m_cachedResources)
+            {
+                ResourceSPtr& resource(resourceEntry.second);
+                
+                if(resource->GetFilePath().empty() == false)
+                {
+                    //Find a provider that can load this resource
+                    ResourceProvider* provider = FindProvider(resource->GetFilePath(), desc);
+                    if(provider == nullptr)
+                    {
+                        CS_LOG_ERROR("Failed to find resource provider for " + resource->GetFilePath());
+                        continue;
+                    }
+                    
+                    resource->SetLoadState(Resource::LoadState::k_loading);
+                    provider->CreateResourceFromFile(resource->GetStorageLocation(), resource->GetFilePath(), resource);
+                    if(resource->GetLoadState() != Resource::LoadState::k_loaded)
+                    {
+                        CS_LOG_ERROR("Failed to refresh resource for " + resource->GetFilePath());
+                        continue;
+                    }
+                }
+            }
         }
         //-------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------
