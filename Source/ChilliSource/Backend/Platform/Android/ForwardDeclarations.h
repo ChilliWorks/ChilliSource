@@ -85,7 +85,7 @@ namespace ChilliSource
 		/// Web
 		//------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(WebViewJavaInterface);
-		CS_FORWARDDECLARE_CLASS(WebViewActivity);
+		CS_FORWARDDECLARE_CLASS(WebView);
 	}
 }
 

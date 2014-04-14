@@ -12,7 +12,7 @@ public class CSWebViewClient extends android.webkit.WebViewClient
 	final String kstrGooglePlayURLScheme = "market";
 	final String kstrAmazonUrlScheme = "amzn";
 	private String mAnchor;
-	private WebView mWebView;
+	private CSWebView mWebView;
 	//--------------------------------------------------------
 	/// Is Store Deep Link
 	///
@@ -65,6 +65,7 @@ public class CSWebViewClient extends android.webkit.WebViewClient
 	public void onPageFinished(WebView inView, String inURL)
 	{
 		WebViewNativeInterface.RemoveActivityIndicator();
+		WebViewNativeInterface.AddDismissButton();
 		
 		if(mAnchor.length() > 0)
 		{
@@ -85,7 +86,7 @@ public class CSWebViewClient extends android.webkit.WebViewClient
 		mAnchor = inAnchor;
 	}
 	
-	public void SetView(WebView inWebView)
+	public void SetView(CSWebView inWebView)
 	{
 		mWebView = inWebView;
 	}

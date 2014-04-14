@@ -50,7 +50,7 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(WebViewActivity);
             //-------------------------------------------------------
-            /// A delegate for callbacks from the video player system.
+            /// A delegate called when the webview is dismissed.
             ///
             /// @author S Downie
             //-------------------------------------------------------

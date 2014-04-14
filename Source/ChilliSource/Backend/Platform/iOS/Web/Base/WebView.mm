@@ -44,6 +44,33 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
+        namespace
+        {
+            //---------------------------------------------------------
+			/// Breaks the given url path into the file path and anchor.
+			///
+			/// @author I Copland
+			///
+			/// @param The URL.
+			/// @param [Out] The file path.
+			/// @param [Out] The anchor.
+			//---------------------------------------------------------
+			void GetFilePathAndAnchor(const std::string& in_combined, std::string& out_filePath, std::string& out_anchor)
+            {
+                size_t anchorStart = in_combined.find_last_of('#');
+                
+				if(anchorStart != std::string::npos)
+				{
+					out_anchor = in_combined.substr(anchorStart, in_combined.size() - anchorStart);
+					out_filePath = in_combined.substr(0, anchorStart);
+				}
+				else
+				{
+					out_anchor = "";
+					out_filePath = in_combined;
+				}
+            }
+        }
         CS_DEFINE_NAMEDTYPE(WebView);
 		//-----------------------------------------------
 		//-----------------------------------------------
@@ -104,21 +131,8 @@ namespace ChilliSource
                 
                 CreateWebview(in_size);
                 
-                
-                size_t udwAnchorStart = in_filePath.find_last_of('#');
-                bool bHasAnchor = (udwAnchorStart != std::string::npos);
-                
                 std::string filePath;
-                if(bHasAnchor)
-                {
-                    m_anchor = in_filePath.substr(udwAnchorStart, in_filePath.size() - udwAnchorStart);
-                    filePath = in_filePath.substr(0, udwAnchorStart);
-                }
-                else
-                {
-                    m_anchor = "";
-                    filePath = in_filePath;
-                }
+                GetFilePathAndAnchor(in_filePath, filePath, m_anchor);
                 
                 Core::FileSystem* fileSystem = Core::Application::Get()->GetFileSystem();
 
@@ -139,6 +153,7 @@ namespace ChilliSource
                 std::string strHTMLFileContents;
                 Core::FileStreamSPtr pHTMLFile = fileSystem->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_read);
                 pHTMLFile->GetAll(strHTMLFileContents);
+                pHTMLFile->Close();
                 
                 NSString* pstrHTML = [NSStringUtils newNSStringWithString:strHTMLFileContents];
                 NSString* urlString = [NSStringUtils newNSStringWithString:fullFilePath];
@@ -216,9 +231,9 @@ namespace ChilliSource
         //---------------------------------------------------------
         void WebView::OnViewDidFinishLoad()
         {
-            if(HasAnchor() == true)
+            if(m_anchor.length() > 0)
             {
-                std::string strJavaScript = "window.location.href = '" + GetAnchor() + "';";
+                std::string strJavaScript = "window.location.href = '" + m_anchor + "';";
                 NSString* nsJavaString = [NSStringUtils newNSStringWithString:strJavaScript];
                 [m_webView stringByEvaluatingJavaScriptFromString:nsJavaString];
                 [nsJavaString release];
@@ -301,17 +316,14 @@ namespace ChilliSource
                 m_activityIndicator = nil;
             }
         }
-        //-----------------------------------------------
-        //-----------------------------------------------
-        bool WebView::HasAnchor()
+        //------------------------------------------------
+        //------------------------------------------------
+        void WebView::OnDestroy()
         {
-            return (!m_anchor.empty());
-        }
-        //-----------------------------------------------
-        //-----------------------------------------------
-        const std::string& WebView::GetAnchor() const
-        {
-            return m_anchor;
+            if (IsPresented() == true)
+            {
+                Dismiss();
+            }
         }
 	}
 }

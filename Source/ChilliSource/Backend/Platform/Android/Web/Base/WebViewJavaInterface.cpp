@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Backend/Platform/Android/Web/Base/WebViewJavaInterface.h>
 
-#include <ChilliSource/Backend/Platform/Android/Web/Base/WebViewActivity.h>
+#include <ChilliSource/Backend/Platform/Android/Web/Base/WebView.h>
 
 //function definitions
 extern "C"
@@ -29,7 +29,7 @@ extern "C"
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_web_WebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex)
 {
-	ChilliSource::Android::WebViewActivity::OnWebViewDismissed(inudwIndex);
+	ChilliSource::Android::WebView::OnWebViewDismissed(inudwIndex);
 }
 
 namespace ChilliSource
@@ -40,13 +40,12 @@ namespace ChilliSource
 		{
 			mspJavaVM = inpJavaVM;
 
-			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","Present", "(ILjava/lang/String;II)V");
-			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","PresentFromFile", "(ILjava/lang/String;IILjava/lang/String;Ljava/lang/String;)V");
+			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","Present", "(ILjava/lang/String;IIF)V");
+			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","PresentFromFile", "(ILjava/lang/String;IILjava/lang/String;Ljava/lang/String;F)V");
 			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","PresentInExternalBrowser", "(Ljava/lang/String;)V");
 			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","Dismiss", "(I)V");
-			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","AddDismissButton", "(IF)V");
 		}
-		void WebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::Vector2& invSize)
+		void WebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::Vector2& invSize, f32 in_dismissButtonScale)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("Present");
 
@@ -57,13 +56,13 @@ namespace ChilliSource
 				u32 udwIndex = inudwIndex;
 				u32 udwWidth = invSize.x;
 				u32 udwHeight = invSize.y;
-				env->CallStaticVoidMethod(sdMethodRef.mClassID, sdMethodRef.mMethodID,udwIndex,jstrURL,udwWidth,udwHeight);
+				env->CallStaticVoidMethod(sdMethodRef.mClassID, sdMethodRef.mMethodID,udwIndex,jstrURL,udwWidth,udwHeight, in_dismissButtonScale);
 
 				//delete local reference
 				env->DeleteLocalRef(jstrURL);
 			}
 		}
-		void WebViewJavaInterface::PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor)
+		void WebViewJavaInterface::PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor, f32 in_dismissButtonScale)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("PresentFromFile");
 
@@ -76,7 +75,7 @@ namespace ChilliSource
 				u32 udwIndex = inudwIndex;
 				u32 udwWidth = invSize.x;
 				u32 udwHeight = invSize.y;
-				env->CallStaticVoidMethod(sdMethodRef.mClassID, sdMethodRef.mMethodID, udwIndex, jstrContent, udwWidth, udwHeight, jstrBasePath, jstrAnchor);
+				env->CallStaticVoidMethod(sdMethodRef.mClassID, sdMethodRef.mMethodID, udwIndex, jstrContent, udwWidth, udwHeight, jstrBasePath, jstrAnchor, in_dismissButtonScale);
 
 				//delete local reference
 				env->DeleteLocalRef(jstrContent);
@@ -107,17 +106,6 @@ namespace ChilliSource
 				JNIEnv* env = GetJNIEnvironmentPtr();
 				u32 udwIndex = inudwIndex;
 				env->CallStaticVoidMethod(sdMethodRef.mClassID, sdMethodRef.mMethodID, udwIndex);
-			}
-		}
-		void WebViewJavaInterface::AddDismissButton(u32 inudwIndex, f32 infSize)
-		{
-			MethodReference sdMethodRef = GetStaticMethodReference("AddDismissButton");
-
-			if (sdMethodRef.mMethodID != 0 && sdMethodRef.mClassID != 0)
-			{
-				JNIEnv* env = GetJNIEnvironmentPtr();
-				u32 udwIndex = inudwIndex;
-				env->CallStaticVoidMethod(sdMethodRef.mClassID, sdMethodRef.mMethodID,udwIndex,infSize);
 			}
 		}
 	}

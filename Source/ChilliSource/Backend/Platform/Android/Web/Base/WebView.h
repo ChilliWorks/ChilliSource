@@ -1,11 +1,11 @@
 //
 //  WebView.h
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2011.
+//  Created by Steven Hendrie on 10/12/12.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2012 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,38 +26,44 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_WEB_BASE_WEBVIEW_H_
-#define _CHILLISOURCE_BACKEND_PLATFORM_IOS_WEB_BASE_WEBVIEW_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_WEB_BASE_WEBVIEW_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_WEB_BASE_WEBVIEW_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Web/Base/WebView.h>
 
-@class WebViewDelegate;
-@class UIWebView;
-@class UIActivityIndicatorView;
-@class UIButton;
+#include <unordered_map>
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace Android
 	{
-        //-------------------------------------------------------
-        /// The iOS backend for the web view.
-        ///
-        /// @author S Downie
-        //-------------------------------------------------------
+		//-------------------------------------------------------
+		/// The Android backend for the web view.
+		///
+		/// @author S Hendrie
+		//-------------------------------------------------------
 		class WebView final : public Web::WebView
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(WebView);
+			//---------------------------------------------------------
+			/// Called when webview has been dismissed. This is for
+            /// internal use and should not be called manually by the
+            /// user.
+            ///
+            /// @author S Hendrie
+			///
+			/// @param index of webview
+			//---------------------------------------------------------
+			static void OnWebViewDismissed(s32 in_index);
             //-------------------------------------------------------
 			/// Queries whether or not this system implements the
             /// interface with the given Id.
 			///
-            /// @author S Downie
+            /// @author S Hendrie
             ///
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
@@ -67,7 +73,7 @@ namespace ChilliSource
             /// Displays the website at the given URL in an in-app
             /// web view.
             ///
-            /// @author S Downie
+            /// @author S Hendrie
             ///
             /// @param The Url.
             /// @param The dismissed delegate.
@@ -79,7 +85,7 @@ namespace ChilliSource
             /// Displays the website at the given location on disk in
             /// an in-app web view.
             ///
-            /// @author S Downie
+            /// @author S Hendrie
             ///
             /// @param The storage location.
             /// @param The file path.
@@ -92,7 +98,7 @@ namespace ChilliSource
             /// Displays the website at the given Url in an external
             /// browser.
             ///
-            /// @author S Downie
+            /// @author S Hendrie
             ///
             /// @param The Url.
             //---------------------------------------------------------
@@ -100,26 +106,17 @@ namespace ChilliSource
             //---------------------------------------------------------
             /// Dismiss the web view if it is currently presented.
             ///
-            /// @author S Downie
+            /// @author S Hendrie
             //---------------------------------------------------------
             void Dismiss() override;
             //---------------------------------------------------------
-            /// @author I Copland
+            /// @author S Hendrie
             ///
             /// @return Whether or not the web view is currently
             /// presented.
             //---------------------------------------------------------
             bool IsPresented() const override;
-            //---------------------------------------------------------
-            /// Called from the webview delegate to inform the system
-            /// that the webview has finished loading. This should not
-            /// be called manually by the user.
-            ///
-            /// @author I Copland
-            //---------------------------------------------------------
-            void OnViewDidFinishLoad();
-            
-        private:
+		private:
             friend Web::WebViewUPtr Web::WebView::Create();
             //---------------------------------------------------------
             /// Private constructor to force use of factory method
@@ -128,64 +125,32 @@ namespace ChilliSource
             //---------------------------------------------------------
             WebView();
             //---------------------------------------------------------
-            /// Create a webview instance from the size member and
-            /// centre it on-screen.
+            /// Called when the the owning state is initialised.
             ///
-            /// @author S Downie
+            /// @author I Copland
+            //---------------------------------------------------------
+			void OnInit() override;
+            //---------------------------------------------------------
+            /// Called when the webview is dismissed.
             ///
-            /// @param The size.
+            /// @author I Copland
             //---------------------------------------------------------
-            void CreateWebview(const Core::UnifiedVector2& in_size);
-            //---------------------------------------------------------
-            /// Adds the webview to the main view.
-            ///
-            /// @author S Downie
-            //---------------------------------------------------------
-            void Display();
-			//---------------------------------------------------------
-			/// Create a button that can dismiss the web view.
-            ///
-            /// @author S Downie
-			//---------------------------------------------------------
-			void AddDismissButton();
-            //---------------------------------------------------------
-			/// Adds the activity indicatator while loading the web
-            /// view.
-            ///
-			/// @author S Downie
-			//---------------------------------------------------------
-			void AddActivityIndicator();
-            //---------------------------------------------------------
-			/// Removes the acitivity indicator once web view loading
-            /// has completed.
-			///
-            /// @author S Downie
-			//---------------------------------------------------------
-			void RemoveActivityIndicator();
+            void OnWebViewDismissed();
             //---------------------------------------------------------
             /// Called when the the owning state is destroyed.
             ///
             /// @author I Copland
             //---------------------------------------------------------
-            void OnDestroy() override;
+			void OnDestroy() override;
 		private:
-			
-            bool m_isPresented;
-            DismissedDelegate m_dismissedDelegate;
-			UIWebView* m_webView;
-			UIButton * m_dismissButton;
-            UIActivityIndicatorView* m_activityIndicator;
-			WebViewDelegate* m_webViewDelegate;
-			
-			Core::Vector2 m_absoluteSize;
-			Core::Vector2 m_absolutePosition;
-            f32 m_dismissButtonScale;
-			
-            std::string m_anchor;
+			bool m_isPresented;
+			const s32 m_index;
+			DismissedDelegate m_delegate;
+
+			static s32 s_nextIndex;
+			static std::unordered_map<s32, WebView*> s_indexToWebViewMap;
 		};
+
 	}
 }
-
-
-
 #endif
