@@ -17,6 +17,5 @@ namespace ChilliSource
 	{
 		CS_DEFINE_NAMEDTYPE(Texture);
         CS_DEFINE_NAMEDTYPE(Cubemap);
-		CS_DEFINE_NAMEDTYPE(Shader);
 	}
 }

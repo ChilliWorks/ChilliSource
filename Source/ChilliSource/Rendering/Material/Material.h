@@ -18,6 +18,7 @@
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/Base/ShaderPass.h>
 
+#include <array>
 #include <unordered_map>
 
 namespace ChilliSource
@@ -49,7 +50,7 @@ namespace ChilliSource
 			///
 			/// @return The shader associated with this rendering pass
 			//----------------------------------------------------------
-			const ShaderSPtr& GetShader(ShaderPass in_pass) const;
+			const ShaderCSPtr& GetShader(ShaderPass in_pass) const;
             //----------------------------------------------------------
             /// Associate the given shader with the given render pass
             ///
@@ -58,7 +59,7 @@ namespace ChilliSource
 			/// @param Shader pass
             /// @param Shader
 			//----------------------------------------------------------
-			void SetShader(ShaderPass in_pass, const ShaderSPtr& in_shader);
+			void SetShader(ShaderPass in_pass, const ShaderCSPtr& in_shader);
             //----------------------------------------------------------
 			/// Clear the textures from the slots
             ///
@@ -391,7 +392,7 @@ namespace ChilliSource
             
             CubemapSPtr m_cubemap;
             
-            ShaderSPtr m_shaders[(u32)ShaderPass::k_total];
+            std::array<ShaderCSPtr, (u32)ShaderPass::k_total> m_shaders;
 			
 			Core::Colour m_emissive;
             Core::Colour m_ambient;

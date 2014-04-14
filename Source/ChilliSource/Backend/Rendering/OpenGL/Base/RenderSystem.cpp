@@ -12,6 +12,7 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/MeshBuffer.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderTarget.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
@@ -41,19 +42,44 @@ namespace ChilliSource
 	{
         CS_DEFINE_NAMEDTYPE(RenderSystem);
         
+        namespace
+        {
+            const char* GetAttribNameForVertexSemantic(Rendering::VertexDataSemantic ineSemantic)
+            {
+                //Determine what client states are required and get their currently bound locations
+                switch(ineSemantic)
+                {
+                    case Rendering::VertexDataSemantic::k_position:
+                        return "avPosition";
+                    case Rendering::VertexDataSemantic::k_normal:
+                        return  "avNormal";
+                    case Rendering::VertexDataSemantic::k_uv:
+                        return "avTexCoord";
+                    case Rendering::VertexDataSemantic::k_colour:
+                        return "avColour";
+                    case Rendering::VertexDataSemantic::k_weight:
+                        return "avWeights";
+                    case Rendering::VertexDataSemantic::k_jointIndex:
+                        return "avJointIndices";
+                }
+
+                CS_LOG_FATAL("No such vertex semantic type");
+                return "";
+            }
+        }
+        
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
 		RenderSystem::RenderSystem(Rendering::RenderCapabilities* in_renderCapabilities)
-		: mpDefaultRenderTarget(nullptr), mpCurrentMaterial(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0), mpVertexAttribs(nullptr),
+		: mpDefaultRenderTarget(nullptr), mpCurrentMaterial(nullptr), m_currentShader(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0),
         mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mpLightComponent(nullptr),
-        mbBlendFunctionLocked(false), mpaTextureHandles(nullptr), mbInvalidateLigthingCache(true),
+        mbBlendFunctionLocked(false), mbInvalidateLigthingCache(true),
         mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities)), m_hasContextBeenBackedUp(false)
 		{
 			//Register the GL texture and shader managers
             Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mTexManager);
             Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mCubemapManager);
-            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mShaderManager);
 		}
         //----------------------------------------------------------
 		/// Is A
@@ -91,15 +117,14 @@ namespace ChilliSource
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
             mpRenderCapabilities->DetermineCapabilities();
             
-            m_textureUniformNames.reserve(mpRenderCapabilities->GetNumTextureUnits());
+            m_textureUniformNames.clear();
             for(u32 i=0; i<mpRenderCapabilities->GetNumTextureUnits(); ++i)
             {
-                m_textureUniformNames.push_back(std::string("uTexture" + Core::ToString(i)));
+                m_textureUniformNames.push_back("uTexture" + Core::ToString(i));
             }
             
             ForceRefreshRenderStates();
 			
-            mShaderManager.SetRenderSystem(this);
             OnScreenOrientationChanged((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
             
             m_hasContextBeenBackedUp = false;
@@ -133,7 +158,8 @@ namespace ChilliSource
             if(m_hasContextBeenBackedUp == false)
             {
                 //Context is about to be lost do a data backup
-                BackupMeshBuffers();
+                m_contextRestorer.Backup();
+                
                 mTexManager.Backup();
                 m_hasContextBeenBackedUp = true;
             }
@@ -148,9 +174,9 @@ namespace ChilliSource
             if(m_hasContextBeenBackedUp == true)
             {
                 ForceRefreshRenderStates();
-                RestoreMeshBuffers();
-                mGLCurrentShaderProgram = 0;
-                mShaderManager.Restore();
+                m_contextRestorer.Restore();
+                m_currentShader = nullptr;
+                mpCurrentMaterial = nullptr;
                 mTexManager.Restore();
                 mCubemapManager.Restore();
                 m_hasContextBeenBackedUp = false;
@@ -185,11 +211,12 @@ namespace ChilliSource
             
             CS_ASSERT(in_material != nullptr, "Cannot apply null material");
             
-            Shader* shader = static_cast<Shader*>(in_material->GetShader(in_shaderPass).get());
+            //Casting away constness for the time being as we need to set the shader variables. This will
+            //all change when the new renderer comes in.
+            Shader* shader = (Shader*)(in_material->GetShader(in_shaderPass).get());
             CS_ASSERT(shader != nullptr, "Cannot render with null shader");
             
-            GLuint shaderProgram = shader->GetProgramID();
-            CS_ASSERT(shaderProgram != 0, "Cannot render with no GL shader program");
+            shader->SetUniform("uvCameraPos", mvCameraPos, Shader::UniformNotFoundPolicy::k_failSilent);
             
             bool hasMaterialChanged = mbInvalidateAllCaches == true || mpCurrentMaterial == nullptr || mpCurrentMaterial != in_material.get() || mpCurrentMaterial->IsCacheValid() == false;
             if(hasMaterialChanged == true)
@@ -201,14 +228,11 @@ namespace ChilliSource
                 ApplyRenderStates(mpCurrentMaterial);
                 
                 //Don't bind the shader if we don't need to!
-                bool hasShaderChanged = mbInvalidateAllCaches || shaderProgram != mGLCurrentShaderProgram;
+                bool hasShaderChanged = mbInvalidateAllCaches || shader != m_currentShader;
                 if(hasShaderChanged == true)
                 {
-                    glUseProgram(shaderProgram);
-                    mGLCurrentShaderProgram = shaderProgram;
-                    
-                    GetAttributeLocations(shader);
-                    GetUniformLocations(shader);
+                    shader->Bind();
+                    m_currentShader = shader;
                     
                     mbEmissiveSet = false;
                     mbAmbientSet = false;
@@ -217,15 +241,15 @@ namespace ChilliSource
                     mbInvalidateLigthingCache = true;
                 }
                 
-                //Get and set all the custom shader variables
+                //Set all the custom shader variables
                 if(mpCurrentMaterial->IsVariableCacheValid() == false || hasShaderChanged == true)
                 {
-                    ApplyShaderVariables(mpCurrentMaterial, shader);
+                    ApplyShaderVariables(mpCurrentMaterial, m_currentShader);
                 }
                 
-                ApplyTextures(mpCurrentMaterial);
-                ApplyLightingValues(mpCurrentMaterial);
-                ApplyLighting(mpLightComponent);
+                ApplyTextures(mpCurrentMaterial, m_currentShader);
+                ApplyLightingValues(mpCurrentMaterial, m_currentShader);
+                ApplyLighting(mpLightComponent, m_currentShader);
                 
                 //TODO: Once we change the render system to be a list of commands this hack
                 //will not be required
@@ -237,19 +261,18 @@ namespace ChilliSource
         //----------------------------------------------------------
         void RenderSystem::ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints)
         {
-            if(mJointsHandle != -1)
+            CS_ASSERT(m_currentShader != nullptr,  "Cannot set joints without binding shader");
+            
+            //Remove the final column from the joint matrix data as it is always going to be [0 0 0 1].
+            std::vector<Core::Vector4> jointVectors;
+            for (const auto& joint : inaJoints)
             {
-                //remove the final column from the joint matrix data as it is always going to be [0 0 0 1].
-                std::vector<Core::Vector4> aJointVectors;
-                for (std::vector<Core::Matrix4x4>::const_iterator it = inaJoints.begin(); it != inaJoints.end(); ++it)
-                {
-                    aJointVectors.push_back(Core::Vector4(it->m[0], it->m[4], it->m[8], it->m[12]));
-                    aJointVectors.push_back(Core::Vector4(it->m[1], it->m[5], it->m[9], it->m[13]));
-                    aJointVectors.push_back(Core::Vector4(it->m[2], it->m[6], it->m[10], it->m[14]));
-                }
-                
-                glUniform4fv(mJointsHandle, aJointVectors.size(), (GLfloat*)&(aJointVectors[0]));
+                jointVectors.push_back(Core::Vector4(joint.m[0], joint.m[4], joint.m[8], joint.m[12]));
+                jointVectors.push_back(Core::Vector4(joint.m[1], joint.m[5], joint.m[9], joint.m[13]));
+                jointVectors.push_back(Core::Vector4(joint.m[2], joint.m[6], joint.m[10], joint.m[14]));
             }
+            
+            m_currentShader->SetUniform("uavJoints", jointVectors);
         }
         //----------------------------------------------------------
 		/// Apply Render States
@@ -267,131 +290,46 @@ namespace ChilliSource
             EnableDepthTesting(inMaterial->IsDepthTestEnabled());
         }
         //----------------------------------------------------------
-		/// Get Attribute Locations
-		//----------------------------------------------------------
-		void RenderSystem::GetAttributeLocations(Shader* inpShader)
-        {
-            //Get the handles to the shader attributes
-            
-            GLint uwAttrib = inpShader->GetAttributeLocation("avPosition");
-            if(uwAttrib != mwPosAttributeLocation)
-            {
-                mwPosAttributeLocation = uwAttrib;
-            }
-            uwAttrib = inpShader->GetAttributeLocation("avColour");
-            if(uwAttrib != mwColAttributeLocation)
-            {
-                mwColAttributeLocation = uwAttrib;
-            }
-            uwAttrib = inpShader->GetAttributeLocation("avNormal");
-            if(uwAttrib != mwNormAttributeLocation)
-            {
-                mwNormAttributeLocation = uwAttrib;
-            }
-            uwAttrib = inpShader->GetAttributeLocation("avTexCoord");
-            if(uwAttrib != mwTexAttributeLocation)
-            {
-                mwTexAttributeLocation = uwAttrib;
-            }
-            uwAttrib = inpShader->GetAttributeLocation("avWeights");
-            if(uwAttrib != mwWeiAttributeLocation)
-            {
-                mwWeiAttributeLocation = uwAttrib;
-            }
-            uwAttrib = inpShader->GetAttributeLocation("avJointIndices");
-            if(uwAttrib != mwJIAttributeLocation)
-            {
-                mwJIAttributeLocation = uwAttrib;
-            }
-        }
-        //----------------------------------------------------------
-		/// Get Uniform Locations
-		//----------------------------------------------------------
-		void RenderSystem::GetUniformLocations(Shader* in_shader)
-        {
-            //Get the required handles to the shader variables (Uniform)
-            mmatWVPHandle = in_shader->GetUniformLocation("umatWorldViewProj");
-            mmatWorldHandle = in_shader->GetUniformLocation("umatWorld");
-            mmatNormalHandle = in_shader->GetUniformLocation("umatNormal");
-        
-            mEmissiveHandle = in_shader->GetUniformLocation("uvEmissive");
-            mAmbientHandle = in_shader->GetUniformLocation("uvAmbient");
-            mDiffuseHandle = in_shader->GetUniformLocation("uvDiffuse");
-            mSpecularHandle = in_shader->GetUniformLocation("uvSpecular");
-    
-            mJointsHandle = in_shader->GetUniformLocation("uavJoints");
-            
-            mLightPosHandle = in_shader->GetUniformLocation("uvLightPos");
-            mLightDirHandle = in_shader->GetUniformLocation("uvLightDir");
-            mLightColHandle = in_shader->GetUniformLocation("uvLightCol");
-            mAttenConHandle = in_shader->GetUniformLocation("ufAttenuationConstant");
-            mAttenLinHandle = in_shader->GetUniformLocation("ufAttenuationLinear");
-            mAttenQuadHandle = in_shader->GetUniformLocation("ufAttenuationQuadratic");
-            mCameraPosHandle = in_shader->GetUniformLocation("uvCameraPos");
-            
-            mLightMatrixHandle = in_shader->GetUniformLocation("umatLight");
-            mShadowToleranceHandle = in_shader->GetUniformLocation("ufShadowTolerance");
-            mShadowMapTexHandle = in_shader->GetUniformLocation("uShadowMapTexture");
-            
-            mCubemapHandle = in_shader->GetUniformLocation("uCubemap");
-            
-            if(mpaTextureHandles == nullptr)
-            {
-                mpaTextureHandles = (std::pair<GLint, u32>*)calloc(mpRenderCapabilities->GetNumTextureUnits(), sizeof(std::pair<GLint, u32>));
-            }
-            
-            for(u32 i=0; i<mpRenderCapabilities->GetNumTextureUnits(); ++i)
-            {
-                mpaTextureHandles[i].first = in_shader->GetUniformLocation(m_textureUniformNames[i].c_str());
-            }
-        }
-        //----------------------------------------------------------
 		/// Apply Shader Variables
 		//----------------------------------------------------------
-		void RenderSystem::ApplyShaderVariables(const Rendering::Material* inMaterial, Shader* in_shader)
+		void RenderSystem::ApplyShaderVariables(const Rendering::Material* inMaterial, Shader* out_shader)
 		{
 			//Get and set all the custom shader variables
 			for(auto it = inMaterial->m_floatVars.begin(); it!= inMaterial->m_floatVars.end(); ++it)
 			{
-				GLint VarHandle = in_shader->GetUniformLocation(it->first.c_str());
-				glUniform1f(VarHandle, it->second);
+                out_shader->SetUniform(it->first, it->second);
 			}
 			for(auto it = inMaterial->m_vec2Vars.begin(); it!= inMaterial->m_vec2Vars.end(); ++it)
 			{
-				GLint VarHandle = in_shader->GetUniformLocation(it->first.c_str());
-				glUniform2fv(VarHandle, 1, (GLfloat*)(&it->second));
+                out_shader->SetUniform(it->first, it->second);
 			}
 			for(auto it = inMaterial->m_vec3Vars.begin(); it!= inMaterial->m_vec3Vars.end(); ++it)
 			{
-				GLint VarHandle = in_shader->GetUniformLocation(it->first.c_str());
-				glUniform3fv(VarHandle, 1, (GLfloat*)(&it->second));
+				out_shader->SetUniform(it->first, it->second);
 			}
 			for(auto it = inMaterial->m_vec4Vars.begin(); it!= inMaterial->m_vec4Vars.end(); ++it)
 			{
-				GLint VarHandle = in_shader->GetUniformLocation(it->first.c_str());
-				glUniform4fv(VarHandle, 1, (GLfloat*)(&it->second));
+				out_shader->SetUniform(it->first, it->second);
 			}
 			for(auto it = inMaterial->m_mat4Vars.begin(); it!= inMaterial->m_mat4Vars.end(); ++it)
 			{
-				GLint VarHandle = in_shader->GetUniformLocation(it->first.c_str());
-				glUniformMatrix4fv(VarHandle, 1, GL_FALSE, (GLfloat*)(it->second.m));
+				out_shader->SetUniform(it->first, it->second);
 			}
 			for(auto it = inMaterial->m_colourVars.begin(); it!= inMaterial->m_colourVars.end(); ++it)
 			{
-				GLint VarHandle = in_shader->GetUniformLocation(it->first.c_str());
-				glUniform4fv(VarHandle, 1, (GLfloat*)(&it->second));
+				out_shader->SetUniform(it->first, it->second);
 			}
 		}
         //----------------------------------------------------------
         /// Apply Textures
         //----------------------------------------------------------
-        void RenderSystem::ApplyTextures(const Rendering::Material* inMaterial)
+        void RenderSystem::ApplyTextures(const Rendering::Material* inMaterial, Shader* out_shader)
         {
             //Cubemap takes precedence over texture
-            if(mCubemapHandle >= 0 && inMaterial->GetCubemap() != nullptr)
+            if(inMaterial->GetCubemap() != nullptr)
             {
                 inMaterial->GetCubemap()->Bind(mudwNumBoundTextures);
-                glUniform1i(mCubemapHandle, mudwNumBoundTextures);
+                out_shader->SetUniform("uCubemap", (s32)mudwNumBoundTextures);
                 ++mudwNumBoundTextures;
             }
             
@@ -401,52 +339,44 @@ namespace ChilliSource
             
             for(u32 i=0; i<numTexturesToBind; ++i)
             {
-                if(mpaTextureHandles[i].first != -1)
-                {
-                    inMaterial->GetTexture(i)->Bind(mudwNumBoundTextures);
-                    if(mpaTextureHandles[i].second != mudwNumBoundTextures || mbInvalidateAllCaches)
-                    {
-                        glUniform1i(mpaTextureHandles[i].first, mudwNumBoundTextures);
-                        mpaTextureHandles[i].second = mudwNumBoundTextures;
-                    }
-                    ++mudwNumBoundTextures;
-                }
+                inMaterial->GetTexture(i)->Bind(mudwNumBoundTextures);
+                out_shader->SetUniform(m_textureUniformNames[i], (s32)mudwNumBoundTextures);
+                ++mudwNumBoundTextures;
             }
         }
         //----------------------------------------------------------
-        /// Apply Lighting Values
         //----------------------------------------------------------
-        void RenderSystem::ApplyLightingValues(const Rendering::Material* inMaterial)
+        void RenderSystem::ApplyLightingValues(const Rendering::Material* inMaterial, Shader* out_shader)
         {
-            if(mEmissiveHandle != -1 && (mbInvalidateAllCaches || mbEmissiveSet == false || mCurrentEmissive != inMaterial->GetEmissive()))
+            if(mbInvalidateAllCaches || mbEmissiveSet == false || mCurrentEmissive != inMaterial->GetEmissive())
             {
                 mbEmissiveSet = true;
                 mCurrentEmissive = inMaterial->GetEmissive();
-                glUniform4f(mEmissiveHandle, mCurrentEmissive.r, mCurrentEmissive.g, mCurrentEmissive.b, mCurrentEmissive.a);
+                out_shader->SetUniform("uvEmissive", mCurrentEmissive, Shader::UniformNotFoundPolicy::k_failSilent);
             }
-            if(mAmbientHandle != -1 && (mbInvalidateAllCaches || mbAmbientSet == false || mCurrentAmbient != inMaterial->GetAmbient()))
+            if(mbInvalidateAllCaches || mbAmbientSet == false || mCurrentAmbient != inMaterial->GetAmbient())
             {
                 mbAmbientSet = true;
                 mCurrentAmbient = inMaterial->GetAmbient();
-                glUniform4f(mAmbientHandle, mCurrentAmbient.r, mCurrentAmbient.g, mCurrentAmbient.b, mCurrentAmbient.a);
+                out_shader->SetUniform("uvAmbient", mCurrentAmbient, Shader::UniformNotFoundPolicy::k_failSilent);
             }
-            if(mDiffuseHandle != -1 && (mbInvalidateAllCaches || mbDiffuseSet == false || mCurrentDiffuse != inMaterial->GetDiffuse()))
+            if(mbInvalidateAllCaches || mbDiffuseSet == false || mCurrentDiffuse != inMaterial->GetDiffuse())
             {
                 mbDiffuseSet = true;
                 mCurrentDiffuse = inMaterial->GetDiffuse();
-                glUniform4f(mDiffuseHandle, mCurrentDiffuse.r, mCurrentDiffuse.g, mCurrentDiffuse.b, mCurrentDiffuse.a);
+                out_shader->SetUniform("uvDiffuse", mCurrentDiffuse, Shader::UniformNotFoundPolicy::k_failSilent);
             }
-            if(mSpecularHandle != -1 && (mbInvalidateAllCaches || mbSpecularSet == false || mCurrentSpecular != inMaterial->GetSpecular()))
+            if(mbInvalidateAllCaches || mbSpecularSet == false || mCurrentSpecular != inMaterial->GetSpecular())
             {
                 mbSpecularSet = true;
                 mCurrentSpecular = inMaterial->GetSpecular();
-                glUniform4f(mSpecularHandle, mCurrentSpecular.r, mCurrentSpecular.g, mCurrentSpecular.b, mCurrentSpecular.a);
+                out_shader->SetUniform("uvSpecular", mCurrentSpecular, Shader::UniformNotFoundPolicy::k_failSilent);
             }
         }
         //----------------------------------------------------------
         /// Apply Lighting
         //----------------------------------------------------------
-        void RenderSystem::ApplyLighting(Rendering::LightComponent* inpLightComponent)
+        void RenderSystem::ApplyLighting(Rendering::LightComponent* inpLightComponent, Shader* out_shader)
         {
             if(mbInvalidateLigthingCache == false || inpLightComponent == nullptr)
                 return;
@@ -458,60 +388,36 @@ namespace ChilliSource
             if(inpLightComponent->IsA(Rendering::DirectionalLightComponent::InterfaceID))
             {
                 Rendering::DirectionalLightComponent* pLightComponent = (Rendering::DirectionalLightComponent*)inpLightComponent;
-                
-                if(mLightDirHandle >= 0)
-                {
-                    Core::Vector3 vDirection = pLightComponent->GetDirection();
-                    glUniform3fv(mLightDirHandle, 1, (const GLfloat*)&vDirection);
-                }
+                out_shader->SetUniform("uvLightDir", pLightComponent->GetDirection());
+  
                 if(pLightComponent->GetShadowMapPtr() != nullptr)
                 {
-                    if(mShadowToleranceHandle >= 0)
-                    {
-                        glUniform1f(mShadowToleranceHandle, pLightComponent->GetShadowTolerance());
-                    }
+                    out_shader->SetUniform("ufShadowTolerance", pLightComponent->GetShadowTolerance(), Shader::UniformNotFoundPolicy::k_failSilent);
                     
                     //If we have used all the texture units then we cannot bind the shadow map
-                    if(mShadowMapTexHandle >= 0 && mudwNumBoundTextures <= mpRenderCapabilities->GetNumTextureUnits())
+                    if(mudwNumBoundTextures <= mpRenderCapabilities->GetNumTextureUnits())
                     {
                         pLightComponent->GetShadowMapPtr()->Bind(mudwNumBoundTextures);
-                        glUniform1i(mShadowMapTexHandle, mudwNumBoundTextures);
+                        out_shader->SetUniform("uShadowMapTexture", (s32)mudwNumBoundTextures);
                         ++mudwNumBoundTextures;
+                    }
+                    else
+                    {
+                        CS_LOG_WARNING("Failed to bind shadow map. Not enough texture units");
                     }
                 }
             }
             else if(inpLightComponent->IsA(Rendering::PointLightComponent::InterfaceID))
             {
                 Rendering::PointLightComponent* pLightComponent = (Rendering::PointLightComponent*)inpLightComponent;
-                
-                if(mAttenConHandle >= 0)
-                {
-                    glUniform1f(mAttenConHandle, pLightComponent->GetConstantAttenuation());
-                }
-                if(mAttenLinHandle >= 0)
-                {
-                    glUniform1f(mAttenLinHandle, pLightComponent->GetLinearAttenuation());
-                }
-                if(mAttenQuadHandle >= 0)
-                {
-                    glUniform1f(mAttenQuadHandle, pLightComponent->GetQuadraticAttenuation());
-                }
+                out_shader->SetUniform("ufAttenuationConstant", pLightComponent->GetConstantAttenuation());
+                out_shader->SetUniform("ufAttenuationLinear", pLightComponent->GetLinearAttenuation());
+                out_shader->SetUniform("ufAttenuationQuadratic", pLightComponent->GetQuadraticAttenuation());
             }
             
-            if(mLightPosHandle >= 0)
-            {
-                glUniform3fv(mLightPosHandle, 1, (const GLfloat*)&inpLightComponent->GetWorldPosition());
-            }
-
-            if(mLightColHandle >= 0)
-            {
-                Core::Colour colour = inpLightComponent->GetColour();
-                glUniform4fv(mLightColHandle, 1, (const GLfloat*)&colour);
-            }
-            if(mLightMatrixHandle >= 0)
-            {
-                glUniformMatrix4fv(mLightMatrixHandle, 1, GL_FALSE, (GLfloat*)inpLightComponent->GetLightMatrix().m);
-            }
+            out_shader->SetUniform("uvLightPos", inpLightComponent->GetWorldPosition(), Shader::UniformNotFoundPolicy::k_failSilent);
+            out_shader->SetUniform("uvLightCol", inpLightComponent->GetColour(), Shader::UniformNotFoundPolicy::k_failSilent);
+            out_shader->SetUniform("umatLight", inpLightComponent->GetLightMatrix(), Shader::UniformNotFoundPolicy::k_failSilent);
         }
 		//----------------------------------------------------------
 		/// Apply Camera
@@ -566,7 +472,7 @@ namespace ChilliSource
             
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
-            memset(mpVertexAttribs, 0, sizeof(VertexAttribSet) * mdwMaxVertAttribs);
+            m_attributeCache.clear();
 		}
 		//----------------------------------------------------------
 		/// Create Render Target
@@ -587,7 +493,7 @@ namespace ChilliSource
 			pBuffer->SetOwningRenderSystem(this);
             
 #ifdef CS_TARGETPLATFORM_ANDROID
-			mMeshBuffers.push_back(pBuffer);
+            m_contextRestorer.AddMeshBuffer(pBuffer);
 #endif
 			return pBuffer;
 		}
@@ -604,23 +510,13 @@ namespace ChilliSource
 			//Set the new model view matrix based on the camera view matrix and the object matrix
             static Core::Matrix4x4 matWorldViewProj;
             Core::Matrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
-			glUniformMatrix4fv(mmatWVPHandle, 1, GL_FALSE, (GLfloat*)matWorldViewProj.m);
-			
-            if(mmatWorldHandle != -1)
+            m_currentShader->SetUniform("umatWorldViewProj", matWorldViewProj);
+            m_currentShader->SetUniform("umatWorld", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
+            if(m_currentShader->HasUniform("umatNormal"))
             {
-                glUniformMatrix4fv(mmatWorldHandle, 1, GL_FALSE, (GLfloat*)inmatWorld.m);
+                m_currentShader->SetUniform("umatNormal", inmatWorld.Inverse().GetTranspose());
             }
             
-            if(mmatNormalHandle != -1)
-            {
-                glUniformMatrix4fv(mmatNormalHandle, 1, GL_FALSE, (GLfloat*)inmatWorld.Inverse().GetTranspose().m);
-            }
-            
-            if(mCameraPosHandle != -1)
-            {
-                glUniform3f(mCameraPosHandle, mvCameraPos.x, mvCameraPos.y, mvCameraPos.z);
-            }
-			
 			EnableVertexAttributeForSemantic(inpBuffer);
 			glDrawArrays(GetPrimitiveType(inpBuffer->GetPrimitiveType()), inudwOffset, inudwNumVerts);
             
@@ -638,23 +534,13 @@ namespace ChilliSource
 			//Set the new model view matrix based on the camera view matrix and the object matrix
             static Core::Matrix4x4 matWorldViewProj;
             Core::Matrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
-			glUniformMatrix4fv(mmatWVPHandle, 1, GL_FALSE, (GLfloat*)matWorldViewProj.m);
-            
-            if(mmatWorldHandle != -1)
+            m_currentShader->SetUniform("umatWorldViewProj", matWorldViewProj);
+            m_currentShader->SetUniform("umatWorld", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
+            if(m_currentShader->HasUniform("umatNormal"))
             {
-                glUniformMatrix4fv(mmatWorldHandle, 1, GL_FALSE, (GLfloat*)inmatWorld.m);
+                m_currentShader->SetUniform("umatNormal", inmatWorld.Inverse().GetTranspose());
             }
             
-            if(mmatNormalHandle != -1)
-            {
-                glUniformMatrix4fv(mmatNormalHandle, 1, GL_FALSE, (GLfloat*)inmatWorld.Inverse().GetTranspose().m);
-            }
-            
-            if(mCameraPosHandle != -1)
-            {
-                glUniform3f(mCameraPosHandle, mvCameraPos.x, mvCameraPos.y, mvCameraPos.z);
-            }
-			
 			//Render the buffer contents
 			EnableVertexAttributeForSemantic(inpBuffer);
 			glDrawElements(GetPrimitiveType(inpBuffer->GetPrimitiveType()), inudwNumIndices, GL_UNSIGNED_SHORT, (GLvoid*)inudwOffset);
@@ -1013,52 +899,44 @@ namespace ChilliSource
                 glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &mdwMaxVertAttribs);
                 mpbCurrentVertexAttribState = (bool*)calloc(mdwMaxVertAttribs, sizeof(bool));
                 mpbLastVertexAttribState = (bool*)calloc(mdwMaxVertAttribs, sizeof(bool));
-                mpVertexAttribs = (VertexAttribSet*) calloc(mdwMaxVertAttribs, sizeof(VertexAttribSet));
             }
         }
-        
-        s32 RenderSystem::GetLocationForVertexSemantic(Rendering::VertexDataSemantic ineSemantic)
-        {
-            //Determine what client states are required and get their currently bound locations
-            switch(ineSemantic)
-            {
-                case Rendering::VertexDataSemantic::k_position:
-                    return mwPosAttributeLocation;
-                case Rendering::VertexDataSemantic::k_normal:
-                    return  mwNormAttributeLocation;
-                case Rendering::VertexDataSemantic::k_uv:
-                    return mwTexAttributeLocation;
-                case Rendering::VertexDataSemantic::k_colour:
-                    return mwColAttributeLocation;
-                case Rendering::VertexDataSemantic::k_weight:
-                    return mwWeiAttributeLocation;
-                case Rendering::VertexDataSemantic::k_jointIndex:
-                    return mwJIAttributeLocation;
-                default:
-                    return -1;
-            }
-        }
-        bool RenderSystem::ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
-                                                       GLuint inudwLocation, GLint indwSize, GLenum ineType, GLboolean inbNormalized,
+        void RenderSystem::ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
+                                                       const char* in_attribName, GLint indwSize, GLenum ineType, GLboolean inbNormalized,
                                                        GLsizei indwStride, const GLvoid* inpOffset)
         {
-            if(mpVertexAttribs[inudwLocation].pBuffer == inpBuffer &&
-               mpVertexAttribs[inudwLocation].size == indwSize &&
-               mpVertexAttribs[inudwLocation].type == ineType &&
-               mpVertexAttribs[inudwLocation].normalised == inbNormalized &&
-               mpVertexAttribs[inudwLocation].stride == indwStride &&
-               mpVertexAttribs[inudwLocation].offset ==(void*)indwStride)
-                return false;
+            auto it = m_attributeCache.find(in_attribName);
             
-            mpVertexAttribs[inudwLocation].pBuffer = inpBuffer;
-            mpVertexAttribs[inudwLocation].size = indwSize;
-            mpVertexAttribs[inudwLocation].type = ineType;
-            mpVertexAttribs[inudwLocation].normalised = inbNormalized;
-            mpVertexAttribs[inudwLocation].stride = indwStride;
-            mpVertexAttribs[inudwLocation].offset =(void*)indwStride;
-            
-            glVertexAttribPointer(inudwLocation, indwSize, ineType, inbNormalized, indwStride, inpOffset);
-            return true;
+            if(it != m_attributeCache.end())
+            {
+                if(it->second.pBuffer == inpBuffer &&
+                   it->second.size == indwSize &&
+                   it->second.type == ineType &&
+                   it->second.normalised == inbNormalized &&
+                   it->second.stride == indwStride &&
+                   it->second.offset == inpOffset)
+                    return;
+                
+                it->second.pBuffer = inpBuffer;
+                it->second.size = indwSize;
+                it->second.type = ineType;
+                it->second.normalised = inbNormalized;
+                it->second.stride = indwStride;
+                it->second.offset = inpOffset;
+            }
+            else
+            {
+                VertexAttribSet set;
+                set.pBuffer = inpBuffer;
+                set.size = indwSize;
+                set.type = ineType;
+                set.normalised = inbNormalized;
+                set.stride = indwStride;
+                set.offset = inpOffset;
+                m_attributeCache.insert(std::make_pair(in_attribName, set));
+            }
+  
+            m_currentShader->SetAttribute(in_attribName, indwSize, ineType, inbNormalized, indwStride, inpOffset);
         }
 		//------------------------------------------------------------
 		/// Enable Vertex Attribute For Semantic
@@ -1074,10 +952,10 @@ namespace ChilliSource
             // If mesh buffer has changed we need to reset all its vertex attributes
             if(((ChilliSource::OpenGL::MeshBuffer*)inpBuffer)->IsCacheValid() == false)
             {
-                for(s32 i =0; i < mdwMaxVertAttribs; i++)
+                for(auto& entry : m_attributeCache)
                 {
-                    if(mpVertexAttribs[i].pBuffer == inpBuffer)
-                        mpVertexAttribs[i].pBuffer = nullptr;
+                    if(entry.second.pBuffer == inpBuffer)
+                        entry.second.pBuffer = nullptr;
                 }
                 ((ChilliSource::OpenGL::MeshBuffer*)inpBuffer)->SetCacheValid();
             }
@@ -1092,15 +970,8 @@ namespace ChilliSource
 			//Enable all the client states required to match the vertex layout
 			for(u32 i=0; i<nElements; ++i)
 			{
-				const Rendering::VertexElement &Element = inpBuffer->GetVertexDeclaration().GetElementAtIndex(i);
-                GLint dwLocation = GetLocationForVertexSemantic(Element.eSemantic);
-                
-                // Check next vertex attribute if no location available
-                if(dwLocation < 0)
-                    continue;
-                
                 //Track the active attribute channels
-                mpbCurrentVertexAttribState[dwLocation] = true;
+                mpbCurrentVertexAttribState[i] = true;
                 
                 //Track to ensure we don't exceed maximum.
                 udwAttributeCount++;
@@ -1129,11 +1000,7 @@ namespace ChilliSource
                 const Rendering::VertexElement &Element = inpBuffer->GetVertexDeclaration().GetElementAtIndex(i);
                 
                 // Get parameters for vertex attribute pointer call
-                const GLint         dwLocation = GetLocationForVertexSemantic(Element.eSemantic);
-                
-                // Check next vertex attribute if no location available
-                if(dwLocation < 0)
-                    continue;
+                const char* attribName = GetAttribNameForVertexSemantic(Element.eSemantic);
                 
 				const GLint         uwNumComponents = Element.NumDataTypesPerType();
                 GLenum              eType = GL_FLOAT;
@@ -1153,7 +1020,7 @@ namespace ChilliSource
                     eType = GL_UNSIGNED_BYTE;
                 }
                 
-                ApplyVertexAttributePointr(inpBuffer, dwLocation, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*)(s32)uwElementOffset);
+                ApplyVertexAttributePointr(inpBuffer, attribName, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*)(s32)uwElementOffset);
             }
 		}
 		//------------------------------------------------------------
@@ -1174,13 +1041,6 @@ namespace ChilliSource
 					return -1;
 			}
 		}
-        //----------------------------------------------------------
-        /// Get Path To Shaders
-        //----------------------------------------------------------
-        std::string RenderSystem::GetPathToShaders() const
-        {
-            return "Shaders/OpenGL/";
-        }
 		//----------------------------------------------------------
 		/// Force Refresh Render States
 		//----------------------------------------------------------
@@ -1198,44 +1058,13 @@ namespace ChilliSource
             
             mbInvalidateAllCaches = true;
 		}
-		//----------------------------------------------------------
-		/// Backup Mesh Buffers
-		//----------------------------------------------------------
-		void RenderSystem::BackupMeshBuffers()
-		{
-#ifdef CS_TARGETPLATFORM_ANDROID
-			for(std::vector<MeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
-			{
-				(*it)->Backup();
-			}
-#endif
-		}
-		//----------------------------------------------------------
-		/// Restore Mesh Buffers
-		//----------------------------------------------------------
-		void RenderSystem::RestoreMeshBuffers()
-		{
-#ifdef CS_TARGETPLATFORM_ANDROID
-			for(std::vector<MeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
-			{
-				(*it)->Restore();
-			}
-#endif
-		}
         //----------------------------------------------------------
 		/// Remove Buffer
 		//----------------------------------------------------------
 		void RenderSystem::RemoveBuffer(Rendering::MeshBuffer* inpBuffer)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
-			for(std::vector<MeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
-			{
-				if ((*it) == inpBuffer)
-				{
-					mMeshBuffers.erase(it);
-					break;
-				}
-			}
+            m_contextRestorer.RemoveMeshBuffer((MeshBuffer*)inpBuffer);
 #endif
 		}
 		//----------------------------------------------------------
@@ -1306,8 +1135,6 @@ namespace ChilliSource
             
             free(mpbCurrentVertexAttribState);
             free(mpbLastVertexAttribState);
-            free(mpVertexAttribs);
-            free(mpaTextureHandles);
 		}
 	}
 }

@@ -1,9 +1,29 @@
 //
 //  ResourcePool.h
 //  Chilli Source
-//
 //  Created by Scott Downie on 03/04/2014.
-//  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifndef _CHILLISOURCE_CORE_RESOURCE_RESOURCEPOOL_H_
@@ -91,6 +111,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------------
             /// Load the resource of given type from the file location. If the resource at this
             /// location has previously been loaded then the cached version will be returned.
+            /// Check the load state of the resources of that type prior to use.
             ///
             /// The resource is immutable
             ///
@@ -105,6 +126,32 @@ namespace ChilliSource
             /// @return Resource or null
             //-------------------------------------------------------------------------------------
             template <typename TResourceType> std::shared_ptr<const TResourceType> LoadResource(StorageLocation in_location, const std::string& in_filePath);
+            //------------------------------------------------------------------------------------
+            /// Forec the reload of the resource of given type from the file location. This will
+            /// overwrite the currently cached version. This will fail if no cached resource
+            /// is found. Check the load state of the resources of that type prior to use
+            ///
+            /// The resource is immutable
+            ///
+            /// If the resource cannot be loaded or no loader exists for that type of resource
+            /// then null will be returned
+            ///
+            /// @author S Downie
+            ///
+            /// @param Storage location
+            /// @param File path
+            ///
+            /// @return Resource or null
+            //-------------------------------------------------------------------------------------
+            template <typename TResourceType> std::shared_ptr<const TResourceType> RefreshResource(StorageLocation in_location, const std::string& in_filePath);
+            //------------------------------------------------------------------------------------
+            /// Force the reload of the resources of the given type that are currently cached.
+            /// Check the load state of the resources of that type prior to use, although if they
+            /// have loaded once then chances are they will load again.
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------------------------------------
+            template <typename TResourceType> void RefreshResources();
             //------------------------------------------------------------------------------------
             /// Load the resource of given type from the file location. If the resource at this
             /// location has previously been loaded then the cached version will be returned in the
@@ -275,7 +322,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------------------
         template <typename TResourceType> std::shared_ptr<const TResourceType> ResourcePool::LoadResource(StorageLocation in_location, const std::string& in_filePath)
         {
-            CS_ASSERT(in_filePath.empty() == false, "Cannot load resource async with no file path");
+            CS_ASSERT(in_filePath.empty() == false, "Cannot load resource with no file path");
             
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             
@@ -317,6 +364,88 @@ namespace ChilliSource
             desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
             
             return std::static_pointer_cast<TResourceType>(resource);
+        }
+        //-------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------
+        template <typename TResourceType> std::shared_ptr<const TResourceType> ResourcePool::RefreshResource(StorageLocation in_location, const std::string& in_filePath)
+        {
+            CS_ASSERT(in_filePath.empty() == false, "Cannot refresh resource with no file path");
+            
+            auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
+            
+            if(itDescriptor == m_descriptors.end())
+            {
+                CS_LOG_ERROR("Failed to find resource provider for " + TResourceType::TypeName);
+                return nullptr;
+            }
+            
+            PoolDesc& desc(itDescriptor->second);
+            
+            //Check descriptor and see if this resource already exists
+            ResourceId resourceId = GenerateResourceId(in_location, in_filePath);
+            auto itResource = desc.m_cachedResources.find(resourceId);
+            if(itResource == desc.m_cachedResources.end())
+            {
+                CS_LOG_ERROR("Failed to refresh non-existing resource for " + in_filePath);
+                return nullptr;
+            }
+            
+            //Find a provider that can load this resource
+            ResourceProvider* provider = FindProvider(in_filePath, desc);
+            if(provider == nullptr)
+            {
+                return nullptr;
+            }
+            
+            //Load the resource
+            ResourceSPtr& resource(itResource->second);
+            resource->SetLoadState(Resource::LoadState::k_loading);
+            provider->CreateResourceFromFile(in_location, in_filePath, resource);
+            if(resource->GetLoadState() != Resource::LoadState::k_loaded)
+            {
+                CS_LOG_ERROR("Failed to refresh resource for " + in_filePath);
+                return nullptr;
+            }
+            
+            return std::static_pointer_cast<TResourceType>(resource);
+        }
+        //------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------
+        template <typename TResourceType> void ResourcePool::RefreshResources()
+        {
+            auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
+            
+            if(itDescriptor == m_descriptors.end())
+            {
+                CS_LOG_ERROR("Failed to find resource provider for " + TResourceType::TypeName);
+                return;
+            }
+            
+            PoolDesc& desc(itDescriptor->second);
+            
+            for(auto& resourceEntry : desc.m_cachedResources)
+            {
+                ResourceSPtr& resource(resourceEntry.second);
+                
+                if(resource->GetFilePath().empty() == false)
+                {
+                    //Find a provider that can load this resource
+                    ResourceProvider* provider = FindProvider(resource->GetFilePath(), desc);
+                    if(provider == nullptr)
+                    {
+                        CS_LOG_ERROR("Failed to find resource provider for " + resource->GetFilePath());
+                        continue;
+                    }
+                    
+                    resource->SetLoadState(Resource::LoadState::k_loading);
+                    provider->CreateResourceFromFile(resource->GetStorageLocation(), resource->GetFilePath(), resource);
+                    if(resource->GetLoadState() != Resource::LoadState::k_loaded)
+                    {
+                        CS_LOG_ERROR("Failed to refresh resource for " + resource->GetFilePath());
+                        continue;
+                    }
+                }
+            }
         }
         //-------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------

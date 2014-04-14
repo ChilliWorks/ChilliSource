@@ -124,30 +124,6 @@ namespace ChilliSource
 			/// @return Index ID of Off state on sprite sheet
 			//-----------------------------------------------------------
 			const std::string& GetOffTextureAtlasID() const;
-            //-----------------------------------------------------------
-            /// Set Default Select Audio Effect
-            ///
-            /// @param Audio effect played when the button is selected
-            //-----------------------------------------------------------
-            static void SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect);
-			//-----------------------------------------------------------
-            /// Set Default De-Select Audio Effect
-            ///
-            /// @param Audio effect played when the button is selected
-            //-----------------------------------------------------------
-            static void SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect);
-            //-----------------------------------------------------------
-            /// Set Select Audio Effect
-            ///
-            /// @param Audio effect played when the button is selected
-            //-----------------------------------------------------------
-            void SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect);
-			//-----------------------------------------------------------
-            /// Set De-Select Audio Effect
-            ///
-            /// @param Audio effect played when the button is selected
-            //-----------------------------------------------------------
-            void SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect);
 			//--------------------------------------------------------
 			/// Enable Size From Image
 			///
@@ -327,8 +303,6 @@ namespace ChilliSource
 
             ImageViewSPtr mpBackgroundImage;
  
-            Audio::AudioComponentSPtr mpSelectAudioEffect;
-			Audio::AudioComponentSPtr mpDeselectAudioEffect;
             
             Core::ConnectionUPtr m_pressedInsideConnection;
             Core::ConnectionUPtr m_releasedInsideConnection;
@@ -342,9 +316,6 @@ namespace ChilliSource
             
 			bool mbSelected;
             bool mbToggledOn;
-            
-            static Audio::AudioComponentSPtr mspDefaultSelectSound;
-            static Audio::AudioComponentSPtr mspDefaultDeSelectSound;
 		};
     }
 }

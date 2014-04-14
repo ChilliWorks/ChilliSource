@@ -21,18 +21,12 @@
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
-#include <ChilliSource/Audio/3D/AudioComponent.h>
-#include <ChilliSource/Audio/3D/AudioComponentFactory.h>
-
 #include <cmath>
 
 namespace ChilliSource
 {
     namespace GUI
     {
-        Audio::AudioComponentSPtr ToggleButton::mspDefaultSelectSound;
-        Audio::AudioComponentSPtr ToggleButton::mspDefaultDeSelectSound;
-        
 		DEFINE_META_CLASS(ToggleButton)
 
 		DEFINE_PROPERTY(OnTexture);
@@ -78,12 +72,6 @@ namespace ChilliSource
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
         {
             std::string strValue;
-            
-            if(mspDefaultSelectSound)
-                SetSelectAudioEffect(mspDefaultSelectSound);
-            
-            if(mspDefaultDeSelectSound)
-                SetDeselectAudioEffect(mspDefaultDeSelectSound);
             
             //---Default
             Core::StorageLocation eOnTextureLocation = Core::StorageLocation::k_package;
@@ -166,28 +154,6 @@ namespace ChilliSource
 				WidthMaintain = true;
 				SetWidthMaintainingAspect(vSize.x, vSize.y);
 			}
-            //---Audio effect
-            Core::StorageLocation eSelectAudioLocation = Core::StorageLocation::k_package;
-            Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
-            if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
-            {
-                eSelectAudioLocation = Core::ParseStorageLocation(strValue);
-            }
-			if(insParams.TryGetValue("DeselectAudioEffectLocation", strValue))
-            {
-                eDeselectAudioLocation = Core::ParseStorageLocation(strValue);
-            }
-            //---Audio effect
-            if(insParams.TryGetValue("SelectAudioEffect", strValue))
-            {
-                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
-                SetSelectAudioEffect(pAudioFactory->CreateAudioComponent(eSelectAudioLocation, strValue, false, false));
-            }
-			if(insParams.TryGetValue("DeselectAudioEffect", strValue))
-            {
-                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
-                SetDeselectAudioEffect(pAudioFactory->CreateAudioComponent(eDeselectAudioLocation, strValue, false, false));
-            }
             
             mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
             mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::Vector2(0.5f, 0.5f), Core::Vector2(0, 0)));
@@ -401,35 +367,6 @@ namespace ChilliSource
 			return SizeFromImage;
 		}
         //-----------------------------------------------------------
-        /// Set Select Audio Effect
-        ///
-        /// @param Audio effect played when the button is selected
-        //-----------------------------------------------------------
-        void ToggleButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
-        {
-            mpSelectAudioEffect = inpEffect;
-        }
-		//-----------------------------------------------------------
-		/// Set De-Select Audio Effect
-		///
-		/// @param Audio effect played when the button is selected
-		//-----------------------------------------------------------
-		void ToggleButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
-		{
-			mpDeselectAudioEffect = inpEffect;
-		}
-        void ToggleButton::SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
-        {
-            Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
-            mspDefaultSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
-        }
-        
-        void ToggleButton::SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
-        {
-            Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
-            mspDefaultDeSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
-        }
-        //-----------------------------------------------------------
         //-----------------------------------------------------------
         void ToggleButton::OnButtonSelect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
         {
@@ -438,11 +375,6 @@ namespace ChilliSource
                 mvSelectedPos = in_pointer.m_location;
                 
 				mbSelected = true;
-				
-                if(mpSelectAudioEffect && !mpSelectAudioEffect->IsPlaying())
-                {
-                    mpSelectAudioEffect->Play();
-                }
 			}
         }
         //-----------------------------------------------------------
@@ -451,11 +383,6 @@ namespace ChilliSource
         {
 			if(mbSelected)
 			{
-				if(mpDeselectAudioEffect && !mpDeselectAudioEffect->IsPlaying())
-				{
-					mpDeselectAudioEffect->Play();
-				}
-				
 				mbSelected = false;
 			}
         }
@@ -699,14 +626,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         ToggleButton::~ToggleButton()
         {
-            if(mpSelectAudioEffect)
-            {
-                mpSelectAudioEffect->Stop();
-            }
-			if(mpDeselectAudioEffect)
-            {
-                mpDeselectAudioEffect->Stop();
-            }
+
         }
     }
 }

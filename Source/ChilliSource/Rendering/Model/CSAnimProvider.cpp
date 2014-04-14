@@ -203,6 +203,7 @@ namespace ChilliSource
 			s32 numSkeletonNodes = 0;
 			if(ReadHeader(stream, in_filePath, out_resource, numFrames, numSkeletonNodes) == false)
             {
+                CS_LOG_ERROR("Failed to read header in anim: " + in_filePath);
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {

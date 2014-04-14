@@ -131,6 +131,7 @@ namespace ChilliSource
 			Core::FileStreamSPtr characterStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_read);
             if(characterStream == nullptr || characterStream->IsBad())
             {
+                CS_LOG_ERROR("Failed to open font file: " + in_filePath);
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
@@ -174,11 +175,13 @@ namespace ChilliSource
                 }
                 else
                 {
+                    CS_LOG_ERROR("Failed to open font texture: " + textureFilePath);
                     out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 }
             }
             else
             {
+                CS_LOG_ERROR("Failed to open font atlas: " + atlasFilePath);
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
             }
 

@@ -238,17 +238,6 @@ namespace ChilliSource
                 return m_platformSystem.get();
             }
 			//-----------------------------------------------------
-			/// Returns a pointer to the audio system.
-            ///
-            /// @author S Downie.
-			///
-			/// @return Pointer to the input system
-			//-----------------------------------------------------
-			inline Audio::AudioSystem* GetAudioSystem()
-            {
-                return m_audioSystem;
-            }
-			//-----------------------------------------------------
 			/// Returns a pointer to the file system.
             ///
             /// @author I Copland
@@ -491,7 +480,6 @@ namespace ChilliSource
 			Rendering::RendererUPtr m_renderer;
             Rendering::RenderSystem* m_renderSystem;
             PlatformSystemUPtr m_platformSystem;
-            Audio::AudioSystem* m_audioSystem;
             FileSystem* m_fileSystem;
             Input::PointerSystem* m_pointerSystem;
 

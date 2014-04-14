@@ -1,6 +1,6 @@
 //
 //  ForwardDeclarations.h
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Scott Downie on 25/01/2012.
 //  Copyright (c) 2012 Tag Games. All rights reserved.
@@ -8,6 +8,10 @@
 
 #ifndef _CHILLISOURCE_BACKEND_RENDERING_OPENGL_FORWARDDECLARATIONS_H_
 #define _CHILLISOURCE_BACKEND_RENDERING_OPENGL_FORWARDDECLARATIONS_H_
+
+#include <ChilliSource/Core/Base/StandardMacros.h>
+
+#include <memory>
 
 namespace ChilliSource
 {
@@ -24,7 +28,7 @@ namespace ChilliSource
         /// Shader
         //----------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Shader);
-        CS_FORWARDDECLARE_CLASS(ShaderManager);
+        CS_FORWARDDECLARE_CLASS(GLSLShaderProvider);
         //----------------------------------------------------
         /// Texture
         //----------------------------------------------------

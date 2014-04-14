@@ -629,8 +629,6 @@ public class CSApplication
 		}
 		
 		//load the default libraries
-		System.loadLibrary("fmodex");
-		System.loadLibrary("fmodevent");
 		System.loadLibrary("Application");
 	}
 }

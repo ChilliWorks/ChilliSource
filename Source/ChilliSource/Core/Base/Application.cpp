@@ -8,10 +8,6 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 
-#include <ChilliSource/Audio/Base/AudioSystem.h>
-#include <ChilliSource/Audio/Base/AudioLoader.h>
-#include <ChilliSource/Audio/Base/AudioPlayer.h>
-
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/Base/Logging.h>
@@ -57,9 +53,6 @@
 
 #include <ctime>
 
-//TODO: Remove
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
-
 namespace ChilliSource
 {
 	namespace Core
@@ -82,7 +75,7 @@ namespace ChilliSource
         //----------------------------------------------------
         //----------------------------------------------------
 		Application::Application()
-        : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_audioSystem(nullptr), m_resourcePool(nullptr),
+        : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_resourcePool(nullptr),
         m_renderer(nullptr), m_fileSystem(nullptr), m_stateManager(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_resourceManagerDispenser(nullptr), m_updateIntervalRemainder(0.0f),
         m_shouldNotifyConnectionsResumeEvent(false), m_shouldNotifyConnectionsForegroundEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
 		{
@@ -443,10 +436,6 @@ namespace ChilliSource
             //TODO: Change this to a PNG image provider.
             CreateSystem<ImageProvider>();
 
-            //Audio
-            m_audioSystem = CreateSystem<Audio::AudioSystem>();
-            CreateSystem<Audio::AudioLoader>(m_audioSystem);
-
             //Input
             CreateSystem<Input::Keyboard>();
             m_pointerSystem = CreateSystem<Input::PointerSystem>();
@@ -454,11 +443,8 @@ namespace ChilliSource
             //Rendering
             Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();
             
-            //TODO: Don't assume this will be a GL render system. We only do this temporarily
-            //in order to access the managers. This will change.
             m_renderSystem = CreateSystem<Rendering::RenderSystem>(renderCapabilities);
-            OpenGL::RenderSystem* renderSystem = (OpenGL::RenderSystem*)m_renderSystem;
-            CreateSystem<Rendering::MaterialFactory>(renderSystem->GetShaderManager(), renderCapabilities);
+            CreateSystem<Rendering::MaterialFactory>(renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
             CreateSystem<Rendering::TextureAtlasProvider>();
             CreateSystem<Rendering::FontProvider>();
@@ -497,8 +483,6 @@ namespace ChilliSource
 
             //Give the resource managers their providers
             m_resourceManagerDispenser->SetResourceProviderOlds(m_ResourceProviderOlds);
-
-            Audio::AudioPlayer::Init();
 
             m_platformSystem->PostCreateSystems();
 		}

@@ -10,6 +10,8 @@
 
 #include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
 
+#include <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
+
 #include <windows.h>
 
 //As the opengl classes need to include glfw.h, they need to be included after windows.h to avoid macro redefinitions.
@@ -51,6 +53,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
 		{
+			in_application->CreateSystem<OpenGL::GLSLShaderProvider>();
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------

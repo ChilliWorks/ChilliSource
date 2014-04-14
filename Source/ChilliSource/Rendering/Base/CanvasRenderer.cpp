@@ -65,7 +65,7 @@ namespace ChilliSource
             }
             else
             {
-                std::string materialId("_GUI" + in_texture->GetFilename());
+                std::string materialId("_GUI:" + in_texture->GetFilename());
                 MaterialCSPtr materialExisting = m_resourcePool->GetResource<Material>(materialId);
                 
                 if(materialExisting != nullptr)
@@ -84,36 +84,6 @@ namespace ChilliSource
             CS_LOG_FATAL("CanvasRenderer: No GUI material created. Some logic has gone wrong");
             return nullptr;
         }
-        //----------------------------------------------------------
-		//----------------------------------------------------------
-        MaterialCSPtr CanvasRenderer::GetDistFontMaterialForTexture(const TextureSPtr& in_texture)
-        {
-            auto itExistingEntry = m_materialDistFontCache.find(in_texture);
-            if(itExistingEntry != m_materialDistFontCache.end())
-            {
-                return itExistingEntry->second;
-            }
-            else
-            {
-                std::string materialId("_GUIDistFont" + in_texture->GetFilename());
-                MaterialCSPtr materialExisting = m_resourcePool->GetResource<Material>(materialId);
-                
-                if(materialExisting != nullptr)
-                {
-                    m_materialDistFontCache.insert(std::make_pair(in_texture, materialExisting));
-                    return materialExisting;
-                }
-                
-                MaterialSPtr materialNew = m_materialFactory->CreateGUIDistanceFont(materialId);
-                materialNew->AddTexture(in_texture);
-                m_materialDistFontCache.insert(std::make_pair(in_texture, materialNew));
-                
-                return materialNew;
-            }
-            
-            CS_LOG_FATAL("CanvasRenderer: No dist font material created. Some logic has gone wrong");
-            return nullptr;
-        }
 		//----------------------------------------------------------
 		/// Render
 		///
@@ -130,7 +100,6 @@ namespace ChilliSource
 			mOverlayBatcher.ForceRender();
             
             m_materialGUICache.clear();
-            m_materialDistFontCache.clear();
 		}
         //----------------------------------------------------------
         /// Enable Clipping To Bounds
@@ -251,61 +220,6 @@ namespace ChilliSource
             DebugStats::AddToEvent("GUI", 1);
 #endif
 		}
-        //-----------------------------------------------------------
-        /// Draw Distance String
-        //-----------------------------------------------------------
-        void CanvasRenderer::DrawDistanceString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
-                                         const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
-										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
-		{
-            msCachedSprite.pMaterial = GetDistFontMaterialForTexture(inpFont->GetTexture());
-            
-            DrawDistanceStringInternal(insString, inmatTransform, infSize, inpFont, outCharCache, insColour, invBounds, infCharacterSpacing, infLineSpacing,
-                                       ineHorizontalJustification, ineVerticalJustification, inbFlipVertical, ineBehaviour, inudwNumLines);
-            
-		}
-        //-----------------------------------------------------------
-        /// Draw Distance String Internal
-        //-----------------------------------------------------------
-        void CanvasRenderer::DrawDistanceStringInternal(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
-                                                 const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
-                                                 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
-        {
-            //Get the data about how to draw each character
-            //This will be in text space and will be in a single line
-            if(outCharCache.empty())
-            {
-                BuildString(inpFont, insString, outCharCache, infSize, infCharacterSpacing, infLineSpacing, invBounds, inudwNumLines,
-							ineHorizontalJustification, ineVerticalJustification, inbFlipVertical, ineBehaviour);
-            }
-            
-            Core::Matrix4x4 matTransform(inmatTransform);
-            Core::Matrix4x4 matTransformedLocal;
-			
-            //Build each character sprite from the draw info
-			for (u32 nChar = 0; nChar < outCharCache.size(); nChar++)
-            {
-                Core::Matrix4x4 matLocal;
-                
-                f32 fXPos = outCharCache[nChar].vPosition.x;
-                f32 fYPos = outCharCache[nChar].vPosition.y - outCharCache[nChar].vSize.y * 0.5f;
-				matLocal.Translate((fXPos), (fYPos), 0.0f);
-				
-                Core::Matrix4x4::Multiply(&matLocal, &matTransform, &matTransformedLocal);
-                
-				UpdateSpriteData(matTransformedLocal, outCharCache[nChar].vSize, outCharCache[nChar].sUVs, insColour, AlignmentAnchor::k_middleCentre);
-				
-                for(u32 i = 0; i <kudwVertsPerSprite; i++)
-                {
-                    msCachedSprite.sVerts[i].vPos.w = infSize;
-                    mOverlayBatcher.Render(msCachedSprite);
-                }
-            }
-            
-#ifdef CS_ENABLE_DEBUGSTATS
-            DebugStats::AddToEvent("GUI", 1);
-#endif
-        }
         //-----------------------------------------------------------
         /// Calculate String Width
         ///

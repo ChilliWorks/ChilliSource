@@ -57,14 +57,14 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
-        const ShaderSPtr& Material::GetShader(ShaderPass in_pass) const
+        const ShaderCSPtr& Material::GetShader(ShaderPass in_pass) const
         {
             CS_ASSERT(in_pass != ShaderPass::k_total, "Invalid shader pass when fetching material shader");
             return m_shaders[(u32)in_pass];
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Material::SetShader(ShaderPass in_pass, const ShaderSPtr& in_shader)
+        void Material::SetShader(ShaderPass in_pass, const ShaderCSPtr& in_shader)
         {
             CS_ASSERT(in_pass != ShaderPass::k_total, "Invalid shader pass when setting material shader");
             

@@ -287,32 +287,6 @@ namespace ChilliSource
 			/// based on the text contents
 			//-------------------------------------------------------
 			void DoAutosizing(Rendering::CanvasRenderer* inpCanvas);
-            //-------------------------------------------------------
-            /// Enable Scalable Font
-            ///
-            /// @param Whether the label should use a scalable font
-			/// or not
-            //-------------------------------------------------------
-            void EnableScalableFont(bool inbEnabled);
-			//-------------------------------------------------------
-			/// Enable Scalable Font
-			///
-			/// @return Whether the label should use a scalable font
-			/// or not
-			//-------------------------------------------------------
-			bool IsScalableFontEnabled() const;
-			//-------------------------------------------------------
-            /// Set Scalable Font Height
-            ///
-            /// @param Sets the height of the scalable font
-            //-------------------------------------------------------
-            void SetScalableFontHeight(f32 infHeight);
-			//-------------------------------------------------------
-			/// Returns the Height of Scalable Font
-			///
-			/// @return Height of scalable font
-			//-------------------------------------------------------
-			f32 GetScalableFontHeight() const;
             //-----------------------------------------------------------
 			/// Set Flipped Vertical
 			///
@@ -384,8 +358,6 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(TextJustification, HorizontalJustification, SetHorizontalJustification, GetHorizontalJustification);
 			DECLARE_PROPERTY_A(TextJustification, VerticalJustification, SetVerticalJustification, GetVerticalJustification);
 			DECLARE_PROPERTY_A(Rendering::FontCSPtr, Font, SetFont, GetFont);
-            DECLARE_PROPERTY_A(bool, ScalableFont, SetScalableFont, GetScalableFont)
-            DECLARE_PROPERTY_A(f32, ScalableHeight, SetScalableHeight, GetScalableHeight);
 			DECLARE_PROPERTY_A(Core::Colour, TextColour, SetTextColour, GetTextColour);
             DECLARE_PROPERTY_A(Core::Colour, TextOutlineColour, SetTextOutlineColour, GetTextOutlineColour);
 			DECLARE_PROPERTY_A(bool, Background, EnableBackground, IsBackgroundEnabled);

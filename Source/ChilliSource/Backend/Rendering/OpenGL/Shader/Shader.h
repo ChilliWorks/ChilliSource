@@ -1,117 +1,265 @@
-/*
- * File: GLShader.h
- * Date: 22/11/2010 2010 
- * Description: Concrete shader implementation. Once a shader has been compiled by GL it is held here
- */
+//
+//  Shader.h
+//  Chilli Source
+//  Created by Scott Downie on 22/11/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
-/*
- * Author: Scott Downie
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
-
-#ifndef _MOFLOW_OPENGL_SHADER_H_
-#define _MOFLOW_OPENGL_SHADER_H_
+#ifndef _CHILLISOURCE_BACKEND_RENDERING_OPENGL_SHADER_SHADER_H_
+#define _CHILLISOURCE_BACKEND_RENDERING_OPENGL_SHADER_SHADER_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 
+#include <unordered_map>
+
 namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class Shader : public ChilliSource::Rendering::Shader
+        //----------------------------------------------------------
+        /// OpenGL GLSL shader resource. This holds the combined
+        /// vertex and fragment shader programs and provides
+        /// accessors to set shader variables.
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------
+		class Shader : public Rendering::Shader
 		{
 		public:
 			
-			virtual ~Shader();
+            //----------------------------------------------------------
+            /// Specifies the policy for how the progrm should handle
+            /// an missing variable when setting a uniform
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+            enum class UniformNotFoundPolicy
+            {
+                k_failHard,
+                k_failSilent
+            };
+            //----------------------------------------------------------
+            /// Compile the given vertex and fragment shaders
+            /// into a shader program. Asserts on failure.
+            ///
+            /// @param Vertex shader contents
+            /// @param Fragment shader contents
+            //----------------------------------------------------------
+            void Build(const std::string& in_vs, const std::string& in_fs);
 			//----------------------------------------------------------
-			/// Is A
+			/// @author S Downie
 			///
-			/// Returns if it is of the type given
 			/// @param Comparison Type
+            ///
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
-			//----------------------------------------------------------
-			/// Get Program ID
-			///
-			/// @return GL identifer of shader program
-			//----------------------------------------------------------
-			GLuint GetProgramID() const;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------------
-			/// Get Attribute Location
-			///
-			/// @param Name of attribute to be located
-			/// @return GL identifer of attribute location
-			//----------------------------------------------------------
-            GLint GetAttributeLocation(const char * instrAttributeName);
+            /// Set this shader to be the active one.
+            ///
+            /// @author S Downie
             //----------------------------------------------------------
-			/// Get Uniform Location
-			///
-			/// @param Name of uniform to be located
-			/// @return GL identifer of uniform location
+            void Bind();
+            //----------------------------------------------------------
+            /// Attempts to set the uniform shader variable with the
+            /// given name to the given value.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Uniform name
+            /// @param Value
+            /// @param Failure policy
+            //----------------------------------------------------------
+            void SetUniform(const std::string& in_varName, s32 in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            //----------------------------------------------------------
+            /// Attempts to set the uniform shader variable with the
+            /// given name to the given value.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Uniform name
+            /// @param Value
+            /// @param Failure policy
+            //----------------------------------------------------------
+            void SetUniform(const std::string& in_varName, f32 in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            //----------------------------------------------------------
+            /// Attempts to set the uniform shader variable with the
+            /// given name to the given value.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Uniform name
+            /// @param Value
+            /// @param Failure policy
+            //----------------------------------------------------------
+            void SetUniform(const std::string& in_varName, const Core::Vector2& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            //----------------------------------------------------------
+            /// Attempts to set the uniform shader variable with the
+            /// given name to the given value.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Uniform name
+            /// @param Value
+            /// @param Failure policy
+            //----------------------------------------------------------
+            void SetUniform(const std::string& in_varName, const Core::Vector3& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            //----------------------------------------------------------
+            /// Attempts to set the uniform shader variable with the
+            /// given name to the given value.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Uniform name
+            /// @param Value
+            /// @param Failure policy
+            //----------------------------------------------------------
+            void SetUniform(const std::string& in_varName, const Core::Vector4& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            //----------------------------------------------------------
+            /// Attempts to set the uniform shader variable with the
+            /// given name to the given value.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Uniform name
+            /// @param Value
+            /// @param Failure policy
+            //----------------------------------------------------------
+            void SetUniform(const std::string& in_varName, const Core::Matrix4x4& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            //----------------------------------------------------------
+            /// Attempts to set the uniform shader variable with the
+            /// given name to the given value.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Uniform name
+            /// @param Value
+            /// @param Failure policy
+            //----------------------------------------------------------
+            void SetUniform(const std::string& in_varName, const Core::Colour& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            //----------------------------------------------------------
+            /// Attempts to set the uniform shader variable with the
+            /// given name to the given values.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Uniform name
+            /// @param Values
+            /// @param Failure policy
+            //----------------------------------------------------------
+            void SetUniform(const std::string& in_varName, const std::vector<Core::Vector4>& in_vec4Values, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            //----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Whether shader has the given uniform variable
+            //----------------------------------------------------------
+            bool HasUniform(const std::string& in_varName);
+            //----------------------------------------------------------
+            /// Attempts to set the attribute shader variable with
+            /// the given name. Will fail silently if variable not found.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Variable name
+            /// @param Num of components in the attribute
+            /// @param Type
+            /// @param Whether normalised or not
+            /// @param Stride
+            /// @param Pointer to offset in buffer
+            //----------------------------------------------------------
+            void SetAttribute(const std::string& in_varName, GLint in_size, GLenum in_type, GLboolean in_isNormalized, GLsizei in_stride, const GLvoid* in_offset);
+            //----------------------------------------------------------
+            /// Destructor. Destroys the GL program
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+            ~Shader();
+            
+		private:
+            friend Rendering::ShaderUPtr Rendering::Shader::Create();
 			//----------------------------------------------------------
-            GLint GetUniformLocation(const char * instrUniformName);
-		protected:
-			
-			//No randomly creating this! That means you!
+            /// Private constructor to enforce the use of the factory
+            /// method
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
 			Shader();
 			//----------------------------------------------------------
-			/// Load and Compile Shader
+			/// Compiles a pre-loaded shader. Asserts on failure.
+            ///
+            /// @author S Downie
 			///
-			/// Load the shader program from file and compile it for
-			/// errors.
+			/// @param Shader source code
+            /// @param Shader type vertex or fragment
+			//----------------------------------------------------------
+			void CompileShader(const std::string& in_shaderSource, GLenum in_shaderType);
+			//----------------------------------------------------------
+			/// Having compiled the vertex and fragment shaders
+            /// this will link them into a single program. Asserts on
+            /// failure
+            ///
+            /// @author S Downie
 			///
-            /// @param The storage location to load from
-			/// @param The shader file path
-			/// @return Success or failure
+			/// @param Vertex shader Id
+            /// @param Fragment shader Id
 			//----------------------------------------------------------
-			bool LoadAndCompileShader(Core::StorageLocation ineStorageLocation, const std::string& instrShaderFile, Rendering::ShaderType ineShaderType);
-			//----------------------------------------------------------
-			/// Compile Shader
-			///
-			/// Compiles a pre-loaded shader
-			///
-			/// @param The shader file path
-			/// @return Success or failure
-			//----------------------------------------------------------
-			bool CompileShader(const std::string& instrShaderSource, Rendering::ShaderType ineShaderType);
-			//----------------------------------------------------------
-			/// Create Program
-			///
-			/// Create shader program from the vertex and pixel shaders
-			/// @return Success
-			//----------------------------------------------------------
-			bool CreateProgram();
-			//----------------------------------------------------------
-			/// Read Shader From File
-			///
-            /// @param The storage location to load from
-			/// @param File path
-			/// @param Out contents of file
-			/// @return Success
-			//----------------------------------------------------------
-			bool ReadShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, std::stringstream& outstrContents);
-			
-			friend class ShaderManager;
-			
+			void CreateProgram(GLuint in_vs, GLuint in_fs);
+            //----------------------------------------------------------
+            /// Assign the attribute handles based on the supported
+            /// shader attribute names
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+            void PopulateAttributeHandles();
+            //----------------------------------------------------------
+			/// Get the location of the given uniform variable.
+            /// Subsequent calls to the same variable will return the
+            /// cached value
+            ///
+            /// @author S Downie
+            ///
+            /// @param Uniform name
+            ///
+            /// @return Location or -1 if not found
+            //----------------------------------------------------------
+            GLint GetUniformHandle(const std::string& in_name);
+            
 		private:
 
-			GLuint mGLVertexShader;
-			GLuint mGLPixelShader;
-			GLuint mGLProgram;
+            GLuint m_vertexShaderId;
+			GLuint m_fragmentShaderId;
+			GLuint m_programId;
             
-            // Cached attribute and uniform locations
-            typedef std::pair<u32, GLint> LocationLookup;
-            std::vector<LocationLookup> maAttributes;
-            std::vector<LocationLookup> maUniforms;
+            //---Uniforms
+            std::unordered_map<std::string, GLint> m_uniformHandles;
+        
+            //---Attributes
+            std::unordered_map<std::string, GLint> m_attribHandles;
 		};
-		
-		typedef std::shared_ptr<Shader> ShaderSPtr;
-		typedef std::weak_ptr<Shader> ShaderWeakPtr;
 	}
 }
 

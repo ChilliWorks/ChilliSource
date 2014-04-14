@@ -1,359 +1,377 @@
-/*
- * File: GLShader.cpp
- * Date: 22/11/2010 2010 
- * Description: 
- */
+//
+//  Shader.cpp
+//  Chilli Source
+//  Created by Scott Downie on 22/11/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
-/*
- * Author: Scott Downie
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
-
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Cryptographic/HashCRC32.h>
-#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 
-#include <algorithm>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
+
+#include <array>
 
 namespace ChilliSource
 {
 	namespace OpenGL
 	{
-        const bool SortCachedLocations(const std::pair<u32, GLint> & inLHS, const std::pair<u32, GLint> & inRHS)
-        {
-            return inLHS.first < inRHS.first;
-        }
-        
+        //----------------------------------------------------------
+        //----------------------------------------------------------
 		Shader::Shader()
-		: mGLVertexShader(0), mGLPixelShader(0), mGLProgram(0)
+		: m_programId(0), m_vertexShaderId(0), m_fragmentShaderId(0)
 		{
 			
 		}
 		//----------------------------------------------------------
-		/// Is A
-		///
-		/// Returns if it is of the type given
-		/// @param Comparison Type
-		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool Shader::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Shader::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return inInterfaceID == Shader::InterfaceID;
-		}
-		//----------------------------------------------------------
-		/// Get Program ID
-		///
-		/// @return GL identifer of shader program
-		//----------------------------------------------------------
-		GLuint Shader::GetProgramID() const
-		{
-			return mGLProgram;
+			return in_interfaceId == Shader::InterfaceID || in_interfaceId == Rendering::Shader::InterfaceID;
 		}
         //----------------------------------------------------------
-		/// Get Attribute Location
-		///
-		/// @param Name of attribute to be located
-		/// @return GL identifer of attribute location
-		//----------------------------------------------------------
-        GLint Shader::GetAttributeLocation(const char * instrAttributeName)
+        //----------------------------------------------------------
+        void Shader::Build(const std::string& in_vs, const std::string& in_fs)
         {
-        	// Hash the name string
-            LocationLookup sItem( Core::HashCRC32::GenerateHashCode(instrAttributeName), 0);
-            
-            // Binary search through a sorted array of items
-            std::vector<LocationLookup>::iterator it;
-            it = std::lower_bound(maAttributes.begin(), maAttributes.end(), sItem, SortCachedLocations);
-            
-            if(it!=maAttributes.end()  && it->first == sItem.first)
-                return it->second;
-            
-            // Find and add if we don't already have it cached
-            sItem.second = glGetAttribLocation(mGLProgram, instrAttributeName);
-            maAttributes.push_back(sItem);
-            
-            // Resort our list
-            std::sort(maAttributes.begin(), maAttributes.end(), SortCachedLocations);
-            return sItem.second;
+            CompileShader(in_vs, GL_VERTEX_SHADER);
+            CompileShader(in_fs, GL_FRAGMENT_SHADER);
+            CreateProgram(m_vertexShaderId, m_fragmentShaderId);
+            PopulateAttributeHandles();
         }
         //----------------------------------------------------------
-		/// Get Uniform Location
-		///
-		/// @param Name of uniform to be located
-		/// @return GL identifer of uniform location
-		//----------------------------------------------------------
-        GLint Shader::GetUniformLocation(const char * instrUniformName)
+        //----------------------------------------------------------
+        void Shader::Bind()
         {
-        	// Hash the name string
-            LocationLookup sItem( Core::HashCRC32::GenerateHashCode(instrUniformName), 0);
+            glUseProgram(m_programId);
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::PopulateAttributeHandles()
+        {
+            const std::array<std::string, 6> attribNames =
+            {{
+                "avPosition",
+                "avColour",
+                "avNormal",
+                "avTexCoord",
+                "avWeights",
+                "avJointIndices"
+            }};
             
-            // Binary search through a sorted array of items
-            std::vector<LocationLookup>::iterator it;
-            it =std::lower_bound(maUniforms.begin(), maUniforms.end(), sItem, SortCachedLocations);
+            for(const auto& name : attribNames)
+            {
+                GLint handle = glGetAttribLocation(m_programId, name.c_str());
+                if(handle >= 0)
+                {
+                    m_attribHandles.insert(std::make_pair(name, handle));
+                }
+            }
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::SetUniform(const std::string& in_varName, s32 in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        {
+            GLint handle = GetUniformHandle(in_varName);
             
-            if(it!=maUniforms.end()  && it->first == sItem.first)
+            if(handle < 0)
+            {
+                switch (in_notFoundPolicy)
+                {
+                    case UniformNotFoundPolicy::k_failHard:
+                        CS_LOG_FATAL("Cannot find shader uniform: " + in_varName);
+                        return;
+                    case UniformNotFoundPolicy::k_failSilent:
+                        return;
+                }
+            }
+            
+            glUniform1i(handle, in_value);
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::SetUniform(const std::string& in_varName, f32 in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        {
+            GLint handle = GetUniformHandle(in_varName);
+            
+            if(handle < 0)
+            {
+                switch (in_notFoundPolicy)
+                {
+                    case UniformNotFoundPolicy::k_failHard:
+                        CS_LOG_FATAL("Cannot find shader uniform: " + in_varName);
+                        return;
+                    case UniformNotFoundPolicy::k_failSilent:
+                        return;
+                }
+            }
+            
+            glUniform1f(handle, in_value);
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::SetUniform(const std::string& in_varName, const Core::Vector2& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        {
+            GLint handle = GetUniformHandle(in_varName);
+            
+            if(handle < 0)
+            {
+                switch (in_notFoundPolicy)
+                {
+                    case UniformNotFoundPolicy::k_failHard:
+                        CS_LOG_FATAL("Cannot find shader uniform: " + in_varName);
+                        return;
+                    case UniformNotFoundPolicy::k_failSilent:
+                        return;
+                }
+            }
+            
+            glUniform2fv(handle, 1, (GLfloat*)(&in_value));
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::SetUniform(const std::string& in_varName, const Core::Vector3& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        {
+            GLint handle = GetUniformHandle(in_varName);
+            
+            if(handle < 0)
+            {
+                switch (in_notFoundPolicy)
+                {
+                    case UniformNotFoundPolicy::k_failHard:
+                        CS_LOG_FATAL("Cannot find shader uniform: " + in_varName);
+                        return;
+                    case UniformNotFoundPolicy::k_failSilent:
+                        return;
+                }
+            }
+            
+            glUniform3fv(handle, 1, (GLfloat*)(&in_value));
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::SetUniform(const std::string& in_varName, const Core::Vector4& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        {
+            GLint handle = GetUniformHandle(in_varName);
+            
+            if(handle < 0)
+            {
+                switch (in_notFoundPolicy)
+                {
+                    case UniformNotFoundPolicy::k_failHard:
+                        CS_LOG_FATAL("Cannot find shader uniform: " + in_varName);
+                        return;
+                    case UniformNotFoundPolicy::k_failSilent:
+                        return;
+                }
+            }
+            
+            glUniform4fv(handle, 1, (GLfloat*)(&in_value));
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::SetUniform(const std::string& in_varName, const Core::Matrix4x4& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        {
+            GLint handle = GetUniformHandle(in_varName);
+            
+            if(handle < 0)
+            {
+                switch (in_notFoundPolicy)
+                {
+                    case UniformNotFoundPolicy::k_failHard:
+                        CS_LOG_FATAL("Cannot find shader uniform: " + in_varName);
+                        return;
+                    case UniformNotFoundPolicy::k_failSilent:
+                        return;
+                }
+            }
+            
+            glUniformMatrix4fv(handle, 1, GL_FALSE, (GLfloat*)(&in_value.m));
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::SetUniform(const std::string& in_varName, const Core::Colour& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        {
+            GLint handle = GetUniformHandle(in_varName);
+            
+            if(handle < 0)
+            {
+                switch (in_notFoundPolicy)
+                {
+                    case UniformNotFoundPolicy::k_failHard:
+                        CS_LOG_FATAL("Cannot find shader uniform: " + in_varName);
+                        return;
+                    case UniformNotFoundPolicy::k_failSilent:
+                        return;
+                }
+            }
+            
+            glUniform4fv(handle, 1, (GLfloat*)(&in_value));
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::SetUniform(const std::string& in_varName, const std::vector<Core::Vector4>& in_vec4Values, UniformNotFoundPolicy in_notFoundPolicy)
+        {
+            GLint handle = GetUniformHandle(in_varName);
+            
+            if(handle < 0)
+            {
+                switch (in_notFoundPolicy)
+                {
+                    case UniformNotFoundPolicy::k_failHard:
+                        CS_LOG_FATAL("Cannot find shader uniform: " + in_varName);
+                        return;
+                    case UniformNotFoundPolicy::k_failSilent:
+                        return;
+                }
+            }
+            
+            glUniform4fv(handle, in_vec4Values.size(), (GLfloat*)(&in_vec4Values[0]));
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        bool Shader::HasUniform(const std::string& in_varName)
+        {
+            return GetUniformHandle(in_varName) >= 0;
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::SetAttribute(const std::string& in_varName, GLint in_size, GLenum in_type, GLboolean in_isNormalized, GLsizei in_stride, const GLvoid* in_offset)
+        {
+            auto it = m_attribHandles.find(in_varName);
+            
+            if(it == m_attribHandles.end())
+            {
+                return;
+            }
+            
+            glVertexAttribPointer(it->second, in_size, in_type, in_isNormalized, in_stride, in_offset);
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        GLint Shader::GetUniformHandle(const std::string& in_name)
+        {
+            auto it = m_uniformHandles.find(in_name);
+            
+            if(it != m_uniformHandles.end())
+            {
                 return it->second;
+            }
             
-            // Find and add if we don't already have it cached
-            sItem.second = glGetUniformLocation(mGLProgram, instrUniformName);
-            maUniforms.push_back(sItem);
-            
-            // Resort our list
-            std::sort(maUniforms.begin(), maUniforms.end(), SortCachedLocations);
-            return sItem.second;
+            GLint handle = glGetUniformLocation(m_programId, in_name.c_str());
+            m_uniformHandles.insert(std::make_pair(in_name, handle));
+            return handle;
         }
 		//----------------------------------------------------------
-		/// Read Shader From File
-		///
-        /// @param The storage location to load from
-		/// @param File path
-		/// @param Out contents of file
-		/// @return Success
 		//----------------------------------------------------------
-		bool Shader::ReadShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, std::stringstream& outstrContents)
+		void Shader::CompileShader(const std::string& in_shaderSource, GLenum in_shaderType)
 		{
-			//Open the shader file for reading only
-			ChilliSource::Core::FileStreamSPtr shaderStream = ChilliSource::Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrFilePath, ChilliSource::Core::FileMode::k_read);
+            GLuint* shaderId = nullptr;
             
-            if (shaderStream == nullptr || shaderStream->IsBad() == true)
+			switch(in_shaderType)
 			{
-				CS_LOG_ERROR("Cannot open shader file " + instrFilePath + " for reading");
-				shaderStream->Close();
-				return false;
-			}
-			
-			//Read the contents into a string
-			shaderStream->Get(outstrContents);
-			
-			//Close the shader file
-			shaderStream->Close();
-			
-			return true;
-		}
-		//----------------------------------------------------------
-		/// Load and Compile Shader
-		///
-		/// Load the shader program from file and compile it for
-		/// errors.
-		///
-        /// @param The storage location to load from
-		/// @param The shader file path
-		/// @return Success or failure
-		//----------------------------------------------------------
-		bool Shader::LoadAndCompileShader(Core::StorageLocation ineStorageLocation, const std::string& instrShaderFile, Rendering::ShaderType ineShaderType)
-		{
-            maAttributes.clear();
-            maUniforms.clear();
-            
-			//Read the shader contents from file
-			std::stringstream sstrShaderSource;
-			if(!ReadShaderFromFile(ineStorageLocation, instrShaderFile, sstrShaderSource))
-			{
-				return false;
-			}
-			
-			//Convert from our internal shader type to OpenGL's
-			GLuint* pGLShader;
-			GLenum GLShaderType;
-			
-			switch(ineShaderType)
-			{
-				case Rendering::ShaderType::k_combined:
-					CS_LOG_ERROR("OpenGL ES 2.0 does not support combined vertex and pixel shaders");
-					return false;
-				case Rendering::ShaderType::k_vertex:
-					GLShaderType = GL_VERTEX_SHADER;
-					pGLShader = &mGLVertexShader;
+				case GL_VERTEX_SHADER:
+					shaderId = &m_vertexShaderId;
 					break;
-				case Rendering::ShaderType::k_fragment:
-					GLShaderType = GL_FRAGMENT_SHADER;
-					pGLShader = &mGLPixelShader;
+				case GL_FRAGMENT_SHADER:
+					shaderId = &m_fragmentShaderId;
 					break;
 			};
 			
-			//Create a shader of the correct type
-			*pGLShader = glCreateShader(GLShaderType);
+			*shaderId = glCreateShader(in_shaderType);
+            CS_ASSERT(*shaderId > 0, "OpenGL ES 2.0 does not support this shader type");
 			
-			if(*pGLShader == 0)
+            const GLchar* glSource = in_shaderSource.c_str();
+			glShaderSource(*shaderId, 1, &glSource, nullptr);
+			glCompileShader(*shaderId);
+			
+			GLint compilationStatus;
+			glGetShaderiv(*shaderId, GL_COMPILE_STATUS, &compilationStatus);
+			
+			if(compilationStatus == 0)
 			{
-				CS_LOG_FATAL("OpenGL ES 2.0 does not support shader type for " + instrShaderFile);
-				return false;
-			}
-			
-			//Load the shader source 
-			CS_LOG_VERBOSE("Loading shader " + instrShaderFile);
-			std::string strSource = sstrShaderSource.str();
-			const GLchar* pGLSource = strSource.c_str();
-			glShaderSource(*pGLShader, 1, &pGLSource, nullptr);
-			
-			//Compile the shader and check for errors
-			CS_LOG_VERBOSE("Compiling shader " + instrShaderFile);
-			glCompileShader(*pGLShader);
-			
-			GLint Compiled;
-			glGetShaderiv(*pGLShader, GL_COMPILE_STATUS, &Compiled);
-			
-			if(!Compiled)
-			{
-				//We failed to compile. Spit out the errors
-				GLint InfoLength = 0;
-				glGetShaderiv(*pGLShader, GL_INFO_LOG_LENGTH, &InfoLength);
-				
-				if(InfoLength > 1)
+				GLint errorLength = 0;
+				glGetShaderiv(*shaderId, GL_INFO_LOG_LENGTH, &errorLength);
+                
+				if(errorLength > 1)
 				{
-					char* ShaderLog = (char*)malloc(sizeof(char) * InfoLength);
-					glGetShaderInfoLog(*pGLShader, InfoLength, nullptr, ShaderLog);
-					CS_LOG_ERROR("Compiling shader " + instrShaderFile + ". " + std::string(ShaderLog));
-					CS_LOG_FATAL("Failed to compile shader");
-					free(ShaderLog);
-					return false;
+					char* errorLog = (char*)malloc(sizeof(char) * errorLength);
+					glGetShaderInfoLog(*shaderId, errorLength, nullptr, errorLog);
+					
+					CS_LOG_ERROR("GLSL compilation error: " + std::string(errorLog));
+					free(errorLog);
 				}
-				
-				CS_LOG_FATAL("Compiling shader " + instrShaderFile);
-				return false;
+                
+                CS_LOG_FATAL("Failed to compile GLSL shader");
 			}
-			
-			CS_LOG_VERBOSE("Shader compiled successfully\n");
-			return true;
 		}
-		//----------------------------------------------------------
-		/// Compile Shader
-		///
-		/// compiles a pre-loaded
-		///
-		/// @param The shader file path
-		/// @return Success or failure
-		//----------------------------------------------------------
-		bool Shader::CompileShader(const std::string& instrShaderSource, Rendering::ShaderType ineShaderType)
-		{
-			//Convert from our internal shader type to OpenGL's
-			GLuint* pGLShader;
-			GLenum GLShaderType;
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::CreateProgram(GLuint in_vs, GLuint in_fs)
+        {
+            m_programId = glCreateProgram();
+            CS_ASSERT(m_programId > 0, "Failed to create GLSL program");
+            
+            glAttachShader(m_programId, in_vs);
+            glAttachShader(m_programId, in_fs);
+            glLinkProgram(m_programId);
+            
+            //Check for success
+			GLint linkStatus;
+			glGetProgramiv(m_programId, GL_LINK_STATUS, &linkStatus);
 			
-			switch(ineShaderType)
+			if(linkStatus == 0)
 			{
-				case Rendering::ShaderType::k_combined:
-					CS_LOG_ERROR("OpenGL ES 2.0 does not support combined vertex and pixel shaders");
-					return false;
-				case Rendering::ShaderType::k_vertex:
-					GLShaderType = GL_VERTEX_SHADER;
-					pGLShader = &mGLVertexShader;
-					break;
-				case Rendering::ShaderType::k_fragment:
-					GLShaderType = GL_FRAGMENT_SHADER;
-					pGLShader = &mGLPixelShader;
-					break;
-			};
-			
-			//Create a shader of the correct type
-			*pGLShader = glCreateShader(GLShaderType);
-			
-			if(*pGLShader == 0)
-			{
-				CS_LOG_FATAL("OpenGL ES 2.0 does not support shader type");
-				return false;
-			}
-			
-			//Load the shader source
-			CS_LOG_VERBOSE("Loading shader from pre loaded source.");
-			const GLchar* pGLSource = instrShaderSource.c_str();
-			glShaderSource(*pGLShader, 1, &pGLSource, nullptr);
-			
-			//Compile the shader and check for errors
-			CS_LOG_VERBOSE("Compiling shader...");
-			glCompileShader(*pGLShader);
-			
-			GLint Compiled;
-			glGetShaderiv(*pGLShader, GL_COMPILE_STATUS, &Compiled);
-			
-			if(!Compiled)
-			{
-				//We failed to compile. Spit out the errors
-				GLint InfoLength = 0;
-				glGetShaderiv(*pGLShader, GL_INFO_LOG_LENGTH, &InfoLength);
+				GLint errorLength = 0;
+				glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &errorLength);
 				
-				if(InfoLength > 1)
+				if(errorLength > 1)
 				{
-					char* ShaderLog = (char*)malloc(sizeof(char) * InfoLength);
-					glGetShaderInfoLog(*pGLShader, InfoLength, nullptr, ShaderLog);
-					CS_LOG_ERROR("Compiling shader. " + std::string(ShaderLog));
-					CS_LOG_FATAL(std::string(pGLSource));
-					free(ShaderLog);
-					return false;
+					char* errorLog = (char*)malloc(sizeof(char) * errorLength);
+					glGetProgramInfoLog(m_programId, errorLength, nullptr, errorLog);
+					CS_LOG_ERROR("GLSL link error: " + std::string(errorLog));
+					free(errorLog);
 				}
-				
-				CS_LOG_FATAL("Compiling shader.");
-				return false;
+                
+                CS_LOG_FATAL("Failed to link GLSL shader");
 			}
-			
-			CS_LOG_VERBOSE("Shader compiled successfully\n");
-			return true;
-		}
+        }
 		//----------------------------------------------------------
-		/// Create Program
-		///
-		/// Create shader program from the vertex and pixel shaders
-		/// @return Success
-		//----------------------------------------------------------
-		bool Shader::CreateProgram()
-		{
-			mGLProgram = glCreateProgram();
-			
-			if(mGLProgram == 0)
-			{
-				CS_LOG_FATAL("Creating OpenGL ES shader program");
-			}
-			
-			//Now attach our two shaders
-			glAttachShader(mGLProgram, mGLVertexShader);
-			glAttachShader(mGLProgram, mGLPixelShader);
-			
-			//Link the shaders together
-			glLinkProgram(mGLProgram);
-			
-			//Check for success
-			GLint linked;
-			glGetProgramiv(mGLProgram, GL_LINK_STATUS, &linked);
-			
-			if(!linked)
-			{
-				//We failed to link. Spit out the errors
-				GLint InfoLength = 0;
-				glGetProgramiv(mGLProgram, GL_INFO_LOG_LENGTH, &InfoLength);
-				
-				if(InfoLength > 1)
-				{
-					char* ShaderLog = (char*)malloc(sizeof(char) * InfoLength);
-					glGetProgramInfoLog(mGLProgram, InfoLength, nullptr, ShaderLog);
-					CS_LOG_ERROR("Linking shader: " + std::string(ShaderLog));
-					free(ShaderLog);
-					return false;
-				}
-			}
-			
-			CS_LOG_VERBOSE("Linking shader complete\n");
-			return true;
-		}
-		//----------------------------------------------------------
-		/// Destructor
-		///
 		//----------------------------------------------------------
 		Shader::~Shader()
 		{
-			if(mGLVertexShader)
+			if(m_vertexShaderId > 0)
 			{
-				glDetachShader(mGLProgram, mGLVertexShader);
-				glDeleteShader(mGLVertexShader);
+				glDetachShader(m_programId, m_vertexShaderId);
+				glDeleteShader(m_vertexShaderId);
 			}
-			if(mGLPixelShader)
+			if(m_fragmentShaderId > 0)
 			{
-				glDetachShader(mGLProgram, mGLPixelShader);
-				glDeleteShader(mGLPixelShader);
+				glDetachShader(m_programId, m_fragmentShaderId);
+				glDeleteShader(m_fragmentShaderId);
 			}
-			if(mGLProgram)
+			if(m_programId > 0)
 			{
-				glDeleteProgram(mGLProgram);
+				glDeleteProgram(m_programId);
 			}
 		}
 	}

@@ -10,6 +10,7 @@
 
 #include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #include <ChilliSource/Core/Image/ETC1ImageProvider.h>
 
 namespace ChilliSource 
@@ -26,6 +27,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
 		{
+			in_application->CreateSystem<OpenGL::GLSLShaderProvider>();
 			in_application->CreateSystem<Core::ETC1ImageProvider>();
 		}
 		//-------------------------------------------------
