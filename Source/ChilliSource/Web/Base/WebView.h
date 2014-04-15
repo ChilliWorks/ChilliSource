@@ -30,10 +30,10 @@
 #define _CHILLISOURCE_WEB_BASE_WEBVIEW_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/StateSystem.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Core/System/StateSystem.h>
 
 #include <functional>
 
@@ -64,11 +64,11 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param The Url.
-            /// @param The dismissed delegate.
             /// @param The size of the webview in GUI coordinates.
-            /// @param The size of the dismiss button.
+            /// @param The relative size of the dismiss button.
+            /// @param The dismissed delegate.
             //---------------------------------------------------------
-            virtual void Present(const std::string& in_url, const DismissedDelegate& in_delegate, const Core::UnifiedVector2& in_size, f32 in_dismissButtonScale) = 0;
+            virtual void Present(const std::string& in_url, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate) = 0;
             //---------------------------------------------------------
             /// Displays the website at the given location on disk in
             /// an in-app web view.
@@ -77,11 +77,11 @@ namespace ChilliSource
             ///
             /// @param The storage location.
             /// @param The file path.
-            /// @param The dismissed delegate.
             /// @param The size of the webview in GUI coordinates.
-            /// @param The size of the dismiss button.
+            /// @param The relative size of the dismiss button.
+            /// @param The dismissed delegate.
             //---------------------------------------------------------
-            virtual void PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const DismissedDelegate& in_delegate, const Core::UnifiedVector2& in_size, f32 in_dismissButtonScale) = 0;
+            virtual void PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate) = 0;
             //---------------------------------------------------------
             /// Displays the website at the given Url in an external
             /// browser.

@@ -45,7 +45,7 @@ namespace ChilliSource
 			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","PresentInExternalBrowser", "(Ljava/lang/String;)V");
 			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","Dismiss", "(I)V");
 		}
-		void WebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::Vector2& invSize, f32 in_dismissButtonScale)
+		void WebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::Vector2& invSize, f32 in_dismissButtonRelativeSize)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("Present");
 
@@ -56,13 +56,13 @@ namespace ChilliSource
 				u32 udwIndex = inudwIndex;
 				u32 udwWidth = invSize.x;
 				u32 udwHeight = invSize.y;
-				env->CallStaticVoidMethod(sdMethodRef.mClassID, sdMethodRef.mMethodID,udwIndex,jstrURL,udwWidth,udwHeight, in_dismissButtonScale);
+				env->CallStaticVoidMethod(sdMethodRef.mClassID, sdMethodRef.mMethodID,udwIndex,jstrURL,udwWidth,udwHeight, in_dismissButtonRelativeSize);
 
 				//delete local reference
 				env->DeleteLocalRef(jstrURL);
 			}
 		}
-		void WebViewJavaInterface::PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor, f32 in_dismissButtonScale)
+		void WebViewJavaInterface::PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor, f32 in_dismissButtonRelativeSize)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("PresentFromFile");
 
@@ -75,7 +75,7 @@ namespace ChilliSource
 				u32 udwIndex = inudwIndex;
 				u32 udwWidth = invSize.x;
 				u32 udwHeight = invSize.y;
-				env->CallStaticVoidMethod(sdMethodRef.mClassID, sdMethodRef.mMethodID, udwIndex, jstrContent, udwWidth, udwHeight, jstrBasePath, jstrAnchor, in_dismissButtonScale);
+				env->CallStaticVoidMethod(sdMethodRef.mClassID, sdMethodRef.mMethodID, udwIndex, jstrContent, udwWidth, udwHeight, jstrBasePath, jstrAnchor, in_dismissButtonRelativeSize);
 
 				//delete local reference
 				env->DeleteLocalRef(jstrContent);

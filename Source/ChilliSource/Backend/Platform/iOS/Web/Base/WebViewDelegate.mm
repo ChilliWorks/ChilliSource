@@ -1,5 +1,5 @@
 //
-//  WebViewDelegate.h
+//  WebViewDelegate.mm
 //  Chilli Source
 //  Created by I Copland on 14/04/2014.
 //
@@ -54,9 +54,7 @@
 {
 	if(navigationType == UIWebViewNavigationTypeLinkClicked)
 	{
-        std::string strScheme = [NSStringUtils newStringWithNSString:[[request URL] scheme]];
-        
-        if(strScheme != "file")
+        if([[[request URL] scheme] isEqualToString:@"file"] == TRUE)
         {
             //Load all other links externally
             [[UIApplication sharedApplication] openURL:request.URL];

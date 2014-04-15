@@ -76,11 +76,11 @@ namespace ChilliSource
             /// @author S Hendrie
             ///
             /// @param The Url.
-            /// @param The dismissed delegate.
             /// @param The size of the webview in GUI coordinates.
-            /// @param The size of the dismiss button.
+            /// @param The relative size of the dismiss button.
+            /// @param The dismissed delegate.
             //---------------------------------------------------------
-            void Present(const std::string& in_url, const DismissedDelegate& in_delegate, const Core::UnifiedVector2& in_size, f32 in_dismissButtonScale) override;
+            void Present(const std::string& in_url, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate) override;
             //---------------------------------------------------------
             /// Displays the website at the given location on disk in
             /// an in-app web view.
@@ -89,11 +89,11 @@ namespace ChilliSource
             ///
             /// @param The storage location.
             /// @param The file path.
-            /// @param The dismissed delegate.
             /// @param The size of the webview in GUI coordinates.
-            /// @param The size of the dismiss button.
+            /// @param The relative size of the dismiss button.
+            /// @param The dismissed delegate.
             //---------------------------------------------------------
-            void PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const DismissedDelegate& in_delegate, const Core::UnifiedVector2& in_size, f32 in_dismissButtonScale) override;
+            void PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate) override;
             //---------------------------------------------------------
             /// Displays the website at the given Url in an external
             /// browser.

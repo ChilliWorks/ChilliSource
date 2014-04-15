@@ -49,7 +49,7 @@
 ///
 /// @param The web view system.
 //----------------------------------------------------
--(id) initWithSystem:(ChilliSource::iOS::WebView*)isystem;
+-(id) initWithSystem:(ChilliSource::iOS::WebView*)system;
 //----------------------------------------------------
 /// Called when the dismiss button is pressed. This
 /// is for internal use and should not be called

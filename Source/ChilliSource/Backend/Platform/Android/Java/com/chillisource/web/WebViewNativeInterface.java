@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 
 import com.chillisource.core.CSActivity;
 import com.chillisource.core.CSApplication;
-import com.chillisource.core.Logging;
 import com.chillisource.core.ResourceHelper;
 import com.chillisource.web.CSWebView;
 import com.chillisource.web.CSWebViewClient;
@@ -55,9 +54,9 @@ public class WebViewNativeInterface
 	/// @param url string for the website to be displayed
 	/// @param absolute value for width - determined in native 
 	/// @param absolute value for height - determined in native
-	/// @param The dismiss button scale.
+	/// @param The relative size of the dismiss button
 	//---------------------------------------------------------------------
-	public static void Present(final int inudwIndex, final String instrURL, final int inudwXAbsolute, final int inudwYAbsolute, final float in_dismissButtonScale)
+	public static void Present(final int inudwIndex, final String instrURL, final int inudwXAbsolute, final int inudwYAbsolute, final float in_dismissButtonRelativeSize)
 	{
     	CSApplication.get().scheduleUIThreadTask(new Runnable() 
         {
@@ -71,7 +70,7 @@ public class WebViewNativeInterface
 		    		sWebView.requestFocus();
 		    		AddActivityIndicator();
 		    		
-		    		s_dismissButtonSize = in_dismissButtonScale * inudwXAbsolute;
+		    		s_dismissButtonSize = in_dismissButtonRelativeSize * inudwXAbsolute;
 		    		s_currentIndex = inudwIndex;
 		    		s_active = true;
 		    	}
@@ -87,9 +86,9 @@ public class WebViewNativeInterface
 	/// @param absolute value for width - determined in native 
 	/// @param absolute value for height - determined in native
 	/// @param base path
-	/// @param The dismiss button scale.
+	/// @param The relative size of the dismiss button
 	//---------------------------------------------------------------------
-	public static void PresentFromFile(final int inudwIndex, final String instrHTMLContents, final int inudwXAbsolute, final int inudwYAbsolute, final String instrBasePath, final String instrAnchor, final float in_dismissButtonScale)
+	public static void PresentFromFile(final int inudwIndex, final String instrHTMLContents, final int inudwXAbsolute, final int inudwYAbsolute, final String instrBasePath, final String instrAnchor, final float in_dismissButtonRelativeSize)
 	{
 		msActivity.runOnUiThread(new Runnable() 
         {
@@ -103,9 +102,9 @@ public class WebViewNativeInterface
 		    		sWebView.requestFocus();
 		    		AddActivityIndicator();
 		    		
-		    		s_dismissButtonSize = in_dismissButtonScale * inudwXAbsolute;
+		    		s_dismissButtonSize = in_dismissButtonRelativeSize * inudwXAbsolute;
 		    		s_currentIndex = inudwIndex;
-		    		s_active = false;
+		    		s_active = true;
 		    	}
 		    }
 		});

@@ -95,7 +95,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void WebView::Present(const std::string& in_url, const DismissedDelegate& in_delegate, const Core::UnifiedVector2& in_size, f32 in_dismissButtonScale)
+		void WebView::Present(const std::string& in_url, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
 
@@ -103,11 +103,11 @@ namespace ChilliSource
 			m_delegate = in_delegate;
 			Core::Vector2 absoluteSize = (Core::Screen::GetOrientedDimensions() * in_size.GetRelative()) + in_size.GetAbsolute();
 
-			WebViewJavaInterface::Present(m_index, in_url, absoluteSize, in_dismissButtonScale);
+			WebViewJavaInterface::Present(m_index, in_url, absoluteSize, in_dismissButtonRelativeSize);
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void WebView::PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const DismissedDelegate& in_delegate, const Core::UnifiedVector2& in_size, f32 in_dismissButtonScale)
+		void WebView::PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
 
@@ -160,7 +160,7 @@ namespace ChilliSource
 			m_isPresented = true;
 			m_delegate = in_delegate;
 			Core::Vector2 absoluteSize = (Core::Screen::GetOrientedDimensions() * in_size.GetRelative()) + in_size.GetAbsolute();
-			WebViewJavaInterface::PresentFromFile(m_index, htmlFileContents, absoluteSize, fullFilePath, anchor, in_dismissButtonScale);
+			WebViewJavaInterface::PresentFromFile(m_index, htmlFileContents, absoluteSize, fullFilePath, anchor, in_dismissButtonRelativeSize);
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------

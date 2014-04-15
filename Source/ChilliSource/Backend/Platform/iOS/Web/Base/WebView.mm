@@ -75,7 +75,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		//-----------------------------------------------
 		WebView::WebView()
-            : m_webView(nil), m_dismissButton(nil), m_isPresented(false), m_activityIndicator(nil), m_webViewDelegate(nil), m_dismissButtonScale(0.0f)
+            : m_webView(nil), m_dismissButton(nil), m_isPresented(false), m_activityIndicator(nil), m_webViewDelegate(nil), m_dismissButtonRelativeSize(0.0f)
 		{
 		}
         //-------------------------------------------------------
@@ -86,7 +86,7 @@ namespace ChilliSource
         }
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void WebView::Present(const std::string& in_url, const DismissedDelegate& in_delegate, const Core::UnifiedVector2& in_size, f32 in_dismissButtonScale)
+		void WebView::Present(const std::string& in_url, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
 		{
             @autoreleasepool
             {
@@ -94,7 +94,7 @@ namespace ChilliSource
                 
                 m_isPresented = true;
                 m_dismissedDelegate = in_delegate;
-                m_dismissButtonScale = in_dismissButtonScale;
+                m_dismissButtonRelativeSize = in_dismissButtonRelativeSize;
                 
                 if(!m_webView)
                 {
@@ -119,7 +119,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void WebView::PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const DismissedDelegate& in_delegate, const Core::UnifiedVector2& in_size, f32 in_dismissButtonScale)
+		void WebView::PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
 		{
             @autoreleasepool
             {
@@ -127,7 +127,7 @@ namespace ChilliSource
                 
                 m_isPresented = true;
                 m_dismissedDelegate = in_delegate;
-                m_dismissButtonScale = in_dismissButtonScale;
+                m_dismissButtonRelativeSize = in_dismissButtonRelativeSize;
                 
                 CreateWebview(in_size);
                 
@@ -274,7 +274,7 @@ namespace ChilliSource
                 m_dismissButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
                 [m_dismissButton addTarget:m_webViewDelegate action:@selector(onDismissButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
                 
-                f32 size = m_absoluteSize.x * m_dismissButtonScale;
+                f32 size = m_absoluteSize.x * m_dismissButtonRelativeSize;
                 [m_dismissButton setFrame:CGRectMake(m_absoluteSize.x - size - 10, 10, size, size)];
                 [m_dismissButton setBackgroundImage:btnImage forState:UIControlStateNormal];
                 [m_webView addSubview:m_dismissButton];
@@ -284,7 +284,7 @@ namespace ChilliSource
                 m_dismissButton = [[UIButton buttonWithType:UIButtonTypeRoundedRect] retain];
                 [m_dismissButton addTarget:m_webViewDelegate action:@selector(onDismissButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
                  
-                f32 size = m_absoluteSize.x * m_dismissButtonScale;
+                f32 size = m_absoluteSize.x * m_dismissButtonRelativeSize;
                 [m_dismissButton setFrame:CGRectMake(m_absoluteSize.x - size - 10, 10, size, size)];
                 [m_dismissButton setTitle:@"X" forState:UIControlStateNormal];
                 [m_dismissButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
