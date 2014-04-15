@@ -21,7 +21,7 @@ namespace ChilliSource
         /// Communications
         //------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(ContactInformationProvider);
-        CS_FORWARDDECLARE_CLASS(EmailCompositionActivity);
+        CS_FORWARDDECLARE_CLASS(EmailComposer);
         CS_FORWARDDECLARE_CLASS(SMSCompositionActivity);
         //------------------------------------------------------
         /// Facebook
