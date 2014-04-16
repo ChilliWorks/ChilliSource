@@ -82,7 +82,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateSprite(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateSprite(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
             /// that use no lighting.
@@ -95,7 +95,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStatic(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateStatic(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
             /// that use Ambient lighting.
@@ -108,7 +108,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStaticAmbient(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateStaticAmbient(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
             /// that use blinn-phong per pixel lighting.
@@ -121,7 +121,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStaticBlinn(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateStaticBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
             /// that use blinn-phong per pixel lighting and recieved
@@ -135,7 +135,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStaticBlinnShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateStaticBlinnShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
             /// that use blinn-phong per vertex lighting.
@@ -148,7 +148,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStaticBlinnPerVertex(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateStaticBlinnPerVertex(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
             /// that use blinn-phong per vertex lighting and
@@ -162,7 +162,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStaticBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateStaticBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Create a material for rendering a static model
             /// to a directional shadow map.
@@ -187,7 +187,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimated(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateAnimated(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for animated textured models
             /// that use ambient lighting.
@@ -200,7 +200,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimatedAmbient(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateAnimatedAmbient(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for animated textured models
             /// that use blinn-phong per pixel lighting.
@@ -213,7 +213,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimatedBlinn(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateAnimatedBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for animated textured models
             /// that use blinn-phong per pixel lighting and receives
@@ -227,7 +227,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimatedBlinnShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateAnimatedBlinnShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for animated textured models
             /// that use blinn-phong per vertex lighting.
@@ -240,7 +240,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimatedBlinnPerVertex(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateAnimatedBlinnPerVertex(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for animated textured models
             /// that use blinn-phong per vertex lighting and
@@ -254,7 +254,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimatedBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const;
+            MaterialSPtr CreateAnimatedBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Create a material for rendering an animated model
             /// to a directional shadow map.

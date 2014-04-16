@@ -43,7 +43,6 @@
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/Texture/CubemapManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
 
 namespace ChilliSource
 {
@@ -578,6 +577,7 @@ namespace ChilliSource
             MaterialSPtr material = std::static_pointer_cast<Material>(out_resource);
             
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+            
             for(u32 i=0; i<shaderFiles.size(); ++i)
             {
                 if(shaderFiles[i].m_filePath.empty() == false)
@@ -592,21 +592,21 @@ namespace ChilliSource
                 }
             }
             
-            TextureManager* textureManager = GET_RESOURCE_MANAGER(TextureManager);
-            CS_ASSERT(textureManager != nullptr, "Texture manager must be created");
             for(u32 i=0; i<textureFiles.size(); ++i)
             {
-                TextureSPtr texture = std::static_pointer_cast<Texture>(textureManager->GetResourceFromFile(textureFiles[i].m_location, textureFiles[i].m_filePath));
-                if(texture == nullptr)
+                if(textureFiles[i].m_filePath.empty() == false)
                 {
-                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-                    return;
-                }
-                
-                material->AddTexture(texture);
-                if(textureFiles[i].m_shouldMipMap == true)
-                {
-                    //TODO: Generate mipmaps
+                    TextureCSPtr texture = resourcePool->LoadResource<Texture>(textureFiles[i].m_location, textureFiles[i].m_filePath);
+                    if(texture == nullptr)
+                    {
+                        out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                        return;
+                    }
+                    material->AddTexture(texture);
+                    if(textureFiles[i].m_shouldMipMap == true)
+                    {
+                        //TODO: Generate mipmaps
+                    }
                 }
             }
             
@@ -649,6 +649,7 @@ namespace ChilliSource
 			if(BuildMaterialFromFile(in_location, in_filePath, shaderFiles, textureFiles, cubemapFiles, (Material*)out_resource.get()) == false)
             {
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                //TODO: Return on main thread
                 in_delegate(out_resource);
                 return;
             }

@@ -43,13 +43,13 @@ namespace ChilliSource
             ///
             /// @param Texture containing the nine patches
             //---------------------------------------------------------
-            void SetTexture(const Rendering::TextureSPtr& inpTexture);
+            void SetTexture(const Rendering::TextureCSPtr& inpTexture);
             //---------------------------------------------------------
             /// Get Texture
             ///
             /// @return Texture containing the nine patches
             //---------------------------------------------------------
-            const Rendering::TextureSPtr& GetTexture() const;
+            const Rendering::TextureCSPtr& GetTexture() const;
 			//---------------------------------------------------------
 			/// Set Sprite Sheet
 			///
@@ -166,7 +166,7 @@ namespace ChilliSource
 			
 		private:
 
-            DECLARE_PROPERTY_A(Rendering::TextureSPtr, Texture, SetTexture, GetTexture);
+            DECLARE_PROPERTY_A(Rendering::TextureCSPtr, Texture, SetTexture, GetTexture);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
 			
 			DECLARE_PROPERTY_A(std::string, BaseTextureAtlasID, SetBaseTextureAtlasID, GetBaseTextureAtlasID);

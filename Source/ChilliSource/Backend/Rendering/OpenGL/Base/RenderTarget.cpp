@@ -210,12 +210,12 @@ namespace ChilliSource
 			
             if (inpColourTexture != nullptr)
             {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(inpColourTexture)->GetTextureID(), 0);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(inpColourTexture)->GetTextureHandle(), 0);
             }
             
             if (inpDepthTexture != nullptr)
             {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(inpDepthTexture)->GetTextureID(), 0);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(inpDepthTexture)->GetTextureHandle(), 0);
             }
             else
             {

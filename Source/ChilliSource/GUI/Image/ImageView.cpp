@@ -9,13 +9,10 @@
 #include <ChilliSource/GUI/Image/ImageView.h>
 
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
-
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
@@ -70,7 +67,8 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("Texture", strValue))
             {
-                Texture = LOAD_RESOURCE(Rendering::Texture, eTextureLocation, strValue);
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                Texture = resourcePool->LoadResource<Rendering::Texture>(eTextureLocation, strValue);
             }
             //---Sprite sheet
             Core::StorageLocation eTextureAtlasLocation = Core::StorageLocation::k_package;
@@ -284,7 +282,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //--------------------------------------------------------
-        void ImageView::SetTexture(const Rendering::TextureSPtr& inpTexture)
+        void ImageView::SetTexture(const Rendering::TextureCSPtr& inpTexture)
         {
             Texture = inpTexture;
             
@@ -303,7 +301,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //--------------------------------------------------------
-        const Rendering::TextureSPtr& ImageView::GetTexture() const
+        const Rendering::TextureCSPtr& ImageView::GetTexture() const
         {
             return Texture;
         }

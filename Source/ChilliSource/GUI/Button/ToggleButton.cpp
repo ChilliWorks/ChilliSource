@@ -10,15 +10,12 @@
 #include <ChilliSource/GUI/Image/ImageView.h>
 
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
-#include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
 #include <cmath>
@@ -81,7 +78,8 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("OnTexture", strValue))
             {
-                SetOnImage(LOAD_RESOURCE(Rendering::Texture, eOnTextureLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                SetOnImage(resourcePool->LoadResource<Rendering::Texture>(eOnTextureLocation, strValue));
             }
             //---Off
             Core::StorageLocation eOffTextureLocation = Core::StorageLocation::k_package;
@@ -91,7 +89,8 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("OffTexture", strValue))
             {
-                SetOffImage(LOAD_RESOURCE(Rendering::Texture, eOffTextureLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                SetOffImage(resourcePool->LoadResource<Rendering::Texture>(eOffTextureLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eOnTextureAtlasLocation = Core::StorageLocation::k_package;
@@ -181,7 +180,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void ToggleButton::SetOnImage(const Rendering::TextureSPtr& inpTexture)
+        void ToggleButton::SetOnImage(const Rendering::TextureCSPtr& inpTexture)
         {
             OnTexture = inpTexture;
             
@@ -195,7 +194,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for non-selected button
 		//-----------------------------------------------------------
-		const Rendering::TextureSPtr& ToggleButton::GetOnImage() const
+		const Rendering::TextureCSPtr& ToggleButton::GetOnImage() const
 		{
 			return OnTexture;
 		}
@@ -206,7 +205,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void ToggleButton::SetOffImage(const Rendering::TextureSPtr& inpTexture)
+        void ToggleButton::SetOffImage(const Rendering::TextureCSPtr& inpTexture)
         {
             OffTexture = inpTexture;
             mpBackgroundImage->SetTexture(inpTexture);
@@ -222,7 +221,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for selected button
 		//-----------------------------------------------------------
-		const Rendering::TextureSPtr& ToggleButton::GetOffImage() const
+		const Rendering::TextureCSPtr& ToggleButton::GetOffImage() const
 		{
 			return OffTexture;
 		}

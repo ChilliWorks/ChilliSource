@@ -333,7 +333,7 @@ namespace ChilliSource
             
             Rendering::CanvasRenderer::CharacterList mCachedChars;
             
-            Rendering::TextureSPtr mpWhiteTex;
+            Rendering::TextureCSPtr mpWhiteTex;
             
             static f32 mfGlobalTextScale;
             

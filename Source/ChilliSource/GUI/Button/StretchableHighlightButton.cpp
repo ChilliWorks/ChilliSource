@@ -10,16 +10,13 @@
 #include <ChilliSource/GUI/Image/StretchableImage.h>
 
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
-#include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
 #include <cmath>
@@ -71,7 +68,8 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("NormalTexture", strValue))
             {
-                SetNormalTexture(LOAD_RESOURCE(Rendering::Texture, eNormalTextureLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                SetNormalTexture(resourcePool->LoadResource<Rendering::Texture>(eNormalTextureLocation, strValue));
             }
             //---Texture
             Core::StorageLocation eHighlightTextureLocation = Core::StorageLocation::k_package;
@@ -81,7 +79,8 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("HighlightTexture", strValue))
             {
-                SetHighlightTexture(LOAD_RESOURCE(Rendering::Texture, eHighlightTextureLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                SetHighlightTexture(resourcePool->LoadResource<Rendering::Texture>(eHighlightTextureLocation, strValue));
             }
             
             //---Sprite sheet
@@ -145,10 +144,10 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void StretchableHighlightButton::SetNormalTexture(const Rendering::TextureSPtr& inpTexture)
+        void StretchableHighlightButton::SetNormalTexture(const Rendering::TextureCSPtr& inpTexture)
         {
             NormalTexture = inpTexture;
-            mCurrentTexture = NormalTexture;
+            mCurrentTexture = NormalTexture.get();
             
             if(!HighlightTexture)
             {
@@ -157,7 +156,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void StretchableHighlightButton::SetHighlightTexture(const Rendering::TextureSPtr& inpTexture)
+        void StretchableHighlightButton::SetHighlightTexture(const Rendering::TextureCSPtr& inpTexture)
         {
             HighlightTexture = inpTexture;
             
@@ -168,13 +167,13 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        const Rendering::TextureSPtr& StretchableHighlightButton::GetNormalTexture() const
+        const Rendering::TextureCSPtr& StretchableHighlightButton::GetNormalTexture() const
         {
             return NormalTexture;
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        const Rendering::TextureSPtr& StretchableHighlightButton::GetHighlightTexture() const
+        const Rendering::TextureCSPtr& StretchableHighlightButton::GetHighlightTexture() const
         {
             return HighlightTexture;
         }
@@ -184,7 +183,7 @@ namespace ChilliSource
         void StretchableHighlightButton::SetNormalTextureAtlas(const Rendering::TextureAtlasCSPtr& inpTextureAtlas)
         {
             NormalTextureAtlas = inpTextureAtlas;
-            mCurrentTextureAtlas = NormalTextureAtlas;
+            mCurrentTextureAtlas = NormalTextureAtlas.get();
             
             if(!HighlightTextureAtlas)
             {

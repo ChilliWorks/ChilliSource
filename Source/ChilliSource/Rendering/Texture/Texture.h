@@ -48,12 +48,22 @@ namespace ChilliSource
 		public:
 			
             CS_DECLARE_NAMEDTYPE(Texture);
+            
+            using TextureDataUPtr = std::unique_ptr<u8[]>;
+            
             //--------------------------------------------------------------
-            /// Virtual destructor
+            /// Holds the description for building a texture from image data
             ///
             /// @author S Downie
             //--------------------------------------------------------------
-			virtual ~Texture(){}
+            struct Descriptor
+            {
+                u32 m_width;
+                u32 m_height;
+                Core::ImageFormat m_format;
+                Core::ImageCompression m_compression;
+                u32 m_dataSize;
+            };
 			//--------------------------------------------------------------
             /// The filter mode for determining how to sample texels based
             /// on nearby texels in order to reduce texture aliasing.
@@ -82,6 +92,16 @@ namespace ChilliSource
                 k_clamp,
                 k_repeat
 			};
+            //--------------------------------------------------
+            /// Construct the texture from the given image data.
+            /// The texture will take ownership of the image data
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture descriptor
+            /// @param Image data
+            //--------------------------------------------------
+            virtual void Build(const Descriptor& in_desc, TextureDataUPtr in_data) = 0;
 			//--------------------------------------------------------------
             /// Binds this texture to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it
@@ -127,6 +147,31 @@ namespace ChilliSource
             /// @return The height of the texture in texels
             //--------------------------------------------------------------
 			virtual u32 GetHeight() const = 0;
+            //--------------------------------------------------------------
+            /// Generate mip map levels for the texture to reduce
+            /// aliasing
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------
+			virtual void GenerateMipMaps() = 0;
+            //--------------------------------------------------------------
+            /// Virtual destructor
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------
+			virtual ~Texture(){}
+            
+        protected:
+            friend class Core::ResourcePool;
+            //--------------------------------------------------------------
+            /// Factory method for creating an empty texture resource.
+            /// Only called by the resource pool
+            ///
+            /// @author S Downie
+            ///
+            /// @return Concrete texture resource
+            //--------------------------------------------------------------
+            static TextureUPtr Create();
 		};
 	}
 }

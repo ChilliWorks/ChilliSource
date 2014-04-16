@@ -10,15 +10,12 @@
 #include <ChilliSource/GUI/Image/ImageView.h>
 
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
-#include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
 #include <cmath>
@@ -85,7 +82,8 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("NormalTexture", strValue))
             {
-                SetNormalImage(LOAD_RESOURCE(Rendering::Texture, eNormalTextureLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetNormalImage(resourcePool->LoadResource<Rendering::Texture>(eNormalTextureLocation, strValue));
             }
             //---Highlight
             Core::StorageLocation eHighlightTextureLocation = Core::StorageLocation::k_package;
@@ -95,7 +93,8 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("HighlightTexture", strValue))
             {
-                SetHighlightImage(LOAD_RESOURCE(Rendering::Texture, eHighlightTextureLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetHighlightImage(resourcePool->LoadResource<Rendering::Texture>(eHighlightTextureLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eNormalTextureAtlasLocation = Core::StorageLocation::k_package;
@@ -212,7 +211,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void HighlightButton::SetNormalImage(const Rendering::TextureSPtr& inpTexture)
+        void HighlightButton::SetNormalImage(const Rendering::TextureCSPtr& inpTexture)
         {
             NormalTexture = inpTexture;
 			mpBackgroundImage->SetTexture(inpTexture);
@@ -228,7 +227,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for non-selected button
 		//-----------------------------------------------------------
-		const Rendering::TextureSPtr& HighlightButton::GetNormalImage() const
+		const Rendering::TextureCSPtr& HighlightButton::GetNormalImage() const
 		{
 			return NormalTexture;
 		}
@@ -239,7 +238,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void HighlightButton::SetHighlightImage(const Rendering::TextureSPtr& inpTexture)
+        void HighlightButton::SetHighlightImage(const Rendering::TextureCSPtr& inpTexture)
         {
             HighlightTexture = inpTexture;
             
@@ -253,7 +252,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for selected button
 		//-----------------------------------------------------------
-		const Rendering::TextureSPtr& HighlightButton::GetHighlightImage() const
+		const Rendering::TextureCSPtr& HighlightButton::GetHighlightImage() const
 		{
 			return HighlightTexture;
 		}

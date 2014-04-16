@@ -1,455 +1,96 @@
-/*
- *  Image.cpp
- *  moFlo
- *
- *  Created by Stuart McGaw on 01/10/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Image.cpp
+//  Chilli Source
+//  Created by Scott Downie on 01/10/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Core/Image/Image.h>
+
+#include <ChilliSource/Core/Image/ImageCompression.h>
+#include <ChilliSource/Core/Image/ImageFormat.h>
 
 namespace ChilliSource
 {
 	namespace Core
 	{
 		CS_DEFINE_NAMEDTYPE(Image);
-        
-        namespace
-        {
-            const u8 gcstrPVRTexIdentifier[4] = {'P', 'V', 'R', '!'};
-            const u32 kPVRTextureFlagTypePVRTC_2 = 24;
-            const u32 kPVRTextureFlagTypePVRTC_4 = 25;
-            const u32 k_pvrTextureFlagTypeMask = 0xff;
-            const u32 k_pvrVersionMismatch = 0x50565203;
-		}
-        
-        //Old Texture Format : Not Supported in newer tools
-		struct PVRTexHeader
-		{
-			u32 udwHeaderLength;
-			u32 udwHeight;
-			u32 udwWidth;
-			u32 udwNumMipmaps;
-			u32 udwFlags;
-			u32 udwDataLength;
-			u32 udwBpp;
-			u32 udwBitmaskRed;
-			u32 udwBitmaskGreen;
-			u32 udwBitmaskBlue;
-			u32 udwBitmaskAlpha;
-			u32 udwPvrTag;
-			u32 udwNumSurfs;
-		};
-        
-        //new Texture Format as in v4 of the tool
-        struct PVRTCTexHeader
-        {
-            u32 udwVersion;
-            u32 udwFlags;
-            u64 udwPixelFormat;
-            u32 udwColourSpace;
-            u32 udwChannelType;
-            u32 udwHeight;
-            u32 udwWidth;
-            u32 udwDepth;
-            u32 udwNumSurfaces;
-            u32 udwNumFaces;
-            u32 udwMipMapCount;
-            u32 udwMetaDataSize;
-        };
-		
-        enum class PVRTCFlags
-        {
-            k_none = 0x0,
-            k_preMultiplied = 0x02
-        };
-        
-        //Anything outside these is not supported on iDevices
-        enum class PixelFormat
-        {
-            k_2BppRGB,
-            k_2BppRGBA,
-            k_4BppRGB,
-            k_4BppRGBA
-        };
-        
-        enum class ColourSpace
-        {
-            k_linearRGB,
-            k_SRGB
-        };
-        
-        enum class ChannelType
-        {
-            k_unsignedByteNormalised,
-            k_signedByteNormalised,
-            k_unsignedByte,
-            k_signedByte,
-            k_unsignedShortNormalised,
-            k_signedShortNormalised,
-            k_unsignedShort,
-            k_signedShort,
-            k_unsignedIntNormalised,
-            k_signedIntNormalised,
-            k_unsignedInt,
-            k_signedInt,
-            k_float
-        };
-
-        const u8 kBPP[] = 
-        {
-            16,
-            32,
-            24,
-            16,
-            16,
-            8
-        };
+    
         //----------------------------------------------------------------
-		/// Get Format BPP
-		///
-		/// @param Format
-        /// @return Bits per pixel
 		//----------------------------------------------------------------
-        u8 Image::GetFormatBPP(Image::Format ineFormat)
+		bool Image::IsA(Core::InterfaceIDType in_interfaceId) const
+		{
+			return in_interfaceId == Image::InterfaceID;
+		}
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        void Image::Build(const Descriptor& in_desc, ImageDataUPtr in_imageData)
         {
-            return kBPP[(u32)ineFormat];
+            m_dataDesc = in_desc;
+            m_imageData = std::move(in_imageData);
         }
-        
 		//----------------------------------------------------------------
-		/// Constructor
-		///
-		/// Default
 		//----------------------------------------------------------------
-		Image::Image()
-		:meFormat(Image::Format::k_RGBA8888), mudwWidth(0), mudwHeight(0), mpRawData(nullptr), meCompression(ImageCompression::k_none), mbHasAlpha(false), mudwDataLength(0), mpImageData(nullptr)
+		ImageFormat Image::GetFormat() const
 		{
-			
-		}
-		//--------------------------------------------------
-		/// Set Width
-		///
-		/// @param Width of the image in pixels
-		//--------------------------------------------------
-		void Image::SetWidth(u32 inudwWidth)
-		{
-			mudwWidth = inudwWidth;
-		}
-		//--------------------------------------------------
-		/// Set Height
-		///
-		/// @param Height of the image in pixels
-		//--------------------------------------------------
-		void Image::SetHeight(u32 inudwHeight)
-		{
-			mudwHeight = inudwHeight;
-		}
-		//--------------------------------------------------
-		/// Set Data
-		///
-		/// @param Image data in bytes
-		//--------------------------------------------------
-		void Image::SetData(u8* inpData)
-		{
-			mpRawData = inpData;
-			mpImageData = inpData;
-		}
-		//--------------------------------------------------
-		/// Set Format
-		///
-		/// @param Image format
-		//--------------------------------------------------
-		void Image::SetFormat(Format ineFormat)
-		{
-			meFormat = ineFormat;
-		}
-		//--------------------------------------------------
-		/// Set Compression
-		///
-		/// @param image compression type
-		//--------------------------------------------------
-		void Image::SetCompression(ImageCompression ineCompression)
-		{
-			meCompression = ineCompression;
-		}
-		//--------------------------------------------------
-		/// Set Data Length
-		///
-		/// @param data length
-		//--------------------------------------------------
-		void Image::SetDataLength(u32 inudwDataLength)
-		{
-			mudwDataLength = inudwDataLength;
+			return m_dataDesc.m_format;
 		}
 		//----------------------------------------------------------------
-		/// Is A
-		///
-		/// Is the object of the given interface type
-		/// @param Interface type to query
-		/// @return Whether the object is of given type
-		//----------------------------------------------------------------
-		bool Image::IsA(Core::InterfaceIDType inInterfaceID) const
-		{
-			return inInterfaceID == Image::InterfaceID;
-		}
-		//----------------------------------------------------------------
-		/// Get Format
-		///
-		/// @return Image format (RGB, RGBA, etc)
-		//----------------------------------------------------------------
-		Image::Format Image::GetFormat() const
-		{
-			return meFormat;
-		}
-		//----------------------------------------------------------------
-		/// Get Width
-		///
-		/// @return Image width
 		//----------------------------------------------------------------
 		u32 Image::GetWidth() const
 		{
-			return mudwWidth;
+			return m_dataDesc.m_width;
 		}
 		//----------------------------------------------------------------
-		/// Get Height
-		///
-		/// @return Image height
 		//----------------------------------------------------------------
 		u32 Image::GetHeight() const
 		{
-			return mudwHeight;
+			return m_dataDesc.m_height;
 		}
 		//----------------------------------------------------------------
-		/// Get Data
-		///
-		/// @return Raw image data
 		//----------------------------------------------------------------
 		const u8* Image::GetData() const
 		{
-			return mpImageData;
+			return m_imageData.get();
 		}
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        Image::ImageDataUPtr&& Image::MoveData()
+        {
+            return std::move(m_imageData);
+        }
 		//----------------------------------------------------------------
-		/// Get Name
-		///
-		/// @return Image label
-		//----------------------------------------------------------------
-		const std::string& Image::GetName() const
-		{
-			return mImageName;
-		}
-		//----------------------------------------------------------------
-		/// Set Name
-		///
-		/// @param Image label
-		//----------------------------------------------------------------
-		void Image::SetName(const std::string& instrName)
-		{
-			mImageName = instrName;
-		}
-		//----------------------------------------------------------------
-		/// Get Compression
-		///
-		/// @return PVR image compression type (NONE, 4BPP, 2BPP)
 		//----------------------------------------------------------------
 		ImageCompression Image::GetCompression() const
 		{
-			return meCompression;
+			return m_dataDesc.m_compression;
 		}
 		//----------------------------------------------------------------
-		/// Get Data Length
-		///
-		/// @return Return size of the image in bytes
 		//----------------------------------------------------------------
-		u32 Image::GetDataLength() const
+		u32 Image::GetDataSize() const
 		{
-			return mudwDataLength;
-		}
-		//--------------------------------------------------
-		/// Unpack PVR Data
-		///
-		/// Unpack the texture data in accordance with the
-		/// PVR format
-		//--------------------------------------------------
-		void Image::UnpackPVRData()
-		{
-			//Get the header data from the image file
-			PVRTexHeader* pPVRHeader = reinterpret_cast<PVRTexHeader*>(mpRawData);
-
-			//Check that the header of the PVR data is correct
-			//We must swap the endianess for the ARM
-			u32 udwPvrTag = pPVRHeader->udwPvrTag;
-			
-            //We check this to maintain support for the older, unsupported header format
-			if (gcstrPVRTexIdentifier[0] != ((udwPvrTag >>  0) & 0xff) ||
-				gcstrPVRTexIdentifier[1] != ((udwPvrTag >>  8) & 0xff) ||
-				gcstrPVRTexIdentifier[2] != ((udwPvrTag >> 16) & 0xff) ||
-				gcstrPVRTexIdentifier[3] != ((udwPvrTag >> 24) & 0xff))
-			{
-				//Unpack with the updated header format
-                UnpackPVRTCData();
-			}
-            else
-            {
-                UnpackLegacyPVRTCData(pPVRHeader);
-            }
-		}
-        
-        //--------------------------------------------------
-        /// Unpack Legacy PVRTC Data - Unsupported older format
-        ///
-        /// Unpack the texture data in accordance with the
-        /// PVR format
-        //--------------------------------------------------
-        void Image::UnpackLegacyPVRTCData(void* inpPVRHeader)
-        {
-            PVRTexHeader* pPVRHeader = static_cast<PVRTexHeader*>(inpPVRHeader);
-            
-			//Get the flags for the compression format
-			u32 udwFlags = pPVRHeader->udwFlags;
-			u32 udwFormatFlags = udwFlags & k_pvrTextureFlagTypeMask;
-			
-			//The only compression formats we support are 2 bits per pixel and 4 bits per pixel
-			if(udwFormatFlags == kPVRTextureFlagTypePVRTC_4 || udwFormatFlags == kPVRTextureFlagTypePVRTC_2)
-			{
-				if (udwFormatFlags == kPVRTextureFlagTypePVRTC_4)
-				{
-					meCompression = ImageCompression::k_PVR4Bpp;
-				}
-				else if(udwFormatFlags == kPVRTextureFlagTypePVRTC_2)
-				{
-					meCompression = ImageCompression::k_PVR2Bpp;
-				}
-				
-				if(pPVRHeader->udwBitmaskAlpha > 0)
-				{
-					mbHasAlpha = true;
-				}
-				else
-				{
-					mbHasAlpha = false;
-				}
-                
-				mudwDataLength = pPVRHeader->udwDataLength;
-				
-				//Now just use the image data without the header
-				//Set the pointer to the actual image data
-				mpImageData = mpRawData + sizeof(PVRTexHeader);
-			}
-        }
-        
-        //--------------------------------------------------
-        /// Unpack PVRTC Data
-        ///
-        /// Unpack the texture data in accordance with the
-        /// PVR format
-        //--------------------------------------------------
-        void Image::UnpackPVRTCData()
-        {
-            //Get the header data from the image file
-			PVRTCTexHeader* pPVRTCHeader = reinterpret_cast<PVRTCTexHeader*>(mpRawData);
-
-            //Check the version so determine endianess correctness
-            if(pPVRTCHeader->udwVersion == k_pvrVersionMismatch)
-            {
-                //TODO:: Endianess is not correct, need to flip bits in the header data, possibly image data?
-                CS_LOG_FATAL("Image::UnpackPVRTCData >> Endianess Check failed for creating PVR");
-            }
-            
-            u64 udwPFormat = pPVRTCHeader->udwPixelFormat;
-            
-            u32 udwLow32Bits;
-            u32 udwHigh32Bits;
-            
-            udwLow32Bits  = udwPFormat & 0x00000000ffffffff;
-            udwHigh32Bits = udwPFormat >> 32; //Shift to right 32bits
-            
-            bool bSupported = false;
-            
-            u32 udwWidth = mudwWidth = pPVRTCHeader->udwWidth;
-            u32 udwHeight = mudwHeight = pPVRTCHeader->udwHeight;
-            
-            
-            //Calculate the data size for each texture level and respect the minimum number of blocks
-            u32 udwBpp = 4;
-            
-            
-            //Where the most significant 4 bytes have been set to ‘0’ the least significant 4 bytes will contain a 32bit unsigned integer value identifying the pixel format.
-            if(udwHigh32Bits == 0)
-            {
-                if(udwLow32Bits == (u32)PixelFormat::k_2BppRGB || udwLow32Bits == (u32)PixelFormat::k_2BppRGBA)
-                {
-                    meCompression = ImageCompression::k_PVR2Bpp;
-                    bSupported = true;
-                    
-                    //Pixel by pixel block size for 2bpp
-					udwBpp = 2;
-                    
-                    //Set if Alpha in image
-                    if(udwLow32Bits == (u32)PixelFormat::k_2BppRGBA)
-                    {
-                        mbHasAlpha = true;
-                    }
-                    else
-                    {
-                        mbHasAlpha = false;
-                    }
-                }
-                else if(udwLow32Bits == (u32)PixelFormat::k_4BppRGB || udwLow32Bits == (u32)PixelFormat::k_4BppRGBA)
-                {
-                    meCompression = ImageCompression::k_PVR4Bpp;
-                    bSupported = true;
-                    
-                    //Pixel by pixel block size for 4bpp
-					udwBpp = 4;
-                    
-                    //Set if Alpha in image
-                    if(udwLow32Bits == (u32)PixelFormat::k_4BppRGBA)
-                    {
-                        mbHasAlpha = true;
-                    }
-                    else
-                    {
-                        mbHasAlpha = false;
-                    }
-                }
-                else
-                {
-                    CS_LOG_FATAL("Unrecognised PixelFormat for image");
-                }
-            }
-            else
-            {
-                //If the most significant 4 bytes contain a value, the full 8 bytes are used to determine the pixel format. The least significant 4 bytes contain the channel order,
-                //each byte containing a single character, or a null character if there are fewer than four channels; for example, {‘r’,‘g’,‘b’,‘a’} or {‘r’,‘g’,‘b’,‘\0’}.
-                //The most significant 4 bytes state the bit rate for each channel in the same order, each byte containing a single 8bit unsigned integer value,
-                //or zero if there are fewer than four channels; for example, {8,8,8,8} or {5,6,5,0}.
-                
-                //TODO:: Should never reach here through pvr format
-                CS_LOG_FATAL("Unimplemented PixelFormat for image");
-            }
-            
-            if(bSupported)
-            {
-                mudwDataLength = (udwWidth * udwHeight * udwBpp) >> 3;
-				
-				//Now just use the image data without the header
-				//Set the pointer to the actual image data
-				mpImageData = mpRawData + sizeof(PVRTCTexHeader);
-            }
-            else
-            {
-                CS_LOG_FATAL("Unimplemented PixelFormat for image");
-            }
-        }
-        
-		//---------------------------------------------------------------
-		/// Destructor
-		///
-		//---------------------------------------------------------------
-		Image::~Image()
-		{
-			free(mpRawData);
+			return m_dataDesc.m_dataSize;
 		}
 	}
 }

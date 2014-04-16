@@ -36,6 +36,8 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
+        CS_DEFINE_NAMEDTYPE(Shader);
+        
         //----------------------------------------------------------
         //----------------------------------------------------------
 		Shader::Shader()
@@ -53,6 +55,8 @@ namespace ChilliSource
         //----------------------------------------------------------
         void Shader::Build(const std::string& in_vs, const std::string& in_fs)
         {
+            Destroy();
+            
             CompileShader(in_vs, GL_VERTEX_SHADER);
             CompileShader(in_fs, GL_FRAGMENT_SHADER);
             CreateProgram(m_vertexShaderId, m_fragmentShaderId);
@@ -70,12 +74,12 @@ namespace ChilliSource
         {
             const std::array<std::string, 6> attribNames =
             {{
-                "avPosition",
-                "avColour",
-                "avNormal",
-                "avTexCoord",
-                "avWeights",
-                "avJointIndices"
+                "a_position",
+                "a_colour",
+                "a_normal",
+                "a_texCoord",
+                "a_weights",
+                "a_jointIndices"
             }};
             
             for(const auto& name : attribNames)
@@ -355,11 +359,11 @@ namespace ChilliSource
                 CS_LOG_FATAL("Failed to link GLSL shader");
 			}
         }
-		//----------------------------------------------------------
-		//----------------------------------------------------------
-		Shader::~Shader()
-		{
-			if(m_vertexShaderId > 0)
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Shader::Destroy()
+        {
+            if(m_vertexShaderId > 0)
 			{
 				glDetachShader(m_programId, m_vertexShaderId);
 				glDeleteShader(m_vertexShaderId);
@@ -373,6 +377,15 @@ namespace ChilliSource
 			{
 				glDeleteProgram(m_programId);
 			}
+            
+            m_attribHandles.clear();
+            m_uniformHandles.clear();
+        }
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		Shader::~Shader()
+		{
+            Destroy();
 		}
 	}
 }

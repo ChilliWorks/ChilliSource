@@ -32,6 +32,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
 {
@@ -45,7 +46,7 @@ namespace ChilliSource
         {
             if(m_hasContextBeenBackedUp == false)
             {
-                for(auto buffer : m_meshBuffers)
+                for(auto& buffer : m_meshBuffers)
                 {
                     buffer->Backup();
                 }
@@ -67,13 +68,13 @@ namespace ChilliSource
                 resourcePool->RefreshResources<Rendering::Shader>();
                 
                 //---Textures
-                //TODO: Once they have been converted to pooled resources
+                resourcePool->RefreshResources<Rendering::Texture>();
                 
                 //---Cubemaps
                 //TODO: Once they have been converted to pooled resources
                 
                 //---Meshes
-                for(auto buffer : m_meshBuffers)
+                for(auto& buffer : m_meshBuffers)
                 {
                     buffer->Restore();
                 }

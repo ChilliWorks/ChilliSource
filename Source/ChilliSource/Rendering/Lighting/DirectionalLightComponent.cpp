@@ -9,8 +9,11 @@
 
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
 {
@@ -122,6 +125,27 @@ namespace ChilliSource
         {
             mbMatrixCacheValid = false;
             mbCacheValid = false;
+        }
+        //----------------------------------------------------------
+        /// Destructor
+        //----------------------------------------------------------
+        DirectionalLightComponent::~DirectionalLightComponent()
+        {
+            Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+            
+            if(mpShadowMap != nullptr)
+            {
+                Texture* release = mpShadowMap.get();
+                mpShadowMap.reset();
+                resourcePool->Release(release);
+            }
+            
+            if(mpShadowMapDebug != nullptr)
+            {
+                Texture* release = mpShadowMapDebug.get();
+                mpShadowMapDebug.reset();
+                resourcePool->Release(release);
+            }
         }
 	}
 }

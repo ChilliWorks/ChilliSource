@@ -87,6 +87,8 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(Image);
         CS_FORWARDDECLARE_CLASS(ImageProvider);
         CS_FORWARDDECLARE_CLASS(CSImageProvider);
+        enum class ImageFormat;
+        enum class ImageCompression;
         //---------------------------------------------------------
         /// Localisation
         //---------------------------------------------------------

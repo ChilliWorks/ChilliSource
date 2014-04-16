@@ -11,10 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/ImageProvider.h>
-
-#include <string>
 
 namespace ChilliSource
 {
@@ -40,18 +37,12 @@ namespace ChilliSource
 			/// @return Whether the object is of given type
 			//----------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-			//----------------------------------------------------------
-			/// Whether or not the provider can create resources
-            /// of the given type.
-			///
-            /// @author S McGaw
+            //-------------------------------------------------------
+            /// @author S Downie
             ///
-			/// @param Resource to compare against
-            ///
-			/// @return Whether the object can load a resource of given
-            /// type
-			//----------------------------------------------------------
-			bool CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const override;
+            /// @return The resource type this provider can load
+            //-------------------------------------------------------
+            Core::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------
 			/// Whether or not the provider can create resources from
             /// files with the given extension.
@@ -63,44 +54,51 @@ namespace ChilliSource
 			/// @return Whether the object can load a resource with that
             /// extension
 			//----------------------------------------------------------
-			bool CanCreateResourceFromFileWithExtension(const std::string & in_extension) const override;
+			bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
 			//----------------------------------------------------------
-			/// Creates a new image resource from file.
+			/// Creates a new image resource from file. Check the
+            /// resource load state for success or failure
 			///
             /// @author S McGaw
             ///
             /// @param The storage location to load from
 			/// @param File path to resource
 			/// @param [Out] Resource
-            ///
-			/// @return Whether the resource loaded 
 			//-----------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filepath, Core::ResourceOldSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
-            /// The resource will be returned immediately but
-            /// cannot be used until the loaded flag is set. This
-            /// can be queried using IsLoaded() on the resource.
+            /// Completion delegate is called when load is finished.
+            /// Check the resource load state for success or failure
             ///
             /// @author I Copland
             ///
             /// @param The storage location.
             /// @param The filepath.
+            /// @param Completion delegate
             /// @param [Out] The output resource.
-            ///
-            /// @return Whether or not the resource async load was
-            /// successfully started.
             //----------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string & in_filePath, Core::ResourceOldSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource) override;
         private:
-            friend Core::ImageProviderUPtr Core::ImageProvider::Create();
             
+            friend Core::ImageProviderUPtr Core::ImageProvider::Create();
             //-----------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             //-----------------------------------------------------------
-            ImageProvider(){}
+            ImageProvider() = default;
+            //-----------------------------------------------------------
+            /// Performs the heavy lifting for the 2 create methods
+            ///
+            /// @author S Downie
+            ///
+            /// @param The storage location.
+            /// @param The filepath.
+            /// @param Completion delegate
+            /// @param [Out] The output resource
+            //-----------------------------------------------------------
+            void LoadImage(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource);
 		};
 	}
 }

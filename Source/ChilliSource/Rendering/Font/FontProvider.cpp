@@ -11,10 +11,9 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Resource/Resourcepool.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 namespace ChilliSource
@@ -166,7 +165,7 @@ namespace ChilliSource
             if(fontData != nullptr)
             {
                 const std::string textureFilePath(fileName + "." + k_textureFileExtension);
-                TextureSPtr textureData = LOAD_RESOURCE(Texture, in_location, textureFilePath);
+                TextureCSPtr textureData = Core::Application::Get()->GetResourcePool()->LoadResource<Texture>(in_location, textureFilePath);
                 font->SetTexture(textureData);
                 
                 if(textureData != nullptr)

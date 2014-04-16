@@ -135,13 +135,13 @@ namespace ChilliSource
 			///
 			/// @param Font texture
             //---------------------------------------------------------------------
-            void SetTexture(const TextureSPtr& in_texture);
+            void SetTexture(const TextureCSPtr& in_texture);
 			//---------------------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return Font texture 
 			//---------------------------------------------------------------------
-			const TextureSPtr& GetTexture() const;
+			const TextureCSPtr& GetTexture() const;
 			//---------------------------------------------------------------------
 			/// Each character is a sprite in a TextureAtlas. The TextureAtlas
             /// also holds the texture
@@ -235,7 +235,7 @@ namespace ChilliSource
             std::vector<KernLookup> m_kerningLookups;
             std::vector<KernPair> m_kerningPairs;
             
-            TextureSPtr      m_texture;
+            TextureCSPtr m_texture;
 			TextureAtlasCSPtr m_textureAtlas;
             
             f32 m_lineHeight = 0.0f;

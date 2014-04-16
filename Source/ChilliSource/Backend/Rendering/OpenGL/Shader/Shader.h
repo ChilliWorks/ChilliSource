@@ -47,10 +47,12 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------
-		class Shader : public Rendering::Shader
+		class Shader final : public Rendering::Shader
 		{
 		public:
 			
+            CS_DECLARE_NAMEDTYPE(Shader);
+            
             //----------------------------------------------------------
             /// Specifies the policy for how the progrm should handle
             /// an missing variable when setting a uniform
@@ -192,6 +194,13 @@ namespace ChilliSource
             /// @param Pointer to offset in buffer
             //----------------------------------------------------------
             void SetAttribute(const std::string& in_varName, GLint in_size, GLenum in_type, GLboolean in_isNormalized, GLsizei in_stride, const GLvoid* in_offset);
+            //----------------------------------------------------------
+            /// Destroys the shader and returns the resource to the
+            /// state prior to build
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+			void Destroy();
             //----------------------------------------------------------
             /// Destructor. Destroys the GL program
             ///

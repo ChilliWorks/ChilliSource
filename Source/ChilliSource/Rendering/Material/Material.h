@@ -80,7 +80,7 @@ namespace ChilliSource
 			///
 			/// @param Texture 
 			//----------------------------------------------------------
-			void AddTexture(const TextureSPtr& in_texture);
+			void AddTexture(const TextureCSPtr& in_texture);
             //----------------------------------------------------------
             /// Overwrite an exisiting added texture with the given
             /// texture at the given index. If a texture does not
@@ -91,7 +91,7 @@ namespace ChilliSource
             /// @param Texture
             /// @param Index
             //----------------------------------------------------------
-            void SetTexture(const TextureSPtr& in_texture, u32 in_texIndex = 0);
+            void SetTexture(const TextureCSPtr& in_texture, u32 in_texIndex = 0);
 			//----------------------------------------------------------
 			/// Get Texture at the given index. Will assert
             /// if index is out of bounds.
@@ -102,7 +102,7 @@ namespace ChilliSource
             ///
 			/// @return Texture or null
 			//----------------------------------------------------------
-			const TextureSPtr& GetTexture(u32 in_texIndex = 0) const;
+			const TextureCSPtr& GetTexture(u32 in_texIndex = 0) const;
 			//----------------------------------------------------------
             /// @author S Downie
 			///
@@ -388,7 +388,7 @@ namespace ChilliSource
 
 		private:
             
-            std::vector<TextureSPtr> m_textures;
+            std::vector<TextureCSPtr> m_textures;
             
             CubemapSPtr m_cubemap;
             

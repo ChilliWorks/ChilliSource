@@ -1,11 +1,11 @@
 //
-//  Texture.cpp
+//  ImageCompression.h
 //  Chilli Source
-//  Created by Scott Downie on 01/10/2010.
+//  Created by Scott Downie on 15/04/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +26,27 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Texture/Texture.h>
-
-#if defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_WINDOWS)
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
-#endif
+#ifndef _CHILLISOURCE_CORE_IMAGE_IMAGECOMRPESSION_H_
+#define _CHILLISOURCE_CORE_IMAGE_IMAGECOMRPESSION_H_
 
 namespace ChilliSource
 {
-	namespace Rendering
+	namespace Core
 	{
-        CS_DEFINE_NAMEDTYPE(Texture);
-        
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        TextureUPtr Texture::Create()
-        {
-#if defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_WINDOWS)
-            return TextureUPtr(new OpenGL::Texture());
-#else
-            return nullptr;
-#endif
-        }
+        //-----------------------------------------------------
+        /// Holds the supported image compression that can be
+        /// converted to textures.
+        ///
+        /// @author S Downie
+        //-----------------------------------------------------
+		enum class ImageCompression
+		{
+            k_none,
+            k_PVR4Bpp,
+            k_PVR2Bpp,
+            k_ETC1
+		};
 	}
 }
+
+#endif

@@ -64,7 +64,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateSprite(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateSprite(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
             MaterialSPtr material(CreateCustom(in_uniqueId));
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
@@ -77,7 +77,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStatic(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateStatic(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
             MaterialSPtr material(CreateCustom(in_uniqueId));
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
@@ -90,7 +90,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStaticAmbient(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateStaticAmbient(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
             MaterialSPtr material(CreateCustom(in_uniqueId));
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
@@ -103,7 +103,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStaticBlinn(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateStaticBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
             MaterialSPtr material(CreateCustom(in_uniqueId));
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
@@ -118,7 +118,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStaticBlinnShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateStaticBlinnShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
         	if (m_renderCapabilities->IsShadowMappingSupported() == false)
 			{
@@ -138,7 +138,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStaticBlinnPerVertex(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateStaticBlinnPerVertex(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
             MaterialSPtr material(CreateCustom(in_uniqueId));
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
@@ -153,7 +153,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStaticBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateStaticBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
         	if (m_renderCapabilities->IsShadowMappingSupported() == false)
 			{
@@ -192,7 +192,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimated(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateAnimated(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
             MaterialSPtr material(CreateCustom(in_uniqueId));
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
@@ -205,7 +205,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimatedAmbient(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateAnimatedAmbient(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
             MaterialSPtr material(CreateCustom(in_uniqueId));
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
@@ -218,7 +218,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimatedBlinn(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateAnimatedBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
             MaterialSPtr material(CreateCustom(in_uniqueId));
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
@@ -233,7 +233,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimatedBlinnShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateAnimatedBlinnShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
         	if (m_renderCapabilities->IsShadowMappingSupported() == false)
 			{
@@ -253,7 +253,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimatedBlinnPerVertex(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateAnimatedBlinnPerVertex(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
             MaterialSPtr material(CreateCustom(in_uniqueId));
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
@@ -268,7 +268,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimatedBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureSPtr& in_texture) const
+        MaterialSPtr MaterialFactory::CreateAnimatedBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
         {
         	if (m_renderCapabilities->IsShadowMappingSupported() == false)
         	{

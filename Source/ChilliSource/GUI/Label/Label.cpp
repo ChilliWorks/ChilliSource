@@ -16,7 +16,6 @@
 #include <ChilliSource/Core/String/StringParser.h>
 
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
 
 namespace ChilliSource
 {
@@ -54,8 +53,12 @@ namespace ChilliSource
 		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
         {
             SetColour(Core::Colour(0.18f, 0.3f, 0.4f, 0.6f));
-            Rendering::TextureManager* pMgr = Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>();
-            mpWhiteTex = pMgr->GetDefaultTexture();
+
+            mpWhiteTex = Core::Application::Get()->GetResourcePool()->GetResource<Rendering::Texture>("_GUIBackgroundTex");
+            if(mpWhiteTex == nullptr)
+            {
+                mpWhiteTex = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_GUIBackgroundTex");
+            }
             
             //Grab the default font
             Font = Core::Application::Get()->GetDefaultFont();
@@ -164,8 +167,11 @@ namespace ChilliSource
                 FlipVertical = true;
             }
             
-            Rendering::TextureManager* pMgr = Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>();
-            mpWhiteTex = pMgr->GetDefaultTexture();
+            mpWhiteTex = Core::Application::Get()->GetResourcePool()->GetResource<Rendering::Texture>("_GUIBackgroundTex");
+            if(mpWhiteTex == nullptr)
+            {
+                mpWhiteTex = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_GUIBackgroundTex");
+            }
             
             if(!Font)
             {

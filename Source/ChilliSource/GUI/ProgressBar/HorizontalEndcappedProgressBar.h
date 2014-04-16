@@ -44,13 +44,13 @@ namespace ChilliSource
 			///
 			/// @param Texture
 			//------------------------------------------------------------------------
-            void SetTexture(const Rendering::TextureSPtr& inpTexture);
+            void SetTexture(const Rendering::TextureCSPtr& inpTexture);
 			//------------------------------------------------------------------------
 			/// Get Texture
 			///
 			/// @return Texture
 			//------------------------------------------------------------------------
-            const Rendering::TextureSPtr& GetTexture() const;
+            const Rendering::TextureCSPtr& GetTexture() const;
 			//---------------------------------------------------------
 			/// Set Base Fill Sprite Sheet Index ID
 			///
@@ -170,7 +170,7 @@ namespace ChilliSource
 		private:
 
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
-            DECLARE_PROPERTY_A(Rendering::TextureSPtr, Texture, SetTexture, GetTexture);
+            DECLARE_PROPERTY_A(Rendering::TextureCSPtr, Texture, SetTexture, GetTexture);
 
 			DECLARE_PROPERTY_A(std::string, BaseFillTextureAtlasID, SetBaseFillTextureAtlasID, GetBaseFillTextureAtlasID);
 			DECLARE_PROPERTY_A(std::string, BaseBackgroundTextureAtlasID, SetBaseBackgroundTextureAtlasID, GetBaseBackgroundTextureAtlasID);

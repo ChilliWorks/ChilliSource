@@ -50,6 +50,8 @@ namespace ChilliSource
         {
         public:
             
+            CS_DECLARE_NOCOPY(ContextRestorer);
+            
             //-----------------------------------------------------
             /// Take a snapshot of the GL context for resources
             /// that cannot be recreated from file and store them

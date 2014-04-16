@@ -11,11 +11,9 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
 
 namespace ChilliSource
 {
@@ -80,7 +78,8 @@ namespace ChilliSource
             }
 			if(insParams.TryGetValue("Texture", strValue))
 			{
-				SetTexture(LOAD_RESOURCE(Rendering::Texture, eTextureLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetTexture(resourcePool->LoadResource<Rendering::Texture>(eTextureLocation, strValue));
 			}
 			
 			//---Sprite sheet
@@ -130,7 +129,7 @@ namespace ChilliSource
         ///
         /// @param Texture
         //------------------------------------------------------------------------
-        void HorizontalEndcappedProgressBar::SetTexture(const Rendering::TextureSPtr& inpTexture)
+        void HorizontalEndcappedProgressBar::SetTexture(const Rendering::TextureCSPtr& inpTexture)
         {
             Texture = inpTexture;
             mpBGImage->SetTexture(inpTexture);
@@ -141,7 +140,7 @@ namespace ChilliSource
         ///
         /// @return Texture
         //------------------------------------------------------------------------
-        const Rendering::TextureSPtr& HorizontalEndcappedProgressBar::GetTexture() const
+        const Rendering::TextureCSPtr& HorizontalEndcappedProgressBar::GetTexture() const
         {
             return Texture;
         }

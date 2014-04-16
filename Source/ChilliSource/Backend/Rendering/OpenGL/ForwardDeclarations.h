@@ -35,7 +35,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(Cubemap);
         CS_FORWARDDECLARE_CLASS(CubemapManager);
         CS_FORWARDDECLARE_CLASS(Texture);
-        CS_FORWARDDECLARE_CLASS(TextureManager);
+        CS_FORWARDDECLARE_CLASS(TextureUnitSystem);
     }
 }
 

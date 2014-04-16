@@ -106,7 +106,7 @@ namespace ChilliSource
 			/// @param Delegate function that is called when the task is executed
 			/// @param [Variadic] Arguments to pass to the task on execution
 			//------------------------------------------------------------------
-			Task(const TaskDelegate& in_taskDelegate, TArgTypes... in_args)
+            Task(const TaskDelegate& in_taskDelegate, TArgTypes... in_args)
 				: m_delegate(in_taskDelegate)
 				, m_args(in_args...)
 				, m_waitCondition(nullptr)
@@ -122,68 +122,8 @@ namespace ChilliSource
 			/// This can be used to block on the task.
 			/// @param [Variadic] Arguments to pass to the task on execution
 			//------------------------------------------------------------------
-			Task(const TaskDelegate& in_taskDelegate, WaitCondition* in_waitCondition, TArgTypes... in_args)
+            Task(const TaskDelegate& in_taskDelegate, WaitCondition* in_waitCondition, TArgTypes... in_args)
 				: m_delegate(in_taskDelegate)
-				, m_args(in_args...)
-				, m_waitCondition(in_waitCondition)
-			{
-			}
-			//------------------------------------------------------------------
-			/// Constructor (Free delegate)
-			///
-			/// @author S Downie
-			///
-			/// @param Free function that's called on execution
-			/// @param [Variadic] Arguments to pass to the task on execution
-			//------------------------------------------------------------------
-			Task(void(*in_func)(TArgTypes...), TArgTypes... in_args)
-				: m_delegate(in_func)
-				, m_args(in_args...)
-				, m_waitCondition(nullptr)
-			{
-			}
-			//------------------------------------------------------------------
-			/// Constructor (Free delegate)
-			///
-			/// @author I Copland
-			///
-			/// @param Free function that's called on execution
-			/// @param Wait condition that task will notify when it completes. 
-			/// This can be used to block on the task.
-			/// @param [Variadic] Arguments to pass to the task on execution
-			//------------------------------------------------------------------
-			Task(void(*in_func)(TArgTypes...), WaitCondition* in_waitCondition, TArgTypes... in_args)
-				: m_delegate(in_func)
-				, m_args(in_args...)
-				, m_waitCondition(in_waitCondition)
-			{
-			}
-			//------------------------------------------------------------------
-			/// Constructor (Static delegate)
-			///
-			/// @author S Downie
-			///
-			/// @param Static function that's called on execution
-			/// @param [Variadic] Arguments to pass to the task on execution
-			//------------------------------------------------------------------
-			template <typename TDelegate> Task(void (TDelegate::*in_func)(TArgTypes...), TArgTypes... in_args)
-				: m_delegate(in_func)
-				, m_args(in_args...)
-				, m_waitCondition(nullptr)
-			{
-			}
-			//------------------------------------------------------------------
-			/// Constructor (Static delegate)
-			///
-			/// @author I Copland
-			///
-			/// @param Static function that's called on execution
-			/// @param Wait condition that task will notify when it completes. 
-			/// This can be used to block on the task.
-			/// @param [Variadic] Arguments to pass to the task on execution
-			//------------------------------------------------------------------
-			template <typename TDelegate> Task(void (TDelegate::*in_func)(TArgTypes...), WaitCondition* in_waitCondition, TArgTypes... in_args)
-				: m_delegate(in_func)
 				, m_args(in_args...)
 				, m_waitCondition(in_waitCondition)
 			{

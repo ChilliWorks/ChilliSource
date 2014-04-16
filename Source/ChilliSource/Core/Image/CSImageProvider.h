@@ -1,38 +1,51 @@
 //
 //  CSImageProvider.h
 //  Chilli Source
-//
 //  Created by Scott Downie on 10/08/2012.
-//  Copyright (c) 2012 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2012 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifndef _CHILLISOURCE_CORE_IMAGE_CSIMAGEPROVIDER_H_
 #define _CHILLISOURCE_CORE_IMAGE_CSIMAGEPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Image/ImageProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
 
 namespace ChilliSource
 {
     namespace Core
     {
         //-------------------------------------------------------------
-        /// A resource provider that creates images from moimage files.
+        /// A resource provider that creates images from csimage files.
         ///
         /// @author S Downie
         //-------------------------------------------------------------
-        class CSImageProvider final : public ResourceProviderOld
+        class CSImageProvider final : public ResourceProvider
         {
         public:
             CS_DECLARE_NAMEDTYPE(CSImageProvider);
-            //-------------------------------------------------------
-            /// Factory method
-            ///
-            /// @author S Downie
-            ///
-            /// @return New backend with ownership transferred
-            //-------------------------------------------------------
-            static CSImageProviderUPtr Create();
+
             //-------------------------------------------------------
             /// Is the object of the given interface type.
             ///
@@ -42,19 +55,13 @@ namespace ChilliSource
             ///
             /// @return Whether the object is of given type
             //-------------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
-            /// Queries whether or not this provider can create
-            /// resources of the given type.
-            ///
             /// @author S Downie
             ///
-            /// @param Resource to compare against
-            ///
-            /// @return Whether the object can load a resource of
-            /// given type
+            /// @return The resource type this provider can load
             //-------------------------------------------------------
-            bool CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const override;
+            InterfaceIDType GetResourceType() const override;
             //-------------------------------------------------------
             /// Queries whether or not this provider can create
             /// resources from files with the given extension.
@@ -66,43 +73,59 @@ namespace ChilliSource
             /// @return Whether the object can load a resource with
             /// that extension
             //-------------------------------------------------------
-            bool CanCreateResourceFromFileWithExtension(const std::string& in_extension) const override;
+            bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
             //-------------------------------------------------------
-            /// Creates a new image from file.
+            /// Creates a new image from file. Check the resource
+            /// load state for success or failure
             ///
             /// @author S Downie
             ///
             /// @param The storage location to load from
             /// @param File path to resource
             /// @param [Out] Resource
-            ///
-            /// @return Whether the resource loaded
             //-------------------------------------------------------
-            bool CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, Core::ResourceOldSPtr& out_resource) override;
+            void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource) override;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
-            /// The resource will be returned immediately but
-            /// cannot be used until the loaded flag is set. This
-            /// can be queried using IsLoaded() on the resource.
+            /// Completion delegate is called on finish. Check
+            /// the resource load state for success or failure
             ///
             /// @author S Downie
             ///
             /// @param The storage location.
             /// @param The filepath.
+            /// @param Completion delegate
             /// @param [Out] The output resource.
-            ///
-            /// @return Whether or not the resource async load was
-            /// successfully started.
             //----------------------------------------------------
-			bool AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceOldSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource) override;
         private:
-
+            
+            friend class Application;
+            //-------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend with ownership transferred
+            //-------------------------------------------------------
+            static CSImageProviderUPtr Create();
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            CSImageProvider(){}
+            CSImageProvider() = default;
+            //----------------------------------------------------
+            /// Performs the heavy lifting for the 2 create methods
+            ///
+            /// @author S Downie
+            ///
+            /// @param The storage location.
+            /// @param The filepath.
+            /// @param Completion delegate
+            /// @param [Out] The output resource.
+            //----------------------------------------------------
+			void LoadImage(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource);
         };
     }
 }

@@ -39,13 +39,13 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //-----------------------------------------------------------
-            void SetNormalImage(const Rendering::TextureSPtr& inpTexture);
+            void SetNormalImage(const Rendering::TextureCSPtr& inpTexture);
 			//-----------------------------------------------------------
 			/// Get Normal Image
 			///
 			/// @return Texture for non-selected button
 			//-----------------------------------------------------------
-			const Rendering::TextureSPtr& GetNormalImage() const;
+			const Rendering::TextureCSPtr& GetNormalImage() const;
             //-----------------------------------------------------------
             /// Set Highlight Image
             ///
@@ -53,13 +53,13 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //-----------------------------------------------------------
-            void SetHighlightImage(const Rendering::TextureSPtr& inpTexture);
+            void SetHighlightImage(const Rendering::TextureCSPtr& inpTexture);
 			//-----------------------------------------------------------
 			/// Get Highlight Image
 			///
 			/// @return Texture for selected button
 			//-----------------------------------------------------------
-			const Rendering::TextureSPtr& GetHighlightImage() const;
+			const Rendering::TextureCSPtr& GetHighlightImage() const;
             //-----------------------------------------------------------
             /// Set Default UVs
             ///
@@ -365,8 +365,8 @@ namespace ChilliSource
             bool mbFitMaintain;
 			
 			//---Properties
-			DECLARE_PROPERTY_A(Rendering::TextureSPtr, NormalTexture, SetNormalImage, GetNormalImage);
-			DECLARE_PROPERTY_A(Rendering::TextureSPtr, HighlightTexture, SetHighlightImage, GetHighlightImage);
+			DECLARE_PROPERTY_A(Rendering::TextureCSPtr, NormalTexture, SetNormalImage, GetNormalImage);
+			DECLARE_PROPERTY_A(Rendering::TextureCSPtr, HighlightTexture, SetHighlightImage, GetHighlightImage);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, NormalTextureAtlas, SetNormalTextureAtlas, GetNormalTextureAtlas);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, HighlightTextureAtlas, SetHighlightTextureAtlas, GetHighlightTextureAtlas);
 

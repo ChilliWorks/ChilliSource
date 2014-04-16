@@ -42,7 +42,7 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //--------------------------------------------------------
-            void SetTexture(const Rendering::TextureSPtr& inpTexture);
+            void SetTexture(const Rendering::TextureCSPtr& inpTexture);
             //--------------------------------------------------------
             /// Get Texture
             ///
@@ -50,7 +50,7 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //--------------------------------------------------------
-            const Rendering::TextureSPtr& GetTexture() const;
+            const Rendering::TextureCSPtr& GetTexture() const;
             //--------------------------------------------------------
             /// Set Sprite Sheet
             ///
@@ -341,7 +341,7 @@ namespace ChilliSource
             Core::Vector2 m_imageSize;
             
 			//---Properties
-            DECLARE_PROPERTY_A(Rendering::TextureSPtr, Texture, SetTexture, GetTexture);
+            DECLARE_PROPERTY_A(Rendering::TextureCSPtr, Texture, SetTexture, GetTexture);
             DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
 
             DECLARE_PROPERTY_A(Core::Rectangle, UVs, SetUVs, GetUVs);

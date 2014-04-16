@@ -39,13 +39,13 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //-----------------------------------------------------------
-            void SetOnImage(const Rendering::TextureSPtr& inpTexture);
+            void SetOnImage(const Rendering::TextureCSPtr& inpTexture);
 			//-----------------------------------------------------------
 			/// Get On Image
 			///
 			/// @return Texture for non-selected button
 			//-----------------------------------------------------------
-			const Rendering::TextureSPtr& GetOnImage() const;
+			const Rendering::TextureCSPtr& GetOnImage() const;
             //-----------------------------------------------------------
             /// Set Off Image
             ///
@@ -53,13 +53,13 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //-----------------------------------------------------------
-            void SetOffImage(const Rendering::TextureSPtr& inpTexture);
+            void SetOffImage(const Rendering::TextureCSPtr& inpTexture);
 			//-----------------------------------------------------------
 			/// Get Off Image
 			///
 			/// @return Texture for selected button
 			//-----------------------------------------------------------
-			const Rendering::TextureSPtr& GetOffImage() const;
+			const Rendering::TextureCSPtr& GetOffImage() const;
             //-----------------------------------------------------------
             /// Set On UVs
             ///
@@ -289,8 +289,8 @@ namespace ChilliSource
             
         protected:
 			//---Properties
-			DECLARE_PROPERTY_A(Rendering::TextureSPtr, OnTexture, SetOnImage, GetOnImage);
-			DECLARE_PROPERTY_A(Rendering::TextureSPtr, OffTexture, SetOffImage, GetOffImage);
+			DECLARE_PROPERTY_A(Rendering::TextureCSPtr, OnTexture, SetOnImage, GetOnImage);
+			DECLARE_PROPERTY_A(Rendering::TextureCSPtr, OffTexture, SetOffImage, GetOffImage);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, OnTextureAtlas, SetOnTextureAtlas, GetOnTextureAtlas);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, OffTextureAtlas, SetOffTextureAtlas, GetOffTextureAtlas);
 

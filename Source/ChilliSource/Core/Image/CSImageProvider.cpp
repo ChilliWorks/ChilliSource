@@ -1,16 +1,40 @@
 //
 //  CSImageProvider.cpp
 //  Chilli Source
-//
 //  Created by Scott Downie on 10/08/2012.
-//  Copyright (c) 2012 Tag Games. All rights reserved.
 //
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2012 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+#include <ChilliSource/Core/Image/CSImageProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 #include <ChilliSource/Core/Image/Image.h>
-#include <ChilliSource/Core/Image/CSImageProvider.h>
+#include <ChilliSource/Core/Image/ImageCompression.h>
+#include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Minizip/unzip.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace ChilliSource
 {
@@ -61,32 +85,32 @@ namespace ChilliSource
             ///
             /// @return Whether the format was found
             //-------------------------------------------------------
-            bool GetFormatInfo(const u32 in_format, const u32 in_width, const u32 in_height, Image::Format& out_format, u32& out_imageSize)
+            bool GetFormatInfo(const u32 in_format, const u32 in_width, const u32 in_height, ImageFormat& out_format, u32& out_imageSize)
             {
                 switch(in_format)
                 {
                     case 1:
-                        out_format = Image::Format::k_Lum8;
+                        out_format = ImageFormat::k_Lum8;
                         out_imageSize = in_width * in_height * 1;
                         return true;
                     case 2:
-                        out_format = Image::Format::k_LumA88;
+                        out_format = ImageFormat::k_LumA88;
                         out_imageSize = in_width * in_height * 2;
                         return true;
                     case 3:
-                        out_format = Image::Format::k_RGB565;
+                        out_format = ImageFormat::k_RGB565;
                         out_imageSize = in_width * in_height * 2;
                         return true;
                     case 4:
-                        out_format = Image::Format::k_RGBA4444;
+                        out_format = ImageFormat::k_RGBA4444;
                         out_imageSize = in_width * in_height * 2;
                         return true;
                     case 5:
-                        out_format = Image::Format::k_RGB888;
+                        out_format = ImageFormat::k_RGB888;
                         out_imageSize = in_width * in_height * 3;
                         return true;
                     case 6:
-                        out_format = Image::Format::k_RGBA8888;
+                        out_format = ImageFormat::k_RGBA8888;
                         out_imageSize = in_width * in_height * 4;
                         return true;
                     default:
@@ -103,7 +127,7 @@ namespace ChilliSource
             /// @param Pointer to image data file
             /// @param Pointer to resource destination
             //-------------------------------------------------------
-            void ReadFileVersion2(const Core::FileStreamSPtr& in_stream, Core::ResourceOldSPtr& out_resource)
+            void ReadFileVersion2(const FileStreamSPtr& in_stream, ResourceSPtr& out_resource)
             {
                 //Read the header
                 ImageHeaderVersion2 sHeader;
@@ -114,21 +138,25 @@ namespace ChilliSource
                 in_stream->Read((s8*)&sHeader.m_dataSize, sizeof(u32));
                 
                 u32 udwSize = 0;
-                Core::Image::Format eFormat;
+                ImageFormat eFormat;
                 bool bFoundFormat = GetFormatInfo(sHeader.m_imageFormat, sHeader.m_width, sHeader.m_height, eFormat, udwSize);
                 CS_ASSERT(bFoundFormat, "Invalid CSImage Format.");
                 
                 // Allocated memory needed for the bitmap context
-                u8* pubyBitmapData = (u8*) malloc(udwSize);
+                u8* pubyBitmapData = new u8[udwSize];
                 in_stream->Read((s8*)pubyBitmapData, udwSize);
                 in_stream->Close();
+                Image::ImageDataUPtr imageData(pubyBitmapData);
                 
-                Core::Image* outpImage = (Core::Image*)out_resource.get();
-                outpImage->SetFormat(eFormat);
-                outpImage->SetData(pubyBitmapData);
-                outpImage->SetWidth(sHeader.m_width);
-                outpImage->SetHeight(sHeader.m_height);
-                outpImage->SetLoaded(true);
+                Image::Descriptor desc;
+                desc.m_format = eFormat;
+                desc.m_compression = ImageCompression::k_none;
+                desc.m_width = sHeader.m_width;
+                desc.m_height = sHeader.m_height;
+                desc.m_dataSize = udwSize;
+                
+                Image* outpImage = (Image*)out_resource.get();
+                outpImage->Build(desc, std::move(imageData));
             }
             //-------------------------------------------------------
             /// Reads a version 3 formatted .moimage file
@@ -138,7 +166,7 @@ namespace ChilliSource
             /// @param Pointer to image data file
             /// @param Pointer to resource destination
             //-------------------------------------------------------
-            void ReadFileVersion3(const Core::FileStreamSPtr& in_stream, Core::ResourceOldSPtr& out_resource)
+            void ReadFileVersion3(const FileStreamSPtr& in_stream, ResourceSPtr& out_resource)
             {
                 //Read the header
                 ImageHeaderVersion3 sHeader;
@@ -151,7 +179,7 @@ namespace ChilliSource
                 in_stream->Read((s8*)&sHeader.m_compressedDataSize, sizeof(u32));
                 
                 u32 udwSize = 0;
-                Core::Image::Format eFormat;
+                ImageFormat eFormat;
                 bool bFoundFormat = GetFormatInfo(sHeader.m_imageFormat, sHeader.m_width, sHeader.m_height, eFormat, udwSize);
                 CS_ASSERT(bFoundFormat, "Invalid CSImage Format.");
                 
@@ -164,7 +192,7 @@ namespace ChilliSource
                     in_stream->Close();
                     
                     // Allocated memory need for for the bitmap context
-                    pubyBitmapData = (u8*)malloc(sHeader.m_originalDataSize);
+                    pubyBitmapData = new u8[sHeader.m_originalDataSize];
                     
                     // Inflate data (I like to think this is the machine equvilent to eating lots of pizza!)
                     z_stream infstream;
@@ -192,17 +220,22 @@ namespace ChilliSource
                 else
                 {
                     // Allocated memory needed for the bitmap context
-                    pubyBitmapData = (u8*) malloc(udwSize);
+                    pubyBitmapData = new u8[sHeader.m_originalDataSize];;
                     in_stream->Read((s8*)pubyBitmapData, udwSize);
                     in_stream->Close();
                 }
                 
-                Core::Image* outpImage = (Core::Image*)out_resource.get();
-                outpImage->SetFormat(eFormat);
-                outpImage->SetData(pubyBitmapData);
-                outpImage->SetWidth(sHeader.m_width);
-                outpImage->SetHeight(sHeader.m_height);
-                outpImage->SetLoaded(true);
+                Image::ImageDataUPtr imageData(pubyBitmapData);
+                
+                Image::Descriptor desc;
+                desc.m_format = eFormat;
+                desc.m_compression = ImageCompression::k_none;
+                desc.m_width = sHeader.m_width;
+                desc.m_height = sHeader.m_height;
+                desc.m_dataSize = udwSize;
+                
+                Image* outpImage = (Image*)out_resource.get();
+                outpImage->Build(desc, std::move(imageData));
             }
         }
         
@@ -215,65 +248,79 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool CSImageProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool CSImageProvider::IsA(InterfaceIDType in_interfaceId) const
         {
-            return (in_interfaceId == ResourceProviderOld::InterfaceID || in_interfaceId == CSImageProvider::InterfaceID);
+            return (in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSImageProvider::InterfaceID);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool CSImageProvider::CanCreateResourceOfKind(Core::InterfaceIDType in_interfaceId) const
+        InterfaceIDType CSImageProvider::GetResourceType() const
         {
-            return in_interfaceId == Image::InterfaceID;
+            return Image::InterfaceID;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool CSImageProvider::CanCreateResourceFromFileWithExtension(const std::string& in_extension) const
+        bool CSImageProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
         {
             return (in_extension == k_csImageExtension);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool CSImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, Core::ResourceOldSPtr& out_resource)
+        void CSImageProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource)
         {
-            //ensure the extension is correct.
-            if (ChilliSource::Core::StringUtils::EndsWith(in_filepath, k_csImageExtension, true) == false)
-                return false;
-            
-            Core::FileStreamSPtr pImageFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, Core::FileMode::k_readBinary);
-            
-            if(pImageFile && !pImageFile->IsBad())
-            {
-                //Read the byte order mark and ensure it is 123456
-                u32 udwByteOrder = 0;
-                pImageFile->Read((s8*)&udwByteOrder, sizeof(u32));
-                CS_ASSERT(udwByteOrder == 123456, "Endianess not supported");
-                
-                //Read the version
-                u32 udwVersion = 0;
-                pImageFile->Read((s8*)&udwVersion, sizeof(u32));
-                CS_ASSERT(udwVersion >= 2 && udwVersion <= 3, "Only versions 2 and 3 supported");
-                
-                if(3 == udwVersion)
-                {
-                    ReadFileVersion3(pImageFile, out_resource);
-                }
-                else if (2 == udwVersion)
-                {
-                    CS_LOG_WARNING("File \"" + in_filepath + "\" moimage version 2 is deprecated. Please use version 3 which is supported from revision 86 in the tool repository.");
-                    ReadFileVersion2(pImageFile, out_resource);
-                }
-                
-                return true;
-            }
-            
-            return false;
+            LoadImage(in_storageLocation, in_filepath, nullptr, out_resource);
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool CSImageProvider::AsyncCreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceOldSPtr& out_resource)
+        void CSImageProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource)
         {
-            CS_LOG_WARNING("Async load is not implemented in CSImage Provider.");
-            return false;
+            Task<StorageLocation, const std::string&, const ResourceProvider::AsyncLoadDelegate&, ResourceSPtr&>
+            task(this, &CSImageProvider::LoadImage, in_storageLocation, in_filepath, in_delegate, out_resource);
+            TaskScheduler::ScheduleTask(task);
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void CSImageProvider::LoadImage(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource)
+        {
+            FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
+            
+            if(pImageFile == nullptr || pImageFile->IsBad() == true)
+            {
+                out_resource->SetLoadState(Resource::LoadState::k_failed);
+                if(in_delegate != nullptr)
+                {
+                    Task<ResourceSPtr&> task(in_delegate, out_resource);
+                    TaskScheduler::ScheduleMainThreadTask(task);
+                }
+                return;
+            }
+            
+            //Read the byte order mark and ensure it is 123456
+            u32 udwByteOrder = 0;
+            pImageFile->Read((s8*)&udwByteOrder, sizeof(u32));
+            CS_ASSERT(udwByteOrder == 123456, "Endianess not supported");
+            
+            //Read the version
+            u32 udwVersion = 0;
+            pImageFile->Read((s8*)&udwVersion, sizeof(u32));
+            CS_ASSERT(udwVersion >= 2 && udwVersion <= 3, "Only versions 2 and 3 supported");
+            
+            if(3 == udwVersion)
+            {
+                ReadFileVersion3(pImageFile, out_resource);
+            }
+            else if (2 == udwVersion)
+            {
+                CS_LOG_WARNING("File \"" + in_filepath + "\" moimage version 2 is deprecated. Please use version 3 which is supported from revision 86 in the tool repository.");
+                ReadFileVersion2(pImageFile, out_resource);
+            }
+            
+            out_resource->SetLoadState(Resource::LoadState::k_loaded);
+            if(in_delegate != nullptr)
+            {
+                Task<ResourceSPtr&> task(in_delegate, out_resource);
+                TaskScheduler::ScheduleMainThreadTask(task);
+            }
         }
     }
 }

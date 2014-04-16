@@ -1,11 +1,11 @@
 //
-//  Texture.cpp
+//  ImageFormat.h
 //  Chilli Source
-//  Created by Scott Downie on 01/10/2010.
+//  Created by Scott Downie on 15/04/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +26,31 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Texture/Texture.h>
-
-#if defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_WINDOWS)
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
-#endif
+#ifndef _CHILLISOURCE_CORE_IMAGE_IMAGEFORMAT_H_
+#define _CHILLISOURCE_CORE_IMAGE_IMAGEFORMAT_H_
 
 namespace ChilliSource
 {
-	namespace Rendering
+	namespace Core
 	{
-        CS_DEFINE_NAMEDTYPE(Texture);
-        
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        TextureUPtr Texture::Create()
+        //-----------------------------------------------------
+        /// Holds the supported image formats that can be
+        /// converted to texture.
+        ///
+        /// @author S Downie
+        //-----------------------------------------------------
+        enum class ImageFormat
         {
-#if defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_WINDOWS)
-            return TextureUPtr(new OpenGL::Texture());
-#else
-            return nullptr;
-#endif
-        }
+            k_RGBA4444,
+            k_RGBA8888,
+            k_RGB888,
+            k_RGB565,
+            k_LumA88,
+            k_Lum8,
+            k_Depth16,
+            k_Depth32
+        };
 	}
 }
+
+#endif

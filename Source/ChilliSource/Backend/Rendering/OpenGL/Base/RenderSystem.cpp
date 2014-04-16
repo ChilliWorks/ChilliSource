@@ -15,6 +15,7 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
@@ -44,30 +45,35 @@ namespace ChilliSource
         
         namespace
         {
-            const char* GetAttribNameForVertexSemantic(Rendering::VertexDataSemantic ineSemantic)
+            //----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Vertex attribute semantic ID
+            ///
+            /// @return Vertex attribute variable name
+            //----------------------------------------------------------
+            const char* GetAttribNameForVertexSemantic(Rendering::VertexDataSemantic in_semantic)
             {
-                //Determine what client states are required and get their currently bound locations
-                switch(ineSemantic)
+                switch(in_semantic)
                 {
                     case Rendering::VertexDataSemantic::k_position:
-                        return "avPosition";
+                        return "a_position";
                     case Rendering::VertexDataSemantic::k_normal:
-                        return  "avNormal";
+                        return  "a_normal";
                     case Rendering::VertexDataSemantic::k_uv:
-                        return "avTexCoord";
+                        return "a_texCoord";
                     case Rendering::VertexDataSemantic::k_colour:
-                        return "avColour";
+                        return "a_colour";
                     case Rendering::VertexDataSemantic::k_weight:
-                        return "avWeights";
+                        return "a_weights";
                     case Rendering::VertexDataSemantic::k_jointIndex:
-                        return "avJointIndices";
+                        return "a_jointIndices";
                 }
 
                 CS_LOG_FATAL("No such vertex semantic type");
                 return "";
             }
         }
-        
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
@@ -78,7 +84,6 @@ namespace ChilliSource
         mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities)), m_hasContextBeenBackedUp(false)
 		{
 			//Register the GL texture and shader managers
-            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mTexManager);
             Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mCubemapManager);
 		}
         //----------------------------------------------------------
@@ -120,7 +125,7 @@ namespace ChilliSource
             m_textureUniformNames.clear();
             for(u32 i=0; i<mpRenderCapabilities->GetNumTextureUnits(); ++i)
             {
-                m_textureUniformNames.push_back("uTexture" + Core::ToString(i));
+                m_textureUniformNames.push_back("u_texture" + Core::ToString(i));
             }
             
             ForceRefreshRenderStates();
@@ -160,7 +165,6 @@ namespace ChilliSource
                 //Context is about to be lost do a data backup
                 m_contextRestorer.Backup();
                 
-                mTexManager.Backup();
                 m_hasContextBeenBackedUp = true;
             }
 #endif
@@ -177,7 +181,6 @@ namespace ChilliSource
                 m_contextRestorer.Restore();
                 m_currentShader = nullptr;
                 mpCurrentMaterial = nullptr;
-                mTexManager.Restore();
                 mCubemapManager.Restore();
                 m_hasContextBeenBackedUp = false;
             }
@@ -216,7 +219,7 @@ namespace ChilliSource
             Shader* shader = (Shader*)(in_material->GetShader(in_shaderPass).get());
             CS_ASSERT(shader != nullptr, "Cannot render with null shader");
             
-            shader->SetUniform("uvCameraPos", mvCameraPos, Shader::UniformNotFoundPolicy::k_failSilent);
+            shader->SetUniform("u_cameraPos", mvCameraPos, Shader::UniformNotFoundPolicy::k_failSilent);
             
             bool hasMaterialChanged = mbInvalidateAllCaches == true || mpCurrentMaterial == nullptr || mpCurrentMaterial != in_material.get() || mpCurrentMaterial->IsCacheValid() == false;
             if(hasMaterialChanged == true)
@@ -272,7 +275,7 @@ namespace ChilliSource
                 jointVectors.push_back(Core::Vector4(joint.m[2], joint.m[6], joint.m[10], joint.m[14]));
             }
             
-            m_currentShader->SetUniform("uavJoints", jointVectors);
+            m_currentShader->SetUniform("u_joints", jointVectors);
         }
         //----------------------------------------------------------
 		/// Apply Render States
@@ -329,7 +332,7 @@ namespace ChilliSource
             if(inMaterial->GetCubemap() != nullptr)
             {
                 inMaterial->GetCubemap()->Bind(mudwNumBoundTextures);
-                out_shader->SetUniform("uCubemap", (s32)mudwNumBoundTextures);
+                out_shader->SetUniform("u_cubemap", (s32)mudwNumBoundTextures);
                 ++mudwNumBoundTextures;
             }
             
@@ -339,7 +342,10 @@ namespace ChilliSource
             
             for(u32 i=0; i<numTexturesToBind; ++i)
             {
-                inMaterial->GetTexture(i)->Bind(mudwNumBoundTextures);
+                //TODO: Once we change the render system this hack will not be required as we will be dealing
+                //with a list of commands and texture handles
+                Texture* texture = (Texture*)inMaterial->GetTexture(i).get();
+                texture->Bind(mudwNumBoundTextures);
                 out_shader->SetUniform(m_textureUniformNames[i], (s32)mudwNumBoundTextures);
                 ++mudwNumBoundTextures;
             }
@@ -352,25 +358,25 @@ namespace ChilliSource
             {
                 mbEmissiveSet = true;
                 mCurrentEmissive = inMaterial->GetEmissive();
-                out_shader->SetUniform("uvEmissive", mCurrentEmissive, Shader::UniformNotFoundPolicy::k_failSilent);
+                out_shader->SetUniform("u_emissive", mCurrentEmissive, Shader::UniformNotFoundPolicy::k_failSilent);
             }
             if(mbInvalidateAllCaches || mbAmbientSet == false || mCurrentAmbient != inMaterial->GetAmbient())
             {
                 mbAmbientSet = true;
                 mCurrentAmbient = inMaterial->GetAmbient();
-                out_shader->SetUniform("uvAmbient", mCurrentAmbient, Shader::UniformNotFoundPolicy::k_failSilent);
+                out_shader->SetUniform("u_ambient", mCurrentAmbient, Shader::UniformNotFoundPolicy::k_failSilent);
             }
             if(mbInvalidateAllCaches || mbDiffuseSet == false || mCurrentDiffuse != inMaterial->GetDiffuse())
             {
                 mbDiffuseSet = true;
                 mCurrentDiffuse = inMaterial->GetDiffuse();
-                out_shader->SetUniform("uvDiffuse", mCurrentDiffuse, Shader::UniformNotFoundPolicy::k_failSilent);
+                out_shader->SetUniform("u_diffuse", mCurrentDiffuse, Shader::UniformNotFoundPolicy::k_failSilent);
             }
             if(mbInvalidateAllCaches || mbSpecularSet == false || mCurrentSpecular != inMaterial->GetSpecular())
             {
                 mbSpecularSet = true;
                 mCurrentSpecular = inMaterial->GetSpecular();
-                out_shader->SetUniform("uvSpecular", mCurrentSpecular, Shader::UniformNotFoundPolicy::k_failSilent);
+                out_shader->SetUniform("u_specular", mCurrentSpecular, Shader::UniformNotFoundPolicy::k_failSilent);
             }
         }
         //----------------------------------------------------------
@@ -388,17 +394,17 @@ namespace ChilliSource
             if(inpLightComponent->IsA(Rendering::DirectionalLightComponent::InterfaceID))
             {
                 Rendering::DirectionalLightComponent* pLightComponent = (Rendering::DirectionalLightComponent*)inpLightComponent;
-                out_shader->SetUniform("uvLightDir", pLightComponent->GetDirection());
+                out_shader->SetUniform("u_lightDir", pLightComponent->GetDirection());
   
                 if(pLightComponent->GetShadowMapPtr() != nullptr)
                 {
-                    out_shader->SetUniform("ufShadowTolerance", pLightComponent->GetShadowTolerance(), Shader::UniformNotFoundPolicy::k_failSilent);
+                    out_shader->SetUniform("u_shadowTolerance", pLightComponent->GetShadowTolerance(), Shader::UniformNotFoundPolicy::k_failSilent);
                     
                     //If we have used all the texture units then we cannot bind the shadow map
                     if(mudwNumBoundTextures <= mpRenderCapabilities->GetNumTextureUnits())
                     {
                         pLightComponent->GetShadowMapPtr()->Bind(mudwNumBoundTextures);
-                        out_shader->SetUniform("uShadowMapTexture", (s32)mudwNumBoundTextures);
+                        out_shader->SetUniform("u_shadowMap", (s32)mudwNumBoundTextures);
                         ++mudwNumBoundTextures;
                     }
                     else
@@ -410,14 +416,14 @@ namespace ChilliSource
             else if(inpLightComponent->IsA(Rendering::PointLightComponent::InterfaceID))
             {
                 Rendering::PointLightComponent* pLightComponent = (Rendering::PointLightComponent*)inpLightComponent;
-                out_shader->SetUniform("ufAttenuationConstant", pLightComponent->GetConstantAttenuation());
-                out_shader->SetUniform("ufAttenuationLinear", pLightComponent->GetLinearAttenuation());
-                out_shader->SetUniform("ufAttenuationQuadratic", pLightComponent->GetQuadraticAttenuation());
+                out_shader->SetUniform("u_attenuationConstant", pLightComponent->GetConstantAttenuation(), Shader::UniformNotFoundPolicy::k_failSilent);
+                out_shader->SetUniform("u_attenuationLinear", pLightComponent->GetLinearAttenuation(), Shader::UniformNotFoundPolicy::k_failSilent);
+                out_shader->SetUniform("u_attenuationQuadratic", pLightComponent->GetQuadraticAttenuation(), Shader::UniformNotFoundPolicy::k_failSilent);
             }
             
-            out_shader->SetUniform("uvLightPos", inpLightComponent->GetWorldPosition(), Shader::UniformNotFoundPolicy::k_failSilent);
-            out_shader->SetUniform("uvLightCol", inpLightComponent->GetColour(), Shader::UniformNotFoundPolicy::k_failSilent);
-            out_shader->SetUniform("umatLight", inpLightComponent->GetLightMatrix(), Shader::UniformNotFoundPolicy::k_failSilent);
+            out_shader->SetUniform("u_lightPos", inpLightComponent->GetWorldPosition(), Shader::UniformNotFoundPolicy::k_failSilent);
+            out_shader->SetUniform("u_lightCol", inpLightComponent->GetColour(), Shader::UniformNotFoundPolicy::k_failSilent);
+            out_shader->SetUniform("u_lightMat", inpLightComponent->GetLightMatrix(), Shader::UniformNotFoundPolicy::k_failSilent);
         }
 		//----------------------------------------------------------
 		/// Apply Camera
@@ -510,11 +516,11 @@ namespace ChilliSource
 			//Set the new model view matrix based on the camera view matrix and the object matrix
             static Core::Matrix4x4 matWorldViewProj;
             Core::Matrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
-            m_currentShader->SetUniform("umatWorldViewProj", matWorldViewProj);
-            m_currentShader->SetUniform("umatWorld", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
-            if(m_currentShader->HasUniform("umatNormal"))
+            m_currentShader->SetUniform("u_wvpMat", matWorldViewProj, Shader::UniformNotFoundPolicy::k_failSilent);
+            m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
+            if(m_currentShader->HasUniform("u_normalMat"))
             {
-                m_currentShader->SetUniform("umatNormal", inmatWorld.Inverse().GetTranspose());
+                m_currentShader->SetUniform("u_normalMat", inmatWorld.Inverse().GetTranspose());
             }
             
 			EnableVertexAttributeForSemantic(inpBuffer);
@@ -534,11 +540,11 @@ namespace ChilliSource
 			//Set the new model view matrix based on the camera view matrix and the object matrix
             static Core::Matrix4x4 matWorldViewProj;
             Core::Matrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
-            m_currentShader->SetUniform("umatWorldViewProj", matWorldViewProj);
-            m_currentShader->SetUniform("umatWorld", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
-            if(m_currentShader->HasUniform("umatNormal"))
+            m_currentShader->SetUniform("u_wvpMat", matWorldViewProj, Shader::UniformNotFoundPolicy::k_failSilent);
+            m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
+            if(m_currentShader->HasUniform("u_normalMat"))
             {
-                m_currentShader->SetUniform("umatNormal", inmatWorld.Inverse().GetTranspose());
+                m_currentShader->SetUniform("u_normalMat", inmatWorld.Inverse().GetTranspose());
             }
             
 			//Render the buffer contents
@@ -1047,7 +1053,7 @@ namespace ChilliSource
 		void RenderSystem::ForceRefreshRenderStates()
 		{
 			//clear the cache.
-			Texture::ClearCache();
+            m_textureUnitSystem->Clear();
             RenderTarget::ClearCache();
             
             //Set the default blend function and alpha function

@@ -16,7 +16,6 @@
 #include <ChilliSource/Core/String/StringParser.h>
 
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
@@ -82,7 +81,8 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("BarTexture", strValue))
             {
-                SetBarTexture(LOAD_RESOURCE(Rendering::Texture, eBarTextureLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetBarTexture(resourcePool->LoadResource<Rendering::Texture>(eBarTextureLocation, strValue));
             }
 			//---Slider Texture
             Core::StorageLocation eSliderTextureLocation = Core::StorageLocation::k_package;
@@ -92,7 +92,8 @@ namespace ChilliSource
             }
 			if(insParams.TryGetValue("SliderTexture", strValue))
 			{
-                SetSliderTexture(LOAD_RESOURCE(Rendering::Texture, eSliderTextureLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetSliderTexture(resourcePool->LoadResource<Rendering::Texture>(eSliderTextureLocation, strValue));
 			}
             
 			//---Bar Sprite sheet
@@ -141,7 +142,7 @@ namespace ChilliSource
         ///
         /// @param Texture for the bar
         //--------------------------------------------------------
-        void HorizontalSliderBar::SetBarTexture(const Rendering::TextureSPtr& inpTexture)
+        void HorizontalSliderBar::SetBarTexture(const Rendering::TextureCSPtr& inpTexture)
         {
             BarTexture = inpTexture;
             mpBackgroundImage->SetTexture(inpTexture);
@@ -156,7 +157,7 @@ namespace ChilliSource
         ///
         /// @return Texture for the bar
         //--------------------------------------------------------
-        const Rendering::TextureSPtr& HorizontalSliderBar::GetBarTexture() const
+        const Rendering::TextureCSPtr& HorizontalSliderBar::GetBarTexture() const
         {
             return BarTexture;
         }
@@ -165,7 +166,7 @@ namespace ChilliSource
         ///
         /// @param Texture for the slider
         //--------------------------------------------------------
-        void HorizontalSliderBar::SetSliderTexture(const Rendering::TextureSPtr& inpTexture)
+        void HorizontalSliderBar::SetSliderTexture(const Rendering::TextureCSPtr& inpTexture)
         {
             SliderTexture = inpTexture;
             mpSliderImage->SetTexture(inpTexture);
@@ -180,7 +181,7 @@ namespace ChilliSource
         ///
         /// @return Texture for the slider
         //--------------------------------------------------------
-        const Rendering::TextureSPtr& HorizontalSliderBar::GetSliderTexture() const
+        const Rendering::TextureCSPtr& HorizontalSliderBar::GetSliderTexture() const
         {
             return SliderTexture;
         }

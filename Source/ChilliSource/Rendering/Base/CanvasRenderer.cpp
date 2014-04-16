@@ -56,7 +56,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
 		//----------------------------------------------------------
-        MaterialCSPtr CanvasRenderer::GetGUIMaterialForTexture(const TextureSPtr& in_texture)
+        MaterialCSPtr CanvasRenderer::GetGUIMaterialForTexture(const TextureCSPtr& in_texture)
         {
             auto itExistingEntry = m_materialGUICache.find(in_texture);
             if(itExistingEntry != m_materialGUICache.end())
@@ -65,7 +65,7 @@ namespace ChilliSource
             }
             else
             {
-                std::string materialId("_GUI:" + in_texture->GetFilename());
+                std::string materialId("_GUI:" + in_texture->GetFilePath());
                 MaterialCSPtr materialExisting = m_resourcePool->GetResource<Material>(materialId);
                 
                 if(materialExisting != nullptr)
@@ -164,7 +164,7 @@ namespace ChilliSource
         ///
         /// Build a sprite box and batch it ready for rendering
         //-----------------------------------------------------------
-        void CanvasRenderer::DrawBox(const Core::Matrix3x3& inmatTransform, const Core::Vector2 & invSize, const TextureSPtr & inpTexture, 
+        void CanvasRenderer::DrawBox(const Core::Matrix3x3& inmatTransform, const Core::Vector2 & invSize, const TextureCSPtr & inpTexture, 
                                       const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
         {
             msCachedSprite.pMaterial = GetGUIMaterialForTexture(inpTexture);

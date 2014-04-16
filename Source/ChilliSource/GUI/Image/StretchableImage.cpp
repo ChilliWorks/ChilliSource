@@ -9,13 +9,11 @@
 #include <ChilliSource/GUI/Image/StretchableImage.h>
 
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 
 namespace ChilliSource
@@ -60,7 +58,8 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("Texture", strValue))
             {
-                Texture = LOAD_RESOURCE(Rendering::Texture, eTextureLocation, strValue);
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                SetTexture(resourcePool->LoadResource<Rendering::Texture>(eTextureLocation, strValue));
             }
             
             //---Sprite sheet
@@ -106,6 +105,24 @@ namespace ChilliSource
 			{
 				CentreTouchConsumption = Core::ParseBool(strValue);
 			}
+        }
+        //---------------------------------------------------------
+        /// Set Texture
+        ///
+        /// @param Texture containing the nine patches
+        //---------------------------------------------------------
+        void StretchableImage::SetTexture(const Rendering::TextureCSPtr& inpTexture)
+        {
+            Texture = inpTexture;
+        }
+        //---------------------------------------------------------
+        /// Get Texture
+        ///
+        /// @return Texture containing the nine patches
+        //---------------------------------------------------------
+        const Rendering::TextureCSPtr& StretchableImage::GetTexture() const
+        {
+            return Texture;
         }
         //---------------------------------------------------------
         /// Set Sprite Sheet

@@ -10,11 +10,9 @@
 
 #include <ChilliSource/GUI/Image/ImageView.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 
 namespace ChilliSource
@@ -79,7 +77,8 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("BackgroundTexture", strValue))
             {
-                SetBackgroundImage(LOAD_RESOURCE(Rendering::Texture, eBackgroundTextureLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                SetBackgroundImage(resourcePool->LoadResource<Rendering::Texture>(eBackgroundTextureLocation, strValue));
             }
             //---Progress Texture
             Core::StorageLocation eProgressTextureLocation = Core::StorageLocation::k_package;
@@ -89,7 +88,8 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("ProgressTexture", strValue))
             {
-                SetProgressImage(LOAD_RESOURCE(Rendering::Texture, eProgressTextureLocation, strValue));
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                SetProgressImage(resourcePool->LoadResource<Rendering::Texture>(eProgressTextureLocation, strValue));
             }
             //---Background sprite sheet
             Core::StorageLocation eBackgroundTextureAtlasLocation = Core::StorageLocation::k_package;
@@ -231,7 +231,7 @@ namespace ChilliSource
         ///
         /// @param Texture representing the background
         //------------------------------------------------------
-        void HorizontalClippingProgressBar::SetBackgroundImage(const Rendering::TextureSPtr& inpTexture)
+        void HorizontalClippingProgressBar::SetBackgroundImage(const Rendering::TextureCSPtr& inpTexture)
         {
 			BackgroundTexture = inpTexture;
             mpBackgroundImage->SetTexture(inpTexture);
@@ -241,7 +241,7 @@ namespace ChilliSource
         ///
         /// @param Texture representing the bar
         //------------------------------------------------------
-        void HorizontalClippingProgressBar::SetProgressImage(const Rendering::TextureSPtr& inpTexture)
+        void HorizontalClippingProgressBar::SetProgressImage(const Rendering::TextureCSPtr& inpTexture)
         {
 			ProgressTexture = inpTexture;
             mpProgressImage->SetTexture(inpTexture);
@@ -276,7 +276,7 @@ namespace ChilliSource
 		///
 		/// @return Texture representing the background
 		//------------------------------------------------------
-		const Rendering::TextureSPtr& HorizontalClippingProgressBar::GetBackgroundImage() const
+		const Rendering::TextureCSPtr& HorizontalClippingProgressBar::GetBackgroundImage() const
 		{
 			return BackgroundTexture;
 		}
@@ -285,7 +285,7 @@ namespace ChilliSource
 		///
 		/// @return Texture representing the bar
 		//------------------------------------------------------
-		const Rendering::TextureSPtr& HorizontalClippingProgressBar::GetProgressImage() const
+		const Rendering::TextureCSPtr& HorizontalClippingProgressBar::GetProgressImage() const
 		{
 			return ProgressTexture;
 		}

@@ -83,7 +83,7 @@ namespace ChilliSource
             /// @param Colour
             /// @param Box origin alignment
             //-----------------------------------------------------------
-			void DrawBox(const Core::Matrix3x3& inmatTransform, const Core::Vector2 & invSize, const TextureSPtr & inpTexture, const Core::Rectangle& inUVs, 
+			void DrawBox(const Core::Matrix3x3& inmatTransform, const Core::Vector2 & invSize, const TextureCSPtr & inpTexture, const Core::Rectangle& inUVs,
                          const Core::Colour & insTintColour, AlignmentAnchor ineAlignment = AlignmentAnchor::k_middleCentre);
             //-----------------------------------------------------------
             /// Draw String
@@ -200,7 +200,7 @@ namespace ChilliSource
             /// @return Cached or new GUI material that has the given
             /// texture
             //----------------------------------------------------------
-            MaterialCSPtr GetGUIMaterialForTexture(const TextureSPtr& in_texture);
+            MaterialCSPtr GetGUIMaterialForTexture(const TextureCSPtr& in_texture);
             
 			//-----------------------------------------------------
 			/// Update Sprite Data
@@ -218,7 +218,7 @@ namespace ChilliSource
 			std::vector<Core::Vector2> mScissorPos;
             std::vector<Core::Vector2> mScissorSize;
             
-            std::unordered_map<TextureSPtr, MaterialCSPtr> m_materialGUICache;
+            std::unordered_map<TextureCSPtr, MaterialCSPtr> m_materialGUICache;
             
             Core::ResourcePool* m_resourcePool;
             MaterialFactory* m_materialFactory;

@@ -39,25 +39,25 @@ namespace ChilliSource
             ///
             /// @param Texture for the bar
             //--------------------------------------------------------
-            void SetBarTexture(const Rendering::TextureSPtr& inpTexture);
+            void SetBarTexture(const Rendering::TextureCSPtr& inpTexture);
 			//--------------------------------------------------------
 			/// Get Bar Texture
 			///
 			/// @return Texture for the bar
 			//--------------------------------------------------------
-            const Rendering::TextureSPtr& GetBarTexture() const;
+            const Rendering::TextureCSPtr& GetBarTexture() const;
 			//--------------------------------------------------------
 			/// Set Slider Texture
 			///
 			/// @param Texture for the slider
 			//--------------------------------------------------------
-            void SetSliderTexture(const Rendering::TextureSPtr& inpTexture);
+            void SetSliderTexture(const Rendering::TextureCSPtr& inpTexture);
 			//--------------------------------------------------------
 			/// Get Slider Texture
 			///
 			/// @return Texture for the slider
 			//--------------------------------------------------------
-            const Rendering::TextureSPtr& GetSliderTexture() const;
+            const Rendering::TextureCSPtr& GetSliderTexture() const;
             //--------------------------------------------------------
             /// Set Bar Sprite Sheet
             ///
@@ -144,8 +144,8 @@ namespace ChilliSource
 
 			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSliderSize, SetSliderSize, GetSliderSize);
 
-            DECLARE_PROPERTY_A(Rendering::TextureSPtr, BarTexture, SetBarTexture, GetBarTexture);
-			DECLARE_PROPERTY_A(Rendering::TextureSPtr, SliderTexture, SetSliderTexture, GetSliderTexture);
+            DECLARE_PROPERTY_A(Rendering::TextureCSPtr, BarTexture, SetBarTexture, GetBarTexture);
+			DECLARE_PROPERTY_A(Rendering::TextureCSPtr, SliderTexture, SetSliderTexture, GetSliderTexture);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, BarTextureAtlas, SetBarTextureAtlas, GetBarTextureAtlas);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, SliderTextureAtlas, SetSliderTextureAtlas, GetSliderTextureAtlas);
 

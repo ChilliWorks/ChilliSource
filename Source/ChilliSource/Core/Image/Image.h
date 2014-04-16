@@ -1,190 +1,157 @@
-/*
- *  Image.h
- *  moFlo
- *
- *  Created by Tag Games on 01/10/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Image.h
+//  Chilli Source
+//  Created by Scott Downie on 01/10/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
-#ifndef _MOFLO_CORE_IMAGE_H_
-#define _MOFLO_CORE_IMAGE_H_
+#ifndef _CHILLISOURCE_CORE_IMAGE_IMAGE_H_
+#define _CHILLISOURCE_CORE_IMAGE_IMAGE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceOld.h>
+#include <ChilliSource/Core/Resource/Resource.h>
 
 namespace ChilliSource
 {
 	namespace Core
 	{
-		enum class ImageCompression
-		{
-            k_none,
-            k_PVR4Bpp,
-            k_PVR2Bpp,
-            k_ETC1
-		};
-		
-		class Image : public ResourceOld
+        //----------------------------------------------------------------
+        /// A resource for a loaded image in one of the formats supported
+        /// in ImageFormat.h
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------
+		class Image : public Resource
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(Image);
-			enum class Format
-			{
-				k_RGBA4444,
-				k_RGBA8888,
-				k_RGB888,
-				k_RGB565,
-				k_LumA88,
-				k_Lum8,
-                k_Depth16,
-                k_Depth32,
-                k_default
-			};
-			
-			///@param inpData - The passed pointer becomes owned by the Image and should have been allocated using malloc
-			Image();
-			~Image();
-		
+            
+            using ImageDataUPtr = std::unique_ptr<u8[]>;
+            
             //----------------------------------------------------------------
-            /// Get Format BPP
+            /// Holds the information about the image data such as size,
+            /// compression, etc. Used to build the image resource
             ///
-            /// @param Format
-            /// @return Bits per pixel
+            /// @author S Downie
             //----------------------------------------------------------------
-            static u8 GetFormatBPP(Format ineFormat);
+            struct Descriptor
+            {
+                ImageCompression m_compression;
+                ImageFormat m_format;
+                u32 m_width;
+                u32 m_height;
+                u32 m_dataSize;
+            };
 			//----------------------------------------------------------------
-			/// Is A
+			/// @author S Downie
 			///
-			/// Is the object of the given interface type
 			/// @param Interface type to query
+            ///
 			/// @return Whether the object is of given type
 			//----------------------------------------------------------------
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            //----------------------------------------------------------------
+            /// Populate the image with the given data. The image resource
+            /// takes ownership of the raw image data
+            ///
+            /// @author S Downie
+            ///
+            /// @param Image data descriptor
+            /// @param Image data
+            //----------------------------------------------------------------
+            void Build(const Descriptor& in_desc, ImageDataUPtr in_imageData);
 			//----------------------------------------------------------------
-			/// Get Format
+			/// @author S Downie
 			///
 			/// @return Image format (RGB, RGBA, etc)
 			//----------------------------------------------------------------
-			Format GetFormat() const;
+			ImageFormat GetFormat() const;
+            //----------------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return image compression type
 			//----------------------------------------------------------------
-			/// Get Width
+			ImageCompression GetCompression() const;
+			//----------------------------------------------------------------
+			/// @author S Downie
 			///
 			/// @return Image width
 			//----------------------------------------------------------------
 			u32 GetWidth() const;
 			//----------------------------------------------------------------
-			/// Get Height
+			/// @author S Downie
 			///
 			/// @return Image height
 			//----------------------------------------------------------------
 			u32 GetHeight() const;
 			//----------------------------------------------------------------
-			/// Get Data Length
+			/// @author S Downie
 			///
 			/// @return Return size of the image in bytes
 			//----------------------------------------------------------------
-			u32 GetDataLength() const;
+			u32 GetDataSize() const;
 			//----------------------------------------------------------------
-			/// Get Data
+			/// Use datasize, width, height, format and compression
+            /// to decode
+            ///
+            /// @author S Downie
 			///
-			/// @return Raw image data
+			/// @return Image data.
 			//----------------------------------------------------------------
 			const u8* GetData() const;
-			//----------------------------------------------------------------
-			/// Get Name
-			///
-			/// @return Image label
-			//----------------------------------------------------------------
-			const std::string& GetName() const;
-			//----------------------------------------------------------------
-			/// Set Name
-			///
-			/// @param Image label
-			//----------------------------------------------------------------
-			void SetName(const std::string& instrName);
-			//----------------------------------------------------------------
-			/// Get Compression
-			///
-			/// @return image compression type
-			//----------------------------------------------------------------
-			ImageCompression GetCompression() const;
-			
-			//--------------------------------------------------
-			/// Unpack PVR Data
-			///
-			/// Unpack the texture data in accordance with the
-			/// PVR format
-			//--------------------------------------------------
-			void UnpackPVRData();
             
-            //--------------------------------------------------
-			/// Unpack Legacy PVRTC Data - Unsupported older format
+        private:
+            friend class ResourcePool;
+            friend class Rendering::TextureProvider;
+            //----------------------------------------------------------------
+            /// Factory create method. Only called by resource pool or by
+            /// texture provider.
+            ///
+            /// @author S Downie
+            ///
+            /// @return An empty image resource
+            //----------------------------------------------------------------
+            static ImageUPtr Create();
+            //----------------------------------------------------------------
+            /// Private constructor to force the use of the factory create
+            /// method
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------
+            Image() = default;
+            //----------------------------------------------------------------
+            /// @author S Downie
 			///
-			/// Unpack the texture data in accordance with the
-			/// PVR format
-			//--------------------------------------------------
-			void UnpackLegacyPVRTCData(void* inpData);
+			/// @return Ownership of image data.
+			//----------------------------------------------------------------
+            ImageDataUPtr&& MoveData();
             
-            //--------------------------------------------------
-			/// Unpack PVRTC Data
-			///
-			/// Unpack the texture data in accordance with the
-			/// PVR format
-			//--------------------------------------------------
-			void UnpackPVRTCData();
+		private:
+			
+            Descriptor m_dataDesc;
             
-			//--------------------------------------------------
-			/// Set Width
-			///
-			/// @param Width of the image in pixels
-			//--------------------------------------------------
-			void SetWidth(u32 inudwWidth);
-			//--------------------------------------------------
-			/// Set Height
-			///
-			/// @param Height of the image in pixels
-			//--------------------------------------------------
-			void SetHeight(u32 inudwHeight);
-			//--------------------------------------------------
-			/// Set Data
-			///
-			/// @param Image data in bytes
-			//--------------------------------------------------
-			void SetData(u8* inpData);
-			//--------------------------------------------------
-			/// Set Format
-			///
-			/// @param Image format
-			//--------------------------------------------------
-			void SetFormat(Format ineFormat);
-			//--------------------------------------------------
-			/// Set Compression
-			///
-			/// @param image compression type
-			//--------------------------------------------------
-			void SetCompression(ImageCompression ineCompression);
-			//--------------------------------------------------
-			/// Set Data Length
-			///
-			/// @param data length
-			//--------------------------------------------------
-			void SetDataLength(u32 inudwDataLength);
-		protected:
-			Format meFormat;
-			u8* mpRawData;
-			u8* mpImageData;
-			
-			u32 mudwWidth;
-			u32 mudwHeight;
-			
-			u32 mudwDataLength;
-		
-			std::string mImageName;
-			
-			ImageCompression meCompression;
-			
-			bool mbHasAlpha;
+            ImageDataUPtr m_imageData;
 		};
 		
 	}

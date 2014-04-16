@@ -110,7 +110,6 @@ namespace ChilliSource
 			
 			RenderSystem* mpRenderSystem;
             
-			TextureManager* mpTextureManager;
 			Core::ResourcePool* m_resourcePool;
 			RenderCapabilities* mpRenderCapabilities;
 		};

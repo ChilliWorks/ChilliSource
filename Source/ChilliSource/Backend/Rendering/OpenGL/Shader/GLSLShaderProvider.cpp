@@ -195,8 +195,7 @@ namespace ChilliSource
                 else
                 {
                     //All GL related tasks must be performed on the main thread.
-                    Core::Task<const std::string&, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, ShaderSPtr&>::TaskDelegate buildTask =
-                    [](const std::string& in_vs, const std::string& in_ps, const Core::ResourceProvider::AsyncLoadDelegate& in_completionDelegate, ShaderSPtr& out_shaderResource)
+                    auto buildTask = [](const std::string& in_vs, const std::string& in_ps, const Core::ResourceProvider::AsyncLoadDelegate& in_completionDelegate, ShaderSPtr& out_shaderResource)
                     {
                         out_shaderResource->Build(in_vs, in_ps);
                         out_shaderResource->SetLoadState(Core::Resource::LoadState::k_loaded);

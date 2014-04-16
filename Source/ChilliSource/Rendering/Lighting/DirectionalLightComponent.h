@@ -104,6 +104,10 @@ namespace ChilliSource
 			/// @return Shadow map debug colour texture
 			//----------------------------------------------------------
 			const TextureSPtr& GetShadowMapDebugPtr() const;
+            //----------------------------------------------------------
+            /// Destructor
+            //----------------------------------------------------------
+            ~DirectionalLightComponent();
             
         private:
             

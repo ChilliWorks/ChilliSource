@@ -38,25 +38,25 @@ namespace ChilliSource
 			///
 			/// @param Texture representing the background
 			//------------------------------------------------------
-			void SetBackgroundImage(const Rendering::TextureSPtr& inpTexture);
+			void SetBackgroundImage(const Rendering::TextureCSPtr& inpTexture);
 			//------------------------------------------------------
 			/// Set Progress Image
 			///
 			/// @param Texture representing the bar
 			//------------------------------------------------------
-			void SetProgressImage(const Rendering::TextureSPtr& inpTexture);
+			void SetProgressImage(const Rendering::TextureCSPtr& inpTexture);
 			//------------------------------------------------------
 			/// Get Background Image
 			///
 			/// @return Texture representing the background
 			//------------------------------------------------------
-			const Rendering::TextureSPtr& GetBackgroundImage() const;
+			const Rendering::TextureCSPtr& GetBackgroundImage() const;
 			//------------------------------------------------------
 			/// Get Progress Image
 			///
 			/// @return Texture representing the bar
 			//------------------------------------------------------
-			const Rendering::TextureSPtr& GetProgressImage() const;
+			const Rendering::TextureCSPtr& GetProgressImage() const;
 			//--------------------------------------------------------
 			/// Set Background Sprite Sheet
 			///
@@ -117,8 +117,8 @@ namespace ChilliSource
 			ImageViewSPtr mpBackgroundImage;
 			ImageViewSPtr mpProgressImage;
 
-			DECLARE_PROPERTY_A(Rendering::TextureSPtr, BackgroundTexture, SetBackgroundImage, GetBackgroundImage);
-			DECLARE_PROPERTY_A(Rendering::TextureSPtr, ProgressTexture, SetProgressImage, GetProgressImage);
+			DECLARE_PROPERTY_A(Rendering::TextureCSPtr, BackgroundTexture, SetBackgroundImage, GetBackgroundImage);
+			DECLARE_PROPERTY_A(Rendering::TextureCSPtr, ProgressTexture, SetProgressImage, GetProgressImage);
 
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, BackgroundTextureAtlas, SetBackgroundTextureAtlas, GetBackgroundTextureAtlas);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, ProgressTextureAtlas, SetProgressTextureAtlas, GetProgressTextureAtlas);

@@ -47,13 +47,13 @@ namespace ChilliSource
 		}
         //-------------------------------------------
 		//-------------------------------------------
-		void Font::SetTexture(const TextureSPtr& in_texture)
+		void Font::SetTexture(const TextureCSPtr& in_texture)
 		{
             m_texture = in_texture;
 		}
 		//-------------------------------------------
 		//-------------------------------------------
-		const TextureSPtr& Font::GetTexture() const
+		const TextureCSPtr& Font::GetTexture() const
 		{
 			return m_texture;
 		}

@@ -1,11 +1,30 @@
-/*
- *  Cubemap.cpp
- *  moFlo
- *
- *  Created by Tag Games on 01/10/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  CubeMap.cpp
+//  Chilli Source
+//  Created by Scott Downie on 15/07/2013.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2013 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
 
@@ -13,6 +32,8 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormatConverter.h>
+#include <ChilliSource/Core/Image/ImageFormat.h>
+#include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
 namespace ChilliSource
@@ -27,27 +48,27 @@ namespace ChilliSource
             /// @param MoFlow image format
             /// @return GL image format
             //--------------------------------------------------
-            GLenum FormatConverter(Core::Image::Format ineFormat)
+            GLenum FormatConverter(Core::ImageFormat ineFormat)
             {
                 switch(ineFormat)
                 {
                     default:
-                    case Core::Image::Format::k_RGBA8888:
+                    case Core::ImageFormat::k_RGBA8888:
                         return GL_RGBA;
                         break;
-                    case Core::Image::Format::k_RGB888:
+                    case Core::ImageFormat::k_RGB888:
                         return GL_RGB;
                         break;
-                    case Core::Image::Format::k_RGBA4444:
+                    case Core::ImageFormat::k_RGBA4444:
                         return GL_RGBA;
                         break;
-                    case Core::Image::Format::k_RGB565:
+                    case Core::ImageFormat::k_RGB565:
                         return GL_RGB;
                         break;
-                    case Core::Image::Format::k_LumA88:
+                    case Core::ImageFormat::k_LumA88:
                         return GL_LUMINANCE_ALPHA;
                         break;
-                    case Core::Image::Format::k_Lum8:
+                    case Core::ImageFormat::k_Lum8:
                         return GL_LUMINANCE;
                         break;
                 };
@@ -58,27 +79,27 @@ namespace ChilliSource
             /// @param MoFlow image format
             /// @return GL image type
             //--------------------------------------------------
-            GLenum TypeConverter(Core::Image::Format ineFormat)
+            GLenum TypeConverter(Core::ImageFormat ineFormat)
             {
                 switch(ineFormat)
                 {
                     default:
-                    case Core::Image::Format::k_RGBA8888:
+                    case Core::ImageFormat::k_RGBA8888:
                         return GL_UNSIGNED_BYTE;
                         break;
-                    case Core::Image::Format::k_RGB888:
+                    case Core::ImageFormat::k_RGB888:
                         return GL_UNSIGNED_BYTE;
                         break;
-                    case Core::Image::Format::k_RGBA4444:
+                    case Core::ImageFormat::k_RGBA4444:
                         return GL_UNSIGNED_SHORT_4_4_4_4;
                         break;
-                    case Core::Image::Format::k_RGB565:
+                    case Core::ImageFormat::k_RGB565:
                         return GL_UNSIGNED_SHORT_5_6_5;
                         break;
-                    case Core::Image::Format::k_LumA88:
+                    case Core::ImageFormat::k_LumA88:
                         return GL_UNSIGNED_BYTE;
                         break;
-                    case Core::Image::Format::k_Lum8:
+                    case Core::ImageFormat::k_Lum8:
                         return GL_UNSIGNED_BYTE;
                         break;
                 };
@@ -120,7 +141,7 @@ namespace ChilliSource
         :mpCubemapManager(inpManager),
         meSFilter(Rendering::Texture::Filter::k_linear), meTFilter(Rendering::Texture::Filter::k_linear),
         meSWrapMode(Rendering::Texture::WrapMode::k_clamp), meTWrapMode(Rendering::Texture::WrapMode::k_clamp),
-        mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), meImageFormat(Core::Image::Format::k_RGBA8888),
+        mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), meImageFormat(Core::ImageFormat::k_RGBA8888),
         mpRenderCapabilities(nullptr)
         {
             mpRenderCapabilities = Core::Application::Get()->GetSystem<Rendering::RenderCapabilities>();
@@ -161,10 +182,10 @@ namespace ChilliSource
                     switch(pSourceImage->GetFormat())
                     {
                         default:
-                        case Core::Image::Format::k_RGBA8888:
+                        case Core::ImageFormat::k_RGBA8888:
                             CubemapCompressedImage2D(GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, inapSourceImages);
                             break;
-                        case Core::Image::Format::k_RGB888:
+                        case Core::ImageFormat::k_RGB888:
                             CubemapCompressedImage2D(GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, inapSourceImages);                            
                             break;
                     };
@@ -177,10 +198,10 @@ namespace ChilliSource
                     switch(pSourceImage->GetFormat())
                     {
                         default:
-                        case Core::Image::Format::k_RGBA8888:
+                        case Core::ImageFormat::k_RGBA8888:
                             CubemapCompressedImage2D(GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, inapSourceImages);
                             break;
-                        case Core::Image::Format::k_RGB888:
+                        case Core::ImageFormat::k_RGB888:
                             CubemapCompressedImage2D(GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, inapSourceImages);
                             break;
                     };
@@ -347,7 +368,7 @@ namespace ChilliSource
         //--------------------------------------------------
         /// Get Image Format
         //--------------------------------------------------
-        Core::Image::Format Cubemap::GetImageFormat() const
+        Core::ImageFormat Cubemap::GetImageFormat() const
         {
             return meImageFormat;
         }

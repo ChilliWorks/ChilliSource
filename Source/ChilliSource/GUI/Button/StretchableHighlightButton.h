@@ -47,25 +47,25 @@ namespace ChilliSource
             ///
             /// @param Texture with with normal image
             //-----------------------------------------------------------
-            void SetNormalTexture(const Rendering::TextureSPtr& inpTexture);
+            void SetNormalTexture(const Rendering::TextureCSPtr& inpTexture);
 			//-----------------------------------------------------------
 			/// Set Highlight Texture
 			///
 			/// @param Texture with with highlight image
 			//-----------------------------------------------------------
-			void SetHighlightTexture(const Rendering::TextureSPtr& inpTexture);
+			void SetHighlightTexture(const Rendering::TextureCSPtr& inpTexture);
             //-----------------------------------------------------------
             /// Get Normal Texture
             ///
             /// @return Texture with default image
             //-----------------------------------------------------------
-			const Rendering::TextureSPtr& GetNormalTexture() const;
+			const Rendering::TextureCSPtr& GetNormalTexture() const;
 			//-----------------------------------------------------------
 			/// Get Highlight Texture
 			///
 			/// @return Texture with highlight image
 			//-----------------------------------------------------------
-			const Rendering::TextureSPtr& GetHighlightTexture() const;
+			const Rendering::TextureCSPtr& GetHighlightTexture() const;
             //-----------------------------------------------------------
             /// Set Normal Sprite Sheet
             ///
@@ -230,8 +230,8 @@ namespace ChilliSource
             void OnButtonDeselectThreshold(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
             
         private:
-            Rendering::TextureSPtr mCurrentTexture;
-            Rendering::TextureAtlasCSPtr mCurrentTextureAtlas;
+            const Rendering::Texture* mCurrentTexture = nullptr;
+            const Rendering::TextureAtlas* mCurrentTextureAtlas = nullptr;
             Core::Colour mCurrentColour;
 			bool mbSelected;
             
@@ -245,8 +245,8 @@ namespace ChilliSource
             StretchableImageSPtr m_image;
             
             //---Properties
-			DECLARE_PROPERTY_A(Rendering::TextureSPtr, NormalTexture, SetNormalTexture, GetNormalTexture);
-			DECLARE_PROPERTY_A(Rendering::TextureSPtr, HighlightTexture, SetHighlightTexture, GetHighlightTexture);
+			DECLARE_PROPERTY_A(Rendering::TextureCSPtr, NormalTexture, SetNormalTexture, GetNormalTexture);
+			DECLARE_PROPERTY_A(Rendering::TextureCSPtr, HighlightTexture, SetHighlightTexture, GetHighlightTexture);
             DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, NormalTextureAtlas, SetNormalTextureAtlas, GetNormalTextureAtlas);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, HighlightTextureAtlas, SetHighlightTextureAtlas, GetHighlightTextureAtlas);
 			DECLARE_PROPERTY_A(std::string, BaseNormalTextureAtlasID, SetBaseNormalTextureAtlasID, GetBaseNormalTextureAtlasID);

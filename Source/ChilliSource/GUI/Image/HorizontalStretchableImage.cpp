@@ -10,12 +10,10 @@
 #include <ChilliSource/GUI/Image/HorizontalStretchableImage.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 namespace ChilliSource
@@ -56,7 +54,8 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("Texture", strValue))
             {
-                Texture = LOAD_RESOURCE(Rendering::Texture, eTextureLocation, strValue);
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+				SetTexture(resourcePool->LoadResource<Rendering::Texture>(eTextureLocation, strValue));
             }
             
             Core::StorageLocation eTextureAtlasLocation = Core::StorageLocation::k_package;
@@ -109,7 +108,7 @@ namespace ChilliSource
         ///
         /// @param Texture containing the nine patches
         //---------------------------------------------------------
-        void HorizontalStretchableImage::SetTexture(const Rendering::TextureSPtr& inpTexture)
+        void HorizontalStretchableImage::SetTexture(const Rendering::TextureCSPtr& inpTexture)
         {
             Texture = inpTexture;
         }
@@ -118,7 +117,7 @@ namespace ChilliSource
         ///
         /// @return Texture containing the nine patches
         //---------------------------------------------------------
-        const Rendering::TextureSPtr& HorizontalStretchableImage::GetTexture() const
+        const Rendering::TextureCSPtr& HorizontalStretchableImage::GetTexture() const
         {
             return Texture;
         }

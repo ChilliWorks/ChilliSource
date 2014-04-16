@@ -80,7 +80,7 @@ namespace ChilliSource
         }
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		void Material::AddTexture(const TextureSPtr& in_texture)
+		void Material::AddTexture(const TextureCSPtr& in_texture)
 		{
             CS_ASSERT(in_texture != nullptr, "Cannot add null texture to material");
             m_textures.push_back(in_texture);
@@ -89,7 +89,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------
 		//----------------------------------------------------------
-		void Material::SetTexture(const TextureSPtr& in_texture, u32 in_texIndex)
+		void Material::SetTexture(const TextureCSPtr& in_texture, u32 in_texIndex)
 		{
             CS_ASSERT(in_texIndex < m_textures.size(), "Texture index out of bounds");
             
@@ -99,7 +99,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		const TextureSPtr& Material::GetTexture(u32 in_index) const
+		const TextureCSPtr& Material::GetTexture(u32 in_index) const
 		{
             CS_ASSERT(in_index < m_textures.size(), "Texture index out of bounds");
 			return m_textures[in_index];

@@ -19,7 +19,6 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/CubemapManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/ContextRestorer.h>
@@ -304,7 +303,6 @@ namespace ChilliSource
             //----------------------------------------------------------
             void RemoveBuffer(Rendering::MeshBuffer* inpBuffer);
             
-            inline TextureManager* GetTextureManager() {return &mTexManager;}
             inline CubemapManager* GetCubemapManager() {return &mCubemapManager;}
 			
 		private:
@@ -450,10 +448,10 @@ namespace ChilliSource
             Core::Matrix4x4 mmatView;
             Core::Vector3 mvCameraPos;
             
-			TextureManager mTexManager;
             CubemapManager mCubemapManager;
 			
             RenderCapabilities* mpRenderCapabilities;
+            TextureUnitSystem* m_textureUnitSystem;
 			
             GLint mdwMaxVertAttribs;
             
