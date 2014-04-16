@@ -66,8 +66,8 @@ namespace ChilliSource
             /// @param A list of recipients.
             /// @param The subject.
             /// @param The body of the email.
-            /// @param The callback describing the result of the email.
             /// @param Whether or not to format as HTML.
+            /// @param The callback describing the result of the email.
             //-------------------------------------------------------
 			void Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, bool in_formatAsHtml,
                          const SendResultDelegate& in_callback) override;
@@ -82,8 +82,8 @@ namespace ChilliSource
             /// @param The subject.
             /// @param The body of the email.
             /// @param The attachment.
-            /// @param The callback describing the result of the email.
             /// @param Whether or not to format as HTML.
+            /// @param The callback describing the result of the email.
             //-------------------------------------------------------
             void PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, const Attachment& in_attachment,
                                        bool in_formatAsHtml, const SendResultDelegate & in_callback) override;

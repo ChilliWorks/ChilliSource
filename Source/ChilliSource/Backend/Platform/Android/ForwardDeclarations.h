@@ -66,8 +66,8 @@ namespace ChilliSource
 		//------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(ContactInformationProvider);
 		CS_FORWARDDECLARE_CLASS(ContactInformationProviderJavaInterface);
-		CS_FORWARDDECLARE_CLASS(EmailCompositionActivity);
-		CS_FORWARDDECLARE_CLASS(EmailCompositionJavaInterface);
+		CS_FORWARDDECLARE_CLASS(EmailComposer);
+		CS_FORWARDDECLARE_CLASS(EmailComposerJavaInterface);
 		CS_FORWARDDECLARE_CLASS(SMSCompositionActivity);
 		CS_FORWARDDECLARE_CLASS(SMSCompositionActivityJavaInterface);
 		CS_FORWARDDECLARE_CLASS(FacebookAuthentication);
