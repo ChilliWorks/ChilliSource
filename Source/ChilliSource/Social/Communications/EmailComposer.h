@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/System/StateSystem.h>
 
+#include <functional>
 #include <vector>
 
 namespace ChilliSource 
