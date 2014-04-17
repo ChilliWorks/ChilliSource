@@ -30,24 +30,103 @@
 #define _CHILLISOURCE_RENDERING_TEXTURE_CUBEMAP_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Resource/ResourceOld.h>
+#include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+
+#include <array>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class Cubemap : public Core::ResourceOld
+        //--------------------------------------------------------------
+        /// Interface class to backend rendering cubemap resource. A
+        /// cubemap resource is created from 6 images into a format
+        /// that can be used by the render system.
+        ///
+        /// @author S Downie
+        //--------------------------------------------------------------
+		class Cubemap : public Core::Resource
 		{
 		public:
 			
 			CS_DECLARE_NAMEDTYPE(Cubemap);
-			
+            //--------------------------------------------------
+            /// Construct the texture from the given image data.
+            /// The texture will take ownership of the image data
+            ///
+            /// Order is as follows:
+            /// - Pos X
+            /// - Neg X
+            /// - Pos Y
+            /// - Neg Y
+            /// - Pos Z
+            /// - Neg Z
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture descriptors (6)
+            /// @param Image datas (6)
+            //--------------------------------------------------
+            virtual void Build(const std::array<Texture::Descriptor, 6>& in_descs, const std::array<Texture::TextureDataUPtr, 6>& in_datas) = 0;
+			//--------------------------------------------------------------
+            /// Binds this cubemap to the given texture unit allowing it to
+            /// be accessed by the shaders and operations to be performed on it
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture unit
+            //--------------------------------------------------------------
 			virtual void Bind(u32 inSlot = 0) = 0;
+            //--------------------------------------------------------------
+            /// Unbind this cubemap from its current texture unit. This
+            /// means it can no longer be used or changed until rebound.
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------
 			virtual void Unbind() = 0;
+			//--------------------------------------------------------------
+            /// Future sampling of the cubemap will use the given filter function
+            ///
+            /// @author S Downie
+            ///
+            /// @param Filter mode
+            //--------------------------------------------------------------
+			virtual void SetFilterMode(Texture::FilterMode in_mode) = 0;
+            //--------------------------------------------------------------
+            /// Future sampling of the cubemap will use the given wrap mode
+            ///
+            /// @author S Downie
+            ///
+            /// @param Horizontal wrapping
+            /// @param Vertical wrapping
+            //--------------------------------------------------------------
+			virtual void SetWrapMode(Texture::WrapMode in_sMode, Texture::WrapMode in_tMode) = 0;
+            //--------------------------------------------------------------
+            /// Generate mip map levels for the cubemap to reduce
+            /// aliasing
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------
+			virtual void GenerateMipMaps() = 0;
+            //--------------------------------------------------------------
+            /// Virtual destructor
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------
+			virtual ~Cubemap(){}
             
-            virtual void SetFilter(Texture::Filter ineSFilter, Texture::Filter ineTFilter) = 0;
-			virtual void SetWrapMode(Texture::WrapMode inSWrapMode, Texture::WrapMode inTWrapMode) = 0;
+        protected:
+            friend class Core::ResourcePool;
+            //--------------------------------------------------------------
+            /// Factory method for creating an empty cubemap resource.
+            /// Only called by the resource pool
+            ///
+            /// @author S Downie
+            ///
+            /// @return Concrete cubemap resource
+            //--------------------------------------------------------------
+            static CubemapUPtr Create();
 		};
 	}
 }

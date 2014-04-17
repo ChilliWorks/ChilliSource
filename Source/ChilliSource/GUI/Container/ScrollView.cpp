@@ -12,10 +12,8 @@
 #include <ChilliSource/Core/String/StringParser.h>
 
 #if CS_ENABLE_DEBUGDRAWING
-    #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
-    #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
-    #include <ChilliSource/Rendering/Texture/Texture.h>
-    #include <ChilliSource/Rendering/Texture/TextureManager.h>
+#include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 #endif
 
 namespace ChilliSource

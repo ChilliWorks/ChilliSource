@@ -72,6 +72,18 @@ namespace ChilliSource
 			/// returns the image data.
 			//----------------------------------------------------------------------------------
 			u8 * GetImageData();
+			//----------------------------------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return Size of image data in bytes
+			//----------------------------------------------------------------------------------
+			u32 GetDataSize() const;
+			//----------------------------------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return the image format
+			//----------------------------------------------------------------------------------
+			Core::ImageFormat GetImageFormat() const;
 		protected:
 			//----------------------------------------------------------------------------------
 			/// Load with lib png
@@ -85,6 +97,8 @@ namespace ChilliSource
 			s32 mdwHeight;
 			s32 mdwWidth;
 			u8 * mpData;
+			Core::ImageFormat m_format;
+			u32 m_dataSize = 0;
 		};
 	}
 }

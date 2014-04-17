@@ -8,11 +8,12 @@
 
 #include <ChilliSource/GUI/Label/Label.h>
 
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Image/ImageCompression.h>
+#include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
 #include <ChilliSource/Rendering/Texture/Texture.h>
@@ -57,7 +58,20 @@ namespace ChilliSource
             mpWhiteTex = Core::Application::Get()->GetResourcePool()->GetResource<Rendering::Texture>("_GUIBackgroundTex");
             if(mpWhiteTex == nullptr)
             {
-                mpWhiteTex = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_GUIBackgroundTex");
+                const u32 k_numPixels = 4;
+                const u32 k_numBytesPerPixel = 4;
+                Rendering::Texture::Descriptor desc;
+                desc.m_width = 2;
+                desc.m_height = 2;
+                desc.m_format = Core::ImageFormat::k_RGBA8888;
+                desc.m_compression = Core::ImageCompression::k_none;
+                desc.m_dataSize = k_numPixels * k_numBytesPerPixel;
+                u8* data = new u8[desc.m_dataSize];
+                memset(data, 255, desc.m_dataSize);
+                
+                Rendering::TextureSPtr texture = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_GUIBackgroundTex");
+                texture->Build(desc, Rendering::Texture::TextureDataUPtr(data));
+                mpWhiteTex = texture;
             }
             
             //Grab the default font

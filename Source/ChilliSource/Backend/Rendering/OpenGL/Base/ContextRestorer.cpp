@@ -32,6 +32,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
+#include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
@@ -71,7 +72,7 @@ namespace ChilliSource
                 resourcePool->RefreshResources<Rendering::Texture>();
                 
                 //---Cubemaps
-                //TODO: Once they have been converted to pooled resources
+                resourcePool->RefreshResources<Rendering::Cubemap>();
                 
                 //---Meshes
                 for(auto& buffer : m_meshBuffers)

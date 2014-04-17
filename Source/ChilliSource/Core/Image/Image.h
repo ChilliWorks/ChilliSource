@@ -124,6 +124,7 @@ namespace ChilliSource
         private:
             friend class ResourcePool;
             friend class Rendering::TextureProvider;
+            friend class Rendering::CubemapProvider;
             //----------------------------------------------------------------
             /// Factory create method. Only called by resource pool or by
             /// texture provider.

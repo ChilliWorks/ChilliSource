@@ -18,7 +18,6 @@
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace ChilliSource
 {

@@ -51,11 +51,11 @@ namespace ChilliSource
             if(it != mmapEvents.end())
             {
                 udwNewValue = Core::ParseU32(mmapEvents[instrType]) + inudwValue;
-                it->second = ToString(udwNewValue);
+                it->second = Core::ToString(udwNewValue);
             }
             else
             {
-                mmapEvents[instrType] = ToString(udwNewValue);
+                mmapEvents[instrType] = Core::ToString(udwNewValue);
             }
         }
         //----------------------------------------------------------------------------------
@@ -77,11 +77,11 @@ namespace ChilliSource
             if(it != mmapEvents.end())
             {
                 dwNewValue = Core::ParseS32(mmapEvents[instrType]) + indwValue;
-                it->second = ToString(dwNewValue);
+                it->second = Core::ToString(dwNewValue);
             }
             else
             {
-                mmapEvents[instrType] = ToString(dwNewValue);
+                mmapEvents[instrType] = Core::ToString(dwNewValue);
             }
         }
         //----------------------------------------------------------------------------------
@@ -103,11 +103,11 @@ namespace ChilliSource
             if(it != mmapEvents.end())
             {
                 fNewValue = Core::ParseF32(mmapEvents[instrType]) + infValue;
-                it->second = ToString(fNewValue);
+                it->second = Core::ToString(fNewValue);
             }
             else
             {
-                mmapEvents[instrType] = ToString(fNewValue);
+                mmapEvents[instrType] = Core::ToString(fNewValue);
             }
         }
         //----------------------------------------------------------------------------------

@@ -28,11 +28,12 @@ mpLabel##NAME->SetAlignmentToParent(Rendering::AlignmentAnchor::k_topLeft); \
 mpLabel##NAME->SetOffsetFromParentAlignment(0.0f, 0.0f, 5.0f, 0.0f); \
 mpLabel##NAME->EnableAlignmentToParent(true); \
 mpLabel##NAME->SetSize(0.0f, 0.0f, 90.0f, 20.0f); \
-mpLabel##NAME->SetHorizontalJustification(JUSTIFY_LEFT); \
+mpLabel##NAME->SetHorizontalJustification(TextJustification::k_left); \
 mpLabel##NAME->SetLocalAlignment(Rendering::AlignmentAnchor::k_topLeft); \
 mpLabel##NAME->EnableUserInteraction(false); \
 mpLabel##NAME->EnableTouchConsumption(false); \
 mpLabel##NAME->EnableBackground(false); \
+mpLabel##NAME->SetTextColour(Core::Colour::k_white); \
 AddSubview(mpLabel##NAME); \
 mpValue##NAME = LabelSPtr(new Label()); \
 mpValue##NAME->SetTextScale(mfTextScale); \
@@ -41,15 +42,16 @@ mpValue##NAME->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleRight); 
 mpValue##NAME->SetOffsetFromParentAlignment(0.0f, 0.0f, 10.0f, 0.0f); \
 mpValue##NAME->EnableAlignmentToParent(true); \
 mpValue##NAME->SetSize(0.0f, 0.0f, 90.0f, 20.0f); \
-mpValue##NAME->SetHorizontalJustification(JUSTIFY_LEFT); \
+mpValue##NAME->SetHorizontalJustification(TextJustification::k_left); \
 mpValue##NAME->EnableUserInteraction(false); \
 mpValue##NAME->EnableTouchConsumption(false); \
 mpValue##NAME->EnableBackground(false); \
+mpValue##NAME->SetTextColour(Core::Colour::k_white); \
 mpLabel##NAME->AddSubview(mpValue##NAME) 
 
 #define CS_SET_DEBUGSTAT(NAME) \
 {\
-    std::string strValue = DebugStats::GetValueForEvent(#NAME);\
+    std::string strValue = Debugging::DebugStats::GetValueForEvent(#NAME);\
     if(strValue.empty())\
         strValue = "0";\
     mpValue##NAME->SetText(strValue);\
@@ -65,7 +67,7 @@ namespace ChilliSource
 		{
 		public:
 			
-			static const DebugStatsViewPtr& GetSingletonPtr();
+			static const DebugStatsViewSPtr& GetSingletonPtr();
             
             void RefreshStats();
 			
@@ -85,7 +87,7 @@ namespace ChilliSource
 			
             DebugStatsView();
             
-			static DebugStatsViewPtr pInstance;
+			static DebugStatsViewSPtr pInstance;
             
             f32 mfTextScale;
 		};

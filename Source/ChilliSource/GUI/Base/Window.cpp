@@ -224,11 +224,11 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer
         //-----------------------------------------------------
-        void Window::Draw(CanvasRenderer * inpCanvas)
+        void Window::Draw(Rendering::CanvasRenderer * inpCanvas)
         {
             GUIView::Draw(inpCanvas);
             
-            if(DebugStats::IsEnabled())
+            if(Debugging::DebugStats::IsEnabled())
             {
                 DebugStatsView::GetSingletonPtr()->SetParentView(this);
                 DebugStatsView::GetSingletonPtr()->SetRootWindow(this);

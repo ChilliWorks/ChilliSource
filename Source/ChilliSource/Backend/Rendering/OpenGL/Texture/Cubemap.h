@@ -26,119 +26,169 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MOFLOW_OPENGL_CUBEMAP_H_
-#define _MOFLOW_OPENGL_CUBEMAP_H_
+#ifndef _CHILLISOURCE_BACKEND_RENDERING_OPENGL_TEXTURE_CUBEMAP_H_
+#define _CHILLISOURCE_BACKEND_RENDERING_OPENGL_TEXTURE_CUBEMAP_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
-#include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
+
+#include <array>
 
 namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class Cubemap : public ChilliSource::Rendering::Cubemap
+        //--------------------------------------------------------------
+        /// OpenGL cubemap resource created from 6 images into a format
+        /// that can be used by OpenGL/GPU.
+        ///
+        /// @author S Downie
+        //--------------------------------------------------------------
+		class Cubemap final : public Rendering::Cubemap
 		{
 		public:
-
-            ~Cubemap();
-			//--------------------------------------------------
-			/// Init
-			///
-			/// @param Source images (Must be 6)
-			//--------------------------------------------------
-			void Init(const std::vector<Core::ResourceOldSPtr>& inapSourceImages);
-			//--------------------------------------------------
-			/// Is A
+            
+            CS_DECLARE_NAMEDTYPE(Cubemap);
+            //--------------------------------------------------
+			/// @author S Downie
 			///
 			/// @param Interface ID type
+            ///
 			/// @return Whether the object is of this type
 			//--------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
-			//--------------------------------------------------
-			/// Bind
-			///
-			/// @param Texture unit to bind texture to (default 0)
-			//--------------------------------------------------
-			void Bind(u32 inSlot = 0) override;
-			//--------------------------------------------------
-			/// Unbind
-			///
-			/// Unbind this texture from a slot if it is bound
-			//--------------------------------------------------
-			void Unbind() override;
-			//--------------------------------------------------
-			/// Get Texture ID
-			///
-			/// @return The GL generated texture handle
-			//--------------------------------------------------
-			GLuint GetTextureID() const;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------
-            /// Has Mip Maps
+            /// Construct the cubemap from the given image data.
+            /// The texture will take ownership of the image data
+            ///
+            /// Order is as follows:
+            /// - Pos X
+            /// - Neg X
+            /// - Pos Y
+            /// - Neg Y
+            /// - Pos Z
+            /// - Neg Z
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture descriptors (6)
+            /// @param Image datas (6)
+            //--------------------------------------------------
+            void Build(const std::array<Rendering::Texture::Descriptor, 6>& in_descs, const std::array<Rendering::Texture::TextureDataUPtr, 6>& in_datas) override;
+			//--------------------------------------------------------------
+            /// Binds this cubemap to the given texture unit allowing it to
+            /// be accessed by the shaders and operations to be performed on it
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture unit
+            //--------------------------------------------------------------
+			void Bind(u32 in_texUnit = 0) override;
+            //--------------------------------------------------------------
+            /// Unbind this cubemap from its current texture unit. This
+            /// means it can no longer be used or changed until rebound.
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------
+			void Unbind() override;
+			//--------------------------------------------------------------
+            /// Future sampling of the cubemap will use the given filter function
+            ///
+            /// @author S Downie
+            ///
+            /// @param Filter mode
+            //--------------------------------------------------------------
+            void SetFilterMode(Rendering::Texture::FilterMode in_mode) override;
+            //--------------------------------------------------------------
+            /// Future sampling of the cubemap will use the given wrap mode
+            ///
+            /// @author S Downie
+            ///
+            /// @param Horizontal wrapping
+            /// @param Vertical wrapping
+            //--------------------------------------------------------------
+			void SetWrapMode(Rendering::Texture::WrapMode in_sMode, Rendering::Texture::WrapMode in_tMode) override;
+            //--------------------------------------------------------------
+            /// Generate mip map levels for the cubemap to reduce
+            /// aliasing. This will bind the cubemap and generate the
+            /// 3 mip map levels.
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------
+            void GenerateMipMaps() override;
+			//--------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return The GL generated cubemap handle
+			//--------------------------------------------------
+			GLuint GetCubemapHandle() const;
+            //--------------------------------------------------
+            /// @author S Downie
             ///
             /// @return Whether or not this was told to use
             ///			mip maps
             //--------------------------------------------------
             bool HasMipMaps() const;
             //--------------------------------------------------
-            /// Get Image Format
+            /// @author S Downie
+            ///
+            /// @param Face Index
+            ///
+            /// - Pos X = 0
+            /// - Neg X = 1
+            /// - Pos Y = 2
+            /// - Neg Y = 3
+            /// - Pos Z = 4
+            /// - Neg Z = 5
             ///
             /// @return The format of the image used to create
-            ///			the texture.
+            ///			the cubemap face.
             //--------------------------------------------------
-            Core::ImageFormat GetImageFormat() const;
+            Core::ImageFormat GetFormat(u32 in_faceIndex) const;
             //--------------------------------------------------
-			/// Set Filter
-			///
-			/// Set the filtering mode
-			/// @param S filter mode
-			/// @param T filter mode
-			//--------------------------------------------------
-			void SetFilter(Rendering::Texture::Filter ineSFilter, Rendering::Texture::Filter ineTFilter) override;
-			//--------------------------------------------------
-			/// Set Wrap Mode
-			///
-			/// Set the texture wrap mode
-			/// @param S wrap mode
-			/// @param T wrap mode
-			//--------------------------------------------------
-			void SetWrapMode(Rendering::Texture::WrapMode inSWrapMode, Rendering::Texture::WrapMode inTWrapMode) override;
-            
-        private:
-            //--------------------------------------------------
-            /// Constructor
+            /// Destroys the cubemap and resets it to the state
+            /// prior to build being called.
             ///
-            /// @param Cubemap manager
+            /// @author S Downie
             //--------------------------------------------------
-            Cubemap(CubemapManager* inpManager);
-            //---------------------------------------------------
-            /// Update Texture Parameters
+            void Destroy();
+            //--------------------------------------------------
+            /// Destructor
             ///
-            /// Update the texture filter and repeat modes
-            //---------------------------------------------------
-            void UpdateTextureParameters();
+            /// @author S Downie
+            //--------------------------------------------------
+			~Cubemap();
+			
+		private:
             
-            friend class CubemapManager;
+            friend Rendering::CubemapUPtr Rendering::Cubemap::Create();
+			//----------------------------------------------------------
+            /// Private constructor to enforce the use of the factory
+            /// method
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+			Cubemap();
+			
+		private:
             
-        private:
+            Rendering::RenderCapabilities* m_renderCapabilities;
+            TextureUnitSystem* m_texUnitSystem;
             
-            GLuint mGLTextureID;
+            GLuint m_cubemapHandle = 0;
             
-            Rendering::Texture::Filter meSFilter;
-			Rendering::Texture::Filter meTFilter;
-			Rendering::Texture::WrapMode meSWrapMode;
-			Rendering::Texture::WrapMode meTWrapMode;
+            Rendering::Texture::FilterMode m_filterMode = Rendering::Texture::FilterMode::k_bilinear;
+            Rendering::Texture::WrapMode m_sWrapMode = Rendering::Texture::WrapMode::k_clamp;
+            Rendering::Texture::WrapMode m_tWrapMode = Rendering::Texture::WrapMode::k_clamp;
             
-            Core::ImageFormat meImageFormat;
+            std::array<Core::ImageFormat, 6> m_formats;
             
-            bool mbHasTextureFilterModeChanged;
-            bool mbHasMipMaps;
-            
-            CubemapManager* mpCubemapManager;
-            Rendering::RenderCapabilities* mpRenderCapabilities;
-		};
+            bool m_hasFilterModeChanged = true;
+            bool m_hasWrapModeChanged = true;
+            bool m_hasMipMaps = false;
+        };
 	}
 }
 

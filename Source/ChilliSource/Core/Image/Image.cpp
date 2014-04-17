@@ -38,6 +38,12 @@ namespace ChilliSource
 		CS_DEFINE_NAMEDTYPE(Image);
     
         //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        ImageUPtr Image::Create()
+        {
+            return ImageUPtr(new Image());
+        }
+        //----------------------------------------------------------------
 		//----------------------------------------------------------------
 		bool Image::IsA(Core::InterfaceIDType in_interfaceId) const
 		{

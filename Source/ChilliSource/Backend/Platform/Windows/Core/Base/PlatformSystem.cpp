@@ -11,6 +11,7 @@
 #include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 
 #include <windows.h>
 
@@ -54,6 +55,7 @@ namespace ChilliSource
 		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
 		{
 			in_application->CreateSystem<OpenGL::GLSLShaderProvider>();
+			in_application->CreateSystem<OpenGL::TextureUnitSystem>();
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------

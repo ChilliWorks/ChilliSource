@@ -1,7 +1,7 @@
 //
-//  TextureProvider.h
+//  CubemapProvider.h
 //  Chilli Source
-//  Created by Scott Downie on 15/04/2014.
+//  Created by Scott Downie on 17/04/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_TEXTURE_TEXTUREPROVIDER_H_
-#define _CHILLISOURCE_RENDERING_TEXTURE_TEXTUREPROVIDER_H_
+#ifndef _CHILLISOURCE_RENDERING_TEXTURE_CUBEMAPPROVIDER_H_
+#define _CHILLISOURCE_RENDERING_TEXTURE_CUBEMAPPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
@@ -37,17 +37,17 @@ namespace ChilliSource
 	namespace Rendering
 	{
         //-------------------------------------------------------
-        /// Factory loader for creating texture resources
-        /// from file. This loader is responsible for loading the
-        /// image data and building the texture.
+        /// Factory loader for creating cubemap resources
+        /// from files. This loader is responsible for loading the
+        /// image data for the 6 faces and building the texture.
         ///
         /// @author S Downie
         //-------------------------------------------------------
-		class TextureProvider final : public Core::ResourceProvider
+		class CubemapProvider final : public Core::ResourceProvider
 		{
 		public:
             
-            CS_DECLARE_NAMEDTYPE(TextureProvider);
+            CS_DECLARE_NAMEDTYPE(CubemapProvider);
             
             //-------------------------------------------------------
             /// Factory method
@@ -56,7 +56,7 @@ namespace ChilliSource
             ///
             /// @return New provider with ownership transferred
             //-------------------------------------------------------
-            static TextureProviderUPtr Create();
+            static CubemapProviderUPtr Create();
 			//-------------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -80,8 +80,12 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
             //----------------------------------------------------------------------------
-			/// Loads the image and generate the texture via the output resource.
+			/// Loads the 6 face images and generate the cubemap via the output resource.
             /// Check the resource load state for success or failure.
+            ///
+            /// Note: The path given is the path to a theoretical image and the face
+            /// indices are appended i.e. myCubemap.png is actually myCubemap1.png,
+            /// myCubemap2.png, etc.
             ///
             /// @author S Downie
 			///
@@ -91,8 +95,12 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
-			/// Loads the image on a background thread and generate the texture via the output resource.
+			/// Loads the 6 face images on a background thread and generate the cubemap via the output resource.
             /// Delegate is called on completion. Check the resource load state for success or failure
+            ///
+            /// Note: The path given is the path to a theoretical image and the face
+            /// indices are appended i.e. myCubemap.png is actually myCubemap1.png,
+            /// myCubemap2.png, etc.
             ///
             /// @author S Downie
 			///
@@ -109,7 +117,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //----------------------------------------------------------------------------
-            TextureProvider() = default;
+            CubemapProvider() = default;
             //----------------------------------------------------------------------------
             /// Called when the system is initialised. Retrieves the image providers
             /// to delegate image loading to
@@ -124,7 +132,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             void OnDestroy() override;
             //----------------------------------------------------------------------------
-			/// Does the heavy lifting for the 2 create methods. The building of the texture
+			/// Does the heavy lifting for the 2 create methods. The building of the cubemap
             /// is always done on the main thread
             ///
             /// @author S Downie
@@ -134,7 +142,7 @@ namespace ChilliSource
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void LoadTexture(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource);
+			void LoadCubemap(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource);
             
         private:
             

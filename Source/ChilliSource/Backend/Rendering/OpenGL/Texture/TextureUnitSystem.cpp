@@ -62,7 +62,7 @@ namespace ChilliSource
         //---------------------------------------------------
         void TextureUnitSystem::Bind(const Cubemap* in_cubemap, u32 in_unit)
         {
-            Bind(GL_TEXTURE_2D, (const void*)in_cubemap, in_cubemap->GetTextureHandle(), in_unit);
+            Bind(GL_TEXTURE_CUBE_MAP, (const void*)in_cubemap, in_cubemap->GetCubemapHandle(), in_unit);
         }
         //---------------------------------------------------
         //---------------------------------------------------

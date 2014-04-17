@@ -116,18 +116,6 @@ namespace ChilliSource
             /// @author S Downie
             //-------------------------------------------------------
             ETC1ImageProvider() = default;
-            //----------------------------------------------------
-            /// Actually performs the heavy lifting for the 2
-            /// create methods
-            ///
-            /// @author S Downie
-            ///
-            /// @param The storage location.
-            /// @param The filepath.
-            /// @param Completion delegate
-            /// @param [Out] The output resource.
-            //----------------------------------------------------
-			void LoadImage(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource);
         };
     }
 }

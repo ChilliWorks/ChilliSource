@@ -11,6 +11,7 @@
 
 #include <ChilliSource/Backend/Platform/Windows/Core/Image/LibPng/png.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Image/ImageFormat.h>
 
 //----------------------------------------------------------------------------------
 /// Read Png Data
@@ -154,6 +155,18 @@ namespace ChilliSource
 			return mpData;
 		}
 		//----------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------
+		u32 PngImage::GetDataSize() const
+		{
+			return m_dataSize;
+		}
+		//----------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------
+		Core::ImageFormat PngImage::GetImageFormat() const
+		{
+			return m_format;
+		}
+		//----------------------------------------------------------------------------------
 		/// Load with lib png
 		///
 		/// Loads the png data using lib png
@@ -248,7 +261,8 @@ namespace ChilliSource
 
 			//read the image into the data buffer
 			s32 dwRowBytes = png_get_rowbytes(pPng, pInfo);
-			mpData = new u8[dwRowBytes * udwHeight];
+			m_dataSize = dwRowBytes * udwHeight;
+			mpData = new u8[m_dataSize];
 
 			for (s32 pass = 0; pass < number_of_passes; pass++)
 			{
@@ -262,6 +276,30 @@ namespace ChilliSource
 			//store the width and height
 			mdwWidth = (s32)udwWidth;
 			mdwHeight = (s32)udwHeight;
+
+			//-------- Get the image format
+			png_get_IHDR(pPng, pInfo, &udwWidth, &udwHeight, &dwBitDepth, &dwColorType, &dwInterlaceType, &dwCompressionMethod, &dwFilterMethod);
+			switch (dwColorType)
+			{
+			case PNG_COLOR_TYPE_GRAY:
+				m_format = Core::ImageFormat::k_Lum8;
+				break;
+			case PNG_COLOR_TYPE_GRAY_ALPHA:
+				m_format = Core::ImageFormat::k_LumA88;
+				break;
+			case PNG_COLOR_TYPE_RGB:
+				m_format = Core::ImageFormat::k_RGB888;
+				break;
+			case PNG_COLOR_TYPE_RGB_ALPHA:
+				m_format = Core::ImageFormat::k_RGBA8888;
+				break;
+			default:
+				CS_LOG_ERROR("Trying to load a PNG with an unknown colour format!");
+				png_read_end(pPng, nullptr);
+				png_destroy_read_struct(&pPng, &pInfo, (png_infopp)nullptr);
+				return false;
+				break;
+			}
 
 			//end the read
 			png_read_end(pPng, nullptr);

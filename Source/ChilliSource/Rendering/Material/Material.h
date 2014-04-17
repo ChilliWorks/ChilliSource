@@ -114,13 +114,13 @@ namespace ChilliSource
 			///
 			/// @param Cubemap
 			//----------------------------------------------------------
-			void SetCubemap(const CubemapSPtr& in_cubemap);
+			void SetCubemap(const CubemapCSPtr& in_cubemap);
 			//----------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return Cubemap or null
 			//----------------------------------------------------------
-			const CubemapSPtr& GetCubemap() const;
+			const CubemapCSPtr& GetCubemap() const;
 			//----------------------------------------------------------
 			/// @author S Downie
 			///
@@ -390,7 +390,7 @@ namespace ChilliSource
             
             std::vector<TextureCSPtr> m_textures;
             
-            CubemapSPtr m_cubemap;
+            CubemapCSPtr m_cubemap;
             
             std::array<ShaderCSPtr, (u32)ShaderPass::k_total> m_shaders;
 			

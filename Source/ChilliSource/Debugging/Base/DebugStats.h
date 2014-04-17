@@ -35,7 +35,7 @@ namespace ChilliSource
             {
                 if(!mbEnabled) return;
                 
-                mmapEvents[instrType] = ToString(inValue);
+                mmapEvents[instrType] = Core::ToString(inValue);
             }
             //----------------------------------------------------------------------------------
             /// Record Event (String Value)

@@ -223,7 +223,7 @@ namespace ChilliSource
 			//Tell the render system to draw the contents of the buffer
 			inpRenderSystem->ApplyMaterial(mpMaterial, in_shaderPass);
 #ifdef CS_ENABLE_DEBUGSTATS
-            DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
+            Debugging::DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
 #endif
 			inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), Core::Matrix4x4::IDENTITY);
 		}

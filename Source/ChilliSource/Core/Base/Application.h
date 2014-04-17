@@ -485,9 +485,7 @@ namespace ChilliSource
 
 			ScreenOrientation m_defaultOrientation;
             
-            ResourceManagerDispenser* m_resourceManagerDispenser;
             ComponentFactoryDispenser* m_componentFactoryDispenser;
-			std::vector<ResourceProviderOld*> m_ResourceProviderOlds;
 
 			TimeIntervalSecs m_currentAppTime;
             Rendering::FontCSPtr m_defaultFont;

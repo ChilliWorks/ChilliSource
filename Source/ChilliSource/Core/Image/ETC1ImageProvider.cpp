@@ -57,6 +57,82 @@ namespace ChilliSource
                 u16 m_originalWidth;
                 u16 m_originalHeight;
             };
+            //----------------------------------------------------
+            /// Actually performs the heavy lifting for the 2
+            /// create methods
+            ///
+            /// @author S Downie
+            ///
+            /// @param The storage location.
+            /// @param The filepath.
+            /// @param Completion delegate
+            /// @param [Out] The output resource.
+            //----------------------------------------------------
+            void LoadImage(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource)
+            {
+                FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
+                
+                if(pImageFile == nullptr || pImageFile->IsBad() == true)
+                {
+                    out_resource->SetLoadState(Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Task<ResourceSPtr&> task(in_delegate, out_resource);
+                        TaskScheduler::ScheduleMainThreadTask(task);
+                    }
+                    return;
+                }
+                
+                //ETC1 Format is in big endian format. As all the platforms we support are little endian we will have to convert the data to little endian.
+                //read the header.
+                ETC1Header sHeader;
+                pImageFile->Read((s8*)sHeader.m_pkmTag, sizeof(u8) * 6);
+                
+                pImageFile->Read((s8*)&sHeader.m_numberOfMipmaps, sizeof(u16));
+                sHeader.m_numberOfMipmaps = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_numberOfMipmaps));
+                
+                pImageFile->Read((s8*)&sHeader.m_textureWidth, sizeof(u16));
+                sHeader.m_textureWidth = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_textureWidth));
+                
+                pImageFile->Read((s8*)&sHeader.m_textureHeight, sizeof(u16));
+                sHeader.m_textureHeight = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_textureHeight));
+                
+                pImageFile->Read((s8*)&sHeader.m_originalWidth, sizeof(u16));
+                sHeader.m_originalWidth = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_originalWidth));
+                
+                pImageFile->Read((s8*)&sHeader.m_originalHeight, sizeof(u16));
+                sHeader.m_originalHeight = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_originalHeight));
+                
+                //get the size of the rest of the data
+                const u32 kstrHeaderSize = 16;
+                pImageFile->SeekG(0, SeekDir::k_end);
+                u32 dwDataSize = pImageFile->TellG() - kstrHeaderSize;
+                pImageFile->SeekG(kstrHeaderSize, SeekDir::k_beginning);
+                
+                //read the rest of the data
+                u8* pData = new u8[dwDataSize];
+                pImageFile->Read((s8*)pData, dwDataSize);
+                pImageFile->Close();
+                Image::ImageDataUPtr imageData(pData);
+                
+                //setup the output image
+                Image::Descriptor desc;
+                desc.m_format = ImageFormat::k_RGB888;
+                desc.m_compression = ImageCompression::k_ETC1;
+                desc.m_width = sHeader.m_textureWidth;
+                desc.m_height = sHeader.m_textureHeight;
+                desc.m_dataSize = dwDataSize;
+                
+                Image* outpImage = (Image*)out_resource.get();
+                outpImage->Build(desc, std::move(imageData));
+                outpImage->SetLoadState(Resource::LoadState::k_loaded);
+                
+                if(in_delegate != nullptr)
+                {
+                    Task<ResourceSPtr&> task(in_delegate, out_resource);
+                    TaskScheduler::ScheduleMainThreadTask(task);
+                }
+            }
         }
         
         CS_DEFINE_NAMEDTYPE(ETC1ImageProvider);
@@ -95,75 +171,8 @@ namespace ChilliSource
         void ETC1ImageProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource)
         {
             Task<StorageLocation, const std::string&, const ResourceProvider::AsyncLoadDelegate&, ResourceSPtr&>
-            task(this, &ETC1ImageProvider::LoadImage, in_storageLocation, in_filepath, in_delegate, out_resource);
+            task(LoadImage, in_storageLocation, in_filepath, in_delegate, out_resource);
             TaskScheduler::ScheduleTask(task);
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void LoadImage(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource)
-        {
-            FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
-            
-            if(pImageFile == nullptr || pImageFile->IsBad() == true)
-            {
-                out_resource->SetLoadState(Resource::LoadState::k_failed);
-                if(in_delegate != nullptr)
-                {
-                    Task<ResourceSPtr&> task(in_delegate, out_resource);
-                    TaskScheduler::ScheduleMainThreadTask(task);
-                }
-                return;
-            }
-            
-            //ETC1 Format is in big endian format. As all the platforms we support are little endian we will have to convert the data to little endian.
-            //read the header.
-            ETC1Header sHeader;
-            pImageFile->Read((s8*)sHeader.m_pkmTag, sizeof(u8) * 6);
-            
-            pImageFile->Read((s8*)&sHeader.m_numberOfMipmaps, sizeof(u16));
-            sHeader.m_numberOfMipmaps = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_numberOfMipmaps));
-            
-            pImageFile->Read((s8*)&sHeader.m_textureWidth, sizeof(u16));
-            sHeader.m_textureWidth = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_textureWidth));
-            
-            pImageFile->Read((s8*)&sHeader.m_textureHeight, sizeof(u16));
-            sHeader.m_textureHeight = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_textureHeight));
-            
-            pImageFile->Read((s8*)&sHeader.m_originalWidth, sizeof(u16));
-            sHeader.m_originalWidth = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_originalWidth));
-            
-            pImageFile->Read((s8*)&sHeader.m_originalHeight, sizeof(u16));
-            sHeader.m_originalHeight = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_originalHeight));
-            
-            //get the size of the rest of the data
-            const u32 kstrHeaderSize = 16;
-            pImageFile->SeekG(0, SeekDir::k_end);
-            u32 dwDataSize = pImageFile->TellG() - kstrHeaderSize;
-            pImageFile->SeekG(kstrHeaderSize, SeekDir::k_beginning);
-            
-            //read the rest of the data
-            u8* pData = new u8[dwDataSize];
-            pImageFile->Read((s8*)pData, dwDataSize);
-            pImageFile->Close();
-            Image::ImageDataUPtr imageData(pData);
-            
-            //setup the output image
-            Image::Descriptor desc;
-            desc.m_format = ImageFormat::k_RGBA8888;
-            desc.m_compression = ImageCompression::k_ETC1;
-            desc.m_width = sHeader.m_textureWidth;
-            desc.m_height = sHeader.m_textureHeight;
-            desc.m_dataSize = dwDataSize;
-            
-            Image* outpImage = (Image*)out_resource.get();
-            outpImage->Build(desc, std::move(imageData));
-            outpImage->SetLoadState(Resource::LoadState::k_loaded);
-            
-            if(in_delegate != nullptr)
-            {
-                Task<ResourceSPtr&> task(in_delegate, out_resource);
-                TaskScheduler::ScheduleMainThreadTask(task);
-            }
         }
     }
 }

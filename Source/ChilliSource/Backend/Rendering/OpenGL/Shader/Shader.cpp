@@ -28,6 +28,8 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 
 #include <array>
@@ -363,21 +365,30 @@ namespace ChilliSource
         //----------------------------------------------------------
         void Shader::Destroy()
         {
-            if(m_vertexShaderId > 0)
-			{
-				glDetachShader(m_programId, m_vertexShaderId);
-				glDeleteShader(m_vertexShaderId);
-			}
-			if(m_fragmentShaderId > 0)
-			{
-				glDetachShader(m_programId, m_fragmentShaderId);
-				glDeleteShader(m_fragmentShaderId);
-			}
-			if(m_programId > 0)
-			{
-				glDeleteProgram(m_programId);
-			}
+            bool hasContext = static_cast<RenderSystem*>(Core::Application::Get()->GetRenderSystem())->HasContext();
             
+            //If the context has already been destroyed then the shaders have already been destroyed
+            if(hasContext == true)
+            {
+                if(m_vertexShaderId > 0)
+                {
+                    glDetachShader(m_programId, m_vertexShaderId);
+                    glDeleteShader(m_vertexShaderId);
+                }
+                if(m_fragmentShaderId > 0)
+                {
+                    glDetachShader(m_programId, m_fragmentShaderId);
+                    glDeleteShader(m_fragmentShaderId);
+                }
+                if(m_programId > 0)
+                {
+                    glDeleteProgram(m_programId);
+                }
+            }
+            
+            m_vertexShaderId = 0;
+            m_fragmentShaderId = 0;
+            m_programId = 0;
             m_attribHandles.clear();
             m_uniformHandles.clear();
         }

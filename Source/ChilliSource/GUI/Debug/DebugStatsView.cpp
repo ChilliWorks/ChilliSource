@@ -11,18 +11,20 @@
 
 #include <ChilliSource/GUI/Debug/DebugStatsView.h>
 
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Image/ImageCompression.h>
+#include <ChilliSource/Core/Image/ImageFormat.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 
-#include <ChilliSource/Rendering/Texture/TextureManager.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 
 namespace ChilliSource
 {
 	namespace GUI
 	{
-		DebugStatsViewPtr DebugStatsView::pInstance;
+		DebugStatsViewSPtr DebugStatsView::pInstance;
 		
 		DebugStatsView::DebugStatsView() : mfTextScale(1.0f)
 		{
@@ -30,7 +32,7 @@ namespace ChilliSource
             
             const f32 kfCurrentLetterHeight = Core::Application::Get()->GetDefaultFont()->GetLineHeight();
             
-            mfTextScale = kfBestFitTextSize/kfCurrentLetterHeight   ;
+            mfTextScale = kfBestFitTextSize/kfCurrentLetterHeight;
             
 			CS_DEFINE_DEBUGSTAT(FPS);
 			CS_DEFINE_DEBUGSTAT(FrameTime);
@@ -51,7 +53,26 @@ namespace ChilliSource
 			SetOffsetFromParentAlignment(0.0f, 0.0f, 10.0f, -10.0f);
 			SetLocalAlignment(Rendering::AlignmentAnchor::k_topLeft);
 			
-			SetTexture(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>()->GetDefaultTexture());
+            Rendering::TextureCSPtr bgTex = Core::Application::Get()->GetResourcePool()->GetResource<Rendering::Texture>("_GUIBackgroundTex");
+            if(bgTex == nullptr)
+            {
+                const u32 k_numPixels = 4;
+                const u32 k_numBytesPerPixel = 4;
+                Rendering::Texture::Descriptor desc;
+                desc.m_width = 2;
+                desc.m_height = 2;
+                desc.m_format = Core::ImageFormat::k_RGBA8888;
+                desc.m_compression = Core::ImageCompression::k_none;
+                desc.m_dataSize = k_numPixels * k_numBytesPerPixel;
+                u8* data = new u8[desc.m_dataSize];
+                memset(data, 255, desc.m_dataSize);
+                
+                Rendering::TextureSPtr texture = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_GUIBackgroundTex");
+                texture->Build(desc, Rendering::Texture::TextureDataUPtr(data));
+                bgTex = texture;
+            }
+            
+			SetTexture(bgTex);
 			SetColour(Core::Colour(0.41f, 0.41f, 0.41f, 0.8f));
 			
 			u32 i = 0;
@@ -74,11 +95,11 @@ namespace ChilliSource
             CS_SET_DEBUGSTAT(GUI);
         }
 		
-		const DebugStatsViewPtr& DebugStatsView::GetSingletonPtr()
+		const DebugStatsViewSPtr& DebugStatsView::GetSingletonPtr()
 		{
             if(!pInstance)
             {
-                pInstance = DebugStatsViewPtr(new DebugStatsView());
+                pInstance = DebugStatsViewSPtr(new DebugStatsView());
             }
             
 			return pInstance;

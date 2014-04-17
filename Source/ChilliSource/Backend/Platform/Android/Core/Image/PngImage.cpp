@@ -11,6 +11,7 @@
 
 #include <ChilliSource/Backend/Platform/Android/Core/Image/LibPng/png.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Image/ImageFormat.h>
 
 namespace ChilliSource
 {
@@ -54,18 +55,18 @@ namespace ChilliSource
 			mdwHeight = -1;
 			mdwWidth = -1;
 			mpData = nullptr;
-			meFormat = Core::Image::Format::k_RGBA8888;
+			meFormat = Core::ImageFormat::k_RGBA8888;
 		}
 		//----------------------------------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------------------------------
-		PngImage::PngImage(Core::StorageLocation ineStorageLocation, std::string instrFilename)
+		PngImage::PngImage(Core::StorageLocation ineStorageLocation, const std::string& instrFilename)
 		{
 			mbIsLoaded = false;
 			mdwHeight = -1;
 			mdwWidth = -1;
 			mpData = nullptr;
-			meFormat = Core::Image::Format::k_RGBA8888;
+			meFormat = Core::ImageFormat::k_RGBA8888;
 
 			Load(ineStorageLocation, instrFilename);
 		}
@@ -82,7 +83,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Load
 		//----------------------------------------------------------------------------------
-		void PngImage::Load(Core::StorageLocation ineStorageLocation, std::string instrFilename)
+		void PngImage::Load(Core::StorageLocation ineStorageLocation, const std::string& instrFilename)
 		{
 			//create the file stream
 			ChilliSource::Core::FileStreamSPtr stream = ChilliSource::Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrFilename, ChilliSource::Core::FileMode::k_readBinary);
@@ -147,9 +148,15 @@ namespace ChilliSource
 			return mpData;
 		}
 		//----------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------
+		u32 PngImage::GetDataSize() const
+		{
+			return m_dataSize;
+		}
+		//----------------------------------------------------------------------------------
 		/// Get Image Format
 		//----------------------------------------------------------------------------------
-		Core::Image::Format PngImage::GetImageFormat()
+		Core::ImageFormat PngImage::GetImageFormat()
 		{
 			return meFormat;
 		}
@@ -246,7 +253,8 @@ namespace ChilliSource
 
 			//read the image into the data buffer
 			int dwRowBytes = png_get_rowbytes(pPng, pInfo);
-			mpData = new u8[dwRowBytes * udwHeight];
+			m_dataSize = dwRowBytes * udwHeight;
+			mpData = new u8[m_dataSize];
 
 			for (u32 pass = 0; pass < number_of_passes; pass++)
 			{
@@ -265,16 +273,16 @@ namespace ChilliSource
 			switch (dwColorType)
 			{
 			case PNG_COLOR_TYPE_GRAY:
-				meFormat = Core::Image::Format::k_Lum8;
+				meFormat = Core::ImageFormat::k_Lum8;
 				break;
 			case PNG_COLOR_TYPE_GRAY_ALPHA:
-				meFormat = Core::Image::Format::k_LumA88;
+				meFormat = Core::ImageFormat::k_LumA88;
 				break;
 			case PNG_COLOR_TYPE_RGB:
-				meFormat = Core::Image::Format::k_RGB888;
+				meFormat = Core::ImageFormat::k_RGB888;
 				break;
 			case PNG_COLOR_TYPE_RGB_ALPHA:
-				meFormat = Core::Image::Format::k_RGBA8888;
+				meFormat = Core::ImageFormat::k_RGBA8888;
 				break;
 			default:
 				CS_LOG_ERROR("Trying to load a PNG with an unknown colour format!");
@@ -293,124 +301,6 @@ namespace ChilliSource
 			inStream->Close();
 
 			return true;
-		}
-		//----------------------------------------------------------------------------------
-		/// Convert Format From RGB888 To LUM8
-		//----------------------------------------------------------------------------------
-		void PngImage::ConvertFormatFromRGB888ToLUM8()
-		{
-			const u32 udwBytesPerPixel = 2;
-			u32 udwArea = mdwWidth * mdwHeight;
-
-			if (meFormat != Core::Image::Format::k_RGB888)
-			{
-				CS_LOG_ERROR("Trying to convert from RGB888 to LUM8 but current format is not RGB888!");
-				return;
-			}
-
-			u8* pubyBitmapData8 = (u8*)calloc(udwArea, udwBytesPerPixel);
-			PixelRGB888* pPixel24 = (PixelRGB888*)mpData;
-			PixelLUM8* pPixel8 = (PixelLUM8*)pubyBitmapData8;
-
-			for(u32 i=0; i<udwArea; ++i, ++pPixel24, ++pPixel8)
-			{
-				//read the first byte as the greyscale colour
-				pPixel8->mbyLum = pPixel24->mbyR;
-			}
-
-
-			CS_SAFEDELETE_ARRAY(mpData);
-			mpData = (u8*)pubyBitmapData8;
-			meFormat = Core::Image::Format::k_Lum8;
-		}
-		//----------------------------------------------------------------------------------
-		/// Convert Format From RGB8888 To LUMA88
-		//----------------------------------------------------------------------------------
-		void PngImage::ConvertFormatFromRGB8888ToLUMA88()
-		{
-			const u32 udwBytesPerPixel = 2;
-			u32 udwArea = mdwWidth * mdwHeight;
-
-			if (meFormat != Core::Image::Format::k_RGBA8888)
-			{
-				CS_LOG_ERROR("Trying to convert from RGBA8888 to LUMA88 but current format is not RGBA8888!");
-				return;
-			}
-
-			u8* pubyBitmapData88 = (u8*)calloc(udwArea, udwBytesPerPixel);
-			PixelRGBA8888* pPixel32 = (PixelRGBA8888*)mpData;
-			PixelLUMA88* pPixel16 = (PixelLUMA88*)pubyBitmapData88;
-
-			for(u32 i=0; i<udwArea; ++i, ++pPixel32, ++pPixel16)
-			{
-				pPixel16->mbyLum = pPixel32->mbyR;
-				pPixel16->mbyA = pPixel32->mbyA;
-			}
-
-			CS_SAFEDELETE_ARRAY(mpData);
-			mpData = (u8*)pubyBitmapData88;
-			meFormat = Core::Image::Format::k_LumA88;
-		}
-		//----------------------------------------------------------------------------------
-		/// Convert Format From RGB888 To RGB565
-		//----------------------------------------------------------------------------------
-		void PngImage::ConvertFormatFromRGB888ToRGB565()
-		{
-			const u32 udwBytesPerPixel = 2;
-			u32 udwArea = mdwWidth * mdwHeight;
-
-			if (meFormat != Core::Image::Format::k_RGB888)
-			{
-				CS_LOG_ERROR("Trying to convert from RGB888 to RGB565 but current format is not RGB888!");
-				return;
-			}
-
-			u8* pubyBitmapData565 = (u8*)calloc(udwArea, udwBytesPerPixel);
-			PixelRGB888* pPixel24 = (PixelRGB888*)mpData;
-			PixelRGB545* pPixel16 = (PixelRGB545*)pubyBitmapData565;
-
-			for(u32 i=0; i<udwArea; ++i, ++pPixel24, ++pPixel16)
-			{
-				pPixel16->mwData =
-						((((pPixel24->mbyR) & 0xFF) >> 3) << 11) |
-						((((pPixel24->mbyG) & 0xFF) >> 2) <<  5) |
-						((((pPixel24->mbyB) & 0xFF) >> 3) <<  0);
-			}
-
-			CS_SAFEDELETE_ARRAY(mpData);
-			mpData = (u8*)pubyBitmapData565;
-			meFormat = Core::Image::Format::k_RGB565;
-		}
-		//----------------------------------------------------------------------------------
-		/// Convert Format From RGBA8888 To RGBA4444
-		//----------------------------------------------------------------------------------
-		void PngImage::ConvertFormatFromRGBA8888ToRGBA4444()
-		{
-			const u32 udwBytesPerPixel = 2;
-			u32 udwArea = mdwWidth * mdwHeight;
-
-			if (meFormat != Core::Image::Format::k_RGBA8888)
-			{
-				CS_LOG_ERROR("Trying to convert from RGBA8888 to RGBA4444 but current format is not RGBA8888!");
-				return;
-			}
-
-			u8* pubyBitmapData4444 = (u8*)calloc(udwArea, udwBytesPerPixel);
-			u32* pPixel32 = (u32*)mpData;
-			u16* pPixel16 = (u16*)pubyBitmapData4444;
-
-			for(u32 i=0; i<udwArea; ++i, ++pPixel32)
-			{
-				*pPixel16++ =
-				((((*pPixel32 >> 0) & 0xFF) >> 4) << 12) | // R
-				((((*pPixel32 >> 8) & 0xFF) >> 4) << 8) | // G
-				((((*pPixel32 >> 16) & 0xFF) >> 4) << 4) | // B
-				((((*pPixel32 >> 24) & 0xFF) >> 4) << 0); // A
-			}
-
-			CS_SAFEDELETE_ARRAY(mpData);
-			mpData = (u8*)pubyBitmapData4444;
-			meFormat = Core::Image::Format::k_RGBA4444;
 		}
 	}
 }

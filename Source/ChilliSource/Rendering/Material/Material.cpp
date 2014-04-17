@@ -112,7 +112,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Material::SetCubemap(const CubemapSPtr& in_cubemap)
+        void Material::SetCubemap(const CubemapCSPtr& in_cubemap)
         {
             m_cubemap = in_cubemap;
             
@@ -120,7 +120,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        const CubemapSPtr& Material::GetCubemap() const
+        const CubemapCSPtr& Material::GetCubemap() const
         {
             return m_cubemap;
         }

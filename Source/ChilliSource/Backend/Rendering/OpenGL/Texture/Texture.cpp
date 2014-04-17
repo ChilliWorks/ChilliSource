@@ -29,6 +29,7 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
@@ -165,7 +166,7 @@ namespace ChilliSource
 #ifndef CS_TARGETPLATFORM_ANDROID
                 CS_LOG_FATAL("ETC1 compression is only supported on Android");
 #endif
-                CS_ASSERT(in_format == Core::ImageFormat::k_RGB888, "ETC1 only supports RGBA image format");
+                CS_ASSERT(in_format == Core::ImageFormat::k_RGB888, "ETC1 only supports RGB image format");
                 
 #ifdef CS_TARGETPLATFORM_ANDROID
                 glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_OES, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
@@ -242,7 +243,8 @@ namespace ChilliSource
 #endif
             }
         }
-		
+        
+        CS_DEFINE_NAMEDTYPE(Texture);
 		//---------------------------------------------------------------
 		//---------------------------------------------------------------
 		Texture::Texture()
@@ -390,12 +392,15 @@ namespace ChilliSource
             m_sWrapMode = WrapMode::k_clamp;
             m_tWrapMode = WrapMode::k_clamp;
             
-            if(m_texHandle > 0)
+            //If the context has already been destroyed then the cubemap has already been destroyed
+            bool hasContext = static_cast<RenderSystem*>(Core::Application::Get()->GetRenderSystem())->HasContext();
+            if(hasContext == true && m_texHandle > 0)
             {
                 Unbind();
                 glDeleteTextures(1, &m_texHandle);
-                m_texHandle = 0;
             }
+            
+            m_texHandle = 0;
         }
 		//--------------------------------------------------
 		//--------------------------------------------------

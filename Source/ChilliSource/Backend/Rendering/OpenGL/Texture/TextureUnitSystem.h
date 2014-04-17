@@ -107,7 +107,7 @@ namespace ChilliSource
             void Clear();
 
         private:
-            friend class Application;
+            friend class Core::Application;
             //----------------------------------------------------
 			/// Creates a new instance of this system.
             ///

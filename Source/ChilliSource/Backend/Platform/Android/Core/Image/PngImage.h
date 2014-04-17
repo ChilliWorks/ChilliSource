@@ -89,7 +89,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------------------------------------
-			PngImage(Core::StorageLocation ineStorageLocation, std::string instrFilename);
+			PngImage(Core::StorageLocation ineStorageLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ namespace ChilliSource
 			/// @param The storage location to load from.
 			/// @param The file path.
 			//----------------------------------------------------------------------------------
-			void Load(Core::StorageLocation ineStorageLocation, std::string instrFilename);
+			void Load(Core::StorageLocation ineStorageLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Release
 			///
@@ -135,35 +135,17 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------------
 			u8 * GetImageData();
 			//----------------------------------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return Size of image data in bytes
+			//----------------------------------------------------------------------------------
+			u32 GetDataSize() const;
+			//----------------------------------------------------------------------------------
 			/// Get Image Format
 			///
 			/// @return the image format
 			//----------------------------------------------------------------------------------
-			Core::Image::Format GetImageFormat();
-			//----------------------------------------------------------------------------------
-			/// Convert Format From RGB888 To LUM8
-			///
-			/// Changes the image data from RGB888 LUM8
-			//----------------------------------------------------------------------------------
-			void ConvertFormatFromRGB888ToLUM8();
-			//----------------------------------------------------------------------------------
-			/// Convert Format From RGB8888 To LUMA88
-			///
-			/// Changes the image data from RGB8888 LUMA88
-			//----------------------------------------------------------------------------------
-			void ConvertFormatFromRGB8888ToLUMA88();
-			//----------------------------------------------------------------------------------
-			/// Convert Format From RGB888 To RGB565
-			///
-			/// Changes the image data from RGB888 RGB565
-			//----------------------------------------------------------------------------------
-			void ConvertFormatFromRGB888ToRGB565();
-			//----------------------------------------------------------------------------------
-			/// Convert Format From RGBA8888 To RGBA4444
-			///
-			/// Changes the image data from RGBA8888 RGBA4444
-			//----------------------------------------------------------------------------------
-			void ConvertFormatFromRGBA8888ToRGBA4444();
+			Core::ImageFormat GetImageFormat();
 		protected:
 			//----------------------------------------------------------------------------------
 			/// Load with lib png
@@ -178,7 +160,8 @@ namespace ChilliSource
 			s32 mdwHeight;
 			s32 mdwWidth;
 			u8 * mpData;
-			Core::Image::Format meFormat;
+			Core::ImageFormat meFormat;
+			u32 m_dataSize = 0;
 		};
 	}
 }

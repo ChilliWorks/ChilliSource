@@ -180,7 +180,7 @@ namespace ChilliSource
 			
 			mpMeshBuffer->Bind();
 #ifdef CS_ENABLE_DEBUGSTATS
-            DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
+            Debugging::DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
 #endif
             if(mpMeshBuffer->GetIndexCount() > 0)
             {

@@ -132,13 +132,16 @@ namespace ChilliSource
                 if(!maRenderCommands.empty())
                 {
                     RenderCommand &sLastCommand = maRenderCommands.back();
-                    if(sLastCommand.Material.IsTransparent())
+                    if(sLastCommand.m_material != nullptr)
                     {
-                        DebugStats::AddToEvent("Sprites_Trans", (u32)maSpriteCache.size());
-                    }
-                    else
-                    {
-                        DebugStats::AddToEvent("Sprites", (u32)maSpriteCache.size());
+                        if(sLastCommand.m_material->IsTransparencyEnabled())
+                        {
+                            Debugging::DebugStats::AddToEvent("Sprites_Trans", (u32)maSpriteCache.size());
+                        }
+                        else
+                        {
+                            Debugging::DebugStats::AddToEvent("Sprites", (u32)maSpriteCache.size());
+                        }
                     }
                 }
 #endif

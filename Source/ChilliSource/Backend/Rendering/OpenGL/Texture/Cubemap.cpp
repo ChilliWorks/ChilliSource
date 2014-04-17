@@ -28,13 +28,12 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/CubemapManager.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Image/ImageFormatConverter.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
-#include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
 namespace ChilliSource
 {
@@ -42,343 +41,361 @@ namespace ChilliSource
 	{
         namespace
         {
-            //--------------------------------------------------
-            /// Format Converter
+            //---------------------------------------------------
+            /// Apply the currently set wrap mode to the cubemap.
+            /// Requires that the cubemap is bound.
             ///
-            /// @param MoFlow image format
-            /// @return GL image format
-            //--------------------------------------------------
-            GLenum FormatConverter(Core::ImageFormat ineFormat)
+            /// @author S Downie
+            ///
+            /// @param Horizontal wrap mode
+            /// @param Vertical wrap mode
+            //---------------------------------------------------
+            void ApplyWrapMode(Rendering::Texture::WrapMode in_smode, Rendering::Texture::WrapMode in_tmode)
             {
-                switch(ineFormat)
+                switch(in_smode)
                 {
-                    default:
-                    case Core::ImageFormat::k_RGBA8888:
-                        return GL_RGBA;
+                    case Rendering::Texture::WrapMode::k_clamp:
+                        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
                         break;
-                    case Core::ImageFormat::k_RGB888:
-                        return GL_RGB;
+                    case Rendering::Texture::WrapMode::k_repeat:
+                        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);
                         break;
-                    case Core::ImageFormat::k_RGBA4444:
-                        return GL_RGBA;
+                };
+                switch(in_tmode)
+                {
+                    case Rendering::Texture::WrapMode::k_clamp:
+                        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
                         break;
-                    case Core::ImageFormat::k_RGB565:
-                        return GL_RGB;
-                        break;
-                    case Core::ImageFormat::k_LumA88:
-                        return GL_LUMINANCE_ALPHA;
-                        break;
-                    case Core::ImageFormat::k_Lum8:
-                        return GL_LUMINANCE;
+                    case Rendering::Texture::WrapMode::k_repeat:
+                        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT);
                         break;
                 };
             }
-            //--------------------------------------------------
-            /// Type Converter
+            //---------------------------------------------------
+            /// Apply the currently set filter mode to the cubemap.
+            /// Requires that the cubemap is bound.
             ///
-            /// @param MoFlow image format
-            /// @return GL image type
-            //--------------------------------------------------
-            GLenum TypeConverter(Core::ImageFormat ineFormat)
-            {
-                switch(ineFormat)
-                {
-                    default:
-                    case Core::ImageFormat::k_RGBA8888:
-                        return GL_UNSIGNED_BYTE;
-                        break;
-                    case Core::ImageFormat::k_RGB888:
-                        return GL_UNSIGNED_BYTE;
-                        break;
-                    case Core::ImageFormat::k_RGBA4444:
-                        return GL_UNSIGNED_SHORT_4_4_4_4;
-                        break;
-                    case Core::ImageFormat::k_RGB565:
-                        return GL_UNSIGNED_SHORT_5_6_5;
-                        break;
-                    case Core::ImageFormat::k_LumA88:
-                        return GL_UNSIGNED_BYTE;
-                        break;
-                    case Core::ImageFormat::k_Lum8:
-                        return GL_UNSIGNED_BYTE;
-                        break;
-                };
-            }
-            //--------------------------------------------------
-            /// Cubemap Image 2D
+            /// @author S Downie
             ///
-            /// @param Array of 6 images
-            //--------------------------------------------------
-            void CubemapImage2D(const std::vector<Core::ResourceOldSPtr>& inapSourceImages)
+            /// @param Filter mode
+            /// @param Whether mip-mapping is enabled
+            //---------------------------------------------------
+            void ApplyFilterMode(Rendering::Texture::FilterMode in_mode, bool in_hasMipMaps)
             {
-                for(u32 i=0; i<6; ++i)
+                if(in_hasMipMaps == false)
                 {
-                    Core::Image* pSourceImage = (Core::Image*)inapSourceImages[i].get();
-                    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, FormatConverter(pSourceImage->GetFormat()), pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0,
-                                 FormatConverter(pSourceImage->GetFormat()), TypeConverter(pSourceImage->GetFormat()), pSourceImage->GetData());
+                    switch(in_mode)
+                    {
+                        case Rendering::Texture::FilterMode::k_nearestNeighbour:
+                            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                            break;
+                        case Rendering::Texture::FilterMode::k_bilinear:
+                            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                            break;
+                    }
+                }
+                else
+                {
+                    switch(in_mode)
+                    {
+                        case Rendering::Texture::FilterMode::k_nearestNeighbour:
+                            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+                            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                            break;
+                        case Rendering::Texture::FilterMode::k_bilinear:
+                            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+                            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                            break;
+                    }
                 }
             }
-            //--------------------------------------------------
-            /// Cubemap Compressed Image 2D
+            //---------------------------------------------------
+            /// Uploads image data with no compression in the
+            /// given format
             ///
+            /// @author S Downie
+            ///
+            /// @param Cubemap face index
             /// @param Format
-            /// @param Array of 6 images
-            //--------------------------------------------------
-            void CubemapCompressedImage2D(GLenum inFormat, const std::vector<Core::ResourceOldSPtr>& inapSourceImages)
+            /// @param Image width
+            /// @param Image height
+            /// @param Image data
+            //---------------------------------------------------
+            void UploadImageDataNoCompression(u32 in_faceIdx, Core::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData)
             {
-                for(u32 i=0; i<6; ++i)
+                switch(in_format)
                 {
-                    Core::Image* pSourceImage = (Core::Image*)inapSourceImages[i].get();
-                    glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, inFormat, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, pSourceImage->GetDataLength(), pSourceImage->GetData());
-                }
+                    default:
+                    case Core::ImageFormat::k_RGBA8888:
+                        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_RGBA, in_imageWidth, in_imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, in_imageData);
+                        break;
+                    case Core::ImageFormat::k_RGB888:
+                        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_RGB, in_imageWidth, in_imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, in_imageData);
+                        break;
+                    case Core::ImageFormat::k_RGBA4444:
+                        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_RGBA, in_imageWidth, in_imageHeight, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, in_imageData);
+                        break;
+                    case Core::ImageFormat::k_RGB565:
+                        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_RGB, in_imageWidth, in_imageHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, in_imageData);
+                        break;
+                    case Core::ImageFormat::k_LumA88:
+                        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_LUMINANCE_ALPHA, in_imageWidth, in_imageHeight, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, in_imageData);
+                        break;
+                    case Core::ImageFormat::k_Lum8:
+                        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_LUMINANCE, in_imageWidth, in_imageHeight, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, in_imageData);
+                        break;
+                };
+            }
+            //---------------------------------------------------
+            /// Uploads image data with ETC1 compression. ETC1
+            /// only supports RGB images and will aseert on any
+            /// other format. It is currently only supported on
+            /// Android and will assert on other platforms
+            ///
+            /// @author S Downie
+            ///
+            /// @param Cubemap face index
+            /// @param Format
+            /// @param Image width
+            /// @param Image height
+            /// @param Image data
+            /// @param Image data size in bytes
+            //---------------------------------------------------
+            void UploadImageDataETC1(u32 in_faceIdx, Core::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
+            {
+#ifndef CS_TARGETPLATFORM_ANDROID
+                CS_LOG_FATAL("ETC1 compression is only supported on Android");
+#endif
+                CS_ASSERT(in_format == Core::ImageFormat::k_RGB888, "ETC1 only supports RGB image format");
+                
+#ifdef CS_TARGETPLATFORM_ANDROID
+                glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_ETC1_RGB8_OES, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
+#endif
+            }
+            //---------------------------------------------------
+            /// Uploads image data with PVR 2 bits per pixel compression.
+            /// PVR only supports RGB and RGBA images and will aseert on any
+            /// other format. It is currently only supported on
+            /// iOS and will assert on other platforms
+            ///
+            /// @author S Downie
+            ///
+            /// @param Cubemap face index
+            /// @param Format
+            /// @param Image width
+            /// @param Image height
+            /// @param Image data
+            /// @param Image data size in bytes
+            //---------------------------------------------------
+            void UploadImageDataPVR2(u32 in_faceIdx, Core::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
+            {
+#ifndef CS_TARGETPLATFORM_IOS
+                CS_LOG_FATAL("PVR compression is only supported on iOS");
+#endif
+                
+#ifdef CS_TARGETPLATFORM_IOS
+                switch(in_format)
+                {
+                    default:
+                        CS_LOG_FATAL("PVR compression only supports RGB and RGBA image formats");
+                        break;
+                    case Core::ImageFormat::k_RGBA8888:
+                        glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
+                        break;
+                    case Core::ImageFormat::k_RGB888:
+                        glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
+                        break;
+                };
+#endif
+            }
+            //---------------------------------------------------
+            /// Uploads image data with PVR 4 bits per pixel compression.
+            /// PVR only supports RGB and RGBA images and will aseert on any
+            /// other format. It is currently only supported on
+            /// iOS and will assert on other platforms
+            ///
+            /// @author S Downie
+            ///
+            /// @param Cubemap face index
+            /// @param Format
+            /// @param Image width
+            /// @param Image height
+            /// @param Image data
+            /// @param Image data size in bytes
+            //---------------------------------------------------
+            void UploadImageDataPVR4(u32 in_faceIdx, Core::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
+            {
+#ifndef CS_TARGETPLATFORM_IOS
+                CS_LOG_FATAL("PVR compression is only supported on iOS");
+#endif
+                
+#ifdef CS_TARGETPLATFORM_IOS
+                switch(in_format)
+                {
+                    default:
+                        CS_LOG_FATAL("PVR compression only supports RGB and RGBA image formats");
+                        break;
+                    case Core::ImageFormat::k_RGBA8888:
+                        glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
+                        break;
+                    case Core::ImageFormat::k_RGB888:
+                        glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
+                        break;
+                };
+#endif
             }
         }
         
+        CS_DEFINE_NAMEDTYPE(Cubemap);
+        //---------------------------------------------------------------
+		//---------------------------------------------------------------
+		Cubemap::Cubemap()
+		{
+            m_renderCapabilities = Core::Application::Get()->GetSystem<Rendering::RenderCapabilities>();
+            CS_ASSERT(m_renderCapabilities, "Cannot find required system: Render Capabilities.");
+            
+            m_texUnitSystem = Core::Application::Get()->GetSystem<TextureUnitSystem>();
+            CS_ASSERT(m_renderCapabilities, "Cannot find required system: Texture Unit System.");
+		}
         //--------------------------------------------------
-		/// Cosntructor
 		//--------------------------------------------------
-        Cubemap::Cubemap(CubemapManager* inpManager)
-        :mpCubemapManager(inpManager),
-        meSFilter(Rendering::Texture::Filter::k_linear), meTFilter(Rendering::Texture::Filter::k_linear),
-        meSWrapMode(Rendering::Texture::WrapMode::k_clamp), meTWrapMode(Rendering::Texture::WrapMode::k_clamp),
-        mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), meImageFormat(Core::ImageFormat::k_RGBA8888),
-        mpRenderCapabilities(nullptr)
-        {
-            mpRenderCapabilities = Core::Application::Get()->GetSystem<Rendering::RenderCapabilities>();
-        }
-		//--------------------------------------------------
-		/// Init
-		//--------------------------------------------------
-		void Cubemap::Init(const std::vector<Core::ResourceOldSPtr>& inapSourceImages)
+		bool Cubemap::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-            CS_ASSERT(inapSourceImages.size() == 6, "Cubemaps must have 6 face textures");
-            
-			glGenTextures(1, &mGLTextureID);
-			Bind();
-			
-            mbHasMipMaps = false;
-            mbHasTextureFilterModeChanged = true;
-            
-            UpdateTextureParameters();
-
-            Core::Image* pSourceImage = (Core::Image*)inapSourceImages[0].get();
-            meImageFormat = pSourceImage->GetFormat();
-            
-            switch(pSourceImage->GetCompression())
-            {
-                default:
-                case Core::ImageCompression::k_none:
-                    CubemapImage2D(inapSourceImages);
-                    break;
-                case Core::ImageCompression::k_ETC1:
-#ifdef CS_TARGETPLATFORM_ANDROID
-                    CubemapCompressedImage2D(GL_ETC1_RGB8_OES, inapSourceImages);
-#endif
-                    break;
-                case Core::ImageCompression::k_PVR2Bpp:
-#ifndef CS_TARGETPLATFORM_IOS
-                    CS_LOG_FATAL("PVR compressed textures are only supported on iOS.");
-#else
-                    switch(pSourceImage->GetFormat())
-                    {
-                        default:
-                        case Core::ImageFormat::k_RGBA8888:
-                            CubemapCompressedImage2D(GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, inapSourceImages);
-                            break;
-                        case Core::ImageFormat::k_RGB888:
-                            CubemapCompressedImage2D(GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, inapSourceImages);                            
-                            break;
-                    };
-#endif
-                    break;
-                case Core::ImageCompression::k_PVR4Bpp:
-#ifndef CS_TARGETPLATFORM_IOS
-                    CS_LOG_FATAL("PVR compressed textures are only supported on iOS.");
-#else
-                    switch(pSourceImage->GetFormat())
-                    {
-                        default:
-                        case Core::ImageFormat::k_RGBA8888:
-                            CubemapCompressedImage2D(GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, inapSourceImages);
-                            break;
-                        case Core::ImageFormat::k_RGB888:
-                            CubemapCompressedImage2D(GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, inapSourceImages);
-                            break;
-                    };
-#endif
-                    break;
-            };
-            
-            //TODO: This should be moved to GenerateMipMaps method when one is created.
-            if(mbHasMipMaps)
-			{
-                glGenerateMipmap(GL_TEXTURE_CUBE_MAP); 
-			}
+			return in_interfaceId == Cubemap::InterfaceID || in_interfaceId == Rendering::Cubemap::InterfaceID;
 		}
 		//--------------------------------------------------
-		/// Is A
 		//--------------------------------------------------
-		bool Cubemap::IsA(Core::InterfaceIDType inInterfaceID) const
+		void Cubemap::Bind(u32 in_texUnit)
 		{
-			return inInterfaceID == Cubemap::InterfaceID;
-		}
-		//--------------------------------------------------
-		/// Bind
-		//--------------------------------------------------
-		void Cubemap::Bind(u32 inSlot)
-		{
-			if(inSlot > mpRenderCapabilities->GetNumTextureUnits())
-			{
-				CS_LOG_FATAL("Attempting to bind to texture unit not supported on this device: " + Core::ToString(inSlot));
-			}
+			CS_ASSERT(in_texUnit < m_renderCapabilities->GetNumTextureUnits(), "Attempting to bind to texture unit not supported on this device: " + Core::ToString(in_texUnit));
 			
-            Texture::SetActiveTextureSlot(inSlot);
-            Texture::Bind(GL_TEXTURE_CUBE_MAP, inSlot, mGLTextureID, (u8*)this);
-
-            //Check if the filter params have changed
-            if(mbHasTextureFilterModeChanged)
+            m_texUnitSystem->Bind(this, in_texUnit);
+            
+            if(m_hasFilterModeChanged == true)
             {
-                UpdateTextureParameters();
+                ApplyFilterMode(m_filterMode, m_hasMipMaps);
+                m_hasFilterModeChanged = false;
+            }
+            
+            if(m_hasWrapModeChanged == true)
+            {
+                ApplyWrapMode(m_sWrapMode, m_tWrapMode);
+                m_hasWrapModeChanged = false;
             }
 		}
         //--------------------------------------------------
-		/// Set Filter
-		///
-		/// Set the filtering mode
-		/// @param S filter mode
-		/// @param T filter mode
-		//--------------------------------------------------
-		void Cubemap::SetFilter(Rendering::Texture::Filter ineSFilter, Rendering::Texture::Filter ineTFilter)
-		{
-			meSFilter = ineSFilter;
-			meTFilter = ineTFilter;
-            
-            mbHasTextureFilterModeChanged = true;
-		}
-		//--------------------------------------------------
-		/// Set Wrap Mode
-		///
-		/// Set the texture wrap mode
-		/// @param S wrap mode
-		/// @param T wrap mode
-		//--------------------------------------------------
-		void Cubemap::SetWrapMode(Rendering::Texture::WrapMode inSWrapMode, Rendering::Texture::WrapMode inTWrapMode)
-		{
-			meSWrapMode = inSWrapMode;
-			meTWrapMode = inTWrapMode;
-            
-            mbHasTextureFilterModeChanged = true;
-		}
-        //---------------------------------------------------
-        /// Update Texture Parameters
-        //---------------------------------------------------
-        void Cubemap::UpdateTextureParameters()
+        /// GL makes a copy of the data so we can just
+        /// let the incoming data delete itself
+        //--------------------------------------------------
+        void Cubemap::Build(const std::array<Rendering::Texture::Descriptor, 6>& in_descs, const std::array<Rendering::Texture::TextureDataUPtr, 6>& in_datas)
         {
-            mbHasTextureFilterModeChanged = false;
+            Destroy();
             
-            switch(meSWrapMode)
-            {
-                default:
-                case Rendering::Texture::WrapMode::k_clamp:
-                    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-                    break;
-                case Rendering::Texture::WrapMode::k_repeat:
-                    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_S,GL_REPEAT);
-                    break;
-            };
-            switch(meTWrapMode)
-            {
-                default:
-                case Rendering::Texture::WrapMode::k_clamp:
-                    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-                    break;
-                case Rendering::Texture::WrapMode::k_repeat:
-                    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_T,GL_REPEAT);
-                    break;
-            };
+            glGenTextures(1, &m_cubemapHandle);
+            Bind();
             
-            if(!mbHasMipMaps)
+            for(u32 i=0; i<in_descs.size(); ++i)
             {
-                switch (meSFilter)
+                CS_ASSERT(in_descs[i].m_width <= m_renderCapabilities->GetMaxTextureSize() && in_descs[i].m_height <= m_renderCapabilities->GetMaxTextureSize(),
+                          "OpenGL does not support textures of this size on this device (" + Core::ToString(in_descs[i].m_width) + ", " + Core::ToString(in_descs[i].m_height) + ")");
+                
+                m_formats[i] = in_descs[i].m_format;
+                
+                switch(in_descs[i].m_compression)
                 {
-                    default:
-                    case Rendering::Texture::Filter::k_point:
-                        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,  GL_NEAREST);
+                    case Core::ImageCompression::k_none:
+                        UploadImageDataNoCompression(i, in_descs[i].m_format, in_descs[i].m_width, in_descs[i].m_height, in_datas[i].get());
                         break;
-                    case Rendering::Texture::Filter::k_linear:
-                        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,  GL_LINEAR);
+                    case Core::ImageCompression::k_ETC1:
+                        UploadImageDataETC1(i, in_descs[i].m_format, in_descs[i].m_width, in_descs[i].m_height, in_datas[i].get(), in_descs[i].m_dataSize);
                         break;
-                }
-                switch (meTFilter)
-                {
-                    default:
-                    case Rendering::Texture::Filter::k_point:
-                        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                    case Core::ImageCompression::k_PVR2Bpp:
+                        UploadImageDataPVR2(i, in_descs[i].m_format, in_descs[i].m_width, in_descs[i].m_height, in_datas[i].get(), in_descs[i].m_dataSize);
                         break;
-                    case Rendering::Texture::Filter::k_linear:
-                        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                    case Core::ImageCompression::k_PVR4Bpp:
+                        UploadImageDataPVR4(i, in_descs[i].m_format, in_descs[i].m_width, in_descs[i].m_height, in_datas[i].get(), in_descs[i].m_dataSize);
                         break;
-                }
-            }
-            else
-            {
-                switch (meSFilter)
-                {
-                    default:
-                    case Rendering::Texture::Filter::k_point:
-                        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,  GL_NEAREST_MIPMAP_NEAREST);
-                        break;
-                    case Rendering::Texture::Filter::k_linear:
-                        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,  GL_LINEAR_MIPMAP_NEAREST);
-                        break;
-                }
-                switch (meTFilter)
-                {
-                    default:
-                    case Rendering::Texture::Filter::k_point:
-                        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                        break;
-                    case Rendering::Texture::Filter::k_linear:
-                        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                        break;
-                }
+                };
             }
         }
-		//--------------------------------------------------
-		/// Unbind
+        //--------------------------------------------------
 		//--------------------------------------------------
 		void Cubemap::Unbind()
 		{
-            Texture::Unbind((u8*)this);
+            m_texUnitSystem->Unbind(this);
 		}
 		//--------------------------------------------------
-		/// Get Texture ID
 		//--------------------------------------------------
-		GLuint Cubemap::GetTextureID() const 
+		GLuint Cubemap::GetCubemapHandle() const
 		{
-			return mGLTextureID;
+			return m_cubemapHandle;
 		}
         //--------------------------------------------------
-        /// Has Mip Maps
-        //--------------------------------------------------
-        bool Cubemap::HasMipMaps() const
+		//--------------------------------------------------
+		bool Cubemap::HasMipMaps() const
+		{
+			return m_hasMipMaps;
+		}
+		//--------------------------------------------------
+		//--------------------------------------------------
+		Core::ImageFormat Cubemap::GetFormat(u32 in_faceIndex) const
+		{
+            CS_ASSERT(in_faceIndex < 6, "Cubemap face index out of bounds");
+			return m_formats[in_faceIndex];
+		}
+		//--------------------------------------------------
+		//--------------------------------------------------
+		void Cubemap::SetFilterMode(Rendering::Texture::FilterMode in_mode)
+		{
+            m_filterMode = in_mode;
+            
+            m_hasFilterModeChanged = true;
+		}
+		//--------------------------------------------------
+		//--------------------------------------------------
+		void Cubemap::SetWrapMode(Rendering::Texture::WrapMode in_smode, Rendering::Texture::WrapMode in_tmode)
+		{
+			m_sWrapMode = in_smode;
+			m_tWrapMode = in_tmode;
+            
+            m_hasWrapModeChanged = true;
+		}
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        void Cubemap::GenerateMipMaps()
         {
-            return mbHasMipMaps;
+            Bind();
+            glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+            m_hasMipMaps = true;
         }
         //--------------------------------------------------
-        /// Get Image Format
         //--------------------------------------------------
-        Core::ImageFormat Cubemap::GetImageFormat() const
+        void Cubemap::Destroy()
         {
-            return meImageFormat;
+            m_hasFilterModeChanged = true;
+            m_hasWrapModeChanged = true;
+            m_hasMipMaps = false;
+            
+            m_sWrapMode = Rendering::Texture::WrapMode::k_clamp;
+            m_tWrapMode = Rendering::Texture::WrapMode::k_clamp;
+            
+            //If the context has already been destroyed then the cubemap has already been destroyed
+            bool hasContext = static_cast<RenderSystem*>(Core::Application::Get()->GetRenderSystem())->HasContext();
+            if(hasContext == true && m_cubemapHandle > 0)
+            {
+                Unbind();
+                glDeleteTextures(1, &m_cubemapHandle);
+            }
+            
+            m_cubemapHandle = 0;
         }
-        //--------------------------------------------------
-        /// Destructor
-        //--------------------------------------------------
-        Cubemap::~Cubemap()
-        {
-            mpCubemapManager->RemoveRestorableCubemap(this);
-            Texture::Reset(mGLTextureID, (u8*)this);
-        }
+		//--------------------------------------------------
+		//--------------------------------------------------
+		Cubemap::~Cubemap()
+		{
+            Destroy();
+		}
 	}
 }

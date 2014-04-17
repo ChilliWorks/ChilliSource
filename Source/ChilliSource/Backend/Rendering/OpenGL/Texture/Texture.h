@@ -48,6 +48,8 @@ namespace ChilliSource
 		{
 		public:
             
+            CS_DECLARE_NAMEDTYPE(Texture);
+            
             //--------------------------------------------------
 			/// @author S Downie
 			///

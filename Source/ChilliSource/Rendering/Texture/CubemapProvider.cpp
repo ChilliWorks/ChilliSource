@@ -1,7 +1,7 @@
 //
-//  TextureProvider.cpp
+//  CubemapProvider.cpp
 //  Chilli Source
-//  Created by Scott Downie on 15/04/2014.
+//  Created by Scott Downie on 17/04/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,34 +26,36 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Texture/TextureProvider.h>
+#include <ChilliSource/Rendering/Texture/CubemapProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/Cubemap.h>
+
+#include <array>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-        CS_DEFINE_NAMEDTYPE(TextureProvider);
-        
+        CS_DEFINE_NAMEDTYPE(CubemapProvider);
+      
         //-------------------------------------------------------
         //-------------------------------------------------------
-        TextureProviderUPtr TextureProvider::Create()
+        CubemapProviderUPtr CubemapProvider::Create()
         {
-            return TextureProviderUPtr(new TextureProvider());
+            return CubemapProviderUPtr(new CubemapProvider());
         }
 		//-------------------------------------------------------------------------
 		//-------------------------------------------------------------------------
-		bool TextureProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool CubemapProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == TextureProvider::InterfaceID;
+			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CubemapProvider::InterfaceID;
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureProvider::OnInit()
+        void CubemapProvider::OnInit()
         {
             std::vector<Core::ResourceProvider*> resourceProviders;
             Core::Application::Get()->GetSystems(resourceProviders);
@@ -68,13 +70,13 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        Core::InterfaceIDType TextureProvider::GetResourceType() const
+        Core::InterfaceIDType CubemapProvider::GetResourceType() const
         {
-            return Texture::InterfaceID;
+            return Cubemap::InterfaceID;
         }
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		bool TextureProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
+		bool CubemapProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
 		{
             for(u32 i=0; i<m_imageProviders.size(); ++i)
             {
@@ -88,21 +90,21 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+        void CubemapProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
 		{
-            LoadTexture(in_location, in_filePath, nullptr, out_resource);
+            LoadCubemap(in_location, in_filePath, nullptr, out_resource);
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+        void CubemapProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
         {
             Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, Core::ResourceSPtr&>
-            task(this, &TextureProvider::LoadTexture, in_location, in_filePath, in_delegate, out_resource);
+            task(this, &CubemapProvider::LoadCubemap, in_location, in_filePath, in_delegate, out_resource);
             Core::TaskScheduler::ScheduleTask(task);
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureProvider::LoadTexture(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+        void CubemapProvider::LoadCubemap(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
         {
             std::string fileName;
             std::string fileExtension;
@@ -130,46 +132,55 @@ namespace ChilliSource
                 return;
             }
             
-            Core::ResourceSPtr imageResource(Core::Image::Create());
-            imageProvider->CreateResourceFromFile(in_location, in_filePath, imageResource);
-            Core::ImageSPtr image(std::static_pointer_cast<Core::Image>(imageResource));
+            const u32 k_numFaces = 6;
+			//MSVC does not support moving arrays of unique_ptr at this time and therfore we have
+			//to create a shared pointer in order to pass it into the lambda
+			auto imageDataContainer = std::make_shared<std::array<Texture::TextureDataUPtr, k_numFaces>>();
+            std::array<Texture::Descriptor, k_numFaces> descs;
             
-            if(image->GetLoadState() == Core::Resource::LoadState::k_failed)
+            for(u32 i=0; i<k_numFaces; ++i)
             {
-                CS_LOG_ERROR("Failed to load image " + in_filePath);
-                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-                if(in_delegate != nullptr)
+                std::string facePath = fileName + Core::ToString(i) + "." + fileExtension;
+                Core::ResourceSPtr imageResource(Core::Image::Create());
+                imageProvider->CreateResourceFromFile(in_location, facePath, imageResource);
+                Core::ImageSPtr image(std::static_pointer_cast<Core::Image>(imageResource));
+                
+                if(image->GetLoadState() == Core::Resource::LoadState::k_failed)
                 {
-                    Core::Task<Core::ResourceSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+                    CS_LOG_ERROR("Failed to load cubemap face image " + facePath);
+                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Core::Task<Core::ResourceSPtr&> task(in_delegate, out_resource);
+                        Core::TaskScheduler::ScheduleMainThreadTask(task);
+                    }
+                    return;
                 }
-                return;
-            }
-            
-            if(in_delegate == nullptr)
-            {
+                
+				(*imageDataContainer)[i] = image->MoveData();
+                
                 Texture::Descriptor desc;
                 desc.m_width = image->GetWidth();
                 desc.m_height = image->GetHeight();
                 desc.m_format = image->GetFormat();
                 desc.m_compression = image->GetCompression();
                 desc.m_dataSize = image->GetDataSize();
-                Texture* texture = (Texture*)out_resource.get();
-                texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()));
+                
+                descs[i] = std::move(desc);
+            }
+            
+            if(in_delegate == nullptr)
+            {
+                Cubemap* cubemap = (Cubemap*)out_resource.get();
+				cubemap->Build(descs, *imageDataContainer);
                 out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
             }
             else
             {
-                Core::Task<> task([image, in_delegate, out_resource]()
+				Core::Task<> task([descs, imageDataContainer, in_delegate, out_resource]()
                 {
-                    Texture::Descriptor desc;
-                    desc.m_width = image->GetWidth();
-                    desc.m_height = image->GetHeight();
-                    desc.m_format = image->GetFormat();
-                    desc.m_compression = image->GetCompression();
-                    desc.m_dataSize = image->GetDataSize();
-                    Texture* texture = (Texture*)out_resource.get();
-                    texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()));
+                    Cubemap* cubemap = (Cubemap*)out_resource.get();
+					cubemap->Build(descs, *imageDataContainer);
                     out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
                     in_delegate(out_resource);
                 });
@@ -178,7 +189,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureProvider::OnDestroy()
+        void CubemapProvider::OnDestroy()
         {
             m_imageProviders.clear();
             m_imageProviders.shrink_to_fit();

@@ -19,7 +19,6 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/CubemapManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/ContextRestorer.h>
 
@@ -302,8 +301,12 @@ namespace ChilliSource
             /// @param Mesh buffer pointer.
             //----------------------------------------------------------
             void RemoveBuffer(Rendering::MeshBuffer* inpBuffer);
-            
-            inline CubemapManager* GetCubemapManager() {return &mCubemapManager;}
+            //----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return If the GL context still exists
+            //----------------------------------------------------------
+            bool HasContext() const;
 			
 		private:
             
@@ -447,8 +450,6 @@ namespace ChilliSource
 			Core::Matrix4x4 mmatViewProj;
             Core::Matrix4x4 mmatView;
             Core::Vector3 mvCameraPos;
-            
-            CubemapManager mCubemapManager;
 			
             RenderCapabilities* mpRenderCapabilities;
             TextureUnitSystem* m_textureUnitSystem;
@@ -522,6 +523,8 @@ namespace ChilliSource
 #elif defined CS_TARGETPLATFORM_ANDROID
             ContextRestorer m_contextRestorer;
 #endif
+            
+            bool m_hasContext = false;
 		};
 	}
 }

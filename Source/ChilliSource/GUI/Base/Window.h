@@ -116,7 +116,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------
-            void Draw(CanvasRenderer * inpCanvas);
+            void Draw(Rendering::CanvasRenderer * inpCanvas);
 #endif
 			
 			// Granting friendly access for the Scene

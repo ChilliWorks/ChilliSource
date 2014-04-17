@@ -237,6 +237,58 @@ namespace ChilliSource
                 Image* outpImage = (Image*)out_resource.get();
                 outpImage->Build(desc, std::move(imageData));
             }
+            //----------------------------------------------------
+            /// Performs the heavy lifting for the 2 create methods
+            ///
+            /// @author S Downie
+            ///
+            /// @param The storage location.
+            /// @param The filepath.
+            /// @param Completion delegate
+            /// @param [Out] The output resource.
+            //----------------------------------------------------
+            void LoadImage(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource)
+            {
+                FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
+                
+                if(pImageFile == nullptr || pImageFile->IsBad() == true)
+                {
+                    out_resource->SetLoadState(Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Task<ResourceSPtr&> task(in_delegate, out_resource);
+                        TaskScheduler::ScheduleMainThreadTask(task);
+                    }
+                    return;
+                }
+                
+                //Read the byte order mark and ensure it is 123456
+                u32 udwByteOrder = 0;
+                pImageFile->Read((s8*)&udwByteOrder, sizeof(u32));
+                CS_ASSERT(udwByteOrder == 123456, "Endianess not supported");
+                
+                //Read the version
+                u32 udwVersion = 0;
+                pImageFile->Read((s8*)&udwVersion, sizeof(u32));
+                CS_ASSERT(udwVersion >= 2 && udwVersion <= 3, "Only versions 2 and 3 supported");
+                
+                if(3 == udwVersion)
+                {
+                    ReadFileVersion3(pImageFile, out_resource);
+                }
+                else if (2 == udwVersion)
+                {
+                    CS_LOG_WARNING("File \"" + in_filepath + "\" moimage version 2 is deprecated. Please use version 3 which is supported from revision 86 in the tool repository.");
+                    ReadFileVersion2(pImageFile, out_resource);
+                }
+                
+                out_resource->SetLoadState(Resource::LoadState::k_loaded);
+                if(in_delegate != nullptr)
+                {
+                    Task<ResourceSPtr&> task(in_delegate, out_resource);
+                    TaskScheduler::ScheduleMainThreadTask(task);
+                }
+            }
         }
         
         CS_DEFINE_NAMEDTYPE(CSImageProvider);
@@ -275,52 +327,8 @@ namespace ChilliSource
         void CSImageProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource)
         {
             Task<StorageLocation, const std::string&, const ResourceProvider::AsyncLoadDelegate&, ResourceSPtr&>
-            task(this, &CSImageProvider::LoadImage, in_storageLocation, in_filepath, in_delegate, out_resource);
+            task(LoadImage, in_storageLocation, in_filepath, in_delegate, out_resource);
             TaskScheduler::ScheduleTask(task);
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void CSImageProvider::LoadImage(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource)
-        {
-            FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
-            
-            if(pImageFile == nullptr || pImageFile->IsBad() == true)
-            {
-                out_resource->SetLoadState(Resource::LoadState::k_failed);
-                if(in_delegate != nullptr)
-                {
-                    Task<ResourceSPtr&> task(in_delegate, out_resource);
-                    TaskScheduler::ScheduleMainThreadTask(task);
-                }
-                return;
-            }
-            
-            //Read the byte order mark and ensure it is 123456
-            u32 udwByteOrder = 0;
-            pImageFile->Read((s8*)&udwByteOrder, sizeof(u32));
-            CS_ASSERT(udwByteOrder == 123456, "Endianess not supported");
-            
-            //Read the version
-            u32 udwVersion = 0;
-            pImageFile->Read((s8*)&udwVersion, sizeof(u32));
-            CS_ASSERT(udwVersion >= 2 && udwVersion <= 3, "Only versions 2 and 3 supported");
-            
-            if(3 == udwVersion)
-            {
-                ReadFileVersion3(pImageFile, out_resource);
-            }
-            else if (2 == udwVersion)
-            {
-                CS_LOG_WARNING("File \"" + in_filepath + "\" moimage version 2 is deprecated. Please use version 3 which is supported from revision 86 in the tool repository.");
-                ReadFileVersion2(pImageFile, out_resource);
-            }
-            
-            out_resource->SetLoadState(Resource::LoadState::k_loaded);
-            if(in_delegate != nullptr)
-            {
-                Task<ResourceSPtr&> task(in_delegate, out_resource);
-                TaskScheduler::ScheduleMainThreadTask(task);
-            }
         }
     }
 }

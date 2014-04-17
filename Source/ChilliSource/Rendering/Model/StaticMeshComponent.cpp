@@ -17,7 +17,6 @@
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 

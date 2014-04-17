@@ -113,11 +113,11 @@ namespace ChilliSource
         /// Texture
         //------------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Cubemap);
-        CS_FORWARDDECLARE_CLASS(CubemapManager);
         CS_FORWARDDECLARE_CLASS(Texture);
         CS_FORWARDDECLARE_CLASS(TextureAtlas);
         CS_FORWARDDECLARE_CLASS(TextureAtlasProvider);
         CS_FORWARDDECLARE_CLASS(TextureProvider);
+        CS_FORWARDDECLARE_CLASS(CubemapProvider);
 	}
 }
 

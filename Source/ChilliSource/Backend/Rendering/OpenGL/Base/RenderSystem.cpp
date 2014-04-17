@@ -17,7 +17,6 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
@@ -83,8 +82,7 @@ namespace ChilliSource
         mbBlendFunctionLocked(false), mbInvalidateLigthingCache(true),
         mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities)), m_hasContextBeenBackedUp(false)
 		{
-			//Register the GL texture and shader managers
-            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mCubemapManager);
+
 		}
         //----------------------------------------------------------
 		/// Is A
@@ -116,8 +114,12 @@ namespace ChilliSource
 			}
 #endif
             
+            m_hasContext = true;
+            
             CS_ASSERT((Core::Screen::GetRawDimensions() > Core::Vector2::ZERO), "Cannot create and OpenGL ES view with size ZERO");
             
+            m_textureUnitSystem = Core::Application::Get()->GetSystem<TextureUnitSystem>();
+            CS_ASSERT(m_textureUnitSystem, "Cannot find required system: Texture Unit System.");
 
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
             mpRenderCapabilities->DetermineCapabilities();
@@ -167,6 +169,7 @@ namespace ChilliSource
                 
                 m_hasContextBeenBackedUp = true;
             }
+            m_hasContext = false;
 #endif
         }
         //----------------------------------------------------------
@@ -181,11 +184,18 @@ namespace ChilliSource
                 m_contextRestorer.Restore();
                 m_currentShader = nullptr;
                 mpCurrentMaterial = nullptr;
-                mCubemapManager.Restore();
                 m_hasContextBeenBackedUp = false;
             }
+            
+            m_hasContext = true;
 #endif
 		}
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        bool RenderSystem::HasContext() const
+        {
+            return m_hasContext;
+        }
         //----------------------------------------------------------
         /// Set Light
         //----------------------------------------------------------
@@ -331,7 +341,10 @@ namespace ChilliSource
             //Cubemap takes precedence over texture
             if(inMaterial->GetCubemap() != nullptr)
             {
-                inMaterial->GetCubemap()->Bind(mudwNumBoundTextures);
+                //TODO: Once we change the render system this hack will not be required as we will be dealing
+                //with a list of commands and texture handles
+                Cubemap* cubemap = (Cubemap*)inMaterial->GetCubemap().get();
+                cubemap->Bind(mudwNumBoundTextures);
                 out_shader->SetUniform("u_cubemap", (s32)mudwNumBoundTextures);
                 ++mudwNumBoundTextures;
             }
@@ -509,8 +522,8 @@ namespace ChilliSource
         void RenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
-            DebugStats::AddToEvent("DrawCalls", 1u);
-			DebugStats::AddToEvent("Verts", inudwNumVerts);
+            Debugging::DebugStats::AddToEvent("DrawCalls", 1u);
+			Debugging::DebugStats::AddToEvent("Verts", inudwNumVerts);
 #endif
             
 			//Set the new model view matrix based on the camera view matrix and the object matrix
@@ -534,7 +547,7 @@ namespace ChilliSource
         void RenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
-            DebugStats::AddToEvent("DrawCalls", 1u);
+            Debugging::DebugStats::AddToEvent("DrawCalls", 1u);
 #endif
 
 			//Set the new model view matrix based on the camera view matrix and the object matrix

@@ -24,16 +24,17 @@
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Resource/ResourceManager.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
-#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Time/CoreTimer.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
+
+#ifdef CS_ENABLE_DEBUGSTATS
+#include <ChilliSource/Debugging/Base/DebugStats.h>
+#endif
 
 #include <ChilliSource/GUI/Base/GUIViewFactory.h>
 
@@ -50,6 +51,8 @@
 #include <ChilliSource/Rendering/Material/MaterialProvider.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
+#include <ChilliSource/Rendering/Texture/CubemapProvider.h>
+#include <ChilliSource/Rendering/Texture/TextureProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 
 #include <ctime>
@@ -77,7 +80,7 @@ namespace ChilliSource
         //----------------------------------------------------
 		Application::Application()
         : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_resourcePool(nullptr),
-        m_renderer(nullptr), m_fileSystem(nullptr), m_stateManager(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_resourceManagerDispenser(nullptr), m_updateIntervalRemainder(0.0f),
+        m_renderer(nullptr), m_fileSystem(nullptr), m_stateManager(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_updateIntervalRemainder(0.0f),
         m_shouldNotifyConnectionsResumeEvent(false), m_shouldNotifyConnectionsForegroundEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
 		{
 		}
@@ -160,7 +163,6 @@ namespace ChilliSource
             CS_ASSERT(s_application == nullptr, "Application already initialised!");
             s_application = this;
             
-            m_resourceManagerDispenser = new ResourceManagerDispenser(this);
             m_componentFactoryDispenser = new ComponentFactoryDispenser(this);
             
 #ifdef CS_TARGETPLATFORM_WINDOWS
@@ -206,7 +208,6 @@ namespace ChilliSource
             m_renderer = Rendering::Renderer::Create(m_renderSystem);
             m_renderer->Init();
 
-            LoadDefaultResources();
 			ScreenChangedOrientation(m_defaultOrientation);
 
             //initialise all of the application systems.
@@ -214,6 +215,8 @@ namespace ChilliSource
             {
                 system->OnInit();
             }
+            
+            LoadDefaultResources();
             
             OnInit();
             PushInitialState();
@@ -262,8 +265,8 @@ namespace ChilliSource
             }
             
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::RecordEvent("FrameTime", infDt);
-			Debugging::DebugStats::RecordEvent("FPS", 1.0f/infDt);
+            Debugging::DebugStats::RecordEvent("FrameTime", in_deltaTime);
+			Debugging::DebugStats::RecordEvent("FPS", 1.0f/in_deltaTime);
 #endif
             
 			//Update the app time since start
@@ -302,7 +305,7 @@ namespace ChilliSource
             m_renderer->RenderToScreen(m_stateManager->GetActiveState()->GetScene());
             
 #ifdef CS_ENABLE_DEBUGSTATS
-			DebugStats::Clear();
+            Debugging::DebugStats::Clear();
 #endif
 		}
         //----------------------------------------------------
@@ -342,7 +345,6 @@ namespace ChilliSource
 		void Application::ApplicationMemoryWarning()
 		{
 			CS_LOG_VERBOSE("Memory Warning. Clearing resource cache...");
-			ResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
 			ApplicationEvents::GetLowMemoryEvent().NotifyConnections();
             
             //update all of the application systems
@@ -414,7 +416,6 @@ namespace ChilliSource
             
             m_platformSystem.reset();
 			m_renderer.reset();
-            CS_SAFEDELETE(m_resourceManagerDispenser);
             CS_SAFEDELETE(m_componentFactoryDispenser);
             
             m_resourcePool->Destroy();
@@ -448,6 +449,8 @@ namespace ChilliSource
             CreateSystem<Rendering::MaterialFactory>(renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
             CreateSystem<Rendering::TextureAtlasProvider>();
+            CreateSystem<Rendering::TextureProvider>();
+            CreateSystem<Rendering::CubemapProvider>();
             CreateSystem<Rendering::FontProvider>();
         }
         //----------------------------------------------------
@@ -457,12 +460,6 @@ namespace ChilliSource
             //Loop round all the created app systems and categorise them
 			for(const AppSystemUPtr& system : m_systems)
 			{
-                //TODO: Remove when all providers have been changed
-				if(system->IsA(ResourceProviderOld::InterfaceID))
-				{
-					m_ResourceProviderOlds.push_back(dynamic_cast<ResourceProviderOld*>(system.get()));
-				}
-                
                 //Resource providers
 				if(system->IsA(ResourceProvider::InterfaceID))
 				{
@@ -481,9 +478,6 @@ namespace ChilliSource
                     }
 				}
 			}
-
-            //Give the resource managers their providers
-            m_resourceManagerDispenser->SetResourceProviderOlds(m_ResourceProviderOlds);
 
             m_platformSystem->PostCreateSystems();
 		}

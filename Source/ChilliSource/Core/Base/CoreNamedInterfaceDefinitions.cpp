@@ -9,13 +9,11 @@
 
 
 #include <ChilliSource/Core/System/SystemConcepts.h>
-#include <ChilliSource/Core/Resource/ResourceProviderOld.h>
 
 namespace ChilliSource
 {
 	namespace Core
 	{
 		CS_DEFINE_NAMEDTYPE(IComponentProducer);
-		CS_DEFINE_NAMEDTYPE(ResourceProviderOld);
 	}
 }

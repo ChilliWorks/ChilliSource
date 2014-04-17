@@ -25,7 +25,6 @@
 
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
@@ -406,8 +405,7 @@ namespace ChilliSource
                 desc.m_format = Core::ImageFormat::k_Depth16;
                 desc.m_compression = Core::ImageCompression::k_none;
                 desc.m_dataSize = 0;
-                desc.m_data = nullptr;
-                pShadowMap->Build(desc);
+                pShadowMap->Build(desc, nullptr);
         
 #ifdef CS_ENABLE_DEBUGSHADOW
                 pShadowMapDebug = resourcePool->CreateResource<Rendering::Texture>("_ShadowMapDebug" + Core::ToString(s_shadowMapCount));
@@ -416,8 +414,7 @@ namespace ChilliSource
                 desc.m_format = Core::ImageFormat::k_RGB888;
                 desc.m_compression = Core::ImageCompression::k_none;
                 desc.m_dataSize = 0;
-                desc.m_data = nullptr;
-                pShadowMapDebug->Build(desc);
+                pShadowMapDebug->Build(desc, nullptr);
 #endif
                 
                 s_shadowMapCount++;
