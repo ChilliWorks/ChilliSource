@@ -6,14 +6,14 @@
 //  Copyright 2013 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
+#import <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/String/UTF8String.h>
-#include <ChilliSource/Core/Localisation/LocalisedText.h>
-#include <ChilliSource/Video/Base/Subtitles.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <ChilliSource/Core/Base/Screen.h>
+#import <ChilliSource/Core/String/StringUtils.h>
+#import <ChilliSource/Core/String/UTF8String.h>
+#import <ChilliSource/Core/Localisation/LocalisedText.h>
+#import <ChilliSource/Video/Base/Subtitles.h>
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -110,7 +110,6 @@
     [pNewTextView setText:text];
     [pNewTextView setFont:[UIFont fontWithName:fontName size: pStyle->m_fontSize]];
     [pNewTextView setTextColor:[UIColor colorWithRed:pStyle->m_colour.r green:pStyle->m_colour.g blue:pStyle->m_colour.b alpha:0.0f]];
-    [pNewTextView setEditable:YES];
     [pNewTextView setUserInteractionEnabled:NO];
     [text release];
     [fontName release];
@@ -159,9 +158,7 @@
         [self RemoveTextView:inpSubtitle];
     }
     
-    [inpTextView setEditable:YES];
     [inpTextView setTextColor:[UIColor colorWithRed:pStyle->m_colour.r green:pStyle->m_colour.g blue:pStyle->m_colour.b alpha:(fFade * pStyle->m_colour.a)]];
-    [inpTextView setEditable:NO];
 }
 //--------------------------------------------------------
 /// Remove Text View

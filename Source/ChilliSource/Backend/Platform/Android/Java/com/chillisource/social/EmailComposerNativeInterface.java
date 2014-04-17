@@ -19,7 +19,7 @@ import android.text.Html;
 /// of sending emails to multiple recipients and sending 
 /// multiple attachments.
 //=============================================================
-public class EmailCompositionNativeInterface extends INativeInterface
+public class EmailComposerNativeInterface extends INativeInterface
 {
 	//--------------------------------------------------------------
 	/// Member Data
@@ -30,7 +30,7 @@ public class EmailCompositionNativeInterface extends INativeInterface
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
-	public EmailCompositionNativeInterface()
+	public EmailComposerNativeInterface()
 	{
 	}
 	//--------------------------------------------------------------
@@ -53,7 +53,7 @@ public class EmailCompositionNativeInterface extends INativeInterface
 	/// @param The filename of the attachement if there is one.
 	/// @param bool if to format as html
 	//-----------------------------------------------
-	public void Present(String[] inastrRecipientAddresses, String instrSubject, String instrContents, String instrAttachmentFilename, boolean inbFormatAsHtml)
+	public void Present(String[] inastrRecipientAddresses, String instrSubject, String instrContents, boolean inbFormatAsHtml, String instrAttachmentFilename)
 	{  
 		if (mbActive == false)
 		{
@@ -104,7 +104,7 @@ public class EmailCompositionNativeInterface extends INativeInterface
 	//------------------------------------------------------
 	@Override public void onActivityResult(int indwRequestCode, int indwResultCode, Intent inData)
 	{
-		if (mbActive == true && indwRequestCode == EmailCompositionNativeInterface.EMAIL_RETURN_REQUEST)
+		if (mbActive == true && indwRequestCode == EmailComposerNativeInterface.EMAIL_RETURN_REQUEST)
 		{
 			mbActive = false;
 			// We are hard coding the result code to OK because the email clients never return this code and

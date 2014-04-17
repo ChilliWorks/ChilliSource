@@ -1,0 +1,132 @@
+//
+//  EmailComposer.h
+//  Chilli Source
+//  Created by Steven Hendrie on 20/01/2012.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2012 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_SOCIAL_COMMUNICATIONS_EMAILCOMPOSER_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_SOCIAL_COMMUNICATIONS_EMAILCOMPOSER_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailComposerJavaInterface.h>
+#include <ChilliSource/Social/Communications/EmailComposer.h>
+
+namespace ChilliSource
+{
+	namespace Android
+	{
+		//---------------------------------------------------------------
+		/// The Android backend for the Email Composer.
+		///
+		/// @author S Hendrie
+		//---------------------------------------------------------------
+		class EmailComposer final : public Social::EmailComposer
+		{
+		public:
+			CS_DECLARE_NAMEDTYPE(EmailComposer);
+            //-------------------------------------------------------
+			/// Queries whether or not this system implements the
+            /// interface with the given Id.
+			///
+            /// @author S Hendrie
+            ///
+			/// @param The interface Id.
+			/// @param Whether system is of given type.
+			//-------------------------------------------------------
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            //-------------------------------------------------------
+            /// Displays the email activity with the given recipients,
+            /// subject and contents.
+			///
+			/// @author S Hendrie
+            ///
+            /// @param A list of recipients.
+            /// @param The subject.
+            /// @param The body of the email.
+            /// @param The format of the body of the email.
+            /// @param The callback describing the result of the email.
+            //-------------------------------------------------------
+			void Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat, const SendResultDelegate& in_callback) override;
+			//-------------------------------------------------------
+			/// Displays the email activity with the given recipients,
+			/// subject and contents, and adds a list of attachments
+			/// to the email.
+			///
+			/// @author I Copland
+			///
+			/// @param A list of recipients.
+			/// @param The subject.
+			/// @param The body of the email.
+            /// @param The format of the body of the email.
+			/// @param The attachment
+			/// @param The callback describing the result of the email.
+			//-------------------------------------------------------
+			void PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
+					const Attachment& in_attachment, const SendResultDelegate& in_callback) override;
+            //-------------------------------------------------------
+            /// Dismisses the activity if it is currently displayed.
+			///
+			/// @author S Hendrie
+            //-------------------------------------------------------
+			void Dismiss() override;
+		private:
+			friend Social::EmailComposerUPtr Social::EmailComposer::Create();
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+			EmailComposer();
+            //------------------------------------------------------
+            /// Called when the the owning state is initialised.
+            ///
+            /// @author I Copland
+            //------------------------------------------------------
+            void OnInit() override;
+            //-------------------------------------------------------
+            /// Called when the email activity returns with a result.
+            ///
+            /// @author I Copland
+			///
+			/// @param The result.
+            //-------------------------------------------------------
+			void OnEmailClosed(EmailComposerJavaInterface::Result in_result);
+            //------------------------------------------------------
+            /// Called when the the owning state is destroyed.
+            ///
+            /// @author I Copland
+            //------------------------------------------------------
+            void OnDestroy() override;
+
+            bool m_isPresented;
+			EmailComposerJavaInterfaceSPtr m_javaInterface;
+			SendResultDelegate m_resultDelegate;
+		};
+
+	}
+}
+#endif

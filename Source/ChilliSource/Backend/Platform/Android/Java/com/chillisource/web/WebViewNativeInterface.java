@@ -1,8 +1,5 @@
 package com.chillisource.web;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.annotation.SuppressLint;
 
 import android.app.ProgressDialog;
@@ -26,8 +23,10 @@ public class WebViewNativeInterface
 	private static CSActivity msActivity;
 	private static RelativeLayout msWebviewHolder;
 	private static ProgressDialog mActivityIndicator;
-	private static Map<Integer,WebViewCloseButton> mDismissButtonMap;
-	
+	private static WebViewCloseButton s_dismissButton;
+	private static float s_dismissButtonSize = 0.0f;
+	private static int s_currentIndex = 0;
+	private static boolean s_active = false;
 	//---------------------------------------------------------------------
 	/// Initialise
 	///
@@ -40,7 +39,6 @@ public class WebViewNativeInterface
 	public static void Setup(CSActivity inActivity)
 	{
 		msActivity = inActivity;	
-		mDismissButtonMap = new HashMap<Integer,WebViewCloseButton>();
 		msWebviewHolder = new RelativeLayout(msActivity);	
 		LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		msWebviewHolder.setLayoutParams(params);
@@ -56,25 +54,25 @@ public class WebViewNativeInterface
 	/// @param url string for the website to be displayed
 	/// @param absolute value for width - determined in native 
 	/// @param absolute value for height - determined in native
+	/// @param The relative size of the dismiss button
 	//---------------------------------------------------------------------
-	public static void Present(int inudwIndex, String instrURL, int inudwXAbsolute,int inudwYAbsolute)
+	public static void Present(final int inudwIndex, final String instrURL, final int inudwXAbsolute, final int inudwYAbsolute, final float in_dismissButtonRelativeSize)
 	{
-		final String strURL = instrURL;
-		final int udwXAbsolute = inudwXAbsolute;
-		final int udwYAbsolute = inudwYAbsolute;		
-    	final int udwIndex = inudwIndex;
-    	
     	CSApplication.get().scheduleUIThreadTask(new Runnable() 
         {
 		    public void run() 
 		    {		
 		    	synchronized (msWebviewHolder) 
 		    	{
-		    		CSWebView sWebView = CreateBlankWebView(udwIndex, udwXAbsolute, udwYAbsolute, "");
-		    		sWebView.loadUrl(strURL);
+		    		CSWebView sWebView = CreateBlankWebView(inudwIndex, inudwXAbsolute, inudwYAbsolute, "");
+		    		sWebView.loadUrl(instrURL);
 		    		msWebviewHolder.addView(sWebView);
 		    		sWebView.requestFocus();
 		    		AddActivityIndicator();
+		    		
+		    		s_dismissButtonSize = in_dismissButtonRelativeSize * inudwXAbsolute;
+		    		s_currentIndex = inudwIndex;
+		    		s_active = true;
 		    	}
 		    }
 		});		
@@ -88,30 +86,28 @@ public class WebViewNativeInterface
 	/// @param absolute value for width - determined in native 
 	/// @param absolute value for height - determined in native
 	/// @param base path
+	/// @param The relative size of the dismiss button
 	//---------------------------------------------------------------------
-	public static void PresentFromFile(int inudwIndex, String instrHTMLContents, int inudwXAbsolute, int inudwYAbsolute, String instrBasePath, String instrAnchor)
+	public static void PresentFromFile(final int inudwIndex, final String instrHTMLContents, final int inudwXAbsolute, final int inudwYAbsolute, final String instrBasePath, final String instrAnchor, final float in_dismissButtonRelativeSize)
 	{
-		final String strHTMLContents = instrHTMLContents;
-		final String strBasePath = instrBasePath;
-		final String strAnchor = instrAnchor;
-		final int udwXAbsolute = inudwXAbsolute;
-		final int udwYAbsolute = inudwYAbsolute;
-		final int udwIndex = inudwIndex;
-		
 		msActivity.runOnUiThread(new Runnable() 
         {
 		    public void run() 
 		    {
 		    	synchronized (msWebviewHolder) 
 		    	{
-		    		CSWebView sWebView = CreateBlankWebView(udwIndex, udwXAbsolute, udwYAbsolute, strAnchor);
-		    		sWebView.loadDataWithBaseURL(strBasePath, strHTMLContents, "text/html", "utf-8", null);
+		    		CSWebView sWebView = CreateBlankWebView(inudwIndex, inudwXAbsolute, inudwYAbsolute, instrAnchor);
+		    		sWebView.loadDataWithBaseURL(instrBasePath, instrHTMLContents, "text/html", "utf-8", null);
 		    		msWebviewHolder.addView(sWebView);
 		    		sWebView.requestFocus();
 		    		AddActivityIndicator();
+		    		
+		    		s_dismissButtonSize = in_dismissButtonRelativeSize * inudwXAbsolute;
+		    		s_currentIndex = inudwIndex;
+		    		s_active = true;
 		    	}
 		    }
-		});			
+		});
 	}
 	//---------------------------------------------------------------------
 	/// Present In External Browser
@@ -137,19 +133,24 @@ public class WebViewNativeInterface
 	//---------------------------------------------------------------------
 	public static void Dismiss(final int inudwIndex)
 	{
-		final WebViewCloseButton dismissButton = mDismissButtonMap.get(inudwIndex);
-		
 		msActivity.runOnUiThread(new Runnable() 
         {
 		    public void run() 
 		    {
 		    	synchronized (msWebviewHolder) 
 		    	{
-		    		if(dismissButton != null) msWebviewHolder.removeView(dismissButton);
+		    		if(s_dismissButton != null) 
+	    			{
+	    				msWebviewHolder.removeView(s_dismissButton);
+	    				s_dismissButton = null;
+	    			}
 		    		msWebviewHolder.removeView(msWebviewHolder.findViewById(inudwIndex));
+		    		
+		    		s_active = false;
 		    	}
 		    }
-		});
+		});	
+		
 		WebViewNativeInterface.OnWebviewDismissed(inudwIndex);
 	}
 	//---------------------------------------------------------------------
@@ -176,11 +177,11 @@ public class WebViewNativeInterface
 	//---------------------------------------------------------------------
 	public static void RemoveActivityIndicator()
 	{
-		if(mActivityIndicator == null)
-			return;
-		
-		mActivityIndicator.dismiss();
-    	mActivityIndicator = null;
+		if(mActivityIndicator != null)
+		{
+			mActivityIndicator.dismiss();
+	    	mActivityIndicator = null;
+		}
 	}
 	//---------------------------------------------------------------------
 	/// Add Dismiss Button
@@ -189,17 +190,19 @@ public class WebViewNativeInterface
 	///
 	/// @param index of webview to be removed
 	//---------------------------------------------------------------------
-	public static void AddDismissButton(int inudwIndex, float infSize)
+	public static void AddDismissButton()
 	{
-		final WebViewCloseButton dismissButton = new WebViewCloseButton(msActivity, inudwIndex, infSize);
-		mDismissButtonMap.put(inudwIndex, dismissButton);	
 		msActivity.runOnUiThread(new Runnable() 
         {
 		    public void run() 
-		    {	   
+		    {	 
 		    	synchronized (msWebviewHolder) 
 		    	{
-		    		msWebviewHolder.addView(dismissButton);	
+		    		if (s_active == true && s_dismissButton == null)
+		    		{
+		    			s_dismissButton = new WebViewCloseButton(msActivity, s_currentIndex, s_dismissButtonSize);
+		    			msWebviewHolder.addView(s_dismissButton);	
+		    		}
 		    	}
 		    }
 		});		

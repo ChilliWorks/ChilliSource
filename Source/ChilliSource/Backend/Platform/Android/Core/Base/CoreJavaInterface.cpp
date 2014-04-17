@@ -16,7 +16,6 @@
 #include <ChilliSource/Backend/Platform/Android/Input/Pointer/TouchInputJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Communications/ContactInformationProviderJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Social/Communications/SMSCompositionJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterAuthenticationActivityJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Web/Base/WebViewJavaInterface.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
@@ -178,7 +177,6 @@ void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject
 	ChilliSource::Android::HttpRequestJavaInterface::SetupJavaInterface(javaVM);
 	ChilliSource::Android::SharedPreferencesJavaInterface::SetupJavaInterface(javaVM);
 	ChilliSource::Android::WebViewJavaInterface::SetupJavaInterface(javaVM);
-	ChilliSource::Android::SMSCompositionJavaInterface::SetupJavaInterface(javaVM);
 	ChilliSource::Android::ContactInformationProviderJavaInterface::SetupJavaInterface(javaVM);
 	ChilliSource::Android::TwitterAuthenticationActivityJavaInterface::SetupJavaInterface(javaVM);
     

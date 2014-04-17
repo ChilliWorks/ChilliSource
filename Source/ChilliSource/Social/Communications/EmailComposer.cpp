@@ -1,11 +1,11 @@
 //
-//  VideoPlayer.cpp
+//  EmailComposer.cpp
 //  Chilli Source
-//  Created by S Downie on 12/05/2011.
+//  Created by Ian Copland on 06/03/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,32 +26,39 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Video/Base/VideoPlayer.h>
+#include <ChilliSource/Social/Communications/EmailComposer.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayer.h>
+#import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposer.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Video/Base/VideoPlayer.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailComposer.h>
 #endif
 
 namespace ChilliSource
 {
-    namespace Video
+    namespace Social
     {
-		CS_DEFINE_NAMEDTYPE(VideoPlayer);
+        CS_DEFINE_NAMEDTYPE(EmailComposer);
         //-------------------------------------------------------
         //-------------------------------------------------------
-        VideoPlayerUPtr VideoPlayer::Create()
+        EmailComposerUPtr EmailComposer::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return VideoPlayerUPtr(new iOS::VideoPlayer());
-#endif
-#ifdef CS_TARGETPLATFORM_ANDROID
-            return VideoPlayerUPtr(new Android::VideoPlayer());
-#endif
+            if (iOS::EmailComposer::IsSupportedByDevice() == true)
+            {
+                return EmailComposerUPtr(new iOS::EmailComposer());
+            }
+            else
+            {
+                return nullptr;
+            }
+#elif defined CS_TARGETPLATFORM_ANDROID
+            return EmailComposerUPtr(new Android::EmailComposer());
+#else
             return nullptr;
+#endif
         }
     }
 }

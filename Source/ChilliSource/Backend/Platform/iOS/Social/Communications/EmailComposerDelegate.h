@@ -1,11 +1,11 @@
 //
-//  VideoPlayer.cpp
+//  EmailComposerDelegate.h
 //  Chilli Source
-//  Created by S Downie on 12/05/2011.
+//  Created by Ian Copland on 15/04/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,32 +26,31 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Video/Base/VideoPlayer.h>
+#import <ChilliSource/ChilliSource.h>
+#import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposer.h>
 
-#ifdef CS_TARGETPLATFORM_IOS
-#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayer.h>
-#endif
+#import <Foundation/Foundation.h>
+#import <MessageUI/MessageUI.h>
 
-#ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Video/Base/VideoPlayer.h>
-#endif
-
-namespace ChilliSource
+//---------------------------------------------------------
+/// A delegate for recieving events for the email composer.
+///
+/// @author S McGaw
+//---------------------------------------------------------
+@interface EmailComposerDelegate : NSObject<MFMailComposeViewControllerDelegate>
 {
-    namespace Video
-    {
-		CS_DEFINE_NAMEDTYPE(VideoPlayer);
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        VideoPlayerUPtr VideoPlayer::Create()
-        {
-#ifdef CS_TARGETPLATFORM_IOS
-            return VideoPlayerUPtr(new iOS::VideoPlayer());
-#endif
-#ifdef CS_TARGETPLATFORM_ANDROID
-            return VideoPlayerUPtr(new Android::VideoPlayer());
-#endif
-            return nullptr;
-        }
-    }
+	ChilliSource::iOS::EmailComposer* emailComposer;
 }
+//-------------------------------------------------------
+/// Constructor
+///
+/// @author I Copland
+///
+/// @param The email composition system.
+///
+/// @return The constructed object.
+//-------------------------------------------------------
+-(id) initWithSystem:(ChilliSource::iOS::EmailComposer*)system;
+
+@end

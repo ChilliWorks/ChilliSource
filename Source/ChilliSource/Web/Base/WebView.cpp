@@ -1,7 +1,7 @@
 //
-//  VideoPlayer.cpp
+//  WebView.cpp
 //  Chilli Source
-//  Created by S Downie on 12/05/2011.
+//  Created by Scott Downie on 25/07/2011.
 //
 //  The MIT License (MIT)
 //
@@ -26,32 +26,34 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Video/Base/VideoPlayer.h>
+#include <ChilliSource/Web/Base/WebView.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayer.h>
+#import <ChilliSource/Backend/Platform/iOS/Web/Base/WebView.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Video/Base/VideoPlayer.h>
+#include <ChilliSource/Backend/Platform/Android/Web/Base/WebView.h>
 #endif
 
 namespace ChilliSource
 {
-    namespace Video
+    namespace Web
     {
-		CS_DEFINE_NAMEDTYPE(VideoPlayer);
+        CS_DEFINE_NAMEDTYPE(WebView);
+        
         //-------------------------------------------------------
         //-------------------------------------------------------
-        VideoPlayerUPtr VideoPlayer::Create()
+        WebViewUPtr WebView::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return VideoPlayerUPtr(new iOS::VideoPlayer());
+            return WebViewUPtr(new iOS::WebView());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
-            return VideoPlayerUPtr(new Android::VideoPlayer());
+            return WebViewUPtr(new Android::WebView());
 #endif
             return nullptr;
         }
     }
 }
+

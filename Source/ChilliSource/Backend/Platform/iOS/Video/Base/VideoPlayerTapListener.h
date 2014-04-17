@@ -6,15 +6,12 @@
 //  Copyright 2012 Tag Games. All rights reserved.
 //
 
-#ifndef _MOFLOW_PLATFORM_IOS_VIDEO_VIDEOPLAYERTAPLISTENER_H_
-#define _MOFLOW_PLATFORM_IOS_VIDEO_VIDEOPLAYERTAPLISTENER_H_
-
-#include <ChilliSource/ChilliSource.h>
+#import <ChilliSource/ChilliSource.h>
 
 #import <Foundation/Foundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 
-#include <functional>
+#import <functional>
 
 @class UIView;
 @class UITapGestureRecognizer;
@@ -88,6 +85,5 @@ namespace ChilliSource
 /// destroys the listener
 //--------------------------------------------------------
 -(void) dealloc;
-@end
 
-#endif
+@end

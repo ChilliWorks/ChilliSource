@@ -35,8 +35,9 @@ namespace ChilliSource
 			/// @param index of webview
 			/// @param URL
 			/// @param size of webview
+			/// @param The relative size of the button.
 			//-----------------------------------------------
-			static void Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::Vector2& invSize);
+			static void Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::Vector2& invSize, f32 in_dismissButtonRelativeSize);
 			//-----------------------------------------------
 			/// Present from file
 			///
@@ -47,8 +48,9 @@ namespace ChilliSource
 			/// @param size of webview
 			/// @param Base path of assets
 			/// @param Anchor
+			/// @param The relative size of the button.
 			//-----------------------------------------------
-			static void PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor);
+			static void PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor, f32 in_dismissButtonRelativeSize);
 			//-----------------------------------------------
 			/// Present from external browser
 			///
@@ -65,15 +67,6 @@ namespace ChilliSource
 			/// @param index of webview
 			//-----------------------------------------------
 			static void Dismiss(u32 inudwIndex);
-			//-----------------------------------------------
-			/// Add Dismiss Button
-			///
-			/// Adds button to the webview so that it can be removed
-			///
-			/// @param index of webview
-			/// @param size
-			//-----------------------------------------------
-			static void AddDismissButton(u32 inudwIndex, f32 infSize);
 		};
 
 	}
