@@ -63,6 +63,16 @@ namespace ChilliSource
                 k_cancelled
 			};
             //-------------------------------------------------------
+            /// Describes the format of the email contents.
+            ///
+            /// @author I Copland
+            //-------------------------------------------------------
+			enum class ContentFormat
+            {
+                k_plainText,
+                k_html
+			};
+            //-------------------------------------------------------
             /// A container for information describing a single
             /// attachment file.
             ///
@@ -92,10 +102,10 @@ namespace ChilliSource
             /// @param A list of recipients.
             /// @param The subject.
             /// @param The body of the email.
-            /// @param Whether or not to format as HTML.
+            /// @param The format of the body of the email.
             /// @param The callback describing the result of the email.
             //-------------------------------------------------------
-			virtual void Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, bool in_formatAsHtml,
+			virtual void Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
                                  const SendResultDelegate& in_callback) = 0;
             //-------------------------------------------------------
             /// Displays the email activity with the given recipients,
@@ -107,12 +117,12 @@ namespace ChilliSource
             /// @param A list of recipients.
             /// @param The subject.
             /// @param The body of the email.
+            /// @param The format of the body of the email.
             /// @param The attachment.
-            /// @param Whether or not to format as HTML.
             /// @param The callback describing the result of the email.
             //-------------------------------------------------------
-            virtual void PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, const Attachment& in_attachment,
-                                               bool in_formatAsHtml, const SendResultDelegate& in_callback) = 0;
+            virtual void PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
+                                               const Attachment& in_attachment, const SendResultDelegate& in_callback) = 0;
             //-------------------------------------------------------
 			/// Dismisses the activity if it is currently displayed.
             ///

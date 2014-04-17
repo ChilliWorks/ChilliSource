@@ -26,19 +26,19 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Backend/Platform/iOS/Web/Base/WebView.h>
+#import <ChilliSource/Backend/Platform/iOS/Web/Base/WebView.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#include <ChilliSource/Backend/Platform/iOS/Web/Base/WebViewDelegate.h>
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/File/FileStream.h>
-#include <ChilliSource/Core/String/StringUtils.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <ChilliSource/Backend/Platform/iOS/Web/Base/WebViewDelegate.h>
+#import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/Base/Screen.h>
+#import <ChilliSource/Core/File/FileSystem.h>
+#import <ChilliSource/Core/File/FileStream.h>
+#import <ChilliSource/Core/String/StringUtils.h>
 
-#include <UIKit/UIKit.h>
-#include <QuartzCore/CALayer.h>
+#import <UIKit/UIKit.h>
+#import <QuartzCore/CALayer.h>
 
 namespace ChilliSource
 {

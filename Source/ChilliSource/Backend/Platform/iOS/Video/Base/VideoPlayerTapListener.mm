@@ -8,8 +8,7 @@
 
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
 #import <QuartzCore/QuartzCore.h>
-#include <ChilliSource/Core/Base/Screen.h>
-
+#import <ChilliSource/Core/Base/Screen.h>
 
 using namespace ChilliSource;
 using namespace ChilliSource::iOS;

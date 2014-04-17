@@ -53,7 +53,7 @@ public class EmailComposerNativeInterface extends INativeInterface
 	/// @param The filename of the attachement if there is one.
 	/// @param bool if to format as html
 	//-----------------------------------------------
-	public void Present(String[] inastrRecipientAddresses, String instrSubject, String instrContents, String instrAttachmentFilename, boolean inbFormatAsHtml)
+	public void Present(String[] inastrRecipientAddresses, String instrSubject, String instrContents, boolean inbFormatAsHtml, String instrAttachmentFilename)
 	{  
 		if (mbActive == false)
 		{

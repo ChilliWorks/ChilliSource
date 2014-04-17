@@ -43,14 +43,21 @@ namespace ChilliSource
 			CS_DECLARE_NAMEDTYPE(EmailCompositionJavaInterface);
 
 			//--------------------------------------------------------------
-			/// Result Codes
+			/// An enum describing the possible results from presenting the
+			/// email composer.
+			///
+			/// @author I Copland
 			//--------------------------------------------------------------
-			static const s32 k_resultSuccess = -1;
-			static const s32 k_resultCancelled = 0;
+			enum class Result
+			{
+				k_success,
+				k_cancelled,
+				k_failed
+			};
 			//--------------------------------------------------------------
 			/// Delegates
 			//--------------------------------------------------------------
-			typedef std::function<void(s32)> ResultDelegate;
+			typedef std::function<void(Result)> ResultDelegate;
 			//--------------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------------
@@ -69,12 +76,12 @@ namespace ChilliSource
 			/// @param vector of email addresses
 			/// @param subject line
 			/// @param content
-			/// @param The attachment filename.
 			/// @param bool if to format as html
+			/// @param The attachment filename.
 			/// @param result callback delegate
 			//--------------------------------------------------------------
 			void Present(const std::vector<Core::UTF8String>& inastrRecipientAddresses, const Core::UTF8String& instrSubject, const Core::UTF8String& instrContents,
-						const std::string& instrAttachmentFilename, bool inbFormatAsHtml, const ResultDelegate& inDelegate);
+					bool inbFormatAsHtml, const std::string& instrAttachmentFilename, const ResultDelegate& inDelegate);
 			//--------------------------------------------------------------
 			/// On Email Closed
 			///

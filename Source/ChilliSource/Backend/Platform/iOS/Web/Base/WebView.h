@@ -26,14 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_WEB_BASE_WEBVIEW_H_
-#define _CHILLISOURCE_BACKEND_PLATFORM_IOS_WEB_BASE_WEBVIEW_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Math/UnifiedCoordinates.h>
-#include <ChilliSource/Web/Base/WebView.h>
+#import <ChilliSource/ChilliSource.h>
+#import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#import <ChilliSource/Core/File/FileSystem.h>
+#import <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#import <ChilliSource/Web/Base/WebView.h>
 
 @class WebViewDelegate;
 @class UIWebView;
@@ -185,7 +182,3 @@ namespace ChilliSource
 		};
 	}
 }
-
-
-
-#endif

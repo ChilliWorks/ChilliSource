@@ -26,9 +26,9 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Backend/Platform/iOS/Web/Base/WebViewDelegate.h>
+#import <ChilliSource/Backend/Platform/iOS/Web/Base/WebViewDelegate.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 
 @implementation WebViewDelegate
 //----------------------------------------------------

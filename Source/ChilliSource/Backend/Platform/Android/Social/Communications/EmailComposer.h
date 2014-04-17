@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailComposerJavaInterface.h>
 #include <ChilliSource/Social/Communications/EmailComposer.h>
 
 namespace ChilliSource
@@ -65,10 +66,10 @@ namespace ChilliSource
             /// @param A list of recipients.
             /// @param The subject.
             /// @param The body of the email.
-			/// @param Whether or not to format as HTML.
+            /// @param The format of the body of the email.
             /// @param The callback describing the result of the email.
             //-------------------------------------------------------
-			void Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, bool in_formatAsHtml, const SendResultDelegate& in_callback) override;
+			void Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat, const SendResultDelegate& in_callback) override;
 			//-------------------------------------------------------
 			/// Displays the email activity with the given recipients,
 			/// subject and contents, and adds a list of attachments
@@ -79,11 +80,12 @@ namespace ChilliSource
 			/// @param A list of recipients.
 			/// @param The subject.
 			/// @param The body of the email.
+            /// @param The format of the body of the email.
 			/// @param The attachment
-			/// @param Whether or not to format as HTML.
 			/// @param The callback describing the result of the email.
 			//-------------------------------------------------------
-			void PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, const Attachment& in_attachment, bool in_formatAsHtml, const SendResultDelegate& in_callback) override;
+			void PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
+					const Attachment& in_attachment, const SendResultDelegate& in_callback) override;
             //-------------------------------------------------------
             /// Dismisses the activity if it is currently displayed.
 			///
@@ -110,9 +112,9 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			///
-			/// @param The result code.
+			/// @param The result.
             //-------------------------------------------------------
-			void OnEmailClosed(s32 in_resultCode);
+			void OnEmailClosed(EmailComposerJavaInterface::Result in_result);
             //------------------------------------------------------
             /// Called when the the owning state is destroyed.
             ///

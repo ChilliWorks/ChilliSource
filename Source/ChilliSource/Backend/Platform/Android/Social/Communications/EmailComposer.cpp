@@ -58,17 +58,17 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void EmailComposer::Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, bool in_formatAsHtml, const SendResultDelegate& in_callback)
+		void EmailComposer::Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
+				const SendResultDelegate& in_callback)
 		{
 			Attachment emptyAttachment;
-			emptyAttachment.m_filename = "";
-			emptyAttachment.m_mimeType = "";
 			emptyAttachment.m_storageLocation = Core::StorageLocation::k_none;
-			PresentWithAttachment(in_recipientAddresses, in_subject, in_contents, emptyAttachment, in_formatAsHtml, in_callback);
+			PresentWithAttachment(in_recipientAddresses, in_subject, in_contents, in_contentFormat, emptyAttachment, in_callback);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void EmailComposer::PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, const Attachment& in_attachment, bool in_formatAsHtml, const SendResultDelegate & in_callback)
+		void EmailComposer::PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents,
+				ContentFormat in_contentFormat, const Attachment& in_attachment, const SendResultDelegate & in_callback)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present email composer while one is already presented.");
 
@@ -91,7 +91,7 @@ namespace ChilliSource
 				}
 			}
 
-			m_javaInterface->Present(in_recipientAddresses, in_subject, in_contents, filename, in_formatAsHtml, Core::MakeDelegate(this, &EmailComposer::OnEmailClosed));
+			m_javaInterface->Present(in_recipientAddresses, in_subject, in_contents, (in_contentFormat == ContentFormat::k_html), filename, Core::MakeDelegate(this, &EmailComposer::OnEmailClosed));
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -106,17 +106,17 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void EmailComposer::OnEmailClosed(s32 in_resultCode)
+		void EmailComposer::OnEmailClosed(EmailComposerJavaInterface::Result in_result)
 		{
 			if(m_javaInterface != nullptr)
 			{
 				EmailComposer::SendResult result = EmailComposer::SendResult::k_failed;
-				switch (in_resultCode)
+				switch (in_result)
 				{
-					case EmailComposerJavaInterface::k_resultSuccess:
+					case EmailComposerJavaInterface::Result::k_success:
 						result= EmailComposer::SendResult::k_succeed;
 						break;
-					case EmailComposerJavaInterface::k_resultCancelled:
+					case EmailComposerJavaInterface::Result::k_cancelled:
 						result = EmailComposer::SendResult::k_cancelled;
 						break;
 					default:

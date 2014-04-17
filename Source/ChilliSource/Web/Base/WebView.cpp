@@ -29,7 +29,7 @@
 #include <ChilliSource/Web/Base/WebView.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Web/Base/WebView.h>
+#import <ChilliSource/Backend/Platform/iOS/Web/Base/WebView.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID

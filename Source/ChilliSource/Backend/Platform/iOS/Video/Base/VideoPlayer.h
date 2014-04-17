@@ -26,13 +26,10 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_VIDEO_BASE_VIDEOPLAYERSYSTEM_H_
-#define _CHILLISOURCE_BACKEND_PLATFORM_IOS_VIDEO_BASE_VIDEOPLAYERSYSTEM_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Input/Gestures/Gestures.h>
-#include <ChilliSource/Video/Base/VideoPlayer.h>
+#import <ChilliSource/ChilliSource.h>
+#import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#import <ChilliSource/Input/Gestures/Gestures.h>
+#import <ChilliSource/Video/Base/VideoPlayer.h>
 
 
 @class MPMoviePlayerController;
@@ -225,5 +222,3 @@ namespace ChilliSource
         };
     }
 }
-
-#endif

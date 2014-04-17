@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/ChilliSource.h>
+#import <ChilliSource/ChilliSource.h>
 #import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposer.h>
 

@@ -26,11 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Social/Communications/EmailComposer.h>
+#import <ChilliSource/ChilliSource.h>
+#import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#import <ChilliSource/Social/Communications/EmailComposer.h>
 
-#include <MessageUI/MessageUI.h>
+#import <MessageUI/MessageUI.h>
 
 @class EmailComposerDelegate;
 
@@ -54,7 +54,7 @@ namespace ChilliSource
             /// @author S McGaw
             ///
 			/// @param The interface Id.
-			/// @param Whether system is of given type.
+			/// @return Whether system is of given type.
 			//-------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
@@ -66,10 +66,10 @@ namespace ChilliSource
             /// @param A list of recipients.
             /// @param The subject.
             /// @param The body of the email.
-            /// @param Whether or not to format as HTML.
+            /// @param The format of the body of the email.
             /// @param The callback describing the result of the email.
             //-------------------------------------------------------
-			void Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, bool in_formatAsHtml,
+			void Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
                          const SendResultDelegate& in_callback) override;
             //-------------------------------------------------------
             /// Displays the email activity with the given recipients,
@@ -81,12 +81,12 @@ namespace ChilliSource
             /// @param A list of recipients.
             /// @param The subject.
             /// @param The body of the email.
+            /// @param The format of the body of the email.
             /// @param The attachment.
-            /// @param Whether or not to format as HTML.
             /// @param The callback describing the result of the email.
             //-------------------------------------------------------
-            void PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, const Attachment& in_attachment,
-                                       bool in_formatAsHtml, const SendResultDelegate & in_callback) override;
+            void PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
+                                       const Attachment& in_attachment, const SendResultDelegate & in_callback) override;
             //-------------------------------------------------------
             /// Dismisses the activity if it is currently displayed.
             ///

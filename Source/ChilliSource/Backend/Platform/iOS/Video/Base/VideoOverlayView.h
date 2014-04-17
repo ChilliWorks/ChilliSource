@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/ChilliSource.h>
+#import <ChilliSource/ChilliSource.h>
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 

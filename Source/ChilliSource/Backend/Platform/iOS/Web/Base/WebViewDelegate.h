@@ -26,11 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/Web/Base/WebView.h>
+#import <ChilliSource/ChilliSource.h>
+#import <ChilliSource/Backend/Platform/iOS/Web/Base/WebView.h>
 
-#include <Foundation/Foundation.h>
-#include <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 //---------------------------------------------------------
 /// A delegate for receiving callbacks from the web view.

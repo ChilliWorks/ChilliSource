@@ -28,12 +28,12 @@
 
 #import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposer.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposerDelegate.h>
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/String/StringUtils.h>
+#import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/File/FileSystem.h>
+#import <ChilliSource/Core/String/StringUtils.h>
 
 namespace ChilliSource
 {
@@ -54,19 +54,17 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void EmailComposer::Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, bool in_formatAsHtml,
+		void EmailComposer::Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
                                     const SendResultDelegate& in_callback)
         {
             Attachment emptyAttachment;
-            emptyAttachment.m_filename = "";
             emptyAttachment.m_storageLocation = Core::StorageLocation::k_none;
-            emptyAttachment.m_mimeType = "";
-			PresentWithAttachment(in_recipientAddresses, in_subject, in_contents, emptyAttachment, in_formatAsHtml, in_callback);
+			PresentWithAttachment(in_recipientAddresses, in_subject, in_contents, in_contentFormat, emptyAttachment, in_callback);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void EmailComposer::PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, const Attachment& in_attachment,
-                                                  bool in_formatAsHtml, const SendResultDelegate& in_callback)
+		void EmailComposer::PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
+                                                  const Attachment& in_attachment, const SendResultDelegate& in_callback)
         {
             @autoreleasepool
             {
@@ -100,7 +98,7 @@ namespace ChilliSource
                 NSString* body = [NSStringUtils newNSStringWithUTF8String:in_contents];
                 NSString* subject = [NSStringUtils newNSStringWithUTF8String:in_subject];
                 
-                [m_viewController setMessageBody:body isHTML:in_formatAsHtml];
+                [m_viewController setMessageBody:body isHTML:(in_contentFormat == ContentFormat::k_html)];
                 [m_viewController setSubject:subject];
                 
                 [body release];

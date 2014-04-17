@@ -59,6 +59,34 @@ namespace ChilliSource
 {
 	namespace Android
 	{
+		namespace
+		{
+			//--------------------------------------------------------------
+			/// Converts the integer result returned from java to the
+			/// Result enum.
+			///
+			/// @author I Copland
+			///
+			/// @param The result integer.
+			///
+			/// @return The result enum.
+			//--------------------------------------------------------------
+			EmailComposerJavaInterface::Result IntegerToResult(s32 in_result)
+			{
+				const s32 k_resultSuccess = -1;
+				const s32 k_resultCancelled = 0;
+
+				switch (in_result)
+				{
+				case k_resultSuccess:
+					return EmailComposerJavaInterface::Result::k_success;
+				case k_resultCancelled:
+					return EmailComposerJavaInterface::Result::k_cancelled;
+				default:
+					return EmailComposerJavaInterface::Result::k_failed;
+				}
+			}
+		}
 
 		CS_DEFINE_NAMEDTYPE(EmailComposerJavaInterface);
 		//--------------------------------------------------------------
@@ -67,7 +95,7 @@ namespace ChilliSource
 		EmailComposerJavaInterface::EmailComposerJavaInterface()
 		{
 			CreateNativeInterface("com/chillisource/social/EmailComposerNativeInterface");
-			CreateMethodReference("Present", "([Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V");
+			CreateMethodReference("Present", "([Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V");
 		}
 		//--------------------------------------------------------------
 		/// Is A
@@ -80,7 +108,7 @@ namespace ChilliSource
 		/// Present
 		//--------------------------------------------------------------
 		void EmailComposerJavaInterface::Present(const std::vector<Core::UTF8String>& inastrRecipientAddresses, const Core::UTF8String& instrSubject, const Core::UTF8String& instrContents,
-													const std::string& instrAttachmentFilename, bool inbFormatAsHtml, const ResultDelegate& inDelegate)
+				bool inbFormatAsHtml, const std::string& instrAttachmentFilename, const ResultDelegate& inDelegate)
 		{
 			mDelegate = inDelegate;
 
@@ -101,7 +129,7 @@ namespace ChilliSource
 			jstring jstrAttachmentFilename = JavaInterfaceUtils::CreateJStringFromUTF8String(instrAttachmentFilename);
 
 			//call method
-			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Present"), ajstrRecipients, jstrSubject, jstrContents, jstrAttachmentFilename, inbFormatAsHtml);
+			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Present"), ajstrRecipients, jstrSubject, jstrContents, inbFormatAsHtml, jstrAttachmentFilename);
 
 			//clean up
 			pEnv->DeleteLocalRef(ajstrRecipients);
@@ -116,9 +144,10 @@ namespace ChilliSource
 		{
 			if (mDelegate != nullptr)
 			{
-				mDelegate(indwResultCode);
+				ResultDelegate delegate = mDelegate;
+				mDelegate = nullptr;
+				delegate(IntegerToResult(indwResultCode));
 			}
-			mDelegate = nullptr;
 		}
 	}
 }

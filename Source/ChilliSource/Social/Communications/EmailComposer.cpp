@@ -1,5 +1,5 @@
 //
-//  EmailComposer.h
+//  EmailComposer.cpp
 //  Chilli Source
 //  Created by Ian Copland on 06/03/2014.
 //
@@ -52,12 +52,12 @@ namespace ChilliSource
             }
             else
             {
-                return EmailComposerUPtr();
+                return nullptr;
             }
 #elif defined CS_TARGETPLATFORM_ANDROID
             return EmailComposerUPtr(new Android::EmailComposer());
 #else
-            return EmailComposerUPtr();
+            return nullptr;
 #endif
         }
     }

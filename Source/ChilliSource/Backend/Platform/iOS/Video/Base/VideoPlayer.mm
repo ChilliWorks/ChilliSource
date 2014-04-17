@@ -26,20 +26,20 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayer.h>
+#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayer.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#include <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoOverlayView.h>
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
-#include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/String/StringUtils.h>
+#import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/Base/MakeDelegate.h>
+#import <ChilliSource/Core/Base/Screen.h>
+#import <ChilliSource/Core/Math/MathUtils.h>
+#import <ChilliSource/Core/String/StringUtils.h>
 
 #import <AudioToolbox/AudioSession.h>
 #import <MediaPlayer/MediaPlayer.h>
