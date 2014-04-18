@@ -50,6 +50,16 @@ namespace ChilliSource
 		{
 		public:
 			
+            enum class Face
+            {
+                k_posX,
+                k_negX,
+                k_posY,
+                k_negY,
+                k_posZ,
+                k_negZ
+            };
+            
 			CS_DECLARE_NAMEDTYPE(Cubemap);
             //--------------------------------------------------
             /// Construct the texture from the given image data.
@@ -77,7 +87,7 @@ namespace ChilliSource
             ///
             /// @param Texture unit
             //--------------------------------------------------------------
-			virtual void Bind(u32 inSlot = 0) = 0;
+			virtual void Bind(u32 in_texUnit = 0) = 0;
             //--------------------------------------------------------------
             /// Unbind this cubemap from its current texture unit. This
             /// means it can no longer be used or changed until rebound.

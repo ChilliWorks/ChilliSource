@@ -311,11 +311,6 @@ namespace ChilliSource
                     CS_LOG_FATAL("Unimplemented PixelFormat for image");
                 }
                 
-                if(!bSupported)
-                {
-                    CS_LOG_FATAL("Unimplemented PixelFormat for image");
-                }
-                
                 Core::Image::Descriptor desc;
                 desc.m_width = header->udwWidth;
                 desc.m_height = header->udwHeight;
@@ -359,6 +354,10 @@ namespace ChilliSource
         {
             Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, Core::ResourceSPtr&>
             task(this, &ImageProvider::LoadImage, in_storageLocation, in_filePath, in_delegate, out_resource);
+            
+            //auto task = Core::MakeTask(std::bind(&ImageProvider::LoadImage, this, in_storageLocation, in_filePath, in_delegate, out_resource), in_storageLocation, in_filePath, in_delegate, out_resource);
+            //auto task = Core::MakeTask(this, &ImageProvider::LoadImage, in_storageLocation, in_filePath, in_delegate, out_resource);
+            
             Core::TaskScheduler::ScheduleTask(task);
         }
         //-----------------------------------------------------------

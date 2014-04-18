@@ -340,10 +340,9 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		Core::ImageFormat Cubemap::GetFormat(u32 in_faceIndex) const
+		Core::ImageFormat Cubemap::GetFormat(Face in_face) const
 		{
-            CS_ASSERT(in_faceIndex < 6, "Cubemap face index out of bounds");
-			return m_formats[in_faceIndex];
+			return m_formats[(u32)in_face];
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------

@@ -50,7 +50,7 @@ namespace ChilliSource
         {
             while (m_isFinished == false)
             {
-                GenericTaskType task = m_tasks.front();
+                GenericTaskType task(std::move(m_tasks.front()));
                 m_tasks.pop();
                 task();
             }

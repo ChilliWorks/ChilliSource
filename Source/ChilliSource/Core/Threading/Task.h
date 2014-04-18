@@ -242,6 +242,38 @@ namespace ChilliSource
             std::tuple<typename std::remove_reference<TArgTypes>::type...> m_args;
             WaitCondition* m_waitCondition;
         };
+        //------------------------------------------------------------------
+        /// Convenience method to create a new task that can infer the
+        /// template types
+        ///
+        /// @author S Downie
+        ///
+        /// @param Delegate
+        /// @param Variadic args
+        ///
+        /// @return Task
+        //------------------------------------------------------------------
+//        template <typename... TArgTypes> Task<TArgTypes...> MakeTask(const typename Task<TArgTypes...>::TaskDelegate& in_taskDelegate, TArgTypes... in_args)
+//        {
+//            return Task<TArgTypes...>(in_taskDelegate, in_args...);
+//        }
+        //------------------------------------------------------------------
+        /// Convenience method to create a new task that can infer the
+        /// template types
+        ///
+        /// @author S Downie
+        ///
+        /// @param Delegate function that is called when the task is executed
+        /// @param Wait condition that task will notify when it completes.
+        /// This can be used to block on the task.
+        /// @param [Variadic] Arguments to pass to the task on execution
+        ///
+        /// @return Task
+        //------------------------------------------------------------------
+//        template <typename... TArgTypes, typename TDelegate, typename TSender> Task<TArgTypes...> MakeTask(TSender* in_sender, void (TDelegate::*in_func)(TArgTypes...), TArgTypes... in_args)
+//        {
+//            return Task<TArgTypes...>(in_sender, in_func, in_args...);
+//        }
     }
 }
 

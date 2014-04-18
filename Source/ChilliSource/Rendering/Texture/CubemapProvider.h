@@ -49,14 +49,6 @@ namespace ChilliSource
             
             CS_DECLARE_NAMEDTYPE(CubemapProvider);
             
-            //-------------------------------------------------------
-            /// Factory method
-            ///
-            /// @author S Downie
-            ///
-            /// @return New provider with ownership transferred
-            //-------------------------------------------------------
-            static CubemapProviderUPtr Create();
 			//-------------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -112,6 +104,15 @@ namespace ChilliSource
 			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource) override;
 			
 		private:
+            friend class Core::Application;
+            //-------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @return New provider with ownership transferred
+            //-------------------------------------------------------
+            static CubemapProviderUPtr Create();
             //----------------------------------------------------------------------------
             /// Private constructor to force use of factory method
             ///

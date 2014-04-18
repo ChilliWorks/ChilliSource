@@ -47,7 +47,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
 		//-----------------------------------------------------------
-		class TextureUnitSystem : public Core::AppSystem
+		class TextureUnitSystem final : public Core::AppSystem
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(TextureUnitSystem);
