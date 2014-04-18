@@ -96,7 +96,7 @@ namespace ChilliSource
 			//Load model as task
             Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, SubtitlesSPtr&>
             task(this, &CSSubtitlesProvider::LoadSubtitles, in_storageLocation, in_filePath, in_delegate, pSubtitles);
-			Core::TaskScheduler::ScheduleTask(task);
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
@@ -115,7 +115,7 @@ namespace ChilliSource
                 if(in_delegate != nullptr)
                 {
                     Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+                    Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
                 }
                 return;
             }
@@ -137,7 +137,7 @@ namespace ChilliSource
                         if(in_delegate != nullptr)
                         {
                             Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                            Core::TaskScheduler::ScheduleMainThreadTask(task);
+                            Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
                         }
                         return;
                     }
@@ -150,7 +150,7 @@ namespace ChilliSource
                 if(in_delegate != nullptr)
                 {
                     Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+                    Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
                 }
                 return;
             }
@@ -172,7 +172,7 @@ namespace ChilliSource
                         if(in_delegate != nullptr)
                         {
                             Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                            Core::TaskScheduler::ScheduleMainThreadTask(task);
+                            Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
                         }
                         return;
                     }
@@ -185,7 +185,7 @@ namespace ChilliSource
                 if(in_delegate != nullptr)
                 {
                     Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+                    Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
                 }
                 return;
             }
@@ -195,7 +195,7 @@ namespace ChilliSource
             if(in_delegate != nullptr)
             {
                 Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                Core::TaskScheduler::ScheduleMainThreadTask(task);
+                Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
             }
         }
         //-------------------------------------------------------------------------

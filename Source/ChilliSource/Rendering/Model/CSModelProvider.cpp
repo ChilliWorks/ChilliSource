@@ -479,7 +479,7 @@ namespace ChilliSource
 			
             //Load model as task
 			Core::Task<Core::StorageLocation, const std::string&, const AsyncLoadDelegate&, const MeshSPtr&> MeshTask(this, &CSModelProvider::LoadMeshDataTask, in_location, in_filePath, in_delegate, meshResource);
-			Core::TaskScheduler::ScheduleTask(MeshTask);
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(MeshTask);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -490,12 +490,12 @@ namespace ChilliSource
 			if (false == ReadFile(in_location, in_filePath, descriptor))
 			{
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-                Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const MeshSPtr&>(in_delegate, out_resource));
+				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const MeshSPtr&>(in_delegate, out_resource));
 				return;
 			}
 			
 			//start a main thread task for loading the data into a mesh
-			Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const AsyncLoadDelegate&, MeshDescriptor&, const MeshSPtr&>(this, &CSModelProvider::BuildMesh, in_delegate, descriptor, out_resource));
+			Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const AsyncLoadDelegate&, MeshDescriptor&, const MeshSPtr&>(this, &CSModelProvider::BuildMesh, in_delegate, descriptor, out_resource));
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------

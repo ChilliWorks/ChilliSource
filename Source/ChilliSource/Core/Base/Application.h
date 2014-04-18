@@ -248,6 +248,17 @@ namespace ChilliSource
             {
                 return m_fileSystem;
             }
+			//-----------------------------------------------------
+			/// Returns a pointer to the task scheduler.
+			///
+			/// @author S Downie
+			///
+			/// @return Pointer to the task scheduler
+			//-----------------------------------------------------
+			inline TaskScheduler* GetTaskScheduler()
+			{
+				return m_taskScheduler;
+			}
             //-----------------------------------------------------
 			/// Returns a pointer to the resource pool system.
             ///
@@ -477,6 +488,7 @@ namespace ChilliSource
             
             ResourcePool* m_resourcePool;
 			StateManager* m_stateManager;
+			TaskScheduler* m_taskScheduler;
 			Rendering::RendererUPtr m_renderer;
             Rendering::RenderSystem* m_renderSystem;
             PlatformSystemUPtr m_platformSystem;

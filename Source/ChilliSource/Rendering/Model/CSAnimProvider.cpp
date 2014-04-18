@@ -190,8 +190,7 @@ namespace ChilliSource
             >
             AnimTask(this, &CSAnimProvider::ReadSkinnedAnimationFromFile, in_location, in_filePath, in_delegate, anim);
             
-            
-			Core::TaskScheduler::ScheduleTask(AnimTask);
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(AnimTask);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -208,7 +207,7 @@ namespace ChilliSource
                 if(in_delegate != nullptr)
                 {
                     Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
                 }
                 return;
             }
@@ -220,7 +219,7 @@ namespace ChilliSource
             if(in_delegate != nullptr)
             {
                 Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                Core::TaskScheduler::ScheduleMainThreadTask(task);
+				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
             }
 		}
 	}

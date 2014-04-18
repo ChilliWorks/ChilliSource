@@ -535,14 +535,14 @@ namespace ChilliSource
                                 else
                                 {
                                     out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
-                                    Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
+									Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
                                     return;
                                 }
                             }
                             else
                             {
                                 out_material->SetLoadState(Core::Resource::LoadState::k_failed);
-                                Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
+								Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
                                 return;
                             }
                         });
@@ -565,14 +565,14 @@ namespace ChilliSource
                                 else
                                 {
                                     out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
-                                    Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
+									Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
                                     return;
                                 }
                             }
                             else
                             {
                                 out_material->SetLoadState(Core::Resource::LoadState::k_failed);
-                                Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
+								Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
                                 return;
                             }
                         });
@@ -595,14 +595,14 @@ namespace ChilliSource
                                 else
                                 {
                                     out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
-                                    Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
+									Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
                                     return;
                                 }
                             }
                             else
                             {
                                 out_material->SetLoadState(Core::Resource::LoadState::k_failed);
-                                Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
+								Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
                                 return;
                             }
                         });
@@ -722,7 +722,7 @@ namespace ChilliSource
 		{
 			Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, Core::ResourceSPtr&>
             BuildMaterialTask(this, &MaterialProvider::BuildMaterialTask, in_location, in_filePath, in_delegate, out_resource);
-			Core::TaskScheduler::ScheduleTask(BuildMaterialTask);
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(BuildMaterialTask);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -734,7 +734,7 @@ namespace ChilliSource
 			if(BuildMaterialFromFile(in_location, in_filePath, shaderFiles, textureFiles, cubemapFiles, (Material*)out_resource.get()) == false)
             {
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-                Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<Core::ResourceSPtr&>(in_delegate, out_resource));
+				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<Core::ResourceSPtr&>(in_delegate, out_resource));
                 return;
             }
             

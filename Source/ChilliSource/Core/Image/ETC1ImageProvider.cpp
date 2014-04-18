@@ -78,7 +78,7 @@ namespace ChilliSource
                     if(in_delegate != nullptr)
                     {
                         Task<ResourceSPtr&> task(in_delegate, out_resource);
-                        TaskScheduler::ScheduleMainThreadTask(task);
+						Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
                     }
                     return;
                 }
@@ -130,7 +130,7 @@ namespace ChilliSource
                 if(in_delegate != nullptr)
                 {
                     Task<ResourceSPtr&> task(in_delegate, out_resource);
-                    TaskScheduler::ScheduleMainThreadTask(task);
+					Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
                 }
             }
         }
@@ -172,7 +172,7 @@ namespace ChilliSource
         {
             Task<StorageLocation, const std::string&, const ResourceProvider::AsyncLoadDelegate&, ResourceSPtr&>
             task(LoadImage, in_storageLocation, in_filepath, in_delegate, out_resource);
-            TaskScheduler::ScheduleTask(task);
+			Application::Get()->GetTaskScheduler()->ScheduleTask(task);
         }
     }
 }

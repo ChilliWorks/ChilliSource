@@ -9,6 +9,7 @@
 #include <ChilliSource/Backend/Platform/Windows/Networking/Http/HttpRequest.h>
 
 #include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -138,7 +139,7 @@ namespace ChilliSource
 			CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
 
 			//Begin the read loop as a threaded task
-			Core::TaskScheduler::ScheduleTask(Core::Task<HINTERNET, HINTERNET>(Core::MakeDelegate(this, &HttpRequest::PollReadStream), in_requestHandle, in_connectionHandle));
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::Task<HINTERNET, HINTERNET>(Core::MakeDelegate(this, &HttpRequest::PollReadStream), in_requestHandle, in_connectionHandle));
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------

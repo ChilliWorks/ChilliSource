@@ -142,7 +142,7 @@ namespace ChilliSource
                     out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
+						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
                     }
                     return;
                 }
@@ -158,7 +158,7 @@ namespace ChilliSource
                     out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
+						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
                     }
                     return;
                 }
@@ -170,7 +170,7 @@ namespace ChilliSource
                     out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
+						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
                     }
                     return;
                 }
@@ -182,7 +182,7 @@ namespace ChilliSource
                     out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
+						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
                     }
                     return;
                 }
@@ -201,7 +201,7 @@ namespace ChilliSource
                         out_shaderResource->SetLoadState(Core::Resource::LoadState::k_loaded);
                         in_completionDelegate(out_shaderResource);
                     };
-                    Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const std::string&, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, ShaderSPtr&>
+					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const std::string&, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, ShaderSPtr&>
                                                                 (buildTask, vsChunk, fsChunk, in_delegate, out_shader));
                 }
             }
