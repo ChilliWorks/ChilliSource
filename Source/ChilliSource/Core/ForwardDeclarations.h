@@ -39,6 +39,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(PlatformSystem);
         CS_FORWARDDECLARE_CLASS(QueryableInterface);
         CS_FORWARDDECLARE_CLASS(Screen);
+        enum class AlignmentAnchor;
         //---------------------------------------------------------
         /// Container
         //---------------------------------------------------------
