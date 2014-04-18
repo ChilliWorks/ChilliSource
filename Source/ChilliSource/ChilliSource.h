@@ -45,6 +45,7 @@ typedef u64                 TimeIntervalMs;
 #include <ChilliSource/Networking/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Social/ForwardDeclarations.h>
+#include <ChilliSource/UI/ForwardDeclarations.h>
 #include <ChilliSource/Video/ForwardDeclarations.h>
 #include <ChilliSource/Web/ForwardDeclarations.h>
 //------------------------------------------------------------
@@ -66,6 +67,7 @@ namespace ChilliSource
     namespace Networking{}
     namespace Rendering{}
     namespace Social{}
+    namespace UI{}
     namespace Video{}
     namespace Web{}
 }
@@ -77,6 +79,7 @@ namespace CSGUI = ChilliSource::GUI;
 namespace CSNetworking = ChilliSource::Networking;
 namespace CSRendering = ChilliSource::Rendering;
 namespace CSSocial = ChilliSource::Social;
+namespace CSUI = ChilliSource::UI;
 namespace CSVideo = ChilliSource::Video;
 namespace CSWeb = ChilliSource::Web;
 
