@@ -135,7 +135,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const Core::Vector2Old& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const Core::Vector2& in_value, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             

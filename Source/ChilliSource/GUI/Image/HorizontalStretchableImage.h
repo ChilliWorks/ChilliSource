@@ -28,9 +28,9 @@ namespace ChilliSource
                 Core::Rectangle m_centreUVs;
                 Core::Rectangle m_rightUVs;
                 
-                Core::Vector2Old m_leftSize;
-                Core::Vector2Old m_centreSize;
-                Core::Vector2Old m_rightSize;
+                Core::Vector2 m_leftSize;
+                Core::Vector2 m_centreSize;
+                Core::Vector2 m_rightSize;
             };
             
 			DECLARE_META_CLASS(HorizontalStretchableImage)

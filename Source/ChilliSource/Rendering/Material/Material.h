@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3Old.h>
 #include <ChilliSource/Core/Math/Vector4Old.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>
@@ -296,7 +296,7 @@ namespace ChilliSource
 			/// @param Variable name
 			/// @param Vec2 value
 			//-----------------------------------------------------------
-			void SetShaderVar(const std::string& in_varName, const Core::Vector2Old& in_value);
+			void SetShaderVar(const std::string& in_varName, const Core::Vector2& in_value);
 			//-----------------------------------------------------------
 			/// Set the value of the variable with the given name to the
             /// given value
@@ -362,7 +362,7 @@ namespace ChilliSource
             
             //TODO: Make private when we rework the render system
             std::unordered_map<std::string, f32> m_floatVars;
-			std::unordered_map<std::string, Core::Vector2Old> m_vec2Vars;
+			std::unordered_map<std::string, Core::Vector2> m_vec2Vars;
 			std::unordered_map<std::string, Core::Vector3Old> m_vec3Vars;
 			std::unordered_map<std::string, Core::Vector4Old> m_vec4Vars;
 			std::unordered_map<std::string, Core::Matrix4x4Old> m_mat4Vars;

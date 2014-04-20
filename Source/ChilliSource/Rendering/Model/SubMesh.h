@@ -13,7 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3Old.h>
 #include <ChilliSource/Core/Math/Vector4Old.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>

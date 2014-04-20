@@ -11,7 +11,7 @@
 #define _MO_FLO_CORE_SCREEN_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 
 namespace ChilliSource
 {
@@ -37,14 +37,14 @@ namespace ChilliSource
 			///
 			/// @return Vector containing the width and height of the screen
 			//----------------------------------------------------------------
-			static const Vector2Old& GetRawDimensions();
+			static const Vector2& GetRawDimensions();
 			//----------------------------------------------------------------
 			/// Get Oriented Dimensions
 			///
 			/// @return Vector containing the width and height of the screen
 			/// in the current orientation
 			//----------------------------------------------------------------
-			static const Vector2Old& GetOrientedDimensions();
+			static const Vector2& GetOrientedDimensions();
 			//----------------------------------------------------------------
 			/// Get Oriented Width
 			///
@@ -114,7 +114,7 @@ namespace ChilliSource
 			///
 			/// @param Screen size in default orientation
 			//----------------------------------------------------------------
-			static void SetRawDimensions(const Vector2Old & invRawScreenDimensions);
+			static void SetRawDimensions(const Vector2 & invRawScreenDimensions);
 			//----------------------------------------------------------------
 			/// Set Orientation
 			///
@@ -140,8 +140,8 @@ namespace ChilliSource
 
 		private:
 
-			static Vector2Old mvRawDims;
-			static Vector2Old mvOrientedDims;
+			static Vector2 mvRawDims;
+			static Vector2 mvOrientedDims;
 			static ScreenOrientation mOrientation; 
             static bool mbIsHighDefinition;
             static f32 mfDensityScale;

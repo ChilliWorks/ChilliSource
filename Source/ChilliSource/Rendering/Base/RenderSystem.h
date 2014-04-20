@@ -92,7 +92,7 @@ namespace ChilliSource
 			virtual void SetBlendFunction(BlendMode ineSrcFunc, BlendMode ineDstFunc) = 0;
             virtual void SetDepthFunction(DepthTestComparison ineFunc) = 0;
             virtual void SetCullFace(CullFace ineCullFace) = 0;
-            virtual void SetScissorRegion(const Core::Vector2Old& invPosition, const Core::Vector2Old& invSize) = 0;
+            virtual void SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize) = 0;
 			
 			virtual MeshBuffer* CreateBuffer(BufferDescription&) = 0;
 			virtual void RenderVertexBuffer(MeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::Matrix4x4Old&) = 0;

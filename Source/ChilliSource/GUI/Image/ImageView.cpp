@@ -41,7 +41,7 @@ namespace ChilliSource
         ///
         /// Default
         //--------------------------------------------------------
-        ImageView::ImageView() : UVs(Core::Vector2Old(0, 0), Core::Vector2Old(1, 1)), UVOffsets(Core::Vector2Old(0, 0), Core::Vector2Old(1, 1)), SizeFromImage(false),
+        ImageView::ImageView() : UVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), UVOffsets(Core::Vector2(0, 0), Core::Vector2(1, 1)), SizeFromImage(false),
         HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), ActAsSpacer(false), FlipHorizontal(false), FlipVertical(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             
@@ -54,7 +54,7 @@ namespace ChilliSource
         /// @param Param dictionary
         //------------------------------------------------------
         ImageView::ImageView(const Core::ParamDictionary& insParams)
-        : GUIView(insParams), UVs(Core::Vector2Old(0, 0), Core::Vector2Old(1, 1)), UVOffsets(Core::Vector2Old(0, 0), Core::Vector2Old(1, 1)),
+        : GUIView(insParams), UVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), UVOffsets(Core::Vector2(0, 0), Core::Vector2(1, 1)),
         SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), ActAsSpacer(false), FlipHorizontal(false), FlipVertical(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             std::string strValue;
@@ -113,13 +113,13 @@ namespace ChilliSource
             //---Set Maintain Width
             if(insParams.TryGetValue("SetHeightMaintain", strValue))
             {
-                Core::Vector2Old vSize = Core::ParseVector2Old(strValue);
+                Core::Vector2 vSize = Core::ParseVector2(strValue);
                 SetHeightMaintainingAspect(vSize.x, vSize.y);
             }
             //---Set Maintain Height
             if(insParams.TryGetValue("SetWidthMaintain", strValue))
             {
-                Core::Vector2Old vSize = Core::ParseVector2Old(strValue);
+                Core::Vector2 vSize = Core::ParseVector2(strValue);
                 SetWidthMaintainingAspect(vSize.x, vSize.y);
             }
             //---Set Fill Maintain
@@ -181,8 +181,8 @@ namespace ChilliSource
         {
             f32 fWidthOfArea = insUVs.Right() - insUVs.Left();
             f32 fHeightOfArea = insUVs.Bottom() - insUVs.Top();
-            Core::Vector2Old vTopLeft = Core::Vector2Old((fWidthOfArea*insOffsets.Left())+insUVs.Left(), (fHeightOfArea*insOffsets.Top())+insUVs.Top());
-            Core::Vector2Old vBottomRight = Core::Vector2Old((fWidthOfArea*insOffsets.Right()), (fHeightOfArea*insOffsets.Bottom()));
+            Core::Vector2 vTopLeft = Core::Vector2((fWidthOfArea*insOffsets.Left())+insUVs.Left(), (fHeightOfArea*insOffsets.Top())+insUVs.Top());
+            Core::Vector2 vBottomRight = Core::Vector2((fWidthOfArea*insOffsets.Right()), (fHeightOfArea*insOffsets.Bottom()));
             outsUVs = Core::Rectangle(vTopLeft, vBottomRight);
         }
         //--------------------------------------------------------
@@ -288,7 +288,7 @@ namespace ChilliSource
             
             if(TextureAtlas == nullptr)
             {
-                m_imageSize = Core::Vector2Old((f32)Texture->GetWidth(), (f32)Texture->GetHeight());
+                m_imageSize = Core::Vector2((f32)Texture->GetWidth(), (f32)Texture->GetHeight());
             }
             
             LayoutContent();
@@ -384,7 +384,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void ImageView::SetSizeFromImage()
         {
-            SetSize(Core::UnifiedVector2Old(Core::Vector2Old::ZERO, GetSizeFromImage()));
+            SetSize(Core::UnifiedVector2(Core::Vector2::k_zero, GetSizeFromImage()));
         }
 		
         //--------------------------------------------------------
@@ -392,7 +392,7 @@ namespace ChilliSource
         ///
         /// @return Absolute size of the image
         //--------------------------------------------------------
-        Core::Vector2Old ImageView::GetSizeFromImage() const
+        Core::Vector2 ImageView::GetSizeFromImage() const
         {
             return m_imageSize;
         }
@@ -492,7 +492,7 @@ namespace ChilliSource
 			if(fScaleY == 0.0f)
 				return;
             
-            Core::Vector2Old vCurrentSize = GetSizeFromImage();
+            Core::Vector2 vCurrentSize = GetSizeFromImage();
             f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
             
             vCurrentSize = GetAbsoluteSize();
@@ -517,7 +517,7 @@ namespace ChilliSource
 			if(fScaleX == 0.0f)
 				return;
             
-            Core::Vector2Old vCurrentSize = GetSizeFromImage();
+            Core::Vector2 vCurrentSize = GetSizeFromImage();
             f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
             
             vCurrentSize = GetAbsoluteSize();
@@ -544,8 +544,8 @@ namespace ChilliSource
             if(GetParentViewPtr() == nullptr)
                 return;
             
-            Core::Vector2Old vParentSize(GetParentViewPtr()->GetAbsoluteSize());
-            Core::Vector2Old vImageSize(GetSizeFromImage());
+            Core::Vector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
+            Core::Vector2 vImageSize(GetSizeFromImage());
             
             f32 fParentRatio = (vParentSize.x * infRelWidth) / (vParentSize.y * infRelHeight);
             f32 fImageRatio = vImageSize.x / vImageSize.y;
@@ -579,8 +579,8 @@ namespace ChilliSource
             if(GetParentViewPtr() == nullptr)
                 return;
             
-            Core::Vector2Old vParentSize(GetParentViewPtr()->GetAbsoluteSize());
-            Core::Vector2Old vImageSize(GetSizeFromImage());
+            Core::Vector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
+            Core::Vector2 vImageSize(GetSizeFromImage());
             
             f32 fParentRatio = (vParentSize.x * infRelWidth) / (vParentSize.y * infRelHeight);
             f32 fImageRatio = vImageSize.x / vImageSize.y;
@@ -677,12 +677,12 @@ namespace ChilliSource
             }
             else if(HeightMaintain)
             {
-                Core::UnifiedVector2Old uvSize = GetSize();
+                Core::UnifiedVector2 uvSize = GetSize();
                 SetHeightMaintainingAspect(uvSize.GetRelative().y, uvSize.GetAbsolute().y);
             }
             else if(WidthMaintain)
             {
-                Core::UnifiedVector2Old uvSize = GetSize();
+                Core::UnifiedVector2 uvSize = GetSize();
                 SetWidthMaintainingAspect(uvSize.GetRelative().x, uvSize.GetAbsolute().x);
             }
         }

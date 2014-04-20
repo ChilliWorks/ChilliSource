@@ -46,12 +46,12 @@ namespace ChilliSource
         //-----------------------------------------------------------
         HighlightButton::HighlightButton() 
         : mpBackgroundImage(new ImageView()), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
-        msDefaultUVs(Core::Vector2Old::ZERO, Core::Vector2Old::ONE),
-        msHighlightUVs(Core::Vector2Old::ZERO, Core::Vector2Old::ONE),
+        msDefaultUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
+        msHighlightUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
         {
-            mpBackgroundImage->SetSize(Core::UnifiedVector2Old(Core::Vector2Old(1.0f, 1.0f), Core::Vector2Old(0, 0)));
-            mpBackgroundImage->SetPosition(Core::UnifiedVector2Old(Core::Vector2Old(0.5f, 0.5f), Core::Vector2Old(0, 0)));
+            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
+            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::Vector2(0.5f, 0.5f), Core::Vector2(0, 0)));
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
@@ -67,8 +67,8 @@ namespace ChilliSource
         //------------------------------------------------------------
         HighlightButton::HighlightButton(const Core::ParamDictionary& insParams) 
         : Button(insParams), mpBackgroundImage(new ImageView()),
-        msDefaultUVs(Core::Vector2Old::ZERO, Core::Vector2Old::ONE),
-        msHighlightUVs(Core::Vector2Old::ZERO, Core::Vector2Old::ONE),
+        msDefaultUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
+        msHighlightUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
         mbSelected(false), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
 		SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
         {
@@ -161,14 +161,14 @@ namespace ChilliSource
 			//---Set Maintain Height
 			if(insParams.TryGetValue("SetHeightMaintain", strValue))
 			{
-				Core::Vector2Old vSize = Core::ParseVector2Old(strValue);
+				Core::Vector2 vSize = Core::ParseVector2(strValue);
 				HeightMaintain = true;
 				SetHeightMaintainingAspect(vSize.x, vSize.y);
 			}
 			//---Set Maintain Width
 			if(insParams.TryGetValue("SetWidthMaintain", strValue))
 			{
-				Core::Vector2Old vSize = Core::ParseVector2Old(strValue);
+				Core::Vector2 vSize = Core::ParseVector2(strValue);
 				WidthMaintain = true;
 				SetWidthMaintainingAspect(vSize.x, vSize.y);
 			}
@@ -185,8 +185,8 @@ namespace ChilliSource
                 SetFitMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             
-            mpBackgroundImage->SetSize(Core::UnifiedVector2Old(Core::Vector2Old(1.0f, 1.0f), Core::Vector2Old(0, 0)));
-            mpBackgroundImage->SetPosition(Core::UnifiedVector2Old(Core::Vector2Old(0.5f, 0.5f), Core::Vector2Old(0, 0)));
+            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
+            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::Vector2(0.5f, 0.5f), Core::Vector2(0, 0)));
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
@@ -513,7 +513,7 @@ namespace ChilliSource
 		{
 			if(SizeFromImage)
 			{
-				Core::Vector2Old vImageSize = mpBackgroundImage->GetSizeFromImage();
+				Core::Vector2 vImageSize = mpBackgroundImage->GetSizeFromImage();
 				SetSize(0.0f, 0.0f, vImageSize.x, vImageSize.y);
 			}
             else if(HeightFromImage)
@@ -547,12 +547,12 @@ namespace ChilliSource
             }
             else if(HeightMaintain)
             {
-                Core::UnifiedVector2Old uvSize = GetSize();
+                Core::UnifiedVector2 uvSize = GetSize();
                 SetHeightMaintainingAspect(uvSize.GetRelative().y, uvSize.GetAbsolute().y);
             }
             else if(WidthMaintain)
             {
-                Core::UnifiedVector2Old uvSize = GetSize();
+                Core::UnifiedVector2 uvSize = GetSize();
                 SetWidthMaintainingAspect(uvSize.GetRelative().x, uvSize.GetAbsolute().x);
             }
         }
@@ -652,7 +652,7 @@ namespace ChilliSource
 		///
 		/// @return Absolute size of the image
 		//--------------------------------------------------------
-		Core::Vector2Old HighlightButton::GetSizeFromImage() const
+		Core::Vector2 HighlightButton::GetSizeFromImage() const
 		{
 			return GetBackgroundImageView()->GetSizeFromImage();
 		}
@@ -674,7 +674,7 @@ namespace ChilliSource
 			if(fScaleY == 0.0f)
 				return;
             
-            Core::Vector2Old vCurrentSize = GetSizeFromImage();
+            Core::Vector2 vCurrentSize = GetSizeFromImage();
             f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
             
             vCurrentSize = GetAbsoluteSize();
@@ -699,7 +699,7 @@ namespace ChilliSource
 			if(fScaleX == 0.0f)
 				return;
             
-            Core::Vector2Old vCurrentSize = GetSizeFromImage();
+            Core::Vector2 vCurrentSize = GetSizeFromImage();
             f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
             
             vCurrentSize = GetAbsoluteSize();
@@ -766,8 +766,8 @@ namespace ChilliSource
             if(GetParentViewPtr() == nullptr)
                 return;
             
-            Core::Vector2Old vParentSize(GetParentViewPtr()->GetAbsoluteSize());
-            Core::Vector2Old vImageSize(GetSizeFromImage());
+            Core::Vector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
+            Core::Vector2 vImageSize(GetSizeFromImage());
             
             f32 fParentRatio = (vParentSize.x * infRelWidth) / (vParentSize.y * infRelHeight);
             f32 fImageRatio = vImageSize.x / vImageSize.y;
@@ -801,8 +801,8 @@ namespace ChilliSource
             if(GetParentViewPtr() == nullptr)
                 return;
             
-            Core::Vector2Old vParentSize(GetParentViewPtr()->GetAbsoluteSize());
-            Core::Vector2Old vImageSize(GetSizeFromImage());
+            Core::Vector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
+            Core::Vector2 vImageSize(GetSizeFromImage());
             
             f32 fParentRatio = (vParentSize.x * infRelWidth) / (vParentSize.y * infRelHeight);
             f32 fImageRatio = vImageSize.x / vImageSize.y;

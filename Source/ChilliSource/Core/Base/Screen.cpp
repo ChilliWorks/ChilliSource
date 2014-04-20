@@ -13,8 +13,8 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		Vector2Old Screen::mvRawDims;
-		Vector2Old Screen::mvOrientedDims;
+		Vector2 Screen::mvRawDims;
+		Vector2 Screen::mvOrientedDims;
 		ScreenOrientation Screen::mOrientation = ScreenOrientation::k_undefined;
 		bool Screen::mbIsHighDefinition = false;
         f32 Screen::mfDensityScale = kfDefaultNormalResScreenDensity;
@@ -25,7 +25,7 @@ namespace ChilliSource
 		///
 		/// @param Screen size in default orientation
 		//----------------------------------------------------------------
-		void Screen::SetRawDimensions(const Vector2Old & invRawScreenDimensions)
+		void Screen::SetRawDimensions(const Vector2 & invRawScreenDimensions)
 		{
 			mvRawDims = invRawScreenDimensions;
 
@@ -44,7 +44,7 @@ namespace ChilliSource
 		///
 		/// @return Vector containing the width and height of the screen
 		//----------------------------------------------------------------
-		const Vector2Old& Screen::GetRawDimensions() 
+		const Vector2& Screen::GetRawDimensions() 
 		{
 			return mvRawDims;
 		}
@@ -54,7 +54,7 @@ namespace ChilliSource
 		/// @return Vector containing the width and height of the screen
 		/// in the current orientation
 		//----------------------------------------------------------------
-		const Vector2Old& Screen::GetOrientedDimensions() 
+		const Vector2& Screen::GetOrientedDimensions() 
 		{
 			return mvOrientedDims;
 		}

@@ -118,7 +118,7 @@ namespace ChilliSource
             /// @param Value
             /// @param Failure policy
             //----------------------------------------------------------
-            void SetUniform(const std::string& in_varName, const Core::Vector2Old& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            void SetUniform(const std::string& in_varName, const Core::Vector2& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
             //----------------------------------------------------------
             /// Attempts to set the uniform shader variable with the
             /// given name to the given value.

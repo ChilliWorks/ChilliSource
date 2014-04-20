@@ -35,9 +35,9 @@ namespace ChilliSource
                 Core::Rectangle m_middleUVs;
                 Core::Rectangle m_bottomUVs;
                 
-                Core::Vector2Old m_topSize;
-                Core::Vector2Old m_middleSize;
-                Core::Vector2Old m_bottomSize;
+                Core::Vector2 m_topSize;
+                Core::Vector2 m_middleSize;
+                Core::Vector2 m_bottomSize;
             };
             VerticalStretchableImage();
             VerticalStretchableImage(const Core::ParamDictionary& insParams);

@@ -212,7 +212,7 @@ namespace ChilliSource
             f32 mfEmissionFreq;
             f32 mfTimeToLive;
             f32 mfEnergyLoss;
-            Core::Vector2Old mvInitialScale;
+            Core::Vector2 mvInitialScale;
             
             bool mbShouldLoop;
             bool mbIsEmitting;

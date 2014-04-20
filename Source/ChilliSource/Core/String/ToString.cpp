@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>
 #include <ChilliSource/Core/Math/QuaternionOld.h>
-#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3Old.h>
 #include <ChilliSource/Core/Math/Vector4Old.h>
 
@@ -141,7 +141,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const Vector2Old& in_value)
+        std::string ToString(const Vector2& in_value)
         {
             std::stringstream stream;
 			stream << in_value.x << " " << in_value.y;

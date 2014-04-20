@@ -40,7 +40,7 @@ namespace ChilliSource
 		/// Container for a rectangle with it's origin 
 		/// at top left
 		//================================================
-		Rectangle::Rectangle(const Vector2Old &invOrigin, const Vector2Old &invSize) : vOrigin(invOrigin), vSize(invSize)
+		Rectangle::Rectangle(const Vector2 &invOrigin, const Vector2 &invSize) : vOrigin(invOrigin), vSize(invSize)
 		{
 		}
 		//-----------------------------------------------
@@ -81,7 +81,7 @@ namespace ChilliSource
 		///
 		/// @return Top left co-ordinate
 		//-----------------------------------------------
-		const Core::Vector2Old& Rectangle::TopLeft() const
+		const Core::Vector2& Rectangle::TopLeft() const
 		{
 			return vOrigin;
 		}
@@ -90,34 +90,34 @@ namespace ChilliSource
 		///
 		/// @return Top right co-ordinate
 		//-----------------------------------------------
-		const Core::Vector2Old Rectangle::TopRight() const
+		const Core::Vector2 Rectangle::TopRight() const
 		{
-			return Vector2Old(vOrigin.x + vSize.x, vOrigin.y); 
+			return Vector2(vOrigin.x + vSize.x, vOrigin.y); 
 		}
 		//-----------------------------------------------
 		/// Bottom Left
 		///
 		/// @return Bottom left co-ordinate
 		//-----------------------------------------------
-		const Core::Vector2Old Rectangle::BottomLeft() const
+		const Core::Vector2 Rectangle::BottomLeft() const
 		{
-			return Vector2Old(vOrigin.x, vOrigin.y + vSize.y);
+			return Vector2(vOrigin.x, vOrigin.y + vSize.y);
 		}
 		//-----------------------------------------------
 		/// Bottom Right
 		///
 		/// @return Bottom right co-ordinate
 		//-----------------------------------------------
-		const Core::Vector2Old Rectangle::BottomRight() const
+		const Core::Vector2 Rectangle::BottomRight() const
 		{
-			return Vector2Old(vOrigin.x + vSize.x, vOrigin.y + vSize.y);
+			return Vector2(vOrigin.x + vSize.x, vOrigin.y + vSize.y);
 		}
 		//-----------------------------------------------
 		/// Centre
 		///
 		/// @return Centre point
 		//-----------------------------------------------
-		const Core::Vector2Old Rectangle::Centre() const
+		const Core::Vector2 Rectangle::Centre() const
 		{
 			return vOrigin + (vSize * 0.5f);
 		}
@@ -127,7 +127,7 @@ namespace ChilliSource
 		/// @param Point in 2D space
 		/// @return Whether point intersects the rect
 		//-----------------------------------------------
-		bool Rectangle::Contains(const Vector2Old& invPoint) const
+		bool Rectangle::Contains(const Vector2& invPoint) const
 		{
 			return ShapeIntersection::Intersects(*this, invPoint);
 		}
@@ -150,8 +150,8 @@ namespace ChilliSource
         {
 			if (vSize.x < 0.0f || vSize.y < 0.0f)
             {
-				Vector2Old vFixedOrigin = vOrigin;
-				Vector2Old vFixedSize = vSize;
+				Vector2 vFixedOrigin = vOrigin;
+				Vector2 vFixedSize = vSize;
 				
 				if (vSize.x < 0.0f )
                 {
@@ -183,10 +183,10 @@ namespace ChilliSource
             Rectangle cUnion;
             
             // Determine rectangle extremities
-            Vector2Old vTopLeft1 = TopLeft();
-            Vector2Old vTopLeft2 = inRect.TopLeft();
-            Vector2Old vBottomRight1 = BottomRight();
-            Vector2Old vBottomRight2 = inRect.BottomRight();
+            Vector2 vTopLeft1 = TopLeft();
+            Vector2 vTopLeft2 = inRect.TopLeft();
+            Vector2 vBottomRight1 = BottomRight();
+            Vector2 vBottomRight2 = inRect.BottomRight();
             
             // Adjust origin
             if (vTopLeft2.x < vTopLeft1.x)
@@ -219,7 +219,7 @@ namespace ChilliSource
 		/// Container for a circle with it's origin 
 		/// at centre
 		//================================================
-		Circle::Circle(const Vector2Old &invOrigin, const f32 infRadius) : vOrigin(invOrigin), fRadius(infRadius)
+		Circle::Circle(const Vector2 &invOrigin, const f32 infRadius) : vOrigin(invOrigin), fRadius(infRadius)
 		{
 		}
 		//-----------------------------------------------
@@ -228,7 +228,7 @@ namespace ChilliSource
 		/// @param Point in 2D space
 		/// @return Whether point intersects the circle
 		//-----------------------------------------------
-		bool Circle::Contains(const Vector2Old & invPoint) const
+		bool Circle::Contains(const Vector2 & invPoint) const
 		{
 			return ShapeIntersection::Intersects(*this, invPoint);
 		}

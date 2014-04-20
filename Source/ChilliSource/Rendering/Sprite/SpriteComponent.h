@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
-#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Base/ByteColour.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
@@ -51,7 +51,7 @@ namespace ChilliSource
             struct SpriteVertex
             {
                 Core::Vector4Old vPos;
-                Core::Vector2Old vTex;
+                Core::Vector2 vTex;
                 Core::ByteColour Col;
             };
             
@@ -104,7 +104,7 @@ namespace ChilliSource
 			///
 			/// @param Vector containing width and height
 			//-----------------------------------------------------------
-			void SetDimensions(const Core::Vector2Old &invDims);
+			void SetDimensions(const Core::Vector2 &invDims);
 			//-----------------------------------------------------------
 			/// Set Dimensions
 			///
@@ -129,14 +129,14 @@ namespace ChilliSource
 			///
 			/// @return Vector containing width and height
 			//-----------------------------------------------------------
-			const Core::Vector2Old& GetDimensions() const;
+			const Core::Vector2& GetDimensions() const;
 			//-----------------------------------------------------------
 			/// Get Dimensions Unfactored
 			///
 			/// @return Vector containing width and height, without applying
 			/// the screen factor
 			//-----------------------------------------------------------
-			const Core::Vector2Old& GetDimensionsUnfactored() const;
+			const Core::Vector2& GetDimensionsUnfactored() const;
 			//-----------------------------------------------------------
 			/// Set UV's
 			///
@@ -364,7 +364,7 @@ namespace ChilliSource
             
             Core::Vector4Old mavVertexPos[kudwVertsPerSprite];
 
-			Core::Vector2Old mvDimensions;
+			Core::Vector2 mvDimensions;
 			
 			Core::Rectangle mUVs;
 			Core::Rectangle mTransformedUVs;

@@ -29,7 +29,7 @@ namespace ChilliSource
         //-------------------------------------------------------------
         ParticleEmitter::ParticleEmitter(const Core::ParamDictionary& inParams, const MaterialCSPtr &inpMaterial, ParticleComponent* inpComponent)
         : mudwMaxNumParticles(100), mudwMaxNumParticlesPerEmission(1), mfEmissionFreq(0.5f), mfCurrentTime(0.0f), mfLastEmissionTime(0.0f), mfTimeToLive(1.0f), mvInitialScale(1.0f, 1.0f), mbShouldLoop(true)
-        ,mfEnergyLoss(1.0f/mfTimeToLive), mpOwningComponent(inpComponent), mbIsEmitting(true), mudwNumUsed(0), mpMaterial(inpMaterial),msParticleUVs(Core::Vector2Old::ZERO, Core::Vector2Old(1.0f,1.0f))
+        ,mfEnergyLoss(1.0f/mfTimeToLive), mpOwningComponent(inpComponent), mbIsEmitting(true), mudwNumUsed(0), mpMaterial(inpMaterial),msParticleUVs(Core::Vector2::k_zero, Core::Vector2(1.0f,1.0f))
 		,mudwBurstCounter(0), mbIsEmittingFinished(false)
         ,mbIsGlobalSpace(true)
         {
@@ -73,7 +73,7 @@ namespace ChilliSource
             //Scale
             if(inParams.TryGetValue("InitScale", strTemp))
             {
-                mvInitialScale = Core::ParseVector2Old(strTemp);
+                mvInitialScale = Core::ParseVector2(strTemp);
             }
             //Num per emission
             if(inParams.TryGetValue("ParticlesPerEmit", strTemp))

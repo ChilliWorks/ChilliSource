@@ -225,7 +225,7 @@ namespace ChilliSource
             ///
             /// @param Unified vector
             //-------------------------------------------------------
-            void SetMaximumSize(const Core::UnifiedVector2Old& invSize);
+            void SetMaximumSize(const Core::UnifiedVector2& invSize);
             //-------------------------------------------------------
             /// Set Minimum Size
             ///
@@ -233,7 +233,7 @@ namespace ChilliSource
             ///
             /// @param Unified vector
             //-------------------------------------------------------
-            void SetMinimumSize(const Core::UnifiedVector2Old& invSize);
+            void SetMinimumSize(const Core::UnifiedVector2& invSize);
             //-------------------------------------------------------
             /// Set Maximum Size
             ///
@@ -258,7 +258,7 @@ namespace ChilliSource
 			///
 			/// @return Unified vector
 			//-------------------------------------------------------
-			const Core::UnifiedVector2Old& GetMinimumSize() const;
+			const Core::UnifiedVector2& GetMinimumSize() const;
 			//-------------------------------------------------------
 			/// Get Maximum Size
 			///
@@ -266,7 +266,7 @@ namespace ChilliSource
 			///
 			/// @return Unified vector
 			//-------------------------------------------------------
-			const Core::UnifiedVector2Old& GetMaximumSize() const;
+			const Core::UnifiedVector2& GetMaximumSize() const;
             //-------------------------------------------------------
             /// Enable Autosizing
             ///
@@ -362,8 +362,8 @@ namespace ChilliSource
             DECLARE_PROPERTY_A(Core::Colour, TextOutlineColour, SetTextOutlineColour, GetTextOutlineColour);
 			DECLARE_PROPERTY_A(bool, Background, EnableBackground, IsBackgroundEnabled);
 			DECLARE_PROPERTY_A(bool, Autosizing, EnableAutosizing, IsAutosizingEnabled);
-			DECLARE_PROPERTY_A(Core::UnifiedVector2Old, UnifiedMaxSize, SetMaximumSize, GetMaximumSize);
-			DECLARE_PROPERTY_A(Core::UnifiedVector2Old, UnifiedMinSize, SetMinimumSize, GetMinimumSize);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedMaxSize, SetMaximumSize, GetMaximumSize);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedMinSize, SetMinimumSize, GetMinimumSize);
             DECLARE_PROPERTY_A(bool, FlipVertical, EnableVerticalFlip, IsVerticalFlipEnabled);
         };
     }

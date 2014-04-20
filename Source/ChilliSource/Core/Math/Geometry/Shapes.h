@@ -11,7 +11,7 @@
 #define _MOFLO_CORE_MATHS_SHAPES_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3Old.h>
 #include <ChilliSource/Core/Math/QuaternionOld.h>
 
@@ -49,7 +49,7 @@ namespace ChilliSource
 		{
 		public:	
 			Rectangle(){}
-			Rectangle(const Vector2Old &invOrigin, const Vector2Old &invSize);
+			Rectangle(const Vector2 &invOrigin, const Vector2 &invSize);
 			
 			//-----------------------------------------------
 			/// Left
@@ -80,38 +80,38 @@ namespace ChilliSource
 			///
 			/// @return Top left co-ordinate
 			//-----------------------------------------------
-			const Vector2Old& TopLeft() const;
+			const Vector2& TopLeft() const;
 			//-----------------------------------------------
 			/// Top Right
 			///
 			/// @return Top right co-ordinate
 			//-----------------------------------------------
-			const Vector2Old TopRight() const;
+			const Vector2 TopRight() const;
 			//-----------------------------------------------
 			/// Bottom Left
 			///
 			/// @return Bottom left co-ordinate
 			//-----------------------------------------------
-			const Vector2Old BottomLeft() const;
+			const Vector2 BottomLeft() const;
 			//-----------------------------------------------
 			/// Bottom Right
 			///
 			/// @return Bottom right co-ordinate
 			//-----------------------------------------------
-			const Vector2Old BottomRight() const;
+			const Vector2 BottomRight() const;
 			//-----------------------------------------------
 			/// Centre
 			///
 			/// @return Centre point
 			//-----------------------------------------------
-			const Vector2Old Centre() const;
+			const Vector2 Centre() const;
 			//-----------------------------------------------
 			/// Contains (Point)
 			///
 			/// @param Point in 2D space
 			/// @return Whether point intersects the rect
 			//-----------------------------------------------
-			bool Contains(const Vector2Old & invPoint) const;
+			bool Contains(const Vector2 & invPoint) const;
 			//-----------------------------------------------
 			/// Contains (Rect)
 			///
@@ -136,9 +136,9 @@ namespace ChilliSource
 			Rectangle Union(const Rectangle& inRect);
             
 			///Top Left
-			Vector2Old vOrigin;
+			Vector2 vOrigin;
 			///Width and height
-			Vector2Old vSize;
+			Vector2 vSize;
 		};
 		//================================================
 		/// Circle
@@ -150,14 +150,14 @@ namespace ChilliSource
 		{
 		public:
 			Circle(){}
-			Circle(const Vector2Old &invOrigin, const f32 infRadius);
+			Circle(const Vector2 &invOrigin, const f32 infRadius);
 			//-----------------------------------------------
 			/// Contains (Point)
 			///
 			/// @param Point in 2D space
 			/// @return Whether point intersects the circle
 			//-----------------------------------------------
-			bool Contains(const Vector2Old & invPoint) const;
+			bool Contains(const Vector2 & invPoint) const;
 			//-----------------------------------------------
 			/// Contains (Circle)
 			///
@@ -167,7 +167,7 @@ namespace ChilliSource
 			bool Contains(const Circle & inCircle) const;
 			
 			///Centre				   
-			Vector2Old vOrigin;
+			Vector2 vOrigin;
 			f32 fRadius;
 		};
 		//================================================

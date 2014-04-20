@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Matrix3x3Old.h>
-#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3Old.h>
 #include <ChilliSource/Core/Math/Vector4Old.h>
 
@@ -95,7 +95,7 @@ namespace ChilliSource
 
 			
 			static void Multiply(const Matrix4x4Old *  p1, const Matrix4x4Old *   p2, Matrix4x4Old *  pOut);
-            static void Multiply(const Vector2Old* inpVec, const Matrix4x4Old* inpMat, Vector2Old* outpVec);
+            static void Multiply(const Vector2* inpVec, const Matrix4x4Old* inpMat, Vector2* outpVec);
             static void Multiply(const Vector3Old* inpVec, const Matrix4x4Old* inpMat, Vector3Old* outpVec);
             static void Multiply(const Vector4Old* inpVec, const Matrix4x4Old* inpMat, Vector4Old* outpVec);
 			
@@ -141,7 +141,7 @@ namespace ChilliSource
 #endif
 		}
         
-        inline void Matrix4x4Old::Multiply(const Vector2Old* inpVec, const Matrix4x4Old* inpMat, Vector2Old* outpVec)
+        inline void Matrix4x4Old::Multiply(const Vector2* inpVec, const Matrix4x4Old* inpMat, Vector2* outpVec)
         {
             const f32* m = inpMat->m;
             
@@ -192,9 +192,9 @@ namespace ChilliSource
 			return Result;
 		}
         
-        inline Vector2Old operator*(const Vector2Old& vec, const Matrix4x4Old &mat)
+        inline Vector2 operator*(const Vector2& vec, const Matrix4x4Old &mat)
 		{
-			Vector2Old Result; 
+			Vector2 Result; 
     
 			Result.x = mat.m[0] * vec.x + mat.m[4] * vec.y + mat.m[12];
 			Result.y = mat.m[1] * vec.x + mat.m[5] * vec.y + mat.m[13];

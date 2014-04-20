@@ -167,7 +167,7 @@ namespace ChilliSource
                 return uRemoved;
             }
             
-            Vector2Old ScaleMaintainingAspectRatio(const Vector2Old& invCurrentSize, const Vector2Old& invTargetSize, bool inbFitInside = false);
+            Vector2 ScaleMaintainingAspectRatio(const Vector2& invCurrentSize, const Vector2& invTargetSize, bool inbFitInside = false);
 		};
 	}
 }

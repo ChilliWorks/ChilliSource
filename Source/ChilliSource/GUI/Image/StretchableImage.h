@@ -43,17 +43,17 @@ namespace ChilliSource
                 Core::Rectangle m_middleCentreUVs;
                 Core::Rectangle m_rightCentreUVs;
                 
-                Core::Vector2Old m_topLeftSize;
-                Core::Vector2Old m_topCentreSize;
-                Core::Vector2Old m_topRightSize;
+                Core::Vector2 m_topLeftSize;
+                Core::Vector2 m_topCentreSize;
+                Core::Vector2 m_topRightSize;
                 
-                Core::Vector2Old m_bottomLeftSize;
-                Core::Vector2Old m_bottomCentreSize;
-                Core::Vector2Old m_bottomRightSize;
+                Core::Vector2 m_bottomLeftSize;
+                Core::Vector2 m_bottomCentreSize;
+                Core::Vector2 m_bottomRightSize;
                 
-                Core::Vector2Old m_leftCentreSize;
-                Core::Vector2Old m_middleCentreSize;
-                Core::Vector2Old m_rightCentreSize;
+                Core::Vector2 m_leftCentreSize;
+                Core::Vector2 m_middleCentreSize;
+                Core::Vector2 m_rightCentreSize;
             };
             
             StretchableImage();
@@ -215,15 +215,15 @@ namespace ChilliSource
             
             struct PatchSize
             {
-				ChilliSource::Core::Vector2Old vSizeTopLeft;
-				ChilliSource::Core::Vector2Old vSizeTopRight;
-				ChilliSource::Core::Vector2Old vSizeBottomLeft;
-				ChilliSource::Core::Vector2Old vSizeBottomRight;
-				ChilliSource::Core::Vector2Old vSizeTopCentre;
-				ChilliSource::Core::Vector2Old vSizeBottomCentre;
-				ChilliSource::Core::Vector2Old vSizeLeftCentre;
-				ChilliSource::Core::Vector2Old vSizeRightCentre;
-				ChilliSource::Core::Vector2Old vSizeMiddleCentre;
+				ChilliSource::Core::Vector2 vSizeTopLeft;
+				ChilliSource::Core::Vector2 vSizeTopRight;
+				ChilliSource::Core::Vector2 vSizeBottomLeft;
+				ChilliSource::Core::Vector2 vSizeBottomRight;
+				ChilliSource::Core::Vector2 vSizeTopCentre;
+				ChilliSource::Core::Vector2 vSizeBottomCentre;
+				ChilliSource::Core::Vector2 vSizeLeftCentre;
+				ChilliSource::Core::Vector2 vSizeRightCentre;
+				ChilliSource::Core::Vector2 vSizeMiddleCentre;
             };
 			
 			void CalculatePatchSize(PatchSize& outSizePatch);

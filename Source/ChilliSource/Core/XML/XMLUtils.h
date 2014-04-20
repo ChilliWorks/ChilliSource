@@ -46,7 +46,7 @@ namespace ChilliSource
 		template <> const s64 XMLUtils::GetAttributeValueOrDefault<s64>(TiXmlElement* inpElement, const std::string & inAttributeName, const s64 & inDefault);
 		template <> const u64 XMLUtils::GetAttributeValueOrDefault<u64>(TiXmlElement* inpElement, const std::string & inAttributeName, const u64 & inDefault);
 		template <> const bool XMLUtils::GetAttributeValueOrDefault<bool>(TiXmlElement* inpElement, const std::string & inAttributeName, const bool & inDefault);		
-		template <> const Vector2Old XMLUtils::GetAttributeValueOrDefault<Vector2Old>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector2Old & inDefault);
+		template <> const Vector2 XMLUtils::GetAttributeValueOrDefault<Vector2>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector2 & inDefault);
 		template <> const Vector3Old XMLUtils::GetAttributeValueOrDefault<Vector3Old>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector3Old & inDefault);
 		template <> const Vector4Old XMLUtils::GetAttributeValueOrDefault<Vector4Old>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector4Old & inDefault);
 		template <> const Matrix4x4Old XMLUtils::GetAttributeValueOrDefault<Matrix4x4Old>(TiXmlElement* inpElement, const std::string & inAttributeName, const Matrix4x4Old & inDefault);

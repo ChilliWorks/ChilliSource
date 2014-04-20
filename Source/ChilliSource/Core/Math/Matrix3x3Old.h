@@ -11,7 +11,8 @@
 #define _MO_FLO_CORE_MATH_MATRIX_3X3_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector3Old.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>
 
 #if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
@@ -46,16 +47,16 @@ namespace ChilliSource
 
 			
 			void Translate(f32 inX, f32 inY);
-			void Translate(const Vector2Old &inVec);
+			void Translate(const Vector2 &inVec);
 	
 			void Rotate(f32 infAngleRads);
 			
 			void Scale(f32 inScale);
 			void Scale(f32 inX, f32 inY);
-			void Scale(const Vector2Old &Vec);
+			void Scale(const Vector2 &Vec);
 
-			void SetTransform(const Vector2Old & inTranslate, const Vector2Old & inScale, f32 infAngleRads);
-            void SetTranslation(const Vector2Old& invTranslation);
+			void SetTransform(const Vector2 & inTranslate, const Vector2 & inScale, f32 infAngleRads);
+            void SetTranslation(const Vector2& invTranslation);
             
 			//---Operators
 			f32 operator()(u32 inRow, u32 inColumn) const;
@@ -75,7 +76,7 @@ namespace ChilliSource
 			Matrix3x3Old operator*(const Matrix3x3Old &rhs) const;
 			
 			static void Multiply(const Matrix3x3Old *  p1, const Matrix3x3Old *   p2, Matrix3x3Old *  pOut);
-            static void Multiply(const Vector2Old* inpVec, const Matrix3x3Old* inpMat, Vector2Old* outpVec);
+            static void Multiply(const Vector2* inpVec, const Matrix3x3Old* inpMat, Vector2* outpVec);
 			
 			static const Matrix3x3Old IDENTITY;
 			
@@ -107,7 +108,7 @@ namespace ChilliSource
 #endif
 		}
         
-        inline void Matrix3x3Old::Multiply(const Vector2Old* inpVec, const Matrix3x3Old* inpMat, Vector2Old* outpVec)
+        inline void Matrix3x3Old::Multiply(const Vector2* inpVec, const Matrix3x3Old* inpMat, Vector2* outpVec)
         {
             const f32* m = inpMat->m;
             
@@ -118,9 +119,9 @@ namespace ChilliSource
 		Matrix3x3Old operator*(const Matrix3x3Old & inMat, f32 infScale);
 		Matrix3x3Old operator*(f32 infScale, const Matrix3x3Old & inMat);
 
-        inline Vector2Old operator*(const Vector2Old& vec, const Matrix3x3Old &mat)
+        inline Vector2 operator*(const Vector2& vec, const Matrix3x3Old &mat)
 		{
-			Vector2Old Result; 
+			Vector2 Result; 
     
 			Result.x = mat.m[0] * vec.x + mat.m[3] * vec.y + mat.m[6];
 			Result.y = mat.m[1] * vec.x + mat.m[4] * vec.y + mat.m[7];

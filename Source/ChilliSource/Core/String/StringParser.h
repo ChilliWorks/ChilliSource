@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_CORE_STRING_STRINGPARSER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3Old.h>
 #include <ChilliSource/Core/Math/Vector4Old.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>
@@ -100,7 +100,7 @@ namespace ChilliSource
         ///
         /// @return The vector value.
         //------------------------------------------------------------
-        Vector2Old ParseVector2Old(const std::string& in_string);
+        Vector2 ParseVector2(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a 3 component vector. The vector must be
         /// in the format "x y z", i.e F32 values, space delimited. Failure

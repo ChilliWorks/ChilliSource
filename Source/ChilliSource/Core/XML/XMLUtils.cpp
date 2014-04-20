@@ -136,12 +136,12 @@ namespace ChilliSource
 			}
 		}
 		
-		template <> const Vector2Old XMLUtils::GetAttributeValueOrDefault<Vector2Old>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector2Old & inDefault)
+		template <> const Vector2 XMLUtils::GetAttributeValueOrDefault<Vector2>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector2 & inDefault)
 		{
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return ParseVector2Old(Result);
+				return ParseVector2(Result);
 			} else {
 				return inDefault;
 			}

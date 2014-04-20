@@ -1,4 +1,4 @@
-#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3Old.h>
 #include <ChilliSource/Core/Math/Vector4Old.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
@@ -44,7 +44,7 @@ namespace ChilliSource
 		{
 			
 		}
-		Vector3Old::Vector3Old(const Vector2Old &Vec2)
+		Vector3Old::Vector3Old(const Vector2 &Vec2)
 		: x(Vec2.x), y(Vec2.y), z(0)
 		{
 			
@@ -56,7 +56,7 @@ namespace ChilliSource
 		/// Initialise with copy and ignore z component
 		/// @param Vector to copy
 		//---------------------------------------------------------
-		Vector3Old::Vector3Old(const Vector2Old &Vec2, float fZ)
+		Vector3Old::Vector3Old(const Vector2 &Vec2, float fZ)
 		: x(Vec2.x), y(Vec2.y), z(fZ)
 		{
 			

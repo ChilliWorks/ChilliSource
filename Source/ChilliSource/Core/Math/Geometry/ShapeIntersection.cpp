@@ -91,7 +91,7 @@ namespace ChilliSource
             //----------------------------------------------------------------
             bool Intersects(const Sphere& inSphere, const Vector3Old& invPoint)
             {
-                return (inSphere.vOrigin - Vector2Old(invPoint)).LengthSquared() <= (inSphere.fRadius * inSphere.fRadius);
+                return (inSphere.vOrigin - invPoint).LengthSquared() <= (inSphere.fRadius * inSphere.fRadius);
             }
             //----------------------------------------------------------------
             /// Sphere vs Plane
@@ -132,20 +132,20 @@ namespace ChilliSource
             //----------------------------------------------------------------
             /// Circle vs Point
             //----------------------------------------------------------------
-            bool Intersects(const Circle& inCircle, const Vector3Old& invPoint)
+			bool Intersects(const Circle& inCircle, const Vector2& invPoint)
             {
-                return (inCircle.vOrigin - (Vector2Old)invPoint).LengthSquared() <= (inCircle.fRadius * inCircle.fRadius);
+                return (inCircle.vOrigin - invPoint).LengthSquared() <= (inCircle.fRadius * inCircle.fRadius);
             }
             //----------------------------------------------------------------
             /// Rect vs Rect
             //----------------------------------------------------------------
             bool Intersects(const Rectangle& inRectLHS, const Rectangle& inRectRHS)
             {
-                Core::Vector2Old vMinLS(inRectLHS.vOrigin);
-                Core::Vector2Old vMaxLS(inRectLHS.vOrigin.x + inRectLHS.vSize.x, inRectLHS.vOrigin.y + inRectLHS.vSize.y);
+                Core::Vector2 vMinLS(inRectLHS.vOrigin);
+                Core::Vector2 vMaxLS(inRectLHS.vOrigin.x + inRectLHS.vSize.x, inRectLHS.vOrigin.y + inRectLHS.vSize.y);
                 
-                Core::Vector2Old vMinRS(inRectRHS.vOrigin);
-                Core::Vector2Old vMaxRS(inRectRHS.vOrigin.x + inRectRHS.vSize.x, inRectRHS.vOrigin.y + inRectRHS.vSize.y);
+                Core::Vector2 vMinRS(inRectRHS.vOrigin);
+                Core::Vector2 vMaxRS(inRectRHS.vOrigin.x + inRectRHS.vSize.x, inRectRHS.vOrigin.y + inRectRHS.vSize.y);
                 
                 return	(vMaxLS.x > vMinRS.x && vMinLS.x < vMaxRS.x) &&
                         (vMaxLS.y > vMinRS.y && vMinLS.y < vMaxRS.y);

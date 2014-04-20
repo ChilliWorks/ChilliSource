@@ -161,7 +161,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        PointerSystem::PointerId PointerSystem::AddPointerCreateEvent(const Core::Vector2Old& in_position)
+        PointerSystem::PointerId PointerSystem::AddPointerCreateEvent(const Core::Vector2& in_position)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -186,14 +186,14 @@ namespace ChilliSource
             event.m_type = PointerEventType::k_down;
             event.m_pointerUniqueId = in_pointerUniqueId;
             event.m_InputType = in_inputType;
-            event.m_position = Core::Vector2Old::ZERO;
+            event.m_position = Core::Vector2::k_zero;
             event.m_timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
             
             m_eventQueue.push(event);
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void PointerSystem::AddPointerMovedEvent(PointerId in_pointerUniqueId, const Core::Vector2Old& in_position)
+        void PointerSystem::AddPointerMovedEvent(PointerId in_pointerUniqueId, const Core::Vector2& in_position)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -216,7 +216,7 @@ namespace ChilliSource
             event.m_type = PointerEventType::k_up;
             event.m_pointerUniqueId = in_pointerUniqueId;
             event.m_InputType = in_inputType;
-            event.m_position = Core::Vector2Old::ZERO;
+            event.m_position = Core::Vector2::k_zero;
             event.m_timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
             
             m_eventQueue.push(event);
@@ -231,7 +231,7 @@ namespace ChilliSource
             event.m_type = PointerEventType::k_remove;
             event.m_pointerUniqueId = in_pointerUniqueId;
             event.m_InputType = InputType::k_none;
-            event.m_position = Core::Vector2Old::ZERO;
+            event.m_position = Core::Vector2::k_zero;
             event.m_timestamp = 0.0;
             
             m_eventQueue.push(event);
@@ -253,7 +253,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //-----------------------------------------------------
-        void PointerSystem::CreatePointer(PointerId in_uniqueId, const Core::Vector2Old& in_initialPosition)
+        void PointerSystem::CreatePointer(PointerId in_uniqueId, const Core::Vector2& in_initialPosition)
         {
             Pointer pointer;
             pointer.m_uniqueId = in_uniqueId;
@@ -284,7 +284,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //-----------------------------------------------------
-        void PointerSystem::PointerMoved(PointerId in_uniqueId, f64 in_timestamp, const Core::Vector2Old& in_newPosition)
+        void PointerSystem::PointerMoved(PointerId in_uniqueId, f64 in_timestamp, const Core::Vector2& in_newPosition)
         {
             auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
             {

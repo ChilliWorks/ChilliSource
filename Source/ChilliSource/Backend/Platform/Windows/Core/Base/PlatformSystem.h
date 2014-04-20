@@ -88,10 +88,10 @@ namespace ChilliSource
 			///
 			/// @author S Downie
 			///
-			/// @return A Vector2Old containing the screen size in 
+			/// @return A Vector2 containing the screen size in 
 			/// its x + y components
 			//-------------------------------------------------
-			Core::Vector2Old GetScreenDimensions() const override;
+			Core::Vector2 GetScreenDimensions() const override;
 			//-------------------------------------------------
 			/// @author S Downie
 			///

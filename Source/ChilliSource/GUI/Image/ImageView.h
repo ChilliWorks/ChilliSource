@@ -305,7 +305,7 @@ namespace ChilliSource
 			///
 			/// @return Absolute size of the image
 			//--------------------------------------------------------
-			Core::Vector2Old GetSizeFromImage() const;
+			Core::Vector2 GetSizeFromImage() const;
 			//--------------------------------------------------------
 			/// Layout Content
 			///
@@ -332,13 +332,13 @@ namespace ChilliSource
 
         private:
             
-            Core::UnifiedVector2Old mvFillMaintainTarget;
-            Core::UnifiedVector2Old mvFitMaintainTarget;
+            Core::UnifiedVector2 mvFillMaintainTarget;
+            Core::UnifiedVector2 mvFitMaintainTarget;
             
             bool mbFillMaintain;
             bool mbFitMaintain;
             
-            Core::Vector2Old m_imageSize;
+            Core::Vector2 m_imageSize;
             
 			//---Properties
             DECLARE_PROPERTY_A(Rendering::TextureCSPtr, Texture, SetTexture, GetTexture);

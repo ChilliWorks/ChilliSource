@@ -116,7 +116,7 @@ namespace ChilliSource
             
             m_hasContext = true;
             
-            CS_ASSERT((Core::Screen::GetRawDimensions() > Core::Vector2Old::ZERO), "Cannot create and OpenGL ES view with size ZERO");
+            CS_ASSERT((Core::Screen::GetRawDimensions() > Core::Vector2::k_zero), "Cannot create and OpenGL ES view with size ZERO");
             
             m_textureUnitSystem = Core::Application::Get()->GetSystem<TextureUnitSystem>();
             CS_ASSERT(m_textureUnitSystem, "Cannot find required system: Texture Unit System.");
@@ -766,9 +766,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Scissor Region
         //---------------------------------------------------------
-        void RenderSystem::SetScissorRegion(const Core::Vector2Old& invPosition, const Core::Vector2Old& invSize)
+        void RenderSystem::SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize)
         {
-            if(mbInvalidateAllCaches || mvCachedScissorPos != invPosition || mvCachedScissorSize != invSize)
+			if(mbInvalidateAllCaches || mvCachedScissorPos != invPosition || mvCachedScissorSize != invSize)
             {
                 mvCachedScissorPos = invPosition;
                 mvCachedScissorSize = invSize;

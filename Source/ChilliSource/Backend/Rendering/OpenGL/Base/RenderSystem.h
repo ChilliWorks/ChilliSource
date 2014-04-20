@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>
 #include <ChilliSource/Core/Math/Vector3Old.h>
-#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
@@ -259,7 +259,7 @@ namespace ChilliSource
             /// @param Position of the bottom left corner of the rect
             /// @param Size of the scissor region
             //---------------------------------------------------------
-            void SetScissorRegion(const Core::Vector2Old& invPosition, const Core::Vector2Old& invSize) override;
+            void SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize) override;
             //----------------------------------------------------------
 			/// Set Cull Face
 			///
@@ -463,8 +463,8 @@ namespace ChilliSource
             
 			RenderTarget* mpDefaultRenderTarget;
             
-            Core::Vector2Old mvCachedScissorPos;
-            Core::Vector2Old mvCachedScissorSize;
+            Core::Vector2 mvCachedScissorPos;
+            Core::Vector2 mvCachedScissorSize;
             
             const Rendering::Material* mpCurrentMaterial;
             Shader* m_currentShader;

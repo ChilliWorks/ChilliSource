@@ -319,14 +319,14 @@ namespace ChilliSource
 			if(Visible && TextureAtlas && Texture)
 			{
                 
-				Core::Vector2Old vMyAbsSize = GetAbsoluteSize();
+				Core::Vector2 vMyAbsSize = GetAbsoluteSize();
 				
 				f32 fFullProgressHeight = vMyAbsSize.y - mpBGImage->GetCombinedCapHeight();
 				f32 fFillHeight = GetProgress() * fFullProgressHeight + mpFillImage->GetCombinedCapHeight() - 2.0f;
 				
 				f32 fFillOffsetY = (mpBGImage->GetCombinedCapHeight() - mpFillImage->GetCombinedCapHeight()) * 0.5f + 1.0f;
 				
-				mpFillImage->SetOffsetFromParentAlignment(Core::UnifiedVector2Old(0,0,0,fFillOffsetY));
+				mpFillImage->SetOffsetFromParentAlignment(Core::UnifiedVector2(0,0,0,fFillOffsetY));
 				
 				f32 fFillImageWidth = mpFillImage->GetCapWidth();
 				f32 fBGImageWidth = mpBGImage->GetCapWidth();
@@ -338,10 +338,10 @@ namespace ChilliSource
 				
 				f32 fFillDrawWidth = vMyAbsSize.x - (fBGImageWidth-fFillImageWidth);
 				
-				mpBGImage->SetSize(Core::UnifiedVector2Old(Core::Vector2Old::ZERO,vMyAbsSize));
+				mpBGImage->SetSize(Core::UnifiedVector2(Core::Vector2::k_zero,vMyAbsSize));
 				mpBGImage->Draw(inpCanvas);
 				
-				mpFillImage->SetSize(Core::UnifiedVector2Old(Core::Vector2Old::ZERO,Core::Vector2Old(fFillDrawWidth,fFillHeight)));
+				mpFillImage->SetSize(Core::UnifiedVector2(Core::Vector2::k_zero,Core::Vector2(fFillDrawWidth,fFillHeight)));
 				mpFillImage->Draw(inpCanvas);
 			}
             

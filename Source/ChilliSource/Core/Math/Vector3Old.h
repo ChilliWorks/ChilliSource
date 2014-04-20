@@ -15,7 +15,6 @@ namespace ChilliSource
 {
 	namespace Core 
 	{
-		class Vector2Old;
 		class Vector4Old;
 		
 		class Vector3Old
@@ -26,8 +25,8 @@ namespace ChilliSource
 			//---------------------------------
 			Vector3Old(void);
 			Vector3Old(const Vector3Old &Vec);
-			Vector3Old(const Vector2Old &Vec2);
-			Vector3Old(const Vector2Old &Vec2, float fZ);
+			Vector3Old(const Vector2 &Vec2);
+			Vector3Old(const Vector2 &Vec2, float fZ);
 			Vector3Old(const Vector4Old &Vec);
 			Vector3Old(const f32 fX, const f32 fY, const f32 fZ);
 

@@ -468,7 +468,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         Core::Matrix4x4Old Renderer::CreateOverlayProjection(GUI::Window* inpWindow) const
         {
-            const Core::Vector2Old kvOverlayDimensions(inpWindow->GetAbsoluteSize());
+            const Core::Vector2 kvOverlayDimensions(inpWindow->GetAbsoluteSize());
             const f32 kfOverlayNear = 1.0f;
             const f32 kfOverlayFar = 100.0f;
             return Core::Matrix4x4Old::CreateOrthoMatrixOffset(0, kvOverlayDimensions.x, 0, kvOverlayDimensions.y, kfOverlayNear, kfOverlayFar);

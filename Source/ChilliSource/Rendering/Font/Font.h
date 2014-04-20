@@ -47,8 +47,8 @@ namespace ChilliSource
 			struct CharacterInfo
 			{
 				Core::Rectangle m_UVs;
-                Core::Vector2Old m_size;
-                Core::Vector2Old m_offset;
+                Core::Vector2 m_size;
+                Core::Vector2 m_offset;
 			};
             //---------------------------------------------------------------------
             /// TODO: Find out how the kerning works and actually document it

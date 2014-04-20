@@ -27,7 +27,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
-		SpriteComponent::SpriteComponent() : mUVs(Core::Vector2Old(0, 0), Core::Vector2Old(1, 1)), mbFlippedVertical(false), mbFlippedHorizontal(false), 
+		SpriteComponent::SpriteComponent() : mUVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), mbFlippedVertical(false), mbFlippedHorizontal(false), 
         mbCornerPosCacheValid(false), meAlignment(AlignmentAnchor::k_middleCentre), mbUVCacheValid(false), mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
 		{
             mByteColourWithOpacity.r = 255;
@@ -90,7 +90,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Dimensions Unfactored
 		//-----------------------------------------------------------
-		void SpriteComponent::SetDimensions(const Core::Vector2Old &invDims)
+		void SpriteComponent::SetDimensions(const Core::Vector2 &invDims)
 		{
 			SetDimensions(invDims.x, invDims.y);
 		}
@@ -101,7 +101,7 @@ namespace ChilliSource
 		{
 			mbCornerPosCacheValid = false;
 			
-			mvDimensions = Core::Vector2Old(infWidth, infHeight);
+			mvDimensions = Core::Vector2(infWidth, infHeight);
 		}
 		//-----------------------------------------------------------
 		/// Set Width Unfactored
@@ -124,7 +124,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Dimensions
 		//-----------------------------------------------------------
-		const Core::Vector2Old& SpriteComponent::GetDimensions() const
+		const Core::Vector2& SpriteComponent::GetDimensions() const
 		{
 			return mvDimensions;
 		}
@@ -391,8 +391,8 @@ namespace ChilliSource
         {
             mmatTransformCache = GetEntity()->GetTransform().GetWorldTransform();
             
-			Core::Vector2Old vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
-			Core::Vector2Old vAlignedPos;
+			Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+			Core::Vector2 vAlignedPos;
             Align(meAlignment, vHalfSize, vAlignedPos);
             
             Core::Vector4Old vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);

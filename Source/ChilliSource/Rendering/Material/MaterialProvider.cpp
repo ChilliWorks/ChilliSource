@@ -430,7 +430,7 @@ namespace ChilliSource
                         }
                         else if(strType == "Vec2")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector2Old>(shaderVarEl, "value", Core::Vector2Old::ZERO));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector2>(shaderVarEl, "value", Core::Vector2::k_zero));
                         }
                         else if(strType == "Vec3")
                         {

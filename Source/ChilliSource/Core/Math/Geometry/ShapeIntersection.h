@@ -68,7 +68,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			/// Circle vs Point
 			//----------------------------------------------------------------
-			bool Intersects(const Circle& inCircle, const Vector3Old& invPoint);
+			bool Intersects(const Circle& inCircle, const Vector2& invPoint);
             //----------------------------------------------------------------
             /// Line vs Line
             //----------------------------------------------------------------

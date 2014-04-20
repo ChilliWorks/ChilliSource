@@ -74,7 +74,7 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void DynamicSpriteBatch::EnableScissoring(const Core::Vector2Old& in_pos, const Core::Vector2Old& in_size)
+        void DynamicSpriteBatch::EnableScissoring(const Core::Vector2& in_pos, const Core::Vector2& in_size)
         {
             InsertDrawCommand();
             

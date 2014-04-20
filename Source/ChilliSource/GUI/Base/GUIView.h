@@ -488,7 +488,7 @@ namespace ChilliSource
 			///
 			/// @param Unified co-ordinates
 			//-----------------------------------------------------
-			void SetOffsetFromParentAlignment(const Core::UnifiedVector2Old& invOffset);
+			void SetOffsetFromParentAlignment(const Core::UnifiedVector2& invOffset);
 			//-----------------------------------------------------
 			/// Set Offset From Parent Alignment
 			///
@@ -510,7 +510,7 @@ namespace ChilliSource
 			///
 			/// @return Unified co-ordinates
 			//-----------------------------------------------------
-			const Core::UnifiedVector2Old& GetOffsetFromParentAlignment() const;
+			const Core::UnifiedVector2& GetOffsetFromParentAlignment() const;
 			//-----------------------------------------------------
 			/// Get Absolute Offset From Parent Alignment
 			///
@@ -522,7 +522,7 @@ namespace ChilliSource
 			/// @return Unified co-ordinates converted to real
 			/// co-ordinates
 			//-----------------------------------------------------
-			const Core::Vector2Old& GetAbsoluteOffsetFromParentAlignment() const;
+			const Core::Vector2& GetAbsoluteOffsetFromParentAlignment() const;
 			//-----------------------------------------------------
 			/// Set Offset From Alignment
 			///
@@ -531,7 +531,7 @@ namespace ChilliSource
 			///
 			/// @param Unified co-ordinates
 			//-----------------------------------------------------
-			void SetOffsetFromPosition(const Core::UnifiedVector2Old& invOffset);
+			void SetOffsetFromPosition(const Core::UnifiedVector2& invOffset);
 			//-----------------------------------------------------
 			/// Set Offset From Position
 			///
@@ -549,7 +549,7 @@ namespace ChilliSource
 			///
 			/// @return Unified co-ordinates
 			//-----------------------------------------------------
-			const Core::UnifiedVector2Old& GetOffsetFromPosition() const;
+			const Core::UnifiedVector2& GetOffsetFromPosition() const;
 			//-----------------------------------------------------
 			/// Get Absolute Offset From Position
 			///
@@ -559,21 +559,21 @@ namespace ChilliSource
 			/// @return Unified co-ordinates converted to real
 			/// co-ordinates
 			//-----------------------------------------------------
-			const Core::Vector2Old& GetAbsoluteOffsetFromPosition() const;
+			const Core::Vector2& GetAbsoluteOffsetFromPosition() const;
 			//-----------------------------------------------------
 			/// Get Absolute Anchor Point
 			///
 			/// @param Anchor point type
 			/// @return Anchor point value as absolute
 			//-----------------------------------------------------
-			Core::Vector2Old GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const;
+			Core::Vector2 GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const;
 			//-----------------------------------------------------
 			/// Get Absolute Screen Space Anchor Point
 			///
 			/// @param Anchor point type
 			/// @return Anchor point value as absolute
 			//-----------------------------------------------------
-			Core::Vector2Old GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const;
+			Core::Vector2 GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const;
             //-----------------------------------------------------
             /// Is Onscreen
             ///
@@ -593,7 +593,7 @@ namespace ChilliSource
 			///
 			/// @param Unified co-ordinates
 			//------------------------------------------------------
-			void SetPosition(const Core::UnifiedVector2Old& invPosition);
+			void SetPosition(const Core::UnifiedVector2& invPosition);
 			//-----------------------------------------------------
 			/// Set Position
 			///
@@ -613,7 +613,7 @@ namespace ChilliSource
 			///
 			/// @param co-ordinates
 			//------------------------------------------------------
-			void MoveBy(const Core::UnifiedVector2Old& invPosition);
+			void MoveBy(const Core::UnifiedVector2& invPosition);
 			//------------------------------------------------------
 			/// Move By
 			///
@@ -647,7 +647,7 @@ namespace ChilliSource
 			///
 			/// @param Unified co-ordinates 
 			//------------------------------------------------------
-			void SetSize(const Core::UnifiedVector2Old& invSize);
+			void SetSize(const Core::UnifiedVector2& invSize);
 			//------------------------------------------------------
 			/// Set Size
 			///
@@ -663,7 +663,7 @@ namespace ChilliSource
 			///
 			/// @param Unified co-ordinates 
 			//------------------------------------------------------
-			void ScaleTo(const Core::Vector2Old& invScale);
+			void ScaleTo(const Core::Vector2& invScale);
 			//------------------------------------------------------
 			/// Scale To
 			///
@@ -690,7 +690,7 @@ namespace ChilliSource
 			///
 			/// @return Unified co-ordinates
 			//------------------------------------------------------
-			const Core::UnifiedVector2Old& GetPosition() const;
+			const Core::UnifiedVector2& GetPosition() const;
 			//------------------------------------------------------
 			/// Get Rotation
 			///
@@ -706,7 +706,7 @@ namespace ChilliSource
 			///
 			/// @return Unified co-ordinates for dimensions
 			//------------------------------------------------------
-			const Core::UnifiedVector2Old& GetSize() const;
+			const Core::UnifiedVector2& GetSize() const;
 			//------------------------------------------------------
 			/// Get Scale
 			///
@@ -714,13 +714,13 @@ namespace ChilliSource
 			///
 			/// @return Unified co-ordinates for scale
 			//------------------------------------------------------
-			const Core::Vector2Old& GetScale() const;
+			const Core::Vector2& GetScale() const;
 			//-----------------------------------------------------
 			/// Get Absolute Scale
 			///
 			/// @param The inherited scale of the view
 			//-----------------------------------------------------
-			const Core::Vector2Old& GetAbsoluteScale() const;
+			const Core::Vector2& GetAbsoluteScale() const;
 			//-----------------------------------------------------
 			/// Get Absolute Screen Space Position
 			///
@@ -730,7 +730,7 @@ namespace ChilliSource
 			///
 			/// @return Position combined absolute and relative
 			//------------------------------------------------------
-			const Core::Vector2Old& GetAbsoluteScreenSpacePosition() const;
+			const Core::Vector2& GetAbsoluteScreenSpacePosition() const;
 			//-----------------------------------------------------
 			/// Get Absolute Rotation
 			///
@@ -748,7 +748,7 @@ namespace ChilliSource
 			///
 			/// @return Position combined absolute and relative
 			//------------------------------------------------------
-			const Core::Vector2Old& GetAbsolutePosition() const;
+			const Core::Vector2& GetAbsolutePosition() const;
 			//------------------------------------------------------
 			/// Get Absolute Size
 			///
@@ -757,7 +757,7 @@ namespace ChilliSource
 			///
 			/// @return Size combined absolute and relative
 			//------------------------------------------------------
-			const Core::Vector2Old& GetAbsoluteSize() const;
+			const Core::Vector2& GetAbsoluteSize() const;
 
 			//---Functional overrides
 			//-----------------------------------------------------
@@ -787,7 +787,7 @@ namespace ChilliSource
 			/// @param Point vector
 			/// @return Whether it lies within the view
 			//----------------------------------------------------
-			virtual bool Contains(const Core::Vector2Old& invPoint) const;
+			virtual bool Contains(const Core::Vector2& invPoint) const;
 			//-----------------------------------------------------------
 			/// Enable Accept Touches Outside of Bounds
 			///
@@ -928,11 +928,11 @@ namespace ChilliSource
 			mutable Core::Matrix3x3Old mmatTransform;
 
 			Core::Colour mAbsoluteColour;
-			mutable Core::Vector2Old mvAbsolutePosition;
-			mutable Core::Vector2Old mvAbsoluteScale;
-			mutable Core::Vector2Old mvAbsoluteSize;
-			mutable Core::Vector2Old mvAbsoluteParentalOffset;
-			mutable Core::Vector2Old mvAbsolutePositionOffset;
+			mutable Core::Vector2 mvAbsolutePosition;
+			mutable Core::Vector2 mvAbsoluteScale;
+			mutable Core::Vector2 mvAbsoluteSize;
+			mutable Core::Vector2 mvAbsoluteParentalOffset;
+			mutable Core::Vector2 mvAbsolutePositionOffset;
 
 		protected:
 
@@ -954,11 +954,11 @@ namespace ChilliSource
 
 			//---Properties
 			DECLARE_PROPERTY_A(std::string, Name, SetName, GetName);
-			DECLARE_PROPERTY_A(Core::UnifiedVector2Old, UnifiedPosition, SetPosition, GetPosition);
-			DECLARE_PROPERTY_A(Core::UnifiedVector2Old, UnifiedSize, SetSize, GetSize);
-			DECLARE_PROPERTY_A(Core::UnifiedVector2Old, UnifiedParentalOffset, SetOffsetFromParentAlignment, GetOffsetFromParentAlignment);
-			DECLARE_PROPERTY_A(Core::UnifiedVector2Old, UnifiedPositionOffset, SetOffsetFromPosition, GetOffsetFromPosition);
-			DECLARE_PROPERTY_A(Core::Vector2Old, Scale, ScaleTo, GetScale);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedPosition, SetPosition, GetPosition);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSize, SetSize, GetSize);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedParentalOffset, SetOffsetFromParentAlignment, GetOffsetFromParentAlignment);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedPositionOffset, SetOffsetFromPosition, GetOffsetFromPosition);
+			DECLARE_PROPERTY_A(Core::Vector2, Scale, ScaleTo, GetScale);
 			DECLARE_PROPERTY_A(f32, Rotation, RotateTo, GetRotation);
 			DECLARE_PROPERTY_A(f32, Opacity, SetOpacity, GetOpacity);
 			DECLARE_PROPERTY_A(Rendering::AlignmentAnchor, LocalAlignment, SetLocalAlignment, GetLocalAlignment);

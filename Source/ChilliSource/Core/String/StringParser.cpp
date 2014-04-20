@@ -92,17 +92,17 @@ namespace ChilliSource
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        Vector2Old ParseVector2Old(const std::string& in_string)
+        Vector2 ParseVector2(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
             
 			if (udwSize != 2)
 			{
-				return Vector2Old::ZERO;
+				return Vector2::k_zero;
 			}
 			else
 			{
-                Vector2Old vRet;
+                Vector2 vRet;
 				CS_SSCANF(in_string.c_str(), "%f %f", &vRet.x, &vRet.y);
 				return vRet;
 			}

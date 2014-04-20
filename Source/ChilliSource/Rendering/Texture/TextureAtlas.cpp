@@ -98,17 +98,17 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
-		Core::Vector2Old TextureAtlas::GetFrameSize(const std::string& in_textureId) const
+		Core::Vector2 TextureAtlas::GetFrameSize(const std::string& in_textureId) const
         {
             const Frame& frame = GetFrame(in_textureId);
-			return Core::Vector2Old(frame.m_width, frame.m_height);
+			return Core::Vector2(frame.m_width, frame.m_height);
 		}
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
-		Core::Vector2Old TextureAtlas::GetFrameOffset(const std::string& in_textureId) const
+		Core::Vector2 TextureAtlas::GetFrameOffset(const std::string& in_textureId) const
         {
             const Frame& frame = GetFrame(in_textureId);
-            return Core::Vector2Old(frame.m_offsetX, frame.m_offsetY);
+            return Core::Vector2(frame.m_offsetX, frame.m_offsetY);
 		}
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------

@@ -91,13 +91,13 @@ namespace ChilliSource
 			//---Set Maintain Width
 			if(insParams.TryGetValue("SetHeightMaintain", strValue))
 			{
-				Core::Vector2Old vSize = Core::ParseVector2Old(strValue);
+				Core::Vector2 vSize = Core::ParseVector2(strValue);
 				SetHeightMaintainingAspect(vSize.x, vSize.y);
 			}
 			//---Set Maintain Height
 			if(insParams.TryGetValue("SetWidthMaintain", strValue))
 			{
-				Core::Vector2Old vSize = Core::ParseVector2Old(strValue);
+				Core::Vector2 vSize = Core::ParseVector2(strValue);
 				SetWidthMaintainingAspect(vSize.x, vSize.y);
 			}
 			//---Centre Touch Consumption
@@ -232,8 +232,8 @@ namespace ChilliSource
         void StretchableImage::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
-			Core::Vector2Old vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
-			Core::Vector2Old vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
+			Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+			Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 			
 			if(vTopRight.y < 0 || vBottomLeft.y > Core::Screen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::Screen::GetOrientedWidth())
 			{
@@ -243,9 +243,9 @@ namespace ChilliSource
 			
             if(Visible && TextureAtlas && Texture)
             {
-                Core::Vector2Old vPanelPos = GetAbsoluteScreenSpacePosition();
-                Core::Vector2Old vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
-                Core::Vector2Old vPatchPos;
+                Core::Vector2 vPanelPos = GetAbsoluteScreenSpacePosition();
+                Core::Vector2 vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
+                Core::Vector2 vPatchPos;
                 
                 Core::Colour AbsColour = GetAbsoluteColour();
                 
@@ -255,7 +255,7 @@ namespace ChilliSource
                 Core::Matrix3x3Old matPatchTransform;
                 Core::Matrix3x3Old matViewTransform;
                 
-                matViewTransform.SetTransform(vPanelPos, Core::Vector2Old(1, 1), GetAbsoluteRotation());
+                matViewTransform.SetTransform(vPanelPos, Core::Vector2(1, 1), GetAbsoluteRotation());
 				
 				// Retrieve each bit's size
 				PatchSize sPatchSize;
@@ -377,7 +377,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		void StretchableImage::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
 		{
-            Core::Vector2Old vCurrentSize = GetAbsoluteSize();
+            Core::Vector2 vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
 			SetSize(infRelWidth, 0.0f, infAbsWidth, 0.0f);
 			
@@ -399,7 +399,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		void StretchableImage::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
 		{
-            Core::Vector2Old vCurrentSize = GetAbsoluteSize();
+            Core::Vector2 vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
 			SetSize(0.0f, infRelHeight, 0.0f, infAbsHeight);
 			
@@ -454,7 +454,7 @@ namespace ChilliSource
 		
 		void StretchableImage::CalculatePatchSize(PatchSize& outPatchSize)
 		{
-			Core::Vector2Old vPanelSize = GetAbsoluteSize();
+			Core::Vector2 vPanelSize = GetAbsoluteSize();
 
 			//Get the patch sizes
 			outPatchSize.vSizeTopLeft = m_panels.m_topLeftSize;
@@ -583,11 +583,11 @@ namespace ChilliSource
 					{
 						if(!AlignedWithParent)
 						{
-							SetPosition(Core::UnifiedVector2Old(Core::Vector2Old::ZERO, in_pointer.m_location));
+							SetPosition(Core::UnifiedVector2(Core::Vector2::k_zero, in_pointer.m_location));
 						}
 						else
 						{
-							SetOffsetFromParentAlignment(Core::UnifiedVector2Old(Core::Vector2Old::ZERO, in_pointer.m_location));
+							SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::k_zero, in_pointer.m_location));
 						}
 					}
 					

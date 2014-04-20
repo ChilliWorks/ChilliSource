@@ -111,13 +111,13 @@ namespace ChilliSource
 			///
 			/// @param The unified size of the slider
 			//--------------------------------------------------------
-			void SetSliderSize(const Core::UnifiedVector2Old& invUnifiedSize);
+			void SetSliderSize(const Core::UnifiedVector2& invUnifiedSize);
 			//--------------------------------------------------------
 			/// Get Slider Size
 			///
 			/// @return The unified size of the slider
 			//--------------------------------------------------------
-			const Core::UnifiedVector2Old& GetSliderSize() const;
+			const Core::UnifiedVector2& GetSliderSize() const;
             
 			//---Touch Delegates
 			//-----------------------------------------------------------
@@ -145,7 +145,7 @@ namespace ChilliSource
             
             Core::ConnectionUPtr m_movedWithinConnection;
             
-			DECLARE_PROPERTY_A(Core::UnifiedVector2Old, UnifiedSliderSize, SetSliderSize, GetSliderSize);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSliderSize, SetSliderSize, GetSliderSize);
 
             DECLARE_PROPERTY_A(Rendering::TextureCSPtr, BarTexture, SetBarTexture, GetBarTexture);
 			DECLARE_PROPERTY_A(Rendering::TextureCSPtr, SliderTexture, SetSliderTexture, GetSliderTexture);

@@ -31,8 +31,8 @@ namespace ChilliSource
             struct PlacedCharacter
             {
                 Core::Rectangle sUVs;
-                Core::Vector2Old vSize;
-                Core::Vector2Old vPosition;
+                Core::Vector2 vSize;
+                Core::Vector2 vPosition;
             };
             
             typedef std::vector<PlacedCharacter> CharacterList;
@@ -65,7 +65,7 @@ namespace ChilliSource
             /// @param Position of the bottom left corner of the rect
             /// @param Size of the clip region
             //---------------------------------------------------------
-            void EnableClippingToBounds(const Core::Vector2Old& invPosition, const Core::Vector2Old& invSize);
+            void EnableClippingToBounds(const Core::Vector2& invPosition, const Core::Vector2& invSize);
             //----------------------------------------------------------
             /// Disable Clipping To Bounds
             ///
@@ -83,7 +83,7 @@ namespace ChilliSource
             /// @param Colour
             /// @param Box origin alignment
             //-----------------------------------------------------------
-			void DrawBox(const Core::Matrix3x3Old& inmatTransform, const Core::Vector2Old & invSize, const TextureCSPtr & inpTexture, const Core::Rectangle& inUVs,
+			void DrawBox(const Core::Matrix3x3Old& inmatTransform, const Core::Vector2 & invSize, const TextureCSPtr & inpTexture, const Core::Rectangle& inUVs,
                          const Core::Colour & insTintColour, AlignmentAnchor ineAlignment = AlignmentAnchor::k_middleCentre);
             //-----------------------------------------------------------
             /// Draw String
@@ -106,7 +106,7 @@ namespace ChilliSource
             /// @param Bool pointer. Bool set true if invalid character is found.
             //-----------------------------------------------------------
 			void DrawString(const Core::UTF8String & insString, const Core::Matrix3x3Old& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
-							const Core::Colour & insColour, const Core::Vector2Old & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
+							const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
 							GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped = nullptr, bool * outpInvalidCharacterFound = nullptr);
             //-----------------------------------------------------------
             /// Calculate String Width
@@ -159,7 +159,7 @@ namespace ChilliSource
             /// vertically.
 			//-------------------------------------------
 			static void BuildString(const FontCSPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
-							const Core::Vector2Old& invBounds, u32 inudwNumLines, GUI::TextJustification ineJustification, GUI::TextJustification ineVerticalJustification,
+							const Core::Vector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineJustification, GUI::TextJustification ineVerticalJustification,
 							bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour,  bool * outpClipped = nullptr, bool * outpInvalidCharacterFound = nullptr);
 			//----------------------------------------------------
 			/// Build Character
@@ -175,7 +175,7 @@ namespace ChilliSource
 			/// @param List of characters that we can add too
 			//----------------------------------------------------
 			static void BuildCharacter(const FontCSPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
-                                                   const Core::Vector2Old& invCursor, f32 infTextScale, f32 infCharSpacing,
+                                                   const Core::Vector2& invCursor, f32 infTextScale, f32 infCharSpacing,
                                                    f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound = nullptr);
             //----------------------------------------------------
             /// Wrap
@@ -187,8 +187,8 @@ namespace ChilliSource
             /// @param Out: Cursor Pos
             /// @param Out: Character list
             //----------------------------------------------------
-            static void Wrap(GUI::TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::Vector2Old& invBounds, CharacterList &inCurrentLine,
-					  Core::Vector2Old& outvCursor, CharacterList &outCharacters);
+            static void Wrap(GUI::TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::Vector2& invBounds, CharacterList &inCurrentLine,
+					  Core::Vector2& outvCursor, CharacterList &outCharacters);
 			
 		private:
 			
@@ -207,7 +207,7 @@ namespace ChilliSource
 			///
 			/// Rebuild the sprite data
 			//-----------------------------------------------------
-			void UpdateSpriteData(const Core::Matrix4x4Old& inTransform, const Core::Vector2Old & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment);
+			void UpdateSpriteData(const Core::Matrix4x4Old& inTransform, const Core::Vector2 & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment);
             
 		private:
 			
@@ -215,8 +215,8 @@ namespace ChilliSource
 
             DynamicSpriteBatch mOverlayBatcher;
             
-			std::vector<Core::Vector2Old> mScissorPos;
-            std::vector<Core::Vector2Old> mScissorSize;
+			std::vector<Core::Vector2> mScissorPos;
+            std::vector<Core::Vector2> mScissorSize;
             
             std::unordered_map<TextureCSPtr, MaterialCSPtr> m_materialGUICache;
             

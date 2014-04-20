@@ -297,7 +297,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		void Material::SetShaderVar(const std::string& in_varName, const Core::Vector2Old& in_value)
+		void Material::SetShaderVar(const std::string& in_varName, const Core::Vector2& in_value)
 		{
 			m_vec2Vars[in_varName] = in_value;
             

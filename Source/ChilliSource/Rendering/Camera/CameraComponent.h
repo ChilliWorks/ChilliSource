@@ -32,7 +32,7 @@ namespace ChilliSource
 			bool bShouldResizeToScreen;
 			
 			Core::Colour ClearCol; 
-			Core::Vector2Old vViewSize;
+			Core::Vector2 vViewSize;
 		};
 		
 		class CameraComponent : public Core::Component
@@ -76,7 +76,7 @@ namespace ChilliSource
 			///
 			/// @param Vector containing width and height
 			//----------------------------------------------------------
-			void SetViewportSize(const Core::Vector2Old &invSize);
+			void SetViewportSize(const Core::Vector2 &invSize);
 			//----------------------------------------------------------
 			/// Set Viewport Size
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			///
 			/// @param Vector containing width and height
 			//----------------------------------------------------------
-			const Core::Vector2Old& GetViewportSize();			
+			const Core::Vector2& GetViewportSize();			
 			//------------------------------------------------------
 			/// Set Field Of View
 			///
@@ -199,14 +199,14 @@ namespace ChilliSource
 			/// @param Point in screen space
 			/// @return Ray in world space with camera view direction
 			//------------------------------------------------------
-			virtual Core::Ray Unproject(const Core::Vector2Old &invScreenPos);
+			virtual Core::Ray Unproject(const Core::Vector2 &invScreenPos);
 			//------------------------------------------------------
 			/// Project
 			///
 			/// Convert from a point in world space to a point in
 			/// screen space
 			//------------------------------------------------------
-			virtual Core::Vector2Old Project(const Core::Vector3Old &invWorldPos);
+			virtual Core::Vector2 Project(const Core::Vector3Old &invWorldPos);
 			
 			//------------------------------------------------------
 			/// Get Frustum Pointer

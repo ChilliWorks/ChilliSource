@@ -81,7 +81,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		void Matrix3x3Old::Translate(f32 inX, f32 inY)
 		{
-			Translate(Vector2Old(inX, inY));
+			Translate(Vector2(inX, inY));
 		}
 		//------------------------------------------------
 		/// Translate
@@ -89,7 +89,7 @@ namespace ChilliSource
 		/// Build a translation matrix
 		/// @param Translation vector
 		//------------------------------------------------
-		void Matrix3x3Old::Translate(const Vector2Old &inVec)
+		void Matrix3x3Old::Translate(const Vector2 &inVec)
 		{
 			(*this) = Matrix3x3Old::IDENTITY;
 			
@@ -150,7 +150,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		void Matrix3x3Old::Scale(f32 inScale)
 		{
-			Scale(Vector2Old(inScale, inScale));
+			Scale(Vector2(inScale, inScale));
 		}
 		//------------------------------------------------
 		/// Scale 
@@ -162,7 +162,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		void Matrix3x3Old::Scale(f32 inX, f32 inY)
 		{
-			Scale(Vector2Old(inX, inY));
+			Scale(Vector2(inX, inY));
 		}
 		//------------------------------------------------
 		/// Scale 
@@ -170,14 +170,14 @@ namespace ChilliSource
 		/// Build a scaling matrix 
 		/// @param Scale dimensions vector
 		//------------------------------------------------
-		void Matrix3x3Old::Scale(const Vector2Old &Vec)
+		void Matrix3x3Old::Scale(const Vector2 &Vec)
 		{
 			(*this) = Matrix3x3Old::IDENTITY;
 			
 			m[0] = Vec.x;
 			m[4] = Vec.y;
 		}
-		void Matrix3x3Old::SetTransform(const Vector2Old & inTranslate, const Vector2Old & inScale, f32 infAngleRads)
+		void Matrix3x3Old::SetTransform(const Vector2 & inTranslate, const Vector2 & inScale, f32 infAngleRads)
 		{
             f32 c = cosf(infAngleRads);
 			f32 s = sinf(infAngleRads);
@@ -196,7 +196,7 @@ namespace ChilliSource
             m[5] = 0.0f;
             m[8] = 1.0f;
 		}
-        void Matrix3x3Old::SetTranslation(const Vector2Old& invTranslation)
+        void Matrix3x3Old::SetTranslation(const Vector2& invTranslation)
         {
             m[6] = invTranslation.x;
             m[7] = invTranslation.y;

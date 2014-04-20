@@ -67,11 +67,11 @@ namespace ChilliSource
 		/// @param Point in screen space with orientation
 		/// @return Ray in world space with camera view direction
 		//------------------------------------------------------
-		Core::Ray CameraComponent::Unproject(const Core::Vector2Old &invScreenPos)
+		Core::Ray CameraComponent::Unproject(const Core::Vector2 &invScreenPos)
 		{
             Core::Matrix4x4Old matProj = (GetView() * GetProjection()).Inverse();
             
-            Core::Vector2Old vScreenSize(Core::Screen::GetOrientedDimensions());
+            Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
 			//Normalise the screen space co-ordinates into clip space
 			f32 nx = ((2.0f * (invScreenPos.x/vScreenSize.x)) - 1.0f);
 			f32 ny = ((2.0f * (invScreenPos.y/vScreenSize.y)) - 1.0f);
@@ -97,13 +97,13 @@ namespace ChilliSource
 		/// Convert from a point in world space to a point in
 		/// screen space
 		//------------------------------------------------------
-		Core::Vector2Old CameraComponent::Project(const Core::Vector3Old &invWorldPos)
+		Core::Vector2 CameraComponent::Project(const Core::Vector3Old &invWorldPos)
 		{
 			//Convert the world space position to clip space
 			Core::Matrix4x4Old matToClip = (GetView() * GetProjection());
 			Core::Vector4Old vScreenPos = Core::Vector4Old(invWorldPos, 1.0f) * matToClip;
 			
-            Core::Vector2Old vScreenSize(Core::Screen::GetOrientedDimensions());
+            Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
 			
 			// Normalize co-ordinates
 			vScreenPos.x = vScreenPos.x / vScreenPos.w;
@@ -114,7 +114,7 @@ namespace ChilliSource
 			vScreenPos.y = (vScreenSize.y * 0.5f)* vScreenPos.y + vScreenSize.y * 0.5f;
 
 			//Return 2D screen space co-ordinates
-			return (Core::Vector2Old)vScreenPos;
+			return Core::Vector2(vScreenPos.x, vScreenPos.y);
 		}
 		//----------------------------------------------------------
 		/// Use Orthographic View
@@ -142,7 +142,7 @@ namespace ChilliSource
 		///
 		/// @param Vector containing width and height
 		//----------------------------------------------------------
-		void CameraComponent::SetViewportSize(const Core::Vector2Old &invSize)
+		void CameraComponent::SetViewportSize(const Core::Vector2 &invSize)
 		{
 			mDesc.vViewSize = invSize;
 			mbProjectionCacheValid = false;
@@ -164,7 +164,7 @@ namespace ChilliSource
 		///
 		/// @param Vector containing width and height
 		//----------------------------------------------------------
-		const Core::Vector2Old& CameraComponent::GetViewportSize()
+		const Core::Vector2& CameraComponent::GetViewportSize()
 		{ 
 			return mDesc.vViewSize; 
 		}	

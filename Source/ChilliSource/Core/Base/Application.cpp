@@ -329,7 +329,7 @@ namespace ChilliSource
         //----------------------------------------------------
 		void Application::ScreenResized(u32 in_width, u32 in_height)
 		{
-			Screen::SetRawDimensions(Core::Vector2Old((f32)in_width, (f32)in_height));
+			Screen::SetRawDimensions(Core::Vector2((f32)in_width, (f32)in_height));
 
 			if (m_renderSystem)
 			{

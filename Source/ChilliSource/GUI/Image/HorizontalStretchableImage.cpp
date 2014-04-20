@@ -263,7 +263,7 @@ namespace ChilliSource
 		{
 			if(HeightFromImage)
             {
-				Core::Vector2Old vPanelSize = GetAbsoluteSize();
+				Core::Vector2 vPanelSize = GetAbsoluteSize();
 				vPanelSize.y = GetCapHeight();
 				SetSize(0.0f, 0.0f, vPanelSize.x, vPanelSize.y);
             }
@@ -279,7 +279,7 @@ namespace ChilliSource
 		{
 			if(Visible && TextureAtlas && Texture)
 			{
-				Core::Vector2Old vPanelSize = GetAbsoluteSize();
+				Core::Vector2 vPanelSize = GetAbsoluteSize();
 				
 				if(HeightFromImage)
 				{
@@ -289,9 +289,9 @@ namespace ChilliSource
 				
                 if (ActAsSpacer == false)
                 {
-                    Core::Vector2Old vPanelPos = GetAbsoluteScreenSpacePosition();
-                    Core::Vector2Old vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
-                    Core::Vector2Old vPatchPos;
+                    Core::Vector2 vPanelPos = GetAbsoluteScreenSpacePosition();
+                    Core::Vector2 vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
+                    Core::Vector2 vPatchPos;
                     
                     Core::Colour AbsColour = GetAbsoluteColour();
                     
@@ -301,10 +301,10 @@ namespace ChilliSource
                     Core::Matrix3x3Old matPatchTransform;
                     Core::Matrix3x3Old matViewTransform;
                     
-                    matViewTransform.SetTransform(vPanelPos, Core::Vector2Old(1, 1), GetAbsoluteRotation());
+                    matViewTransform.SetTransform(vPanelPos, Core::Vector2(1, 1), GetAbsoluteRotation());
                     
                     // Calculate dimentions and position for centre
-                    Core::Vector2Old vPatchSize = m_panels.m_centreSize;
+                    Core::Vector2 vPatchSize = m_panels.m_centreSize;
                     vPatchSize.y = vPanelSize.y;
                     vPatchSize.x = vPanelSize.x - (m_panels.m_leftSize.x + m_panels.m_rightSize.x);
                     // Record size the caps need to shrink
@@ -320,7 +320,7 @@ namespace ChilliSource
                     matPatchTransform.Translate(vTopLeft);
                     Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                     inpCanvas->DrawBox(matTransform,
-                                       Core::Vector2Old(m_panels.m_leftSize.x + fShrinkX,vPanelSize.y),
+                                       Core::Vector2(m_panels.m_leftSize.x + fShrinkX,vPanelSize.y),
                                        Texture,
                                        m_panels.m_leftUVs,
                                        AbsColour, 
@@ -330,7 +330,7 @@ namespace ChilliSource
                     matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topRight));
                     Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                     inpCanvas->DrawBox(matTransform, 
-                                       Core::Vector2Old(m_panels.m_rightSize.x + fShrinkX,vPanelSize.y),
+                                       Core::Vector2(m_panels.m_rightSize.x + fShrinkX,vPanelSize.y),
                                        Texture,
                                        m_panels.m_rightUVs,
                                        AbsColour, 

@@ -145,7 +145,7 @@ namespace ChilliSource
         ///
         /// @return The value as a string.
         //---------------------------------------------------------
-        std::string ToString(const Vector2Old& in_value);
+        std::string ToString(const Vector2& in_value);
         //---------------------------------------------------------
         /// Converts a 3 component vector to a string.
         ///
