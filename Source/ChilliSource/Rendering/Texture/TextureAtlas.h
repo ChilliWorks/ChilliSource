@@ -109,7 +109,7 @@ namespace ChilliSource
             ///
 			/// @return Size of the given frame in pixels
 			//---------------------------------------------------------------------
-			Core::Vector2 GetFrameSize(const std::string& in_textureId) const;
+			Core::Vector2Old GetFrameSize(const std::string& in_textureId) const;
 			//---------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -118,7 +118,7 @@ namespace ChilliSource
             /// @return The value in pixels of the X, Y crop offset from the original
             /// sprite.
 			//---------------------------------------------------------------------
-			Core::Vector2 GetFrameOffset(const std::string& in_textureId) const;
+			Core::Vector2Old GetFrameOffset(const std::string& in_textureId) const;
 			//---------------------------------------------------------------------
             /// @author S Downie
 			///

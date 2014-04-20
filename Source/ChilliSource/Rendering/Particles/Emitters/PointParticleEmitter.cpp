@@ -45,7 +45,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void PointParticleEmitter::Emit(Particle& in_particle)
         {
-			Core::Vector3 vDirection(Core::MathUtils::RandomInRange(-1.0f, 1.0f),
+			Core::Vector3Old vDirection(Core::MathUtils::RandomInRange(-1.0f, 1.0f),
 									  Core::MathUtils::RandomInRange(-1.0f, 1.0f),
 									  Core::MathUtils::RandomInRange(-1.0f, 1.0f));
 			

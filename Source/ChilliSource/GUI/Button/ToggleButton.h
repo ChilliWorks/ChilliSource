@@ -202,7 +202,7 @@ namespace ChilliSource
 			///
 			/// @return Absolute size of the image
 			//--------------------------------------------------------
-			Core::Vector2 GetSizeFromImage() const;
+			Core::Vector2Old GetSizeFromImage() const;
 			//--------------------------------------------------------
 			/// Layout Content
 			///
@@ -312,7 +312,7 @@ namespace ChilliSource
             Core::Rectangle msOnUVs;
             Core::Rectangle msOffUVs;
             
-            Core::Vector2 mvSelectedPos;
+            Core::Vector2Old mvSelectedPos;
             
 			bool mbSelected;
             bool mbToggledOn;

@@ -1,0 +1,128 @@
+#ifndef _MO_FLO_CORE_VECTOR_4_H_
+#define _MO_FLO_CORE_VECTOR_4_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Vector3Old.h>
+
+#include <math.h>
+
+//=================================================
+// Tag - Vector 4
+//
+// 4-Dimensional Vector
+//=================================================
+
+namespace ChilliSource 
+{
+	namespace Core 
+	{
+		class Vector4Old
+		{
+		public:
+			//---------------------------------
+			// Constructors & Destructor
+			//---------------------------------
+			Vector4Old(void);
+			Vector4Old(const Vector4Old &Vec);
+			Vector4Old(const Vector3Old &Vec, f32 inW = 1.0f);
+			Vector4Old(const f32 fX, const f32 fY, const f32 fZ, const f32 fW);
+			
+			//---------------------------------
+			// Operators
+			//---------------------------------
+			Vector4Old& operator=(const Vector4Old &Vec){x = Vec.x; y = Vec.y; z = Vec.z; w = Vec.w; return *this;};
+			
+			Vector4Old operator+(const Vector4Old &Vec) const
+			{Vector4Old Result; Result.x = this->x + Vec.x; Result.y = this->y + Vec.y; Result.z = this->z + Vec.z; Result.w = this->w + Vec.w; return Result;}
+			
+			Vector4Old operator+(const f32 Scale) const
+			{Vector4Old Result; Result.x = this->x + Scale; Result.y = this->y + Scale; Result.z = this->z + Scale; Result.w = this->w + Scale; return Result;}
+			
+			Vector4Old operator-(const Vector4Old &Vec) const
+			{Vector4Old Result; Result.x = this->x - Vec.x; Result.y = this->y - Vec.y; Result.z = this->z - Vec.z; Result.w = this->w - Vec.w; return Result;}
+			
+			Vector4Old operator-(const f32 Scale) const
+			{Vector4Old Result; Result.x = this->x - Scale; Result.y = this->y - Scale; Result.z = this->z - Scale; Result.w = this->w - Scale; return Result;}
+			
+			Vector4Old operator*(const Vector4Old &Vec) const
+			{Vector4Old Result; Result.x = this->x * Vec.x; Result.y = this->y * Vec.y; Result.z = this->z * Vec.z; Result.w = this->w * Vec.w; return Result;}
+			
+			Vector4Old operator*(const f32 Scale) const
+			{Vector4Old Result; Result.x = this->x * Scale; Result.y = this->y * Scale; Result.z = this->z * Scale; Result.w = this->w * Scale; return Result;}
+			
+			Vector4Old operator/(const Vector4Old &Vec) const
+			{Vector4Old Result; Result.x = this->x / Vec.x; Result.y = this->y / Vec.y; Result.z = this->z / Vec.z; Result.w = this->w / Vec.w; return Result;}
+			
+			Vector4Old operator/(const f32 Scale) const
+			{Vector4Old Result; Result.x = this->x / Scale; Result.y = this->y / Scale; Result.z = this->z / Scale; Result.w = this->w / Scale; return Result;}
+			
+			const Vector4Old& operator+=(const Vector4Old &Vec)
+			{this->x += Vec.x; this->y += Vec.y; this->z += Vec.z; this->w += Vec.w; return *this;}
+			
+			const Vector4Old& operator-=(const Vector4Old &Vec)
+			{this->x -= Vec.x; this->y -= Vec.y; this->z -= Vec.z; this->w -= Vec.w; return *this;}
+			
+			const Vector4Old& operator*=(const Vector4Old &Vec)
+			{this->x *= Vec.x; this->y *= Vec.y; this->z *= Vec.z; this->w *= Vec.w; return *this;}
+			
+			const Vector4Old& operator/=(const Vector4Old &Vec)
+			{this->x /= Vec.x; this->y /= Vec.y; this->z /= Vec.z; this->w /= Vec.w; return *this;}
+			
+			const Vector4Old& operator+=(const f32 Scale)
+			{this->x += Scale; this->y += Scale; this->z += Scale; this->w += Scale; return *this;}
+			
+			const Vector4Old& operator-=(const f32 Scale)
+			{this->x -= Scale; this->y -= Scale; this->z -= Scale; this->w -= Scale; return *this;}
+
+			Vector4Old operator-() const
+			{Vector4Old Result; Result.x = -this->x; Result.y = -this->y; Result.z = -this->z; Result.w = -this->w; return Result;}
+						
+			const Vector4Old& operator*=(const f32 Scale)
+			{this->x *= Scale; this->y *= Scale; this->z *= Scale; this->w *= Scale; return *this;}
+			
+			const Vector4Old& operator/=(const f32 Scale)
+			{this->x /= Scale; this->y /= Scale; this->z /= Scale; this->w /= Scale; return *this;}
+			
+			bool operator==(const Vector4Old &Vec)const 
+			{return (Vec.x == x && Vec.y == y && Vec.z == z && Vec.w == w);}
+			
+			bool operator!=(const Vector4Old &Vec)const 
+			{return (Vec.x != x || Vec.y != y || Vec.z != z || w != w);}
+			
+			bool operator>(const Vector4Old &Vec)const 
+			{return x > Vec.x && y > Vec.y && z > Vec.z && w > Vec.w;}
+			
+			bool operator<(const Vector4Old &Vec)const 
+			{return x < Vec.x && y < Vec.y && z < Vec.z && w < Vec.w;}
+			
+			bool operator>=(const Vector4Old &Vec)const 
+			{return x >= Vec.x && y >= Vec.y && z >= Vec.z && w >= Vec.w;}
+			
+			bool operator<=(const Vector4Old &Vec)const 
+			{return x <= Vec.x && y <= Vec.y && z <= Vec.z && w <= Vec.w;}
+			
+			//---------------------------------
+			// Methods
+			//---------------------------------
+			void CrossProduct(const Vector4Old &Vec, Vector4Old &Out);
+            Vector4Old CrossProduct(const Vector4Old &Vec, const Vector4Old &Vec2);
+            Vector4Old & Normalise();
+			Vector4Old NormalisedCopy() const;
+            Vector4Old InversedCopy() const;
+            Vector4Old & Inverse();
+			f32 Length() const;
+			f32 LengthSquared() const;
+			
+			static const Vector4Old ZERO;
+            
+            static void Multiply(const Vector4Old* inpVec, const Vector4Old* inpVec2, Vector4Old* outpVec);
+            static void CrossProduct(const Vector4Old* inpVec, const Vector4Old* inpVec2, Vector4Old* outpVec);
+			
+		public:
+			
+			f32 x, y, z, w;
+		};
+	}
+}
+
+#endif

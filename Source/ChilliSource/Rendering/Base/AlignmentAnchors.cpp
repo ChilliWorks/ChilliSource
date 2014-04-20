@@ -22,7 +22,7 @@ namespace ChilliSource
         /// @param Half size
         /// @param Out anchor point
         //---------------------------------------------------------------
-        void Align(AlignmentAnchor ineAlignment, const Core::Vector2& invHalfSize, Core::Vector2& outvAlignmentPoint)
+        void Align(AlignmentAnchor ineAlignment, const Core::Vector2Old& invHalfSize, Core::Vector2Old& outvAlignmentPoint)
         {
             //Vertical alignment
 			switch (ineAlignment) 
@@ -82,7 +82,7 @@ namespace ChilliSource
         /// @param Half size
         /// @param Out anchor point
         //---------------------------------------------------------------
-        void GetAnchorPoint(AlignmentAnchor ineAlignment, const Core::Vector2& invHalfSize, Core::Vector2& outvAlignmentPoint)
+        void GetAnchorPoint(AlignmentAnchor ineAlignment, const Core::Vector2Old& invHalfSize, Core::Vector2Old& outvAlignmentPoint)
         {
             //Vertical alignment
 			switch (ineAlignment) 

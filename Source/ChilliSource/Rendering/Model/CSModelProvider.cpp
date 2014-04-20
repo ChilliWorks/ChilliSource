@@ -164,7 +164,7 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<in_meshDesc.m_skeletonDesc.m_jointIndices.size(); ++i)
                     {
-                        ChilliSource::Core::Matrix4x4 IBPMat;
+                        ChilliSource::Core::Matrix4x4Old IBPMat;
                         ReadBlock<f32>(in_meshStream, 16, IBPMat.m);
                         out_subMeshDesc.mInverseBindPoseMatrices.push_back(IBPMat);
                     }

@@ -47,8 +47,8 @@ namespace ChilliSource
             m_movedOutsideConnection = mInputEvents.GetMovedOutsideEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonDeselect));
             
             m_image = StretchableImageSPtr(new StretchableImage());
-            m_image->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
-            m_image->SetPosition(Core::UnifiedVector2(Core::Vector2(0.5f, 0.5f), Core::Vector2(0, 0)));
+            m_image->SetSize(Core::UnifiedVector2Old(Core::Vector2Old(1.0f, 1.0f), Core::Vector2Old(0, 0)));
+            m_image->SetPosition(Core::UnifiedVector2Old(Core::Vector2Old(0.5f, 0.5f), Core::Vector2Old(0, 0)));
             m_image->EnableUserInteraction(false);
             AddSubview(m_image);
         }
@@ -137,8 +137,8 @@ namespace ChilliSource
             m_movedOutsideConnection = mInputEvents.GetMovedOutsideEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonDeselect));
             
             m_image = StretchableImageSPtr(new StretchableImage());
-            m_image->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
-            m_image->SetPosition(Core::UnifiedVector2(Core::Vector2(0.5f, 0.5f), Core::Vector2(0, 0)));
+            m_image->SetSize(Core::UnifiedVector2Old(Core::Vector2Old(1.0f, 1.0f), Core::Vector2Old(0, 0)));
+            m_image->SetPosition(Core::UnifiedVector2Old(Core::Vector2Old(0.5f, 0.5f), Core::Vector2Old(0, 0)));
             m_image->EnableUserInteraction(false);
             AddSubview(m_image);
         }
@@ -271,7 +271,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void StretchableHighlightButton::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
         {
-            Core::Vector2 vCurrentSize = GetAbsoluteSize();
+            Core::Vector2Old vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
 			SetSize(infRelWidth, 0.0f, infAbsWidth, 0.0f);
 			
@@ -288,7 +288,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void StretchableHighlightButton::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
         {
-            Core::Vector2 vCurrentSize = GetAbsoluteSize();
+            Core::Vector2Old vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
 			SetSize(0.0f, infRelHeight, 0.0f, infAbsHeight);
 			

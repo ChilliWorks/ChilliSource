@@ -19,10 +19,10 @@ namespace ChilliSource
     {
         struct Particle
         {
-            Core::Vector3 m_scale;
-            Core::Vector3 m_translation;
+            Core::Vector3Old m_scale;
+            Core::Vector3Old m_translation;
 			Core::Colour m_colour;				//The colour of the particle
-            Core::Vector3 m_velocity;		//The speed of the particle in 3D space
+            Core::Vector3Old m_velocity;		//The speed of the particle in 3D space
             f32 m_energy;					//Measures the full lifetime of the particle from birth at 1 to death at 0
             f32 m_angularRotation;
         };
@@ -185,8 +185,8 @@ namespace ChilliSource
 			///
 			/// Rebuild the sprite data
 			//-----------------------------------------------------
-			void UpdateSpriteData(const Core::Vector3& invPos, const Core::Colour & insTintColour, SpriteComponent::SpriteData& outsData,
-                                  const Core::Vector3& invRight, const Core::Vector3& invUp, const Core::Vector3& invScale);
+			void UpdateSpriteData(const Core::Vector3Old& invPos, const Core::Colour & insTintColour, SpriteComponent::SpriteData& outsData,
+                                  const Core::Vector3Old& invRight, const Core::Vector3Old& invUp, const Core::Vector3Old& invScale);
             
         protected:
             
@@ -197,7 +197,7 @@ namespace ChilliSource
             f32 mfMinInitialVelocity;
             
             Core::Colour mInitialColour;
-            Core::Vector3 mvLastEmissionPos;
+            Core::Vector3Old mvLastEmissionPos;
             
 			Core::Rectangle msParticleUVs;
 			
@@ -212,7 +212,7 @@ namespace ChilliSource
             f32 mfEmissionFreq;
             f32 mfTimeToLive;
             f32 mfEnergyLoss;
-            Core::Vector2 mvInitialScale;
+            Core::Vector2Old mvInitialScale;
             
             bool mbShouldLoop;
             bool mbIsEmitting;

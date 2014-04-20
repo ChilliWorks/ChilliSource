@@ -12,14 +12,14 @@ namespace ChilliSource
 {
     namespace Core
     {
-        const UnifiedVector2 UnifiedVector2::ZERO(Core::Vector2::ZERO, Core::Vector2::ZERO);
+        const UnifiedVector2Old UnifiedVector2Old::ZERO(Core::Vector2Old::ZERO, Core::Vector2Old::ZERO);
         
         //------------------------------------------------------
         /// Get Absolute
         ///
         /// @return Absolute vector
         //------------------------------------------------------
-        const Core::Vector2& UnifiedVector2::GetAbsolute() const
+        const Core::Vector2Old& UnifiedVector2Old::GetAbsolute() const
         {
             return vAbsolute;
         }
@@ -28,7 +28,7 @@ namespace ChilliSource
         ///
         /// @return Relative vector
         //------------------------------------------------------
-        const Core::Vector2& UnifiedVector2::GetRelative() const
+        const Core::Vector2Old& UnifiedVector2Old::GetRelative() const
         {
             return vRelative;
         }

@@ -13,7 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Entity/Component.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4x4Old.h>
 
 namespace ChilliSource
 {
@@ -49,7 +49,7 @@ namespace ChilliSource
 			///
 			/// @return Position in world space
 			//----------------------------------------------------------
-			const Core::Vector3& GetWorldPosition() const;
+			const Core::Vector3Old& GetWorldPosition() const;
             //----------------------------------------------------------
 			/// Set Intensity
 			///
@@ -67,7 +67,7 @@ namespace ChilliSource
             ///
             /// @return Matrix to transform into light space
             //----------------------------------------------------------
-            virtual const Core::Matrix4x4& GetLightMatrix() const = 0;
+            virtual const Core::Matrix4x4Old& GetLightMatrix() const = 0;
             //----------------------------------------------------------
             /// Is Cache Valid
             ///
@@ -92,7 +92,7 @@ namespace ChilliSource
             
         protected:
             
-            mutable Core::Matrix4x4 mmatLight;
+            mutable Core::Matrix4x4Old mmatLight;
             
             Core::Colour mColour;
             

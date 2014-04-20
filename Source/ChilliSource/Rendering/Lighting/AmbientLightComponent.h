@@ -35,7 +35,7 @@ namespace ChilliSource
             ///
             /// @return Light transform
             //----------------------------------------------------------
-            const Core::Matrix4x4& GetLightMatrix() const override;
+            const Core::Matrix4x4Old& GetLightMatrix() const override;
 		};
     }
 }

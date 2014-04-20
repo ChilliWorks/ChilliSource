@@ -47,14 +47,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get World Position
         //----------------------------------------------------------
-        const Core::Vector3& LightComponent::GetWorldPosition() const
+        const Core::Vector3Old& LightComponent::GetWorldPosition() const
         {
             if(GetEntity() != nullptr)
             {
                 return GetEntity()->GetTransform().GetWorldPosition();
             }
             
-            return Core::Vector3::ZERO;
+            return Core::Vector3Old::ZERO;
         }
         //----------------------------------------------------------
         /// Set Intensity

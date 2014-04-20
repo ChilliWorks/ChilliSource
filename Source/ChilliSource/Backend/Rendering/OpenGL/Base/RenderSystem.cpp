@@ -116,7 +116,7 @@ namespace ChilliSource
             
             m_hasContext = true;
             
-            CS_ASSERT((Core::Screen::GetRawDimensions() > Core::Vector2::ZERO), "Cannot create and OpenGL ES view with size ZERO");
+            CS_ASSERT((Core::Screen::GetRawDimensions() > Core::Vector2Old::ZERO), "Cannot create and OpenGL ES view with size ZERO");
             
             m_textureUnitSystem = Core::Application::Get()->GetSystem<TextureUnitSystem>();
             CS_ASSERT(m_textureUnitSystem, "Cannot find required system: Texture Unit System.");
@@ -272,17 +272,17 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Joints
         //----------------------------------------------------------
-        void RenderSystem::ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints)
+        void RenderSystem::ApplyJoints(const std::vector<Core::Matrix4x4Old>& inaJoints)
         {
             CS_ASSERT(m_currentShader != nullptr,  "Cannot set joints without binding shader");
             
             //Remove the final column from the joint matrix data as it is always going to be [0 0 0 1].
-            std::vector<Core::Vector4> jointVectors;
+            std::vector<Core::Vector4Old> jointVectors;
             for (const auto& joint : inaJoints)
             {
-                jointVectors.push_back(Core::Vector4(joint.m[0], joint.m[4], joint.m[8], joint.m[12]));
-                jointVectors.push_back(Core::Vector4(joint.m[1], joint.m[5], joint.m[9], joint.m[13]));
-                jointVectors.push_back(Core::Vector4(joint.m[2], joint.m[6], joint.m[10], joint.m[14]));
+                jointVectors.push_back(Core::Vector4Old(joint.m[0], joint.m[4], joint.m[8], joint.m[12]));
+                jointVectors.push_back(Core::Vector4Old(joint.m[1], joint.m[5], joint.m[9], joint.m[13]));
+                jointVectors.push_back(Core::Vector4Old(joint.m[2], joint.m[6], joint.m[10], joint.m[14]));
             }
             
             m_currentShader->SetUniform("u_joints", jointVectors);
@@ -441,13 +441,13 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Apply Camera
 		//----------------------------------------------------------
-		void RenderSystem::ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4x4& inmatView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol)
+		void RenderSystem::ApplyCamera(const Core::Vector3Old& invPosition, const Core::Matrix4x4Old& inmatView, const Core::Matrix4x4Old& inmatProj, const Core::Colour& inClearCol)
 		{
 			//Set the new view matrix based on the camera position
 			mmatView = inmatView;
 			mmatProj = inmatProj;
             mvCameraPos = invPosition;
-            Core::Matrix4x4::Multiply(&mmatView, &mmatProj, &mmatViewProj);
+            Core::Matrix4x4Old::Multiply(&mmatView, &mmatProj, &mmatViewProj);
 			
 			//Set the clear colour
             mNewClearColour = inClearCol;
@@ -519,7 +519,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Vertex Buffer
         //----------------------------------------------------------
-        void RenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld)
+        void RenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4Old& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
             Debugging::DebugStats::AddToEvent("DrawCalls", 1u);
@@ -527,8 +527,8 @@ namespace ChilliSource
 #endif
             
 			//Set the new model view matrix based on the camera view matrix and the object matrix
-            static Core::Matrix4x4 matWorldViewProj;
-            Core::Matrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
+            static Core::Matrix4x4Old matWorldViewProj;
+            Core::Matrix4x4Old::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
             m_currentShader->SetUniform("u_wvpMat", matWorldViewProj, Shader::UniformNotFoundPolicy::k_failSilent);
             m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
             if(m_currentShader->HasUniform("u_normalMat"))
@@ -544,15 +544,15 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Buffer
         //----------------------------------------------------------
-        void RenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld)
+        void RenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4Old& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
             Debugging::DebugStats::AddToEvent("DrawCalls", 1u);
 #endif
 
 			//Set the new model view matrix based on the camera view matrix and the object matrix
-            static Core::Matrix4x4 matWorldViewProj;
-            Core::Matrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
+            static Core::Matrix4x4Old matWorldViewProj;
+            Core::Matrix4x4Old::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
             m_currentShader->SetUniform("u_wvpMat", matWorldViewProj, Shader::UniformNotFoundPolicy::k_failSilent);
             m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
             if(m_currentShader->HasUniform("u_normalMat"))
@@ -766,7 +766,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Scissor Region
         //---------------------------------------------------------
-        void RenderSystem::SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize)
+        void RenderSystem::SetScissorRegion(const Core::Vector2Old& invPosition, const Core::Vector2Old& invSize)
         {
             if(mbInvalidateAllCaches || mvCachedScissorPos != invPosition || mvCachedScissorSize != invSize)
             {

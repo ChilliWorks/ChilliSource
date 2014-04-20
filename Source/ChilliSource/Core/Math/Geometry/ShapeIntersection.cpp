@@ -31,11 +31,11 @@ namespace ChilliSource
                 f32 t2 = std::numeric_limits<f32>::infinity();
                 f32 t1 = -t2;
                 
-                Core::Vector3 vRayOrigin = inRay.vOrigin;
-                Core::Vector3 vRayDir = inRay.vDirection * inRay.fLength;
+                Core::Vector3Old vRayOrigin = inRay.vOrigin;
+                Core::Vector3Old vRayDir = inRay.vDirection * inRay.fLength;
                 
-                Core::Vector3 vAABBMin = inAABB.GetMin();
-                Core::Vector3 vAABBMax = inAABB.GetMax();
+                Core::Vector3Old vAABBMin = inAABB.GetMin();
+                Core::Vector3Old vAABBMax = inAABB.GetMax();
                 
                 //----X Slab 
                 if(!RaySlabIntersect(vRayOrigin.x, vRayDir.x, vAABBMin.x, vAABBMax.x, t1, t2)) return false;
@@ -56,10 +56,10 @@ namespace ChilliSource
             //----------------------------------------------------------------
             /// AABB vs Point
             //----------------------------------------------------------------
-            bool Intersects(const AABB& inAABB, const Vector3& invPoint)
+            bool Intersects(const AABB& inAABB, const Vector3Old& invPoint)
             {
-                Core::Vector3 vOrigin = inAABB.GetOrigin();
-                Core::Vector3 vHalfSize = inAABB.GetHalfSize();
+                Core::Vector3Old vOrigin = inAABB.GetOrigin();
+                Core::Vector3Old vHalfSize = inAABB.GetHalfSize();
                 
                 return	(invPoint.x >= (vOrigin.x - vHalfSize.x)) && (invPoint.x <= (vOrigin.x + vHalfSize.x)) &&
                         (invPoint.y >= (vOrigin.y - vHalfSize.y)) && (invPoint.y <= (vOrigin.y + vHalfSize.y)) &&
@@ -79,7 +79,7 @@ namespace ChilliSource
             //----------------------------------------------------------------
             bool Intersects(const Sphere& inSphere, const Ray& inRay)
             {
-                Core::Vector3 vDelta = inRay.vOrigin - inSphere.vOrigin;
+                Core::Vector3Old vDelta = inRay.vOrigin - inSphere.vOrigin;
                 f32 A = inRay.vDirection.DotProduct(inRay.vDirection);
                 f32 B = 2.0f * vDelta.DotProduct(inRay.vDirection);
                 f32 C = vDelta.DotProduct(vDelta) - inSphere.fRadius * inSphere.fRadius;
@@ -89,16 +89,16 @@ namespace ChilliSource
             //----------------------------------------------------------------
             /// Sphere vs Point
             //----------------------------------------------------------------
-            bool Intersects(const Sphere& inSphere, const Vector3& invPoint)
+            bool Intersects(const Sphere& inSphere, const Vector3Old& invPoint)
             {
-                return (inSphere.vOrigin - Vector2(invPoint)).LengthSquared() <= (inSphere.fRadius * inSphere.fRadius);
+                return (inSphere.vOrigin - Vector2Old(invPoint)).LengthSquared() <= (inSphere.fRadius * inSphere.fRadius);
             }
             //----------------------------------------------------------------
             /// Sphere vs Plane
             //----------------------------------------------------------------
             ShapeIntersection::Result Intersects(const Sphere& inSphere, const Plane& inPlane)
             {
-                f32 fDist = Vector3::DotProduct(&inSphere.vOrigin, &inPlane.mvNormal) + inPlane.mfD;
+                f32 fDist = Vector3Old::DotProduct(&inSphere.vOrigin, &inPlane.mvNormal) + inPlane.mfD;
                 
                 if(fDist < -inSphere.fRadius)
                     return Result::k_outside;
@@ -132,20 +132,20 @@ namespace ChilliSource
             //----------------------------------------------------------------
             /// Circle vs Point
             //----------------------------------------------------------------
-            bool Intersects(const Circle& inCircle, const Vector3& invPoint)
+            bool Intersects(const Circle& inCircle, const Vector3Old& invPoint)
             {
-                return (inCircle.vOrigin - (Vector2)invPoint).LengthSquared() <= (inCircle.fRadius * inCircle.fRadius);
+                return (inCircle.vOrigin - (Vector2Old)invPoint).LengthSquared() <= (inCircle.fRadius * inCircle.fRadius);
             }
             //----------------------------------------------------------------
             /// Rect vs Rect
             //----------------------------------------------------------------
             bool Intersects(const Rectangle& inRectLHS, const Rectangle& inRectRHS)
             {
-                Core::Vector2 vMinLS(inRectLHS.vOrigin);
-                Core::Vector2 vMaxLS(inRectLHS.vOrigin.x + inRectLHS.vSize.x, inRectLHS.vOrigin.y + inRectLHS.vSize.y);
+                Core::Vector2Old vMinLS(inRectLHS.vOrigin);
+                Core::Vector2Old vMaxLS(inRectLHS.vOrigin.x + inRectLHS.vSize.x, inRectLHS.vOrigin.y + inRectLHS.vSize.y);
                 
-                Core::Vector2 vMinRS(inRectRHS.vOrigin);
-                Core::Vector2 vMaxRS(inRectRHS.vOrigin.x + inRectRHS.vSize.x, inRectRHS.vOrigin.y + inRectRHS.vSize.y);
+                Core::Vector2Old vMinRS(inRectRHS.vOrigin);
+                Core::Vector2Old vMaxRS(inRectRHS.vOrigin.x + inRectRHS.vSize.x, inRectRHS.vOrigin.y + inRectRHS.vSize.y);
                 
                 return	(vMaxLS.x > vMinRS.x && vMinLS.x < vMaxRS.x) &&
                         (vMaxLS.y > vMinRS.y && vMinLS.y < vMaxRS.y);
@@ -153,7 +153,7 @@ namespace ChilliSource
             //----------------------------------------------------------------
             /// Rect vs Point
             //----------------------------------------------------------------
-            bool Intersects(const Rectangle& inRect, const Vector3& invPoint)
+            bool Intersects(const Rectangle& inRect, const Vector3Old& invPoint)
             {
                 return (invPoint.x >= inRect.vOrigin.x) && (invPoint.y >= inRect.vOrigin.y) && (inRect.vOrigin.x + inRect.vSize.x >= invPoint.x) && (inRect.vOrigin.y + inRect.vSize.y >= invPoint.y);
             }
@@ -162,7 +162,7 @@ namespace ChilliSource
             //----------------------------------------------------------------
             bool Intersects(const Plane& inPlaneLHS, const Plane& inPlaneRHS, Ray& outIntersection)
             {
-                Vector3::CrossProduct(&inPlaneLHS.mvNormal, &inPlaneRHS.mvNormal, &outIntersection.vDirection);
+                Vector3Old::CrossProduct(&inPlaneLHS.mvNormal, &inPlaneRHS.mvNormal, &outIntersection.vDirection);
                 
                 f32 fDenom = outIntersection.vDirection.DotProduct(outIntersection.vDirection);
                 
@@ -171,10 +171,10 @@ namespace ChilliSource
                     return false;
                 }
                 
-                Vector3 v1(inPlaneLHS.mfD * inPlaneRHS.mvNormal);
-                Vector3 v2(inPlaneRHS.mfD * inPlaneLHS.mvNormal);
-                Vector3 vDelta = v1 - v2;
-                Vector3::CrossProduct(&vDelta, &outIntersection.vDirection, &outIntersection.vOrigin);
+                Vector3Old v1(inPlaneLHS.mfD * inPlaneRHS.mvNormal);
+                Vector3Old v2(inPlaneRHS.mfD * inPlaneLHS.mvNormal);
+                Vector3Old vDelta = v1 - v2;
+                Vector3Old::CrossProduct(&vDelta, &outIntersection.vDirection, &outIntersection.vOrigin);
                 outIntersection.vOrigin /= fDenom;
                 outIntersection.vDirection.Normalise();
                 
@@ -183,7 +183,7 @@ namespace ChilliSource
             //----------------------------------------------------------------
             /// Line vs Line
             //----------------------------------------------------------------
-            bool Intersects(const Line& inLineLHS, const Line& inLineRHS, Vector3& outvIntersection)
+            bool Intersects(const Line& inLineLHS, const Line& inLineRHS, Vector3Old& outvIntersection)
             {
                 //Due to floating point errors we will compute the smallest distance between the two lines
                 //and if this is less than epsilon we will consider that an intersection. We will then pick one of the closest
@@ -191,25 +191,25 @@ namespace ChilliSource
                 
                 //The following is taken from the Orange Physics Book - "Realtime Collision Detection" by Christer Ericson. p. 149
                 
-                Vector3 vAB = inLineLHS.vEndPos - inLineLHS.vStartPos;
-                Vector3 vCD = inLineRHS.vEndPos - inLineRHS.vStartPos;
-                Vector3 vAC = inLineLHS.vStartPos - inLineRHS.vStartPos;
+                Vector3Old vAB = inLineLHS.vEndPos - inLineLHS.vStartPos;
+                Vector3Old vCD = inLineRHS.vEndPos - inLineRHS.vStartPos;
+                Vector3Old vAC = inLineLHS.vStartPos - inLineRHS.vStartPos;
                 
-                f32 fA = Vector3::DotProduct(&vAB, &vAB);
-                f32 fE = Vector3::DotProduct(&vCD, &vCD);
-                f32 fF = Vector3::DotProduct(&vCD, &vAC);
+                f32 fA = Vector3Old::DotProduct(&vAB, &vAB);
+                f32 fE = Vector3Old::DotProduct(&vCD, &vCD);
+                f32 fF = Vector3Old::DotProduct(&vCD, &vAC);
                 f32 fS = 0.0f;
                 f32 fT = 0.0f;
                 
-                Vector3 vIntersection1, vIntersection2;
+                Vector3Old vIntersection1, vIntersection2;
                 
                 if(fabsf(fA) <= MathUtils::kApproxZero && fabsf(fE) <= MathUtils::kApproxZero)
                 {
                     vIntersection1 = inLineLHS.vStartPos;
                     vIntersection2 = inLineRHS.vStartPos;
                     
-                    Vector3 vDir = vIntersection1 - vIntersection2;
-                    return (fabsf(Vector3::DotProduct(&vDir, &vDir)) <= MathUtils::kApproxZero);
+                    Vector3Old vDir = vIntersection1 - vIntersection2;
+                    return (fabsf(Vector3Old::DotProduct(&vDir, &vDir)) <= MathUtils::kApproxZero);
                 }
                 
                 if(fA <= MathUtils::kApproxZero)
@@ -219,7 +219,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    f32 fC = Vector3::DotProduct(&vAB, &vAC);
+                    f32 fC = Vector3Old::DotProduct(&vAB, &vAC);
                     if(fabsf(fE) <= MathUtils::kApproxZero)
                     {
                         fT = 0.0f;
@@ -227,7 +227,7 @@ namespace ChilliSource
                     }
                     else
                     {
-                        f32 fB = Vector3::DotProduct(&vAB, &vCD);
+                        f32 fB = Vector3Old::DotProduct(&vAB, &vCD);
                         f32 fDenom = fA*fE - fB*fB;
                         if(fDenom != 0.0f)
                         {
@@ -259,8 +259,8 @@ namespace ChilliSource
                 //Pick the first one as the point of intersection
                 outvIntersection = vIntersection1;
                 
-                Vector3 vDir = vIntersection1 - vIntersection2;
-                return (fabsf(Vector3::DotProduct(&vDir, &vDir)) <= MathUtils::kApproxZero);
+                Vector3Old vDir = vIntersection1 - vIntersection2;
+                return (fabsf(Vector3Old::DotProduct(&vDir, &vDir)) <= MathUtils::kApproxZero);
             }
             //----------------------------------------------------------------
             /// Ray vs Slab

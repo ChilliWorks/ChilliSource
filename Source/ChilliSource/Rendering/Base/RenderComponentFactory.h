@@ -61,8 +61,8 @@ namespace ChilliSource
 			///
 			/// A number of overloads 
 			//---------------------------------------------------------------------------
-			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2 &invDims, const MaterialCSPtr& inMaterial);
-			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath);
+			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2Old &invDims, const MaterialCSPtr& inMaterial);
+			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2Old &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath);
 			SpriteComponentUPtr CreateSpriteComponent(const TextureAtlasCSPtr& pTextureAtlas, const std::string& in_textureId, const MaterialCSPtr& inpMaterial);
             SpriteComponentUPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrTextureAtlas, const std::string& inTpageID, const MaterialCSPtr& inpMaterial);
 

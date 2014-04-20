@@ -33,7 +33,7 @@ namespace ChilliSource
 	namespace Rendering
 	{
         //---Matrix caches
-        Core::Matrix4x4 Renderer::matViewProjCache;
+        Core::Matrix4x4Old Renderer::matViewProjCache;
 		
 		typedef std::function<bool(RenderComponent*, RenderComponent*)> RenderSortDelegate;
 		
@@ -150,7 +150,7 @@ namespace ChilliSource
                 //Apply the world view projection matrix
                 mpRenderSystem->ApplyCamera(mpActiveCamera->GetEntity()->GetTransform().GetWorldPosition(), mpActiveCamera->GetView(), mpActiveCamera->GetProjection(), mpActiveCamera->GetClearColour());
                 //Calculate the view-projection matrix as we will need it for sorting
-                Core::Matrix4x4::Multiply(&mpActiveCamera->GetView(), &mpActiveCamera->GetProjection(), &matViewProjCache);
+                Core::Matrix4x4Old::Multiply(&mpActiveCamera->GetView(), &mpActiveCamera->GetProjection(), &matViewProjCache);
                 
                 //Render shadow maps
                 RenderShadowMap(mpActiveCamera, aDirLightCache, aPreFilteredRenderCache);
@@ -375,7 +375,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void Renderer::RenderUI(GUI::Window* inpWindow)
         {
-            mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), Core::Colour::k_cornflowerBlue);
+            mpRenderSystem->ApplyCamera(Core::Vector3Old::ZERO, Core::Matrix4x4Old::IDENTITY, CreateOverlayProjection(inpWindow), Core::Colour::k_cornflowerBlue);
 			mCanvas.Render(inpWindow, 1.0f);
         }
         //----------------------------------------------------------
@@ -466,12 +466,12 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Create Overlay Projection
         //----------------------------------------------------------
-        Core::Matrix4x4 Renderer::CreateOverlayProjection(GUI::Window* inpWindow) const
+        Core::Matrix4x4Old Renderer::CreateOverlayProjection(GUI::Window* inpWindow) const
         {
-            const Core::Vector2 kvOverlayDimensions(inpWindow->GetAbsoluteSize());
+            const Core::Vector2Old kvOverlayDimensions(inpWindow->GetAbsoluteSize());
             const f32 kfOverlayNear = 1.0f;
             const f32 kfOverlayFar = 100.0f;
-            return Core::Matrix4x4::CreateOrthoMatrixOffset(0, kvOverlayDimensions.x, 0, kvOverlayDimensions.y, kfOverlayNear, kfOverlayFar);
+            return Core::Matrix4x4Old::CreateOrthoMatrixOffset(0, kvOverlayDimensions.x, 0, kvOverlayDimensions.y, kfOverlayNear, kfOverlayFar);
         }
 	}
 }

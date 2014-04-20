@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Vector3Old.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <functional>
@@ -39,7 +39,7 @@ namespace ChilliSource
             /// @param The new acceleration. This wont neccessarily
             /// have changed since the last update.
 			//----------------------------------------------------
-			typedef std::function<void(const Core::Vector3&)> AccelerationUpdatedDelegate;
+			typedef std::function<void(const Core::Vector3Old&)> AccelerationUpdatedDelegate;
             //----------------------------------------------------
 			/// Creates a new platform specific instance of the
             /// system.
@@ -66,7 +66,7 @@ namespace ChilliSource
 			/// @return The acceleration applied to the device
 			/// measured in "G"s.
 			//----------------------------------------------------
-			virtual Core::Vector3 GetAcceleration() const = 0;
+			virtual Core::Vector3Old GetAcceleration() const = 0;
 			//----------------------------------------------------
 			/// @author I Copland
 			///

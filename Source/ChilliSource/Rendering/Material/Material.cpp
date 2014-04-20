@@ -297,7 +297,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		void Material::SetShaderVar(const std::string& in_varName, const Core::Vector2& in_value)
+		void Material::SetShaderVar(const std::string& in_varName, const Core::Vector2Old& in_value)
 		{
 			m_vec2Vars[in_varName] = in_value;
             
@@ -306,7 +306,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		void Material::SetShaderVar(const std::string& in_varName, const Core::Vector3& in_value)
+		void Material::SetShaderVar(const std::string& in_varName, const Core::Vector3Old& in_value)
 		{
 			m_vec3Vars[in_varName] = in_value;
             
@@ -315,7 +315,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		void Material::SetShaderVar(const std::string& in_varName, const Core::Vector4& in_value)
+		void Material::SetShaderVar(const std::string& in_varName, const Core::Vector4Old& in_value)
 		{
             m_vec4Vars[in_varName] = in_value;
             
@@ -324,7 +324,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		void Material::SetShaderVar(const std::string& in_varName, const Core::Matrix4x4& in_value)
+		void Material::SetShaderVar(const std::string& in_varName, const Core::Matrix4x4Old& in_value)
 		{
 			m_mat4Vars[in_varName] = in_value;
             

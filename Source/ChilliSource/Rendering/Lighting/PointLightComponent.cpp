@@ -97,7 +97,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Light Matrix
         //----------------------------------------------------------
-        const Core::Matrix4x4& PointLightComponent::GetLightMatrix() const
+        const Core::Matrix4x4Old& PointLightComponent::GetLightMatrix() const
         {
             //The point light matrix is simply a light view matrix
             //as the projection is done in the shader

@@ -235,7 +235,7 @@ namespace ChilliSource
             Core::Colour mCurrentColour;
 			bool mbSelected;
             
-            Core::Vector2 mvSelectedPos;
+            Core::Vector2Old mvSelectedPos;
             
             Core::ConnectionUPtr m_pressedInsideConnection;
             Core::ConnectionUPtr m_releasedInsideConnection;

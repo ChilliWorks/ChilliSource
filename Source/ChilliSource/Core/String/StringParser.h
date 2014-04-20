@@ -10,11 +10,11 @@
 #define _CHILLISOURCE_CORE_STRING_STRINGPARSER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Core/Math/Vector4.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
-#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector4Old.h>
+#include <ChilliSource/Core/Math/Matrix4x4Old.h>
+#include <ChilliSource/Core/Math/QuaternionOld.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
@@ -100,7 +100,7 @@ namespace ChilliSource
         ///
         /// @return The vector value.
         //------------------------------------------------------------
-        Vector2 ParseVector2(const std::string& in_string);
+        Vector2Old ParseVector2Old(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a 3 component vector. The vector must be
         /// in the format "x y z", i.e F32 values, space delimited. Failure
@@ -112,7 +112,7 @@ namespace ChilliSource
         ///
         /// @return The vector value.
         //------------------------------------------------------------
-        Vector3 ParseVector3(const std::string& in_string);
+        Vector3Old ParseVector3Old(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a 4 component vector. The vector must be
         /// in the format "x y z w", i.e F32 values, space delimited.
@@ -124,7 +124,7 @@ namespace ChilliSource
         ///
         /// @return The vector value.
         //------------------------------------------------------------
-        Vector4 ParseVector4(const std::string& in_string);
+        Vector4Old ParseVector4Old(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a matrix. The matrix should be provided
         /// in row major format, space delimited. failure to parse will
@@ -136,7 +136,7 @@ namespace ChilliSource
         ///
         /// @return The matrix value.
         //------------------------------------------------------------
-        Matrix4x4 ParseMatrix4(const std::string& in_string);
+        Matrix4x4Old ParseMatrix4(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a quaternion. The quaternion must be
         /// in the format "w x y z", i.e F32 values, space delimited.
@@ -148,7 +148,7 @@ namespace ChilliSource
         ///
         /// @return The quaternion value.
         //------------------------------------------------------------
-        Quaternion ParseQuaternion(const std::string& in_string);
+        QuaternionOld ParseQuaternionOld(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a colour. The colour must be
         /// in the format "r g b a", i.e F32 values, space delimited.

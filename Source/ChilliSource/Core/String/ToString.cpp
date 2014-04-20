@@ -10,11 +10,11 @@
 
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
-#include <ChilliSource/Core/Math/Quaternion.h>
-#include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Core/Math/Vector4.h>
+#include <ChilliSource/Core/Math/Matrix4x4Old.h>
+#include <ChilliSource/Core/Math/QuaternionOld.h>
+#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector4Old.h>
 
 #include <sstream>
 
@@ -141,7 +141,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const Vector2& in_value)
+        std::string ToString(const Vector2Old& in_value)
         {
             std::stringstream stream;
 			stream << in_value.x << " " << in_value.y;
@@ -149,7 +149,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const Vector3& in_value)
+        std::string ToString(const Vector3Old& in_value)
         {
             std::stringstream stream;
 			stream << in_value.x << " " << in_value.y << " " << in_value.z;
@@ -157,7 +157,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const Vector4& in_value)
+        std::string ToString(const Vector4Old& in_value)
         {
             std::stringstream stream;
 			stream << in_value.x << " " << in_value.y << " " << in_value.z << " " << in_value.w;
@@ -165,7 +165,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const Matrix4x4& in_value)
+        std::string ToString(const Matrix4x4Old& in_value)
         {
             std::stringstream stream;
 			stream << in_value.m[0] << " "
@@ -188,7 +188,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const Quaternion& in_value)
+        std::string ToString(const QuaternionOld& in_value)
         {
             std::stringstream stream;
 			stream  << in_value.w << " " << in_value.x << " " << in_value.y << " " << in_value.z;

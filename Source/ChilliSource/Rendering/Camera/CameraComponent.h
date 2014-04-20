@@ -32,7 +32,7 @@ namespace ChilliSource
 			bool bShouldResizeToScreen;
 			
 			Core::Colour ClearCol; 
-			Core::Vector2 vViewSize;
+			Core::Vector2Old vViewSize;
 		};
 		
 		class CameraComponent : public Core::Component
@@ -57,7 +57,7 @@ namespace ChilliSource
 			/// @param Look target
 			/// @param Up direction
 			//----------------------------------------------------------
-			void SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp);
+			void SetLookAt(const Core::Vector3Old& invPos, const Core::Vector3Old& invTarget, const Core::Vector3Old& invUp);
 			//----------------------------------------------------------
 			/// Use Orthographic View
 			///
@@ -76,7 +76,7 @@ namespace ChilliSource
 			///
 			/// @param Vector containing width and height
 			//----------------------------------------------------------
-			void SetViewportSize(const Core::Vector2 &invSize);
+			void SetViewportSize(const Core::Vector2Old &invSize);
 			//----------------------------------------------------------
 			/// Set Viewport Size
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			///
 			/// @param Vector containing width and height
 			//----------------------------------------------------------
-			const Core::Vector2& GetViewportSize();			
+			const Core::Vector2Old& GetViewportSize();			
 			//------------------------------------------------------
 			/// Set Field Of View
 			///
@@ -170,13 +170,13 @@ namespace ChilliSource
 			///
 			/// @return Projection matrix
 			//------------------------------------------------------
-			const Core::Matrix4x4& GetProjection();
+			const Core::Matrix4x4Old& GetProjection();
 			//------------------------------------------------------
 			/// Get View 
 			///
 			/// @return View matrix
 			//------------------------------------------------------
-			const Core::Matrix4x4& GetView();
+			const Core::Matrix4x4Old& GetView();
 			//------------------------------------------------------
 			/// Set Viewport Orientation
 			///
@@ -190,7 +190,7 @@ namespace ChilliSource
 			///
 			/// @return Orthographic projection matrix
 			//------------------------------------------------------
-			const Core::Matrix4x4& GetOrthoProjection() const;
+			const Core::Matrix4x4Old& GetOrthoProjection() const;
 			//------------------------------------------------------
 			/// Unproject
 			///
@@ -199,14 +199,14 @@ namespace ChilliSource
 			/// @param Point in screen space
 			/// @return Ray in world space with camera view direction
 			//------------------------------------------------------
-			virtual Core::Ray Unproject(const Core::Vector2 &invScreenPos);
+			virtual Core::Ray Unproject(const Core::Vector2Old &invScreenPos);
 			//------------------------------------------------------
 			/// Project
 			///
 			/// Convert from a point in world space to a point in
 			/// screen space
 			//------------------------------------------------------
-			virtual Core::Vector2 Project(const Core::Vector3 &invWorldPos);
+			virtual Core::Vector2Old Project(const Core::Vector3Old &invWorldPos);
 			
 			//------------------------------------------------------
 			/// Get Frustum Pointer
@@ -226,7 +226,7 @@ namespace ChilliSource
             /// Orientate the given matrix to face the cameras
             /// view vector
             //------------------------------------------------------
-            void Billboard(const Core::Matrix4x4& inmatBillboarded, Core::Matrix4x4& outmatBillboarded);
+            void Billboard(const Core::Matrix4x4Old& inmatBillboarded, Core::Matrix4x4Old& outmatBillboarded);
 
 			CameraDescription& GetDescription() { return mDesc; }
             
@@ -297,10 +297,10 @@ namespace ChilliSource
 			
 			Core::ScreenOrientation mViewOrientation;
 			
-			Core::Matrix4x4 mmatOrthoProj; //Ortho projection matrix;
-			Core::Matrix4x4 mmatProj;		//Projection matrix depending on whether we are an ortho or perspective camera
-			Core::Matrix4x4 mmatView;		//View matrix
-			Core::Matrix4x4 mmatViewProj;	//View projection;
+			Core::Matrix4x4Old mmatOrthoProj; //Ortho projection matrix;
+			Core::Matrix4x4Old mmatProj;		//Projection matrix depending on whether we are an ortho or perspective camera
+			Core::Matrix4x4Old mmatView;		//View matrix
+			Core::Matrix4x4Old mmatViewProj;	//View projection;
             
             Core::ConnectionUPtr m_screenOrientationChangedConnection;
             Core::ConnectionUPtr m_screenResizedConnection;

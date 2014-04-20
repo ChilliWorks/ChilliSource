@@ -51,7 +51,7 @@ namespace ChilliSource
 		/// @param Look target
 		/// @param Up direction
 		//----------------------------------------------------------
-		void CameraComponent::SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp)
+		void CameraComponent::SetLookAt(const Core::Vector3Old& invPos, const Core::Vector3Old& invTarget, const Core::Vector3Old& invUp)
 		{
             Core::Entity * pParent(GetEntity());
 
@@ -67,17 +67,17 @@ namespace ChilliSource
 		/// @param Point in screen space with orientation
 		/// @return Ray in world space with camera view direction
 		//------------------------------------------------------
-		Core::Ray CameraComponent::Unproject(const Core::Vector2 &invScreenPos)
+		Core::Ray CameraComponent::Unproject(const Core::Vector2Old &invScreenPos)
 		{
-            Core::Matrix4x4 matProj = (GetView() * GetProjection()).Inverse();
+            Core::Matrix4x4Old matProj = (GetView() * GetProjection()).Inverse();
             
-            Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
+            Core::Vector2Old vScreenSize(Core::Screen::GetOrientedDimensions());
 			//Normalise the screen space co-ordinates into clip space
 			f32 nx = ((2.0f * (invScreenPos.x/vScreenSize.x)) - 1.0f);
 			f32 ny = ((2.0f * (invScreenPos.y/vScreenSize.y)) - 1.0f);
 			
-			Core::Vector4 vNear(nx, ny, -1.0f, 1.0f);
-            Core::Vector4 vFar(nx,ny, 1.0f, 1.0f);
+			Core::Vector4Old vNear(nx, ny, -1.0f, 1.0f);
+            Core::Vector4Old vFar(nx,ny, 1.0f, 1.0f);
             vNear = vNear * matProj;
             vFar = vFar * matProj;
             
@@ -97,13 +97,13 @@ namespace ChilliSource
 		/// Convert from a point in world space to a point in
 		/// screen space
 		//------------------------------------------------------
-		Core::Vector2 CameraComponent::Project(const Core::Vector3 &invWorldPos)
+		Core::Vector2Old CameraComponent::Project(const Core::Vector3Old &invWorldPos)
 		{
 			//Convert the world space position to clip space
-			Core::Matrix4x4 matToClip = (GetView() * GetProjection());
-			Core::Vector4 vScreenPos = Core::Vector4(invWorldPos, 1.0f) * matToClip;
+			Core::Matrix4x4Old matToClip = (GetView() * GetProjection());
+			Core::Vector4Old vScreenPos = Core::Vector4Old(invWorldPos, 1.0f) * matToClip;
 			
-            Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
+            Core::Vector2Old vScreenSize(Core::Screen::GetOrientedDimensions());
 			
 			// Normalize co-ordinates
 			vScreenPos.x = vScreenPos.x / vScreenPos.w;
@@ -114,7 +114,7 @@ namespace ChilliSource
 			vScreenPos.y = (vScreenSize.y * 0.5f)* vScreenPos.y + vScreenSize.y * 0.5f;
 
 			//Return 2D screen space co-ordinates
-			return (Core::Vector2)vScreenPos;
+			return (Core::Vector2Old)vScreenPos;
 		}
 		//----------------------------------------------------------
 		/// Use Orthographic View
@@ -142,7 +142,7 @@ namespace ChilliSource
 		///
 		/// @param Vector containing width and height
 		//----------------------------------------------------------
-		void CameraComponent::SetViewportSize(const Core::Vector2 &invSize)
+		void CameraComponent::SetViewportSize(const Core::Vector2Old &invSize)
 		{
 			mDesc.vViewSize = invSize;
 			mbProjectionCacheValid = false;
@@ -164,7 +164,7 @@ namespace ChilliSource
 		///
 		/// @param Vector containing width and height
 		//----------------------------------------------------------
-		const Core::Vector2& CameraComponent::GetViewportSize()
+		const Core::Vector2Old& CameraComponent::GetViewportSize()
 		{ 
 			return mDesc.vViewSize; 
 		}	
@@ -188,7 +188,7 @@ namespace ChilliSource
 			f32 F = (2.0f * mDesc.fNearClipping)/(Top - Bottom);
 			f32 G = (2.0f * mDesc.fNearClipping)/(Right - Left);
 
-			mmatProj = Core::Matrix4x4
+			mmatProj = Core::Matrix4x4Old
 				(
 				G, 0, 0, 0, 
 				0, F, 0, 0, 
@@ -205,7 +205,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::CalculateOrthographicMatrix()
 		{
-			mmatOrthoProj = Core::Matrix4x4::CreateOrthoMatrix(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
+			mmatOrthoProj = Core::Matrix4x4Old::CreateOrthoMatrix(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
 			mbProjectionCacheValid = true;
 		}
 		//------------------------------------------------------
@@ -228,7 +228,7 @@ namespace ChilliSource
 		///
 		/// @return Orthographic projection matrix
 		//------------------------------------------------------
-		const Core::Matrix4x4& CameraComponent::GetOrthoProjection() const
+		const Core::Matrix4x4Old& CameraComponent::GetOrthoProjection() const
 		{
 			return mmatOrthoProj;
 		}
@@ -240,7 +240,7 @@ namespace ChilliSource
 		/// 
 		/// @return Projection matrix
 		//------------------------------------------------------
-		const Core::Matrix4x4& CameraComponent::GetProjection() 
+		const Core::Matrix4x4Old& CameraComponent::GetProjection() 
 		{
 			if(!mbProjectionCacheValid)
 			{
@@ -265,7 +265,7 @@ namespace ChilliSource
 		///
 		/// @return View matrix
 		//------------------------------------------------------
-		const Core::Matrix4x4& CameraComponent::GetView()
+		const Core::Matrix4x4Old& CameraComponent::GetView()
 		{
 			if(GetEntity())
 			{
@@ -290,7 +290,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::UpdateFrustum()
 		{
-			Core::Matrix4x4::Multiply(&GetView(), &GetProjection(), &mmatViewProj);
+			Core::Matrix4x4Old::Multiply(&GetView(), &GetProjection(), &mmatViewProj);
 
 			//Re-calculate the clip planes
 			mFrustum.CalculateClippingPlanes(mmatViewProj);
@@ -301,10 +301,10 @@ namespace ChilliSource
 		/// Orientate the given matrix to face the cameras
 		/// view vector
 		//------------------------------------------------------
-		void CameraComponent::Billboard(const Core::Matrix4x4& inmatBillboarded, Core::Matrix4x4& outmatBillboarded)
+		void CameraComponent::Billboard(const Core::Matrix4x4Old& inmatBillboarded, Core::Matrix4x4Old& outmatBillboarded)
 		{
-            const Core::Matrix4x4 matView = GetView();
-            Core::Matrix4x4::Multiply(&inmatBillboarded, &matView, &outmatBillboarded);
+            const Core::Matrix4x4Old matView = GetView();
+            Core::Matrix4x4Old::Multiply(&inmatBillboarded, &matView, &outmatBillboarded);
             
 			outmatBillboarded.m[12] = inmatBillboarded.m[12];
 			outmatBillboarded.m[13] = inmatBillboarded.m[13];

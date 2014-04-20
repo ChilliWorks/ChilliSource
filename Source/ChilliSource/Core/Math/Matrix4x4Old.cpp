@@ -1,5 +1,5 @@
 /*
- *  Matrix4x4.cpp
+ *  Matrix4x4Old.cpp
  *  moFlo
  *
  *  Created by Scott Downie on 28/09/2010.
@@ -7,14 +7,14 @@
  *
  */
 
-#include <ChilliSource/Core/Math/Matrix4x4.h>
-#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Math/Matrix4x4Old.h>
+#include <ChilliSource/Core/Math/QuaternionOld.h>
 
 namespace ChilliSource
 {
 	namespace Core
 	{
-        Matrix4x4 Matrix4x4::CreateOrthoMatrix(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar)
+        Matrix4x4Old Matrix4x4Old::CreateOrthoMatrix(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar)
         {
             f32 Depth = infFar - infNear;
             
@@ -24,7 +24,7 @@ namespace ChilliSource
             
             f32 Tz = (infNear + infFar)/ Depth;
             
-            return Core::Matrix4x4
+            return Core::Matrix4x4Old
             (
              A, 0,  0,  0, 
              0, B,  0,  0, 
@@ -33,7 +33,7 @@ namespace ChilliSource
              );
         }
         
-        Matrix4x4 Matrix4x4::CreateOrthoMatrixOffset(f32 infLeft, f32 infRight, f32 infBottom, f32 infTop, f32 infNear, f32 infFar)
+        Matrix4x4Old Matrix4x4Old::CreateOrthoMatrixOffset(f32 infLeft, f32 infRight, f32 infBottom, f32 infTop, f32 infNear, f32 infFar)
         {
 			f32 Depth = infFar - infNear;
             
@@ -45,7 +45,7 @@ namespace ChilliSource
 			f32 Ty = (infTop + infBottom)/(infTop - infBottom);
 			f32 Tz = (infNear + infFar)/Depth;
             
-			return Core::Matrix4x4
+			return Core::Matrix4x4Old
             (
              A, 0,  0,  0, 
              0, B,  0,  0, 
@@ -53,15 +53,15 @@ namespace ChilliSource
              -Tx, -Ty,  -Tz, 1
              );
         }
-		const Matrix4x4 Matrix4x4::IDENTITY(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+		const Matrix4x4Old Matrix4x4Old::IDENTITY(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 		//------------------------------------------------
 		/// Constructor
 		///
 		/// Default - Initialises to identity matrix
 		//------------------------------------------------
-		Matrix4x4::Matrix4x4()
+		Matrix4x4Old::Matrix4x4Old()
 		{
-			(*this) = Matrix4x4::IDENTITY;
+			(*this) = Matrix4x4Old::IDENTITY;
 		}
 		//------------------------------------------------
 		/// Constructor
@@ -70,7 +70,7 @@ namespace ChilliSource
 		///
 		/// @param 16 float elements
 		//------------------------------------------------
-		Matrix4x4::Matrix4x4(f32 m00, f32 m01, f32 m02, f32 m03,
+		Matrix4x4Old::Matrix4x4Old(f32 m00, f32 m01, f32 m02, f32 m03,
                                f32 m10, f32 m11, f32 m12, f32 m13,
                                f32 m20, f32 m21, f32 m22, f32 m23,
                                f32 m30, f32 m31, f32 m32, f32 m33)
@@ -87,7 +87,7 @@ namespace ChilliSource
 		///
 		/// @param Float array containing 16 values
 		//------------------------------------------------
-		Matrix4x4::Matrix4x4(const f32* paMatrix)
+		Matrix4x4Old::Matrix4x4Old(const f32* paMatrix)
 		{
 			memcpy(&m, paMatrix, sizeof(f32) * kMatrixDims);
 		}
@@ -96,7 +96,7 @@ namespace ChilliSource
 		///
 		/// @param From 3x3 matrix
 		//------------------------------------------------
-        Matrix4x4::Matrix4x4(const Matrix3x3& inmat)
+        Matrix4x4Old::Matrix4x4Old(const Matrix3x3Old& inmat)
         {
             m[0]  = inmat.m[0]; m[1]  = inmat.m[1]; m[2]  = inmat.m[2]; m[3]  = 0.0f;
 			m[4]  = inmat.m[3]; m[5]  = inmat.m[4]; m[6]  = inmat.m[5]; m[7]  = 0.0f;
@@ -109,7 +109,7 @@ namespace ChilliSource
 		///
 		/// @param Inverse of the matrix
 		//------------------------------------------------
-		Matrix4x4 Matrix4x4::Inverse() const
+		Matrix4x4Old Matrix4x4Old::Inverse() const
 		{
 			f32 m00 = m[0],  m01 = m[1],  m02 = m[2],  m03 = m[3];
 			f32 m10 = m[4],  m11 = m[5],  m12 = m[6],  m13 = m[7];
@@ -168,7 +168,7 @@ namespace ChilliSource
                 f32 d23 = - (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
                 f32 d33 = + (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
                 
-                return Matrix4x4(
+                return Matrix4x4Old(
                                d00, d01, d02, d03,
                                d10, d11, d12, d13,
                                d20, d21, d22, d23,
@@ -177,7 +177,7 @@ namespace ChilliSource
             }
             else 
             {
-                return Matrix4x4(IDENTITY);
+                return Matrix4x4Old(IDENTITY);
             }
 		}
 		//------------------------------------------------
@@ -188,9 +188,9 @@ namespace ChilliSource
 		/// @param Y component
 		/// @param Z component
 		//------------------------------------------------
-		void Matrix4x4::Translate(f32 inX, f32 inY, f32 inZ)
+		void Matrix4x4Old::Translate(f32 inX, f32 inY, f32 inZ)
 		{
-			Translate(Vector3(inX, inY, inZ));
+			Translate(Vector3Old(inX, inY, inZ));
 		}
 		//------------------------------------------------
 		/// Translate
@@ -198,9 +198,9 @@ namespace ChilliSource
 		/// Build a translation matrix
 		/// @param Translation vector
 		//------------------------------------------------
-		void Matrix4x4::Translate(const Vector3 &inVec)
+		void Matrix4x4Old::Translate(const Vector3Old &inVec)
 		{
-			(*this) = Matrix4x4::IDENTITY;
+			(*this) = Matrix4x4Old::IDENTITY;
 			
 			m[12] = inVec.x;
 			m[13] = inVec.y;
@@ -212,9 +212,9 @@ namespace ChilliSource
 		/// Build a transposed matrix
 		/// @param Translation vector
 		//------------------------------------------------
-		Matrix4x4 Matrix4x4::GetTranspose() const
+		Matrix4x4Old Matrix4x4Old::GetTranspose() const
 		{
-			Matrix4x4 cResult;
+			Matrix4x4Old cResult;
             
 #if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
             vDSP_mtrans(const_cast<f32*>(m), 1, cResult.m, 1, 4, 4);
@@ -248,9 +248,9 @@ namespace ChilliSource
 		/// Build a rotation matrix about the x-axis
 		/// @param Angle to rotate in radians
 		//------------------------------------------------
-		void Matrix4x4::RotateX(f32 infAngleRads)
+		void Matrix4x4Old::RotateX(f32 infAngleRads)
 		{
-			(*this) = Matrix4x4::IDENTITY;
+			(*this) = Matrix4x4Old::IDENTITY;
 			
 			f32 c = cosf(infAngleRads);
 			f32 s = sinf(infAngleRads);
@@ -266,9 +266,9 @@ namespace ChilliSource
 		/// Build a rotation matrix about the y-axis
 		/// @param Angle to rotate in radians
 		//------------------------------------------------
-		void Matrix4x4::RotateY(f32 infAngleRads)
+		void Matrix4x4Old::RotateY(f32 infAngleRads)
 		{
-			(*this) = Matrix4x4::IDENTITY;
+			(*this) = Matrix4x4Old::IDENTITY;
 			
 			f32 c = cosf(infAngleRads);
 			f32 s = sinf(infAngleRads);
@@ -284,9 +284,9 @@ namespace ChilliSource
 		/// Build a rotation matrix about the z-axis
 		/// @param Angle to rotate in radians
 		//------------------------------------------------
-		void Matrix4x4::RotateZ(f32 infAngleRads)
+		void Matrix4x4Old::RotateZ(f32 infAngleRads)
 		{
-			(*this) = Matrix4x4::IDENTITY;
+			(*this) = Matrix4x4Old::IDENTITY;
 			
 			f32 c = cosf(infAngleRads);
 			f32 s = sinf(infAngleRads);
@@ -305,9 +305,9 @@ namespace ChilliSource
 		/// @param Z component
 		/// @param Angle to rotate in radians
 		//------------------------------------------------
-		void Matrix4x4::Rotate(f32 inXAxis, f32 inYAxis, f32 inZAxis, f32 infAngleRads)
+		void Matrix4x4Old::Rotate(f32 inXAxis, f32 inYAxis, f32 inZAxis, f32 infAngleRads)
 		{
-			Rotate(Vector3(inXAxis, inYAxis, inZAxis), infAngleRads);
+			Rotate(Vector3Old(inXAxis, inYAxis, inZAxis), infAngleRads);
 		}
 		//------------------------------------------------
 		/// Rotate 
@@ -316,9 +316,9 @@ namespace ChilliSource
 		/// @param Axis
 		/// @param Angle to rotate in radians
 		//------------------------------------------------
-		void Matrix4x4::Rotate(const Vector3 &vAxis, f32 infAngleRads)
+		void Matrix4x4Old::Rotate(const Vector3Old &vAxis, f32 infAngleRads)
 		{
-			(*this) = Matrix4x4::IDENTITY;
+			(*this) = Matrix4x4Old::IDENTITY;
 			
 			f32 c = cosf(infAngleRads);
 			f32 s = sinf(infAngleRads);
@@ -333,9 +333,9 @@ namespace ChilliSource
 		/// Build a uniform scaling matrix
 		/// @param Scale factor
 		//------------------------------------------------
-		void Matrix4x4::Scale(f32 inScale)
+		void Matrix4x4Old::Scale(f32 inScale)
 		{
-			Scale(Vector3(inScale, inScale, inScale));
+			Scale(Vector3Old(inScale, inScale, inScale));
 		}
 		//------------------------------------------------
 		/// Scale 
@@ -346,9 +346,9 @@ namespace ChilliSource
 		/// @param Z component
 		/// @param Scale factor
 		//------------------------------------------------
-		void Matrix4x4::Scale(f32 inX, f32 inY, f32 inZ)
+		void Matrix4x4Old::Scale(f32 inX, f32 inY, f32 inZ)
 		{
-			Scale(Vector3(inX, inY, inZ));
+			Scale(Vector3Old(inX, inY, inZ));
 		}
 		//------------------------------------------------
 		/// Scale 
@@ -356,9 +356,9 @@ namespace ChilliSource
 		/// Build a scaling matrix 
 		/// @param Scale dimensions vector
 		//------------------------------------------------
-		void Matrix4x4::Scale(const Vector3 &Vec)
+		void Matrix4x4Old::Scale(const Vector3Old &Vec)
 		{
-			(*this) = Matrix4x4::IDENTITY;
+			(*this) = Matrix4x4Old::IDENTITY;
 			
 			m[0] = Vec.x;
 			m[5] = Vec.y;
@@ -373,18 +373,18 @@ namespace ChilliSource
 		/// @param Direction vector
 		/// @param Up vector
 		//------------------------------------------------
-		void Matrix4x4::LookAt(const Vector3 &vPos, const Vector3 &vTarget, const Vector3 &vUp)
+		void Matrix4x4Old::LookAt(const Vector3Old &vPos, const Vector3Old &vTarget, const Vector3Old &vUp)
 		{
-			(*this) = Matrix4x4::IDENTITY;
+			(*this) = Matrix4x4Old::IDENTITY;
 			
-			Vector3 vZ = vPos - vTarget; 
+			Vector3Old vZ = vPos - vTarget; 
 			vZ.Normalise();
 			
-			Vector3 vX;
-            Vector3::CrossProduct(&vUp, &vZ, &vX);
+			Vector3Old vX;
+            Vector3Old::CrossProduct(&vUp, &vZ, &vX);
 			
-			Vector3 vY;
-            Vector3::CrossProduct(&vZ, &vX, &vY);
+			Vector3Old vY;
+            Vector3Old::CrossProduct(&vZ, &vX, &vY);
 			
 			m[0] = vX.x; m[1] = vY.x; m[2]  = vZ.x; m[3]  = 0;
 			m[4] = vX.y; m[5] = vY.y; m[6]  = vZ.y;	m[7]  = 0;
@@ -392,31 +392,31 @@ namespace ChilliSource
 			m[12]= -vX.DotProduct(vPos); m[13]= -vY.DotProduct(vPos); m[14]= -vZ.DotProduct(vPos); m[15] = 1.0f;
 		}
 		
-        Vector3 Matrix4x4::Right() const
+        Vector3Old Matrix4x4Old::Right() const
         {
-            return Vector3(m[0], m[1], m[2]);
+            return Vector3Old(m[0], m[1], m[2]);
         }
         
-        Vector3 Matrix4x4::Up() const
+        Vector3Old Matrix4x4Old::Up() const
         {
-            return Vector3(m[4], m[5], m[6]);
+            return Vector3Old(m[4], m[5], m[6]);
         }
         
-        Vector3 Matrix4x4::Forward() const
+        Vector3Old Matrix4x4Old::Forward() const
         {
-            return Vector3(m[8], m[9], m[10]);
+            return Vector3Old(m[8], m[9], m[10]);
         }
-		Vector3 Matrix4x4::GetTranslation() const
+		Vector3Old Matrix4x4Old::GetTranslation() const
 		{
-			return Vector3(m[12], m[13], m[14]);
+			return Vector3Old(m[12], m[13], m[14]);
 		}
-		void Matrix4x4::SetTranslation(const Vector3& invTrans) 
+		void Matrix4x4Old::SetTranslation(const Vector3Old& invTrans) 
 		{
 			m[12] = invTrans.x; m[13] = invTrans.y; m[14] = invTrans.z;
 		}
-		void Matrix4x4::SetTransform(const Vector3 & inTranslate, const Vector3 & inScale, const Quaternion & inOrientation)
+		void Matrix4x4Old::SetTransform(const Vector3Old & inTranslate, const Vector3Old & inScale, const QuaternionOld & inOrientation)
 		{
-			Matrix4x4 rot;
+			Matrix4x4Old rot;
 			inOrientation.ToRotationMatrix(rot);
 			
 			// Set up final matrix with scale, rotation and translation
@@ -426,9 +426,9 @@ namespace ChilliSource
 			
 			m[12] = inTranslate.x; m[13] = inTranslate.y; m[14] = inTranslate.z; m[15] = 1;
 		}
-		void Matrix4x4::DecomposeTransforms(Vector3 & outTranslate, Vector3 & outScale, Quaternion & outOrientation) const
+		void Matrix4x4Old::DecomposeTransforms(Vector3Old & outTranslate, Vector3Old & outScale, QuaternionOld & outOrientation) const
         {
-//			Matrix4x4 mat3x3(
+//			Matrix4x4Old mat3x3(
 //			m[0], m[1], m[2], 0,
 //			m[4], m[5], m[6], 0,
 //		    m[8], m[9], m[10], 0,
@@ -438,7 +438,7 @@ namespace ChilliSource
 			outTranslate.y = m[13]; 
 			outTranslate.z = m[14];
 			
-			Matrix4x4 kQ;
+			Matrix4x4Old kQ;
 							  
 			// Factor M = QR = QDU where Q is orthogonal, D is diagonal,
 			// and U is upper triangular with ones on its diagonal.  Algorithm uses
@@ -514,7 +514,7 @@ namespace ChilliSource
 			}
 			
 			// build "right" matrix R
-			Matrix4x4 kR;
+			Matrix4x4Old kR;
 			kR.m[0] = kQ.m[0]*m[0] + kQ.m[1]*m[1] +
             kQ.m[2]*m[2];
 			kR.m[4] = kQ.m[0]*m[4] + kQ.m[1]*m[5] +
@@ -533,7 +533,7 @@ namespace ChilliSource
 			outScale.y = kR.m[5];
 			outScale.z = kR.m[10];
 			
-			outOrientation = Quaternion(kQ);
+			outOrientation = QuaternionOld(kQ);
 			
 			// the shear component
 			/*f32 fInvD0 = 1.0f/kD[0];
@@ -563,17 +563,17 @@ namespace ChilliSource
 			//	M21/sy   M22/sy   M23/sy   0       
 			//	M31/sz   M32/sz   M33/sz   0      
 			//	0        0        0        1
-			Matrix4x4 matRot(
+			Matrix4x4Old matRot(
 			m[0]/sX, m[4]/sX, m[8]/sX ,0,
 			m[1]/sY, m[5]/sY, m[9]/sY ,0,
 			m[2]/sZ, m[6]/sZ, m[10]/sZ ,0,
 			0, 0, 0, 1);
-			outOrientation = Quaternion(matRot);
+			outOrientation = QuaternionOld(matRot);
 			*/
 
 		}
 
-		f32 Matrix4x4::GetTrace()
+		f32 Matrix4x4Old::GetTrace()
 		{
 			f32 fTrace = 0.0f;
 			for (u32 i = 0; i < kMatrixDims; i += (kMatrixWidth + 1))
@@ -581,14 +581,14 @@ namespace ChilliSource
 			return fTrace;
 		}
 		
-		f32 Matrix4x4::operator()(u32 inRow, u32 inColumn) const
+		f32 Matrix4x4Old::operator()(u32 inRow, u32 inColumn) const
 		{
 			return m[inRow * kMatrixWidth + inColumn];
 		}
 		
-		Matrix4x4 Matrix4x4::operator+(const Matrix4x4 &rhs) const
+		Matrix4x4Old Matrix4x4Old::operator+(const Matrix4x4Old &rhs) const
 		{
-			Matrix4x4 Result; 
+			Matrix4x4Old Result; 
 			for(u32 i=0; i<kMatrixDims; ++i)
 			{
 				Result.m[i] = this->m[i] + rhs.m[i];
@@ -596,9 +596,9 @@ namespace ChilliSource
 			return Result;
 		}
 		
-		Matrix4x4 Matrix4x4::operator-(const Matrix4x4 &rhs) const
+		Matrix4x4Old Matrix4x4Old::operator-(const Matrix4x4Old &rhs) const
 		{
-			Matrix4x4 Result; 
+			Matrix4x4Old Result; 
 			for(u32 i=0; i<kMatrixDims; ++i)
 			{
 				Result.m[i] = this->m[i] - rhs.m[i];
@@ -606,31 +606,31 @@ namespace ChilliSource
 			return Result;
 		}
 		
-		const Matrix4x4& Matrix4x4::operator+=(const Matrix4x4 &rhs)
+		const Matrix4x4Old& Matrix4x4Old::operator+=(const Matrix4x4Old &rhs)
 		{
-			for(u32 i=0; i<Matrix4x4::kMatrixDims; ++i)
+			for(u32 i=0; i<Matrix4x4Old::kMatrixDims; ++i)
 			{
 				this->m[i] += rhs.m[i];
 			} 
 			return *this;
 		}
 		
-		const Matrix4x4& Matrix4x4::operator-=(const Matrix4x4 &rhs)
+		const Matrix4x4Old& Matrix4x4Old::operator-=(const Matrix4x4Old &rhs)
 		{
-			for(u32 i=0; i<Matrix4x4::kMatrixDims; ++i)
+			for(u32 i=0; i<Matrix4x4Old::kMatrixDims; ++i)
 			{
 				this->m[i] -= rhs.m[i];
 			} 
 			return *this;
 		}
 		
-		const Matrix4x4& Matrix4x4::operator*=(const Matrix4x4 &rhs)
+		const Matrix4x4Old& Matrix4x4Old::operator*=(const Matrix4x4Old &rhs)
 		{
 			(*this) = (*this) * rhs; 
 			return *this;
 		}
 		
-		const Matrix4x4& Matrix4x4::operator*=(f32 Scale)
+		const Matrix4x4Old& Matrix4x4Old::operator*=(f32 Scale)
 		{
 			for(u32 i=0; i<kMatrixDims; ++i)
 			{
@@ -639,34 +639,34 @@ namespace ChilliSource
 			return *this;
 		}
 		
-		bool Matrix4x4::operator==(const Matrix4x4 &rhs) const
+		bool Matrix4x4Old::operator==(const Matrix4x4Old &rhs) const
 		{
 			return memcmp(&m, &rhs.m, sizeof(f32) * kMatrixDims) == 0;
 		}
 		
-		bool Matrix4x4::operator!=(const Matrix4x4 &rhs) const
+		bool Matrix4x4Old::operator!=(const Matrix4x4Old &rhs) const
 		{
 			return memcmp(&m, &rhs.m, sizeof(f32) * kMatrixDims) != 0;
 		}
 		
-		Matrix4x4 Matrix4x4::operator*(const Matrix4x4 &m2) const
+		Matrix4x4Old Matrix4x4Old::operator*(const Matrix4x4Old &m2) const
 		{
-			static Matrix4x4 Result;
+			static Matrix4x4Old Result;
 
 			Multiply(this, &m2, &Result);
 			
 			return Result;
 		}
 		
-		Matrix4x4 operator*(const Matrix4x4 & inMat, f32 infScale){
-			Matrix4x4 Result; 
-			for(u32 i=0; i<Matrix4x4::kMatrixDims; ++i)
+		Matrix4x4Old operator*(const Matrix4x4Old & inMat, f32 infScale){
+			Matrix4x4Old Result; 
+			for(u32 i=0; i<Matrix4x4Old::kMatrixDims; ++i)
 			{
 				Result.m[i] = inMat.m[i] * infScale;
 			} 
 			return Result;
 		}
-		Matrix4x4 operator*(f32 infScale, const Matrix4x4 & inMat)
+		Matrix4x4Old operator*(f32 infScale, const Matrix4x4Old & inMat)
         {
 			return inMat * infScale;
 		}

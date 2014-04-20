@@ -24,14 +24,14 @@ namespace ChilliSource
 		struct MeshBatchVertex
 		{
 			MeshBatchVertex(){}
-			MeshBatchVertex(const Core::Vector4 &invPos, const Core::Vector3 &invNorm, const Core::Vector2 &invTexCoord)
+			MeshBatchVertex(const Core::Vector4Old &invPos, const Core::Vector3Old &invNorm, const Core::Vector2Old &invTexCoord)
 			: Pos(invPos), Norm(invNorm), Tex(invTexCoord)
             {
 				
             }
-			Core::Vector4 Pos;
-			Core::Vector3 Norm;
-			Core::Vector2 Tex;
+			Core::Vector4Old Pos;
+			Core::Vector3Old Norm;
+			Core::Vector2Old Tex;
 		};
 		
 		
@@ -48,7 +48,7 @@ namespace ChilliSource
 			/// @param Static mesh component
 			/// @param Transform
 			//------------------------------------------------------
-			void AddMesh(const StaticMeshComponentSPtr &inpSprite, const Core::Matrix4x4& inmatTransform);
+			void AddMesh(const StaticMeshComponentSPtr &inpSprite, const Core::Matrix4x4Old& inmatTransform);
 			//------------------------------------------------------
 			/// Set Material
 			///
@@ -113,7 +113,7 @@ namespace ChilliSource
 			MeshBuffer* mpMeshBuffer;
 			
 			//List of sprites in the batch
-			typedef std::unordered_map<StaticMeshComponentSPtr, Core::Matrix4x4> MapMeshToTransform;
+			typedef std::unordered_map<StaticMeshComponentSPtr, Core::Matrix4x4Old> MapMeshToTransform;
 			MapMeshToTransform mmapMeshCache;
 		};
 	}

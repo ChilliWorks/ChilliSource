@@ -1,5 +1,5 @@
 /*
- *  Matrix4x4.cpp
+ *  Matrix4x4Old.cpp
  *  moFlo
  *
  *  Created by Scott Downie on 28/09/2010.
@@ -7,13 +7,13 @@
  *
  */
 
-#include <ChilliSource/Core/Math/Matrix3x3.h>
+#include <ChilliSource/Core/Math/Matrix3x3Old.h>
 
 namespace ChilliSource
 {
 	namespace Core
 	{
-		const Matrix3x3 Matrix3x3::IDENTITY(1,0,0, 
+		const Matrix3x3Old Matrix3x3Old::IDENTITY(1,0,0, 
                                               0,1,0, 
                                               0,0,1);
 		//------------------------------------------------
@@ -21,9 +21,9 @@ namespace ChilliSource
 		///
 		/// Default - Initialises to identity matrix
 		//------------------------------------------------
-		Matrix3x3::Matrix3x3()
+		Matrix3x3Old::Matrix3x3Old()
 		{
-			(*this) = Matrix3x3::IDENTITY;
+			(*this) = Matrix3x3Old::IDENTITY;
 		}
 		//------------------------------------------------
 		/// Constructor
@@ -32,7 +32,7 @@ namespace ChilliSource
 		///
 		/// @param 16 float elements
 		//------------------------------------------------
-		Matrix3x3::Matrix3x3(f32 m00, f32 m01, f32 m02,
+		Matrix3x3Old::Matrix3x3Old(f32 m00, f32 m01, f32 m02,
 							   f32 m10, f32 m11, f32 m12,
 							   f32 m20, f32 m21, f32 m22)
 		{
@@ -47,7 +47,7 @@ namespace ChilliSource
 		///
 		/// @param Float array containing 16 values
 		//------------------------------------------------
-		Matrix3x3::Matrix3x3(const f32* paMatrix)
+		Matrix3x3Old::Matrix3x3Old(const f32* paMatrix)
 		{
 			memcpy(&m, paMatrix, sizeof(f32) * kMatrixDims);
 		}
@@ -56,21 +56,21 @@ namespace ChilliSource
 		///
 		/// Intialises matrix from a 4x4
 		///
-		/// @param incMatrix4x4 just copy the top-left 3x3 part
+		/// @param incMatrix4x4Old just copy the top-left 3x3 part
 		//------------------------------------------------
-		Matrix3x3::Matrix3x3(const Matrix4x4& incMatrix4x4)
+		Matrix3x3Old::Matrix3x3Old(const Matrix4x4Old& incMatrix4x4Old)
 		{
-			m[0] = incMatrix4x4.m[0];
-			m[1] = incMatrix4x4.m[1];
-			m[2] = incMatrix4x4.m[2];
+			m[0] = incMatrix4x4Old.m[0];
+			m[1] = incMatrix4x4Old.m[1];
+			m[2] = incMatrix4x4Old.m[2];
 
-			m[3] = incMatrix4x4.m[4];
-			m[4] = incMatrix4x4.m[5];
-			m[5] = incMatrix4x4.m[6];
+			m[3] = incMatrix4x4Old.m[4];
+			m[4] = incMatrix4x4Old.m[5];
+			m[5] = incMatrix4x4Old.m[6];
 
-			m[6] = incMatrix4x4.m[8];
-			m[7] = incMatrix4x4.m[9];
-			m[8] = incMatrix4x4.m[10];
+			m[6] = incMatrix4x4Old.m[8];
+			m[7] = incMatrix4x4Old.m[9];
+			m[8] = incMatrix4x4Old.m[10];
 		}
 		//------------------------------------------------
 		/// Translate
@@ -79,9 +79,9 @@ namespace ChilliSource
 		/// @param X component
 		/// @param Y component
 		//------------------------------------------------
-		void Matrix3x3::Translate(f32 inX, f32 inY)
+		void Matrix3x3Old::Translate(f32 inX, f32 inY)
 		{
-			Translate(Vector2(inX, inY));
+			Translate(Vector2Old(inX, inY));
 		}
 		//------------------------------------------------
 		/// Translate
@@ -89,9 +89,9 @@ namespace ChilliSource
 		/// Build a translation matrix
 		/// @param Translation vector
 		//------------------------------------------------
-		void Matrix3x3::Translate(const Vector2 &inVec)
+		void Matrix3x3Old::Translate(const Vector2Old &inVec)
 		{
-			(*this) = Matrix3x3::IDENTITY;
+			(*this) = Matrix3x3Old::IDENTITY;
 			
 			m[6] = inVec.x;
 			m[7] = inVec.y;
@@ -102,9 +102,9 @@ namespace ChilliSource
 		/// Build a transposed matrix
 		/// @param Translation vector
 		//------------------------------------------------
-		Matrix3x3 Matrix3x3::GetTranspose() const
+		Matrix3x3Old Matrix3x3Old::GetTranspose() const
 		{
-			Matrix3x3 cResult;
+			Matrix3x3Old cResult;
             
 #if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
             vDSP_mtrans(const_cast<f32*>(m), 1, cResult.m, 1, 3, 3);
@@ -130,9 +130,9 @@ namespace ChilliSource
 		/// Build a rotation matrix about the z-axis
 		/// @param Angle to rotate in radians
 		//------------------------------------------------
-		void Matrix3x3::Rotate(f32 infAngleRads)
+		void Matrix3x3Old::Rotate(f32 infAngleRads)
 		{
-			(*this) = Matrix3x3::IDENTITY;
+			(*this) = Matrix3x3Old::IDENTITY;
 			
 			f32 c = cosf(infAngleRads);
 			f32 s = sinf(infAngleRads);
@@ -148,9 +148,9 @@ namespace ChilliSource
 		/// Build a uniform scaling matrix
 		/// @param Scale factor
 		//------------------------------------------------
-		void Matrix3x3::Scale(f32 inScale)
+		void Matrix3x3Old::Scale(f32 inScale)
 		{
-			Scale(Vector2(inScale, inScale));
+			Scale(Vector2Old(inScale, inScale));
 		}
 		//------------------------------------------------
 		/// Scale 
@@ -160,9 +160,9 @@ namespace ChilliSource
 		/// @param Y component
 		/// @param Scale factor
 		//------------------------------------------------
-		void Matrix3x3::Scale(f32 inX, f32 inY)
+		void Matrix3x3Old::Scale(f32 inX, f32 inY)
 		{
-			Scale(Vector2(inX, inY));
+			Scale(Vector2Old(inX, inY));
 		}
 		//------------------------------------------------
 		/// Scale 
@@ -170,14 +170,14 @@ namespace ChilliSource
 		/// Build a scaling matrix 
 		/// @param Scale dimensions vector
 		//------------------------------------------------
-		void Matrix3x3::Scale(const Vector2 &Vec)
+		void Matrix3x3Old::Scale(const Vector2Old &Vec)
 		{
-			(*this) = Matrix3x3::IDENTITY;
+			(*this) = Matrix3x3Old::IDENTITY;
 			
 			m[0] = Vec.x;
 			m[4] = Vec.y;
 		}
-		void Matrix3x3::SetTransform(const Vector2 & inTranslate, const Vector2 & inScale, f32 infAngleRads)
+		void Matrix3x3Old::SetTransform(const Vector2Old & inTranslate, const Vector2Old & inScale, f32 infAngleRads)
 		{
             f32 c = cosf(infAngleRads);
 			f32 s = sinf(infAngleRads);
@@ -196,62 +196,62 @@ namespace ChilliSource
             m[5] = 0.0f;
             m[8] = 1.0f;
 		}
-        void Matrix3x3::SetTranslation(const Vector2& invTranslation)
+        void Matrix3x3Old::SetTranslation(const Vector2Old& invTranslation)
         {
             m[6] = invTranslation.x;
             m[7] = invTranslation.y;
         }
 
-		f32 Matrix3x3::operator()(u32 inRow, u32 inColumn) const
+		f32 Matrix3x3Old::operator()(u32 inRow, u32 inColumn) const
 		{
-			return m[inRow * Matrix3x3::kMatrixWidth + inColumn];
+			return m[inRow * Matrix3x3Old::kMatrixWidth + inColumn];
 		}
 		
-		Matrix3x3 Matrix3x3::operator+(const Matrix3x3 &rhs) const
+		Matrix3x3Old Matrix3x3Old::operator+(const Matrix3x3Old &rhs) const
 		{
-			Matrix3x3 Result; 
-			for(u32 i=0; i<Matrix3x3::kMatrixDims; ++i)
+			Matrix3x3Old Result; 
+			for(u32 i=0; i<Matrix3x3Old::kMatrixDims; ++i)
 			{
 				Result.m[i] = this->m[i] + rhs.m[i];
 			} 
 			return Result;
 		}
 		
-		Matrix3x3 Matrix3x3::operator-(const Matrix3x3 &rhs) const
+		Matrix3x3Old Matrix3x3Old::operator-(const Matrix3x3Old &rhs) const
 		{
-			Matrix3x3 Result; 
-			for(u32 i=0; i<Matrix3x3::kMatrixDims; ++i)
+			Matrix3x3Old Result; 
+			for(u32 i=0; i<Matrix3x3Old::kMatrixDims; ++i)
 			{
 				Result.m[i] = this->m[i] - rhs.m[i];
 			} 
 			return Result;
 		}
 		
-		const Matrix3x3& Matrix3x3::operator+=(const Matrix3x3 &rhs)
+		const Matrix3x3Old& Matrix3x3Old::operator+=(const Matrix3x3Old &rhs)
 		{
-			for(u32 i=0; i<Matrix3x3::kMatrixDims; ++i)
+			for(u32 i=0; i<Matrix3x3Old::kMatrixDims; ++i)
 			{
 				this->m[i] += rhs.m[i];
 			} 
 			return *this;
 		}
 		
-		const Matrix3x3& Matrix3x3::operator-=(const Matrix3x3 &rhs)
+		const Matrix3x3Old& Matrix3x3Old::operator-=(const Matrix3x3Old &rhs)
 		{
-			for(u32 i=0; i<Matrix3x3::kMatrixDims; ++i)
+			for(u32 i=0; i<Matrix3x3Old::kMatrixDims; ++i)
 			{
 				this->m[i] -= rhs.m[i];
 			} 
 			return *this;
 		}
 		
-		const Matrix3x3& Matrix3x3::operator*=(const Matrix3x3 &rhs)
+		const Matrix3x3Old& Matrix3x3Old::operator*=(const Matrix3x3Old &rhs)
 		{
 			(*this) = (*this) * rhs; 
 			return *this;
 		}
 		
-		const Matrix3x3& Matrix3x3::operator*=(f32 Scale)
+		const Matrix3x3Old& Matrix3x3Old::operator*=(f32 Scale)
 		{
 			for(u32 i=0; i<kMatrixDims; ++i)
 			{
@@ -260,35 +260,35 @@ namespace ChilliSource
 			return *this;
 		}
 		
-		bool Matrix3x3::operator==(const Matrix3x3 &rhs) const
+		bool Matrix3x3Old::operator==(const Matrix3x3Old &rhs) const
 		{
 			return memcmp(&m, &rhs.m, sizeof(f32) * kMatrixDims) == 0;
 		}
 		
-		bool Matrix3x3::operator!=(const Matrix3x3 &rhs) const
+		bool Matrix3x3Old::operator!=(const Matrix3x3Old &rhs) const
 		{
 			return memcmp(&m, &rhs.m, sizeof(f32) * kMatrixDims) != 0;
 		}
 	
-		Matrix3x3 Matrix3x3::operator*(const Matrix3x3 &m2) const
+		Matrix3x3Old Matrix3x3Old::operator*(const Matrix3x3Old &m2) const
 		{
-			static Matrix3x3 Result;
+			static Matrix3x3Old Result;
 
 			Multiply(this, &m2, &Result);
 			
 			return Result;
 		}
 		
-		Matrix3x3 operator*(const Matrix3x3 & inMat, f32 infScale)
+		Matrix3x3Old operator*(const Matrix3x3Old & inMat, f32 infScale)
         {
-			Matrix3x3 Result; 
-			for(u32 i=0; i<Matrix3x3::kMatrixDims; ++i)
+			Matrix3x3Old Result; 
+			for(u32 i=0; i<Matrix3x3Old::kMatrixDims; ++i)
 			{
 				Result.m[i] = inMat.m[i] * infScale;
 			} 
 			return Result;
 		}
-		Matrix3x3 operator*(f32 infScale, const Matrix3x3 & inMat)
+		Matrix3x3Old operator*(f32 infScale, const Matrix3x3Old & inMat)
         {
 			return inMat * infScale;
 		}		

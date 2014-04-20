@@ -13,10 +13,10 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Core/Math/Vector4.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Vector2Old.h>
+#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector4Old.h>
+#include <ChilliSource/Core/Math/Matrix4x4Old.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
@@ -29,7 +29,7 @@ namespace ChilliSource
 		//===============================================
 		struct InverseBindPose
 		{
-			std::vector<ChilliSource::Core::Matrix4x4> mInverseBindPoseMatrices;
+			std::vector<ChilliSource::Core::Matrix4x4Old> mInverseBindPoseMatrices;
 		};
 		typedef std::shared_ptr<InverseBindPose> InverseBindPosePtr;
 		
@@ -115,7 +115,7 @@ namespace ChilliSource
 			/// @param the minimum bounds.
 			/// @param the maximum bounds.
 			//-----------------------------------------------------------------
-			void Build(void* inpVertexData, void*inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::Vector3 invMin, Core::Vector3 invMax);
+			void Build(void* inpVertexData, void*inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::Vector3Old invMin, Core::Vector3Old invMax);
 			//-----------------------------------------------------------------
 			/// Set Inverse Bind Pose
 			/// 
@@ -131,7 +131,7 @@ namespace ChilliSource
 			/// @param the render system.
 			/// @param World transform matrix
 			//-----------------------------------------------------------------
-			void Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const MaterialCSPtr& inpMaterial, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const;
+			void Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4Old &inmatWorld, const MaterialCSPtr& inpMaterial, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const;
 			
 			friend class Mesh;
 			

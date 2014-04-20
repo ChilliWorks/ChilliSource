@@ -104,7 +104,7 @@ namespace ChilliSource
         /// @param Material file
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath)
+        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2Old &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath)
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
             MaterialCSPtr pMaterial = m_resourcePool->LoadResource<Material>(ineStorageLocation, instrMaterialFilePath);
@@ -119,7 +119,7 @@ namespace ChilliSource
         /// @param Material
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2 &invDims, const MaterialCSPtr& inpMaterial)
+        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2Old &invDims, const MaterialCSPtr& inpMaterial)
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
             pSprite->SetDimensions(invDims);

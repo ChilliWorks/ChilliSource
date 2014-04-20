@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector2Old.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <mutex>
@@ -65,8 +65,8 @@ namespace ChilliSource
             //----------------------------------------------------
             struct Pointer
             {
-                Core::Vector2 m_location;
-                Core::Vector2 m_previousLocation;
+                Core::Vector2Old m_location;
+                Core::Vector2Old m_previousLocation;
                 u32 m_pointerIndex;
                 PointerId m_uniqueId;
                 std::set<InputType> m_activeInput;
@@ -204,7 +204,7 @@ namespace ChilliSource
             ///
             /// @return The unique Id of the new pointer.
             //----------------------------------------------------
-            PointerId AddPointerCreateEvent(const Core::Vector2& in_position);
+            PointerId AddPointerCreateEvent(const Core::Vector2Old& in_position);
             //----------------------------------------------------
             /// Adds a new pointer down event. This method is thread
             /// safe and can be called on any thread.
@@ -224,7 +224,7 @@ namespace ChilliSource
             /// @param The unique Id of the pointer.
             /// @param The position it has moved to.
             //----------------------------------------------------
-            void AddPointerMovedEvent(PointerId in_pointerUniqueId, const Core::Vector2& in_position);
+            void AddPointerMovedEvent(PointerId in_pointerUniqueId, const Core::Vector2Old& in_position);
             //----------------------------------------------------
             /// Adds a new pointer up event. This method is thread
             /// safe and can be called on any thread.
@@ -277,7 +277,7 @@ namespace ChilliSource
             {
                 PointerEventType m_type;
                 PointerId m_pointerUniqueId;
-                Core::Vector2 m_position;
+                Core::Vector2Old m_position;
                 InputType m_InputType;
                 f64 m_timestamp;
             };
@@ -289,7 +289,7 @@ namespace ChilliSource
             /// @param The unique pointer Id.
             /// @param The initial position.
             //-----------------------------------------------------
-            void CreatePointer(PointerId in_uniqueId, const Core::Vector2& in_initialPosition);
+            void CreatePointer(PointerId in_uniqueId, const Core::Vector2Old& in_initialPosition);
             //----------------------------------------------------
             /// Notifies listeners that the pointer with the given
             /// unique id is down.
@@ -311,7 +311,7 @@ namespace ChilliSource
             /// @param The timestamp.
             /// @param The new position.
             //-----------------------------------------------------
-            void PointerMoved(PointerId in_uniqueId, f64 in_timestamp, const Core::Vector2& in_newPosition);
+            void PointerMoved(PointerId in_uniqueId, f64 in_timestamp, const Core::Vector2Old& in_newPosition);
             //----------------------------------------------------
             /// Notifies listeners that the pointer with the given
             /// unique id is up.

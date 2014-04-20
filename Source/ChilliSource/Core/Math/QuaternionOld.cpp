@@ -1,31 +1,31 @@
 
-#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Math/QuaternionOld.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 using namespace ChilliSource::Core;
 
-const Quaternion Quaternion::IDENTITY(0,0,0,1);
-const Quaternion Quaternion::ZERO(0,0,0,0);
+const QuaternionOld QuaternionOld::IDENTITY(0,0,0,1);
+const QuaternionOld QuaternionOld::ZERO(0,0,0,0);
 
-Quaternion::Quaternion()
+QuaternionOld::QuaternionOld()
 :x(0),y(0),z(0),w(1)
 {
 	
 }
 
-Quaternion::Quaternion(const f32 _x, const f32 _y, const f32 _z, const f32 _w)
+QuaternionOld::QuaternionOld(const f32 _x, const f32 _y, const f32 _z, const f32 _w)
 :w(_w),x(_x),y(_y),z(_z)
 {
 }
 
-Quaternion::Quaternion(const Vector3 & V, f32 theta)
+QuaternionOld::QuaternionOld(const Vector3Old & V, f32 theta)
 {
 	SetAxisAngle(V,theta);
 }
 //-----------------------------------------------------------------------
-Quaternion::Quaternion(const Vector3& xaxis, const Vector3& yaxis, const Vector3& zaxis)
+QuaternionOld::QuaternionOld(const Vector3Old& xaxis, const Vector3Old& yaxis, const Vector3Old& zaxis)
 {
-	Matrix4x4 matRot;
+	Matrix4x4Old matRot;
 	
 	matRot.m[0] = xaxis.x;
 	matRot.m[1] = xaxis.y;
@@ -39,9 +39,9 @@ Quaternion::Quaternion(const Vector3& xaxis, const Vector3& yaxis, const Vector3
 	matRot.m[9] = zaxis.y;
 	matRot.m[10] = zaxis.z;
 	
-	(*this) = Quaternion(matRot);
+	(*this) = QuaternionOld(matRot);
 }
-f32 Quaternion::GetAngle() const {
+f32 QuaternionOld::GetAngle() const {
 	f32 fSqrLength = (x * x + y * y + z * z);
 
 	if (fSqrLength > 0){
@@ -50,20 +50,20 @@ f32 Quaternion::GetAngle() const {
 
 	return 0.0f;
 }
-Vector3 Quaternion::GetAxis() const {
+Vector3Old QuaternionOld::GetAxis() const {
 	f32 fSqrLength = (x * x + y * y + z * z);
 
 	if (fSqrLength > 0){
 		f32 fInvLength = 1.0f / std::sqrt(fSqrLength);
-		return Vector3(x * fInvLength, y * fInvLength, z * fInvLength);
+		return Vector3Old(x * fInvLength, y * fInvLength, z * fInvLength);
 	} else {
-		return Vector3::X_UNIT_POSITIVE;
+		return Vector3Old::X_UNIT_POSITIVE;
 	}
 }
 
-void Quaternion::ToEulerAxes (Vector3& xaxis, Vector3& yaxis, Vector3& zaxis) const
+void QuaternionOld::ToEulerAxes (Vector3Old& xaxis, Vector3Old& yaxis, Vector3Old& zaxis) const
 {
-	Matrix4x4 matRot;
+	Matrix4x4Old matRot;
 	
 	ToRotationMatrix(matRot);
 	
@@ -79,10 +79,10 @@ void Quaternion::ToEulerAxes (Vector3& xaxis, Vector3& yaxis, Vector3& zaxis) co
 	zaxis.y = matRot(2, 1);
 	zaxis.z = matRot(2, 2);
 }
-Quaternion::Quaternion(const Matrix4x4& inMat)
+QuaternionOld::QuaternionOld(const Matrix4x4Old& inMat)
 {
 	// Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
-	// article "Quaternion Calculus and Fast Animation".
+	// article "QuaternionOld Calculus and Fast Animation".
 	
 	f32 fTrace = inMat.m[0]+inMat.m[5]+inMat.m[10];
 	f32 fRoot = 0.0f;
@@ -119,9 +119,9 @@ Quaternion::Quaternion(const Matrix4x4& inMat)
 		*apkQuat[k] = (inMat(k,i)+inMat(i,k))*fRoot;
 	}
 }
-void Quaternion::SetAxisAngle(const Vector3 &V, f32 theta)
+void QuaternionOld::SetAxisAngle(const Vector3Old &V, f32 theta)
 {
-	Vector3 Vnorm = V.NormalisedCopy();
+	Vector3Old Vnorm = V.NormalisedCopy();
 
 	f32 fHalfAngle = theta/2.0f;
 	f32 fSinAngle = (f32)sin(fHalfAngle);
@@ -130,7 +130,7 @@ void Quaternion::SetAxisAngle(const Vector3 &V, f32 theta)
 	z = Vnorm.z * fSinAngle;
 	w = (f32)cos(fHalfAngle);
 }
-void Quaternion::SetAxisAngle(f32 infX, f32 infY, f32 infZ, f32 theta)
+void QuaternionOld::SetAxisAngle(f32 infX, f32 infY, f32 infZ, f32 theta)
 {
 	f32 fHalfAngle = theta/2.0f;
 	f32 fSinAngle = (f32)sin(fHalfAngle);
@@ -140,9 +140,9 @@ void Quaternion::SetAxisAngle(f32 infX, f32 infY, f32 infZ, f32 theta)
 	w = (f32)cos(fHalfAngle);
 }
 
-Quaternion Quaternion::Slerp(const Quaternion &q1, const Quaternion &q2, float t, bool inbShortestPath) 
+QuaternionOld QuaternionOld::Slerp(const QuaternionOld &q1, const QuaternionOld &q2, float t, bool inbShortestPath) 
 {
-	Quaternion result, _q2 = q2;
+	QuaternionOld result, _q2 = q2;
 	
 	float cosOmega = q1.w*q2.w + q1.x*q2.x + q1.y*q2.y + q1.z*q2.z;
 	
@@ -184,10 +184,10 @@ Quaternion Quaternion::Slerp(const Quaternion &q1, const Quaternion &q2, float t
 	return result;
 }
 
-Quaternion Quaternion::NLerp(const ChilliSource::Core::Quaternion &q1, const ChilliSource::Core::Quaternion &q2, float t, bool inbShortestPath)
+QuaternionOld QuaternionOld::NLerp(const ChilliSource::Core::QuaternionOld &q1, const ChilliSource::Core::QuaternionOld &q2, float t, bool inbShortestPath)
 {
     const f32 fDot = q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.x * q2.x + q1.w * q2.w;
-    Quaternion rVal;
+    QuaternionOld rVal;
     if(fDot < 0.0f && inbShortestPath)
         rVal = q1 + (t * ((q2 * -1.0f) - q1));
     else
@@ -197,21 +197,21 @@ Quaternion Quaternion::NLerp(const ChilliSource::Core::Quaternion &q1, const Chi
     return rVal;
 }
 
-Quaternion::~Quaternion()
+QuaternionOld::~QuaternionOld()
 {
 }
 
-f32 Quaternion::Modulus() const
+f32 QuaternionOld::Modulus() const
 {
     return sqrtf(w * w + x * x + y * y + z * z);
 }
 
-f32 Quaternion::ModulusSquared() const
+f32 QuaternionOld::ModulusSquared() const
 {
     return (w * w + x * x + y * y + z * z);
 }
 
-Quaternion & Quaternion::NormaliseSelf()
+QuaternionOld & QuaternionOld::NormaliseSelf()
 {
 	f32 s = 1.0f / Modulus();
 	w *= s;
@@ -222,9 +222,9 @@ Quaternion & Quaternion::NormaliseSelf()
 	return *this;
 }
 
-Quaternion Quaternion::Conjugate() const
+QuaternionOld QuaternionOld::Conjugate() const
 {
-	Quaternion quat;
+	QuaternionOld quat;
 	quat.x = -x;
 	quat.y = -y;
 	quat.z = -z;
@@ -232,12 +232,12 @@ Quaternion Quaternion::Conjugate() const
 	return quat;
 }
 
-Quaternion Quaternion::Inverse() const
+QuaternionOld QuaternionOld::Inverse() const
 {
     return Conjugate() / ModulusSquared();
 }
 
-void Quaternion::ToRotationMatrix(Matrix4x4 & inMatrix) const
+void QuaternionOld::ToRotationMatrix(Matrix4x4Old & inMatrix) const
 {
 	f32 x2 = x * x;
 	f32 y2 = y * y;
@@ -249,7 +249,7 @@ void Quaternion::ToRotationMatrix(Matrix4x4 & inMatrix) const
 	f32 wy = w * y;
 	f32 wz = w * z;
 	
-	inMatrix = Matrix4x4
+	inMatrix = Matrix4x4Old
 	( 
 	 1.0f - 2.0f * (y2 + z2),	2.0f * (xy + wz),			2.0f * (xz - wy),			0.0f,
 	 2.0f * (xy - wz),			1.0f - 2.0f * (x2 + z2),	2.0f * (yz + wx),			0.0f,
@@ -258,10 +258,10 @@ void Quaternion::ToRotationMatrix(Matrix4x4 & inMatrix) const
 	 );
 }
 
-Matrix4x4 Quaternion::ToRotationMatrix4x4() const
+Matrix4x4Old QuaternionOld::ToRotationMatrix4x4Old() const
 {
 
-	Matrix4x4 Result;
+	Matrix4x4Old Result;
 	this->ToRotationMatrix(Result);
 
 	return Result;

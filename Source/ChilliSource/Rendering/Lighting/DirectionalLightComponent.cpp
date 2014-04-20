@@ -43,34 +43,34 @@ namespace ChilliSource
         //----------------------------------------------------------
         void DirectionalLightComponent::SetShadowVolume(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar)
         {
-            mmatProj = Core::Matrix4x4::CreateOrthoMatrix(infWidth, infHeight, infNear, infFar);
+            mmatProj = Core::Matrix4x4Old::CreateOrthoMatrix(infWidth, infHeight, infNear, infFar);
             
             mbCacheValid = false;
         }
         //----------------------------------------------------------
         /// Get Direction
         //----------------------------------------------------------
-        Core::Vector3 DirectionalLightComponent::GetDirection() const
+        Core::Vector3Old DirectionalLightComponent::GetDirection() const
         {
             if(GetEntity() != nullptr)
             {
-                return GetEntity()->GetTransform().GetWorldOrientation() * Core::Vector3::Z_UNIT_NEGATIVE;
+                return GetEntity()->GetTransform().GetWorldOrientation() * Core::Vector3Old::Z_UNIT_NEGATIVE;
             }
             else
             {
-                return Core::Vector3::Z_UNIT_NEGATIVE;
+                return Core::Vector3Old::Z_UNIT_NEGATIVE;
             }
         }
         //----------------------------------------------------------
         /// Get Light Matrix
         //----------------------------------------------------------
-        const Core::Matrix4x4& DirectionalLightComponent::GetLightMatrix() const
+        const Core::Matrix4x4Old& DirectionalLightComponent::GetLightMatrix() const
         {
             //The matrix is a view projection
             if(mbMatrixCacheValid == false && GetEntity() != nullptr)
             {
-                Core::Matrix4x4 matView = GetEntity()->GetTransform().GetWorldTransform().Inverse();
-                Core::Matrix4x4::Multiply(&matView, &mmatProj, &mmatLight);
+                Core::Matrix4x4Old matView = GetEntity()->GetTransform().GetWorldTransform().Inverse();
+                Core::Matrix4x4Old::Multiply(&matView, &mmatProj, &mmatLight);
                 mbMatrixCacheValid = true;
             }
             

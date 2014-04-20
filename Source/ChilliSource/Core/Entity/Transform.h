@@ -11,9 +11,9 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
-#include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Math/Matrix4x4Old.h>
+#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/QuaternionOld.h>
 
 #include <functional>
 
@@ -35,7 +35,7 @@ namespace ChilliSource
             /// @param Look target
             /// @param Up direction
             //----------------------------------------------------------
-            void SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp);
+            void SetLookAt(const Core::Vector3Old& invPos, const Core::Vector3Old& invTarget, const Core::Vector3Old& invUp);
             //----------------------------------------------------------------
 			/// Set Position Scale Orientation
 			///
@@ -43,7 +43,7 @@ namespace ChilliSource
             /// @param Scale vector
             /// @param Orientation quaternion
 			//----------------------------------------------------------------
-            void SetPositionScaleOrientation(const Vector3& invPos, const Vector3& invScale, const Quaternion& invOrientation);
+            void SetPositionScaleOrientation(const Vector3Old& invPos, const Vector3Old& invScale, const QuaternionOld& invOrientation);
             //----------------------------------------------------------------
 			/// Set Position
 			///
@@ -57,19 +57,19 @@ namespace ChilliSource
 			///
 			/// @param Position vector
 			//----------------------------------------------------------------
-			void SetPosition(const Vector3 &invPos);
+			void SetPosition(const Vector3Old &invPos);
 			//----------------------------------------------------------------
 			/// Get Local Position
 			///
 			/// @return The position of the object 
 			//----------------------------------------------------------------
-			const Vector3& GetLocalPosition() const;
+			const Vector3Old& GetLocalPosition() const;
             //----------------------------------------------------------------
 			/// Get World Position
 			///
 			/// @return The relative position of the object 
 			//----------------------------------------------------------------
-			const Vector3& GetWorldPosition() const;
+			const Vector3Old& GetWorldPosition() const;
 			//----------------------------------------------------------------
 			/// Move By
 			///
@@ -83,25 +83,25 @@ namespace ChilliSource
 			///
 			/// Movement direction vector
 			//----------------------------------------------------------------
-			void MoveBy(const Vector3 &invPos);
+			void MoveBy(const Vector3Old &invPos);
 			//----------------------------------------------------------------
 			/// Set Orientation
 			///
 			/// @param Orientation quaternion
 			//----------------------------------------------------------------
-			void SetOrientation(const Quaternion & inqOrientation);
+			void SetOrientation(const QuaternionOld & inqOrientation);
 			//----------------------------------------------------------------
 			/// Get Local Orientation
 			///
 			/// @return Orientation quaternion
 			//----------------------------------------------------------------
-			const Quaternion& GetLocalOrientation() const;
+			const QuaternionOld& GetLocalOrientation() const;
             //----------------------------------------------------------------
 			/// Get World Orientation
 			///
 			/// @return Orientation quaternion relative to parent tranform
 			//----------------------------------------------------------------
-			const Quaternion& GetWorldOrientation() const;
+			const QuaternionOld& GetWorldOrientation() const;
 			//----------------------------------------------------------------
 			/// Rotate X By
 			///
@@ -145,7 +145,7 @@ namespace ChilliSource
 			/// @param Axis vector
 			/// @param Angle in radians
 			//----------------------------------------------------------------
-			void RotateBy(const Vector3 &vAxis, f32 infAngleRads);
+			void RotateBy(const Vector3Old &vAxis, f32 infAngleRads);
 			//----------------------------------------------------------------
 			/// Rotate To
 			///
@@ -165,7 +165,7 @@ namespace ChilliSource
 			/// @param Axis vector
 			/// @param Angle in radians
 			//----------------------------------------------------------------
-			void RotateTo(const Vector3 &vAxis, f32 infAngleRads);
+			void RotateTo(const Vector3Old &vAxis, f32 infAngleRads);
 			//----------------------------------------------------------------
 			/// Scale By
 			///
@@ -191,7 +191,7 @@ namespace ChilliSource
 			///
 			/// @param Axis vector
 			//----------------------------------------------------------------
-			void ScaleBy(const Vector3 &Vec);
+			void ScaleBy(const Vector3Old &Vec);
 			//----------------------------------------------------------------
 			/// Scale To
 			///
@@ -217,19 +217,19 @@ namespace ChilliSource
 			///
 			/// @param Axis vector
 			//----------------------------------------------------------------
-			void ScaleTo(const Vector3 &Vec);
+			void ScaleTo(const Vector3Old &Vec);
 			//----------------------------------------------------------------
 			/// Get Scale
 			///
 			/// @return The scale of object
 			//----------------------------------------------------------------
-			const Vector3& GetLocalScale() const;
+			const Vector3Old& GetLocalScale() const;
             //----------------------------------------------------------------
 			/// Get World Scale
 			///
 			/// @return The relative scale of object
 			//----------------------------------------------------------------
-			const Vector3& GetWorldScale() const;
+			const Vector3Old& GetWorldScale() const;
             
             
             //----------------------------------------------------------------
@@ -270,13 +270,13 @@ namespace ChilliSource
 			///
 			/// @return The currently cached transform (rebuilds if invalid)
 			//----------------------------------------------------------------
-			const Matrix4x4& GetLocalTransform() const;
+			const Matrix4x4Old& GetLocalTransform() const;
             //----------------------------------------------------------------
             /// Get World Transform
             ///
             /// @return The tranform in relation to its parent transform
             //----------------------------------------------------------------
-			const Matrix4x4& GetWorldTransform() const;
+			const Matrix4x4Old& GetWorldTransform() const;
             //----------------------------------------------------------------
             /// Set World Transform
             ///
@@ -284,7 +284,7 @@ namespace ChilliSource
             ///
             /// @param Objects transformation matrix
             //----------------------------------------------------------------
-            void SetWorldTransform(const Matrix4x4& inmatTransform);
+            void SetWorldTransform(const Matrix4x4Old& inmatTransform);
             //----------------------------------------------------------------
             /// Set Local Transform
             ///
@@ -292,7 +292,7 @@ namespace ChilliSource
             ///
             /// @param Objects transformation matrix
             //----------------------------------------------------------------
-            void SetLocalTransform(const Matrix4x4& inmatTransform);
+            void SetLocalTransform(const Matrix4x4Old& inmatTransform);
             //----------------------------------------------------------------
             /// Is Transform Valid
             ///
@@ -376,18 +376,18 @@ namespace ChilliSource
             
         private:
             
-            mutable Matrix4x4 mmatTransform;
-            mutable Matrix4x4 mmatWorldTransform;
+            mutable Matrix4x4Old mmatTransform;
+            mutable Matrix4x4Old mmatWorldTransform;
             
-            Vector3 mvPosition;
-			Vector3 mvScale;
-			Quaternion mqOrientation;
+            Vector3Old mvPosition;
+			Vector3Old mvScale;
+			QuaternionOld mqOrientation;
             
             f32 mfOpacity;
             
-            mutable Vector3 mvWorldPosition;
-			mutable Vector3 mvWorldScale;
-			mutable Quaternion mqWorldOrientation;
+            mutable Vector3Old mvWorldPosition;
+			mutable Vector3Old mvWorldScale;
+			mutable QuaternionOld mqWorldOrientation;
             
             Event<TransformChangedDelegate> mTransformChangedEvent;
             

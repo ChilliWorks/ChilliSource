@@ -79,7 +79,7 @@ namespace ChilliSource
             
             ConsumesTouches = false;
             
-			UnifiedSize = Core::UnifiedVector2(0.2f, 0.05f, 0.0f, 0.0f);
+			UnifiedSize = Core::UnifiedVector2Old(0.2f, 0.05f, 0.0f, 0.0f);
             UnifiedMaxSize = GetSize();
             UnifiedMinSize = GetSize();
         }
@@ -126,14 +126,14 @@ namespace ChilliSource
             if(insParams.TryGetValue("UnifiedMaxSize", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector4 vRawSize = Core::ParseVector4(strValue);
+                Core::Vector4Old vRawSize = Core::ParseVector4Old(strValue);
                 SetMaximumSize(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w);
             }
             //---Unified maximum size
             if(insParams.TryGetValue("UnifiedMinSize", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector4 vRawSize = Core::ParseVector4(strValue);
+                Core::Vector4Old vRawSize = Core::ParseVector4Old(strValue);
                 SetMinimumSize(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w);
             }
             //---Line spacing
@@ -268,7 +268,7 @@ namespace ChilliSource
         ///
         /// @param Unified vector
         //-------------------------------------------------------
-        void Label::SetMaximumSize(const Core::UnifiedVector2& invSize)
+        void Label::SetMaximumSize(const Core::UnifiedVector2Old& invSize)
         {
             UnifiedMaxSize = invSize;
 
@@ -281,7 +281,7 @@ namespace ChilliSource
         ///
         /// @param Unified vector
         //-------------------------------------------------------
-        void Label::SetMinimumSize(const Core::UnifiedVector2& invSize)
+        void Label::SetMinimumSize(const Core::UnifiedVector2Old& invSize)
         {
             UnifiedMinSize = invSize;
 
@@ -327,7 +327,7 @@ namespace ChilliSource
 		///
 		/// @return Unified vector
 		//-------------------------------------------------------
-		const Core::UnifiedVector2& Label::GetMinimumSize() const
+		const Core::UnifiedVector2Old& Label::GetMinimumSize() const
 		{
 			return UnifiedMinSize;
 		}
@@ -338,7 +338,7 @@ namespace ChilliSource
 		///
 		/// @return Unified vector
 		//-------------------------------------------------------
-		const Core::UnifiedVector2& Label::GetMaximumSize() const
+		const Core::UnifiedVector2Old& Label::GetMaximumSize() const
 		{
 			return UnifiedMaxSize;
 		}
@@ -597,8 +597,8 @@ namespace ChilliSource
             if(Visible)
             {
                 //Check if this is on screen
-                Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
-                Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
+                Core::Vector2Old vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+                Core::Vector2Old vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
                 
                 if(vTopRight.y < 0 || vBottomLeft.y > Core::Screen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::Screen::GetOrientedWidth())
                 {
@@ -609,7 +609,7 @@ namespace ChilliSource
                 DoAutosizing(inpCanvas);
                 
                 //Calculate the size of the label box
-                Core::Vector2 vAbsoluteLabelSize = GetAbsoluteSize();
+                Core::Vector2Old vAbsoluteLabelSize = GetAbsoluteSize();
                 Core::Colour AbsCol = GetAbsoluteColour();
 
                 //Check if we force clip our children 
@@ -621,7 +621,7 @@ namespace ChilliSource
                 //Draw ourself
                 if(Background)
                 {
-                    inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::ZERO, Core::Vector2::ZERO), AbsCol);
+                    inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2Old::ZERO, Core::Vector2Old::ZERO), AbsCol);
                 }
                 
                 f32 fAssetTextScale = GetGlobalTextScale();
@@ -657,8 +657,8 @@ namespace ChilliSource
                 //maximum size
                 
                 //Convert min and max to absolute co-ordinates
-                Core::Vector2 vAbsMaxSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMaxSize.GetRelative()) + UnifiedMaxSize.GetAbsolute() : UnifiedMaxSize.GetAbsolute();
-                Core::Vector2 vAbsMinSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMinSize.GetRelative()) + UnifiedMinSize.GetAbsolute() : UnifiedMinSize.GetAbsolute();
+                Core::Vector2Old vAbsMaxSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMaxSize.GetRelative()) + UnifiedMaxSize.GetAbsolute() : UnifiedMaxSize.GetAbsolute();
+                Core::Vector2Old vAbsMinSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMinSize.GetRelative()) + UnifiedMinSize.GetAbsolute() : UnifiedMinSize.GetAbsolute();
                 
                 f32 fNewRelWidth = 0.0f;
                 f32 fNewRelHeight = 0.0f;

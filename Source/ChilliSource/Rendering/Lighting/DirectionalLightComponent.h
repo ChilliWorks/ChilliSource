@@ -64,13 +64,13 @@ namespace ChilliSource
             /// @return Direction vector of light
             /// (only applies to directional lights)
             //----------------------------------------------------------
-            Core::Vector3 GetDirection() const;
+            Core::Vector3Old GetDirection() const;
             //----------------------------------------------------------
             /// Get Light Matrix
             ///
             /// @return Matrix to transform into light space
             //----------------------------------------------------------
-            const Core::Matrix4x4& GetLightMatrix() const override;
+            const Core::Matrix4x4Old& GetLightMatrix() const override;
             //----------------------------------------------------
 			/// Triggered when the component is attached to
 			/// an entity on the scene
@@ -111,7 +111,7 @@ namespace ChilliSource
             
         private:
             
-            Core::Matrix4x4 mmatProj;
+            Core::Matrix4x4Old mmatProj;
             
             TextureSPtr mpShadowMap;
             TextureSPtr mpShadowMapDebug;

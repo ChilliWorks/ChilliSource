@@ -57,7 +57,7 @@ namespace ChilliSource
         //-----------------------------------------------------
         GUIView::GUIView() : mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
         Rotation(0.0f), Opacity(1.0f), LocalAlignment(Rendering::AlignmentAnchor::k_middleCentre), ParentalAlignment(Rendering::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
-        Scale(Core::Vector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
+        Scale(Core::Vector2Old::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
         {
 
@@ -72,7 +72,7 @@ namespace ChilliSource
         GUIView::GUIView(const Core::ParamDictionary& insParams) 
 		: mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
         Rotation(0.0f), Opacity(1.0f), LocalAlignment(Rendering::AlignmentAnchor::k_middleCentre), ParentalAlignment(Rendering::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
-        Scale(Core::Vector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
+        Scale(Core::Vector2Old::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
         {
             std::string strValue;
@@ -86,21 +86,21 @@ namespace ChilliSource
             if(insParams.TryGetValue("UnifiedPosition", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector4 vRawPosition = Core::ParseVector4(strValue);
-                SetPosition(Core::UnifiedVector2(vRawPosition.x, vRawPosition.y, vRawPosition.z, vRawPosition.w));
+                Core::Vector4Old vRawPosition = Core::ParseVector4Old(strValue);
+                SetPosition(Core::UnifiedVector2Old(vRawPosition.x, vRawPosition.y, vRawPosition.z, vRawPosition.w));
             }
             //---Unified size
             if(insParams.TryGetValue("UnifiedSize", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector4 vRawSize = Core::ParseVector4(strValue);
-                SetSize(Core::UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
+                Core::Vector4Old vRawSize = Core::ParseVector4Old(strValue);
+                SetSize(Core::UnifiedVector2Old(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
             }
             //---Unified scale
             if(insParams.TryGetValue("Scale", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector2 vScale = Core::ParseVector2(strValue);
+                Core::Vector2Old vScale = Core::ParseVector2Old(strValue);
                 ScaleTo(vScale);
             }
             //---Scale Inheritance
@@ -147,15 +147,15 @@ namespace ChilliSource
             if(insParams.TryGetValue("UnifiedParentalOffset", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector4 vRawOffset = Core::ParseVector4(strValue);
-                SetOffsetFromParentAlignment(Core::UnifiedVector2(vRawOffset.x, vRawOffset.y, vRawOffset.z, vRawOffset.w));
+                Core::Vector4Old vRawOffset = Core::ParseVector4Old(strValue);
+                SetOffsetFromParentAlignment(Core::UnifiedVector2Old(vRawOffset.x, vRawOffset.y, vRawOffset.z, vRawOffset.w));
             }
             //---Unified alignment offset
             if(insParams.TryGetValue("UnifiedPositionOffset", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector4 vRawOffset = Core::ParseVector4(strValue);
-                SetOffsetFromPosition(Core::UnifiedVector2(vRawOffset.x, vRawOffset.y, vRawOffset.z, vRawOffset.w));
+                Core::Vector4Old vRawOffset = Core::ParseVector4Old(strValue);
+                SetOffsetFromPosition(Core::UnifiedVector2Old(vRawOffset.x, vRawOffset.y, vRawOffset.z, vRawOffset.w));
             }
             //---Enable user interaction
             if(insParams.TryGetValue("UserInteraction", strValue))
@@ -713,7 +713,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates
         //-----------------------------------------------------
-        void GUIView::SetOffsetFromParentAlignment(const Core::UnifiedVector2& invOffset)
+        void GUIView::SetOffsetFromParentAlignment(const Core::UnifiedVector2Old& invOffset)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedParentalOffset = invOffset;
@@ -746,7 +746,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates
         //-----------------------------------------------------
-        const Core::UnifiedVector2& GUIView::GetOffsetFromParentAlignment() const
+        const Core::UnifiedVector2Old& GUIView::GetOffsetFromParentAlignment() const
         {
             return UnifiedParentalOffset;
         }
@@ -761,7 +761,7 @@ namespace ChilliSource
         /// @return Unified co-ordinates converted to real
         /// co-ordinates
         //-----------------------------------------------------
-        const Core::Vector2& GUIView::GetAbsoluteOffsetFromParentAlignment() const
+        const Core::Vector2Old& GUIView::GetAbsoluteOffsetFromParentAlignment() const
         {
             mvAbsoluteParentalOffset = (mpParentView->GetAbsoluteSize() * GetOffsetFromParentAlignment().GetRelative()) + GetOffsetFromParentAlignment().GetAbsolute();
             return mvAbsoluteParentalOffset;
@@ -774,7 +774,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates
         //-----------------------------------------------------
-        void GUIView::SetOffsetFromPosition(const Core::UnifiedVector2& invOffset)
+        void GUIView::SetOffsetFromPosition(const Core::UnifiedVector2Old& invOffset)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedPositionOffset = invOffset;
@@ -803,7 +803,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates
         //-----------------------------------------------------
-        const Core::UnifiedVector2& GUIView::GetOffsetFromPosition() const
+        const Core::UnifiedVector2Old& GUIView::GetOffsetFromPosition() const
         {
             return UnifiedPositionOffset;
         }
@@ -816,7 +816,7 @@ namespace ChilliSource
         /// @return Unified co-ordinates converted to real
         /// co-ordinates
         //-----------------------------------------------------
-        const Core::Vector2& GUIView::GetAbsoluteOffsetFromPosition() const
+        const Core::Vector2Old& GUIView::GetAbsoluteOffsetFromPosition() const
         {
             mvAbsolutePositionOffset = GetOffsetFromPosition().GetAbsolute();
 			
@@ -1156,7 +1156,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates
         //------------------------------------------------------
-        void GUIView::SetPosition(const Core::UnifiedVector2& invPosition)
+        void GUIView::SetPosition(const Core::UnifiedVector2Old& invPosition)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedPosition = invPosition;
@@ -1187,7 +1187,7 @@ namespace ChilliSource
         ///
         /// @param co-ordinates
         //------------------------------------------------------
-        void GUIView::MoveBy(const Core::UnifiedVector2& invPosition)
+        void GUIView::MoveBy(const Core::UnifiedVector2Old& invPosition)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             if(!AlignedWithParent)
@@ -1257,7 +1257,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates for scale factor
         //------------------------------------------------------
-        void GUIView::SetSize(const Core::UnifiedVector2& invSize)
+        void GUIView::SetSize(const Core::UnifiedVector2Old& invSize)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize);
             UnifiedSize = invSize;
@@ -1284,7 +1284,7 @@ namespace ChilliSource
         ///
         /// @param Scale co-ordinates for scale factor
         //------------------------------------------------------
-        void GUIView::ScaleTo(const Core::Vector2& invScale)
+        void GUIView::ScaleTo(const Core::Vector2Old& invScale)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize);
             Scale = invScale;
@@ -1323,7 +1323,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates
         //------------------------------------------------------
-        const Core::UnifiedVector2& GUIView::GetPosition() const
+        const Core::UnifiedVector2Old& GUIView::GetPosition() const
         {
             return UnifiedPosition;
         }
@@ -1345,7 +1345,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates for dimensions
         //------------------------------------------------------
-        const Core::UnifiedVector2& GUIView::GetSize() const
+        const Core::UnifiedVector2Old& GUIView::GetSize() const
         {
             return UnifiedSize;
         }
@@ -1356,7 +1356,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates for dimensions
         //------------------------------------------------------
-        const Core::Vector2& GUIView::GetScale() const
+        const Core::Vector2Old& GUIView::GetScale() const
         {
             return Scale;
         }
@@ -1365,7 +1365,7 @@ namespace ChilliSource
         ///
         /// @param The inherited scale of the view
         //-----------------------------------------------------
-        const Core::Vector2& GUIView::GetAbsoluteScale() const
+        const Core::Vector2Old& GUIView::GetAbsoluteScale() const
         {
             mvAbsoluteScale = Scale;
             
@@ -1401,7 +1401,7 @@ namespace ChilliSource
         ///
         /// @return Position combined absolute and relative
         //------------------------------------------------------
-        const Core::Vector2& GUIView::GetAbsolutePosition() const
+        const Core::Vector2Old& GUIView::GetAbsolutePosition() const
         {
 			if(!Core::Utils::BitmapCheck(mudwCacheValidaters, (u32)TransformCache::k_absPos))
 			{
@@ -1418,8 +1418,8 @@ namespace ChilliSource
 					else
 					{
 						//The relative position is based on the size of our parent
-						Core::Vector2 vParentSize = mpParentView->GetAbsoluteSize();
-						Core::Vector2 vParentHalfSize = vParentSize * 0.5f;
+						Core::Vector2Old vParentSize = mpParentView->GetAbsoluteSize();
+						Core::Vector2Old vParentHalfSize = vParentSize * 0.5f;
 						
 						//Get our centre point relative to the parent
 						mvAbsolutePosition = (vParentSize * (GetPosition().GetRelative() + GetOffsetFromPosition().GetRelative())) + GetPosition().GetAbsolute() - vParentHalfSize + GetOffsetFromPosition().GetAbsolute();
@@ -1433,7 +1433,7 @@ namespace ChilliSource
 				}
 				
 				//Take into account local alignment which will offset the absolute point from our centre point
-				Core::Vector2 vAlignment;
+				Core::Vector2Old vAlignment;
 				Rendering::Align(LocalAlignment, GetAbsoluteSize() * 0.5f, vAlignment);
 				mvAbsolutePosition += vAlignment;
 				
@@ -1452,7 +1452,7 @@ namespace ChilliSource
         ///
         /// @return Position combined absolute and relative
         //------------------------------------------------------
-        const Core::Vector2& GUIView::GetAbsoluteScreenSpacePosition() const
+        const Core::Vector2Old& GUIView::GetAbsoluteScreenSpacePosition() const
         {
             //Return the translation component of our transform
 			GetTransform();
@@ -1469,7 +1469,7 @@ namespace ChilliSource
         ///
         /// @return Size combined absolute and relative
         //------------------------------------------------------
-        const Core::Vector2& GUIView::GetAbsoluteSize() const
+        const Core::Vector2Old& GUIView::GetAbsoluteSize() const
         {
             //The absolute size is based on the absolute size of our parent 
             //and the relative size of us
@@ -1495,11 +1495,11 @@ namespace ChilliSource
         /// @param Anchor point type
         /// @return Anchor point value as absolute
         //-----------------------------------------------------
-        Core::Vector2 GUIView::GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const
+        Core::Vector2Old GUIView::GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const
         {
-			Core::Vector2 vSize = GetAbsoluteSize();
-			Core::Vector2 vHalfSize(vSize.x * 0.5f, vSize.y * 0.5f);
-			Core::Vector2 vPos;
+			Core::Vector2Old vSize = GetAbsoluteSize();
+			Core::Vector2Old vHalfSize(vSize.x * 0.5f, vSize.y * 0.5f);
+			Core::Vector2Old vPos;
 			Rendering::GetAnchorPoint(ineAlignment, vHalfSize, vPos);
 
             return vPos;
@@ -1510,11 +1510,11 @@ namespace ChilliSource
         /// @param Anchor point type
         /// @return Anchor point value as absolute
         //-----------------------------------------------------
-        Core::Vector2 GUIView::GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const
+        Core::Vector2Old GUIView::GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const
         {
-			Core::Vector2 vSize = GetAbsoluteSize();
-			Core::Vector2 vHalfSize(vSize.x * 0.5f, vSize.y * 0.5f);
-			Core::Vector2 vPos;
+			Core::Vector2Old vSize = GetAbsoluteSize();
+			Core::Vector2Old vHalfSize(vSize.x * 0.5f, vSize.y * 0.5f);
+			Core::Vector2Old vPos;
 		
 			Rendering::GetAnchorPoint(ineAlignment, vHalfSize, vPos);
 				
@@ -1525,22 +1525,22 @@ namespace ChilliSource
         ///
         /// @return Transformation matrix
         //-----------------------------------------------------
-        const Core::Matrix3x3& GUIView::GetTransform() const
+        const Core::Matrix3x3Old& GUIView::GetTransform() const
         {
 			if(!Core::Utils::BitmapCheck(mudwCacheValidaters, (u32)TransformCache::k_transform))
 			{
 				if(mpParentView)
 				{
 					//Create our transform without respect to our parent
-					Core::Matrix3x3 matTrans;
-					matTrans.SetTransform(GetAbsolutePosition(), Core::Vector2::ONE, GetAbsoluteRotation());
+					Core::Matrix3x3Old matTrans;
+					matTrans.SetTransform(GetAbsolutePosition(), Core::Vector2Old::ONE, GetAbsoluteRotation());
 					
 					//Apply our parents transform
-					Core::Matrix3x3::Multiply(&matTrans, &mpParentView->GetTransform(), &mmatTransform);
+					Core::Matrix3x3Old::Multiply(&matTrans, &mpParentView->GetTransform(), &mmatTransform);
 				}
 				else
 				{
-					mmatTransform.SetTransform(GetAbsolutePosition(), Core::Vector2::ONE, Rotation);
+					mmatTransform.SetTransform(GetAbsolutePosition(), Core::Vector2Old::ONE, Rotation);
 				}
 				
 				Core::Utils::BitmapSet(mudwCacheValidaters, (u32)TransformCache::k_transform);
@@ -1557,8 +1557,8 @@ namespace ChilliSource
         bool GUIView::IsOnscreen() const
         {
             //Check if this is on screen
-            Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
-            Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
+            Core::Vector2Old vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+            Core::Vector2Old vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
         
             return (vTopRight.y >= 0 && vBottomLeft.y <= Core::Screen::GetOrientedHeight() && vTopRight.x >= 0 && vBottomLeft.x <= Core::Screen::GetOrientedWidth());
         }
@@ -1601,7 +1601,7 @@ namespace ChilliSource
 				//Check if we force clip our children 
 				if(ClipSubviews)
 				{
-                    Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
+                    Core::Vector2Old vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 					inpCanvas->EnableClippingToBounds(vBottomLeft, GetAbsoluteSize());
 				}
 				
@@ -1630,7 +1630,7 @@ namespace ChilliSource
         /// @param Point vector
         /// @return Whether it lies within the view
         //----------------------------------------------------
-        bool GUIView::Contains(const Core::Vector2& invPoint) const
+        bool GUIView::Contains(const Core::Vector2Old& invPoint) const
         {
             Core::Rectangle sAbsoluteAABB(GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft), GetAbsoluteSize());
             return sAbsoluteAABB.Contains(invPoint);
@@ -1731,11 +1731,11 @@ namespace ChilliSource
 				{
 					if(!AlignedWithParent)
 					{
-						SetPosition(Core::UnifiedVector2(Core::Vector2::ZERO, in_pointer.m_location));
+						SetPosition(Core::UnifiedVector2Old(Core::Vector2Old::ZERO, in_pointer.m_location));
 					}
 					else
 					{
-						SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::ZERO, in_pointer.m_location));
+						SetOffsetFromParentAlignment(Core::UnifiedVector2Old(Core::Vector2Old::ZERO, in_pointer.m_location));
 					}
 				}
 

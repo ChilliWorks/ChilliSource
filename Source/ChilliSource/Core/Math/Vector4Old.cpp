@@ -1,18 +1,18 @@
-#include <ChilliSource/Core/Math/Vector4.h>
+#include <ChilliSource/Core/Math/Vector4Old.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace ChilliSource 
 {
 	namespace Core 
 	{
-		const Vector4 Vector4::ZERO;
+		const Vector4Old Vector4Old::ZERO;
 		
 		//---------------------------------------------------------
 		/// Constructor
 		///
 		/// Initialise to zero
 		//---------------------------------------------------------
-		Vector4::Vector4(void) : x(0.0f), y(0.0f), z(0.0f), w(1.0f)
+		Vector4Old::Vector4Old(void) : x(0.0f), y(0.0f), z(0.0f), w(1.0f)
 		{
 		}
 		//---------------------------------------------------------
@@ -24,7 +24,7 @@ namespace ChilliSource
 		/// @param Z component
 		/// @param W component
 		//---------------------------------------------------------
-		Vector4::Vector4(const f32 fX, const f32 fY, const f32 fZ, const f32 fW) : x(fX), y(fY), z(fZ), w(fW)
+		Vector4Old::Vector4Old(const f32 fX, const f32 fY, const f32 fZ, const f32 fW) : x(fX), y(fY), z(fZ), w(fW)
 		{
 		}
 		//---------------------------------------------------------
@@ -33,7 +33,7 @@ namespace ChilliSource
 		/// Initialise with copy
 		/// @param Vector to copy
 		//---------------------------------------------------------
-		Vector4::Vector4(const Vector4 &Vec)
+		Vector4Old::Vector4Old(const Vector4Old &Vec)
 		{
 			(*this) = Vec;
 		}
@@ -43,12 +43,12 @@ namespace ChilliSource
 		/// Initialise with copy and ignore w component
 		/// @param Vector to copy
 		//---------------------------------------------------------
-		Vector4::Vector4(const Vector3 &Vec, f32 inW) : x(Vec.x), y(Vec.y), z(Vec.z), w(inW)
+		Vector4Old::Vector4Old(const Vector3Old &Vec, f32 inW) : x(Vec.x), y(Vec.y), z(Vec.z), w(inW)
 		{
 			
 		}
 		//---------------------------------------------------------
-		/// Vector4 - Cross Product
+		/// Vector4Old - Cross Product
 		///
 		/// Returns the perpendicular vector to the plane
 		/// described by the two input vectors
@@ -56,12 +56,12 @@ namespace ChilliSource
 		/// @param The adjoining vector
 		/// @param The vector product result of the calculation
 		//---------------------------------------------------------
-		void Vector4::CrossProduct(const Vector4 &Vec, Vector4 &Out)
+		void Vector4Old::CrossProduct(const Vector4Old &Vec, Vector4Old &Out)
 		{
             CrossProduct(this, &Vec, &Out);
 		}
         //---------------------------------------------------------
-		/// Vector4 - Cross Product
+		/// Vector4Old - Cross Product
 		///
 		/// Returns the perpendicular vector to the plane
 		/// described by the two input vectors
@@ -69,21 +69,21 @@ namespace ChilliSource
 		/// @param The adjoining vector
 		/// @param The vector product result of the calculation
 		//---------------------------------------------------------
-		Vector4 Vector4::CrossProduct(const Vector4 &Vec, const Vector4 &Vec2)
+		Vector4Old Vector4Old::CrossProduct(const Vector4Old &Vec, const Vector4Old &Vec2)
 		{
-            Vector4 Out;
+            Vector4Old Out;
             
             CrossProduct(&Vec, &Vec2, &Out);
             
             return Out;
 		}
 		//---------------------------------------------------------
-		/// Vector4 - Normalise
+		/// Vector4Old - Normalise
 		///
 		/// Normalises this vector
 		///  
 		//---------------------------------------------------------
-        Vector4 & Vector4::Normalise()
+        Vector4Old & Vector4Old::Normalise()
 		{
 			//Calculate Magnitude
 			f32 fMag = Length();
@@ -98,14 +98,14 @@ namespace ChilliSource
             return *this;
 		}
 		//---------------------------------------------------------
-		/// Vector4 - Normalise Copy
+		/// Vector4Old - Normalise Copy
 		///
 		/// @return Normalised copy of this vector
 		///  
 		//---------------------------------------------------------
-		Vector4 Vector4::NormalisedCopy() const 
+		Vector4Old Vector4Old::NormalisedCopy() const 
 		{
-			Vector4 Result;
+			Vector4Old Result;
 			//Calculate Magnitude
 			f32 fMag = Length();
 			//Prevent division by zero
@@ -119,30 +119,30 @@ namespace ChilliSource
 			return Result;
 		}
 		//---------------------------------------------------------
-		/// Vector4 - Length Squared
+		/// Vector4Old - Length Squared
 		///
 		/// Calculate the  squared magnitude of a vector
 		/// no costly sqrt function
 		/// @return The magnitude of the vector squared
 		//---------------------------------------------------------
-		f32 Vector4::LengthSquared() const
+		f32 Vector4Old::LengthSquared() const
 		{
 			return (this->x * this->x + this->y * this->y + this->z * this->z + this->w * this->w);
 		}
 		//---------------------------------------------------------
-		/// Vector4 - Length
+		/// Vector4Old - Length
 		///
 		/// Calculate the magnitude of a vector
 		/// @return The magnitude of the vector
 		//---------------------------------------------------------
-		f32 Vector4::Length() const
+		f32 Vector4Old::Length() const
 		{
 			//Calculate Magnitude
 			return (f32)sqrt(this->x * this->x + this->y * this->y + this->z * this->z + this->w * this->w);
 		}
-        Vector4 Vector4::InversedCopy() const
+        Vector4Old Vector4Old::InversedCopy() const
         {
-            Vector4 Out;
+            Vector4Old Out;
 			
 			if(this->x != 0.0f)
 			{
@@ -163,7 +163,7 @@ namespace ChilliSource
             
 			return Out;
         }
-        Vector4 & Vector4::Inverse()
+        Vector4Old & Vector4Old::Inverse()
         {
             if(this->x != 0.0f)
 			{
@@ -184,14 +184,14 @@ namespace ChilliSource
             
             return *this;
         }
-        void Vector4::Multiply(const Vector4* inpVec, const Vector4* inpVec2, Vector4* outpVec)
+        void Vector4Old::Multiply(const Vector4Old* inpVec, const Vector4Old* inpVec2, Vector4Old* outpVec)
         {
             outpVec->x = inpVec->x * inpVec2->x; 
             outpVec->y = inpVec->y * inpVec2->y; 
             outpVec->z = inpVec->z * inpVec2->z;
             outpVec->w = inpVec->w * inpVec2->w;
         }
-        void Vector4::CrossProduct(const Vector4* inpVec, const Vector4* inpVec2, Vector4* outpVec)
+        void Vector4Old::CrossProduct(const Vector4Old* inpVec, const Vector4Old* inpVec2, Vector4Old* outpVec)
         {
             outpVec->x = (inpVec->y * inpVec2->z - inpVec->z * inpVec2->y);
 			outpVec->y = (inpVec->z * inpVec2->x - inpVec->x * inpVec2->z);

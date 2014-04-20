@@ -105,13 +105,13 @@ namespace ChilliSource
 			//---Set Maintain Width
 			if(insParams.TryGetValue("SetHeightMaintain", strValue))
 			{
-				Core::Vector2 vSize = Core::ParseVector2(strValue);
+				Core::Vector2Old vSize = Core::ParseVector2Old(strValue);
 				SetHeightMaintainingAspect(vSize.x, vSize.y);
 			}
 			//---Set Maintain Height
 			if(insParams.TryGetValue("SetWidthMaintain", strValue))
 			{
-				Core::Vector2 vSize = Core::ParseVector2(strValue);
+				Core::Vector2Old vSize = Core::ParseVector2Old(strValue);
 				SetWidthMaintainingAspect(vSize.x, vSize.y);
 			}
         }
@@ -238,8 +238,8 @@ namespace ChilliSource
         void VerticalStretchableImage::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
-			Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
-			Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
+			Core::Vector2Old vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+			Core::Vector2Old vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 			
 			if(vTopRight.y < 0 || vBottomLeft.y > Core::Screen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::Screen::GetOrientedWidth())
 			{
@@ -249,31 +249,31 @@ namespace ChilliSource
 			
             if(Visible && TextureAtlas && Texture)
             {			
-                Core::Vector2 vPanelSize = GetAbsoluteSize();
-                Core::Vector2 vPanelPos = GetAbsoluteScreenSpacePosition();
-                Core::Vector2 vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
-                Core::Vector2 vPatchPos;
+                Core::Vector2Old vPanelSize = GetAbsoluteSize();
+                Core::Vector2Old vPanelPos = GetAbsoluteScreenSpacePosition();
+                Core::Vector2Old vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
+                Core::Vector2Old vPatchPos;
                 
                 Core::Colour AbsColour = GetAbsoluteColour();
                 
                 //We need to use a matrix so that we can rotate all the patches with respect
                 //to the view
-                Core::Matrix3x3 matTransform;
-                Core::Matrix3x3 matPatchTransform;
-                Core::Matrix3x3 matViewTransform;
+                Core::Matrix3x3Old matTransform;
+                Core::Matrix3x3Old matPatchTransform;
+                Core::Matrix3x3Old matViewTransform;
                 
-                matViewTransform.SetTransform(vPanelPos, Core::Vector2(1, 1), GetRotation());
+                matViewTransform.SetTransform(vPanelPos, Core::Vector2Old(1, 1), GetRotation());
                 
                 //Get the patch sizes
-                Core::Vector2 vTPatchSize = m_panels.m_topSize;
-                Core::Vector2 vBPatchSize = m_panels.m_bottomSize;
+                Core::Vector2Old vTPatchSize = m_panels.m_topSize;
+                Core::Vector2Old vBPatchSize = m_panels.m_bottomSize;
                 
                 vTPatchSize.x = vPanelSize.x;
                 vBPatchSize.x = vPanelSize.x;
 
-                Core::Vector2 vTCPatchSize;
-                Core::Vector2 vBCPatchSize;
-                Core::Vector2 vMCPatchSize;
+                Core::Vector2Old vTCPatchSize;
+                Core::Vector2Old vBCPatchSize;
+                Core::Vector2Old vMCPatchSize;
                 
                 //Check to see if they are going to fit in the bounds of the view
                 f32 fTotal = vTPatchSize.y + vBPatchSize.y;
@@ -307,7 +307,7 @@ namespace ChilliSource
                 //Draw the corners first
                 matPatchTransform.Translate(vTopLeft);
                 
-                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform,
                                    vTPatchSize, 
 								   Texture,
@@ -317,7 +317,7 @@ namespace ChilliSource
                 
                 
                 matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft));
-                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vBPatchSize, 
 								   Texture,
@@ -333,7 +333,7 @@ namespace ChilliSource
                 vPatchPos.y = vTopLeft.y - vTPatchSize.y;
                
                 matPatchTransform.Translate(vPatchPos);
-                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform,
                                    vMCPatchSize, 
 								   Texture,
@@ -355,7 +355,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		void VerticalStretchableImage::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
 		{
-            Core::Vector2 vCurrentSize = GetAbsoluteSize();
+            Core::Vector2Old vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
 			SetSize(infRelWidth, 0.0f, infAbsWidth, 0.0f);
 			
@@ -377,7 +377,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		void VerticalStretchableImage::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
 		{
-            Core::Vector2 vCurrentSize = GetAbsoluteSize();
+            Core::Vector2Old vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
 			SetSize(0.0f, infRelHeight, 0.0f, infAbsHeight);
 			

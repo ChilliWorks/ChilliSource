@@ -114,7 +114,7 @@ namespace ChilliSource
             /// @param Shader pass
             /// @param Skinned animation group
 			//-----------------------------------------------------------------
-			void Render(RenderSystem* in_renderSystem, const Core::Matrix4x4& in_worldMat, const std::vector<MaterialCSPtr>& in_materials, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& in_animGroup = SkinnedAnimationGroupSPtr()) const;
+			void Render(RenderSystem* in_renderSystem, const Core::Matrix4x4Old& in_worldMat, const std::vector<MaterialCSPtr>& in_materials, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& in_animGroup = SkinnedAnimationGroupSPtr()) const;
 		private:
             
             friend class Core::ResourcePool;
@@ -151,7 +151,7 @@ namespace ChilliSource
 			/// @param the minimum bounds
 			/// @param the maximum bounds.
 			//-----------------------------------------------------------------
-			void SetBounds(const Core::Vector3& in_minBounds, const Core::Vector3& in_maxBounds);
+			void SetBounds(const Core::Vector3Old& in_minBounds, const Core::Vector3Old& in_maxBounds);
 			//-----------------------------------------------------------------
 			/// Calculates the internal vertex and index counts. This should be
 			/// called after filling all of the submeshes with data.

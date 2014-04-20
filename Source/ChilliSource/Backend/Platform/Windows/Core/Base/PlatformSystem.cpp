@@ -99,9 +99,9 @@ namespace ChilliSource
 		}
 		//---------------------------------------------
 		//---------------------------------------------
-		Core::Vector2 PlatformSystem::GetScreenDimensions() const
+		Core::Vector2Old PlatformSystem::GetScreenDimensions() const
 		{
-			Core::Vector2 result;
+			Core::Vector2Old result;
 
 			s32 width, height = 0;
 			GLFWManager::Get()->GetWindowSize(&width, &height);

@@ -145,7 +145,7 @@ namespace ChilliSource
         ///
         /// @return The value as a string.
         //---------------------------------------------------------
-        std::string ToString(const Vector2& in_value);
+        std::string ToString(const Vector2Old& in_value);
         //---------------------------------------------------------
         /// Converts a 3 component vector to a string.
         ///
@@ -155,7 +155,7 @@ namespace ChilliSource
         ///
         /// @return The value as a string.
         //---------------------------------------------------------
-        std::string ToString(const Vector3& in_value);
+        std::string ToString(const Vector3Old& in_value);
         //---------------------------------------------------------
         /// Converts a 4 component vector to a string.
         ///
@@ -165,7 +165,7 @@ namespace ChilliSource
         ///
         /// @return The value as a string.
         //---------------------------------------------------------
-        std::string ToString(const Vector4& in_value);
+        std::string ToString(const Vector4Old& in_value);
         //---------------------------------------------------------
         /// Converts a 4x4 matrix to a string.
         ///
@@ -175,7 +175,7 @@ namespace ChilliSource
         ///
         /// @return The value as a string.
         //---------------------------------------------------------
-        std::string ToString(const Matrix4x4& in_value);
+        std::string ToString(const Matrix4x4Old& in_value);
         //---------------------------------------------------------
         /// Converts a quaternion to a string.
         ///
@@ -185,7 +185,7 @@ namespace ChilliSource
         ///
         /// @return The value as a string.
         //---------------------------------------------------------
-        std::string ToString(const Quaternion& in_value);
+        std::string ToString(const QuaternionOld& in_value);
         //---------------------------------------------------------
         /// Converts a colour to a string.
         ///

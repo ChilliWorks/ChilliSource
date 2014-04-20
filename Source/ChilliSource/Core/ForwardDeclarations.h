@@ -108,15 +108,15 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(Line);
         CS_FORWARDDECLARE_CLASS(Plane);
         CS_FORWARDDECLARE_CLASS(Frustum);
-        CS_FORWARDDECLARE_CLASS(Matrix3x3);
-        CS_FORWARDDECLARE_CLASS(Matrix4x4);
-        CS_FORWARDDECLARE_CLASS(Quaternion);
+        CS_FORWARDDECLARE_CLASS(Matrix3x3Old);
+        CS_FORWARDDECLARE_CLASS(Matrix4x4Old);
+        CS_FORWARDDECLARE_CLASS(QuaternionOld);
         CS_FORWARDDECLARE_STRUCT(UnifiedScalar);
-		CS_FORWARDDECLARE_STRUCT(UnifiedVector2);
+		CS_FORWARDDECLARE_STRUCT(UnifiedVector2Old);
 		CS_FORWARDDECLARE_STRUCT(UnifiedRectangle);
-        CS_FORWARDDECLARE_CLASS(Vector2);
-        CS_FORWARDDECLARE_CLASS(Vector3);
-        CS_FORWARDDECLARE_CLASS(Vector4);
+        CS_FORWARDDECLARE_CLASS(Vector2Old);
+        CS_FORWARDDECLARE_CLASS(Vector3Old);
+        CS_FORWARDDECLARE_CLASS(Vector4Old);
         //---------------------------------------------------------
         /// Notifications
         //---------------------------------------------------------

@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4x4Old.h>
 
 #include <array>
 
@@ -135,7 +135,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const Core::Vector2& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const Core::Vector2Old& in_value, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             
@@ -155,7 +155,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const Core::Vector3& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const Core::Vector3Old& in_value, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             
@@ -175,7 +175,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const Core::Vector4& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const Core::Vector4Old& in_value, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             
@@ -195,7 +195,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const Core::Matrix4x4& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const Core::Matrix4x4Old& in_value, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             
@@ -235,7 +235,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const std::vector<Core::Vector4>& in_vec4Values, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const std::vector<Core::Vector4Old>& in_vec4Values, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             

@@ -27,7 +27,7 @@ namespace ChilliSource
 			///
 			/// @return The current mouse position.
 			//------------------------------------------------
-			Core::Vector2 GetMousePosition()
+			Core::Vector2Old GetMousePosition()
 			{
 				f64 x = 0.0;
 				f64 y = 0.0;
@@ -35,7 +35,7 @@ namespace ChilliSource
 				GLFWManager::Get()->GetCursorPos(&x, &y);
 
 				y = Core::Screen::GetOrientedHeight() - y;
-				return Core::Vector2((f32)x, (f32)y);
+				return Core::Vector2Old((f32)x, (f32)y);
 			}
 			//------------------------------------------------
 			/// @author I Copland
@@ -74,7 +74,7 @@ namespace ChilliSource
 		{
 			CS_ASSERT(g_pointerSystem, "OnMouseMoved callback requires a pointer system.");
 
-			Core::Vector2 touchLocation((f32)in_xPos, Core::Screen::GetOrientedDimensions().y - ((f32)in_yPos));
+			Core::Vector2Old touchLocation((f32)in_xPos, Core::Screen::GetOrientedDimensions().y - ((f32)in_yPos));
 			g_pointerSystem->AddPointerMovedEvent(g_pointerSystem->m_pointerId, touchLocation);
 		}
 		//----------------------------------------------

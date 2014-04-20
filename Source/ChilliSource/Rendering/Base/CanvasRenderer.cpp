@@ -108,7 +108,7 @@ namespace ChilliSource
         /// Pushes to a stack which tracks when to enable and
         /// disable scissoring
         //---------------------------------------------------------
-        void CanvasRenderer::EnableClippingToBounds(const Core::Vector2& invPosition, const Core::Vector2& invSize)
+        void CanvasRenderer::EnableClippingToBounds(const Core::Vector2Old& invPosition, const Core::Vector2Old& invSize)
         {
             if(mScissorPos.empty())
             {
@@ -117,10 +117,10 @@ namespace ChilliSource
             } 
             else
             {
-                Core::Vector2 vOldBottomLeft = mScissorPos.back();
-                Core::Vector2 vOldTopRight = mScissorSize.back()+vOldBottomLeft;
-                Core::Vector2 vNewBottomLeft = invPosition;
-                Core::Vector2 vNewTopRight = invPosition+invSize;
+                Core::Vector2Old vOldBottomLeft = mScissorPos.back();
+                Core::Vector2Old vOldTopRight = mScissorSize.back()+vOldBottomLeft;
+                Core::Vector2Old vNewBottomLeft = invPosition;
+                Core::Vector2Old vNewTopRight = invPosition+invSize;
                 
                 vNewBottomLeft.x = Core::MathUtils::Max(vNewBottomLeft.x, vOldBottomLeft.x);
                 vNewBottomLeft.y = Core::MathUtils::Max(vNewBottomLeft.y, vOldBottomLeft.y);
@@ -128,7 +128,7 @@ namespace ChilliSource
                 vNewTopRight.x = Core::MathUtils::Min(vNewTopRight.x, vOldTopRight.x);
                 vNewTopRight.y = Core::MathUtils::Min(vNewTopRight.y, vOldTopRight.y);
                 
-                Core::Vector2 vNewSize = vNewTopRight - vNewBottomLeft;
+                Core::Vector2Old vNewSize = vNewTopRight - vNewBottomLeft;
                 
                 mScissorPos.push_back(vNewBottomLeft);
                 mScissorSize.push_back(vNewSize);
@@ -164,7 +164,7 @@ namespace ChilliSource
         ///
         /// Build a sprite box and batch it ready for rendering
         //-----------------------------------------------------------
-        void CanvasRenderer::DrawBox(const Core::Matrix3x3& inmatTransform, const Core::Vector2 & invSize, const TextureCSPtr & inpTexture, 
+        void CanvasRenderer::DrawBox(const Core::Matrix3x3Old& inmatTransform, const Core::Vector2Old & invSize, const TextureCSPtr & inpTexture, 
                                       const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
         {
             msCachedSprite.pMaterial = GetGUIMaterialForTexture(inpTexture);
@@ -181,8 +181,8 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw String
         //-----------------------------------------------------------
-		void CanvasRenderer::DrawString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
-                                         const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
+		void CanvasRenderer::DrawString(const Core::UTF8String & insString, const Core::Matrix3x3Old& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
+                                         const Core::Colour & insColour, const Core::Vector2Old & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
 										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped, bool *outpInvalidCharacterFound)
 		{
             msCachedSprite.pMaterial = GetGUIMaterialForTexture(inpFont->GetTexture());
@@ -197,19 +197,19 @@ namespace ChilliSource
 							ineHorizontalJustification, ineVerticalJustification, inbFlipVertical, ineBehaviour, outpClipped,outpInvalidCharacterFound);
             }
             
-            Core::Matrix4x4 matTransform(inmatTransform);
-            Core::Matrix4x4 matTransformedLocal;
+            Core::Matrix4x4Old matTransform(inmatTransform);
+            Core::Matrix4x4Old matTransformedLocal;
 			
             //Build each character sprite from the draw info
 			for (u32 nChar = 0; nChar < outCharCache.size(); nChar++)
             {
-				Core::Matrix4x4 matLocal;
+				Core::Matrix4x4Old matLocal;
                 
                 f32 fXPos = outCharCache[nChar].vPosition.x;
                 f32 fYPos = outCharCache[nChar].vPosition.y - outCharCache[nChar].vSize.y * 0.5f;
 				matLocal.Translate((fXPos), (fYPos), 0.0f);
                 
-                Core::Matrix4x4::Multiply(&matLocal, &matTransform, &matTransformedLocal);
+                Core::Matrix4x4Old::Multiply(&matLocal, &matTransform, &matTransformedLocal);
                 
                 UpdateSpriteData(matTransformedLocal, outCharCache[nChar].vSize, outCharCache[nChar].sUVs, insColour, AlignmentAnchor::k_middleCentre);
 				
@@ -228,7 +228,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         f32 CanvasRenderer::CalculateStringWidth(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infSize, f32 infCharSpacing, bool inbIgnoreLinesBreaks)
         {
-            Core::Vector2 vSize;
+            Core::Vector2Old vSize;
             
             //Track the character width
             std::vector<f32> aLineWidths;
@@ -282,7 +282,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         f32 CanvasRenderer::CalculateStringHeight(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines)
         {
-            Core::Vector2 vCursorPos;
+            Core::Vector2Old vCursorPos;
             
             //Track the character height
 			f32 fLastCharacterWidth = 0.0f;
@@ -317,7 +317,7 @@ namespace ChilliSource
                     }
                     
                     //Construct the characters position and size from the font sheet to get the width
-                    BuildCharacter(inpFont, Char, NextChar, Core::Vector2::ZERO, infSize, infCharSpacing, fLastCharacterWidth, CurrentLine);
+                    BuildCharacter(inpFont, Char, NextChar, Core::Vector2Old::ZERO, infSize, infCharSpacing, fLastCharacterWidth, CurrentLine);
                     vCursorPos.x += fLastCharacterWidth;
 
                     Core::UTF8String sTemp;
@@ -393,7 +393,7 @@ namespace ChilliSource
 		/// from the given string
         //-------------------------------------------
 		void CanvasRenderer::BuildString(const FontCSPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
-										  const Core::Vector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification,
+										  const Core::Vector2Old& invBounds, u32 inudwNumLines, GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification,
                                           bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
 		{
             // don't attempt to draw zero or negative sized text
@@ -405,7 +405,7 @@ namespace ChilliSource
             outCharacters.reserve(inText.length());
 			
 			//This will be positioned in local space where the characters are relative to each either.
-            Core::Vector2 vCursorPos;
+            Core::Vector2Old vCursorPos;
 			
 			//Track the width of the last character so we can offset the next correctly
 			f32 fLastCharacterWidth = 0.0f;
@@ -512,7 +512,7 @@ namespace ChilliSource
                                     LookAheadNextChar=inText.next(jt2);
                                 
                                 //Construct the characters position and size from the font sheet to get the width
-                                BuildCharacter(inpFont, LookAheadChar, LookAheadNextChar, Core::Vector2::ZERO, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLineTemp, outpInvalidCharacterFound);
+                                BuildCharacter(inpFont, LookAheadChar, LookAheadNextChar, Core::Vector2Old::ZERO, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLineTemp, outpInvalidCharacterFound);
                                 fLengthToNextSpace += fLastCharacterWidth;
                                 
                                 if(fLengthToNextSpace > invBounds.x)
@@ -600,7 +600,7 @@ namespace ChilliSource
 		/// Build Character
 		//----------------------------------------------------
 		void CanvasRenderer::BuildCharacter(const FontCSPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
-                                                         const Core::Vector2& invCursor, f32 infTextScale, f32 infCharSpacing,
+                                                         const Core::Vector2Old& invCursor, f32 infTextScale, f32 infCharSpacing,
                                                          f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound)
 		{
 			Font::CharacterInfo sInfo;
@@ -647,8 +647,8 @@ namespace ChilliSource
         //----------------------------------------------------
         /// Wrap
         //----------------------------------------------------
-        void CanvasRenderer::Wrap(GUI::TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::Vector2& invBounds,
-								   CharacterList &inCurrentLine, Core::Vector2& outvCursor, CharacterList &outCharacters)
+        void CanvasRenderer::Wrap(GUI::TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::Vector2Old& invBounds,
+								   CharacterList &inCurrentLine, Core::Vector2Old& outvCursor, CharacterList &outCharacters)
         {
             if(!inCurrentLine.empty())
             {
@@ -687,7 +687,7 @@ namespace ChilliSource
 		///
 		/// Rebuild the sprite data
 		//-----------------------------------------------------
-		void CanvasRenderer::UpdateSpriteData(const Core::Matrix4x4 & inTransform, const Core::Vector2 & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
+		void CanvasRenderer::UpdateSpriteData(const Core::Matrix4x4Old & inTransform, const Core::Vector2Old & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
 		{
 			Core::ByteColour Col = Core::ColourUtils::ColourToByteColour(insTintColour);
 			
@@ -701,34 +701,34 @@ namespace ChilliSource
 			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex = inUVs.TopRight();
 			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex = inUVs.BottomRight();
 			
-			Core::Vector2 vHalfSize(invSize.x * 0.5f, invSize.y * 0.5f);
-			Core::Vector2 vAlignedPos;
+			Core::Vector2Old vHalfSize(invSize.x * 0.5f, invSize.y * 0.5f);
+			Core::Vector2Old vAlignedPos;
             Align(ineAlignment, vHalfSize, vAlignedPos);
             
-            Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
-            Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
+            Core::Vector4Old vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
+            Core::Vector4Old vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
 			
-            const Core::Matrix4x4 &matTransform(inTransform);
+            const Core::Matrix4x4Old &matTransform(inTransform);
 			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos);
+            Core::Matrix4x4Old::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos);
             
             vTemp.x = vHalfSize.x;
             vTemp.y = vHalfSize.y;
 			
 			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos);
+            Core::Matrix4x4Old::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos);
             
             vTemp.x = -vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 			
 			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos);
+            Core::Matrix4x4Old::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos);
             
             vTemp.x = vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 			
 			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos);
+            Core::Matrix4x4Old::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos);
 
 			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.z = -mfNearClippingDistance;
 			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.w = 1.0f;

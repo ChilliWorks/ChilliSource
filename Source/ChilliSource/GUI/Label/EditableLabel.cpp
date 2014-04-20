@@ -292,8 +292,8 @@ namespace ChilliSource
         void EditableLabel::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
-			Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
-			Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
+			Core::Vector2Old vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+			Core::Vector2Old vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 			
 			if(vTopRight.y < 0 || vBottomLeft.y > Core::Screen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::Screen::GetOrientedWidth())
 			{
@@ -304,7 +304,7 @@ namespace ChilliSource
             DoAutosizing(inpCanvas);
 			
             //Calculate the size of the label box
-            Core::Vector2 vAbsoluteLabelSize = GetAbsoluteSize();
+            Core::Vector2Old vAbsoluteLabelSize = GetAbsoluteSize();
             Core::Colour AbsCol = GetAbsoluteColour();
             
             //Check if we force clip our children 
@@ -316,7 +316,7 @@ namespace ChilliSource
             //Draw ourself
             if(Background)
             {
-                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::ZERO, Core::Vector2::ZERO), AbsCol);
+                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2Old::ZERO, Core::Vector2Old::ZERO), AbsCol);
             }
         
             Core::UTF8String strutf8DisplayString(Text);

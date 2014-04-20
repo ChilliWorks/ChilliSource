@@ -31,8 +31,8 @@ namespace ChilliSource
         {
             MaterialCSPtr m_material;
             
-            Core::Vector2 m_scissorPos;
-            Core::Vector2 m_scissorSize;
+            Core::Vector2Old m_scissorPos;
+            Core::Vector2Old m_scissorSize;
             
             u32 m_offset;
             u32 m_stride;
@@ -56,7 +56,7 @@ namespace ChilliSource
             ///
             /// @param Sprite data to batch
 			//-------------------------------------------------------
-			void Render(const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4x4 * inpTransform = nullptr);
+			void Render(const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4x4Old * inpTransform = nullptr);
             //-------------------------------------------------------
 			/// Enable scissoring with the given region. Any
             /// subsequent renders to the batcher will be clipped
@@ -67,7 +67,7 @@ namespace ChilliSource
             /// @param Bottom left pos of the scissor rect
             /// @param Size of the scissor rect
 			//-------------------------------------------------------
-			void EnableScissoring(const Core::Vector2& in_pos, const Core::Vector2& in_size);
+			void EnableScissoring(const Core::Vector2Old& in_pos, const Core::Vector2Old& in_size);
             //-------------------------------------------------------
 			/// Disable scissoring. Any
             /// subsequent renders to the batcher will not be clipped/

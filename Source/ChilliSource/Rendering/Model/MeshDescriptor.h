@@ -13,7 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4x4Old.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
@@ -42,11 +42,11 @@ namespace ChilliSource
 			std::string mstrName;
 			u32 mudwNumVertices;
 			u32 mudwNumIndices;
-			ChilliSource::Core::Vector3 mvMinBounds;
-			ChilliSource::Core::Vector3 mvMaxBounds;
+			ChilliSource::Core::Vector3Old mvMinBounds;
+			ChilliSource::Core::Vector3Old mvMaxBounds;
 			u8* mpVertexData;
 			u8* mpIndexData;
-			std::vector<ChilliSource::Core::Matrix4x4> mInverseBindPoseMatrices;
+			std::vector<ChilliSource::Core::Matrix4x4Old> mInverseBindPoseMatrices;
 			PrimitiveType ePrimitiveType;            
 		};
         //-------------------------------------------------------------------------
@@ -69,8 +69,8 @@ namespace ChilliSource
 			MeshFeatureDescriptor mFeatures;
             std::vector<SubMeshDescriptor> mMeshes;
 			VertexDeclaration mVertexDeclaration;
-			Core::Vector3 mvMinBounds;
-			Core::Vector3 mvMaxBounds;
+			Core::Vector3Old mvMinBounds;
+			Core::Vector3Old mvMaxBounds;
             u32 mudwIndexSize;
 		};
 	}

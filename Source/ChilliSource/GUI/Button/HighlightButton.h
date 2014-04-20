@@ -283,7 +283,7 @@ namespace ChilliSource
 			///
 			/// @return Absolute size of the image
 			//--------------------------------------------------------
-			Core::Vector2 GetSizeFromImage() const;
+			Core::Vector2Old GetSizeFromImage() const;
             //--------------------------------------------------------
 			/// Set Highlight Colour
 			///
@@ -358,8 +358,8 @@ namespace ChilliSource
             
         private:
             
-            Core::UnifiedVector2 mvFillMaintainTarget;
-            Core::UnifiedVector2 mvFitMaintainTarget;
+            Core::UnifiedVector2Old mvFillMaintainTarget;
+            Core::UnifiedVector2Old mvFitMaintainTarget;
             
             bool mbFillMaintain;
             bool mbFitMaintain;
@@ -391,7 +391,7 @@ namespace ChilliSource
             Core::Rectangle msDefaultUVs;
             Core::Rectangle msHighlightUVs;
             
-            Core::Vector2 mvSelectedPos;
+            Core::Vector2Old mvSelectedPos;
             
 			bool mbSelected;
 		};

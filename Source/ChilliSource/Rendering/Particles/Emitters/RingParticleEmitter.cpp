@@ -52,14 +52,14 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void RingParticleEmitter::Emit(Particle& in_particle)
         {
-            Core::Vector3 vPos;
+            Core::Vector3Old vPos;
             vPos.x = Core::MathUtils::RandomInRange(-1.0f, 1.0f);
             vPos.z = Core::MathUtils::RandomInRange(-1.0f, 1.0f);
             
             vPos.Normalise() *=  mfRadius;
             
             in_particle.m_translation += vPos;
-            in_particle.m_velocity = Core::Vector3::Y_UNIT_POSITIVE * mfInitialVelocity;
+            in_particle.m_velocity = Core::Vector3Old::Y_UNIT_POSITIVE * mfInitialVelocity;
             
         }
     }

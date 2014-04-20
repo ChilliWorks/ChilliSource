@@ -11,7 +11,7 @@
 #define _MO_FLO_CORE_ALIGNMENT_ANCHORS_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector2Old.h>
 
 namespace ChilliSource
 {
@@ -41,7 +41,7 @@ namespace ChilliSource
         /// @param Half size
         /// @param Out anchor point
         //---------------------------------------------------------------
-        void Align(AlignmentAnchor ineAlignment, const Core::Vector2& invHalfSize, Core::Vector2& outvAlignmentPoint);
+        void Align(AlignmentAnchor ineAlignment, const Core::Vector2Old& invHalfSize, Core::Vector2Old& outvAlignmentPoint);
         //---------------------------------------------------------------
         /// Alignment Anchor From String
         ///
@@ -66,7 +66,7 @@ namespace ChilliSource
         /// @param Half size
         /// @param Out anchor point
         //---------------------------------------------------------------
-        void GetAnchorPoint(AlignmentAnchor ineAlignment, const Core::Vector2& invHalfSize, Core::Vector2& outvAlignmentPoint);
+        void GetAnchorPoint(AlignmentAnchor ineAlignment, const Core::Vector2Old& invHalfSize, Core::Vector2Old& outvAlignmentPoint);
     }
 }
 

@@ -1,106 +1,324 @@
+// Quaternion.h
+// ICEngine
+//
+// Created by Ian Copland on 05/02/2013
+// Copyright Ian Copland 2013. All rights reserved.
 
+#ifndef _ICENGINE_CORE_MATH_QUATERNION_H_
+#define _ICENGINE_CORE_MATH_QUATERNION_H_
 
-#ifndef _MOFLO_CORE_QUATERNION_H_
-#define _MOFLO_CORE_QUATERNION_H_
+#include <ICEngine/ICEngine.h>
+#include <ICEngine/Core/Math/Vector3.h>
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
-#include <ChilliSource/Core/Math/Vector4.h>
-
-namespace ChilliSource
+namespace ICEngine
 {
-	namespace Core
+	//-------------------------------------------------------
+	/// A generic quaternion class for respresention 3D 
+	/// orientations.
+	//-------------------------------------------------------
+	template <typename TType> class GenericQuaternion final
 	{
-		class Quaternion
+	public:
+		//-----------------------------------------------
+		/// Constructor
+		//-----------------------------------------------
+		GenericQuaternion();
+		//-----------------------------------------------
+		/// Constructor
+		/// @param X
+		/// @param Y
+		/// @param Z
+		/// @param W
+		//-----------------------------------------------
+		explicit GenericQuaternion(TType inX, TType inY, TType inZ, TType inW);
+		//-----------------------------------------------
+		/// Constructor
+		/// @param An axis.
+		/// @param An angle.
+		//-----------------------------------------------
+		explicit GenericQuaternion(const GenericVector3<TType>& inAxis, TType inAngle);
+		//-----------------------------------------------
+		/// @return the magnitude of the quaternion.
+		//-----------------------------------------------
+		TType Magnitude() const;
+		//-----------------------------------------------
+		/// @return the magnitude of the quaternion 
+		/// squared.
+		//-----------------------------------------------
+		TType MagnitudeSquared() const;
+		//-----------------------------------------------
+		/// Normalises this quaternion.
+		//-----------------------------------------------
+		void Normalise();
+		//-----------------------------------------------
+		/// @return a normalised version of the quaternion.
+		//-----------------------------------------------
+		GenericQuaternion<TType> NormaliseCopy() const;
+		//-----------------------------------------------
+		/// Sets this quaternion to its conjugate.
+		//-----------------------------------------------
+		void Conjugate();
+		//-----------------------------------------------
+		/// @return the conjugate of the quaternion.
+		//-----------------------------------------------
+		GenericQuaternion<TType> ConjugateCopy() const;
+		//-----------------------------------------------
+		/// Sets this quaternion to its inverse.
+		//-----------------------------------------------
+		void Inverese();
+		//-----------------------------------------------
+		/// @return the inverse of the quaternion.
+		//-----------------------------------------------
+		GenericQuaternion<TType> InvereseCopy() const;
+		//--------------------------------------------
+		/// @param The first quaternion.
+		/// @param The second quaternion.
+		/// @return The dot product of two quaternions. 
+		//--------------------------------------------
+		static F32 Dot(const GenericQuaternion<TType>& inA, const GenericQuaternion<TType>& inB);
+		//--------------------------------------------
+		/// Spherical Linear Interpolation on two
+		/// quaternions.
+		/// @param The step between the two values. This
+		/// is in the range 0.0 - 1.0 and will be clamped
+		/// if outside of it.
+		/// @param The first quaternion.
+		/// @param The second quaternion.
+		/// @return The interpolated quaternion.
+		//--------------------------------------------
+		static GenericQuaternion<TType> Slerp(const GenericQuaternion<TType>& inA, const GenericQuaternion<TType>& inB, F32 inT);
+		//-----------------------------------------------
+		/// Overloaded operators
+		//-----------------------------------------------
+		Bool operator==(const GenericQuaternion<TType>& inB);
+		Bool operator!=(const GenericQuaternion<TType>& inB);
+		GenericQuaternion<TType>& operator+=(const GenericQuaternion<TType>& inB);
+		GenericQuaternion<TType>& operator-=(const GenericQuaternion<TType>& inB);
+		GenericQuaternion<TType>& operator*=(const GenericQuaternion<TType>& inB);
+		GenericQuaternion<TType>& operator*=(TType inB);
+		GenericQuaternion<TType>& operator/=(TType inB);
+
+		TType X;
+		TType Y;
+		TType Z;
+		TType W;
+	};
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType>::GenericQuaternion()
+		: X(0), Y(0), Z(0), W(1)
+	{
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType>::GenericQuaternion(TType inX, TType inY, TType inZ, TType inW)
+		: X(inX), Y(inY), Z(inZ), W(inW)
+	{
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType>::GenericQuaternion(const GenericVector3<TType>& inAxis, TType inAngle)
+		: X(0), Y(0), Z(0), W(0)
+	{
+		GenericVector3<TType> normalised = inAxis.NormaliseCopy();
+		TType halfAngle = inAngle / 2;
+		TType sinAngle = (TType)sin(halfAngle);
+
+		X = normalised.X * sinAngle;
+		Y = normalised.Y * sinAngle;
+		Z = normalised.Z * sinAngle;
+		W = (TType)cos(halfAngle);
+	}
+	//-----------------------------------------------
+	template <typename TType> TType GenericQuaternion<TType>::Magnitude() const
+	{
+		return (TType)sqrt(W*W + X*X + Y*Y + Z*Z);
+	}
+	//-----------------------------------------------
+	template <typename TType> TType GenericQuaternion<TType>::MagnitudeSquared() const
+	{
+		return (W*W + X*X + Y*Y + Z*Z);
+	}
+	//-----------------------------------------------
+	template <typename TType> void GenericQuaternion<TType>::Normalise()
+	{
+		float magnitude = Magnitude();
+		W = W / magnitude;
+		X = X / magnitude;
+		Y = Y / magnitude;
+		Z = Z / magnitude;
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::NormaliseCopy() const
+	{
+		GenericQuaternion<TType> output = *this;
+		output.Normalise();
+		return output;
+	}
+	//-----------------------------------------------
+	template <typename TType> void GenericQuaternion<TType>::Conjugate()
+	{
+		W = W;
+		X = -X;
+		Y = -Y;
+		Z = -Z;
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::ConjugateCopy() const
+	{
+		GenericQuaternion<TType> output = *this;
+		output.Conjugate();
+		return output;
+	}
+	//-----------------------------------------------
+	template <typename TType> void GenericQuaternion<TType>::Inverese()
+	{
+		TType magnitudeSquared = MagnitudeSquared();
+		Conjugate();
+		W /= magnitudeSquared;
+		X /= magnitudeSquared;
+		Y /= magnitudeSquared;
+		Z /= magnitudeSquared;
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::InvereseCopy() const
+	{
+		GenericQuaternion<TType> output = *this;
+		output.Inverese();
+		return output;
+	}
+	//--------------------------------------------
+	template <typename TType> F32 GenericQuaternion<TType>::Dot(const GenericQuaternion<TType>& inA, const GenericQuaternion<TType>& inB)
+	{
+		return (inA.X * inB.X + inA.Y * inB.Y + inA.Z * inB.Z + inA.W * inB.W);
+	}
+	//--------------------------------------------
+	template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::Slerp(const GenericQuaternion<TType>& inA, const GenericQuaternion<TType>& inB, F32 inT)
+	{
+		const TType kEpsilon = (TType)0.0001;
+
+		if (inT <= 0)
 		{
-		public:
-		
-			Quaternion();
-			Quaternion(const f32 _x, const f32 _y, const f32 _z, const f32 _w);
-			Quaternion(const Vector3 & V, const f32 theta);
-			Quaternion(const Matrix4x4& inMat);
-			Quaternion(const Vector3& xaxis, const Vector3& yaxis, const Vector3& zaxis);
-			~Quaternion();
-			
-            f32 Modulus() const;
-            f32 ModulusSquared() const;
-			Quaternion & NormaliseSelf();
-			Quaternion Conjugate() const;
-            Quaternion Inverse() const;
-
-			static Quaternion Slerp(const Quaternion &q1, const Quaternion &q2, float t, bool inbShortestPath = true);
-            static Quaternion NLerp(const Quaternion &q1, const Quaternion &q2, float t, bool inbShortestPath = true);
-
-			Matrix4x4 ToRotationMatrix4x4(void) const;
-			void ToRotationMatrix(Matrix4x4 & inMatrix) const;
-			
-			f32 GetAngle() const;
-			Vector3 GetAxis() const;
-
-			void ToEulerAxes (Vector3& xaxis, Vector3& yaxis, Vector3& zaxis) const;
-
-			void SetAxisAngle(const Vector3 & V, f32 theta);
-			void SetAxisAngle(f32 infX, f32 infY, f32 infZ, f32 theta);
-
-			static const Quaternion IDENTITY;
-			static const Quaternion ZERO;
-			
-			bool operator==(const Quaternion &q)const 
-			{return (q.x == x && q.y == y && q.z == z && q.w == w);}
-			
-			bool operator!=(const Quaternion &q)const 
-			{return (q.x != x || q.y != y || q.z != z || q.w != w);}
-			
-			f32 w,x,y,z;
-		};
-		
-		inline Quaternion operator + (const Quaternion &q1, const Quaternion &q2)
-		{
-			return Quaternion(q1.x + q2.x, q1.y + q2.y, q1.z + q2.z, q1.w + q2.w);
+			return inA;
 		}
-		
-		inline Quaternion operator - (const Quaternion &q1, const Quaternion &q2)
+		if (inT >= 1)
 		{
-			return Quaternion(q1.x - q2.x, q1.y - q2.y, q1.z - q2.z, q1.w - q2.w);
-		}
-		
-		inline Quaternion operator * (const Quaternion &A, const Quaternion &B)
-		{
-			Quaternion C;
-			
-			C.x = A.w*B.x + A.x*B.w + A.y*B.z - A.z*B.y;
-			C.y = A.w*B.y - A.x*B.z + A.y*B.w + A.z*B.x;
-			C.z = A.w*B.z + A.x*B.y - A.y*B.x + A.z*B.w;
-			C.w = A.w*B.w - A.x*B.x - A.y*B.y - A.z*B.z;
-			return C;
+			return inB;
 		}
 
-		inline Quaternion operator * (const Quaternion &q, const f32 &s)
+		GenericQuaternion<TType> B = inB;
+		TType aDotB = Dot(inA, B);
+		if (aDotB < 0)
 		{
-			return Quaternion(q.x * s, q.y * s, q.z * s, q.w * s);
+			B.X = -B.X;
+			B.Y = -B.Y;
+			B.Z = -B.Z;
+			B.W = -B.W;
+			aDotB = -aDotB;
 		}
-		
-		inline Quaternion operator * (const f32 &s, const Quaternion &q)
+
+		if (aDotB > 1 - kEpsilon)
 		{
-			return Quaternion(q.x * s, q.y * s, q.z * s, q.w * s);
+			GenericQuaternion<TType> output;
+			output = inA + inT * (B - inA);
+			output.Normalise();
+			return output;
 		}
-        
-        inline Vector3 operator * ( const Quaternion &q, const Vector3 &v)
-        {
-            Vector3 vQuatAxis(q.x,q.y,q.z);
-            Vector3 uv(vQuatAxis.CrossProduct(v));
-            Vector3 uuv(vQuatAxis.CrossProduct(uv));
-            uv *= (2.0f * q.w);
-            uuv *= 2.0f;
-            
-            return v + uv + uuv; 
-        }
-        
-        inline Quaternion operator / (const Quaternion& q, f32 infValue)
-        {
-            f32 fInverseValue = (1.0f / infValue);
-            return Quaternion(q.x * fInverseValue, q.y * fInverseValue, q.z * fInverseValue, q.w * fInverseValue);
-        }
+
+		TType acosADotB = acos(aDotB);
+		return (sin((1 - inT) * acosADotB) * inA + sin(inT * acosADotB) * B) / sin(acosADotB);
+	}
+	//-----------------------------------------------
+	template <typename TType> Bool GenericQuaternion<TType>::operator==(const GenericQuaternion<TType>& inB)
+	{
+		if (X != inB.X || Y != inB.Y || Z != inB.Z || W != inB.W)
+		{
+			return false;
+		}
+		return true;
+	}
+	//-----------------------------------------------
+	template <typename TType> Bool GenericQuaternion<TType>::operator!=(const GenericQuaternion<TType>& inB)
+	{
+		return !(*this == inB);
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType>& GenericQuaternion<TType>::operator+=(const GenericQuaternion<TType>& inB)
+	{
+		X += inB.X;
+		Y += inB.Y;
+		Z += inB.Z;
+		W += inB.W;
+		return *this;
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType>& GenericQuaternion<TType>::operator-=(const GenericQuaternion<TType>& inB)
+	{
+		X -= inB.X;
+		Y -= inB.Y;
+		Z -= inB.Z;
+		W -= inB.W;
+		return *this;
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType>& GenericQuaternion<TType>::operator *= (const GenericQuaternion<TType>& inB)
+	{
+		GenericQuaternion<TType> copy = *this;
+		W = inB.W * copy.W - inB.X *copy.X - inB.Y * copy.Y - inB.Z * copy.Z;
+		X = inB.W * copy.X + inB.X *copy.W + inB.Y * copy.Z - inB.Z * copy.Y;
+		Y = inB.W * copy.Y - inB.X *copy.Z + inB.Y * copy.W + inB.Z * copy.X;
+		Z = inB.W * copy.Z + inB.X *copy.Y - inB.Y * copy.X + inB.Z * copy.W;
+		return *this;
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType>& GenericQuaternion<TType>::operator*=(TType inB)
+	{
+		X *= inB;
+		Y *= inB;
+		Z *= inB;
+		W *= inB;
+		return *this;
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType>& GenericQuaternion<TType>::operator/=(TType inB)
+	{
+		X /= inB;
+		Y /= inB;
+		Z /= inB;
+		W /= inB;
+		return *this;
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType> operator+(GenericQuaternion<TType> inA, const GenericQuaternion<TType>& inB)
+	{
+		return (inA += inB);
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType> operator-(GenericQuaternion<TType> inA, const GenericQuaternion<TType>& inB)
+	{
+		return (inA -= inB);
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType> operator*(GenericQuaternion<TType> inA, const GenericQuaternion<TType>& inB)
+	{
+		return (inA *= inB);
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType> operator*(GenericQuaternion<TType> inA, TType inB)
+	{
+		return (inA *= inB);
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType> operator*(TType inA, GenericQuaternion<TType> inB)
+	{
+		return (inB *= inA);
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType> operator/(GenericQuaternion<TType> inA, TType inB)
+	{
+		return (inA /= inB);
+	}
+	//-----------------------------------------------
+	template <typename TType> GenericQuaternion<TType> operator/(TType inA, GenericQuaternion<TType> inB)
+	{
+		return (inB /= inA);
 	}
 }
 

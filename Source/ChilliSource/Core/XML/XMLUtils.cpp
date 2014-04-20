@@ -136,38 +136,38 @@ namespace ChilliSource
 			}
 		}
 		
-		template <> const Vector2 XMLUtils::GetAttributeValueOrDefault<Vector2>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector2 & inDefault)
+		template <> const Vector2Old XMLUtils::GetAttributeValueOrDefault<Vector2Old>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector2Old & inDefault)
 		{
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return ParseVector2(Result);
+				return ParseVector2Old(Result);
 			} else {
 				return inDefault;
 			}
 		}
 		
-		template <> const Vector3 XMLUtils::GetAttributeValueOrDefault<Vector3>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector3 & inDefault)
+		template <> const Vector3Old XMLUtils::GetAttributeValueOrDefault<Vector3Old>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector3Old & inDefault)
 		{
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return ParseVector3(Result);
+				return ParseVector3Old(Result);
 			} else {
 				return inDefault;
 			}
 		}
-		template <> const Vector4 XMLUtils::GetAttributeValueOrDefault<Vector4>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector4 & inDefault)
+		template <> const Vector4Old XMLUtils::GetAttributeValueOrDefault<Vector4Old>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector4Old & inDefault)
 		{
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return ParseVector4(Result);
+				return ParseVector4Old(Result);
 			} else {
 				return inDefault;
 			}
 		}
-		template <> const Matrix4x4 XMLUtils::GetAttributeValueOrDefault<Matrix4x4>(TiXmlElement* inpElement, const std::string & inAttributeName, const Matrix4x4 & inDefault)
+		template <> const Matrix4x4Old XMLUtils::GetAttributeValueOrDefault<Matrix4x4Old>(TiXmlElement* inpElement, const std::string & inAttributeName, const Matrix4x4Old & inDefault)
 		{
 			std::string Result;
 			
@@ -177,12 +177,12 @@ namespace ChilliSource
 				return inDefault;
 			}
 		}
-		template <> const Quaternion XMLUtils::GetAttributeValueOrDefault<Quaternion>(TiXmlElement* inpElement, const std::string & inAttributeName, const Quaternion & inDefault)
+		template <> const QuaternionOld XMLUtils::GetAttributeValueOrDefault<QuaternionOld>(TiXmlElement* inpElement, const std::string & inAttributeName, const QuaternionOld & inDefault)
 		{
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return ParseQuaternion(Result);
+				return ParseQuaternionOld(Result);
 			} else {
 				return inDefault;
 			}

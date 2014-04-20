@@ -119,16 +119,16 @@ namespace ChilliSource
                 return false;
             }
 
-            Vector2 ScaleMaintainingAspectRatio(const Vector2& invCurrentSize, const Vector2& invTargetSize, bool inbFitInside)
+            Vector2Old ScaleMaintainingAspectRatio(const Vector2Old& invCurrentSize, const Vector2Old& invTargetSize, bool inbFitInside)
             {
                 if(invCurrentSize == invTargetSize)
                 {
                     return invCurrentSize;
                 }
                 
-                Vector2 vResult;
+                Vector2Old vResult;
                 
-                Vector2 vDiff(invTargetSize.x - invCurrentSize.x, invTargetSize.y - invCurrentSize.y);
+                Vector2Old vDiff(invTargetSize.x - invCurrentSize.x, invTargetSize.y - invCurrentSize.y);
                 
                 // reverse the checks below so the smallest value is picked instead
                 if(inbFitInside)

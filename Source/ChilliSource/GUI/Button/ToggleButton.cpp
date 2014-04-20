@@ -44,12 +44,12 @@ namespace ChilliSource
         //-----------------------------------------------------------
         ToggleButton::ToggleButton() 
         : mpBackgroundImage(new ImageView()),
-        msOnUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
-        msOffUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
+        msOnUVs(Core::Vector2Old::ZERO, Core::Vector2Old::ONE),
+        msOffUVs(Core::Vector2Old::ZERO, Core::Vector2Old::ONE),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
         {
-            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
-            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::Vector2(0.5f, 0.5f), Core::Vector2(0, 0)));
+            mpBackgroundImage->SetSize(Core::UnifiedVector2Old(Core::Vector2Old(1.0f, 1.0f), Core::Vector2Old(0, 0)));
+            mpBackgroundImage->SetPosition(Core::UnifiedVector2Old(Core::Vector2Old(0.5f, 0.5f), Core::Vector2Old(0, 0)));
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
@@ -65,7 +65,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         ToggleButton::ToggleButton(const Core::ParamDictionary& insParams) 
         : Button(insParams), mpBackgroundImage(new ImageView()),
-        msOnUVs(Core::Vector2::ZERO, Core::Vector2::ONE), msOffUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
+        msOnUVs(Core::Vector2Old::ZERO, Core::Vector2Old::ONE), msOffUVs(Core::Vector2Old::ZERO, Core::Vector2Old::ONE),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
         {
             std::string strValue;
@@ -142,20 +142,20 @@ namespace ChilliSource
 			//---Set Maintain Height
 			if(insParams.TryGetValue("SetHeightMaintain", strValue))
 			{
-				Core::Vector2 vSize = Core::ParseVector2(strValue);
+				Core::Vector2Old vSize = Core::ParseVector2Old(strValue);
 				HeightMaintain = true;
 				SetHeightMaintainingAspect(vSize.x, vSize.y);
 			}
 			//---Set Maintain Width
 			if(insParams.TryGetValue("SetWidthMaintain", strValue))
 			{
-				Core::Vector2 vSize = Core::ParseVector2(strValue);
+				Core::Vector2Old vSize = Core::ParseVector2Old(strValue);
 				WidthMaintain = true;
 				SetWidthMaintainingAspect(vSize.x, vSize.y);
 			}
             
-            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
-            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::Vector2(0.5f, 0.5f), Core::Vector2(0, 0)));
+            mpBackgroundImage->SetSize(Core::UnifiedVector2Old(Core::Vector2Old(1.0f, 1.0f), Core::Vector2Old(0, 0)));
+            mpBackgroundImage->SetPosition(Core::UnifiedVector2Old(Core::Vector2Old(0.5f, 0.5f), Core::Vector2Old(0, 0)));
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
@@ -494,17 +494,17 @@ namespace ChilliSource
 		{
 			if(SizeFromImage)
 			{
-				Core::Vector2 vImageSize = mpBackgroundImage->GetSizeFromImage();
+				Core::Vector2Old vImageSize = mpBackgroundImage->GetSizeFromImage();
 				SetSize(0.0f, 0.0f, vImageSize.x, vImageSize.y);
 			}
 			else if(HeightMaintain)
             {
-                Core::UnifiedVector2 uvSize = GetSize();
+                Core::UnifiedVector2Old uvSize = GetSize();
                 SetHeightMaintainingAspect(uvSize.GetRelative().y, uvSize.GetAbsolute().y);
             }
             else if(WidthMaintain)
             {
-                Core::UnifiedVector2 uvSize = GetSize();
+                Core::UnifiedVector2Old uvSize = GetSize();
                 SetWidthMaintainingAspect(uvSize.GetRelative().x, uvSize.GetAbsolute().x);
             }
 		}
@@ -526,7 +526,7 @@ namespace ChilliSource
 		///
 		/// @return Absolute size of the image
 		//--------------------------------------------------------
-		Core::Vector2 ToggleButton::GetSizeFromImage() const
+		Core::Vector2Old ToggleButton::GetSizeFromImage() const
 		{
 			return GetBackgroundImageView()->GetSizeFromImage();
 		}
@@ -548,7 +548,7 @@ namespace ChilliSource
 			if(fScaleY == 0.0f)
 				return;
             
-            Core::Vector2 vCurrentSize = GetSizeFromImage();
+            Core::Vector2Old vCurrentSize = GetSizeFromImage();
             f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
             
             vCurrentSize = GetAbsoluteSize();
@@ -573,7 +573,7 @@ namespace ChilliSource
 			if(fScaleX == 0.0f)
 				return;
             
-            Core::Vector2 vCurrentSize = GetSizeFromImage();
+            Core::Vector2Old vCurrentSize = GetSizeFromImage();
             f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
             
             vCurrentSize = GetAbsoluteSize();

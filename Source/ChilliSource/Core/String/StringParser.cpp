@@ -92,68 +92,68 @@ namespace ChilliSource
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        Vector2 ParseVector2(const std::string& in_string)
+        Vector2Old ParseVector2Old(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
             
 			if (udwSize != 2)
 			{
-				return Vector2::ZERO;
+				return Vector2Old::ZERO;
 			}
 			else
 			{
-                Vector2 vRet;
+                Vector2Old vRet;
 				CS_SSCANF(in_string.c_str(), "%f %f", &vRet.x, &vRet.y);
 				return vRet;
 			}
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        Vector3 ParseVector3(const std::string& in_string)
+        Vector3Old ParseVector3Old(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
             
 			if (udwSize != 3)
 			{
-				return Vector3::ZERO;
+				return Vector3Old::ZERO;
 			}
 			else
 			{
-				Vector3 vRet;
+				Vector3Old vRet;
 				CS_SSCANF(in_string.c_str(), "%f %f %f", &vRet.x, &vRet.y, &vRet.z);
 				return vRet;
 			}
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        Vector4 ParseVector4(const std::string& in_string)
+        Vector4Old ParseVector4Old(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
 			
 			if (udwSize != 4)
 			{
-				return Vector4::ZERO;
+				return Vector4Old::ZERO;
 			}
 			else
 			{
-				Vector4 vRet;
+				Vector4Old vRet;
 				CS_SSCANF(in_string.c_str(), "%f %f %f %f", &vRet.x, &vRet.y, &vRet.z, &vRet.w);
 				return vRet;
 			}
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        Matrix4x4 ParseMatrix4(const std::string& in_string)
+        Matrix4x4Old ParseMatrix4(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
             
 			if (udwSize != 16)
 			{
-				return Matrix4x4::IDENTITY;
+				return Matrix4x4Old::IDENTITY;
 			}
 			else
 			{
-                Matrix4x4 matRet;
+                Matrix4x4Old matRet;
                 
 				CS_SSCANF(in_string.c_str(), "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ",
 						&matRet.m[0], &matRet.m[1], &matRet.m[2], &matRet.m[3],
@@ -167,17 +167,17 @@ namespace ChilliSource
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        Quaternion ParseQuaternion(const std::string& in_string)
+        QuaternionOld ParseQuaternionOld(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
             
 			if (udwSize != 4)
 			{
-				return Quaternion::IDENTITY;
+				return QuaternionOld::IDENTITY;
 			}
 			else
 			{
-                Quaternion qRet;
+                QuaternionOld qRet;
 				CS_SSCANF(in_string.c_str(), "%f %f %f %f", &qRet.w, &qRet.x, &qRet.y, &qRet.z);
                 return qRet;
 			}
