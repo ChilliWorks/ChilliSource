@@ -95,8 +95,9 @@ namespace ChilliSource
 			///
 			/// @param a vector.
 			/// @param another vector.
+			/// @param The interpolation factor.
 			///
-			/// @return The lerped vector.
+			/// @return The interpolated vector.
 			//-----------------------------------------------------
 			static GenericVector2<TType> Lerp(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b, f32 in_t);
 			//-----------------------------------------------------
@@ -233,7 +234,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
-			/// @param Another vector.
+			/// @param  A scalar.
 			///
 			/// @return This vector after being multiplied by the 
 			/// given scalar.
@@ -242,7 +243,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
-			/// @param Another vector.
+			/// @param A scalar.
 			///
 			/// @return This vector after being divided by the 
 			/// given scalar.
