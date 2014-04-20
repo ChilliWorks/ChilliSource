@@ -31,7 +31,6 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Threading/Task.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace ChilliSource
@@ -133,7 +132,7 @@ namespace ChilliSource
             /// @param Completion delegate
             /// @param [Out] Shader resource
             //----------------------------------------------
-            void LoadShader(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, ShaderSPtr& out_shader)
+			void LoadShader(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const ShaderSPtr& out_shader)
             {
                 Core::FileStreamSPtr shaderStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_read);
                 if(shaderStream == nullptr || shaderStream->IsBad())
@@ -142,7 +141,7 @@ namespace ChilliSource
                     out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
+						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
                     }
                     return;
                 }
@@ -158,7 +157,7 @@ namespace ChilliSource
                     out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
+						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
                     }
                     return;
                 }
@@ -170,7 +169,7 @@ namespace ChilliSource
                     out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
+						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
                     }
                     return;
                 }
@@ -182,7 +181,7 @@ namespace ChilliSource
                     out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_shader));
+						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
                     }
                     return;
                 }
@@ -195,14 +194,14 @@ namespace ChilliSource
                 else
                 {
                     //All GL related tasks must be performed on the main thread.
-                    auto buildTask = [](const std::string& in_vs, const std::string& in_ps, const Core::ResourceProvider::AsyncLoadDelegate& in_completionDelegate, ShaderSPtr& out_shaderResource)
+					auto buildTask = [](const std::string& in_vs, const std::string& in_ps, const Core::ResourceProvider::AsyncLoadDelegate& in_completionDelegate, const ShaderSPtr& out_shaderResource)
                     {
                         out_shaderResource->Build(in_vs, in_ps);
                         out_shaderResource->SetLoadState(Core::Resource::LoadState::k_loaded);
                         in_completionDelegate(out_shaderResource);
                     };
-					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const std::string&, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, ShaderSPtr&>
-                                                                (buildTask, vsChunk, fsChunk, in_delegate, out_shader));
+					auto task = std::bind(buildTask, vsChunk, fsChunk, in_delegate, out_shader);
+					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
                 }
             }
         }
@@ -235,14 +234,14 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void GLSLShaderProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		void GLSLShaderProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
         {
             ShaderSPtr shaderResource = std::static_pointer_cast<Shader>(out_resource);
             LoadShader(in_location, in_filePath, nullptr, shaderResource);
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void GLSLShaderProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+		void GLSLShaderProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
             ShaderSPtr shaderResource = std::static_pointer_cast<Shader>(out_resource);
             LoadShader(in_location, in_filePath, in_delegate, shaderResource);

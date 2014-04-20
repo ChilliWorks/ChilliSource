@@ -58,7 +58,7 @@ namespace ChilliSource
             ///
             /// @param Resource
             //----------------------------------------------------
-            using AsyncLoadDelegate = std::function<void(const std::shared_ptr<const Resource>&)>;
+            using AsyncLoadDelegate = std::function<void(const std::shared_ptr<Resource>&)>;
             
             CS_DECLARE_NAMEDTYPE(ResourceProvider);
             //----------------------------------------------------
@@ -88,7 +88,7 @@ namespace ChilliSource
             /// @param Delegate to callback on completion either success or failure
             /// @param [Out] The output resource.
             //----------------------------------------------------
-			virtual void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, ResourceSPtr& out_resource) = 0;
+			virtual void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceSPtr& out_resource) = 0;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
             /// The resource will be returned immediately but
@@ -101,7 +101,7 @@ namespace ChilliSource
             /// @param The filepath.
             /// @param [Out] The output resource.
             //----------------------------------------------------
-			virtual void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource) = 0;
+			virtual void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) = 0;
             //----------------------------------------------------
             /// Destructor.
             ///

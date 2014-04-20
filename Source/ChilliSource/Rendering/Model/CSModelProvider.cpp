@@ -455,7 +455,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void CSModelProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		void CSModelProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
 		{
 			MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
 			
@@ -471,15 +471,15 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void CSModelProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+		void CSModelProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
             CS_ASSERT(in_delegate != nullptr, "Cannot load mesh async with null delegate");
             
 			MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
 			
             //Load model as task
-			Core::Task<Core::StorageLocation, const std::string&, const AsyncLoadDelegate&, const MeshSPtr&> MeshTask(this, &CSModelProvider::LoadMeshDataTask, in_location, in_filePath, in_delegate, meshResource);
-			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(MeshTask);
+			auto task = std::bind(&CSModelProvider::LoadMeshDataTask, this, in_location, in_filePath, in_delegate, meshResource);
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -490,12 +490,12 @@ namespace ChilliSource
 			if (false == ReadFile(in_location, in_filePath, descriptor))
 			{
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const MeshSPtr&>(in_delegate, out_resource));
+				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
 				return;
 			}
 			
 			//start a main thread task for loading the data into a mesh
-			Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(Core::Task<const AsyncLoadDelegate&, MeshDescriptor&, const MeshSPtr&>(this, &CSModelProvider::BuildMesh, in_delegate, descriptor, out_resource));
+			Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSModelProvider::BuildMesh, this, in_delegate, descriptor, out_resource));
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------

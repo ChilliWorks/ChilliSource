@@ -168,7 +168,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void CSAnimProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		void CSAnimProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
 		{
 			SkinnedAnimationSPtr anim = std::static_pointer_cast<SkinnedAnimation>(out_resource);
             
@@ -176,21 +176,11 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void CSAnimProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+		void CSAnimProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
 			SkinnedAnimationSPtr anim = std::static_pointer_cast<SkinnedAnimation>(out_resource);
-            
-			//Load model as task
-			Core::Task
-            <
-            Core::StorageLocation,
-            const std::string&,
-            const Core::ResourceProvider::AsyncLoadDelegate&,
-            const SkinnedAnimationSPtr&
-            >
-            AnimTask(this, &CSAnimProvider::ReadSkinnedAnimationFromFile, in_location, in_filePath, in_delegate, anim);
-            
-			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(AnimTask);
+			auto task = std::bind(&CSAnimProvider::ReadSkinnedAnimationFromFile, this, in_location, in_filePath, in_delegate, anim);
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -206,8 +196,7 @@ namespace ChilliSource
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-                    Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
+					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 }
                 return;
             }
@@ -218,8 +207,7 @@ namespace ChilliSource
             
             if(in_delegate != nullptr)
             {
-                Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
+				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
             }
 		}
 	}

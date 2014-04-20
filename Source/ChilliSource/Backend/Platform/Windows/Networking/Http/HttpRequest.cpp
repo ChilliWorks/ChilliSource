@@ -139,7 +139,7 @@ namespace ChilliSource
 			CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
 
 			//Begin the read loop as a threaded task
-			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::Task<HINTERNET, HINTERNET>(Core::MakeDelegate(this, &HttpRequest::PollReadStream), in_requestHandle, in_connectionHandle));
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&HttpRequest::PollReadStream, this, in_requestHandle, in_connectionHandle));
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------

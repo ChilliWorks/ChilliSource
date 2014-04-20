@@ -32,7 +32,6 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/Threading/ThreadPool.h>
-#include <ChilliSource/Core/Threading/Task.h>
 
 namespace ChilliSource
 {

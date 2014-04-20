@@ -490,7 +490,7 @@ namespace ChilliSource
             resource->SetFilePath(in_filePath);
             desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
             
-            ResourceProvider::AsyncLoadDelegate convertDelegate([=](const ResourceCSPtr& in_resource)
+            ResourceProvider::AsyncLoadDelegate convertDelegate([=](const ResourceSPtr& in_resource)
             {
                 in_delegate(std::static_pointer_cast<const TResourceType>(in_resource));
             });

@@ -127,7 +127,7 @@ namespace ChilliSource
             /// @param Pointer to image data file
             /// @param Pointer to resource destination
             //-------------------------------------------------------
-            void ReadFileVersion2(const FileStreamSPtr& in_stream, ResourceSPtr& out_resource)
+			void ReadFileVersion2(const FileStreamSPtr& in_stream, const ResourceSPtr& out_resource)
             {
                 //Read the header
                 ImageHeaderVersion2 sHeader;
@@ -166,7 +166,7 @@ namespace ChilliSource
             /// @param Pointer to image data file
             /// @param Pointer to resource destination
             //-------------------------------------------------------
-            void ReadFileVersion3(const FileStreamSPtr& in_stream, ResourceSPtr& out_resource)
+			void ReadFileVersion3(const FileStreamSPtr& in_stream, const ResourceSPtr& out_resource)
             {
                 //Read the header
                 ImageHeaderVersion3 sHeader;
@@ -247,7 +247,7 @@ namespace ChilliSource
             /// @param Completion delegate
             /// @param [Out] The output resource.
             //----------------------------------------------------
-            void LoadImage(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource)
+			void LoadImage(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
             {
                 FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
                 
@@ -256,8 +256,7 @@ namespace ChilliSource
                     out_resource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Task<ResourceSPtr&> task(in_delegate, out_resource);
-						Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
+						Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                     }
                     return;
                 }
@@ -285,7 +284,7 @@ namespace ChilliSource
                 out_resource->SetLoadState(Resource::LoadState::k_loaded);
                 if(in_delegate != nullptr)
                 {
-                    Task<ResourceSPtr&> task(in_delegate, out_resource);
+					auto task = std::bind(in_delegate, out_resource);
 					Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
                 }
             }
@@ -318,16 +317,15 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void CSImageProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, ResourceSPtr& out_resource)
+		void CSImageProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceSPtr& out_resource)
         {
             LoadImage(in_storageLocation, in_filepath, nullptr, out_resource);
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void CSImageProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, ResourceSPtr& out_resource)
+		void CSImageProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
         {
-            Task<StorageLocation, const std::string&, const ResourceProvider::AsyncLoadDelegate&, ResourceSPtr&>
-            task(LoadImage, in_storageLocation, in_filepath, in_delegate, out_resource);
+			auto task = std::bind(LoadImage, in_storageLocation, in_filepath, in_delegate, out_resource);
             Application::Get()->GetTaskScheduler()->ScheduleTask(task);
         }
     }

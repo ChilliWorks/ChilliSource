@@ -124,7 +124,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
             /// Load the material resource from the given material file on a background
             /// thread. Calls the delegate on completion. Check the
@@ -137,7 +137,7 @@ namespace ChilliSource
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// Build Material Task
 			///
@@ -147,7 +147,7 @@ namespace ChilliSource
             ///
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void BuildMaterialTask(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource);
+			void BuildMaterialTask(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
 			//----------------------------------------------------------------------------
 			/// Build Material From File
 			///
