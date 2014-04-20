@@ -10,7 +10,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/QuaternionOld.h>
-#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 
@@ -61,7 +61,7 @@ namespace ChilliSource
                     for (u32 skelNodeCount=0; skelNodeCount<(u32)in_numSkeletonNodes; ++skelNodeCount)
                     {
                         //create new translation
-                        Core::Vector3Old translation;
+                        Core::Vector3 translation;
                         translation.x = ReadValue<f32>(in_fileStream);
                         translation.y = ReadValue<f32>(in_fileStream);
                         translation.z = ReadValue<f32>(in_fileStream);
@@ -74,7 +74,7 @@ namespace ChilliSource
                         orientation.w = ReadValue<f32>(in_fileStream);
                         
                         //create new scale
-                        Core::Vector3Old scale;
+                        Core::Vector3 scale;
                         scale.x = ReadValue<f32>(in_fileStream);
                         scale.y = ReadValue<f32>(in_fileStream);
                         scale.z = ReadValue<f32>(in_fileStream);

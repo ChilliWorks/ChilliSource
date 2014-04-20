@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
 #include <ChilliSource/Core/Math/QuaternionOld.h>
-#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>
@@ -342,12 +342,12 @@ namespace ChilliSource
             {
                 //iterate through each translation
                 outFrame->m_nodeTranslations.reserve(inFrameB->m_nodeTranslations.size());
-                std::vector<Core::Vector3Old>::const_iterator transAIt = inFrameA->m_nodeTranslations.begin();
-                for (std::vector<Core::Vector3Old>::const_iterator transBIt = inFrameB->m_nodeTranslations.begin();
+                std::vector<Core::Vector3>::const_iterator transAIt = inFrameA->m_nodeTranslations.begin();
+                for (std::vector<Core::Vector3>::const_iterator transBIt = inFrameB->m_nodeTranslations.begin();
                      transAIt != inFrameA->m_nodeTranslations.end() && transBIt != inFrameB->m_nodeTranslations.end();)
                 {
                     //lerp
-                    Core::Vector3Old newTrans = Core::MathUtils::Lerp(infInterpFactor, *transAIt, *transBIt);
+                    Core::Vector3 newTrans = Core::MathUtils::Lerp(infInterpFactor, *transAIt, *transBIt);
                     
                     //add to frame
                     outFrame->m_nodeTranslations.push_back(newTrans);
@@ -376,12 +376,12 @@ namespace ChilliSource
                 
                 //iterate through each scale
                 outFrame->m_nodeScales.reserve(inFrameB->m_nodeScales.size());
-                std::vector<Core::Vector3Old>::const_iterator scaleAIt = inFrameA->m_nodeScales.begin();
-                for (std::vector<Core::Vector3Old>::const_iterator scaleBIt = inFrameB->m_nodeScales.begin();
+                std::vector<Core::Vector3>::const_iterator scaleAIt = inFrameA->m_nodeScales.begin();
+                for (std::vector<Core::Vector3>::const_iterator scaleBIt = inFrameB->m_nodeScales.begin();
                      scaleAIt != inFrameA->m_nodeScales.end() && scaleBIt != inFrameB->m_nodeScales.end();)
                 {
                     //lerp
-                    Core::Vector3Old newScale = Core::MathUtils::Lerp(infInterpFactor, *scaleAIt, *scaleBIt);
+                    Core::Vector3 newScale = Core::MathUtils::Lerp(infInterpFactor, *scaleAIt, *scaleBIt);
                     
                     //add to frame
                     outFrame->m_nodeScales.push_back(newScale);

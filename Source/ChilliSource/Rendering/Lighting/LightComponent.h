@@ -49,7 +49,7 @@ namespace ChilliSource
 			///
 			/// @return Position in world space
 			//----------------------------------------------------------
-			const Core::Vector3Old& GetWorldPosition() const;
+			const Core::Vector3& GetWorldPosition() const;
             //----------------------------------------------------------
 			/// Set Intensity
 			///

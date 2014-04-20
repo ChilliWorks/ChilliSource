@@ -31,15 +31,15 @@ namespace ChilliSource
 		/// @param Look target
 		/// @param Up direction
 		//----------------------------------------------------------
-		void Transform::SetLookAt(const Core::Vector3Old& invPos, const Core::Vector3Old& invTarget, const Core::Vector3Old& invUp)
+		void Transform::SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp)
 		{
-            Core::Vector3Old vUp(invUp);
+            Core::Vector3 vUp(invUp);
             
-            Core::Vector3Old vForward(invPos - invTarget);
+            Core::Vector3 vForward(invPos - invTarget);
             vForward.Normalise();
             
-            Core::Vector3Old vRight(vUp.CrossProduct(vForward));
-            Core::Vector3Old::CrossProduct(&vForward, &vRight, &vUp);
+            Core::Vector3 vRight(Vector3::CrossProduct(vUp, vForward));
+            vUp = Core::Vector3::CrossProduct(vForward, vRight);
             
             vUp.Normalise();
             vRight.Normalise();
@@ -56,7 +56,7 @@ namespace ChilliSource
         /// @param Scale vector
         /// @param Orientation quaternion
         //----------------------------------------------------------------
-        void Transform::SetPositionScaleOrientation(const Vector3Old& invPos, const Vector3Old& invScale, const QuaternionOld& invOrientation)
+        void Transform::SetPositionScaleOrientation(const Vector3& invPos, const Vector3& invScale, const QuaternionOld& invOrientation)
         {
             mvPosition = invPos;
             mvScale = invScale;
@@ -87,7 +87,7 @@ namespace ChilliSource
 		///
 		/// @param Position vector
 		//----------------------------------------------------------------
-		void Transform::SetPosition(const Vector3Old &invPos)
+		void Transform::SetPosition(const Vector3 &invPos)
 		{
             if(mvPosition == invPos)
                 return;
@@ -101,7 +101,7 @@ namespace ChilliSource
 		///
 		/// @return The position of the object 
 		//----------------------------------------------------------------
-		const Vector3Old& Transform::GetLocalPosition() const
+		const Vector3& Transform::GetLocalPosition() const
 		{
 			return mvPosition;
 		}
@@ -110,7 +110,7 @@ namespace ChilliSource
 		///
 		/// @return The scale of object
 		//----------------------------------------------------------------
-		const Vector3Old& Transform::GetLocalScale() const
+		const Vector3& Transform::GetLocalScale() const
 		{
             return mvScale;
 		}
@@ -119,7 +119,7 @@ namespace ChilliSource
 		///
 		/// @return The relative position of the object 
 		//----------------------------------------------------------------
-		const Vector3Old& Transform::GetWorldPosition() const
+		const Vector3& Transform::GetWorldPosition() const
 		{
             if(mpParentTransform)
             {
@@ -134,11 +134,11 @@ namespace ChilliSource
 		///
 		/// @return The relative scale of object
 		//----------------------------------------------------------------
-		const Vector3Old& Transform::GetWorldScale() const
+		const Vector3& Transform::GetWorldScale() const
 		{
             if(mpParentTransform)
 			{
-                Vector3Old::Multiply(&mpParentTransform->GetWorldScale(), &mvScale, &mvWorldScale);
+				mvWorldScale = mpParentTransform->GetWorldScale() * mvScale;
                 return mvWorldScale;
 			}
 			
@@ -188,7 +188,7 @@ namespace ChilliSource
 		///
 		/// Movement direction vector
 		//----------------------------------------------------------------
-		void Transform::MoveBy(const Vector3Old &invPos)
+		void Transform::MoveBy(const Vector3 &invPos)
 		{
 			mvPosition += invPos;
 			
@@ -217,7 +217,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void Transform::RotateXBy(f32 infAngleRads)
 		{			
-			RotateBy(Vector3Old::X_UNIT_POSITIVE, infAngleRads);
+			RotateBy(Vector3::k_unitPositiveX, infAngleRads);
 		}
 		//----------------------------------------------------------------
 		/// Rotate Y By
@@ -228,7 +228,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void Transform::RotateYBy(f32 infAngleRads)
 		{
-			RotateBy(Vector3Old::Y_UNIT_POSITIVE, infAngleRads);
+			RotateBy(Vector3::k_unitPositiveY, infAngleRads);
 		}
 		//----------------------------------------------------------------
 		/// Rotate Z By
@@ -239,7 +239,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void Transform::RotateZBy(f32 infAngleRads)
 		{
-			RotateBy(Vector3Old::Z_UNIT_POSITIVE, infAngleRads);
+			RotateBy(Vector3::k_unitPositiveZ, infAngleRads);
 		}
 		//----------------------------------------------------------------
 		/// Rotate By
@@ -253,7 +253,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void Transform::RotateBy(f32 inXAxis, f32 inYAxis, f32 inZAxis, f32 infAngleRads)
 		{			
-			RotateBy(Vector3Old(inXAxis,inYAxis,inZAxis), infAngleRads);
+			RotateBy(Vector3(inXAxis,inYAxis,inZAxis), infAngleRads);
 		}
 		//----------------------------------------------------------------
 		/// Rotate By
@@ -263,7 +263,7 @@ namespace ChilliSource
 		/// @param Axis vector
 		/// @param Angle in radians
 		//----------------------------------------------------------------
-		void Transform::RotateBy(const Vector3Old &vAxis, f32 infAngleRads)
+		void Transform::RotateBy(const Vector3 &vAxis, f32 infAngleRads)
 		{
 			mqOrientation = mqOrientation * QuaternionOld(vAxis,infAngleRads);
 			
@@ -281,7 +281,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void Transform::RotateTo(f32 inXAxis, f32 inYAxis, f32 inZAxis, f32 infAngleRads)
 		{
-			RotateTo(Vector3Old(inXAxis,inYAxis,inZAxis),infAngleRads);
+			RotateTo(Vector3(inXAxis,inYAxis,inZAxis),infAngleRads);
 		}
 		//----------------------------------------------------------------
 		/// Rotate To
@@ -291,7 +291,7 @@ namespace ChilliSource
 		/// @param Axis vector
 		/// @param Angle in radians
 		//----------------------------------------------------------------
-		void Transform::RotateTo(const Vector3Old &vAxis, f32 infAngleRads)
+		void Transform::RotateTo(const Vector3 &vAxis, f32 infAngleRads)
 		{
 			mqOrientation = QuaternionOld(vAxis,infAngleRads);
 			
@@ -336,7 +336,7 @@ namespace ChilliSource
 		///
 		/// @param Axis vector
 		//----------------------------------------------------------------
-		void Transform::ScaleBy(const Vector3Old &Vec)
+		void Transform::ScaleBy(const Vector3 &Vec)
 		{
 			mvScale.x *= Vec.x;
 			mvScale.y *= Vec.y;
@@ -389,7 +389,7 @@ namespace ChilliSource
 		///
 		/// @param Axis vector
 		//----------------------------------------------------------------
-		void Transform::ScaleTo(const Vector3Old &Vec)
+		void Transform::ScaleTo(const Vector3 &Vec)
 		{
             if(mvScale == Vec)
                 return;
@@ -668,8 +668,8 @@ namespace ChilliSource
         {
             mbIsTransformCacheValid = false;
             mbIsParentTransformCacheValid = false;
-            mvPosition = Vector3Old::ZERO;
-            mvScale = Vector3Old::ONE;
+            mvPosition = Vector3::k_zero;
+            mvScale = Vector3::k_one;
             mqWorldOrientation = QuaternionOld::IDENTITY;
             mpParentTransform = nullptr;
             mfOpacity = 1.0f;

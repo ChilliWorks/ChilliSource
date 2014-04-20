@@ -50,15 +50,15 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Direction
         //----------------------------------------------------------
-        Core::Vector3Old DirectionalLightComponent::GetDirection() const
+        Core::Vector3 DirectionalLightComponent::GetDirection() const
         {
             if(GetEntity() != nullptr)
             {
-                return GetEntity()->GetTransform().GetWorldOrientation() * Core::Vector3Old::Z_UNIT_NEGATIVE;
+                return GetEntity()->GetTransform().GetWorldOrientation() * Core::Vector3::k_unitNegativeZ;
             }
             else
             {
-                return Core::Vector3Old::Z_UNIT_NEGATIVE;
+				return Core::Vector3::k_unitNegativeZ;
             }
         }
         //----------------------------------------------------------

@@ -12,7 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>
 #include <ChilliSource/Core/Math/QuaternionOld.h>
-#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 
 namespace ChilliSource
@@ -36,9 +36,9 @@ namespace ChilliSource
             //---------------------------------------------------------------------
             struct Frame
             {
-                std::vector<Core::Vector3Old> m_nodeTranslations;
+                std::vector<Core::Vector3> m_nodeTranslations;
                 std::vector<Core::QuaternionOld> m_nodeOrientations;
-                std::vector<Core::Vector3Old> m_nodeScales;
+                std::vector<Core::Vector3> m_nodeScales;
             };
             using FrameUPtr = std::unique_ptr<Frame>;
             using FrameSPtr = std::shared_ptr<Frame>;

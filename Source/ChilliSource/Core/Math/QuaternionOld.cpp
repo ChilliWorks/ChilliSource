@@ -18,12 +18,12 @@ QuaternionOld::QuaternionOld(const f32 _x, const f32 _y, const f32 _z, const f32
 {
 }
 
-QuaternionOld::QuaternionOld(const Vector3Old & V, f32 theta)
+QuaternionOld::QuaternionOld(const Vector3 & V, f32 theta)
 {
 	SetAxisAngle(V,theta);
 }
 //-----------------------------------------------------------------------
-QuaternionOld::QuaternionOld(const Vector3Old& xaxis, const Vector3Old& yaxis, const Vector3Old& zaxis)
+QuaternionOld::QuaternionOld(const Vector3& xaxis, const Vector3& yaxis, const Vector3& zaxis)
 {
 	Matrix4x4Old matRot;
 	
@@ -50,18 +50,18 @@ f32 QuaternionOld::GetAngle() const {
 
 	return 0.0f;
 }
-Vector3Old QuaternionOld::GetAxis() const {
+Vector3 QuaternionOld::GetAxis() const {
 	f32 fSqrLength = (x * x + y * y + z * z);
 
 	if (fSqrLength > 0){
 		f32 fInvLength = 1.0f / std::sqrt(fSqrLength);
-		return Vector3Old(x * fInvLength, y * fInvLength, z * fInvLength);
+		return Vector3(x * fInvLength, y * fInvLength, z * fInvLength);
 	} else {
-		return Vector3Old::X_UNIT_POSITIVE;
+		return Vector3::k_unitPositiveX;
 	}
 }
 
-void QuaternionOld::ToEulerAxes (Vector3Old& xaxis, Vector3Old& yaxis, Vector3Old& zaxis) const
+void QuaternionOld::ToEulerAxes (Vector3& xaxis, Vector3& yaxis, Vector3& zaxis) const
 {
 	Matrix4x4Old matRot;
 	
@@ -119,9 +119,9 @@ QuaternionOld::QuaternionOld(const Matrix4x4Old& inMat)
 		*apkQuat[k] = (inMat(k,i)+inMat(i,k))*fRoot;
 	}
 }
-void QuaternionOld::SetAxisAngle(const Vector3Old &V, f32 theta)
+void QuaternionOld::SetAxisAngle(const Vector3 &V, f32 theta)
 {
-	Vector3Old Vnorm = V.NormalisedCopy();
+	Vector3 Vnorm = V.NormaliseCopy();
 
 	f32 fHalfAngle = theta/2.0f;
 	f32 fSinAngle = (f32)sin(fHalfAngle);

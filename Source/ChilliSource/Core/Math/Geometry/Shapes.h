@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/QuaternionOld.h>
 
 namespace ChilliSource
@@ -180,14 +180,14 @@ namespace ChilliSource
 		{
         public:
 			Sphere(){}
-			Sphere(const Vector3Old &invOrigin, const f32 infRadius);
+			Sphere(const Vector3 &invOrigin, const f32 infRadius);
 			//-----------------------------------------------
 			/// Contains (Point)
 			///
 			/// @param Point in 2D space
 			/// @return Whether point intersects the circle
 			//-----------------------------------------------
-			bool Contains(const Vector3Old & invPoint) const;
+			bool Contains(const Vector3 & invPoint) const;
 			//-----------------------------------------------
 			/// Contains (Ray)
 			///
@@ -204,7 +204,7 @@ namespace ChilliSource
 			bool Contains(const Sphere & inSphere) const;
 			
 			///Centre				   
-			Vector3Old vOrigin;
+			Vector3 vOrigin;
 			f32 fRadius;
 		};
 		//================================================
@@ -217,103 +217,103 @@ namespace ChilliSource
 		{
 		public:
 			AABB(){}
-			AABB(const Vector3Old &invOrigin, const Vector3Old &invSize);
+			AABB(const Vector3 &invOrigin, const Vector3 &invSize);
 			//-----------------------------------------------
 			/// Front Top Left
 			///
 			/// @return Top left co-ordinate
 			//-----------------------------------------------
-			const Vector3Old FrontTopLeft() const;
+			const Vector3 FrontTopLeft() const;
 			//-----------------------------------------------
 			/// Front Top Right
 			///
 			/// @return Top right co-ordinate
 			//-----------------------------------------------
-			const Vector3Old FrontTopRight() const;
+			const Vector3 FrontTopRight() const;
 			//-----------------------------------------------
 			/// Front Bottom Left
 			///
 			/// @return Lower left co-ordinate
 			//-----------------------------------------------
-			const Vector3Old FrontBottomLeft() const;
+			const Vector3 FrontBottomLeft() const;
 			//-----------------------------------------------
 			/// Front Bottom Right
 			///
 			/// @return Lower right co-ordinate
 			//-----------------------------------------------
-			const Vector3Old FrontBottomRight() const;
+			const Vector3 FrontBottomRight() const;
 			//-----------------------------------------------
 			/// Back Top Left
 			///
 			/// @return Top left co-ordinate
 			//-----------------------------------------------
-			const Vector3Old BackTopLeft() const;
+			const Vector3 BackTopLeft() const;
 			//-----------------------------------------------
 			/// Back Top Right
 			///
 			/// @return Top right co-ordinate
 			//-----------------------------------------------
-			const Vector3Old BackTopRight() const;
+			const Vector3 BackTopRight() const;
 			//-----------------------------------------------
 			/// Back Bottom Left
 			///
 			/// @return Lower left co-ordinate
 			//-----------------------------------------------
-			const Vector3Old BackBottomLeft() const;
+			const Vector3 BackBottomLeft() const;
 			//-----------------------------------------------
 			/// Back Bottom Right
 			///
 			/// @return Lower right co-ordinate
 			//-----------------------------------------------
-			const Vector3Old BackBottomRight() const;
+			const Vector3 BackBottomRight() const;
 			//-----------------------------------------------
 			/// Centre
 			///
 			/// @return Centre point
 			//-----------------------------------------------
-			const Vector3Old& Centre() const;
+			const Vector3& Centre() const;
             //-----------------------------------------------
 			/// Get Origin
 			///
 			/// @return Centre point of AABB
 			//-----------------------------------------------
-			inline const Vector3Old& GetOrigin() const {return mvOrigin;};
+			inline const Vector3& GetOrigin() const {return mvOrigin;};
 			//-----------------------------------------------
 			/// Set Origin
 			///
 			/// @param Centre point of AABB
 			//-----------------------------------------------
-			void SetOrigin(const Vector3Old &invOrigin);
+			void SetOrigin(const Vector3 &invOrigin);
             //-----------------------------------------------
 			/// Get Size
 			///
 			/// @return Dimensions of AABB
 			//-----------------------------------------------
-			inline const Vector3Old& GetSize() const {return mvSize;};
+			inline const Vector3& GetSize() const {return mvSize;};
 			//-----------------------------------------------
 			/// Set Size
 			///
 			/// @param Dimensions of AABB
 			//-----------------------------------------------
-			void SetSize(const Vector3Old &invSize);
+			void SetSize(const Vector3 &invSize);
             //-----------------------------------------------
 			/// Get Half Size
 			///
 			/// @return Half Dimensions of AABB
 			//-----------------------------------------------
-			inline const Vector3Old& GetHalfSize() const {return mvHalfSize;};
+			inline const Vector3& GetHalfSize() const {return mvHalfSize;};
             //-----------------------------------------------
 			/// Get Min
 			///
 			/// @return Mininmum coords of AABB
 			//-----------------------------------------------
-			inline const Vector3Old& GetMin() const {return mvMin;};
+			inline const Vector3& GetMin() const {return mvMin;};
             //-----------------------------------------------
 			/// Get Max
 			///
 			/// @return Maximum coords of AABB
 			//-----------------------------------------------
-			inline const Vector3Old& GetMax() const {return mvMax;};
+			inline const Vector3& GetMax() const {return mvMax;};
 			//-----------------------------------------------
 			/// Calculate Min and Max
 			///
@@ -326,7 +326,7 @@ namespace ChilliSource
 			/// @param Point in 3D space
 			/// @return Whether point intersects the AABB
 			//-----------------------------------------------
-			bool Contains(const Vector3Old &invPoint) const;
+			bool Contains(const Vector3 &invPoint) const;
 			//-----------------------------------------------
 			/// Contains (AABB)
 			///
@@ -353,12 +353,12 @@ namespace ChilliSource
             
             private:
 			///Centre
-			Vector3Old mvOrigin;
+			Vector3 mvOrigin;
 			///Dimensions (width, height, breadth)
-			Vector3Old mvSize;
-			Vector3Old mvHalfSize;
-			Vector3Old mvMin;
-			Vector3Old mvMax;
+			Vector3 mvSize;
+			Vector3 mvHalfSize;
+			Vector3 mvMin;
+			Vector3 mvMax;
 		};
 		//================================================
 		/// OOBB
@@ -370,7 +370,7 @@ namespace ChilliSource
 		{
 		public:
 			OOBB();
-			OOBB(const Vector3Old &invOrigin, const Vector3Old &invSize);
+			OOBB(const Vector3 &invOrigin, const Vector3 &invSize);
 			
 			//----------------------------------------------- 
 			/// Set Origin
@@ -385,25 +385,25 @@ namespace ChilliSource
 			///
 			/// @param Local origin of the object
 			//-----------------------------------------------
-			void SetOrigin(const Vector3Old &invPos);
+			void SetOrigin(const Vector3 &invPos);
 			//----------------------------------------------- 
 			/// Get Origin
 			///
 			/// @return Local origin of the object
 			//-----------------------------------------------
-			const Vector3Old& GetOrigin() const;
+			const Vector3& GetOrigin() const;
 			//----------------------------------------------- 
 			/// Set Size
 			///
 			/// @param Local dimensions of the object
 			//-----------------------------------------------
-			void SetSize(const Vector3Old& invSize);
+			void SetSize(const Vector3& invSize);
 			//----------------------------------------------- 
 			/// Get Size
 			///
 			/// @return Local dimensions of the object
 			//-----------------------------------------------
-			const Vector3Old& GetSize() const;			
+			const Vector3& GetSize() const;			
 			//----------------------------------------------- 
 			/// Get Transform
 			///
@@ -427,7 +427,7 @@ namespace ChilliSource
 			/// @param Point in 3D space
 			/// @return Whether point intersects the OOBB
 			//-----------------------------------------------
-			bool Contains(const Vector3Old &invPoint) const;
+			bool Contains(const Vector3 &invPoint) const;
 			//-----------------------------------------------
 			/// Contains (Ray)
 			///
@@ -454,10 +454,10 @@ namespace ChilliSource
 		{
 		public:
 			Ray(){}
-			Ray(const Vector3Old &invOrigin, const Vector3Old &invDirection, const f32 infLength = kDefaultRayLength);
+			Ray(const Vector3 &invOrigin, const Vector3 &invDirection, const f32 infLength = kDefaultRayLength);
 			
-			Vector3Old vOrigin;
-			Vector3Old vDirection;
+			Vector3 vOrigin;
+			Vector3 vDirection;
 			
 			//----------------------------------------------- 
 			/// Get Point
@@ -467,9 +467,9 @@ namespace ChilliSource
 			/// @param A value t along parametric ray
 			/// @return Point on ray
 			//-----------------------------------------------
-			Vector3Old GetPoint(f32 t) const;
+			Vector3 GetPoint(f32 t) const;
 			
-			f32 DistanceFromPoint(const Vector3Old &invOrigin) const;
+			f32 DistanceFromPoint(const Vector3 &invOrigin) const;
 			
 			f32 fLength;
 		};
@@ -482,11 +482,11 @@ namespace ChilliSource
         {
 		public:
             Line(){}
-            Line(const Vector3Old &invStartPos, const Vector3Old &invEndPos)
+            Line(const Vector3 &invStartPos, const Vector3 &invEndPos)
             : vStartPos(invStartPos), vEndPos(invEndPos)
             {}
-            Vector3Old vStartPos;
-            Vector3Old vEndPos;
+            Vector3 vStartPos;
+            Vector3 vEndPos;
         };
 		//===============================================
 		/// Plane
@@ -497,16 +497,16 @@ namespace ChilliSource
 		{
 		public:
 			Plane(){}
-			Plane(const Vector3Old& incOrigin, const Vector3Old& incNormal);
+			Plane(const Vector3& incOrigin, const Vector3& incNormal);
 			Plane(f32 a, f32 b, f32 c, f32 d);
-			Plane(const Vector3Old& incNormal, f32 d);
+			Plane(const Vector3& incNormal, f32 d);
 			
-			f32 DistanceFromPoint(const Vector3Old& invPoint) const;
+			f32 DistanceFromPoint(const Vector3& invPoint) const;
 			bool Intersects(const Ray& incRay) const;
 
-			bool GetIsRayIntersecting(const Ray& incRay, Vector3Old& outcIntersect) const;
+			bool GetIsRayIntersecting(const Ray& incRay, Vector3& outcIntersect) const;
 	
-			Vector3Old mvNormal;
+			Vector3 mvNormal;
 			f32 mfD;
 		};
 

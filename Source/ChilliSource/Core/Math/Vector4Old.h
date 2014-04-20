@@ -2,7 +2,7 @@
 #define _MO_FLO_CORE_VECTOR_4_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 
 #include <math.h>
 
@@ -24,7 +24,7 @@ namespace ChilliSource
 			//---------------------------------
 			Vector4Old(void);
 			Vector4Old(const Vector4Old &Vec);
-			Vector4Old(const Vector3Old &Vec, f32 inW = 1.0f);
+			Vector4Old(const Vector3 &Vec, f32 inW = 1.0f);
 			Vector4Old(const f32 fX, const f32 fY, const f32 fZ, const f32 fW);
 			
 			//---------------------------------

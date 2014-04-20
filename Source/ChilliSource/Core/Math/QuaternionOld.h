@@ -17,9 +17,9 @@ namespace ChilliSource
 		
 			QuaternionOld();
 			QuaternionOld(const f32 _x, const f32 _y, const f32 _z, const f32 _w);
-			QuaternionOld(const Vector3Old & V, const f32 theta);
+			QuaternionOld(const Vector3 & V, const f32 theta);
 			QuaternionOld(const Matrix4x4Old& inMat);
-			QuaternionOld(const Vector3Old& xaxis, const Vector3Old& yaxis, const Vector3Old& zaxis);
+			QuaternionOld(const Vector3& xaxis, const Vector3& yaxis, const Vector3& zaxis);
 			~QuaternionOld();
 			
             f32 Modulus() const;
@@ -35,11 +35,11 @@ namespace ChilliSource
 			void ToRotationMatrix(Matrix4x4Old & inMatrix) const;
 			
 			f32 GetAngle() const;
-			Vector3Old GetAxis() const;
+			Vector3 GetAxis() const;
 
-			void ToEulerAxes (Vector3Old& xaxis, Vector3Old& yaxis, Vector3Old& zaxis) const;
+			void ToEulerAxes (Vector3& xaxis, Vector3& yaxis, Vector3& zaxis) const;
 
-			void SetAxisAngle(const Vector3Old & V, f32 theta);
+			void SetAxisAngle(const Vector3 & V, f32 theta);
 			void SetAxisAngle(f32 infX, f32 infY, f32 infZ, f32 theta);
 
 			static const QuaternionOld IDENTITY;
@@ -85,11 +85,11 @@ namespace ChilliSource
 			return QuaternionOld(q.x * s, q.y * s, q.z * s, q.w * s);
 		}
         
-        inline Vector3Old operator * ( const QuaternionOld &q, const Vector3Old &v)
+        inline Vector3 operator * ( const QuaternionOld &q, const Vector3 &v)
         {
-            Vector3Old vQuatAxis(q.x,q.y,q.z);
-            Vector3Old uv(vQuatAxis.CrossProduct(v));
-            Vector3Old uuv(vQuatAxis.CrossProduct(uv));
+            Vector3 vQuatAxis(q.x,q.y,q.z);
+            Vector3 uv(Vector3::CrossProduct(vQuatAxis, v));
+			Vector3 uuv(Vector3::CrossProduct(vQuatAxis, uv));
             uv *= (2.0f * q.w);
             uuv *= 2.0f;
             

@@ -28,7 +28,7 @@ namespace ChilliSource
             //Linear force
             if(insParams.TryGetValue("Force", strTemp))
             {
-                mvForce = Core::ParseVector3Old(strTemp);
+                mvForce = Core::ParseVector3(strTemp);
             }
             //Energy level
             if(insParams.TryGetValue("AtEnergyLevel", strTemp))

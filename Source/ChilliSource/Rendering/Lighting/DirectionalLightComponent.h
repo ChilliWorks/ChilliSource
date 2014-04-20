@@ -64,7 +64,7 @@ namespace ChilliSource
             /// @return Direction vector of light
             /// (only applies to directional lights)
             //----------------------------------------------------------
-            Core::Vector3Old GetDirection() const;
+            Core::Vector3 GetDirection() const;
             //----------------------------------------------------------
             /// Get Light Matrix
             ///

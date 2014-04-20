@@ -13,7 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Matrix3x3Old.h>
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4Old.h>
 
 #if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
@@ -50,30 +50,30 @@ namespace ChilliSource
 			Matrix4x4Old Inverse() const;
 			Matrix4x4Old GetTranspose() const;
 
-			Vector3Old Right() const;
-            Vector3Old Up() const;
-            Vector3Old Forward() const;
+			Vector3 Right() const;
+            Vector3 Up() const;
+            Vector3 Forward() const;
             
 			void Translate(f32 inX, f32 inY, f32 inZ);
-			void Translate(const Vector3Old &inVec);
+			void Translate(const Vector3 &inVec);
 			void RotateX(f32 infAngleRads);
 			void RotateY(f32 infAngleRads);
 			void RotateZ(f32 infAngleRads);
 			
 			void Rotate(f32 inXAxis, f32 inYAxis, f32 inZAxis, f32 infAngleRads);
-			void Rotate(const Vector3Old &vAxis, f32 infAngleRads);
+			void Rotate(const Vector3 &vAxis, f32 infAngleRads);
 			
 			void Scale(f32 inScale);
 			void Scale(f32 inX, f32 inY, f32 inZ);
-			void Scale(const Vector3Old &Vec);
+			void Scale(const Vector3 &Vec);
 
-			void LookAt(const Vector3Old &vPos, const Vector3Old &vTarget, const Vector3Old &vUp);
+			void LookAt(const Vector3 &vPos, const Vector3 &vTarget, const Vector3 &vUp);
 			
-			Vector3Old GetTranslation() const;
-			void SetTranslation(const Vector3Old& invTrans); 
+			Vector3 GetTranslation() const;
+			void SetTranslation(const Vector3& invTrans); 
 			
-			void SetTransform(const Vector3Old & inTranslate, const Vector3Old & inScale, const QuaternionOld & inOrientation);
-			void DecomposeTransforms(Vector3Old & outTranslate, Vector3Old & outScale, QuaternionOld & outOrientation) const;
+			void SetTransform(const Vector3 & inTranslate, const Vector3 & inScale, const QuaternionOld & inOrientation);
+			void DecomposeTransforms(Vector3 & outTranslate, Vector3 & outScale, QuaternionOld & outOrientation) const;
 			f32 GetTrace();
 			
 			//---Operators
@@ -96,7 +96,7 @@ namespace ChilliSource
 			
 			static void Multiply(const Matrix4x4Old *  p1, const Matrix4x4Old *   p2, Matrix4x4Old *  pOut);
             static void Multiply(const Vector2* inpVec, const Matrix4x4Old* inpMat, Vector2* outpVec);
-            static void Multiply(const Vector3Old* inpVec, const Matrix4x4Old* inpMat, Vector3Old* outpVec);
+            static void Multiply(const Vector3* inpVec, const Matrix4x4Old* inpMat, Vector3* outpVec);
             static void Multiply(const Vector4Old* inpVec, const Matrix4x4Old* inpMat, Vector4Old* outpVec);
 			
             
@@ -148,7 +148,7 @@ namespace ChilliSource
             outpVec->x = inpVec->x * m[0] + inpVec->y * m[4] + m[12];
 			outpVec->y = inpVec->x * m[1] + inpVec->y * m[5] + m[13];
         }
-        inline void Matrix4x4Old::Multiply(const Vector3Old* inpVec, const Matrix4x4Old* inpMat, Vector3Old* outpVec)
+        inline void Matrix4x4Old::Multiply(const Vector3* inpVec, const Matrix4x4Old* inpMat, Vector3* outpVec)
         {
             const f32* m = inpMat->m;
             
@@ -181,9 +181,9 @@ namespace ChilliSource
 			return Result;
 		}
 		
-		inline Vector3Old operator*(const Vector3Old& vec, const Matrix4x4Old &mat)
+		inline Vector3 operator*(const Vector3& vec, const Matrix4x4Old &mat)
 		{
-			Vector3Old Result; 
+			Vector3 Result; 
 	
 			Result.x = mat.m[0] * vec.x + mat.m[4] * vec.y + mat.m[8] * vec.z + mat.m[12];
 			Result.y = mat.m[1] * vec.x + mat.m[5] * vec.y + mat.m[9] * vec.z + mat.m[13];

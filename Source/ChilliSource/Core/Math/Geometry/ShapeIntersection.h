@@ -36,7 +36,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			/// AABB vs Point
 			//----------------------------------------------------------------
-			bool Intersects(const AABB& inAABB, const Vector3Old& invPoint);
+			bool Intersects(const AABB& inAABB, const Vector3& invPoint);
 			//----------------------------------------------------------------
 			/// AABB vs AABB
 			//----------------------------------------------------------------
@@ -48,7 +48,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			/// Sphere vs Point
 			//----------------------------------------------------------------
-			bool Intersects(const Sphere& inSphere, const Vector3Old& invPoint);
+			bool Intersects(const Sphere& inSphere, const Vector3& invPoint);
 			//----------------------------------------------------------------
 			/// Sphere vs Sphere
 			//----------------------------------------------------------------
@@ -72,7 +72,7 @@ namespace ChilliSource
             //----------------------------------------------------------------
             /// Line vs Line
             //----------------------------------------------------------------
-			bool Intersects(const Line& inLineLHS, const Line& inLineRHS, Vector3Old& outvIntersection);
+			bool Intersects(const Line& inLineLHS, const Line& inLineRHS, Vector3& outvIntersection);
 			//----------------------------------------------------------------
 			/// Rect vs Rect
 			//----------------------------------------------------------------
@@ -80,7 +80,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			/// Rect vs Point
 			//----------------------------------------------------------------
-			bool Intersects(const Rectangle& inRect, const Vector3Old& invPoint);
+			bool Intersects(const Rectangle& inRect, const Vector2& invPoint);
 			//----------------------------------------------------------------
 			/// Ray vs Slab
 			//----------------------------------------------------------------

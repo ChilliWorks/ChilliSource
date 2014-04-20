@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>
 
 #if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
@@ -128,9 +128,9 @@ namespace ChilliSource
 			
 			return Result;
 		}
-		inline Vector3Old operator*(const Vector3Old& vec, const Matrix3x3Old &mat)
+		inline Vector3 operator*(const Vector3& vec, const Matrix3x3Old &mat)
 		{
-			Vector3Old Result; 
+			Vector3 Result; 
 			
 			Result.x = mat.m[0] * vec.x + mat.m[3] * vec.y + mat.m[6] * vec.z;
 			Result.y = mat.m[1] * vec.x + mat.m[4] * vec.y + mat.m[7] * vec.z;

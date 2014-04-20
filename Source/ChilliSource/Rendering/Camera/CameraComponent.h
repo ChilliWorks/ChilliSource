@@ -57,7 +57,7 @@ namespace ChilliSource
 			/// @param Look target
 			/// @param Up direction
 			//----------------------------------------------------------
-			void SetLookAt(const Core::Vector3Old& invPos, const Core::Vector3Old& invTarget, const Core::Vector3Old& invUp);
+			void SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp);
 			//----------------------------------------------------------
 			/// Use Orthographic View
 			///
@@ -206,7 +206,7 @@ namespace ChilliSource
 			/// Convert from a point in world space to a point in
 			/// screen space
 			//------------------------------------------------------
-			virtual Core::Vector2 Project(const Core::Vector3Old &invWorldPos);
+			virtual Core::Vector2 Project(const Core::Vector3 &invWorldPos);
 			
 			//------------------------------------------------------
 			/// Get Frustum Pointer

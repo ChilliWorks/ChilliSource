@@ -14,7 +14,7 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>
-#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
@@ -120,7 +120,7 @@ namespace ChilliSource
 			/// @param Camera view matrix
 			/// @param Frame buffer clear colour
 			//----------------------------------------------------------
-			void ApplyCamera(const Core::Vector3Old& invPos, const Core::Matrix4x4Old& inmatView, const Core::Matrix4x4Old& inmatProj, const Core::Colour& inClearCol) override;
+			void ApplyCamera(const Core::Vector3& invPos, const Core::Matrix4x4Old& inmatView, const Core::Matrix4x4Old& inmatProj, const Core::Colour& inClearCol) override;
             //----------------------------------------------------------
             /// Set Light
             ///
@@ -449,7 +449,7 @@ namespace ChilliSource
 			Core::Matrix4x4Old mmatProj;
 			Core::Matrix4x4Old mmatViewProj;
             Core::Matrix4x4Old mmatView;
-            Core::Vector3Old mvCameraPos;
+            Core::Vector3 mvCameraPos;
 			
             RenderCapabilities* mpRenderCapabilities;
             TextureUnitSystem* m_textureUnitSystem;

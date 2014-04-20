@@ -13,7 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 
 namespace ChilliSource
 {
@@ -54,7 +54,7 @@ namespace ChilliSource
             
         private:
             
-            Core::Vector3Old mvForce;
+            Core::Vector3 mvForce;
         };
     }
 }

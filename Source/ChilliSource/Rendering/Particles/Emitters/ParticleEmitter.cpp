@@ -110,7 +110,7 @@ namespace ChilliSource
         {
             mfCurrentTime += infDT;
             
-            const Core::Vector3Old& vCurrentPos = mpOwningComponent->GetEntity()->GetTransform().GetWorldPosition();
+            const Core::Vector3& vCurrentPos = mpOwningComponent->GetEntity()->GetTransform().GetWorldPosition();
             const f32 kfTimeSinceLastEmission = Core::MathUtils::Min(mfCurrentTime - mfLastEmissionTime, mfTimeToLive);
             u32 udwNumEmits = (u32)std::ceil(kfTimeSinceLastEmission/mfEmissionFreq);
             
@@ -148,14 +148,14 @@ namespace ChilliSource
                     udwNum_particlesEmittedThisStep++;
                     
                     f32 fLerpFactor = fEmissionStep/kfTimeSinceLastEmission;
-                    Core::Vector3Old vPosition = Core::MathUtils::Lerp(fLerpFactor, mvLastEmissionPos, vCurrentPos) - vCurrentPos;
+                    Core::Vector3 vPosition = Core::MathUtils::Lerp(fLerpFactor, mvLastEmissionPos, vCurrentPos) - vCurrentPos;
                     if(udwNum_particlesEmittedThisStep >= mudwMaxNumParticlesPerEmission)
                     {
                         fEmissionStep += mfEmissionFreq;
                         udwNum_particlesEmittedThisStep = 0;
                     }
                     Core::QuaternionOld qOrientation;
-                    Core::Vector3Old vScale(Core::Vector3Old::ONE);
+                    Core::Vector3 vScale(Core::Vector3::k_one);
                     
                     if(mbIsGlobalSpace)
                     {
@@ -272,9 +272,9 @@ namespace ChilliSource
             const Core::Matrix4x4Old & matCamWorld = inpCam->GetEntity()->GetTransform().GetWorldTransform();
             // Get cameras up and right vectors in particle space
             
-            Core::Vector3Old vRight = matCamWorld.Right();
-            Core::Vector3Old vUp = matCamWorld.Up();
-            Core::Vector3Old vForward = matCamWorld.Forward();
+            Core::Vector3 vRight = matCamWorld.Right();
+            Core::Vector3 vUp = matCamWorld.Up();
+            Core::Vector3 vForward = matCamWorld.Forward();
             
             const Core::Matrix4x4Old * pTransform = nullptr;
             if(mbIsGlobalSpace == false)
@@ -460,8 +460,8 @@ namespace ChilliSource
 		///
 		/// Rebuild the sprite data
 		//-----------------------------------------------------
-		void ParticleEmitter::UpdateSpriteData(const Core::Vector3Old& invPos, const Core::Colour & insTintColour, SpriteComponent::SpriteData& outsData,
-                                                const Core::Vector3Old& invRight, const Core::Vector3Old& invUp, const Core::Vector3Old& invScale)
+		void ParticleEmitter::UpdateSpriteData(const Core::Vector3& invPos, const Core::Colour & insTintColour, SpriteComponent::SpriteData& outsData,
+                                                const Core::Vector3& invRight, const Core::Vector3& invUp, const Core::Vector3& invScale)
 		{
 			Core::ByteColour Col = Core::ColourUtils::ColourToByteColour(insTintColour);
 			
@@ -477,20 +477,20 @@ namespace ChilliSource
 			
 			outsData.pMaterial = mpMaterial;
 			
-            Core::Vector3Old vHalfRight = (0.5f * mvInitialScale.x * invScale.x) * invRight;
-            Core::Vector3Old vHalfUp = (0.5f * mvInitialScale.y * invScale.y) * invUp;
+            Core::Vector3 vHalfRight = (0.5f * mvInitialScale.x * invScale.x) * invRight;
+            Core::Vector3 vHalfUp = (0.5f * mvInitialScale.y * invScale.y) * invUp;
             
             Core::Vector4Old vTemp(vHalfUp.x - vHalfRight.x, vHalfUp.y - vHalfRight.y, vHalfUp.z - vHalfRight.z, 1.0f);
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = invPos + vTemp;
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = invPos + Core::Vector3(vTemp.x, vTemp.y, vTemp.z);
             
             vTemp.x = vHalfUp.x + vHalfRight.x; vTemp.y = vHalfUp.y + vHalfRight.y; vTemp.z = vHalfUp.z + vHalfRight.z;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos = invPos + vTemp;
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos = invPos + Core::Vector3(vTemp.x, vTemp.y, vTemp.z);
             
             vTemp.x = -vHalfUp.x - vHalfRight.x; vTemp.y = -vHalfUp.y - vHalfRight.y; vTemp.z = -vHalfUp.z - vHalfRight.z;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos = invPos + vTemp;
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos = invPos + Core::Vector3(vTemp.x, vTemp.y, vTemp.z);
             
             vTemp.x = -vHalfUp.x + vHalfRight.x; vTemp.y = -vHalfUp.y + vHalfRight.y; vTemp.z = -vHalfUp.z + vHalfRight.z;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos = invPos + vTemp;
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos = invPos + Core::Vector3(vTemp.x, vTemp.y, vTemp.z);
 		}
         //-------------------------------------------------------
         /// Destructor

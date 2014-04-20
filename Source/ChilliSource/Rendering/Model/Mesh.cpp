@@ -171,10 +171,10 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		void Mesh::SetBounds(const Core::Vector3Old& in_minBounds, const Core::Vector3Old& in_maxBounds)
+		void Mesh::SetBounds(const Core::Vector3& in_minBounds, const Core::Vector3& in_maxBounds)
 		{
 			//Calculate the size of this meshes bounding box
-			Core::Vector3Old vSize = in_maxBounds - in_minBounds;
+			Core::Vector3 vSize = in_maxBounds - in_minBounds;
 			
 			//Build our bounding box based on the size of all our sub-meshes
 			m_aabb = Core::AABB((in_maxBounds + in_minBounds) * 0.5f, vSize);

@@ -190,7 +190,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		void Matrix4x4Old::Translate(f32 inX, f32 inY, f32 inZ)
 		{
-			Translate(Vector3Old(inX, inY, inZ));
+			Translate(Vector3(inX, inY, inZ));
 		}
 		//------------------------------------------------
 		/// Translate
@@ -198,7 +198,7 @@ namespace ChilliSource
 		/// Build a translation matrix
 		/// @param Translation vector
 		//------------------------------------------------
-		void Matrix4x4Old::Translate(const Vector3Old &inVec)
+		void Matrix4x4Old::Translate(const Vector3 &inVec)
 		{
 			(*this) = Matrix4x4Old::IDENTITY;
 			
@@ -307,7 +307,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		void Matrix4x4Old::Rotate(f32 inXAxis, f32 inYAxis, f32 inZAxis, f32 infAngleRads)
 		{
-			Rotate(Vector3Old(inXAxis, inYAxis, inZAxis), infAngleRads);
+			Rotate(Vector3(inXAxis, inYAxis, inZAxis), infAngleRads);
 		}
 		//------------------------------------------------
 		/// Rotate 
@@ -316,7 +316,7 @@ namespace ChilliSource
 		/// @param Axis
 		/// @param Angle to rotate in radians
 		//------------------------------------------------
-		void Matrix4x4Old::Rotate(const Vector3Old &vAxis, f32 infAngleRads)
+		void Matrix4x4Old::Rotate(const Vector3 &vAxis, f32 infAngleRads)
 		{
 			(*this) = Matrix4x4Old::IDENTITY;
 			
@@ -335,7 +335,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		void Matrix4x4Old::Scale(f32 inScale)
 		{
-			Scale(Vector3Old(inScale, inScale, inScale));
+			Scale(Vector3(inScale, inScale, inScale));
 		}
 		//------------------------------------------------
 		/// Scale 
@@ -348,7 +348,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		void Matrix4x4Old::Scale(f32 inX, f32 inY, f32 inZ)
 		{
-			Scale(Vector3Old(inX, inY, inZ));
+			Scale(Vector3(inX, inY, inZ));
 		}
 		//------------------------------------------------
 		/// Scale 
@@ -356,7 +356,7 @@ namespace ChilliSource
 		/// Build a scaling matrix 
 		/// @param Scale dimensions vector
 		//------------------------------------------------
-		void Matrix4x4Old::Scale(const Vector3Old &Vec)
+		void Matrix4x4Old::Scale(const Vector3 &Vec)
 		{
 			(*this) = Matrix4x4Old::IDENTITY;
 			
@@ -373,48 +373,45 @@ namespace ChilliSource
 		/// @param Direction vector
 		/// @param Up vector
 		//------------------------------------------------
-		void Matrix4x4Old::LookAt(const Vector3Old &vPos, const Vector3Old &vTarget, const Vector3Old &vUp)
+		void Matrix4x4Old::LookAt(const Vector3 &vPos, const Vector3 &vTarget, const Vector3 &vUp)
 		{
 			(*this) = Matrix4x4Old::IDENTITY;
 			
-			Vector3Old vZ = vPos - vTarget; 
+			Vector3 vZ = vPos - vTarget; 
 			vZ.Normalise();
 			
-			Vector3Old vX;
-            Vector3Old::CrossProduct(&vUp, &vZ, &vX);
-			
-			Vector3Old vY;
-            Vector3Old::CrossProduct(&vZ, &vX, &vY);
+			Vector3 vX = Vector3::CrossProduct(vUp, vZ);
+			Vector3 vY = Vector3::CrossProduct(vZ, vX);
 			
 			m[0] = vX.x; m[1] = vY.x; m[2]  = vZ.x; m[3]  = 0;
 			m[4] = vX.y; m[5] = vY.y; m[6]  = vZ.y;	m[7]  = 0;
 			m[8] = vX.z; m[9] = vY.z; m[10] = vZ.z;	m[11] = 0;
-			m[12]= -vX.DotProduct(vPos); m[13]= -vY.DotProduct(vPos); m[14]= -vZ.DotProduct(vPos); m[15] = 1.0f;
+			m[12] = -Vector3::DotProduct(vX, vPos); m[13] = -Vector3::DotProduct(vY, vPos); m[14] = -Vector3::DotProduct(vZ, vPos); m[15] = 1.0f;
 		}
 		
-        Vector3Old Matrix4x4Old::Right() const
+        Vector3 Matrix4x4Old::Right() const
         {
-            return Vector3Old(m[0], m[1], m[2]);
+            return Vector3(m[0], m[1], m[2]);
         }
         
-        Vector3Old Matrix4x4Old::Up() const
+        Vector3 Matrix4x4Old::Up() const
         {
-            return Vector3Old(m[4], m[5], m[6]);
+            return Vector3(m[4], m[5], m[6]);
         }
         
-        Vector3Old Matrix4x4Old::Forward() const
+        Vector3 Matrix4x4Old::Forward() const
         {
-            return Vector3Old(m[8], m[9], m[10]);
+            return Vector3(m[8], m[9], m[10]);
         }
-		Vector3Old Matrix4x4Old::GetTranslation() const
+		Vector3 Matrix4x4Old::GetTranslation() const
 		{
-			return Vector3Old(m[12], m[13], m[14]);
+			return Vector3(m[12], m[13], m[14]);
 		}
-		void Matrix4x4Old::SetTranslation(const Vector3Old& invTrans) 
+		void Matrix4x4Old::SetTranslation(const Vector3& invTrans) 
 		{
 			m[12] = invTrans.x; m[13] = invTrans.y; m[14] = invTrans.z;
 		}
-		void Matrix4x4Old::SetTransform(const Vector3Old & inTranslate, const Vector3Old & inScale, const QuaternionOld & inOrientation)
+		void Matrix4x4Old::SetTransform(const Vector3 & inTranslate, const Vector3 & inScale, const QuaternionOld & inOrientation)
 		{
 			Matrix4x4Old rot;
 			inOrientation.ToRotationMatrix(rot);
@@ -426,7 +423,7 @@ namespace ChilliSource
 			
 			m[12] = inTranslate.x; m[13] = inTranslate.y; m[14] = inTranslate.z; m[15] = 1;
 		}
-		void Matrix4x4Old::DecomposeTransforms(Vector3Old & outTranslate, Vector3Old & outScale, QuaternionOld & outOrientation) const
+		void Matrix4x4Old::DecomposeTransforms(Vector3 & outTranslate, Vector3 & outScale, QuaternionOld & outOrientation) const
         {
 //			Matrix4x4Old mat3x3(
 //			m[0], m[1], m[2], 0,

@@ -43,7 +43,7 @@ namespace ChilliSource
 		/// Initialise with copy and ignore w component
 		/// @param Vector to copy
 		//---------------------------------------------------------
-		Vector4Old::Vector4Old(const Vector3Old &Vec, f32 inW) : x(Vec.x), y(Vec.y), z(Vec.z), w(inW)
+		Vector4Old::Vector4Old(const Vector3 &Vec, f32 inW) : x(Vec.x), y(Vec.y), z(Vec.z), w(inW)
 		{
 			
 		}

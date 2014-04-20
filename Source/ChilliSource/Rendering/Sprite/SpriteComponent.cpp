@@ -55,7 +55,7 @@ namespace ChilliSource
                 
 				//Rebuild the box
 				mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition());
-				mBoundingBox.SetSize(mvDimensions);
+				mBoundingBox.SetSize(Core::Vector3(mvDimensions, 0.0f));
 			}
 			return mBoundingBox;
 		}
@@ -68,7 +68,7 @@ namespace ChilliSource
 			{
                 mbOOBBValid = true;
                 
-				mOBBoundingBox.SetSize(mvDimensions);
+				mOBBoundingBox.SetSize(Core::Vector3(mvDimensions, 0.0f));
 				mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
 			}
 			return mOBBoundingBox;

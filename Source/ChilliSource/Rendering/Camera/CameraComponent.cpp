@@ -51,7 +51,7 @@ namespace ChilliSource
 		/// @param Look target
 		/// @param Up direction
 		//----------------------------------------------------------
-		void CameraComponent::SetLookAt(const Core::Vector3Old& invPos, const Core::Vector3Old& invTarget, const Core::Vector3Old& invUp)
+		void CameraComponent::SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp)
 		{
             Core::Entity * pParent(GetEntity());
 
@@ -83,8 +83,11 @@ namespace ChilliSource
             
             Core::Ray cRay;
             
-            cRay.vOrigin = vNear/vNear.w;
-            cRay.vDirection = vFar/vFar.w - cRay.vOrigin;
+			vNear /= vNear.w;
+			cRay.vOrigin = Core::Vector3(vNear.x, vNear.y, vNear.z);
+
+			vFar /= vFar.w;
+			cRay.vDirection = Core::Vector3(vFar.x, vFar.y, vFar.z) - cRay.vOrigin;
             
             cRay.fLength = cRay.vDirection.Length();
             cRay.vDirection /= cRay.fLength;
@@ -97,7 +100,7 @@ namespace ChilliSource
 		/// Convert from a point in world space to a point in
 		/// screen space
 		//------------------------------------------------------
-		Core::Vector2 CameraComponent::Project(const Core::Vector3Old &invWorldPos)
+		Core::Vector2 CameraComponent::Project(const Core::Vector3 &invWorldPos)
 		{
 			//Convert the world space position to clip space
 			Core::Matrix4x4Old matToClip = (GetView() * GetProjection());

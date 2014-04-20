@@ -13,7 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 
 namespace ChilliSource
 {
@@ -55,8 +55,8 @@ namespace ChilliSource
         private:
             
             bool mbInitialSet;
-            Core::Vector3Old mvInitialScale;
-            Core::Vector3Old mvTargetScale;
+            Core::Vector3 mvInitialScale;
+            Core::Vector3 mvTargetScale;
         };
     }
 }

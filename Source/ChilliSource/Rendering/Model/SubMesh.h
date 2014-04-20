@@ -14,7 +14,7 @@
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4Old.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
@@ -115,7 +115,7 @@ namespace ChilliSource
 			/// @param the minimum bounds.
 			/// @param the maximum bounds.
 			//-----------------------------------------------------------------
-			void Build(void* inpVertexData, void*inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::Vector3Old invMin, Core::Vector3Old invMax);
+			void Build(void* inpVertexData, void*inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::Vector3 invMin, Core::Vector3 invMax);
 			//-----------------------------------------------------------------
 			/// Set Inverse Bind Pose
 			/// 

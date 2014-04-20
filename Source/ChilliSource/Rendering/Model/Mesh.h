@@ -151,7 +151,7 @@ namespace ChilliSource
 			/// @param the minimum bounds
 			/// @param the maximum bounds.
 			//-----------------------------------------------------------------
-			void SetBounds(const Core::Vector3Old& in_minBounds, const Core::Vector3Old& in_maxBounds);
+			void SetBounds(const Core::Vector3& in_minBounds, const Core::Vector3& in_maxBounds);
 			//-----------------------------------------------------------------
 			/// Calculates the internal vertex and index counts. This should be
 			/// called after filling all of the submeshes with data.

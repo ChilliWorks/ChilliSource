@@ -114,7 +114,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Build
 		//-----------------------------------------------------------------
-		void SubMesh::Build(void* inpVertexData, void* inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::Vector3Old invMin, Core::Vector3Old invMax)
+		void SubMesh::Build(void* inpVertexData, void* inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::Vector3 invMin, Core::Vector3 invMax)
 		{
 			mpMeshBuffer->SetVertexCount(inudwNumVertices);
 			mpMeshBuffer->SetIndexCount(indwNumIndices);
@@ -148,7 +148,7 @@ namespace ChilliSource
                 mpMeshBuffer->UnlockIndex();
 			}
 			//Calculate the size of this meshes bounding box
-			Core::Vector3Old vSize = invMax - invMin;
+			Core::Vector3 vSize = invMax - invMin;
 			
 			//Build our bounding box based on the size of all our sub-meshes
 			mBoundingBox = Core::AABB((invMax + invMin) * 0.5f, vSize);

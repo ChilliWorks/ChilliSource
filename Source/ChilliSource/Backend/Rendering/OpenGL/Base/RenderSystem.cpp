@@ -441,7 +441,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Apply Camera
 		//----------------------------------------------------------
-		void RenderSystem::ApplyCamera(const Core::Vector3Old& invPosition, const Core::Matrix4x4Old& inmatView, const Core::Matrix4x4Old& inmatProj, const Core::Colour& inClearCol)
+		void RenderSystem::ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4x4Old& inmatView, const Core::Matrix4x4Old& inmatProj, const Core::Colour& inClearCol)
 		{
 			//Set the new view matrix based on the camera position
 			mmatView = inmatView;

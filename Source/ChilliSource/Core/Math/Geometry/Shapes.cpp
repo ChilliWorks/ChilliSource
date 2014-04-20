@@ -11,7 +11,7 @@
  */
 
 
-#include <ChilliSource/Core/Math/Vector3Old.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 
@@ -248,7 +248,7 @@ namespace ChilliSource
 		/// Container for a sphere with it's origin 
 		/// at centre
 		//================================================
-		Sphere::Sphere(const Vector3Old &invOrigin, const f32 infRadius) : vOrigin(invOrigin), fRadius(infRadius)
+		Sphere::Sphere(const Vector3 &invOrigin, const f32 infRadius) : vOrigin(invOrigin), fRadius(infRadius)
 		{
 		}
 		//-----------------------------------------------
@@ -257,7 +257,7 @@ namespace ChilliSource
 		/// @param Point in 3D space
 		/// @return Whether point intersects the sphere
 		//-----------------------------------------------
-		bool Sphere::Contains(const Vector3Old & invPoint) const
+		bool Sphere::Contains(const Vector3 & invPoint) const
 		{
 			return ShapeIntersection::Intersects(*this, invPoint);
 		}
@@ -287,7 +287,7 @@ namespace ChilliSource
 		/// Container for a axis-aligned bounding box 
 		/// with it's origin at centre
 		//================================================
-		AABB::AABB(const Core::Vector3Old &invOrigin, const Core::Vector3Old &invSize) : mvOrigin(invOrigin), mvSize(invSize), mvHalfSize(invSize*0.5f)
+		AABB::AABB(const Core::Vector3 &invOrigin, const Core::Vector3 &invSize) : mvOrigin(invOrigin), mvSize(invSize), mvHalfSize(invSize*0.5f)
 		{
 			CalculateMinandMax();
 		}
@@ -311,7 +311,7 @@ namespace ChilliSource
 		///
 		/// @param Centre point of AABB
 		//-----------------------------------------------
-		void AABB::SetOrigin(const Core::Vector3Old &invOrigin)
+		void AABB::SetOrigin(const Core::Vector3 &invOrigin)
 		{
 			mvOrigin = invOrigin;
 			
@@ -322,7 +322,7 @@ namespace ChilliSource
 		///
 		/// @param Dimensions of AABB
 		//-----------------------------------------------
-		void AABB::SetSize(const Core::Vector3Old &invSize)
+		void AABB::SetSize(const Core::Vector3 &invSize)
 		{
 			mvSize = invSize;
             mvSize.x = fabsf(mvSize.x);
@@ -338,79 +338,79 @@ namespace ChilliSource
 		///
 		/// @return Top left co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3Old AABB::FrontTopLeft() const
+		const Core::Vector3 AABB::FrontTopLeft() const
 		{
-			return Core::Vector3Old(mvMin.x, mvMax.y, mvMin.z);
+			return Core::Vector3(mvMin.x, mvMax.y, mvMin.z);
 		}
 		//-----------------------------------------------
 		/// Front Top Right
 		///
 		/// @return Top right co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3Old AABB::FrontTopRight() const
+		const Core::Vector3 AABB::FrontTopRight() const
 		{
-			return Core::Vector3Old(mvMax.x, mvMax.y, mvMin.z);
+			return Core::Vector3(mvMax.x, mvMax.y, mvMin.z);
 		}
 		//-----------------------------------------------
 		/// Front Bottom Left
 		///
 		/// @return Lower left co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3Old AABB::FrontBottomLeft() const
+		const Core::Vector3 AABB::FrontBottomLeft() const
 		{
-			return Core::Vector3Old(mvMin.x, mvMin.y, mvMin.z);
+			return Core::Vector3(mvMin.x, mvMin.y, mvMin.z);
 		}
 		//-----------------------------------------------
 		/// Front Bottom Right
 		///
 		/// @return Lower right co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3Old AABB::FrontBottomRight() const
+		const Core::Vector3 AABB::FrontBottomRight() const
 		{
-			return Core::Vector3Old(mvMax.x, mvMin.y, mvMin.z);
+			return Core::Vector3(mvMax.x, mvMin.y, mvMin.z);
 		}
 		//-----------------------------------------------
 		/// Back Top Left
 		///
 		/// @return Top left co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3Old AABB::BackTopLeft() const
+		const Core::Vector3 AABB::BackTopLeft() const
 		{
-			return Core::Vector3Old(mvMin.x, mvMax.y, mvMax.z);
+			return Core::Vector3(mvMin.x, mvMax.y, mvMax.z);
 		}
 		//-----------------------------------------------
 		/// Back Top Right
 		///
 		/// @return Top right co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3Old AABB::BackTopRight() const
+		const Core::Vector3 AABB::BackTopRight() const
 		{
-			return Core::Vector3Old(mvMax.x, mvMax.y, mvMax.z);
+			return Core::Vector3(mvMax.x, mvMax.y, mvMax.z);
 		}
 		//-----------------------------------------------
 		/// Back Bottom Left
 		///
 		/// @return Lower left co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3Old AABB::BackBottomLeft() const
+		const Core::Vector3 AABB::BackBottomLeft() const
 		{
-			return Core::Vector3Old(mvMin.x, mvMin.y, mvMax.z);
+			return Core::Vector3(mvMin.x, mvMin.y, mvMax.z);
 		}
 		//-----------------------------------------------
 		/// Back Bottom Right
 		///
 		/// @return Lower right co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3Old AABB::BackBottomRight() const
+		const Core::Vector3 AABB::BackBottomRight() const
 		{
-			return Core::Vector3Old(mvMax.x, mvMin.y, mvMax.z);
+			return Core::Vector3(mvMax.x, mvMin.y, mvMax.z);
 		}
 		//-----------------------------------------------
 		/// Centre
 		///
 		/// @return Centre point
 		//-----------------------------------------------
-		const Core::Vector3Old& AABB::Centre() const
+		const Core::Vector3& AABB::Centre() const
 		{
 			return mvOrigin;
 		}
@@ -420,7 +420,7 @@ namespace ChilliSource
 		/// @param Point in 3D space
 		/// @return Whether point intersects the AABB
 		//-----------------------------------------------
-		bool AABB::Contains(const Vector3Old &invPoint) const
+		bool AABB::Contains(const Vector3 &invPoint) const
 		{
 			return	ShapeIntersection::Intersects(*this, invPoint);
 		}
@@ -464,8 +464,8 @@ namespace ChilliSource
             f32 fMaxY = std::max(mvMax.y, inAABB.mvMax.y);
             f32 fMaxZ = std::max(mvMax.z, inAABB.mvMax.z);
             
-            cUnion.SetOrigin(Vector3Old((fMinX + fMaxX) * 0.5f,(fMinY + fMaxY) * 0.5f,(fMinZ + fMaxZ) * 0.5f));
-            cUnion.SetSize(Vector3Old(fMaxX - fMinX,fMaxY - fMinY,fMaxZ - fMinZ));
+            cUnion.SetOrigin(Vector3((fMinX + fMaxX) * 0.5f,(fMinY + fMaxY) * 0.5f,(fMinZ + fMaxZ) * 0.5f));
+            cUnion.SetSize(Vector3(fMaxX - fMinX,fMaxY - fMinY,fMaxZ - fMinZ));
             
             return cUnion;
         }
@@ -475,10 +475,10 @@ namespace ChilliSource
 		/// Container for an object oriented bounding box 
 		/// with it's origin at centre
 		//================================================
-		OOBB::OOBB() :  mHitBox(Vector3Old(1,1,1), Vector3Old::ZERO), mmatLocal(Matrix4x4Old::IDENTITY)
+		OOBB::OOBB() :  mHitBox(Vector3(1,1,1), Vector3::k_zero), mmatLocal(Matrix4x4Old::IDENTITY)
 		{
 		}
-		OOBB::OOBB(const Core::Vector3Old &invOrigin, const Core::Vector3Old &invSize) : mHitBox(invOrigin,invSize), mmatLocal(Matrix4x4Old::IDENTITY)
+		OOBB::OOBB(const Core::Vector3 &invOrigin, const Core::Vector3 &invSize) : mHitBox(invOrigin,invSize), mmatLocal(Matrix4x4Old::IDENTITY)
 		{
 		}
 		//-----------------------------------------------
@@ -487,13 +487,13 @@ namespace ChilliSource
 		/// @param Point in 3D space
 		/// @return Whether point intersects the OOBB
 		//-----------------------------------------------
-		bool OOBB::Contains(const Vector3Old &invPoint) const
+		bool OOBB::Contains(const Vector3 &invPoint) const
 		{
 			//Convert the point into our local space
 			//allowing us to do an AABB check
 			Matrix4x4Old matToLocal = GetTransform().Inverse();
 			
-			Vector3Old LocalPoint = invPoint * matToLocal;
+			Vector3 LocalPoint = invPoint * matToLocal;
 			
 			return mHitBox.Contains(LocalPoint);
 		}
@@ -530,14 +530,14 @@ namespace ChilliSource
 		//-----------------------------------------------
 		void OOBB::SetOrigin(const f32 infX, const f32 infY, const f32 infZ)
 		{
-			mHitBox.SetOrigin(Vector3Old(infX,infY,infZ));
+			mHitBox.SetOrigin(Vector3(infX,infY,infZ));
 		}
 		//----------------------------------------------- 
 		/// Set Origin
 		///
 		/// @param Local origin of the object
 		//-----------------------------------------------
-		void OOBB::SetOrigin(const Vector3Old &invPos)
+		void OOBB::SetOrigin(const Vector3 &invPos)
 		{
 			mHitBox.SetOrigin(invPos);
 		}
@@ -546,7 +546,7 @@ namespace ChilliSource
 		///
 		/// @return Local origin of the object
 		//-----------------------------------------------
-		const Vector3Old& OOBB::GetOrigin() const
+		const Vector3& OOBB::GetOrigin() const
 		{
 			return mHitBox.GetOrigin();
 		}
@@ -555,7 +555,7 @@ namespace ChilliSource
 		///
 		/// @param Local dimensions of the object
 		//-----------------------------------------------
-		void OOBB::SetSize(const Vector3Old& invSize)
+		void OOBB::SetSize(const Vector3& invSize)
 		{
 			mHitBox.SetSize(invSize);
 		}
@@ -564,7 +564,7 @@ namespace ChilliSource
 		///
 		/// @return Local dimensions of the object
 		//-----------------------------------------------
-		const Vector3Old& OOBB::GetSize() const
+		const Vector3& OOBB::GetSize() const
 		{
 			return mHitBox.GetSize();
 		}
@@ -595,7 +595,7 @@ namespace ChilliSource
 		///
 		/// Container for a ray
 		//===============================================
-		Ray::Ray(const Core::Vector3Old &invOrigin, const Core::Vector3Old &invDirection, const f32 infLength) : vOrigin(invOrigin), vDirection(invDirection), fLength(infLength)
+		Ray::Ray(const Core::Vector3 &invOrigin, const Core::Vector3 &invDirection, const f32 infLength) : vOrigin(invOrigin), vDirection(invDirection), fLength(infLength)
 		{
 		}
 		//----------------------------------------------- 
@@ -606,13 +606,13 @@ namespace ChilliSource
 		/// @param A value t along parametric ray
 		/// @return Point on ray
 		//-----------------------------------------------
-		Core::Vector3Old Ray::GetPoint(f32 t) const 
+		Core::Vector3 Ray::GetPoint(f32 t) const 
 		{ 
-			return Core::Vector3Old(vOrigin + (vDirection * t) * fLength);
+			return Core::Vector3(vOrigin + (vDirection * t) * fLength);
 		}
-		f32 Ray::DistanceFromPoint(const Core::Vector3Old &invPoint) const
+		f32 Ray::DistanceFromPoint(const Core::Vector3 &invPoint) const
         {
-			return vDirection.CrossProduct(invPoint).Length();
+			return Vector3::CrossProduct(vDirection, invPoint).Length();
 		}
 
 		//===============================================
@@ -620,27 +620,27 @@ namespace ChilliSource
 		///
 		/// Container for a plane
 		//===============================================
-		Plane::Plane(const Core::Vector3Old& invOrigin, const Core::Vector3Old& invNormal)
+		Plane::Plane(const Core::Vector3& invOrigin, const Core::Vector3& invNormal)
 		:mvNormal(invNormal)
 		{
-			mfD = -invNormal.DotProduct(invOrigin);
+			mfD = -Vector3::DotProduct(invNormal, invOrigin);
 		}
 		Plane::Plane(f32 a, f32 b, f32 c, f32 d)
 		: mvNormal(a,b,c), mfD(d)
 		{
 
 		}
-		Plane::Plane(const Core::Vector3Old& incNormal, f32 d)
+		Plane::Plane(const Core::Vector3& incNormal, f32 d)
 		:mvNormal(incNormal), mfD(d)
 		{
 			
 		}
-		f32 Plane::DistanceFromPoint(const Core::Vector3Old& invPoint) const{			
-			return mvNormal.DotProduct(invPoint) + mfD;
+		f32 Plane::DistanceFromPoint(const Core::Vector3& invPoint) const{			
+			return Vector3::DotProduct(mvNormal, invPoint) + mfD;
 		}
 		
 		bool Plane::Intersects(const Ray& incRay) const{
-			f32 denom = mvNormal.DotProduct(incRay.vDirection);											 
+			f32 denom = Vector3::DotProduct(mvNormal, incRay.vDirection);
 			
 			
 			if (fabsf(denom) < std::numeric_limits<f32>::epsilon())
@@ -650,7 +650,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				f32 nom = mvNormal.DotProduct(incRay.vOrigin) + mfD;
+				f32 nom = Vector3::DotProduct(mvNormal, incRay.vOrigin) + mfD;
 				f32 t = -(nom/denom);
 				return t >= 0;
 			}
@@ -664,10 +664,10 @@ namespace ChilliSource
 		/// @param A value t along parametric ray
 		/// @return Point on ray
 		//-----------------------------------------------
-		bool Plane::GetIsRayIntersecting(const Ray& incRay, Core::Vector3Old& outcIntersect) const
+		bool Plane::GetIsRayIntersecting(const Ray& incRay, Core::Vector3& outcIntersect) const
 		{
 			
-			f32 denom = mvNormal.DotProduct(incRay.vDirection);											 
+			f32 denom = Vector3::DotProduct(mvNormal, incRay.vDirection);
 											 
 											 
 			if (fabsf(denom) < std::numeric_limits<f32>::epsilon())
@@ -677,7 +677,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				f32 nom = mvNormal.DotProduct(incRay.vOrigin) + mfD;
+				f32 nom = Vector3::DotProduct(mvNormal, incRay.vOrigin) + mfD;
 				f32 t = -(nom/denom);
 				
 				if (t >= 0)

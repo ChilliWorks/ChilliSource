@@ -63,16 +63,16 @@ namespace ChilliSource
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
                 const Core::Matrix4x4Old& matWorld = GetEntity()->GetTransform().GetWorldTransform();
-                Core::Vector3Old vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
-                Core::Vector3Old vBackBottomRight(cAABB.BackBottomRight() * matWorld);
-                Core::Vector3Old vBackTopLeft(cAABB.BackTopLeft() * matWorld);
-                Core::Vector3Old vBackTopRight(cAABB.BackTopRight() * matWorld);
-                Core::Vector3Old vFrontBottomLeft(cAABB.FrontBottomLeft() * matWorld);
-                Core::Vector3Old vFrontBottomRight(cAABB.FrontBottomRight() * matWorld);
-                Core::Vector3Old vFrontTopLeft(cAABB.FrontTopLeft() *matWorld);
-                Core::Vector3Old vFrontTopRight(cAABB.FrontTopRight() * matWorld);
+                Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
+                Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
+                Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
+                Core::Vector3 vBackTopRight(cAABB.BackTopRight() * matWorld);
+                Core::Vector3 vFrontBottomLeft(cAABB.FrontBottomLeft() * matWorld);
+                Core::Vector3 vFrontBottomRight(cAABB.FrontBottomRight() * matWorld);
+                Core::Vector3 vFrontTopLeft(cAABB.FrontTopLeft() *matWorld);
+                Core::Vector3 vFrontTopRight(cAABB.FrontTopRight() * matWorld);
                 
-                Core::Vector3Old vMin(std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity());
+                Core::Vector3 vMin(std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity());
                 vMin.x = std::min(vMin.x, vBackBottomLeft.x);
                 vMin.x = std::min(vMin.x, vBackBottomRight.x);
                 vMin.x = std::min(vMin.x, vBackTopLeft.x);
@@ -100,7 +100,7 @@ namespace ChilliSource
                 vMin.z = std::min(vMin.z, vFrontTopLeft.z);
                 vMin.z = std::min(vMin.z, vFrontTopRight.z);
                 
-                Core::Vector3Old vMax(-std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity());
+                Core::Vector3 vMax(-std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity());
                 vMax.x = std::max(vMax.x, vBackBottomLeft.x);
                 vMax.x = std::max(vMax.x, vBackBottomRight.x);
                 vMax.x = std::max(vMax.x, vBackTopLeft.x);
@@ -154,7 +154,7 @@ namespace ChilliSource
 			if(GetEntity())
 			{
                 const Core::AABB& sAABB = GetAABB();
-                Core::Vector3Old vSize = sAABB.GetSize();
+                Core::Vector3 vSize = sAABB.GetSize();
 				mBoundingSphere.vOrigin = sAABB.GetOrigin();
 				mBoundingSphere.fRadius = std::max(vSize.x, vSize.y) * 0.5f;
 			}
