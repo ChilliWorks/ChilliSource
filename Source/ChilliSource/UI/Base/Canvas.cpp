@@ -55,7 +55,10 @@ namespace ChilliSource
             m_size.y = Core::Screen::GetOrientedHeight();
             
             m_canvas = WidgetUPtr(new Widget());
+            m_canvas->SetName("Canvas");
             m_canvas->SetAbsoluteSize(m_size);
+            m_canvas->SetCanvas(m_canvas.get());
+            m_canvas->SetAbsolutePosition(m_size * 0.5f);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -67,7 +70,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void Canvas::Draw(Rendering::CanvasRenderer* in_renderer) const
         {
-            
+            m_canvas->Draw(in_renderer);
         }
         //----------------------------------------------------
         //----------------------------------------------------

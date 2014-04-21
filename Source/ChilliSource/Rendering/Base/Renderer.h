@@ -77,8 +77,9 @@ namespace ChilliSource
 			/// frame buffer. This function is called by the system
 			///
 			/// @param Scene to render
+            /// @param Canvas to render
 			//----------------------------------------------------------
-			void RenderToScreen(Core::Scene* inpScene);
+			void RenderToScreen(Core::Scene* inpScene, UI::Canvas* in_canvas);
 			//----------------------------------------------------------
 			/// Render To Texture
 			///
@@ -87,11 +88,12 @@ namespace ChilliSource
             /// be rendered. If no depth target is provided a depth
             /// buffer will be created.
             ///
-			/// @param Handle to the scene 
+			/// @param Scene to render
+            /// @param Canvas to render
 			/// @param Texture to render colour to.
             /// @param Texture to render depth to.
 			//----------------------------------------------------------
-			void RenderToTexture(Core::Scene* inpScene, const TextureSPtr &inpColourTarget, const TextureSPtr& inpDepthTarget = TextureSPtr());
+			void RenderToTexture(Core::Scene* inpScene, UI::Canvas* in_canvas, const TextureSPtr &inpColourTarget, const TextureSPtr& inpDepthTarget = TextureSPtr());
 			//----------------------------------------------------------
 			/// Get Active Camera Pointer
 			///
@@ -162,9 +164,10 @@ namespace ChilliSource
             /// Render the contents of the scene to the target buffer
             ///
             /// @param Scene
+            /// @param Canvas to render
             /// @param Target
             //----------------------------------------------------------
-            void RenderSceneToTarget(Core::Scene* inpScene, RenderTarget* inpRenderTarget);
+            void RenderSceneToTarget(Core::Scene* inpScene, UI::Canvas* in_canvas, RenderTarget* inpRenderTarget);
 			//----------------------------------------------------------
 			/// Find Renderable Objects In Scene
 			///

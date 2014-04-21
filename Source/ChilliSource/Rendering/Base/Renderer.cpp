@@ -26,6 +26,8 @@
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
+#include <ChilliSource/UI/Base/Canvas.h>
+
 #include <algorithm>
 
 namespace ChilliSource

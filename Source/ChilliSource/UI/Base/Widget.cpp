@@ -28,6 +28,8 @@
 
 #include <ChilliSource/UI/Base/Widget.h>
 
+#include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+
 namespace ChilliSource
 {
     namespace UI
@@ -185,6 +187,106 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void Widget::RelativeMoveBy(f32 in_x, f32 in_y)
+        {
+            m_localPosition.vRelative.x = in_x;
+            m_localPosition.vRelative.y = in_y;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::RelativeMoveBy(const Core::Vector2& in_translate)
+        {
+            m_localPosition.vRelative += in_translate;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::AbsoluteMoveBy(f32 in_x, f32 in_y)
+        {
+            m_localPosition.vAbsolute.x += in_x;
+            m_localPosition.vAbsolute.y += in_y;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::AbsoluteMoveBy(const Core::Vector2& in_translate)
+        {
+            m_localPosition.vAbsolute += in_translate;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::RotateBy(f32 in_angleRads)
+        {
+            m_localRotation += in_angleRads;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::RotateTo(f32 in_angleRads)
+        {
+            m_localRotation = in_angleRads;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::ScaleBy(const Core::Vector2& in_scale)
+        {
+            m_localScale *= in_scale;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::ScaleBy(f32 in_x, f32 in_y)
+        {
+            m_localScale.x *= in_x;
+            m_localScale.y *= in_y;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::ScaleTo(const Core::Vector2& in_scale)
+        {
+            m_localScale = in_scale;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::ScaleTo(f32 in_x, f32 in_y)
+        {
+            m_localScale.x = in_x;
+            m_localScale.y = in_y;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetAnchorToParent(Rendering::AlignmentAnchor in_anchor)
+        {
+            m_anchorToParent = in_anchor;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetOriginAnchor(Rendering::AlignmentAnchor in_anchor)
+        {
+            m_originAnchor = in_anchor;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetColour(const Core::Colour& in_colour)
+        {
+            m_localColour = in_colour;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetVisible(bool in_visible)
+        {
+            m_isVisible = in_visible;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        bool Widget::IsVisible() const
+        {
+            return m_isVisible;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetClippingEnabled(bool in_enabled)
+        {
+            m_isSubviewClippingEnabled = in_enabled;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         void Widget::Add(const WidgetSPtr& in_widget)
         {
             CS_ASSERT(in_widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
@@ -215,42 +317,65 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::Draw(Rendering::CanvasRenderer* in_renderer)
         {
-            //TODO: Visibility check
+            if(m_isVisible == false)
+                return;
+            
             if(m_isLayoutValid == false && m_layout != nullptr)
             {
                 //m_layout->Layout();
                 m_isLayoutValid = true;
             }
             
+            Core::Vector2 finalSize(GetFinalSize());
+            
             if(m_drawable != nullptr)
             {
-                m_drawable->Draw(in_renderer, GetFinalTransform(), GetFinalColour());
+                m_drawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
             }
             
-            //TODO: Draw subview
+            if(m_isSubviewClippingEnabled == true)
+            {
+                Core::Vector2 halfSize(finalSize * 0.5f);
+                Core::Vector2 bottomLeftPos;
+                Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, halfSize, bottomLeftPos);
+				
+                bottomLeftPos += GetFinalPosition();
+                
+                in_renderer->EnableClippingToBounds(bottomLeftPos, finalSize);
+            }
+            
             for(auto& child : m_children)
             {
                 child->Draw(in_renderer);
+            }
+            
+            if(m_isSubviewClippingEnabled == true)
+            {
+                in_renderer->DisableClippingToBounds();
             }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         Core::Matrix3x3 Widget::GetFinalTransform() const
         {
-            //TODO: Do we add caching here?
-            Core::Matrix3x3 localTransform(GetParentSpacePosition(), Core::Vector2::ONE, m_localRotation);
-            
-            if(m_parent != nullptr)
+            if(m_canvas == this)
             {
-                Core::Matrix3x3 parentTransform(std::move(m_parent->GetFinalTransform()));
-
-                Core::Matrix3x3 finalTransform;
-                Core::Matrix3x3::Multiply(&localTransform, &parentTransform, &finalTransform);
-                
-                return finalTransform;
+                return Core::Matrix3x3(m_localPosition.vAbsolute, Core::Vector2::ONE, m_localRotation);
             }
             
-            return localTransform;
+            //TODO: Do we add caching here?
+            
+            //Translate by the inverse of the pivot offset to place the pivot at the centre
+            //Perform the rotation
+            //Translate back to the pivot and then apply final translation
+            Core::Vector2 halfSize(GetFinalSize() * 0.5f);
+            Core::Vector2 pivotPos;
+            Rendering::GetAnchorPoint(m_originAnchor, halfSize, pivotPos);
+            
+            Core::Matrix3x3 pivot(-pivotPos, Core::Vector2::ONE, 0.0f);
+            Core::Matrix3x3 rotate(Core::Vector2::ZERO, Core::Vector2::ONE, m_localRotation);
+            Core::Matrix3x3 translate(GetParentSpacePosition() + pivotPos, Core::Vector2::ONE, 0.0f);
+            return pivot * rotate * translate * m_parent->GetFinalTransform();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -268,20 +393,20 @@ namespace ChilliSource
         Core::Vector2 Widget::GetParentSpacePosition() const
         {
             CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute position of widget without canvas");
-            CS_ASSERT(m_parent != nullptr, "Cannot calculate widget parent space pos without parent");
+            CS_ASSERT(m_parent != nullptr, "Cannot get the absolute position of widget without parent");
             
             //Get the anchor point to which the widget is aligned in parent space
             const Core::Vector2 parentSize(m_parent->GetFinalSize());
 			const Core::Vector2 parentHalfSize(parentSize * 0.5f);
 			Core::Vector2 parentAnchorPos;
-			Rendering::GetAnchorPoint(m_alignmentToParent, parentHalfSize, parentAnchorPos);
+			Rendering::GetAnchorPoint(m_anchorToParent, parentHalfSize, parentAnchorPos);
             
             //Calculate the position relative to the anchor point
             Core::Vector2 parentSpacePos = parentAnchorPos + (parentSize * m_localPosition.vRelative) + m_localPosition.vAbsolute;
             
             //Offset the position by the alignment anchor of the origin
             Core::Vector2 alignmentOffset;
-            Rendering::Align(m_originAlignment, GetFinalSize() * 0.5f, alignmentOffset);
+            Rendering::Align(m_originAnchor, GetFinalSize() * 0.5f, alignmentOffset);
             
             return parentSpacePos + alignmentOffset;
         }

@@ -76,9 +76,10 @@ namespace ChilliSource
             ///
             /// @param Renderer
             /// @param Absolute screen transform
+            /// @param Asbolute screen size
             /// @param Absolute colour
             //----------------------------------------------------------------------------------------
-            void Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3x3& in_transform, const Core::Colour& in_absColour) override;
+            void Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3x3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) override;
             
         private:
             

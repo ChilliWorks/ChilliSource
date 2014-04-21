@@ -170,8 +170,8 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetAbsoluteSize(const Core::Vector2& in_size);
             //----------------------------------------------------------------------------------------
-            /// Set the position of the widget relative to its parent size i.e. 0.5, 0.5 will
-            /// place the widget directly on the anchor point
+            /// Set the position of the widget relative to its parent size and anchor point i.e.
+            /// if the anchor is bottom left then 0.5, 0.5 will place it in the middle of the parent
             ///
             /// @author S Downie
             ///
@@ -180,8 +180,8 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetRelativePosition(f32 in_x, f32 in_y);
             //----------------------------------------------------------------------------------------
-            /// Set the position of the widget relative to its parent size i.e. 0.5, 0.5 will
-            /// place the widget directly on the anchor point
+            /// Set the position of the widget relative to its parent size and anchor point i.e.
+            /// if the anchor is bottom left then 0.5, 0.5 will place it in the middle of the parent
             ///
             /// @author S Downie
             ///
@@ -205,6 +205,138 @@ namespace ChilliSource
             /// @param Position in pixels
             //----------------------------------------------------------------------------------------
             void SetAbsolutePosition(const Core::Vector2& in_pos);
+            //----------------------------------------------------------------------------------------
+            /// Move the position of the widget from the parental anchor by the given percentages
+            /// of the parent height and width
+            ///
+            /// @author S Downie
+            ///
+            /// @param Offset X as percentage width of parent (0.0 - 1.0)
+            /// @param Offset Y as percentage height of parent (0.0 - 1.0)
+            //----------------------------------------------------------------------------------------
+            void RelativeMoveBy(f32 in_x, f32 in_y);
+            //----------------------------------------------------------------------------------------
+            /// Move the position of the widget from the parental anchor by the given percentages
+            /// of the parent height and width
+            ///
+            /// @author S Downie
+            ///
+            /// @param Offset as percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
+            //----------------------------------------------------------------------------------------
+            void RelativeMoveBy(const Core::Vector2& in_translate);
+            //----------------------------------------------------------------------------------------
+            /// Move the position of the widget from the parental anchor by the given pixels
+            ///
+            /// @author S Downie
+            ///
+            /// @param X in pixels
+            /// @param Y in pixels
+            //----------------------------------------------------------------------------------------
+            void AbsoluteMoveBy(f32 in_x, f32 in_y);
+            //----------------------------------------------------------------------------------------
+            /// Move the position of the widget from the parental anchor by the given pixels
+            ///
+            /// @author S Downie
+            ///
+            /// @param Translation in pixels
+            //----------------------------------------------------------------------------------------
+            void AbsoluteMoveBy(const Core::Vector2& in_translate);
+            //----------------------------------------------------------------------------------------
+            /// Rotate the widget about its origin by the given radians
+            ///
+            /// @author S Downie
+            ///
+            /// @param Angle or rotation in radians
+            //----------------------------------------------------------------------------------------
+            void RotateBy(f32 in_angleRads);
+            //----------------------------------------------------------------------------------------
+            /// Rotate the widget about its origin to the given radians
+            ///
+            /// @author S Downie
+            ///
+            /// @param Angle or rotation in radians
+            //----------------------------------------------------------------------------------------
+            void RotateTo(f32 in_angleRads);
+            //----------------------------------------------------------------------------------------
+            /// Scale the widgets current size about its origin by the given scaler
+            ///
+            /// @author S Downie
+            ///
+            /// @param Scaler width and height
+            //----------------------------------------------------------------------------------------
+            void ScaleBy(const Core::Vector2& in_scale);
+            //----------------------------------------------------------------------------------------
+            /// Scale the widgets current size about its origin to the given scaler
+            ///
+            /// @author S Downie
+            ///
+            /// @param Scaler width and height
+            //----------------------------------------------------------------------------------------
+            void ScaleTo(const Core::Vector2& in_scale);
+            //----------------------------------------------------------------------------------------
+            /// Scale the widgets current size about its origin by the given scaler
+            ///
+            /// @author S Downie
+            ///
+            /// @param Scaler x
+            /// @param Scaler y
+            //----------------------------------------------------------------------------------------
+            void ScaleBy(f32 in_x, f32 in_y);
+            //----------------------------------------------------------------------------------------
+            /// Scale the widgets current size about its origin to the given scaler
+            ///
+            /// @author S Downie
+            ///
+            /// @param Scaler x
+            /// @param Scaler y
+            //----------------------------------------------------------------------------------------
+            void ScaleTo(f32 in_x, f32 in_y);
+            //----------------------------------------------------------------------------------------
+            /// Set the alignment anchor of the widget to its parent i.e. if the anchor is middle
+            /// centre then the origin of the widget will be at the middle centre of the parent
+            ///
+            /// @author S Downie
+            ///
+            /// @param Alignment anchor
+            //----------------------------------------------------------------------------------------
+            void SetAnchorToParent(Rendering::AlignmentAnchor in_anchor);
+            //----------------------------------------------------------------------------------------
+            /// Set the alignment anchor that is to be the widgets origin i.e. it's pivot point
+            ///
+            /// @author S Downie
+            ///
+            /// @param Alignment anchor
+            //----------------------------------------------------------------------------------------
+            void SetOriginAnchor(Rendering::AlignmentAnchor in_anchor);
+            //----------------------------------------------------------------------------------------
+            /// Set the colour that is multiplied into the widget. Widgets inherit their parent's
+            /// colour.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Colour
+            //----------------------------------------------------------------------------------------
+            void SetColour(const Core::Colour& in_colour);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Set whether the widget hierarchy from here down is visible
+            //----------------------------------------------------------------------------------------
+            void SetVisible(bool in_visible);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Whether the widget hierarchy from here down is visible
+            //----------------------------------------------------------------------------------------
+            bool IsVisible() const;
+            //----------------------------------------------------------------------------------------
+            /// NOTE: Clipping does not work well with rotation as it requires an AABB clip region
+            ///
+            /// @author S Downie
+            ///
+            /// @param Set whether the widget will clip pixels that exceed its bounds
+            //----------------------------------------------------------------------------------------
+            void SetClippingEnabled(bool in_enabled);
             //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
@@ -379,7 +511,7 @@ namespace ChilliSource
             Core::UnifiedVector2 m_localSize;
             Core::Vector2 m_localScale = Core::Vector2::ONE;
             Core::Colour m_localColour;
-            f32 m_localRotation;
+            f32 m_localRotation = 0.0f;
             
             std::vector<WidgetSPtr> m_children;
             
@@ -394,8 +526,8 @@ namespace ChilliSource
             Widget* m_parent = nullptr;
             const Widget* m_canvas = nullptr;
             
-            Rendering::AlignmentAnchor m_originAlignment = Rendering::AlignmentAnchor::k_middleCentre;
-            Rendering::AlignmentAnchor m_alignmentToParent = Rendering::AlignmentAnchor::k_middleCentre;
+            Rendering::AlignmentAnchor m_originAnchor = Rendering::AlignmentAnchor::k_middleCentre;
+            Rendering::AlignmentAnchor m_anchorToParent = Rendering::AlignmentAnchor::k_bottomLeft;
             
             bool m_isLayoutValid = false;
             bool m_isVisible = true;

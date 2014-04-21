@@ -56,11 +56,10 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void TextureDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3x3& in_transform, const Core::Colour& in_absColour)
+        void TextureDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3x3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
         {
             CS_ASSERT(m_texture != nullptr, "TextureDrawable cannot draw without texture");
-            //TODO: Check if the object is on screen
-            //in_renderer->DrawBox(<#const Core::Matrix3x3 &inmatTransform#>, <#const Core::Vector2 &invSize#>, m_texture, m_UVs, in_absColour);
+            in_renderer->DrawBox(in_transform, in_absSize, m_texture, m_UVs, in_absColour);
         }
     }
 }

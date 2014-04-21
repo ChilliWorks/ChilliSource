@@ -302,7 +302,7 @@ namespace ChilliSource
             OnUpdate(in_deltaTime);
             
             //Render the scene
-            m_renderer->RenderToScreen(m_stateManager->GetActiveState()->GetScene());
+            m_renderer->RenderToScreen(m_stateManager->GetActiveState()->GetScene(), m_stateManager->GetActiveState()->GetUICanvas());
             
 #ifdef CS_ENABLE_DEBUGSTATS
             Debugging::DebugStats::Clear();
