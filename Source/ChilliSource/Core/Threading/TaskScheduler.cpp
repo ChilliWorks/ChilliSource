@@ -28,6 +28,8 @@
 
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
+#include <ChilliSource/Core/Base/Device.h>
+
 namespace ChilliSource
 {
     namespace Core
@@ -36,16 +38,15 @@ namespace ChilliSource
 
 		//-------------------------------------------------
 		//-------------------------------------------------
-		TaskSchedulerUPtr TaskScheduler::Create(u32 in_numThreads)
+		TaskSchedulerUPtr TaskScheduler::Create()
 		{
-			return TaskSchedulerUPtr(new TaskScheduler(in_numThreads));
+			return TaskSchedulerUPtr(new TaskScheduler());
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		TaskScheduler::TaskScheduler(u32 in_numThreads)
-			: m_numThreads(in_numThreads)
+		TaskScheduler::TaskScheduler()
 		{
-			CS_ASSERT(m_numThreads > 0, "Thread pool must have at least 1 thread");
+        
 		}
 		//------------------------------------------------
 		//------------------------------------------------
@@ -57,7 +58,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void TaskScheduler::OnInit()
 		{
-			m_threadPool = ThreadPoolUPtr(new Core::ThreadPool(m_numThreads));
+			m_threadPool = ThreadPoolUPtr(new Core::ThreadPool(Device::GetNumCPUCores() * 2));
 		}
 		//------------------------------------------------
 		//------------------------------------------------

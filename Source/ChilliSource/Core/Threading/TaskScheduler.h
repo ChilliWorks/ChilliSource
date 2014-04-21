@@ -44,7 +44,7 @@ namespace ChilliSource
 		///
 		/// @author S Downie
 		//-------------------------------------------------
-        class TaskScheduler : public AppSystem
+        class TaskScheduler final : public AppSystem
         {
         public:
         
@@ -91,19 +91,19 @@ namespace ChilliSource
 			friend class Application;
 			//-------------------------------------------------
 			/// Factory create method called by application
-			///
-			/// @param Number of threads to create in pool
+            ///
+            /// @author S Downie
 			///
 			/// @return Ownership of new instance
 			//-------------------------------------------------
-			static TaskSchedulerUPtr Create(u32 in_numThreads);
+			static TaskSchedulerUPtr Create();
 			//-------------------------------------------------
 			/// Private constructor to enforce use of create
 			/// method
 			///
-			/// @param Number of threads to create in pool
+			/// @author S Downie
 			//-------------------------------------------------
-			TaskScheduler(u32 in_numThreads);
+			TaskScheduler();
 			//-------------------------------------------------
 			/// Called when the system is created. Creates
 			/// the thread pool based on the set number of
@@ -122,7 +122,6 @@ namespace ChilliSource
             
         private:
         
-			u32 m_numThreads;
             ThreadPoolUPtr m_threadPool;
             
             std::recursive_mutex m_mainThreadQueueMutex;

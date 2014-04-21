@@ -427,7 +427,7 @@ namespace ChilliSource
         void Application::CreateDefaultSystems()
         {
             //Core
-			m_taskScheduler = CreateSystem<TaskScheduler>(Core::Device::GetNumCPUCores() * 2);
+			m_taskScheduler = CreateSystem<TaskScheduler>();
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
             m_resourcePool = CreateSystem<ResourcePool>();
