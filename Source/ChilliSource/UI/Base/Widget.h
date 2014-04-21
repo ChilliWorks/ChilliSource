@@ -30,6 +30,10 @@
 #define _CHILLISOURCE_UI_BASE_WIDGET_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Math/Matrix3x3.h>
+#include <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 
@@ -53,6 +57,9 @@ namespace ChilliSource
         {
         public:
 
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            //----------------------------------------------------------------------------------------
             Widget()
             {
                 //TODO: Restrict what is allowed to be set on a property
@@ -127,6 +134,101 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             const std::string& GetName() const;
             //----------------------------------------------------------------------------------------
+            /// Set the percentage size of the widget relative to its parent size i.e. 0.5, 0.5 will
+            /// make the widget half the width of the parent and half the height
+            ///
+            /// @author S Downie
+            ///
+            /// @param Percentage width of parent (0.0 - 1.0)
+            /// @param Percentage height of parent (0.0 - 1.0)
+            //----------------------------------------------------------------------------------------
+            void SetRelativeSize(f32 in_width, f32 in_height);
+            //----------------------------------------------------------------------------------------
+            /// Set the percentage size of the widget relative to its parent size i.e. 0.5, 0.5 will
+            /// make the widget half the width of the parent and half the height
+            ///
+            /// @author S Downie
+            ///
+            /// @param Percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
+            //----------------------------------------------------------------------------------------
+            void SetRelativeSize(const Core::Vector2& in_size);
+            //----------------------------------------------------------------------------------------
+            /// Set the size of the widget in pixels
+            ///
+            /// @author S Downie
+            ///
+            /// @param Width in pixels
+            /// @param Height in pixels
+            //----------------------------------------------------------------------------------------
+            void SetAbsoluteSize(f32 in_width, f32 in_height);
+            //----------------------------------------------------------------------------------------
+            /// Set the size of the widget in pixels
+            ///
+            /// @author S Downie
+            ///
+            /// @param Size in pixels
+            //----------------------------------------------------------------------------------------
+            void SetAbsoluteSize(const Core::Vector2& in_size);
+            //----------------------------------------------------------------------------------------
+            /// Set the position of the widget relative to its parent size i.e. 0.5, 0.5 will
+            /// place the widget directly on the anchor point
+            ///
+            /// @author S Downie
+            ///
+            /// @param Offset X as percentage width of parent (0.0 - 1.0)
+            /// @param Offset Y as percentage height of parent (0.0 - 1.0)
+            //----------------------------------------------------------------------------------------
+            void SetRelativePosition(f32 in_x, f32 in_y);
+            //----------------------------------------------------------------------------------------
+            /// Set the position of the widget relative to its parent size i.e. 0.5, 0.5 will
+            /// place the widget directly on the anchor point
+            ///
+            /// @author S Downie
+            ///
+            /// @param Offset as percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
+            //----------------------------------------------------------------------------------------
+            void SetRelativePosition(const Core::Vector2& in_pos);
+            //----------------------------------------------------------------------------------------
+            /// Set the position of the widget from the parental anchor in pixels
+            ///
+            /// @author S Downie
+            ///
+            /// @param X in pixels
+            /// @param Y in pixels
+            //----------------------------------------------------------------------------------------
+            void SetAbsolutePosition(f32 in_x, f32 in_y);
+            //----------------------------------------------------------------------------------------
+            /// Set the position of the widget from the parental anchor in pixels
+            ///
+            /// @author S Downie
+            ///
+            /// @param Position in pixels
+            //----------------------------------------------------------------------------------------
+            void SetAbsolutePosition(const Core::Vector2& in_pos);
+            //----------------------------------------------------------------------------------------
+            /// Adds a widget as a child of this widget. The widget will be rendered as part of this
+            /// hierarchy and any relative coordinates will now be in relation to this widget.
+            ///
+            /// NOTE: Will assert if the widget already has a parent
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget
+            //----------------------------------------------------------------------------------------
+            void Add(const WidgetSPtr& in_widget);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Parent widget of this widget or null
+            //----------------------------------------------------------------------------------------
+            Widget* GetParent();
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Parent widget of this widget or null
+            //----------------------------------------------------------------------------------------
+            const Widget* GetParent() const;
+            //----------------------------------------------------------------------------------------
             /// Set the value of the property with the given name. If no property exists
             /// with the name then it will assert.
             ///
@@ -163,6 +265,16 @@ namespace ChilliSource
             ~Widget();
             
         private:
+            friend class Canvas;
+            //----------------------------------------------------------------------------------------
+            /// Set the pointer to the canvas. This is only called by the canvas when initialising
+            /// the canvas widget
+            ///
+            /// @author S Downie
+            ///
+            /// @param Canvas
+            //----------------------------------------------------------------------------------------
+            void SetCanvas(const Widget* in_canvas);
             //----------------------------------------------------------------------------------------
             /// Holds the type of the property and the offset into the blob
             ///
@@ -182,8 +294,94 @@ namespace ChilliSource
             /// @return The internal enum property type of the given object type
             //----------------------------------------------------------------------------------------
             template<typename TType> PropertyType GetType() const;
-            
+            //----------------------------------------------------------------------------------------
+            /// Calculate the transform matrix of the object based on the local transform and the
+            /// parent transform.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Screen space transformation matrix
+            //----------------------------------------------------------------------------------------
+            Core::Matrix3x3 GetFinalTransform() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the screen space position of the object based on the local position, local
+            /// alignment to parent, local alignment to origin and the parents final position.
+            ///
+            /// NOTE: If the position is relative the final position cannot be calculated until
+            /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
+            /// Therefore will assert if the widget is not on the root canvas
+            ///
+            /// @author S Downie
+            ///
+            /// @return Screen space position of origin in pixels
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetFinalPosition() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the parent space position of the object based on the local position, local
+            /// alignment to parent and local alignment to origin. This method exists to create
+            /// a position in pixels that can be used to create the local transform matrix. The local
+            /// transform matrix is multiplied with the parent tranform to get the final transform
+            /// and this method prevents double transformation by the parent.
+            ///
+            /// NOTE: If the position is relative the final position cannot be calculated until
+            /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
+            /// Therefore will assert if the widget is not on the root canvas
+            ///
+            /// @author S Downie
+            ///
+            /// @return Position of origin in pixels in parent space
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetParentSpacePosition() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the screen space size of the object based on the local size and the
+            /// parent size.
+            ///
+            /// NOTE: If the size is relative the final size cannot be calculated until
+            /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
+            /// Therefore will assert if the widget is not on the root canvas
+            ///
+            /// @author S Downie
+            ///
+            /// @return Screen space size in pixels
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetFinalSize() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the rotation of the object based on the local rotation and the
+            /// parent rotation.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Final rotation in radians
+            //----------------------------------------------------------------------------------------
+            f32 GetFinalRotation() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the scale of the object based on the local scale and the
+            /// parent scale.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Final scale
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetFinalScale() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the colour of the object based on the local colour and the
+            /// parent colour.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Final colour
+            //----------------------------------------------------------------------------------------
+            Core::Colour GetFinalColour() const;
+
         private:
+            
+            Core::UnifiedVector2 m_localPosition;
+            Core::UnifiedVector2 m_localSize;
+            Core::Vector2 m_localScale = Core::Vector2::ONE;
+            Core::Colour m_localColour;
+            f32 m_localRotation;
+            
+            std::vector<WidgetSPtr> m_children;
             
             std::string m_name;
             
@@ -194,9 +392,10 @@ namespace ChilliSource
             ILayoutUPtr m_layout;
             
             Widget* m_parent = nullptr;
+            const Widget* m_canvas = nullptr;
             
-            Core::AlignmentAnchor m_originAlignment;
-            Core::AlignmentAnchor m_alignmentToParent;
+            Rendering::AlignmentAnchor m_originAlignment = Rendering::AlignmentAnchor::k_middleCentre;
+            Rendering::AlignmentAnchor m_alignmentToParent = Rendering::AlignmentAnchor::k_middleCentre;
             
             bool m_isLayoutValid = false;
             bool m_isVisible = true;

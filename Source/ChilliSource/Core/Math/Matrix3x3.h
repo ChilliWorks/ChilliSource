@@ -31,10 +31,22 @@ namespace ChilliSource
 		class Matrix3x3
 		{
 		public:
+            
             static const u32 kMatrixWidth = 3;
             static const u32 kMatrixDims  = kMatrixWidth * kMatrixWidth;
             
 			Matrix3x3();
+            //------------------------------------------------
+            /// Construct the matrix with the given transform
+            ///
+            /// @author S Downie
+            ///
+            /// @param Translation
+            /// @param Scale
+            /// @param Rotation in radians
+            //------------------------------------------------
+            Matrix3x3(const Vector2& in_translation, const Vector2& in_scale, f32 in_rotRads);
+            
 			Matrix3x3(const f32* paMatrix);
 			Matrix3x3(f32 m00, f32 m01, f32 m02, 
 					   f32 m10, f32 m11, f32 m12, 

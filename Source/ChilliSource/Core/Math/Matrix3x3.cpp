@@ -25,6 +25,12 @@ namespace ChilliSource
 		{
 			(*this) = Matrix3x3::IDENTITY;
 		}
+        //------------------------------------------------
+        //------------------------------------------------
+        Matrix3x3::Matrix3x3(const Vector2& in_translation, const Vector2& in_scale, f32 in_rotRads)
+        {
+            SetTransform(in_translation, in_scale, in_rotRads);
+        }
 		//------------------------------------------------
 		/// Constructor
 		///

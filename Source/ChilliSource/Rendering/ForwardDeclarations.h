@@ -38,6 +38,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(RenderSystem);
         CS_FORWARDDECLARE_CLASS(RenderTarget);
         CS_FORWARDDECLARE_CLASS(VertexDeclaration);
+        enum class AlignmentAnchor;
         enum class ShaderPass;
         enum class BlendMode;
         enum class CullFace;

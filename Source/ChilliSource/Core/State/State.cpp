@@ -1,9 +1,29 @@
 //
 //  State.cpp
-//  ChilliSource
-//
+//  Chilli Source
 //  Created by Scott Downie on 21/09/2010.
-//  Copyright 2010 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 
@@ -12,6 +32,7 @@
 #include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/UI/Base/Canvas.h>
 
 namespace ChilliSource
 {
@@ -20,8 +41,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		//-----------------------------------------
 		State::State()
-        : m_canAddSystems(false)
-        , m_scene(nullptr)
+        : m_canAddSystems(false), m_scene(nullptr), m_canvas(nullptr)
 		{
 
 		}
@@ -30,8 +50,9 @@ namespace ChilliSource
         void State::Init()
         {
             m_canAddSystems = true;
-            //States will always have a scene by default
+            //States will always have a scene and canvas by default
             m_scene = CreateSystem<Scene>();
+            m_canvas = CreateSystem<UI::Canvas>();
             CreateSystems();
             m_canAddSystems = false;
             
@@ -143,6 +164,12 @@ namespace ChilliSource
 		{
 			return m_scene;
 		}
+        //------------------------------------------
+        //------------------------------------------
+        UI::Canvas* State::GetUICanvas()
+        {
+            return m_canvas;
+        }
         //------------------------------------------
         //------------------------------------------
 		bool State::IsActiveState() const 

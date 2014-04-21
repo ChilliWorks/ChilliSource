@@ -21,6 +21,7 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 
 #include <ChilliSource/GUI/Label/Label.h>
+#include <ChilliSource/UI/Base/Canvas.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
@@ -40,7 +41,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		CanvasRenderer::CanvasRenderer(RenderSystem* inpRenderSystem)
         : mOverlayBatcher(inpRenderSystem)
-        , mfNearClippingDistance(0.0f)
+        , mfNearClippingDistance(2.0f)
 		{
 
 		}
@@ -89,12 +90,23 @@ namespace ChilliSource
 		///
 		/// Draw the UI
 		//----------------------------------------------------------
-		void CanvasRenderer::Render(GUI::GUIView* inpView, f32 infNearClipDistance)
+		void CanvasRenderer::Render(GUI::GUIView* inpView)
 		{
-            //We use this to ensure our UI is never clipped
-            mfNearClippingDistance = infNearClipDistance + 1.0f;
-            
             inpView->Draw(this);
+			
+            mOverlayBatcher.DisableScissoring();
+			mOverlayBatcher.ForceRender();
+            
+            m_materialGUICache.clear();
+		}
+        //----------------------------------------------------------
+		/// Render
+		///
+		/// Draw the UI
+		//----------------------------------------------------------
+		void CanvasRenderer::Render(UI::Canvas* in_canvas)
+		{
+            in_canvas->Draw(this);
 			
             mOverlayBatcher.DisableScissoring();
 			mOverlayBatcher.ForceRender();

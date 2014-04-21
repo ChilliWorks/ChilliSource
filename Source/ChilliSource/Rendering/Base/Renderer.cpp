@@ -102,14 +102,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Render To Screen
 		//----------------------------------------------------------
-		void Renderer::RenderToScreen(Core::Scene* inpScene)
+		void Renderer::RenderToScreen(Core::Scene* inpScene, UI::Canvas* in_canvas)
 		{
-            RenderSceneToTarget(inpScene, mpRenderSystem->GetDefaultRenderTarget());
+            RenderSceneToTarget(inpScene, in_canvas, mpRenderSystem->GetDefaultRenderTarget());
 		}
         //----------------------------------------------------------
         /// Render To Texture
         //----------------------------------------------------------
-        void Renderer::RenderToTexture(Core::Scene* inpScene, const TextureSPtr& inpColourTarget, const TextureSPtr& inpDepthTarget)
+        void Renderer::RenderToTexture(Core::Scene* inpScene, UI::Canvas* in_canvas, const TextureSPtr& inpColourTarget, const TextureSPtr& inpDepthTarget)
 		{
             //get the width and height
             u32 udwWidth = 1;
@@ -127,14 +127,15 @@ namespace ChilliSource
             
             RenderTarget* pOffscreenTarget = mpRenderSystem->CreateRenderTarget(udwWidth, udwHeight);
             pOffscreenTarget->SetTargetTextures(inpColourTarget, inpDepthTarget);
-            RenderSceneToTarget(inpScene, pOffscreenTarget);
+            RenderSceneToTarget(inpScene, in_canvas, pOffscreenTarget);
             CS_SAFEDELETE(pOffscreenTarget);
 		}
         //----------------------------------------------------------
 		/// Render Scene To Target
 		//----------------------------------------------------------
-		void Renderer::RenderSceneToTarget(Core::Scene* inpScene, RenderTarget* inpRenderTarget)
+		void Renderer::RenderSceneToTarget(Core::Scene* inpScene, UI::Canvas* in_canvas, RenderTarget* inpRenderTarget)
         {
+            //TODO: Remove old UI render code
 			//Traverse the scene graph and get all renderable objects
             std::vector<RenderComponent*> aPreFilteredRenderCache;
             std::vector<CameraComponent*> aCameraCache;
@@ -206,6 +207,7 @@ namespace ChilliSource
                 
                 mpRenderSystem->SetLight(nullptr);
                 RenderUI(inpScene->GetWindow());
+                RenderUI(in_canvas);
                 
                 //Present contents of buffer to screen
                 if (inpRenderTarget != nullptr)
@@ -222,6 +224,7 @@ namespace ChilliSource
                 
                 mpRenderSystem->SetLight(nullptr);
                 RenderUI(inpScene->GetWindow());
+                RenderUI(in_canvas);
                 
                 //Present contents of buffer to screen
                 if (inpRenderTarget != nullptr)
@@ -375,8 +378,16 @@ namespace ChilliSource
         //----------------------------------------------------------
         void Renderer::RenderUI(GUI::Window* inpWindow)
         {
-            mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), Core::Colour::k_cornflowerBlue);
-			mCanvas.Render(inpWindow, 1.0f);
+            mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(inpWindow->GetAbsoluteSize()), Core::Colour::k_cornflowerBlue);
+			mCanvas.Render(inpWindow);
+        }
+        //----------------------------------------------------------
+        /// Render UI
+        //----------------------------------------------------------
+        void Renderer::RenderUI(UI::Canvas* in_canvas)
+        {
+            mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(in_canvas->GetSize()), Core::Colour::k_cornflowerBlue);
+			mCanvas.Render(in_canvas);
         }
         //----------------------------------------------------------
         /// Cull Renderables
@@ -466,12 +477,11 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Create Overlay Projection
         //----------------------------------------------------------
-        Core::Matrix4x4 Renderer::CreateOverlayProjection(GUI::Window* inpWindow) const
+        Core::Matrix4x4 Renderer::CreateOverlayProjection(const Core::Vector2& in_size) const
         {
-            const Core::Vector2 kvOverlayDimensions(inpWindow->GetAbsoluteSize());
             const f32 kfOverlayNear = 1.0f;
             const f32 kfOverlayFar = 100.0f;
-            return Core::Matrix4x4::CreateOrthoMatrixOffset(0, kvOverlayDimensions.x, 0, kvOverlayDimensions.y, kfOverlayNear, kfOverlayFar);
+            return Core::Matrix4x4::CreateOrthoMatrixOffset(0, in_size.x, 0, in_size.y, kfOverlayNear, kfOverlayFar);
         }
 	}
 }

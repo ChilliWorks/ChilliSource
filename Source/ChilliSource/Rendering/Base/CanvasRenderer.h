@@ -54,7 +54,13 @@ namespace ChilliSource
 			///
 			/// Draw UI 
 			//----------------------------------------------------------
-			void Render(GUI::GUIView* inpRootSurface, f32 infNearClipDistance);
+			void Render(GUI::GUIView* inpRootSurface);
+            //----------------------------------------------------------
+			/// Render
+			///
+			/// Draw UI
+			//----------------------------------------------------------
+			void Render(UI::Canvas* in_canvas);
             //----------------------------------------------------------
             /// Enable Clipping To Bounds
             ///

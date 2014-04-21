@@ -133,8 +133,89 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void Widget::SetRelativeSize(f32 in_width, f32 in_height)
+        {
+            m_localSize.vRelative.x = in_width;
+            m_localSize.vRelative.y = in_height;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetRelativeSize(const Core::Vector2& in_size)
+        {
+            m_localSize.vRelative = in_size;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetAbsoluteSize(f32 in_width, f32 in_height)
+        {
+            m_localSize.vAbsolute.x = in_width;
+            m_localSize.vAbsolute.y = in_height;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetAbsoluteSize(const Core::Vector2& in_size)
+        {
+            m_localSize.vAbsolute = in_size;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetRelativePosition(f32 in_x, f32 in_y)
+        {
+            m_localPosition.vRelative.x = in_x;
+            m_localPosition.vRelative.y = in_y;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetRelativePosition(const Core::Vector2& in_pos)
+        {
+            m_localPosition.vRelative = in_pos;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetAbsolutePosition(f32 in_x, f32 in_y)
+        {
+            m_localPosition.vAbsolute.x = in_x;
+            m_localPosition.vAbsolute.y = in_y;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetAbsolutePosition(const Core::Vector2& in_pos)
+        {
+            m_localPosition.vAbsolute = in_pos;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::Add(const WidgetSPtr& in_widget)
+        {
+            CS_ASSERT(in_widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
+            //TODO: Ensure that the vector is not invalidated during iteration
+            m_children.push_back(in_widget);
+            in_widget->m_parent = this;
+            in_widget->m_canvas = m_canvas;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Widget* Widget::GetParent()
+        {
+            return m_parent;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const Widget* Widget::GetParent() const
+        {
+            return m_parent;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetCanvas(const Widget* in_canvas)
+        {
+            m_canvas = in_canvas;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         void Widget::Draw(Rendering::CanvasRenderer* in_renderer)
         {
+            //TODO: Visibility check
             if(m_isLayoutValid == false && m_layout != nullptr)
             {
                 //m_layout->Layout();
@@ -143,8 +224,118 @@ namespace ChilliSource
             
             if(m_drawable != nullptr)
             {
-                //m_drawable->Draw(in_renderer, , , );
+                m_drawable->Draw(in_renderer, GetFinalTransform(), GetFinalColour());
             }
+            
+            //TODO: Draw subview
+            for(auto& child : m_children)
+            {
+                child->Draw(in_renderer);
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Matrix3x3 Widget::GetFinalTransform() const
+        {
+            //TODO: Do we add caching here?
+            Core::Matrix3x3 localTransform(GetParentSpacePosition(), Core::Vector2::ONE, m_localRotation);
+            
+            if(m_parent != nullptr)
+            {
+                Core::Matrix3x3 parentTransform(std::move(m_parent->GetFinalTransform()));
+
+                Core::Matrix3x3 finalTransform;
+                Core::Matrix3x3::Multiply(&localTransform, &parentTransform, &finalTransform);
+                
+                return finalTransform;
+            }
+            
+            return localTransform;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 Widget::GetFinalPosition() const
+        {
+			Core::Matrix3x3 finalTransform(GetFinalTransform());
+            return Core::Vector2(finalTransform.m[6], finalTransform.m[7]);
+        }
+        //----------------------------------------------------------------------------------------
+        /// The position of the widget is calculated based on the local absolute and
+        /// relative positions as well as the local alignment anchors. The local relative
+        /// position is relative to the final parent position and cannot be calculated until
+        /// there is an absolute reference point in the widget hierarchy.
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 Widget::GetParentSpacePosition() const
+        {
+            CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute position of widget without canvas");
+            CS_ASSERT(m_parent != nullptr, "Cannot calculate widget parent space pos without parent");
+            
+            //Get the anchor point to which the widget is aligned in parent space
+            const Core::Vector2 parentSize(m_parent->GetFinalSize());
+			const Core::Vector2 parentHalfSize(parentSize * 0.5f);
+			Core::Vector2 parentAnchorPos;
+			Rendering::GetAnchorPoint(m_alignmentToParent, parentHalfSize, parentAnchorPos);
+            
+            //Calculate the position relative to the anchor point
+            Core::Vector2 parentSpacePos = parentAnchorPos + (parentSize * m_localPosition.vRelative) + m_localPosition.vAbsolute;
+            
+            //Offset the position by the alignment anchor of the origin
+            Core::Vector2 alignmentOffset;
+            Rendering::Align(m_originAlignment, GetFinalSize() * 0.5f, alignmentOffset);
+            
+            return parentSpacePos + alignmentOffset;
+        }
+        //----------------------------------------------------------------------------------------
+        /// The final size of the widget is calculated based on the local absolute and the
+        /// local relative size. The local relative size is relative to the final parent size and
+        /// cannot be calculated until there is an absolute reference point in the widget
+        /// hierarchy
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 Widget::GetFinalSize() const
+        {
+            CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute position of widget without canvas");
+            
+            if(m_parent != nullptr)
+            {
+                return ((m_parent->GetFinalSize() * m_localSize.vRelative) + m_localSize.vAbsolute) * GetFinalScale();
+            }
+            
+            return m_localSize.vAbsolute * GetFinalScale();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        f32 Widget::GetFinalRotation() const
+        {
+            //TODO: Find out why this is minused in the old GUI system
+            if(m_parent != nullptr)
+            {
+                return m_localRotation + m_parent->GetFinalRotation();
+            }
+            
+            return m_localRotation;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 Widget::GetFinalScale() const
+        {
+            if(m_parent != nullptr)
+            {
+                return m_localScale * m_parent->GetFinalScale();
+            }
+            
+            return m_localScale;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Colour Widget::GetFinalColour() const
+        {
+            //TODO: Do we implement the inherit colour option?
+            if(m_parent != nullptr)
+            {
+                return m_localColour * m_parent->GetFinalColour();
+            }
+            
+            return m_localColour;
         }
         //----------------------------------------------------------------------------------------
         /// Set the value of the string property with the given name. If no property exists
