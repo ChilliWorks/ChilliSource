@@ -13,6 +13,7 @@
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/JSON/json.h>
@@ -87,7 +88,7 @@ void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescr
 			products.push_back(desc);
 		}
 
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::vector<CSNetworking::IAPSystem::ProductDesc>&>(javaInterface.get(), &ChilliSource::Android::AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete, products));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete, javaInterface.get(), products));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -101,7 +102,7 @@ void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionSt
 		transaction.m_productId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
 		transaction.m_transactionId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
 		transaction.m_receipt = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_receipt);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<u32, const CSNetworking::IAPSystem::Transaction&>(javaInterface.get(), &ChilliSource::Android::AmazonIAPJavaInterface::OnTransactionStatusUpdated, in_result, transaction));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::AmazonIAPJavaInterface::OnTransactionStatusUpdated, javaInterface.get(), in_result, transaction));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -113,7 +114,7 @@ void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionCl
 	{
 		std::string productId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
 		std::string transactionId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::string&, const std::string&>(javaInterface.get(), &ChilliSource::Android::AmazonIAPJavaInterface::OnTransactionClosed, productId, transactionId));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::AmazonIAPJavaInterface::OnTransactionClosed, javaInterface.get(), productId, transactionId));
 	}
 }
 

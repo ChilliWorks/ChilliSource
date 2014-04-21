@@ -9,6 +9,7 @@
 #include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequest.h>
 
 #include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace ChilliSource
@@ -24,7 +25,7 @@ namespace ChilliSource
 			CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
 
 			//Begin the read loop as a threaded task
-			Core::TaskScheduler::ScheduleTask(Core::Task<>(this, &HttpRequest::PerformRequest));
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&HttpRequest::PerformRequest, this));
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------

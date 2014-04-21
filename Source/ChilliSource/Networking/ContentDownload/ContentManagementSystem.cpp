@@ -230,12 +230,10 @@ namespace ChilliSource
 				if(!m_packageDetails.empty())
 				{
 					//Unzip all the files and overwrite the old manifest
-					Core::WaitCondition waitCondition(m_packageDetails.size());
-					
-					Core::TaskScheduler::ForEach(m_packageDetails.begin(), m_packageDetails.end(), this, &ContentManagementSystem::ExtractFilesFromPackage, &waitCondition);
-					
-					//Wait on all the packages being unzipped
-					waitCondition.Wait();
+					for (const auto& details : m_packageDetails)
+					{
+						ExtractFilesFromPackage(details);
+					}
 				}
                 
                 //Remove the temp zips
@@ -246,12 +244,10 @@ namespace ChilliSource
 				if(!m_removePackageIds.empty())
 				{
 					//Remove any unused files from the documents
-					Core::WaitCondition waitCondition(m_removePackageIds.size());
-					
-					Core::TaskScheduler::ForEach(m_removePackageIds.begin(), m_removePackageIds.end(), this, &ContentManagementSystem::DeleteDirectory, &waitCondition);
-					
-					//Wait on all the packages being removed
-					waitCondition.Wait();
+					for (const auto& packageId : m_removePackageIds)
+					{
+						DeleteDirectory(packageId);
+					}
 				}
                 
                 //Save the new content manifest

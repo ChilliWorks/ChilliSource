@@ -54,7 +54,7 @@ namespace ChilliSource
             /// @param Completion delegate
             /// @param [Out] The output resource
             //-----------------------------------------------------------
-			void CreatePNGImageFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+			void CreatePNGImageFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 			{
 				Core::Image* imageResource = (Core::Image*)(out_resource.get());
 
@@ -70,8 +70,7 @@ namespace ChilliSource
 					imageResource->SetLoadState(Core::Resource::LoadState::k_failed);
 	                if(in_delegate != nullptr)
 	                {
-	                    Core::Task<Core::ResourceSPtr&> task(in_delegate, out_resource);
-	                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+	                    Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
 	                }
 					return;
 				}
@@ -90,8 +89,7 @@ namespace ChilliSource
 				imageResource->SetLoadState(Core::Resource::LoadState::k_loaded);
                 if(in_delegate != nullptr)
                 {
-                    Core::Task<Core::ResourceSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+                	Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 }
 			}
 		}
@@ -117,17 +115,16 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void ImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, Core::ResourceSPtr& out_resource)
+		void ImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::ResourceSPtr& out_resource)
 		{
 			CreatePNGImageFromFile(in_storageLocation, in_filepath, nullptr, out_resource);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void ImageProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+		void ImageProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
-            Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, Core::ResourceSPtr&>
-            task(CreatePNGImageFromFile, in_storageLocation, in_filePath, in_delegate, out_resource);
-            Core::TaskScheduler::ScheduleTask(task);
+            auto task = std::bind(CreatePNGImageFromFile, in_storageLocation, in_filePath, in_delegate, out_resource);
+            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
 		}
 	}
 }

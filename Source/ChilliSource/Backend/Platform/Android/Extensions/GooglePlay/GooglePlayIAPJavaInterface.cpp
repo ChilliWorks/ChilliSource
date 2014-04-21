@@ -13,6 +13,7 @@
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/JSON/json.h>
@@ -89,7 +90,7 @@ void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProdu
 			products.push_back(desc);
 		}
 
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::vector<CSNetworking::IAPSystem::ProductDesc>&>(javaInterface.get(), &ChilliSource::Android::GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, products));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, javaInterface.get(), products));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -104,7 +105,7 @@ void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTrans
 		transaction.m_transactionId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
 		transaction.m_receipt = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_receipt);
 
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<u32, const CSNetworking::IAPSystem::Transaction&>(javaInterface.get(), &ChilliSource::Android::GooglePlayIAPJavaInterface::OnTransactionStatusUpdated, in_result, transaction));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::GooglePlayIAPJavaInterface::OnTransactionStatusUpdated, javaInterface.get(), in_result, transaction));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -116,7 +117,7 @@ void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTrans
 	{
 		std::string productId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
 		std::string transactionId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::string&, const std::string&, bool>(javaInterface.get(), &ChilliSource::Android::GooglePlayIAPJavaInterface::OnTransactionClosed, productId, transactionId, in_success));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::GooglePlayIAPJavaInterface::OnTransactionClosed, javaInterface.get(), productId, transactionId, in_success));
 	}
 }
 

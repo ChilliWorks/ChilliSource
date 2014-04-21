@@ -1,135 +1,131 @@
-/*
- *  TaskScheduler.h
- *  moFlow
- *
- *  Created by Scott Downie on 09/08/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  TaskScheduler.h
+//  Chilli Source
+//  Created by Scott Downie on 09/08/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
-#ifndef _MO_FLO_CORE_TASK_SCHEDULER_H_
-#define _MO_FLO_CORE_TASK_SCHEDULER_H_
+#ifndef _CHILLISOURCE_CORE_THREADING_TASKSCHEDULER_H_
+#define _CHILLISOURCE_CORE_THREADING_TASKSCHEDULER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/Threading/ThreadPool.h>
-#include <ChilliSource/Core/Threading/Task.h>
 
 namespace ChilliSource
 {
     namespace Core
     {
-        class TaskScheduler
+		//-------------------------------------------------
+		/// System for scheduling tasks to be executed
+		/// asynchronously by the thread pool or on
+		/// the main thread.
+		///
+		/// @author S Downie
+		//-------------------------------------------------
+        class TaskScheduler final : public AppSystem
         {
         public:
         
+			CS_DECLARE_NAMEDTYPE(TaskScheduler);
+
             typedef std::function<void()> GenericTaskType;
-            
-            //-------------------------------------------------
-            /// Init
-            ///
-            /// Called by the application to create a thread
-            /// pool with the optimum number of threads for
-            /// the hardware
-            ///
-            /// @param Number of threads
+
+			//------------------------------------------------
+			/// @author S Downie
+			///
+			/// @param Interface Id
+			///
+			/// @return Whether this object is of the given type
+			//------------------------------------------------
+			bool IsA(InterfaceIDType in_interfaceId) const override;
             //------------------------------------------------
-            static void Init(u32 udwNumThreads);
-            //------------------------------------------------
-            /// Schedule Task
-            ///
-            /// The task delegate will be placed into the
+            /// The task will be placed into the
             /// task queue and be performed when a thread
-            /// becomes available
+            /// becomes available.
+			///
+			/// @author S Downie
             ///
-            /// @param Task delegate
+            /// @param Task
             //------------------------------------------------
-            static void ScheduleTask(const GenericTaskType& insTask)
-            {
-                pThreadPool->Schedule(insTask);
-            }
-            //------------------------------------------------
-            /// For Each
-            ///
-            /// The given function will be applied to the
-            /// value of each element in parallel. 
-            ///
-            /// @param Iterator pointing to beginning
-            /// @param Iterator pointing to end
-            /// @param Task delegate callee
-            /// @param Delegate
-            /// @param Optional wait condition
-            //------------------------------------------------
-            template <typename TSender, typename TDelegate, typename TIterator, typename TArg>
-            static void ForEach(TIterator inIt, TIterator inItEnd, TSender* inpSender, void (TDelegate::*func)(TArg inArg1), WaitCondition* inpWaitCondition = nullptr)
-            {
-                //Unlike usual tasks the wait condition is shared between each scheduled task
-                //and threfore the condition isn't one but the number of iterations
-                for(; inIt != inItEnd; ++inIt)
-                {
-                    TArg Value = (*inIt);
-                    pThreadPool->Schedule(Task<TArg>(inpSender, func, Value, inpWaitCondition));
-                }
-            }
-            //------------------------------------------------
-            /// For Each (Const)
-            ///
-            /// The given function will be applied to the
-            /// value of each element in parallel. 
-            ///
-            /// @param Iterator pointing to beginning
-            /// @param Iterator pointing to end
-            /// @param Task delegate callee
-            /// @param Delegate
-            /// @param Optional wait condition
-            //------------------------------------------------
-            template <typename TSender, typename TDelegate, typename TIterator, typename TArg>
-            static void ForEach(TIterator inIt, TIterator inItEnd, TSender* inpSender, void (TDelegate::*func)(TArg inArg1) const, WaitCondition* inpWaitCondition = nullptr)
-            {
-                //Unlike usual tasks the wait condition is shared between each scheduled task
-                //and threfore the condition isn't one but the number of iterations
-                for(; inIt != inItEnd; ++inIt)
-                {
-                    TArg Value = (*inIt);
-					pThreadPool->Schedule(Task<TArg>(inpSender, func, inpWaitCondition, Value));
-                }
-            }
+			void ScheduleTask(const GenericTaskType& in_task);
             //----------------------------------------------------
-            /// Schedule Main Thread Message
-            ///
-            /// Schedule a delegate to be executed by the main
+            /// Schedule a task to be executed by the main
             /// thread
+			///
+			/// @author S Downie
+			///
+			/// @param Task
             //----------------------------------------------------
-            static void ScheduleMainThreadTask(const GenericTaskType& insTask)
-            {
-                std::unique_lock<std::recursive_mutex> Lock(MainThreadTaskMutex);
-                MainThreadTasks.push_back(insTask);
-            }
+			void ScheduleMainThreadTask(const GenericTaskType& insTask);
             //----------------------------------------------------
-            /// Get Num Pending Tasks
-            ///
-            /// @return Number of tasks waiting to be executed
-            //----------------------------------------------------
-            static u32 GetNumPendingTasks();
-            //----------------------------------------------------
-            /// Clear
-            ///
-            /// Unschedule all pending tasks
-            //----------------------------------------------------
-            static void Clear();
-            //----------------------------------------------------
-            /// Execute Main Thread Tasks
-            ///
             /// Execute any tasks that have been scehduled
             /// for the main thread
+			///
+			/// @author S Downie
             //----------------------------------------------------
-            static void ExecuteMainThreadTasks();
+            void ExecuteMainThreadTasks();
+
+		private:
+			friend class Application;
+			//-------------------------------------------------
+			/// Factory create method called by application
+            ///
+            /// @author S Downie
+			///
+			/// @return Ownership of new instance
+			//-------------------------------------------------
+			static TaskSchedulerUPtr Create();
+			//-------------------------------------------------
+			/// Private constructor to enforce use of create
+			/// method
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			TaskScheduler();
+			//-------------------------------------------------
+			/// Called when the system is created. Creates
+			/// the thread pool based on the set number of
+			/// threads.
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void OnInit() override;
+			//-------------------------------------------------
+			/// Called when the system is destroyed. Joins
+			/// all the threads back to main.
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void OnDestroy() override;
             
         private:
         
-            static Core::ThreadPool* pThreadPool;
+            ThreadPoolUPtr m_threadPool;
             
-            static std::recursive_mutex MainThreadTaskMutex;
-            static std::vector<GenericTaskType> MainThreadTasks;
+            std::recursive_mutex m_mainThreadQueueMutex;
+            std::vector<GenericTaskType> m_mainThreadTasks;
         };
     }
 }

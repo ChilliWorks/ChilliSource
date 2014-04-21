@@ -71,7 +71,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param [Out] the output resource pointer
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// Create mesh resource from model file on a background thread
 			///
@@ -82,7 +82,7 @@ namespace ChilliSource
             /// @param Delegate to callback on completion either success or failure
 			/// @param [Out] the output resource pointer
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// @author I Copland
 			///

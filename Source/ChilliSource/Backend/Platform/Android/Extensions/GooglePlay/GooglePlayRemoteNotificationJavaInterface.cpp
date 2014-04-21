@@ -29,7 +29,7 @@ void Java_com_chillisource_googleplay_GooglePlayRemoteNotificationNativeInterfac
 	if(pInterface != nullptr)
 	{
 		const std::string strToken = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrToken);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::string&>(pInterface.get(), &ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface::OnRemoteTokenReceived, strToken));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface::OnRemoteTokenReceived, pInterface.get(), strToken));
 	}
 }
 
@@ -58,7 +58,7 @@ void Java_com_chillisource_googleplay_GooglePlayRemoteNotificationNativeInterfac
 			sParams.SetValueForKey(strKey, strValue);
 		}
 
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const ChilliSource::Core::ParamDictionary&>(pInterface.get(), &ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface::OnRemoteNotificationReceived, sParams));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface::OnRemoteNotificationReceived, pInterface.get(), sParams));
 	}
 }
 

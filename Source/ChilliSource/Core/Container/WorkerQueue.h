@@ -45,11 +45,26 @@ namespace ChilliSource
                 //Wakey wakey!!!!
                 mEmptyWaitCondition.notify_one();
             }
+			//-----------------------------------------------------------
+			/// Causes the calling thread to sleep until the queue
+			/// gets an object pushed onto it or is destroyed
+			///
+			/// @author Scott Downie
+			//-----------------------------------------------------------
+			void wait_for_push_or_destroy()
+			{
+				std::unique_lock<std::mutex> QueueLock(mQueueMutex);
+
+				if (mQueue.empty())
+				{
+					//Sleepy time
+					mEmptyWaitCondition.wait(QueueLock);
+				}
+			}
             //-----------------------------------------------------------
             /// Thread safe method that locks the queue while it returns
-            /// the top object. If the flag is set then
-            /// The method will force the requesting thread to sleep
-            /// until the queue has data in it
+            /// the top object. Ensure the queue is not empty before 
+			/// calling
             ///
             /// @author Scott Downie
             ///
@@ -58,13 +73,6 @@ namespace ChilliSource
             T front()
             {
                 std::unique_lock<std::mutex> QueueLock(mQueueMutex);
-                
-                while(mQueue.empty())
-                {
-                    //Sleepy time
-                    mEmptyWaitCondition.wait(QueueLock);
-                }
-                
                 return mQueue.front();
             }
             //-----------------------------------------------------------
@@ -76,7 +84,6 @@ namespace ChilliSource
             void pop()
             {
                 std::unique_lock<std::mutex> QueueLock(mQueueMutex);
-                
                 mQueue.pop();
             }
             //-----------------------------------------------------------
@@ -99,6 +106,25 @@ namespace ChilliSource
                 std::unique_lock<std::mutex> QueueLock(mQueueMutex);
                 return mQueue.size();
             }
+			//-----------------------------------------------------------
+			/// Awakes all waiting threads regardless of whether 
+			/// objects have been pushed
+			///
+			/// @author S Downie
+			//-----------------------------------------------------------
+			void awake_all()
+			{
+				mEmptyWaitCondition.notify_all();
+			}
+			//-----------------------------------------------------------
+			/// Destructor awakes all waiting threads
+			///
+			/// @author S Downie
+			//-----------------------------------------------------------
+			~WorkerQueue()
+			{
+				awake_all();
+			}
             
         private:
             

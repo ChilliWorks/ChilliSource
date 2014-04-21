@@ -52,8 +52,6 @@ namespace ChilliSource
             
             //----------------------------------------------------------------------------
             /// The resource types supported by materials
-            ///
-            /// @author S Downie
             //----------------------------------------------------------------------------
             enum class ResourceType
             {
@@ -514,151 +512,102 @@ namespace ChilliSource
             /// @param Completion delegate
             /// @param [Out] Material
             //----------------------------------------------------------------------------
-            void LoadResourcesChained(u32 in_loadIndex, const std::vector<ChainedLoadDesc>& in_descs, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const MaterialSPtr& out_material);
-            //----------------------------------------------------------------------------
-            /// Load the shader from the given descs at the given index. On
-            /// completion this will recursively kick off the next load if one
-            /// is required, otherwise will call the delegate
-            ///
-            /// @author S Downie
-            ///
-            /// @param Index of desc to load
-            /// @param Descs
-            /// @param Completion delegate
-            /// @param [Out] Material
-            //----------------------------------------------------------------------------
-            void LoadShaderChained(u32 in_loadIndex, const std::vector<ChainedLoadDesc>& in_descs, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const MaterialSPtr& out_material)
-            {
-                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-                
-                resourcePool->LoadResourceAsync<Shader>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, [in_loadIndex, in_descs, in_delegate, out_material](const ShaderCSPtr& in_shader)
-                {
-                    if(in_shader->GetLoadState() == Core::Resource::LoadState::k_loaded)
-                    {
-                        out_material->SetShader(in_descs[in_loadIndex].m_pass, in_shader);
-                        
-                        u32 newLoadIndex = in_loadIndex + 1;
-                        
-                        if(newLoadIndex < in_descs.size())
-                        {
-                            LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
-                        }
-                        else
-                        {
-                            out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
-                            Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        out_material->SetLoadState(Core::Resource::LoadState::k_failed);
-                        Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
-                        return;
-                    }
-                });
-            }
-            //----------------------------------------------------------------------------
-            /// Load the texture resource from the given descs at the given index. On
-            /// completion this will recursively kick off the next load if one
-            /// is required, otherwise will call the delegate
-            ///
-            /// @author S Downie
-            ///
-            /// @param Index of desc to load
-            /// @param Descs
-            /// @param Completion delegate
-            /// @param [Out] Material
-            //----------------------------------------------------------------------------
-            void LoadTextureChained(u32 in_loadIndex, const std::vector<ChainedLoadDesc>& in_descs, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const MaterialSPtr& out_material)
-            {
-                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-                
-                resourcePool->LoadResourceAsync<Texture>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, [in_loadIndex, in_descs, in_delegate, out_material](const TextureCSPtr& in_texture)
-                {
-                     if(in_texture->GetLoadState() == Core::Resource::LoadState::k_loaded)
-                     {
-                         out_material->AddTexture(in_texture);
-                         
-                         u32 newLoadIndex = in_loadIndex + 1;
-                         
-                         if(newLoadIndex < in_descs.size())
-                         {
-                             LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
-                         }
-                         else
-                         {
-                             out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
-                             Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
-                             return;
-                         }
-                     }
-                     else
-                     {
-                         out_material->SetLoadState(Core::Resource::LoadState::k_failed);
-                         Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
-                         return;
-                     }
-                });
-            }
-            //----------------------------------------------------------------------------
-            /// Load the cubemap resource from the given descs at the given index. On
-            /// completion this will recursively kick off the next load if one
-            /// is required, otherwise will call the delegate
-            ///
-            /// @author S Downie
-            ///
-            /// @param Index of desc to load
-            /// @param Descs
-            /// @param Completion delegate
-            /// @param [Out] Material
-            //----------------------------------------------------------------------------
-            void LoadCubemapChained(u32 in_loadIndex, const std::vector<ChainedLoadDesc>& in_descs, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const MaterialSPtr& out_material)
-            {
-                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-                
-                resourcePool->LoadResourceAsync<Cubemap>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, [in_loadIndex, in_descs, in_delegate, out_material](const CubemapCSPtr& in_cubemap)
-                {
-                     if(in_cubemap->GetLoadState() == Core::Resource::LoadState::k_loaded)
-                     {
-                         out_material->SetCubemap(in_cubemap);
-                         
-                         u32 newLoadIndex = in_loadIndex + 1;
-                         
-                         if(newLoadIndex < in_descs.size())
-                         {
-                             LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
-                         }
-                         else
-                         {
-                             out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
-                             Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
-                             return;
-                         }
-                     }
-                     else
-                     {
-                         out_material->SetLoadState(Core::Resource::LoadState::k_failed);
-                         Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourceSPtr&>(in_delegate, out_material));
-                         return;
-                     }
-                });
-            }
-            //----------------------------------------------------------------------------
-            //----------------------------------------------------------------------------
             void LoadResourcesChained(u32 in_loadIndex, const std::vector<ChainedLoadDesc>& in_descs, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const MaterialSPtr& out_material)
             {
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                
                 switch(in_descs[in_loadIndex].m_type)
                 {
                     case ResourceType::k_shader:
-                        LoadShaderChained(in_loadIndex, in_descs, in_delegate, out_material);
+                    {
+                        resourcePool->LoadResourceAsync<Shader>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, [in_loadIndex, in_descs, in_delegate, out_material](const ShaderCSPtr& in_shader)
+                        {
+                            if(in_shader->GetLoadState() == Core::Resource::LoadState::k_loaded)
+                            {
+                                out_material->SetShader(in_descs[in_loadIndex].m_pass, in_shader);
+                                
+                                u32 newLoadIndex = in_loadIndex + 1;
+                                
+                                if(newLoadIndex < in_descs.size())
+                                {
+                                    LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
+                                }
+                                else
+                                {
+                                    out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
+									Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_material));
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                out_material->SetLoadState(Core::Resource::LoadState::k_failed);
+								Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_material));
+                                return;
+                            }
+                        });
                         break;
+                    }
                     case ResourceType::k_texture:
-                        LoadTextureChained(in_loadIndex, in_descs, in_delegate, out_material);
+                    {
+                        resourcePool->LoadResourceAsync<Texture>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, [in_loadIndex, in_descs, in_delegate, out_material](const TextureCSPtr& in_texture)
+                        {
+                            if(in_texture->GetLoadState() == Core::Resource::LoadState::k_loaded)
+                            {
+                                out_material->AddTexture(in_texture);
+                                
+                                u32 newLoadIndex = in_loadIndex + 1;
+                                
+                                if(newLoadIndex < in_descs.size())
+                                {
+                                    LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
+                                }
+                                else
+                                {
+                                    out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
+									Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_material));
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                out_material->SetLoadState(Core::Resource::LoadState::k_failed);
+								Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_material));
+                                return;
+                            }
+                        });
                         break;
+                    }
                     case ResourceType::k_cubemap:
-                        LoadCubemapChained(in_loadIndex, in_descs, in_delegate, out_material);
+                    {
+                        resourcePool->LoadResourceAsync<Cubemap>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, [in_loadIndex, in_descs, in_delegate, out_material](const CubemapCSPtr& in_cubemap)
+                        {
+                            if(in_cubemap->GetLoadState() == Core::Resource::LoadState::k_loaded)
+                            {
+                                out_material->SetCubemap(in_cubemap);
+
+                                u32 newLoadIndex = in_loadIndex + 1;
+
+                                if(newLoadIndex < in_descs.size())
+                                {
+                                    LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
+                                }
+                                else
+                                {
+                                    out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
+									Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_material));
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                out_material->SetLoadState(Core::Resource::LoadState::k_failed);
+								Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_material));
+                                return;
+                            }
+                        });
                         break;
+                    }
                 }
             }
 		}
@@ -698,7 +647,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void MaterialProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		void MaterialProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
 		{
             std::vector<ShaderDesc> shaderFiles;
             std::vector<TextureDesc> textureFiles;
@@ -769,15 +718,14 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void MaterialProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+		void MaterialProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
-			Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, Core::ResourceSPtr&>
-            BuildMaterialTask(this, &MaterialProvider::BuildMaterialTask, in_location, in_filePath, in_delegate, out_resource);
-			Core::TaskScheduler::ScheduleTask(BuildMaterialTask);
+			auto task = std::bind(&MaterialProvider::BuildMaterialTask, this, in_location, in_filePath, in_delegate, out_resource);
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void MaterialProvider::BuildMaterialTask(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+		void MaterialProvider::BuildMaterialTask(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
             std::vector<ShaderDesc> shaderFiles;
             std::vector<TextureDesc> textureFiles;
@@ -785,7 +733,7 @@ namespace ChilliSource
 			if(BuildMaterialFromFile(in_location, in_filePath, shaderFiles, textureFiles, cubemapFiles, (Material*)out_resource.get()) == false)
             {
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-                Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<Core::ResourceSPtr&>(in_delegate, out_resource));
+				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 return;
             }
             
