@@ -11,6 +11,7 @@
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -38,8 +39,8 @@ void Java_com_chillisource_video_VideoPlayerNativeInterface_OnVideoComplete(JNIE
 
 	if (pVideoPJI != nullptr)
 	{
-		ChilliSource::Core::Task<> task(pVideoPJI.get(), &ChilliSource::Android::VideoPlayerJavaInterface::OnVideoComplete);
-		ChilliSource::Core::TaskScheduler::ScheduleMainThreadTask(task);
+		auto task = std::bind(&ChilliSource::Android::VideoPlayerJavaInterface::OnVideoComplete, pVideoPJI.get());
+		ChilliSource::Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
 }
 //-------------------------------------------

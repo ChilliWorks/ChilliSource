@@ -344,25 +344,21 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void ImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		void ImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
 		{
             LoadImage(in_storageLocation, in_filePath, nullptr, out_resource);
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-        void ImageProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+        void ImageProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
-            Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, Core::ResourceSPtr&>
-            task(this, &ImageProvider::LoadImage, in_storageLocation, in_filePath, in_delegate, out_resource);
+            auto task = std::bind(&ImageProvider::LoadImage, this, in_storageLocation, in_filePath, in_delegate, out_resource);
             
-            //auto task = Core::MakeTask(std::bind(&ImageProvider::LoadImage, this, in_storageLocation, in_filePath, in_delegate, out_resource), in_storageLocation, in_filePath, in_delegate, out_resource);
-            //auto task = Core::MakeTask(this, &ImageProvider::LoadImage, in_storageLocation, in_filePath, in_delegate, out_resource);
-            
-            Core::TaskScheduler::ScheduleTask(task);
+            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void ImageProvider::LoadImage(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+        void ImageProvider::LoadImage(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
             Core::FileStreamSPtr pImageFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_readBinary);
             
@@ -371,8 +367,7 @@ namespace ChilliSource
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-                    Core::Task<Core::ResourceSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+                    Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 }
                 return;
             }
@@ -405,8 +400,7 @@ namespace ChilliSource
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-                    Core::Task<Core::ResourceSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+                    Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 }
                 return;
             }
@@ -414,8 +408,7 @@ namespace ChilliSource
             out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
             if(in_delegate != nullptr)
             {
-                Core::Task<Core::ResourceSPtr&> task(in_delegate, out_resource);
-                Core::TaskScheduler::ScheduleMainThreadTask(task);
+                Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
             }
         }
 	}

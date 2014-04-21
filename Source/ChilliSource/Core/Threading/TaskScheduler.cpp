@@ -1,11 +1,30 @@
-/*
- *  TaskScheduler.cpp
- *  moFlow
- *
- *  Created by Scott Downie on 09/08/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  TaskScheduler.cpp
+//  Chilli Source
+//  Created by Scott Downie on 09/08/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -13,60 +32,65 @@ namespace ChilliSource
 {
     namespace Core
     {
-        Core::ThreadPool* TaskScheduler::pThreadPool = nullptr;
-        
-        std::recursive_mutex TaskScheduler::MainThreadTaskMutex;
-        std::vector<TaskScheduler::GenericTaskType> TaskScheduler::MainThreadTasks;
+		CS_DEFINE_NAMEDTYPE(TaskScheduler);
 
-        //-------------------------------------------------
-        /// Init
-        ///
-        /// Called by the application to create a thread
-        /// pool with the optimum number of threads for
-        /// the hardware
-        ///
-        /// @param Number of threads
-        //------------------------------------------------
-        void TaskScheduler::Init(u32 udwNumThreads)
-        {
-            pThreadPool = new Core::ThreadPool(udwNumThreads);
-        }
+		//-------------------------------------------------
+		//-------------------------------------------------
+		TaskSchedulerUPtr TaskScheduler::Create(u32 in_numThreads)
+		{
+			return TaskSchedulerUPtr(new TaskScheduler(in_numThreads));
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		TaskScheduler::TaskScheduler(u32 in_numThreads)
+			: m_numThreads(in_numThreads)
+		{
+			CS_ASSERT(m_numThreads > 0, "Thread pool must have at least 1 thread");
+		}
+		//------------------------------------------------
+		//------------------------------------------------
+		bool TaskScheduler::IsA(InterfaceIDType in_interfaceId) const
+		{
+			return in_interfaceId == TaskScheduler::InterfaceID;
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void TaskScheduler::OnInit()
+		{
+			m_threadPool = ThreadPoolUPtr(new Core::ThreadPool(m_numThreads));
+		}
+		//------------------------------------------------
+		//------------------------------------------------
+		void TaskScheduler::ScheduleTask(const GenericTaskType& in_task)
+		{
+			m_threadPool->Schedule(in_task);
+		}
+		//----------------------------------------------------
+		//----------------------------------------------------
+		void TaskScheduler::ScheduleMainThreadTask(const GenericTaskType& in_task)
+		{
+			std::unique_lock<std::recursive_mutex> lock(m_mainThreadQueueMutex);
+			m_mainThreadTasks.push_back(in_task);
+		}
         //----------------------------------------------------
-        /// Get Num Pending Tasks
-        ///
-        /// @return Number of tasks waiting to be executed
-        //----------------------------------------------------
-        u32 TaskScheduler::GetNumPendingTasks() 
-        {
-            return pThreadPool->GetNumQueuedTasks();
-        }
-        //----------------------------------------------------
-        /// Clear
-        ///
-        /// Unschedule all pending tasks
-        //----------------------------------------------------
-        void TaskScheduler::Clear()
-        {
-            pThreadPool->ClearQueuedTasks();
-        }
-        //----------------------------------------------------
-        /// Execute Main Thread Tasks
-        ///
-        /// Execute any tasks that have been scehduled
-        /// for the main thread
         //----------------------------------------------------
         void TaskScheduler::ExecuteMainThreadTasks()
         {
-            std::unique_lock<std::recursive_mutex> Lock(MainThreadTaskMutex);
+            std::unique_lock<std::recursive_mutex> lock(m_mainThreadQueueMutex);
             
-            for (u32 i = 0; i < MainThreadTasks.size(); ++i)
+            for (u32 i = 0; i < m_mainThreadTasks.size(); ++i)
             {
-                GenericTaskType task = MainThreadTasks[i];
-                task();
+				m_mainThreadTasks[i]();
             }
             
-            MainThreadTasks.clear();
-        }
+			m_mainThreadTasks.clear();
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void TaskScheduler::OnDestroy()
+		{
+			m_threadPool.reset();
+		}
     }
 }
 

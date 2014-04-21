@@ -354,8 +354,7 @@ namespace ChilliSource
         		}
         	}
 
-        	Core::Task<> UnzipTask(this, &GooglePlayExpansionSystem::UnzipTask);
-        	Core::TaskScheduler::ScheduleTask(UnzipTask);
+        	Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&GooglePlayExpansionSystem::UnzipTask, this));
         }
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
@@ -377,8 +376,7 @@ namespace ChilliSource
 
 			m_javaInterface->AllowAppToSleep();
 
-        	Core::Task<DownloadStatus> CompleteTask(this, &GooglePlayExpansionSystem::UnzipCompleteTask, DownloadStatus::k_complete);
-        	Core::TaskScheduler::ScheduleMainThreadTask(CompleteTask);
+			Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&GooglePlayExpansionSystem::UnzipCompleteTask, this, DownloadStatus::k_complete));
         }
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------

@@ -82,25 +82,24 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		void CSSubtitlesProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		void CSSubtitlesProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
 		{
             SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(out_resource);
             LoadSubtitles(in_storageLocation, in_filePath, nullptr, pSubtitles);
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		void CSSubtitlesProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+		void CSSubtitlesProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
 			SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(out_resource);
 			
 			//Load model as task
-            Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, SubtitlesSPtr&>
-            task(this, &CSSubtitlesProvider::LoadSubtitles, in_storageLocation, in_filePath, in_delegate, pSubtitles);
-			Core::TaskScheduler::ScheduleTask(task);
+			auto task = std::bind(&CSSubtitlesProvider::LoadSubtitles, this, in_storageLocation, in_filePath, in_delegate, pSubtitles);
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void CSSubtitlesProvider::LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, SubtitlesSPtr& out_resource) const
+		void CSSubtitlesProvider::LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const SubtitlesSPtr& out_resource) const
         {
             //read the JSON
             Json::Value root;
@@ -114,8 +113,7 @@ namespace ChilliSource
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-                    Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 }
                 return;
             }
@@ -136,8 +134,7 @@ namespace ChilliSource
                         out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                         if(in_delegate != nullptr)
                         {
-                            Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                            Core::TaskScheduler::ScheduleMainThreadTask(task);
+							Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                         }
                         return;
                     }
@@ -149,8 +146,7 @@ namespace ChilliSource
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-                    Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 }
                 return;
             }
@@ -171,8 +167,7 @@ namespace ChilliSource
                         out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                         if(in_delegate != nullptr)
                         {
-                            Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                            Core::TaskScheduler::ScheduleMainThreadTask(task);
+							Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                         }
                         return;
                     }
@@ -184,8 +179,7 @@ namespace ChilliSource
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-                    Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 }
                 return;
             }
@@ -194,8 +188,7 @@ namespace ChilliSource
             
             if(in_delegate != nullptr)
             {
-                Core::Task<const Core::ResourceCSPtr&> task(in_delegate, out_resource);
-                Core::TaskScheduler::ScheduleMainThreadTask(task);
+				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
             }
         }
         //-------------------------------------------------------------------------

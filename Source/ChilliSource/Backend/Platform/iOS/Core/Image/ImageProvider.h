@@ -85,7 +85,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @param [Out] Resource
 			//-----------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
             /// Completion delegate is called when load is finished.
@@ -98,7 +98,7 @@ namespace ChilliSource
             /// @param Completion delegate
             /// @param [Out] The output resource.
             //----------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
         private:
             
             friend Core::ImageProviderUPtr Core::ImageProvider::Create();
@@ -118,7 +118,7 @@ namespace ChilliSource
             /// @param Completion delegate
             /// @param [Out] The output resource
             //-----------------------------------------------------------
-            void LoadImage(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource);
+            void LoadImage(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
 		};
 	}
 }
