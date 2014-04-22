@@ -60,7 +60,7 @@ namespace ChilliSource
         Core::Vector2 TextureDrawable::GetPreferredSize() const
         {
             CS_ASSERT(m_texture != nullptr, "TextureDrawable cannot get preferred size without texture");
-            return Core::Vector2(m_texture->GetWidth(), m_texture->GetHeight());
+            return Core::Vector2((f32)m_texture->GetWidth(), (f32)m_texture->GetHeight());
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
