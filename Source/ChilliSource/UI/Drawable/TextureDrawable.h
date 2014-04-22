@@ -69,6 +69,13 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetUVs(const Core::Rectangle& in_UVs);
             //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The preferred size that the drawable wishes to de drawn at based on the
+            /// texture size
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetPreferredSize() const override;
+            //----------------------------------------------------------------------------------------
             /// Render the widget using the canvas renderer. The widget has is rendered using the
             /// set texture and UVs.
             ///

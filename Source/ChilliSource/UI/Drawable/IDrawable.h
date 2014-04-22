@@ -45,6 +45,13 @@ namespace ChilliSource
         {
         public:
             //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The preferred size that the drawable wishes to de drawn at. This is usually
+            /// based on an underlying image
+            //----------------------------------------------------------------------------------------
+            virtual Core::Vector2 GetPreferredSize() const = 0;
+            //----------------------------------------------------------------------------------------
             /// Render the widget using the canvas renderer
             ///
             /// @author S Downie

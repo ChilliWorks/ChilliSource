@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
 {
@@ -53,6 +54,13 @@ namespace ChilliSource
         void TextureDrawable::SetUVs(const Core::Rectangle& in_UVs)
         {
             m_UVs = in_UVs;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 TextureDrawable::GetPreferredSize() const
+        {
+            CS_ASSERT(m_texture != nullptr, "TextureDrawable cannot get preferred size without texture");
+            return Core::Vector2(m_texture->GetWidth(), m_texture->GetHeight());
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
