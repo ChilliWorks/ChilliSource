@@ -37,6 +37,8 @@
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 
+#include <array>
+#include <functional>
 #include <unordered_map>
 #include <vector>
 
@@ -51,22 +53,16 @@ namespace ChilliSource
         /// layed out using a mixture of absolute and relative coordinates in which relative coordinates
         /// are relative to the parent view
         ///
+        /// Note: Some widgets have private sub-widgets. These are not exposed through the API
+        /// and allow the widget to be treated as a solid black box while maintaining the flexibility
+        /// of building widgets from smaller blocks.
+        ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
         class Widget
         {
         public:
 
-            //----------------------------------------------------------------------------------------
-            /// Constructor
-            //----------------------------------------------------------------------------------------
-            Widget()
-            {
-                //TODO: Restrict what is allowed to be set on a property
-                //TEST STUFF
-                std::vector<PropertyDesc> descs = { {"WiggleFactor", "Float"}, {"Visible", "Bool"}, {"SizePolicy", "String"}, {"CustomPointer", "Pointer"} };
-                CreateProperties(descs);
-            }
             //----------------------------------------------------------------------------------------
             /// Holds the definition of a property that allow it to be set and get from code. The
             /// description contains the name and type of the property
@@ -91,6 +87,22 @@ namespace ChilliSource
                 k_float,
                 k_string,
                 k_pointer
+            };
+            //----------------------------------------------------------------------------------------
+            /// Identifiers for functions that maintain the aspect ratio of the widget based on
+            /// current size and preferred size
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            enum class AspectMaintainPolicy
+            {
+                k_none,
+                k_preferred,
+                k_width,
+                k_height,
+                k_fit,
+                k_fill,
+                k_totalNum
             };
             //----------------------------------------------------------------------------------------
             /// Widgets have custom properties that can be changed. These are created from the
@@ -169,6 +181,25 @@ namespace ChilliSource
             /// @param Size in pixels
             //----------------------------------------------------------------------------------------
             void SetAbsoluteSize(const Core::Vector2& in_size);
+            //----------------------------------------------------------------------------------------
+            /// The default preferred size is used in cases when there is no drawable to query for its
+            /// preferred size. The preferred size is used to maintain aspect ration depending on the
+            /// aspect policy.
+            ///
+            /// @author S Downie
+            ///
+            /// @param The preferred size of the widget in absolutes
+            //----------------------------------------------------------------------------------------
+            void SetDefaultPreferredSize(const Core::Vector2& in_size);
+            //----------------------------------------------------------------------------------------
+            /// Set the function that will be used to alter the size in order to maintain the
+            /// aspect ratio of the widget. This is usually based on the drawable image size and aspect
+            ///
+            /// @author S Downie
+            ///
+            /// @param Aspect maintain function
+            //----------------------------------------------------------------------------------------
+            void SetAspectMaintainPolicy(AspectMaintainPolicy in_policy);
             //----------------------------------------------------------------------------------------
             /// Set the position of the widget relative to its parent size and anchor point i.e.
             /// if the anchor is bottom left then 0.5, 0.5 will place it in the middle of the parent
@@ -345,9 +376,35 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Widget
+            /// @param Widget to add
             //----------------------------------------------------------------------------------------
             void Add(const WidgetSPtr& in_widget);
+            //----------------------------------------------------------------------------------------
+            /// Remove the child widget from this widget. It will no longer be rendered and may
+            /// be destroyed if this is the last reference.
+            ///
+            /// NOTE: Will assert if the parents do not match
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget to remove
+            //----------------------------------------------------------------------------------------
+            void Remove(Widget* in_widget);
+            //----------------------------------------------------------------------------------------
+            /// Remove the widget from the child list of its parent. It will no longer be rendered and may
+            /// be destroyed if the parent holds the last reference
+            ///
+            /// NOTE: Will assert if the parents do not match
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            void RemoveFromParent();
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The first child widget with the given name. Note: this is not recursive
+            //----------------------------------------------------------------------------------------
+            Widget* GetWidget(const std::string& in_name);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -360,6 +417,91 @@ namespace ChilliSource
             /// @return Parent widget of this widget or null
             //----------------------------------------------------------------------------------------
             const Widget* GetParent() const;
+            //----------------------------------------------------------------------------------------
+            /// Bring the subview to the front of its siblings. It will now be rendered on top
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            void BringToFront();
+            //----------------------------------------------------------------------------------------
+            /// Bring the subview one place forward to the front of the sibling in front of it.
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            void BringForward();
+            //----------------------------------------------------------------------------------------
+            /// Send the subview one place backward to behind the sibling in behind it.
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            void SendBackward();
+            //----------------------------------------------------------------------------------------
+            /// Send the subview to the back of its siblings. It will be rendered behind all other
+            /// siblings
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            void SendToBack();
+            //----------------------------------------------------------------------------------------
+            /// Calculate the screen space position of the object based on the local position, local
+            /// alignment to parent, local alignment to origin and the parents final position.
+            ///
+            /// NOTE: If the position is relative the final position cannot be calculated until
+            /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
+            /// Therefore will assert if the widget is not on the root canvas
+            ///
+            /// @author S Downie
+            ///
+            /// @return Screen space position of origin in pixels
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetFinalPosition() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the screen space size of the object based on the local size and the
+            /// parent size.
+            ///
+            /// NOTE: If the size is relative the final size cannot be calculated until
+            /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
+            /// Therefore will assert if the widget is not on the root canvas
+            ///
+            /// @author S Downie
+            ///
+            /// @return Screen space size in pixels
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetFinalSize() const;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The preferred size of the widget based on the current drawable or the
+            /// fallback value if there is no drawable
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetPreferredSize() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the rotation of the object based on the local rotation and the
+            /// parent rotation.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Final rotation in radians
+            //----------------------------------------------------------------------------------------
+            f32 GetFinalRotation() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the scale of the object based on the local scale and the
+            /// parent scale.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Final scale
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetFinalScale() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the colour of the object based on the local colour and the
+            /// parent colour.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Final colour
+            //----------------------------------------------------------------------------------------
+            Core::Colour GetFinalColour() const;
             //----------------------------------------------------------------------------------------
             /// Set the value of the property with the given name. If no property exists
             /// with the name then it will assert.
@@ -436,19 +578,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Matrix3x3 GetFinalTransform() const;
             //----------------------------------------------------------------------------------------
-            /// Calculate the screen space position of the object based on the local position, local
-            /// alignment to parent, local alignment to origin and the parents final position.
-            ///
-            /// NOTE: If the position is relative the final position cannot be calculated until
-            /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
-            /// Therefore will assert if the widget is not on the root canvas
-            ///
-            /// @author S Downie
-            ///
-            /// @return Screen space position of origin in pixels
-            //----------------------------------------------------------------------------------------
-            Core::Vector2 GetFinalPosition() const;
-            //----------------------------------------------------------------------------------------
             /// Calculate the parent space position of the object based on the local position, local
             /// alignment to parent and local alignment to origin. This method exists to create
             /// a position in pixels that can be used to create the local transform matrix. The local
@@ -465,54 +594,29 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Vector2 GetParentSpacePosition() const;
             //----------------------------------------------------------------------------------------
-            /// Calculate the screen space size of the object based on the local size and the
-            /// parent size.
-            ///
-            /// NOTE: If the size is relative the final size cannot be calculated until
-            /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
-            /// Therefore will assert if the widget is not on the root canvas
+            /// Delegate for aspect ratio maintain functions.
             ///
             /// @author S Downie
             ///
-            /// @return Screen space size in pixels
-            //----------------------------------------------------------------------------------------
-            Core::Vector2 GetFinalSize() const;
-            //----------------------------------------------------------------------------------------
-            /// Calculate the rotation of the object based on the local rotation and the
-            /// parent rotation.
+            /// @param Widget absolute size
+            /// @param Widget target size (aspect ratio)
             ///
-            /// @author S Downie
-            ///
-            /// @return Final rotation in radians
+            /// @return New size with aspect function applied
             //----------------------------------------------------------------------------------------
-            f32 GetFinalRotation() const;
-            //----------------------------------------------------------------------------------------
-            /// Calculate the scale of the object based on the local scale and the
-            /// parent scale.
-            ///
-            /// @author S Downie
-            ///
-            /// @return Final scale
-            //----------------------------------------------------------------------------------------
-            Core::Vector2 GetFinalScale() const;
-            //----------------------------------------------------------------------------------------
-            /// Calculate the colour of the object based on the local colour and the
-            /// parent colour.
-            ///
-            /// @author S Downie
-            ///
-            /// @return Final colour
-            //----------------------------------------------------------------------------------------
-            Core::Colour GetFinalColour() const;
-
+            using AspectMaintainDelegate = std::function<Core::Vector2(const Core::Vector2&, const Core::Vector2&)>;
         private:
             
             Core::UnifiedVector2 m_localPosition;
             Core::UnifiedVector2 m_localSize;
+            Core::Vector2 m_preferredSize = Core::Vector2::ONE;
             Core::Vector2 m_localScale = Core::Vector2::ONE;
             Core::Colour m_localColour;
             f32 m_localRotation = 0.0f;
             
+            std::array<AspectMaintainDelegate, (u32)AspectMaintainPolicy::k_totalNum> m_aspectMaintainFuncs;
+            AspectMaintainDelegate m_aspectMaintainDelegate;
+            
+            std::vector<WidgetSPtr> m_internalChildren;
             std::vector<WidgetSPtr> m_children;
             
             std::string m_name;

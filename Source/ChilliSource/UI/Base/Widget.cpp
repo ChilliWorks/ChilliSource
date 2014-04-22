@@ -83,6 +83,107 @@ namespace ChilliSource
                 return 0;
             }
         }
+        namespace AspectMaintain
+        {
+            //----------------------------------------------------------------------------------------
+            /// Aspect ratio maintaining function that keeps the current width but adapts
+            /// the height to maintain the aspect ratio
+            ///
+            /// @author S Downie
+            ///
+            /// @param Absolute size of widget based on current unified size settings
+            /// @param Target aspect ration size in absolute coordinates
+            ///
+            /// @return New absolute size with maintain function applied
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 KeepWidthAdaptHeight(const Core::Vector2& in_absSize, const Core::Vector2& in_targetSize)
+            {
+                f32 targetAspectRatio = in_targetSize.y / in_targetSize.x;
+                f32 absHeight = (targetAspectRatio * in_absSize.x);
+                return Core::Vector2(in_absSize.x, absHeight);
+            }
+            //----------------------------------------------------------------------------------------
+            /// Aspect ratio maintaining function that keeps the current height but adapts
+            /// the width to maintain the aspect ratio
+            ///
+            /// @author S Downie
+            ///
+            /// @param Absolute size of widget based on current unified size settings
+            /// @param Target aspect ration size in absolute coordinates
+            ///
+            /// @return New absolute size with maintain function applied
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 KeepHeightAdaptWidth(const Core::Vector2& in_absSize, const Core::Vector2& in_targetSize)
+            {
+                f32 targetAspectRatio = in_targetSize.x / in_targetSize.y;
+                f32 absWidth = (targetAspectRatio * in_absSize.y);
+                return Core::Vector2(absWidth, in_absSize.y);
+            }
+            //----------------------------------------------------------------------------------------
+            /// Aspect ratio maintaining function that uses the target size and aspect
+            ///
+            /// @author S Downie
+            ///
+            /// @param Absolute size of widget based on current unified size settings
+            /// @param Target aspect ration size in absolute coordinates
+            ///
+            /// @return New absolute size with maintain function applied
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 UseTarget(const Core::Vector2& in_absSize, const Core::Vector2& in_targetSize)
+            {
+                return in_targetSize;
+            }
+            //----------------------------------------------------------------------------------------
+            /// Aspect ratio maintaining function that maintains the given target aspect ratio
+            /// while ensuring the size does not DROP BELOW the original size
+            ///
+            /// @author S Downie
+            ///
+            /// @param Absolute size of widget based on current unified size settings
+            /// @param Target aspect ration size in absolute coordinates
+            ///
+            /// @return New absolute size with maintain function applied
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 FillOriginal(const Core::Vector2& in_absSize, const Core::Vector2& in_targetSize)
+            {
+                f32 currentRatio = in_absSize.x / in_absSize.y;
+                f32 targetRatio = in_targetSize.x / in_targetSize.y;
+                
+                if(targetRatio <= currentRatio)
+                {
+                    return KeepWidthAdaptHeight(std::max(in_targetSize, in_absSize), in_targetSize);
+                }
+                else
+                {
+                    return KeepHeightAdaptWidth(std::max(in_targetSize, in_absSize), in_targetSize);
+                }
+            }
+            //----------------------------------------------------------------------------------------
+            /// Aspect ratio maintaining function that maintains the given target aspect ratio
+            /// while ensuring the size does not EXCEED the original size
+            ///
+            /// @author S Downie
+            ///
+            /// @param Absolute size of widget based on current unified size settings
+            /// @param Target aspect ration size in absolute coordinates
+            ///
+            /// @return New absolute size with maintain function applied
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 FitOriginal(const Core::Vector2& in_absSize, const Core::Vector2& in_targetSize)
+            {
+                f32 currentRatio = in_absSize.x / in_absSize.y;
+                f32 targetRatio = in_targetSize.x / in_targetSize.y;
+                
+                if(targetRatio > currentRatio)
+                {
+                    return KeepWidthAdaptHeight(std::min(in_targetSize, in_absSize), in_targetSize);
+                }
+                else
+                {
+                    return KeepHeightAdaptWidth(std::min(in_targetSize, in_absSize), in_targetSize);
+                }
+            }
+        }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::CreateProperties(const std::vector<PropertyDesc>& in_descs)
@@ -107,6 +208,12 @@ namespace ChilliSource
             {
                 m_propertyBlob = new u8[currentOffset];
             }
+            
+            m_aspectMaintainFuncs[(u32)AspectMaintainPolicy::k_preferred] = AspectMaintain::UseTarget;
+            m_aspectMaintainFuncs[(u32)AspectMaintainPolicy::k_width] = AspectMaintain::KeepWidthAdaptHeight;
+            m_aspectMaintainFuncs[(u32)AspectMaintainPolicy::k_height] = AspectMaintain::KeepHeightAdaptWidth;
+            m_aspectMaintainFuncs[(u32)AspectMaintainPolicy::k_fill] = AspectMaintain::FillOriginal;
+            m_aspectMaintainFuncs[(u32)AspectMaintainPolicy::k_fit] = AspectMaintain::FitOriginal;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -158,6 +265,26 @@ namespace ChilliSource
         void Widget::SetAbsoluteSize(const Core::Vector2& in_size)
         {
             m_localSize.vAbsolute = in_size;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetDefaultPreferredSize(const Core::Vector2& in_size)
+        {
+            m_preferredSize = in_size;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetAspectMaintainPolicy(AspectMaintainPolicy in_policy)
+        {
+            CS_ASSERT(in_policy != AspectMaintainPolicy::k_totalNum, "k_totalNum is not an aspect maintain function");
+            
+            if(in_policy == AspectMaintainPolicy::k_none)
+            {
+                m_aspectMaintainDelegate = nullptr;
+                return;
+            }
+            
+            m_aspectMaintainDelegate = m_aspectMaintainFuncs[(u32)in_policy];
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -293,7 +420,44 @@ namespace ChilliSource
             //TODO: Ensure that the vector is not invalidated during iteration
             m_children.push_back(in_widget);
             in_widget->m_parent = this;
-            in_widget->m_canvas = m_canvas;
+            in_widget->SetCanvas(m_canvas);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::Remove(Widget* in_widget)
+        {
+            CS_ASSERT(in_widget->GetParent() == this, "Widget is a child of a different parent");
+            
+            for(auto it = std::begin(m_children); it != std::end(m_children); ++it)
+            {
+                if(it->get() == in_widget)
+                {
+                    m_children.erase(it);
+                    return;
+                }
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::RemoveFromParent()
+        {
+            CS_ASSERT(m_parent != nullptr, "Widget has no parent to remove from");
+            
+            m_parent->Remove(this);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Widget* Widget::GetWidget(const std::string& in_name)
+        {
+            for(auto& child : m_children)
+            {
+                if(child->m_name == in_name)
+                {
+                    return child.get();
+                }
+            }
+            
+            return nullptr;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -309,9 +473,85 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void Widget::BringToFront()
+        {
+            CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
+            
+            CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
+            
+            s32 length = m_parent->m_children.size() - 1;
+            for(u32 i=0; i<length; ++i)
+            {
+                if(m_parent->m_children[i].get() == this)
+                {
+                    std::swap(m_parent->m_children[i], m_parent->m_children[i+1]);
+                }
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::BringForward()
+        {
+            CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
+            
+            s32 length = m_parent->m_children.size() - 1;
+            for(u32 i=0; i<length; ++i)
+            {
+                if(m_parent->m_children[i].get() == this)
+                {
+                    std::swap(m_parent->m_children[i], m_parent->m_children[i+1]);
+                    return;
+                }
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SendBackward()
+        {
+            CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
+            
+            u32 length = m_parent->m_children.size();
+            for(u32 i=1; i<length; ++i)
+            {
+                if(m_parent->m_children[i].get() == this)
+                {
+                    std::swap(m_parent->m_children[i], m_parent->m_children[i-1]);
+                    return;
+                }
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SendToBack()
+        {
+            CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
+            
+            CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
+            
+            u32 length = m_parent->m_children.size();
+            for(u32 i=1; i<length; ++i)
+            {
+                if(m_parent->m_children[i].get() == this)
+                {
+                    std::swap(m_parent->m_children[i], m_parent->m_children[i-1]);
+                }
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         void Widget::SetCanvas(const Widget* in_canvas)
         {
             m_canvas = in_canvas;
+            
+            for(auto& child : m_internalChildren)
+            {
+                child->SetCanvas(m_canvas);
+            }
+            
+            for(auto& child : m_children)
+            {
+                child->SetCanvas(m_canvas);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -342,6 +582,11 @@ namespace ChilliSource
                 bottomLeftPos += GetFinalPosition();
                 
                 in_renderer->EnableClippingToBounds(bottomLeftPos, finalSize);
+            }
+            
+            for(auto& child : m_internalChildren)
+            {
+                child->Draw(in_renderer);
             }
             
             for(auto& child : m_children)
@@ -392,8 +637,8 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         Core::Vector2 Widget::GetParentSpacePosition() const
         {
-            CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute position of widget without canvas");
-            CS_ASSERT(m_parent != nullptr, "Cannot get the absolute position of widget without parent");
+            CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute position of widget without attaching it to the canvas");
+            CS_ASSERT(m_parent != nullptr, "Cannot get the absolute position of widget without a parent");
             
             //Get the anchor point to which the widget is aligned in parent space
             const Core::Vector2 parentSize(m_parent->GetFinalSize());
@@ -418,20 +663,41 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         Core::Vector2 Widget::GetFinalSize() const
         {
-            CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute position of widget without canvas");
+            CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute size of widget without attaching it to the canvas");
+            
+            Core::Vector2 finalSize;
             
             if(m_parent != nullptr)
             {
-                return ((m_parent->GetFinalSize() * m_localSize.vRelative) + m_localSize.vAbsolute) * GetFinalScale();
+                finalSize = ((m_parent->GetFinalSize() * m_localSize.vRelative) + m_localSize.vAbsolute) * GetFinalScale();
+            }
+            else
+            {
+                finalSize = m_localSize.vAbsolute * GetFinalScale();
             }
             
-            return m_localSize.vAbsolute * GetFinalScale();
+            if(m_aspectMaintainDelegate != nullptr)
+            {
+                finalSize = m_aspectMaintainDelegate(finalSize, GetPreferredSize());
+            }
+            
+            return finalSize;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 Widget::GetPreferredSize() const
+        {
+            if(m_drawable != nullptr)
+            {
+                return m_drawable->GetPreferredSize();
+            }
+            
+            return m_preferredSize;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         f32 Widget::GetFinalRotation() const
         {
-            //TODO: Find out why this is minused in the old GUI system
             if(m_parent != nullptr)
             {
                 return m_localRotation + m_parent->GetFinalRotation();
