@@ -246,12 +246,16 @@ namespace ChilliSource
         {
             m_localSize.vRelative.x = in_width;
             m_localSize.vRelative.y = in_height;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::SetRelativeSize(const Core::Vector2& in_size)
         {
             m_localSize.vRelative = in_size;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -259,24 +263,32 @@ namespace ChilliSource
         {
             m_localSize.vAbsolute.x = in_width;
             m_localSize.vAbsolute.y = in_height;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::SetAbsoluteSize(const Core::Vector2& in_size)
         {
             m_localSize.vAbsolute = in_size;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::SetDefaultPreferredSize(const Core::Vector2& in_size)
         {
             m_preferredSize = in_size;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::SetAspectMaintainPolicy(AspectMaintainPolicy in_policy)
         {
             CS_ASSERT(in_policy != AspectMaintainPolicy::k_totalNum, "k_totalNum is not an aspect maintain function");
+            
+            OnTransformChanged();
             
             if(in_policy == AspectMaintainPolicy::k_none)
             {
@@ -292,12 +304,16 @@ namespace ChilliSource
         {
             m_localPosition.vRelative.x = in_x;
             m_localPosition.vRelative.y = in_y;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::SetRelativePosition(const Core::Vector2& in_pos)
         {
             m_localPosition.vRelative = in_pos;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -305,12 +321,16 @@ namespace ChilliSource
         {
             m_localPosition.vAbsolute.x = in_x;
             m_localPosition.vAbsolute.y = in_y;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::SetAbsolutePosition(const Core::Vector2& in_pos)
         {
             m_localPosition.vAbsolute = in_pos;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -318,12 +338,16 @@ namespace ChilliSource
         {
             m_localPosition.vRelative.x = in_x;
             m_localPosition.vRelative.y = in_y;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::RelativeMoveBy(const Core::Vector2& in_translate)
         {
             m_localPosition.vRelative += in_translate;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -331,30 +355,40 @@ namespace ChilliSource
         {
             m_localPosition.vAbsolute.x += in_x;
             m_localPosition.vAbsolute.y += in_y;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::AbsoluteMoveBy(const Core::Vector2& in_translate)
         {
             m_localPosition.vAbsolute += in_translate;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::RotateBy(f32 in_angleRads)
         {
             m_localRotation += in_angleRads;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::RotateTo(f32 in_angleRads)
         {
             m_localRotation = in_angleRads;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::ScaleBy(const Core::Vector2& in_scale)
         {
             m_localScale *= in_scale;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -362,12 +396,16 @@ namespace ChilliSource
         {
             m_localScale.x *= in_x;
             m_localScale.y *= in_y;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::ScaleTo(const Core::Vector2& in_scale)
         {
             m_localScale = in_scale;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -375,18 +413,24 @@ namespace ChilliSource
         {
             m_localScale.x = in_x;
             m_localScale.y = in_y;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::SetAnchorToParent(Rendering::AlignmentAnchor in_anchor)
         {
             m_anchorToParent = in_anchor;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::SetOriginAnchor(Rendering::AlignmentAnchor in_anchor)
         {
             m_originAnchor = in_anchor;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -477,10 +521,8 @@ namespace ChilliSource
         {
             CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
             
-            CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
-            
             s32 length = m_parent->m_children.size() - 1;
-            for(u32 i=0; i<length; ++i)
+            for(s32 i=0; i<length; ++i)
             {
                 if(m_parent->m_children[i].get() == this)
                 {
@@ -495,7 +537,7 @@ namespace ChilliSource
             CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
             
             s32 length = m_parent->m_children.size() - 1;
-            for(u32 i=0; i<length; ++i)
+            for(s32 i=0; i<length; ++i)
             {
                 if(m_parent->m_children[i].get() == this)
                 {
@@ -526,8 +568,6 @@ namespace ChilliSource
         {
             CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
             
-            CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
-            
             u32 length = m_parent->m_children.size();
             for(u32 i=1; i<length; ++i)
             {
@@ -543,6 +583,8 @@ namespace ChilliSource
         {
             m_canvas = in_canvas;
             
+            OnTransformChanged();
+            
             for(auto& child : m_internalChildren)
             {
                 child->SetCanvas(m_canvas);
@@ -555,10 +597,20 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void Widget::SetParent(Widget* in_parent)
+        {
+            m_parent = in_parent;
+            
+            OnTransformChanged();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         void Widget::Draw(Rendering::CanvasRenderer* in_renderer)
         {
             if(m_isVisible == false)
+            {
                 return;
+            }
             
             if(m_isLayoutValid == false && m_layout != nullptr)
             {
@@ -601,18 +653,13 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Matrix3x3 Widget::GetFinalTransform() const
+        Core::Matrix3x3 Widget::GetLocalTransform() const
         {
-            if(m_canvas == this)
+            if(m_isLocalTransformCacheValid == true)
             {
-                return Core::Matrix3x3(m_localPosition.vAbsolute, Core::Vector2::ONE, m_localRotation);
+                return m_cachedLocalTransform;
             }
             
-            //TODO: Do we add caching here?
-            
-            //Translate by the inverse of the pivot offset to place the pivot at the centre
-            //Perform the rotation
-            //Translate back to the pivot and then apply final translation
             Core::Vector2 halfSize(GetFinalSize() * 0.5f);
             Core::Vector2 pivotPos;
             Rendering::GetAnchorPoint(m_originAnchor, halfSize, pivotPos);
@@ -620,7 +667,34 @@ namespace ChilliSource
             Core::Matrix3x3 pivot(-pivotPos, Core::Vector2::ONE, 0.0f);
             Core::Matrix3x3 rotate(Core::Vector2::ZERO, Core::Vector2::ONE, m_localRotation);
             Core::Matrix3x3 translate(GetParentSpacePosition() + pivotPos, Core::Vector2::ONE, 0.0f);
-            return pivot * rotate * translate * m_parent->GetFinalTransform();
+            
+            m_cachedLocalTransform = pivot * rotate * translate;
+            
+            m_isLocalTransformCacheValid = true;
+            return m_cachedLocalTransform;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Matrix3x3 Widget::GetFinalTransform() const
+        {
+            if(m_isParentTransformCacheValid == true && m_isLocalTransformCacheValid == true)
+            {
+                return m_cachedFinalTransform;
+            }
+            
+            if(m_canvas == this)
+            {
+                m_cachedFinalTransform = Core::Matrix3x3(m_localPosition.vAbsolute, Core::Vector2::ONE, m_localRotation);
+                
+                m_isParentTransformCacheValid = true;
+                m_isLocalTransformCacheValid = true;
+                return m_cachedFinalTransform;
+            }
+        
+            m_cachedFinalTransform = GetLocalTransform() * m_parent->GetFinalTransform();
+            m_isParentTransformCacheValid = true;
+            
+            return m_cachedFinalTransform;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -665,21 +739,35 @@ namespace ChilliSource
         {
             CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute size of widget without attaching it to the canvas");
             
+            if(m_isParentSizeCacheValid == true && m_isLocalSizeCacheValid == true)
+            {
+                return m_cachedFinalSize;
+            }
+            
             Core::Vector2 finalSize;
             
             if(m_parent != nullptr)
             {
-                finalSize = ((m_parent->GetFinalSize() * m_localSize.vRelative) + m_localSize.vAbsolute) * GetFinalScale();
+                finalSize = ((m_parent->GetFinalSize() * m_localSize.vRelative) + m_localSize.vAbsolute);
             }
             else
             {
-                finalSize = m_localSize.vAbsolute * GetFinalScale();
+                finalSize = m_localSize.vAbsolute;
             }
             
             if(m_aspectMaintainDelegate != nullptr)
             {
                 finalSize = m_aspectMaintainDelegate(finalSize, GetPreferredSize());
             }
+            
+            finalSize *= m_localScale;
+            
+            std::unique_lock<std::mutex> lock(m_sizeMutex);
+            m_cachedFinalSize = finalSize;
+            lock.unlock();
+            
+            m_isLocalSizeCacheValid = true;
+            m_isParentSizeCacheValid = true;
             
             return finalSize;
         }
@@ -727,6 +815,32 @@ namespace ChilliSource
             }
             
             return m_localColour;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::OnTransformChanged()
+        {
+            m_isLocalTransformCacheValid = false;
+            m_isLocalSizeCacheValid = false;
+            
+            for(auto& child : m_internalChildren)
+            {
+                child->OnParentTransformChanged();
+            }
+            
+            for(auto& child : m_children)
+            {
+                child->OnParentTransformChanged();
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::OnParentTransformChanged()
+        {
+            m_isParentTransformCacheValid = false;
+            m_isParentSizeCacheValid = false;
+            
+            OnTransformChanged();
         }
         //----------------------------------------------------------------------------------------
         /// Set the value of the string property with the given name. If no property exists

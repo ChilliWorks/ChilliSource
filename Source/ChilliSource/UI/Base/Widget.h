@@ -39,6 +39,7 @@
 
 #include <array>
 #include <functional>
+#include <mutex>
 #include <unordered_map>
 #include <vector>
 
@@ -59,10 +60,12 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        class Widget
+        class Widget final
         {
         public:
 
+            CS_DECLARE_NOCOPY(Widget);
+            
             //----------------------------------------------------------------------------------------
             /// Holds the definition of a property that allow it to be set and get from code. The
             /// description contains the name and type of the property
@@ -104,6 +107,12 @@ namespace ChilliSource
                 k_fill,
                 k_totalNum
             };
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            Widget() = default;
             //----------------------------------------------------------------------------------------
             /// Widgets have custom properties that can be changed. These are created from the
             /// widget description and the property type are immutable. Attempting to create them
@@ -541,14 +550,21 @@ namespace ChilliSource
         private:
             friend class Canvas;
             //----------------------------------------------------------------------------------------
-            /// Set the pointer to the canvas. This is only called by the canvas when initialising
-            /// the canvas widget
+            /// Set the pointer to the canvas
             ///
             /// @author S Downie
             ///
             /// @param Canvas
             //----------------------------------------------------------------------------------------
             void SetCanvas(const Widget* in_canvas);
+            //----------------------------------------------------------------------------------------
+            /// Set the pointer to the parent.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Parent
+            //----------------------------------------------------------------------------------------
+            void SetParent(Widget* in_parent);
             //----------------------------------------------------------------------------------------
             /// Holds the type of the property and the offset into the blob
             ///
@@ -568,6 +584,15 @@ namespace ChilliSource
             /// @return The internal enum property type of the given object type
             //----------------------------------------------------------------------------------------
             template<typename TType> PropertyType GetType() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the transform matrix of the object based on the local scale, rotation and
+            /// position
+            ///
+            /// @author S Downie
+            ///
+            /// @return Local transformation matrix
+            //----------------------------------------------------------------------------------------
+            Core::Matrix3x3 GetLocalTransform() const;
             //----------------------------------------------------------------------------------------
             /// Calculate the transform matrix of the object based on the local transform and the
             /// parent transform.
@@ -594,6 +619,18 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Vector2 GetParentSpacePosition() const;
             //----------------------------------------------------------------------------------------
+            /// Called when the out transform changes forcing this to update its caches
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            void OnTransformChanged();
+            //----------------------------------------------------------------------------------------
+            /// Called when the parent transform changes forcing this to update its caches
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            void OnParentTransformChanged();
+            //----------------------------------------------------------------------------------------
             /// Delegate for aspect ratio maintain functions.
             ///
             /// @author S Downie
@@ -613,6 +650,10 @@ namespace ChilliSource
             Core::Colour m_localColour;
             f32 m_localRotation = 0.0f;
             
+            mutable Core::Matrix3x3 m_cachedLocalTransform;
+            mutable Core::Matrix3x3 m_cachedFinalTransform;
+            mutable Core::Vector2 m_cachedFinalSize;
+            
             std::array<AspectMaintainDelegate, (u32)AspectMaintainPolicy::k_totalNum> m_aspectMaintainFuncs;
             AspectMaintainDelegate m_aspectMaintainDelegate;
             
@@ -631,11 +672,18 @@ namespace ChilliSource
             const Widget* m_canvas = nullptr;
             
             Rendering::AlignmentAnchor m_originAnchor = Rendering::AlignmentAnchor::k_middleCentre;
-            Rendering::AlignmentAnchor m_anchorToParent = Rendering::AlignmentAnchor::k_bottomLeft;
+            Rendering::AlignmentAnchor m_anchorToParent = Rendering::AlignmentAnchor::k_middleCentre;
             
             bool m_isLayoutValid = false;
             bool m_isVisible = true;
             bool m_isSubviewClippingEnabled = false;
+            
+            mutable bool m_isParentTransformCacheValid = false;
+            mutable bool m_isLocalTransformCacheValid = false;
+            mutable bool m_isLocalSizeCacheValid = false;
+            mutable bool m_isParentSizeCacheValid = false;
+            
+            mutable std::mutex m_sizeMutex;
         };
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
