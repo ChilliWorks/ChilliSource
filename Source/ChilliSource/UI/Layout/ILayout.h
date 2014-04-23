@@ -47,14 +47,14 @@ namespace ChilliSource
         {
         public:
             //----------------------------------------------------------------------------------------
-            /// Layout the widgets using custom layout logic. Layout will supercede the exisitng
-            /// position and or size values on the views.
+            /// Create the layout based on the given widgets. This should allow subsequent calls to
+            /// get the position, size, etc for a widget to retrieve the correct data
             ///
             /// @author S Downie
             ///
             /// @param Widgets to layout
             //----------------------------------------------------------------------------------------
-            virtual void Layout(const std::vector<WidgetSPtr>& in_widgets) = 0;
+            virtual void BuildLayout(const std::vector<WidgetSPtr>& in_widgets) const = 0;
         };
     }
 }

@@ -233,7 +233,6 @@ namespace ChilliSource
         void Widget::SetLayout(ILayoutUPtr in_layout)
         {
             m_layout = std::move(in_layout);
-            m_isLayoutValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -536,6 +535,8 @@ namespace ChilliSource
                     std::swap(m_parent->m_children[i], m_parent->m_children[i+1]);
                 }
             }
+            
+            m_isLayoutValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -552,6 +553,8 @@ namespace ChilliSource
                     return;
                 }
             }
+            
+            m_isLayoutValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -619,11 +622,8 @@ namespace ChilliSource
                 return;
             }
             
-            if(m_isLayoutValid == false && m_layout != nullptr)
-            {
-                //m_layout->Layout();
-                m_isLayoutValid = true;
-            }
+            //TODO: Cache the layout
+            //m_layout->BuildLayout(m_children);
             
             Core::Vector2 finalSize(GetFinalSize());
             

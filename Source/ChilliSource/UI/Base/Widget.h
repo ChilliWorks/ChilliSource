@@ -675,7 +675,6 @@ namespace ChilliSource
             Rendering::AlignmentAnchor m_originAnchor = Rendering::AlignmentAnchor::k_middleCentre;
             Rendering::AlignmentAnchor m_parentalAnchor = Rendering::AlignmentAnchor::k_middleCentre;
             
-            bool m_isLayoutValid = false;
             bool m_isVisible = true;
             bool m_isSubviewClippingEnabled = false;
             
