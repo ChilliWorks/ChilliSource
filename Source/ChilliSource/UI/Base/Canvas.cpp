@@ -74,9 +74,15 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void Canvas::Add(const WidgetSPtr& in_widget)
+        void Canvas::AddWidget(const WidgetSPtr& in_widget)
         {
-            m_canvas->Add(in_widget);
+            m_canvas->AddWidget(in_widget);
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Canvas::RemoveWidget(Widget* in_widget)
+        {
+            m_canvas->RemoveWidget(in_widget);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

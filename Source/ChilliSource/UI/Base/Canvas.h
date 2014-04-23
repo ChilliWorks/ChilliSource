@@ -83,7 +83,17 @@ namespace ChilliSource
             ///
             /// @param Widget
             //----------------------------------------------------
-            void Add(const WidgetSPtr& in_widget);
+            void AddWidget(const WidgetSPtr& in_widget);
+            //----------------------------------------------------
+            /// Remove widget from the canvas.
+            ///
+            /// NOTE: Will assert if the widget is not on this canvas
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget
+            //----------------------------------------------------
+            void RemoveWidget(Widget* in_widget);
             
         private:
             friend class Core::State;

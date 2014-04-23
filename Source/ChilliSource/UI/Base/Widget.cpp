@@ -83,7 +83,7 @@ namespace ChilliSource
                 return 0;
             }
         }
-        namespace AspectMaintain
+        namespace SizePolicyFuncs
         {
             //----------------------------------------------------------------------------------------
             /// Aspect ratio maintaining function that keeps the current width but adapts
@@ -94,11 +94,11 @@ namespace ChilliSource
             /// @param Absolute size of widget based on current unified size settings
             /// @param Target aspect ration size in absolute coordinates
             ///
-            /// @return New absolute size with maintain function applied
+            /// @return New absolute size with function applied
             //----------------------------------------------------------------------------------------
-            Core::Vector2 KeepWidthAdaptHeight(const Core::Vector2& in_absSize, const Core::Vector2& in_targetSize)
+            Core::Vector2 KeepWidthAdaptHeight(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
             {
-                f32 targetAspectRatio = in_targetSize.y / in_targetSize.x;
+                f32 targetAspectRatio = in_preferredSize.y / in_preferredSize.x;
                 f32 absHeight = (targetAspectRatio * in_absSize.x);
                 return Core::Vector2(in_absSize.x, absHeight);
             }
@@ -111,27 +111,27 @@ namespace ChilliSource
             /// @param Absolute size of widget based on current unified size settings
             /// @param Target aspect ration size in absolute coordinates
             ///
-            /// @return New absolute size with maintain function applied
+            /// @return New absolute size with function applied
             //----------------------------------------------------------------------------------------
-            Core::Vector2 KeepHeightAdaptWidth(const Core::Vector2& in_absSize, const Core::Vector2& in_targetSize)
+            Core::Vector2 KeepHeightAdaptWidth(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
             {
-                f32 targetAspectRatio = in_targetSize.x / in_targetSize.y;
+                f32 targetAspectRatio = in_preferredSize.x / in_preferredSize.y;
                 f32 absWidth = (targetAspectRatio * in_absSize.y);
                 return Core::Vector2(absWidth, in_absSize.y);
             }
             //----------------------------------------------------------------------------------------
-            /// Aspect ratio maintaining function that uses the target size and aspect
+            /// Size policy function that uses the preferred size and aspect
             ///
             /// @author S Downie
             ///
             /// @param Absolute size of widget based on current unified size settings
             /// @param Target aspect ration size in absolute coordinates
             ///
-            /// @return New absolute size with maintain function applied
+            /// @return New absolute size with function applied
             //----------------------------------------------------------------------------------------
-            Core::Vector2 UseTarget(const Core::Vector2& in_absSize, const Core::Vector2& in_targetSize)
+            Core::Vector2 UsePreferred(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
             {
-                return in_targetSize;
+                return in_preferredSize;
             }
             //----------------------------------------------------------------------------------------
             /// Aspect ratio maintaining function that maintains the given target aspect ratio
@@ -142,20 +142,20 @@ namespace ChilliSource
             /// @param Absolute size of widget based on current unified size settings
             /// @param Target aspect ration size in absolute coordinates
             ///
-            /// @return New absolute size with maintain function applied
+            /// @return New absolute size with function applied
             //----------------------------------------------------------------------------------------
-            Core::Vector2 FillOriginal(const Core::Vector2& in_absSize, const Core::Vector2& in_targetSize)
+            Core::Vector2 FillOriginal(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
             {
                 f32 currentRatio = in_absSize.x / in_absSize.y;
-                f32 targetRatio = in_targetSize.x / in_targetSize.y;
+                f32 targetRatio = in_preferredSize.x / in_preferredSize.y;
                 
                 if(targetRatio <= currentRatio)
                 {
-                    return KeepWidthAdaptHeight(std::max(in_targetSize, in_absSize), in_targetSize);
+                    return KeepWidthAdaptHeight(in_absSize, in_preferredSize);
                 }
                 else
                 {
-                    return KeepHeightAdaptWidth(std::max(in_targetSize, in_absSize), in_targetSize);
+                    return KeepHeightAdaptWidth(in_absSize, in_preferredSize);
                 }
             }
             //----------------------------------------------------------------------------------------
@@ -167,28 +167,28 @@ namespace ChilliSource
             /// @param Absolute size of widget based on current unified size settings
             /// @param Target aspect ration size in absolute coordinates
             ///
-            /// @return New absolute size with maintain function applied
+            /// @return New absolute size with function applied
             //----------------------------------------------------------------------------------------
-            Core::Vector2 FitOriginal(const Core::Vector2& in_absSize, const Core::Vector2& in_targetSize)
+            Core::Vector2 FitOriginal(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
             {
                 f32 currentRatio = in_absSize.x / in_absSize.y;
-                f32 targetRatio = in_targetSize.x / in_targetSize.y;
+                f32 targetRatio = in_preferredSize.x / in_preferredSize.y;
                 
                 if(targetRatio > currentRatio)
                 {
-                    return KeepWidthAdaptHeight(std::min(in_targetSize, in_absSize), in_targetSize);
+                    return KeepWidthAdaptHeight(in_absSize, in_preferredSize);
                 }
                 else
                 {
-                    return KeepHeightAdaptWidth(std::min(in_targetSize, in_absSize), in_targetSize);
+                    return KeepHeightAdaptWidth(in_absSize, in_preferredSize);
                 }
             }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::CreateProperties(const std::vector<PropertyDesc>& in_descs)
+        void Widget::Build(const std::vector<PropertyDesc>& in_descs)
         {
-            CS_ASSERT(m_propertyBlob == nullptr, "Cannot create widget properties more than once");
+            CS_ASSERT(m_propertyBlob == nullptr, "Cannot build widget more than once");
             
             u32 currentOffset = 0;
             for(const auto& desc : in_descs)
@@ -209,11 +209,11 @@ namespace ChilliSource
                 m_propertyBlob = new u8[currentOffset];
             }
             
-            m_aspectMaintainFuncs[(u32)AspectMaintainPolicy::k_preferred] = AspectMaintain::UseTarget;
-            m_aspectMaintainFuncs[(u32)AspectMaintainPolicy::k_width] = AspectMaintain::KeepWidthAdaptHeight;
-            m_aspectMaintainFuncs[(u32)AspectMaintainPolicy::k_height] = AspectMaintain::KeepHeightAdaptWidth;
-            m_aspectMaintainFuncs[(u32)AspectMaintainPolicy::k_fill] = AspectMaintain::FillOriginal;
-            m_aspectMaintainFuncs[(u32)AspectMaintainPolicy::k_fit] = AspectMaintain::FitOriginal;
+            m_sizePolicyFuncs[(u32)SizePolicy::k_usePreferredSize] = SizePolicyFuncs::UsePreferred;
+            m_sizePolicyFuncs[(u32)SizePolicy::k_useWidthMaintainingAspect] = SizePolicyFuncs::KeepWidthAdaptHeight;
+            m_sizePolicyFuncs[(u32)SizePolicy::k_useHeightMaintainingAspect] = SizePolicyFuncs::KeepHeightAdaptWidth;
+            m_sizePolicyFuncs[(u32)SizePolicy::k_fillMaintainingAspect] = SizePolicyFuncs::FillOriginal;
+            m_sizePolicyFuncs[(u32)SizePolicy::k_fitMaintainingAspect] = SizePolicyFuncs::FitOriginal;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -284,19 +284,19 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetAspectMaintainPolicy(AspectMaintainPolicy in_policy)
+        void Widget::SetSizePolicy(SizePolicy in_policy)
         {
-            CS_ASSERT(in_policy != AspectMaintainPolicy::k_totalNum, "k_totalNum is not an aspect maintain function");
+            CS_ASSERT(in_policy != SizePolicy::k_totalNum, "k_totalNum is not a size policy");
             
             OnTransformChanged();
             
-            if(in_policy == AspectMaintainPolicy::k_none)
+            if(in_policy == SizePolicy::k_none)
             {
-                m_aspectMaintainDelegate = nullptr;
+                m_sizePolicyDelegate = nullptr;
                 return;
             }
             
-            m_aspectMaintainDelegate = m_aspectMaintainFuncs[(u32)in_policy];
+            m_sizePolicyDelegate = m_sizePolicyFuncs[(u32)in_policy];
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -418,9 +418,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetAnchorToParent(Rendering::AlignmentAnchor in_anchor)
+        void Widget::SetParentalAnchor(Rendering::AlignmentAnchor in_anchor)
         {
-            m_anchorToParent = in_anchor;
+            m_parentalAnchor = in_anchor;
             
             OnTransformChanged();
         }
@@ -458,7 +458,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::Add(const WidgetSPtr& in_widget)
+        void Widget::AddWidget(const WidgetSPtr& in_widget)
         {
             CS_ASSERT(in_widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
             //TODO: Ensure that the vector is not invalidated during iteration
@@ -468,7 +468,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::Remove(Widget* in_widget)
+        void Widget::RemoveWidget(Widget* in_widget)
         {
             CS_ASSERT(in_widget->GetParent() == this, "Widget is a child of a different parent");
             
@@ -487,7 +487,7 @@ namespace ChilliSource
         {
             CS_ASSERT(m_parent != nullptr, "Widget has no parent to remove from");
             
-            m_parent->Remove(this);
+            m_parent->RemoveWidget(this);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -718,7 +718,7 @@ namespace ChilliSource
             const Core::Vector2 parentSize(m_parent->GetFinalSize());
 			const Core::Vector2 parentHalfSize(parentSize * 0.5f);
 			Core::Vector2 parentAnchorPos;
-			Rendering::GetAnchorPoint(m_anchorToParent, parentHalfSize, parentAnchorPos);
+			Rendering::GetAnchorPoint(m_parentalAnchor, parentHalfSize, parentAnchorPos);
             
             //Calculate the position relative to the anchor point
             Core::Vector2 parentSpacePos = parentAnchorPos + (parentSize * m_localPosition.vRelative) + m_localPosition.vAbsolute;
@@ -755,9 +755,9 @@ namespace ChilliSource
                 finalSize = m_localSize.vAbsolute;
             }
             
-            if(m_aspectMaintainDelegate != nullptr)
+            if(m_sizePolicyDelegate != nullptr)
             {
-                finalSize = m_aspectMaintainDelegate(finalSize, GetPreferredSize());
+                finalSize = m_sizePolicyDelegate(finalSize, GetPreferredSize());
             }
             
             finalSize *= m_localScale;

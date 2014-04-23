@@ -49,10 +49,10 @@ namespace ChilliSource
     {
         //----------------------------------------------------------------------------------------
         /// The Widget class that holds the components for laying out, rendering and manipulating
-        /// UI views. A widget can be a single view or a collection of views.
-        /// Widgets can be added as subviews or have subviews added to them. Widgets are
+        /// UI widgets. A widget can be a single widget or a collection of widgets.
+        /// Widgets can be added to other widgets to create a hierarchy. Widgets are
         /// layed out using a mixture of absolute and relative coordinates in which relative coordinates
-        /// are relative to the parent view
+        /// are relative to the parent
         ///
         /// Note: Some widgets have private sub-widgets. These are not exposed through the API
         /// and allow the widget to be treated as a solid black box while maintaining the flexibility
@@ -97,14 +97,14 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //----------------------------------------------------------------------------------------
-            enum class AspectMaintainPolicy
+            enum class SizePolicy
             {
                 k_none,
-                k_preferred,
-                k_width,
-                k_height,
-                k_fit,
-                k_fill,
+                k_usePreferredSize,
+                k_useWidthMaintainingAspect,
+                k_useHeightMaintainingAspect,
+                k_fitMaintainingAspect,
+                k_fillMaintainingAspect,
                 k_totalNum
             };
             //----------------------------------------------------------------------------------------
@@ -114,15 +114,14 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Widget() = default;
             //----------------------------------------------------------------------------------------
-            /// Widgets have custom properties that can be changed. These are created from the
-            /// widget description and the property type are immutable. Attempting to create them
-            /// again will cause an assertion
+            /// Build the widget from the given defintion. This includes creating the custom properties.
+            /// Build should only be called once per instance.
             ///
             /// @author S Downie
             ///
             /// @param Property descriptors
             //----------------------------------------------------------------------------------------
-            void CreateProperties(const std::vector<PropertyDesc>& in_descs);
+            void Build(const std::vector<PropertyDesc>& in_descs);
             //----------------------------------------------------------------------------------------
             /// Set the drawable that handles how to render the widget. If this is null then the
             /// widget will not be visible. The widget takes ownership of the drawable.
@@ -192,7 +191,7 @@ namespace ChilliSource
             void SetAbsoluteSize(const Core::Vector2& in_size);
             //----------------------------------------------------------------------------------------
             /// The default preferred size is used in cases when there is no drawable to query for its
-            /// preferred size. The preferred size is used to maintain aspect ration depending on the
+            /// preferred size. The preferred size is used to maintain aspect ratio depending on the
             /// aspect policy.
             ///
             /// @author S Downie
@@ -206,9 +205,9 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Aspect maintain function
+            /// @param Size policy
             //----------------------------------------------------------------------------------------
-            void SetAspectMaintainPolicy(AspectMaintainPolicy in_policy);
+            void SetSizePolicy(SizePolicy in_policy);
             //----------------------------------------------------------------------------------------
             /// Set the position of the widget relative to its parent size and anchor point i.e.
             /// if the anchor is bottom left then 0.5, 0.5 will place it in the middle of the parent
@@ -339,7 +338,7 @@ namespace ChilliSource
             ///
             /// @param Alignment anchor
             //----------------------------------------------------------------------------------------
-            void SetAnchorToParent(Rendering::AlignmentAnchor in_anchor);
+            void SetParentalAnchor(Rendering::AlignmentAnchor in_anchor);
             //----------------------------------------------------------------------------------------
             /// Set the alignment anchor that is to be the widgets origin i.e. it's pivot point
             ///
@@ -387,7 +386,7 @@ namespace ChilliSource
             ///
             /// @param Widget to add
             //----------------------------------------------------------------------------------------
-            void Add(const WidgetSPtr& in_widget);
+            void AddWidget(const WidgetSPtr& in_widget);
             //----------------------------------------------------------------------------------------
             /// Remove the child widget from this widget. It will no longer be rendered and may
             /// be destroyed if this is the last reference.
@@ -398,12 +397,12 @@ namespace ChilliSource
             ///
             /// @param Widget to remove
             //----------------------------------------------------------------------------------------
-            void Remove(Widget* in_widget);
+            void RemoveWidget(Widget* in_widget);
             //----------------------------------------------------------------------------------------
             /// Remove the widget from the child list of its parent. It will no longer be rendered and may
             /// be destroyed if the parent holds the last reference
             ///
-            /// NOTE: Will assert if the parents do not match
+            /// NOTE: Will assert if has no parent
             ///
             /// @author S Downie
             //----------------------------------------------------------------------------------------
@@ -455,7 +454,7 @@ namespace ChilliSource
             /// Calculate the screen space position of the object based on the local position, local
             /// alignment to parent, local alignment to origin and the parents final position.
             ///
-            /// NOTE: If the position is relative the final position cannot be calculated until
+            /// NOTE: As the relative final position cannot be calculated until
             /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
             /// Therefore will assert if the widget is not on the root canvas
             ///
@@ -468,7 +467,7 @@ namespace ChilliSource
             /// Calculate the screen space size of the object based on the local size and the
             /// parent size.
             ///
-            /// NOTE: If the size is relative the final size cannot be calculated until
+            /// NOTE: As the relative the final size cannot be calculated until
             /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
             /// Therefore will assert if the widget is not on the root canvas
             ///
@@ -609,7 +608,7 @@ namespace ChilliSource
             /// transform matrix is multiplied with the parent tranform to get the final transform
             /// and this method prevents double transformation by the parent.
             ///
-            /// NOTE: If the position is relative the final position cannot be calculated until
+            /// NOTE: As the position is relative the final position cannot be calculated until
             /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
             /// Therefore will assert if the widget is not on the root canvas
             ///
@@ -631,16 +630,16 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void OnParentTransformChanged();
             //----------------------------------------------------------------------------------------
-            /// Delegate for aspect ratio maintain functions.
+            /// Delegate for size policy functions.
             ///
             /// @author S Downie
             ///
             /// @param Widget absolute size
-            /// @param Widget target size (aspect ratio)
+            /// @param Widget absolute preferred size
             ///
-            /// @return New size with aspect function applied
+            /// @return New size with function applied
             //----------------------------------------------------------------------------------------
-            using AspectMaintainDelegate = std::function<Core::Vector2(const Core::Vector2&, const Core::Vector2&)>;
+            using SizePolicyDelegate = std::function<Core::Vector2(const Core::Vector2&, const Core::Vector2&)>;
         private:
             
             Core::UnifiedVector2 m_localPosition;
@@ -654,8 +653,8 @@ namespace ChilliSource
             mutable Core::Matrix3x3 m_cachedFinalTransform;
             mutable Core::Vector2 m_cachedFinalSize;
             
-            std::array<AspectMaintainDelegate, (u32)AspectMaintainPolicy::k_totalNum> m_aspectMaintainFuncs;
-            AspectMaintainDelegate m_aspectMaintainDelegate;
+            std::array<SizePolicyDelegate, (u32)SizePolicy::k_totalNum> m_sizePolicyFuncs;
+            SizePolicyDelegate m_sizePolicyDelegate;
             
             std::vector<WidgetSPtr> m_internalChildren;
             std::vector<WidgetSPtr> m_children;
@@ -672,7 +671,7 @@ namespace ChilliSource
             const Widget* m_canvas = nullptr;
             
             Rendering::AlignmentAnchor m_originAnchor = Rendering::AlignmentAnchor::k_middleCentre;
-            Rendering::AlignmentAnchor m_anchorToParent = Rendering::AlignmentAnchor::k_middleCentre;
+            Rendering::AlignmentAnchor m_parentalAnchor = Rendering::AlignmentAnchor::k_middleCentre;
             
             bool m_isLayoutValid = false;
             bool m_isVisible = true;
