@@ -89,7 +89,9 @@ namespace ChilliSource
                 k_int,
                 k_float,
                 k_string,
-                k_pointer
+                k_pointer,
+                k_vec2,
+                k_vec3
             };
             //----------------------------------------------------------------------------------------
             /// Identifiers for functions that maintain the aspect ratio of the widget based on
@@ -761,6 +763,38 @@ namespace ChilliSource
         /// @return Float prop type
         //----------------------------------------------------------------------------------------
         template<> Widget::PropertyType Widget::GetType<f32>() const;
+        //----------------------------------------------------------------------------------------
+        /// Specialisation to return property type for string
+        ///
+        /// @author S Downie
+        ///
+        /// @return Vec2 prop type
+        //----------------------------------------------------------------------------------------
+        template<> Widget::PropertyType Widget::GetType<Core::Vector2>() const;
+        //----------------------------------------------------------------------------------------
+        /// Specialisation to return property type for string
+        ///
+        /// @author S Downie
+        ///
+        /// @return Vec2 prop type
+        //----------------------------------------------------------------------------------------
+        template<> Widget::PropertyType Widget::GetType<const Core::Vector2&>() const;
+        //----------------------------------------------------------------------------------------
+        /// Specialisation to return property type for string
+        ///
+        /// @author S Downie
+        ///
+        /// @return Vec3 prop type
+        //----------------------------------------------------------------------------------------
+        template<> Widget::PropertyType Widget::GetType<Core::Vector3>() const;
+        //----------------------------------------------------------------------------------------
+        /// Specialisation to return property type for string
+        ///
+        /// @author S Downie
+        ///
+        /// @return Vec3 prop type
+        //----------------------------------------------------------------------------------------
+        template<> Widget::PropertyType Widget::GetType<const Core::Vector3&>() const;
     }
 }
 
