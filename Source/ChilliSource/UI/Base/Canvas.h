@@ -44,7 +44,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
 		//-----------------------------------------------------------
-		class Canvas : public Core::StateSystem
+		class Canvas final : public Core::StateSystem
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(Canvas);

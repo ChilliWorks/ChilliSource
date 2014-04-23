@@ -37,7 +37,7 @@ namespace ChilliSource
     namespace UI
     {
         //----------------------------------------------------------------------------------------
-        /// Interface for rendering widgets. Each widget has its own drawable
+        /// Interface for rendering widgets
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------

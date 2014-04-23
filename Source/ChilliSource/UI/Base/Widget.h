@@ -624,7 +624,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //----------------------------------------------------------------------------------------
-            void OnTransformChanged();
+            void InvalidateTransformCache();
             //----------------------------------------------------------------------------------------
             /// Called when the parent transform changes forcing this to update its caches
             ///

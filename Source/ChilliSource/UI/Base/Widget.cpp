@@ -232,7 +232,7 @@ namespace ChilliSource
                 CS_ASSERT(type != PropertyType::k_unknown, "Unsupported property type: " + desc.m_type);
                 
                 PropertyLookup lookup = {type, currentOffset};
-                m_blobOffsets.insert(std::make_pair(std::move(desc.m_name), std::move(lookup)));
+                m_blobOffsets.insert(std::make_pair(desc.m_name, lookup));
                 
                 u32 typeSize = GetTypeSize(type);
                 currentOffset += typeSize;
@@ -281,7 +281,7 @@ namespace ChilliSource
             m_localSize.vRelative.x = in_width;
             m_localSize.vRelative.y = in_height;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -289,7 +289,7 @@ namespace ChilliSource
         {
             m_localSize.vRelative = in_size;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -298,7 +298,7 @@ namespace ChilliSource
             m_localSize.vAbsolute.x = in_width;
             m_localSize.vAbsolute.y = in_height;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -306,7 +306,7 @@ namespace ChilliSource
         {
             m_localSize.vAbsolute = in_size;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -314,7 +314,7 @@ namespace ChilliSource
         {
             m_preferredSize = in_size;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -322,7 +322,7 @@ namespace ChilliSource
         {
             CS_ASSERT(in_policy != SizePolicy::k_totalNum, "k_totalNum is not a size policy");
             
-            OnTransformChanged();
+            InvalidateTransformCache();
             
             if(in_policy == SizePolicy::k_none)
             {
@@ -339,7 +339,7 @@ namespace ChilliSource
             m_localPosition.vRelative.x = in_x;
             m_localPosition.vRelative.y = in_y;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -347,7 +347,7 @@ namespace ChilliSource
         {
             m_localPosition.vRelative = in_pos;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -356,7 +356,7 @@ namespace ChilliSource
             m_localPosition.vAbsolute.x = in_x;
             m_localPosition.vAbsolute.y = in_y;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -364,7 +364,7 @@ namespace ChilliSource
         {
             m_localPosition.vAbsolute = in_pos;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -373,7 +373,7 @@ namespace ChilliSource
             m_localPosition.vRelative.x = in_x;
             m_localPosition.vRelative.y = in_y;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -381,7 +381,7 @@ namespace ChilliSource
         {
             m_localPosition.vRelative += in_translate;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -390,7 +390,7 @@ namespace ChilliSource
             m_localPosition.vAbsolute.x += in_x;
             m_localPosition.vAbsolute.y += in_y;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -398,7 +398,7 @@ namespace ChilliSource
         {
             m_localPosition.vAbsolute += in_translate;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -406,7 +406,7 @@ namespace ChilliSource
         {
             m_localRotation += in_angleRads;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -414,7 +414,7 @@ namespace ChilliSource
         {
             m_localRotation = in_angleRads;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -422,7 +422,7 @@ namespace ChilliSource
         {
             m_localScale *= in_scale;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -431,7 +431,7 @@ namespace ChilliSource
             m_localScale.x *= in_x;
             m_localScale.y *= in_y;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -439,7 +439,7 @@ namespace ChilliSource
         {
             m_localScale = in_scale;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -448,7 +448,7 @@ namespace ChilliSource
             m_localScale.x = in_x;
             m_localScale.y = in_y;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -456,7 +456,7 @@ namespace ChilliSource
         {
             m_parentalAnchor = in_anchor;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -464,7 +464,7 @@ namespace ChilliSource
         {
             m_originAnchor = in_anchor;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -617,7 +617,7 @@ namespace ChilliSource
         {
             m_canvas = in_canvas;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
             
             for(auto& child : m_internalChildren)
             {
@@ -635,7 +635,7 @@ namespace ChilliSource
         {
             m_parent = in_parent;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -848,7 +848,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::OnTransformChanged()
+        void Widget::InvalidateTransformCache()
         {
             m_isLocalTransformCacheValid = false;
             m_isLocalSizeCacheValid = false;
@@ -870,7 +870,7 @@ namespace ChilliSource
             m_isParentTransformCacheValid = false;
             m_isParentSizeCacheValid = false;
             
-            OnTransformChanged();
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         /// Set the value of the string property with the given name. If no property exists
