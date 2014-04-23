@@ -231,7 +231,7 @@ namespace ChilliSource
 			///
 			/// @param Component to attach to the entity
 			//-------------------------------------------------------------
-			void Add(const ComponentSPtr& in_component);
+			void AddComponent(const ComponentSPtr& in_component);
 			//-------------------------------------------------------------
 			/// Remove a component from the entity. The component will no
             /// longer be owned by the entity and will no longer receieve
@@ -241,7 +241,7 @@ namespace ChilliSource
 			///
 			/// @param Component to remove from the entity
 			//-------------------------------------------------------------
-			void Remove(Component* in_component);
+			void RemoveComponent(Component* in_component);
             //-------------------------------------------------------------
             /// Removes all components
             ///
@@ -256,14 +256,14 @@ namespace ChilliSource
 			///
 			/// @param Entity
 			//-------------------------------------------------------------
-			void Add(const EntitySPtr& in_child);
+			void AddEntity(const EntitySPtr& in_child);
 			//-------------------------------------------------------------
 			/// Remove an entity as a child. This will unlink the transforms
             /// in a hierarchy and will unlink lifecycle and scene events
 			///
 			/// @param Entity
 			//-------------------------------------------------------------
-			void Remove(Entity* in_child);
+			void RemoveEntity(Entity* in_child);
 			//-------------------------------------------------------------
 			/// Detach the entity from its parent. If it has no parent
             /// then remove it from the scene

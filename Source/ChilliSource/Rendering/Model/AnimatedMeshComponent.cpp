@@ -390,7 +390,7 @@ namespace ChilliSource
                 return;
             }
             
-            GetEntity()->Add(inpEntity);
+            GetEntity()->AddEntity(inpEntity);
             maAttachedEntities.push_back(std::pair<Core::EntityWPtr, s32>(Core::EntityWPtr(inpEntity), dwNodeIndex));
         }
         //----------------------------------------------------------

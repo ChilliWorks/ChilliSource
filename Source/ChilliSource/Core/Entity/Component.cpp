@@ -44,7 +44,7 @@ namespace ChilliSource
         void Component::RemoveFromEntity()
         {
             CS_ASSERT(m_entity != nullptr, "Must have an entity to remove from");
-            m_entity->Remove(this);
+            m_entity->RemoveComponent(this);
         }
 	}
 }
