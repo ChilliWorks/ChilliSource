@@ -28,6 +28,7 @@
 
 #include <ChilliSource/UI/Base/Widget.h>
 
+#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 namespace ChilliSource
@@ -87,6 +88,33 @@ namespace ChilliSource
                 }
                 
                 return 0;
+            }
+            //----------------------------------------------------------------------------------------
+            /// Perform a rough check to see if the widget is offscreen
+            ///
+            /// @author S Downie
+            ///
+            /// @param Absolute position
+            /// @param Absolute size
+            ///
+            /// @return Whether the widget is considered offscreen and should be culled
+            //----------------------------------------------------------------------------------------
+            bool ShouldCull(const Core::Vector2& in_absPos, const Core::Vector2& in_absSize)
+            {
+                Core::Vector2 halfSize(in_absSize * 0.5f);
+                //Treat it like a square so that we do not need to take rotation into account
+                halfSize.x = std::max(halfSize.x, halfSize.y);
+                halfSize.y = std::max(halfSize.y, halfSize.y);
+                
+                Core::Vector2 bottomLeft;
+                Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, halfSize, bottomLeft);
+                bottomLeft += in_absPos;
+                
+                Core::Vector2 topRight;
+                Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_topRight, halfSize, topRight);
+                topRight += in_absPos;
+                
+                return (topRight.y < 0 || bottomLeft.y > Core::Screen::GetOrientedHeight() || topRight.x < 0 || bottomLeft.x > Core::Screen::GetOrientedWidth());
             }
             
             namespace SizePolicyFuncs
@@ -623,7 +651,7 @@ namespace ChilliSource
             
             Core::Vector2 finalSize(GetFinalSize());
             
-            if(m_drawable != nullptr)
+            if(m_drawable != nullptr && ShouldCull(GetFinalPosition(), finalSize) == false)
             {
                 m_drawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
             }
@@ -633,7 +661,6 @@ namespace ChilliSource
                 Core::Vector2 halfSize(finalSize * 0.5f);
                 Core::Vector2 bottomLeftPos;
                 Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, halfSize, bottomLeftPos);
-				
                 bottomLeftPos += GetFinalPosition();
                 
                 in_renderer->EnableClippingToBounds(bottomLeftPos, finalSize);
