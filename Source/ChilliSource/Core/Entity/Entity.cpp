@@ -39,7 +39,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------
-		void Entity::Add(const EntitySPtr& in_child)
+		void Entity::AddEntity(const EntitySPtr& in_child)
 		{
             CS_ASSERT(in_child != nullptr, "Cannot add null child");
             CS_ASSERT(in_child->GetParent() == nullptr, "Cannot add child with existing parent");
@@ -57,7 +57,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------
-		void Entity::Remove(Entity* in_child)
+		void Entity::RemoveEntity(Entity* in_child)
 		{
             CS_ASSERT(in_child != nullptr, "Cannot remove null child");
             CS_ASSERT(in_child->GetParent() == this, "Cannot remove entity that is not a child of this");
@@ -107,7 +107,7 @@ namespace ChilliSource
             
             if(m_parent != nullptr)
             {
-                m_parent->Remove(this);
+                m_parent->RemoveEntity(this);
             }
             else if(m_scene != nullptr)
             {
@@ -208,7 +208,7 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------------
 		//-------------------------------------------------------------
-		void Entity::Add(const ComponentSPtr& in_component)
+		void Entity::AddComponent(const ComponentSPtr& in_component)
 		{
             CS_ASSERT(in_component != nullptr, "Cannot add null component");
             CS_ASSERT(in_component->GetEntity() == nullptr, "Component cannot be attached to more than 1 entity at a time.");
@@ -226,7 +226,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------
-		void Entity::Remove(Component* in_component)
+		void Entity::RemoveComponent(Component* in_component)
 		{
             CS_ASSERT(in_component != nullptr, "Cannot remove a null component");
             CS_ASSERT(in_component->GetEntity() == this, "Cannot remove component that is not attached to this.");
