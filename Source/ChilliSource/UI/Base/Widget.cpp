@@ -873,14 +873,7 @@ namespace ChilliSource
             InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
-        /// Set the value of the string property with the given name. If no property exists
-        /// with the name then it will assert. This is a specialisation to handle inserting
-        /// strings into the blob.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Name
-        /// @param Value
+        /// This is a specialisation to handle inserting strings into the blob.
         //----------------------------------------------------------------------------------------
         template<> void Widget::SetProperty(const std::string& in_name, std::string in_value)
         {
@@ -892,28 +885,14 @@ namespace ChilliSource
             *property = in_value;
         }
         //----------------------------------------------------------------------------------------
-        /// Set the value of the string property with the given name. If no property exists
-        /// with the name then it will assert. This is a specialisation to handle inserting
-        /// strings into the blob.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Name
-        /// @param Value
+        /// This is a specialisation to handle inserting strings into the blob.
         //----------------------------------------------------------------------------------------
         template<> void Widget::SetProperty(const std::string& in_name, const std::string& in_value)
         {
             SetProperty<std::string>(in_name, in_value);
         }
         //----------------------------------------------------------------------------------------
-        /// Set the value of the string property with the given name. If no property exists
-        /// with the name then it will assert. This is a specialisation to handle inserting
-        /// strings into the blob.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Name
-        /// @param Value
+        /// This is a specialisation to handle inserting string literals into the blob
         //----------------------------------------------------------------------------------------
         template<> void Widget::SetProperty(const std::string& in_name, const char* in_value)
         {
