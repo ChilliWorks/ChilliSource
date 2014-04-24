@@ -185,9 +185,6 @@ namespace ChilliSource
 
             DetermineResourceDirectories();
 
-            //Set up the device helper
-            Device::Init(m_platformSystem.get());
-
 			//System setup
             m_isSystemCreationAllowed = true;
             CreateDefaultSystems();
@@ -427,6 +424,7 @@ namespace ChilliSource
         void Application::CreateDefaultSystems()
         {
             //Core
+            CreateSystem<Device>();
 			m_taskScheduler = CreateSystem<TaskScheduler>();
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();

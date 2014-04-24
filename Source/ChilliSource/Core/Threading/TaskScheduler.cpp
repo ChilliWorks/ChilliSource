@@ -28,6 +28,7 @@
 
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
 
 namespace ChilliSource
@@ -58,7 +59,8 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void TaskScheduler::OnInit()
 		{
-			m_threadPool = ThreadPoolUPtr(new Core::ThreadPool(Device::GetNumCPUCores() * 2));
+            Device* device = Core::Application::Get()->GetSystem<Device>();
+			m_threadPool = ThreadPoolUPtr(new Core::ThreadPool(device->GetNumberOfCPUCores() * 2));
 		}
 		//------------------------------------------------
 		//------------------------------------------------
