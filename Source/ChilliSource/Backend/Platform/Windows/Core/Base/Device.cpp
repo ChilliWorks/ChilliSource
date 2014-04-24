@@ -1,5 +1,5 @@
 //
-//  Device.mm
+//  Device.cpp
 //  Chilli Source
 //  Created by Ian Copland on 24/04/2014.
 //
@@ -26,19 +26,13 @@
 //  THE SOFTWARE.
 //
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/Device.h>
+#include <ChilliSource/Backend/Platform/Windows/Core/Base/Device.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-#import <sys/types.h>
-#import <sys/sysctl.h>
-#import <AdSupport/ASIdentifierManager.h>
+#include <windows.h>
 
 namespace ChilliSource
 {
-    namespace iOS
+    namespace Windows
     {
         namespace
         {
@@ -46,142 +40,81 @@ namespace ChilliSource
             //----------------------------------------------
             std::string GetDeviceModel()
             {
-                @autoreleasepool
-                {
-                    NSString * type = [[UIDevice currentDevice] model];
-                    return [NSStringUtils newStringWithNSString:type];
-                }
+				return "Windows";
             }
             //----------------------------------------------
             //----------------------------------------------
             std::string GetDeviceModelType()
             {
-                size_t size = 0;
-                sysctlbyname("hw.machine", nullptr, &size, nullptr, 0);
-                s8* machine = new s8[size];
-                sysctlbyname("hw.machine", machine, &size, nullptr, 0);
-                std::string modelType(machine);
-                CS_SAFEDELETE(machine);
-                
-                std::string output;
-                bool record = false;
-                for(std::string::const_iterator it = modelType.begin(); it != modelType.end(); ++it)
-                {
-                    if(isdigit(*it))
-                    {
-                        record = true;
-                    }
-                    
-                    if(record)
-                    {
-                        output += (*it);
-                    }
-                }
-                return output;
+				return "PC";
             }
             //---------------------------------------------
             //---------------------------------------------
             std::string GetDeviceManufacturer()
             {
-                return "Apple";
+				return "Microsoft";
             }
             //---------------------------------------------
             //---------------------------------------------
             std::string GetOSVersion()
             {
-                @autoreleasepool
-                {
-                    NSString* version = [[UIDevice currentDevice] systemVersion];
-                    return [NSStringUtils newStringWithNSString:version];
-                }
+				OSVERSIONINFOEX osvi;
+				ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX)); osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+				GetVersionEx((OSVERSIONINFO*)&osvi);
+				return std::string(Core::ToString((u32)osvi.dwMajorVersion) + "." + Core::ToString((u32)osvi.dwMinorVersion));
             }
             //---------------------------------------------
             //---------------------------------------------
             Core::Locale GetLocale()
             {
-                @autoreleasepool
-                {
-                    NSLocale *locale = [NSLocale currentLocale];
-                    NSString *countryCodeObjc = [locale objectForKey:NSLocaleCountryCode];
-                    std::string countryCode = [countryCodeObjc UTF8String];
-                    NSString *languageCodeObjc = [locale objectForKey:NSLocaleLanguageCode];
-                    std::string languageCode = [languageCodeObjc UTF8String];
-                    
-                    return ChilliSource::Core::Locale(languageCode, countryCode);
-                }
+				wchar_t localeName[LOCALE_NAME_MAX_LENGTH] = { 0 };
+
+				if (GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t)))
+				{
+					if (wcscmp(localeName, L"en") == 0)	return Core::Locale("en");
+					if (wcscmp(localeName, L"fr") == 0)	return Core::Locale("fr");
+					if (wcscmp(localeName, L"it") == 0)  return Core::Locale("it");
+					if (wcscmp(localeName, L"de") == 0)  return Core::Locale("de");
+					if (wcscmp(localeName, L"es") == 0)  return Core::Locale("es");
+					if (wcscmp(localeName, L"jp") == 0)  return Core::Locale("jp");
+				}
+
+				//Just default to english
+				return Core::Locale("en");
             }
             //---------------------------------------------
             //---------------------------------------------
             Core::Locale GetLanguage()
             {
-                @autoreleasepool
-                {
-                    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-                    NSArray* supportedLanguages = [userDefaults objectForKey:@"AppleLanguages"];
-                    NSString* userLocale = [supportedLanguages objectAtIndex:0];
-                    std::string localeCode = [userLocale UTF8String];
-                    
-                    //break this locale into parts(language/country code/extra)
-                    std::vector<std::string> localeBrokenUp = ChilliSource::Core::StringUtils::Split(localeCode, "-", 0);
-                    
-                    if (localeBrokenUp.size() > 1)
-                    {
-                        return Core::Locale(localeBrokenUp[0],localeBrokenUp[1]);
-                    }
-                    else if (localeBrokenUp.size() == 1)
-                    {
-                        return Core::Locale(localeBrokenUp[0]);
-                    }
-                    else
-                    {
-                        return Core::kUnknownLocale;
-                    }
-                }
+				wchar_t localeName[LOCALE_NAME_MAX_LENGTH] = { 0 };
+
+				if (GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t)))
+				{
+					if (wcscmp(localeName, L"en") == 0)	return Core::Locale("en");
+					if (wcscmp(localeName, L"fr") == 0)	return Core::Locale("fr");
+					if (wcscmp(localeName, L"it") == 0)  return Core::Locale("it");
+					if (wcscmp(localeName, L"de") == 0)  return Core::Locale("de");
+					if (wcscmp(localeName, L"es") == 0)  return Core::Locale("es");
+					if (wcscmp(localeName, L"jp") == 0)  return Core::Locale("jp");
+				}
+
+				//Just default to english
+				return Core::Locale("en");
             }
             //-----------------------------------------------
             //-----------------------------------------------
             std::string GetUDID()
             {
-                @autoreleasepool
-                {
-                    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0f)
-                    {
-                        NSUUID* uid = nil;
-                        
-                        if([ASIdentifierManager sharedManager].advertisingTrackingEnabled)
-                        {
-                            uid = [ASIdentifierManager sharedManager].advertisingIdentifier;
-                        }
-                        else
-                        {
-                            uid = [UIDevice currentDevice].identifierForVendor;
-                        }
-                        
-                        return [NSStringUtils newStringWithNSString:[uid UUIDString]];
-                    }
-                    else
-                    {
-                        //TODO: remove this?
-                        NSString* udid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
-                        return [NSStringUtils newStringWithNSString:udid];
-                    }
-                }
+				CS_LOG_ERROR("PlatformSystem::GetDeviceID() has not been implemented!");
+				return "FAKE ID";
             }
             //-------------------------------------------------
             //-------------------------------------------------
             u32 GetNumberOfCPUCores()
             {
-                u32 numCores = 1;
-                size_t size = sizeof(numCores);
-                
-                if(sysctlbyname("hw.ncpu", &numCores, &size, nullptr, 0))
-                {
-                    return 1;
-                }
-                else
-                {
-                    return numCores;
-                }
+				SYSTEM_INFO SysInfo;
+				GetSystemInfo(&SysInfo);
+				return SysInfo.dwNumberOfProcessors;
             }
         }
         
@@ -191,14 +124,14 @@ namespace ChilliSource
         Device::Device()
             : m_locale(Core::kUnknownLocale), m_language(Core::kUnknownLocale)
         {
-            m_model = iOS::GetDeviceModel();
-            m_modelType = iOS::GetDeviceModelType();
-            m_manufacturer = iOS::GetDeviceManufacturer();
-            m_locale = iOS::GetLocale();
-            m_language = iOS::GetLanguage();
-            m_osVersion = iOS::GetOSVersion();
-            m_udid = iOS::GetUDID();
-            m_numCPUCores = iOS::GetNumberOfCPUCores();
+			m_model = Windows::GetDeviceModel();
+			m_modelType = Windows::GetDeviceModelType();
+			m_manufacturer = Windows::GetDeviceManufacturer();
+			m_locale = Windows::GetLocale();
+			m_language = Windows::GetLanguage();
+			m_osVersion = Windows::GetOSVersion();
+			m_udid = Windows::GetUDID();
+            m_numCPUCores = Windows::GetNumberOfCPUCores();
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

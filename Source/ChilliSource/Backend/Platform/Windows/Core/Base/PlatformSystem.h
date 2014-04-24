@@ -95,66 +95,16 @@ namespace ChilliSource
 			//-------------------------------------------------
 			/// @author S Downie
 			///
-			/// @return The above information stringified
-			//------------------------------------------------
-			std::string GetDeviceModelName() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The above information stringified
-			//-------------------------------------------------
-			std::string GetDeviceModelTypeName() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The above information stringified
-			//-------------------------------------------------
-			std::string GetDeviceManufacturerName() const override;
-            //-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return  String containing the OS version of the device
-			//-------------------------------------------------
-			std::string GetOSVersion() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// Get the active language locale of the device
-			/// @return Locale ID
-			//-------------------------------------------------
-			Core::Locale GetLocale() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// Get the active language of the device in locale format
-			/// @return Locale ID
-			//-------------------------------------------------
-			Core::Locale GetLanguage() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
 			/// @return The density scale factor of the screen
 			/// to convert from DIPS to physical pixels
 			//-------------------------------------------------
 			f32 GetScreenDensity() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The UDID of the device
-			//-------------------------------------------------
-			std::string GetDeviceID() override;
 			//-------------------------------------------------
 	        /// @author S Downie
 	        ///
 	        /// @return The version of the application
 	        //-------------------------------------------------
 			std::string GetAppVersion() const override { return ""; }
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The number of cores available
-			//------------------------------------------------
-			u32 GetNumberOfCPUCores() const override;
 			//------------------------------------------------
 			/// @author S Downie
 			///
