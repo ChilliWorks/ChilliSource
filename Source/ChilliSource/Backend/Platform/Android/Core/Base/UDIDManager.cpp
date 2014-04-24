@@ -32,7 +32,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Get UDID
 		//-----------------------------------------
-		std::string UDIDManager::GetUDID()
+		const std::string& UDIDManager::GetUDID()
 		{
 			if (mbInitialised == false)
 				Initialise();

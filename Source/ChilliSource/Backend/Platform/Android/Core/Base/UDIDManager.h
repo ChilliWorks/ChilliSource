@@ -32,7 +32,7 @@ namespace ChilliSource
 			///
 			/// @return The UDID
 			//-----------------------------------------
-			std::string GetUDID();
+			const std::string& GetUDID();
 
 		private:
 			//-----------------------------------------

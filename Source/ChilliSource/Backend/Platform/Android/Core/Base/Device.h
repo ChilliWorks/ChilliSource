@@ -26,17 +26,21 @@
 //  THE SOFTWARE.
 //
 
-#import <ChilliSource/ChilliSource.h>
-#import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#import <ChilliSource/Core/Base/Device.h>
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_DEVICE_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_DEVICE_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/Core/Base/UDIDManager.h>
+#include <ChilliSource/Core/Base/Device.h>
 
 namespace ChilliSource
 {
-    namespace iOS
+    namespace Android
     {
         //---------------------------------------------------------
-        /// The iOS backend for the device system. This provides
-        /// information on the specific iOS device.
+        /// The Android backend for the device system. This provides
+        /// information on the specific Android device.
         ///
         /// @author I Copland
         //---------------------------------------------------------
@@ -115,10 +119,10 @@ namespace ChilliSource
 			//----------------------------------------------------
 			Device();
             
+			UDIDManager m_udidManager;
             std::string m_model;
             std::string m_modelType;
             std::string m_manufacturer;
-            std::string m_udid;
             Core::Locale m_locale;
             Core::Locale m_language;
             std::string m_osVersion;
@@ -126,3 +130,5 @@ namespace ChilliSource
         };
     }
 }
+
+#endif
