@@ -126,6 +126,7 @@ namespace ChilliSource
             Core::Locale m_locale;
             Core::Locale m_language;
             std::string m_osVersion;
+            std::string m_udid;
 			u32 m_numCPUCores;
         };
     }

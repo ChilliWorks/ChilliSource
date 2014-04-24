@@ -80,6 +80,7 @@ namespace ChilliSource
             m_osVersion = javaInterface->GetOSVersionCode();
             m_locale = ParseLocaleString(javaInterface->GetDefaultLocaleCode());
             m_language = m_locale;
+            m_udid = m_udidManager.GetUDID();
             m_numCPUCores = javaInterface->GetNumberOfCores();
         }
         //-------------------------------------------------------
@@ -128,7 +129,7 @@ namespace ChilliSource
         //---------------------------------------------------
         const std::string& Device::GetUDID()
         {
-            return m_udidManager.GetUDID();
+            return m_udid;
         }
         //---------------------------------------------------
         //---------------------------------------------------
