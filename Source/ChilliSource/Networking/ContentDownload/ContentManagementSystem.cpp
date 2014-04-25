@@ -25,6 +25,8 @@ namespace ChilliSource
     {
         namespace
         {
+            const std::string k_ldsKeyHasCached = "_CMSCachedDLC";
+            
             //--------------------------------------------------------
             /// @author S Downie
             ///
@@ -139,7 +141,8 @@ namespace ChilliSource
             in_currentManifest->LoadFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
             
             //If there is no DLC we should check to see if there ever was any
-            if(!in_currentManifest->RootElement() && Core::LocalDataStore::GetSingletonPtr()->HasValueForKey("MOCMSCachedDLC"))
+            Core::LocalDataStore* lds = Core::Application::Get()->GetSystem<Core::LocalDataStore>();
+            if(!in_currentManifest->RootElement() && lds->Contains("") == true)
             {
                 m_dlcCachePurged = true;
             }
@@ -257,7 +260,8 @@ namespace ChilliSource
                 
                 //Store that we have DLC cached. If there is no DLC on next check then 
                 //we know the cache has been purged and we have to block on download
-                Core::LocalDataStore::GetSingletonPtr()->SetValueForKey("MOCMSCachedDLC", true);
+                Core::LocalDataStore* lds = Core::Application::Get()->GetSystem<Core::LocalDataStore>();
+                lds->SetValue(k_ldsKeyHasCached, true);
                 
                 //Tell the delegate all is good
                 inDelegate(Result::k_succeeded);

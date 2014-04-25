@@ -216,9 +216,6 @@ namespace ChilliSource
             OnInit();
             PushInitialState();
 
-			//Register for update events
-			LocalDataStore::GetSingleton().SubscribeToApplicationSuspendEvent();
-
 			//Begin the update loop
 			m_platformSystem->Run();
 		}
@@ -429,6 +426,7 @@ namespace ChilliSource
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
             m_resourcePool = CreateSystem<ResourcePool>();
+            CreateSystem<LocalDataStore>();
             CreateSystem<CSImageProvider>();
             CreateSystem<DialogueBoxSystem>();
             
