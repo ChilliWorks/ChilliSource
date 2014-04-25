@@ -70,41 +70,6 @@ namespace ChilliSource
         {
             iOSInvalidateUpdater();
         }
-		//------------------------------------------
-		//------------------------------------------
-		Core::Vector2 PlatformSystem::GetScreenDimensions() const
-		{
-			Core::Vector2 result;
-			CGSize size = [[UIScreen mainScreen] bounds].size;
-            
-            f32 scale = 1.0f;
-            
-            bool isiOS4_0 = ([[[UIDevice currentDevice] systemVersion] floatValue] >= 4.0f);
-            
-            if(isiOS4_0)
-            {
-                scale = [UIScreen mainScreen].scale;
-            }
-            
-			result.x = size.width * scale;
-			result.y = size.height * scale;
-            
-			return result;
-		}
-
-        //----------------------------------------------
-        //----------------------------------------------
-        f32 PlatformSystem::GetScreenDensity() const
-        {
-            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 4.0f) 
-            {
-				CGFloat scale = [UIScreen mainScreen].scale;
-                
-                return scale;
-			}
-            
-            return 1.0f;
-        }
         //-------------------------------------------------
         //-------------------------------------------------
         std::string PlatformSystem::GetAppVersion() const

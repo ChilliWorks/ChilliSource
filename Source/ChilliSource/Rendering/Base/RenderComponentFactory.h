@@ -109,6 +109,7 @@ namespace ChilliSource
 		protected:
 			
 			RenderSystem* mpRenderSystem;
+            Core::Screen* m_screen;
             
 			Core::ResourcePool* m_resourcePool;
 			RenderCapabilities* mpRenderCapabilities;

@@ -33,19 +33,14 @@ namespace ChilliSource
             
             void StartListeningForPointerInput();
             void StopListeningForPointerInput();
-            //-----------------------------------------------------------
-			/// On Screen Orientation Changed
-			///
-			/// Triggered if the screen orientation changes so we can
-			/// resize ourself
 			//-----------------------------------------------------------
-			void OnScreenOrientationChanged(Core::ScreenOrientation ineOrientation);
-			//-----------------------------------------------------------
-			/// On Screen Resized
+			/// On Screen Resolution Changed
 			///
 			/// Triggered if the screen resizes
+            ///
+            /// @param The new resolution
 			//-----------------------------------------------------------
-			void OnScreenResized(u32 inudwWidth, u32 inudwHeight);
+			void OnScreenResolutionChanged(const Core::Vector2& in_resolution);
             
         protected:
             //-----------------------------------------------------------

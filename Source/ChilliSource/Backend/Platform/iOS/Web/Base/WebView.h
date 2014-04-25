@@ -125,6 +125,12 @@ namespace ChilliSource
             //---------------------------------------------------------
             WebView();
             //---------------------------------------------------------
+            /// Called when the the owning state is initialised.
+            ///
+            /// @author I Copland
+            //---------------------------------------------------------
+            void OnInit() override;
+            //---------------------------------------------------------
             /// Create a webview instance from the size member and
             /// centre it on-screen.
             ///
@@ -167,6 +173,8 @@ namespace ChilliSource
             void OnDestroy() override;
 		private:
 			
+            Core::Screen* m_screen;
+            
             bool m_isPresented;
             DismissedDelegate m_dismissedDelegate;
 			UIWebView* m_webView;

@@ -26,6 +26,8 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(ImageProvider);
         CS_FORWARDDECLARE_CLASS(LocalNotificationSystem);
         CS_FORWARDDECLARE_CLASS(RemoteNotificationSystem);
+        CS_FORWARDDECLARE_CLASS(Device);
+        CS_FORWARDDECLARE_CLASS(Screen);
         //------------------------------------------------------
 		/// Input
 		//------------------------------------------------------

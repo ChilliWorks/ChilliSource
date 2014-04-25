@@ -63,9 +63,7 @@ namespace ChilliSource
             virtual void Destroy() = 0;
 			
 			virtual ~RenderSystem();
-			
-			virtual void OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight) = 0;
-
+            
 			virtual void BeginFrame(RenderTarget* inpActiveRenderTarget) = 0;
 			virtual void EndFrame(RenderTarget* inpActiveRenderTarget) = 0;
 

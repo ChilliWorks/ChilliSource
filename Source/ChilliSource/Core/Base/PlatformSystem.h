@@ -94,26 +94,12 @@ namespace ChilliSource
             /// @param the system list
             //-------------------------------------------------
             virtual void PostCreateSystems() = 0;
-            //-----------------------------------------------------------------------------------------------------------
-            /// Get Screen Dimensions
-            ///
-            /// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
-            /// @return A Vector2 containing the screen size in its x + y components
-            //-----------------------------------------------------------------------------------------------------------
-            virtual Core::Vector2 GetScreenDimensions() const = 0;
             //--------------------------------------------------------------
             /// Get System Time
             ///
             /// @return the current time in milliseconds
             //--------------------------------------------------------------
             virtual TimeIntervalMs GetSystemTimeMS() const = 0;
-            //-------------------------------------------------
-            /// Get Screen Density
-            ///
-            /// @return The density scale factor of the screen
-            /// to convert from DIPS to physical pixels
-            //-------------------------------------------------
-            virtual f32 GetScreenDensity() const = 0;
             //-------------------------------------------------
             /// Get App Version
             ///

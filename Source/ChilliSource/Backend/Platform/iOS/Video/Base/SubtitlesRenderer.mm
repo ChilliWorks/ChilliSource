@@ -9,6 +9,7 @@
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
 
 #import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Base/Screen.h>
 #import <ChilliSource/Core/String/StringUtils.h>
 #import <ChilliSource/Core/String/UTF8String.h>
@@ -29,6 +30,7 @@
     
     m_videoPlayer = in_videoPlayer;
     mpBaseView = inpView;
+    m_screen = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Core::Screen>();
     
     //create the display link
     mpDisplayLink = [CADisplayLink displayLinkWithTarget: self selector: @selector(OnUpdate)];
@@ -249,7 +251,7 @@
 //--------------------------------------------------------
 -(CGRect) CalculateTextBoxRect:(const ChilliSource::Core::Rectangle&)inRelativeBounds
 {
-    ChilliSource::Core::Vector2 vScreenDimensions(ChilliSource::Core::Screen::GetOrientedWidth() * ChilliSource::Core::Screen::GetInverseDensity(), ChilliSource::Core::Screen::GetOrientedHeight() * ChilliSource::Core::Screen::GetInverseDensity());
+    ChilliSource::Core::Vector2 vScreenDimensions(m_screen->GetResolution().x * m_screen->GetInverseDensityScale(), m_screen->GetResolution().y * m_screen->GetInverseDensityScale());
     ChilliSource::Core::Vector2 vVideoDimensions = m_videoPlayer->GetVideoDimensions();
     float fScreenAspectRatio = vScreenDimensions.x / vScreenDimensions.y;
     float fVideoAspectRatio = vVideoDimensions.x / vVideoDimensions.y;
