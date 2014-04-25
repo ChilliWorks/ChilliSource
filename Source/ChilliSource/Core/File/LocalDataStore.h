@@ -33,6 +33,8 @@
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
+#include <mutex>
+
 namespace ChilliSource
 {
 	namespace Core
@@ -44,11 +46,13 @@ namespace ChilliSource
         /// The local data store is encrypted on disk however the private key
         /// used is generated from known information. This means the local
         /// data store should not be used to store sensitive information such
+        /// as passwords.
         ///
         /// Note that keys beginning with an underscore '_' are reserved for
         /// internal engine use.
         ///
-        /// It is safe to use this during the OnInit() lifecycle event.
+        /// The LDS is thread-safe and is initialised prior to the the OnInit()
+        /// lifecycle event.
         ///
         /// @author S McGaw
         //--------------------------------------------------------------------
@@ -88,7 +92,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, std::string& out_value);
+			bool GetValue(const std::string& in_key, std::string& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a bool.
@@ -100,7 +104,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, bool& out_value);
+			bool GetValue(const std::string& in_key, bool& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a u16.
@@ -112,7 +116,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, u16& out_value);
+			bool GetValue(const std::string& in_key, u16& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a s16.
@@ -124,7 +128,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, s16& out_value);
+			bool GetValue(const std::string& in_key, s16& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a u32.
@@ -136,7 +140,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, u32& out_value);
+			bool GetValue(const std::string& in_key, u32& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a s32.
@@ -148,7 +152,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, s32& out_value);
+			bool GetValue(const std::string& in_key, s32& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a u64.
@@ -160,7 +164,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, u64& out_value);
+			bool GetValue(const std::string& in_key, u64& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a s64.
@@ -171,7 +175,7 @@ namespace ChilliSource
             /// @param [Out] The output value.
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, s64& out_value);
+			bool GetValue(const std::string& in_key, s64& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a f32.
@@ -183,7 +187,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, f32& out_value);
+			bool GetValue(const std::string& in_key, f32& out_value) const;
 			//--------------------------------------------------------------
             /// Sets the value for the given key. If the key already existed
             /// its previous value will be overwritten. Note that keys
@@ -349,6 +353,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             void OnSuspend() override;
 			
+            mutable std::mutex m_mutex;
 			bool m_needsSynchonised;
 			ParamDictionary m_dictionary;
 		};

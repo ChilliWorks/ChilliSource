@@ -111,14 +111,17 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, std::string& out_value)
+		bool LocalDataStore::GetValue(const std::string& in_key, std::string& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
 			return m_dictionary.TryGetValue(in_key, out_value);
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, bool& out_value)
+		bool LocalDataStore::GetValue(const std::string& in_key, bool& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
 			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
@@ -129,8 +132,10 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, u16& out_value)
+		bool LocalDataStore::GetValue(const std::string& in_key, u16& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
 			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
@@ -141,8 +146,10 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, s16& out_value)
+		bool LocalDataStore::GetValue(const std::string& in_key, s16& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
 			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
@@ -153,8 +160,10 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, u32& out_value)
+		bool LocalDataStore::GetValue(const std::string& in_key, u32& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
 			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
@@ -165,8 +174,10 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, s32& out_value)
+		bool LocalDataStore::GetValue(const std::string& in_key, s32& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
 			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
@@ -177,8 +188,10 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, u64& out_value)
+		bool LocalDataStore::GetValue(const std::string& in_key, u64& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
 			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
@@ -189,8 +202,10 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, s64& out_value)
+		bool LocalDataStore::GetValue(const std::string& in_key, s64& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
 			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
@@ -201,8 +216,10 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, f32& out_value)
+		bool LocalDataStore::GetValue(const std::string& in_key, f32& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
 			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
@@ -215,6 +232,8 @@ namespace ChilliSource
         //--------------------------------------------------------------
 		void LocalDataStore::SetValue(const std::string& in_key, const std::string& in_value)
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			m_dictionary[in_key] = in_value;
 			m_needsSynchonised = true;
 		}
@@ -270,6 +289,8 @@ namespace ChilliSource
         //--------------------------------------------------------------
 		bool LocalDataStore::Erase(const std::string& in_key)
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			ParamDictionary::iterator pEntry = m_dictionary.find(in_key);
 			if(m_dictionary.end() != pEntry)
             {
@@ -283,6 +304,8 @@ namespace ChilliSource
         //--------------------------------------------------------------
         void LocalDataStore::Clear()
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
             m_dictionary.clear();
             m_needsSynchonised = true;
             Synchronise();
@@ -291,6 +314,8 @@ namespace ChilliSource
         //--------------------------------------------------------------
 		void LocalDataStore::Synchronise()
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			if(m_needsSynchonised == true)
             {
                 // Convert to XML
