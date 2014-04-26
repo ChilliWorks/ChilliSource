@@ -164,7 +164,7 @@ namespace ChilliSource
         ///
         /// Build a sprite box and batch it ready for rendering
         //-----------------------------------------------------------
-        void CanvasRenderer::DrawBox(const Core::Matrix3x3Old& inmatTransform, const Core::Vector2 & invSize, const TextureCSPtr & inpTexture, 
+        void CanvasRenderer::DrawBox(const Core::Matrix3& inmatTransform, const Core::Vector2 & invSize, const TextureCSPtr & inpTexture, 
                                       const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
         {
             msCachedSprite.pMaterial = GetGUIMaterialForTexture(inpTexture);
@@ -181,7 +181,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw String
         //-----------------------------------------------------------
-		void CanvasRenderer::DrawString(const Core::UTF8String & insString, const Core::Matrix3x3Old& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
+		void CanvasRenderer::DrawString(const Core::UTF8String & insString, const Core::Matrix3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
                                          const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
 										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped, bool *outpInvalidCharacterFound)
 		{

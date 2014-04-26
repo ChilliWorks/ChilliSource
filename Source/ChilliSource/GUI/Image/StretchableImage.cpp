@@ -251,11 +251,7 @@ namespace ChilliSource
                 
                 //We need to use a matrix so that we can rotate all the patches with respect
                 //to the view
-                Core::Matrix3x3Old matTransform;
-                Core::Matrix3x3Old matPatchTransform;
-                Core::Matrix3x3Old matViewTransform;
-                
-                matViewTransform.SetTransform(vPanelPos, Core::Vector2(1, 1), GetAbsoluteRotation());
+                Core::Matrix3 matViewTransform = Core::Matrix3::CreateTransform(vPanelPos, Core::Vector2(1, 1), GetAbsoluteRotation());
 				
 				// Retrieve each bit's size
 				PatchSize sPatchSize;
@@ -264,8 +260,8 @@ namespace ChilliSource
                 // Render ourself
 				
                 // Draw the top left corner
-                matPatchTransform.Translate(vTopLeft);
-                Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+				Core::Matrix3 matPatchTransform = Core::Matrix3::CreateTranslation(vTopLeft);
+				Core::Matrix3 matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform,
                                    sPatchSize.vSizeTopLeft, 
 								   Texture,
@@ -274,8 +270,8 @@ namespace ChilliSource
                                    Rendering::AlignmentAnchor::k_topLeft);
                 
                 // Draw the top right corner
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topRight));
-                Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+				matPatchTransform = Core::Matrix3::CreateTranslation(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topRight));
+				matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeTopRight,  
 								   Texture,
@@ -284,8 +280,8 @@ namespace ChilliSource
                                    Rendering::AlignmentAnchor::k_topRight);
                 
                 // Draw the bottom left corner
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft));
-                Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+				matPatchTransform = Core::Matrix3::CreateTranslation(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft));
+				matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeBottomLeft, 
 								   Texture,
@@ -294,8 +290,8 @@ namespace ChilliSource
                                    Rendering::AlignmentAnchor::k_bottomLeft);
                 
                 // Draw the bottom right corner
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomRight));
-                Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+				matPatchTransform = Core::Matrix3::CreateTranslation(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomRight));
+				matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeBottomRight,  
 								   Texture,
@@ -306,8 +302,8 @@ namespace ChilliSource
                 // Draw the top
 				vPatchPos.x = vTopLeft.x + sPatchSize.vSizeTopLeft.x;
 				vPatchPos.y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topCentre).y;
-                matPatchTransform.Translate(vPatchPos);
-                Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
+				matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeTopCentre, 
 								   Texture,
@@ -318,8 +314,8 @@ namespace ChilliSource
                 // Draw the bottom
 				vPatchPos.x = vTopLeft.x + sPatchSize.vSizeBottomLeft.x;
 				vPatchPos.y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomCentre).y;
-                matPatchTransform.Translate(vPatchPos);
-                Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
+				matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeBottomCentre, 
 								   Texture,
@@ -330,8 +326,8 @@ namespace ChilliSource
                 // Draw the left
 				vPatchPos.x = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_middleLeft).x;
 				vPatchPos.y = vTopLeft.y - sPatchSize.vSizeTopLeft.y;
-                matPatchTransform.Translate(vPatchPos);
-                Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
+				matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeLeftCentre, 
 								   Texture,
@@ -342,8 +338,8 @@ namespace ChilliSource
                 // Draw the right
 				vPatchPos.x = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_middleRight).x;
 				vPatchPos.y = vTopLeft.y - sPatchSize.vSizeTopRight.y;
-                matPatchTransform.Translate(vPatchPos);
-                Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
+				matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeRightCentre, 
 								   Texture,
@@ -354,8 +350,8 @@ namespace ChilliSource
                 // Draw the centre
 				vPatchPos.x = vTopLeft.x + sPatchSize.vSizeTopLeft.x;
 				vPatchPos.y = vTopLeft.y - sPatchSize.vSizeTopLeft.y;
-                matPatchTransform.Translate(vPatchPos);
-                Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
+				matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform,
                                    sPatchSize.vSizeMiddleCentre, 
 								   Texture,

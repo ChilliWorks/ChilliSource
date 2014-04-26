@@ -11,7 +11,7 @@
 #define _MO_FLO_CORE_MATH_MATRIX_4X4_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Matrix3x3Old.h>
+#include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>
@@ -44,7 +44,7 @@ namespace ChilliSource
                        f32 m10, f32 m11, f32 m12, f32 m13,
                        f32 m20, f32 m21, f32 m22, f32 m23,
                        f32 m30, f32 m31, f32 m32, f32 m33);
-            Matrix4x4Old(const Matrix3x3Old& inmat);
+            Matrix4x4Old(const Matrix3& inmat);
 			
 			//---Methods
 			Matrix4x4Old Inverse() const;

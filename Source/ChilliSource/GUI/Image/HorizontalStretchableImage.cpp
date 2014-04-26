@@ -297,11 +297,7 @@ namespace ChilliSource
                     
                     //We need to use a matrix so that we can rotate all the patches with respect
                     //to the view
-                    Core::Matrix3x3Old matTransform;
-                    Core::Matrix3x3Old matPatchTransform;
-                    Core::Matrix3x3Old matViewTransform;
-                    
-                    matViewTransform.SetTransform(vPanelPos, Core::Vector2(1, 1), GetAbsoluteRotation());
+                    Core::Matrix3 matViewTransform = Core::Matrix3::CreateTransform(vPanelPos, Core::Vector2(1, 1), GetAbsoluteRotation());
                     
                     // Calculate dimentions and position for centre
                     Core::Vector2 vPatchSize = m_panels.m_centreSize;
@@ -317,8 +313,8 @@ namespace ChilliSource
                     
                     //Render ourself
                     //Draw the left cap
-                    matPatchTransform.Translate(vTopLeft);
-                    Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+					Core::Matrix3 matPatchTransform = Core::Matrix3::CreateTranslation(vTopLeft);
+					Core::Matrix3 matTransform = matPatchTransform * matViewTransform;
                     inpCanvas->DrawBox(matTransform,
                                        Core::Vector2(m_panels.m_leftSize.x + fShrinkX,vPanelSize.y),
                                        Texture,
@@ -327,8 +323,8 @@ namespace ChilliSource
                                        Rendering::AlignmentAnchor::k_topLeft);
                     
                     //Draw the right cap
-                    matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topRight));
-                    Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+					matPatchTransform = Core::Matrix3::CreateTranslation(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topRight));
+					matTransform = matPatchTransform * matViewTransform;
                     inpCanvas->DrawBox(matTransform, 
                                        Core::Vector2(m_panels.m_rightSize.x + fShrinkX,vPanelSize.y),
                                        Texture,
@@ -337,8 +333,8 @@ namespace ChilliSource
                                        Rendering::AlignmentAnchor::k_topRight);
                     
                     // Draw the centre going from left to right cap
-                    matPatchTransform.Translate(vPatchPos);
-                    Core::Matrix3x3Old::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+					matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
+					matTransform = matPatchTransform * matViewTransform;
                     inpCanvas->DrawBox(matTransform,
                                        vPatchSize,
                                        Texture,

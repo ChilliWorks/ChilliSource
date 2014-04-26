@@ -16,7 +16,7 @@
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
-#include <ChilliSource/Core/Math/Matrix3x3Old.h>
+#include <ChilliSource/Core/Math/Matrix3.h>
 
 #include <unordered_map>
 
@@ -83,7 +83,7 @@ namespace ChilliSource
             /// @param Colour
             /// @param Box origin alignment
             //-----------------------------------------------------------
-			void DrawBox(const Core::Matrix3x3Old& inmatTransform, const Core::Vector2 & invSize, const TextureCSPtr & inpTexture, const Core::Rectangle& inUVs,
+			void DrawBox(const Core::Matrix3& inmatTransform, const Core::Vector2 & invSize, const TextureCSPtr & inpTexture, const Core::Rectangle& inUVs,
                          const Core::Colour & insTintColour, AlignmentAnchor ineAlignment = AlignmentAnchor::k_middleCentre);
             //-----------------------------------------------------------
             /// Draw String
@@ -105,7 +105,7 @@ namespace ChilliSource
             /// @param Bool pointer. Bool set true if string is clipped, false if not, untouched if string not rebuilt
             /// @param Bool pointer. Bool set true if invalid character is found.
             //-----------------------------------------------------------
-			void DrawString(const Core::UTF8String & insString, const Core::Matrix3x3Old& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
+			void DrawString(const Core::UTF8String & insString, const Core::Matrix3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
 							const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
 							GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped = nullptr, bool * outpInvalidCharacterFound = nullptr);
             //-----------------------------------------------------------

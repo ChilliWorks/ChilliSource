@@ -96,7 +96,7 @@ namespace ChilliSource
 		///
 		/// @param From 3x3 matrix
 		//------------------------------------------------
-        Matrix4x4Old::Matrix4x4Old(const Matrix3x3Old& inmat)
+        Matrix4x4Old::Matrix4x4Old(const Matrix3& inmat)
         {
             m[0]  = inmat.m[0]; m[1]  = inmat.m[1]; m[2]  = inmat.m[2]; m[3]  = 0.0f;
 			m[4]  = inmat.m[3]; m[5]  = inmat.m[4]; m[6]  = inmat.m[5]; m[7]  = 0.0f;

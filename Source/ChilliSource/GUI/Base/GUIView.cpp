@@ -1525,22 +1525,21 @@ namespace ChilliSource
         ///
         /// @return Transformation matrix
         //-----------------------------------------------------
-        const Core::Matrix3x3Old& GUIView::GetTransform() const
+        const Core::Matrix3& GUIView::GetTransform() const
         {
 			if(!Core::Utils::BitmapCheck(mudwCacheValidaters, (u32)TransformCache::k_transform))
 			{
 				if(mpParentView)
 				{
 					//Create our transform without respect to our parent
-					Core::Matrix3x3Old matTrans;
-					matTrans.SetTransform(GetAbsolutePosition(), Core::Vector2::k_one, GetAbsoluteRotation());
+					Core::Matrix3 matTrans = Core::Matrix3::CreateTransform(GetAbsolutePosition(), Core::Vector2::k_one, GetAbsoluteRotation());
 					
 					//Apply our parents transform
-					Core::Matrix3x3Old::Multiply(&matTrans, &mpParentView->GetTransform(), &mmatTransform);
+					mmatTransform = matTrans * mpParentView->GetTransform();
 				}
 				else
 				{
-					mmatTransform.SetTransform(GetAbsolutePosition(), Core::Vector2::k_one, Rotation);
+					mmatTransform = Core::Matrix3::CreateTransform(GetAbsolutePosition(), Core::Vector2::k_one, Rotation);
 				}
 				
 				Core::Utils::BitmapSet(mudwCacheValidaters, (u32)TransformCache::k_transform);

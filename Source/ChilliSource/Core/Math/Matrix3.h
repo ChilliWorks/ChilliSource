@@ -229,13 +229,13 @@ namespace ChilliSource
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::CreateTranslation(const GenericVector2<TType>& in_translation)
 		{
-			return GenericMatrix3<TType>(1, 0, 0, 0, 1, 0, in_translation.X, in_translation.Y, 1);
+			return GenericMatrix3<TType>(1, 0, 0, 0, 1, 0, in_translation.x, in_translation.y, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::CreateScale(const GenericVector2<TType>& in_scale)
 		{
-			return GenericMatrix3<TType>(in_scale.X, 0, 0, 0, in_scale.Y, 0, 0, 0, 1);
+			return GenericMatrix3<TType>(in_scale.x, 0, 0, 0, in_scale.y, 0, 0, 0, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -333,8 +333,8 @@ namespace ChilliSource
 		//------------------------------------------------------
 		template <typename TType> void GenericMatrix3<TType>::Translate(const GenericVector2<TType>& in_translation)
 		{
-			m[6] += in_translation.X;
-			m[7] += in_translation.Y;
+			m[6] += in_translation.x;
+			m[7] += in_translation.y;
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -457,9 +457,9 @@ namespace ChilliSource
 		template <typename TType> GenericVector3<TType>& operator*=(GenericVector3<TType>& in_a, const GenericMatrix3<TType>& in_b)
 		{
 			GenericVector3<TType> c = in_a;
-			in_a.X = c.X * in_b.m[0] + c.Y * in_b.m[3] + c.Z * in_b.m[6];
-			in_a.Y = c.X * in_b.m[1] + c.Y * in_b.m[4] + c.Z * in_b.m[7];
-			in_a.Z = c.X * in_b.m[2] + c.Y * in_b.m[5] + c.Z * in_b.m[8];
+			in_a.x = c.x * in_b.m[0] + c.y * in_b.m[3] + c.z * in_b.m[6];
+			in_a.y = c.x * in_b.m[1] + c.y * in_b.m[4] + c.z * in_b.m[7];
+			in_a.z = c.x * in_b.m[2] + c.y * in_b.m[5] + c.z * in_b.m[8];
 			return in_a;
 		}
 		//------------------------------------------------------
@@ -467,9 +467,9 @@ namespace ChilliSource
 		template <typename TType> GenericVector3<TType> operator*(const GenericVector3<TType>& in_a, const GenericMatrix3<TType>& in_b)
 		{
 			GenericVector3<TType> c;
-			c.X = in_a.X * in_b.m[0] + in_a.Y * in_b.m[3] + in_a.Z * in_b.m[6];
-			c.Y = in_a.X * in_b.m[1] + in_a.Y * in_b.m[4] + in_a.Z * in_b.m[7];
-			c.Z = in_a.X * in_b.m[2] + in_a.Y * in_b.m[5] + in_a.Z * in_b.m[8];
+			c.x = in_a.x * in_b.m[0] + in_a.y * in_b.m[3] + in_a.z * in_b.m[6];
+			c.y = in_a.x * in_b.m[1] + in_a.y * in_b.m[4] + in_a.z * in_b.m[7];
+			c.z = in_a.x * in_b.m[2] + in_a.y * in_b.m[5] + in_a.z * in_b.m[8];
 			return c;
 		}
 		//------------------------------------------------------
@@ -477,9 +477,9 @@ namespace ChilliSource
 		template <typename TType> GenericVector2<TType>& operator*=(GenericVector2<TType>& in_a, const GenericMatrix3<TType>& in_b)
 		{
 			GenericVector2<TType> c = in_a;
-			in_a.X = c.X * in_b.m[0] + c.Y * in_b.m[3] + in_b.m[6];
-			in_a.Y = c.X * in_b.m[1] + c.Y * in_b.m[4] + in_b.m[7];
-			TType oneOverZ = 1 / (c.X * in_b.m[2] + c.Y * in_b.m[5] + in_b.m[8]);
+			in_a.x = c.x * in_b.m[0] + c.y * in_b.m[3] + in_b.m[6];
+			in_a.y = c.x * in_b.m[1] + c.y * in_b.m[4] + in_b.m[7];
+			TType oneOverZ = 1 / (c.x * in_b.m[2] + c.y * in_b.m[5] + in_b.m[8]);
 			in_a *= oneOverZ;
 			return in_a;
 		}
@@ -488,15 +488,15 @@ namespace ChilliSource
 		template <typename TType> GenericVector2<TType> operator*(const GenericVector2<TType>& in_a, const GenericMatrix3<TType>& in_b)
 		{
 			GenericVector3<TType> c;
-			c.X = in_a.X * in_b.m[0] + in_a.Y * in_b.m[3] + in_b.m[6];
-			c.Y = in_a.X * in_b.m[1] + in_a.Y * in_b.m[4] + in_b.m[7];
-			TType oneOverZ = 1 / (c.X * in_b.m[2] + c.Y * in_b.m[5] + in_b.m[8]);
+			c.x = in_a.x * in_b.m[0] + in_a.y * in_b.m[3] + in_b.m[6];
+			c.y = in_a.x * in_b.m[1] + in_a.y * in_b.m[4] + in_b.m[7];
+			TType oneOverZ = 1 / (c.x * in_b.m[2] + c.y * in_b.m[5] + in_b.m[8]);
 			c *= oneOverZ;
 			return c;
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
-		template <typename TType> bool GenericMatrix3<TType>::operator==(const GenericMatrix3<TType>& in_a, const GenericMatrix3<TType>& in_b)
+		template <typename TType> bool operator==(const GenericMatrix3<TType>& in_a, const GenericMatrix3<TType>& in_b)
 		{
 			for (u32 i = 0; i < 9; ++i)
 			{
@@ -507,7 +507,7 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
-		template <typename TType> bool GenericMatrix3<TType>::operator!=(const GenericMatrix3<TType>& in_a, const GenericMatrix3<TType>& in_b)
+		template <typename TType> bool operator!=(const GenericMatrix3<TType>& in_a, const GenericMatrix3<TType>& in_b)
 		{
 			return !(in_a == in_b);
 		}

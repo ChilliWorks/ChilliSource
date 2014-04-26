@@ -20,7 +20,7 @@
 #include <ChilliSource/GUI/Base/InputEvents.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Math/Matrix3x3Old.h>
+#include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Core/Reflection/Reflection.h>
 #include <ChilliSource/Core/Base/Colour.h>
@@ -898,7 +898,7 @@ namespace ChilliSource
 			///
 			/// @return Transformation matrix
 			//-----------------------------------------------------
-			const Core::Matrix3x3Old& GetTransform() const;
+			const Core::Matrix3& GetTransform() const;
 			//-----------------------------------------------------
 			/// On Transform Changed
 			///
@@ -925,7 +925,7 @@ namespace ChilliSource
 		private:
 
 
-			mutable Core::Matrix3x3Old mmatTransform;
+			mutable Core::Matrix3 mmatTransform;
 
 			Core::Colour mAbsoluteColour;
 			mutable Core::Vector2 mvAbsolutePosition;
