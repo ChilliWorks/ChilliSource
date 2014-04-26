@@ -72,59 +72,7 @@ namespace ChilliSource
 
 			return dims;
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-        std::string PlatformSystem::GetDeviceModelName() const
-		{
-			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetDeviceModel();
-		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-        std::string PlatformSystem::GetDeviceModelTypeName() const
-		{
-			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetDeviceModelType();
-		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-        std::string PlatformSystem::GetDeviceManufacturerName() const
-		{
-			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetDeviceManufacturer();
-		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		std::string PlatformSystem::GetOSVersion() const
-		{
-			return Core::ToString(JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetOSVersionCode());
-		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		Core::Locale PlatformSystem::GetLocale() const
-		{
-			//get the locale from android
-			std::string strLocale = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetDefaultLocaleCode();
 
-			//break this locale into parts(language/country code/extra)
-			std::vector<std::string> strLocaleBrokenUp = ChilliSource::Core::StringUtils::Split(strLocale, "_", 0);
-
-			if (strLocaleBrokenUp.size() > 1)
-			{
-				return Core::Locale(strLocaleBrokenUp[0],strLocaleBrokenUp[1]);
-			}
-			else if (strLocaleBrokenUp.size() == 1)
-			{
-				return Core::Locale(strLocaleBrokenUp[0]);
-			}
-			else
-			{
-				return Core::kUnknownLocale;
-			}
-		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		Core::Locale PlatformSystem::GetLanguage() const
-		{
-			return GetLocale();
-		}
 		//-------------------------------------------------
 		//-------------------------------------------------
 		f32 PlatformSystem::GetScreenDensity() const
@@ -136,18 +84,6 @@ namespace ChilliSource
         std::string PlatformSystem::GetAppVersion() const
 		{
 			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetApplicationVersionName();
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		std::string PlatformSystem::GetDeviceID()
-		{
-			return mUDIDManager.GetUDID();
-		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		u32 PlatformSystem::GetNumberOfCPUCores() const
-		{
-			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetNumberOfCores();
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------

@@ -80,7 +80,7 @@ namespace ChilliSource
         //----------------------------------------------------
 		Application::Application()
         : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_resourcePool(nullptr),
-        m_renderer(nullptr), m_fileSystem(nullptr), m_stateManager(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_updateIntervalRemainder(0.0f),
+        m_renderer(nullptr), m_fileSystem(nullptr), m_stateManager(nullptr), m_taskScheduler(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_updateIntervalRemainder(0.0f),
         m_shouldNotifyConnectionsResumeEvent(false), m_shouldNotifyConnectionsForegroundEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
 		{
 		}
@@ -185,11 +185,6 @@ namespace ChilliSource
 
             DetermineResourceDirectories();
 
-            //Set up the device helper
-            Device::Init(m_platformSystem.get());
-
-			//Set up the task scheduler
-			TaskScheduler::Init(Core::Device::GetNumCPUCores() * 2);
 			//System setup
             m_isSystemCreationAllowed = true;
             CreateDefaultSystems();
@@ -220,9 +215,6 @@ namespace ChilliSource
             
             OnInit();
             PushInitialState();
-
-			//Register for update events
-			LocalDataStore::GetSingleton().SubscribeToApplicationSuspendEvent();
 
 			//Begin the update loop
 			m_platformSystem->Run();
@@ -272,7 +264,7 @@ namespace ChilliSource
 			//Update the app time since start
 			m_currentAppTime = in_timestamp;
             
-			TaskScheduler::ExecuteMainThreadTasks();
+			m_taskScheduler->ExecuteMainThreadTasks();
             
             //We do not need to render as often as we update so this callback will be triggered
             //less freqenctly than the update frequency suggests. We must work out how many times to update based on the time since last frame
@@ -429,9 +421,12 @@ namespace ChilliSource
         void Application::CreateDefaultSystems()
         {
             //Core
+            CreateSystem<Device>();
+			m_taskScheduler = CreateSystem<TaskScheduler>();
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
             m_resourcePool = CreateSystem<ResourcePool>();
+            CreateSystem<LocalDataStore>();
             CreateSystem<CSImageProvider>();
             CreateSystem<DialogueBoxSystem>();
             

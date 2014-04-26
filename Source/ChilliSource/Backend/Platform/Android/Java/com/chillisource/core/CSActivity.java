@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import com.chillisource.social.ContactInformationProviderNativeInterface;
 import com.chillisource.networking.HttpRequestNativeInterface;
 import com.chillisource.core.SharedPreferencesNativeInterface;
-import com.chillisource.social.TwitterAuthenticationViewNativeInterface;
 import com.chillisource.web.WebViewNativeInterface;
 import com.chillisource.core.CSPowerManager;
 
@@ -59,7 +58,6 @@ public class CSActivity extends Activity
         	ContactInformationProviderNativeInterface.Setup(this);
             WebViewNativeInterface.Setup(this);
             CSPowerManager.Setup(this);
-            TwitterAuthenticationViewNativeInterface.Setup(this);
         }
         catch (Exception e)
         {

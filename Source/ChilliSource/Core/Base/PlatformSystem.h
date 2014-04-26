@@ -102,55 +102,11 @@ namespace ChilliSource
             //-----------------------------------------------------------------------------------------------------------
             virtual Core::Vector2 GetScreenDimensions() const = 0;
             //--------------------------------------------------------------
-            /// Get Device Model Name
-            ///
-            /// @return The above information stringified
-            //--------------------------------------------------------------
-            virtual std::string GetDeviceModelName() const = 0;
-            //--------------------------------------------------------------
-            /// Get Device Model Type Name
-            ///
-            /// @return The above information stringified
-            //--------------------------------------------------------------
-            virtual std::string GetDeviceModelTypeName() const = 0;
-            //--------------------------------------------------------------
-            /// Get Device Manufacturer Name
-            ///
-            /// @return The above information stringified
-            //--------------------------------------------------------------
-            virtual std::string GetDeviceManufacturerName() const = 0;
-            //--------------------------------------------------------------
-            /// Get Number Of CPU Cores
-            ///
-            /// @return The number of cores available
-            //--------------------------------------------------------------
-            virtual u32 GetNumberOfCPUCores() const = 0;
-            //--------------------------------------------------------------
             /// Get System Time
             ///
             /// @return the current time in milliseconds
             //--------------------------------------------------------------
             virtual TimeIntervalMs GetSystemTimeMS() const = 0;
-            //--------------------------------------------------------------
-            /// Get OS Version
-            ///
-            /// @return  String containing the OS version of the device
-            //--------------------------------------------------------------
-            virtual std::string GetOSVersion() const = 0;
-            //--------------------------------------------------------------
-            /// Get Locale
-            ///
-            /// Get the active language locale of the device
-            /// @return Locale ID
-            //--------------------------------------------------------------
-            virtual Core::Locale GetLocale() const = 0;
-            //--------------------------------------------------------------
-            /// Get Language
-            ///
-            /// Get the active locale of the device in locale format
-            /// @return Locale ID
-            //--------------------------------------------------------------
-            virtual Core::Locale GetLanguage() const = 0;
             //-------------------------------------------------
             /// Get Screen Density
             ///
@@ -158,12 +114,6 @@ namespace ChilliSource
             /// to convert from DIPS to physical pixels
             //-------------------------------------------------
             virtual f32 GetScreenDensity() const = 0;
-            //-------------------------------------------------
-            /// Get Device ID
-            ///
-            /// @return The UDID of the device
-            //-------------------------------------------------
-            virtual std::string GetDeviceID() = 0;
             //-------------------------------------------------
             /// Get App Version
             ///

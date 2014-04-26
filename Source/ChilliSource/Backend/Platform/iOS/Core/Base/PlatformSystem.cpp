@@ -16,9 +16,6 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #include <UIKit/UIKit.h>
-#include <sys/types.h>
-#include <sys/sysctl.h>
-#include <AdSupport/ASIdentifierManager.h>
 
 namespace ChilliSource 
 {
@@ -94,91 +91,7 @@ namespace ChilliSource
             
 			return result;
 		}
-		//----------------------------------------------
-		//----------------------------------------------
-		std::string PlatformSystem::GetDeviceModelName() const
-		{
-			NSString * type = [[UIDevice currentDevice] model];
 
-			return [NSStringUtils newStringWithNSString:type];
-		}
-		//----------------------------------------------
-		//----------------------------------------------
-		std::string PlatformSystem::GetDeviceModelTypeName() const
-		{
-			size_t size = 0;
-			sysctlbyname("hw.machine", nullptr, &size, nullptr, 0);
-			char* machine = (char*)malloc(size);
-			sysctlbyname("hw.machine", machine, &size, nullptr, 0);
-			NSString *platform = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
-			free(machine);
-
-			std::string output;
-			std::string modelType = [NSStringUtils newStringWithNSString:platform];
-			bool record = false;
-			for(std::string::const_iterator it = modelType.begin(); it != modelType.end(); ++it)
-			{
-				if(isdigit(*it))
-				{
-					record = true;
-				}
-				
-				if(record)
-				{
-					output += (*it);
-				}
-			}
-			return output;
-		}
-		//---------------------------------------------
-		//---------------------------------------------
-		std::string PlatformSystem::GetDeviceManufacturerName() const
-		{
-			return std::string("Apple");
-		}
-        //---------------------------------------------
-        //---------------------------------------------
-        std::string PlatformSystem::GetOSVersion() const
-        {
-            NSString* version = [[UIDevice currentDevice] systemVersion];
-			return [NSStringUtils newStringWithNSString:version];
-        }
-        //---------------------------------------------
-		//---------------------------------------------
-		Core::Locale PlatformSystem::GetLocale() const
-		{
-			NSLocale *locale = [NSLocale currentLocale];
-			NSString *countryCodeObjc = [locale objectForKey:NSLocaleCountryCode];
-			std::string countryCode = [countryCodeObjc UTF8String];
-			NSString *languageCodeObjc = [locale objectForKey:NSLocaleLanguageCode];
-			std::string languageCode = [languageCodeObjc UTF8String];
-
-			//Just default to english
-			return ChilliSource::Core::Locale(languageCode, countryCode);
-		}
-        //---------------------------------------------
-		//---------------------------------------------
-		Core::Locale PlatformSystem::GetLanguage() const
-		{
-			NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-			NSArray* supportedLanguages = [userDefaults objectForKey:@"AppleLanguages"];
-			NSString* userLocale = [supportedLanguages objectAtIndex:0];
-			std::string localeCode = [userLocale UTF8String];
-
-			//break this locale into parts(language/country code/extra)
-			std::vector<std::string> localeBrokenUp = ChilliSource::Core::StringUtils::Split(localeCode, "-", 0);
-
-			if (localeBrokenUp.size() > 1)
-			{
-				return Core::Locale(localeBrokenUp[0],localeBrokenUp[1]);
-			}
-			else if (localeBrokenUp.size() == 1)
-			{
-				return Core::Locale(localeBrokenUp[0]);
-			}
-			else
-				return Core::kUnknownLocale;
-		}
         //----------------------------------------------
         //----------------------------------------------
         f32 PlatformSystem::GetScreenDensity() const
@@ -192,31 +105,6 @@ namespace ChilliSource
             
             return 1.0f;
         }
-        //-----------------------------------------------
-        //-----------------------------------------------
-        std::string PlatformSystem::GetDeviceID()
-        {
-            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0f)
-            {
-                NSUUID* uid = nil;
-                
-                if([ASIdentifierManager sharedManager].advertisingTrackingEnabled)
-                {
-                    uid = [ASIdentifierManager sharedManager].advertisingIdentifier;
-                }
-                else
-                {
-                    uid = [UIDevice currentDevice].identifierForVendor;
-                }
-                
-                return [NSStringUtils newStringWithNSString:[uid UUIDString]];
-            }
-            else
-            {
-                NSString* udid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
-                return [NSStringUtils newStringWithNSString:udid];
-            }
-        }
         //-------------------------------------------------
         //-------------------------------------------------
         std::string PlatformSystem::GetAppVersion() const
@@ -224,22 +112,6 @@ namespace ChilliSource
             NSString* version = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
             return [NSStringUtils newStringWithNSString:version];
         }
-		//-------------------------------------------------
-		//-------------------------------------------------
-		u32 PlatformSystem::GetNumberOfCPUCores() const
-		{
-			u32 numCores = 1;
-			size_t size = sizeof(numCores);
-			
-			if(sysctlbyname("hw.ncpu", &numCores, &size, nullptr, 0))
-			{
-				return 1;
-			}
-			else
-			{
-				return numCores;
-			}
-		}
 		//---------------------------------------------------
 		//---------------------------------------------------
 		TimeIntervalMs PlatformSystem::GetSystemTimeMS() const

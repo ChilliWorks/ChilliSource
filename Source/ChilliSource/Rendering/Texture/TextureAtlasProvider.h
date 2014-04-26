@@ -79,7 +79,7 @@ namespace ChilliSource
 			/// @param Filename
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Loads the two files that constitute a atlas resource and
             /// parses them into the output resource on a background thread. Delegate
@@ -92,7 +92,7 @@ namespace ChilliSource
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Performs the actual loading delegated to by the 2 create methods
             ///
@@ -103,7 +103,7 @@ namespace ChilliSource
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-            void LoadResource(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource);
+			void LoadResource(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
             //----------------------------------------------------------------------------
 			/// Loads the file containing the frame data for each texture in the atlas
             ///

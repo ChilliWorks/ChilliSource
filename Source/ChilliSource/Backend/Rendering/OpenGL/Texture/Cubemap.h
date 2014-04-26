@@ -134,19 +134,12 @@ namespace ChilliSource
             //--------------------------------------------------
             /// @author S Downie
             ///
-            /// @param Face Index
-            ///
-            /// - Pos X = 0
-            /// - Neg X = 1
-            /// - Pos Y = 2
-            /// - Neg Y = 3
-            /// - Pos Z = 4
-            /// - Neg Z = 5
+            /// @param Face
             ///
             /// @return The format of the image used to create
             ///			the cubemap face.
             //--------------------------------------------------
-            Core::ImageFormat GetFormat(u32 in_faceIndex) const;
+            Core::ImageFormat GetFormat(Face in_face) const;
             //--------------------------------------------------
             /// Destroys the cubemap and resets it to the state
             /// prior to build being called.

@@ -32,7 +32,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Get UDID
 		//-----------------------------------------
-		std::string UDIDManager::GetUDID()
+		const std::string& UDIDManager::GetUDID()
 		{
 			if (mbInitialised == false)
 				Initialise();
@@ -47,7 +47,6 @@ namespace ChilliSource
 			if (LoadUDID() == false)
 				CalculateUDID();
 
-			CS_LOG_VERBOSE("UDID: " + mstrUDID);
 			mbInitialised = true;
 		}
 		//-----------------------------------------

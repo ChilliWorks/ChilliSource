@@ -88,21 +88,20 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		void TextureProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
 		{
             LoadTexture(in_location, in_filePath, nullptr, out_resource);
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+		void TextureProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
-            Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, Core::ResourceSPtr&>
-            task(this, &TextureProvider::LoadTexture, in_location, in_filePath, in_delegate, out_resource);
-            Core::TaskScheduler::ScheduleTask(task);
+			auto task = std::bind(&TextureProvider::LoadTexture, this, in_location, in_filePath, in_delegate, out_resource);
+            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureProvider::LoadTexture(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+		void TextureProvider::LoadTexture(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
             std::string fileName;
             std::string fileExtension;
@@ -124,8 +123,7 @@ namespace ChilliSource
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-                    Core::Task<Core::ResourceSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 }
                 return;
             }
@@ -140,8 +138,7 @@ namespace ChilliSource
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-                    Core::Task<Core::ResourceSPtr&> task(in_delegate, out_resource);
-                    Core::TaskScheduler::ScheduleMainThreadTask(task);
+					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 }
                 return;
             }
@@ -160,7 +157,7 @@ namespace ChilliSource
             }
             else
             {
-                Core::Task<> task([image, in_delegate, out_resource]()
+                auto task([image, in_delegate, out_resource]()
                 {
                     Texture::Descriptor desc;
                     desc.m_width = image->GetWidth();
@@ -173,7 +170,7 @@ namespace ChilliSource
                     out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
                     in_delegate(out_resource);
                 });
-                Core::TaskScheduler::ScheduleMainThreadTask(task);
+                Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
             }
         }
         //----------------------------------------------------------------------------

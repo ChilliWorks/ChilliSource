@@ -83,7 +83,7 @@ namespace ChilliSource
             /// @author I Copland
 			//----------------------------------------------------
 			void StopUpdating() override;
-		private:
+		protected:
             friend Input::AccelerometerUPtr Input::Accelerometer::Create();
             
             //----------------------------------------------------

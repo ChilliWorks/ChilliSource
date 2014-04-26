@@ -8,7 +8,6 @@
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_PLATFORMSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_PLATFORMSYSTEM_H_
 
-#include <ChilliSource/Backend/Platform/Android/Core/Base/UDIDManager.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
 namespace ChilliSource
@@ -88,42 +87,6 @@ namespace ChilliSource
 			/// @return A Vector2 containing the screen size in its x, y components
 			//-----------------------------------------------------------------------------------------------------------
 			Core::Vector2 GetScreenDimensions() const override;
-			//--------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The device model name stringified
-			//--------------------------------------------------------------
-            std::string GetDeviceModelName() const override;
-			//--------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The device model type stringified
-			//--------------------------------------------------------------
-            std::string GetDeviceModelTypeName() const override;
-			//--------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The manufacturer stringified
-			//--------------------------------------------------------------
-            std::string GetDeviceManufacturerName() const override;
-            //--------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return String containing the OS version of the device
-			//--------------------------------------------------------------
-			std::string GetOSVersion() const override;
-			//--------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return active locale of the device
-			//--------------------------------------------------------------
-            Core::Locale GetLocale() const override;
-			//--------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return active language of the device
-			//--------------------------------------------------------------
-            Core::Locale GetLanguage() const override;
 			//-------------------------------------------------
             /// @author S Downie
             ///
@@ -131,12 +94,6 @@ namespace ChilliSource
 			/// to convert from DIPS to physical pixels
 			//-------------------------------------------------
 			f32 GetScreenDensity() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The UDID of the device
-			//-------------------------------------------------
-			std::string GetDeviceID() override;
 	        //-------------------------------------------------
 	        /// @author S Downie
 	        ///
@@ -144,12 +101,6 @@ namespace ChilliSource
 			/// in the manifest
 	        //-------------------------------------------------
 	        std::string GetAppVersion() const override;
-			//--------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The number of cores available
-			//--------------------------------------------------------------
-			u32 GetNumberOfCPUCores() const override;
 			//--------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -165,10 +116,6 @@ namespace ChilliSource
             /// @author S Downie
             //-------------------------------------------------------
             PlatformSystem() = default;
-
-		private:
-			
-			UDIDManager mUDIDManager;
 		};
 	}
 }

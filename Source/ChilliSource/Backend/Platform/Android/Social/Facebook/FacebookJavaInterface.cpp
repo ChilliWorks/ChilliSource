@@ -12,6 +12,7 @@
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthenticationSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <jni.h>
@@ -42,7 +43,7 @@ void Java_com_chillisource_social_FacebookNativeInterface_OnAuthenticationComple
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidAuthSystem, &ChilliSource::Android::FacebookAuthenticationSystem::OnAuthenticationComplete, inbSuccess));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::FacebookAuthenticationSystem::OnAuthenticationComplete, gpAndroidAuthSystem, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -58,7 +59,7 @@ void Java_com_chillisource_social_FacebookNativeInterface_OnReadAuthorisationCom
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidAuthSystem, &ChilliSource::Android::FacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete, inbSuccess));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::FacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete, gpAndroidAuthSystem, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -74,7 +75,7 @@ void Java_com_chillisource_social_FacebookNativeInterface_OnWriteAuthorisationCo
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidAuthSystem, &ChilliSource::Android::FacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete, inbSuccess));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::FacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete, gpAndroidAuthSystem, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -104,7 +105,7 @@ void Java_com_chillisource_social_FacebookNativeInterface_OnPostToFeedComplete(J
 			break;
 		}
 
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<CSSocial::FacebookPostSystem::PostResult>(gpAndroidPostSystem, &ChilliSource::Android::FacebookPostSystem::OnPostToFeedComplete, result));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::FacebookPostSystem::OnPostToFeedComplete, gpAndroidPostSystem, result));
 	}
 }
 //------------------------------------------------------------
@@ -134,7 +135,7 @@ void Java_com_chillisource_social_FacebookNativeInterface_OnPostRequestComplete(
 			break;
 		}
 
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<CSSocial::FacebookPostSystem::PostResult>(gpAndroidPostSystem, &ChilliSource::Android::FacebookPostSystem::OnPostRequestComplete, result));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::FacebookPostSystem::OnPostRequestComplete, gpAndroidPostSystem, result));
 	}
 }
 

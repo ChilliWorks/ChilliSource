@@ -25,6 +25,8 @@ namespace ChilliSource
     {
         namespace
         {
+            const std::string k_ldsKeyHasCached = "_CMSCachedDLC";
+            
             //--------------------------------------------------------
             /// @author S Downie
             ///
@@ -139,7 +141,8 @@ namespace ChilliSource
             in_currentManifest->LoadFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
             
             //If there is no DLC we should check to see if there ever was any
-            if(!in_currentManifest->RootElement() && Core::LocalDataStore::GetSingletonPtr()->HasValueForKey("MOCMSCachedDLC"))
+            Core::LocalDataStore* lds = Core::Application::Get()->GetSystem<Core::LocalDataStore>();
+            if(!in_currentManifest->RootElement() && lds->Contains("") == true)
             {
                 m_dlcCachePurged = true;
             }
@@ -230,12 +233,10 @@ namespace ChilliSource
 				if(!m_packageDetails.empty())
 				{
 					//Unzip all the files and overwrite the old manifest
-					Core::WaitCondition waitCondition(m_packageDetails.size());
-					
-					Core::TaskScheduler::ForEach(m_packageDetails.begin(), m_packageDetails.end(), this, &ContentManagementSystem::ExtractFilesFromPackage, &waitCondition);
-					
-					//Wait on all the packages being unzipped
-					waitCondition.Wait();
+					for (const auto& details : m_packageDetails)
+					{
+						ExtractFilesFromPackage(details);
+					}
 				}
                 
                 //Remove the temp zips
@@ -246,12 +247,10 @@ namespace ChilliSource
 				if(!m_removePackageIds.empty())
 				{
 					//Remove any unused files from the documents
-					Core::WaitCondition waitCondition(m_removePackageIds.size());
-					
-					Core::TaskScheduler::ForEach(m_removePackageIds.begin(), m_removePackageIds.end(), this, &ContentManagementSystem::DeleteDirectory, &waitCondition);
-					
-					//Wait on all the packages being removed
-					waitCondition.Wait();
+					for (const auto& packageId : m_removePackageIds)
+					{
+						DeleteDirectory(packageId);
+					}
 				}
                 
                 //Save the new content manifest
@@ -261,7 +260,8 @@ namespace ChilliSource
                 
                 //Store that we have DLC cached. If there is no DLC on next check then 
                 //we know the cache has been purged and we have to block on download
-                Core::LocalDataStore::GetSingletonPtr()->SetValueForKey("MOCMSCachedDLC", true);
+                Core::LocalDataStore* lds = Core::Application::Get()->GetSystem<Core::LocalDataStore>();
+                lds->SetValue(k_ldsKeyHasCached, true);
                 
                 //Tell the delegate all is good
                 inDelegate(Result::k_succeeded);

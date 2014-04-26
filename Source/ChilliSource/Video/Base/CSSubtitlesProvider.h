@@ -78,7 +78,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param [Out] Resource object
 			//-------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
 			//-------------------------------------------------------------------------
             /// Load the subtitles resource on a background thread from the given
             /// file location. Calls the completion delegate on completion. Check
@@ -91,7 +91,7 @@ namespace ChilliSource
             /// @param Delegate
 			/// @param [Out] Resource object
 			//-------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
             //-------------------------------------------------------------------------
 			/// @author I Copland
 			///
@@ -100,7 +100,7 @@ namespace ChilliSource
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//-------------------------------------------------------------------------
-			void LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, SubtitlesSPtr& out_resource) const;
+			void LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const SubtitlesSPtr& out_resource) const;
             //-------------------------------------------------------------------------
 			/// @author I Copland
 			///

@@ -1,293 +1,361 @@
-/*
- *  LocalDataStore.h
- *  moFlow
- *
- *  Created by Stuart McGaw on 24/05/2011.
- *  Modified by Robert Henning on 24/07/2013
- *   + Updated to use encryption
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- *  LocalDataStore provides a simple key-value data store
- *  useful for storing persistent data such as options
- *  or user log-in details.
- */
+//
+//  LocalDataStore.h
+//  Chilli Source
+//  Created by Stuart McGaw on 24/05/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
-#ifndef _MOFLO_CORE_LOCALDATASTORE_H_
-#define _MOFLO_CORE_LOCALDATASTORE_H_
+#ifndef _CHILLISOURCE_CORE_FILE_LOCALDATASTORE_H_
+#define _CHILLISOURCE_CORE_FILE_LOCALDATASTORE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
+#include <ChilliSource/Core/System/AppSystem.h>
+
+#include <mutex>
 
 namespace ChilliSource
 {
 	namespace Core
     {
-		class LocalDataStore
+        //--------------------------------------------------------------------
+        /// Local data store provides a simple key-value data store useful for
+        /// storing persistent data such as options and player preferences.
+        ///
+        /// The local data store is encrypted on disk however the private key
+        /// used is generated from known information. This means the local
+        /// data store should not be used to store sensitive information such
+        /// as passwords.
+        ///
+        /// Note that keys beginning with an underscore '_' are reserved for
+        /// internal engine use.
+        ///
+        /// The LDS is thread-safe and is initialised prior to the the OnInit()
+        /// lifecycle event.
+        ///
+        /// @author S McGaw
+        //--------------------------------------------------------------------
+		class LocalDataStore final : public AppSystem
         {
-            // Application is a friend as it is the only place
-            // our data store is created and subscribes to the
-            // suspend event
-            friend class Application;
-        
         public:
-            //----------------------------------------------------------------
-            /// Get Singleton
+            CS_DECLARE_NAMEDTYPE(LocalDataStore);
+            //------------------------------------------------------------
+            /// Allows querying of whether or not this system implements
+            /// a given interface.
             ///
-            /// Returns the singleton
+			/// @author I Copland
+			///
+			/// @param Interface Id
+			///
+			/// @return Whether this object is of the given type.
+			//------------------------------------------------------------
+			bool IsA(InterfaceIDType in_interfaceId) const override;
+			//------------------------------------------------------------
+            /// Returns if the given key exists in the data store.
             ///
-            /// @return Reference to singleton
-            //----------------------------------------------------------------
-			static LocalDataStore& GetSingleton();
-            //----------------------------------------------------------------
-            /// Get Singleton Pointer
+            /// @author R Henning
             ///
-            /// Returns the singleton
+            /// @param The name of the key.
             ///
-            /// @return Pointer to singleton
-            //----------------------------------------------------------------
-			static LocalDataStore* GetSingletonPtr();
-			//----------------------------------------------------------------
-            /// Has Value For Key
-            ///
-            /// Returns if the given key exists in the current data store
-            ///
-            /// @return True if key exist, false otherwise
-            //----------------------------------------------------------------
-			bool HasValueForKey(const std::string& instrKey);
-            //----------------------------------------------------------------
-            /// Try Get Value
-            ///
-            /// Attempts to read the value for the given key from the data
+            /// @return Whether or not the key exists.
+            //------------------------------------------------------------
+			bool Contains(const std::string& in_key);
+            //------------------------------------------------------------
+            /// Attempts to get the value for the given key from the data
             /// store as a string.
             ///
-            /// @param Key to attempt to retrieve value for
-            /// @param [Out] Value ready
-            /// @return True if value has been read, false otherwise
-            //----------------------------------------------------------------
-			bool TryGetValue(const std::string& instrKey, std::string& outstrValue);
-            //----------------------------------------------------------------
-            /// Try Get Value
+            /// @author R Henning
             ///
-            /// Attempts to read the value for the given key from the data
+            /// @param Key to attempt to retrieve the value for.
+            /// @param [Out] The output value.
+            ///
+            /// @return Whether or not the value was successfully retreived.
+            //------------------------------------------------------------
+			bool GetValue(const std::string& in_key, std::string& out_value) const;
+            //------------------------------------------------------------
+            /// Attempts to get the value for the given key from the data
             /// store as a bool.
             ///
-            /// @param Key to attempt to retrieve value for
-            /// @param [Out] Value ready
-            /// @return True if value has been read, false otherwise
-            //----------------------------------------------------------------
-			bool TryGetValue(const std::string& instrKey, bool &outbValue);
-            //----------------------------------------------------------------
-            /// Try Get Value
+            /// @author R Henning
             ///
-            /// Attempts to read the value for the given key from the data
+            /// @param Key to attempt to retrieve the value for.
+            /// @param [Out] The output value.
+            ///
+            /// @return Whether or not the value was successfully retreived.
+            //------------------------------------------------------------
+			bool GetValue(const std::string& in_key, bool& out_value) const;
+            //------------------------------------------------------------
+            /// Attempts to get the value for the given key from the data
             /// store as a u16.
             ///
-            /// @param Key to attempt to retrieve value for
-            /// @param [Out] Value ready
-            /// @return True if value has been read, false otherwise
-            //----------------------------------------------------------------
-			bool TryGetValue(const std::string& instrKey, u16 &outuwValue);
-            //----------------------------------------------------------------
-            /// Try Get Value
+            /// @author R Henning
             ///
-            /// Attempts to read the value for the given key from the data
+            /// @param Key to attempt to retrieve the value for.
+            /// @param [Out] The output value.
+            ///
+            /// @return Whether or not the value was successfully retreived.
+            //------------------------------------------------------------
+			bool GetValue(const std::string& in_key, u16& out_value) const;
+            //------------------------------------------------------------
+            /// Attempts to get the value for the given key from the data
             /// store as a s16.
             ///
-            /// @param Key to attempt to retrieve value for
-            /// @param [Out] Value ready
-            /// @return True if value has been read, false otherwise
-            //----------------------------------------------------------------
-			bool TryGetValue(const std::string& instrKey, s16 &outwValue);
-            //----------------------------------------------------------------
-            /// Try Get Value
+            /// @author R Henning
             ///
-            /// Attempts to read the value for the given key from the data
+            /// @param Key to attempt to retrieve the value for.
+            /// @param [Out] The output value.
+            ///
+            /// @return Whether or not the value was successfully retreived.
+            //------------------------------------------------------------
+			bool GetValue(const std::string& in_key, s16& out_value) const;
+            //------------------------------------------------------------
+            /// Attempts to get the value for the given key from the data
             /// store as a u32.
             ///
-            /// @param Key to attempt to retrieve value for
-            /// @param [Out] Value ready
-            /// @return True if value has been read, false otherwise
-            //----------------------------------------------------------------
-			bool TryGetValue(const std::string& instrKey, u32 &outudwValue);
-            //----------------------------------------------------------------
-            /// Try Get Value
+            /// @author R Henning
             ///
-            /// Attempts to read the value for the given key from the data
+            /// @param Key to attempt to retrieve the value for.
+            /// @param [Out] The output value.
+            ///
+            /// @return Whether or not the value was successfully retreived.
+            //------------------------------------------------------------
+			bool GetValue(const std::string& in_key, u32& out_value) const;
+            //------------------------------------------------------------
+            /// Attempts to get the value for the given key from the data
             /// store as a s32.
             ///
-            /// @param Key to attempt to retrieve value for
-            /// @param [Out] Value ready
-            /// @return True if value has been read, false otherwise
-            //----------------------------------------------------------------
-			bool TryGetValue(const std::string& instrKey, s32 &outdwValue);
-            //----------------------------------------------------------------
-            /// Try Get Value
+            /// @author R Henning
             ///
-            /// Attempts to read the value for the given key from the data
+            /// @param Key to attempt to retrieve the value for.
+            /// @param [Out] The output value.
+            ///
+            /// @return Whether or not the value was successfully retreived.
+            //------------------------------------------------------------
+			bool GetValue(const std::string& in_key, s32& out_value) const;
+            //------------------------------------------------------------
+            /// Attempts to get the value for the given key from the data
             /// store as a u64.
             ///
-            /// @param Key to attempt to retrieve value for
-            /// @param [Out] Value ready
-            /// @return True if value has been read, false otherwise
-            //----------------------------------------------------------------
-			bool TryGetValue(const std::string& instrKey, u64 &outuddwValue);
-            //----------------------------------------------------------------
-            /// Try Get Value
+            /// @author R Henning
             ///
-            /// Attempts to read the value for the given key from the data
+            /// @param Key to attempt to retrieve the value for.
+            /// @param [Out] The output value.
+            ///
+            /// @return Whether or not the value was successfully retreived.
+            //------------------------------------------------------------
+			bool GetValue(const std::string& in_key, u64& out_value) const;
+            //------------------------------------------------------------
+            /// Attempts to get the value for the given key from the data
             /// store as a s64.
             ///
-            /// @param Key to attempt to retrieve value for
-            /// @param [Out] Value ready
-            /// @return True if value has been read, false otherwise
-            //----------------------------------------------------------------
-			bool TryGetValue(const std::string& instrKey, s64 &outddwValue);
-            //----------------------------------------------------------------
-            /// Try Get Value
+            /// @author R Henning
             ///
-            /// Attempts to read the value for the given key from the data
+            /// @param Key to attempt to retrieve the value for.
+            /// @param [Out] The output value.
+            /// @return Whether or not the value was successfully retreived.
+            //------------------------------------------------------------
+			bool GetValue(const std::string& in_key, s64& out_value) const;
+            //------------------------------------------------------------
+            /// Attempts to get the value for the given key from the data
             /// store as a f32.
             ///
-            /// @param Key to attempt to retrieve value for
-            /// @param [Out] Value ready
-            /// @return True if value has been read, false otherwise
-            //----------------------------------------------------------------
-			bool TryGetValue(const std::string& instrKey, f32 &outfValue);			
-			//----------------------------------------------------------------
-            /// Set Value For Key
+            /// @author R Henning
             ///
-            /// Sets a new value for the given key overwriting any previous data
+            /// @param Key to attempt to retrieve the value for.
+            /// @param [Out] The output value.
             ///
-            /// @param Key to use
-            /// @param Value to set
-            //----------------------------------------------------------------
-			void SetValueForKey(const std::string& instrKey, const std::string& instrValue);
-            //----------------------------------------------------------------
-            /// Set Value For Key
+            /// @return Whether or not the value was successfully retreived.
+            //------------------------------------------------------------
+			bool GetValue(const std::string& in_key, f32& out_value) const;
+			//--------------------------------------------------------------
+            /// Sets the value for the given key. If the key already existed
+            /// its previous value will be overwritten. Note that keys
+            /// beginning with an underscore '_' are reserved for internal
+            /// engine use.
             ///
-            /// Sets a new value for the given key overwriting any previous data
+            /// @author R Henning
             ///
-            /// @param Key to use
-            /// @param Value to set
-            //----------------------------------------------------------------
-			void SetValueForKey(const std::string& instrKey, bool inbValue);
-            //----------------------------------------------------------------
-            /// Set Value For Key
+            /// @param The key.
+            /// @param The value.
+            //--------------------------------------------------------------
+			void SetValue(const std::string& in_key, const std::string& in_value);
+			//--------------------------------------------------------------
+            /// Sets the value for the given key. If the key already existed
+            /// its previous value will be overwritten. Note that keys
+            /// beginning with an underscore '_' are reserved for internal
+            /// engine use.
             ///
-            /// Sets a new value for the given key overwriting any previous data
+            /// @author R Henning
             ///
-            /// @param Key to use
-            /// @param Value to set
-            //----------------------------------------------------------------
-			void SetValueForKey(const std::string& instrKey, u16 inuwValue);
-            //----------------------------------------------------------------
-            /// Set Value For Key
+            /// @param The key.
+            /// @param The value.
+            //--------------------------------------------------------------
+			void SetValue(const std::string& in_key, bool in_value);
+			//--------------------------------------------------------------
+            /// Sets the value for the given key. If the key already existed
+            /// its previous value will be overwritten. Note that keys
+            /// beginning with an underscore '_' are reserved for internal
+            /// engine use.
             ///
-            /// Sets a new value for the given key overwriting any previous data
+            /// @author R Henning
             ///
-            /// @param Key to use
-            /// @param Value to set
-            //----------------------------------------------------------------
-			void SetValueForKey(const std::string& instrKey, s16 inwValue);
-            //----------------------------------------------------------------
-            /// Set Value For Key
+            /// @param The key.
+            /// @param The value.
+            //--------------------------------------------------------------
+			void SetValue(const std::string& in_key, u16 in_value);
+			//--------------------------------------------------------------
+            /// Sets the value for the given key. If the key already existed
+            /// its previous value will be overwritten. Note that keys
+            /// beginning with an underscore '_' are reserved for internal
+            /// engine use.
             ///
-            /// Sets a new value for the given key overwriting any previous data
+            /// @author R Henning
             ///
-            /// @param Key to use
-            /// @param Value to set
-            //----------------------------------------------------------------
-			void SetValueForKey(const std::string& instrKey, u32 inudwValue);
-            //----------------------------------------------------------------
-            /// Set Value For Key
+            /// @param The key.
+            /// @param The value.
+            //--------------------------------------------------------------
+			void SetValue(const std::string& in_key, s16 in_value);
+			//--------------------------------------------------------------
+            /// Sets the value for the given key. If the key already existed
+            /// its previous value will be overwritten. Note that keys
+            /// beginning with an underscore '_' are reserved for internal
+            /// engine use.
             ///
-            /// Sets a new value for the given key overwriting any previous data
+            /// @author R Henning
             ///
-            /// @param Key to use
-            /// @param Value to set
-            //----------------------------------------------------------------
-			void SetValueForKey(const std::string& instrKey, s32 indwValue);
-            //----------------------------------------------------------------
-            /// Set Value For Key
+            /// @param The key.
+            /// @param The value.
+            //--------------------------------------------------------------
+			void SetValue(const std::string& in_key, u32 in_value);
+			//--------------------------------------------------------------
+            /// Sets the value for the given key. If the key already existed
+            /// its previous value will be overwritten. Note that keys
+            /// beginning with an underscore '_' are reserved for internal
+            /// engine use.
             ///
-            /// Sets a new value for the given key overwriting any previous data
+            /// @author R Henning
             ///
-            /// @param Key to use
-            /// @param Value to set
-            //----------------------------------------------------------------
-			void SetValueForKey(const std::string& instrKey, u64 inuddwValue);
-            //----------------------------------------------------------------
-            /// Set Value For Key
+            /// @param The key.
+            /// @param The value.
+            //--------------------------------------------------------------
+			void SetValue(const std::string& in_key, s32 in_value);
+			//--------------------------------------------------------------
+            /// Sets the value for the given key. If the key already existed
+            /// its previous value will be overwritten. Note that keys
+            /// beginning with an underscore '_' are reserved for internal
+            /// engine use.
             ///
-            /// Sets a new value for the given key overwriting any previous data
+            /// @author R Henning
             ///
-            /// @param Key to use
-            /// @param Value to set
-            //----------------------------------------------------------------
-			void SetValueForKey(const std::string& instrKey, s64 inddwValue);
-            //----------------------------------------------------------------
-            /// Set Value For Key
+            /// @param The key.
+            /// @param The value.
+            //--------------------------------------------------------------
+			void SetValue(const std::string& in_key, u64 in_value);
+			//--------------------------------------------------------------
+            /// Sets the value for the given key. If the key already existed
+            /// its previous value will be overwritten. Note that keys
+            /// beginning with an underscore '_' are reserved for internal
+            /// engine use.
             ///
-            /// Sets a new value for the given key overwriting any previous data
+            /// @author R Henning
             ///
-            /// @param Key to use
-            /// @param Value to set
-            //----------------------------------------------------------------
-			void SetValueForKey(const std::string& instrKey, f32 infValue);			
-			//----------------------------------------------------------------
-            /// Try Erase Key
+            /// @param The key.
+            /// @param The value.
+            //--------------------------------------------------------------
+			void SetValue(const std::string& in_key, s64 in_value);
+			//--------------------------------------------------------------
+            /// Sets the value for the given key. If the key already existed
+            /// its previous value will be overwritten. Note that keys
+            /// beginning with an underscore '_' are reserved for internal
+            /// engine use.
             ///
+            /// @author R Henning
+            ///
+            /// @param The key.
+            /// @param The value.
+            //--------------------------------------------------------------
+			void SetValue(const std::string& in_key, f32 in_value);
+			//--------------------------------------------------------------
             /// Attempts to erase the entry for the given key from the data
             /// store.
             ///
-            /// @param Key of entry to remove
-            /// @return True if entry removed, false otherwise
-            //----------------------------------------------------------------
-			bool TryEraseKey(const std::string& instrKey);
-            //------------------------
-            /// Clear
+            /// @author R Henning
             ///
-            /// Clears the local data store of all values
+            /// @param The key of the entry to remove.
             ///
-            //------------------------
+            /// @return Whether or not the key was successfully removed.
+            //--------------------------------------------------------------
+			bool Erase(const std::string& in_key);
+            //--------------------------------------------------------------
+            /// Clears the Local Data Store, removing all contents.
+            ///
+            /// @author I Copland
+            //--------------------------------------------------------------
             void Clear();
-			//----------------------------------------------------------------
-            /// Synchronise
-            ///
+			//--------------------------------------------------------------
             /// Writes the current state of the data store to disk.
-            //----------------------------------------------------------------
+            ///
+            /// @author R Henning
+            //--------------------------------------------------------------
 			void Synchronise();
 		
         private:
-            //----------------------------------------------------------------
-            /// Constructor
-            //----------------------------------------------------------------
+            friend class Application;
+			//--------------------------------------------------------------
+			/// Factory create method called by application to create a new
+            /// instance of the system.
+            ///
+            /// @author I Copland
+			///
+			/// @return Creates a new instance of the system.
+			//--------------------------------------------------------------
+			static LocalDataStoreUPtr Create();
+			//--------------------------------------------------------------
+			/// Private constructor to enforce use of the factory method.
+			///
+			/// @author S McGaw
+			//--------------------------------------------------------------
 			LocalDataStore();
-            //----------------------------------------------------------------
-            /// Refresh From File
+            //--------------------------------------------------------------
+            /// Loads the saved data from disk into the current data store.
             ///
-            /// Loads the saved data from disk into the current data store
-            //----------------------------------------------------------------
+            /// @author R Henning
+            //--------------------------------------------------------------
             void RefreshFromFile();
-            //----------------------------------------------------------------
-            /// Subscribe To Application Suspend Event
+            //--------------------------------------------------------------
+            /// Called when the application is suspended. This is also called
+            /// when the application is exiting just prior to calling On
+            /// Destroy. System suspend is called in the reverse order to
+            /// which they were created.
             ///
-            /// Subscribes to the suspend event
-            //----------------------------------------------------------------
-            void SubscribeToApplicationSuspendEvent();
-            //----------------------------------------------------------------
-            /// On Application Suspended
-            ///
-            /// Delegate called with the application suspends
-            //----------------------------------------------------------------
-			void OnApplicationSuspended();
+            /// @author I Copland
+            //--------------------------------------------------------------
+            void OnSuspend() override;
 			
-            // Member vars
-			bool                        mbBackingValid;
-			ParamDictionary             mBackingDictionary;
-			static LocalDataStore*     mpSingletonInstance;
-            
-            ConnectionUPtr m_appSuspendedConnection;
+            mutable std::mutex m_mutex;
+			bool m_needsSynchonised;
+			ParamDictionary m_dictionary;
 		};
 	}
 }

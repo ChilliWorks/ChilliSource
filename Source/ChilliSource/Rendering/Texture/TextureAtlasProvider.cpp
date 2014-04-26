@@ -53,21 +53,20 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureAtlasProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, Core::ResourceSPtr& out_resource)
+		void TextureAtlasProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
 		{
             LoadResource(in_location, in_filePath, nullptr, out_resource);
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureAtlasProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+		void TextureAtlasProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
-            Core::Task<Core::StorageLocation, const std::string&, const Core::ResourceProvider::AsyncLoadDelegate&, Core::ResourceSPtr&>
-            task(this, &TextureAtlasProvider::LoadResource, in_location, in_filePath, in_delegate, out_resource);
-            Core::TaskScheduler::ScheduleTask(task);
+			auto task = std::bind(&TextureAtlasProvider::LoadResource, this, in_location, in_filePath, in_delegate, out_resource);
+            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureAtlasProvider::LoadResource(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, Core::ResourceSPtr& out_resource)
+		void TextureAtlasProvider::LoadResource(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
             TextureAtlas* spriteResource(static_cast<TextureAtlas*>(out_resource.get()));
             
@@ -88,8 +87,7 @@ namespace ChilliSource
             
             if(in_delegate != nullptr)
             {
-                Core::Task<Core::ResourceSPtr&> task(in_delegate, out_resource);
-                Core::TaskScheduler::ScheduleMainThreadTask(task);
+				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
             }
         }
         //----------------------------------------------------------------------------

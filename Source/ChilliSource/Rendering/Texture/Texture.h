@@ -68,7 +68,7 @@ namespace ChilliSource
             /// The filter mode for determining how to sample texels based
             /// on nearby texels in order to reduce texture aliasing.
             ///
-            /// * Nearest neighbour - Fastest method. Blends with the closest texel
+            /// * Nearest neighbour - Fastest method. Chooses the closest texel
             /// * Bilinear - Samples from 4 texels and uses weighted average
             ///
             /// @author S Downie
@@ -110,7 +110,7 @@ namespace ChilliSource
             ///
             /// @param Texture unit
             //--------------------------------------------------------------
-			virtual void Bind(u32 inSlot = 0) = 0;
+			virtual void Bind(u32 in_texUnit = 0) = 0;
             //--------------------------------------------------------------
             /// Unbind this texture from its current texture unit. This
             /// means it can no longer be used or changed until rebound.

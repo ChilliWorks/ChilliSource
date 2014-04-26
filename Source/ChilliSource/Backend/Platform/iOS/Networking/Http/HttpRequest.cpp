@@ -9,6 +9,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequest.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
@@ -42,7 +43,7 @@ namespace ChilliSource
         void HttpRequest::Start(CFReadStreamRef in_readStream)
         {
             //Begin the read loop as a threaded task
-			Core::TaskScheduler::ScheduleTask(Core::Task<CFReadStreamRef>(this, &HttpRequest::PollReadStream, in_readStream));
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&HttpRequest::PollReadStream, this, in_readStream));
         }
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------

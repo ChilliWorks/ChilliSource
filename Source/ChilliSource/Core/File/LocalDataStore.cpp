@@ -1,305 +1,359 @@
-/*
- *  LocalDataStore.cpp
- *  moFlow
- *
- *  Created by Stuart McGaw on 24/05/2011.
- *  Modified by Robert Henning on 24/07/2013
- *   + Updated to use encryption
- *  Copyright 2011 Tag Games. All rights reserved.
- */
+//
+//  LocalDataStore.cpp
+//  Chilli Source
+//  Created by Stuart McGaw on 24/05/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+#include <ChilliSource/Core/File/LocalDataStore.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
-#include <ChilliSource/Core/File/LocalDataStore.h>
-#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Cryptographic/aes.h>
 #include <ChilliSource/Core/Cryptographic/AESEncrypt.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
 
 namespace ChilliSource
 {
 	namespace Core
     {
-        const std::string kstrLocalDataStoreDeprecatedFilename  = "App.lds";
-        const std::string kstrLocalDataStoreEncryptedFilename   = "App.elds";
-        const std::string kstrLocalDataStoreEncryptionKey       = "aV0r71^jX01}pXMk";
+        namespace
+        {
+            const std::string k_filename = "App.lds";
+            
+            //---------------------------------------------------------
+            /// Generates the key that is used to encrypt the LDS. Note
+            /// that this is not really crytographically secure as none
+            /// of the information used to generate the hash is truely
+            /// private.
+            ///
+            /// @author I Copland
+            //---------------------------------------------------------
+            std::string GenerateEncryptionKey()
+            {
+                const std::string k_salt = "aV0r71^jX01}pXMk";
+                Device* device = Application::Get()->GetSystem<Device>();
+                
+                //calculate the SHA1 hash.
+                SHA1 hash;
+                hash.Reset();
+                hash.Update((u8*)device->GetUDID().c_str(), device->GetUDID().size());
+                hash.Update((u8*)k_salt.c_str(), k_salt.size());
+                hash.Final();
+                std::string hexHash = hash.GetHash(SHA1::REPORT_HEX_SHORT);
+                CS_ASSERT(hexHash.length() == 40, "Something has gone wrong with the SHA1 hash.");
+                
+                //truncate into 128 bits.
+                std::string output;
+                for (u32 i = 0; i < 16; i++)
+                {
+                    s8 lower = hexHash[i*2 + 0];
+                    s8 upper = hexHash[i*2 + 1];
+                    s8 combined = (lower + (upper << 4));
+                    output += combined;
+                    
+                    std::string print;
+                    print +=combined;
+                }
+                
+                return output;
+            }
+        }
         
-        LocalDataStore* LocalDataStore::mpSingletonInstance = nullptr;
-		
-		//----------------------------------------------------------------
-        /// Get Singleton
-        //----------------------------------------------------------------
-		LocalDataStore& LocalDataStore::GetSingleton()
+        CS_DEFINE_NAMEDTYPE(LocalDataStore);
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        LocalDataStoreUPtr LocalDataStore::Create()
         {
-			return *mpSingletonInstance;
+            return LocalDataStoreUPtr(new LocalDataStore());
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        LocalDataStore::LocalDataStore()
+        : m_needsSynchonised(false)
+        {
+            RefreshFromFile();
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        bool LocalDataStore::IsA(InterfaceIDType in_interfaceId) const
+        {
+            return (LocalDataStore::InterfaceID == in_interfaceId);
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		bool LocalDataStore::Contains(const std::string& in_key)
+        {
+			return m_dictionary.HasValue(in_key);
 		}
-        //----------------------------------------------------------------
-        /// Get Singleton Pointer
-        //----------------------------------------------------------------
-		LocalDataStore* LocalDataStore::GetSingletonPtr()
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		bool LocalDataStore::GetValue(const std::string& in_key, std::string& out_value) const
         {
-			return mpSingletonInstance;
+            std::unique_lock<std::mutex> lock(m_mutex);
+			return m_dictionary.TryGetValue(in_key, out_value);
 		}
-		//----------------------------------------------------------------
-        /// Has Value For Key
-        //----------------------------------------------------------------
-		bool LocalDataStore::HasValueForKey(const std::string& instrKey)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		bool LocalDataStore::GetValue(const std::string& in_key, bool& out_value) const
         {
-			return mBackingDictionary.HasValue(instrKey);
-		}
-        //----------------------------------------------------------------
-        /// Try Get Value
-        //----------------------------------------------------------------
-		bool LocalDataStore::TryGetValue(const std::string& instrKey, std::string& outstrValue)
-        {
-			return mBackingDictionary.TryGetValue(instrKey, outstrValue);
-		}
-        //----------------------------------------------------------------
-        /// Try Get Value
-        //----------------------------------------------------------------
-		bool LocalDataStore::TryGetValue(const std::string& instrKey, bool& outbValue)
-        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
-			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
+			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
             {
-				outbValue = ParseBool(strTempValue);
+				out_value = ParseBool(strTempValue);
             }
 			return bSuccess;
 		}
-        //----------------------------------------------------------------
-        /// Try Get Value
-        //----------------------------------------------------------------
-		bool LocalDataStore::TryGetValue(const std::string& instrKey, u16& outuwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		bool LocalDataStore::GetValue(const std::string& in_key, u16& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
-			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
+			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
             {
-				outuwValue = static_cast<u16>(ParseU32(strTempValue));
+				out_value = static_cast<u16>(ParseU32(strTempValue));
             }
 			return bSuccess;			
 		}
-        //----------------------------------------------------------------
-        /// Try Get Value
-        //----------------------------------------------------------------
-		bool LocalDataStore::TryGetValue(const std::string& instrKey, s16& outwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		bool LocalDataStore::GetValue(const std::string& in_key, s16& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
-			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
+			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
             {
-				outwValue = static_cast<s16>(ParseS32(strTempValue));
+				out_value = static_cast<s16>(ParseS32(strTempValue));
 			}
 			return bSuccess;
 		}
-        //----------------------------------------------------------------
-        /// Try Get Value
-        //----------------------------------------------------------------
-		bool LocalDataStore::TryGetValue(const std::string& instrKey, u32& outudwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		bool LocalDataStore::GetValue(const std::string& in_key, u32& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
-			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
+			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
             {
-				outudwValue = static_cast<u32>(ParseU32(strTempValue));
+				out_value = static_cast<u32>(ParseU32(strTempValue));
 			}
 			return bSuccess;			
 		}
-        //----------------------------------------------------------------
-        /// Try Get Value
-        //----------------------------------------------------------------
-		bool LocalDataStore::TryGetValue(const std::string& instrKey, s32& outdwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		bool LocalDataStore::GetValue(const std::string& in_key, s32& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
-			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
+			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
             {
-				outdwValue = static_cast<s32>(ParseS32(strTempValue));
+				out_value = static_cast<s32>(ParseS32(strTempValue));
 			}
 			return bSuccess;			
 		}
-        //----------------------------------------------------------------
-        /// Try Get Value
-        //----------------------------------------------------------------
-		bool LocalDataStore::TryGetValue(const std::string& instrKey, u64& outuddwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		bool LocalDataStore::GetValue(const std::string& in_key, u64& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
-			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
+			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
             {
-				outuddwValue = static_cast<u64>(ParseU64(strTempValue));
+				out_value = static_cast<u64>(ParseU64(strTempValue));
 			}
 			return bSuccess;			
 		}
-        //----------------------------------------------------------------
-        /// Try Get Value
-        //----------------------------------------------------------------
-		bool LocalDataStore::TryGetValue(const std::string& instrKey, s64& outddwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		bool LocalDataStore::GetValue(const std::string& in_key, s64& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
-			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
+			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
             {
-				outddwValue = static_cast<s64>(ParseS64(strTempValue));
+				out_value = static_cast<s64>(ParseS64(strTempValue));
 			}
 			return bSuccess;			
 		}
-        //----------------------------------------------------------------
-        /// Try Get Value
-        //----------------------------------------------------------------
-		bool LocalDataStore::TryGetValue(const std::string& instrKey, f32& outfValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		bool LocalDataStore::GetValue(const std::string& in_key, f32& out_value) const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
 			std::string strTempValue;
-			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
+			bool bSuccess = m_dictionary.TryGetValue(in_key, strTempValue);
 			if(bSuccess)
             {
-				outfValue = ParseF32(strTempValue);
+				out_value = ParseF32(strTempValue);
 			}
 			return bSuccess;		
 		}		
-        //----------------------------------------------------------------
-        /// Set Value For Key
-        //----------------------------------------------------------------
-		void LocalDataStore::SetValueForKey(const std::string& instrKey, const std::string& instrValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		void LocalDataStore::SetValue(const std::string& in_key, const std::string& in_value)
         {
-			mBackingDictionary[instrKey] = instrValue;
-			mbBackingValid = false;
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
+			m_dictionary[in_key] = in_value;
+			m_needsSynchonised = true;
 		}
-        //----------------------------------------------------------------
-        /// Set Value For Key
-        //----------------------------------------------------------------
-		void LocalDataStore::SetValueForKey(const std::string& instrKey, bool inbValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		void LocalDataStore::SetValue(const std::string& in_key, bool in_value)
         {
-			SetValueForKey(instrKey, ToString(inbValue));
+			SetValue(in_key, ToString(in_value));
 		}
-        //----------------------------------------------------------------
-        /// Set Value For Key
-        //----------------------------------------------------------------
-		void LocalDataStore::SetValueForKey(const std::string& instrKey, u16 inuwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		void LocalDataStore::SetValue(const std::string& in_key, u16 in_value)
         {
-			SetValueForKey(instrKey, ToString(inuwValue));			
+			SetValue(in_key, ToString(in_value));
 		}
-        //----------------------------------------------------------------
-        /// Set Value For Key
-        //----------------------------------------------------------------
-		void LocalDataStore::SetValueForKey(const std::string& instrKey, s16 inwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		void LocalDataStore::SetValue(const std::string& in_key, s16 in_value)
         {
-			SetValueForKey(instrKey, ToString(inwValue));
+			SetValue(in_key, ToString(in_value));
 		}
-        //----------------------------------------------------------------
-        /// Set Value For Key
-        //----------------------------------------------------------------
-		void LocalDataStore::SetValueForKey(const std::string& instrKey, u32 inudwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		void LocalDataStore::SetValue(const std::string& in_key, u32 in_value)
         {
-			SetValueForKey(instrKey, ToString(inudwValue));
+			SetValue(in_key, ToString(in_value));
 		}
-        //----------------------------------------------------------------
-        /// Set Value For Key
-        //----------------------------------------------------------------
-		void LocalDataStore::SetValueForKey(const std::string& instrKey, s32 indwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		void LocalDataStore::SetValue(const std::string& in_key, s32 in_value)
         {
-			SetValueForKey(instrKey, ToString(indwValue));
+			SetValue(in_key, ToString(in_value));
 		}
-        //----------------------------------------------------------------
-        /// Set Value For Key
-        //----------------------------------------------------------------
-		void LocalDataStore::SetValueForKey(const std::string& instrKey, u64 inuddwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		void LocalDataStore::SetValue(const std::string& in_key, u64 in_value)
         {
-			SetValueForKey(instrKey, ToString(inuddwValue));
+			SetValue(in_key, ToString(in_value));
 		}
-        //----------------------------------------------------------------
-        /// Set Value For Key
-        //----------------------------------------------------------------
-		void LocalDataStore::SetValueForKey(const std::string& instrKey, s64 inddwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		void LocalDataStore::SetValue(const std::string& in_key, s64 in_value)
         {
-			SetValueForKey(instrKey, ToString(inddwValue));
+			SetValue(in_key, ToString(in_value));
 		}
-        //----------------------------------------------------------------
-        /// Set Value For Key
-        //----------------------------------------------------------------
-		void LocalDataStore::SetValueForKey(const std::string& instrKey, f32 infValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		void LocalDataStore::SetValue(const std::string& in_key, f32 infValue)
         {
-			SetValueForKey(instrKey, ToString(infValue));
+			SetValue(in_key, ToString(infValue));
 		}
-        //----------------------------------------------------------------
-        /// Try Erase Key
-        //----------------------------------------------------------------
-		bool LocalDataStore::TryEraseKey(const std::string& instrKey)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		bool LocalDataStore::Erase(const std::string& in_key)
         {
-			ParamDictionary::iterator pEntry = mBackingDictionary.find(instrKey);
-			if(mBackingDictionary.end() != pEntry)
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
+			ParamDictionary::iterator pEntry = m_dictionary.find(in_key);
+			if(m_dictionary.end() != pEntry)
             {
-				mBackingDictionary.erase(pEntry);
+				m_dictionary.erase(pEntry);
 				return true;
 			}
 			
 			return false;
 		}
-        //------------------------
-        /// Clear
-        //------------------------
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
         void LocalDataStore::Clear()
         {
-            mBackingDictionary.clear();
-            mbBackingValid = false;
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
+            m_dictionary.clear();
+            m_needsSynchonised = true;
             Synchronise();
         }
-        //----------------------------------------------------------------
-        /// Synchronise
-        //----------------------------------------------------------------
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
 		void LocalDataStore::Synchronise()
         {
-			if(mbBackingValid)
-            {
-				return;
-			}
+            std::unique_lock<std::mutex> lock(m_mutex);
             
-            // Convert to XML
-			TiXmlDocument xmlDoc;
-			TiXmlElement xmlRootElement("LDS");
-			mBackingDictionary.ToXml(&xmlRootElement);
-			xmlDoc.InsertEndChild(xmlRootElement);
-			
-            // Encrypt
-            TiXmlPrinter xmlPrinter;
-            xmlDoc.Accept(&xmlPrinter);
-            std::string strDocToBeEncrypted = xmlPrinter.CStr();
-            const u8* pudwDocBinary = reinterpret_cast<const u8*>(strDocToBeEncrypted.c_str());
-            u32 udwEncryptedSize = AESEncrypt::CalculateAlignedSize(strDocToBeEncrypted.size());
-            s8* pdwDocEncrypted = new s8[udwEncryptedSize];
-            AESEncrypt::Encrypt(pudwDocBinary, udwEncryptedSize, kstrLocalDataStoreEncryptionKey, reinterpret_cast<u8*>(pdwDocEncrypted));
-            
-            // Write to disk
-            FileSystem* pFileSystem = Application::Get()->GetFileSystem();
-            FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename, FileMode::k_writeBinary);
-            if(pFileStream->IsOpen() && !pFileStream->IsBad())
+			if(m_needsSynchonised == true)
             {
-                pFileStream->Write(pdwDocEncrypted, udwEncryptedSize);
-                pFileStream->Close();
+                // Convert to XML
+                TiXmlDocument xmlDoc;
+                TiXmlElement xmlRootElement("LDS");
+                m_dictionary.ToXml(&xmlRootElement);
+                xmlDoc.InsertEndChild(xmlRootElement);
+                
+                // Encrypt
+                TiXmlPrinter xmlPrinter;
+                xmlDoc.Accept(&xmlPrinter);
+                std::string strDocToBeEncrypted = xmlPrinter.CStr();
+                const u8* pudwDocBinary = reinterpret_cast<const u8*>(strDocToBeEncrypted.c_str());
+                u32 udwEncryptedSize = AESEncrypt::CalculateAlignedSize(strDocToBeEncrypted.size());
+                s8* pdwDocEncrypted = new s8[udwEncryptedSize];
+                AESEncrypt::Encrypt(pudwDocBinary, udwEncryptedSize, GenerateEncryptionKey(), reinterpret_cast<u8*>(pdwDocEncrypted));
+                
+                // Write to disk
+                FileSystem* pFileSystem = Application::Get()->GetFileSystem();
+                FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_writeBinary);
+                if(pFileStream->IsOpen() && !pFileStream->IsBad())
+                {
+                    pFileStream->Write(pdwDocEncrypted, udwEncryptedSize);
+                    pFileStream->Close();
+                }
+                
+                CS_SAFEDELETE_ARRAY(pdwDocEncrypted)
+                m_needsSynchonised = false;
             }
-            
-            CS_SAFEDELETE_ARRAY(pdwDocEncrypted)
-            mbBackingValid = true;
 		}
-        //----------------------------------------------------------------
-        /// Constructor
-        //----------------------------------------------------------------
-        LocalDataStore::LocalDataStore()
-        {
-			mpSingletonInstance = this;
-			RefreshFromFile();
-		}
-        //----------------------------------------------------------------
-        /// Refresh From File
-        //----------------------------------------------------------------
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
 		void LocalDataStore::RefreshFromFile()
         {
             FileSystem* pFileSystem = Application::Get()->GetFileSystem();
-            if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename))
+            if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, k_filename) == true)
             {
-                FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename, FileMode::k_read);
+                FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_read);
                 if(pFileStream->IsOpen() && !pFileStream->IsBad())
                 {
                     std::string strEncryptedXML;
@@ -309,45 +363,25 @@ namespace ChilliSource
                     u32 udwEncryptedSize = strEncryptedXML.size();
                     s8* pbyData = new s8[udwEncryptedSize];
                     const u8* udwDocBinary = reinterpret_cast<const u8*>(strEncryptedXML.c_str());
-                    AESEncrypt::Decrypt(udwDocBinary, udwEncryptedSize, kstrLocalDataStoreEncryptionKey, reinterpret_cast<u8*>(pbyData));
+                    AESEncrypt::Decrypt(udwDocBinary, udwEncryptedSize, GenerateEncryptionKey(), reinterpret_cast<u8*>(pbyData));
                     
                     TiXmlDocument xmlDoc;
                     xmlDoc.Parse(pbyData, 0, TIXML_DEFAULT_ENCODING);
                     TiXmlElement* pRoot = xmlDoc.RootElement();
                     if(nullptr != pRoot)
                     {
-                        mBackingDictionary.FromXml(pRoot);
+                        m_dictionary.FromXml(pRoot);
                     }
                     
                     CS_SAFEDELETE_ARRAY(pbyData);
                 }
             }
-            else
-            if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, kstrLocalDataStoreDeprecatedFilename))
-            {
-                TiXmlDocument xmlDoc;
-                xmlDoc.LoadFile(StorageLocation::k_saveData, kstrLocalDataStoreDeprecatedFilename);
-                TiXmlElement* pRoot = xmlDoc.RootElement();
-                if(nullptr != pRoot)
-                {
-                    mBackingDictionary.FromXml(pRoot);
-                    pFileSystem->DeleteFile(StorageLocation::k_saveData, kstrLocalDataStoreDeprecatedFilename);
-                }
-            }
             
-            mbBackingValid = true;
+            m_needsSynchonised = false;
         }
-        //----------------------------------------------------------------
-        /// Subscribe To Application SuspendEvent
-        //----------------------------------------------------------------
-        void LocalDataStore::SubscribeToApplicationSuspendEvent()
-		{
-			m_appSuspendedConnection = ApplicationEvents::GetLateSuspendEvent().OpenConnection(Core::MakeDelegate(this, &LocalDataStore::OnApplicationSuspended));
-		}
-        //----------------------------------------------------------------
-        /// On Application Suspended
-        //----------------------------------------------------------------
-		void LocalDataStore::OnApplicationSuspended()
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		void LocalDataStore::OnSuspend()
         {
 			Synchronise();
 		}

@@ -10,6 +10,7 @@
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <jni.h>
@@ -39,8 +40,8 @@ void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextAdded(JNIEn
 	if (pKeyboardJI != nullptr)
 	{
 		CSCore::UTF8String strText = ChilliSource::Android::JavaInterfaceUtils::CreateUTF8StringFromJString(injstrText);
-		CSCore::Task<const CSCore::UTF8String&> task(pKeyboardJI.get(), &ChilliSource::Android::KeyboardJavaInterface::OnTextAdded, strText);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(task);
+		auto task = std::bind(&ChilliSource::Android::KeyboardJavaInterface::OnTextAdded, pKeyboardJI.get(), strText);
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
 	inpEnv->DeleteLocalRef(injstrText);
 }
@@ -58,8 +59,8 @@ void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextDeleted(JNI
 	ChilliSource::Android::KeyboardJavaInterfaceSPtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
 	if (pKeyboardJI != nullptr)
 	{
-		CSCore::Task<> task(pKeyboardJI.get(), &ChilliSource::Android::KeyboardJavaInterface::OnTextDeleted);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(task);
+		auto task = std::bind(&ChilliSource::Android::KeyboardJavaInterface::OnTextDeleted, pKeyboardJI.get());
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
 }
 //-----------------------------------------------
@@ -75,8 +76,8 @@ void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnKeyboardDismiss
 	ChilliSource::Android::KeyboardJavaInterfaceSPtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
 	if (pKeyboardJI != nullptr)
 	{
-		CSCore::Task<> task(pKeyboardJI.get(), &ChilliSource::Android::KeyboardJavaInterface::OnKeyboardDismissed);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(task);
+		auto task = std::bind(&ChilliSource::Android::KeyboardJavaInterface::OnKeyboardDismissed, pKeyboardJI.get());
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
 }
 

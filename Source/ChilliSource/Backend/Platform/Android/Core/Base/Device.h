@@ -1,11 +1,11 @@
 //
 //  Device.h
 //  Chilli Source
-//  Created by Scott Downie on 03/05/2011.
+//  Created by Ian Copland on 24/04/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,92 +26,108 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_BASE_DEVICE_H_
-#define _CHILLISOURCE_CORE_BASE_DEVICE_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_DEVICE_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_DEVICE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Localisation/Locales.h>
-#include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/Core/Base/UDIDManager.h>
+#include <ChilliSource/Core/Base/Device.h>
 
 namespace ChilliSource
 {
-    namespace Core
+    namespace Android
     {
         //---------------------------------------------------------
-        /// An application system for providing cross platform
-        /// access to information about the current device. This
-        /// includes information like the current model name and
-        /// the number of CPU cores. It is safe to use this during
-        /// the OnInit() and OnDestroy() lifecycle events.
+        /// The Android backend for the device system. This provides
+        /// information on the specific Android device.
         ///
-        /// @author S Downie
+        /// @author I Copland
         //---------------------------------------------------------
-        class Device : public AppSystem
+        class Device final : public Core::Device
         {
         public:
             CS_DECLARE_NAMEDTYPE(Device);
+            //-------------------------------------------------------
+			/// Queries whether or not this system implements the
+            /// interface with the given Id.
+			///
+            /// @author I Copland
+            ///
+			/// @param The interface Id.
+			/// @param Whether system is of given type.
+			//-------------------------------------------------------
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------
             /// @author I Copland
             ///
             /// @return The device model name.
             //---------------------------------------------------
-            virtual const std::string& GetModel() = 0;
+            const std::string& GetModel() override;
             //---------------------------------------------------
             /// @author I Copland
             ///
             /// @return The name of the device model type.
             //---------------------------------------------------
-            virtual const std::string& GetModelType() = 0;
+            const std::string& GetModelType() override;
             //---------------------------------------------------
             /// @author I Copland
             ///
             /// @return The name of the device manufacturer.
             //---------------------------------------------------
-            virtual const std::string& GetManufacturer() = 0;
+            const std::string& GetManufacturer() override;
             //---------------------------------------------------
-            /// @author S Downie
+            /// @author I Copland
             ///
             /// @return The locale code registered with the
             /// device.
             //---------------------------------------------------
-            virtual Locale& GetLocale() = 0;
+            Core::Locale& GetLocale() override;
             //---------------------------------------------------
-            /// @author S Downie
+            /// @author I Copland
             ///
             /// @return The language the device is set to.
             //---------------------------------------------------
-            virtual Locale& GetLanguage() = 0;
+            Core::Locale& GetLanguage() override;
             //---------------------------------------------------
-            /// @author S Downie
+            /// @author I Copland
             ///
             /// @return The version of the operating system.
             //---------------------------------------------------
-            virtual const std::string& GetOSVersion() = 0;
+            const std::string& GetOSVersion() override;
             //---------------------------------------------------
-            /// @author S Downie
+            /// @author I Copland
             ///
             /// @return An identifier that can be used to uniquely
             /// identify the device.
             //---------------------------------------------------
-            virtual const std::string& GetUDID() = 0;
+            const std::string& GetUDID() override;
 			//---------------------------------------------------
-			/// @author S Downie
+			/// @author I Copland
 			///
 			/// @return The number of CPU cores available on the
             /// device.
 			//--------------------------------------------------
-			virtual u32 GetNumberOfCPUCores() = 0;
-        protected:
-            friend class Core::Application;
-            //--------------------------------------------------
-            /// Creates a new platform specific backend for the
-            /// system.
+			u32 GetNumberOfCPUCores() override;
+        private:
+            friend Core::DeviceUPtr Core::Device::Create();
+            //----------------------------------------------------
+			/// Constructor. Declared private to force the use of
+            /// the factory method.
             ///
             /// @author I Copland
-            ///
-            /// @return The new instance.
-            //--------------------------------------------------
-            static DeviceUPtr Create();
+			//----------------------------------------------------
+			Device();
+            
+			UDIDManager m_udidManager;
+            std::string m_model;
+            std::string m_modelType;
+            std::string m_manufacturer;
+            Core::Locale m_locale;
+            Core::Locale m_language;
+            std::string m_osVersion;
+            std::string m_udid;
+			u32 m_numCPUCores;
         };
     }
 }

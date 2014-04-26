@@ -1,114 +1,63 @@
 //
 //  Device.cpp
-//  moFloTest
-//
+//  Chilli Source
 //  Created by Scott Downie on 03/05/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/Core/Base/Device.h>
+
+#ifdef CS_TARGETPLATFORM_ANDROID
+#include <ChilliSource/Backend/Platform/Android/Core/Base/Device.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_IOS
+#import <ChilliSource/Backend/Platform/iOS/Core/Base/Device.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <ChilliSource/Backend/Platform/Windows/Core/Base/Device.h>
+#endif
 
 namespace ChilliSource
 {
     namespace Core
     {
-        std::string Device::mstrDeviceModel;
-		std::string Device::mstrDeviceModelType;
-		std::string Device::mstrDeviceManufacturer;
-		Locale Device::mLocale = kUnknownLocale;
-		Locale Device::mLanguage = kUnknownLocale;
-        std::string Device::mstrOSVersion;
-        std::string Device::mstrDeviceID;
-		u32 Device::mudwNumCores = 0;
-		f32 Device::mfPhysicalScreenSize = 0.0f;
-        
-        //---------------------------------------------
-        /// Init
-        ///
-        /// @param Platform system
-        //---------------------------------------------
-        void Device::Init(PlatformSystem* inpPlatformSystem)
+        CS_DEFINE_NAMEDTYPE(Device);
+        //--------------------------------------------------
+        //--------------------------------------------------
+        DeviceUPtr Device::Create()
         {
-            mstrDeviceModel = inpPlatformSystem->GetDeviceModelName();
-            mstrDeviceModelType = inpPlatformSystem->GetDeviceModelTypeName();
-            mstrDeviceManufacturer = inpPlatformSystem->GetDeviceManufacturerName();
-            mLocale = inpPlatformSystem->GetLocale();
-            mLanguage = inpPlatformSystem->GetLanguage();
-            mstrOSVersion = inpPlatformSystem->GetOSVersion();
-            mstrDeviceID = inpPlatformSystem->GetDeviceID();
-			mudwNumCores = inpPlatformSystem->GetNumberOfCPUCores();
+#if defined CS_TARGETPLATFORM_ANDROID
+            return DeviceUPtr(new Android::Device());
+#elif defined CS_TARGETPLATFORM_IOS
+            return DeviceUPtr(new iOS::Device());
+#elif defined CS_TARGETPLATFORM_WINDOWS
+            return DeviceUPtr(new Windows::Device());
+#else
+            return nullptr;
+#endif
         }
-        //---------------------------------------------
-        /// Get Model Name
-        ///
-        /// @return Device model Name
-        //---------------------------------------------
-        const std::string& Device::GetModelName()
-        {
-        	return mstrDeviceModel;
-        }
-        //---------------------------------------------
-        /// Get Model Type Name
-        ///
-        /// @return Device model type Name
-        //---------------------------------------------
-        const std::string& Device::GetModelTypeName()
-        {
-        	return mstrDeviceModelType;
-        }
-        //---------------------------------------------
-        /// Get Manufacturer Name
-        ///
-        /// @return Device manufacturer Name
-        //---------------------------------------------
-        const std::string& Device::GetManufacturerName()
-        {
-        	return mstrDeviceManufacturer;
-        }
-        //---------------------------------------------
-        /// Get Locale
-        ///
-        /// @return the locale
-        //---------------------------------------------
-        Locale& Device::GetLocale()
-        {
-            return mLocale;
-        }
-        //---------------------------------------------
-        /// Get Language
-        ///
-        /// @return the language in locale format
-        //---------------------------------------------
-        Locale& Device::GetLanguage()
-        {
-            return mLanguage;
-        }
-        //---------------------------------------------
-        /// Get OS Version
-        ///
-        /// @return String containing OS version
-        //---------------------------------------------
-        const std::string& Device::GetOSVersion()
-        {
-            return mstrOSVersion;
-        }
-        //---------------------------------------------
-        /// Get UDID
-        ///
-        /// @return String containing unique device ID
-        //---------------------------------------------
-        const std::string& Device::GetUDID()
-        {
-            return mstrDeviceID;
-        }
-		//---------------------------------------------
-		/// Get Num CPU Cores
-		///
-		/// @return The number of cores available on device
-		//--------------------------------------------
-		u32 Device::GetNumCPUCores()
-		{
-			return mudwNumCores;
-		}
     }
 }

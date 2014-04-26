@@ -111,91 +111,12 @@ namespace ChilliSource
 
 			return result;
 		}
-		//------------------------------------------------
-		//------------------------------------------------
-		std::string PlatformSystem::GetOSVersion() const
-		{
-			OSVERSIONINFOEX osvi;
-			ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX)); osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-			GetVersionEx((OSVERSIONINFO*) &osvi);
-			return std::string(Core::ToString((u32)osvi.dwMajorVersion) + "." + Core::ToString((u32)osvi.dwMinorVersion));
-		}
-		//------------------------------------------------
-		//------------------------------------------------
-		Core::Locale PlatformSystem::GetLocale() const
-		{
-			wchar_t localeName[LOCALE_NAME_MAX_LENGTH]={0};
 
-			if(GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t)))
-			{
-				if(wcscmp(localeName, L"en") == 0)	return Core::Locale("en");
-				if(wcscmp(localeName, L"fr") == 0)	return Core::Locale("fr");
-				if(wcscmp(localeName, L"it") == 0)  return Core::Locale("it");
-				if(wcscmp(localeName, L"de") == 0)  return Core::Locale("de");
-				if(wcscmp(localeName, L"es") == 0)  return Core::Locale("es");
-				if(wcscmp(localeName, L"jp") == 0)  return Core::Locale("jp");
-			}
-
-			//Just default to english
-			return Core::Locale("en");
-		}
-		//------------------------------------------------
-		//------------------------------------------------
-		std::string PlatformSystem::GetDeviceModelName() const
-		{
-			return "Windows";
-		}
-		//------------------------------------------------
-		//------------------------------------------------
-		std::string PlatformSystem::GetDeviceModelTypeName() const
-		{
-			return "PC";
-		}
-		//------------------------------------------------
-		//------------------------------------------------
-		std::string PlatformSystem::GetDeviceManufacturerName() const
-		{
-			return "Microsoft";
-		}
-		//------------------------------------------------
-		//------------------------------------------------
-		Core::Locale PlatformSystem::GetLanguage() const
-		{
-			wchar_t localeName[LOCALE_NAME_MAX_LENGTH]={0};
-
-			if(GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t)))
-			{
-				if(wcscmp(localeName, L"en") == 0)	return Core::Locale("en");
-				if(wcscmp(localeName, L"fr") == 0)	return Core::Locale("fr");
-				if(wcscmp(localeName, L"it") == 0)  return Core::Locale("it");
-				if(wcscmp(localeName, L"de") == 0)  return Core::Locale("de");
-				if(wcscmp(localeName, L"es") == 0)  return Core::Locale("es");
-				if(wcscmp(localeName, L"jp") == 0)  return Core::Locale("jp");
-			}
-
-			//Just default to english
-			return Core::Locale("en");
-		}
 		//-------------------------------------------------
 		//-------------------------------------------------
 		f32 PlatformSystem::GetScreenDensity() const
 		{
 			return 1.0f;
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		std::string PlatformSystem::GetDeviceID()
-		{
-			CS_LOG_ERROR("PlatformSystem::GetDeviceID() has not been implemented!");
-			return "FAKE ID";
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		u32 PlatformSystem::GetNumberOfCPUCores() const
-		{
-			SYSTEM_INFO SysInfo;
-			GetSystemInfo(&SysInfo);
-			return SysInfo.dwNumberOfProcessors;
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
