@@ -503,30 +503,6 @@ namespace ChilliSource
 		{
 			return !(in_a == in_b);
 		}
-		//-----------------------------------------------------
-		//-----------------------------------------------------
-		template <typename TType> bool operator<(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b)
-		{
-			return (in_a.x < in_b.x && in_a.y < in_b.y);
-		}
-		//-----------------------------------------------------
-		//-----------------------------------------------------
-		template <typename TType> bool operator<=(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b)
-		{
-			return (in_a.x <= in_b.x && in_a.y <= in_b.y);
-		}
-		//-----------------------------------------------------
-		//-----------------------------------------------------
-		template <typename TType> bool operator>(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b)
-		{
-			return (in_a.x > in_b.x && in_a.y > in_b.y);
-		}
-		//-----------------------------------------------------
-		//-----------------------------------------------------
-		template <typename TType> bool operator>=(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b)
-		{
-			return (in_a.x >= in_b.x && in_a.y >= in_b.y);
-		}
 	}
 }
 

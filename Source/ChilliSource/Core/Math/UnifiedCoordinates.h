@@ -105,18 +105,6 @@ namespace ChilliSource
 
             bool operator!=(const UnifiedVector2 &Vec) const
             {return (Vec.vRelative != vRelative || Vec.vAbsolute != vAbsolute);}
-
-            bool operator>(const UnifiedVector2 &Vec) const
-            {return Vec.vRelative > vRelative && Vec.vAbsolute > vAbsolute;}
-
-            bool operator<(const UnifiedVector2 &Vec) const
-            {return Vec.vRelative < vRelative && Vec.vAbsolute < vAbsolute;}
-
-            bool operator>=(const UnifiedVector2 &Vec) const
-            {return Vec.vRelative >= vRelative && Vec.vAbsolute >= vAbsolute;}
-
-            bool operator<=(const UnifiedVector2 &Vec) const
-            {return Vec.vRelative <= vRelative && Vec.vAbsolute <= vAbsolute;}
             
             static const UnifiedVector2 ZERO;
         };
