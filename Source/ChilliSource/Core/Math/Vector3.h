@@ -325,16 +325,8 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericVector3<TType> GenericVector3<TType>::Lerp(const GenericVector3<TType>& in_a, const GenericVector3<TType>& in_b, f32 in_t)
 		{
-			if (in_t <= 0.0f)
-			{
-				return in_a;
-			}
-			else if (in_t >= 1.0f)
-			{
-				return in_b;
-			}
-
-			return (in_a + in_t * (in_b - in_a));
+			f32 t = std::min(std::max(in_t, 0.0f), 1.0f);
+			return (in_a + t * (in_b - in_a));
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
@@ -426,10 +418,10 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> void GenericVector3<TType>::Normalise()
 		{
-			TType length = Length();
-			x = x / length;
-			y = y / length;
-			z = z / length;
+			TType invLength = 1 / Length();
+			x = x * invLength;
+			y = y * invLength;
+			z = z * invLength;
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
