@@ -277,12 +277,12 @@ namespace ChilliSource
             CS_ASSERT(m_currentShader != nullptr,  "Cannot set joints without binding shader");
             
             //Remove the final column from the joint matrix data as it is always going to be [0 0 0 1].
-            std::vector<Core::Vector4Old> jointVectors;
+            std::vector<Core::Vector4> jointVectors;
             for (const auto& joint : inaJoints)
             {
-                jointVectors.push_back(Core::Vector4Old(joint.m[0], joint.m[4], joint.m[8], joint.m[12]));
-                jointVectors.push_back(Core::Vector4Old(joint.m[1], joint.m[5], joint.m[9], joint.m[13]));
-                jointVectors.push_back(Core::Vector4Old(joint.m[2], joint.m[6], joint.m[10], joint.m[14]));
+                jointVectors.push_back(Core::Vector4(joint.m[0], joint.m[4], joint.m[8], joint.m[12]));
+                jointVectors.push_back(Core::Vector4(joint.m[1], joint.m[5], joint.m[9], joint.m[13]));
+                jointVectors.push_back(Core::Vector4(joint.m[2], joint.m[6], joint.m[10], joint.m[14]));
             }
             
             m_currentShader->SetUniform("u_joints", jointVectors);

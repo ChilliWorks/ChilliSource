@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Math/Matrix3x3Old.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Core/Math/Vector4Old.h>
+#include <ChilliSource/Core/Math/Vector4.h>
 
 #if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
     #include <Accelerate/Accelerate.h>
@@ -97,7 +97,7 @@ namespace ChilliSource
 			static void Multiply(const Matrix4x4Old *  p1, const Matrix4x4Old *   p2, Matrix4x4Old *  pOut);
             static void Multiply(const Vector2* inpVec, const Matrix4x4Old* inpMat, Vector2* outpVec);
             static void Multiply(const Vector3* inpVec, const Matrix4x4Old* inpMat, Vector3* outpVec);
-            static void Multiply(const Vector4Old* inpVec, const Matrix4x4Old* inpMat, Vector4Old* outpVec);
+            static void Multiply(const Vector4* inpVec, const Matrix4x4Old* inpMat, Vector4* outpVec);
 			
             
             static Matrix4x4Old CreateOrthoMatrix(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar);
@@ -156,7 +156,7 @@ namespace ChilliSource
 			outpVec->y = inpVec->x * m[1] + inpVec->y * m[5] + inpVec->z * m[9] + m[13];
 			outpVec->z = inpVec->x * m[2] + inpVec->y * m[6] + inpVec->z * m[10] + m[14];
         }
-        inline void Matrix4x4Old::Multiply(const Vector4Old* inpVec, const Matrix4x4Old* inpMat, Vector4Old* outpVec)
+        inline void Matrix4x4Old::Multiply(const Vector4* inpVec, const Matrix4x4Old* inpMat, Vector4* outpVec)
         {
             const f32* m = inpMat->m;
             
@@ -169,9 +169,9 @@ namespace ChilliSource
 		Matrix4x4Old operator*(const Matrix4x4Old & inMat, f32 infScale);
 		Matrix4x4Old operator*(f32 infScale, const Matrix4x4Old & inMat);
 
-		inline Vector4Old operator*(const Vector4Old& vec, const Matrix4x4Old &mat)
+		inline Vector4 operator*(const Vector4& vec, const Matrix4x4Old &mat)
 		{
-			Vector4Old Result; 
+			Vector4 Result; 
 			
 			Result.x = mat.m[0] * vec.x + mat.m[4] * vec.y + mat.m[8] * vec.z + mat.m[12] * vec.w;
 			Result.y = mat.m[1] * vec.x + mat.m[5] * vec.y + mat.m[9] * vec.z + mat.m[13] * vec.w;

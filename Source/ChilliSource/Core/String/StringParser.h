@@ -12,7 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Core/Math/Vector4Old.h>
+#include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>
 #include <ChilliSource/Core/Math/QuaternionOld.h>
 #include <ChilliSource/Core/Base/Colour.h>
@@ -124,7 +124,7 @@ namespace ChilliSource
         ///
         /// @return The vector value.
         //------------------------------------------------------------
-        Vector4Old ParseVector4Old(const std::string& in_string);
+        Vector4 ParseVector4(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a matrix. The matrix should be provided
         /// in row major format, space delimited. failure to parse will

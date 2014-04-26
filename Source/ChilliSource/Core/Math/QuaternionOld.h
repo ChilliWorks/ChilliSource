@@ -5,7 +5,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>
-#include <ChilliSource/Core/Math/Vector4Old.h>
+#include <ChilliSource/Core/Math/Vector4.h>
 
 namespace ChilliSource
 {

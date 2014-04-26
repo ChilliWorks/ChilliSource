@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Core/Math/Vector4Old.h>
+#include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/Math/Matrix4x4Old.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/Base/ShaderPass.h>
@@ -316,7 +316,7 @@ namespace ChilliSource
 			/// @param Variable name
 			/// @param Vec4 value
 			//-----------------------------------------------------------
-			void SetShaderVar(const std::string& in_varName, const Core::Vector4Old& in_value);
+			void SetShaderVar(const std::string& in_varName, const Core::Vector4& in_value);
 			//-----------------------------------------------------------
 			/// Set the value of the variable with the given name to the
             /// given value
@@ -364,7 +364,7 @@ namespace ChilliSource
             std::unordered_map<std::string, f32> m_floatVars;
 			std::unordered_map<std::string, Core::Vector2> m_vec2Vars;
 			std::unordered_map<std::string, Core::Vector3> m_vec3Vars;
-			std::unordered_map<std::string, Core::Vector4Old> m_vec4Vars;
+			std::unordered_map<std::string, Core::Vector4> m_vec4Vars;
 			std::unordered_map<std::string, Core::Matrix4x4Old> m_mat4Vars;
 			std::unordered_map<std::string, Core::Colour> m_colourVars;
             

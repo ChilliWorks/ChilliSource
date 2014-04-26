@@ -705,8 +705,8 @@ namespace ChilliSource
 			Core::Vector2 vAlignedPos;
             Align(ineAlignment, vHalfSize, vAlignedPos);
             
-            Core::Vector4Old vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
-            Core::Vector4Old vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
+            Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
+            Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
 			
             const Core::Matrix4x4Old &matTransform(inTransform);
 			vTemp += vCentrePos;

@@ -175,13 +175,13 @@ namespace ChilliSource
             //---Set Fill Maintain
             if(insParams.TryGetValue("SetFillMaintain", strValue))
             {
-                Core::Vector4Old vSize = Core::ParseVector4Old(strValue);
+                Core::Vector4 vSize = Core::ParseVector4(strValue);
                 SetFillMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             //---Set Fit Maintain
             if(insParams.TryGetValue("SetFitMaintain", strValue))
             {
-                Core::Vector4Old vSize = Core::ParseVector4Old(strValue);
+                Core::Vector4 vSize = Core::ParseVector4(strValue);
                 SetFitMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             

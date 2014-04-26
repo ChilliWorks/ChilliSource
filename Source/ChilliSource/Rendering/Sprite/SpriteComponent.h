@@ -50,7 +50,7 @@ namespace ChilliSource
             
             struct SpriteVertex
             {
-                Core::Vector4Old vPos;
+                Core::Vector4 vPos;
                 Core::Vector2 vTex;
                 Core::ByteColour Col;
             };
@@ -244,25 +244,25 @@ namespace ChilliSource
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-            const ChilliSource::Core::Vector4Old & GetUpperLeftCornerPos();
+            const ChilliSource::Core::Vector4 & GetUpperLeftCornerPos();
             //-----------------------------------------------------------
             /// Get Lower Left Corner Position
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-			const ChilliSource::Core::Vector4Old & GetLowerLeftCornerPos();
+			const ChilliSource::Core::Vector4 & GetLowerLeftCornerPos();
             //-----------------------------------------------------------
             /// Get Upper Right Corner Position
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-			const ChilliSource::Core::Vector4Old & GetUpperRightCornerPos();
+			const ChilliSource::Core::Vector4 & GetUpperRightCornerPos();
             //-----------------------------------------------------------
             /// Get Lower Right Corner Position
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-			const ChilliSource::Core::Vector4Old & GetLowerRightCornerPos();
+			const ChilliSource::Core::Vector4 & GetLowerRightCornerPos();
             //-----------------------------------------------------------
             /// Get Sprite Data
             ///
@@ -362,7 +362,7 @@ namespace ChilliSource
             
             Core::Matrix4x4Old mmatTransformCache;
             
-            Core::Vector4Old mavVertexPos[kudwVertsPerSprite];
+            Core::Vector4 mavVertexPos[kudwVertsPerSprite];
 
 			Core::Vector2 mvDimensions;
 			

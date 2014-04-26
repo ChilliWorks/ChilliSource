@@ -126,14 +126,14 @@ namespace ChilliSource
             if(insParams.TryGetValue("UnifiedMaxSize", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector4Old vRawSize = Core::ParseVector4Old(strValue);
+                Core::Vector4 vRawSize = Core::ParseVector4(strValue);
                 SetMaximumSize(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w);
             }
             //---Unified maximum size
             if(insParams.TryGetValue("UnifiedMinSize", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector4Old vRawSize = Core::ParseVector4Old(strValue);
+                Core::Vector4 vRawSize = Core::ParseVector4(strValue);
                 SetMinimumSize(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w);
             }
             //---Line spacing

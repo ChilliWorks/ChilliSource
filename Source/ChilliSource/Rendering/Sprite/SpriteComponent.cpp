@@ -325,7 +325,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Upper Left Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::Vector4Old & SpriteComponent::GetUpperLeftCornerPos()
+		const ChilliSource::Core::Vector4 & SpriteComponent::GetUpperLeftCornerPos()
         {
 			if (!mbCornerPosCacheValid)
             {
@@ -337,7 +337,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Lower Left Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::Vector4Old & SpriteComponent::GetLowerLeftCornerPos()
+		const ChilliSource::Core::Vector4 & SpriteComponent::GetLowerLeftCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -349,7 +349,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Upper Right Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::Vector4Old & SpriteComponent::GetUpperRightCornerPos()
+		const ChilliSource::Core::Vector4 & SpriteComponent::GetUpperRightCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -361,7 +361,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Lower Right Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::Vector4Old & SpriteComponent::GetLowerRightCornerPos()
+		const ChilliSource::Core::Vector4 & SpriteComponent::GetLowerRightCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -395,8 +395,8 @@ namespace ChilliSource
 			Core::Vector2 vAlignedPos;
             Align(meAlignment, vHalfSize, vAlignedPos);
             
-            Core::Vector4Old vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
-            Core::Vector4Old vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
+            Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
+            Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
 			vTemp += vCentrePos;
             Core::Matrix4x4Old::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topLeft]);
             

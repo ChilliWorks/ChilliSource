@@ -114,7 +114,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_STRUCT(UnifiedScalar);
 		CS_FORWARDDECLARE_STRUCT(UnifiedVector2);
 		CS_FORWARDDECLARE_STRUCT(UnifiedRectangle);
-        CS_FORWARDDECLARE_CLASS(Vector4Old);
 		template <typename TType> class GenericVector2;
 		template <typename TType> class GenericVector3;
 		template <typename TType> class GenericVector4;

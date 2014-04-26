@@ -125,19 +125,19 @@ namespace ChilliSource
             //---Set Fill Maintain
             if(insParams.TryGetValue("SetFillMaintain", strValue))
             {
-                Core::Vector4Old vSize = Core::ParseVector4Old(strValue);
+                Core::Vector4 vSize = Core::ParseVector4(strValue);
                 SetFillMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             //---Set Fit Maintain
             if(insParams.TryGetValue("SetFitMaintain", strValue))
             {
-                Core::Vector4Old vSize = Core::ParseVector4Old(strValue);
+                Core::Vector4 vSize = Core::ParseVector4(strValue);
                 SetFitMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             //---UV
             if(insParams.TryGetValue("UVs", strValue))
             {
-                Core::Vector4Old vRaw = Core::ParseVector4Old(strValue);
+                Core::Vector4 vRaw = Core::ParseVector4(strValue);
                 UVs.vOrigin.x = vRaw.x;
                 UVs.vOrigin.y = vRaw.y;
                 UVs.vSize.x = vRaw.z;
@@ -146,7 +146,7 @@ namespace ChilliSource
             //---UV Offsets
             if(insParams.TryGetValue("UVOffsets", strValue))
             {
-                Core::Vector4Old vRaw = Core::ParseVector4Old(strValue);
+                Core::Vector4 vRaw = Core::ParseVector4(strValue);
                 UVOffsets.vOrigin.x = vRaw.x;
                 UVOffsets.vOrigin.y = vRaw.y;
                 UVOffsets.vSize.x = vRaw.z;

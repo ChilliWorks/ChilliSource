@@ -24,12 +24,12 @@ namespace ChilliSource
 		struct MeshBatchVertex
 		{
 			MeshBatchVertex(){}
-			MeshBatchVertex(const Core::Vector4Old &invPos, const Core::Vector3 &invNorm, const Core::Vector2 &invTexCoord)
+			MeshBatchVertex(const Core::Vector4 &invPos, const Core::Vector3 &invNorm, const Core::Vector2 &invTexCoord)
 			: Pos(invPos), Norm(invNorm), Tex(invTexCoord)
             {
 				
             }
-			Core::Vector4Old Pos;
+			Core::Vector4 Pos;
 			Core::Vector3 Norm;
 			Core::Vector2 Tex;
 		};

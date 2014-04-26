@@ -86,14 +86,14 @@ namespace ChilliSource
             if(insParams.TryGetValue("UnifiedPosition", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector4Old vRawPosition = Core::ParseVector4Old(strValue);
+                Core::Vector4 vRawPosition = Core::ParseVector4(strValue);
                 SetPosition(Core::UnifiedVector2(vRawPosition.x, vRawPosition.y, vRawPosition.z, vRawPosition.w));
             }
             //---Unified size
             if(insParams.TryGetValue("UnifiedSize", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector4Old vRawSize = Core::ParseVector4Old(strValue);
+                Core::Vector4 vRawSize = Core::ParseVector4(strValue);
                 SetSize(Core::UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
             }
             //---Unified scale
@@ -147,14 +147,14 @@ namespace ChilliSource
             if(insParams.TryGetValue("UnifiedParentalOffset", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector4Old vRawOffset = Core::ParseVector4Old(strValue);
+                Core::Vector4 vRawOffset = Core::ParseVector4(strValue);
                 SetOffsetFromParentAlignment(Core::UnifiedVector2(vRawOffset.x, vRawOffset.y, vRawOffset.z, vRawOffset.w));
             }
             //---Unified alignment offset
             if(insParams.TryGetValue("UnifiedPositionOffset", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::Vector4Old vRawOffset = Core::ParseVector4Old(strValue);
+                Core::Vector4 vRawOffset = Core::ParseVector4(strValue);
                 SetOffsetFromPosition(Core::UnifiedVector2(vRawOffset.x, vRawOffset.y, vRawOffset.z, vRawOffset.w));
             }
             //---Enable user interaction

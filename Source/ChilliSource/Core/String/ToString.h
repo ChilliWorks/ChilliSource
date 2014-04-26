@@ -165,7 +165,7 @@ namespace ChilliSource
         ///
         /// @return The value as a string.
         //---------------------------------------------------------
-        std::string ToString(const Vector4Old& in_value);
+        std::string ToString(const Vector4& in_value);
         //---------------------------------------------------------
         /// Converts a 4x4 matrix to a string.
         ///

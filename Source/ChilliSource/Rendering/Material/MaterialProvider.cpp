@@ -438,7 +438,7 @@ namespace ChilliSource
                         }
                         else if(strType == "Vec4")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector4Old>(shaderVarEl, "value", Core::Vector4Old::ZERO));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector4>(shaderVarEl, "value", Core::Vector4::k_zero));
                         }
                         else if(strType == "Colour")
                         {

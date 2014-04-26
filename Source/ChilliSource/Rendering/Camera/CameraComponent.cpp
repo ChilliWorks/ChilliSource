@@ -76,8 +76,8 @@ namespace ChilliSource
 			f32 nx = ((2.0f * (invScreenPos.x/vScreenSize.x)) - 1.0f);
 			f32 ny = ((2.0f * (invScreenPos.y/vScreenSize.y)) - 1.0f);
 			
-			Core::Vector4Old vNear(nx, ny, -1.0f, 1.0f);
-            Core::Vector4Old vFar(nx,ny, 1.0f, 1.0f);
+			Core::Vector4 vNear(nx, ny, -1.0f, 1.0f);
+            Core::Vector4 vFar(nx,ny, 1.0f, 1.0f);
             vNear = vNear * matProj;
             vFar = vFar * matProj;
             
@@ -104,7 +104,7 @@ namespace ChilliSource
 		{
 			//Convert the world space position to clip space
 			Core::Matrix4x4Old matToClip = (GetView() * GetProjection());
-			Core::Vector4Old vScreenPos = Core::Vector4Old(invWorldPos, 1.0f) * matToClip;
+			Core::Vector4 vScreenPos = Core::Vector4(invWorldPos, 1.0f) * matToClip;
 			
             Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
 			

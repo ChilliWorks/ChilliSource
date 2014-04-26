@@ -215,7 +215,7 @@ namespace ChilliSource
 			///
 			/// @return An inversed copy of this vector.
 			//-----------------------------------------------------
-			GenericVector3<TType> InverseCopy() const;
+			GenericVector4<TType> InverseCopy() const;
 			//-----------------------------------------------------
 			/// Sets this vector to it's absolute value.
 			///
@@ -335,7 +335,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
-		template <typename TType> GenericVector4<TType> GenericVector4<TType>::Lerp(const GenericVector4<TType>& in_a, const GenericVector4<TType>& in_b, F32 in_t)
+		template <typename TType> GenericVector4<TType> GenericVector4<TType>::Lerp(const GenericVector4<TType>& in_a, const GenericVector4<TType>& in_b, f32 in_t)
 		{
 			f32 t = std::min(std::max(in_t, 0.0f), 1.0f);
 			return (in_a + t * (in_b - in_a));

@@ -126,17 +126,17 @@ namespace ChilliSource
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        Vector4Old ParseVector4Old(const std::string& in_string)
+        Vector4 ParseVector4(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
 			
 			if (udwSize != 4)
 			{
-				return Vector4Old::ZERO;
+				return Vector4::k_zero;
 			}
 			else
 			{
-				Vector4Old vRet;
+				Vector4 vRet;
 				CS_SSCANF(in_string.c_str(), "%f %f %f %f", &vRet.x, &vRet.y, &vRet.z, &vRet.w);
 				return vRet;
 			}

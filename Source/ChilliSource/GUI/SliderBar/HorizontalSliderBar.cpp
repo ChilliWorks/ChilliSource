@@ -130,7 +130,7 @@ namespace ChilliSource
 			//---Slider size
 			if(insParams.TryGetValue("UnifiedSliderSize", strValue))
 			{
-				Core::Vector4Old vRawSize = Core::ParseVector4Old(strValue);
+				Core::Vector4 vRawSize = Core::ParseVector4(strValue);
 				SetSliderSize(Core::UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
 			}
             
