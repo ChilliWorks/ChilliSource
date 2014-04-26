@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-#include <math.h>
+#include <cmath>
 
 namespace ChilliSource
 {
@@ -334,7 +334,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> TType GenericVector2<TType>::Length() const
 		{
-			return (sqrt(x * x + y * y));
+			return (std::sqrt(x * x + y * y));
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------

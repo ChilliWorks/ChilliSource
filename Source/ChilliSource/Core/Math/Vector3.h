@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 
-#include <math.h>
+#include <cmath>
 
 namespace ChilliSource
 {
@@ -368,7 +368,7 @@ namespace ChilliSource
 				ratio = -1;
 			}
 
-			return acosf(ratio);
+			return std::acos(ratio);
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
@@ -412,7 +412,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> TType GenericVector3<TType>::Length() const
 		{
-			return (sqrt(x * x + y * y + z * z));
+			return (std::sqrt(x * x + y * y + z * z));
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------

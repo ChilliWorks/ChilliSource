@@ -1,349 +1,516 @@
-// Matrix3.h
-// ICEngine
 //
-// Created by Ian Copland on 20/04/2012
-// Copyright Ian Copland 2012. All rights reserved.
+//  Matrix3.h
+//  Chilli Source
+//  Created by Ian Copland on 26/04/2014.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
-#ifndef _ICENGINE_CORE_MATH_MATRIX3_H_
-#define _ICENGINE_CORE_MATH_MATRIX3_H_
+#ifndef _CHILLISOURCE_CORE_MATH_MATRIX3_H_
+#define _CHILLISOURCE_CORE_MATH_MATRIX3_H_
 
-#include <ICEngine/ICEngine.h>
-#include <ICEngine/Core/Math/Vector2.h>
-#include <ICEngine/Core/Math/Vector3.h>
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 
-namespace ICEngine
+namespace ChilliSource
 {
-	//---------------------------------------------------------------
-	/// A generic 3x3 matrix that provides standard matrix math
-	/// functionality. The matrix is represented internally in
-	/// row major format. Vector multiplication and transformation
-	/// matrices are described using row vector format.Typically this 
-	/// would not be used directly instead the F32 typedef Matrix3 
-	/// should be used.
-	//---------------------------------------------------------------
-	template <typename TType> class GenericMatrix3 final
+	namespace Core
 	{
-	public:
-		//-----------------------------------------------------
-		/// Constants
-		//-----------------------------------------------------
-		static const GenericMatrix3<TType> kIdentity;
-		//-----------------------------------------------------
-		/// Constructor
-		//-----------------------------------------------------
-		GenericMatrix3();
-		//-----------------------------------------------------
-		/// Constructor
-		/// @param The matrix elements in row major format.
-		//-----------------------------------------------------
-		GenericMatrix3(TType inA0, TType inA1, TType inA2, TType inB0, TType inB1, TType inB2, TType inC0, TType inC1, TType inC2);
-		//------------------------------------------------------
-		/// @return The determinant of this matrix.
-		//------------------------------------------------------
-		TType Determinant() const;
-		//-----------------------------------------------------
-		/// Sets this matrix to the identity matrix.
-		//-----------------------------------------------------
-		void Identity();
-		//-----------------------------------------------------
-		/// Sets this matrix to its transpose
-		//-----------------------------------------------------
-		void Transpose();
-		//------------------------------------------------------
-		/// @return A transposed copy of this matrix.
-		//------------------------------------------------------
-		GenericMatrix3<TType> TransposeCopy() const;
-		//------------------------------------------------------
-		/// Sets this matrix to its inverse.
-		//------------------------------------------------------
-		void Inverse();
-		//------------------------------------------------------
-		/// @return An inverted copy of this matrix.
-		//------------------------------------------------------
-		GenericMatrix3<TType> InverseCopy() const;
-		//-----------------------------------------------------
-		/// Translates the matrix
-		/// @param the translation vector.
-		//-----------------------------------------------------
-		void Translate(const GenericVector2<TType>& inTranslation);
-		//-----------------------------------------------------
-		/// scales this matrix.
-		/// @param scale vector
-		//-----------------------------------------------------
-		void Scale(const GenericVector2<TType>& inScale);
-		//-----------------------------------------------------
-		/// Rotates the matrix.
-		/// @param the rotation.
-		//-----------------------------------------------------
-		void Rotate(TType inA);
-		//------------------------------------------------------
-		/// Create a matrix that will translate.
-		/// @param the rotation.
-		//------------------------------------------------------
-		static GenericMatrix3<TType> CreateTranslation(const GenericVector2<TType>& inTranslation);
-		//------------------------------------------------------
-		/// Create a matrix that will scale.
-		/// @param the rotation.
-		//------------------------------------------------------
-		static GenericMatrix3<TType> CreateScale(const GenericVector2<TType>& inScale);
-		//------------------------------------------------------
-		/// Create a matrix that will rotate.
-		/// @param the rotation.
-		//------------------------------------------------------
-		static GenericMatrix3<TType> CreateRotation(TType inA);
-		//------------------------------------------------------
-		/// Operators
-		//------------------------------------------------------
-		Bool operator==(const GenericMatrix3<TType>& inB);
-		Bool operator!=(const GenericMatrix3<TType>& inB);
-		GenericMatrix3<TType>& operator+=(const GenericMatrix3<TType>& inB);
-		GenericMatrix3<TType>& operator-=(const GenericMatrix3<TType>& inB);
-		GenericMatrix3<TType>& operator*=(const GenericMatrix3<TType>& inB);
-		GenericMatrix3<TType>& operator*=(TType inB);
-
-		TType M[9];
-	};
-	//-----------------------------------------------------
-	template <typename TType> const GenericMatrix3<TType> GenericMatrix3<TType>::kIdentity(1, 0, 0, 0, 1, 0, 0, 0, 1);
-	//-----------------------------------------------------
-	template <typename TType> GenericMatrix3<TType>::GenericMatrix3()
-	{
-		Identity();
-	}
-	//-----------------------------------------------------
-	template <typename TType> GenericMatrix3<TType>::GenericMatrix3(TType inA0, TType inA1, TType inA2, TType inB0, TType inB1, TType inB2, TType inC0, TType inC1, TType inC2)
-	{
-		M[0] = inA0; M[1] = inA1; M[2] = inA2;
-		M[3] = inB0; M[4] = inB1; M[5] = inB2;
-		M[6] = inC0; M[7] = inC1; M[8] = inC2;
-	}
-	//------------------------------------------------------
-	template <typename TType> TType GenericMatrix3<TType>::Determinant() const
-	{
-		return M[0] * (M[4] * M[8] - M[5] * M[7]) - M[1] * (M[3] * M[8] - M[5] * M[6]) + M[2] * (M[3] * M[7] - M[4] * M[6]);
-	}
-	//-----------------------------------------------------
-	template <typename TType> void GenericMatrix3<TType>::Identity()
-	{
-		M[0] = 1; M[1] = 0; M[2] = 0;
-		M[3] = 0; M[4] = 1; M[5] = 0;
-		M[6] = 0; M[7] = 0; M[8] = 1;
-	}
-	//-----------------------------------------------------
-	template <typename TType> void GenericMatrix3<TType>::Transpose()
-	{
-		GenericMatrix3<TType> a = *this;
-		M[0] = a.M[0]; M[1] = a.M[3]; M[2] = a.M[6];
-		M[3] = a.M[1]; M[4] = a.M[4]; M[5] = a.M[7];
-		M[6] = a.M[2]; M[7] = a.M[5]; M[8] = a.M[8];
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::TransposeCopy() const
-	{
-		GenericMatrix3<TType> a = *this;
-		a.M[0] = M[0]; a.M[1] = M[3]; a.M[2] = M[6];
-		a.M[3] = M[1]; a.M[4] = M[4]; a.M[5] = M[7];
-		a.M[6] = M[2]; a.M[7] = M[5]; a.M[8] = M[8];
-		return a;
-	}
-	//------------------------------------------------------
-	template <typename TType> void GenericMatrix3<TType>::Inverse()
-	{
-		*this = InverseCopy();
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::InverseCopy() const
-	{
-		TType det = Determinant();
-		if (det == 0)
+		//---------------------------------------------------------------
+		/// A generic 3x3 matrix that provides standard matrix math
+		/// functionality. The matrix is represented internally in
+		/// row major format. Vector multiplication and transformation
+		/// matrices are described using row vector format.Typically this 
+		/// would not be used directly instead the f32 typedef Matrix3 
+		/// should be used.
+		///
+		/// @author I Copland
+		//---------------------------------------------------------------
+		template <typename TType> class GenericMatrix3 final
 		{
+		public:
+			//-----------------------------------------------------
+			/// Constants
+			//-----------------------------------------------------
+			static const GenericMatrix3<TType> k_identity;
+			//------------------------------------------------------
+			/// Creates a translation matrix.
+			///
+			/// @author I Copland
+			///
+			/// @param the rotation.
+			///
+			/// @return The new translation matrix.
+			//------------------------------------------------------
+			static GenericMatrix3<TType> CreateTranslation(const GenericVector2<TType>& in_translation);
+			//------------------------------------------------------
+			/// Creates a scale matrix.
+			///
+			/// @author I Copland
+			///
+			/// @param the scale.
+			///
+			/// @return The new scale matrix.
+			//------------------------------------------------------
+			static GenericMatrix3<TType> CreateScale(const GenericVector2<TType>& in_scale);
+			//------------------------------------------------------
+			/// Creates a rotation matrix.
+			///
+			/// @author I Copland
+			///
+			/// @param the rotation.
+			///
+			/// @return The new rotation matrix.
+			//------------------------------------------------------
+			static GenericMatrix3<TType> CreateRotation(TType in_angle);
+			//------------------------------------------------------
+			/// Creates a transform matrix, built out of a translation
+			/// scale and rotation.
+			///
+			/// @author I Copland
+			///
+			/// @param The translation.
+			/// @param The scale.
+			/// @param The rotation angle.
+			///
+			/// @return The new transform matrix.
+			//------------------------------------------------------
+			static GenericMatrix3<TType> CreateTransform(const GenericVector2<TType>& in_translation, const GenericVector2<TType>& in_scale, TType in_angle);
+			//-----------------------------------------------------
+			/// Constructor. Sets the contents to the identity
+			/// matrix.
+			///
+			/// @author I Copland.
+			//-----------------------------------------------------
+			GenericMatrix3();
+			//-----------------------------------------------------
+			/// Constructor
+			///
+			/// @author I Copland
+			///
+			/// @param The matrix elements in row major format.
+			//-----------------------------------------------------
+			GenericMatrix3(TType in_a0, TType in_a1, TType in_a2, TType in_b0, TType in_b1, TType in_b2, TType in_c0, TType in_c1, TType in_c2);
+			//------------------------------------------------------
+			/// @author I Copland
+			///
+			/// @return The determinant of this matrix.
+			//------------------------------------------------------
+			TType Determinant() const;
+			//-----------------------------------------------------
+			/// Sets this matrix to the identity matrix.
+			///
+			/// @author I Copland
+			//-----------------------------------------------------
+			void Identity();
+			//-----------------------------------------------------
+			/// Sets this matrix to its transpose.
+			///
+			/// @author I Copland
+			//-----------------------------------------------------
+			void Transpose();
+			//------------------------------------------------------
+			/// @author I Copland
+			///
+			/// @return A transposed copy of this matrix.
+			//------------------------------------------------------
+			GenericMatrix3<TType> TransposeCopy() const;
+			//------------------------------------------------------
+			/// Sets this matrix to its inverse.
+			///
+			/// @author I Copland
+			//------------------------------------------------------
+			void Inverse();
+			//------------------------------------------------------
+			/// @author I Copland
+			///
+			/// @return An inverted copy of this matrix.
+			//------------------------------------------------------
+			GenericMatrix3<TType> InverseCopy() const;
+			//-----------------------------------------------------
+			/// Translates this matrix.
+			///
+			/// @author I Copland
+			///
+			/// @param the translation vector.
+			//-----------------------------------------------------
+			void Translate(const GenericVector2<TType>& in_translation);
+			//-----------------------------------------------------
+			/// Scales this matrix.
+			///
+			/// @author I Copland
+			///
+			/// @param the scale vector.
+			//-----------------------------------------------------
+			void Scale(const GenericVector2<TType>& in_scale);
+			//-----------------------------------------------------
+			/// Rotates the matrix.
+			///
+			/// @author I Copland
+			///
+			/// @param the rotation.
+			//-----------------------------------------------------
+			void Rotate(TType in_angle);
+			//-----------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param The row index.
+			/// @param The column index.
+			///
+			/// @return The value at the given position in the
+			/// matrix. Matrices are row major so this equates to
+			/// the value at position in_row * 3 + in_column.
+			//-----------------------------------------------------
+			TType operator()(u32 in_row, u32 in_column) const;
+			//-----------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param Another matrix.
+			///
+			/// @return This matrix after adding the given matrix
+			/// component-wise.
+			//-----------------------------------------------------
+			GenericMatrix3<TType>& operator+=(const GenericMatrix3<TType>& in_b);
+			//-----------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param Another matrix.
+			///
+			/// @return This matrix after subtracting the given matrix
+			/// component-wise.
+			//-----------------------------------------------------
+			GenericMatrix3<TType>& operator-=(const GenericMatrix3<TType>& in_b);
+			//-----------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param Another matrix.
+			///
+			/// @return This matrix after multiplying by the given
+			/// matrix.
+			//-----------------------------------------------------
+			GenericMatrix3<TType>& operator*=(const GenericMatrix3<TType>& in_b);
+			//-----------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param Another matrix.
+			///
+			/// @return This matrix after multiplying by the given 
+			/// scalar.
+			//-----------------------------------------------------
+			GenericMatrix3<TType>& operator*=(TType in_b);
+
+			TType m[9];
+		};
+
+		template <typename TType> const GenericMatrix3<TType> GenericMatrix3<TType>::k_identity(1, 0, 0, 0, 1, 0, 0, 0, 1);
+
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::CreateTranslation(const GenericVector2<TType>& in_translation)
+		{
+			return GenericMatrix3<TType>(1, 0, 0, 0, 1, 0, in_translation.X, in_translation.Y, 1);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::CreateScale(const GenericVector2<TType>& in_scale)
+		{
+			return GenericMatrix3<TType>(in_scale.X, 0, 0, 0, in_scale.Y, 0, 0, 0, 1);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::CreateRotation(TType in_angle)
+		{
+			TType sinA = (TType)std::sin(in_angle);
+			TType cosA = (TType)std::cos(in_angle);
+			return GenericMatrix3<TType>(cosA, sinA, 0, -sinA, cosA, 0, 0, 0, 1);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::CreateTransform(const GenericVector2<TType>& in_translation, const GenericVector2<TType>& in_scale, TType in_angle)
+		{
+			TType cosA = (TType)std::cos(in_angle);
+			TType sinA = (TType)std::sin(in_angle);
+			return GenericMatrix3<TType>(cosA * in_scale.x, -sinA, 0, sinA, cosA * in_scale.y, 0, in_translation.x, in_translation.y, 1);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType>::GenericMatrix3()
+		{
+			Identity();
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType>::GenericMatrix3(TType in_a0, TType in_a1, TType in_a2, TType in_b0, TType in_b1, TType in_b2, TType in_c0, TType in_c1, TType in_c2)
+		{
+			m[0] = in_a0; m[1] = in_a1; m[2] = in_a2;
+			m[3] = in_b0; m[4] = in_b1; m[5] = in_b2;
+			m[6] = in_c0; m[7] = in_c1; m[8] = in_c2;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> TType GenericMatrix3<TType>::Determinant() const
+		{
+			return m[0] * (m[4] * m[8] - m[5] * m[7]) - m[1] * (m[3] * m[8] - m[5] * m[6]) + m[2] * (m[3] * m[7] - m[4] * m[6]);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> void GenericMatrix3<TType>::Identity()
+		{
+			m[0] = 1; m[1] = 0; m[2] = 0;
+			m[3] = 0; m[4] = 1; m[5] = 0;
+			m[6] = 0; m[7] = 0; m[8] = 1;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> void GenericMatrix3<TType>::Transpose()
+		{
+			GenericMatrix3<TType> a = *this;
+			m[0] = a.m[0]; m[1] = a.m[3]; m[2] = a.m[6];
+			m[3] = a.m[1]; m[4] = a.m[4]; m[5] = a.m[7];
+			m[6] = a.m[2]; m[7] = a.m[5]; m[8] = a.m[8];
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::TransposeCopy() const
+		{
+			GenericMatrix3<TType> a = *this;
+			a.m[0] = m[0]; a.m[1] = m[3]; a.m[2] = m[6];
+			a.m[3] = m[1]; a.m[4] = m[4]; a.m[5] = m[7];
+			a.m[6] = m[2]; a.m[7] = m[5]; a.m[8] = m[8];
+			return a;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> void GenericMatrix3<TType>::Inverse()
+		{
+			*this = InverseCopy();
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::InverseCopy() const
+		{
+			TType det = Determinant();
+			if (det == 0)
+			{
+				return *this;
+			}
+			TType oneOverDet = 1 / det;
+
+			GenericMatrix3<TType> c;
+			c.m[0] = (m[4] * m[8] - m[5] * m[7]) * oneOverDet;
+			c.m[1] = (m[2] * m[7] - m[1] * m[8]) * oneOverDet;
+			c.m[2] = (m[1] * m[5] - m[2] * m[4]) * oneOverDet;
+			c.m[3] = (m[5] * m[6] - m[3] * m[8]) * oneOverDet;
+			c.m[4] = (m[0] * m[8] - m[2] * m[6]) * oneOverDet;
+			c.m[5] = (m[2] * m[3] - m[0] * m[5]) * oneOverDet;
+			c.m[6] = (m[3] * m[7] - m[4] * m[6]) * oneOverDet;
+			c.m[7] = (m[1] * m[6] - m[0] * m[7]) * oneOverDet;
+			c.m[8] = (m[0] * m[4] - m[1] * m[3]) * oneOverDet;
+			return c;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> void GenericMatrix3<TType>::Translate(const GenericVector2<TType>& in_translation)
+		{
+			m[6] += in_translation.X;
+			m[7] += in_translation.Y;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> void GenericMatrix3<TType>::Scale(const GenericVector2<TType>& in_scale)
+		{
+			*this *= CreateScale(in_scale);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> void GenericMatrix3<TType>::Rotate(TType in_angle)
+		{
+			*this *= CreateRotation(in_angle);
+		}
+		//-----------------------------------------------------
+		//-----------------------------------------------------
+		template <typename TType> TType GenericMatrix3<TType>::operator()(u32 in_row, u32 in_column) const
+		{
+			CS_ASSERT(in_row >= 0 && in_row < 3 && in_column >= 0 && in_column < 3, "Trying to access matrix value at [" + ToString(in_row) + ", " + ToString(in_column) + "]");
+			return m[in_column + in_row * 3];
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType>& GenericMatrix3<TType>::operator+=(const GenericMatrix3<TType>& in_b)
+		{
+			m[0] += in_b.m[0]; m[1] += in_b.m[1]; m[2] += in_b.m[2];
+			m[3] += in_b.m[3]; m[4] += in_b.m[4]; m[5] += in_b.m[5];
+			m[6] += in_b.m[6]; m[7] += in_b.m[7]; m[8] += in_b.m[8];
 			return *this;
 		}
-		TType oneOverDet = 1 / det;
-
-		GenericMatrix3<TType> c;
-		c.M[0] = (M[4] * M[8] - M[5] * M[7]) * oneOverDet;
-		c.M[1] = (M[2] * M[7] - M[1] * M[8]) * oneOverDet;
-		c.M[2] = (M[1] * M[5] - M[2] * M[4]) * oneOverDet;
-		c.M[3] = (M[5] * M[6] - M[3] * M[8]) * oneOverDet;
-		c.M[4] = (M[0] * M[8] - M[2] * M[6]) * oneOverDet;
-		c.M[5] = (M[2] * M[3] - M[0] * M[5]) * oneOverDet;
-		c.M[6] = (M[3] * M[7] - M[4] * M[6]) * oneOverDet;
-		c.M[7] = (M[1] * M[6] - M[0] * M[7]) * oneOverDet;
-		c.M[8] = (M[0] * M[4] - M[1] * M[3]) * oneOverDet;
-		return c;
-	}
-	//-----------------------------------------------------
-	template <typename TType> void GenericMatrix3<TType>::Translate(const GenericVector2<TType>& inTranslation)
-	{
-		M[6] += inTranslation.X;
-		M[7] += inTranslation.Y;
-	}
-	//-----------------------------------------------------
-	template <typename TType> void GenericMatrix3<TType>::Scale(const GenericVector2<TType>& inScale)
-	{
-		GenericMatrix3<TType> c = CreateScale(inScale);
-		*this *= c;
-	}
-	//-----------------------------------------------------
-	template <typename TType> void GenericMatrix3<TType>::Rotate(TType inA)
-	{
-		GenericMatrix3<TType> c = CreateRotation(inA);
-		*this *= c;
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::CreateTranslation(const GenericVector2<TType>& inTranslation)
-	{
-		return GenericMatrix3<TType>(1, 0, 0,
-									0, 1, 0,
-									inTranslation.X, inTranslation.Y, 1);
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::CreateScale(const GenericVector2<TType>& inScale)
-	{
-		return GenericMatrix3<TType>(inScale.X, 0, 0,
-									0., inScale.Y, 0,
-									0, 0, 1);
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::CreateRotation(TType inA)
-	{
-		TType sinA = (TType)sin(inA);
-		TType cosA = (TType)cos(inA);
-		return GenericMatrix3<TType>(cosA, sinA, 0,
-									-sinA, cosA, 0,
-									0, 0, 1);
-	}
-	//------------------------------------------------------
-	template <typename TType> Bool GenericMatrix3<TType>::operator==(const GenericMatrix3<TType>& inB)
-	{
-		for (int i = 0; i < 9; ++i)
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType>& GenericMatrix3<TType>::operator-=(const GenericMatrix3<TType>& in_b)
 		{
-			if (inmA.M[i] != inmB.M[i])
-				return false;
+			m[0] -= in_b.m[0]; m[1] -= in_b.m[1]; m[2] -= in_b.m[2];
+			m[3] -= in_b.m[3]; m[4] -= in_b.m[4]; m[5] -= in_b.m[5];
+			m[6] -= in_b.m[6]; m[7] -= in_b.m[7]; m[8] -= in_b.m[8];
+			return *this;
 		}
-		return true;
-	}
-	//------------------------------------------------------
-	template <typename TType> Bool GenericMatrix3<TType>::operator!=(const GenericMatrix3<TType>& inB)
-	{
-		for (int i = 0; i < 9; ++i)
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType>& GenericMatrix3<TType>::operator*=(const GenericMatrix3<TType>& in_b)
 		{
-			if (inmA.M[i] != inmB.M[i])
-				return true;
+			Matrix3 c = *this;
+
+#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
+			vDSP_mmul(const_cast<f32*>(c.m), 1, const_cast<f32*>(in_b.m), 1, m, 1, 3, 3, 3);
+#else
+			m[0] = c.m[0] * in_b.m[0] + c.m[1] * in_b.m[3] + c.m[2] * in_b.m[6];
+			m[1] = c.m[0] * in_b.m[1] + c.m[1] * in_b.m[4] + c.m[2] * in_b.m[7];
+			m[2] = c.m[0] * in_b.m[2] + c.m[1] * in_b.m[5] + c.m[2] * in_b.m[8];
+
+			m[3] = c.m[3] * in_b.m[0] + c.m[4] * in_b.m[3] + c.m[5] * in_b.m[6];
+			m[4] = c.m[3] * in_b.m[1] + c.m[4] * in_b.m[4] + c.m[5] * in_b.m[7];
+			m[5] = c.m[3] * in_b.m[2] + c.m[4] * in_b.m[5] + c.m[5] * in_b.m[8];
+
+			m[6] = c.m[6] * in_b.m[0] + c.m[7] * in_b.m[3] + c.m[8] * in_b.m[6];
+			m[7] = c.m[6] * in_b.m[1] + c.m[7] * in_b.m[4] + c.m[8] * in_b.m[7];
+			m[8] = c.m[6] * in_b.m[2] + c.m[7] * in_b.m[5] + c.m[8] * in_b.m[8];
+#endif
+			return *this;
 		}
-		return false;
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType>& GenericMatrix3<TType>::operator+=(const GenericMatrix3<TType>& inB)
-	{
-		M[0] += inB.M[0]; M[1] += inB.M[1]; M[2] += inB.M[2];
-		M[3] += inB.M[3]; M[4] += inB.M[4]; M[5] += inB.M[5];
-		M[6] += inB.M[6]; M[7] += inB.M[7]; M[8] += inB.M[8];
-		return *this;
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType>& GenericMatrix3<TType>::operator-=(const GenericMatrix3<TType>& inB)
-	{
-		M[0] -= inB.M[0]; M[1] -= inB.M[1]; M[2] -= inB.M[2];
-		M[3] -= inB.M[3]; M[4] -= inB.M[4]; M[5] -= inB.M[5];
-		M[6] -= inB.M[6]; M[7] -= inB.M[7]; M[8] -= inB.M[8];
-		return *this;
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType>& GenericMatrix3<TType>::operator*=(const GenericMatrix3<TType>& inB)
-	{
-		*this = (*this * inB);
-		return *this;
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType>& GenericMatrix3<TType>::operator*=(TType inB)
-	{
-		M[0] *= inB; M[1] *= inB; M[2] *= inB;
-		M[3] *= inB; M[4] *= inB; M[5] *= inB;
-		M[6] *= inB; M[7] *= inB; M[8] *= inB;
-		return *this;
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType> operator+(const GenericMatrix3<TType>& inA, const GenericMatrix3<TType>& inB)
-	{
-		GenericMatrix3<TType> copy = inA;
-		return (copy += inB);
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType> operator-(const GenericMatrix3<TType>& inA, const GenericMatrix3<TType>& inB)
-	{
-		GenericMatrix3<TType> copy = inA;
-		return (copy -= inB);
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType> operator*(const GenericMatrix3<TType>& inA, const GenericMatrix3<TType>& inB)
-	{
-		Matrix3 c;
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType>& GenericMatrix3<TType>::operator*=(TType in_b)
+		{
+			m[0] *= in_b; m[1] *= in_b; m[2] *= in_b;
+			m[3] *= in_b; m[4] *= in_b; m[5] *= in_b;
+			m[6] *= in_b; m[7] *= in_b; m[8] *= in_b;
+			return *this;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> operator+(GenericMatrix3<TType> in_a, const GenericMatrix3<TType>& in_b)
+		{
+			return (in_a += in_b);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> operator-(GenericMatrix3<TType> in_a, const GenericMatrix3<TType>& in_b)
+		{
+			return (in_a -= in_b);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> operator*(const GenericMatrix3<TType>& in_a, const GenericMatrix3<TType>& in_b)
+		{
+			Matrix3 c;
 
-		c.M[0] = inA.M[0] * inB.M[0] + inA.M[1] * inB.M[3] + inA.M[2] * inB.M[6];
-		c.M[1] = inA.M[0] * inB.M[1] + inA.M[1] * inB.M[4] + inA.M[2] * inB.M[7];
-		c.M[2] = inA.M[0] * inB.M[2] + inA.M[1] * inB.M[5] + inA.M[2] * inB.M[8];
+#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
+			vDSP_mmul(const_cast<f32*>(m), 1, const_cast<f32*>(in_b.m), 1, c.m, 1, 3, 3, 3);
+#else
+			c.m[0] = in_a.m[0] * in_b.m[0] + in_a.m[1] * in_b.m[3] + in_a.m[2] * in_b.m[6];
+			c.m[1] = in_a.m[0] * in_b.m[1] + in_a.m[1] * in_b.m[4] + in_a.m[2] * in_b.m[7];
+			c.m[2] = in_a.m[0] * in_b.m[2] + in_a.m[1] * in_b.m[5] + in_a.m[2] * in_b.m[8];
 
-		c.M[3] = inA.M[3] * inB.M[0] + inA.M[4] * inB.M[3] + inA.M[5] * inB.M[6];
-		c.M[4] = inA.M[3] * inB.M[1] + inA.M[4] * inB.M[4] + inA.M[5] * inB.M[7];
-		c.M[5] = inA.M[3] * inB.M[2] + inA.M[4] * inB.M[5] + inA.M[5] * inB.M[8];
+			c.m[3] = in_a.m[3] * in_b.m[0] + in_a.m[4] * in_b.m[3] + in_a.m[5] * in_b.m[6];
+			c.m[4] = in_a.m[3] * in_b.m[1] + in_a.m[4] * in_b.m[4] + in_a.m[5] * in_b.m[7];
+			c.m[5] = in_a.m[3] * in_b.m[2] + in_a.m[4] * in_b.m[5] + in_a.m[5] * in_b.m[8];
 
-		c.M[6] = inA.M[6] * inB.M[0] + inA.M[7] * inB.M[3] + inA.M[8] * inB.M[6];
-		c.M[7] = inA.M[6] * inB.M[1] + inA.M[7] * inB.M[4] + inA.M[8] * inB.M[7];
-		c.M[8] = inA.M[6] * inB.M[2] + inA.M[7] * inB.M[5] + inA.M[8] * inB.M[8];
-
-		return c;
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType> operator*(const GenericMatrix3<TType>& inA, TType inB)
-	{
-		GenericMatrix3<TType> copy = inA;
-		return (copy *= inB);
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericMatrix3<TType> operator*(TType inA, const GenericMatrix3<TType>& inB)
-	{
-		GenericMatrix3<TType> copy = inB;
-		return (copy *= inA);
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericVector3<TType>& operator*=(GenericVector3<TType>& inA, const GenericMatrix3<TType>& inB)
-	{
-		GenericVector3<TType> c = inA;
-		inA.X = c.X * inB.M[0] + c.Y * inB.M[3] + c.Z * inB.M[6];
-		inA.Y = c.X * inB.M[1] + c.Y * inB.M[4] + c.Z * inB.M[7];
-		inA.Z = c.X * inB.M[2] + c.Y * inB.M[5] + c.Z * inB.M[8];
-		return inA;
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericVector3<TType> operator*(const GenericVector3<TType>& inA, const GenericMatrix3<TType>& inB)
-	{
-		GenericVector3<TType> c;
-		c.X = inA.X * inB.M[0] + inA.Y * inB.M[3] + inA.Z * inB.M[6];
-		c.Y = inA.X * inB.M[1] + inA.Y * inB.M[4] + inA.Z * inB.M[7];
-		c.Z = inA.X * inB.M[2] + inA.Y * inB.M[5] + inA.Z * inB.M[8];
-		return c;
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericVector2<TType>& operator*=(GenericVector2<TType>& inA, const GenericMatrix3<TType>& inB)
-	{
-		GenericVector2<TType> c = inA;
-		inA.X = c.X * inmB.M[0] + c.Y * inmB.M[3] + inmB.M[6];
-		inA.Y = c.X * inmB.M[1] + c.Y * inmB.M[4] + inmB.M[7];
-		TType oneOverZ = 1 / (c.X * inB.M[2] + c.Y * inB.M[5] + inB.M[8]);
-		inA *= oneOverZ;
-		return inA;
-	}
-	//------------------------------------------------------
-	template <typename TType> GenericVector2<TType> operator*(const GenericVector2<TType>& invA, const GenericMatrix3<TType>& inB)
-	{
-		GenericVector3<TType> c;
-		c.X = invA.X * inmB.M[0] + invA.Y * inmB.M[3] + inmB.M[6];
-		c.Y = invA.X * inmB.M[1] + invA.Y * inmB.M[4] + inmB.M[7];
-		TType oneOverZ = 1 / (c.X * inB.M[2] + c.Y * inB.M[5] + inB.M[8]);
-		c *= oneOverZ;
-		return c;
+			c.m[6] = in_a.m[6] * in_b.m[0] + in_a.m[7] * in_b.m[3] + in_a.m[8] * in_b.m[6];
+			c.m[7] = in_a.m[6] * in_b.m[1] + in_a.m[7] * in_b.m[4] + in_a.m[8] * in_b.m[7];
+			c.m[8] = in_a.m[6] * in_b.m[2] + in_a.m[7] * in_b.m[5] + in_a.m[8] * in_b.m[8];
+#endif
+			return c;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> operator*(GenericMatrix3<TType> in_a, TType in_b)
+		{
+			return (in_a *= in_b);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> operator*(TType in_a, GenericMatrix3<TType> in_b)
+		{
+			return (in_b *= in_a);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericVector3<TType>& operator*=(GenericVector3<TType>& in_a, const GenericMatrix3<TType>& in_b)
+		{
+			GenericVector3<TType> c = in_a;
+			in_a.X = c.X * in_b.m[0] + c.Y * in_b.m[3] + c.Z * in_b.m[6];
+			in_a.Y = c.X * in_b.m[1] + c.Y * in_b.m[4] + c.Z * in_b.m[7];
+			in_a.Z = c.X * in_b.m[2] + c.Y * in_b.m[5] + c.Z * in_b.m[8];
+			return in_a;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericVector3<TType> operator*(const GenericVector3<TType>& in_a, const GenericMatrix3<TType>& in_b)
+		{
+			GenericVector3<TType> c;
+			c.X = in_a.X * in_b.m[0] + in_a.Y * in_b.m[3] + in_a.Z * in_b.m[6];
+			c.Y = in_a.X * in_b.m[1] + in_a.Y * in_b.m[4] + in_a.Z * in_b.m[7];
+			c.Z = in_a.X * in_b.m[2] + in_a.Y * in_b.m[5] + in_a.Z * in_b.m[8];
+			return c;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericVector2<TType>& operator*=(GenericVector2<TType>& in_a, const GenericMatrix3<TType>& in_b)
+		{
+			GenericVector2<TType> c = in_a;
+			in_a.X = c.X * in_b.m[0] + c.Y * in_b.m[3] + in_b.m[6];
+			in_a.Y = c.X * in_b.m[1] + c.Y * in_b.m[4] + in_b.m[7];
+			TType oneOverZ = 1 / (c.X * in_b.m[2] + c.Y * in_b.m[5] + in_b.m[8]);
+			in_a *= oneOverZ;
+			return in_a;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericVector2<TType> operator*(const GenericVector2<TType>& in_a, const GenericMatrix3<TType>& in_b)
+		{
+			GenericVector3<TType> c;
+			c.X = in_a.X * in_b.m[0] + in_a.Y * in_b.m[3] + in_b.m[6];
+			c.Y = in_a.X * in_b.m[1] + in_a.Y * in_b.m[4] + in_b.m[7];
+			TType oneOverZ = 1 / (c.X * in_b.m[2] + c.Y * in_b.m[5] + in_b.m[8]);
+			c *= oneOverZ;
+			return c;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> bool GenericMatrix3<TType>::operator==(const GenericMatrix3<TType>& in_a, const GenericMatrix3<TType>& in_b)
+		{
+			for (u32 i = 0; i < 9; ++i)
+			{
+				if (in_a.m[i] != in_b.m[i])
+					return false;
+			}
+			return true;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> bool GenericMatrix3<TType>::operator!=(const GenericMatrix3<TType>& in_a, const GenericMatrix3<TType>& in_b)
+		{
+			return !(in_a == in_b);
+		}
 	}
 }
 
