@@ -207,7 +207,7 @@ namespace ChilliSource
 			///
 			/// Rebuild the sprite data
 			//-----------------------------------------------------
-			void UpdateSpriteData(const Core::Matrix4x4Old& inTransform, const Core::Vector2 & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment);
+			void UpdateSpriteData(const Core::Matrix4& inTransform, const Core::Vector2 & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment);
             
 		private:
 			

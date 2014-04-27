@@ -115,6 +115,38 @@ namespace ChilliSource
 			//------------------------------------------------------
 			static GenericMatrix4<TType> CreateOrthographicProjectionRH(TType in_width, TType in_height, TType in_near, TType in_far);
 			//------------------------------------------------------
+			/// Creates a new orthographic projection matrix with the 
+			/// given parameters.  This projection matrix is "Left
+			/// Handed" meaning the positive z axis is considered
+			/// to point into the screen.
+			///
+			/// @author I Copland
+			///
+			/// @param the left side.
+			/// @param The right side.
+			/// @param The bottom.
+			/// @param The top.
+			/// @param the near.
+			/// @param The far.
+			//------------------------------------------------------
+			static GenericMatrix4<TType> CreateOrthographicProjectionLH(TType in_left, f32 in_right, f32 in_bottom, f32 in_top, f32 in_near, f32 in_far);
+			//------------------------------------------------------
+			/// Creates a new orthographic projection matrix with the 
+			/// given parameters.  This projection matrix is "Right
+			/// Handed" meaning the positive z axis is considered
+			/// to point out of the screen.
+			///
+			/// @author I Copland
+			///
+			/// @param the left side.
+			/// @param The right side.
+			/// @param The bottom.
+			/// @param The top.
+			/// @param the near.
+			/// @param The far.
+			//------------------------------------------------------
+			static GenericMatrix4<TType> CreateOrthographicProjectionRH(TType in_left, f32 in_right, f32 in_bottom, f32 in_top, f32 in_near, f32 in_far);
+			//------------------------------------------------------
 			/// Creates a new "look-at" matrix with the given camera
 			/// position, look at and up vector.
 			///
@@ -143,7 +175,7 @@ namespace ChilliSource
 			static GenericMatrix4<TType> CreateScale(const GenericVector3<TType>& in_scale);
 			//------------------------------------------------------
 			/// Create a new matrix that describes a rotation
-			/// arround the X axis.
+			/// arround the x axis.
 			///
 			/// @author I Copland
 			///
@@ -152,7 +184,7 @@ namespace ChilliSource
 			static GenericMatrix4<TType> CreateRotationX(TType in_angle);
 			//------------------------------------------------------
 			/// Create a new matrix that describes a rotation
-			/// arround the Y axis.
+			/// arround the y axis.
 			///
 			/// @author I Copland
 			///
@@ -161,7 +193,7 @@ namespace ChilliSource
 			static GenericMatrix4<TType> CreateRotationY(TType in_angle);
 			//------------------------------------------------------
 			/// Create a new matrix that describes a rotation
-			/// arround the Y axis.
+			/// arround the y axis.
 			///
 			/// @author I Copland
 			///
@@ -189,6 +221,17 @@ namespace ChilliSource
 			/// @return The new transform matrix.
 			//------------------------------------------------------
 			static GenericMatrix4<TType> CreateTransform(const GenericVector3<TType>& in_translation, const GenericVector3<TType>& in_scale, const GenericQuaternion<TType>& in_rotation);
+			//------------------------------------------------------
+			/// Creates a transform matrix from a 3x3 2D transform 
+			/// matrix.
+			///
+			/// @author S Downie
+			///
+			/// @param The 2D transform matrix.
+			///
+			/// @return The new transform matrix.
+			//------------------------------------------------------
+			static GenericMatrix4<TType> CreateTransform(const GenericMatrix3<TType>& in_transform);
 			//------------------------------------------------------
 			/// Constructor. Sets the contents of the matrix to the
 			/// identity matrix.
@@ -257,7 +300,7 @@ namespace ChilliSource
 			//------------------------------------------------------
 			void Scale(const GenericVector3<TType>& in_scale);
 			//------------------------------------------------------
-			/// Rotates arround the X axis.
+			/// Rotates arround the x axis.
 			///
 			/// @author I Copland
 			///
@@ -265,7 +308,7 @@ namespace ChilliSource
 			//------------------------------------------------------
 			void RotateX(TType in_angle);
 			//------------------------------------------------------
-			/// Rotates arround the Y axis.
+			/// Rotates arround the y axis.
 			///
 			/// @author I Copland
 			///
@@ -273,7 +316,7 @@ namespace ChilliSource
 			//------------------------------------------------------
 			void RotateY(TType in_angle);
 			//------------------------------------------------------
-			/// Rotates arround the Z axis.
+			/// Rotates arround the z axis.
 			///
 			/// @author I Copland
 			///
@@ -289,6 +332,30 @@ namespace ChilliSource
 			//------------------------------------------------------
 			void Rotate(const GenericQuaternion<TType>& inOrientation);
 			//------------------------------------------------------
+			/// @author S Dowie
+			///
+			/// @param The right vector.
+			//------------------------------------------------------
+			GenericVector3<TType> GetRight() const;
+			//------------------------------------------------------
+			/// @author S Dowie
+			///
+			/// @param The up vector.
+			//------------------------------------------------------
+			GenericVector3<TType> GetUp() const;
+			//------------------------------------------------------
+			/// @author S Dowie
+			///
+			/// @param The forward vector.
+			//------------------------------------------------------
+			GenericVector3<TType> GetForward() const;
+			//------------------------------------------------------
+			/// @author S Dowie
+			///
+			/// @param The translation part of the transform. 
+			//------------------------------------------------------
+			GenericVector3<TType> GetTranslation() const;
+			//------------------------------------------------------
 			/// Decompose the matrix into the transform, scale and
 			/// rotation it was created with. 
 			///
@@ -298,7 +365,7 @@ namespace ChilliSource
 			/// @param [Out] The scale part of the transform.
 			/// @param [Out] The rotation part of the transform.
 			//------------------------------------------------------
-			void Decompose(GenericVector3<TType>& out_translation, GenericVector3<TType> & out_scale, GenericQuaternion<TType> & out_orientation);
+			void Decompose(GenericVector3<TType>& out_translation, GenericVector3<TType> & out_scale, GenericQuaternion<TType> & out_orientation) const;
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -310,6 +377,17 @@ namespace ChilliSource
 			/// the value at position in_row * 4 + in_column.
 			//-----------------------------------------------------
 			TType& operator()(u32 in_row, u32 in_column);
+			//-----------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param The row index.
+			/// @param The column index.
+			///
+			/// @return The value at the given position in the
+			/// matrix. Matrices are row major so this equates to
+			/// the value at position in_row * 4 + in_column.
+			//-----------------------------------------------------
+			TType operator()(u32 in_row, u32 in_column) const;
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -472,6 +550,24 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
+		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateOrthographicProjectionLH(TType in_left, f32 in_right, f32 in_bottom, f32 in_top, f32 in_near, f32 in_far)
+		{
+			//TODO:
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateOrthographicProjectionRH(TType in_left, f32 in_right, f32 in_bottom, f32 in_top, f32 in_near, f32 in_far)
+		{
+			TType a0 = 2 / (in_right - in_left);
+			TType b1 = 2 / (in_top - in_bottom);
+			TType c2 = -2 / (in_far - in_near);
+			TType d0 = -(in_right + in_left) / (in_right - in_left);
+			TType d1 = -(in_top + in_bottom) / (in_top - in_bottom);
+			TType d2 = -(in_near + in_far) / (in_far - in_near);
+			return GenericMatrix4<TType>(a0, 0, 0, 0, 0, b1, 0, 0, 0, 0, c2, 0, d0, d1, d2, 1);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateLookAt(const GenericVector3<TType>& in_position, const GenericVector3<TType>& in_lookAt, const GenericVector3<TType>& in_up)
 		{
 			GenericVector3<TType> zAxis = in_lookAt - in_position;
@@ -484,9 +580,9 @@ namespace ChilliSource
 			TType dotZ = GenericVector3<TType>::DotProduct(zAxis, in_position);
 
 			GenericMatrix4<TType> m;
-			m.m[0] = xAxis.X;		m.m[1] = yAxis.X;		m.m[2] = zAxis.X;		m.m[3] = 0;
-			m.m[4] = xAxis.Y;		m.m[5] = yAxis.Y;		m.m[6] = zAxis.Y;		m.m[7] = 0;
-			m.m[8] = xAxis.Z;		m.m[9] = yAxis.Z;		m.m[10] = zAxis.Z;		m.m[11] = 0;
+			m.m[0] = xAxis.x;		m.m[1] = yAxis.x;		m.m[2] = zAxis.x;		m.m[3] = 0;
+			m.m[4] = xAxis.y;		m.m[5] = yAxis.y;		m.m[6] = zAxis.y;		m.m[7] = 0;
+			m.m[8] = xAxis.z;		m.m[9] = yAxis.z;		m.m[10] = zAxis.z;		m.m[11] = 0;
 			m.m[12] = -dotX;		m.m[13] = -dotY;		m.m[14] = -dotZ;		m.m[15] = 1;
 			return m;
 		}
@@ -494,13 +590,13 @@ namespace ChilliSource
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateTranslation(const GenericVector3<TType>& in_translation)
 		{
-			return GenericMatrix4<TType>(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, in_translation.X, in_translation.Y, in_translation.Z, 1);
+			return GenericMatrix4<TType>(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, in_translation.x, in_translation.y, in_translation.z, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateScale(const GenericVector3<TType>& in_scale)
 		{
-			return GenericMatrix4<TType>(in_scale.X, 0, 0, 0, 0, in_scale.Y, 0, 0, 0, 0, in_scale.Z, 0, 0, 0, 0, 1);
+			return GenericMatrix4<TType>(in_scale.x, 0, 0, 0, 0, in_scale.y, 0, 0, 0, 0, in_scale.z, 0, 0, 0, 0, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -533,28 +629,28 @@ namespace ChilliSource
 			GenericQuaternion<TType> q;
 			if (in_rotation.MagnitudeSquared() == 1)
 			{
-				q = inRotation;
+				q = in_rotation;
 			}
 			else if (q.MagnitudeSquared() > 0)
 			{
 				q = in_rotation.NormaliseCopy();
 			}
 
-			TType wSquared = q.W * q.W;
-			TType xSquared = q.X * q.X;
-			TType ySquared = q.Y * q.Y;
-			TType zSquared = q.Z * q.Z;
+			TType wSquared = q.w * q.w;
+			TType xSquared = q.x * q.x;
+			TType ySquared = q.y * q.y;
+			TType zSquared = q.z * q.z;
 
 			TType a = wSquared + xSquared - ySquared - zSquared;
-			TType b = 2 * q.X * q.Y + 2 * q.W * q.Z;
-			TType c = 2 * q.X * q.Z - 2 * q.W * q.Y;
+			TType b = 2 * q.x * q.y + 2 * q.w * q.z;
+			TType c = 2 * q.x * q.z - 2 * q.w * q.y;
 			TType d = 0;
-			TType e = 2 * q.X * q.Y - 2 * q.W * q.Z;
+			TType e = 2 * q.x * q.y - 2 * q.w * q.z;
 			TType f = wSquared - xSquared + ySquared - zSquared;
-			TType g = 2 * q.Y * q.Z + 2 * q.W * q.X;
+			TType g = 2 * q.y * q.z + 2 * q.w * q.x;
 			TType h = 0;
-			TType i = 2 * q.X * q.Z + 2 * q.W * q.Y;
-			TType j = 2 * q.Y * q.Z - 2 * q.W * q.X;
+			TType i = 2 * q.x * q.z + 2 * q.w * q.y;
+			TType j = 2 * q.y * q.z - 2 * q.w * q.x;
 			TType k = wSquared - xSquared - ySquared + zSquared;
 			TType l = 0;
 			TType m = 0;
@@ -573,11 +669,21 @@ namespace ChilliSource
 		{
 			GenericMatrix4<TType> rotation = CreateRotation(in_rotation);
 
-			return CreateTransform(
+			return GenericMatrix4<TType>(
 				in_scale.x * rotation.m[0], in_scale.x * rotation.m[1], in_scale.x * rotation.m[2], 0,
 				in_scale.y * rotation.m[4], in_scale.y * rotation.m[5], in_scale.y * rotation.m[6], 0,
-				in_scale.z * rotation.m[8], in_scale.z * rotation.m[9], in_scale.z * rotation.m[10], 0
+				in_scale.z * rotation.m[8], in_scale.z * rotation.m[9], in_scale.z * rotation.m[10], 0,
 				in_translation.x, in_translation.y, in_translation.z, 1);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateTransform(const GenericMatrix3<TType>& in_transform)
+		{
+			return GenericMatrix4<TType>(
+				in_transform.m[0], in_transform.m[1], in_transform.m[2], 0,
+				in_transform.m[3], in_transform.m[4], in_transform.m[5], 0,
+				0, 0, 1, 0,
+				in_transform.m[6], in_transform.m[7], in_transform.m[8], 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -718,7 +824,31 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
-		template <typename TType> void GenericMatrix4<TType>::Decompose(GenericVector3<TType>& out_translation, GenericVector3<TType> & out_scale, GenericQuaternion<TType> & out_orientation)
+		template <typename TType> GenericVector3<TType> GenericMatrix4<TType>::GetRight() const
+		{
+			return GenericVector3<TType>(m[0], m[1], m[2]);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericVector3<TType> GenericMatrix4<TType>::GetUp() const
+		{
+			return GenericVector3<TType>(m[4], m[5], m[6]);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericVector3<TType> GenericMatrix4<TType>::GetForward() const
+		{
+			return GenericVector3<TType>(m[8], m[9], m[10]);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericVector3<TType> GenericMatrix4<TType>::GetTranslation() const
+		{
+			return GenericVector3<TType>(m[12], m[13], m[14]);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> void GenericMatrix4<TType>::Decompose(GenericVector3<TType>& out_translation, GenericVector3<TType> & out_scale, GenericQuaternion<TType> & out_orientation) const
 		{
 			out_translation.x = m[12];
 			out_translation.y = m[13];
@@ -768,7 +898,7 @@ namespace ChilliSource
 			}
 
 			// build "right" matrix R
-			Matrix4x4Old r;
+			Matrix4 r;
 			r.m[0] = p.m[0] * m[0] + p.m[1] * m[1] + p.m[2] * m[2];
 			r.m[4] = p.m[0] * m[4] + p.m[1] * m[5] + p.m[2] * m[6];
 			r.m[5] = p.m[4] * m[4] + p.m[5] * m[5] + p.m[6] * m[6];
@@ -782,6 +912,20 @@ namespace ChilliSource
 			out_scale.z = r.m[10];
 
 			out_orientation = GenericQuaternion<TType>(p);
+		}
+		//-----------------------------------------------------
+		//-----------------------------------------------------
+		template <typename TType> TType& GenericMatrix4<TType>::operator()(u32 in_row, u32 in_column)
+		{
+			CS_ASSERT(in_row >= 0 && in_row < 4 && in_column >= 0 && in_column < 4, "Trying to access matrix value at [" + ToString(in_row) + ", " + ToString(in_column) + "]");
+			return m[in_column + in_row * 4];
+		}
+		//-----------------------------------------------------
+		//-----------------------------------------------------
+		template <typename TType> TType GenericMatrix4<TType>::operator()(u32 in_row, u32 in_column) const
+		{
+			CS_ASSERT(in_row >= 0 && in_row < 4 && in_column >= 0 && in_column < 4, "Trying to access matrix value at [" + ToString(in_row) + ", " + ToString(in_column) + "]");
+			return m[in_column + in_row * 4];
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------

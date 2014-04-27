@@ -446,7 +446,7 @@ namespace ChilliSource
                         }
                         else if(strType == "Matrix")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Matrix4x4Old>(shaderVarEl, "value", Core::Matrix4x4Old::IDENTITY));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Matrix4>(shaderVarEl, "value", Core::Matrix4::k_identity));
                         }
                         //Move on to the next variable
                         shaderVarEl =  Core::XMLUtils::NextSiblingElementWithName(shaderVarEl);

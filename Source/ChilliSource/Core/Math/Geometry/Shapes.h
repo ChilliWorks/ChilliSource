@@ -13,7 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Core/Math/QuaternionOld.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
 
 namespace ChilliSource
 {
@@ -411,7 +411,7 @@ namespace ChilliSource
 			/// object to world space
 			/// @return To world matrix
 			//-----------------------------------------------
-			const Matrix4x4Old & GetTransform() const;
+			const Matrix4 & GetTransform() const;
 			//----------------------------------------------- 
 			/// Set Transform
 			///
@@ -419,7 +419,7 @@ namespace ChilliSource
 			/// to world space
 			/// @param To world matrix
 			//-----------------------------------------------
-			void SetTransform(const Matrix4x4Old& inmatTransform);
+			void SetTransform(const Matrix4& inmatTransform);
 			
 			//-----------------------------------------------
 			/// Contains (Point)
@@ -443,7 +443,7 @@ namespace ChilliSource
 			///AABB in Local Space
             AABB mHitBox;
 			
-            Matrix4x4Old mmatLocal;
+            Matrix4 mmatLocal;
 		};
 		//===============================================
 		/// Ray
@@ -527,7 +527,7 @@ namespace ChilliSource
 			///
 			/// @param View projection matrix
 			//----------------------------------------------------------
-			void CalculateClippingPlanes(const Core::Matrix4x4Old& inmatViewProj);
+			void CalculateClippingPlanes(const Core::Matrix4& inmatViewProj);
 			//----------------------------------------------------------
 			/// Sphere Cull Test
 			///

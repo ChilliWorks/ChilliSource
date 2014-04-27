@@ -13,7 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
-#include <ChilliSource/Core/Math/Matrix4x4Old.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
@@ -46,7 +46,7 @@ namespace ChilliSource
 			ChilliSource::Core::Vector3 mvMaxBounds;
 			u8* mpVertexData;
 			u8* mpIndexData;
-			std::vector<ChilliSource::Core::Matrix4x4Old> mInverseBindPoseMatrices;
+			std::vector<ChilliSource::Core::Matrix4> mInverseBindPoseMatrices;
 			PrimitiveType ePrimitiveType;            
 		};
         //-------------------------------------------------------------------------

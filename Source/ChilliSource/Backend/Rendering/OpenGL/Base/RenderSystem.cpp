@@ -272,7 +272,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Joints
         //----------------------------------------------------------
-        void RenderSystem::ApplyJoints(const std::vector<Core::Matrix4x4Old>& inaJoints)
+        void RenderSystem::ApplyJoints(const std::vector<Core::Matrix4>& inaJoints)
         {
             CS_ASSERT(m_currentShader != nullptr,  "Cannot set joints without binding shader");
             
@@ -441,13 +441,13 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Apply Camera
 		//----------------------------------------------------------
-		void RenderSystem::ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4x4Old& inmatView, const Core::Matrix4x4Old& inmatProj, const Core::Colour& inClearCol)
+		void RenderSystem::ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4& inmatView, const Core::Matrix4& inmatProj, const Core::Colour& inClearCol)
 		{
 			//Set the new view matrix based on the camera position
 			mmatView = inmatView;
 			mmatProj = inmatProj;
             mvCameraPos = invPosition;
-            Core::Matrix4x4Old::Multiply(&mmatView, &mmatProj, &mmatViewProj);
+			mmatViewProj = mmatView * mmatProj;
 			
 			//Set the clear colour
             mNewClearColour = inClearCol;
@@ -519,7 +519,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Vertex Buffer
         //----------------------------------------------------------
-        void RenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4Old& inmatWorld)
+        void RenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
             Debugging::DebugStats::AddToEvent("DrawCalls", 1u);
@@ -527,13 +527,13 @@ namespace ChilliSource
 #endif
             
 			//Set the new model view matrix based on the camera view matrix and the object matrix
-            static Core::Matrix4x4Old matWorldViewProj;
-            Core::Matrix4x4Old::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
+            static Core::Matrix4 matWorldViewProj;
+			matWorldViewProj = inmatWorld * mmatViewProj;
             m_currentShader->SetUniform("u_wvpMat", matWorldViewProj, Shader::UniformNotFoundPolicy::k_failSilent);
             m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
             if(m_currentShader->HasUniform("u_normalMat"))
             {
-                m_currentShader->SetUniform("u_normalMat", inmatWorld.Inverse().GetTranspose());
+                m_currentShader->SetUniform("u_normalMat", inmatWorld.InverseCopy().TransposeCopy());
             }
             
 			EnableVertexAttributeForSemantic(inpBuffer);
@@ -544,20 +544,20 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Buffer
         //----------------------------------------------------------
-        void RenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4Old& inmatWorld)
+        void RenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
             Debugging::DebugStats::AddToEvent("DrawCalls", 1u);
 #endif
 
 			//Set the new model view matrix based on the camera view matrix and the object matrix
-            static Core::Matrix4x4Old matWorldViewProj;
-            Core::Matrix4x4Old::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
+            static Core::Matrix4 matWorldViewProj;
+			matWorldViewProj = inmatWorld * mmatViewProj; 
             m_currentShader->SetUniform("u_wvpMat", matWorldViewProj, Shader::UniformNotFoundPolicy::k_failSilent);
             m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
             if(m_currentShader->HasUniform("u_normalMat"))
             {
-                m_currentShader->SetUniform("u_normalMat", inmatWorld.Inverse().GetTranspose());
+                m_currentShader->SetUniform("u_normalMat", inmatWorld.InverseCopy().TransposeCopy());
             }
             
 			//Render the buffer contents

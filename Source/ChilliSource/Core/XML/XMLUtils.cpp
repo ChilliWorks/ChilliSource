@@ -167,7 +167,7 @@ namespace ChilliSource
 				return inDefault;
 			}
 		}
-		template <> const Matrix4x4Old XMLUtils::GetAttributeValueOrDefault<Matrix4x4Old>(TiXmlElement* inpElement, const std::string & inAttributeName, const Matrix4x4Old & inDefault)
+		template <> const Matrix4 XMLUtils::GetAttributeValueOrDefault<Matrix4>(TiXmlElement* inpElement, const std::string & inAttributeName, const Matrix4 & inDefault)
 		{
 			std::string Result;
 			
@@ -177,12 +177,12 @@ namespace ChilliSource
 				return inDefault;
 			}
 		}
-		template <> const QuaternionOld XMLUtils::GetAttributeValueOrDefault<QuaternionOld>(TiXmlElement* inpElement, const std::string & inAttributeName, const QuaternionOld & inDefault)
+		template <> const Quaternion XMLUtils::GetAttributeValueOrDefault<Quaternion>(TiXmlElement* inpElement, const std::string & inAttributeName, const Quaternion & inDefault)
 		{
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return ParseQuaternionOld(Result);
+				return ParseQuaternion(Result);
 			} else {
 				return inDefault;
 			}

@@ -69,7 +69,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		Core::Ray CameraComponent::Unproject(const Core::Vector2 &invScreenPos)
 		{
-            Core::Matrix4x4Old matProj = (GetView() * GetProjection()).Inverse();
+            Core::Matrix4 matProj = (GetView() * GetProjection()).InverseCopy();
             
             Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
 			//Normalise the screen space co-ordinates into clip space
@@ -103,7 +103,7 @@ namespace ChilliSource
 		Core::Vector2 CameraComponent::Project(const Core::Vector3 &invWorldPos)
 		{
 			//Convert the world space position to clip space
-			Core::Matrix4x4Old matToClip = (GetView() * GetProjection());
+			Core::Matrix4 matToClip = (GetView() * GetProjection());
 			Core::Vector4 vScreenPos = Core::Vector4(invWorldPos, 1.0f) * matToClip;
 			
             Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
@@ -191,7 +191,7 @@ namespace ChilliSource
 			f32 F = (2.0f * mDesc.fNearClipping)/(Top - Bottom);
 			f32 G = (2.0f * mDesc.fNearClipping)/(Right - Left);
 
-			mmatProj = Core::Matrix4x4Old
+			mmatProj = Core::Matrix4
 				(
 				G, 0, 0, 0, 
 				0, F, 0, 0, 
@@ -208,7 +208,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::CalculateOrthographicMatrix()
 		{
-			mmatOrthoProj = Core::Matrix4x4Old::CreateOrthoMatrix(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
+			mmatOrthoProj = Core::Matrix4::CreateOrthographicProjectionRH(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
 			mbProjectionCacheValid = true;
 		}
 		//------------------------------------------------------
@@ -231,7 +231,7 @@ namespace ChilliSource
 		///
 		/// @return Orthographic projection matrix
 		//------------------------------------------------------
-		const Core::Matrix4x4Old& CameraComponent::GetOrthoProjection() const
+		const Core::Matrix4& CameraComponent::GetOrthoProjection() const
 		{
 			return mmatOrthoProj;
 		}
@@ -243,7 +243,7 @@ namespace ChilliSource
 		/// 
 		/// @return Projection matrix
 		//------------------------------------------------------
-		const Core::Matrix4x4Old& CameraComponent::GetProjection() 
+		const Core::Matrix4& CameraComponent::GetProjection() 
 		{
 			if(!mbProjectionCacheValid)
 			{
@@ -268,11 +268,11 @@ namespace ChilliSource
 		///
 		/// @return View matrix
 		//------------------------------------------------------
-		const Core::Matrix4x4Old& CameraComponent::GetView()
+		const Core::Matrix4& CameraComponent::GetView()
 		{
 			if(GetEntity())
 			{
-				mmatView = GetEntity()->GetTransform().GetWorldTransform().Inverse();
+				mmatView = GetEntity()->GetTransform().GetWorldTransform().InverseCopy();
 			}
 
 			return mmatView;
@@ -293,7 +293,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::UpdateFrustum()
 		{
-			Core::Matrix4x4Old::Multiply(&GetView(), &GetProjection(), &mmatViewProj);
+			mmatViewProj = GetView() * GetProjection();
 
 			//Re-calculate the clip planes
 			mFrustum.CalculateClippingPlanes(mmatViewProj);
@@ -304,10 +304,10 @@ namespace ChilliSource
 		/// Orientate the given matrix to face the cameras
 		/// view vector
 		//------------------------------------------------------
-		void CameraComponent::Billboard(const Core::Matrix4x4Old& inmatBillboarded, Core::Matrix4x4Old& outmatBillboarded)
+		void CameraComponent::Billboard(const Core::Matrix4& inmatBillboarded, Core::Matrix4& outmatBillboarded)
 		{
-            const Core::Matrix4x4Old matView = GetView();
-            Core::Matrix4x4Old::Multiply(&inmatBillboarded, &matView, &outmatBillboarded);
+            const Core::Matrix4 matView = GetView();
+			outmatBillboarded = inmatBillboarded * matView;
             
 			outmatBillboarded.m[12] = inmatBillboarded.m[12];
 			outmatBillboarded.m[13] = inmatBillboarded.m[13];

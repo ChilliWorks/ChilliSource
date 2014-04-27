@@ -178,6 +178,12 @@ namespace ChilliSource
 			/// @param the rotation.
 			//-----------------------------------------------------
 			void Rotate(TType in_angle);
+			//------------------------------------------------------
+			/// @author S Dowie
+			///
+			/// @param The translation part of the transform. 
+			//------------------------------------------------------
+			GenericVector2<TType> GetTranslation() const;
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -189,6 +195,17 @@ namespace ChilliSource
 			/// the value at position in_row * 3 + in_column.
 			//-----------------------------------------------------
 			TType& operator()(u32 in_row, u32 in_column);
+			//-----------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param The row index.
+			/// @param The column index.
+			///
+			/// @return The value at the given position in the
+			/// matrix. Matrices are row major so this equates to
+			/// the value at position in_row * 3 + in_column.
+			//-----------------------------------------------------
+			TType operator()(u32 in_row, u32 in_column) const;
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -353,9 +370,22 @@ namespace ChilliSource
 		{
 			*this *= CreateRotation(in_angle);
 		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericVector2<TType> GenericMatrix3<TType>::GetTranslation() const
+		{
+			return GenericVector2<TType>(m[6], m[7]);
+		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> TType& GenericMatrix3<TType>::operator()(u32 in_row, u32 in_column)
+		{
+			CS_ASSERT(in_row >= 0 && in_row < 3 && in_column >= 0 && in_column < 3, "Trying to access matrix value at [" + ToString(in_row) + ", " + ToString(in_column) + "]");
+			return m[in_column + in_row * 3];
+		}
+		//-----------------------------------------------------
+		//-----------------------------------------------------
+		template <typename TType> TType GenericMatrix3<TType>::operator()(u32 in_row, u32 in_column) const
 		{
 			CS_ASSERT(in_row >= 0 && in_row < 3 && in_column >= 0 && in_column < 3, "Trying to access matrix value at [" + ToString(in_row) + ", " + ToString(in_column) + "]");
 			return m[in_column + in_row * 3];

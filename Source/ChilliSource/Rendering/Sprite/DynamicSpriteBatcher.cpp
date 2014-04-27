@@ -47,7 +47,7 @@ namespace ChilliSource
         ///
         /// @param Sprite data to batch
         //-------------------------------------------------------
-		void DynamicSpriteBatch::Render(const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4x4Old * inpTransform)
+		void DynamicSpriteBatch::Render(const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4 * inpTransform)
 		{
             //If we exceed the capacity of the buffer then we will be forced to flush it
             if(maSpriteCache.size() >= kudwMaxSpritesInDynamicBatch)
@@ -67,7 +67,7 @@ namespace ChilliSource
             if(inpTransform)
             {
                 for(u32 i = 0; i < kudwVertsPerSprite; i++)
-                    Core::Matrix4x4Old::Multiply(&inpSprite.sVerts[i].vPos, inpTransform, &maSpriteCache.back().sVerts[i].vPos);
+					maSpriteCache.back().sVerts[i].vPos = inpSprite.sVerts[i].vPos * *inpTransform;
             }
             mpLastMaterial = inpSprite.pMaterial;
             ++mudwSpriteCommandCounter;

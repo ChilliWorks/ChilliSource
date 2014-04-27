@@ -475,10 +475,10 @@ namespace ChilliSource
 		/// Container for an object oriented bounding box 
 		/// with it's origin at centre
 		//================================================
-		OOBB::OOBB() :  mHitBox(Vector3(1,1,1), Vector3::k_zero), mmatLocal(Matrix4x4Old::IDENTITY)
+		OOBB::OOBB() :  mHitBox(Vector3(1,1,1), Vector3::k_zero), mmatLocal(Matrix4::k_identity)
 		{
 		}
-		OOBB::OOBB(const Core::Vector3 &invOrigin, const Core::Vector3 &invSize) : mHitBox(invOrigin,invSize), mmatLocal(Matrix4x4Old::IDENTITY)
+		OOBB::OOBB(const Core::Vector3 &invOrigin, const Core::Vector3 &invSize) : mHitBox(invOrigin, invSize), mmatLocal(Matrix4::k_identity)
 		{
 		}
 		//-----------------------------------------------
@@ -491,7 +491,7 @@ namespace ChilliSource
 		{
 			//Convert the point into our local space
 			//allowing us to do an AABB check
-			Matrix4x4Old matToLocal = GetTransform().Inverse();
+			Matrix4 matToLocal = GetTransform().InverseCopy();
 			
 			Vector3 LocalPoint = invPoint * matToLocal;
 			
@@ -509,7 +509,7 @@ namespace ChilliSource
 		{
 			//Matrix to transform from world space to this objects local space
 			//In local space the OOBB is simply an AABB
-			Matrix4x4Old matToLocal = GetTransform().Inverse();
+			Matrix4 matToLocal = GetTransform().InverseCopy();
 
 			//Convert the ray into our local space
 			//allowing us to do an AABB check
@@ -575,7 +575,7 @@ namespace ChilliSource
 		/// to world space
 		/// @param To world matrix
 		//-----------------------------------------------
-		void OOBB::SetTransform(const Matrix4x4Old& inmatTransform)
+		void OOBB::SetTransform(const Matrix4& inmatTransform)
 		{
 			mmatLocal = inmatTransform;
 		}
@@ -586,7 +586,7 @@ namespace ChilliSource
 		/// object to world space
 		/// @return To world matrix
 		//-----------------------------------------------
-		const Matrix4x4Old& OOBB::GetTransform() const
+		const Matrix4& OOBB::GetTransform() const
 		{			
 			return mmatLocal;
 		}
@@ -704,7 +704,7 @@ namespace ChilliSource
 		///
 		/// @param View projection matrix
 		//----------------------------------------------------------
-		void Frustum::CalculateClippingPlanes(const Core::Matrix4x4Old& inmatViewProj)
+		void Frustum::CalculateClippingPlanes(const Core::Matrix4& inmatViewProj)
 		{
 			f32 t = 0.0f;
 

@@ -44,8 +44,8 @@ namespace ChilliSource
             vUp.Normalise();
             vRight.Normalise();
             
-            Core::QuaternionOld cRot(vRight, vUp, vForward);
-            cRot.NormaliseSelf();
+            Core::Quaternion cRot(vRight, vUp, vForward);
+            cRot.Normalise();
             
             SetPositionScaleOrientation(invPos, mvScale, cRot);
 		}
@@ -56,7 +56,7 @@ namespace ChilliSource
         /// @param Scale vector
         /// @param Orientation quaternion
         //----------------------------------------------------------------
-        void Transform::SetPositionScaleOrientation(const Vector3& invPos, const Vector3& invScale, const QuaternionOld& invOrientation)
+        void Transform::SetPositionScaleOrientation(const Vector3& invPos, const Vector3& invScale, const Quaternion& invOrientation)
         {
             mvPosition = invPos;
             mvScale = invScale;
@@ -149,7 +149,7 @@ namespace ChilliSource
 		///
 		/// @return Orientation quaternion
 		//----------------------------------------------------------------
-		const QuaternionOld& Transform::GetLocalOrientation() const
+		const Quaternion& Transform::GetLocalOrientation() const
 		{
 			return mqOrientation;
 		}
@@ -158,11 +158,11 @@ namespace ChilliSource
 		///
 		/// @return Orientation quaternion relative to parent
 		//----------------------------------------------------------------
-		const QuaternionOld& Transform::GetWorldOrientation() const
+		const Quaternion& Transform::GetWorldOrientation() const
 		{
             if(mpParentTransform)
             {
-                mqWorldOrientation = Core::QuaternionOld(GetWorldTransform());
+                mqWorldOrientation = Core::Quaternion(GetWorldTransform());
                 return mqWorldOrientation;
             }
             
@@ -199,7 +199,7 @@ namespace ChilliSource
 		///
 		/// @param Orientation quaternion
 		//----------------------------------------------------------------
-		void Transform::SetOrientation(const QuaternionOld & inqOrientation)
+		void Transform::SetOrientation(const Quaternion & inqOrientation)
 		{
             if(mqOrientation == inqOrientation)
                 return;
@@ -265,7 +265,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void Transform::RotateBy(const Vector3 &vAxis, f32 infAngleRads)
 		{
-			mqOrientation = mqOrientation * QuaternionOld(vAxis,infAngleRads);
+			mqOrientation = mqOrientation * Quaternion(vAxis,infAngleRads);
 			
 			OnTransformChanged();
 		}
@@ -293,7 +293,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void Transform::RotateTo(const Vector3 &vAxis, f32 infAngleRads)
 		{
-			mqOrientation = QuaternionOld(vAxis,infAngleRads);
+			mqOrientation = Quaternion(vAxis,infAngleRads);
 			
 			OnTransformChanged();
 		}
@@ -460,13 +460,13 @@ namespace ChilliSource
         ///
         /// @return The currently cached transform (rebuilds if invalid)
         //----------------------------------------------------------------
-        const Matrix4x4Old& Transform::GetLocalTransform() const
+        const Matrix4& Transform::GetLocalTransform() const
         {
             //Check if the transform needs to be re-calculated
             if(!mbIsTransformCacheValid)
             {
                 mbIsTransformCacheValid = true;
-                mmatTransform.SetTransform(mvPosition, mvScale, mqOrientation);
+                mmatTransform = Matrix4::CreateTransform(mvPosition, mvScale, mqOrientation);
             }
             
             return mmatTransform;
@@ -476,7 +476,7 @@ namespace ChilliSource
         ///
         /// @return The tranform in relation to its parent transform
         //----------------------------------------------------------------
-        const Matrix4x4Old& Transform::GetWorldTransform() const
+        const Matrix4& Transform::GetWorldTransform() const
         {
             //If we have a parent transform we must apply it to
             //our local transform to get the relative transformation
@@ -488,13 +488,13 @@ namespace ChilliSource
                     mbIsParentTransformCacheValid = true;
 					
                     //Calculate the relative transform with our new parent transform
-                    Matrix4x4Old::Multiply(&GetLocalTransform(), &mpParentTransform->GetWorldTransform(), &mmatWorldTransform);
+					mmatWorldTransform = GetLocalTransform() * mpParentTransform->GetWorldTransform();
                 }
                 //Our local transform has changed therefore we must update
                 else if(!mbIsTransformCacheValid)
                 {
                     //Calculate the relative transformation from our cached parent
-                    Matrix4x4Old::Multiply(&GetLocalTransform(), &mpParentTransform->GetWorldTransform(), &mmatWorldTransform);
+					mmatWorldTransform = GetLocalTransform() * mpParentTransform->GetWorldTransform();
                 }
             }
             //We do not have a parent so our relative transform is actually just our local one
@@ -512,9 +512,9 @@ namespace ChilliSource
         ///
         /// @param Objects transformation matrix
         //----------------------------------------------------------------
-        void Transform::SetWorldTransform(const Matrix4x4Old& inmatTransform)
+        void Transform::SetWorldTransform(const Matrix4& inmatTransform)
         {
-            inmatTransform.DecomposeTransforms(mvWorldPosition, mvWorldScale, mqWorldOrientation);
+            inmatTransform.Decompose(mvWorldPosition, mvWorldScale, mqWorldOrientation);
             
             mmatWorldTransform = inmatTransform;
             
@@ -530,9 +530,9 @@ namespace ChilliSource
         ///
         /// @param Objects transformation matrix
         //----------------------------------------------------------------
-        void Transform::SetLocalTransform(const Matrix4x4Old& inmatTransform)
+        void Transform::SetLocalTransform(const Matrix4& inmatTransform)
         {
-            inmatTransform.DecomposeTransforms(mvPosition, mvScale, mqOrientation);
+            inmatTransform.Decompose(mvPosition, mvScale, mqOrientation);
             
             mmatTransform = inmatTransform;
             
@@ -670,7 +670,7 @@ namespace ChilliSource
             mbIsParentTransformCacheValid = false;
             mvPosition = Vector3::k_zero;
             mvScale = Vector3::k_one;
-            mqWorldOrientation = QuaternionOld::IDENTITY;
+            mqWorldOrientation = Quaternion::k_identity;
             mpParentTransform = nullptr;
             mfOpacity = 1.0f;
             mChildTransforms.clear();

@@ -398,25 +398,25 @@ namespace ChilliSource
             Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
             Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
 			vTemp += vCentrePos;
-            Core::Matrix4x4Old::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topLeft]);
+			mavVertexPos[(u32)Verts::k_topLeft] = vTemp * mmatTransformCache;
             
             vTemp.x = vHalfSize.x;
             vTemp.y = vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::Matrix4x4Old::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topRight]);
+			mavVertexPos[(u32)Verts::k_topRight] = vTemp * mmatTransformCache;
             
             vTemp.x = -vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::Matrix4x4Old::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomLeft]);
+			mavVertexPos[(u32)Verts::k_bottomLeft] = vTemp * mmatTransformCache;
             
             vTemp.x = vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::Matrix4x4Old::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomRight]);
+			mavVertexPos[(u32)Verts::k_bottomRight] = vTemp * mmatTransformCache;
             
 			mbCornerPosCacheValid = true;
             

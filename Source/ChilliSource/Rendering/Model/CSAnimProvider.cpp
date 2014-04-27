@@ -9,7 +9,7 @@
 #include <ChilliSource/Rendering/Model/CSAnimProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Math/QuaternionOld.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
@@ -67,7 +67,7 @@ namespace ChilliSource
                         translation.z = ReadValue<f32>(in_fileStream);
                         
                         //create new orientation
-                        Core::QuaternionOld orientation;
+                        Core::Quaternion orientation;
                         orientation.x = ReadValue<f32>(in_fileStream);
                         orientation.y = ReadValue<f32>(in_fileStream);
                         orientation.z = ReadValue<f32>(in_fileStream);

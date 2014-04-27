@@ -11,7 +11,7 @@
 #define _MOFLO_RENDERING_RENDERERSORTPREDICATES_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Matrix4x4Old.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
 
 #include <vector>
 
@@ -53,7 +53,7 @@ namespace ChilliSource
             void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) override;
             bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const override;
 		private:
-			Core::Matrix4x4Old mCameraViewProj;
+			Core::Matrix4 mCameraViewProj;
 		};
         
         //---------------------------------------------------------

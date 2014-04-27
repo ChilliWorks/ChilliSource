@@ -170,13 +170,13 @@ namespace ChilliSource
 			///
 			/// @return Projection matrix
 			//------------------------------------------------------
-			const Core::Matrix4x4Old& GetProjection();
+			const Core::Matrix4& GetProjection();
 			//------------------------------------------------------
 			/// Get View 
 			///
 			/// @return View matrix
 			//------------------------------------------------------
-			const Core::Matrix4x4Old& GetView();
+			const Core::Matrix4& GetView();
 			//------------------------------------------------------
 			/// Set Viewport Orientation
 			///
@@ -190,7 +190,7 @@ namespace ChilliSource
 			///
 			/// @return Orthographic projection matrix
 			//------------------------------------------------------
-			const Core::Matrix4x4Old& GetOrthoProjection() const;
+			const Core::Matrix4& GetOrthoProjection() const;
 			//------------------------------------------------------
 			/// Unproject
 			///
@@ -226,7 +226,7 @@ namespace ChilliSource
             /// Orientate the given matrix to face the cameras
             /// view vector
             //------------------------------------------------------
-            void Billboard(const Core::Matrix4x4Old& inmatBillboarded, Core::Matrix4x4Old& outmatBillboarded);
+            void Billboard(const Core::Matrix4& inmatBillboarded, Core::Matrix4& outmatBillboarded);
 
 			CameraDescription& GetDescription() { return mDesc; }
             
@@ -297,10 +297,10 @@ namespace ChilliSource
 			
 			Core::ScreenOrientation mViewOrientation;
 			
-			Core::Matrix4x4Old mmatOrthoProj; //Ortho projection matrix;
-			Core::Matrix4x4Old mmatProj;		//Projection matrix depending on whether we are an ortho or perspective camera
-			Core::Matrix4x4Old mmatView;		//View matrix
-			Core::Matrix4x4Old mmatViewProj;	//View projection;
+			Core::Matrix4 mmatOrthoProj; //Ortho projection matrix;
+			Core::Matrix4 mmatProj;		//Projection matrix depending on whether we are an ortho or perspective camera
+			Core::Matrix4 mmatView;		//View matrix
+			Core::Matrix4 mmatViewProj;	//View projection;
             
             Core::ConnectionUPtr m_screenOrientationChangedConnection;
             Core::ConnectionUPtr m_screenResizedConnection;

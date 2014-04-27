@@ -489,8 +489,8 @@ namespace ChilliSource
 		template <typename TType> GenericVector3<TType> GenericVector3<TType>::Rotate(const GenericVector3<TType>& in_a, const GenericQuaternion<TType>& in_b)
 		{
 			GenericVector3<TType> xyzA(in_b.x, in_b.y, in_b.z);
-			GenericVector3<TType> t = 2 * CrossProduct(xyzA, in_a);
-			return in_a + in_b.W * t + CrossProduct(xyzA, t);
+			GenericVector3<TType> t = ((TType)2) * CrossProduct(xyzA, in_a);
+			return in_a + in_b.w * t + CrossProduct(xyzA, t);
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
@@ -629,10 +629,10 @@ namespace ChilliSource
 		template <typename TType> GenericVector3<TType>& GenericVector3<TType>::operator*=(const GenericMatrix4<TType>& in_b)
 		{
 			GenericVector3<TType> c = in_a;
-			in_a.X = c.X * in_b.m[0] + c.Y * in_b.m[4] + c.Z * in_b.m[8] + in_b.m[12];
-			in_a.Y = c.X * in_b.m[1] + c.Y * in_b.m[5] + c.Z * in_b.m[9] + in_b.m[13];
-			in_a.Z = c.X * in_b.m[2] + c.Y * in_b.m[6] + c.Z * in_b.m[10] + in_b.m[14];
-			TType oneOverW = 1 / (c.X * in_b.m[3] + c.Y * in_b.m[7] + c.Z * in_b.m[11] + in_b.m[15]);
+			in_a.x = c.x * in_b.m[0] + c.y * in_b.m[4] + c.z * in_b.m[8] + in_b.m[12];
+			in_a.y = c.x * in_b.m[1] + c.y * in_b.m[5] + c.z * in_b.m[9] + in_b.m[13];
+			in_a.z = c.x * in_b.m[2] + c.y * in_b.m[6] + c.z * in_b.m[10] + in_b.m[14];
+			TType oneOverW = 1 / (c.x * in_b.m[3] + c.y * in_b.m[7] + c.z * in_b.m[11] + in_b.m[15]);
 			in_a *= oneOverW;
 			return in_a;
 		}
@@ -683,10 +683,10 @@ namespace ChilliSource
 		template <typename TType> GenericVector3<TType> operator*(const GenericVector3<TType>& in_a, const GenericMatrix4<TType>& in_b)
 		{
 			GenericVector3<TType> c;
-			c.X = in_a.X * in_b.m[0] + in_a.Y * in_b.m[4] + in_a.Z * in_b.m[8] + in_b.m[12];
-			c.Y = in_a.X * in_b.m[1] + in_a.Y * in_b.m[5] + in_a.Z * in_b.m[9] + in_b.m[13];
-			c.Z = in_a.X * in_b.m[2] + in_a.Y * in_b.m[6] + in_a.Z * in_b.m[10] + in_b.m[14];
-			TType oneOverW = 1 / (in_a.X * in_b.m[3] + in_a.Y * in_b.m[7] + in_a.Z * in_b.m[11] + in_b.m[15]);
+			c.x = in_a.x * in_b.m[0] + in_a.y * in_b.m[4] + in_a.z * in_b.m[8] + in_b.m[12];
+			c.y = in_a.x * in_b.m[1] + in_a.y * in_b.m[5] + in_a.z * in_b.m[9] + in_b.m[13];
+			c.z = in_a.x * in_b.m[2] + in_a.y * in_b.m[6] + in_a.z * in_b.m[10] + in_b.m[14];
+			TType oneOverW = 1 / (in_a.x * in_b.m[3] + in_a.y * in_b.m[7] + in_a.z * in_b.m[11] + in_b.m[15]);
 			c *= oneOverW;
 			return c;
 		}

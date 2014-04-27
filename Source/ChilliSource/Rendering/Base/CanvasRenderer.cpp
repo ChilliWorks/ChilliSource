@@ -169,7 +169,7 @@ namespace ChilliSource
         {
             msCachedSprite.pMaterial = GetGUIMaterialForTexture(inpTexture);
             
-			UpdateSpriteData(inmatTransform, invSize, inUVs, insTintColour, ineAlignment);
+			UpdateSpriteData(Core::Matrix4::CreateTransform(inmatTransform), invSize, inUVs, insTintColour, ineAlignment);
             
             //Draw us!
 			mOverlayBatcher.Render(msCachedSprite);
@@ -197,19 +197,17 @@ namespace ChilliSource
 							ineHorizontalJustification, ineVerticalJustification, inbFlipVertical, ineBehaviour, outpClipped,outpInvalidCharacterFound);
             }
             
-            Core::Matrix4x4Old matTransform(inmatTransform);
-            Core::Matrix4x4Old matTransformedLocal;
+			Core::Matrix4 matTransform = Core::Matrix4::CreateTransform(inmatTransform);
+            Core::Matrix4 matTransformedLocal;
 			
             //Build each character sprite from the draw info
 			for (u32 nChar = 0; nChar < outCharCache.size(); nChar++)
             {
-				Core::Matrix4x4Old matLocal;
-                
                 f32 fXPos = outCharCache[nChar].vPosition.x;
                 f32 fYPos = outCharCache[nChar].vPosition.y - outCharCache[nChar].vSize.y * 0.5f;
-				matLocal.Translate((fXPos), (fYPos), 0.0f);
+				Core::Matrix4 matLocal = Core::Matrix4::CreateTranslation(Core::Vector3(fXPos, fYPos, 0.0f));
                 
-                Core::Matrix4x4Old::Multiply(&matLocal, &matTransform, &matTransformedLocal);
+				matTransformedLocal = matLocal * matTransform;
                 
                 UpdateSpriteData(matTransformedLocal, outCharCache[nChar].vSize, outCharCache[nChar].sUVs, insColour, AlignmentAnchor::k_middleCentre);
 				
@@ -687,7 +685,7 @@ namespace ChilliSource
 		///
 		/// Rebuild the sprite data
 		//-----------------------------------------------------
-		void CanvasRenderer::UpdateSpriteData(const Core::Matrix4x4Old & inTransform, const Core::Vector2 & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
+		void CanvasRenderer::UpdateSpriteData(const Core::Matrix4 & inTransform, const Core::Vector2 & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
 		{
 			Core::ByteColour Col = Core::ColourUtils::ColourToByteColour(insTintColour);
 			
@@ -708,27 +706,27 @@ namespace ChilliSource
             Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
             Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
 			
-            const Core::Matrix4x4Old &matTransform(inTransform);
+            const Core::Matrix4 &matTransform(inTransform);
 			vTemp += vCentrePos;
-            Core::Matrix4x4Old::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos);
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = vTemp * matTransform;
             
             vTemp.x = vHalfSize.x;
             vTemp.y = vHalfSize.y;
 			
 			vTemp += vCentrePos;
-            Core::Matrix4x4Old::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos);
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos = vTemp * matTransform;
             
             vTemp.x = -vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 			
 			vTemp += vCentrePos;
-            Core::Matrix4x4Old::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos);
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos = vTemp * matTransform;
             
             vTemp.x = vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 			
 			vTemp += vCentrePos;
-            Core::Matrix4x4Old::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos);
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos = vTemp * matTransform;
 
 			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.z = -mfNearClippingDistance;
 			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.w = 1.0f;

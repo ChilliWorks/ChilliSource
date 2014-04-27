@@ -56,7 +56,7 @@ namespace ChilliSource
             ///
             /// @param Sprite data to batch
 			//-------------------------------------------------------
-			void Render(const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4x4Old * inpTransform = nullptr);
+			void Render(const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4 * inpTransform = nullptr);
             //-------------------------------------------------------
 			/// Enable scissoring with the given region. Any
             /// subsequent renders to the batcher will be clipped

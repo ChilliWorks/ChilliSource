@@ -181,7 +181,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		void Mesh::Render(RenderSystem* in_renderSystem, const Core::Matrix4x4Old& in_worldMat, const std::vector<MaterialCSPtr>& in_materials, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& in_animGroup) const
+		void Mesh::Render(RenderSystem* in_renderSystem, const Core::Matrix4& in_worldMat, const std::vector<MaterialCSPtr>& in_materials, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& in_animGroup) const
 		{
             CS_ASSERT(in_materials.size() > 0, "Must have at least one material to render");
 

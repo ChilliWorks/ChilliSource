@@ -62,7 +62,7 @@ namespace ChilliSource
 			{
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
-                const Core::Matrix4x4Old& matWorld = GetEntity()->GetTransform().GetWorldTransform();
+                const Core::Matrix4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
                 Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
                 Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
                 Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
@@ -728,7 +728,7 @@ namespace ChilliSource
                     {
                         s32 dwNodeIndex = it->second;
                         
-                        const Core::Matrix4x4Old& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
+                        const Core::Matrix4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
                         pEntity->GetTransform().SetLocalTransform(matTransform);
                         ++it;
                     }

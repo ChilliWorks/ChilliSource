@@ -456,7 +456,7 @@ namespace ChilliSource
 			rotation.m[9] = in_zAxis.y;
 			rotation.m[10] = in_zAxis.z;
 
-			(*this) = QuaternionOld(rotation);
+			(*this) = Quaternion(rotation);
 		}
 		//-----------------------------------------------
 		// Algorithm in Ken Shoemake's article in 1987 
@@ -471,8 +471,8 @@ namespace ChilliSource
 			if (trace > 0)
 			{
 				root = std::sqrt(trace + 1); 
-				w = 0.5 * root;
-				root = 0.5 / root;
+				w = (TType)0.5 * root;
+				root = (TType)0.5 / root;
 				x = (in_rotation.m[6] - in_rotation.m[9]) * root;
 				y = (in_rotation.m[8] - in_rotation.m[2]) * root;
 				z = (in_rotation.m[1] - in_rotation.m[4]) * root;
@@ -495,8 +495,8 @@ namespace ChilliSource
 				root = std::sqrt(in_rotation(i, i) - in_rotation(j, j) - in_rotation(k, k) + 1);
 
 				f32* apkQuat[3] = { &x, &y, &z };
-				*apkQuat[i] = 0.5 * root;
-				root = 0.5 / root;
+				*apkQuat[i] = (TType)0.5 * root;
+				root = (TType)0.5 / root;
 				w = (in_rotation(j, k) - in_rotation(k, j)) * root;
 				*apkQuat[j] = (in_rotation(j, i) + in_rotation(i, j)) * root;
 				*apkQuat[k] = (in_rotation(k, i) + in_rotation(i, k)) * root;

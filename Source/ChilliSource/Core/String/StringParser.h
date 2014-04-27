@@ -13,8 +13,8 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>
-#include <ChilliSource/Core/Math/Matrix4x4Old.h>
-#include <ChilliSource/Core/Math/QuaternionOld.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
@@ -136,7 +136,7 @@ namespace ChilliSource
         ///
         /// @return The matrix value.
         //------------------------------------------------------------
-        Matrix4x4Old ParseMatrix4(const std::string& in_string);
+        Matrix4 ParseMatrix4(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a quaternion. The quaternion must be
         /// in the format "w x y z", i.e F32 values, space delimited.
@@ -148,7 +148,7 @@ namespace ChilliSource
         ///
         /// @return The quaternion value.
         //------------------------------------------------------------
-        QuaternionOld ParseQuaternionOld(const std::string& in_string);
+        Quaternion ParseQuaternion(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a colour. The colour must be
         /// in the format "r g b a", i.e F32 values, space delimited.
