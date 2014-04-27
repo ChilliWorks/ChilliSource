@@ -33,6 +33,8 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 
+#include <cmath>
+
 #if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
 #include <Accelerate/Accelerate.h>
 #endif
@@ -92,7 +94,7 @@ namespace ChilliSource
 			/// Creates a transform matrix, built out of a translation
 			/// scale and rotation.
 			///
-			/// @author I Copland
+			/// @author S Downie
 			///
 			/// @param The translation.
 			/// @param The scale.

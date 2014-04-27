@@ -30,7 +30,6 @@
 #define _CHILLLISOURCE_CORE_MATH_VECTOR3_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Vector2.h>
 
 #include <cmath>
 
@@ -122,7 +121,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static GenericVector3<TType> CrossProduct(const GenericVector3<TType>& in_a, const GenericVector3<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author S Downie
 			///
 			/// @param  A vector.
 			/// @param  Another vector.
@@ -136,12 +135,12 @@ namespace ChilliSource
 			///
 			/// @author I Copland
 			///
-			/// @param The quaternion.
 			/// @param The vector.
+			/// @param The quaternion.
 			///
-			/// @return The new vector.
+			/// @return The new vector after rotation.
 			//-----------------------------------------------------
-			//TODO: static GenericVector3<TType> Rotate(const GenericQuaternion<TType>& in_a, const GenericVector3<TType>& in_b);
+			static GenericVector3<TType> Rotate(const GenericVector3<TType>& in_a, const GenericQuaternion<TType>& in_b);
 			//-----------------------------------------------------
 			/// Constructor
 			///
@@ -261,6 +260,15 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
+			/// @param A matrix.
+			///
+			/// @return This vector after it has been multiplied
+			/// by the given matrix.
+			//-----------------------------------------------------
+			GenericVector3<TType>& operator*=(const GenericMatrix4<TType>& in_b);
+			//-----------------------------------------------------
+			/// @author I Copland
+			///
 			/// @param A scalar
 			///
 			/// @return This vector after it has been multiplied
@@ -282,6 +290,112 @@ namespace ChilliSource
 			TType z;
 		};
 
+		//-----------------------------------------------------
+		/// @author I Copland
+		///
+		/// @param The vector A.
+		/// @param The vector B.
+		///
+		/// @return The result of A + B.
+		//-----------------------------------------------------
+		template <typename TType> GenericVector3<TType> operator+(GenericVector3<TType> in_a, const GenericVector3<TType>& in_b);
+		//-----------------------------------------------------
+		/// @author I Copland
+		///
+		/// @param The vector A.
+		/// @param The vector B.
+		///
+		/// @return The result of A - B.
+		//-----------------------------------------------------
+		template <typename TType> GenericVector3<TType> operator-(GenericVector3<TType> in_a, const GenericVector3<TType>& in_b);
+		//-----------------------------------------------------
+		/// @author I Copland
+		///
+		/// @param The vector A.
+		/// @param The vector B.
+		///
+		/// @return The result of A * B.
+		//-----------------------------------------------------
+		template <typename TType> GenericVector3<TType> operator*(GenericVector3<TType> in_a, const GenericVector3<TType>& in_b);
+		//-----------------------------------------------------
+		/// @author I Copland
+		///
+		/// @param The vector A.
+		/// @param The vector B.
+		///
+		/// @return The result of A / B.
+		//-----------------------------------------------------
+		template <typename TType> GenericVector3<TType> operator/(GenericVector3<TType> in_a, const GenericVector3<TType>& in_b);
+		//-----------------------------------------------------
+		/// @author I Copland
+		///
+		/// @param The vector A.
+		/// @param The matrix B.
+		///
+		/// @return The result of A * B.
+		//-----------------------------------------------------
+		template <typename TType> GenericVector3<TType> operator*(const GenericVector3<TType>& in_a, const GenericMatrix4<TType>& in_b);
+		//-----------------------------------------------------
+		/// @author I Copland
+		///
+		/// @param The vector A.
+		/// @param The scalar B.
+		///
+		/// @return The result of A * B.
+		//-----------------------------------------------------
+		template <typename TType> GenericVector3<TType> operator*(GenericVector3<TType> in_a, TType in_b);
+		//-----------------------------------------------------
+		/// @author I Copland
+		///
+		/// @param The scalar A.
+		/// @param The vector B.
+		///
+		/// @return The result of A * B.
+		//-----------------------------------------------------
+		template <typename TType> GenericVector3<TType> operator*(TType in_a, GenericVector3<TType> in_b);
+		//-----------------------------------------------------
+		/// @author I Copland
+		///
+		/// @param The vector A.
+		/// @param The scalar B.
+		///
+		/// @return The result of A / B.
+		//-----------------------------------------------------
+		template <typename TType> GenericVector3<TType> operator/(GenericVector3<TType> in_a, TType in_b);
+		//-----------------------------------------------------
+		/// @author I Copland
+		///
+		/// @param The vector A.
+		/// @param The vector B.
+		///
+		/// @return Whether or not the two vectors are equal.
+		//-----------------------------------------------------
+		template <typename TType> bool operator==(const GenericVector3<TType>& in_a, const GenericVector3<TType>& in_b);
+		//-----------------------------------------------------
+		/// @author I Copland
+		///
+		/// @param The vector A.
+		/// @param The vector B.
+		///
+		/// @return Whether or not the two vectors are in-equal.
+		//-----------------------------------------------------
+		template <typename TType> bool operator!=(const GenericVector3<TType>& in_a, const GenericVector3<TType>& in_b);
+	}
+}
+
+//----------------------------------------------------
+// These are included here to avoid circular inclusion
+// issues. At this stage the class has been defined
+// which is enough for the classes included to use it.
+//----------------------------------------------------
+#include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+
+namespace ChilliSource
+{
+	namespace Core
+	{
 		template <typename TType> const GenericVector3<TType> GenericVector3<TType>::k_zero(0, 0, 0);
 		template <typename TType> const GenericVector3<TType> GenericVector3<TType>::k_one(1, 1, 1);
 		template <typename TType> const GenericVector3<TType> GenericVector3<TType>::k_unitPositiveX(1, 0, 0);
@@ -372,12 +486,12 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
-		//template <typename TType> GenericVector3<TType> GenericVector3<TType>::Rotate(const GenericQuaternion<TType>& in_a, const GenericVector3<TType>& in_b)
-		//{
-		//	GenericVector3<TType> xyzA(in_a.x, in_a.y, in_a.z);
-		//	GenericVector3<TType> t = static_cast<TType>(2) * CrossProduct(xyzA, in_b);
-		//	return in_b + in_a.W * t + CrossProduct(xyzA, t);
-		//}
+		template <typename TType> GenericVector3<TType> GenericVector3<TType>::Rotate(const GenericVector3<TType>& in_a, const GenericQuaternion<TType>& in_b)
+		{
+			GenericVector3<TType> xyzA(in_b.x, in_b.y, in_b.z);
+			GenericVector3<TType> t = 2 * CrossProduct(xyzA, in_a);
+			return in_a + in_b.W * t + CrossProduct(xyzA, t);
+		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector3<TType>::GenericVector3()
@@ -512,6 +626,18 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
+		template <typename TType> GenericVector3<TType>& GenericVector3<TType>::operator*=(const GenericMatrix4<TType>& in_b)
+		{
+			GenericVector3<TType> c = in_a;
+			in_a.X = c.X * in_b.m[0] + c.Y * in_b.m[4] + c.Z * in_b.m[8] + in_b.m[12];
+			in_a.Y = c.X * in_b.m[1] + c.Y * in_b.m[5] + c.Z * in_b.m[9] + in_b.m[13];
+			in_a.Z = c.X * in_b.m[2] + c.Y * in_b.m[6] + c.Z * in_b.m[10] + in_b.m[14];
+			TType oneOverW = 1 / (c.X * in_b.m[3] + c.Y * in_b.m[7] + c.Z * in_b.m[11] + in_b.m[15]);
+			in_a *= oneOverW;
+			return in_a;
+		}
+		//-----------------------------------------------------
+		//-----------------------------------------------------
 		template <typename TType> GenericVector3<TType>& GenericVector3<TType>::operator*=(TType in_b)
 		{
 			x *= in_b;
@@ -551,6 +677,18 @@ namespace ChilliSource
 		template <typename TType> GenericVector3<TType> operator/(GenericVector3<TType> in_a, const GenericVector3<TType>& in_b)
 		{
 			return (in_a /= in_b);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericVector3<TType> operator*(const GenericVector3<TType>& in_a, const GenericMatrix4<TType>& in_b)
+		{
+			GenericVector3<TType> c;
+			c.X = in_a.X * in_b.m[0] + in_a.Y * in_b.m[4] + in_a.Z * in_b.m[8] + in_b.m[12];
+			c.Y = in_a.X * in_b.m[1] + in_a.Y * in_b.m[5] + in_a.Z * in_b.m[9] + in_b.m[13];
+			c.Z = in_a.X * in_b.m[2] + in_a.Y * in_b.m[6] + in_a.Z * in_b.m[10] + in_b.m[14];
+			TType oneOverW = 1 / (in_a.X * in_b.m[3] + in_a.Y * in_b.m[7] + in_a.Z * in_b.m[11] + in_b.m[15]);
+			c *= oneOverW;
+			return c;
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------

@@ -123,7 +123,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static TType CrossProductZ(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author S Downie
 			///
 			/// @param  A vector.
 			/// @param  Another vector.
