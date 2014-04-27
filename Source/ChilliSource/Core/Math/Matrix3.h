@@ -33,6 +33,10 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 
+#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
+#include <Accelerate/Accelerate.h>
+#endif
+
 namespace ChilliSource
 {
 	namespace Core
@@ -182,7 +186,7 @@ namespace ChilliSource
 			/// matrix. Matrices are row major so this equates to
 			/// the value at position in_row * 3 + in_column.
 			//-----------------------------------------------------
-			TType operator()(u32 in_row, u32 in_column) const;
+			TType& operator()(u32 in_row, u32 in_column);
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -333,8 +337,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		template <typename TType> void GenericMatrix3<TType>::Translate(const GenericVector2<TType>& in_translation)
 		{
-			m[6] += in_translation.x;
-			m[7] += in_translation.y;
+			*this *= CreateTranslation(in_translation);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -350,7 +353,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
-		template <typename TType> TType GenericMatrix3<TType>::operator()(u32 in_row, u32 in_column) const
+		template <typename TType> TType& GenericMatrix3<TType>::operator()(u32 in_row, u32 in_column)
 		{
 			CS_ASSERT(in_row >= 0 && in_row < 3 && in_column >= 0 && in_column < 3, "Trying to access matrix value at [" + ToString(in_row) + ", " + ToString(in_column) + "]");
 			return m[in_column + in_row * 3];
