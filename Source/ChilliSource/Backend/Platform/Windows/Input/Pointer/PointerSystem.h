@@ -92,6 +92,7 @@ namespace ChilliSource
 			//------------------------------------------------
 			void OnDestroy() override;
 
+			Core::Screen* m_screen;
 			PointerId m_pointerId;
 		};
 	}

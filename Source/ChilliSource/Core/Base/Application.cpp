@@ -164,12 +164,7 @@ namespace ChilliSource
             s_application = this;
             
             m_componentFactoryDispenser = new ComponentFactoryDispenser(this);
-            
-#ifdef CS_TARGETPLATFORM_WINDOWS
-			//Because windows by default is landscape, this needs to be flipped.
-			m_defaultOrientation = Core::ScreenOrientation::k_portraitUp;
-#endif
-            
+
 			Logging::Create();
             
             GUI::GUIViewFactory::RegisterDefaults();
