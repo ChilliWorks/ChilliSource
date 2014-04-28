@@ -112,12 +112,6 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------
 			/// @author I Copland
 			///
-			/// @return Orientation as reported by the OS returned as an int (relates to CS orientation enum)
-			//--------------------------------------------------------------------------------------
-			s32 GetOrientation();
-			//--------------------------------------------------------------------------------------
-			/// @author I Copland
-			///
 			/// @return returns the screen width as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------

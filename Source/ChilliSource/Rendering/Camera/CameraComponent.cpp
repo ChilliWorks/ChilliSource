@@ -176,7 +176,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::CalculatePerspectiveMatrix()
 		{
-			f32 Top = mDesc.fNearClipping * (f32)tanf(mDesc.fFOV * Core::MathUtils::kPI / 360.0f);
+			f32 Top = mDesc.fNearClipping * (f32)tanf(mDesc.fFOV * 0.5f * Core::MathUtils::kPI / 360.0f);
 			f32 Bottom = -Top;
 			f32 Left = Bottom * mDesc.fAspect;
 			f32 Right = Top * mDesc.fAspect;	

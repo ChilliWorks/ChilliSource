@@ -362,7 +362,7 @@ namespace ChilliSource
 			CameraDescription desc;
 			desc.vViewSize = m_screen->GetResolution();
 			desc.fAspect = (desc.vViewSize.x/desc.vViewSize.y);
-			desc.fFOV = infFOV/desc.fAspect;
+			desc.fFOV = infFOV;
 			desc.fNearClipping = infNear;
 			desc.fFarClipping = infFar;
 			desc.ClearCol = Core::Colour::k_white;
