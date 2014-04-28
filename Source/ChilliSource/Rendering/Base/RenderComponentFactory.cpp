@@ -50,6 +50,9 @@ namespace ChilliSource
             
             mpRenderCapabilities = Core::Application::Get()->GetSystem<RenderCapabilities>();
             CS_ASSERT(mpRenderCapabilities, "Render Component Factory is missing required system: Render Capabilities.");
+            
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            CS_ASSERT(m_screen, "Render Component Factory is missing required system: Screen.");
         }
         //--------------------------------------------------------
         /// Is A
@@ -357,18 +360,16 @@ namespace ChilliSource
 		CameraComponentUPtr RenderComponentFactory::CreateCameraComponent(const f32 infFOV, const f32 infNear, const f32 infFar, bool inbIsOrthographic)
 		{
 			CameraDescription desc;
-			desc.vViewSize = Core::Screen::GetOrientedDimensions();
+			desc.vViewSize = m_screen->GetResolution();
 			desc.fAspect = (desc.vViewSize.x/desc.vViewSize.y);
-			desc.fFOV = infFOV/desc.fAspect;
+			desc.fFOV = infFOV;
 			desc.fNearClipping = infNear;
 			desc.fFarClipping = infFar;
 			desc.ClearCol = Core::Colour::k_white;
 			desc.IsOrthographic = inbIsOrthographic;
 			desc.bShouldResizeToScreen = true;
-			desc.bShouldRotateToScreen = true;
 			
 			CameraComponentUPtr pCamera(new CameraComponent(desc));
-			pCamera->SetViewportOrientation(Core::Screen::GetOrientation());
 			return pCamera;
 		}
         //---------------------------------------------------------------------------

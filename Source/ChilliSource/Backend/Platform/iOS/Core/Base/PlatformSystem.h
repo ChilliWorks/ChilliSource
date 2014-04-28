@@ -83,24 +83,6 @@ namespace ChilliSource
             //-----------------------------------------
             void TerminateUpdater() override;
             //-----------------------------------------
-			/// Retrieves the screen dimensions. These
-            /// dimensions are always in the default
-            /// orientation for the device.
-            ///
-            /// @author S Downie
-            ///
-			/// @return A Vector2 containing the screen
-            /// size in its x + y components
-			//-----------------------------------------
-			Core::Vector2 GetScreenDimensions() const override;
-			//-----------------------------------------
-			/// @author S Downie
-            ///
-            /// @return The density scale factor of the screen
-            /// to convert from DIPS to physical pixels
-            //-----------------------------------------
-            f32 GetScreenDensity() const override;
-            //-----------------------------------------
             /// @author S Downie
             ///
             /// @return The bundle version as found in
@@ -123,10 +105,6 @@ namespace ChilliSource
             /// @author S Downie
             //-----------------------------------------
             PlatformSystem();
-			
-		private:
-            
-            f32 m_physicalScreenSize;
 		};
 	}
 }

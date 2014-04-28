@@ -83,23 +83,6 @@ namespace ChilliSource
 			//-------------------------------------------------
 			void TerminateUpdater() override;
 			//-------------------------------------------------
-			/// Retrieves the screen dimensions. These dimensions 
-			/// are always in the default orientation for the device.
-			///
-			/// @author S Downie
-			///
-			/// @return A Vector2 containing the screen size in 
-			/// its x + y components
-			//-------------------------------------------------
-			Core::Vector2 GetScreenDimensions() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The density scale factor of the screen
-			/// to convert from DIPS to physical pixels
-			//-------------------------------------------------
-			f32 GetScreenDensity() const override;
-			//-------------------------------------------------
 	        /// @author S Downie
 	        ///
 	        /// @return The version of the application
@@ -123,16 +106,6 @@ namespace ChilliSource
 			PlatformSystem();
 
 			//---GLFW Delegates
-			//-------------------------------------------------
-			/// Triggered when glfw resizes the window
-			///
-			/// @author S Downie
-			///
-			/// @param Window width
-			/// @param Window Height
-			/// @param Window that resized
-			//-------------------------------------------------
-			static void OnWindowResized(GLFWwindow* in_window, s32 in_width, s32 in_height);
 			//-------------------------------------------------
 			/// Triggered when glfw exits the window
 			///

@@ -80,7 +80,7 @@ namespace ChilliSource
         //----------------------------------------------------
 		Application::Application()
         : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_resourcePool(nullptr),
-        m_renderer(nullptr), m_fileSystem(nullptr), m_stateManager(nullptr), m_taskScheduler(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_updateIntervalRemainder(0.0f),
+        m_renderer(nullptr), m_fileSystem(nullptr), m_stateManager(nullptr), m_taskScheduler(nullptr), m_updateIntervalRemainder(0.0f),
         m_shouldNotifyConnectionsResumeEvent(false), m_shouldNotifyConnectionsForegroundEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
 		{
 		}
@@ -164,12 +164,7 @@ namespace ChilliSource
             s_application = this;
             
             m_componentFactoryDispenser = new ComponentFactoryDispenser(this);
-            
-#ifdef CS_TARGETPLATFORM_WINDOWS
-			//Because windows by default is landscape, this needs to be flipped.
-			m_defaultOrientation = Core::ScreenOrientation::k_portraitUp;
-#endif
-            
+
 			Logging::Create();
             
             GUI::GUIViewFactory::RegisterDefaults();
@@ -178,13 +173,6 @@ namespace ChilliSource
             m_platformSystem = PlatformSystem::Create();
 			m_platformSystem->Init();
             
-			//Set the screen helper classes dimensions
-            Core::Screen::SetRawDimensions(m_platformSystem->GetScreenDimensions());
-            Core::Screen::SetOrientation(m_defaultOrientation);
-            Core::Screen::SetDensity(m_platformSystem->GetScreenDensity());
-
-            DetermineResourceDirectories();
-
 			//System setup
             m_isSystemCreationAllowed = true;
             CreateDefaultSystems();
@@ -202,8 +190,6 @@ namespace ChilliSource
             //TODO: Once renderer becomes a system we can remove this stuff from here
             m_renderer = Rendering::Renderer::Create(m_renderSystem);
             m_renderer->Init();
-
-			ScreenChangedOrientation(m_defaultOrientation);
 
             //initialise all of the application systems.
             for (const AppSystemUPtr& system : m_systems)
@@ -302,38 +288,6 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::ScreenChangedOrientation(ScreenOrientation in_orientation)
-		{
-			Screen::SetOrientation(in_orientation);
-            
-			if(m_renderSystem)
-			{
-				m_renderSystem->OnScreenOrientationChanged(Core::Screen::GetOrientedWidth(), Core::Screen::GetOrientedHeight());
-			}
-            
-			//Flip the screen
-			SetOrientation(in_orientation);
-			ApplicationEvents::GetScreenOrientationChangedEvent().NotifyConnections(in_orientation);
-            
-			CS_LOG_VERBOSE("Screen Oriented Notification");
-		}
-        //----------------------------------------------------
-        //----------------------------------------------------
-		void Application::ScreenResized(u32 in_width, u32 in_height)
-		{
-			Screen::SetRawDimensions(Core::Vector2((f32)in_width, (f32)in_height));
-
-			if (m_renderSystem)
-			{
-				m_renderSystem->OnScreenOrientationChanged(in_width, in_height);
-			}
-
-			ApplicationEvents::GetScreenResizedEvent().NotifyConnections(in_width, in_height);
-            
-			CS_LOG_VERBOSE("Screen resized Notification");
-		}
-        //----------------------------------------------------
-        //----------------------------------------------------
 		void Application::ApplicationMemoryWarning()
 		{
 			CS_LOG_VERBOSE("Memory Warning. Clearing resource cache...");
@@ -422,6 +376,11 @@ namespace ChilliSource
         {
             //Core
             CreateSystem<Device>();
+            CreateSystem<Screen>();
+            
+            //TODO: This should be moved to a separate system.
+            DetermineResourceDirectories();
+            
 			m_taskScheduler = CreateSystem<TaskScheduler>();
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
@@ -480,6 +439,8 @@ namespace ChilliSource
         //----------------------------------------------------
         void Application::LoadDefaultResources()
         {
+            //TODO: This should be moved to a separate system.
+            
             CS_ASSERT(m_resourcePool, "Resource pool must be available when loading default resources");
             
             Json::Value jRoot;
@@ -524,6 +485,8 @@ namespace ChilliSource
         //----------------------------------------------------
         void Application::DetermineResourceDirectories()
         {
+            //TODO: This should be moved to a separate system.
+            
             //Get a list of the resource directories and determine which one this device should be
             //loading from based on it's screen
             std::vector<ResourceDirectoryInfo> aDirectoryInfos;
@@ -536,8 +499,9 @@ namespace ChilliSource
                 return (in_lhs.m_maxRes < in_rhs.m_maxRes);
             });
             
-            u32 udwCurrentRes = Screen::GetOrientedWidth() * Screen::GetOrientedHeight();
-            f32 fCurrenctDensity = Screen::GetDensity();
+            Screen* screen = GetSystem<Screen>();
+            u32 udwCurrentRes = (u32)(screen->GetResolution().x * screen->GetResolution().y);
+            f32 fCurrenctDensity = screen->GetDensityScale();
             f32 fAssetDensity = 1.0f;
             for(std::vector<ResourceDirectoryInfo>::const_iterator it = aDirectoryInfos.begin(); it != aDirectoryInfos.end(); ++it)
             {
@@ -600,15 +564,6 @@ namespace ChilliSource
                 system->OnForeground();
             }
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
-		void Application::SetOrientation(ScreenOrientation in_orientation)
-		{
-			if(m_renderer->GetActiveCameraPtr())
-			{
-				m_renderer->GetActiveCameraPtr()->SetViewportOrientation(in_orientation);
-			}
-		}
         //----------------------------------------------------
         //----------------------------------------------------
 		Application::~Application()

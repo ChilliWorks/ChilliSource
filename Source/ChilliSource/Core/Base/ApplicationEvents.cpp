@@ -18,9 +18,7 @@ namespace ChilliSource
 
 		Event<ApplicationSystemDelegate> ApplicationEvents::mLowMemoryEvent;
 
-		Event<ApplicationScreenOrientationDelegate> ApplicationEvents::mScreenOrientationChangedEvent;
 		Event<ApplicationSystemDelegate> ApplicationEvents::mGoBackEvent;
-		Event<ApplicationScreenResizeDelegate> ApplicationEvents::mScreenResizedEvent;
 		Event<ApplicationReceivesURLDelegate> ApplicationEvents::mReceivesURLEvent;
 
 		//-----------------------------------------------------------------
@@ -59,24 +57,6 @@ namespace ChilliSource
 		Event<ApplicationSystemDelegate>& ApplicationEvents::GetLowMemoryEvent()
 		{
 			return mLowMemoryEvent;
-		}
-		//-----------------------------------------------------------------
-		/// Get Screen Resized Event
-		///
-		/// @return Event that is triggered when screen resizes
-		//-----------------------------------------------------------------
-		Event<ApplicationScreenResizeDelegate>& ApplicationEvents::GetScreenResizedEvent()
-		{
-			return mScreenResizedEvent;
-		}
-		//-----------------------------------------------------------------
-		/// Get Application Screen Orientation Event
-		///
-		/// @return Event that is triggered when screen rotates
-		//-----------------------------------------------------------------
-		Event<ApplicationScreenOrientationDelegate>& ApplicationEvents::GetScreenOrientationChangedEvent()
-		{
-			return mScreenOrientationChangedEvent;
 		}
 		//-----------------------------------------------------------------
 		/// Get Application Screen Orientation Event

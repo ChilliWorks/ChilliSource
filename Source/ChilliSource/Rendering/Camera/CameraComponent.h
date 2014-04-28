@@ -28,7 +28,6 @@ namespace ChilliSource
 			f32 fFarClipping;
 			
 			bool IsOrthographic;
-			bool bShouldRotateToScreen;
 			bool bShouldResizeToScreen;
 			
 			Core::Colour ClearCol; 
@@ -121,13 +120,6 @@ namespace ChilliSource
 			//------------------------------------------------------
 			void SetClearColour(const Core::Colour &inCol);
 			//------------------------------------------------------
-			/// Enable Viewport Rotation with Screen
-			///
-			/// @param Whether the viewport should rotate when
-			/// the screen rotates
-			//-----------------------------------------------------
-			void EnableViewportRotationWithScreen(bool inbEnable);
-			//------------------------------------------------------
 			/// Enable Viewport Resize with Screen
 			///
 			/// @param Whether the viewport should resize when
@@ -177,14 +169,6 @@ namespace ChilliSource
 			/// @return View matrix
 			//------------------------------------------------------
 			const Core::Matrix4x4& GetView();
-			//------------------------------------------------------
-			/// Set Viewport Orientation
-			///
-			/// Rotate the view matrix of this camera to match the 
-			/// screen orientation
-			/// @param Screen orientation flag
-			//------------------------------------------------------
-			void SetViewportOrientation(Core::ScreenOrientation ineOrientation);
 			//------------------------------------------------------
 			/// Get Orthographic Projection 
 			///
@@ -284,18 +268,25 @@ namespace ChilliSource
 			//------------------------------------------------------
 			/// Calculate Orthographic Matrix
 			///
-			/// 
+			///
 			//------------------------------------------------------
 			void CalculateOrthographicMatrix();
+            //------------------------------------------------------
+			/// Called when the resolution changes and resize with
+			/// screen is enabled.
+            ///
+			/// @author I Copland
+			//------------------------------------------------------
+			void OnResolutionChanged(const Core::Vector2& in_resolution);
 
 		private:
 			
+            Core::Screen* m_screen;
+            
 			bool mbProjectionCacheValid;
 			
 			CameraDescription mDesc;
 			Core::Frustum mFrustum;
-			
-			Core::ScreenOrientation mViewOrientation;
 			
 			Core::Matrix4x4 mmatOrthoProj; //Ortho projection matrix;
 			Core::Matrix4x4 mmatProj;		//Projection matrix depending on whether we are an ortho or perspective camera

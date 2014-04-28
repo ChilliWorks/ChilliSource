@@ -303,26 +303,6 @@ namespace ChilliSource
             /// @param The frame timestamp.
 			//----------------------------------------------------
 			void Update(f32 in_deltaTime, TimeIntervalSecs in_timestamp);
-            //----------------------------------------------------
-			/// Triggered on receiving a "orientation changed"
-            /// event. Used to tell the camera and input to rotate.
-            /// This should not be called by a users application.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The new orientation.
-			//----------------------------------------------------
-			void ScreenChangedOrientation(ScreenOrientation in_orientation);
-			//----------------------------------------------------
-			/// Triggered on receiving a "screen resized" event.
-            /// This should not be called by a users application.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The new width.
-            /// @param The new height.
-			//----------------------------------------------------
-			void ScreenResized(u32 in_width, u32 in_height);
 			//----------------------------------------------------
 			/// Triggered on receiving a "application memory warning"
             /// event. This will notify active resource managers to
@@ -472,16 +452,6 @@ namespace ChilliSource
             /// @author S Downie
             //---------------------------------------------------
             void OnForeground();
-            //------------------------------------------------------
-			/// Tell the active camera to roate its view and if we
-            /// are using touch input we must rotate the input
-            /// co-ordinates.
-            ///
-            /// @author S Downie
-            ///
-			/// @param Screen orientation flag
-			//------------------------------------------------------
-			void SetOrientation(ScreenOrientation inOrientation);
 
         private:
             std::vector<AppSystemUPtr> m_systems;
@@ -494,8 +464,6 @@ namespace ChilliSource
             PlatformSystemUPtr m_platformSystem;
             FileSystem* m_fileSystem;
             Input::PointerSystem* m_pointerSystem;
-
-			ScreenOrientation m_defaultOrientation;
             
             ComponentFactoryDispenser* m_componentFactoryDispenser;
 

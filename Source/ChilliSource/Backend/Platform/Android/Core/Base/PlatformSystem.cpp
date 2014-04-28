@@ -50,35 +50,6 @@ namespace ChilliSource
         {
         	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->ForceQuit();
         }
-		//---------------------------------------------
-		//---------------------------------------------
-		Core::Vector2 PlatformSystem::GetScreenDimensions() const
-		{
-			Core::Vector2 dims;
-			CoreJavaInterfaceSPtr coreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
-			dims.x = coreJI->GetScreenWidth();
-			dims.y = coreJI->GetScreenHeight();
-
-			s32 orientation = coreJI->GetOrientation();
-#ifdef CS_ENABLE_DEBUG
-			if(orientation < 0)
-				CS_LOG_ERROR("PlatformSystem::GetScreenDimensions() - Could not get orientation of device!");
-#endif
-			if(Core::ScreenOrientation::k_landscapeRight == (Core::ScreenOrientation)orientation)
-			{
-				// Swap round as we want dimensions the other way
-				std::swap(dims.x, dims.y);
-			}
-
-			return dims;
-		}
-
-		//-------------------------------------------------
-		//-------------------------------------------------
-		f32 PlatformSystem::GetScreenDensity() const
-		{
-			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetScreenDensity();
-		}
         //-------------------------------------------------
         //-------------------------------------------------
         std::string PlatformSystem::GetAppVersion() const

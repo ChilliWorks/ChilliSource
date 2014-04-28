@@ -9,6 +9,7 @@
 #include <ChilliSource/Backend/Platform/Android/Input/Pointer/PointerSystem.h>
 
 #include <ChilliSource/Backend/Platform/Android/Input/Pointer/TouchInputJavaInterface.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
 namespace ChilliSource
@@ -26,7 +27,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void PointerSystem::OnTouchDown(s32 in_systemId, const Core::Vector2& in_location)
 		{
-			Core::Vector2 touchLocation(in_location.x, Core::Screen::GetOrientedDimensions().y - in_location.y);
+			Core::Vector2 touchLocation(in_location.x, m_screen->GetResolution().y - in_location.y);
 			PointerId pointerId = AddPointerCreateEvent(touchLocation);
 			AddPointerDownEvent(pointerId, InputType::k_touch);
 			m_systemIdToPointerIdMap.emplace(in_systemId, pointerId);
@@ -38,7 +39,7 @@ namespace ChilliSource
 			auto it = m_systemIdToPointerIdMap.find(in_systemId);
 			if (it != m_systemIdToPointerIdMap.end())
 			{
-				Core::Vector2 touchLocation(in_location.x, Core::Screen::GetOrientedDimensions().y - in_location.y);
+				Core::Vector2 touchLocation(in_location.x, m_screen->GetResolution().y - in_location.y);
 				AddPointerMovedEvent(it->second, touchLocation);
 			}
 		}
@@ -58,14 +59,18 @@ namespace ChilliSource
 		//------------------------------------------------
 		void PointerSystem::OnInit()
 		{
-			ChilliSource::Android::TouchInputJavaInterface::SetPointerSystem(this);
+			m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+			CS_ASSERT(m_screen != nullptr, "Cannot find required system for PointerSystem: Screen.");
+
+			TouchInputJavaInterface::SetPointerSystem(this);
 		}
 		//------------------------------------------------
 		//------------------------------------------------
 		void PointerSystem::OnDestroy()
 		{
-			ChilliSource::Android::TouchInputJavaInterface::SetPointerSystem(nullptr);
+			TouchInputJavaInterface::SetPointerSystem(nullptr);
 			RemoveAllPointers();
+			m_screen = nullptr;
 		}
 	}
 }

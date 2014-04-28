@@ -44,7 +44,6 @@ namespace ChilliSource
 
 			//Register callbacks
 			GLFWManager::Get()->SetWindowFocusDelegate((GLFWwindowfocusfun)&PlatformSystem::OnWindowFocusChanged);
-			GLFWManager::Get()->SetWindowSizeDelegate((GLFWwindowsizefun)&PlatformSystem::OnWindowResized);
 			GLFWManager::Get()->SetWindowCloseDelegate((GLFWwindowclosefun)&PlatformSystem::OnWindowClosed);
 
 			Core::Application::Get()->Resume();
@@ -97,27 +96,6 @@ namespace ChilliSource
 		{
 			m_isRunning = false;
 		}
-		//---------------------------------------------
-		//---------------------------------------------
-		Core::Vector2 PlatformSystem::GetScreenDimensions() const
-		{
-			Core::Vector2 result;
-
-			s32 width, height = 0;
-			GLFWManager::Get()->GetWindowSize(&width, &height);
-
-			result.x = (f32)width;
-			result.y = (f32)height;
-
-			return result;
-		}
-
-		//-------------------------------------------------
-		//-------------------------------------------------
-		f32 PlatformSystem::GetScreenDensity() const
-		{
-			return 1.0f;
-		}
 		//--------------------------------------------------
 		//--------------------------------------------------
 		u64 PlatformSystem::GetSystemTimeMS() const
@@ -127,12 +105,6 @@ namespace ChilliSource
             return (u64)((currentTime.QuadPart) * 1000.0 / gFrequency.QuadPart);
 		}
 		//---GLFW Delegates
-		//-------------------------------------------------
-		//-------------------------------------------------
-		void PlatformSystem::OnWindowResized(GLFWwindow* in_window, s32 in_width, s32 in_height)
-		{
-			Core::Application::Get()->ScreenResized((u32)in_width, (u32)in_height);
-		}
 		//-------------------------------------------------
 		//-------------------------------------------------
 		void PlatformSystem::OnWindowClosed(GLFWwindow* in_window)

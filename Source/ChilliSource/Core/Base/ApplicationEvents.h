@@ -20,8 +20,6 @@ namespace ChilliSource
     namespace Core
     {
         typedef std::function<void()> ApplicationSystemDelegate;
-        typedef std::function<void(ScreenOrientation)> ApplicationScreenOrientationDelegate;
-		typedef std::function<void(u32, u32)> ApplicationScreenResizeDelegate;
         typedef std::function<void(const std::string&)> ApplicationReceivesURLDelegate;
 		
         class ApplicationEvents
@@ -54,23 +52,11 @@ namespace ChilliSource
             //-----------------------------------------------------------------
             static Event<ApplicationSystemDelegate>& GetLowMemoryEvent();
             //-----------------------------------------------------------------
-            /// Get Screen Orientation Changed Event
-            ///
-            /// @return Event that is triggered when screen rotates
-            //-----------------------------------------------------------------
-            static Event<ApplicationScreenOrientationDelegate>& GetScreenOrientationChangedEvent();
-            //-----------------------------------------------------------------
             /// Get Back Event
             ///
             /// @return Event that is triggered when back is pressed
             //-----------------------------------------------------------------
             static Event<ApplicationSystemDelegate>& GetGoBackEvent();
-			//-----------------------------------------------------------------
-            /// Get Screen Resized Event
-            ///
-            /// @return Event that is triggered when screen resizes
-            //-----------------------------------------------------------------
-            static Event<ApplicationScreenResizeDelegate>& GetScreenResizedEvent();
 			//-----------------------------------------------------------------
             /// GetReceivesURLEvent
             ///
@@ -84,9 +70,7 @@ namespace ChilliSource
 			static Event<ApplicationSystemDelegate> mLateSuspendEvent;
             static Event<ApplicationSystemDelegate> mLowMemoryEvent;
             
-            static Event<ApplicationScreenOrientationDelegate> mScreenOrientationChangedEvent;
             static Event<ApplicationSystemDelegate> mGoBackEvent;
-			static Event<ApplicationScreenResizeDelegate> mScreenResizedEvent;
 			static Event<ApplicationReceivesURLDelegate> mReceivesURLEvent;
         };
     }

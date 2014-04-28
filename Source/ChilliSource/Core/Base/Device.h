@@ -99,18 +99,24 @@ namespace ChilliSource
 			///
 			/// @return The number of CPU cores available on the
             /// device.
-			//--------------------------------------------------
+			//---------------------------------------------------
 			virtual u32 GetNumberOfCPUCores() = 0;
+            //---------------------------------------------------
+            /// Destructor
+            ///
+			/// @author I Copland
+			//---------------------------------------------------
+			virtual ~Device() {};
         protected:
             friend class Core::Application;
-            //--------------------------------------------------
+            //---------------------------------------------------
             /// Creates a new platform specific backend for the
             /// system.
             ///
             /// @author I Copland
             ///
             /// @return The new instance.
-            //--------------------------------------------------
+            //---------------------------------------------------
             static DeviceUPtr Create();
         };
     }

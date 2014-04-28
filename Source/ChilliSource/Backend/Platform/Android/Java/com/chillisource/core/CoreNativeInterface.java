@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Configuration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
@@ -118,13 +117,14 @@ public class CoreNativeInterface extends INativeInterface
 	 */
 	public native void memoryWarning();
 	/**
-	 * Triggered when the screen orientation changes
+	 * Triggered when the screen resolution changes
 	 * 
 	 * @author I Copland
 	 * 
-	 * @param Orientation ID corresponding to native enum
+	 * @param The new width.
+	 * @param The new height.
 	 */
-	public native void orientationChanged(int in_orientationID);
+	public native void onResolutionChanged(int in_width, int in_height);
 	/**
 	 * Triggered when the device back button hard key is pressed
 	 * 
@@ -252,33 +252,6 @@ public class CoreNativeInterface extends INativeInterface
 	public String getAPKDirectory()
 	{
 		return m_packageInfo.applicationInfo.sourceDir;
-	}
-	/**
-	 * @author I Copland
-	 * 
-	 * @return Current device orientation
-	 */
-	public int getOrientation()
-	{
-		return CSApplication.get().getActivityContext().getResources().getConfiguration().orientation;
-	}
-	/**
-	 * @author I Copland
-	 * 
-	 * @return Orientation constant that represents landscape
-	 */
-	public int getOrientationLandscapeConstant()
-	{
-		return Configuration.ORIENTATION_LANDSCAPE;
-	}
-	/**
-	 * @author I Copland
-	 * 
-	 * @return Orientation constant that represents portrait
-	 */
-	public int getOrientationPortraitConstant()
-	{
-		return Configuration.ORIENTATION_PORTRAIT;
 	}
 	/**
 	 * @author I Copland
@@ -451,21 +424,5 @@ public class CoreNativeInterface extends INativeInterface
     public long getSystemTimeInMilliseconds()
     {
     	return System.currentTimeMillis(); 
-    }
-	/**
-	 * @author S Downie
-	 * 
-	 * @return diagonal screen size in inches
-	 */
-    public float getPhysicalScreenSize()
-    {
-    	//get the display metrics
-    	DisplayMetrics displayMetrics = new DisplayMetrics();
-    	CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-    	
-    	//calculate the diagonal physical size from dpi and resolution.
-    	float sizeX = getScreenWidth() / displayMetrics.xdpi;
-    	float sizeY = getScreenHeight() / displayMetrics.ydpi;
-    	return (float)FloatMath.sqrt((sizeX * sizeX) + (sizeY * sizeY));
     }
 }

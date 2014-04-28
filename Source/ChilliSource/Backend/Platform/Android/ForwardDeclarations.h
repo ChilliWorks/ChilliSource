@@ -35,6 +35,8 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(ImageProvider);
 		CS_FORWARDDECLARE_CLASS(LocalNotificationJavaInterface);
 		CS_FORWARDDECLARE_CLASS(LocalNotificationScheduler);
+        CS_FORWARDDECLARE_CLASS(Device);
+        CS_FORWARDDECLARE_CLASS(Screen);
 		//------------------------------------------------------
 		/// Extensions
 		//------------------------------------------------------

@@ -11,6 +11,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Base/Screen.h>
 
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
@@ -36,7 +37,7 @@ namespace ChilliSource
             
             m_pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
             
-			Core::Vector2 vAbsSize = Core::Screen::GetOrientedDimensions();
+			Core::Vector2 vAbsSize = GetScreen()->GetResolution();
             
 			//The window is fullscreen and centred
 			SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), vAbsSize));
@@ -44,8 +45,7 @@ namespace ChilliSource
 			SetName("RootWindow");
             
 			//Register for screen rotation events
-			m_screenOrientationChangedConnection = Core::ApplicationEvents::GetScreenOrientationChangedEvent().OpenConnection(Core::MakeDelegate(this, &Window::OnScreenOrientationChanged));
-			m_screenResizedConnection = Core::ApplicationEvents::GetScreenResizedEvent().OpenConnection(Core::MakeDelegate(this, &Window::OnScreenResized));
+			m_screenResizedConnection = GetScreen()->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate(this, &Window::OnScreenResolutionChanged));
 		}
         void Window::StartListeningForPointerInput()
         {
@@ -75,37 +75,17 @@ namespace ChilliSource
             mbListeningForTouches = false;
         }
 		//-----------------------------------------------------------
-		/// On Screen Orientation Changed
-		///
-		/// Triggered if the screen orientation changes so we can
-		/// resize ourself
 		//-----------------------------------------------------------
-		void Window::OnScreenOrientationChanged(Core::ScreenOrientation ineOrientation)
+		void Window::OnScreenResolutionChanged(const Core::Vector2& in_resolution)
 		{
-			Core::Vector2 vAbsSize = Core::Screen::GetOrientedDimensions();
+			Core::Vector2 vAbsSize((f32)in_resolution.x, (f32)in_resolution.y);
             
 			//The window is fullscreen and centred
 			SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), vAbsSize));
 			SetPosition(Core::UnifiedVector2(Core::Vector2(0.0f, 0.0f), vAbsSize * 0.5f));
             
 			//Notify all subviews and they can decide what to do
-			GUIView::OnScreenOrientationChanged();
-		}
-		//-----------------------------------------------------------
-		/// On Screen Resized
-		///
-		/// Triggered if the screen resizes
-		//-----------------------------------------------------------
-		void Window::OnScreenResized(u32 inudwWidth, u32 inudwHeight)
-		{
-			Core::Vector2 vAbsSize((f32)inudwWidth, (f32)inudwHeight);
-            
-			//The window is fullscreen and centred
-			SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), vAbsSize));
-			SetPosition(Core::UnifiedVector2(Core::Vector2(0.0f, 0.0f), vAbsSize * 0.5f));
-            
-			//Notify all subviews and they can decide what to do
-			GUIView::OnScreenOrientationChanged();
+			GUIView::OnScreenResolutionChanged();
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------

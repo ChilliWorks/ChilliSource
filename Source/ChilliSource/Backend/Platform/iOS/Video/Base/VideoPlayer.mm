@@ -157,6 +157,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void VideoPlayer::OnInit()
         {
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             m_tapListener = [[CVideoPlayerTapListener alloc] init];
         }
         //---------------------------------------------------------------
@@ -224,8 +225,8 @@ namespace ChilliSource
         {
             @autoreleasepool
             {
-                f32 orientedWidthDensityCorrected = Core::Screen::GetOrientedWidth() * Core::Screen::GetInverseDensity();
-                f32 orientedHeightDensityCorrected = Core::Screen::GetOrientedHeight() * Core::Screen::GetInverseDensity();
+                f32 orientedWidthDensityCorrected = m_screen->GetResolution().x * m_screen->GetInverseDensityScale();
+                f32 orientedHeightDensityCorrected = m_screen->GetResolution().y * m_screen->GetInverseDensityScale();
             
                 m_moviePlayerController.backgroundView.backgroundColor = [UIColor colorWithRed:m_backgroundColour.r green:m_backgroundColour.g blue:m_backgroundColour.b alpha:m_backgroundColour.a];
                 [[m_moviePlayerController view] setFrame:CGRectMake(0, 0, orientedWidthDensityCorrected, orientedHeightDensityCorrected)];
@@ -286,7 +287,7 @@ namespace ChilliSource
             if (m_videoOverlayView == nil)
             {
                 //create the overlay
-                CGRect rect = CGRectMake(0, 0, Core::Screen::GetOrientedWidth() * Core::Screen::GetInverseDensity(), Core::Screen::GetOrientedHeight() * Core::Screen::GetInverseDensity());
+                CGRect rect = CGRectMake(0, 0, m_screen->GetResolution().x * m_screen->GetInverseDensityScale(), m_screen->GetResolution().y * m_screen->GetInverseDensityScale());
                 m_videoOverlayView = [[VideoOverlayView alloc] initWithFrame: rect];
                 UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
                 [rootView addSubview:m_videoOverlayView];
