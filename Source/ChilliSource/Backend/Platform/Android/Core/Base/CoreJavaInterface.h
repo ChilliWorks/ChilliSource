@@ -227,12 +227,6 @@ namespace ChilliSource
             /// @return the system time in milliseconds.
             //-----------------------------------------------------------------------------------------------------
             TimeIntervalMs GetSystemTimeInMilliseconds();
-            //-----------------------------------------------------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return the physical screen size in inches (diagonal length)
-            //-----------------------------------------------------------------------------------------------------
-            f32 GetPhysicalScreenSize();
             
 		private:
 

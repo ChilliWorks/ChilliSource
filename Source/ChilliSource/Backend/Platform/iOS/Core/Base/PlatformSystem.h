@@ -105,10 +105,6 @@ namespace ChilliSource
             /// @author S Downie
             //-----------------------------------------
             PlatformSystem();
-			
-		private:
-            
-            f32 m_physicalScreenSize;
 		};
 	}
 }

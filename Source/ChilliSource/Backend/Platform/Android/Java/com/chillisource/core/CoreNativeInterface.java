@@ -425,20 +425,4 @@ public class CoreNativeInterface extends INativeInterface
     {
     	return System.currentTimeMillis(); 
     }
-	/**
-	 * @author S Downie
-	 * 
-	 * @return diagonal screen size in inches
-	 */
-    public float getPhysicalScreenSize()
-    {
-    	//get the display metrics
-    	DisplayMetrics displayMetrics = new DisplayMetrics();
-    	CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-    	
-    	//calculate the diagonal physical size from dpi and resolution.
-    	float sizeX = getScreenWidth() / displayMetrics.xdpi;
-    	float sizeY = getScreenHeight() / displayMetrics.ydpi;
-    	return (float)FloatMath.sqrt((sizeX * sizeX) + (sizeY * sizeY));
-    }
 }

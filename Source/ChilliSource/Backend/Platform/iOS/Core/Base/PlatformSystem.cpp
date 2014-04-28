@@ -24,7 +24,6 @@ namespace ChilliSource
 		//-----------------------------------------
 		//-----------------------------------------
 		PlatformSystem::PlatformSystem()
-        : m_physicalScreenSize(-1.0f)
 		{
 		}
 		//-----------------------------------------

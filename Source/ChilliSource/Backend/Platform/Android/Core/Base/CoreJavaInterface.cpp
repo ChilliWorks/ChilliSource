@@ -279,7 +279,6 @@ namespace ChilliSource
 			CreateMethodReference("getAndroidID", "()Ljava/lang/String;");
 			CreateMethodReference("forceQuit", "()V");
 			CreateMethodReference("getSystemTimeInMilliseconds", "()J");
-			CreateMethodReference("getPhysicalScreenSize", "()F");
 			CreateMethodReference("setMaxFPS", "(I)V");
 		}
 		//--------------------------------------------------------------------------------------
@@ -531,17 +530,6 @@ namespace ChilliSource
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			output = (TimeIntervalMs)env->CallLongMethod(GetJavaObject(), GetMethodID("getSystemTimeInMilliseconds"));
 			return output;
-        }
-        //-----------------------------------------------------------------------------------------------------
-        //-----------------------------------------------------------------------------------------------------
-        f32 CoreJavaInterface::GetPhysicalScreenSize()
-        {
-        	if (m_physicalScreenSize < 0.0f)
-        	{
-				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				m_physicalScreenSize = env->CallFloatMethod(GetJavaObject(), GetMethodID("getPhysicalScreenSize"));
-        	}
-        	return m_physicalScreenSize;
         }
 	}
 }

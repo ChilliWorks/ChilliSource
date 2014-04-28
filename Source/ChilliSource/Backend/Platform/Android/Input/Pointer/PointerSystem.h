@@ -68,6 +68,13 @@ namespace ChilliSource
             friend Input::PointerSystemUPtr Input::PointerSystem::Create();
 
             //------------------------------------------------
+            /// Default constructor. Declared private to force
+            /// the use of the factory method.
+            ///
+            /// @author I Copland
+            //------------------------------------------------
+            PointerSystem() = default;
+            //------------------------------------------------
             /// Initialisation method called at a time when
             /// all App Systems have been created. System
             /// initialisation occurs in the order they were
@@ -87,7 +94,7 @@ namespace ChilliSource
             //------------------------------------------------
             void OnDestroy() override;
 
-            Core::Screen* m_screen;
+            Core::Screen* m_screen = nullptr;
             std::unordered_map<s32, PointerId> m_systemIdToPointerIdMap;
         };
     }
