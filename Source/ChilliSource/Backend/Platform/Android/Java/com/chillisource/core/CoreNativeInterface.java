@@ -23,7 +23,6 @@ import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
-import android.util.FloatMath;
 
 /**
 * Native interface for communicating core os features to native.
