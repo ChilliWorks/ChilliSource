@@ -1,5 +1,5 @@
 //
-//  LocalDataStore.cpp
+//  AppDataStore.cpp
 //  Chilli Source
 //  Created by Stuart McGaw on 24/05/2011.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/File/LocalDataStore.h>
+#include <ChilliSource/Core/File/AppDataStore.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
@@ -42,10 +42,10 @@ namespace ChilliSource
     {
         namespace
         {
-            const std::string k_filename = "App.lds";
+            const std::string k_filename = "App.ads";
             
             //---------------------------------------------------------
-            /// Generates the key that is used to encrypt the LDS. Note
+            /// Generates the key that is used to encrypt the ADS. Note
             /// that this is not really crytographically secure as none
             /// of the information used to generate the hash is truely
             /// private.
@@ -83,42 +83,43 @@ namespace ChilliSource
             }
         }
         
-        CS_DEFINE_NAMEDTYPE(LocalDataStore);
+        CS_DEFINE_NAMEDTYPE(AppDataStore);
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        LocalDataStoreUPtr LocalDataStore::Create()
+        AppDataStoreUPtr AppDataStore::Create()
         {
-            return LocalDataStoreUPtr(new LocalDataStore());
+            return AppDataStoreUPtr(new AppDataStore());
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        LocalDataStore::LocalDataStore()
+        AppDataStore::AppDataStore()
         : m_needsSynchonised(false)
         {
             RefreshFromFile();
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool LocalDataStore::IsA(InterfaceIDType in_interfaceId) const
+        bool AppDataStore::IsA(InterfaceIDType in_interfaceId) const
         {
-            return (LocalDataStore::InterfaceID == in_interfaceId);
+            return (AppDataStore::InterfaceID == in_interfaceId);
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::Contains(const std::string& in_key)
+		bool AppDataStore::Contains(const std::string& in_key)
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
 			return m_dictionary.HasValue(in_key);
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, std::string& out_value) const
+		bool AppDataStore::TryGetValue(const std::string& in_key, std::string& out_value) const
         {
             std::unique_lock<std::mutex> lock(m_mutex);
 			return m_dictionary.TryGetValue(in_key, out_value);
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, bool& out_value) const
+		bool AppDataStore::TryGetValue(const std::string& in_key, bool& out_value) const
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -132,7 +133,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, u16& out_value) const
+		bool AppDataStore::TryGetValue(const std::string& in_key, u16& out_value) const
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -146,7 +147,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, s16& out_value) const
+		bool AppDataStore::TryGetValue(const std::string& in_key, s16& out_value) const
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -160,7 +161,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, u32& out_value) const
+		bool AppDataStore::TryGetValue(const std::string& in_key, u32& out_value) const
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -174,7 +175,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, s32& out_value) const
+		bool AppDataStore::TryGetValue(const std::string& in_key, s32& out_value) const
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -188,7 +189,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, u64& out_value) const
+		bool AppDataStore::TryGetValue(const std::string& in_key, u64& out_value) const
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -202,7 +203,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, s64& out_value) const
+		bool AppDataStore::TryGetValue(const std::string& in_key, s64& out_value) const
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -216,7 +217,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::GetValue(const std::string& in_key, f32& out_value) const
+		bool AppDataStore::TryGetValue(const std::string& in_key, f32& out_value) const
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -230,7 +231,7 @@ namespace ChilliSource
 		}		
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		void LocalDataStore::SetValue(const std::string& in_key, const std::string& in_value)
+		void AppDataStore::SetValue(const std::string& in_key, const std::string& in_value)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -239,55 +240,61 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		void LocalDataStore::SetValue(const std::string& in_key, bool in_value)
+        void AppDataStore::SetValue(const std::string& in_key, const s8* in_value)
+        {
+            SetValue(in_key, std::string(in_value));
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+		void AppDataStore::SetValue(const std::string& in_key, bool in_value)
         {
 			SetValue(in_key, ToString(in_value));
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		void LocalDataStore::SetValue(const std::string& in_key, u16 in_value)
+		void AppDataStore::SetValue(const std::string& in_key, u16 in_value)
         {
 			SetValue(in_key, ToString(in_value));
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		void LocalDataStore::SetValue(const std::string& in_key, s16 in_value)
+		void AppDataStore::SetValue(const std::string& in_key, s16 in_value)
         {
 			SetValue(in_key, ToString(in_value));
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		void LocalDataStore::SetValue(const std::string& in_key, u32 in_value)
+		void AppDataStore::SetValue(const std::string& in_key, u32 in_value)
         {
 			SetValue(in_key, ToString(in_value));
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		void LocalDataStore::SetValue(const std::string& in_key, s32 in_value)
+		void AppDataStore::SetValue(const std::string& in_key, s32 in_value)
         {
 			SetValue(in_key, ToString(in_value));
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		void LocalDataStore::SetValue(const std::string& in_key, u64 in_value)
+		void AppDataStore::SetValue(const std::string& in_key, u64 in_value)
         {
 			SetValue(in_key, ToString(in_value));
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		void LocalDataStore::SetValue(const std::string& in_key, s64 in_value)
+		void AppDataStore::SetValue(const std::string& in_key, s64 in_value)
         {
 			SetValue(in_key, ToString(in_value));
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		void LocalDataStore::SetValue(const std::string& in_key, f32 infValue)
+		void AppDataStore::SetValue(const std::string& in_key, f32 infValue)
         {
 			SetValue(in_key, ToString(infValue));
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		bool LocalDataStore::Erase(const std::string& in_key)
+		bool AppDataStore::Erase(const std::string& in_key)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -302,17 +309,16 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void LocalDataStore::Clear()
+        void AppDataStore::Clear()
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
             m_dictionary.clear();
             m_needsSynchonised = true;
-            Synchronise();
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		void LocalDataStore::Synchronise()
+		void AppDataStore::Save()
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -320,7 +326,7 @@ namespace ChilliSource
             {
                 // Convert to XML
                 TiXmlDocument xmlDoc;
-                TiXmlElement xmlRootElement("LDS");
+                TiXmlElement xmlRootElement("ADS");
                 m_dictionary.ToXml(&xmlRootElement);
                 xmlDoc.InsertEndChild(xmlRootElement);
                 
@@ -348,7 +354,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		void LocalDataStore::RefreshFromFile()
+		void AppDataStore::RefreshFromFile()
         {
             FileSystem* pFileSystem = Application::Get()->GetFileSystem();
             if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, k_filename) == true)
@@ -381,9 +387,9 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-		void LocalDataStore::OnSuspend()
+		void AppDataStore::OnSuspend()
         {
-			Synchronise();
+			Save();
 		}
     }
 }

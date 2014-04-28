@@ -17,7 +17,7 @@
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 #include <ChilliSource/Core/Entity/ComponentFactory.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
-#include <ChilliSource/Core/File/LocalDataStore.h>
+#include <ChilliSource/Core/File/AppDataStore.h>
 #include <ChilliSource/Core/File/TweakableConstants.h>
 #include <ChilliSource/Core/Image/ImageProvider.h>
 #include <ChilliSource/Core/Image/CSImageProvider.h>
@@ -195,7 +195,7 @@ namespace ChilliSource
 
             //init tweakable constants and local data store.
 			new TweakableConstants();
-			new LocalDataStore();
+			new AppDataStore();
             
             m_renderSystem->Init();
             
@@ -426,7 +426,7 @@ namespace ChilliSource
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
             m_resourcePool = CreateSystem<ResourcePool>();
-            CreateSystem<LocalDataStore>();
+            CreateSystem<AppDataStore>();
             CreateSystem<CSImageProvider>();
             CreateSystem<DialogueBoxSystem>();
             

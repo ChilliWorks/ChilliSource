@@ -1,5 +1,5 @@
 //
-//  LocalDataStore.h
+//  AppDataStore.h
 //  Chilli Source
 //  Created by Stuart McGaw on 24/05/2011.
 //
@@ -51,15 +51,15 @@ namespace ChilliSource
         /// Note that keys beginning with an underscore '_' are reserved for
         /// internal engine use.
         ///
-        /// The LDS is thread-safe and is initialised prior to the the OnInit()
+        /// The ADS is thread-safe and is initialised prior to the the OnInit()
         /// lifecycle event.
         ///
         /// @author S McGaw
         //--------------------------------------------------------------------
-		class LocalDataStore final : public AppSystem
+		class AppDataStore final : public AppSystem
         {
         public:
-            CS_DECLARE_NAMEDTYPE(LocalDataStore);
+            CS_DECLARE_NAMEDTYPE(AppDataStore);
             //------------------------------------------------------------
             /// Allows querying of whether or not this system implements
             /// a given interface.
@@ -92,7 +92,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, std::string& out_value) const;
+			bool TryGetValue(const std::string& in_key, std::string& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a bool.
@@ -104,7 +104,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, bool& out_value) const;
+			bool TryGetValue(const std::string& in_key, bool& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a u16.
@@ -116,7 +116,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, u16& out_value) const;
+			bool TryGetValue(const std::string& in_key, u16& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a s16.
@@ -128,7 +128,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, s16& out_value) const;
+			bool TryGetValue(const std::string& in_key, s16& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a u32.
@@ -140,7 +140,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, u32& out_value) const;
+			bool TryGetValue(const std::string& in_key, u32& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a s32.
@@ -152,7 +152,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, s32& out_value) const;
+			bool TryGetValue(const std::string& in_key, s32& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a u64.
@@ -164,7 +164,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, u64& out_value) const;
+			bool TryGetValue(const std::string& in_key, u64& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a s64.
@@ -175,7 +175,7 @@ namespace ChilliSource
             /// @param [Out] The output value.
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, s64& out_value) const;
+			bool TryGetValue(const std::string& in_key, s64& out_value) const;
             //------------------------------------------------------------
             /// Attempts to get the value for the given key from the data
             /// store as a f32.
@@ -187,7 +187,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the value was successfully retreived.
             //------------------------------------------------------------
-			bool GetValue(const std::string& in_key, f32& out_value) const;
+			bool TryGetValue(const std::string& in_key, f32& out_value) const;
 			//--------------------------------------------------------------
             /// Sets the value for the given key. If the key already existed
             /// its previous value will be overwritten. Note that keys
@@ -200,6 +200,18 @@ namespace ChilliSource
             /// @param The value.
             //--------------------------------------------------------------
 			void SetValue(const std::string& in_key, const std::string& in_value);
+            //--------------------------------------------------------------
+            /// Sets the value for the given key. If the key already existed
+            /// its previous value will be overwritten. Note that keys
+            /// beginning with an underscore '_' are reserved for internal
+            /// engine use.
+            ///
+            /// @author R Henning
+            ///
+            /// @param The key.
+            /// @param The value.
+            //--------------------------------------------------------------
+			void SetValue(const std::string& in_key, const s8* in_value);
 			//--------------------------------------------------------------
             /// Sets the value for the given key. If the key already existed
             /// its previous value will be overwritten. Note that keys
@@ -318,7 +330,7 @@ namespace ChilliSource
             ///
             /// @author R Henning
             //--------------------------------------------------------------
-			void Synchronise();
+			void Save();
 		
         private:
             friend class Application;
@@ -330,13 +342,13 @@ namespace ChilliSource
 			///
 			/// @return Creates a new instance of the system.
 			//--------------------------------------------------------------
-			static LocalDataStoreUPtr Create();
+			static AppDataStoreUPtr Create();
 			//--------------------------------------------------------------
 			/// Private constructor to enforce use of the factory method.
 			///
 			/// @author S McGaw
 			//--------------------------------------------------------------
-			LocalDataStore();
+			AppDataStore();
             //--------------------------------------------------------------
             /// Loads the saved data from disk into the current data store.
             ///
