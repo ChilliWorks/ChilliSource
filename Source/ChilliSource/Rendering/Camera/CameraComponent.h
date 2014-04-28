@@ -268,9 +268,16 @@ namespace ChilliSource
 			//------------------------------------------------------
 			/// Calculate Orthographic Matrix
 			///
-			/// 
+			///
 			//------------------------------------------------------
 			void CalculateOrthographicMatrix();
+            //------------------------------------------------------
+			/// Called when the resolution changes and resize with
+			/// screen is enabled.
+            ///
+			/// @author I Copland
+			//------------------------------------------------------
+			void OnResolutionChanged(const Core::Vector2& in_resolution);
 
 		private:
 			

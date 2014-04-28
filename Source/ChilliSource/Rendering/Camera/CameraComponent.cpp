@@ -467,13 +467,20 @@ namespace ChilliSource
 		{
             if (inbEnable == true && m_screenResizedConnection == nullptr)
             {
-                m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate<CameraComponent, CameraComponent, void, const Core::Vector2&>(this, &CameraComponent::SetViewportSize));
+                m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate<CameraComponent, CameraComponent, void, const Core::Vector2&>(this, &CameraComponent::OnResolutionChanged));
             }
             else if (inbEnable == false && m_screenResizedConnection != nullptr)
             {
                 m_screenResizedConnection = nullptr;
             }
 		}
+        //------------------------------------------------------
+        //------------------------------------------------------
+        void CameraComponent::OnResolutionChanged(const Core::Vector2& in_resolution)
+        {
+            SetViewportSize(in_resolution);
+            SetAspectRatio(in_resolution.x / in_resolution.y);
+        }
 		//-----------------------------------------------------
 		/// Destructor
 		///
