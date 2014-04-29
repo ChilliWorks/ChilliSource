@@ -91,7 +91,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		bool RenderSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == RenderSystem::InterfaceID || inInterfaceID == Rendering::RenderSystem::InterfaceID || inInterfaceID == Core::IComponentProducer::InterfaceID;
+			return inInterfaceID == RenderSystem::InterfaceID || inInterfaceID == Rendering::RenderSystem::InterfaceID;
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------

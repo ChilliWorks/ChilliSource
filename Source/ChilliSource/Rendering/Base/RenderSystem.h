@@ -13,7 +13,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 
 namespace ChilliSource
@@ -22,7 +21,7 @@ namespace ChilliSource
 	{
         class DynamicSpriteBatch;
         
-		class RenderSystem : public Core::AppSystem, public Core::IComponentProducer
+		class RenderSystem : public Core::AppSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(RenderSystem);
@@ -99,15 +98,6 @@ namespace ChilliSource
 			virtual RenderTarget* CreateRenderTarget(u32 inWidth, u32 inHeight) = 0;
 			virtual RenderTarget* GetDefaultRenderTarget() = 0;
 			
-			Core::ComponentFactory* GetComponentFactoryPtr(u32 inudwIndex);
-			Core::ComponentFactory& GetComponentFactory(u32 inudwIndex);
-			
-			//----------------------------------------------------
-			/// Get Number Of Component Factories
-			///
-			/// @return Number of factories in this system
-			//----------------------------------------------------
-			u32 GetNumComponentFactories() const;
             //----------------------------------------------------
             /// Get Dynamic Sprite Batch Pointer
             ///
@@ -124,9 +114,6 @@ namespace ChilliSource
             RenderSystem();
             
 		protected:
-			
-			//---Render Factories
-			RenderComponentFactory* mpRenderFactory;
             
             DynamicSpriteBatch* mpSpriteBatcher;
 		};

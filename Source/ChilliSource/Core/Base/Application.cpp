@@ -43,6 +43,7 @@
 
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Font/Font.h>
@@ -406,6 +407,7 @@ namespace ChilliSource
             CreateSystem<Rendering::TextureProvider>();
             CreateSystem<Rendering::CubemapProvider>();
             CreateSystem<Rendering::FontProvider>();
+            CreateSystem<Rendering::RenderComponentFactory>();
         }
         //----------------------------------------------------
         //----------------------------------------------------
