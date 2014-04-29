@@ -1,7 +1,7 @@
 //
-//  ForwardDeclarations.h
+//  VListLayout.cpp
 //  Chilli Source
-//  Created by Scott Downie on 18/04/2014.
+//  Created by Scott Downie on 23/04/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,33 +26,19 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_FORWARDDECLARATIONS_H_
-#define _CHILLISOURCE_UI_FORWARDDECLARATIONS_H_
+#include <ChilliSource/UI/Layout/VListLayout.h>
 
-#include <ChilliSource/Core/Base/StandardMacros.h>
+#include <ChilliSource/UI/Base/Widget.h>
 
-#include <memory>
-
-namespace ChilliSource 
+namespace ChilliSource
 {
-	namespace UI
-	{
-        //---------------------------------------------------------
-        /// Base
-        //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Canvas);
-        CS_FORWARDDECLARE_CLASS(Widget);
-        //---------------------------------------------------------
-        /// Drawable
-        //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(IDrawable);
-        CS_FORWARDDECLARE_CLASS(TextureDrawable);
-        //---------------------------------------------------------
-        /// Layout
-        //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(ILayout);
-        CS_FORWARDDECLARE_CLASS(VListLayout);
-	}
-}
+    namespace UI
+    {
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void VListLayout::BuildLayout(const std::vector<WidgetSPtr>& in_widgets) const
+        {
 
-#endif
+        }
+    }
+}
