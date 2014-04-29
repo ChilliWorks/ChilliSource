@@ -153,6 +153,10 @@ namespace ChilliSource
 					cachedResources.erase(itResource);
                     return;
                 }
+                else
+                {
+                    ++itResource;
+                }
             }
         }
         //------------------------------------------------------------------------------------
@@ -168,7 +172,7 @@ namespace ChilliSource
             
             for(auto& descEntry : m_descriptors)
             {
-                for(auto itResource = descEntry.second.m_cachedResources.begin(); itResource != descEntry.second.m_cachedResources.end(); /*NO INCREMENT*/)
+                for(auto itResource = descEntry.second.m_cachedResources.begin(); itResource != descEntry.second.m_cachedResources.end(); ++itResource)
                 {
                     //The pool is the sole owner so we can safely release the object
                     CS_LOG_ERROR("Resource still in use: " + itResource->second->GetFilePath());
