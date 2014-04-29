@@ -10,7 +10,6 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_BASE_PLATFORMSYSTEM_H_
 
 #include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
-#include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
 namespace ChilliSource

@@ -18,7 +18,6 @@
 #include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Communications/ContactInformationProviderJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Web/Base/WebViewJavaInterface.h>
-#include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/LaunchingActions/LaunchingActions.h>
 

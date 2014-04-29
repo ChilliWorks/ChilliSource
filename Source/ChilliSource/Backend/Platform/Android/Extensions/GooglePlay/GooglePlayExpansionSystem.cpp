@@ -11,7 +11,6 @@
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayExpansionJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Minizip/unzip.h>

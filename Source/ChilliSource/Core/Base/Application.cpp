@@ -8,7 +8,6 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 
-#include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/Base/Logging.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
@@ -291,7 +290,6 @@ namespace ChilliSource
 		void Application::ApplicationMemoryWarning()
 		{
 			CS_LOG_VERBOSE("Memory Warning. Clearing resource cache...");
-			ApplicationEvents::GetLowMemoryEvent().NotifyConnections();
             
             //update all of the application systems
             for (const AppSystemUPtr& system : m_systems)
@@ -304,8 +302,8 @@ namespace ChilliSource
 		void Application::GoBack()
 		{
 			CS_LOG_VERBOSE("Go back event.");
+            
 			//TODO: Feed this to the application another way. m_stateManager.GetActiveState()->OnGoBack();
-			ApplicationEvents::GetGoBackEvent().NotifyConnections();
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -334,9 +332,6 @@ namespace ChilliSource
             
 			//We must invalidate the application timer. This will stop sub-system updates
 			m_platformSystem->SetUpdaterActive(false);
-            
-			ApplicationEvents::GetSuspendEvent().NotifyConnections();
-			ApplicationEvents::GetLateSuspendEvent().NotifyConnections();
 			
 			CS_LOG_VERBOSE("App Finished Suspending...");
 		}
@@ -543,7 +538,6 @@ namespace ChilliSource
 			CS_LOG_VERBOSE("App Resuming...");
             
 			m_isSuspending = false;
-			ApplicationEvents::GetResumeEvent().NotifyConnections();
             
             m_renderSystem->Resume();
             

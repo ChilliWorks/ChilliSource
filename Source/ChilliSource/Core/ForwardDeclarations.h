@@ -31,7 +31,6 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Activity);
         CS_FORWARDDECLARE_CLASS(Application);
-        CS_FORWARDDECLARE_CLASS(ApplicationEvents);
         CS_FORWARDDECLARE_CLASS(Colour);
         CS_FORWARDDECLARE_CLASS(Device);
         CS_FORWARDDECLARE_CLASS(IInformationProvider);
