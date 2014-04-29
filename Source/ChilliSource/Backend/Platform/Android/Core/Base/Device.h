@@ -63,52 +63,52 @@ namespace ChilliSource
             ///
             /// @return The device model name.
             //---------------------------------------------------
-            const std::string& GetModel() override;
+            const std::string& GetModel() const override;
             //---------------------------------------------------
             /// @author I Copland
             ///
             /// @return The name of the device model type.
             //---------------------------------------------------
-            const std::string& GetModelType() override;
+            const std::string& GetModelType() const override;
             //---------------------------------------------------
             /// @author I Copland
             ///
             /// @return The name of the device manufacturer.
             //---------------------------------------------------
-            const std::string& GetManufacturer() override;
+            const std::string& GetManufacturer() const override;
             //---------------------------------------------------
             /// @author I Copland
             ///
             /// @return The locale code registered with the
             /// device.
             //---------------------------------------------------
-            Core::Locale& GetLocale() override;
+            const std::string& GetLocale() const override;
             //---------------------------------------------------
             /// @author I Copland
             ///
             /// @return The language the device is set to.
             //---------------------------------------------------
-            Core::Locale& GetLanguage() override;
+            const std::string& GetLanguage() const override;
             //---------------------------------------------------
             /// @author I Copland
             ///
             /// @return The version of the operating system.
             //---------------------------------------------------
-            const std::string& GetOSVersion() override;
+            const std::string& GetOSVersion() const override;
             //---------------------------------------------------
             /// @author I Copland
             ///
             /// @return An identifier that can be used to uniquely
             /// identify the device.
             //---------------------------------------------------
-            const std::string& GetUDID() override;
+            const std::string& GetUDID() const override;
 			//---------------------------------------------------
 			/// @author I Copland
 			///
 			/// @return The number of CPU cores available on the
             /// device.
 			//--------------------------------------------------
-			u32 GetNumberOfCPUCores() override;
+			u32 GetNumberOfCPUCores() const override;
         private:
             friend Core::DeviceUPtr Core::Device::Create();
             //----------------------------------------------------
@@ -123,8 +123,8 @@ namespace ChilliSource
             std::string m_model;
             std::string m_modelType;
             std::string m_manufacturer;
-            Core::Locale m_locale;
-            Core::Locale m_language;
+            std::string m_locale;
+            std::string m_language;
             std::string m_osVersion;
             std::string m_udid;
 			u32 m_numCPUCores;

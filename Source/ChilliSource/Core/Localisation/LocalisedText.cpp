@@ -29,7 +29,7 @@ namespace ChilliSource
             Device* device = Core::Application::Get()->GetSystem<Device>();
             
             //Load any localised text from file
-            if(!Core::LocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, device->GetLanguage().GetLanguageCode() + ".mofloloca"))
+            if(!Core::LocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, device->GetLanguage() + ".mofloloca"))
             {
                 //Default to english
                 Core::LocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, "en.mofloloca");
