@@ -246,13 +246,6 @@ namespace ChilliSource
 			m_debugStats->RecordEvent("FPS", 1.0f / in_deltaTime);
 #endif
             
-            static u32 testCount = 0;
-            if (testCount++ > 10)
-            {
-                testCount = 0;
-                CS_LOG_VERBOSE("FPS: " + ToString(1.0f / in_deltaTime));
-            }
-            
 			//Update the app time since start
 			m_currentAppTime = in_timestamp;
             

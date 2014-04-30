@@ -168,6 +168,7 @@ namespace ChilliSource
             std::unordered_map<std::string, std::string> m_events;
             bool m_enabled;
             DebugStatsViewSPtr m_view;
+            TimeIntervalMs m_lastRefresh;
         };
         //------------------------------------------------------------
         //------------------------------------------------------------

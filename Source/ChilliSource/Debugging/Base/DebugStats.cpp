@@ -29,6 +29,7 @@
 
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Debugging/Base/DebugStatsView.h>
 #include <ChilliSource/GUI/Base/Window.h>
@@ -37,6 +38,11 @@ namespace ChilliSource
 {
     namespace Debugging
     {
+        namespace
+        {
+            const TimeIntervalMs k_timeBetweenRefreshes = 100;
+        }
+        
         CS_DEFINE_NAMEDTYPE(DebugStats);
         //--------------------------------------------------------------
         //--------------------------------------------------------------
@@ -47,7 +53,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         DebugStats::DebugStats()
-            : m_enabled(true)
+            : m_enabled(true), m_lastRefresh(0)
         {
         }
         //--------------------------------------------------------------
@@ -140,9 +146,16 @@ namespace ChilliSource
         {
             if(m_enabled == true)
             {
+                TimeIntervalMs timeNow = Core::Application::Get()->GetSystemTimeInMilliseconds();
+                TimeIntervalMs timeSince = timeNow - m_lastRefresh;
+                if (timeSince > k_timeBetweenRefreshes)
+                {
+                    m_lastRefresh = timeNow;
+                    m_view->Refresh(m_events);
+                }
+                
                 m_view->SetParentView(in_window);
                 m_view->SetRootWindow(in_window);
-                m_view->Refresh(m_events);
                 m_view->Draw(in_canvas);
             }
         }
