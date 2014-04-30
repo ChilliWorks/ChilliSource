@@ -15,7 +15,6 @@
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
-#include <ChilliSource/GUI/Debug/DebugStatsView.h>
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
@@ -195,30 +194,14 @@ namespace ChilliSource
         }
 #ifdef CS_ENABLE_DEBUGSTATS
         //-----------------------------------------------------
-        /// Draw
-        ///
-        /// Override this implementation to draw the GUI
-        /// using the primitves within canvas renderer i.e.
-        /// DrawBox, DrawString etc
-        ///
-        /// @param Canvas renderer
         //-----------------------------------------------------
         void Window::Draw(Rendering::CanvasRenderer * inpCanvas)
         {
             GUIView::Draw(inpCanvas);
-            
-            if(Debugging::DebugStats::IsEnabled())
-            {
-                DebugStatsView::GetSingletonPtr()->SetParentView(this);
-                DebugStatsView::GetSingletonPtr()->SetRootWindow(this);
-                DebugStatsView::GetSingletonPtr()->RefreshStats();
-                DebugStatsView::GetSingletonPtr()->Draw(inpCanvas);
-            }
+            Core::Application::Get()->GetDebugStats()->DrawStats(inpCanvas, this);
         }
 #endif
 		//-----------------------------------------------
-		/// Destructor
-		///
 		//-----------------------------------------------
 		Window::~Window()
 		{

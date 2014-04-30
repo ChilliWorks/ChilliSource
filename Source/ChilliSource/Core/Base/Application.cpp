@@ -242,9 +242,16 @@ namespace ChilliSource
             }
             
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::RecordEvent("FrameTime", in_deltaTime);
-			Debugging::DebugStats::RecordEvent("FPS", 1.0f/in_deltaTime);
+            m_debugStats->RecordEvent("FrameTime", in_deltaTime);
+			m_debugStats->RecordEvent("FPS", 1.0f / in_deltaTime);
 #endif
+            
+            static u32 testCount = 0;
+            if (testCount++ > 10)
+            {
+                testCount = 0;
+                CS_LOG_VERBOSE("FPS: " + ToString(1.0f / in_deltaTime));
+            }
             
 			//Update the app time since start
 			m_currentAppTime = in_timestamp;
@@ -282,7 +289,7 @@ namespace ChilliSource
             m_renderer->RenderToScreen(m_stateManager->GetActiveState()->GetScene());
             
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::Clear();
+            m_debugStats->Clear();
 #endif
 		}
         //----------------------------------------------------
@@ -383,6 +390,10 @@ namespace ChilliSource
             CreateSystem<AppDataStore>();
             CreateSystem<CSImageProvider>();
             CreateSystem<DialogueBoxSystem>();
+            
+#ifdef CS_ENABLE_DEBUGSTATS
+            m_debugStats = CreateSystem<Debugging::DebugStats>();
+#endif
             
             //TODO: Change this to a PNG image provider.
             CreateSystem<ImageProvider>();

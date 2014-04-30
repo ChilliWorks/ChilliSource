@@ -270,6 +270,21 @@ namespace ChilliSource
             {
                 return m_resourcePool;
             }
+#ifdef CS_ENABLE_DEBUGSTATS
+            //-----------------------------------------------------
+			/// Returns a pointer to the debug stats system. This
+            /// is only available when the debug stats proprocessor
+            /// flag CS_ENABLE_DEBUGSTATS is defined.
+            ///
+            /// @author I Copland
+			///
+			/// @return Pointer to the debug stats system.
+			//-----------------------------------------------------
+			inline Debugging::DebugStats* GetDebugStats()
+            {
+                return m_debugStats;
+            }
+#endif
             //----------------------------------------------------
 			/// Initialises the application and kicks off the update
             /// loop. This should not be called by a users application.
@@ -464,6 +479,10 @@ namespace ChilliSource
             PlatformSystemUPtr m_platformSystem;
             FileSystem* m_fileSystem;
             Input::PointerSystem* m_pointerSystem;
+
+#ifdef CS_ENABLE_DEBUGSTATS
+            Debugging::DebugStats* m_debugStats;
+#endif
             
             ComponentFactoryDispenser* m_componentFactoryDispenser;
 

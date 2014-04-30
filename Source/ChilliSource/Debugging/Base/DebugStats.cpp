@@ -1,141 +1,162 @@
-/*
- *  DebugStats.cpp
- *  iOSTemplate
- *
- *  Created by Scott Downie on 04/08/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
-
-#include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/Debugging/Base/DebugStats.h>
-#include <ChilliSource/GUI/Debug/DebugStatsView.h>
+//
+//  DebugStats.cpp
+//  Chilli Source
+//  Created by Scott Downie on 04/08/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 
 #ifdef CS_ENABLE_DEBUGSTATS
+
+#include <ChilliSource/Debugging/Base/DebugStats.h>
+
+#include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Debugging/Base/DebugStatsView.h>
+#include <ChilliSource/GUI/Base/Window.h>
 
 namespace ChilliSource
 {
     namespace Debugging
     {
-        DebugStats::MapStringToString DebugStats::mmapEvents;
-        bool DebugStats::mbEnabled = true;
-        
-        //----------------------------------------------------------------------------------
-        /// Get Value For Event
-        ///
-        /// Get the current value for the given event type
-        ///
-        /// @param Type ID
-        /// @return Value as string
-        //----------------------------------------------------------------------------------
-        const std::string& DebugStats::GetValueForEvent(const std::string& instrType)
+        CS_DEFINE_NAMEDTYPE(DebugStats);
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        DebugStatsUPtr DebugStats::Create()
         {
-            return mmapEvents[instrType];
+            return DebugStatsUPtr(new DebugStats());
         }
-        //----------------------------------------------------------------------------------
-        /// Add To Event
-        ///
-        /// Add the given value to the value already stored for the given event
-        ///
-        /// @param Type ID
-        /// @param Value to add
-        //----------------------------------------------------------------------------------
-        void DebugStats::AddToEvent(const std::string& instrType, u32 inudwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        DebugStats::DebugStats()
+            : m_enabled(true)
         {
-            if(!mbEnabled) return;
-            
-            MapStringToString::iterator it = mmapEvents.find(instrType);
-            
-            u32 udwNewValue = inudwValue;
-            
-            if(it != mmapEvents.end())
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        bool DebugStats::IsA(Core::InterfaceIDType in_interfaceId) const
+        {
+            return (DebugStats::InterfaceID == in_interfaceId);
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        bool DebugStats::IsEnabled() const
+        {
+            return m_enabled;
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        void DebugStats::SetEnabled(bool in_enabled)
+        {
+            m_enabled = in_enabled;
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        void DebugStats::AddToEvent(const std::string& in_eventName, u32 in_value)
+        {
+            if(m_enabled == false)
             {
-                udwNewValue = Core::ParseU32(mmapEvents[instrType]) + inudwValue;
-                it->second = Core::ToString(udwNewValue);
+                return;
+            }
+            
+            auto it = m_events.find(in_eventName);
+            if(it != m_events.end())
+            {
+                u32 newValue = Core::ParseU32(it->second) + in_value;
+                it->second = Core::ToString(newValue);
             }
             else
             {
-                mmapEvents[instrType] = Core::ToString(udwNewValue);
+                m_events[in_eventName] = Core::ToString(in_value);
             }
         }
-        //----------------------------------------------------------------------------------
-        /// Add To Event
-        ///
-        /// Add the given value to the value already stored for the given event
-        ///
-        /// @param Type ID
-        /// @param Value to add
-        //----------------------------------------------------------------------------------
-        void DebugStats::AddToEvent(const std::string& instrType, s32 indwValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        void DebugStats::AddToEvent(const std::string& in_eventName, s32 in_value)
         {
-            if(!mbEnabled) return;
-            
-            MapStringToString::iterator it = mmapEvents.find(instrType);
-            
-            s32 dwNewValue = indwValue;
-            
-            if(it != mmapEvents.end())
+            if(m_enabled == false)
             {
-                dwNewValue = Core::ParseS32(mmapEvents[instrType]) + indwValue;
-                it->second = Core::ToString(dwNewValue);
+                return;
+            }
+            
+            auto it = m_events.find(in_eventName);
+            if(it != m_events.end())
+            {
+                s32 newValue = Core::ParseS32(it->second) + in_value;
+                it->second = Core::ToString(newValue);
             }
             else
             {
-                mmapEvents[instrType] = Core::ToString(dwNewValue);
+                m_events[in_eventName] = Core::ToString(in_value);
             }
         }
-        //----------------------------------------------------------------------------------
-        /// Add To Event
-        ///
-        /// Add the given value to the value already stored for the given event
-        ///
-        /// @param Type ID
-        /// @param Value to add
-        //----------------------------------------------------------------------------------
-        void DebugStats::AddToEvent(const std::string& instrType, f32 infValue)
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        void DebugStats::AddToEvent(const std::string& in_eventName, f32 in_value)
         {
-            if(!mbEnabled) return;
-            
-            MapStringToString::iterator it = mmapEvents.find(instrType);
-            
-            f32 fNewValue = infValue;
-            
-            if(it != mmapEvents.end())
+            if(m_enabled == false)
             {
-                fNewValue = Core::ParseF32(mmapEvents[instrType]) + infValue;
-                it->second = Core::ToString(fNewValue);
+                return;
+            }
+            
+            auto it = m_events.find(in_eventName);
+            if(it != m_events.end())
+            {
+                f32 newValue = Core::ParseF32(it->second) + in_value;
+                it->second = Core::ToString(newValue);
             }
             else
             {
-                mmapEvents[instrType] = Core::ToString(fNewValue);
+                m_events[in_eventName] = Core::ToString(in_value);
             }
         }
-        //----------------------------------------------------------------------------------
-        /// Set Enabled
-        ///
-        /// @param Whether tracking is enabled
-        //----------------------------------------------------------------------------------
-        void DebugStats::SetEnabled(bool inbEnabled)
-        {
-            mbEnabled = inbEnabled;
-        }
-        //----------------------------------------------------------------------------------
-        /// Is Enabled
-        ///
-        /// @return Whether tracking is enabled
-        //----------------------------------------------------------------------------------
-        bool DebugStats::IsEnabled()
-        {
-            return mbEnabled;
-        }
-        //----------------------------------------------------------------------------------
-        /// Clear
-        ///
-        /// Clear all the previously recorded stats
-        //----------------------------------------------------------------------------------
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
         void DebugStats::Clear()
         {
-            mmapEvents.clear();
+            m_events.clear();
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        void DebugStats::DrawStats(Rendering::CanvasRenderer* in_canvas, GUI::Window* in_window)
+        {
+            if(m_enabled == true)
+            {
+                m_view->SetParentView(in_window);
+                m_view->SetRootWindow(in_window);
+                m_view->Refresh(m_events);
+                m_view->Draw(in_canvas);
+            }
+        }
+        //------------------------------------------------------------
+        //------------------------------------------------------------
+        void DebugStats::OnInit()
+        {
+            m_view = DebugStatsViewSPtr(new DebugStatsView());
+        }
+        //------------------------------------------------------------
+        //------------------------------------------------------------
+        void DebugStats::OnDestroy()
+        {
+            m_view.reset();
         }
     }
 }

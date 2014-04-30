@@ -526,8 +526,8 @@ namespace ChilliSource
         void RenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("DrawCalls", 1u);
-			Debugging::DebugStats::AddToEvent("Verts", inudwNumVerts);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
+			Core::Application::Get()->GetDebugStats()->AddToEvent("Verts", inudwNumVerts);
 #endif
             
 			//Set the new model view matrix based on the camera view matrix and the object matrix
@@ -551,7 +551,7 @@ namespace ChilliSource
         void RenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("DrawCalls", 1u);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
 #endif
 
 			//Set the new model view matrix based on the camera view matrix and the object matrix
