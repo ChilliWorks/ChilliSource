@@ -50,7 +50,39 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
+        namespace
+        {
+            //--------------------------------------------------------
+            /// Calculate the size with the maximum dimension of 1.0
+            /// such that the aspect ratio of the given size is maintained
+            ///
+            /// @author S Downie
+            ///
+            /// @param Original size
+            ///
+            /// @return Normalised size maintaining aspect
+            //--------------------------------------------------------
+            Core::Vector2 CalculateNormalisedSizeMaintainingAspect(const Core::Vector2& in_originalSize)
+            {
+                Core::Vector2 normSize;
+                
+                if(in_originalSize.x >= in_originalSize.y)
+                {
+                    normSize.x = 1.0f;
+                    normSize.y = in_originalSize.y/in_originalSize.x;
+                }
+                else
+                {
+                    normSize.x = in_originalSize.x/in_originalSize.y;
+                    normSize.y = 1.0f;
+                }
+                
+                return normSize;
+            }
+        }
+        
 		CS_DEFINE_NAMEDTYPE(RenderComponentFactory);
+        
         //--------------------------------------------------------
         //--------------------------------------------------------
         RenderComponentFactoryUPtr RenderComponentFactory::Create()
@@ -87,12 +119,22 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material)
+        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteSizePolicy in_sizePolicy)
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(in_material);
-            pSprite->SetDimensions(in_textureAtlas->GetFrameSize(in_textureId));
             pSprite->SetUVs(in_textureAtlas->GetFrameUVs(in_textureId));
+            
+            switch(in_sizePolicy)
+            {
+                case SpriteSizePolicy::k_useImageSize:
+                    pSprite->SetDimensions(in_textureAtlas->GetFrameSize(in_textureId));
+                    break;
+                case SpriteSizePolicy::k_normaliseMaintainingAspect:
+                    Core::Vector2 frameSize(in_textureAtlas->GetFrameSize(in_textureId));
+                    pSprite->SetDimensions(CalculateNormalisedSizeMaintainingAspect(frameSize));
+                    break;
+            }
             
             return pSprite;
         }

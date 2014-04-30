@@ -46,15 +46,26 @@ namespace ChilliSource
 		{
 		public:
             
+            //---------------------------------------------------------------------------
+            /// Policy for setting the intial size of a sprite component
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------------------------
+            enum class SpriteSizePolicy
+            {
+                k_useImageSize,
+                k_normaliseMaintainingAspect
+            };
+            
 			CS_DECLARE_NAMEDTYPE(RenderComponentFactory);
 
-            //--------------------------------------------------------
+            //---------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @param Interface Id
             ///
             /// @return If the object is of the given interface type
-            //--------------------------------------------------------
+            //---------------------------------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------------------------
 			/// Creates a sprite component with the given size and material
@@ -76,10 +87,11 @@ namespace ChilliSource
             /// @param Texture atlas
             /// @param Atlas Id
             /// @param Material
+            /// @param Size policy for setting the initial size of the sprite
             ///
             /// @return Ownership of new sprite component
 			//---------------------------------------------------------------------------
-			SpriteComponentUPtr CreateSpriteComponent(const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material);
+			SpriteComponentUPtr CreateSpriteComponent(const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteSizePolicy in_sizePolicy);
             //---------------------------------------------------------------------------
 			/// Creates a static mesh component with the given material
 			///
