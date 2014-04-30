@@ -11,7 +11,6 @@
 #define _MOFLOW_CORE_PLATFORMSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Localisation/Locales.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 namespace ChilliSource

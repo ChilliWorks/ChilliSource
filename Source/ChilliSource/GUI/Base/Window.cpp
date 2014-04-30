@@ -9,7 +9,6 @@
 #include <ChilliSource/GUI/Base/Window.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
