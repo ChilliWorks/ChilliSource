@@ -64,6 +64,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             Core::Vector2 CalculateNormalisedSizeMaintainingAspect(const Core::Vector2& in_originalSize)
             {
+                CS_ASSERT(in_originalSize.x != 0.0f && in_originalSize.y != 0.0f, "Cannot have ZERO original size");
                 Core::Vector2 normSize;
                 
                 if(in_originalSize.x >= in_originalSize.y)
