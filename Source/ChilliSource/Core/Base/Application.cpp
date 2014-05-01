@@ -168,12 +168,11 @@ namespace ChilliSource
             
             GUI::GUIViewFactory::RegisterDefaults();
 
-            //Initialise the platform specific API's
-            m_platformSystem = PlatformSystem::Create();
-			m_platformSystem->Init();
-            
-			//System setup
+            //Create and initalise the platform system first before adding the other
+            //default system.
             m_isSystemCreationAllowed = true;
+            m_platformSystem = CreateSystem<PlatformSystem>();
+			m_platformSystem->Init();
             CreateDefaultSystems();
 			m_platformSystem->CreateDefaultSystems(this);
 			CreateSystems();
@@ -351,7 +350,8 @@ namespace ChilliSource
             
             m_renderSystem->Destroy();
             
-            m_platformSystem.reset();
+            m_systems.clear();
+            
 			m_renderer.reset();
             CS_SAFEDELETE(m_componentFactoryDispenser);
             
@@ -424,8 +424,6 @@ namespace ChilliSource
                     }
 				}
 			}
-
-            m_platformSystem->PostCreateSystems();
 		}
         //----------------------------------------------------
         //----------------------------------------------------
