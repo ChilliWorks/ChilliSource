@@ -17,7 +17,6 @@
 #include <ChilliSource/Core/Entity/ComponentFactory.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
-#include <ChilliSource/Core/File/TweakableConstants.h>
 #include <ChilliSource/Core/Image/ImageProvider.h>
 #include <ChilliSource/Core/Image/CSImageProvider.h>
 #include <ChilliSource/Core/JSON/json.h>
@@ -180,10 +179,6 @@ namespace ChilliSource
 			CreateSystems();
             m_isSystemCreationAllowed = false;
 			PostCreateSystems();
-
-            //init tweakable constants and local data store.
-			new TweakableConstants();
-			new AppDataStore();
             
             m_renderSystem->Init();
             
