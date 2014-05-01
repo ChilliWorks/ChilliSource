@@ -86,6 +86,14 @@ namespace ChilliSource
 			/// @author S Downie
 			//---------------------------------------------------
 			void PollEvents();
+			//-------------------------------------------------
+			/// @author S Downie
+			///
+			/// @param The maximum frames per second to clamp 
+			/// to. This should be in multiples of 15 
+			/// (15, 30, 60)
+			//-------------------------------------------------
+			void SetMaxFPS(u32 in_fps);
 			//---------------------------------------------------
 			/// @author S Downie
 			///

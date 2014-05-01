@@ -6,13 +6,15 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#define WIN32_LEAN_AND_MEAN
+
 
 #include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
+#include <ChilliSource/Core/Base/Application.h>
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 //As the opengl classes need to include glfw.h, they need to be included after windows.h to avoid macro redefinitions.
@@ -20,23 +22,33 @@
 
 namespace ChilliSource 
 {
-	//This is global as LARGE_INTEGER is defined in windows.h. Including windows.h in PlatformSystemWindows.h will cause compiler errors
-	//in FileSystemWindows.h
-	LARGE_INTEGER gFrequency;
-
 	namespace Windows
 	{
+		namespace
+		{
+			//This is global as LARGE_INTEGER is defined in windows.h. Including windows.h in 
+			//PlatformSystem.h will cause compiler errors in FileSystem.h
+			LARGE_INTEGER g_frequency;
+		}
+
+		CS_DEFINE_NAMEDTYPE(PlatformSystem);
 		//-----------------------------------------
 		//-----------------------------------------
 		PlatformSystem::PlatformSystem() 
-		: m_isRunning(true), m_isSuspended(false), m_appStartTime(0), m_appPreviousTime(0.0)
+			: m_isRunning(true), m_isSuspended(false), m_appStartTime(0), m_appPreviousTime(0.0)
 		{
+		}
+		//--------------------------------------------------
+		//--------------------------------------------------
+		bool PlatformSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		{
+			return (Core::PlatformSystem::InterfaceID == in_interfaceId || PlatformSystem::InterfaceID == in_interfaceId);
 		}
 		//-----------------------------------------
 		//-----------------------------------------
 		void PlatformSystem::Init()
 		{
-			QueryPerformanceFrequency(&gFrequency);
+			QueryPerformanceFrequency(&g_frequency);
 
 			GLFWManager::Create();
 
@@ -55,12 +67,6 @@ namespace ChilliSource
 		{
 			in_application->CreateSystem<OpenGL::GLSLShaderProvider>();
 			in_application->CreateSystem<OpenGL::TextureUnitSystem>();
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		void PlatformSystem::PostCreateSystems()
-		{
-
 		}
 		//-----------------------------------------
 		//-----------------------------------------
@@ -84,11 +90,17 @@ namespace ChilliSource
 				}
 			}
 		}
-		//-----------------------------------------
-		//-----------------------------------------
-		void PlatformSystem::SetUpdaterActive(bool inbIsActive)
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void PlatformSystem::SetMaxFPS(u32 in_fps)
 		{
-			m_isSuspended = !inbIsActive;
+			GLFWManager::Get()->SetMaxFPS(in_fps);
+		}
+		//-----------------------------------------
+		//-----------------------------------------
+		void PlatformSystem::SetUpdaterActive(bool in_isActive)
+		{
+			m_isSuspended = !in_isActive;
 		}
 		//--------------------------------------------
 		//--------------------------------------------
@@ -96,13 +108,19 @@ namespace ChilliSource
 		{
 			m_isRunning = false;
 		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		std::string PlatformSystem::GetAppVersion() const
+		{
+			return ""; 
+		}
 		//--------------------------------------------------
 		//--------------------------------------------------
 		u64 PlatformSystem::GetSystemTimeMS() const
 		{
 			LARGE_INTEGER currentTime;
             QueryPerformanceCounter(&currentTime);
-            return (u64)((currentTime.QuadPart) * 1000.0 / gFrequency.QuadPart);
+			return (u64)((currentTime.QuadPart) * 1000.0 / g_frequency.QuadPart);
 		}
 		//---GLFW Delegates
 		//-------------------------------------------------
