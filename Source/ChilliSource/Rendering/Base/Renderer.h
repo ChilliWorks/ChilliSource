@@ -280,7 +280,16 @@ namespace ChilliSource
             /// @param Renderables
             //----------------------------------------------------------
             void SortTransparent(CameraComponent* inpCameraComponent, std::vector<RenderComponent*>& inaRenderables) const;
-            
+            //------------------------------------------------
+            /// Called when the application is being destroyed.
+            /// This should be used to cleanup memory and
+            /// references to other systems. System destruction
+            /// occurs in the reverse order to which they
+            /// were created
+            ///
+            /// @author I Copland
+            //------------------------------------------------
+            void OnDestroy() override;
         private:
             
             CanvasRendererUPtr m_canvas;

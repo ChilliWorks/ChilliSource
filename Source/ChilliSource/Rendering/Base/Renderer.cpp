@@ -500,5 +500,11 @@ namespace ChilliSource
             const f32 kfOverlayFar = 100.0f;
             return Core::Matrix4x4::CreateOrthoMatrixOffset(0, kvOverlayDimensions.x, 0, kvOverlayDimensions.y, kfOverlayNear, kfOverlayFar);
         }
+        //------------------------------------------------
+        //------------------------------------------------
+        void Renderer::OnDestroy()
+        {
+            m_canvas = nullptr;
+        }
 	}
 }
