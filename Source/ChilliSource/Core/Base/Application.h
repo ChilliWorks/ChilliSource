@@ -213,7 +213,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			inline Rendering::Renderer* GetRenderer()
             {
-                return m_renderer.get();
+                return m_renderer;
             }
 			//-----------------------------------------------------
 			/// Returns a pointer to the render system.
@@ -225,17 +225,6 @@ namespace ChilliSource
 			inline Rendering::RenderSystem* GetRenderSystem()
             {
                 return m_renderSystem;
-            }
-            //-----------------------------------------------------
-			/// Returns a pointer to the platform system.
-            ///
-            /// @author S Downie.
-			///
-            /// @return Pointer to the platform system
-            //-----------------------------------------------------
-			inline PlatformSystem* GetPlatformSystem()
-            {
-                return m_platformSystem.get();
             }
 			//-----------------------------------------------------
 			/// Returns a pointer to the file system.
@@ -270,6 +259,21 @@ namespace ChilliSource
             {
                 return m_resourcePool;
             }
+#ifdef CS_ENABLE_DEBUGSTATS
+            //-----------------------------------------------------
+			/// Returns a pointer to the debug stats system. This
+            /// is only available when the debug stats proprocessor
+            /// flag CS_ENABLE_DEBUGSTATS is defined.
+            ///
+            /// @author I Copland
+			///
+			/// @return Pointer to the debug stats system.
+			//-----------------------------------------------------
+			inline Debugging::DebugStats* GetDebugStats()
+            {
+                return m_debugStats;
+            }
+#endif
             //----------------------------------------------------
 			/// Initialises the application and kicks off the update
             /// loop. This should not be called by a users application.
@@ -303,26 +307,6 @@ namespace ChilliSource
             /// @param The frame timestamp.
 			//----------------------------------------------------
 			void Update(f32 in_deltaTime, TimeIntervalSecs in_timestamp);
-            //----------------------------------------------------
-			/// Triggered on receiving a "orientation changed"
-            /// event. Used to tell the camera and input to rotate.
-            /// This should not be called by a users application.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The new orientation.
-			//----------------------------------------------------
-			void ScreenChangedOrientation(ScreenOrientation in_orientation);
-			//----------------------------------------------------
-			/// Triggered on receiving a "screen resized" event.
-            /// This should not be called by a users application.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The new width.
-            /// @param The new height.
-			//----------------------------------------------------
-			void ScreenResized(u32 in_width, u32 in_height);
 			//----------------------------------------------------
 			/// Triggered on receiving a "application memory warning"
             /// event. This will notify active resource managers to
@@ -472,16 +456,6 @@ namespace ChilliSource
             /// @author S Downie
             //---------------------------------------------------
             void OnForeground();
-            //------------------------------------------------------
-			/// Tell the active camera to roate its view and if we
-            /// are using touch input we must rotate the input
-            /// co-ordinates.
-            ///
-            /// @author S Downie
-            ///
-			/// @param Screen orientation flag
-			//------------------------------------------------------
-			void SetOrientation(ScreenOrientation inOrientation);
 
         private:
             std::vector<AppSystemUPtr> m_systems;
@@ -489,13 +463,15 @@ namespace ChilliSource
             ResourcePool* m_resourcePool;
 			StateManager* m_stateManager;
 			TaskScheduler* m_taskScheduler;
-			Rendering::RendererUPtr m_renderer;
+			Rendering::Renderer* m_renderer;
             Rendering::RenderSystem* m_renderSystem;
-            PlatformSystemUPtr m_platformSystem;
+            PlatformSystem* m_platformSystem;
             FileSystem* m_fileSystem;
             Input::PointerSystem* m_pointerSystem;
 
-			ScreenOrientation m_defaultOrientation;
+#ifdef CS_ENABLE_DEBUGSTATS
+            Debugging::DebugStats* m_debugStats;
+#endif
             
             ComponentFactoryDispenser* m_componentFactoryDispenser;
 

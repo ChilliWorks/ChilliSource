@@ -35,6 +35,8 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(ImageProvider);
 		CS_FORWARDDECLARE_CLASS(LocalNotificationJavaInterface);
 		CS_FORWARDDECLARE_CLASS(LocalNotificationScheduler);
+        CS_FORWARDDECLARE_CLASS(Device);
+        CS_FORWARDDECLARE_CLASS(Screen);
 		//------------------------------------------------------
 		/// Extensions
 		//------------------------------------------------------
@@ -64,16 +66,11 @@ namespace ChilliSource
 		//------------------------------------------------------
 		/// Social
 		//------------------------------------------------------
-		CS_FORWARDDECLARE_CLASS(ContactInformationProvider);
-		CS_FORWARDDECLARE_CLASS(ContactInformationProviderJavaInterface);
 		CS_FORWARDDECLARE_CLASS(EmailComposer);
 		CS_FORWARDDECLARE_CLASS(EmailComposerJavaInterface);
 		CS_FORWARDDECLARE_CLASS(FacebookAuthentication);
 		CS_FORWARDDECLARE_CLASS(FacebookPostSystem);
 		CS_FORWARDDECLARE_CLASS(FacebookJavaInterface);
-		CS_FORWARDDECLARE_CLASS(TwitterAuthenticationActivity);
-		CS_FORWARDDECLARE_CLASS(TwitterPostSystem);
-		CS_FORWARDDECLARE_CLASS(TwitterAuthenticationActivityJavaInterface);
 		//------------------------------------------------------
 		/// Video
 		//------------------------------------------------------

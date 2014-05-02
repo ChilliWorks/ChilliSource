@@ -389,7 +389,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void ToggleButton::OnButtonDeselectThreshold(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
         {
-            const f32 kfThreshold = (f32)(Core::Screen::GetOrientedWidth()) * 0.02f;
+            const f32 kfThreshold = (f32)(GetScreen()->GetResolution().x) * 0.02f;
             f32 fDistX = std::abs(in_pointer.m_location.x - mvSelectedPos.x);
             f32 fDisty = std::abs(in_pointer.m_location.y - mvSelectedPos.y);
 			if(fDistX >= kfThreshold || fDisty >= kfThreshold)

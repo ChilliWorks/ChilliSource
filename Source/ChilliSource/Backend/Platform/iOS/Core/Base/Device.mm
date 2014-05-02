@@ -97,22 +97,26 @@ namespace ChilliSource
             }
             //---------------------------------------------
             //---------------------------------------------
-            Core::Locale GetLocale()
+            std::string GetLocale()
             {
                 @autoreleasepool
                 {
-                    NSLocale *locale = [NSLocale currentLocale];
-                    NSString *countryCodeObjc = [locale objectForKey:NSLocaleCountryCode];
-                    std::string countryCode = [countryCodeObjc UTF8String];
-                    NSString *languageCodeObjc = [locale objectForKey:NSLocaleLanguageCode];
-                    std::string languageCode = [languageCodeObjc UTF8String];
-                    
-                    return ChilliSource::Core::Locale(languageCode, countryCode);
+                    NSLocale* locale = [NSLocale currentLocale];
+                    NSString* languageCode = [locale objectForKey:NSLocaleLanguageCode];
+                    NSString* countryCode = [locale objectForKey:NSLocaleCountryCode];
+                    if (countryCode != nil && [countryCode length] > 0)
+                    {
+                        return [NSStringUtils newStringWithNSString:languageCode] + "_" + [NSStringUtils newStringWithNSString:countryCode];
+                    }
+                    else
+                    {
+                        return [NSStringUtils newStringWithNSString:languageCode];
+                    }
                 }
             }
             //---------------------------------------------
             //---------------------------------------------
-            Core::Locale GetLanguage()
+            std::string GetLanguage()
             {
                 @autoreleasepool
                 {
@@ -121,20 +125,14 @@ namespace ChilliSource
                     NSString* userLocale = [supportedLanguages objectAtIndex:0];
                     std::string localeCode = [userLocale UTF8String];
                     
-                    //break this locale into parts(language/country code/extra)
                     std::vector<std::string> localeBrokenUp = ChilliSource::Core::StringUtils::Split(localeCode, "-", 0);
-                    
-                    if (localeBrokenUp.size() > 1)
+                    if (localeBrokenUp.size() > 0)
                     {
-                        return Core::Locale(localeBrokenUp[0],localeBrokenUp[1]);
-                    }
-                    else if (localeBrokenUp.size() == 1)
-                    {
-                        return Core::Locale(localeBrokenUp[0]);
+                        return localeBrokenUp[0];
                     }
                     else
                     {
-                        return Core::kUnknownLocale;
+                        return "en";
                     }
                 }
             }
@@ -189,7 +187,7 @@ namespace ChilliSource
         //----------------------------------------------------
         //----------------------------------------------------
         Device::Device()
-            : m_locale(Core::kUnknownLocale), m_language(Core::kUnknownLocale)
+            : m_locale("en_GB"), m_language("en")
         {
             m_model = iOS::GetDeviceModel();
             m_modelType = iOS::GetDeviceModelType();
@@ -208,49 +206,49 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        const std::string& Device::GetModel()
+        const std::string& Device::GetModel() const
         {
             return m_model;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        const std::string& Device::GetModelType()
+        const std::string& Device::GetModelType() const
         {
             return m_modelType;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        const std::string& Device::GetManufacturer()
+        const std::string& Device::GetManufacturer() const
         {
             return m_manufacturer;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        Core::Locale& Device::GetLocale()
+        const std::string& Device::GetLocale() const
         {
             return m_locale;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        Core::Locale& Device::GetLanguage()
+        const std::string& Device::GetLanguage() const
         {
             return m_language;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        const std::string& Device::GetOSVersion()
+        const std::string& Device::GetOSVersion() const
         {
             return m_osVersion;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        const std::string& Device::GetUDID()
+        const std::string& Device::GetUDID() const
         {
             return m_udid;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        u32 Device::GetNumberOfCPUCores()
+        u32 Device::GetNumberOfCPUCores() const
         {
             return m_numCPUCores;
         }

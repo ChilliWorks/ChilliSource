@@ -204,6 +204,8 @@ namespace ChilliSource
             void OnDestroy() override;
             
         private:
+            Core::Screen* m_screen;
+            
             bool m_playing;
             MPMoviePlayerController* m_moviePlayerController;
             

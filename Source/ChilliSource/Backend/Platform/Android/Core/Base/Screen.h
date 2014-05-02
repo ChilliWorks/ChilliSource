@@ -1,11 +1,11 @@
 //
 //  Screen.h
 //  Chilli Source
-//  Created by Scott Downie on 12/10/2010.
+//  Created by Ian Copland on 28/04/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,49 +26,47 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_BASE_SCREEN_H_
-#define _CHILLISOURCE_CORE_BASE_SCREEN_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_SCREEN_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_SCREEN_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/System/AppSystem.h>
-
-#include <functional>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Event/Event.h>
 
 namespace ChilliSource
 {
-	namespace Core
-	{
+    namespace Android
+    {
         //----------------------------------------------------------------
-        /// An application system for retreiving information on the
-        /// screen such as the screen dimensions or the pixel density.
+        /// The Android backend for the screen. This provides information on
+        /// the include device's screen such as resolution and density scale.
         ///
-        /// @author S Downie
+        /// @author I Copland
         //----------------------------------------------------------------
-		class Screen : public AppSystem
+		class Screen final : public Core::Screen
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(Screen);
-            //-----------------------------------------------------------
-            /// A delegate called when the application screen resolution
-            /// changes. This can happen when the window is resized in
-            /// a desktop app or when the orientation changes in a mobile
-            /// app.
-            ///
-			/// @author I Copland
+            //-------------------------------------------------------
+			/// Queries whether or not this system implements the
+            /// interface with the given Id.
 			///
-			/// @param The new screen resolution.
+            /// @author I Copland
+            ///
+			/// @param The interface Id.
+			/// @param Whether system is of given type.
+			//-------------------------------------------------------
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//-----------------------------------------------------------
-            using ResolutionChangedDelegate = std::function<void(const Vector2&)>;
-			//-----------------------------------------------------------
-			/// @author S Downie
+			/// @author I Copland
 			///
 			/// @return Vector containing the width and height of screen
             /// space available to the application. For a desktop app
             /// this will be the current size of the window. For a mobile
             /// application this will be full size of the screen.
 			//-----------------------------------------------------------
-			virtual const Vector2& GetResolution() const = 0;
+			const Core::Vector2& GetResolution() const override;
             //-----------------------------------------------------------
             /// The density scale factor as reported by the device. What
             /// this factor relates to is platform dependant. On iOS it
@@ -77,43 +75,51 @@ namespace ChilliSource
             /// screen is considered, low, medium, high or extra high
             /// density.
             ///
-            /// @author S Downie
+            /// @author I Copland
             ///
             /// @return The density scale factor of the screen
             //-----------------------------------------------------------
-            virtual f32 GetDensityScale() const = 0;
+            f32 GetDensityScale() const override;
             //-----------------------------------------------------------
-            /// @author S Downie
+            /// @author I Copland
             ///
             /// @return The inverse of density scale factor of the screen
             //-----------------------------------------------------------
-            virtual f32 GetInverseDensityScale() const = 0;
+            f32 GetInverseDensityScale() const override;
             //-----------------------------------------------------------
             /// @author I Copland
 			///
 			/// @return An event that is called when the screen resolution
             /// changes.
 			//-----------------------------------------------------------
-			virtual IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() = 0;
+            Core::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() override;
             //-----------------------------------------------------------
-            /// Destructor
+            /// Called when the screen resolution changes. This will update
+            /// the screen resolution and notify listeners that the resolution
+            /// has changed. This is for internal use and should not be
+            /// called manually.
             ///
 			/// @author I Copland
-			//-----------------------------------------------------------
-			virtual ~Screen() {};
-		protected:
-            friend class Application;
-            //-----------------------------------------------------------
-            /// Factory creation method called by Application's Create
-            /// System method.
             ///
+            /// @param The new resolution.
+			//------------------------------------------------------------
+			void OnResolutionChanged(const Core::Vector2& in_resolution);
+        private:
+            friend Core::ScreenUPtr Core::Screen::Create();
+            //-------------------------------------------------------
+			/// Private constructor to force the use of the Create()
+            /// factory method.
+			///
             /// @author I Copland
-            ///
-            /// @param The new instance of the system.
-            //-----------------------------------------------------------
-            static ScreenUPtr Create();
-		};
-	}
+			//-------------------------------------------------------
+			Screen();
+            
+            Core::Vector2 m_resolution;
+            f32 m_densityScale;
+            f32 m_invDensityScale;
+            Core::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
+        };
+    }
 }
 
 #endif

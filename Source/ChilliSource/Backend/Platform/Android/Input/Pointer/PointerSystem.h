@@ -94,6 +94,7 @@ namespace ChilliSource
             //------------------------------------------------
             void OnDestroy() override;
 
+            Core::Screen* m_screen = nullptr;
             std::unordered_map<s32, PointerId> m_systemIdToPointerIdMap;
         };
     }

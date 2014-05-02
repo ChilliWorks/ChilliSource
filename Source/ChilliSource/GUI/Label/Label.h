@@ -202,12 +202,12 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			bool IsBackgroundEnabled() const;
 			//-----------------------------------------------------------
-			/// On Screen Orientation Changed
+			/// On Screen Resolution Changed
 			///
-			/// Triggered if the screen orientation changes so we can
+			/// Triggered if the screen resolution changes so we can
 			/// resize ourself
 			//-----------------------------------------------------------
-			void OnScreenOrientationChanged();
+			void OnScreenResolutionChanged();
             //-------------------------------------------------------
             /// Draw
             ///

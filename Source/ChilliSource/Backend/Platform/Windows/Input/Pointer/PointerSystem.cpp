@@ -9,6 +9,7 @@
 #include <ChilliSource/Backend/Platform/Windows/Input/Pointer/PointerSystem.h>
 
 #include <ChilliSource/Backend/Platform/Windows/GLFW/Base/GLFWManager.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
 //This needs to be included after windows.h
@@ -34,7 +35,6 @@ namespace ChilliSource
 
 				GLFWManager::Get()->GetCursorPos(&x, &y);
 
-				y = Core::Screen::GetOrientedHeight() - y;
 				return Core::Vector2((f32)x, (f32)y);
 			}
 			//------------------------------------------------
@@ -74,7 +74,7 @@ namespace ChilliSource
 		{
 			CS_ASSERT(g_pointerSystem, "OnMouseMoved callback requires a pointer system.");
 
-			Core::Vector2 touchLocation((f32)in_xPos, Core::Screen::GetOrientedDimensions().y - ((f32)in_yPos));
+			Core::Vector2 touchLocation((f32)in_xPos, g_pointerSystem->m_screen->GetResolution().y - ((f32)in_yPos));
 			g_pointerSystem->AddPointerMovedEvent(g_pointerSystem->m_pointerId, touchLocation);
 		}
 		//----------------------------------------------
@@ -113,6 +113,9 @@ namespace ChilliSource
 		//------------------------------------------------
 		void PointerSystem::OnInit()
 		{
+			m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+			CS_ASSERT(m_screen != nullptr, "Cannot find system required by PointerSystem: Screen.");
+			
 			g_pointerSystem = this;
 
 			//Register for glfw mouse callbacks
@@ -120,7 +123,10 @@ namespace ChilliSource
 			GLFWManager::Get()->SetMouseButtonDelegate(&PointerSystem::OnMouseButtonPressed);
 
 			//create the mouse pointer
-			m_pointerId = AddPointerCreateEvent(GetMousePosition());
+			Core::Vector2 mousePos = GetMousePosition();
+			mousePos.y = m_screen->GetResolution().y - mousePos.y;
+
+			m_pointerId = AddPointerCreateEvent(mousePos);
 		}
 		//------------------------------------------------
 		//------------------------------------------------
@@ -132,6 +138,8 @@ namespace ChilliSource
 			GLFWManager::Get()->SetMouseButtonDelegate(nullptr);
 
 			g_pointerSystem = nullptr;
+
+			m_screen = nullptr;
 		}
 	}
 }

@@ -242,15 +242,23 @@ namespace ChilliSource
             AddDismissButton();
             RemoveActivityIndicator();
         }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        void WebView::OnInit()
+        {
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+        }
         //-----------------------------------------------
         //-----------------------------------------------
         void WebView::CreateWebview(const Core::UnifiedVector2& in_size)
         {
             CS_ASSERT(m_webView == nil, "Cannot create webview becuase one already exists!");
             
+            Core::Vector2 dipsResolution = m_screen->GetResolution() * m_screen->GetInverseDensityScale();
+            
             //Create the  view and present it, centered on screen
-            m_absoluteSize = (Core::Screen::GetOrientedDimensions() * Core::Screen::GetInverseDensity() * in_size.GetRelative()) + in_size.GetAbsolute();
-            m_absolutePosition =  (Core::Screen::GetOrientedDimensions() * Core::Screen::GetInverseDensity() - m_absoluteSize)/2;
+            m_absoluteSize = (dipsResolution * in_size.GetRelative()) + in_size.GetAbsolute();
+            m_absolutePosition = (dipsResolution - m_absoluteSize) / 2.0f;
             m_webView = [[UIWebView alloc] initWithFrame:CGRectMake(m_absolutePosition.x, m_absolutePosition.y, m_absoluteSize.x, m_absoluteSize.y)];
         }
         //-----------------------------------------------

@@ -144,7 +144,7 @@ namespace ChilliSource
             std::string strType;
             std::string strSource;
             bool bExtern = false;
-            Core::StorageLocation eStorageLoc;
+            Core::StorageLocation eStorageLoc = Core::StorageLocation::k_none;
             
             for(rapidxml::xml_attribute<> * pAttr = inpViewElement->first_attribute(); pAttr != nullptr; pAttr = pAttr->next_attribute())
             {

@@ -8,11 +8,11 @@
 
 #include <ChilliSource/GUI/Base/GUIView.h>
 
-#include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Utils.h>
-
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 #include <algorithm>
@@ -60,7 +60,7 @@ namespace ChilliSource
         Scale(Core::Vector2::k_one), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
         {
-
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
         }
         //------------------------------------------------------
         /// Constructor
@@ -75,6 +75,8 @@ namespace ChilliSource
         Scale(Core::Vector2::k_one), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
         {
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            
             std::string strValue;
             
             //---Name
@@ -1521,6 +1523,12 @@ namespace ChilliSource
 			return vPos + GetAbsoluteScreenSpacePosition();
         }
         //-----------------------------------------------------
+        //-----------------------------------------------------
+        Core::Screen* GUIView::GetScreen() const
+        {
+            return m_screen;
+        }
+        //-----------------------------------------------------
         /// Get Transform
         ///
         /// @return Transformation matrix
@@ -1559,7 +1567,7 @@ namespace ChilliSource
             Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
             Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
         
-            return (vTopRight.y >= 0 && vBottomLeft.y <= Core::Screen::GetOrientedHeight() && vTopRight.x >= 0 && vBottomLeft.x <= Core::Screen::GetOrientedWidth());
+            return (vTopRight.y >= 0 && vBottomLeft.y <= m_screen->GetResolution().y && vTopRight.x >= 0 && vBottomLeft.x <= m_screen->GetResolution().x);
         }
         
         //---Functional overrides
@@ -1655,18 +1663,14 @@ namespace ChilliSource
 			return AcceptTouchesOutsideOfBounds;
 		}
 		//-----------------------------------------------------------
-		/// On Screen Orientation Changed
-		///
-		/// Triggered if the screen orientation changes so we can
-		/// resize ourself
 		//-----------------------------------------------------------
-		void GUIView::OnScreenOrientationChanged()
+		void GUIView::OnScreenResolutionChanged()
 		{
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize|(u32)TransformCache::k_absPos);
 
 			for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
 			{
-				(*it)->OnScreenOrientationChanged();
+				(*it)->OnScreenResolutionChanged();
 			}
 		}
         //---Touch Delegates
