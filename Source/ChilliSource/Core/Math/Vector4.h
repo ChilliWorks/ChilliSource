@@ -532,7 +532,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericVector4<TType> GenericVector4<TType>::NormaliseCopy() const
 		{
-			GenericVector4<TType> copy = in_value;
+			GenericVector4<TType> copy = *this;
 			copy.Normalise();
 			return copy;
 		}
@@ -581,7 +581,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericVector4<TType> GenericVector4<TType>::AbsCopy() const
 		{
-			GenericVector4<TType> copy = in_value;
+			GenericVector4<TType> copy = *this;
 			copy.Abs();
 			return copy;
 		}
@@ -629,12 +629,12 @@ namespace ChilliSource
 		//------------------------------------------------------
 		template <typename TType> GenericVector4<TType>& GenericVector4<TType>::operator*=(const GenericMatrix4<TType>& in_b)
 		{
-			GenericVector4<TType> c = in_a;
-			in_a.x = c.x * in_b.m[0] + c.y * in_b.m[4] + c.z * in_b.m[8] + c.w * in_b.m[12];
-			in_a.y = c.x * in_b.m[1] + c.y * in_b.m[5] + c.z * in_b.m[9] + c.w * in_b.m[13];
-			in_a.z = c.x * in_b.m[2] + c.y * in_b.m[6] + c.z * in_b.m[10] + c.w * in_b.m[14];
-			in_a.w = c.x * in_b.m[3] + c.y * in_b.m[7] + c.z * in_b.m[11] + c.w * in_b.m[15];
-			return in_a;
+			GenericVector4<TType> c = *this;
+			x = c.x * in_b.m[0] + c.y * in_b.m[4] + c.z * in_b.m[8] + c.w * in_b.m[12];
+			y = c.x * in_b.m[1] + c.y * in_b.m[5] + c.z * in_b.m[9] + c.w * in_b.m[13];
+			z = c.x * in_b.m[2] + c.y * in_b.m[6] + c.z * in_b.m[10] + c.w * in_b.m[14];
+			w = c.x * in_b.m[3] + c.y * in_b.m[7] + c.z * in_b.m[11] + c.w * in_b.m[15];
+			return *this;
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------

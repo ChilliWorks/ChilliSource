@@ -402,11 +402,11 @@ namespace ChilliSource
 
 			if (dot < 0.0f)
 			{
-				output = in_a + (t * ((in_b * -1) - in_a));
+				output = in_a + (in_t * ((in_b * -1) - in_a));
 			}
 			else
 			{
-				output = in_a + (t * (in_b - in_a));
+				output = in_a + (in_t * (in_b - in_a));
 			}
 
 			output.Normalise();
@@ -582,7 +582,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		template <typename TType> void GenericQuaternion<TType>::ToEulerAxes(GenericVector3<TType>& out_xAxis, GenericVector3<TType>& out_yAxis, GenericVector3<TType>& out_zAxis) const
 		{
-			GenericMatrix4<TType> rotation = Matrix4::CreateRotation(matRot);
+			GenericMatrix4<TType> rotation = Matrix4::CreateRotation(*this);
 
 			out_xAxis.x = rotation(0, 0);
 			out_xAxis.y = rotation(0, 1);

@@ -616,7 +616,7 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
-		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateRotationZ(TType inRotation)
+		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateRotationZ(TType in_angle)
 		{
 			TType sinA = (TType)std::sin(in_angle);
 			TType cosA = (TType)std::cos(in_angle);
