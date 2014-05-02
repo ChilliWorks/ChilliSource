@@ -16,6 +16,7 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Event/Event.h>
@@ -91,7 +92,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		bool RenderSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == RenderSystem::InterfaceID || inInterfaceID == Rendering::RenderSystem::InterfaceID || inInterfaceID == Core::IComponentProducer::InterfaceID;
+			return inInterfaceID == RenderSystem::InterfaceID || inInterfaceID == Rendering::RenderSystem::InterfaceID;
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------

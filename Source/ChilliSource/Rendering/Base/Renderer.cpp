@@ -273,7 +273,8 @@ namespace ChilliSource
             {
                 return pCullPredicate;
             }
-            if(inpActiveCamera->IsOrthographicView())
+            
+            if(inpActiveCamera->GetType() == CameraType::k_orthographic)
             {
                 return mpOrthoCullPredicate;
             }

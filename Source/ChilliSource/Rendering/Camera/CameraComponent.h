@@ -20,6 +20,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
+        enum class CameraType
+        {
+            k_orthographic,
+            k_perspective
+        };
+        
 		struct CameraDescription
 		{
 			f32 fFOV;
@@ -27,7 +33,7 @@ namespace ChilliSource
 			f32 fNearClipping;
 			f32 fFarClipping;
 			
-			bool IsOrthographic;
+			CameraType m_type;
 			bool bShouldResizeToScreen;
 			
 			Core::Colour ClearCol; 
@@ -58,18 +64,19 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			void SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp);
 			//----------------------------------------------------------
-			/// Use Orthographic View
+            /// Toggle between ortho and persp camera
+            ///
+			/// @author S Downie
 			///
-			/// Switch between ortho and perspective
-			/// @param On or off
+            /// @param Camera type
 			//----------------------------------------------------------
-			void UseOrthographicView(bool inbOrthoEnabled);
+			void SetType(CameraType in_type);
             //----------------------------------------------------------
-			/// Is Orthographic View
+			/// @author S Downie
 			///
-			/// @return On or off
+			/// @return Camera type
 			//----------------------------------------------------------
-			bool IsOrthographicView() const;
+			CameraType GetType() const;
 			//----------------------------------------------------------
 			/// Set Viewport Size
 			///

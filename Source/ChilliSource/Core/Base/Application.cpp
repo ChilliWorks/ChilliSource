@@ -17,7 +17,6 @@
 #include <ChilliSource/Core/Entity/ComponentFactory.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
-#include <ChilliSource/Core/File/TweakableConstants.h>
 #include <ChilliSource/Core/Image/ImageProvider.h>
 #include <ChilliSource/Core/Image/CSImageProvider.h>
 #include <ChilliSource/Core/JSON/json.h>
@@ -42,6 +41,7 @@
 
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Font/Font.h>
@@ -168,21 +168,16 @@ namespace ChilliSource
             
             GUI::GUIViewFactory::RegisterDefaults();
 
-            //Initialise the platform specific API's
-            m_platformSystem = PlatformSystem::Create();
-			m_platformSystem->Init();
-            
-			//System setup
+            //Create and initalise the platform system first before adding the other
+            //default system.
             m_isSystemCreationAllowed = true;
+            m_platformSystem = CreateSystem<PlatformSystem>();
+			m_platformSystem->Init();
             CreateDefaultSystems();
 			m_platformSystem->CreateDefaultSystems(this);
 			CreateSystems();
             m_isSystemCreationAllowed = false;
 			PostCreateSystems();
-
-            //init tweakable constants and local data store.
-			new TweakableConstants();
-			new AppDataStore();
             
             m_renderSystem->Init();
             
@@ -355,7 +350,8 @@ namespace ChilliSource
             
             m_renderSystem->Destroy();
             
-            m_platformSystem.reset();
+            m_systems.clear();
+            
 			m_renderer.reset();
             CS_SAFEDELETE(m_componentFactoryDispenser);
             
@@ -405,6 +401,7 @@ namespace ChilliSource
             CreateSystem<Rendering::TextureProvider>();
             CreateSystem<Rendering::CubemapProvider>();
             CreateSystem<Rendering::FontProvider>();
+            CreateSystem<Rendering::RenderComponentFactory>();
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -431,8 +428,6 @@ namespace ChilliSource
                     }
 				}
 			}
-
-            m_platformSystem->PostCreateSystems();
 		}
         //----------------------------------------------------
         //----------------------------------------------------

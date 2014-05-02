@@ -226,17 +226,6 @@ namespace ChilliSource
             {
                 return m_renderSystem;
             }
-            //-----------------------------------------------------
-			/// Returns a pointer to the platform system.
-            ///
-            /// @author S Downie.
-			///
-            /// @return Pointer to the platform system
-            //-----------------------------------------------------
-			inline PlatformSystem* GetPlatformSystem()
-            {
-                return m_platformSystem.get();
-            }
 			//-----------------------------------------------------
 			/// Returns a pointer to the file system.
             ///
@@ -476,7 +465,7 @@ namespace ChilliSource
 			TaskScheduler* m_taskScheduler;
 			Rendering::RendererUPtr m_renderer;
             Rendering::RenderSystem* m_renderSystem;
-            PlatformSystemUPtr m_platformSystem;
+            PlatformSystem* m_platformSystem;
             FileSystem* m_fileSystem;
             Input::PointerSystem* m_pointerSystem;
 

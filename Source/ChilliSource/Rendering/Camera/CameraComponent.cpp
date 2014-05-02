@@ -31,7 +31,16 @@ namespace ChilliSource
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             
 			EnableViewportResizeWithScreen(mDesc.bShouldResizeToScreen);
-			mDesc.IsOrthographic ? CalculateOrthographicMatrix() : CalculatePerspectiveMatrix();
+            
+            switch(mDesc.m_type)
+            {
+                case CameraType::k_orthographic:
+                    CalculateOrthographicMatrix();
+                    break;
+                case CameraType::k_perspective:
+                    CalculatePerspectiveMatrix();
+                    break;
+            }
 		}
 		//----------------------------------------------------------
 		/// Is A
@@ -117,26 +126,19 @@ namespace ChilliSource
 			//Return 2D screen space co-ordinates
 			return (Core::Vector2)vScreenPos;
 		}
-		//----------------------------------------------------------
-		/// Use Orthographic View
-		///
-		/// Switch between ortho and perspective
-		/// @param On or off
-		//----------------------------------------------------------
-		void CameraComponent::UseOrthographicView(bool inbOrthoEnabled)
-		{
-			mDesc.IsOrthographic = inbOrthoEnabled;
-
-			mbProjectionCacheValid = false;
-		}
         //----------------------------------------------------------
-        /// Is Orthographic View
-        ///
-        /// @return On or off
         //----------------------------------------------------------
-        bool CameraComponent::IsOrthographicView() const
+        void CameraComponent::SetType(CameraType in_type)
         {
-            return mDesc.IsOrthographic;
+            mDesc.m_type = in_type;
+            
+            mbProjectionCacheValid = false;
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        CameraType CameraComponent::GetType() const
+        {
+            return mDesc.m_type;
         }
 		//----------------------------------------------------------
 		/// Set Viewport Size
@@ -234,14 +236,16 @@ namespace ChilliSource
 				//If we are using a perspective matrix we will also
 				//need the orthographic matrix for screen space overlays
 				CalculateOrthographicMatrix();
-				if(mDesc.IsOrthographic) 
-				{
-					mmatProj = mmatOrthoProj;
-				} 
-				else 
-				{
-					CalculatePerspectiveMatrix();
-				}
+                
+                switch(mDesc.m_type)
+                {
+                    case CameraType::k_orthographic:
+                        mmatProj = mmatOrthoProj;
+                        break;
+                    case CameraType::k_perspective:
+                        CalculatePerspectiveMatrix();
+                        break;
+                }
 			}
 
 			return mmatProj;
@@ -437,7 +441,15 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         ICullingPredicateSPtr CameraComponent::GetCullingPredicate() const
         {
-            return IsOrthographicView() ? mpOrthographicCulling : mpPerspectiveCulling;
+            switch(mDesc.m_type)
+            {
+                case CameraType::k_orthographic:
+                    return mpOrthographicCulling;
+                case CameraType::k_perspective:
+                    return mpPerspectiveCulling;
+            }
+            
+            return nullptr;
         }
         //--------------------------------------------------------------------------------------------------
         /// Get Perspective Culling Predicate
