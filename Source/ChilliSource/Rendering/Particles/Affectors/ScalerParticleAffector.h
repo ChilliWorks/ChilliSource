@@ -1,17 +1,17 @@
 //
-//  ColourChangerParticleEffector.h
-//  moFloTest
+//  ScalerParticleAffector.h
+//  moFlow
 //
 //  Created by Scott Downie on 11/04/2011.
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
 
-#ifndef _MO_FLO_RENDERING_PARTICLES_EFFECTORS_LINEAR_FORCE_PARTICLE_EFFECTOR_H_
-#define _MO_FLO_RENDERING_PARTICLES_EFFECTORS_LINEAR_FORCE_PARTICLE_EFFECTOR_H_
+#ifndef _MO_FLO_RENDERING_PARTICLES_AFFECTORS_SCALER_PARTICLE_AFFECTOR_H_
+#define _MO_FLO_RENDERING_PARTICLES_AFFECTORS_SCALER_PARTICLE_AFFECTOR_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffector.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 
@@ -19,23 +19,23 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        class LinearForceParticleEffector : public ParticleEffector
+        class ScalerParticleAffector : public ParticleAffector
         {
         public:
-            LinearForceParticleEffector(const Core::ParamDictionary& insParams);
+            ScalerParticleAffector(const Core::ParamDictionary& insParams);
             //-----------------------------------------------------
             /// Create
             ///
-            /// Create a new effector from the given parameters
+            /// Create a new affector from the given parameters
             ///
             /// @param Param dictionary
-            /// @return Ownership of effector
+            /// @return Ownership of affector
             //-----------------------------------------------------
-            static ParticleEffectorUPtr Create(const Core::ParamDictionary& inParams);
+            static ParticleAffectorUPtr Create(const Core::ParamDictionary& inParams);
             //-----------------------------------------------------
             /// Init
             ///
-            /// The effector will initialise the particles to its
+            /// The affector will initialise the particles to its
             /// liking 
             ///
             /// @param Particle to intialise
@@ -44,7 +44,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Apply
             ///
-            /// The effector will apply itself to the given 
+            /// The affector will apply itself to the given 
             /// particles
             ///
             /// @param Particle to effect
@@ -54,7 +54,9 @@ namespace ChilliSource
             
         private:
             
-            Core::Vector3 mvForce;
+            bool mbInitialSet;
+            Core::Vector3 mvInitialScale;
+            Core::Vector3 mvTargetScale;
         };
     }
 }

@@ -465,8 +465,6 @@ namespace ChilliSource
             FileSystem* m_fileSystem;
             Input::PointerSystem* m_pointerSystem;
             
-            ComponentFactoryDispenser* m_componentFactoryDispenser;
-
 			TimeIntervalSecs m_currentAppTime;
             Rendering::FontCSPtr m_defaultFont;
             Rendering::MeshCSPtr m_defaultMesh;

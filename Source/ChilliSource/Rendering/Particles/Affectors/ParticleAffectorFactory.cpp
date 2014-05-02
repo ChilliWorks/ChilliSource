@@ -1,7 +1,7 @@
 //
-//  ParticleEmitterFactory.cpp
+//  ParticleAffectorFactory.cpp
 //  Chilli Source
-//  Created by S Downie on 11/04/2011.
+//  Created by S Downie on 07/04/2011.
 //
 //  The MIT License (MIT)
 //
@@ -26,68 +26,72 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffectorFactory.h>
 
 #include <ChilliSource/Core/Base/MakeDelegate.h>
-#include <ChilliSource/Rendering/Particles/Emitters/ConeParticleEmitter.h>
-#include <ChilliSource/Rendering/Particles/Emitters/PointParticleEmitter.h>
-#include <ChilliSource/Rendering/Particles/Emitters/RingParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ColourChangerParticleAffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/LinearForceParticleAffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ScalerParticleAffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/SpinnerParticleAffector.h>
 
 namespace ChilliSource
 {
     namespace Rendering
     {
-        CS_DEFINE_NAMEDTYPE(ParticleEmitterFactory);
+        CS_DEFINE_NAMEDTYPE(ParticleAffectorFactory);
         
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        ParticleEmitterFactoryUPtr ParticleEmitterFactory::Create()
+        ParticleAffectorFactoryUPtr ParticleAffectorFactory::Create()
         {
-            return ParticleEmitterFactoryUPtr(new ParticleEmitterFactory());
+            return ParticleAffectorFactoryUPtr(new ParticleAffectorFactory());
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        bool ParticleEmitterFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool ParticleAffectorFactory::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceId == ParticleEmitterFactory::InterfaceID;
+            return in_interfaceId == ParticleAffectorFactory::InterfaceID;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void ParticleEmitterFactory::OnInit()
+        void ParticleAffectorFactory::OnInit()
         {
-            AddCreator("Point", Core::MakeDelegate(&PointParticleEmitter::Create));
-            AddCreator("Ring", Core::MakeDelegate(&RingParticleEmitter::Create));
-            AddCreator("Cone", Core::MakeDelegate(&ConeParticleEmitter::Create));
+            AddCreator("ColourChanger", Core::MakeDelegate(&ColourChangerParticleAffector::Create));
+            AddCreator("LinearForce", Core::MakeDelegate(&LinearForceParticleAffector::Create));
+            AddCreator("Spinner", Core::MakeDelegate(&SpinnerParticleAffector::Create));
+            AddCreator("Scaler", Core::MakeDelegate(&ScalerParticleAffector::Create));
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        void ParticleEmitterFactory::AddCreator(const std::string& in_type, const EmitterCreateDelegate& in_delegate)
+        void ParticleAffectorFactory::AddCreator(const std::string& in_type, const AffectorCreateDelegate& in_delegate)
         {
             m_creators.insert(std::make_pair(in_type, in_delegate));
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        void ParticleEmitterFactory::RemoveAllCreators()
+        void ParticleAffectorFactory::RemoveAllCreators()
         {
             m_creators.clear();
         }
         //------------------------------------------------------------------
         //-------------------------------------------------------------------
-        ParticleEmitterUPtr ParticleEmitterFactory::CreateParticleEmitter(const std::string& in_type, const Core::ParamDictionary& in_properties, const MaterialCSPtr& in_material, ParticleComponent* in_owner) const
+        ParticleAffectorUPtr ParticleAffectorFactory::CreateParticleAffector(const std::string& in_type, const Core::ParamDictionary& in_properties) const
         {
             auto it = m_creators.find(in_type);
             
             if(it != m_creators.end())
             {
-                return (it->second)(in_properties, in_material, in_owner);
+                return (it->second)(in_properties);
             }
-            
-            CS_LOG_ERROR("Cannot create particle emitter of type: " + in_type);
-            return nullptr;
+            else
+            {
+                CS_LOG_ERROR("Cannot create particle affector of type: " + in_type);
+                return nullptr;
+            }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void ParticleEmitterFactory::OnDestroy()
+        void ParticleAffectorFactory::OnDestroy()
         {
             RemoveAllCreators();
         }

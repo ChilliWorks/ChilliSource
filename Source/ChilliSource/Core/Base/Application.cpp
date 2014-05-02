@@ -14,8 +14,6 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
-#include <ChilliSource/Core/Entity/ComponentFactory.h>
-#include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
 #include <ChilliSource/Core/File/TweakableConstants.h>
 #include <ChilliSource/Core/Image/ImageProvider.h>
@@ -27,7 +25,6 @@
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Time/CoreTimer.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -163,8 +160,6 @@ namespace ChilliSource
             CS_ASSERT(s_application == nullptr, "Application already initialised!");
             s_application = this;
             
-            m_componentFactoryDispenser = new ComponentFactoryDispenser(this);
-
 			Logging::Create();
             
             GUI::GUIViewFactory::RegisterDefaults();
@@ -358,7 +353,6 @@ namespace ChilliSource
             
             m_platformSystem.reset();
 			m_renderer.reset();
-            CS_SAFEDELETE(m_componentFactoryDispenser);
             
             m_resourcePool->Destroy();
             
@@ -415,18 +409,6 @@ namespace ChilliSource
 				if(system->IsA(ResourceProvider::InterfaceID))
 				{
                     m_resourcePool->AddProvider(dynamic_cast<ResourceProvider*>(system.get()));
-				}
-                
-                //TODO: Remove this when all Component producers have been changed to systems
-				if(system->IsA(IComponentProducer::InterfaceID))
-				{
-                    IComponentProducer* pProducer = dynamic_cast<IComponentProducer*>(system.get());
-                    u32 udwNumFactoriesInSystem = pProducer->GetNumComponentFactories();
-                    
-                    for(u32 i=0; i<udwNumFactoriesInSystem; ++i)
-                    {
-                        m_componentFactoryDispenser->RegisterComponentFactory(pProducer->GetComponentFactoryPtr(i));
-                    }
 				}
 			}
 

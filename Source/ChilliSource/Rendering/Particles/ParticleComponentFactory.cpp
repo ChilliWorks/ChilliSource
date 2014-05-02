@@ -1,23 +1,41 @@
-/*
- *  ParticleComponentFactory.cpp
- *  moFloTest
- *
- *  Created by Scott Downie on 17/01/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  ParticleComponentFactory.cpp
+//  Chilli Source
+//  Created by S Downie on 17/01/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Rendering/Particles/ParticleComponentFactory.h>
 
-#include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Particles/ParticleComponent.h>
-#include <ChilliSource/Rendering/Particles/ParticleSystem.h>
-#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
-
-#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/XML/XMLUtils.h>
-#include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Rendering/Particles/ParticleComponent.h>
+#include <ChilliSource/Rendering/Particles/ParticleEffect.h>
+#include <ChilliSource/Rendering/Particles/ParticleSystem.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffectorFactory.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
 
 namespace ChilliSource
 {
@@ -25,142 +43,68 @@ namespace ChilliSource
 	{
 		CS_DEFINE_NAMEDTYPE(ParticleComponentFactory);
 		
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        ParticleComponentFactoryUPtr ParticleComponentFactory::Create(ParticleSystem* in_particleSystem, ParticleEmitterFactory* in_emitterFactory, ParticleAffectorFactory* in_affectorFactory)
+        {
+            return ParticleComponentFactoryUPtr(new ParticleComponentFactory(in_particleSystem, in_emitterFactory, in_affectorFactory));
+        }
 		//--------------------------------------------------------
-		/// Constructor
-		///
-		/// Default
 		//--------------------------------------------------------
-		ParticleComponentFactory::ParticleComponentFactory(ParticleSystem* inpParticleSystem, ParticleEmitterFactory* inpEmitterFactory, ParticleEffectorFactory* inpEffectorFactory) :
-        mpParticleSystem(inpParticleSystem), mpEmitterFactory(inpEmitterFactory), mpEffectorFactory(inpEffectorFactory)
+		ParticleComponentFactory::ParticleComponentFactory(ParticleSystem* in_particleSystem, ParticleEmitterFactory* in_emitterFactory, ParticleAffectorFactory* in_affectorFactory)
+        : m_particleSystem(in_particleSystem), m_emitterFactory(in_emitterFactory), m_affectorFactory(in_affectorFactory)
 		{
-
+            CS_ASSERT(m_particleSystem != nullptr, "Particle factory cannot have null system");
+            CS_ASSERT(m_emitterFactory != nullptr, "Particle factory cannot have null emitter factory");
+            CS_ASSERT(m_affectorFactory != nullptr, "Particle factory cannot have null affector factory");
 		}
         //-------------------------------------------------------
-        /// Is A
-        ///
-        /// @param Interface ID
-        /// @return Whether the object is of given type
         //-------------------------------------------------------
-		bool ParticleComponentFactory::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool ParticleComponentFactory::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return inInterfaceID == ParticleComponentFactory::InterfaceID;
-		}
-		//--------------------------------------------------------
-		/// Can Produce Component With Interface
-		///
-		/// Used to determine if this factory can produce 
-		/// component of given type.
-		///
-		/// @param The ID of the component to create
-		/// @return Whether the object can create component of ID
-		//--------------------------------------------------------
-		bool ParticleComponentFactory::CanProduceComponentWithInterface(Core::InterfaceIDType inTypeID) const
-		{
-			return (ParticleComponent::InterfaceID == inTypeID);
-		}
-        //----------------------------------------------------------------------------
-        /// Can Produce Component With Type Name
-        ///
-        /// @param Type name
-        /// @return Whether the factory can produce components with the given name
-        //----------------------------------------------------------------------------
-		bool ParticleComponentFactory::CanProduceComponentWithTypeName(const std::string & incName) const
-		{
-			return (ParticleComponent::TypeName == incName);
+			return in_interfaceId == ParticleComponentFactory::InterfaceID;
 		}
         //--------------------------------------------------------
-        /// Create Particle Component
-        ///
-        /// Creates a default particle effect for customisation
-        ///
-        /// @return Particle Component
         //--------------------------------------------------------
         ParticleComponentUPtr ParticleComponentFactory::CreateParticleComponent()
 		{
-			ParticleComponentUPtr pParticleComp(new ParticleComponent());
-			mpParticleSystem->AddParticleComponent(pParticleComp.get());			
-			return pParticleComp;
+			ParticleComponentUPtr particleComp(new ParticleComponent());
+			m_particleSystem->AddParticleComponent(particleComp.get());
+			return particleComp;
 		}
         //--------------------------------------------------------
-        /// Create Particle Component From Script
-        ///
-        /// Creates a particle component using an external script
-        ///
-        /// @param The storage location to load from
-        /// @param The filepath
-        /// @return Particle Component
         //--------------------------------------------------------
-        ParticleComponentUPtr ParticleComponentFactory::CreateParticleComponentFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile)
+        ParticleComponentUPtr ParticleComponentFactory::CreateParticleComponent(const ParticleEffectCSPtr& in_effect)
 		{
-			ParticleComponentUPtr pParticleComp(new ParticleComponent());
+			ParticleComponent* particleComp(new ParticleComponent());
             
-            //Load script
-            TiXmlDocument Doc(instrScriptFile);
-			Doc.LoadFile(ineStorageLocation);
-			
-			TiXmlElement* pDocRoot = Doc.RootElement();
-			
-			if(pDocRoot && pDocRoot->ValueStr() == "system") 
-            {
-                //---Load the material
-                TiXmlElement* pMaterialEl = Core::XMLUtils::FirstChildElementWithName(pDocRoot, "material");
-                CS_ASSERT(pMaterialEl != nullptr, "Particle file: " + instrScriptFile + " no material found for file");
-                
-                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-                MaterialCSPtr pMaterial = resourcePool->LoadResource<Material>(Core::StorageLocation::k_package, Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pMaterialEl, "filename", ""));
-                CS_ASSERT(pMaterial != nullptr, "Particle file: " + instrScriptFile + " no material found for file");
-
-                pParticleComp->SetMaterial(pMaterial);
-
-                //---Emitters
-				TiXmlElement* pEmittersEl = Core::XMLUtils::FirstChildElementWithName(pDocRoot, "emitters");
-                CS_ASSERT(pEmittersEl != nullptr, "Particle file: " + instrScriptFile + " no emitters found");
- 
-                TiXmlElement* pEmitterEl = Core::XMLUtils::FirstChildElementWithName(pEmittersEl, "emitter");
-                while(pEmitterEl)
-                {
-                    //Get the param dictionary config values
-                    Core::ParamDictionary sParams;
-                    sParams.FromString(pEmitterEl->GetText());
-                    
-                    std::string strShape = sParams.ValueForKey("Shape");
-                    CS_ASSERT(strShape.empty() == false, "Particle file: " + instrScriptFile + " no emitters shape found");
-                    pParticleComp->AddEmitter(mpEmitterFactory->CreateParticleEmitter(strShape, sParams, pMaterial, pParticleComp.get()));
-                    
-                    //Jump to the next emitter
-                    pEmitterEl = Core::XMLUtils::NextSiblingElementWithName(pEmitterEl);
-                }
-                
-                //---Effectors
-                TiXmlElement* pEffectorsEl = Core::XMLUtils::FirstChildElementWithName(pDocRoot, "effectors");
-                if(pEffectorsEl)
-                {
-                    TiXmlElement* pEffectorEl = Core::XMLUtils::FirstChildElementWithName(pEffectorsEl, "effector");
-                    while(pEffectorEl)
-                    {
-                        //Get the param dictionary config values
-                        Core::ParamDictionary sParams;
-                        sParams.FromString(pEffectorEl->GetText());
-                        
-                        std::string strType;
-                        if(sParams.TryGetValue("Type", strType))
-                        {
-                            //Add this effector to all the emitters
-                            pParticleComp->AddEffector(mpEffectorFactory->CreateParticleEffector(strType, sParams));
-                        }
-                        
-                        //Jump to the next effector
-                        pEffectorEl = Core::XMLUtils::NextSiblingElementWithName(pEffectorEl);
-                    }
-                }
-			} 
-            else 
-            {
-				CS_LOG_ERROR("Particle component factory could not load file: " + instrScriptFile);
-			}
+            const MaterialCSPtr& material = in_effect->GetMaterial();
+            particleComp->SetMaterial(material);
             
-			mpParticleSystem->AddParticleComponent(pParticleComp.get());			
-			return pParticleComp;
+            u32 numEmitters = in_effect->GetNumEmitters();
+            for(u32 i=0; i<numEmitters; ++i)
+            {
+                const auto& properties = in_effect->GetEmitterDesc(i);
+                const std::string& type = properties.ValueForKey("Type");
+                auto emitter = m_emitterFactory->CreateParticleEmitter(type, properties, material, particleComp);
+                CS_ASSERT(emitter != nullptr, "Cannot create particle emitter of type " + type);
+                emitter->SetTextureAtlas(in_effect->GetAtlas());
+                emitter->SetTextureAtlasId(in_effect->GetAtlasId());
+                particleComp->AddEmitter(std::move(emitter));
+            }
+            
+            u32 numAffectors = in_effect->GetNumAffectors();
+            for(u32 i=0; i<numAffectors; ++i)
+            {
+                const auto& properties = in_effect->GetAffectorDesc(i);
+                const std::string& type = properties.ValueForKey("Type");
+                auto affector = m_affectorFactory->CreateParticleAffector(type, properties);
+                CS_ASSERT(affector != nullptr, "Cannot create particle affector of type " + type);
+                particleComp->AddAffector(std::move(affector));
+            }
+            
+            m_particleSystem->AddParticleComponent(particleComp);
+			return ParticleComponentUPtr(particleComp);
 		}
 	}
 }

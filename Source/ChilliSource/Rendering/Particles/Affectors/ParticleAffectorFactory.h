@@ -1,7 +1,7 @@
 //
-//  ParticleEmitterFactory.h
+//  ParticleAffectorFactory.h
 //  Chilli Source
-//  Created by S Downie on 11/04/2011.
+//  Created by S Downie on 07/04/2011.
 //
 //  The MIT License (MIT)
 //
@@ -26,8 +26,9 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLES_EMITTERS_PARTICLEEMITTERFACTORY_H_
-#define _CHILLISOURCE_RENDERING_PARTICLES_EMITTERS_PARTICLEEMITTERFACTORY_H_
+
+#ifndef _CHILLISOURCE_RENDERING_PARTICLES_AFFECTORS_PARTICLEAFFECTORFACTORY_H_
+#define _CHILLISOURCE_RENDERING_PARTICLES_AFFECTORS_PARTICLEAFFECTORFACTORY_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
@@ -39,24 +40,22 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        class ParticleEmitterFactory final : public Core::AppSystem
+        class ParticleAffectorFactory final : public Core::AppSystem
         {
         public:
-
-            CS_DECLARE_NAMEDTYPE(ParticleEmitterFactory);
+            
+            CS_DECLARE_NAMEDTYPE(ParticleAffectorFactory);
             
             //------------------------------------------------------------------
-            /// Delegate method to handle the creation of emitters
+            /// Delegate method to handle the creation of affectors
             ///
             /// @author S Downie
             ///
             /// @param Properties as key value dictionary
-            /// @param Material
-            /// @param Owning component
             ///
-            /// @return New emitter
+            /// @return New affector
             //------------------------------------------------------------------
-            typedef std::function<ParticleEmitterUPtr(const Core::ParamDictionary&, const MaterialCSPtr&, ParticleComponent*)> EmitterCreateDelegate;
+            typedef std::function<ParticleAffectorUPtr(const Core::ParamDictionary&)> AffectorCreateDelegate;
             //------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -66,31 +65,30 @@ namespace ChilliSource
             //------------------------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //------------------------------------------------------------------
-            /// Registers a new emitter factory method with the given key
+            /// Registers a new affector factory method with the given key
             ///
             /// @author S Downie
             ///
             /// @param Type key string
             /// @param Creation delegate
             //------------------------------------------------------------------
-            void AddCreator(const std::string& in_type, const EmitterCreateDelegate& in_delegate);
+            void AddCreator(const std::string& in_type, const AffectorCreateDelegate& in_delegate);
             //------------------------------------------------------------------
-            /// Unsubscribe all emitter factory methods
+            /// Remove all registered creator methods
             ///
             /// @author S Downie
             //------------------------------------------------------------------
             void RemoveAllCreators();
             //------------------------------------------------------------------
-            /// Construct a particle emitter from the given type and properties
+            /// Construct a particle affector from the given type identifier
+            /// and properties.
             ///
-            /// @param Type i.e. "Point", "Ring"
+            /// @param Type i.e. "colour fader", "linear force"
             /// @param Param dictionary properties
-            /// @param Material
-            /// @param Owning particle system
             ///
-            /// @return Ownership of particle emitter of that type
+            /// @return Ownership of particle affector of that type
             //-------------------------------------------------------------------
-            ParticleEmitterUPtr CreateParticleEmitter(const std::string& in_type, const Core::ParamDictionary& in_properties, const MaterialCSPtr& in_material, ParticleComponent* in_owner) const;
+            ParticleAffectorUPtr CreateParticleAffector(const std::string& in_type, const Core::ParamDictionary& in_properties) const;
             
         private:
             
@@ -102,13 +100,13 @@ namespace ChilliSource
             ///
             /// @return Ownership of new instance
             //-------------------------------------------------------------------
-            static ParticleEmitterFactoryUPtr Create();
+            static ParticleAffectorFactoryUPtr Create();
             //-------------------------------------------------------------------
             /// Private constructor to enforce use of factory method
             ///
             /// @author S Downie
             //-------------------------------------------------------------------
-            ParticleEmitterFactory() = default;
+            ParticleAffectorFactory() = default;
             //-------------------------------------------------------------------
             /// Called when the system is created. Registers all the common/default
             /// creation methods
@@ -125,7 +123,7 @@ namespace ChilliSource
             
         private:
             
-            std::unordered_map<std::string, EmitterCreateDelegate> m_creators;
+            std::unordered_map<std::string, AffectorCreateDelegate> m_creators;
         };
     }
 }

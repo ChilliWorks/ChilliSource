@@ -1,12 +1,12 @@
 //
-//  ColourChangerParticleEffector.cpp
+//  ScalerParticleAffector.cpp
 //  moFloTest
 //
 //  Created by Scott Downie on 11/04/2011.
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Rendering/Particles/Effectors/LinearForceParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ScalerParticleAffector.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
@@ -19,16 +19,20 @@ namespace ChilliSource
         ///
         /// @param Param dictionary
         //----------------------------------------------------
-        LinearForceParticleEffector::LinearForceParticleEffector(const Core::ParamDictionary& insParams)
+        ScalerParticleAffector::ScalerParticleAffector(const Core::ParamDictionary& insParams)
+        :mbInitialSet(false)
         {
             mfActiveEnergyLevel = 0.0f;
             
             std::string strTemp;
 
-            //Linear force
-            if(insParams.TryGetValue("Force", strTemp))
+            //Colour change
+            if(insParams.TryGetValue("TargetScale", strTemp))
             {
-                mvForce = Core::ParseVector3(strTemp);
+                float fScale = Core::ParseF32(strTemp);
+                mvTargetScale.x = fScale;
+                mvTargetScale.y = fScale;
+                mvTargetScale.z = fScale;
             }
             //Energy level
             if(insParams.TryGetValue("AtEnergyLevel", strTemp))
@@ -39,39 +43,50 @@ namespace ChilliSource
         //-----------------------------------------------------
         /// Create
         ///
-        /// Create a new effector from the given parameters
+        /// Create a new affector from the given parameters
         ///
         /// @param Param dictionary
-        /// @return Ownership of effector
+        /// @return Ownership of affector
         //-----------------------------------------------------
-        ParticleEffectorUPtr LinearForceParticleEffector::Create(const Core::ParamDictionary& inParams)
+        ParticleAffectorUPtr ScalerParticleAffector::Create(const Core::ParamDictionary& inParams)
         {
-            return ParticleEffectorUPtr(new LinearForceParticleEffector(inParams));
+            return ParticleAffectorUPtr(new ScalerParticleAffector(inParams));
         }
         //-----------------------------------------------------
         /// Init
         ///
-        /// The effector will initialise the particles to its
+        /// The affector will initialise the particles to its
         /// liking 
         ///
         /// @param Particle to intialise
         //-----------------------------------------------------
-        void LinearForceParticleEffector::Init(Particle& in_particle)
+        void ScalerParticleAffector::Init(Particle& in_particle)
         {
-            
+            //Doesn't require initing
         }
         //-----------------------------------------------------
         /// Apply
         ///
-        /// The effector will apply itself to the given 
+        /// The affector will apply itself to the given 
         /// particles
         ///
         /// @param Particle to effect
         /// @param Time between frames
         //-----------------------------------------------------
-        void LinearForceParticleEffector::Apply(Particle& in_particle, f32 infDt)
+        void ScalerParticleAffector::Apply(Particle& in_particle, f32 infDt)
         {
-			in_particle.m_velocity += (mvForce * infDt);
+            f32 fEnergy = in_particle.m_energy;
+            
+            fEnergy = fEnergy / mfActiveEnergyLevel;
+            
+            if(!mbInitialSet)
+            {
+                mbInitialSet = true;
+                mvInitialScale = in_particle.m_scale;
+            }
+            
+            Core::Vector3 vDiff = (mvTargetScale - mvInitialScale) * (1.0f - fEnergy);
+            in_particle.m_scale = mvInitialScale + vDiff;
         }
     }
 }

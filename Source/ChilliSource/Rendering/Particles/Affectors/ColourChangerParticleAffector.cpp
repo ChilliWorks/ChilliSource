@@ -1,5 +1,5 @@
 //
-//  ColourChangerParticleEffector.cpp
+//  ColourChangerParticleAffector.cpp
 //  moFloTest
 //
 //  Created by Scott Downie on 11/04/2011.
@@ -7,7 +7,7 @@
 //
 
 #include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/Rendering/Particles/Effectors/ColourChangerParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ColourChangerParticleAffector.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 
 namespace ChilliSource
@@ -19,7 +19,7 @@ namespace ChilliSource
         ///
         /// @param Param dictionary
         //----------------------------------------------------
-        ColourChangerParticleEffector::ColourChangerParticleEffector(const Core::ParamDictionary& insParams)
+        ColourChangerParticleAffector::ColourChangerParticleAffector(const Core::ParamDictionary& insParams)
         :mbInitialColourSet(false)
         {
             mfActiveEnergyLevel = 0.0f;
@@ -40,37 +40,37 @@ namespace ChilliSource
         //-----------------------------------------------------
         /// Create
         ///
-        /// Create a new effector from the given parameters
+        /// Create a new affector from the given parameters
         ///
         /// @param Param dictionary
-        /// @return Ownership of effector
+        /// @return Ownership of affector
         //-----------------------------------------------------
-        ParticleEffectorUPtr ColourChangerParticleEffector::Create(const Core::ParamDictionary& inParams)
+        ParticleAffectorUPtr ColourChangerParticleAffector::Create(const Core::ParamDictionary& inParams)
         {
-            return ParticleEffectorUPtr(new ColourChangerParticleEffector(inParams));
+            return ParticleAffectorUPtr(new ColourChangerParticleAffector(inParams));
         }
         //-----------------------------------------------------
         /// Init
         ///
-        /// The effector will initialise the particles to its
+        /// The affector will initialise the particles to its
         /// liking 
         ///
         /// @param Particle to intialise
         //-----------------------------------------------------
-        void ColourChangerParticleEffector::Init(Particle& in_particle)
+        void ColourChangerParticleAffector::Init(Particle& in_particle)
         {
             //Doesn't require initing
         }
         //-----------------------------------------------------
         /// Apply
         ///
-        /// The effector will apply itself to the given 
+        /// The affector will apply itself to the given 
         /// particles
         ///
         /// @param Particle to effect
         /// @param Time between frames
         //-----------------------------------------------------
-        void ColourChangerParticleEffector::Apply(Particle& in_particle, f32 infDt)
+        void ColourChangerParticleAffector::Apply(Particle& in_particle, f32 infDt)
         {
             f32 fEnergy = in_particle.m_energy;
             

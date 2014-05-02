@@ -1,81 +1,109 @@
-/*
- *  ParticleComponentFactory.h
- *  moFloTest
- *
- *  Created by Scott Downie on 17/01/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  ParticleComponentFactory.h
+//  Chilli Source
+//  Created by S Downie on 17/01/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
-#ifndef _MO_FLO_RENDERING_PARTICLE_COMPONENT_FACTORY_H_
-#define _MO_FLO_RENDERING_PARTICLE_COMPONENT_FACTORY_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLES_PARTICLECOMPONENTFACTORY_H_
+#define _CHILLISOURCE_RENDERING_PARTICLES_PARTICLECOMPONENTFACTORY_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Entity/ComponentFactory.h>
-#include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffectorFactory.h>
-#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class ParticleComponentFactory : public Core::ComponentFactory
+		class ParticleComponentFactory final : public Core::AppSystem
 		{
 		public: 
-			ParticleComponentFactory(ParticleSystem* inpParticleSystem, ParticleEmitterFactory* inpEmitterFactory, ParticleEffectorFactory* inpEffectorFactory);
+			
             
 			CS_DECLARE_NAMEDTYPE(ParticleComponentFactory);
             
             //-------------------------------------------------------
-            /// Is A
+            /// @author S Downie
             ///
             /// @param Interface ID
+            ///
             /// @return Whether the object is of given type
             //-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//--------------------------------------------------------
-			/// Can Produce Component With Interface
-			///
-			/// Used to determine if this factory can produce 
-			/// component of given type.
-			///
-			/// @param The ID of the component to create
-			/// @return Whether the object can create component of ID
-			//--------------------------------------------------------
-			bool CanProduceComponentWithInterface(Core::InterfaceIDType inTypeID) const override;
-            //----------------------------------------------------------------------------
-            /// Can Produce Component With Type Name
+			/// Creates an empty particle component for customisation.
+            /// The component will have no emitters, affectors or
+            /// render properties.
             ///
-            /// @param Type name
-            /// @return Whether the factory can produce components with the given name
-            //----------------------------------------------------------------------------
-			bool CanProduceComponentWithTypeName(const std::string & incName) const override;
-			//--------------------------------------------------------
-			/// Create Particle Component
+            /// @author S Downie
 			///
-			/// Creates a default particle effect for customisation
-			///
-			/// @return Particle Component
+			/// @return New particle component
 			//--------------------------------------------------------
 			ParticleComponentUPtr CreateParticleComponent();
             //--------------------------------------------------------
-            /// Create Particle Component From Script
+            /// Creates a particle component build to the specifications
+            /// of the given effect resource. The effect describes
+            /// the emitters, affectors and render properties.
             ///
-            /// Creates a particle component using an external script
+            /// @param Effect resource
             ///
-            /// @param The storage location to load from
-            /// @param The filepath
-            /// @return Particle Component
+            /// @return New particle component
             //--------------------------------------------------------
-            ParticleComponentUPtr CreateParticleComponentFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile);
-			
+            ParticleComponentUPtr CreateParticleComponent(const ParticleEffectCSPtr& in_effect);
+            
+        private:
+            
+            friend class Core::Application;
+            //--------------------------------------------------------
+            /// Factory method for creating new component factory
+            ///
+            /// @author S Downie
+            ///
+            /// @param Particle system
+            /// @param Emitter factory
+            /// @param Affector factory
+            ///
+            /// @return Ownership of new instance
+            //--------------------------------------------------------
+            static ParticleComponentFactoryUPtr Create(ParticleSystem* in_particleSystem, ParticleEmitterFactory* in_emitterFactory, ParticleAffectorFactory* in_affectorFactory);
+            //--------------------------------------------------------
+            /// Private constructor to enforce use of factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @param Particle system
+            /// @param Emitter factory
+            /// @param Affector factory
+            //--------------------------------------------------------
+			ParticleComponentFactory(ParticleSystem* in_particleSystem, ParticleEmitterFactory* in_emitterFactory, ParticleAffectorFactory* in_affectorFactory);
+            
 		private:
 			
-			ParticleSystem* mpParticleSystem;
+			ParticleSystem* m_particleSystem;
             
-            ParticleEffectorFactory* mpEffectorFactory;
-            ParticleEmitterFactory* mpEmitterFactory;
+            ParticleAffectorFactory* m_affectorFactory;
+            ParticleEmitterFactory* m_emitterFactory;
 		};
 	}
 }

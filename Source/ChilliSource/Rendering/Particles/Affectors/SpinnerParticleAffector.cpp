@@ -1,12 +1,12 @@
 //
-//  ColourChangerParticleEffector.cpp
+//  ColourChangerParticleAffector.cpp
 //  moFloTest
 //
 //  Created by Scott Downie on 11/04/2011.
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Rendering/Particles/Effectors/SpinnerParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/SpinnerParticleAffector.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/String/StringParser.h>
@@ -20,7 +20,7 @@ namespace ChilliSource
         ///
         /// @param Param dictionary
         //----------------------------------------------------
-        SpinnerParticleEffector::SpinnerParticleEffector(const Core::ParamDictionary& insParams)
+        SpinnerParticleAffector::SpinnerParticleAffector(const Core::ParamDictionary& insParams)
         {
             mfActiveEnergyLevel = 0.0f;
             
@@ -40,37 +40,37 @@ namespace ChilliSource
         //-----------------------------------------------------
         /// Create
         ///
-        /// Create a new effector from the given parameters
+        /// Create a new affector from the given parameters
         ///
         /// @param Param dictionary
-        /// @return Ownership of effector
+        /// @return Ownership of affector
         //-----------------------------------------------------
-        ParticleEffectorUPtr SpinnerParticleEffector::Create(const Core::ParamDictionary& inParams)
+        ParticleAffectorUPtr SpinnerParticleAffector::Create(const Core::ParamDictionary& inParams)
         {
-            return ParticleEffectorUPtr(new SpinnerParticleEffector(inParams));
+            return ParticleAffectorUPtr(new SpinnerParticleAffector(inParams));
         }
         //-----------------------------------------------------
         /// Init
         ///
-        /// The effector will initialise the particles to its
+        /// The affector will initialise the particles to its
         /// liking 
         ///
         /// @param Particle to intialise
         //-----------------------------------------------------
-        void SpinnerParticleEffector::Init(Particle& in_particle)
+        void SpinnerParticleAffector::Init(Particle& in_particle)
         {
             
         }
         //-----------------------------------------------------
         /// Apply
         ///
-        /// The effector will apply itself to the given 
+        /// The affector will apply itself to the given 
         /// particles
         ///
         /// @param Particle to effect
         /// @param Time between frames
         //-----------------------------------------------------
-        void SpinnerParticleEffector::Apply(Particle& in_particle, f32 infDt)
+        void SpinnerParticleAffector::Apply(Particle& in_particle, f32 infDt)
         {
             in_particle.m_angularRotation +=  mfAngVelocity * infDt;
         }

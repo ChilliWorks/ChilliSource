@@ -60,8 +60,6 @@ namespace ChilliSource
         /// Entity
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Component);
-        CS_FORWARDDECLARE_CLASS(ComponentFactory);
-        CS_FORWARDDECLARE_CLASS(ComponentFactoryDispenser);
         CS_FORWARDDECLARE_CLASS(Entity);
         CS_FORWARDDECLARE_CLASS(Transform);
         //---------------------------------------------------------

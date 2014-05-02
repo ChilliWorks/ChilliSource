@@ -1,5 +1,5 @@
 /*
- *  ParticleEffector.h
+ *  ParticleAffector.h
  *  moFloTest
  *
  *  Created by Scott Downie on 17/01/2011.
@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef _MO_FLO_RENDERING__PARTICLES_PARTICLE_EFFECTOR_H_
-#define _MO_FLO_RENDERING__PARTICLES_PARTICLE_EFFECTOR_H_
+#ifndef _MO_FLO_RENDERING__PARTICLES_PARTICLE_AFFECTOR_H_
+#define _MO_FLO_RENDERING__PARTICLES_PARTICLE_AFFECTOR_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -17,18 +17,18 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		//================================================================
-		/// Particle Effector - Interface
+		/// Particle Affector - Interface
 		///
 		/// Applied to a particle emitter to effect the particle over time
 		//================================================================
-		class ParticleEffector
+		class ParticleAffector
 		{
 		public:
-			virtual ~ParticleEffector(){}
+			virtual ~ParticleAffector(){}
             //-----------------------------------------------------
             /// Init
             ///
-            /// The effector will initialise the particles to its
+            /// The affector will initialise the particles to its
             /// liking 
             ///
             /// @param Particle to intialise
@@ -37,7 +37,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Apply
             ///
-            /// The effector will apply itself to the given 
+            /// The affector will apply itself to the given 
             /// particles
             ///
             /// @param Particle to effect
@@ -47,7 +47,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Update
             ///
-            /// The effector will update itself
+            /// The affector will update itself
             ///
             /// @param Time between frames
             //-----------------------------------------------------
@@ -55,7 +55,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Set Active Energy Level
             ///
-            /// The energy level at which the effector becomes
+            /// The energy level at which the affector becomes
             /// active
             ///
             /// @param Energy level form 1.0 - 0.0
@@ -64,7 +64,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
             /// Get Active Energy Level
             ///
-            /// The energy level at which the effector becomes
+            /// The energy level at which the affector becomes
             /// active
             ///
             /// @return Energy level form 1.0 - 0.0

@@ -1,5 +1,5 @@
 //
-//  ColourChangerParticleEffector.h
+//  ColourChangerParticleAffector.h
 //  moFloTest
 //
 //  Created by Scott Downie on 11/04/2011.
@@ -7,34 +7,34 @@
 //
 
 
-#ifndef _MO_FLO_RENDERING_PARTICLES_EFFECTORS_SPINNER_PARTICLE_EFFECTOR_H_
-#define _MO_FLO_RENDERING_PARTICLES_EFFECTORS_SPINNER_PARTICLE_EFFECTOR_H_
+#ifndef _MO_FLO_RENDERING_PARTICLES_AFFECTORS_SPINNER_PARTICLE_AFFECTOR_H_
+#define _MO_FLO_RENDERING_PARTICLES_AFFECTORS_SPINNER_PARTICLE_AFFECTOR_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffector.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
 namespace ChilliSource
 {
     namespace Rendering
     {
-        class SpinnerParticleEffector : public ParticleEffector
+        class SpinnerParticleAffector : public ParticleAffector
         {
         public:
-            SpinnerParticleEffector(const Core::ParamDictionary& insParams);
+            SpinnerParticleAffector(const Core::ParamDictionary& insParams);
             //-----------------------------------------------------
             /// Create
             ///
-            /// Create a new effector from the given parameters
+            /// Create a new affector from the given parameters
             ///
             /// @param Param dictionary
-            /// @return Ownership of effector
+            /// @return Ownership of affector
             //-----------------------------------------------------
-            static ParticleEffectorUPtr Create(const Core::ParamDictionary& inParams);
+            static ParticleAffectorUPtr Create(const Core::ParamDictionary& inParams);
             //-----------------------------------------------------
             /// Init
             ///
-            /// The effector will initialise the particles to its
+            /// The affector will initialise the particles to its
             /// liking 
             ///
             /// @param Particle to intialise
@@ -43,7 +43,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Apply
             ///
-            /// The effector will apply itself to the given 
+            /// The affector will apply itself to the given 
             /// particles
             ///
             /// @param Particle to effect

@@ -7,10 +7,11 @@
 //
 
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
-#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffector.h>
 #include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 
 #include <ChilliSource/Core/Base/ColourUtils.h>
@@ -170,7 +171,7 @@ namespace ChilliSource
                     m_particles[i].m_scale = vScale;
                     m_particles[i].m_angularRotation = 0.0f;
                     
-                    //We will emit a particle and pass it through the effector
+                    //We will emit a particle and pass it through the affector
                     Emit(m_particles[i]);
                     
                     // We need to rotate our velocity by our emmiters orientation if in global space
@@ -179,9 +180,9 @@ namespace ChilliSource
                         m_particles[i].m_velocity = qOrientation * m_particles[i].m_velocity;
                     }
                     
-                    for(std::vector<ParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
+                    for(std::vector<ParticleAffector*>::iterator itAffector = mAffectors.begin(); itAffector != mAffectors.end(); ++itAffector)
                     {
-                        (*itEffector)->Init(m_particles[i]);
+                        (*itAffector)->Init(m_particles[i]);
                     }
                     
                     UpdateParticle(m_particles[i], kfTimeSinceLastEmission - fEmissionStep);
@@ -233,19 +234,19 @@ namespace ChilliSource
         //-----------------------------------------------------
         /// Update Particle
         ///
-        /// Update an indivdual particle with the effectors
+        /// Update an indivdual particle with the affectors
         ///
         /// @param Particle array index
         /// @param DT
         //-----------------------------------------------------
         void ParticleEmitter::UpdateParticle(Particle& in_particle, f32 infDT)
         {
-            //Apply the effector to each particle
-            for(std::vector<ParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
+            //Apply the affector to each particle
+            for(std::vector<ParticleAffector*>::iterator itAffector = mAffectors.begin(); itAffector != mAffectors.end(); ++itAffector)
             {
-                if(in_particle.m_energy <= (*itEffector)->GetActiveEnergyLevel())
+                if(in_particle.m_energy <= (*itAffector)->GetActiveEnergyLevel())
                 {
-                    (*itEffector)->Apply(in_particle, infDT);
+                    (*itAffector)->Apply(in_particle, infDT);
                 }
             }
             
@@ -328,32 +329,32 @@ namespace ChilliSource
             mbIsEmitting = false;
         }
         //-----------------------------------------------------
-        /// Add Effector
+        /// Add Affector
         ///
-        /// Add a new effector to apply to the particles
+        /// Add a new affector to apply to the particles
         ///
-        /// @param Particle effector
+        /// @param Particle affector
         //-----------------------------------------------------
-        void ParticleEmitter::AddEffector(ParticleEffector* inpEffector)
+        void ParticleEmitter::AddAffector(ParticleAffector* inpAffector)
         {
-            mEffectors.push_back(inpEffector);
+            mAffectors.push_back(inpAffector);
         }
         //-----------------------------------------------------
-        /// Remove Effector
+        /// Remove Affector
         ///
-        /// Remove the effector so it no longer applies to
+        /// Remove the affector so it no longer applies to
         /// the system
         ///
-        /// @param Particle effector
+        /// @param Particle affector
         //-----------------------------------------------------
-        void ParticleEmitter::RemoveEffector(ParticleEffector* inpEffector)
+        void ParticleEmitter::RemoveAffector(ParticleAffector* inpAffector)
         {
-            for(std::vector<ParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
+            for(std::vector<ParticleAffector*>::iterator itAffector = mAffectors.begin(); itAffector != mAffectors.end(); ++itAffector)
             {
-                if(*itEffector == inpEffector)
+                if(*itAffector == inpAffector)
                 {
-                    CS_SAFEDELETE(*itEffector);
-                    mEffectors.erase(itEffector);
+                    CS_SAFEDELETE(*itAffector);
+                    mAffectors.erase(itAffector);
                     return;
                 }
             }
@@ -424,6 +425,20 @@ namespace ChilliSource
         {
 			msParticleUVs = insUVs;
 		}
+        //-------------------------------------------------
+        //-------------------------------------------------
+        void ParticleEmitter::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
+        {
+            m_atlas = in_atlas;
+        }
+        //-------------------------------------------------
+        //-------------------------------------------------
+        void ParticleEmitter::SetTextureAtlasId(const std::string& in_atlasId)
+        {
+            CS_ASSERT(m_atlas != nullptr, "Cannot set atlas Id without first setting atlas");
+            
+            msParticleUVs = m_atlas->GetFrameUVs(in_atlasId);
+        }
         //-----------------------------------------------------
         /// Set Lifetime
         ///
