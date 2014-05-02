@@ -119,7 +119,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //------------------------------------------------------
-            PlatformSystem();
+            PlatformSystem() = default;
 		};
 	}
 }

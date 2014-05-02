@@ -29,26 +29,16 @@
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 
 #import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/String/NSString+MD5Addition.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/UIDevice+IdentifierAddition.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
 #import <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #import <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
-#import <ChilliSource/Core/String/StringUtils.h>
-
-#include <UIKit/UIKit.h>
 
 namespace ChilliSource 
 {
 	namespace iOS
 	{
         CS_DEFINE_NAMEDTYPE(PlatformSystem);
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-		PlatformSystem::PlatformSystem()
-		{
-		}
         //-------------------------------------------------------
         //-------------------------------------------------------
         bool PlatformSystem::IsA(Core::InterfaceIDType in_interfaceId) const
@@ -95,8 +85,11 @@ namespace ChilliSource
         //-------------------------------------------------------
         std::string PlatformSystem::GetAppVersion() const
         {
-            NSString* version = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-            return [NSStringUtils newStringWithNSString:version];
+            @autoreleasepool
+            {
+                NSString* version = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+                return [NSStringUtils newStringWithNSString:version];
+            }
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

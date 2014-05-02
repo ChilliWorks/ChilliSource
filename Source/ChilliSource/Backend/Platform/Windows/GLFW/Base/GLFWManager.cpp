@@ -65,21 +65,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void GLFWManager::SetMaxFPS(u32 in_fps)
 		{
-			CS_ASSERT(in_fps == 15 || in_fps == 30 || in_fps == 60, "GLFW Manager: FPS must be 15, 30 or 60.");
-
-			switch (in_fps)
-			{
-			case 15:
-				glfwSwapInterval(3);
-				break;
-			case 30:
-				glfwSwapInterval(2);
-				break;
-			case 60:
-			default:
-				glfwSwapInterval(1);
-				break;
-			}
+			glfwSwapInterval(60 / in_fps);
 		}
 		//---------------------------------------------------
 		//---------------------------------------------------
