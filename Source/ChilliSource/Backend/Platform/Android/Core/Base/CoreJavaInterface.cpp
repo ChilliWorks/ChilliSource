@@ -16,10 +16,8 @@
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
 #include <ChilliSource/Backend/Platform/Android/Input/Pointer/TouchInputJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Social/Communications/ContactInformationProviderJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Web/Base/WebViewJavaInterface.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
-#include <ChilliSource/Core/LaunchingActions/LaunchingActions.h>
 
 //--------------------------------------------------------------------------------------
 /// Globals
@@ -177,7 +175,6 @@ void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject
 	ChilliSource::Android::HttpRequestJavaInterface::SetupJavaInterface(javaVM);
 	ChilliSource::Android::SharedPreferencesJavaInterface::SetupJavaInterface(javaVM);
 	ChilliSource::Android::WebViewJavaInterface::SetupJavaInterface(javaVM);
-	ChilliSource::Android::ContactInformationProviderJavaInterface::SetupJavaInterface(javaVM);
     
 	//run the application
     pApplication->Init();
@@ -238,12 +235,6 @@ void Java_com_chillisource_core_CoreNativeInterface_onResolutionChanged(JNIEnv* 
 void Java_com_chillisource_core_CoreNativeInterface_onBackPressed(JNIEnv* in_env, jobject in_this)
 {
 	ChilliSource::Core::Application::Get()->GoBack();
-}
-//--------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_applicationDidReceiveLaunchingURL(JNIEnv* in_env, jobject in_this, jstring in_url)
-{
-	CSCore::LaunchingActions::ApplicationDidReceiveLaunchingURL(ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_url));
 }
 
 namespace ChilliSource

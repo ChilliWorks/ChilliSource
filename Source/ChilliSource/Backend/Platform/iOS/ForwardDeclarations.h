@@ -44,12 +44,9 @@ namespace ChilliSource
         //------------------------------------------------------
 		/// Social
 		//------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(ContactInformationProvider);
         CS_FORWARDDECLARE_CLASS(EmailComposer);
         CS_FORWARDDECLARE_CLASS(FacebookAuthenticationSystem);
         CS_FORWARDDECLARE_CLASS(FacebookPostSystem);
-        CS_FORWARDDECLARE_CLASS(TwitterAuthenticationActivity);
-        CS_FORWARDDECLARE_CLASS(TwitterPostSystem);
         //------------------------------------------------------
 		/// Video
 		//------------------------------------------------------
