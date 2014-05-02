@@ -40,7 +40,7 @@ namespace ChilliSource
     {
         namespace
         {
-            const TimeIntervalMs k_timeBetweenRefreshes = 100;
+            const TimeIntervalMs k_msBetweenRefreshes = 100;
         }
         
         CS_DEFINE_NAMEDTYPE(DebugStats);
@@ -148,7 +148,7 @@ namespace ChilliSource
             {
                 TimeIntervalMs timeNow = Core::Application::Get()->GetSystemTimeInMilliseconds();
                 TimeIntervalMs timeSince = timeNow - m_lastRefresh;
-                if (timeSince > k_timeBetweenRefreshes)
+                if (timeSince > k_msBetweenRefreshes)
                 {
                     m_lastRefresh = timeNow;
                     m_view->Refresh(m_events);

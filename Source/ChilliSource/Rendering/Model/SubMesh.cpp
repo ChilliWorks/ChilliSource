@@ -180,9 +180,7 @@ namespace ChilliSource
             }
 			
 			mpMeshBuffer->Bind();
-#ifdef CS_ENABLE_DEBUGSTATS
-            Core::Application::Get()->GetDebugStats()->AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
-#endif
+
             if(mpMeshBuffer->GetIndexCount() > 0)
             {
                 inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), inmatWorld);

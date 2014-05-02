@@ -1,11 +1,30 @@
-/*
- *  DebugStats.cpp
- *  iOSTemplate
- *
- *  Created by Scott Downie on 03/08/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  DebugStatsView.cpp
+//  Chilli Source
+//  Created by Scott Downie on 03/08/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #ifdef CS_ENABLE_DEBUGSTATS
 
@@ -177,43 +196,3 @@ namespace ChilliSource
 }
 
 #endif
-
-/*
-
-
- 
- 
- 
- 
- 
- mpLabel##NAME = LabelSPtr(new Label()); \
- mpLabel##NAME->SetText(#NAME); \
- mpLabel##NAME->SetTextScale(mfTextScale); \
- mpLabel##NAME->SetAlignmentToParent(Rendering::AlignmentAnchor::k_topLeft); \
- mpLabel##NAME->SetOffsetFromParentAlignment(0.0f, 0.0f, 5.0f, 0.0f); \
- mpLabel##NAME->EnableAlignmentToParent(true); \
- mpLabel##NAME->SetSize(0.0f, 0.0f, 90.0f, 20.0f); \
- mpLabel##NAME->SetHorizontalJustification(TextJustification::k_left); \
- mpLabel##NAME->SetLocalAlignment(Rendering::AlignmentAnchor::k_topLeft); \
- mpLabel##NAME->EnableUserInteraction(false); \
- mpLabel##NAME->EnableTouchConsumption(false); \
- mpLabel##NAME->EnableBackground(false); \
- mpLabel##NAME->SetTextColour(Core::Colour::k_white); \
- AddSubview(mpLabel##NAME); \
- mpValue##NAME = LabelSPtr(new Label()); \
- mpValue##NAME->SetTextScale(mfTextScale); \
- mpValue##NAME->SetLocalAlignment(Rendering::AlignmentAnchor::k_middleLeft); \
- mpValue##NAME->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleRight); \
- mpValue##NAME->SetOffsetFromParentAlignment(0.0f, 0.0f, 10.0f, 0.0f); \
- mpValue##NAME->EnableAlignmentToParent(true); \
- mpValue##NAME->SetSize(0.0f, 0.0f, 90.0f, 20.0f); \
- mpValue##NAME->SetHorizontalJustification(TextJustification::k_left); \
- mpValue##NAME->EnableUserInteraction(false); \
- mpValue##NAME->EnableTouchConsumption(false); \
- mpValue##NAME->EnableBackground(false); \
- mpValue##NAME->SetTextColour(Core::Colour::k_white); \
- mpLabel##NAME->AddSubview(mpValue##NAME)
-
- 
- 
-*/

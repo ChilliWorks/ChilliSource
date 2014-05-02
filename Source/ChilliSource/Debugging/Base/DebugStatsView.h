@@ -1,5 +1,5 @@
 //
-//  DebugStats.h
+//  DebugStatsView.h
 //  Chilli Source
 //  Created by Scott Downie on 03/08/2011.
 //

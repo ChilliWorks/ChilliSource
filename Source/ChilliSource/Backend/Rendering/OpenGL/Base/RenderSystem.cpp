@@ -552,6 +552,7 @@ namespace ChilliSource
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
             Core::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("Verts", inpBuffer->GetVertexCount());
 #endif
 
 			//Set the new model view matrix based on the camera view matrix and the object matrix
