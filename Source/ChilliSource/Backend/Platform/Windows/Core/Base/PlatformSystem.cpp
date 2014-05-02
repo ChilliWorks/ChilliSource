@@ -55,17 +55,6 @@ namespace ChilliSource
 		PlatformSystem::PlatformSystem() 
 			: m_isRunning(true), m_isSuspended(false), m_appStartTime(0), m_appPreviousTime(0.0)
 		{
-		}
-		//--------------------------------------------------
-		//--------------------------------------------------
-		bool PlatformSystem::IsA(Core::InterfaceIDType in_interfaceId) const
-		{
-			return (Core::PlatformSystem::InterfaceID == in_interfaceId || PlatformSystem::InterfaceID == in_interfaceId);
-		}
-		//-----------------------------------------
-		//-----------------------------------------
-		void PlatformSystem::Init()
-		{
 			QueryPerformanceFrequency(&g_frequency);
 
 			GLFWManager::Create();
@@ -76,9 +65,12 @@ namespace ChilliSource
 			//Register callbacks
 			GLFWManager::Get()->SetWindowFocusDelegate((GLFWwindowfocusfun)&PlatformSystem::OnWindowFocusChanged);
 			GLFWManager::Get()->SetWindowCloseDelegate((GLFWwindowclosefun)&PlatformSystem::OnWindowClosed);
-
-			Core::Application::Get()->Resume();
-			Core::Application::Get()->Foreground();
+		}
+		//--------------------------------------------------
+		//--------------------------------------------------
+		bool PlatformSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		{
+			return (Core::PlatformSystem::InterfaceID == in_interfaceId || PlatformSystem::InterfaceID == in_interfaceId);
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -91,6 +83,9 @@ namespace ChilliSource
 		//-----------------------------------------
 		void PlatformSystem::Run()
 		{
+			Core::Application::Get()->Resume();
+			Core::Application::Get()->Foreground();
+
 			m_appStartTime = (u64)GLFWManager::Get()->GetTime();
 
 			while (m_isRunning)

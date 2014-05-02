@@ -55,12 +55,6 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//------------------------------------------------------
-			/// Initialises the iOS backend.
-            ///
-            /// @author S Downie
-			//------------------------------------------------------
-			void Init() override;
-			//------------------------------------------------------
 			/// Adds default systems to the applications system
 			/// list.
             ///

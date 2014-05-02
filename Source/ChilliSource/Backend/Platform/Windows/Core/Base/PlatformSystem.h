@@ -59,12 +59,6 @@ namespace ChilliSource
 			/// @param Whether system is of given type.
 			//--------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-			//--------------------------------------------------
-			/// Create the GLFW window.
-			///
-			/// @author S Downie
-			//-------------------------------------------------
-			void Init() override;
 			//-------------------------------------------------
 			/// Adds default systems to the applications system
 			/// list.

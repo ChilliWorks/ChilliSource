@@ -37,6 +37,7 @@ namespace ChilliSource
 		
 		typedef std::function<bool(RenderComponent*, RenderComponent*)> RenderSortDelegate;
 		
+        CS_DEFINE_NAMEDTYPE(Renderer);
         //-------------------------------------------------------
         //-------------------------------------------------------
         RendererUPtr Renderer::Create(RenderSystem* in_renderSystem)
@@ -47,22 +48,28 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		Renderer::Renderer(RenderSystem* in_renderSystem)
         : mpRenderSystem(in_renderSystem)
-        , mCanvas(in_renderSystem)
         , mpActiveCamera(nullptr)
 		{
-
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Renderer::Init()
+        bool Renderer::IsA(Core::InterfaceIDType in_interfaceId) const
         {
+            return (Renderer::InterfaceID == in_interfaceId);
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Renderer::OnInit()
+        {
+            m_canvas = CanvasRendererUPtr(new CanvasRenderer(mpRenderSystem));
+            
             mpTransparentSortPredicate = RendererSortPredicateSPtr(new BackToFrontSortPredicate());
             mpOpaqueSortPredicate = RendererSortPredicateSPtr(new MaterialSortPredicate());
             
             mpPerspectiveCullPredicate = ICullingPredicateSPtr(new FrustumCullPredicate());
             mpOrthoCullPredicate = ICullingPredicateSPtr(new ViewportCullPredicate());
             
-            mCanvas.Init();
+            m_canvas->Init();
         }
 		//----------------------------------------------------------
 		/// Set Transparent Sort Predicate
@@ -377,7 +384,7 @@ namespace ChilliSource
         void Renderer::RenderUI(GUI::Window* inpWindow)
         {
             mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), Core::Colour::k_cornflowerBlue);
-			mCanvas.Render(inpWindow, 1.0f);
+			m_canvas->Render(inpWindow, 1.0f);
         }
         //----------------------------------------------------------
         /// Cull Renderables

@@ -49,12 +49,6 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(PlatformSystem);
             //---------------------------------------------------
-            /// Initialise platform specific API's.
-            ///
-            /// @author S Downie
-            //---------------------------------------------------
-            virtual void Init() = 0;
-            //---------------------------------------------------
             /// Begin the game loop.
             ///
             /// @author S Downie

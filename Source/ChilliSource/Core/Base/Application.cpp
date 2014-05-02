@@ -168,23 +168,15 @@ namespace ChilliSource
             
             GUI::GUIViewFactory::RegisterDefaults();
 
-            //Create and initalise the platform system first before adding the other
-            //default system.
+            //Create all application systems.
             m_isSystemCreationAllowed = true;
-            m_platformSystem = CreateSystem<PlatformSystem>();
-			m_platformSystem->Init();
             CreateDefaultSystems();
-			m_platformSystem->CreateDefaultSystems(this);
 			CreateSystems();
             m_isSystemCreationAllowed = false;
-			PostCreateSystems();
             
+			PostCreateSystems();
             m_renderSystem->Init();
             
-            //TODO: Once renderer becomes a system we can remove this stuff from here
-            m_renderer = Rendering::Renderer::Create(m_renderSystem);
-            m_renderer->Init();
-
             //initialise all of the application systems.
             for (const AppSystemUPtr& system : m_systems)
             {
@@ -352,7 +344,6 @@ namespace ChilliSource
             
             m_systems.clear();
             
-			m_renderer.reset();
             CS_SAFEDELETE(m_componentFactoryDispenser);
             
             m_resourcePool->Destroy();
@@ -366,6 +357,7 @@ namespace ChilliSource
         void Application::CreateDefaultSystems()
         {
             //Core
+            m_platformSystem = CreateSystem<PlatformSystem>();
             CreateSystem<Device>();
             CreateSystem<Screen>();
             
@@ -393,8 +385,8 @@ namespace ChilliSource
 
             //Rendering
             Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();
-            
             m_renderSystem = CreateSystem<Rendering::RenderSystem>(renderCapabilities);
+            m_renderer = CreateSystem<Rendering::Renderer>(m_renderSystem);
             CreateSystem<Rendering::MaterialFactory>(renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
             CreateSystem<Rendering::TextureAtlasProvider>();
@@ -402,6 +394,9 @@ namespace ChilliSource
             CreateSystem<Rendering::CubemapProvider>();
             CreateSystem<Rendering::FontProvider>();
             CreateSystem<Rendering::RenderComponentFactory>();
+            
+            //Create any platform specific default systems
+            m_platformSystem->CreateDefaultSystems(this);
         }
         //----------------------------------------------------
         //----------------------------------------------------

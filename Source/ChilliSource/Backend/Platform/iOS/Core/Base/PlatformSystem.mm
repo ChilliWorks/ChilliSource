@@ -47,11 +47,6 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void PlatformSystem::Init()
-		{
-		}
-        //-------------------------------------------------------
-        //-------------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
 		{
             in_application->CreateSystem<OpenGL::GLSLShaderProvider>();

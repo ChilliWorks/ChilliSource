@@ -213,7 +213,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			inline Rendering::Renderer* GetRenderer()
             {
-                return m_renderer.get();
+                return m_renderer;
             }
 			//-----------------------------------------------------
 			/// Returns a pointer to the render system.
@@ -463,7 +463,7 @@ namespace ChilliSource
             ResourcePool* m_resourcePool;
 			StateManager* m_stateManager;
 			TaskScheduler* m_taskScheduler;
-			Rendering::RendererUPtr m_renderer;
+			Rendering::Renderer* m_renderer;
             Rendering::RenderSystem* m_renderSystem;
             PlatformSystem* m_platformSystem;
             FileSystem* m_fileSystem;
