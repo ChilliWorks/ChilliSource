@@ -175,7 +175,6 @@ namespace ChilliSource
             m_isSystemCreationAllowed = false;
             
 			PostCreateSystems();
-            m_renderSystem->Init();
             
             //initialise all of the application systems.
             for (const AppSystemUPtr& system : m_systems)
@@ -423,6 +422,9 @@ namespace ChilliSource
                     }
 				}
 			}
+            
+            //Initialise the render system prior to the OnInit() event.
+            m_renderSystem->Init();
 		}
         //----------------------------------------------------
         //----------------------------------------------------
