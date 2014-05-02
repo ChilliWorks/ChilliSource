@@ -1,5 +1,5 @@
 //
-//  DebugStats.h
+//  Renderer.h
 //  Chilli Source
 //  Created by Scott Downie on 30/09/2010.
 //
