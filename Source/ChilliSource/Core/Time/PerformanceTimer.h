@@ -11,39 +11,32 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-#ifdef CS_TARGETPLATFORM_WINDOWS   
-    #include <windows.h>
-#else          
-    #include <sys/time.h>
+#if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID   
+#include <sys/time.h>
 #endif
 
 namespace ChilliSource
 {
     namespace Core
     {
-        class PerformanceTimer
-        {
-        public:
-            
-#ifdef CS_TARGETPLATFORM_WINDOWS
-            typedef LARGE_INTEGER TimeValue;
-#else
-            typedef timeval TimeValue;
-#endif
-            
-            void Start();
-            void Stop();
-            
-            f64 GetTimeTakenS() const;
-            f64 GetTimeTakenMS() const;
-            f64 GetTimeTakenMicroS() const;
-            
+		class PerformanceTimer final
+		{
+		public:
+			PerformanceTimer();
+			void Start();
+			void Stop();
+			f64 GetTimeTakenS() const;
+			f64 GetTimeTakenMS() const;
+			f64 GetTimeTakenMicroS() const;
         private:
-            
-            static f64 GetTimeDurationMicroS(const TimeValue& inStart, const TimeValue& inEnd);
-            
-            TimeValue mStartTime, mFrequency;
-            f64 mffLastDurationMicroS;
+			f64 m_lastDurationMicroS;
+
+#if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID
+			timeval m_startTime;
+#elif defined CS_TARGETPLATFORM_WINDOWS
+			s64 m_frequency;
+			s64 m_startTime;
+#endif
         };
     }
 }

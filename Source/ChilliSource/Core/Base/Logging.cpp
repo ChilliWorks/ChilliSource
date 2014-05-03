@@ -59,14 +59,18 @@ namespace ChilliSource
         //-----------------------------------------------
         void Logging::Create()
         {
+#ifdef CS_ENABLE_DEBUG
             assert(s_logging == nullptr);
+#endif
             s_logging = new Logging();
         }
         //-----------------------------------------------
         //-----------------------------------------------
         Logging* Logging::Get()
         {
+#ifdef CS_ENABLE_DEBUG
             assert(s_logging != nullptr);
+#endif
             return s_logging;
         }
         //----------------------------------------------
@@ -113,7 +117,9 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_ANDROID
             exit(1);
 #else
+#ifdef CS_ENABLE_DEBUG
             assert(false);
+#endif
 #endif
         }
         //-----------------------------------------------------

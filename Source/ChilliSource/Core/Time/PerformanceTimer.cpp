@@ -8,60 +8,64 @@
 
 #include <ChilliSource/Core/Time/PerformanceTimer.h>
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <windows.h>
+#endif
+
 namespace ChilliSource
 {
     namespace Core
     {
+		PerformanceTimer::PerformanceTimer()
+			: m_lastDurationMicroS(0.0)
+		{
+#ifdef CS_TARGETPLATFORM_WINDOWS
+			LARGE_INTEGER frequency;
+			QueryPerformanceFrequency(&frequency);
+			m_frequency = frequency.QuadPart;
+			m_startTime = 0;
+#endif
+		}
+
         void PerformanceTimer::Start()
         {
-#ifdef CS_TARGETPLATFORM_WINDOWS
-            QueryPerformanceFrequency(&mFrequency);
-            QueryPerformanceCounter(&mStartTime);
-#else
-            gettimeofday(&mStartTime, 0);
+#if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID     
+			gettimeofday(&m_startTime, 0);
+#elif defined CS_TARGETPLATFORM_WINDOWS
+			LARGE_INTEGER startTime;
+			QueryPerformanceCounter(&startTime);
+			m_startTime = startTime.QuadPart;
 #endif
         }
         
         void PerformanceTimer::Stop()
         {
-            TimeValue StopTime;
-#ifdef CS_TARGETPLATFORM_WINDOWS
-            QueryPerformanceCounter(&StopTime);
-#else
-            gettimeofday(&StopTime, 0);
+#if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID    
+            TimeValue stopTime;
+			gettimeofday(&stopTime, 0);
+			f64 startTimeMicro = (m_startTime.tv_sec * 1000000.0) + m_startTime.tv_usec;
+			f64 stopTimeMicro = (stopTime.tv_sec * 1000000.0) + stopTime.tv_usec;
+			m_lastDurationMicroS = stopTimeMicro - startTimeMicro;
+#elif defined CS_TARGETPLATFORM_WINDOWS
+			LARGE_INTEGER end;
+			QueryPerformanceCounter(&end);
+			m_lastDurationMicroS = (static_cast<f64>(end.QuadPart - m_startTime) / m_frequency) * 1000000.0;
 #endif
-            mffLastDurationMicroS = GetTimeDurationMicroS(mStartTime, StopTime);
         }
         
         f64 PerformanceTimer::GetTimeTakenS() const
         {
-            return mffLastDurationMicroS * 0.000001;
+            return m_lastDurationMicroS * 0.000001;
         }
         
         f64 PerformanceTimer::GetTimeTakenMS() const
         {
-            return mffLastDurationMicroS * 0.001;
+			return m_lastDurationMicroS * 0.001;
         }
         
         f64 PerformanceTimer::GetTimeTakenMicroS() const
         {
-            return mffLastDurationMicroS;
-        }
-        
-        f64 PerformanceTimer::GetTimeDurationMicroS(const TimeValue& inStart, const TimeValue& inEnd)
-        {
-			f64 ffStartTimeMicro = 0.0f;
-			f64 ffStopTimeMicro = 0.0;
-            
-#ifdef CS_TARGETPLATFORM_WINDOWS
-            //ffStartTimeMicro = inStart.QuadPart * (1000000.0 / mFrequency.QuadPart);
-            //ffStopTimeMicro = inEnd.QuadPart * (1000000.0 / mFrequency.QuadPart);
-#else
-            ffStartTimeMicro = (inStart.tv_sec * 1000000.0) + inStart.tv_usec;
-            ffStopTimeMicro = (inEnd.tv_sec * 1000000.0) + inEnd.tv_usec;
-#endif
-            
-            return ffStopTimeMicro - ffStartTimeMicro;
+			return m_lastDurationMicroS;
         }
     }
 }
