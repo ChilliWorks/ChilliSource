@@ -31,8 +31,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-#include <cmath>
-
 namespace ChilliSource
 {
 	namespace Core
@@ -396,6 +394,8 @@ namespace ChilliSource
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
+
+#include <cmath>
 
 namespace ChilliSource
 {

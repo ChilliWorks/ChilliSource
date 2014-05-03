@@ -31,8 +31,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-#include <cmath>
-
 namespace ChilliSource
 {
 	namespace Core
@@ -265,6 +263,15 @@ namespace ChilliSource
 			/// @return This vector after it has been multiplied
 			/// by the given matrix.
 			//-----------------------------------------------------
+			GenericVector3<TType>& operator*=(const GenericMatrix3<TType>& in_b);
+			//-----------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param A matrix.
+			///
+			/// @return This vector after it has been multiplied
+			/// by the given matrix.
+			//-----------------------------------------------------
 			GenericVector3<TType>& operator*=(const GenericMatrix4<TType>& in_b);
 			//-----------------------------------------------------
 			/// @author I Copland
@@ -334,6 +341,15 @@ namespace ChilliSource
 		///
 		/// @return The result of A * B.
 		//-----------------------------------------------------
+		template <typename TType> GenericVector3<TType> operator*(const GenericVector3<TType>& in_a, const GenericMatrix3<TType>& in_b);
+		//-----------------------------------------------------
+		/// @author I Copland
+		///
+		/// @param The vector A.
+		/// @param The matrix B.
+		///
+		/// @return The result of A * B.
+		//-----------------------------------------------------
 		template <typename TType> GenericVector3<TType> operator*(const GenericVector3<TType>& in_a, const GenericMatrix4<TType>& in_b);
 		//-----------------------------------------------------
 		/// @author I Copland
@@ -388,9 +404,12 @@ namespace ChilliSource
 // issues. At this stage the class has been defined
 // which is enough for the classes included to use it.
 //----------------------------------------------------
+#include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+
+#include <cmath>
 
 namespace ChilliSource
 {
@@ -624,6 +643,16 @@ namespace ChilliSource
 			z /= in_b.z;
 			return *this;
 		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericVector3<TType>& GenericVector3<TType>::operator*=(const GenericMatrix3<TType>& in_b)
+		{
+			GenericVector3<TType> c = *this;
+			x = c.x * in_b.m[0] + c.y * in_b.m[3] + c.z * in_b.m[6];
+			y = c.x * in_b.m[1] + c.y * in_b.m[4] + c.z * in_b.m[7];
+			z = c.x * in_b.m[2] + c.y * in_b.m[5] + c.z * in_b.m[8];
+			return *this;
+		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector3<TType>& GenericVector3<TType>::operator*=(const GenericMatrix4<TType>& in_b)
@@ -677,6 +706,16 @@ namespace ChilliSource
 		template <typename TType> GenericVector3<TType> operator/(GenericVector3<TType> in_a, const GenericVector3<TType>& in_b)
 		{
 			return (in_a /= in_b);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericVector3<TType> operator*(const GenericVector3<TType>& in_a, const GenericMatrix3<TType>& in_b)
+		{
+			GenericVector3<TType> c;
+			c.x = in_a.x * in_b.m[0] + in_a.y * in_b.m[3] + in_a.z * in_b.m[6];
+			c.y = in_a.x * in_b.m[1] + in_a.y * in_b.m[4] + in_a.z * in_b.m[7];
+			c.z = in_a.x * in_b.m[2] + in_a.y * in_b.m[5] + in_a.z * in_b.m[8];
+			return c;
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------

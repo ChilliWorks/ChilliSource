@@ -31,12 +31,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-#include <cmath>
-
-#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
-#include <Accelerate/Accelerate.h>
-#endif
-
 namespace ChilliSource
 {
 	namespace Core
@@ -424,6 +418,15 @@ namespace ChilliSource
 			/// scalar.
 			//-----------------------------------------------------
 			GenericMatrix4<TType>& operator*=(TType in_b);
+			//-----------------------------------------------------
+			/// @author I Copland
+			///
+			/// @param A scalar.
+			///
+			/// @return This matrix after dividing by the given
+			/// scalar.
+			//-----------------------------------------------------
+			GenericMatrix4<TType>& operator/=(TType in_b);
 
 			TType m[16];
 		};
@@ -476,6 +479,15 @@ namespace ChilliSource
 		/// @author I Copland
 		///
 		/// @param The matrix A.
+		/// @param The scalar B.
+		///
+		/// @return The result of A / B.
+		//-----------------------------------------------------
+		template <typename TType> GenericMatrix4<TType> operator/(GenericMatrix4<TType> in_a, TType in_b);
+		//-----------------------------------------------------
+		/// @author I Copland
+		///
+		/// @param The matrix A.
 		/// @param The matrix B.
 		///
 		/// @return Whether or not the matrices are equal.
@@ -502,6 +514,12 @@ namespace ChilliSource
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 
+#include <cmath>
+
+#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
+#include <Accelerate/Accelerate.h>
+#endif
+
 namespace ChilliSource
 {
 	namespace Core
@@ -512,21 +530,29 @@ namespace ChilliSource
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreatePerspectiveProjectionLH(TType in_viewAngle, TType in_aspectRatio, TType in_near, TType in_far)
 		{
-			TType b1 = 1 / std::tan(in_viewAngle * 0.5);
+			TType b1 = 1 / (TType)std::tan(in_viewAngle * 0.5);
 			TType a0 = b1 / in_aspectRatio;
 			TType c2 = (in_far + in_near) / (in_far - in_near);
 			TType d2 = -(2 * in_far * in_near) / (in_far - in_near);
-			return GenericMatrix4<TType>(a0, 0, 0, 0, 0, b1, 0, 0, 0, 0, c2, 1, 0, 0, d2, 0);
+			return GenericMatrix4<TType>(
+				a0, 0, 0, 0, 
+				0, b1, 0, 0, 
+				0, 0, c2, 1, 
+				0, 0, d2, 0);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreatePerspectiveProjectionRH(TType in_viewAngle, TType in_aspectRatio, TType in_near, TType in_far)
 		{
-			TType b1 = 1 / std::tan(in_viewAngle * 0.5);
+			TType b1 = 1 / (TType)std::tan(in_viewAngle * 0.5);
 			TType a0 = b1 / in_aspectRatio;
 			TType c2 = (in_near + in_far) / (in_near - in_far);
 			TType d2 = (2 * in_near * in_far) / (in_far - in_near);
-			return GenericMatrix4<TType>(a0, 0, 0, 0, 0, b1, 0, 0, 0, 0, c2, -1, 0, 0, d2, 0);
+			return GenericMatrix4<TType>(
+				a0, 0, 0, 0, 
+				0, b1, 0, 0,
+				0, 0, c2, -1,
+				0, 0, d2, 0);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -536,7 +562,11 @@ namespace ChilliSource
 			TType b1 = 2 / in_height;
 			TType c2 = 2 / (in_far - in_near);
 			TType d2 = (in_far + in_near) / (in_near - in_far);
-			return Matrix4(a0, 0, 0, 0, 0, b1, 0, 0, 0, 0, c2, 0, 0, 0, d2, 1);
+			return GenericMatrix4<TType>(
+				a0, 0, 0, 0, 
+				0, b1, 0, 0, 
+				0, 0, c2, 0,
+				0, 0, d2, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -546,13 +576,18 @@ namespace ChilliSource
 			TType b1 = 2 / in_height;
 			TType c2 = -2 / (in_far - in_near);
 			TType d2 = -(in_near + in_far) / (in_far - in_near);
-			return GenericMatrix4<TType>(a0, 0, 0, 0, 0, b1, 0, 0, 0, 0, c2, 0, 0, 0, d2, 1);
+			return GenericMatrix4<TType>(
+				a0, 0, 0, 0, 
+				0, b1, 0, 0, 
+				0, 0, c2, 0, 
+				0, 0, d2, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateOrthographicProjectionLH(TType in_left, f32 in_right, f32 in_bottom, f32 in_top, f32 in_near, f32 in_far)
 		{
 			//TODO:
+			return GenericMatrix4<TType>();
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -564,7 +599,11 @@ namespace ChilliSource
 			TType d0 = -(in_right + in_left) / (in_right - in_left);
 			TType d1 = -(in_top + in_bottom) / (in_top - in_bottom);
 			TType d2 = -(in_near + in_far) / (in_far - in_near);
-			return GenericMatrix4<TType>(a0, 0, 0, 0, 0, b1, 0, 0, 0, 0, c2, 0, d0, d1, d2, 1);
+			return GenericMatrix4<TType>(
+				a0, 0, 0, 0, 
+				0, b1, 0, 0, 
+				0, 0, c2, 0, 
+				d0, d1, d2, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -590,13 +629,21 @@ namespace ChilliSource
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateTranslation(const GenericVector3<TType>& in_translation)
 		{
-			return GenericMatrix4<TType>(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, in_translation.x, in_translation.y, in_translation.z, 1);
+			return GenericMatrix4<TType>(
+				1, 0, 0, 0, 
+				0, 1, 0, 0, 
+				0, 0, 1, 0, 
+				in_translation.x, in_translation.y, in_translation.z, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateScale(const GenericVector3<TType>& in_scale)
 		{
-			return GenericMatrix4<TType>(in_scale.x, 0, 0, 0, 0, in_scale.y, 0, 0, 0, 0, in_scale.z, 0, 0, 0, 0, 1);
+			return GenericMatrix4<TType>(
+				in_scale.x, 0, 0, 0,
+				0, in_scale.y, 0, 0, 
+				0, 0, in_scale.z, 0, 
+				0, 0, 0, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -604,7 +651,11 @@ namespace ChilliSource
 		{
 			TType sinA = (TType)std::sin(in_angle);
 			TType cosA = (TType)std::cos(in_angle);
-			return GenericMatrix4<TType>(1, 0, 0, 0, 0, cosA, sinA, 0, 0, -sinA, cosA, 0, 0, 0, 0, 1);
+			return GenericMatrix4<TType>(
+				1, 0, 0, 0, 
+				0, cosA, sinA, 0, 
+				0, -sinA, cosA, 0, 
+				0, 0, 0, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -612,7 +663,11 @@ namespace ChilliSource
 		{
 			TType sinA = (TType)std::sin(in_angle);
 			TType cosA = (TType)std::cos(in_angle);
-			return GenericMatrix4<TType>(cosA, 0, -sinA, 0, 0, 1, 0, 0, sinA, 0, cosA, 0, 0, 0, 0, 1);
+			return GenericMatrix4<TType>(
+				cosA, 0, -sinA, 0, 
+				0, 1, 0, 0, 
+				sinA, 0, cosA, 0, 
+				0, 0, 0, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -620,21 +675,17 @@ namespace ChilliSource
 		{
 			TType sinA = (TType)std::sin(in_angle);
 			TType cosA = (TType)std::cos(in_angle);
-			return GenericMatrix4<TType>(cosA, sinA, 0, 0, -sinA, cosA, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+			return GenericMatrix4<TType>(
+				cosA, sinA, 0, 0, 
+				-sinA, cosA, 0, 0, 
+				0, 0, 1, 0, 
+				0, 0, 0, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateRotation(const GenericQuaternion<TType>& in_rotation)
 		{
-			GenericQuaternion<TType> q;
-			if (in_rotation.MagnitudeSquared() == 1)
-			{
-				q = in_rotation;
-			}
-			else if (q.MagnitudeSquared() > 0)
-			{
-				q = in_rotation.NormaliseCopy();
-			}
+			GenericQuaternion<TType> q = in_rotation.NormaliseCopy();
 
 			TType wSquared = q.w * q.w;
 			TType xSquared = q.x * q.x;
@@ -658,7 +709,8 @@ namespace ChilliSource
 			TType o = 0;
 			TType p = 1;
 
-			return GenericMatrix4<TType>(a, b, c, d,
+			return GenericMatrix4<TType>(
+				a, b, c, d,
 				e, f, g, h,
 				i, j, k, l,
 				m, n, o, p);
@@ -707,7 +759,7 @@ namespace ChilliSource
 			m[0] = 1; m[1] = 0; m[2] = 0; m[3] = 0;
 			m[4] = 0; m[5] = 1; m[6] = 0; m[7] = 0;
 			m[8] = 0; m[9] = 0; m[10] = 1; m[11] = 0;
-			m[12] = 0; m[13] = 0; m[14] = 1; m[15] = 0;
+			m[12] = 0; m[13] = 0; m[14] = 0; m[15] = 1;
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -941,10 +993,10 @@ namespace ChilliSource
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType>& GenericMatrix4<TType>::operator-=(const GenericMatrix4<TType>& in_b)
 		{
-			m[0] += in_b.m[0]; m[1] += in_b.m[1]; m[2] += in_b.m[2]; m[3] += in_b.m[3];
-			m[4] += in_b.m[4]; m[5] += in_b.m[5]; m[6] += in_b.m[6]; m[7] += in_b.m[7];
-			m[8] += in_b.m[8]; m[9] += in_b.m[9]; m[10] += in_b.m[10]; m[11] += in_b.m[11];
-			m[12] += in_b.m[12]; m[13] += in_b.m[13]; m[14] += in_b.m[14]; m[15] += in_b.m[15];
+			m[0] -= in_b.m[0]; m[1] -= in_b.m[1]; m[2] -= in_b.m[2]; m[3] -= in_b.m[3];
+			m[4] -= in_b.m[4]; m[5] -= in_b.m[5]; m[6] -= in_b.m[6]; m[7] -= in_b.m[7];
+			m[8] -= in_b.m[8]; m[9] -= in_b.m[9]; m[10] -= in_b.m[10]; m[11] -= in_b.m[11];
+			m[12] -= in_b.m[12]; m[13] -= in_b.m[13]; m[14] -= in_b.m[14]; m[15] -= in_b.m[15];
 			return *this;
 		}
 		//------------------------------------------------------
@@ -986,6 +1038,16 @@ namespace ChilliSource
 			m[4] *= in_b; m[5] *= in_b; m[6] *= in_b; m[7] *= in_b;
 			m[8] *= in_b; m[9] *= in_b; m[10] *= in_b; m[11] *= in_b;
 			m[12] *= in_b; m[13] *= in_b; m[14] *= in_b; m[15] *= in_b;
+			return *this;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix4<TType>& GenericMatrix4<TType>::operator/=(TType in_b)
+		{
+			m[0] /= in_b; m[1] /= in_b; m[2] /= in_b; m[3] /= in_b;
+			m[4] /= in_b; m[5] /= in_b; m[6] /= in_b; m[7] /= in_b;
+			m[8] /= in_b; m[9] /= in_b; m[10] /= in_b; m[11] /= in_b;
+			m[12] /= in_b; m[13] /= in_b; m[14] /= in_b; m[15] /= in_b;
 			return *this;
 		}
 		//------------------------------------------------------
@@ -1042,6 +1104,12 @@ namespace ChilliSource
 		template <typename TType> GenericMatrix4<TType> operator*(TType in_a, GenericMatrix4<TType> in_b)
 		{
 			return (in_b *= in_a);
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix4<TType> operator/(GenericMatrix4<TType> in_a, TType in_b)
+		{
+			return (in_a /= in_b);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
