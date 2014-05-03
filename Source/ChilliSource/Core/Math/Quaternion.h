@@ -31,8 +31,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-#include <cmath>
-
 namespace ChilliSource
 {
 	namespace Core
@@ -344,6 +342,8 @@ namespace ChilliSource
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 
+#include <cmath>
+
 namespace ChilliSource
 {
 	namespace Core
@@ -395,14 +395,14 @@ namespace ChilliSource
 		}
 		//--------------------------------------------
 		//--------------------------------------------
-		template <typename TType> GenericQuaternion<TType> Nlerp(const GenericQuaternion<TType>& in_a, const GenericQuaternion<TType>& in_b, f32 in_t)
+		template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::Nlerp(const GenericQuaternion<TType>& in_a, const GenericQuaternion<TType>& in_b, f32 in_t)
 		{
 			const f32 dot = Dot(in_a, in_b);
 			Quaternion output;
 
-			if (dot < 0.0f)
+			if (dot < 0)
 			{
-				output = in_a + (in_t * ((in_b * -1) - in_a));
+				output = in_a + (in_t * ((in_b * (TType)-1) - in_a));
 			}
 			else
 			{

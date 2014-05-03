@@ -360,7 +360,7 @@ namespace ChilliSource
 		{
 			TType sinA = (TType)std::sin(in_angle);
 			TType cosA = (TType)std::cos(in_angle);
-			return GenericMatrix3<TType>(cosA, -sinA, 0, sinA, cosA, 0, 0, 0, 1);
+			return GenericMatrix3<TType>(cosA, sinA, 0, -sinA, cosA, 0, 0, 0, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -368,7 +368,7 @@ namespace ChilliSource
 		{
 			TType cosA = (TType)std::cos(in_angle);
 			TType sinA = (TType)std::sin(in_angle);
-			return GenericMatrix3<TType>(cosA * in_scale.x, -sinA * in_scale.x, 0, sinA * in_scale.y, cosA * in_scale.y, 0, in_translation.x, in_translation.y, 1);
+			return GenericMatrix3<TType>(cosA * in_scale.x, sinA * in_scale.x, 0, -sinA * in_scale.y, cosA * in_scale.y, 0, in_translation.x, in_translation.y, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------

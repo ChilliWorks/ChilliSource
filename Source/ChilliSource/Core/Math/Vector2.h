@@ -588,7 +588,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		template <typename TType> GenericVector2<TType> operator*(const GenericVector2<TType>& in_a, const GenericMatrix3<TType>& in_b)
 		{
-			GenericVector3<TType> c;
+			GenericVector2<TType> c;
 			c.x = in_a.x * in_b.m[0] + in_a.y * in_b.m[3] + in_b.m[6];
 			c.y = in_a.x * in_b.m[1] + in_a.y * in_b.m[4] + in_b.m[7];
 			TType oneOverZ = 1 / (c.x * in_b.m[2] + c.y * in_b.m[5] + in_b.m[8]);
