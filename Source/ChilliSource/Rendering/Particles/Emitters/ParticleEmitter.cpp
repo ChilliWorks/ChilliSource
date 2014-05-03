@@ -480,17 +480,17 @@ namespace ChilliSource
             Core::Vector3 vHalfRight = (0.5f * mvInitialScale.x * invScale.x) * invRight;
             Core::Vector3 vHalfUp = (0.5f * mvInitialScale.y * invScale.y) * invUp;
             
-            Core::Vector4 vTemp(vHalfUp.x - vHalfRight.x, vHalfUp.y - vHalfRight.y, vHalfUp.z - vHalfRight.z, 1.0f);
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = Core::Vector4(invPos, 1.0f) + vTemp;
+            Core::Vector3 vTemp(vHalfUp.x - vHalfRight.x, vHalfUp.y - vHalfRight.y, vHalfUp.z - vHalfRight.z);
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = Core::Vector4(invPos + vTemp, 1.0f);
             
             vTemp.x = vHalfUp.x + vHalfRight.x; vTemp.y = vHalfUp.y + vHalfRight.y; vTemp.z = vHalfUp.z + vHalfRight.z;
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos = Core::Vector4(invPos, 1.0f) + vTemp;
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos = Core::Vector4(invPos + vTemp, 1.0f);
             
             vTemp.x = -vHalfUp.x - vHalfRight.x; vTemp.y = -vHalfUp.y - vHalfRight.y; vTemp.z = -vHalfUp.z - vHalfRight.z;
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos = Core::Vector4(invPos, 1.0f) + vTemp;
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos = Core::Vector4(invPos + vTemp, 1.0f);
             
             vTemp.x = -vHalfUp.x + vHalfRight.x; vTemp.y = -vHalfUp.y + vHalfRight.y; vTemp.z = -vHalfUp.z + vHalfRight.z;
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos = Core::Vector4(invPos, 1.0f) + vTemp;
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos = Core::Vector4(invPos + vTemp, 1.0f);
 		}
         //-------------------------------------------------------
         /// Destructor
