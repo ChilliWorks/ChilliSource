@@ -143,6 +143,8 @@ namespace ChilliSource
             //---------------------------------------------------------
 			void OnDestroy() override;
 		private:
+
+			Core::Screen* m_screen;
 			bool m_isPresented;
 			const s32 m_index;
 			DismissedDelegate m_delegate;

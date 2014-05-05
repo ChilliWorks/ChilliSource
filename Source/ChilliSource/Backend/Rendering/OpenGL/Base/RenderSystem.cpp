@@ -16,7 +16,10 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
@@ -89,7 +92,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		bool RenderSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == RenderSystem::InterfaceID || inInterfaceID == Rendering::RenderSystem::InterfaceID || inInterfaceID == Core::IComponentProducer::InterfaceID;
+			return inInterfaceID == RenderSystem::InterfaceID || inInterfaceID == Rendering::RenderSystem::InterfaceID;
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -116,7 +119,8 @@ namespace ChilliSource
             
             m_hasContext = true;
             
-            CS_ASSERT((Core::Screen::GetRawDimensions() > Core::Vector2::ZERO), "Cannot create and OpenGL ES view with size ZERO");
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            CS_ASSERT((m_screen->GetResolution().x > 0.0f && m_screen->GetResolution().y > 0.0f), "Cannot create and OpenGL ES view with size ZERO");
             
             m_textureUnitSystem = Core::Application::Get()->GetSystem<TextureUnitSystem>();
             CS_ASSERT(m_textureUnitSystem, "Cannot find required system: Texture Unit System.");
@@ -132,7 +136,8 @@ namespace ChilliSource
             
             ForceRefreshRenderStates();
 			
-            OnScreenOrientationChanged((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
+            OnScreenResolutionChanged(m_screen->GetResolution());
+            m_resolutionChangeConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate(this, &RenderSystem::OnScreenResolutionChanged));
             
             m_hasContextBeenBackedUp = false;
 		}
@@ -522,8 +527,8 @@ namespace ChilliSource
         void RenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("DrawCalls", 1u);
-			Debugging::DebugStats::AddToEvent("Verts", inudwNumVerts);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
+			Core::Application::Get()->GetDebugStats()->AddToEvent("Verts", inudwNumVerts);
 #endif
             
 			//Set the new model view matrix based on the camera view matrix and the object matrix
@@ -547,7 +552,8 @@ namespace ChilliSource
         void RenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("DrawCalls", 1u);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("Verts", inpBuffer->GetVertexCount());
 #endif
 
 			//Set the new model view matrix based on the camera view matrix and the object matrix
@@ -582,13 +588,6 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_WINDOWS
 			Windows::GLFWManager::Get()->SwapBuffers();
 #endif
-		}
-		//----------------------------------------------------------
-		/// On Screen Orientation Changed
-		//----------------------------------------------------------
-        void RenderSystem::OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight)
-		{
-            ResizeFrameBuffer(inudwWidth, inudwHeight);
 		}
 		//----------------------------------------------------------
 		/// Resize Frame Buffer
@@ -1130,6 +1129,12 @@ namespace ChilliSource
 			}
 		}
         //----------------------------------------------------------
+        //----------------------------------------------------------
+        void RenderSystem::OnScreenResolutionChanged(const Core::Vector2& in_resolution)
+        {
+            ResizeFrameBuffer((u32)in_resolution.x, (u32)in_resolution.y);
+        }
+        //----------------------------------------------------------
 		//----------------------------------------------------------
 		void RenderSystem::Destroy()
 		{
@@ -1154,6 +1159,8 @@ namespace ChilliSource
             
             free(mpbCurrentVertexAttribState);
             free(mpbLastVertexAttribState);
+            
+            m_resolutionChangeConnection = nullptr;
 		}
 	}
 }

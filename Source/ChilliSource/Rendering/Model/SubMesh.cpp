@@ -9,6 +9,7 @@
 
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Base/VertexLayouts.h>
 #include <ChilliSource/Rendering/Material/Material.h>
@@ -179,9 +180,7 @@ namespace ChilliSource
             }
 			
 			mpMeshBuffer->Bind();
-#ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
-#endif
+
             if(mpMeshBuffer->GetIndexCount() > 0)
             {
                 inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), inmatWorld);

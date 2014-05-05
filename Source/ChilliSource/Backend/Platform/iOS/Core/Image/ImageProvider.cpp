@@ -156,6 +156,7 @@ namespace ChilliSource
                 // Allocated memory needed for the bitmap context
                 u32 dataSize = udwArea * udwBytesPerPixel;
                 u8* pubyBitmapData8888 = new u8[dataSize];
+                memset(pubyBitmapData8888, 0, dataSize);
 
                 // Uses the bitmatp creation function provided by the Core Graphics framework.
                 CGContextRef bitmapContext = CGBitmapContextCreate(pubyBitmapData8888, udwWidth, udwHeight, udwBitsPerComponent, udwWidth * udwBytesPerPixel, ColorSpaceInfo, AlphaInfo);

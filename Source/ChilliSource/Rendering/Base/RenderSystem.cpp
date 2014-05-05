@@ -9,7 +9,6 @@
 
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
-#include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 
@@ -39,7 +38,7 @@ namespace ChilliSource
 		/// Default
 		//-------------------------------------------------------
 		RenderSystem::RenderSystem()
-        : mpRenderFactory(nullptr), mpSpriteBatcher(nullptr)
+        : mpSpriteBatcher(nullptr)
 		{
 
 		}
@@ -57,49 +56,11 @@ namespace ChilliSource
             
             return mpSpriteBatcher;
         }
-		//----------------------------------------------------
-		/// Get Number Of Component Factories
-		///
-		/// @return Number of factories in this system
-		//----------------------------------------------------
-		u32 RenderSystem::GetNumComponentFactories() const
-		{
-			return 1;
-		}
-		//-------------------------------------------------------
-		/// Get Component Factory Pointer
-		///
-		/// 
-		//-------------------------------------------------------
-		Core::ComponentFactory* RenderSystem::GetComponentFactoryPtr(u32 inudwIndex)
-		{
-            if(mpRenderFactory == nullptr)
-            {
-                mpRenderFactory = new RenderComponentFactory(this);
-            }
-            
-            return mpRenderFactory;
-		}
-		//-------------------------------------------------------
-		/// Get Component Factory
-		///
-		/// 
-		//-------------------------------------------------------
-		Core::ComponentFactory& RenderSystem::GetComponentFactory(u32 inudwIndex)
-		{
-            if(mpRenderFactory == nullptr)
-            {
-                mpRenderFactory = new RenderComponentFactory(this);
-            }
-            
-            return *mpRenderFactory;
-		}
 		//-------------------------------------------------------
 		/// Destructor
 		//-------------------------------------------------------
 		RenderSystem::~RenderSystem()
 		{
-			CS_SAFEDELETE(mpRenderFactory);
             CS_SAFEDELETE(mpSpriteBatcher);
 		}
 	}

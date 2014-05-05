@@ -25,6 +25,7 @@
 {
     UIView* mpBaseView;
     CADisplayLink* mpDisplayLink;
+    ChilliSource::Core::Screen* m_screen;
     ChilliSource::Video::SubtitlesCSPtr mpSubtitles;
     ChilliSource::iOS::VideoPlayer* m_videoPlayer;
     std::unordered_map<const ChilliSource::Video::Subtitles::Subtitle*, UITextView*> maTextViewMap;

@@ -85,15 +85,16 @@ namespace ChilliSource
         /// Particles
         //------------------------------------------------------------
         CS_FORWARDDECLARE_STRUCT(Particle);
+        CS_FORWARDDECLARE_CLASS(ParticleEffect);
+        CS_FORWARDDECLARE_CLASS(CSParticleEffectProvider);
         CS_FORWARDDECLARE_CLASS(ParticleComponent);
-        CS_FORWARDDECLARE_CLASS(ParticleComponentFactory);
         CS_FORWARDDECLARE_CLASS(ParticleSystem);
-        CS_FORWARDDECLARE_CLASS(ColourChangerParticleEffector);
-        CS_FORWARDDECLARE_CLASS(LinearForceParticleEffector);
-        CS_FORWARDDECLARE_CLASS(ParticleEffector);
-        CS_FORWARDDECLARE_CLASS(ParticleEffectorFactory);
-        CS_FORWARDDECLARE_CLASS(ScalerParticleEffector);
-        CS_FORWARDDECLARE_CLASS(SpinnerParticleEffector);
+        CS_FORWARDDECLARE_CLASS(ColourChangerParticleAffector);
+        CS_FORWARDDECLARE_CLASS(LinearForceParticleAffector);
+        CS_FORWARDDECLARE_CLASS(ParticleAffector);
+        CS_FORWARDDECLARE_CLASS(ParticleAffectorFactory);
+        CS_FORWARDDECLARE_CLASS(ScalerParticleAffector);
+        CS_FORWARDDECLARE_CLASS(SpinnerParticleAffector);
         CS_FORWARDDECLARE_CLASS(ConeParticleEmitter);
         CS_FORWARDDECLARE_CLASS(ParticleEmitter);
         CS_FORWARDDECLARE_CLASS(ParticleEmitterFactory);

@@ -37,31 +37,29 @@ namespace ChilliSource
     {
 		namespace
 		{
+			const std::string k_defaultLocale = "en_US";
+			const std::string k_defaultLanguage = "en";
+
 			//----------------------------------------------------
-			/// Parses the locale code string received from the
-			/// Android API and converts it to a Locale.
+			/// Returns the language portion of a locale code.
 			///
 			/// @author I Copland
 			///
-			/// @param The locale string.
+			/// @param The locale code.
 			///
-			/// @return The locale.
+			/// @return The language code.
 			//----------------------------------------------------
-			Core::Locale ParseLocaleString(const std::string& in_locale)
+			std::string ParseLanguageFromLocale(const std::string& in_locale)
 			{
 				std::vector<std::string> strLocaleBrokenUp = ChilliSource::Core::StringUtils::Split(in_locale, "_", 0);
 
-				if (strLocaleBrokenUp.size() > 1)
+				if (strLocaleBrokenUp.size() > 0)
 				{
-					return Core::Locale(strLocaleBrokenUp[0],strLocaleBrokenUp[1]);
-				}
-				else if (strLocaleBrokenUp.size() == 1)
-				{
-					return Core::Locale(strLocaleBrokenUp[0]);
+					return strLocaleBrokenUp[0];
 				}
 				else
 				{
-					return Core::kUnknownLocale;
+					return k_defaultLanguage;
 				}
 			}
 		}
@@ -70,7 +68,7 @@ namespace ChilliSource
         //----------------------------------------------------
         //----------------------------------------------------
         Device::Device()
-            : m_locale(Core::kUnknownLocale), m_language(Core::kUnknownLocale)
+            : m_locale(k_defaultLocale), m_language(k_defaultLanguage)
         {
         	CoreJavaInterfaceSPtr javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
 
@@ -78,8 +76,8 @@ namespace ChilliSource
             m_modelType = javaInterface->GetDeviceModelType();
             m_manufacturer = javaInterface->GetDeviceManufacturer();
             m_osVersion = javaInterface->GetOSVersionCode();
-            m_locale = ParseLocaleString(javaInterface->GetDefaultLocaleCode());
-            m_language = m_locale;
+            m_locale = javaInterface->GetDefaultLocaleCode();
+            m_language = ParseLanguageFromLocale(m_locale);
             m_udid = m_udidManager.GetUDID();
             m_numCPUCores = javaInterface->GetNumberOfCores();
         }
@@ -91,49 +89,49 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        const std::string& Device::GetModel()
+        const std::string& Device::GetModel() const
         {
             return m_model;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        const std::string& Device::GetModelType()
+        const std::string& Device::GetModelType() const
         {
             return m_modelType;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        const std::string& Device::GetManufacturer()
+        const std::string& Device::GetManufacturer() const
         {
             return m_manufacturer;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        Core::Locale& Device::GetLocale()
+        const std::string& Device::GetLocale() const
         {
             return m_locale;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        Core::Locale& Device::GetLanguage()
+        const std::string& Device::GetLanguage() const
         {
             return m_language;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        const std::string& Device::GetOSVersion()
+        const std::string& Device::GetOSVersion() const
         {
             return m_osVersion;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        const std::string& Device::GetUDID()
+        const std::string& Device::GetUDID() const
         {
             return m_udid;
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        u32 Device::GetNumberOfCPUCores()
+        u32 Device::GetNumberOfCPUCores() const
         {
             return m_numCPUCores;
         }

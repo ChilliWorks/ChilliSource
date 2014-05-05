@@ -8,9 +8,10 @@
  */
 
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Rendering/Base/RenderSystem.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
@@ -136,11 +137,11 @@ namespace ChilliSource
                     {
                         if(sLastCommand.m_material->IsTransparencyEnabled())
                         {
-                            Debugging::DebugStats::AddToEvent("Sprites_Trans", (u32)maSpriteCache.size());
+                            Core::Application::Get()->GetDebugStats()->AddToEvent("Sprites_Trans", (u32)maSpriteCache.size());
                         }
                         else
                         {
-                            Debugging::DebugStats::AddToEvent("Sprites", (u32)maSpriteCache.size());
+                            Core::Application::Get()->GetDebugStats()->AddToEvent("Sprites", (u32)maSpriteCache.size());
                         }
                     }
                 }

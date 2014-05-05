@@ -26,6 +26,8 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(ImageProvider);
         CS_FORWARDDECLARE_CLASS(LocalNotificationSystem);
         CS_FORWARDDECLARE_CLASS(RemoteNotificationSystem);
+        CS_FORWARDDECLARE_CLASS(Device);
+        CS_FORWARDDECLARE_CLASS(Screen);
         //------------------------------------------------------
 		/// Input
 		//------------------------------------------------------
@@ -42,12 +44,9 @@ namespace ChilliSource
         //------------------------------------------------------
 		/// Social
 		//------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(ContactInformationProvider);
         CS_FORWARDDECLARE_CLASS(EmailComposer);
         CS_FORWARDDECLARE_CLASS(FacebookAuthenticationSystem);
         CS_FORWARDDECLARE_CLASS(FacebookPostSystem);
-        CS_FORWARDDECLARE_CLASS(TwitterAuthenticationActivity);
-        CS_FORWARDDECLARE_CLASS(TwitterPostSystem);
         //------------------------------------------------------
 		/// Video
 		//------------------------------------------------------

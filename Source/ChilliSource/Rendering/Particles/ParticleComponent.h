@@ -68,13 +68,13 @@ namespace ChilliSource
 			ParticleEmitter* GetEmitter(u32 inudwIndex);
 			
             //---------------------------------------------------
-            /// Add Effector
+            /// Add Affector
             ///
-            /// Add a new particle effector to all emitters
+            /// Add a new particle affector to all emitters
             ///
-            /// @param Effector
+            /// @param Affector
             //---------------------------------------------------
-            void AddEffector(ParticleEffectorUPtr inpEffector);
+            void AddAffector(ParticleAffectorUPtr inpAffector);
             //---------------------------------------------------
             /// Start Emitting
             ///
@@ -156,7 +156,7 @@ namespace ChilliSource
 		private:
 			
 			std::vector<ParticleEmitterUPtr> mEmitters;
-			std::vector<ParticleEffectorUPtr> mEffectors;
+			std::vector<ParticleAffectorUPtr> mAffectors;
 			
 			ParticleSystem* mpOwningSystem;
             

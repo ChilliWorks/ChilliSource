@@ -29,9 +29,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Base
         //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Activity);
         CS_FORWARDDECLARE_CLASS(Application);
-        CS_FORWARDDECLARE_CLASS(ApplicationEvents);
         CS_FORWARDDECLARE_CLASS(Colour);
         CS_FORWARDDECLARE_CLASS(Device);
         CS_FORWARDDECLARE_CLASS(IInformationProvider);
@@ -44,9 +42,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         template <typename TKey, typename TValue> class HashedArray;
         template <typename TType> class ObjectPool;
-        CS_FORWARDDECLARE_CLASS(Octree);
         CS_FORWARDDECLARE_CLASS(ParamDictionary);
-        CS_FORWARDDECLARE_CLASS(StaticMemPool);
         template <typename T> class WorkerQueue;
         //---------------------------------------------------------
         /// Cryptographic
@@ -61,8 +57,6 @@ namespace ChilliSource
         /// Entity
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Component);
-        CS_FORWARDDECLARE_CLASS(ComponentFactory);
-        CS_FORWARDDECLARE_CLASS(ComponentFactoryDispenser);
         CS_FORWARDDECLARE_CLASS(Entity);
         CS_FORWARDDECLARE_CLASS(Transform);
         //---------------------------------------------------------
@@ -77,8 +71,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(FileStream);
         CS_FORWARDDECLARE_CLASS(FileSystem);
-        CS_FORWARDDECLARE_CLASS(LocalDataStore);
-        CS_FORWARDDECLARE_CLASS(TweakableConstants);
+        CS_FORWARDDECLARE_CLASS(AppDataStore);
         enum class StorageLocation;
         //---------------------------------------------------------
         /// Image
@@ -92,9 +85,8 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Localisation
         //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Locale);
-		CS_FORWARDDECLARE_CLASS(LocalisedText);
-		CS_FORWARDDECLARE_CLASS(LocalisedTextProvider);
+	CS_FORWARDDECLARE_CLASS(LocalisedText);
+	CS_FORWARDDECLARE_CLASS(LocalisedTextProvider);
         //---------------------------------------------------------
         /// Math
         //---------------------------------------------------------

@@ -20,6 +20,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
+        enum class CameraType
+        {
+            k_orthographic,
+            k_perspective
+        };
+        
 		struct CameraDescription
 		{
 			f32 fFOV;
@@ -27,8 +33,7 @@ namespace ChilliSource
 			f32 fNearClipping;
 			f32 fFarClipping;
 			
-			bool IsOrthographic;
-			bool bShouldRotateToScreen;
+			CameraType m_type;
 			bool bShouldResizeToScreen;
 			
 			Core::Colour ClearCol; 
@@ -59,18 +64,19 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			void SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp);
 			//----------------------------------------------------------
-			/// Use Orthographic View
+            /// Toggle between ortho and persp camera
+            ///
+			/// @author S Downie
 			///
-			/// Switch between ortho and perspective
-			/// @param On or off
+            /// @param Camera type
 			//----------------------------------------------------------
-			void UseOrthographicView(bool inbOrthoEnabled);
+			void SetType(CameraType in_type);
             //----------------------------------------------------------
-			/// Is Orthographic View
+			/// @author S Downie
 			///
-			/// @return On or off
+			/// @return Camera type
 			//----------------------------------------------------------
-			bool IsOrthographicView() const;
+			CameraType GetType() const;
 			//----------------------------------------------------------
 			/// Set Viewport Size
 			///
@@ -121,13 +127,6 @@ namespace ChilliSource
 			//------------------------------------------------------
 			void SetClearColour(const Core::Colour &inCol);
 			//------------------------------------------------------
-			/// Enable Viewport Rotation with Screen
-			///
-			/// @param Whether the viewport should rotate when
-			/// the screen rotates
-			//-----------------------------------------------------
-			void EnableViewportRotationWithScreen(bool inbEnable);
-			//------------------------------------------------------
 			/// Enable Viewport Resize with Screen
 			///
 			/// @param Whether the viewport should resize when
@@ -177,14 +176,6 @@ namespace ChilliSource
 			/// @return View matrix
 			//------------------------------------------------------
 			const Core::Matrix4x4& GetView();
-			//------------------------------------------------------
-			/// Set Viewport Orientation
-			///
-			/// Rotate the view matrix of this camera to match the 
-			/// screen orientation
-			/// @param Screen orientation flag
-			//------------------------------------------------------
-			void SetViewportOrientation(Core::ScreenOrientation ineOrientation);
 			//------------------------------------------------------
 			/// Get Orthographic Projection 
 			///
@@ -284,18 +275,25 @@ namespace ChilliSource
 			//------------------------------------------------------
 			/// Calculate Orthographic Matrix
 			///
-			/// 
+			///
 			//------------------------------------------------------
 			void CalculateOrthographicMatrix();
+            //------------------------------------------------------
+			/// Called when the resolution changes and resize with
+			/// screen is enabled.
+            ///
+			/// @author I Copland
+			//------------------------------------------------------
+			void OnResolutionChanged(const Core::Vector2& in_resolution);
 
 		private:
 			
+            Core::Screen* m_screen;
+            
 			bool mbProjectionCacheValid;
 			
 			CameraDescription mDesc;
 			Core::Frustum mFrustum;
-			
-			Core::ScreenOrientation mViewOrientation;
 			
 			Core::Matrix4x4 mmatOrthoProj; //Ortho projection matrix;
 			Core::Matrix4x4 mmatProj;		//Projection matrix depending on whether we are an ortho or perspective camera

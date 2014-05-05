@@ -172,14 +172,6 @@ namespace ChilliSource
 			/// @param Height
 			//----------------------------------------------------------
 			void ResizeFrameBuffer(u32 inudwWidth, u32 inudwHeight);
-			//----------------------------------------------------------
-			/// On Screen Orientation Changed
-			///
-			/// Resize the frame buffer
-			/// @param Width
-			/// @param Height
-			//----------------------------------------------------------
-			void OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight) override;
             
             //---Render states
             //----------------------------------------------------------
@@ -427,7 +419,16 @@ namespace ChilliSource
             /// Create Attrib State Cache
             //----------------------------------------------------------
             void CreateAttribStateCache();
-			
+            //----------------------------------------------------------
+            /// Called when the resolution of the screen changes. This
+            /// then updates the size of the frame buffer.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The new screen resolution.
+            //----------------------------------------------------------
+            void OnScreenResolutionChanged(const Core::Vector2& in_resolution);
+            
 		private:
 			
             void ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
@@ -525,6 +526,9 @@ namespace ChilliSource
 #endif
             
             bool m_hasContext = false;
+            
+            Core::Screen* m_screen;
+            Core::ConnectionUPtr m_resolutionChangeConnection;
 		};
 	}
 }

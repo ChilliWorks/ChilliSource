@@ -52,8 +52,8 @@ namespace ChilliSource
                 Json::Value JDeviceData(Json::objectValue);
                 JDeviceData["Type"] = device->GetManufacturer() + device->GetModel() + device->GetModelType();
                 JDeviceData["OS"] = device->GetOSVersion();
-                JDeviceData["Locale"] = device->GetLocale().GetCountryCode();
-                JDeviceData["Language"] = device->GetLanguage().GetLocaleCode();
+                JDeviceData["Locale"] = device->GetLocale();
+                JDeviceData["Language"] = device->GetLanguage();
                 
                 //The server uses the tags to determine which content to serve
                 Json::Value JTags(Json::arrayValue);

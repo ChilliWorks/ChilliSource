@@ -73,8 +73,11 @@ public class Renderer implements GLSurfaceView.Renderer
 	 */
     @Override public void onSurfaceChanged(GL10 in_GlContext, int in_width, int in_height) 
     {
-    	//ensure the viewport remains correct.
-    	in_GlContext.glViewport(0, 0, in_width, in_height);
+    	CoreNativeInterface coreNI = (CoreNativeInterface)CSApplication.get().getSystem(CoreNativeInterface.InterfaceID);
+    	if (coreNI != null)
+    	{
+    		coreNI.onResolutionChanged(in_width, in_height);
+    	}
     }
 	/**
 	 * Triggered when the surface is created and ready for rendering

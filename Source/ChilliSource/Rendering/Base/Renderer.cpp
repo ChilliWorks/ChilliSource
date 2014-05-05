@@ -1,11 +1,30 @@
-/*
- *  Renderer.cpp
- *  moFlo
- *
- *  Created by Scott Downie on 30/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Renderer.cpp
+//  Chilli Source
+//  Created by Scott Downie on 30/09/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Rendering/Base/Renderer.h>
 
@@ -37,6 +56,7 @@ namespace ChilliSource
 		
 		typedef std::function<bool(RenderComponent*, RenderComponent*)> RenderSortDelegate;
 		
+        CS_DEFINE_NAMEDTYPE(Renderer);
         //-------------------------------------------------------
         //-------------------------------------------------------
         RendererUPtr Renderer::Create(RenderSystem* in_renderSystem)
@@ -47,22 +67,28 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		Renderer::Renderer(RenderSystem* in_renderSystem)
         : mpRenderSystem(in_renderSystem)
-        , mCanvas(in_renderSystem)
         , mpActiveCamera(nullptr)
 		{
-
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Renderer::Init()
+        bool Renderer::IsA(Core::InterfaceIDType in_interfaceId) const
         {
+            return (Renderer::InterfaceID == in_interfaceId);
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Renderer::OnInit()
+        {
+            m_canvas = CanvasRendererUPtr(new CanvasRenderer(mpRenderSystem));
+            
             mpTransparentSortPredicate = RendererSortPredicateSPtr(new BackToFrontSortPredicate());
             mpOpaqueSortPredicate = RendererSortPredicateSPtr(new MaterialSortPredicate());
             
             mpPerspectiveCullPredicate = ICullingPredicateSPtr(new FrustumCullPredicate());
             mpOrthoCullPredicate = ICullingPredicateSPtr(new ViewportCullPredicate());
             
-            mCanvas.Init();
+            m_canvas->Init();
         }
 		//----------------------------------------------------------
 		/// Set Transparent Sort Predicate
@@ -273,7 +299,8 @@ namespace ChilliSource
             {
                 return pCullPredicate;
             }
-            if(inpActiveCamera->IsOrthographicView())
+            
+            if(inpActiveCamera->GetType() == CameraType::k_orthographic)
             {
                 return mpOrthoCullPredicate;
             }
@@ -376,7 +403,7 @@ namespace ChilliSource
         void Renderer::RenderUI(GUI::Window* inpWindow)
         {
             mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), Core::Colour::k_cornflowerBlue);
-			mCanvas.Render(inpWindow, 1.0f);
+			m_canvas->Render(inpWindow, 1.0f);
         }
         //----------------------------------------------------------
         /// Cull Renderables
@@ -472,6 +499,12 @@ namespace ChilliSource
             const f32 kfOverlayNear = 1.0f;
             const f32 kfOverlayFar = 100.0f;
             return Core::Matrix4x4::CreateOrthoMatrixOffset(0, kvOverlayDimensions.x, 0, kvOverlayDimensions.y, kfOverlayNear, kfOverlayFar);
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void Renderer::OnDestroy()
+        {
+            m_canvas = nullptr;
         }
 	}
 }

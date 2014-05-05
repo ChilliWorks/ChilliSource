@@ -15,13 +15,14 @@
 
 namespace ChilliSource
 {
-    namespace Base
+    namespace Debugging
     {
         //--------------------------------------------------
         /// Base
         //--------------------------------------------------
 #ifdef CS_ENABLE_DEBUGSTATS
         CS_FORWARDDECLARE_CLASS(DebugStats);
+        CS_FORWARDDECLARE_CLASS(DebugStatsView);
 #endif
     }
 }

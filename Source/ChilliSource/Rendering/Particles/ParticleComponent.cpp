@@ -10,7 +10,7 @@
 #include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 
 #include <ChilliSource/Rendering/Particles/ParticleSystem.h>
-#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffector.h>
 
 namespace ChilliSource
 {
@@ -79,21 +79,21 @@ namespace ChilliSource
 			return nullptr;
 		}
         //---------------------------------------------------
-		/// Add Effector
+		/// Add Affector
 		//---------------------------------------------------
-		void ParticleComponent::AddEffector(ParticleEffectorUPtr inpEffector)
+		void ParticleComponent::AddAffector(ParticleAffectorUPtr inpAffector)
 		{
-            if(!inpEffector)
+            if(!inpAffector)
             {
                 return;
             }
 			
             for(std::vector<ParticleEmitterUPtr>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
-				(*it)->AddEffector(inpEffector.get());
+				(*it)->AddAffector(inpAffector.get());
 			}
             
-            mEffectors.push_back(std::move(inpEffector));
+            mAffectors.push_back(std::move(inpAffector));
 		}
 		//-------------------------------------------------
 		/// Update

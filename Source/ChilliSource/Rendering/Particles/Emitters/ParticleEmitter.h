@@ -71,22 +71,22 @@ namespace ChilliSource
             //---------------------------------------------------
             void StopEmitting();
             //-----------------------------------------------------
-            /// Add Effector
+            /// Add Affector
             ///
-            /// Add a new effector to apply to the particles
+            /// Add a new affector to apply to the particles
             ///
-            /// @param Particle effector
+            /// @param Particle affector
             //-----------------------------------------------------
-            void AddEffector(ParticleEffector* inpEffector);
+            void AddAffector(ParticleAffector* inpAffector);
             //-----------------------------------------------------
-            /// Remove Effector
+            /// Remove Affector
             ///
-            /// Remove the effector so it no longer applies to
+            /// Remove the affector so it no longer applies to
             /// the system
             ///
-            /// @param Particle effector
+            /// @param Particle affector
             //-----------------------------------------------------
-            void RemoveEffector(ParticleEffector* inpEffector);
+            void RemoveAffector(ParticleAffector* inpAffector);
             //-----------------------------------------------------
             /// Set Velocity
             ///
@@ -151,6 +151,22 @@ namespace ChilliSource
             /// Sets the UVs used for a particle
             //-------------------------------------------------
             void SetParticleUVs(const Core::Rectangle & insUVs);
+            //-------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Texture atlas used in conjunction with
+            /// atlas Id to set the UVs of the particle
+            //-------------------------------------------------
+            void SetTextureAtlas(const TextureAtlasCSPtr& in_atlas);
+            //-------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Texture atlas Id used in conjunction with
+            /// atlas to set the UVs of the particle.
+            ///
+            /// NOTE: Atlas must be set first
+            //-------------------------------------------------
+            void SetTextureAtlasId(const std::string& in_atlasId);
 
 			//-------------------------------------------------
             /// Has this emitter finished emitting its particles? (EmitOnce only!)
@@ -161,7 +177,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Update Particle
             ///
-            /// Update an indivdual particle with the effectors
+            /// Update an indivdual particle with the affectors
             ///
             /// @param Particle
             /// @param DT
@@ -191,7 +207,7 @@ namespace ChilliSource
         protected:
             
             Particle* m_particles;
-            std::vector<ParticleEffector*> mEffectors;
+            std::vector<ParticleAffector*> mAffectors;
             
             f32 mfInitialVelocity;
             f32 mfMinInitialVelocity;
@@ -202,6 +218,7 @@ namespace ChilliSource
 			Core::Rectangle msParticleUVs;
 			
             MaterialCSPtr mpMaterial;
+            TextureAtlasCSPtr m_atlas;
             
             u32 mudwMaxNumParticles;
             u32 mudwMaxNumParticlesPerEmission;
