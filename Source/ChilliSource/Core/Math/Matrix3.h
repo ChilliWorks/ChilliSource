@@ -562,7 +562,7 @@ namespace ChilliSource
 			Matrix3 c;
 
 #if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
-			vDSP_mmul(const_cast<f32*>(m), 1, const_cast<f32*>(in_b.m), 1, c.m, 1, 3, 3, 3);
+			vDSP_mmul(const_cast<f32*>(in_a.m), 1, const_cast<f32*>(in_b.m), 1, c.m, 1, 3, 3, 3);
 #else
 			c.m[0] = in_a.m[0] * in_b.m[0] + in_a.m[1] * in_b.m[3] + in_a.m[2] * in_b.m[6];
 			c.m[1] = in_a.m[0] * in_b.m[1] + in_a.m[1] * in_b.m[4] + in_a.m[2] * in_b.m[7];

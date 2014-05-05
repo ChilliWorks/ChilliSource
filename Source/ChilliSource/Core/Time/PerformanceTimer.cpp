@@ -41,7 +41,7 @@ namespace ChilliSource
         void PerformanceTimer::Stop()
         {
 #if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID    
-            TimeValue stopTime;
+            timeval stopTime;
 			gettimeofday(&stopTime, 0);
 			f64 startTimeMicro = (m_startTime.tv_sec * 1000000.0) + m_startTime.tv_usec;
 			f64 stopTimeMicro = (stopTime.tv_sec * 1000000.0) + stopTime.tv_usec;

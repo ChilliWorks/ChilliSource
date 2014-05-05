@@ -783,7 +783,7 @@ namespace ChilliSource
 			Matrix4 A = *this;
 
 #if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
-			vDSP_mtrans(const_cast<f32*>(m), 1, a.m, 1, 4, 4);
+			vDSP_mtrans(const_cast<f32*>(m), 1, A.m, 1, 4, 4);
 #else 
 			A.m[0] = m[0]; A.m[1] = m[4]; A.m[2] = m[8]; A.m[3] = m[12];
 			A.m[4] = m[1]; A.m[5] = m[5]; A.m[6] = m[9]; A.m[7] = m[13];
