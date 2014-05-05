@@ -28,6 +28,7 @@
 
 #include <ChilliSource/Rendering/Particles/ParticleSystem.h>
 
+#include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 
 
@@ -85,7 +86,7 @@ namespace ChilliSource
             
 			for(auto it = m_particleComponents.begin(); it != m_particleComponents.end(); ++it)
 			{
-                if((*it)->GetEntity())
+                if((*it)->GetEntity() && (*it)->GetEntity()->GetScene())
                 {
                     (*it)->Update(in_timeSinceLastUpdate);
                 }

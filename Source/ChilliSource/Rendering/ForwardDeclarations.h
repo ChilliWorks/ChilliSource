@@ -88,7 +88,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(ParticleEffect);
         CS_FORWARDDECLARE_CLASS(CSParticleEffectProvider);
         CS_FORWARDDECLARE_CLASS(ParticleComponent);
-        CS_FORWARDDECLARE_CLASS(ParticleComponentFactory);
         CS_FORWARDDECLARE_CLASS(ParticleSystem);
         CS_FORWARDDECLARE_CLASS(ColourChangerParticleAffector);
         CS_FORWARDDECLARE_CLASS(LinearForceParticleAffector);

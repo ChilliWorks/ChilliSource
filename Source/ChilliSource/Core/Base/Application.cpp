@@ -48,6 +48,10 @@
 #include <ChilliSource/Rendering/Material/MaterialProvider.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
+#include <ChilliSource/Rendering/Particles/CSParticleEffectProvider.h>
+#include <ChilliSource/Rendering/Particles/ParticleSystem.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffectorFactory.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
 #include <ChilliSource/Rendering/Texture/CubemapProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
@@ -397,6 +401,12 @@ namespace ChilliSource
             CreateSystem<Rendering::CubemapProvider>();
             CreateSystem<Rendering::FontProvider>();
             CreateSystem<Rendering::RenderComponentFactory>();
+            
+            //Particles
+            CreateSystem<CSRendering::ParticleSystem>();
+            CreateSystem<CSRendering::ParticleEmitterFactory>();
+            CreateSystem<CSRendering::ParticleAffectorFactory>();
+            CreateSystem<CSRendering::CSParticleEffectProvider>();
         }
         //----------------------------------------------------
         //----------------------------------------------------
