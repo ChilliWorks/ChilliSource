@@ -15,7 +15,6 @@
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
-#include <ChilliSource/Core/File/TweakableConstants.h>
 #include <ChilliSource/Core/Image/ImageProvider.h>
 #include <ChilliSource/Core/Image/CSImageProvider.h>
 #include <ChilliSource/Core/JSON/json.h>
@@ -168,28 +167,14 @@ namespace ChilliSource
             
             GUI::GUIViewFactory::RegisterDefaults();
 
-            //Initialise the platform specific API's
-            m_platformSystem = PlatformSystem::Create();
-			m_platformSystem->Init();
-            
-			//System setup
+            //Create all application systems.
             m_isSystemCreationAllowed = true;
             CreateDefaultSystems();
-			m_platformSystem->CreateDefaultSystems(this);
 			CreateSystems();
             m_isSystemCreationAllowed = false;
+            
 			PostCreateSystems();
-
-            //init tweakable constants and local data store.
-			new TweakableConstants();
-			new AppDataStore();
             
-            m_renderSystem->Init();
-            
-            //TODO: Once renderer becomes a system we can remove this stuff from here
-            m_renderer = Rendering::Renderer::Create(m_renderSystem);
-            m_renderer->Init();
-
             //initialise all of the application systems.
             for (const AppSystemUPtr& system : m_systems)
             {
@@ -242,8 +227,8 @@ namespace ChilliSource
             }
             
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::RecordEvent("FrameTime", in_deltaTime);
-			Debugging::DebugStats::RecordEvent("FPS", 1.0f/in_deltaTime);
+            m_debugStats->RecordEvent("FrameTime", in_deltaTime);
+			m_debugStats->RecordEvent("FPS", 1.0f / in_deltaTime);
 #endif
             
 			//Update the app time since start
@@ -282,7 +267,7 @@ namespace ChilliSource
             m_renderer->RenderToScreen(m_stateManager->GetActiveState()->GetScene());
             
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::Clear();
+            m_debugStats->Clear();
 #endif
 		}
         //----------------------------------------------------
@@ -355,8 +340,7 @@ namespace ChilliSource
             
             m_renderSystem->Destroy();
             
-            m_platformSystem.reset();
-			m_renderer.reset();
+            m_systems.clear();
             
             m_resourcePool->Destroy();
             
@@ -369,6 +353,7 @@ namespace ChilliSource
         void Application::CreateDefaultSystems()
         {
             //Core
+            m_platformSystem = CreateSystem<PlatformSystem>();
             CreateSystem<Device>();
             CreateSystem<Screen>();
             
@@ -383,6 +368,10 @@ namespace ChilliSource
             CreateSystem<CSImageProvider>();
             CreateSystem<DialogueBoxSystem>();
             
+#ifdef CS_ENABLE_DEBUGSTATS
+            m_debugStats = CreateSystem<Debugging::DebugStats>();
+#endif
+            
             //TODO: Change this to a PNG image provider.
             CreateSystem<ImageProvider>();
 
@@ -392,8 +381,8 @@ namespace ChilliSource
 
             //Rendering
             Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();
-            
             m_renderSystem = CreateSystem<Rendering::RenderSystem>(renderCapabilities);
+            m_renderer = CreateSystem<Rendering::Renderer>(m_renderSystem);
             CreateSystem<Rendering::MaterialFactory>(renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
             CreateSystem<Rendering::TextureAtlasProvider>();
@@ -407,6 +396,9 @@ namespace ChilliSource
             CreateSystem<CSRendering::ParticleEmitterFactory>();
             CreateSystem<CSRendering::ParticleAffectorFactory>();
             CreateSystem<CSRendering::CSParticleEffectProvider>();
+
+	    //Create any platform specific default systems
+            m_platformSystem->CreateDefaultSystems(this);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -421,8 +413,9 @@ namespace ChilliSource
                     m_resourcePool->AddProvider(dynamic_cast<ResourceProvider*>(system.get()));
 				}
 			}
-
-            m_platformSystem->PostCreateSystems();
+            
+            //Initialise the render system prior to the OnInit() event.
+            m_renderSystem->Init();
 		}
         //----------------------------------------------------
         //----------------------------------------------------

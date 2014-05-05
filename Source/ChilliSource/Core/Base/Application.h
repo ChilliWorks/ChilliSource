@@ -213,7 +213,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			inline Rendering::Renderer* GetRenderer()
             {
-                return m_renderer.get();
+                return m_renderer;
             }
 			//-----------------------------------------------------
 			/// Returns a pointer to the render system.
@@ -225,17 +225,6 @@ namespace ChilliSource
 			inline Rendering::RenderSystem* GetRenderSystem()
             {
                 return m_renderSystem;
-            }
-            //-----------------------------------------------------
-			/// Returns a pointer to the platform system.
-            ///
-            /// @author S Downie.
-			///
-            /// @return Pointer to the platform system
-            //-----------------------------------------------------
-			inline PlatformSystem* GetPlatformSystem()
-            {
-                return m_platformSystem.get();
             }
 			//-----------------------------------------------------
 			/// Returns a pointer to the file system.
@@ -270,6 +259,21 @@ namespace ChilliSource
             {
                 return m_resourcePool;
             }
+#ifdef CS_ENABLE_DEBUGSTATS
+            //-----------------------------------------------------
+			/// Returns a pointer to the debug stats system. This
+            /// is only available when the debug stats proprocessor
+            /// flag CS_ENABLE_DEBUGSTATS is defined.
+            ///
+            /// @author I Copland
+			///
+			/// @return Pointer to the debug stats system.
+			//-----------------------------------------------------
+			inline Debugging::DebugStats* GetDebugStats()
+            {
+                return m_debugStats;
+            }
+#endif
             //----------------------------------------------------
 			/// Initialises the application and kicks off the update
             /// loop. This should not be called by a users application.
@@ -459,11 +463,15 @@ namespace ChilliSource
             ResourcePool* m_resourcePool;
 			StateManager* m_stateManager;
 			TaskScheduler* m_taskScheduler;
-			Rendering::RendererUPtr m_renderer;
+			Rendering::Renderer* m_renderer;
             Rendering::RenderSystem* m_renderSystem;
-            PlatformSystemUPtr m_platformSystem;
+            PlatformSystem* m_platformSystem;
             FileSystem* m_fileSystem;
             Input::PointerSystem* m_pointerSystem;
+
+#ifdef CS_ENABLE_DEBUGSTATS
+            Debugging::DebugStats* m_debugStats;
+#endif
             
 			TimeIntervalSecs m_currentAppTime;
             Rendering::FontCSPtr m_defaultFont;

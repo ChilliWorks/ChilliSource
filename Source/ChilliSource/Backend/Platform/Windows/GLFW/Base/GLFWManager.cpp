@@ -61,6 +61,12 @@ namespace ChilliSource
 		{
 			glfwPollEvents();
 		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void GLFWManager::SetMaxFPS(u32 in_fps)
+		{
+			glfwSwapInterval(60 / in_fps);
+		}
 		//---------------------------------------------------
 		//---------------------------------------------------
 		void GLFWManager::SetCursorPosDelegate(GLFWcursorposfun in_delegate)

@@ -175,7 +175,7 @@ namespace ChilliSource
 			mOverlayBatcher.Render(msCachedSprite);
             
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("GUI", 1);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("GUI", 1);
 #endif
         }
         //-----------------------------------------------------------
@@ -217,7 +217,7 @@ namespace ChilliSource
 			}
             
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("GUI", 1);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("GUI", 1);
 #endif
 		}
         //-----------------------------------------------------------

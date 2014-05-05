@@ -39,12 +39,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(ScrollView);
         CS_FORWARDDECLARE_CLASS(VerticalList);
         //--------------------------------------------------------
-        /// Debug
-        //--------------------------------------------------------
-#ifdef CS_ENABLE_DEBUGSTATS
-        CS_FORWARDDECLARE_CLASS(DebugStatsView);
-#endif
-        //--------------------------------------------------------
         /// Image
         //--------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(HorizontalStretchableImage);

@@ -29,7 +29,6 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Base
         //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Activity);
         CS_FORWARDDECLARE_CLASS(Application);
         CS_FORWARDDECLARE_CLASS(Colour);
         CS_FORWARDDECLARE_CLASS(Device);
@@ -43,9 +42,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         template <typename TKey, typename TValue> class HashedArray;
         template <typename TType> class ObjectPool;
-        CS_FORWARDDECLARE_CLASS(Octree);
         CS_FORWARDDECLARE_CLASS(ParamDictionary);
-        CS_FORWARDDECLARE_CLASS(StaticMemPool);
         template <typename T> class WorkerQueue;
         //---------------------------------------------------------
         /// Cryptographic
@@ -75,7 +72,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(FileStream);
         CS_FORWARDDECLARE_CLASS(FileSystem);
         CS_FORWARDDECLARE_CLASS(AppDataStore);
-        CS_FORWARDDECLARE_CLASS(TweakableConstants);
         enum class StorageLocation;
         //---------------------------------------------------------
         /// Image
@@ -86,10 +82,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(CSImageProvider);
         enum class ImageFormat;
         enum class ImageCompression;
-        //---------------------------------------------------------
-        /// Localisation
-        //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Locale);
         //---------------------------------------------------------
         /// Math
         //---------------------------------------------------------

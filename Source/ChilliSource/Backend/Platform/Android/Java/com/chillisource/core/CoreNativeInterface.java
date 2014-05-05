@@ -14,7 +14,6 @@ import com.chillisource.core.FileUtils;
 import com.chillisource.core.InterfaceIDType;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -131,14 +130,6 @@ public class CoreNativeInterface extends INativeInterface
 	 */
 	public native void onBackPressed();
 	/**
-	 * Triggered when the is launched with an intent containing a URL
-	 * 
-	 * @author I Copland
-	 * 
-	 * @param URL
-	 */
-	public native void applicationDidReceiveLaunchingURL(String in_url);
-	/**
 	 * Constructor
 	 * 
 	 * @author I Copland
@@ -157,25 +148,6 @@ public class CoreNativeInterface extends INativeInterface
 	@Override public boolean IsA(InterfaceIDType in_interfaceType) 
 	{
 		return (in_interfaceType.Equals(InterfaceID));
-	}
-	/**
-	 * Triggered when the activity receives an intent
-	 * 
-	 * @author I Copland
-	 * 
-	 * @param Intent
-	 */
-	@Override public void onLaunchIntentReceived(Intent in_intent) 
-	{
-		if(in_intent != null)
-    	{
-    		String strUri = in_intent.getDataString();
-    		
-    		if(strUri != null)
-    		{
-    			applicationDidReceiveLaunchingURL(strUri);
-    		}
-    	}
 	}
 	/**
 	 * @author I Copland
