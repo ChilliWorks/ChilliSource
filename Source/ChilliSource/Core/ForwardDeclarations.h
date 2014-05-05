@@ -93,6 +93,8 @@ namespace ChilliSource
         /// Localisation
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Locale);
+		CS_FORWARDDECLARE_CLASS(LocalisedText);
+		CS_FORWARDDECLARE_CLASS(LocalisedTextProvider);
         //---------------------------------------------------------
         /// Math
         //---------------------------------------------------------
