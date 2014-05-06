@@ -62,7 +62,7 @@ namespace ChilliSource
 		}
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
-        const UTF8String& LocalisedText::GetText(const std::string& in_key) 
+        const UTF8String& LocalisedText::GetText(const std::string& in_key) const
         {
 			auto it = m_text.find(in_key);
 

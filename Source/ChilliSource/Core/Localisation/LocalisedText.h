@@ -75,7 +75,7 @@ namespace ChilliSource
 			///
 			/// @return The localised text string that maps to this key
 			//---------------------------------------------------------------------
-			const UTF8String& GetText(const std::string& in_key);
+			const UTF8String& GetText(const std::string& in_key) const;
 
 		private:
 
