@@ -344,13 +344,13 @@ namespace ChilliSource
 			m_defaultFont.reset();
 			m_defaultMesh.reset();
 			m_defaultMaterial.reset();
+            m_defaultLocalisedText.reset();
             
             m_renderSystem->Destroy();
-            
+			m_resourcePool->Destroy();
+
             m_systems.clear();
-            
-            m_resourcePool->Destroy();
-            
+
             Logging::Destroy();
             
             s_application = nullptr;
