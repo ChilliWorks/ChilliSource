@@ -136,7 +136,7 @@ namespace ChilliSource
                     textResource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(in_delegate, out_resource));
+                        Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                     }
 					return;
 				}
@@ -172,7 +172,7 @@ namespace ChilliSource
                         textResource->SetLoadState(Resource::LoadState::k_failed);
                         if(in_delegate != nullptr)
                         {
-                            Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(in_delegate, out_resource));
+                            Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                         }
                         return;
                     }
@@ -186,7 +186,7 @@ namespace ChilliSource
                 
                 if(in_delegate != nullptr)
                 {
-                    Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(in_delegate, out_resource));
+                    Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 }
 			}
 		}
