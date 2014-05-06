@@ -72,7 +72,7 @@ namespace ChilliSource
 			}
 
 			CS_LOG_ERROR("No localised text for key: " + in_key);
-			return StringUtils::BLANK;
+			return StringUtils::UTF8_BLANK;
         }
 	}
 }
