@@ -186,7 +186,6 @@ namespace ChilliSource
             std::string fileName;
             std::string fileExtension;
             
-            //Get the name of the file and append the high res identifier to it
             Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
             Core::FileStreamSPtr mapFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, fileName + ".mospriteid", Core::FileMode::k_read);
             
