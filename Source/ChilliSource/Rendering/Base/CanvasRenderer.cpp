@@ -35,6 +35,141 @@ namespace ChilliSource
         namespace
         {
             const f32 k_maxKernRatio = 0.25;
+            
+            //----------------------------------------------------
+            /// Build Character
+            //----------------------------------------------------
+            void BuildCharacterNew(const FontCSPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
+                                                const Core::Vector2& invCursor, f32 infTextScale, f32 infCharSpacing,
+                                                f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound)
+            {
+                Font::CharacterInfo sInfo;
+                if(inpFont->TryGetCharacterInfo(inCharacter, sInfo) == false)
+                {
+                    outfCharacterWidth = 0.0f;
+                    if(outpInvalidCharacterFound)
+                        (*outpInvalidCharacterFound)=true;
+                    CS_LOG_ERROR("Invalid character in text component");
+                    return;
+                }
+                
+                sInfo.m_size *= infTextScale;
+                sInfo.m_offset *= infTextScale;
+                
+                f32 fCharWidth = sInfo.m_size.x + infCharSpacing;
+                
+                if(sInfo.m_size.y > 0.0f)
+                {
+                    PlacedCharacter sOutCharacter;
+                    sOutCharacter.sUVs = sInfo.m_UVs;
+                    sOutCharacter.vSize = sInfo.m_size;
+                    sOutCharacter.vPosition.x = invCursor.x + sInfo.m_offset.x;
+                    sOutCharacter.vPosition.y = invCursor.y - sInfo.m_offset.y;
+                    
+                    if(inpFont->SupportsKerning() && fCharWidth > 2)
+                    {
+                        f32 fKernAmount = (inpFont->GetKerningBetweenCharacters(inCharacter, inNextCharacter) * infTextScale);
+                        
+                        if(fKernAmount > (fCharWidth * k_maxKernRatio))
+                        {
+                            fKernAmount = fCharWidth * k_maxKernRatio;
+                        }
+                        
+                        fCharWidth -= fKernAmount;
+                    }
+                    
+                    outCharacters.push_back(sOutCharacter);
+                }
+                
+                outfCharacterWidth = fCharWidth;
+            }
+            
+            f32 CalculateTextWidth(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_charSpacing)
+            {
+                f32 totalWidth = 0.0f;
+                
+                Core::UTF8String::iterator it = (Core::UTF8String::iterator)in_text.begin();
+                while(in_text.end() != it)
+                {
+                    Core::UTF8String::Char character = in_text.next(it);
+                    
+                    Font::CharacterInfo charInfo;
+                    if(in_font->TryGetCharacterInfo(character, charInfo) == true)
+                    {
+                        f32 charWidth = (charInfo.m_size.x * in_textScale);
+                        f32 spacingWidth = in_charSpacing;
+                        
+                        if(in_font->SupportsKerning() == true && in_text.end() != it)
+                        {
+                            auto itNext = it;
+                            Core::UTF8String::Char nextCharacter = in_text.next(itNext);
+                            
+                            f32 kernSpacing = std::min((in_font->GetKerningBetweenCharacters(character, nextCharacter) * in_textScale), charWidth * k_maxKernRatio);
+                            spacingWidth -= kernSpacing;
+                        }
+                        
+                        totalWidth += charWidth + spacingWidth;
+                    }
+                }
+                
+                return totalWidth;
+            }
+            
+            void SplitByNewLine(const Core::UTF8String& in_text, std::vector<Core::UTF8String>& out_lines)
+            {
+                Core::UTF8String::iterator it = (Core::UTF8String::iterator)in_text.begin();
+                Core::UTF8String line;
+                while(in_text.end() != it)
+                {
+                    Core::UTF8String::Char character = in_text.next(it);
+                    
+                    if(character != '\n')
+                    {
+                        line.appendChar(character);
+                    }
+                    else
+                    {
+                        out_lines.push_back(line);
+                        line.clear();
+                    }
+                }
+                
+                if(line.size() > 0)
+                {
+                    out_lines.push_back(line);
+                }
+            }
+            
+            void SplitByBounds(const Core::UTF8String& in_text, const Core::Vector2& in_bounds, std::vector<Core::UTF8String>& out_lines)
+            {
+
+            }
+
+            void BuildStringNew(const FontCSPtr& inpFont, const Core::UTF8String &in_text, CanvasRenderer::CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
+                             const Core::Vector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification,
+                             bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
+            {
+                if(in_text != "This is the options screen\nwhere you can select the options.\nGo on, select and option. Go on, go on, go on, go on.")
+                    return;
+                    
+                //NOTE: | denotes the bounds of the box
+                //- |The quick brown fox| jumped over\nthe ferocious honey badger
+                
+                std::vector<Core::UTF8String> lines;
+                
+                //Split the string into lines by the forced line breaks
+                //- |The quick brown fox| jumped over
+                //- |the ferocious honey| badger
+                SplitByNewLine(in_text, lines);
+                
+                //Split the lines further based on the line width, whitespaces and the bounds
+                //- |The quick brown fox|
+                //- |jumped over        |
+                //- |the ferocious honey|
+                //- |badger             |
+                
+                
+            }
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -195,6 +330,9 @@ namespace ChilliSource
                     (*outpInvalidCharacterFound)=false;
                 BuildString(inpFont, insString, outCharCache, infSize, infCharacterSpacing, infLineSpacing, invBounds, inudwNumLines,
 							ineHorizontalJustification, ineVerticalJustification, inbFlipVertical, ineBehaviour, outpClipped,outpInvalidCharacterFound);
+                
+                BuildStringNew(inpFont, insString, outCharCache, infSize, infCharacterSpacing, infLineSpacing, invBounds, inudwNumLines,
+                               ineHorizontalJustification, ineVerticalJustification, inbFlipVertical, ineBehaviour, outpClipped, outpInvalidCharacterFound);
             }
             
             Core::Matrix4x4 matTransform(inmatTransform);
