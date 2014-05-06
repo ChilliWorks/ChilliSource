@@ -28,6 +28,8 @@
 
 #include <ChilliSource/Core/Localisation/LocalisedTextProvider.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 
 namespace ChilliSource
@@ -38,6 +40,78 @@ namespace ChilliSource
 		{
 			const std::string k_fileExtension("mofloloca");
 
+            //----------------------------------------------------
+			/// Loads the localised text file and parses it into
+            /// individual text lines. Replaces any new-line characters
+            /// with a standardised '\n'
+			///
+			/// @author S Downie
+			///
+			/// @param Valid file stream
+			/// @param [Out] The text split into lines
+			//----------------------------------------------------
+            void LoadLocalisedText(FileStreamSPtr& in_fileStream, std::vector<UTF8String>& out_text)
+			{
+				// Read file
+				std::string fileBuffer;
+				in_fileStream->GetAll(fileBuffer);
+				in_fileStream->Close();
+                
+				std::string strTextLine;
+	
+				for (auto it = fileBuffer.begin(); it != fileBuffer.end(); ++it)
+				{
+					u8 byChar = *it;
+					bool bNewLine = false;
+                    
+					//insure that windows evil "\n\r" doesnt cause any problems
+					if (byChar == '\n')
+					{
+						auto itNext = it + 1;
+						if (itNext != fileBuffer.end())
+						{
+							if (*itNext == '\r')
+							{
+								it++;
+							}
+						}
+						bNewLine = true;
+					}
+					else if (byChar == '\r')
+					{
+						auto itNext = it + 1;
+						if (itNext != fileBuffer.end())
+						{
+							if (*itNext == '\n')
+							{
+								it++;
+							}
+						}
+						bNewLine = true;
+					}
+                    
+					if (!bNewLine)
+					{
+						//We concatenate any '\''n' into '\n' at this point
+						if (byChar == '\\')
+						{
+							//Peek ahead for an n
+							if ((it + 1) != fileBuffer.end() && *(it + 1) == 'n')
+							{
+								byChar = '\n';
+								//Skip the 'n' character
+								++it;
+							}
+						}
+						strTextLine += byChar;
+					}
+					else
+					{
+                        out_text.push_back(UTF8String(strTextLine));
+						strTextLine.clear();
+					}
+				}
+			}
 			//----------------------------------------------------
 			/// Performs the heavy lifting for the 2 create methods
 			/// by loading the keys and text files into a single resource
@@ -49,196 +123,59 @@ namespace ChilliSource
 			/// @param Completion delegate
 			/// @param [Out] The output resource.
 			//----------------------------------------------------
-			void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
+			void LoadResource(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
 			{
-				mudwLineCount = 0;
+                LocalisedText* textResource((LocalisedText*)out_resource.get());
 
-				FileStreamSPtr localFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_read);
-				// Load localised text
-				if (LoadLocalisedText(localFile) == false)
+                //---Load the file that contains the text
+				FileStreamSPtr textFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_read);
+                if (textFile == nullptr || textFile->IsBad() == true)
 				{
-					return false;
+                    CS_LOG_ERROR("Failed to load localised text due to missing file: " + in_filePath);
+                    textResource->SetLoadState(Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(in_delegate, out_resource));
+                    }
+					return;
 				}
+                
+                std::vector<UTF8String> values;
+				LoadLocalisedText(textFile, values);
 
-				FileStreamSPtr idFile = Application::Get()->GetFileSystem()->CreateFileStream(ineLocation, inFilePath + "TagText.id", FileMode::k_read);
-				// Load in string IDs
-				if (LoadTextID(idFile) == false)
+                //---Load the file that contains the keys from the same directory. (TODO: Turn this into a single resource i.e. a zip file containing the keys and texts)
+                std::string fileName;
+                std::string fileExtension;
+                std::string basePath;
+                Core::StringUtils::SplitFullFilename(in_filePath, fileName, fileExtension, basePath);
+                
+				FileStreamSPtr keyFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, basePath + "TagText.id", FileMode::k_read);
+                if (keyFile == nullptr || keyFile->IsBad())
 				{
-					return false;
+                    CS_LOG_ERROR("Failed to load localised text due to missing TagText.id file");
+                    textResource->SetLoadState(Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(in_delegate, out_resource));
+                    }
+					return;
 				}
-
-				return true;
-			}
-			bool LocalisedText::LoadLocalisedText(FileStreamSPtr& incLocaleFile)
-			{
-				//if bad, then bail!
-				if (incLocaleFile == nullptr || incLocaleFile->IsBad() == true)
-				{
-					if (incLocaleFile->IsOpen())
-					{
-						incLocaleFile->Close();
-					}
-
-					return false;
-				}
-
-				// Check we have not seeked beyond file
-				if (incLocaleFile->IsBad() == true)
-				{
-					if (incLocaleFile->IsOpen())
-					{
-						incLocaleFile->Close();
-					}
-
-					return false;
-				}
-
-				// Read file
-				std::string strFile;
-				incLocaleFile->GetAll(strFile);
-				incLocaleFile->Close();
-
-				// Loop through the entire file
-				std::string::const_iterator it;
-
-				// Get line count
-				u32 udwLineCount = 0;
-				u32 udwCurrentLine = 0;
-				for (it = strFile.begin(); it != strFile.end(); ++it)
-				{
-					udwCurrentLine++;
-					u8 byChar = *it;
-					bool bNewLine = false;
-
-					//insure that windows evil "\n\r" doesnt cause any problems
-					if (byChar == '\n')
-					{
-						std::string::const_iterator itNext = it + 1;
-						if (itNext != strFile.end())
-						{
-							if (*itNext == '\r')
-							{
-								it++;
-							}
-						}
-						bNewLine = true;
-					}
-					else if (byChar == '\r')
-					{
-						std::string::const_iterator itNext = it + 1;
-						if (itNext != strFile.end())
-						{
-							if (*itNext == '\n')
-							{
-								it++;
-							}
-						}
-						bNewLine = true;
-					}
-
-					if (bNewLine == true)
-					{
-						udwLineCount++;
-						udwCurrentLine = 0;
-					}
-				}
-
-				// Catch if last line has no newline
-				if (udwCurrentLine != 0)
-				{
-					udwLineCount++;
-				}
-
-				mudwLineCount = udwLineCount;
-				mpText = new UTF8String[mudwLineCount];
-
-				std::string strTextLine;
-				udwCurrentLine = 0;
-				for (it = strFile.begin(); it != strFile.end(); ++it)
-				{
-					u8 byChar = *it;
-					bool bNewLine = false;
-
-					//insure that windows evil "\n\r" doesnt cause any problems
-					if (byChar == '\n')
-					{
-						std::string::const_iterator itNext = it + 1;
-						if (itNext != strFile.end())
-						{
-							if (*itNext == '\r')
-							{
-								it++;
-							}
-						}
-						bNewLine = true;
-					}
-					else if (byChar == '\r')
-					{
-						std::string::const_iterator itNext = it + 1;
-						if (itNext != strFile.end())
-						{
-							if (*itNext == '\n')
-							{
-								it++;
-							}
-						}
-						bNewLine = true;
-					}
-
-					if (!bNewLine)
-					{
-						//We concatenate any '\''n' into '\n' at this point
-						if (byChar == '\\')
-						{
-							//Peek ahead for an n
-							if ((it + 1) != strFile.end() && *(it + 1) == 'n')
-							{
-								byChar = '\n';
-								//Skip the 'n' character
-								++it;
-							}
-						}
-						strTextLine += byChar;
-					}
-					else
-					{
-						mpText[udwCurrentLine++] = UTF8String(strTextLine);
-						strTextLine.clear();
-					}
-				}
-
-				return true;
-			}
-
-			bool LocalisedText::LoadTextID(FileStreamSPtr& incIDFile)
-			{
-				if (incIDFile == nullptr || incIDFile->IsBad())
-				{
-					CS_LOG_WARNING("LocalisedTextLoader ID lookups unavailable: TagText.id missing");
-
-					if (incIDFile->IsOpen())
-					{
-						incIDFile->Close();
-					}
-
-					return false;
-				}
-
-				std::string strID;
-
-				mpTextLookup = new IDToLookupIndex(mudwLineCount, MakeDelegate<u32, const std::string&>(HashCRC32::GenerateHashCode));
-
-				u32 udwCurrentLine = 0;
-				while (udwCurrentLine < mudwLineCount)
-				{
-					incIDFile->GetLine(strID);
-					mpTextLookup->insert(strID, (LocalisedTextKey)udwCurrentLine);
-					udwCurrentLine++;
-				}
-
-				incIDFile->Close();
-
-				return true;
+                
+                std::vector<std::string> keys;
+                std::string key;
+                while(keyFile->EndOfFile() == false)
+                {
+                    keyFile->GetLine(key);
+                    keys.push_back(std::move(key));
+                }
+                
+                textResource->Build(keys, values);
+                textResource->SetLoadState(Resource::LoadState::k_loaded);
+                
+                if(in_delegate != nullptr)
+                {
+                    Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(in_delegate, out_resource));
+                }
 			}
 		}
 
@@ -250,6 +187,12 @@ namespace ChilliSource
 		{
 			return LocalisedTextProviderUPtr(new LocalisedTextProvider());
 		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool LocalisedTextProvider::IsA(InterfaceIDType in_interfaceId) const
+        {
+            return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == LocalisedTextProvider::InterfaceID;
+        }
 		//----------------------------------------------------
 		//----------------------------------------------------
 		InterfaceIDType LocalisedTextProvider::GetResourceType() const
@@ -266,13 +209,13 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void LocalisedTextProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceSPtr& out_resource)
 		{
-
+            LoadResource(in_storageLocation, in_filePath, nullptr, out_resource);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
 		void LocalisedTextProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
 		{
-
+            Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(LoadResource, in_storageLocation, in_filePath, in_delegate, out_resource));
 		}
 	}
 }

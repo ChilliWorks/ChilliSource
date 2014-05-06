@@ -47,6 +47,15 @@ namespace ChilliSource
 		public:
 			
 			CS_DECLARE_NAMEDTYPE(LocalisedTextProvider);
+            
+            //----------------------------------------------------
+			/// @author S Downie
+			///
+			/// @param Interface Id
+			///
+			/// @return Whether object is of given type
+			//----------------------------------------------------
+			bool IsA(InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------
 			/// @author S Downie
 			///
