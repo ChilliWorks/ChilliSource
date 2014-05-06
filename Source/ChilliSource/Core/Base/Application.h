@@ -193,6 +193,15 @@ namespace ChilliSource
             /// @return The default material.
             //-----------------------------------------------------
             const Rendering::MaterialCSPtr& GetDefaultMaterial() const;
+            //-----------------------------------------------------
+			/// Returns the default localised text described in the
+            /// App.config file.
+            ///
+            /// @author S Downie.
+			///
+            /// @return The default text.
+            //-----------------------------------------------------
+            const LocalisedTextCSPtr& GetDefaultLocalisedText() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the state manager.
             ///
@@ -474,6 +483,7 @@ namespace ChilliSource
 #endif
             
 			TimeIntervalSecs m_currentAppTime;
+            LocalisedTextCSPtr m_defaultLocalisedText;
             Rendering::FontCSPtr m_defaultFont;
             Rendering::MeshCSPtr m_defaultMesh;
             Rendering::MaterialCSPtr m_defaultMaterial;

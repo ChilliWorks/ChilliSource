@@ -91,14 +91,14 @@ namespace ChilliSource
 			virtual void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceSPtr& out_resource) = 0;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
-            /// The resource will be returned immediately but
-            /// cannot be used until the loaded flag is set. This
-            /// can be queried using IsLoaded() on the resource.
+            /// Check the load state on the resource for success
+			/// or failure
             ///
             /// @author S Downie
             ///
             /// @param The storage location.
             /// @param The filepath.
+			/// @param Completion delegate
             /// @param [Out] The output resource.
             //----------------------------------------------------
 			virtual void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) = 0;

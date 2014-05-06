@@ -26,7 +26,7 @@ namespace ChilliSource
 
 		//---Properties
 		DEFINE_PROPERTY(Text);
-		DEFINE_PROPERTY(TextID);
+		DEFINE_PROPERTY(LocalisedTextID);
 		DEFINE_PROPERTY(MaxNumLines);
 		DEFINE_PROPERTY(TextScale);
 		DEFINE_PROPERTY(CharacterSpacing);
@@ -97,10 +97,21 @@ namespace ChilliSource
             UnifiedMaxSize = GetSize();
             UnifiedMinSize = GetSize();
             
-            //---Text ID
-            if(insParams.TryGetValue("TextID", strValue))
+            Core::StorageLocation localisedTextLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("LocalisedTextLocation", strValue))
             {
-                SetTextID(strValue);
+                localisedTextLocation = Core::ParseStorageLocation(strValue);
+            }
+            //---Localised Text
+            if(insParams.TryGetValue("LocalisedText", strValue))
+            {
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                m_localisedText = resourcePool->LoadResource<Core::LocalisedText>(localisedTextLocation, strValue);
+            }
+            //---Localised Text ID
+            if(insParams.TryGetValue("LocalisedTextID", strValue))
+            {
+                SetLocalisedTextID(strValue);
             }
             //---Text
             if(insParams.TryGetValue("Text", strValue))
@@ -213,18 +224,40 @@ namespace ChilliSource
         {
             return Text;
         }
+        //-------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Localised text resource used in conjunction with
+        /// id
+        //-------------------------------------------------------
+        void Label::SetLocalisedText(const Core::LocalisedTextCSPtr& in_text)
+        {
+            m_localisedText = in_text;
+        }
+        //-------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Localised text resource used in conjunction with
+        /// id
+        //-------------------------------------------------------
+        const Core::LocalisedTextCSPtr& Label::GetLocalisedText() const
+        {
+            return m_localisedText;
+        }
 		//-------------------------------------------------------
 		/// Set Text ID
 		///
 		/// @param Text string representing lookup ID
 		//-------------------------------------------------------
-		void Label::SetTextID(const std::string& instrText)
+		void Label::SetLocalisedTextID(const std::string& instrTextId)
 		{
-			TextID = instrText;
+            CS_ASSERT(m_localisedText != nullptr, "Label must have a localised text resource set before setting the text Id");
+            
+			LocalisedTextID = instrTextId;
 
-			if(!TextID.empty())
+			if(!LocalisedTextID.empty())
 			{
-				SetText(Core::LocalisedText::GetText(instrText));
+				SetText(m_localisedText->GetText(LocalisedTextID));
 			}
 			else
 			{
@@ -236,9 +269,9 @@ namespace ChilliSource
 		///
 		/// @return Text string representing lookup ID
 		//-------------------------------------------------------
-		const std::string& Label::GetTextID() const
+		const std::string& Label::GetLocalisedTextID() const
 		{
-			return TextID;
+			return LocalisedTextID;
 		}
         //-------------------------------------------------------
         /// Set Font

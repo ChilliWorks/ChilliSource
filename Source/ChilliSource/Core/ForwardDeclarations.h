@@ -83,6 +83,11 @@ namespace ChilliSource
         enum class ImageFormat;
         enum class ImageCompression;
         //---------------------------------------------------------
+        /// Localisation
+        //---------------------------------------------------------
+	CS_FORWARDDECLARE_CLASS(LocalisedText);
+	CS_FORWARDDECLARE_CLASS(LocalisedTextProvider);
+        //---------------------------------------------------------
         /// Math
         //---------------------------------------------------------
         template <typename T> class CatmullRomSpline;

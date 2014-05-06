@@ -19,6 +19,7 @@
 #include <ChilliSource/Core/Image/CSImageProvider.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
+#include <ChilliSource/Core/Localisation/LocalisedTextProvider.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/State/State.h>
@@ -155,6 +156,12 @@ namespace ChilliSource
         const Rendering::MaterialCSPtr& Application::GetDefaultMaterial() const
         {
             return m_defaultMaterial;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        const LocalisedTextCSPtr& Application::GetDefaultLocalisedText() const
+        {
+            return m_defaultLocalisedText;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -337,13 +344,13 @@ namespace ChilliSource
 			m_defaultFont.reset();
 			m_defaultMesh.reset();
 			m_defaultMaterial.reset();
+            m_defaultLocalisedText.reset();
             
             m_renderSystem->Destroy();
-            
+			m_resourcePool->Destroy();
+
             m_systems.clear();
-            
-            m_resourcePool->Destroy();
-            
+
             Logging::Destroy();
             
             s_application = nullptr;
@@ -367,6 +374,7 @@ namespace ChilliSource
             CreateSystem<AppDataStore>();
             CreateSystem<CSImageProvider>();
             CreateSystem<DialogueBoxSystem>();
+            CreateSystem<LocalisedTextProvider>();
             
 #ifdef CS_ENABLE_DEBUGSTATS
             m_debugStats = CreateSystem<Debugging::DebugStats>();
@@ -397,7 +405,7 @@ namespace ChilliSource
             CreateSystem<CSRendering::ParticleAffectorFactory>();
             CreateSystem<CSRendering::CSParticleEffectProvider>();
 
-	    //Create any platform specific default systems
+            //Create any platform specific default systems
             m_platformSystem->CreateDefaultSystems(this);
         }
         //----------------------------------------------------
@@ -434,11 +442,11 @@ namespace ChilliSource
                     m_platformSystem->SetMaxFPS(udwMaxFPS);
                 }
                 
-                if(jRoot.isMember("MasterText"))
+                if(jRoot.isMember("DefaultText"))
                 {
-                    StorageLocation eStorageLocation = ParseStorageLocation(jRoot["MasterText"].get("Location", "Package").asString());
-                    std::string strPath = jRoot["MasterText"].get("Path", "").asString();
-                    LocalisedText::RefreshMasterText(eStorageLocation, strPath);
+                    StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultText"].get("Location", "Package").asString());
+                    std::string strPath = jRoot["DefaultText"].get("Path", "").asString();
+                    m_defaultLocalisedText = m_resourcePool->LoadResource<LocalisedText>(eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultMesh"))
