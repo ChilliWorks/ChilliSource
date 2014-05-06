@@ -149,7 +149,7 @@ namespace ChilliSource
 					auto mapEntry = m_subtitleMap.find(*it);
 					if (mapEntry == m_subtitleMap.end())
 					{
-						Core::UTF8String text = Core::LocalisedText::GetText((*it)->m_textId);
+						const Core::UTF8String& text = (*it)->m_localisedText->GetText((*it)->m_localisedTextId);
 						const Video::Subtitles::Style* style = m_subtitles->GetStyleWithName((*it)->m_styleName);
 						s64 subtitleID = m_javaInterface->CreateSubtitle(text, style->m_fontName, style->m_fontSize, Rendering::StringFromAlignmentAnchor(style->m_alignment), style->m_bounds.vOrigin.x, style->m_bounds.vOrigin.y, style->m_bounds.vSize.x, style->m_bounds.vSize.y);
 						m_javaInterface->SetSubtitleColour(subtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
