@@ -42,6 +42,18 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
+        void Subtitles::SetLocalisedText(const Core::LocalisedTextCSPtr& in_text)
+        {
+            m_localisedText = in_text;
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        const Core::LocalisedTextCSPtr& Subtitles::GetLocalisedText() const
+        {
+            return m_localisedText;
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
         std::vector<const Subtitles::Subtitle*> Subtitles::GetSubtitlesAtTime(TimeIntervalMs in_timeMS) const
         {
             std::vector<const Subtitles::Subtitle*> subtitles;

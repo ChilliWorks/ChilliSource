@@ -45,8 +45,7 @@ namespace ChilliSource
             const std::string k_tagSubtitlestyle = "Style";
             const std::string k_tagSubtitlestartTime = "StartTime";
             const std::string k_tagSubtitleEndTime = "EndTime";
-            const std::string k_tagSubtitleText = "LocalisedText";
-            const std::string k_tagSubtitleTextLocation = "LocalisedTextLocation";
+            const std::string k_tagLocalisedText = "LocalisedText";
             const std::string k_tagSubtitleTextID = "LocalisedTextID";
             const std::string k_defaultFont = "Arial";
             const std::string k_defaultColour = "1.0 1.0 1.0 1.0";
@@ -121,6 +120,35 @@ namespace ChilliSource
                 }
                 return;
             }
+            
+            //get the localised text
+            if (root.isMember(k_tagLocalisedText) == false)
+            {
+                CS_LOG_ERROR("Subtitles file '" + in_filePath + "' must have localised text resource");
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                if(in_delegate != nullptr)
+                {
+					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                }
+                return;
+            }
+            
+            Json::Value localisedTextJson(root[k_tagLocalisedText]);
+            Core::StorageLocation textLocation = Core::ParseStorageLocation(localisedTextJson.get("Location", "Package").asString());
+            
+            auto localisedText = Core::Application::Get()->GetResourcePool()->LoadResource<Core::LocalisedText>(textLocation, localisedTextJson.get("Path", "").asString());
+            if (localisedText == nullptr)
+            {
+                CS_LOG_ERROR("Subtitles file '" + in_filePath + "' must have localised text resource");
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                if(in_delegate != nullptr)
+                {
+					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                }
+                return;
+            }
+            
+            out_resource->SetLocalisedText(localisedText);
             
             //get the styles
             if (root.isMember(k_tagStyles) == true)
@@ -231,17 +259,7 @@ namespace ChilliSource
             	CS_LOG_ERROR("Subtitle must have a style.");
             	return Subtitles::SubtitleCUPtr();
             }
-            
-            //localised text
-            Core::StorageLocation textLocation = Core::ParseStorageLocation(in_subtitleJSON.get(k_tagSubtitleTextLocation, "Package").asString());
-            
-            pSubtitle->m_localisedText = Core::Application::Get()->GetResourcePool()->LoadResource<Core::LocalisedText>(textLocation, in_subtitleJSON.get(k_tagSubtitleText, "").asString());
-            if (pSubtitle->m_localisedText == nullptr)
-            {
-                CS_LOG_ERROR("Subtitle must have a text resource.");
-                return Subtitles::SubtitleCUPtr();
-            }
-            
+
             //text id
             pSubtitle->m_localisedTextId = in_subtitleJSON.get(k_tagSubtitleTextID, "").asString();
             if (pSubtitle->m_localisedTextId == "")

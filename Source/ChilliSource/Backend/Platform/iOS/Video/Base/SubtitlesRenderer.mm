@@ -55,6 +55,7 @@
     {
         mCurrentTimeMS = currentTimeMS;
         auto pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentTimeMS);
+        auto localisedText = mpSubtitles->GetLocalisedText().get();
 
         //add any new subtitles
         for (auto it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
@@ -63,7 +64,7 @@
             auto mapEntry = maTextViewMap.find(*it);
             if (mapEntry == maTextViewMap.end())
             {
-                [self AddTextView:*it];
+                [self AddTextViewWithSubtitle:*it andLocalisedText:localisedText];
             }
         }
 
@@ -90,7 +91,7 @@
 //--------------------------------------------------------
 /// Add Text View
 //--------------------------------------------------------
--(void) AddTextView:(const ChilliSource::Video::Subtitles::Subtitle*)inpSubtitle
+-(void) AddTextViewWithSubtitle:(const ChilliSource::Video::Subtitles::Subtitle*)inpSubtitle andLocalisedText:(const ChilliSource::Core::LocalisedText*) in_localisedText
 {
     //get the style
     const ChilliSource::Video::Subtitles::Style* pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
@@ -107,7 +108,7 @@
     pNewTextView.backgroundColor = [UIColor clearColor];
     
     //setup the text.
-    NSString* text = [NSStringUtils newNSStringWithUTF8String:inpSubtitle->m_localisedText->GetText(inpSubtitle->m_localisedTextId)];
+    NSString* text = [NSStringUtils newNSStringWithUTF8String:in_localisedText->GetText(inpSubtitle->m_localisedTextId)];
     NSString* fontName = [NSStringUtils newNSStringWithUTF8String:pStyle->m_fontName];
     [pNewTextView setText:text];
     [pNewTextView setFont:[UIFont fontWithName:fontName size: pStyle->m_fontSize]];
