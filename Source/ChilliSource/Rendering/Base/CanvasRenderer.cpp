@@ -36,54 +36,6 @@ namespace ChilliSource
         {
             const f32 k_maxKernRatio = 0.25;
             
-            //----------------------------------------------------
-            /// Build Character
-            //----------------------------------------------------
-            void BuildCharacterNew(const FontCSPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
-                                                const Core::Vector2& invCursor, f32 infTextScale, f32 infCharSpacing,
-                                                f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound)
-            {
-                Font::CharacterInfo sInfo;
-                if(inpFont->TryGetCharacterInfo(inCharacter, sInfo) == false)
-                {
-                    outfCharacterWidth = 0.0f;
-                    if(outpInvalidCharacterFound)
-                        (*outpInvalidCharacterFound)=true;
-                    CS_LOG_ERROR("Invalid character in text component");
-                    return;
-                }
-                
-                sInfo.m_size *= infTextScale;
-                sInfo.m_offset *= infTextScale;
-                
-                f32 fCharWidth = sInfo.m_size.x + infCharSpacing;
-                
-                if(sInfo.m_size.y > 0.0f)
-                {
-                    PlacedCharacter sOutCharacter;
-                    sOutCharacter.sUVs = sInfo.m_UVs;
-                    sOutCharacter.vSize = sInfo.m_size;
-                    sOutCharacter.vPosition.x = invCursor.x + sInfo.m_offset.x;
-                    sOutCharacter.vPosition.y = invCursor.y - sInfo.m_offset.y;
-                    
-                    if(inpFont->SupportsKerning() && fCharWidth > 2)
-                    {
-                        f32 fKernAmount = (inpFont->GetKerningBetweenCharacters(inCharacter, inNextCharacter) * infTextScale);
-                        
-                        if(fKernAmount > (fCharWidth * k_maxKernRatio))
-                        {
-                            fKernAmount = fCharWidth * k_maxKernRatio;
-                        }
-                        
-                        fCharWidth -= fKernAmount;
-                    }
-                    
-                    outCharacters.push_back(sOutCharacter);
-                }
-                
-                outfCharacterWidth = fCharWidth;
-            }
-            
             f32 CalculateTextWidth(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_charSpacing)
             {
                 f32 totalWidth = 0.0f;
@@ -140,9 +92,64 @@ namespace ChilliSource
                 }
             }
             
-            void SplitByBounds(const Core::UTF8String& in_text, const Core::Vector2& in_bounds, std::vector<Core::UTF8String>& out_lines)
+            bool IsBreakableCharacter(Core::UTF8String::Char in_character)
             {
-
+                return in_character == ' ' || in_character == '\t' || in_character == '\n';
+            }
+            
+            f32 CalculateDistanceToNextBreak(const Core::UTF8String& in_text, Core::UTF8String::iterator in_currentItPos, const FontCSPtr& in_font, f32 in_textScale, f32 in_charSpacing)
+            {
+                Core::UTF8String textToBreak;
+                Core::UTF8String::iterator itToBreak = in_currentItPos;
+                Core::UTF8String::Char nextCharacter = 0;
+                while(itToBreak != in_text.end() && IsBreakableCharacter(nextCharacter) == false)
+                {
+                    textToBreak.appendChar(nextCharacter);
+                    nextCharacter = in_text.next(itToBreak);
+                }
+                
+                return CalculateTextWidth(textToBreak, in_font, in_textScale, in_charSpacing);
+            }
+            
+            void SplitByBounds(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_charSpacing, const Core::Vector2& in_bounds, std::vector<Core::UTF8String>& out_lines)
+            {
+                f32 maxLineWidth = in_bounds.x;
+ 
+                Core::UTF8String::iterator it = (Core::UTF8String::iterator)in_text.begin();
+                Core::UTF8String line;
+                while(it != in_text.end())
+                {
+                    Core::UTF8String::Char character = in_text.next(it);
+                    
+                    //If we come across a character on which we can wrap we need
+                    //to check ahead to see if the next space is within the bounds or
+                    //whether we need to wrap now
+                    if(IsBreakableCharacter(character) == true)
+                    {
+                        f32 distanceToNextBreak = CalculateDistanceToNextBreak(in_text, it, in_font, in_textScale, in_charSpacing);
+                        
+                        if(distanceToNextBreak >= maxLineWidth && line.size() > 0)
+                        {
+                            out_lines.push_back(line);
+                            line.clear();
+                            continue;
+                        }
+                    }
+                    
+                    //If text has no characters to break on then we need break on the previous character mid "word".
+//                    if(currentLineWidth >= maxLineWidth)
+//                    {
+//                        out_lines.push_back(line);
+//                        line.clear();
+//                    }
+                    
+                    line.appendChar(character);
+                }
+                
+                if(line.size() > 0)
+                {
+                    out_lines.push_back(line);
+                }
             }
 
             void BuildStringNew(const FontCSPtr& inpFont, const Core::UTF8String &in_text, CanvasRenderer::CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
@@ -155,18 +162,20 @@ namespace ChilliSource
                 //NOTE: | denotes the bounds of the box
                 //- |The quick brown fox| jumped over\nthe ferocious honey badger
                 
-                std::vector<Core::UTF8String> lines;
-                
                 //Split the string into lines by the forced line breaks
                 //- |The quick brown fox| jumped over
                 //- |the ferocious honey| badger
-                SplitByNewLine(in_text, lines);
+                std::vector<Core::UTF8String> lines1;
+                SplitByNewLine(in_text, lines1);
                 
                 //Split the lines further based on the line width, whitespaces and the bounds
                 //- |The quick brown fox|
                 //- |jumped over        |
                 //- |the ferocious honey|
                 //- |badger             |
+                
+                std::vector<Core::UTF8String> lines2;
+                SplitByBounds(lines1[0], inpFont, infTextSize, infCharacterSpacing, invBounds, lines2);
                 
                 
             }
