@@ -12,6 +12,8 @@
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/JSON/json.h>
+#include <ChilliSource/Core/Localisation/LocalisedText.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
@@ -43,7 +45,9 @@ namespace ChilliSource
             const std::string k_tagSubtitlestyle = "Style";
             const std::string k_tagSubtitlestartTime = "StartTime";
             const std::string k_tagSubtitleEndTime = "EndTime";
-            const std::string k_tagSubtitleTextID = "TextID";
+            const std::string k_tagSubtitleText = "LocalisedText";
+            const std::string k_tagSubtitleTextLocation = "LocalisedTextLocation";
+            const std::string k_tagSubtitleTextID = "LocalisedTextID";
             const std::string k_defaultFont = "Arial";
             const std::string k_defaultColour = "1.0 1.0 1.0 1.0";
             const std::string k_defaultAlignment = "MiddleCentre";
@@ -228,9 +232,19 @@ namespace ChilliSource
             	return Subtitles::SubtitleCUPtr();
             }
             
+            //localised text
+            Core::StorageLocation textLocation = Core::ParseStorageLocation(in_subtitleJSON.get(k_tagSubtitleTextLocation, "Package").asString());
+            
+            pSubtitle->m_localisedText = Core::Application::Get()->GetResourcePool()->LoadResource<Core::LocalisedText>(textLocation, in_subtitleJSON.get(k_tagSubtitleText, "").asString());
+            if (pSubtitle->m_localisedText == nullptr)
+            {
+                CS_LOG_ERROR("Subtitle must have a text resource.");
+                return Subtitles::SubtitleCUPtr();
+            }
+            
             //text id
-            pSubtitle->m_textId = in_subtitleJSON.get(k_tagSubtitleTextID, "").asString();
-            if (pSubtitle->m_textId == "")
+            pSubtitle->m_localisedTextId = in_subtitleJSON.get(k_tagSubtitleTextID, "").asString();
+            if (pSubtitle->m_localisedTextId == "")
             {
                 CS_LOG_ERROR("Subtitle must have a text ID.");
                 return Subtitles::SubtitleCUPtr();

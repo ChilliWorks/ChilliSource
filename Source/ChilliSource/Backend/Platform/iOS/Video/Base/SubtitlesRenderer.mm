@@ -107,7 +107,7 @@
     pNewTextView.backgroundColor = [UIColor clearColor];
     
     //setup the text.
-    NSString* text = [NSStringUtils newNSStringWithUTF8String:CSCore::LocalisedText::GetText(inpSubtitle->m_textId)];
+    NSString* text = [NSStringUtils newNSStringWithUTF8String:inpSubtitle->m_localisedText->GetText(inpSubtitle->m_localisedTextId)];
     NSString* fontName = [NSStringUtils newNSStringWithUTF8String:pStyle->m_fontName];
     [pNewTextView setText:text];
     [pNewTextView setFont:[UIFont fontWithName:fontName size: pStyle->m_fontSize]];

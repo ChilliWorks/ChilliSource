@@ -53,18 +53,32 @@ namespace ChilliSource
 			/// @returnText string
 			//-------------------------------------------------------
 			const Core::UTF8String& GetText() const;
+            //-------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Localised text resource used in conjunction with
+            /// id
+            //-------------------------------------------------------
+            void SetLocalisedText(const Core::LocalisedTextCSPtr& in_text);
+            //-------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Localised text resource used in conjunction with
+            /// id
+            //-------------------------------------------------------
+            const Core::LocalisedTextCSPtr& GetLocalisedText() const;
 			//-------------------------------------------------------
 			/// Set Text ID
 			///
 			/// @param Text string representing lookup ID
 			//-------------------------------------------------------
-			void SetTextID(const std::string& instrText);
+			void SetLocalisedTextID(const std::string& instrText);
 			//-------------------------------------------------------
 			/// Get Text ID
 			///
 			/// @return Text string representing lookup ID
 			//-------------------------------------------------------
-			const std::string& GetTextID() const;
+			const std::string& GetLocalisedTextID() const;
             //-------------------------------------------------------
             /// Set Font
             ///
@@ -335,6 +349,8 @@ namespace ChilliSource
             
             Rendering::TextureCSPtr mpWhiteTex;
             
+            Core::LocalisedTextCSPtr m_localisedText;
+            
             static f32 mfGlobalTextScale;
             
             // label appearance debugging
@@ -350,7 +366,7 @@ namespace ChilliSource
             
 			//---Properties
 			DECLARE_PROPERTY_A(Core::UTF8String, Text, SetText, GetText);
-			DECLARE_PROPERTY_A(std::string, TextID, SetTextID, GetTextID);
+			DECLARE_PROPERTY_A(std::string, LocalisedTextID, SetLocalisedTextID, GetLocalisedTextID);
 			DECLARE_PROPERTY_A(u32, MaxNumLines, SetNumberOfLines, GetNumberOfLines);
 			DECLARE_PROPERTY_A(f32, TextScale, SetTextScale, GetTextScale);
 			DECLARE_PROPERTY_A(f32, CharacterSpacing, SetCharacterSpacing, GetCharacterSpacing);

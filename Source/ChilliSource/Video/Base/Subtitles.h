@@ -58,7 +58,8 @@ namespace ChilliSource
                 std::string m_styleName;
                 TimeIntervalMs m_startTimeMS;
                 TimeIntervalMs m_endTimeMS;
-                std::string m_textId;
+                std::string m_localisedTextId;
+                Core::LocalisedTextCSPtr m_localisedText;
             };
             typedef std::unique_ptr<const Subtitle> SubtitleCUPtr;
             typedef std::unique_ptr<Subtitle> SubtitleUPtr;
