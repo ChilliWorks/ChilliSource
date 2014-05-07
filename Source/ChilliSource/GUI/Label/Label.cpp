@@ -628,7 +628,7 @@ namespace ChilliSource
                 if(mCachedChars.empty())
                 {
                     f32 fAssetTextScale = GetGlobalTextScale();
-                    mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * fAssetTextScale, LineSpacing, vAbsoluteLabelSize, MaxNumLines);
+                    mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * fAssetTextScale, LineSpacing, vAbsoluteLabelSize, MaxNumLines, HorizontalJustification, VerticalJustification);
                 }
                 
                 Core::Colour sDrawColour = TextColour * GetAbsoluteColour();
@@ -654,72 +654,67 @@ namespace ChilliSource
         //-------------------------------------------------------
         void Label::DoAutosizing(Rendering::CanvasRenderer* inpCanvas)
         {
-//            if(Autosizing && mCachedChars.empty())
-//            {
-//                //Get the size of the text contents and resize the label
-//                //to match. Clamp the bounds between the minimum and
-//                //maximum size
-//                
-//                //Convert min and max to absolute co-ordinates
-//                Core::Vector2 vAbsMaxSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMaxSize.GetRelative()) + UnifiedMaxSize.GetAbsolute() : UnifiedMaxSize.GetAbsolute();
-//                Core::Vector2 vAbsMinSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMinSize.GetRelative()) + UnifiedMinSize.GetAbsolute() : UnifiedMinSize.GetAbsolute();
-//                
-//                f32 fNewRelWidth = 0.0f;
-//                f32 fNewRelHeight = 0.0f;
-//                f32 fNewAbsWidth = 0.0f;
-//                f32 fNewAbsHeight = 0.0f;
-//                f32 fTextHeight = 0.0f;
-//                
-//                //Calculate the width of the label based on the bounds and the length of the text
-//                mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, CharacterSpacing, LineSpacing, <#const Core::Vector2 &in_bounds#>, MaxNumLines);
-//                
-//                f32 fTextWidth = inpCanvas->CalculateStringWidth(Text, Font, TextScale * mfGlobalTextScale, CharacterSpacing, false);
-//                
-//                if(fTextWidth > vAbsMaxSize.x)
-//                {
-//                    fNewRelWidth = UnifiedMaxSize.vRelative.x;
-//                    fNewAbsWidth = UnifiedMaxSize.vAbsolute.x;
-//                    
-//                    //Now that we have calculated the width of the label we
-//                    //can use that to work out the height
-//                    fTextHeight = inpCanvas->CalculateStringHeight(Text, Font, vAbsMaxSize.x, TextScale * mfGlobalTextScale, CharacterSpacing, LineSpacing, MaxNumLines);
-//                }
-//                else if(fTextWidth < vAbsMinSize.x)
-//                {
-//                    fNewRelWidth = UnifiedMinSize.vRelative.x;
-//                    fNewAbsWidth = UnifiedMinSize.vAbsolute.x;
-//                    
-//                    //Now that we have calculated the width of the label we
-//                    //can use that to work out the height
-//                    fTextHeight = inpCanvas->CalculateStringHeight(Text, Font, vAbsMinSize.x, TextScale * mfGlobalTextScale, CharacterSpacing, LineSpacing, MaxNumLines);
-//                }
-//                else
-//                {
-//                    fNewAbsWidth = fTextWidth;
-//                    
-//                    //Now that we have calculated the width of the label we
-//                    //can use that to work out the height
-//                    fTextHeight = inpCanvas->CalculateStringHeight(Text, Font, fTextWidth, TextScale * mfGlobalTextScale, CharacterSpacing, LineSpacing, MaxNumLines);
-//                }
-//                
-//                if(fTextHeight > vAbsMaxSize.y)
-//                {
-//                    fNewRelHeight = UnifiedMaxSize.vRelative.y;
-//                    fNewAbsHeight = UnifiedMaxSize.vAbsolute.y;
-//                }
-//                else if(fTextHeight < vAbsMinSize.y)
-//                {
-//                    fNewRelHeight = UnifiedMinSize.vRelative.y;
-//                    fNewAbsHeight = UnifiedMinSize.vAbsolute.y;
-//                }
-//                else
-//                {
-//                    fNewAbsHeight = fTextHeight;
-//                }
-//                
-//                //Resize the label
-//                SetSize(fNewRelWidth, fNewRelHeight, fNewAbsWidth, fNewAbsHeight);
-//            }
+            if(Autosizing && mCachedChars.empty())
+            {
+                //Get the size of the text contents and resize the label
+                //to match. Clamp the bounds between the minimum and
+                //maximum size
+                
+                //Convert min and max to absolute co-ordinates
+                Core::Vector2 vAbsMaxSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMaxSize.GetRelative()) + UnifiedMaxSize.GetAbsolute() : UnifiedMaxSize.GetAbsolute();
+                Core::Vector2 vAbsMinSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMinSize.GetRelative()) + UnifiedMinSize.GetAbsolute() : UnifiedMinSize.GetAbsolute();
+                
+                //Build the text for the biggest possible bounds
+                mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, vAbsMaxSize, MaxNumLines, HorizontalJustification, VerticalJustification);
+                
+                f32 fNewRelWidth = UnifiedMaxSize.vRelative.x;
+                f32 fNewRelHeight = 0.0f;
+                f32 fNewAbsWidth = UnifiedMaxSize.vAbsolute.x;
+                f32 fNewAbsHeight = 0.0f;
+                f32 fTextWidth = inpCanvas->CalculateTextWidth(mCachedChars);
+                f32 fTextHeight = inpCanvas->CalculateTextHeight(mCachedChars);
+
+                //If the size of the text would actually fit inside the min bounds then clamp to that
+                if(fTextWidth < vAbsMinSize.x)
+                {
+                    fNewRelWidth = UnifiedMinSize.vRelative.x;
+                    fNewAbsWidth = UnifiedMinSize.vAbsolute.x;
+                    
+                    //Now that we have calculated the width of the label we
+                    //can use that to work out the height
+                    mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, vAbsMinSize, MaxNumLines, HorizontalJustification, VerticalJustification);
+                    fTextHeight = inpCanvas->CalculateTextHeight(mCachedChars);
+                }
+                //If the size of text is smaller than the max bounds then clamp to that
+                else if(fTextWidth < vAbsMaxSize.x)
+                {
+                    fNewRelWidth = 0.0f;
+                    fNewAbsWidth = fTextWidth;
+                    
+                    //Now that we have calculated the width of the label we
+                    //can use that to work out the height
+                    mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, Core::Vector2(fNewAbsWidth, vAbsMaxSize.y), MaxNumLines, HorizontalJustification, VerticalJustification);
+                    fTextHeight = inpCanvas->CalculateTextHeight(mCachedChars);
+                }
+                
+                if(fTextHeight > vAbsMaxSize.y)
+                {
+                    fNewRelHeight = UnifiedMaxSize.vRelative.y;
+                    fNewAbsHeight = UnifiedMaxSize.vAbsolute.y;
+                }
+                else if(fTextHeight < vAbsMinSize.y)
+                {
+                    fNewRelHeight = UnifiedMinSize.vRelative.y;
+                    fNewAbsHeight = UnifiedMinSize.vAbsolute.y;
+                }
+                else
+                {
+                    fNewAbsHeight = fTextHeight;
+                }
+                
+                //Resize the label
+                SetSize(fNewRelWidth, fNewRelHeight, fNewAbsWidth, fNewAbsHeight);
+            }
         }
         //-----------------------------------------------------------
 		/// Set Flipped Vertical

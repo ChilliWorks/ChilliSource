@@ -26,13 +26,6 @@ namespace ChilliSource
             k_bottom
         };
 		
-		enum class TextOverflowBehaviour
-		{
-            k_none,
-            k_clip,
-            k_follow
-		};
-		
         class Label : public GUIView
         {
         public:

@@ -345,7 +345,7 @@ namespace ChilliSource
                 if(mCachedChars.empty())
                 {
                     f32 fAssetTextScale = GetGlobalTextScale();
-                    mCachedChars = inpCanvas->BuildText(strutf8DisplayString, Font, TextScale * fAssetTextScale, LineSpacing, vAbsoluteLabelSize, MaxNumLines);
+                    mCachedChars = inpCanvas->BuildText(strutf8DisplayString, Font, TextScale * fAssetTextScale, LineSpacing, vAbsoluteLabelSize, MaxNumLines, HorizontalJustification, VerticalJustification);
                 }
                 
                 inpCanvas->DrawText(mCachedChars, GetTransform(), TextColour, Font->GetTexture());

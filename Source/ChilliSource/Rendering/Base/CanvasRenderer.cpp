@@ -27,6 +27,7 @@
 #endif
 
 #include <algorithm>
+#include <limits>
 
 namespace ChilliSource
 {
@@ -34,23 +35,18 @@ namespace ChilliSource
 	{
         namespace
         {
-            const f32 k_maxKernRatio = 0.25;
-            
             //----------------------------------------------------------------------------
-            /// Get the width of the character pointed to by the iterator
+            /// Get the width of the character
             ///
             /// @author S Downie
             ///
-            /// @param Text
-            /// @param Iterator pointing to current character
+            /// @param Character
             /// @param Font
             //----------------------------------------------------------------------------
-            f32 GetCharacterWidth(const Core::UTF8String& in_text, Core::UTF8String::iterator in_currentItPos, const FontCSPtr& in_font)
+            f32 GetCharacterWidth(Core::UTF8String::Char in_character, const FontCSPtr& in_font)
             {
-                Core::UTF8String::Char character = *in_currentItPos;
-                
                 Font::CharacterInfo charInfo;
-                if(in_font->TryGetCharacterInfo(character, charInfo) == true)
+                if(in_font->TryGetCharacterInfo(in_character, charInfo) == true)
                 {
                     return charInfo.m_size.x;
                 }
@@ -71,10 +67,10 @@ namespace ChilliSource
                 f32 totalWidth = 0.0f;
                 
                 Core::UTF8String::iterator it = (Core::UTF8String::iterator)in_text.begin();
-                while(in_text.end() != it)
+                while(it < in_text.end())
                 {
-                    totalWidth += GetCharacterWidth(in_text, it, in_font);
-                    in_text.next(it);
+                    auto character = in_text.next(it);
+                    totalWidth += GetCharacterWidth(character, in_font);
                 }
                 
                 return totalWidth;
@@ -104,7 +100,7 @@ namespace ChilliSource
                 Core::UTF8String textToBreak;
                 Core::UTF8String::iterator itToBreak = in_currentItPos;
                 Core::UTF8String::Char nextCharacter = in_text.next(itToBreak);
-                while(itToBreak != in_text.end() && IsBreakableCharacter(nextCharacter) == false)
+                while(itToBreak < in_text.end() && IsBreakableCharacter(nextCharacter) == false)
                 {
                     textToBreak.appendChar(nextCharacter);
                     nextCharacter = in_text.next(itToBreak);
@@ -125,7 +121,7 @@ namespace ChilliSource
             {
                 Core::UTF8String::iterator it = (Core::UTF8String::iterator)in_text.begin();
                 Core::UTF8String line;
-                while(in_text.end() != it)
+                while(it < in_text.end())
                 {
                     Core::UTF8String::Char character = in_text.next(it);
                     
@@ -166,10 +162,10 @@ namespace ChilliSource
                 Core::UTF8String line;
                 f32 currentLineWidth = 0.0f;
                 
-                while(it != in_text.end())
+                while(it < in_text.end())
                 {
-                    currentLineWidth += (GetCharacterWidth(in_text, it, in_font) * in_textScale);
-                    Core::UTF8String::Char character = in_text.next(it);
+                    auto character = in_text.next(it);
+                    currentLineWidth += (GetCharacterWidth(character, in_font) * in_textScale);
                     
                     //If we come across a character on which we can wrap we need
                     //to check ahead to see if the next space is within the bounds or
@@ -224,10 +220,14 @@ namespace ChilliSource
                 Font::CharacterInfo info;
                 if(in_font->TryGetCharacterInfo(in_character, info) == true)
                 {
+                    //TODO: The font maker seems to add a 2 unit padding to the font. We need to
+                    //remove this or at least find out its purpose.
+                    const f32 k_hackToolCorrection = 2.0f;
+                    
                     result.m_UVs = info.m_UVs;
                     result.m_size = info.m_size * in_textScale;
                     result.m_position.x = in_cursorX;
-                    result.m_position.y = in_cursorY - (info.m_offset.y * in_textScale);
+                    result.m_position.y = in_cursorY - ((info.m_offset.y - k_hackToolCorrection) * in_textScale);
                 }
                 else
                 {
@@ -235,6 +235,76 @@ namespace ChilliSource
                 }
                 
                 return result;
+            }
+            //----------------------------------------------------------------------------
+            /// The text by default is left justfied. If another justification
+            /// is required this function will update the character positions of a given line
+            ///
+            /// @author S Downie
+            ///
+            /// @param Horizontal justification
+            /// @param Bounds width
+            /// @param Index of the first character in a line
+            /// @param Index of the last character in a line
+            /// @param Line width in text space.
+            /// @param [In/Out] List of display character infos that will be manipulated.
+            ///         These are the charcters for all lines.
+            //----------------------------------------------------------------------------
+            void ApplyHorizontalTextJustifications(GUI::TextJustification in_horizontal, f32 in_boundsWidth, u32 in_lineStartIdx, u32 in_lineEndIdx, f32 in_lineWidth,
+                                                   std::vector<CanvasRenderer::DisplayCharacterInfo>& inout_characters)
+            {
+                f32 horizontalOffset = 0.0f;
+                
+                switch(in_horizontal)
+                {
+                    default:
+                    case GUI::TextJustification::k_left:
+                        return;
+                    case GUI::TextJustification::k_centre:
+                        horizontalOffset = (in_boundsWidth * 0.5f) - (in_lineWidth * 0.5f);
+                        break;
+                    case GUI::TextJustification::k_right:
+                        horizontalOffset = in_boundsWidth - in_lineWidth;
+                        break;
+                }
+                
+                for(u32 i=in_lineStartIdx; i<=in_lineEndIdx; ++i)
+                {
+                    inout_characters[i].m_position.x += horizontalOffset;
+                }
+            }
+            //----------------------------------------------------------------------------
+            /// The text by default is top justfied. If another justification
+            /// is required this function will update all the characters positions
+            ///
+            /// @author S Downie
+            ///
+            /// @param Vertical justification
+            /// @param Bounds height
+            /// @param Height of all the built lines combined
+            /// @param [In/Out] List of display character infos that will be manipulated
+            //----------------------------------------------------------------------------
+            void ApplyVerticalTextJustifications(GUI::TextJustification in_vertical, f32 in_boundsHeight, f32 in_totalLinesHeight, std::vector<CanvasRenderer::DisplayCharacterInfo>& inout_characters)
+            {
+                f32 verticalOffset = 0.0f;
+                
+                switch(in_vertical)
+                {
+                    default:
+                    case GUI::TextJustification::k_top:
+                        return;
+                    case GUI::TextJustification::k_centre:
+                        verticalOffset = (in_boundsHeight * 0.5f) - (in_totalLinesHeight * 0.5f);
+                        break;
+                    case GUI::TextJustification::k_bottom:
+                        verticalOffset = in_boundsHeight - in_totalLinesHeight;
+                        break;
+                }
+                
+                for(auto& character : inout_characters)
+                {
+                    character.m_position.y -= verticalOffset;
+                }
             }
         }
         //----------------------------------------------------------
@@ -381,7 +451,8 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        std::vector<CanvasRenderer::DisplayCharacterInfo> CanvasRenderer::BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing, const Core::Vector2& in_bounds, u32 in_numLines) const
+        std::vector<CanvasRenderer::DisplayCharacterInfo> CanvasRenderer::BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
+                                                                                    const Core::Vector2& in_bounds, u32 in_numLines, GUI::TextJustification in_horizontal, GUI::TextJustification in_vertical) const
         {
             std::vector<CanvasRenderer::DisplayCharacterInfo> result;
             result.reserve(in_text.size());
@@ -421,6 +492,7 @@ namespace ChilliSource
             
             for(u32 lineIdx=0; lineIdx<numLines; ++lineIdx)
             {
+                u32 lineStartIdx = result.size();
                 u32 numCharacters = linesOnBounds[lineIdx].size();
                 for(u32 charIdx=0; charIdx<numCharacters; ++charIdx)
                 {
@@ -436,10 +508,14 @@ namespace ChilliSource
                     }
                 }
                 
+                f32 lineWidth = cursorX - cursorXReturnPos;
+                ApplyHorizontalTextJustifications(in_horizontal, in_bounds.x, lineStartIdx, result.size() - 1, lineWidth, result);
+                
                 cursorX = cursorXReturnPos;
                 cursorY -= lineHeight;
             }
-            //TODO: Handle justification
+            
+            ApplyVerticalTextJustifications(in_vertical, in_bounds.y, numLines * lineHeight, result);
             
             return result;
         }
@@ -469,6 +545,44 @@ namespace ChilliSource
             Core::Application::Get()->GetDebugStats()->AddToEvent("GUI", 1);
 #endif
 		}
+        f32 CanvasRenderer::CalculateTextWidth(const std::vector<DisplayCharacterInfo>& in_characters) const
+        {
+            f32 smallestXPos = std::numeric_limits<f32>::max();
+            f32 largestXPos = std::numeric_limits<f32>::lowest();
+            f32 sizeOffset = 0.0f;
+            
+            for(const auto& character : in_characters)
+            {
+                smallestXPos = std::min(smallestXPos, character.m_position.x);
+                
+                if(largestXPos < character.m_position.x)
+                {
+                    largestXPos = character.m_position.x;
+                    sizeOffset = std::max(character.m_size.x, sizeOffset);
+                }
+            }
+            
+            return largestXPos + sizeOffset - smallestXPos;
+        }
+        f32 CanvasRenderer::CalculateTextHeight(const std::vector<DisplayCharacterInfo>& in_characters) const
+        {
+            f32 smallestYPos = std::numeric_limits<f32>::max();
+            f32 largestYPos = std::numeric_limits<f32>::lowest();
+            f32 sizeOffset = 0.0f;
+            
+            for(const auto& character : in_characters)
+            {
+                smallestYPos = std::min(smallestYPos, character.m_position.y);
+                
+                if(largestYPos < character.m_position.y)
+                {
+                    largestYPos = character.m_position.y;
+                    sizeOffset = std::max(character.m_size.y, sizeOffset);
+                }
+            }
+            
+            return largestYPos + sizeOffset - smallestYPos;
+        }
 		//-----------------------------------------------------
 		/// Update Sprite Data
 		///

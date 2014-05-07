@@ -85,10 +85,13 @@ namespace ChilliSource
                          const Core::Colour & insTintColour, AlignmentAnchor ineAlignment = AlignmentAnchor::k_middleCentre);
             //----------------------------------------------------------------------------
             //----------------------------------------------------------------------------
-            std::vector<DisplayCharacterInfo> BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing, const Core::Vector2& in_bounds, u32 in_numLines) const;
+            std::vector<DisplayCharacterInfo> BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
+                                                        const Core::Vector2& in_bounds, u32 in_numLines, GUI::TextJustification in_horizontal, GUI::TextJustification in_vertical) const;
             //----------------------------------------------------------------------------
             //----------------------------------------------------------------------------
 			void DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3x3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture);
+            f32 CalculateTextWidth(const std::vector<DisplayCharacterInfo>& in_characters) const;
+            f32 CalculateTextHeight(const std::vector<DisplayCharacterInfo>& in_characters) const;
 
 			
 		private:
