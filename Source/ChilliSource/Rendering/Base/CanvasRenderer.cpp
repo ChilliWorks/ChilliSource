@@ -1,26 +1,42 @@
-/*
- *  CanvasRenderer.cpp
- *  moFloTest
- *
- *  Created by Scott Downie on 12/01/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  CanvasRenderer.cpp
+//  Chilli Source
+//  Created by Scott Downie on 12/01/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/ColourUtils.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/GUI/Label/Label.h>
+#include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-
-#include <ChilliSource/Core/Base/ColourUtils.h>
-#include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Resource/ResourcePool.h>
-
-#include <ChilliSource/GUI/Label/Label.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
@@ -306,27 +322,109 @@ namespace ChilliSource
                     character.m_position.y -= verticalOffset;
                 }
             }
+            //-----------------------------------------------------
+            /// Build the sprite from the given data
+            ///
+            /// @author S Downie
+            ///
+            /// @param Transform
+            /// @param Size
+            /// @param UVs
+            /// @param Colour
+            /// @param Alignment
+            /// @param [Out] Sprite
+            //-----------------------------------------------------
+            void UpdateSpriteData(const Core::Matrix4x4& in_transform, const Core::Vector2& in_size, const Core::Rectangle& in_UVs, const Core::Colour& in_colour, AlignmentAnchor in_alignment,
+                                  SpriteComponent::SpriteData& out_sprite)
+            {
+                const f32 k_nearClipDistance = 2.0f;
+                
+                Core::ByteColour Col = Core::ColourUtils::ColourToByteColour(in_colour);
+                
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].Col = Col;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].Col = Col;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].Col = Col;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].Col = Col;
+                
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex = in_UVs.TopLeft();
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex = in_UVs.BottomLeft();
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex = in_UVs.TopRight();
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex = in_UVs.BottomRight();
+                
+                Core::Vector2 vHalfSize(in_size.x * 0.5f, in_size.y * 0.5f);
+                Core::Vector2 vAlignedPos;
+                Align(in_alignment, vHalfSize, vAlignedPos);
+                
+                Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
+                Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
+                
+                const Core::Matrix4x4& matTransform(in_transform);
+                vTemp += vCentrePos;
+                Core::Matrix4x4::Multiply(&vTemp, &matTransform, &out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos);
+                
+                vTemp.x = vHalfSize.x;
+                vTemp.y = vHalfSize.y;
+                
+                vTemp += vCentrePos;
+                Core::Matrix4x4::Multiply(&vTemp, &matTransform, &out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos);
+                
+                vTemp.x = -vHalfSize.x;
+                vTemp.y = -vHalfSize.y;
+                
+                vTemp += vCentrePos;
+                Core::Matrix4x4::Multiply(&vTemp, &matTransform, &out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos);
+                
+                vTemp.x = vHalfSize.x;
+                vTemp.y = -vHalfSize.y;
+                
+                vTemp += vCentrePos;
+                Core::Matrix4x4::Multiply(&vTemp, &matTransform, &out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos);
+                
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.z = -k_nearClipDistance;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.w = 1.0f;
+                
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos.z = -k_nearClipDistance;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos.w = 1.0f;
+                
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos.z = -k_nearClipDistance;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos.w = 1.0f;
+                
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos.z = -k_nearClipDistance;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos.w = 1.0f;
+            }
         }
-        //----------------------------------------------------------
-        //----------------------------------------------------------
-		CanvasRenderer::CanvasRenderer(RenderSystem* inpRenderSystem)
-        : mOverlayBatcher(inpRenderSystem)
-        , mfNearClippingDistance(0.0f)
-		{
-
-		}
-        //----------------------------------------------------------
-        //----------------------------------------------------------
-        void CanvasRenderer::Init()
+        
+        CS_DEFINE_NAMEDTYPE(CanvasRenderer);
+        
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        CanvasRendererUPtr CanvasRenderer::Create()
+        {
+            return CanvasRendererUPtr(new CanvasRenderer());
+        }
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        bool CanvasRenderer::IsA(Core::InterfaceIDType in_interfaceId) const
+        {
+            return in_interfaceId == CanvasRenderer::InterfaceID;
+        }
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void CanvasRenderer::OnInit()
         {
             m_materialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
             CS_ASSERT(m_materialFactory != nullptr, "Must have a material factory");
             
             m_resourcePool = Core::Application::Get()->GetResourcePool();
             CS_ASSERT(m_resourcePool != nullptr, "Must have a resource pool");
+            
+            RenderSystem* renderSystem = Core::Application::Get()->GetRenderSystem();
+            CS_ASSERT(renderSystem != nullptr, "Canvas renderer cannot find render system");
+            
+            m_overlayBatcher = DynamicSpriteBatchUPtr(new DynamicSpriteBatch(renderSystem));
         }
-        //----------------------------------------------------------
-		//----------------------------------------------------------
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
         MaterialCSPtr CanvasRenderer::GetGUIMaterialForTexture(const TextureCSPtr& in_texture)
         {
             auto itExistingEntry = m_materialGUICache.find(in_texture);
@@ -355,43 +453,34 @@ namespace ChilliSource
             CS_LOG_FATAL("CanvasRenderer: No GUI material created. Some logic has gone wrong");
             return nullptr;
         }
-		//----------------------------------------------------------
-		/// Render
-		///
-		/// Draw the UI
-		//----------------------------------------------------------
-		void CanvasRenderer::Render(GUI::GUIView* inpView, f32 infNearClipDistance)
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+		void CanvasRenderer::Render(GUI::GUIView* in_rootView)
 		{
-            //We use this to ensure our UI is never clipped
-            mfNearClippingDistance = infNearClipDistance + 1.0f;
+            CS_ASSERT(in_rootView != nullptr, "Canvas cannot render null view");
             
-            inpView->Draw(this);
+            in_rootView->Draw(this);
 			
-            mOverlayBatcher.DisableScissoring();
-			mOverlayBatcher.ForceRender();
+            m_overlayBatcher->DisableScissoring();
+			m_overlayBatcher->ForceRender();
             
             m_materialGUICache.clear();
 		}
-        //----------------------------------------------------------
-        /// Enable Clipping To Bounds
-        ///
-        /// Set the bounds beyond which any subviews will clip
-        /// Pushes to a stack which tracks when to enable and
-        /// disable scissoring
-        //---------------------------------------------------------
-        void CanvasRenderer::EnableClippingToBounds(const Core::Vector2& invPosition, const Core::Vector2& invSize)
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void CanvasRenderer::PushClipBounds(const Core::Vector2& in_blPosition, const Core::Vector2& in_size)
         {
-            if(mScissorPos.empty())
+            if(m_scissorPositions.empty())
             {
-                mScissorPos.push_back(invPosition);
-                mScissorSize.push_back(invSize);
+                m_scissorPositions.push_back(in_blPosition);
+                m_scissorSizes.push_back(in_size);
             } 
             else
             {
-                Core::Vector2 vOldBottomLeft = mScissorPos.back();
-                Core::Vector2 vOldTopRight = mScissorSize.back()+vOldBottomLeft;
-                Core::Vector2 vNewBottomLeft = invPosition;
-                Core::Vector2 vNewTopRight = invPosition+invSize;
+                Core::Vector2 vOldBottomLeft = m_scissorPositions.back();
+                Core::Vector2 vOldTopRight = m_scissorSizes.back() + vOldBottomLeft;
+                Core::Vector2 vNewBottomLeft = in_blPosition;
+                Core::Vector2 vNewTopRight = in_blPosition + in_size;
                 
                 vNewBottomLeft.x = Core::MathUtils::Max(vNewBottomLeft.x, vOldBottomLeft.x);
                 vNewBottomLeft.y = Core::MathUtils::Max(vNewBottomLeft.y, vOldBottomLeft.y);
@@ -401,49 +490,43 @@ namespace ChilliSource
                 
                 Core::Vector2 vNewSize = vNewTopRight - vNewBottomLeft;
                 
-                mScissorPos.push_back(vNewBottomLeft);
-                mScissorSize.push_back(vNewSize);
+                m_scissorPositions.push_back(vNewBottomLeft);
+                m_scissorSizes.push_back(vNewSize);
             }
             
-            mOverlayBatcher.EnableScissoring(mScissorPos.back(), mScissorSize.back());
+            m_overlayBatcher->EnableScissoring(m_scissorPositions.back(), m_scissorSizes.back());
         }
-        //----------------------------------------------------------
-        /// Disable Clipping To Bounds
-        ///
-        /// Pop the scissor tracking stack
-        //----------------------------------------------------------                            
-        void CanvasRenderer::DisableClippingToBounds()
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void CanvasRenderer::PopClipBounds()
         {
-            if(!mScissorPos.empty())
+            if(!m_scissorPositions.empty())
             {
-                mScissorPos.erase(mScissorPos.end()-1);
-                mScissorSize.erase(mScissorSize.end()-1);
+                m_scissorPositions.erase(m_scissorPositions.end()-1);
+                m_scissorSizes.erase(m_scissorSizes.end()-1);
                 
-                if(!mScissorPos.empty())
+                if(!m_scissorPositions.empty())
                 {
-                    mOverlayBatcher.EnableScissoring(mScissorPos.back(), mScissorSize.back());
+                    m_overlayBatcher->EnableScissoring(m_scissorPositions.back(), m_scissorSizes.back());
                 }
             }
             
-            if(mScissorPos.empty())
+            if(m_scissorPositions.empty())
             {
-                mOverlayBatcher.DisableScissoring();
+                m_overlayBatcher->DisableScissoring();
             }
         }
-        //-----------------------------------------------------------
-        /// Draw Box
-        ///
-        /// Build a sprite box and batch it ready for rendering
-        //-----------------------------------------------------------
-        void CanvasRenderer::DrawBox(const Core::Matrix3x3& inmatTransform, const Core::Vector2 & invSize, const TextureCSPtr & inpTexture, 
-                                      const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void CanvasRenderer::DrawBox(const Core::Matrix3x3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Core::Rectangle& in_UVs,
+                                     const Core::Colour& in_colour, AlignmentAnchor in_anchor)
         {
-            msCachedSprite.pMaterial = GetGUIMaterialForTexture(inpTexture);
+            m_canvasSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
             
-			UpdateSpriteData(inmatTransform, invSize, inUVs, insTintColour, ineAlignment);
+			UpdateSpriteData(in_transform, in_size, in_UVs, in_colour, in_anchor, m_canvasSprite);
             
             //Draw us!
-			mOverlayBatcher.Render(msCachedSprite);
+			m_overlayBatcher->Render(m_canvasSprite);
             
 #ifdef CS_ENABLE_DEBUGSTATS
             Core::Application::Get()->GetDebugStats()->AddToEvent("GUI", 1);
@@ -519,12 +602,11 @@ namespace ChilliSource
             
             return result;
         }
-        //-----------------------------------------------------------
-        /// Draw String
-        //-----------------------------------------------------------
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
 		void CanvasRenderer::DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3x3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture)
 		{
-            msCachedSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
+            m_canvasSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
             
             Core::Matrix4x4 matTransform(in_transform);
             Core::Matrix4x4 matTransformedLocal;
@@ -536,15 +618,17 @@ namespace ChilliSource
                 
                 Core::Matrix4x4::Multiply(&matLocal, &matTransform, &matTransformedLocal);
                 
-                UpdateSpriteData(matTransformedLocal, character.m_size, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft);
+                UpdateSpriteData(matTransformedLocal, character.m_size, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, m_canvasSprite);
 				
-                mOverlayBatcher.Render(msCachedSprite);
+                m_overlayBatcher->Render(m_canvasSprite);
 			}
             
 #ifdef CS_ENABLE_DEBUGSTATS
             Core::Application::Get()->GetDebugStats()->AddToEvent("GUI", 1);
 #endif
 		}
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
         f32 CanvasRenderer::CalculateTextWidth(const std::vector<DisplayCharacterInfo>& in_characters) const
         {
             f32 smallestXPos = std::numeric_limits<f32>::max();
@@ -564,6 +648,8 @@ namespace ChilliSource
             
             return largestXPos + sizeOffset - smallestXPos;
         }
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
         f32 CanvasRenderer::CalculateTextHeight(const std::vector<DisplayCharacterInfo>& in_characters) const
         {
             f32 smallestYPos = std::numeric_limits<f32>::max();
@@ -583,65 +669,11 @@ namespace ChilliSource
             
             return largestYPos + sizeOffset - smallestYPos;
         }
-		//-----------------------------------------------------
-		/// Update Sprite Data
-		///
-		/// Rebuild the sprite data
-		//-----------------------------------------------------
-		void CanvasRenderer::UpdateSpriteData(const Core::Matrix4x4 & inTransform, const Core::Vector2 & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
-		{
-			Core::ByteColour Col = Core::ColourUtils::ColourToByteColour(insTintColour);
-			
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].Col = Col;
-            msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].Col = Col;
-            msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].Col = Col;
-            msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].Col = Col;
-			
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex = inUVs.TopLeft();
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex = inUVs.BottomLeft();
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex = inUVs.TopRight();
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex = inUVs.BottomRight();
-			
-			Core::Vector2 vHalfSize(invSize.x * 0.5f, invSize.y * 0.5f);
-			Core::Vector2 vAlignedPos;
-            Align(ineAlignment, vHalfSize, vAlignedPos);
-            
-            Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
-            Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
-			
-            const Core::Matrix4x4 &matTransform(inTransform);
-			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos);
-            
-            vTemp.x = vHalfSize.x;
-            vTemp.y = vHalfSize.y;
-			
-			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos);
-            
-            vTemp.x = -vHalfSize.x;
-            vTemp.y = -vHalfSize.y;
-			
-			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos);
-            
-            vTemp.x = vHalfSize.x;
-            vTemp.y = -vHalfSize.y;
-			
-			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos);
-
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.w = 1.0f;
-			
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos.w = 1.0f;
-			
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos.w = 1.0f;
-			
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos.w = 1.0f;
-		}
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void CanvasRenderer::OnDestroy()
+        {
+            m_overlayBatcher = nullptr;
+        }
 	}
 }

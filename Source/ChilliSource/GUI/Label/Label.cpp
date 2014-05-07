@@ -16,6 +16,7 @@
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
+#include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
@@ -616,13 +617,13 @@ namespace ChilliSource
                 //Check if we force clip our children 
                 if(ClipSubviews)
                 {
-                    inpCanvas->EnableClippingToBounds(vBottomLeft, vAbsoluteLabelSize);
+                    inpCanvas->PushClipBounds(vBottomLeft, vAbsoluteLabelSize);
                 }
                 
                 //Draw ourself
                 if(Background)
                 {
-                    inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::ZERO, Core::Vector2::ZERO), AbsCol);
+                    inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::ZERO, Core::Vector2::ZERO), AbsCol, Rendering::AlignmentAnchor::k_middleCentre);
                 }
                 
                 if(mCachedChars.empty())
@@ -642,7 +643,7 @@ namespace ChilliSource
                 
                 if(ClipSubviews)
                 {
-                    inpCanvas->DisableClippingToBounds();
+                    inpCanvas->PopClipBounds();
                 }
             }
         }

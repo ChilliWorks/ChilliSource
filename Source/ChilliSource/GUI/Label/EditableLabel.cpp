@@ -11,6 +11,7 @@
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Font/Font.h>
 
 namespace ChilliSource
 {
@@ -310,13 +311,13 @@ namespace ChilliSource
             //Check if we force clip our children 
             if(ClipSubviews)
             {
-                inpCanvas->EnableClippingToBounds(vBottomLeft, vAbsoluteLabelSize);
+                inpCanvas->PushClipBounds(vBottomLeft, vAbsoluteLabelSize);
             }
             
             //Draw ourself
             if(Background)
             {
-                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::ZERO, Core::Vector2::ZERO), AbsCol);
+                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::ZERO, Core::Vector2::ZERO), AbsCol, Rendering::AlignmentAnchor::k_middleCentre);
             }
         
             Core::UTF8String strutf8DisplayString(Text);
@@ -358,7 +359,7 @@ namespace ChilliSource
             
             if(ClipSubviews)
             {
-                inpCanvas->DisableClippingToBounds();
+                inpCanvas->PopClipBounds();
             }
         }
         //-------------------------------------------------------

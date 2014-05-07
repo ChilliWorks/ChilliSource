@@ -1610,7 +1610,7 @@ namespace ChilliSource
 				if(ClipSubviews)
 				{
                     Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
-					inpCanvas->EnableClippingToBounds(vBottomLeft, GetAbsoluteSize());
+					inpCanvas->PushClipBounds(vBottomLeft, GetAbsoluteSize());
 				}
 				
 				for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
@@ -1623,7 +1623,7 @@ namespace ChilliSource
 				
 				if(ClipSubviews)
 				{
-					inpCanvas->DisableClippingToBounds();
+					inpCanvas->PopClipBounds();
 				}
 			}
         }
