@@ -36,37 +36,91 @@ namespace ChilliSource
         {
             const f32 k_maxKernRatio = 0.25;
             
-            f32 CalculateTextWidth(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_charSpacing)
+            //----------------------------------------------------------------------------
+            /// Get the width of the character pointed to by the iterator
+            ///
+            /// @author S Downie
+            ///
+            /// @param Text
+            /// @param Iterator pointing to current character
+            /// @param Font
+            //----------------------------------------------------------------------------
+            f32 GetCharacterWidth(const Core::UTF8String& in_text, Core::UTF8String::iterator in_currentItPos, const FontCSPtr& in_font)
+            {
+                Core::UTF8String::Char character = *in_currentItPos;
+                
+                Font::CharacterInfo charInfo;
+                if(in_font->TryGetCharacterInfo(character, charInfo) == true)
+                {
+                    return charInfo.m_size.x;
+                }
+                
+                return 0.0f;
+            }
+            //----------------------------------------------------------------------------
+            /// Calculate the width of the text in text space. This does not take
+            /// any breaks etc into account.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Text
+            /// @param Font
+            //----------------------------------------------------------------------------
+            f32 CalculateTextWidth(const Core::UTF8String& in_text, const FontCSPtr& in_font)
             {
                 f32 totalWidth = 0.0f;
                 
                 Core::UTF8String::iterator it = (Core::UTF8String::iterator)in_text.begin();
                 while(in_text.end() != it)
                 {
-                    Core::UTF8String::Char character = in_text.next(it);
-                    
-                    Font::CharacterInfo charInfo;
-                    if(in_font->TryGetCharacterInfo(character, charInfo) == true)
-                    {
-                        f32 charWidth = (charInfo.m_size.x * in_textScale);
-                        f32 spacingWidth = in_charSpacing;
-                        
-                        if(in_font->SupportsKerning() == true && in_text.end() != it)
-                        {
-                            auto itNext = it;
-                            Core::UTF8String::Char nextCharacter = in_text.next(itNext);
-                            
-                            f32 kernSpacing = std::min((in_font->GetKerningBetweenCharacters(character, nextCharacter) * in_textScale), charWidth * k_maxKernRatio);
-                            spacingWidth -= kernSpacing;
-                        }
-                        
-                        totalWidth += charWidth + spacingWidth;
-                    }
+                    totalWidth += GetCharacterWidth(in_text, it, in_font);
+                    in_text.next(it);
                 }
                 
                 return totalWidth;
             }
-            
+            //----------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Character
+            ///
+            /// @return Whether the character can safely be line broken on.
+            //----------------------------------------------------------------------------
+            bool IsBreakableCharacter(Core::UTF8String::Char in_character)
+            {
+                return in_character == ' ' || in_character == '\t' || in_character == '\n';
+            }
+            //----------------------------------------------------------------------------
+            /// Calculate the distance in text space to the next 'breakable' character
+            ///
+            /// @author S Downie
+            ///
+            /// @param Text
+            /// @param Iterator pointing to current character
+            /// @param Font
+            //----------------------------------------------------------------------------
+            f32 CalculateDistanceToNextBreak(const Core::UTF8String& in_text, Core::UTF8String::iterator in_currentItPos, const FontCSPtr& in_font)
+            {
+                Core::UTF8String textToBreak;
+                Core::UTF8String::iterator itToBreak = in_currentItPos;
+                Core::UTF8String::Char nextCharacter = in_text.next(itToBreak);
+                while(itToBreak != in_text.end() && IsBreakableCharacter(nextCharacter) == false)
+                {
+                    textToBreak.appendChar(nextCharacter);
+                    nextCharacter = in_text.next(itToBreak);
+                }
+                
+                return CalculateTextWidth(textToBreak, in_font);
+            }
+            //----------------------------------------------------------------------------
+            /// Split the given text into lines based on any '\n' characters. The newline
+            /// characters do not appear in the returned lines
+            ///
+            /// @author S Downie
+            ///
+            /// @param Text
+            /// @param [Out] Array of lines split by '\n'
+            //----------------------------------------------------------------------------
             void SplitByNewLine(const Core::UTF8String& in_text, std::vector<Core::UTF8String>& out_lines)
             {
                 Core::UTF8String::iterator it = (Core::UTF8String::iterator)in_text.begin();
@@ -91,34 +145,30 @@ namespace ChilliSource
                     out_lines.push_back(line);
                 }
             }
-            
-            bool IsBreakableCharacter(Core::UTF8String::Char in_character)
-            {
-                return in_character == ' ' || in_character == '\t' || in_character == '\n';
-            }
-            
-            f32 CalculateDistanceToNextBreak(const Core::UTF8String& in_text, Core::UTF8String::iterator in_currentItPos, const FontCSPtr& in_font, f32 in_textScale, f32 in_charSpacing)
-            {
-                Core::UTF8String textToBreak;
-                Core::UTF8String::iterator itToBreak = in_currentItPos;
-                Core::UTF8String::Char nextCharacter = 0;
-                while(itToBreak != in_text.end() && IsBreakableCharacter(nextCharacter) == false)
-                {
-                    textToBreak.appendChar(nextCharacter);
-                    nextCharacter = in_text.next(itToBreak);
-                }
-                
-                return CalculateTextWidth(textToBreak, in_font, in_textScale, in_charSpacing);
-            }
-            
-            void SplitByBounds(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_charSpacing, const Core::Vector2& in_bounds, std::vector<Core::UTF8String>& out_lines)
+            //----------------------------------------------------------------------------
+            /// Split the given text into lines based on the constrained bounds.
+            /// Splits will prefer to happen on breakable whitespace characters but
+            /// will split mid-word if neccessary.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Text
+            /// @param Font
+            /// @param Text scale
+            /// @param Bounds
+            /// @param [Out] Array of lines split to fit in bounds
+            //----------------------------------------------------------------------------
+            void SplitByBounds(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, const Core::Vector2& in_bounds, std::vector<Core::UTF8String>& out_lines)
             {
                 f32 maxLineWidth = in_bounds.x;
  
                 Core::UTF8String::iterator it = (Core::UTF8String::iterator)in_text.begin();
                 Core::UTF8String line;
+                f32 currentLineWidth = 0.0f;
+                
                 while(it != in_text.end())
                 {
+                    currentLineWidth += (GetCharacterWidth(in_text, it, in_font) * in_textScale);
                     Core::UTF8String::Char character = in_text.next(it);
                     
                     //If we come across a character on which we can wrap we need
@@ -126,22 +176,24 @@ namespace ChilliSource
                     //whether we need to wrap now
                     if(IsBreakableCharacter(character) == true)
                     {
-                        f32 distanceToNextBreak = CalculateDistanceToNextBreak(in_text, it, in_font, in_textScale, in_charSpacing);
+                        f32 nextBreakWidth = currentLineWidth + (CalculateDistanceToNextBreak(in_text, it, in_font) * in_textScale);
                         
-                        if(distanceToNextBreak >= maxLineWidth && line.size() > 0)
+                        if(nextBreakWidth >= maxLineWidth && line.size() > 0)
                         {
                             out_lines.push_back(line);
                             line.clear();
+                            currentLineWidth = 0.0f;
                             continue;
                         }
                     }
                     
                     //If text has no characters to break on then we need break on the previous character mid "word".
-//                    if(currentLineWidth >= maxLineWidth)
-//                    {
-//                        out_lines.push_back(line);
-//                        line.clear();
-//                    }
+                    if(currentLineWidth >= maxLineWidth)
+                    {
+                        out_lines.push_back(line);
+                        line.clear();
+                        currentLineWidth = 0.0f;
+                    }
                     
                     line.appendChar(character);
                 }
@@ -151,33 +203,38 @@ namespace ChilliSource
                     out_lines.push_back(line);
                 }
             }
-
-            void BuildStringNew(const FontCSPtr& inpFont, const Core::UTF8String &in_text, CanvasRenderer::CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
-                             const Core::Vector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification,
-                             bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
+            //----------------------------------------------------------------------------
+            /// Create the data required to display a character. This includes
+            /// the size, UV and position.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Character
+            /// @param Font
+            /// @param Current cursor X pos
+            /// @param Current cursor Y pos
+            /// @param Text scale
+            ///
+            /// @return Display characer info
+            //----------------------------------------------------------------------------
+            CanvasRenderer::DisplayCharacterInfo BuildCharacter(Core::UTF8String::Char in_character, const FontCSPtr& in_font, f32 in_cursorX, f32 in_cursorY, f32 in_textScale)
             {
-                if(in_text != "This is the options screen\nwhere you can select the options.\nGo on, select and option. Go on, go on, go on, go on.")
-                    return;
-                    
-                //NOTE: | denotes the bounds of the box
-                //- |The quick brown fox| jumped over\nthe ferocious honey badger
+                CanvasRenderer::DisplayCharacterInfo result;
                 
-                //Split the string into lines by the forced line breaks
-                //- |The quick brown fox| jumped over
-                //- |the ferocious honey| badger
-                std::vector<Core::UTF8String> lines1;
-                SplitByNewLine(in_text, lines1);
+                Font::CharacterInfo info;
+                if(in_font->TryGetCharacterInfo(in_character, info) == true)
+                {
+                    result.m_UVs = info.m_UVs;
+                    result.m_size = info.m_size * in_textScale;
+                    result.m_position.x = in_cursorX;
+                    result.m_position.y = in_cursorY - (info.m_offset.y * in_textScale);
+                }
+                else
+                {
+                    CS_LOG_ERROR("Unknown character not provided by font: " + in_font->GetFilePath());
+                }
                 
-                //Split the lines further based on the line width, whitespaces and the bounds
-                //- |The quick brown fox|
-                //- |jumped over        |
-                //- |the ferocious honey|
-                //- |badger             |
-                
-                std::vector<Core::UTF8String> lines2;
-                SplitByBounds(lines1[0], inpFont, infTextSize, infCharacterSpacing, invBounds, lines2);
-                
-                
+                return result;
             }
         }
         //----------------------------------------------------------
@@ -322,43 +379,88 @@ namespace ChilliSource
             Core::Application::Get()->GetDebugStats()->AddToEvent("GUI", 1);
 #endif
         }
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        std::vector<CanvasRenderer::DisplayCharacterInfo> CanvasRenderer::BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing, const Core::Vector2& in_bounds, u32 in_numLines) const
+        {
+            std::vector<CanvasRenderer::DisplayCharacterInfo> result;
+            result.reserve(in_text.size());
+            
+            //NOTE: | denotes the bounds of the box
+            //- |The quick brown fox| jumped over\nthe ferocious honey badger
+            
+            //Split the string into lines by the forced line breaks (i.e. the \n)
+            //- |The quick brown fox| jumped over
+            //- |the ferocious honey| badger
+            std::vector<Core::UTF8String> linesOnNewLine;
+            SplitByNewLine(in_text, linesOnNewLine);
+            
+            //Split the lines further based on the line width, breakable characters and the bounds
+            //- |The quick brown fox|
+            //- |jumped over        |
+            //- |the ferocious honey|
+            //- |badger             |
+            std::vector<Core::UTF8String> linesOnBounds;
+            for(const auto& line : linesOnNewLine)
+            {
+                SplitByBounds(line, in_font, in_textScale, in_bounds, linesOnBounds);
+            }
+            
+            //Only build as many lines as we have been told to. If ZERO is specified
+            //this means build all lines. We are also constrained by the size of the bounds
+            u32 numLines = (in_numLines == 0) ? linesOnBounds.size() : std::min((u32)linesOnBounds.size(), in_numLines);
+            
+            f32 lineHeight = in_lineSpacing * (in_font->GetLineHeight() * in_textScale);
+            f32 maxHeight = in_bounds.y;
+            numLines = std::min(numLines, (u32)(maxHeight/lineHeight));
+            
+            //The middle of the text label is 0,0. We want to be starting at the top left.
+            f32 cursorXReturnPos = -in_bounds.x * 0.5f;
+            f32 cursorX = cursorXReturnPos;
+            f32 cursorY = in_bounds.y * 0.5f;
+            
+            for(u32 lineIdx=0; lineIdx<numLines; ++lineIdx)
+            {
+                u32 numCharacters = linesOnBounds[lineIdx].size();
+                for(u32 charIdx=0; charIdx<numCharacters; ++charIdx)
+                {
+                    auto character = linesOnBounds[lineIdx][charIdx];
+                    auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_textScale));
+                    
+                    cursorX += builtCharacter.m_size.x;
+                    
+                    if(builtCharacter.m_size.y > 0.0f)
+                    {
+                        //No point rendering whitespaces
+                        result.push_back(builtCharacter);
+                    }
+                }
+                
+                cursorX = cursorXReturnPos;
+                cursorY -= lineHeight;
+            }
+            //TODO: Handle justification
+            
+            return result;
+        }
         //-----------------------------------------------------------
         /// Draw String
         //-----------------------------------------------------------
-		void CanvasRenderer::DrawString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
-                                         const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
-										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped, bool *outpInvalidCharacterFound)
+		void CanvasRenderer::DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3x3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture)
 		{
-            msCachedSprite.pMaterial = GetGUIMaterialForTexture(inpFont->GetTexture());
+            msCachedSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
             
-			//Get the data about how to draw each character
-            //This will be in text space and will be in a single line
-            if(outCharCache.empty())
-            {
-                if(outpInvalidCharacterFound)
-                    (*outpInvalidCharacterFound)=false;
-                BuildString(inpFont, insString, outCharCache, infSize, infCharacterSpacing, infLineSpacing, invBounds, inudwNumLines,
-							ineHorizontalJustification, ineVerticalJustification, inbFlipVertical, ineBehaviour, outpClipped,outpInvalidCharacterFound);
-                
-                BuildStringNew(inpFont, insString, outCharCache, infSize, infCharacterSpacing, infLineSpacing, invBounds, inudwNumLines,
-                               ineHorizontalJustification, ineVerticalJustification, inbFlipVertical, ineBehaviour, outpClipped, outpInvalidCharacterFound);
-            }
-            
-            Core::Matrix4x4 matTransform(inmatTransform);
+            Core::Matrix4x4 matTransform(in_transform);
             Core::Matrix4x4 matTransformedLocal;
 			
-            //Build each character sprite from the draw info
-			for (u32 nChar = 0; nChar < outCharCache.size(); nChar++)
+			for (const auto& character : in_characters)
             {
 				Core::Matrix4x4 matLocal;
-                
-                f32 fXPos = outCharCache[nChar].vPosition.x;
-                f32 fYPos = outCharCache[nChar].vPosition.y - outCharCache[nChar].vSize.y * 0.5f;
-				matLocal.Translate((fXPos), (fYPos), 0.0f);
+				matLocal.Translate(character.m_position.x, character.m_position.y, 0.0f);
                 
                 Core::Matrix4x4::Multiply(&matLocal, &matTransform, &matTransformedLocal);
                 
-                UpdateSpriteData(matTransformedLocal, outCharCache[nChar].vSize, outCharCache[nChar].sUVs, insColour, AlignmentAnchor::k_middleCentre);
+                UpdateSpriteData(matTransformedLocal, character.m_size, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft);
 				
                 mOverlayBatcher.Render(msCachedSprite);
 			}
@@ -366,468 +468,6 @@ namespace ChilliSource
 #ifdef CS_ENABLE_DEBUGSTATS
             Core::Application::Get()->GetDebugStats()->AddToEvent("GUI", 1);
 #endif
-		}
-        //-----------------------------------------------------------
-        /// Calculate String Width
-        ///
-        /// Calculate the length of a string based on the font
-        /// and attributes
-        //------------------------------------------------------------
-        f32 CanvasRenderer::CalculateStringWidth(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infSize, f32 infCharSpacing, bool inbIgnoreLinesBreaks)
-        {
-            Core::Vector2 vSize;
-            
-            //Track the character width
-            std::vector<f32> aLineWidths;
-            aLineWidths.push_back(0.0f);
-            
-			f32 fLastCharacterWidth = 0.0f;
-            
-            //Make sure we scale the spacing if we have scaled the text
-            infCharSpacing *= infSize;
-			
-            //Track all the characters in this line
-            CharacterList CurrentLine;
-            
-            //Loop round each character and get it's size
-            Core::UTF8String::iterator it = (Core::UTF8String::iterator)insString.begin();
-			while(insString.end() != it)
-			{
-                //Get character for iterator codepoint and bump the iterator to the beginning of
-                //the next character
-                Core::UTF8String::Char Char = insString.next(it);
-                
-                // If we are breaking on new lines, create a new counter.
-                if(!inbIgnoreLinesBreaks && (Char == k_returnCharacter))
-                {
-                    aLineWidths.push_back(0.0f);
-                    continue;
-                }
-                
-                // If kerning is supported, then we need the next character
-                Core::UTF8String::Char NextChar = Char;
-                if(inpFont->SupportsKerning() && insString.end() != it)
-                {
-                    Core::UTF8String::iterator it2 = it;
-                    NextChar = insString.next(it2);
-                }
-                
-                //Construct the characters position and size from the font sheet and add it to the line
-                BuildCharacter(inpFont, Char, NextChar, vSize, infSize, infCharSpacing, fLastCharacterWidth, CurrentLine);
-                
-                aLineWidths.back() += fLastCharacterWidth;
-            }
-            
-            // Return the largest line.
-            return *std::max_element(aLineWidths.begin(), aLineWidths.end());
-        }
-        //-----------------------------------------------------------
-        /// Calculate String Height
-        ///
-        /// Calculate the height of a string based on the font, width
-        /// and attributes
-        //------------------------------------------------------------
-        f32 CanvasRenderer::CalculateStringHeight(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines)
-        {
-            Core::Vector2 vCursorPos;
-            
-            //Track the character height
-			f32 fLastCharacterWidth = 0.0f;
-            
-            //Required to be passed into BuildCharacter
-            CharacterList CurrentLine;
-            
-            //Make sure we scale the spacing if we have scaled the text
-            infLineSpacing *= infSize;
-            infCharSpacing *= infSize;
-            const f32 fLineHeight = inpFont->GetLineHeight() * infLineSpacing;
-        
-            u32 udwCurrentNumLines = 1;
-
-            //Loop round each character and get it's size
-            Core::UTF8String::iterator it = (Core::UTF8String::iterator)insString.begin();
-			while(it != insString.end())
-			{
-                //Get character for iterator codepoint and bump the iterator to the beginning of 
-                //the next character
-                Core::UTF8String::Char Char = insString.next(it);
-                
-                //Decide whether to wrap or clip. If max num lines is zero this means wrap text infinetly
-                if(inudwNumLines == 0 || udwCurrentNumLines <= inudwNumLines)
-                {
-                    // If kerning is supported, then we need the next character
-                    Core::UTF8String::Char NextChar = Char;
-                    if(inpFont->SupportsKerning() && insString.end() != it)
-                    {
-                        Core::UTF8String::iterator it2 = it;
-                        NextChar = insString.next(it2);
-                    }
-                    
-                    //Construct the characters position and size from the font sheet to get the width
-                    BuildCharacter(inpFont, Char, NextChar, Core::Vector2::ZERO, infSize, infCharSpacing, fLastCharacterWidth, CurrentLine);
-                    vCursorPos.x += fLastCharacterWidth;
-
-                    Core::UTF8String sTemp;
-                    sTemp.appendChar(Char);
-                    
-                    //Added by Joe 9/1/14
-                    //Prepare to relocate last character to the next line if it breaches the bounds
-                    //by removing it from the current line and stepping back the iterator
-                    bool bExceededBounds = false;
-                    if(vCursorPos.x > infWidth)
-                    {
-                        bExceededBounds=true;
-                        
-                        if(CurrentLine.size()==1)
-                        {
-                            // this character won't ever fit in this label so stop here.
-                            return udwCurrentNumLines * fLineHeight;
-                        }
-                        
-                        if(insString.begin() != it && Char != k_spaceCharacter && Char != k_tabCharacter)
-                        {
-                            it--;
-                            vCursorPos.x -= fLastCharacterWidth;
-                            CurrentLine.pop_back();
-                        }
-                    }
-                    
-                    //If we are a return character or we exceed the bounds then we must wrap the text
-                    if(Char == k_returnCharacter || bExceededBounds)
-                    {
-                        udwCurrentNumLines++;  
-                        vCursorPos.x = 0.0f;
-                        CurrentLine.clear();
-                    }
-                    //Check if we need to wrap before the next space so that words are not split
-                    //across multiple lines
-                    else if(Char == k_spaceCharacter || Char == k_tabCharacter)
-                    {
-                        //Find the length to the next space/tab from the cursor pos
-                        //and if it exceed the bounds then wrap
-                        f32 fLengthToNextSpace = vCursorPos.x;
-                        Core::UTF8String::iterator jt = it;
-                        Core::UTF8String::Char NextCharacter = 0;
-                        
-                        while(jt != insString.end() && NextCharacter != k_spaceCharacter && NextCharacter != k_tabCharacter && NextCharacter != k_returnCharacter)
-                        {
-                            NextCharacter = insString.next(jt);
-                            
-                            //Add it to the length
-                            Font::CharacterInfo sInfo;
-                            inpFont->TryGetCharacterInfo(NextCharacter, sInfo);
-                            fLengthToNextSpace += (sInfo.m_size.x * infSize) + infCharSpacing;
-                            
-                            if(fLengthToNextSpace > infWidth)
-                            {
-                                //We can wrap to the next line
-                                udwCurrentNumLines++;
-                                vCursorPos.x = 0.0f;
-                                CurrentLine.clear();
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            
-            return udwCurrentNumLines * fLineHeight;
-        }
-		//-------------------------------------------
-		/// Build String
-		///
-		/// Construct a list of character sprites
-		/// from the given string
-        //-------------------------------------------
-		void CanvasRenderer::BuildString(const FontCSPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
-										  const Core::Vector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification,
-                                          bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
-		{
-            // don't attempt to draw zero or negative sized text
-            if(infTextSize <= 0.0f)
-                return;
-            
-            bool bClipped=false;
-            
-            outCharacters.reserve(inText.length());
-			
-			//This will be positioned in local space where the characters are relative to each either.
-            Core::Vector2 vCursorPos;
-			
-			//Track the width of the last character so we can offset the next correctly
-			f32 fLastCharacterWidth = 0.0f;
-            
-            //Make sure we scale the spacing if we have scaled the text
-            infCharacterSpacing *= infTextSize;
-			infLineSpacing *= infTextSize;
-            const f32 fLineHeight = infLineSpacing * inpFont->GetLineHeight();
-            
-            CharacterList CurrentLine;
-            u32 udwCurrentNumLines = 1;
-            
-            bool bNoMoreLines = false;
-			
-            Core::UTF8String::iterator it = (Core::UTF8String::iterator)inText.begin();
-            while(inText.end() != it)
-			{
-                //Get character for iterator codepoint and bump the iterator to the beginning of
-                //the next character
-                Core::UTF8String::Char Char = inText.next(it);
-                
-                // If kerning is supported, then we need the next character
-                Core::UTF8String::Char NextChar = Char;
-                if(inpFont->SupportsKerning() && inText.end() != it)
-                {
-                    Core::UTF8String::iterator it2 = it;
-                    NextChar = inText.next(it2);
-                }
-                
-                //Decide whether to wrap or clip. If max num lines is zero this means wrap text infinetly
-                if(!bNoMoreLines && (inudwNumLines == 0 || udwCurrentNumLines <= inudwNumLines))
-                {
-                    //Construct the characters position and size from the font sheet and add it to the line
-                    BuildCharacter(inpFont, Char, NextChar, vCursorPos, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLine, outpInvalidCharacterFound);
-                    
-                    //Offset the cursor to the start of the next character
-                    vCursorPos.x += fLastCharacterWidth;
-                    
-                    //Added by Joe 9/1/14
-                    //Prepare to relocate last character to the next line if it breaches the bounds
-                    //by removing it from the current line and stepping back the iterator
-                    bool bExceededBounds = false;
-                    if(vCursorPos.x > invBounds.x)
-                    {
-                        bExceededBounds=true;
-                        
-                        if(CurrentLine.size()==1)
-                        {
-                            // don't add any more lines because the width of the bounds is too
-                            // small to allow one of the characters to appear at all.
-                            bNoMoreLines=true;
-                        }
-                        
-                        else if(inText.begin() != it && Char != k_spaceCharacter && Char != k_tabCharacter)
-                        {
-                            it--;
-                            vCursorPos.x -= fLastCharacterWidth;
-                            CurrentLine.pop_back();
-                        }
-                    }
-                    
-                    if(!bNoMoreLines)
-                    {
-                        //If we are a return character or we exceed the bounds then we must wrap the text
-                        if(Char == k_returnCharacter || bExceededBounds)
-                        {
-                            Wrap(ineHorizontalJustification, fLineHeight, invBounds, CurrentLine, vCursorPos, outCharacters);
-                            
-                            //Make sure we don't exceed our vertical bounds
-                            if(vCursorPos.y - fLineHeight <= -invBounds.y || udwCurrentNumLines==inudwNumLines)
-                            {
-                                bNoMoreLines = true;
-                                vCursorPos.y += fLineHeight;
-                            }
-                            else
-                            {
-                                udwCurrentNumLines++;
-                            }
-                        }
-                        //Check if we need to wrap before the next space so that words are not split
-                        //across multiple lines
-                        else if(Char == k_spaceCharacter || Char == k_tabCharacter)
-                        {
-                            //Find the length to the next space/tab from the cursor pos
-                            //and if it exceed the bounds then wrap
-                            f32 fLengthToNextSpace = vCursorPos.x;
-                            Core::UTF8String::iterator jt = it;
-                            Core::UTF8String::Char LookAheadChar;
-                            Core::UTF8String::Char LookAheadNextChar;
-                            CharacterList CurrentLineTemp;
-                            
-                            //This while loop exits through break statements only.
-                            while(jt != inText.end())
-                            {
-                                LookAheadChar = inText.next(jt);
-                                
-                                //Break if the next spacing or return character is reached
-                                if(LookAheadChar == k_spaceCharacter || LookAheadChar == k_tabCharacter || LookAheadChar == k_returnCharacter)
-                                    break;
-                                
-                                LookAheadNextChar = LookAheadChar;
-                                Core::UTF8String::iterator jt2 = jt;
-                                if(jt!=inText.end())
-                                    LookAheadNextChar=inText.next(jt2);
-                                
-                                //Construct the characters position and size from the font sheet to get the width
-                                BuildCharacter(inpFont, LookAheadChar, LookAheadNextChar, Core::Vector2::ZERO, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLineTemp, outpInvalidCharacterFound);
-                                fLengthToNextSpace += fLastCharacterWidth;
-                                
-                                if(fLengthToNextSpace > invBounds.x)
-                                {
-                                    //We can wrap to the next line
-                                    Wrap(ineHorizontalJustification, fLineHeight, invBounds, CurrentLine, vCursorPos, outCharacters);
-                                    
-                                    //Make sure we don't exceed our vertical bounds
-                                    if(vCursorPos.y - fLineHeight <= -invBounds.y || udwCurrentNumLines==inudwNumLines)
-                                    {
-                                        bNoMoreLines = true;
-                                        vCursorPos.y += fLineHeight;
-                                    }
-                                    else
-                                    {
-                                        udwCurrentNumLines++;
-                                    }
-                                    
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    //We are out of room so we can either over-run the label or clip the text
-                    switch(ineBehaviour)
-                    {
-                        case GUI::TextOverflowBehaviour::k_none:
-                        case GUI::TextOverflowBehaviour::k_clip:
-                            //Don't process any further characters
-                            it = (Core::UTF8String::iterator)inText.end();
-                            bClipped=true;
-                            break;
-                        case GUI::TextOverflowBehaviour::k_follow:
-                            //Shunt the text backwards so it appears to scroll
-                            ineHorizontalJustification = GUI::TextJustification::k_right;
-                            break;
-                    }
-                }
-			}
-            
-            //Add the last line to the string
-            Wrap(ineHorizontalJustification, fLineHeight, invBounds, CurrentLine, vCursorPos, outCharacters);
-            
-            //flip the text vertically if required
-            f32 fHeight = udwCurrentNumLines * fLineHeight;
-            if (inbFlipVertical == true)
-            {
-                for(CharacterList::iterator itChar = outCharacters.begin(); itChar != outCharacters.end(); ++itChar)
-                {
-                    itChar->vPosition.y = -itChar->vPosition.y + itChar->vSize.y - fHeight;
-                    itChar->sUVs.vOrigin.y += itChar->sUVs.vSize.y;
-                    itChar->sUVs.vSize.y = -itChar->sUVs.vSize.y;
-                }
-            }
-            
-            //Now vertically justify the text
-            f32 fOffsetY = 0.0f;
-            
-            switch(ineVerticalJustification)
-            {
-                case GUI::TextJustification::k_top:
-                default:
-                    fOffsetY = (invBounds.y * 0.5f);
-                    break;
-                case GUI::TextJustification::k_centre:
-                    fOffsetY = (fHeight * 0.5f);
-                    break;
-                case GUI::TextJustification::k_bottom:
-                    fOffsetY = -((invBounds.y * 0.5f) - fHeight);
-                    break;
-            };
-            
-			for(CharacterList::iterator itChar = outCharacters.begin(); itChar != outCharacters.end(); ++itChar)
-			{
-                itChar->vPosition.y += fOffsetY;
-			}
-            
-            if(outpClipped)
-                (*outpClipped)=bClipped;
-		}
-		//----------------------------------------------------
-		/// Build Character
-		//----------------------------------------------------
-		void CanvasRenderer::BuildCharacter(const FontCSPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
-                                                         const Core::Vector2& invCursor, f32 infTextScale, f32 infCharSpacing,
-                                                         f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound)
-		{
-			Font::CharacterInfo sInfo;
-            if(inpFont->TryGetCharacterInfo(inCharacter, sInfo) == false)
-            {
-                outfCharacterWidth = 0.0f;
-                if(outpInvalidCharacterFound)
-                    (*outpInvalidCharacterFound)=true;
-                CS_LOG_ERROR("Invalid character in text component");
-                return;
-            }
-
-            sInfo.m_size *= infTextScale;
-            sInfo.m_offset *= infTextScale;
-            
-            f32 fCharWidth = sInfo.m_size.x + infCharSpacing;
-            
-            if(sInfo.m_size.y > 0.0f)
-            {
-                PlacedCharacter sOutCharacter;
-                sOutCharacter.sUVs = sInfo.m_UVs;
-                sOutCharacter.vSize = sInfo.m_size;
-                sOutCharacter.vPosition.x = invCursor.x + sInfo.m_offset.x;
-                sOutCharacter.vPosition.y = invCursor.y - sInfo.m_offset.y;
-                
-                if(inpFont->SupportsKerning() && fCharWidth > 2)
-                {
-                    f32 fKernAmount = (inpFont->GetKerningBetweenCharacters(inCharacter, inNextCharacter) * infTextScale);
-                    
-                    if(fKernAmount > (fCharWidth * k_maxKernRatio))
-                    {
-                        fKernAmount = fCharWidth * k_maxKernRatio;
-                    }
-                    
-                    fCharWidth -= fKernAmount;
-                }
-                
-                outCharacters.push_back(sOutCharacter);
-            }
-            
-            outfCharacterWidth = fCharWidth;
-        }
-		
-        //----------------------------------------------------
-        /// Wrap
-        //----------------------------------------------------
-        void CanvasRenderer::Wrap(GUI::TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::Vector2& invBounds,
-								   CharacterList &inCurrentLine, Core::Vector2& outvCursor, CharacterList &outCharacters)
-        {
-            if(!inCurrentLine.empty())
-            {
-                //Move the characters based on the justification
-                //We must centre align everything for rendering
-                f32 fOffsetX = 0.0f;
-                
-                switch(ineHorizontalJustification)
-                {
-                    case GUI::TextJustification::k_left:
-                    default:
-                        fOffsetX = -(invBounds.x * 0.5f);
-                        break;
-                    case GUI::TextJustification::k_centre:
-                        fOffsetX = -(outvCursor.x * 0.5f);
-                        break;
-                    case GUI::TextJustification::k_right:
-                        fOffsetX = (invBounds.x * 0.5f) - outvCursor.x;
-                        break;
-                };
-                
-                for(CharacterList::iterator it = inCurrentLine.begin(); it != inCurrentLine.end(); ++it)
-                {
-                    it->vPosition.x += fOffsetX;
-                    outCharacters.push_back(*it);
-                }
-                
-                inCurrentLine.clear();
-            }
-            
-            outvCursor.y -= infLineSpacing;
-            outvCursor.x = 0.0f;
 		}
 		//-----------------------------------------------------
 		/// Update Sprite Data

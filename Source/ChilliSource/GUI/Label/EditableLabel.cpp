@@ -342,8 +342,13 @@ namespace ChilliSource
                     strutf8DisplayString = strSecureText;
                 }
                 
-                inpCanvas->DrawString(strutf8DisplayString, GetTransform(), TextScale, Font, mCachedChars, TextColour,
-                                      vAbsoluteLabelSize, CharacterSpacing, LineSpacing, HorizontalJustification, VerticalJustification, false, TextOverflowBehaviour::k_follow, MaxNumLines);
+                if(mCachedChars.empty())
+                {
+                    f32 fAssetTextScale = GetGlobalTextScale();
+                    mCachedChars = inpCanvas->BuildText(strutf8DisplayString, Font, TextScale * fAssetTextScale, LineSpacing, vAbsoluteLabelSize, MaxNumLines);
+                }
+                
+                inpCanvas->DrawText(mCachedChars, GetTransform(), TextColour, Font->GetTexture());
             }
             //Draw the kids
             for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)

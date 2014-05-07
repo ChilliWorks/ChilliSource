@@ -118,7 +118,7 @@ namespace ChilliSource
             {
                 CleanupGUIStats();
                 
-                const f32 k_bestFitTextSize = 20.0f;
+                const f32 k_bestFitTextSize = 15.0f;
                 const f32 currentLetterHeight = Core::Application::Get()->GetDefaultFont()->GetLineHeight();
                 const f32 textScale = k_bestFitTextSize / currentLetterHeight;
                 

@@ -19,7 +19,7 @@ namespace ChilliSource
 	{
         namespace
         {
-            const Core::UTF8String::Char k_similarSpaceCharacter = 'n';
+            const Core::UTF8String::Char k_similarSpaceCharacter = '-';
             const u32 k_spacesPerTab = 5;
         }
         
@@ -95,10 +95,10 @@ namespace ChilliSource
 				info.m_size.x = frame.m_width;
                 info.m_size.y = frame.m_height;
                 
-				info.m_offset.x = info.m_size.x * 0.5f;
+				info.m_offset.x = frame.m_offsetX;
 				info.m_offset.y = frame.m_offsetY;
                 
-                m_lineHeight = std::max((f32)frame.m_originalHeight, m_lineHeight);
+                m_lineHeight = std::max((f32)frame.m_height, m_lineHeight);
 
                 Core::UTF8String::Char utf8Char = m_characters[i];
 				m_characterInfos.insert(std::make_pair(utf8Char, info));

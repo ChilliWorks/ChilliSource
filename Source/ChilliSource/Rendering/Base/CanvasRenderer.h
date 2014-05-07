@@ -28,14 +28,12 @@ namespace ChilliSource
 		{
 		public:
 
-            struct PlacedCharacter
+            struct DisplayCharacterInfo
             {
-                Core::Rectangle sUVs;
-                Core::Vector2 vSize;
-                Core::Vector2 vPosition;
+                Core::Rectangle m_UVs;
+                Core::Vector2 m_size;
+                Core::Vector2 m_position;
             };
-            
-            typedef std::vector<PlacedCharacter> CharacterList;
             
             //----------------------------------------------------------
             /// Constructor
@@ -85,110 +83,13 @@ namespace ChilliSource
             //-----------------------------------------------------------
 			void DrawBox(const Core::Matrix3x3& inmatTransform, const Core::Vector2 & invSize, const TextureCSPtr & inpTexture, const Core::Rectangle& inUVs,
                          const Core::Colour & insTintColour, AlignmentAnchor ineAlignment = AlignmentAnchor::k_middleCentre);
-            //-----------------------------------------------------------
-            /// Draw String
-            ///
-            /// Build a sprite font and batch it ready for rendering
-            ///
-            /// @param Text
-            /// @param Transform
-            /// @param Font
-            /// @param Built character cache
-            /// @param Colour
-            /// @param Bounds
-            /// @param Letter spacing
-            /// @param Line spacing
-			/// @param Justification (Horizontal)
-			/// @param Justification (Vertical)
-            /// @param Whether or not to flip vertically.
-            /// @param Max num lines (0 = infinite)
-            /// @param Bool pointer. Bool set true if string is clipped, false if not, untouched if string not rebuilt
-            /// @param Bool pointer. Bool set true if invalid character is found.
-            //-----------------------------------------------------------
-			void DrawString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
-							const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
-							GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped = nullptr, bool * outpInvalidCharacterFound = nullptr);
-            //-----------------------------------------------------------
-            /// Calculate String Width
-            ///
-            /// Calculate the length of a string based on the font
-            /// and attributes
-            ///
-            /// @param String
-            /// @param Font
-            /// @param Size
-            /// @param Character spacing
-            ///
-            /// @return String length
-            //------------------------------------------------------------
-            f32 CalculateStringWidth(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infSize, f32 infCharSpacing, bool inbIgnoreLineBreaks);
-            //-----------------------------------------------------------
-            /// Calculate String Height
-            ///
-            /// Calculate the height of a string based on the font, width
-            /// and attributes
-            ///
-            /// @param String
-            /// @param Font
-            /// @param Width
-            /// @param Size
-            /// @param Character spacing
-            /// @param Line spacing
-            /// @param Number of lines
-            ///
-            /// @return String height
-            //------------------------------------------------------------
-            f32 CalculateStringHeight(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines);
-			//-------------------------------------------
-			/// Build String
-			///
-			/// Construct a list of character sprites
-			/// from the given string
-			///
-			/// @param Font
-			/// @param String to display
-			/// @param List of characters to be filled
-            /// @param Text size
-            /// @param Spacing between each letter
-            /// @param Spacing between each line
-            /// @param Wrap bounds
-            /// @param Max number of lines
-			/// @param Justification (Horizontal)
-			/// @param Justification (Vertical)
-            /// @param Whether or not to flip the text
-            /// vertically.
-			//-------------------------------------------
-			static void BuildString(const FontCSPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
-							const Core::Vector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineJustification, GUI::TextJustification ineVerticalJustification,
-							bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour,  bool * outpClipped = nullptr, bool * outpInvalidCharacterFound = nullptr);
-			//----------------------------------------------------
-			/// Build Character
-			///
-			/// Build a sprite from the given character
-            /// @param Font
-			/// @param Character
-            /// @param Next Character (used for kerning)
-			/// @param Cursor pos
-            /// @param Text scale
-            /// @param Character spacing
-			/// @param The width of the new character
-			/// @param List of characters that we can add too
-			//----------------------------------------------------
-			static void BuildCharacter(const FontCSPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
-                                                   const Core::Vector2& invCursor, f32 infTextScale, f32 infCharSpacing,
-                                                   f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound = nullptr);
-            //----------------------------------------------------
-            /// Wrap
-            ///
-            /// @param Text justification (Horizontal)
-            /// @param Y - offset
-            /// @param Bounds 
-            /// @param Character list with characters in this line
-            /// @param Out: Cursor Pos
-            /// @param Out: Character list
-            //----------------------------------------------------
-            static void Wrap(GUI::TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::Vector2& invBounds, CharacterList &inCurrentLine,
-					  Core::Vector2& outvCursor, CharacterList &outCharacters);
+            //----------------------------------------------------------------------------
+            //----------------------------------------------------------------------------
+            std::vector<DisplayCharacterInfo> BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing, const Core::Vector2& in_bounds, u32 in_numLines) const;
+            //----------------------------------------------------------------------------
+            //----------------------------------------------------------------------------
+			void DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3x3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture);
+
 			
 		private:
 			
