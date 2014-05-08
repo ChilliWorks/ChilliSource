@@ -15,8 +15,8 @@
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
-#include <ChilliSource/Core/Image/ImageProvider.h>
 #include <ChilliSource/Core/Image/CSImageProvider.h>
+#include <ChilliSource/Core/Image/PNGImageProvider.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Localisation/LocalisedTextProvider.h>
@@ -373,15 +373,13 @@ namespace ChilliSource
             m_resourcePool = CreateSystem<ResourcePool>();
             CreateSystem<AppDataStore>();
             CreateSystem<CSImageProvider>();
+            CreateSystem<PNGImageProvider>();
             CreateSystem<DialogueBoxSystem>();
             CreateSystem<LocalisedTextProvider>();
             
 #ifdef CS_ENABLE_DEBUGSTATS
             m_debugStats = CreateSystem<Debugging::DebugStats>();
 #endif
-            
-            //TODO: Change this to a PNG image provider.
-            CreateSystem<ImageProvider>();
 
             //Input
             CreateSystem<Input::Keyboard>();

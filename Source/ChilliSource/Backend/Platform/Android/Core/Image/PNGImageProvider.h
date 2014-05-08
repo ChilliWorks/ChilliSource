@@ -1,11 +1,11 @@
 //
-//  ImageProvider.h
+//  PNGImageProvider.h
 //  Chilli Source
-//  Created by S McGaw on 01/10/2010.
+//  Created by I Copland on 05/02/2011.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2011 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,31 +26,30 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_IMAGE_IMAGEPROVIDER_H_
-#define _CHILLISOURCE_BACKEND_PLATFORM_IOS_IMAGE_IMAGEPROVIDER_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_IMAGE_PNGIMAGEPROVIDER_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_IMAGE_PNGIMAGEPROVIDER_H_
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Core/Image/ImageProvider.h>
+#include <ChilliSource/Core/Image/PNGImageProvider.h>
+#include <ChilliSource/Core/Image/Image.h>
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace Android
 	{
-        //----------------------------------------------------------------
-        /// The iOS backend for the image resource provider. This provides
-        /// PNG, JPEG and PVR images.
-        ///
-        /// @author S McGaw
-        //----------------------------------------------------------------
-		class ImageProvider final : public Core::ImageProvider
+		//--------------------------------------------------------------
+		/// The Android backend for the Image Provider. This loads
+		/// PNG images from file.
+		///
+		/// @author Ian Copland
+		//--------------------------------------------------------------
+		class PNGImageProvider final : public Core::PNGImageProvider
 		{
 		public:
-            CS_DECLARE_NAMEDTYPE(ImageProvider);
+			CS_DECLARE_NAMEDTYPE(PNGImageProvider);
 			//----------------------------------------------------------
 			/// Is the object of the given interface type
             ///
-            /// @author S McGaw
+            /// @author I Copland
             ///
 			/// @param Interface type to query
             ///
@@ -58,7 +57,7 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
-            /// @author S Downie
+            /// @author I Copland
             ///
             /// @return The resource type this provider can load
             //-------------------------------------------------------
@@ -67,7 +66,7 @@ namespace ChilliSource
 			/// Whether or not the provider can create resources from
             /// files with the given extension.
             ///
-			/// @author S McGaw
+			/// @author I Copland
             ///
 			/// @param Extension to compare against
             ///
@@ -79,7 +78,7 @@ namespace ChilliSource
 			/// Creates a new image resource from file. Check the
             /// resource load state for success or failure
 			///
-            /// @author S McGaw
+            /// @author I Copland
             ///
             /// @param The storage location to load from
 			/// @param File path to resource
@@ -99,26 +98,14 @@ namespace ChilliSource
             /// @param [Out] The output resource.
             //----------------------------------------------------
 			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
-        private:
-            
-            friend Core::ImageProviderUPtr Core::ImageProvider::Create();
+		private:
+            friend Core::PNGImageProviderUPtr Core::PNGImageProvider::Create();
             //-----------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
-            /// @author S Downie
+            /// @author I Copland
             //-----------------------------------------------------------
-            ImageProvider() = default;
-            //-----------------------------------------------------------
-            /// Performs the heavy lifting for the 2 create methods
-            ///
-            /// @author S Downie
-            ///
-            /// @param The storage location.
-            /// @param The filepath.
-            /// @param Completion delegate
-            /// @param [Out] The output resource
-            //-----------------------------------------------------------
-            void LoadImage(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
+            PNGImageProvider() = default;
 		};
 	}
 }

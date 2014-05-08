@@ -1,5 +1,5 @@
 //
-//  ImageProvider.cpp
+//  PNGImageProvider.cpp
 //  Chilli Source
 //  Created by I Copland on 05/02/2011.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Backend/Platform/Android/Core/Image/ImageProvider.h>
+#include <ChilliSource/Backend/Platform/Android/Core/Image/PNGImageProvider.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/Image/PngImage.h>
 #include <ChilliSource/Core/Base/Application.h>
@@ -94,34 +94,34 @@ namespace ChilliSource
 			}
 		}
 
-		CS_DEFINE_NAMEDTYPE(ImageProvider);
+		CS_DEFINE_NAMEDTYPE(PNGImageProvider);
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool ImageProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool PNGImageProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == Core::ResourceProvider::InterfaceID || in_interfaceId == Core::ImageProvider::InterfaceID || in_interfaceId == ImageProvider::InterfaceID);
+			return (in_interfaceId == Core::ResourceProvider::InterfaceID || in_interfaceId == Core::PNGImageProvider::InterfaceID || in_interfaceId == PNGImageProvider::InterfaceID);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-        Core::InterfaceIDType ImageProvider::GetResourceType() const
+        Core::InterfaceIDType PNGImageProvider::GetResourceType() const
         {
             return Core::Image::InterfaceID;
         }
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool ImageProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
+		bool PNGImageProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
 		{
 			return (in_extension == k_pngExtension);
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void ImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::ResourceSPtr& out_resource)
+		void PNGImageProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::ResourceSPtr& out_resource)
 		{
 			CreatePNGImageFromFile(in_storageLocation, in_filepath, nullptr, out_resource);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void ImageProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+		void PNGImageProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
             auto task = std::bind(CreatePNGImageFromFile, in_storageLocation, in_filePath, in_delegate, out_resource);
             Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
