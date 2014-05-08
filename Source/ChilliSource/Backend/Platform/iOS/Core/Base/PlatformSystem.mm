@@ -33,6 +33,7 @@
 #import <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #import <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/Image/PVRImageProvider.h>
 
 namespace ChilliSource 
 {
@@ -49,6 +50,7 @@ namespace ChilliSource
         //-------------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
 		{
+            in_application->CreateSystem<Core::PVRImageProvider>();
             in_application->CreateSystem<OpenGL::GLSLShaderProvider>();
             in_application->CreateSystem<OpenGL::TextureUnitSystem>();
 		}
