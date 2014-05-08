@@ -43,7 +43,6 @@
 #endif
 
 #include <algorithm>
-#include <limits>
 
 namespace ChilliSource
 {
