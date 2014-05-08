@@ -356,7 +356,7 @@ namespace ChilliSource
 			const Core::Colour& GetColourWithOpacity() const;
 		private:
             
-            Core::ConnectionUPtr m_transformChangedConnection;
+            Core::EventConnectionUPtr m_transformChangedConnection;
             
 			SpriteData mSpriteData;
             

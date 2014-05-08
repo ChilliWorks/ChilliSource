@@ -122,12 +122,12 @@ namespace ChilliSource
             
             bool mbListeningForTouches;
 
-            Core::ConnectionUPtr m_screenOrientationChangedConnection;
-            Core::ConnectionUPtr m_screenResizedConnection;
+            Core::EventConnectionUPtr m_screenOrientationChangedConnection;
+            Core::EventConnectionUPtr m_screenResizedConnection;
             
-            Core::ConnectionUPtr m_pointerDownConnection;
-            Core::ConnectionUPtr m_pointerMovedConnection;
-            Core::ConnectionUPtr m_pointerUpConnection;
+            Core::EventConnectionUPtr m_pointerDownConnection;
+            Core::EventConnectionUPtr m_pointerMovedConnection;
+            Core::EventConnectionUPtr m_pointerUpConnection;
         };
     }
 }

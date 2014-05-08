@@ -48,7 +48,7 @@ namespace ChilliSource
             ///
             /// @param Connection to close
             //-------------------------------------------------------------
-            virtual void CloseConnection(Connection* in_connection) = 0;
+            virtual void CloseConnection(EventConnection* in_connection) = 0;
         };
     }
 }

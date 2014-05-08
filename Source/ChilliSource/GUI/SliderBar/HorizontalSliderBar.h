@@ -143,7 +143,7 @@ namespace ChilliSource
 			ImageViewSPtr mpBackgroundImage;
 			ImageViewSPtr mpSliderImage;
             
-            Core::ConnectionUPtr m_movedWithinConnection;
+            Core::EventConnectionUPtr m_movedWithinConnection;
             
 			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSliderSize, SetSliderSize, GetSliderSize);
 

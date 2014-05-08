@@ -217,8 +217,8 @@ namespace ChilliSource
             
             Core::Colour m_backgroundColour;
             
-            Core::ConnectionUPtr m_moviePlayerLoadStateChangedConnection;
-            Core::ConnectionUPtr m_moviePlayerPlaybackFinishedConnection;
+            Core::EventConnectionUPtr m_moviePlayerLoadStateChangedConnection;
+            Core::EventConnectionUPtr m_moviePlayerPlaybackFinishedConnection;
 
             VideoCompleteDelegate m_completionDelegate;
         };

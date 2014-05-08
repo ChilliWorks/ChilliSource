@@ -232,9 +232,9 @@ namespace ChilliSource
             std::deque<NotificationContainer> m_notificationQueue;
             Event<RecievedDelegate> m_recievedEvent;
             Event<DismissedDelegate> m_dismissedEvent;
-            ConnectionUPtr m_appRecievedConnection;
-            ConnectionUPtr m_localRecievedConnection;
-            ConnectionUPtr m_remoteRecievedConnection;
+            EventConnectionUPtr m_appRecievedConnection;
+            EventConnectionUPtr m_localRecievedConnection;
+            EventConnectionUPtr m_remoteRecievedConnection;
             f32 m_timeSinceNotification;
         };
     }

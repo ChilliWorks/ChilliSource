@@ -37,6 +37,9 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(PlatformSystem);
         CS_FORWARDDECLARE_CLASS(QueryableInterface);
         CS_FORWARDDECLARE_CLASS(Screen);
+        template <typename TReturnType, typename... TArgTypes> class ConnectableDelegate;
+        template <typename TReturnType, typename... TArgTypes> class DelegateConnection;
+        template <typename TReturnType, typename... TArgTypes> using DelegateConnectionUPtr = std::unique_ptr<DelegateConnection<TReturnType, TArgTypes...> >;
         //---------------------------------------------------------
         /// Container
         //---------------------------------------------------------
@@ -65,7 +68,7 @@ namespace ChilliSource
         template <typename TDelegateType> class Event;
         template <typename TDelegateType> class IConnectableEvent;
         CS_FORWARDDECLARE_CLASS(IDisconnectableEvent);
-        CS_FORWARDDECLARE_CLASS(Connection);
+        CS_FORWARDDECLARE_CLASS(EventConnection);
         //---------------------------------------------------------
         /// File
         //---------------------------------------------------------
@@ -148,7 +151,6 @@ namespace ChilliSource
         /// Threading
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(WaitCondition);
-        template <typename... TArgTypes> class Task;
         CS_FORWARDDECLARE_CLASS(TaskScheduler);
         CS_FORWARDDECLARE_CLASS(ThreadPool);
         //---------------------------------------------------------

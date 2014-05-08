@@ -304,10 +304,10 @@ namespace ChilliSource
             ImageViewSPtr mpBackgroundImage;
  
             
-            Core::ConnectionUPtr m_pressedInsideConnection;
-            Core::ConnectionUPtr m_releasedInsideConnection;
-            Core::ConnectionUPtr m_movedWithinConnection;
-            Core::ConnectionUPtr m_movedOutsideConnection;
+            Core::EventConnectionUPtr m_pressedInsideConnection;
+            Core::EventConnectionUPtr m_releasedInsideConnection;
+            Core::EventConnectionUPtr m_movedWithinConnection;
+            Core::EventConnectionUPtr m_movedOutsideConnection;
 			
             Core::Rectangle msOnUVs;
             Core::Rectangle msOffUVs;

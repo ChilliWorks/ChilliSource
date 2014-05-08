@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/Event/Connection.h>
+#include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/Event/IConnectableEvent.h>
 #include <ChilliSource/Core/Event/IDisconnectableEvent.h>
 
@@ -67,9 +67,9 @@ namespace ChilliSource
             ///
             /// @return Scoped connection
             //-------------------------------------------------------------
-            ConnectionUPtr OpenConnection(const TDelegateType& in_delegate) override
+            EventConnectionUPtr OpenConnection(const TDelegateType& in_delegate) override
             {
-                ConnectionUPtr connection(new Connection());
+                EventConnectionUPtr connection(new EventConnection());
                 connection->SetOwningEvent(this);
             
                 ConnectionDesc desc;
@@ -87,7 +87,7 @@ namespace ChilliSource
             ///
             /// @param Connection to close
             //-------------------------------------------------------------
-            void CloseConnection(Connection* in_connection) override
+            void CloseConnection(EventConnection* in_connection) override
             {
                 for(u32 i=0; i<m_connections.size(); ++i)
                 {
@@ -178,7 +178,7 @@ namespace ChilliSource
             struct ConnectionDesc
             {
                 TDelegateType m_delegate;
-                Connection* m_connection = nullptr;
+                EventConnection* m_connection = nullptr;
             };
     
             typedef std::vector<ConnectionDesc> ConnectionList;

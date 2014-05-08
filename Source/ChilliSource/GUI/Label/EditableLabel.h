@@ -246,9 +246,9 @@ namespace ChilliSource
 			Core::Event<Input::Keyboard::KeyboardEventDelegate> m_textInputDisabledEvent;
 			Core::Event<TextChangeEventDelegate> m_textInputReceivedEvent;
             
-            Core::ConnectionUPtr m_keyboardShownConnection;
-            Core::ConnectionUPtr m_keyboardHiddenConnection;
-            Core::ConnectionUPtr m_keyboardTextChangedConnection;
+            Core::EventConnectionUPtr m_keyboardShownConnection;
+            Core::EventConnectionUPtr m_keyboardHiddenConnection;
+            Core::EventConnectionUPtr m_keyboardTextChangedConnection;
 
 			f32 mfTimeToShow;
 			bool mbShowKeyboard;
