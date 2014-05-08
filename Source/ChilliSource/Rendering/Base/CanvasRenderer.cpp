@@ -70,28 +70,6 @@ namespace ChilliSource
                 return 0.0f;
             }
             //----------------------------------------------------------------------------
-            /// Calculate the width of the text in text space. This does not take
-            /// any breaks etc into account.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Text
-            /// @param Font
-            //----------------------------------------------------------------------------
-            f32 CalculateTextWidth(const Core::UTF8String& in_text, const FontCSPtr& in_font)
-            {
-                f32 totalWidth = 0.0f;
-                
-                Core::UTF8String::iterator it = (Core::UTF8String::iterator)in_text.begin();
-                while(it < in_text.end())
-                {
-                    auto character = in_text.next(it);
-                    totalWidth += GetCharacterWidth(character, in_font);
-                }
-                
-                return totalWidth;
-            }
-            //----------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @param Character
@@ -108,21 +86,26 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Text
-            /// @param Iterator pointing to current character
+            /// @param Iterator pointing to start
             /// @param Font
             //----------------------------------------------------------------------------
-            f32 CalculateDistanceToNextBreak(const Core::UTF8String& in_text, Core::UTF8String::iterator in_currentItPos, const FontCSPtr& in_font)
+            f32 CalculateDistanceToNextBreak(const Core::UTF8String& in_text, Core::UTF8String::iterator in_itStart, const FontCSPtr& in_font)
             {
-                Core::UTF8String textToBreak;
-                Core::UTF8String::iterator itToBreak = in_currentItPos;
-                Core::UTF8String::Char nextCharacter = in_text.next(itToBreak);
-                while(itToBreak < in_text.end() && IsBreakableCharacter(nextCharacter) == false)
+                f32 totalWidth = 0.0f;
+                
+                while(in_itStart < in_text.end())
                 {
-                    textToBreak.appendChar(nextCharacter);
-                    nextCharacter = in_text.next(itToBreak);
+                    auto nextCharacter = in_text.next(in_itStart);
+                    
+                    if(IsBreakableCharacter(nextCharacter) == true)
+                    {
+                        break;
+                    }
+                    
+                    totalWidth += GetCharacterWidth(nextCharacter, in_font);
                 }
                 
-                return CalculateTextWidth(textToBreak, in_font);
+                return totalWidth;
             }
             //----------------------------------------------------------------------------
             /// Split the given text into lines based on any '\n' characters. The newline
@@ -199,8 +182,17 @@ namespace ChilliSource
                         }
                     }
                     
-                    //If text has no characters to break on then we need break on the previous character mid "word".
-                    if(currentLineWidth >= maxLineWidth)
+                    //If text has no characters to break on then we need break anyway should
+                    //we exceed the bounds.
+                    f32 nextCharacterWidth = 0.0f;
+                    if(it < in_text.end())
+                    {
+                        auto itNext = it;
+                        auto nextCharacter = in_text.next(itNext);
+                        nextCharacterWidth = GetCharacterWidth(nextCharacter, in_font) * in_textScale;
+                    }
+                    
+                    if((currentLineWidth + nextCharacterWidth) >= maxLineWidth)
                     {
                         out_lines.push_back(line);
                         line.clear();
@@ -534,11 +526,13 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        std::vector<CanvasRenderer::DisplayCharacterInfo> CanvasRenderer::BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
-                                                                                    const Core::Vector2& in_bounds, u32 in_numLines, GUI::TextJustification in_horizontal, GUI::TextJustification in_vertical) const
+        CanvasRenderer::BuiltText CanvasRenderer::BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
+                                                            const Core::Vector2& in_bounds, u32 in_numLines, GUI::TextJustification in_horizontal, GUI::TextJustification in_vertical) const
         {
-            std::vector<CanvasRenderer::DisplayCharacterInfo> result;
-            result.reserve(in_text.size());
+            BuiltText result;
+            result.m_width = 0.0f;
+            result.m_height = 0.0f;
+            result.m_characters.reserve(in_text.size());
             
             //NOTE: | denotes the bounds of the box
             //- |The quick brown fox| jumped over\nthe ferocious honey badger
@@ -575,7 +569,7 @@ namespace ChilliSource
             
             for(u32 lineIdx=0; lineIdx<numLines; ++lineIdx)
             {
-                u32 lineStartIdx = result.size();
+                u32 lineStartIdx = result.m_characters.size();
                 u32 numCharacters = linesOnBounds[lineIdx].size();
                 for(u32 charIdx=0; charIdx<numCharacters; ++charIdx)
                 {
@@ -587,18 +581,21 @@ namespace ChilliSource
                     if(builtCharacter.m_size.y > 0.0f)
                     {
                         //No point rendering whitespaces
-                        result.push_back(builtCharacter);
+                        result.m_characters.push_back(builtCharacter);
                     }
                 }
                 
                 f32 lineWidth = cursorX - cursorXReturnPos;
-                ApplyHorizontalTextJustifications(in_horizontal, in_bounds.x, lineStartIdx, result.size() - 1, lineWidth, result);
+                ApplyHorizontalTextJustifications(in_horizontal, in_bounds.x, lineStartIdx, result.m_characters.size() - 1, lineWidth, result.m_characters);
+                
+                result.m_width = std::max(lineWidth, result.m_width);
                 
                 cursorX = cursorXReturnPos;
                 cursorY -= lineHeight;
             }
             
-            ApplyVerticalTextJustifications(in_vertical, in_bounds.y, numLines * lineHeight, result);
+            result.m_height = numLines * lineHeight;
+            ApplyVerticalTextJustifications(in_vertical, in_bounds.y, result.m_height, result.m_characters);
             
             return result;
         }
@@ -627,48 +624,6 @@ namespace ChilliSource
             Core::Application::Get()->GetDebugStats()->AddToEvent("GUI", 1);
 #endif
 		}
-        //----------------------------------------------------------------------------
-        //----------------------------------------------------------------------------
-        f32 CanvasRenderer::CalculateTextWidth(const std::vector<DisplayCharacterInfo>& in_characters) const
-        {
-            f32 smallestXPos = std::numeric_limits<f32>::max();
-            f32 largestXPos = std::numeric_limits<f32>::lowest();
-            f32 sizeOffset = 0.0f;
-            
-            for(const auto& character : in_characters)
-            {
-                smallestXPos = std::min(smallestXPos, character.m_position.x);
-                
-                if(largestXPos < character.m_position.x)
-                {
-                    largestXPos = character.m_position.x;
-                    sizeOffset = std::max(character.m_size.x, sizeOffset);
-                }
-            }
-            
-            return largestXPos + sizeOffset - smallestXPos;
-        }
-        //----------------------------------------------------------------------------
-        //----------------------------------------------------------------------------
-        f32 CanvasRenderer::CalculateTextHeight(const std::vector<DisplayCharacterInfo>& in_characters) const
-        {
-            f32 smallestYPos = std::numeric_limits<f32>::max();
-            f32 largestYPos = std::numeric_limits<f32>::lowest();
-            f32 sizeOffset = 0.0f;
-            
-            for(const auto& character : in_characters)
-            {
-                smallestYPos = std::min(smallestYPos, character.m_position.y);
-                
-                if(largestYPos < character.m_position.y)
-                {
-                    largestYPos = character.m_position.y;
-                    sizeOffset = std::max(character.m_size.y, sizeOffset);
-                }
-            }
-            
-            return largestYPos + sizeOffset - smallestYPos;
-        }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
         void CanvasRenderer::OnDestroy()

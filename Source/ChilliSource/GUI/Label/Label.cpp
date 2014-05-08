@@ -629,7 +629,7 @@ namespace ChilliSource
                 if(mCachedChars.empty())
                 {
                     f32 fAssetTextScale = GetGlobalTextScale();
-                    mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * fAssetTextScale, LineSpacing, vAbsoluteLabelSize, MaxNumLines, HorizontalJustification, VerticalJustification);
+                    mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * fAssetTextScale, LineSpacing, vAbsoluteLabelSize, MaxNumLines, HorizontalJustification, VerticalJustification).m_characters;
                 }
                 
                 Core::Colour sDrawColour = TextColour * GetAbsoluteColour();
@@ -666,14 +666,14 @@ namespace ChilliSource
                 Core::Vector2 vAbsMinSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMinSize.GetRelative()) + UnifiedMinSize.GetAbsolute() : UnifiedMinSize.GetAbsolute();
                 
                 //Build the text for the biggest possible bounds
-                mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, vAbsMaxSize, MaxNumLines, HorizontalJustification, VerticalJustification);
+                Rendering::CanvasRenderer::BuiltText builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, vAbsMaxSize, MaxNumLines, HorizontalJustification, VerticalJustification);
                 
                 f32 fNewRelWidth = UnifiedMaxSize.vRelative.x;
                 f32 fNewRelHeight = 0.0f;
                 f32 fNewAbsWidth = UnifiedMaxSize.vAbsolute.x;
                 f32 fNewAbsHeight = 0.0f;
-                f32 fTextWidth = inpCanvas->CalculateTextWidth(mCachedChars);
-                f32 fTextHeight = inpCanvas->CalculateTextHeight(mCachedChars);
+                f32 fTextWidth = builtText.m_width;// inpCanvas->CalculateTextWidth(mCachedChars);
+                f32 fTextHeight = builtText.m_height;// inpCanvas->CalculateTextHeight(mCachedChars);
 
                 //If the size of the text would actually fit inside the min bounds then clamp to that
                 if(fTextWidth < vAbsMinSize.x)
@@ -683,8 +683,8 @@ namespace ChilliSource
                     
                     //Now that we have calculated the width of the label we
                     //can use that to work out the height
-                    mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, vAbsMinSize, MaxNumLines, HorizontalJustification, VerticalJustification);
-                    fTextHeight = inpCanvas->CalculateTextHeight(mCachedChars);
+                    builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, vAbsMinSize, MaxNumLines, HorizontalJustification, VerticalJustification);
+                    fTextHeight = builtText.m_height;//fTextHeight = inpCanvas->CalculateTextHeight(mCachedChars);
                 }
                 //If the size of text is smaller than the max bounds then clamp to that
                 else if(fTextWidth < vAbsMaxSize.x)
@@ -694,8 +694,8 @@ namespace ChilliSource
                     
                     //Now that we have calculated the width of the label we
                     //can use that to work out the height
-                    mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, Core::Vector2(fNewAbsWidth, vAbsMaxSize.y), MaxNumLines, HorizontalJustification, VerticalJustification);
-                    fTextHeight = inpCanvas->CalculateTextHeight(mCachedChars);
+                    builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, Core::Vector2(fNewAbsWidth, vAbsMaxSize.y), MaxNumLines, HorizontalJustification, VerticalJustification);
+                    fTextHeight = builtText.m_height;//fTextHeight = inpCanvas->CalculateTextHeight(mCachedChars);
                 }
                 
                 if(fTextHeight > vAbsMaxSize.y)
@@ -712,6 +712,8 @@ namespace ChilliSource
                 {
                     fNewAbsHeight = fTextHeight;
                 }
+                
+                mCachedChars = std::move(builtText.m_characters);
                 
                 //Resize the label
                 SetSize(fNewRelWidth, fNewRelHeight, fNewAbsWidth, fNewAbsHeight);

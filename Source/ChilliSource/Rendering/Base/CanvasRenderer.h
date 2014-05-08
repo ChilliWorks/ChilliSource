@@ -64,6 +64,19 @@ namespace ChilliSource
                 Core::Vector2 m_position;
             };
             //----------------------------------------------------------------------------
+            /// Holds the return information for building text including all the characters
+            /// and the total width and height
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------
+            struct BuiltText
+            {
+                std::vector<DisplayCharacterInfo> m_characters;
+                
+                f32 m_width;
+                f32 m_height;
+            };
+            //----------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @param Interface ID
@@ -125,10 +138,10 @@ namespace ChilliSource
             /// @param Horizontal justification
             /// @param Vertical justufication
             ///
-            /// @return List of display character infos in text space.
+            /// @return Built text struct containing all the character infos
             //----------------------------------------------------------------------------
-            std::vector<DisplayCharacterInfo> BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
-                                                        const Core::Vector2& in_bounds, u32 in_numLines, GUI::TextJustification in_horizontal, GUI::TextJustification in_vertical) const;
+            BuiltText BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
+                                const Core::Vector2& in_bounds, u32 in_numLines, GUI::TextJustification in_horizontal, GUI::TextJustification in_vertical) const;
             //----------------------------------------------------------------------------
             /// Build the sprites for each given character and render them to screen.
             ///
@@ -138,25 +151,6 @@ namespace ChilliSource
             /// @param Texture
             //----------------------------------------------------------------------------
 			void DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3x3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture);
-            //----------------------------------------------------------------------------
-            /// Calculate the maximum width of the given text taking into account
-            /// wrapping, etc.
-            ///
-            /// @param Characters in text space
-            ///
-            /// @return Width in text space
-            //----------------------------------------------------------------------------
-            f32 CalculateTextWidth(const std::vector<DisplayCharacterInfo>& in_characters) const;
-            //----------------------------------------------------------------------------
-            /// Calculate the maximum height of the given text taking into account
-            /// wrapping, etc.
-            ///
-            /// @param Characters in text space
-            ///
-            /// @return Height in text space
-            //----------------------------------------------------------------------------
-            f32 CalculateTextHeight(const std::vector<DisplayCharacterInfo>& in_characters) const;
-
 			
 		private:
 			
