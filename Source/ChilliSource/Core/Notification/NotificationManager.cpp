@@ -9,7 +9,7 @@
 #include <ChilliSource/Core/Notification/NotificationManager.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Notification/AppNotificationSystem.h>
 #include <ChilliSource/Core/Notification/LocalNotificationSystem.h>
 #include <ChilliSource/Core/Notification/RemoteNotificationSystem.h>

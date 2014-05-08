@@ -13,7 +13,7 @@
 #include <ChilliSource/Input/Gestures/Gestures.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
 #include <cmath>
 

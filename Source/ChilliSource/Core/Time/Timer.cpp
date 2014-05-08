@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Core/Time/Timer.h>
 
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 
 namespace ChilliSource

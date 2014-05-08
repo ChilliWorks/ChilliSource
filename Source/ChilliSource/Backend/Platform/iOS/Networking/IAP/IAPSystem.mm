@@ -9,7 +9,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 

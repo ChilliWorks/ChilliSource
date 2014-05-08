@@ -36,8 +36,8 @@
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoOverlayView.h>
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
 #import <ChilliSource/Core/Base/Application.h>
-#import <ChilliSource/Core/Base/MakeDelegate.h>
 #import <ChilliSource/Core/Base/Screen.h>
+#import <ChilliSource/Core/Delegate/MakeDelegate.h>
 #import <ChilliSource/Core/Math/MathUtils.h>
 #import <ChilliSource/Core/String/StringUtils.h>
 

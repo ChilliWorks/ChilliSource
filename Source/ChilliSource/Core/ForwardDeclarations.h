@@ -37,9 +37,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(PlatformSystem);
         CS_FORWARDDECLARE_CLASS(QueryableInterface);
         CS_FORWARDDECLARE_CLASS(Screen);
-        template <typename TReturnType, typename... TArgTypes> class ConnectableDelegate;
-        template <typename TReturnType, typename... TArgTypes> class DelegateConnection;
-        template <typename TReturnType, typename... TArgTypes> using DelegateConnectionUPtr = std::unique_ptr<DelegateConnection<TReturnType, TArgTypes...> >;
         //---------------------------------------------------------
         /// Container
         //---------------------------------------------------------
@@ -52,6 +49,12 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(HMAC_SHA1);
         CS_FORWARDDECLARE_CLASS(SHA1);
+        //---------------------------------------------------------
+        /// Delegate
+        //---------------------------------------------------------
+        template <typename TReturnType, typename... TArgTypes> class ConnectableDelegate;
+        template <typename TReturnType, typename... TArgTypes> class DelegateConnection;
+        template <typename TReturnType, typename... TArgTypes> using DelegateConnectionUPtr = std::unique_ptr<DelegateConnection<TReturnType, TArgTypes...> >;
         //---------------------------------------------------------
         /// Dialogue
         //---------------------------------------------------------

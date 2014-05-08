@@ -29,7 +29,7 @@
 #include <ChilliSource/Rendering/Base/Renderer.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 #include <ChilliSource/GUI/Base/Window.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>

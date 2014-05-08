@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
 
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ConeParticleEmitter.h>
 #include <ChilliSource/Rendering/Particles/Emitters/PointParticleEmitter.h>
 #include <ChilliSource/Rendering/Particles/Emitters/RingParticleEmitter.h>

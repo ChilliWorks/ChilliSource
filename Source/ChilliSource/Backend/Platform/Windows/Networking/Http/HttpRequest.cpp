@@ -10,7 +10,7 @@
 
 #include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 

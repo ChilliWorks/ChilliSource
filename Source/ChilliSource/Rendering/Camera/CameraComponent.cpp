@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
 namespace ChilliSource

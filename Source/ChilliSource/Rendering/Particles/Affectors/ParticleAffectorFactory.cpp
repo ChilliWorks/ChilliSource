@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Rendering/Particles/Affectors/ParticleAffectorFactory.h>
 
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Rendering/Particles/Affectors/ColourChangerParticleAffector.h>
 #include <ChilliSource/Rendering/Particles/Affectors/LinearForceParticleAffector.h>
 #include <ChilliSource/Rendering/Particles/Affectors/ScalerParticleAffector.h>
