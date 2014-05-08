@@ -113,7 +113,10 @@ namespace ChilliSource
                 
                 for(auto connection : m_connections)
                 {
-                    connection->Close();
+                    if(connection != nullptr)
+                    {
+                        connection->CloseNoNotify();
+                    }
                 }
                 
                 m_connections.clear();
@@ -131,7 +134,7 @@ namespace ChilliSource
             
         private:
             
-            friend TReturnType DelegateConnection<TReturnType, TArgTypes...>::Execute(TArgTypes...);
+            friend class DelegateConnection<TReturnType, TArgTypes...>;
             //------------------------------------------------------------------
             /// Executes the delegate if the connection is open
             ///
@@ -144,6 +147,27 @@ namespace ChilliSource
             TReturnType Execute(TArgTypes... in_args)
             {
                 return m_delegate(in_args...);
+            }
+            //------------------------------------------------------------------
+            /// Flags the connection as no longer open. This is called by
+            /// the connection when it wishes to close
+            ///
+            /// @author S Downie
+            ///
+            /// @param Connection
+            //------------------------------------------------------------------
+            void Close(DelegateConnection<TReturnType, TArgTypes...>* in_connection)
+            {
+                std::unique_lock<std::mutex> lock(m_mutex);
+                
+                for(u32 i=0; i<m_connections.size(); ++i)
+                {
+                    if(m_connections[i] == in_connection)
+                    {
+                        m_connections[i] = nullptr;
+                        break;
+                    }
+                }
             }
             
         private:

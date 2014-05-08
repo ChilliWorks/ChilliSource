@@ -81,7 +81,11 @@ namespace ChilliSource
             void Close()
             {
                 std::unique_lock<std::mutex> lock(m_mutex);
-                m_owningDelegate = nullptr;
+                if(m_owningDelegate != nullptr)
+                {
+                    m_owningDelegate->Close(this);
+                    m_owningDelegate = nullptr;
+                }
             }
             //------------------------------------------------------------------
             /// Executes the delegate if the connection is open
@@ -108,6 +112,21 @@ namespace ChilliSource
             ~DelegateConnection()
             {
                 Close();
+            }
+            
+        private:
+            
+            friend class ConnectableDelegate<TReturnType, TArgTypes...>;
+            //------------------------------------------------------------------
+            /// Called by the delegate when it wishes to close the connection
+            /// without being told by the connection itself
+            ///
+            /// @author S Downie
+            //------------------------------------------------------------------
+            void CloseNoNotify()
+            {
+                std::unique_lock<std::mutex> lock(m_mutex);
+                m_owningDelegate = nullptr;
             }
             
         private:
