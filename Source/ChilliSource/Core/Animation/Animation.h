@@ -82,6 +82,15 @@ namespace ChilliSource
 
 		template <typename TValueType> using LinearAnimation = Animation<LinearInterpolate<TValueType>>;
 
+		template <typename TValueType>
+		LinearAnimation<TValueType> MakeLinearAnim(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_delay = 0.0f)
+		{
+			LinearInterpolate<TValueType> func;
+			func.m_startValue = in_start;
+			func.m_endValue = in_end;
+			return LinearAnimation<TValueType>(func, in_duration, in_delay);
+		}
+
 		//-----------------------------------------------------------------------
 		/// Generic animation class that combines value types and an interpolation
 		/// function to animate values over time.
