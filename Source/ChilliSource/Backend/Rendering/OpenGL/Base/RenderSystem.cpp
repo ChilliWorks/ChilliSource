@@ -557,8 +557,6 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void RenderSystem::EndFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
-            //glViewport(0, 0, mudwViewWidth, mudwViewHeight);
-
 #ifdef CS_TARGETPLATFORM_WINDOWS
 			Windows::GLFWManager::Get()->SwapBuffers();
 #endif
