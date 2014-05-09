@@ -269,6 +269,16 @@ namespace ChilliSource
             
             //Tell the state manager to update the active state
             OnUpdate(in_deltaTime);
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Application::Render()
+        {
+            if(m_isSuspending)
+            {
+                // Updating after told to suspend so early out
+                return;
+            }
             
             //Render the scene
             m_renderer->RenderToScreen(m_stateManager->GetActiveState()->GetScene());
@@ -276,7 +286,7 @@ namespace ChilliSource
 #ifdef CS_ENABLE_DEBUGSTATS
             m_debugStats->Clear();
 #endif
-		}
+        }
         //----------------------------------------------------
         //----------------------------------------------------
 		void Application::ApplicationMemoryWarning()

@@ -28,7 +28,6 @@
 
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayer.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>

@@ -76,7 +76,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
 			//------------------------------------------------------
-			void Run() override;
+			void Run() override{}
 			//------------------------------------------------------
 			/// Starts or stops the platforms update loop.
 			///

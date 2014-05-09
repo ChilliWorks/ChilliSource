@@ -29,10 +29,12 @@
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 
 #import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
 #import <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #import <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
+
+#import <mach/mach.h>
+#import <mach/mach_time.h>
 
 namespace ChilliSource 
 {
@@ -54,27 +56,21 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void PlatformSystem::Run()
-        {
-            iOSInit();
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
         void PlatformSystem::SetMaxFPS(u32 in_fps)
         {
-            iOSSetMaxFPS(in_fps);
+            //TODO:
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
 		void PlatformSystem::SetUpdaterActive(bool in_isActive)
 		{
-			iOSSetUpdaterActive(in_isActive);
+			//TODO:
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
         void PlatformSystem::TerminateUpdater() 
         {
-            iOSInvalidateUpdater();
+            //TODO:
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -90,7 +86,10 @@ namespace ChilliSource
         //-------------------------------------------------------
 		TimeIntervalMs PlatformSystem::GetSystemTimeMS() const
 		{
-			return GetSystemTimeInNanoSeconds() / 1000000;
+            mach_timebase_info_data_t machtimeBase;
+            mach_timebase_info(&machtimeBase);
+            u64 nanoSecs = (mach_absolute_time() * machtimeBase.numer) / machtimeBase.denom;
+			return nanoSecs / 1000000;
 		}
 	}
 }

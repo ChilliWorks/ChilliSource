@@ -215,6 +215,7 @@ void Java_com_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobje
 {
 	//Create the message with the time between frames
 	ChilliSource::Core::Application::Get()->Update(in_deltaTime, (u64)in_elaspedTime);
+	ChilliSource::Core::Application::Get()->Render();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------

@@ -99,8 +99,9 @@ namespace ChilliSource
 
 					GLFWManager::Get()->PollEvents();
 					Core::Application::Get()->Update(deltaTime, uddwAppRunningTime);
-
 					m_appPreviousTime = appCurrentTime;
+
+					Core::Application::Get()->Render();
 				}
 			}
 		}

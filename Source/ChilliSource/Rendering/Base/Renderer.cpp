@@ -130,7 +130,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void Renderer::RenderToScreen(Core::Scene* inpScene)
 		{
-            RenderSceneToTarget(inpScene, mpRenderSystem->GetDefaultRenderTarget());
+            RenderSceneToTarget(inpScene, nullptr);
 		}
         //----------------------------------------------------------
         /// Render To Texture

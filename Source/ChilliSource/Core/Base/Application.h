@@ -316,6 +316,12 @@ namespace ChilliSource
             /// @param The frame timestamp.
 			//----------------------------------------------------
 			void Update(f32 in_deltaTime, TimeIntervalSecs in_timestamp);
+            //----------------------------------------------------
+            /// The main draw loop of the application that will
+            /// render to the screen. This should not be called
+            /// by a users application.
+            //----------------------------------------------------
+            void Render();
 			//----------------------------------------------------
 			/// Triggered on receiving a "application memory warning"
             /// event. This will notify active resource managers to

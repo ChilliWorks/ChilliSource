@@ -28,8 +28,6 @@
 
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/Screen.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
-
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
@@ -68,7 +66,7 @@ namespace ChilliSource
         {
             @autoreleasepool
             {
-                m_resolution = CalculateResolution([EAGLView sharedInstance].viewController.interfaceOrientation);
+                m_resolution = CalculateResolution([UIApplication sharedApplication].keyWindow.rootViewController.interfaceOrientation);
                 m_densityScale = [UIScreen mainScreen].scale;
                 m_invDensityScale = 1.0f / m_densityScale;
             }
