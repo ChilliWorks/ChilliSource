@@ -20,12 +20,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Animation
         //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Animation);
-        template <typename TType> class ValueAnimation;
-        template <typename TType> class LinearAnimation;
-        template <typename TType> class BounceAnimation;
-        template <typename TType> class KeyframeAnimation;
-        enum class InterpolationType;
+        template <typename TType> class Animation;
         //---------------------------------------------------------
         /// Base
         //---------------------------------------------------------
