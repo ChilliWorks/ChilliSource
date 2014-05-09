@@ -77,7 +77,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             bool IsBreakableCharacter(Core::UTF8String::Char in_character)
             {
-                return in_character == ' ' || in_character == '\t' || in_character == '\n';
+                return in_character == ' ' || in_character == '\t' || in_character == '\n' || in_character == '-';
             }
             //----------------------------------------------------------------------------
             /// Calculate the distance in text space to the next 'breakable' character
