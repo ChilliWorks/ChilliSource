@@ -58,12 +58,12 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoCompleteDelegate& in_delegate, bool in_dismissWithTap,
+        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate& in_delegate, bool in_dismissWithTap,
         		const Core::Colour& in_backgroundColour)
         {
         	CS_ASSERT(m_isPlaying == false, "Cannot present a video while one is already playing.");
         	m_isPlaying = true;
-        	m_completionDelegate = in_delegate;
+        	m_completionDelegateConnection = in_delegate.OpenConnection();
 
         	//calculate the storage location and full filename.
         	bool isPackage = false;
@@ -97,7 +97,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
 		//--------------------------------------------------------------
-		void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, const VideoCompleteDelegate& in_delegate,
+		void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate& in_delegate,
                 bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
 		{
 			m_subtitles = in_subtitles;
@@ -124,10 +124,12 @@ namespace ChilliSource
         	m_subtitles.reset();
         	m_isPlaying = false;
 
-        	if (m_completionDelegate != nullptr)
-        	{
-        		m_completionDelegate();
-        	}
+            if (m_completionDelegateConnection != nullptr)
+            {
+                auto delegateConnection = std::move(m_completionDelegateConnection);
+                m_completionDelegateConnection = nullptr;
+                delegateConnection->Call();
+            }
         }
 		//---------------------------------------------------------------
 		//---------------------------------------------------------------

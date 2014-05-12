@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Core/Delegate/ConnectableDelegate.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
 #include <ChilliSource/Video/Base/VideoPlayer.h>
 
@@ -73,7 +74,7 @@ namespace ChilliSource
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoCompleteDelegate& in_delegate, bool in_dismissWithTap = true,
+            void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate& in_delegate, bool in_dismissWithTap = true,
                          const Core::Colour& in_backgroundColour = Core::Colour::k_black) override;
             //--------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
@@ -89,7 +90,7 @@ namespace ChilliSource
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, const VideoCompleteDelegate& in_delegate,
+            void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate& in_delegate,
                                       bool in_dismissWithTap, const Core::Colour& in_backgroundColour = Core::Colour::k_black) override;
         private:
             friend Video::VideoPlayerUPtr Video::VideoPlayer::Create();
@@ -136,7 +137,7 @@ namespace ChilliSource
             void OnDestroy() override;
 
             bool m_isPlaying;
-            VideoCompleteDelegate m_completionDelegate;
+            VideoCompleteDelegate::Connection m_completionDelegateConnection;
             VideoPlayerJavaInterfaceSPtr m_javaInterface;
             Video::SubtitlesCSPtr m_subtitles;
             std::unordered_map<const Video::Subtitles::Subtitle*, s64> m_subtitleMap;
