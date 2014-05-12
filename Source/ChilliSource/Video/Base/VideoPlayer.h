@@ -55,7 +55,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            typedef std::function<void()> VideoCompleteDelegate;
+            using VideoCompleteDelegate = Core::ConnectableDelegate<void()>;
             //-------------------------------------------------------
             /// Begin streaming the video from file
             ///
@@ -69,7 +69,7 @@ namespace ChilliSource
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            virtual void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoCompleteDelegate& in_delegate, bool in_dismissWithTap = true,
+            virtual void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate& in_delegate, bool in_dismissWithTap = true,
                                  const Core::Colour& in_backgroundColour = Core::Colour::k_black) = 0;
             //--------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
@@ -85,7 +85,7 @@ namespace ChilliSource
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            virtual void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const SubtitlesCSPtr& in_subtitles, const VideoCompleteDelegate& in_delegate,
+            virtual void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate& in_delegate,
                                               bool in_dismissWithTap, const Core::Colour& in_backgroundColour = Core::Colour::k_black) = 0;
             //--------------------------------------------------------
             /// Destructor

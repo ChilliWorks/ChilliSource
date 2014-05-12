@@ -54,7 +54,6 @@ namespace ChilliSource
         //---------------------------------------------------------
         template <typename TReturnType, typename... TArgTypes> class ConnectableDelegate;
         template <typename TReturnType, typename... TArgTypes> class DelegateConnection;
-        template <typename TReturnType, typename... TArgTypes> using DelegateConnectionUPtr = std::unique_ptr<DelegateConnection<TReturnType, TArgTypes...> >;
         //---------------------------------------------------------
         /// Dialogue
         //---------------------------------------------------------

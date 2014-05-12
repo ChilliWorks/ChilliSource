@@ -44,7 +44,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //------------------------------------------------------------------
-        template <typename TReturnType, typename... TArgTypes> class DelegateConnection
+        template <typename TReturnType, typename... TArgTypes> class DelegateConnection<TReturnType(TArgTypes...)>
         {
         public:
             
@@ -55,7 +55,7 @@ namespace ChilliSource
             ///
             /// @param Owning delegate
             //------------------------------------------------------------------
-            DelegateConnection(ConnectableDelegate<TReturnType, TArgTypes...>* in_owner)
+            DelegateConnection(ConnectableDelegate<TReturnType(TArgTypes...)>* in_owner)
             : m_owningDelegate(in_owner)
             {
                 
@@ -96,7 +96,7 @@ namespace ChilliSource
             ///
             /// @return TReturnType - matches the delegate signature
             //------------------------------------------------------------------
-            TReturnType Execute(TArgTypes... in_args)
+            TReturnType Call(TArgTypes... in_args)
             {
                 std::unique_lock<std::mutex> lock(m_mutex);
                 if(m_owningDelegate != nullptr)
@@ -116,7 +116,7 @@ namespace ChilliSource
             
         private:
             
-            friend class ConnectableDelegate<TReturnType, TArgTypes...>;
+            friend class ConnectableDelegate<TReturnType(TArgTypes...)>;
             //------------------------------------------------------------------
             /// Called by the delegate when it wishes to close the connection
             /// without being told by the connection itself
@@ -132,7 +132,7 @@ namespace ChilliSource
         private:
 
             mutable std::mutex m_mutex;
-            ConnectableDelegate<TReturnType, TArgTypes...>* m_owningDelegate;
+            ConnectableDelegate<TReturnType(TArgTypes...)>* m_owningDelegate;
         };
 	}
 }

@@ -48,18 +48,19 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //------------------------------------------------------------------
-        template <typename TReturnType, typename... TArgTypes> class ConnectableDelegate
+        template <typename TReturnType, typename... TArgTypes> class ConnectableDelegate<TReturnType(TArgTypes...)>
         {
         public:
             
             CS_DECLARE_NOCOPY(ConnectableDelegate);
             
             //------------------------------------------------------------------
-            /// Constructor
+            /// Signature of connection which acts a convenience type for
+            /// declaring connections
             ///
             /// @author S Downie
             //------------------------------------------------------------------
-            ConnectableDelegate() = default;
+            using Connection = std::unique_ptr<DelegateConnection<TReturnType(TArgTypes...)>>;
             //------------------------------------------------------------------
             /// Signature of the delegate function
             ///
@@ -74,13 +75,53 @@ namespace ChilliSource
             /// Constructor
             ///
             /// @author S Downie
+            //------------------------------------------------------------------
+            ConnectableDelegate() = default;
+            //------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
             ///
             /// @param Delegate to wrap
             //------------------------------------------------------------------
             ConnectableDelegate(const Delegate& in_delegate)
             : m_delegate(in_delegate)
             {
+                m_mutex = std::unique_ptr<std::mutex>(new std::mutex());
+            }
+            //------------------------------------------------------------------
+            /// Move constructor
+            ///
+            /// @author S Downie
+            ///
+            /// @param Object to move
+            //------------------------------------------------------------------
+            ConnectableDelegate(ConnectableDelegate&& in_toMove)
+            {
+                std::unique_lock<std::mutex> lock(*in_toMove.m_mutex);
+                m_mutex = std::move(in_toMove.m_mutex);
+                in_toMove.m_mutex = std::unique_ptr<std::mutex>(new std::mutex());
+                m_connections = std::move(in_toMove.m_connections);
+                m_delegate = std::move(in_toMove.m_delegate);
+            }
+            //------------------------------------------------------------------
+            /// Move assignment
+            ///
+            /// @author S Downie
+            ///
+            /// @param Object to move
+            ///
+            /// @return This
+            //------------------------------------------------------------------
+            ConnectableDelegate& operator=(ConnectableDelegate&& in_toMove)
+            {
+                std::unique_lock<std::mutex> lock(*in_toMove.m_mutex);
+                m_mutex = std::move(in_toMove.m_mutex);
+                in_toMove.m_mutex = std::unique_ptr<std::mutex>(new std::mutex());
+                m_connections = std::move(in_toMove.m_connections);
+                m_delegate = std::move(in_toMove.m_delegate);
                 
+                return *this;
             }
             //------------------------------------------------------------------
             /// Open a new connection to the delegate. While the connection
@@ -91,11 +132,13 @@ namespace ChilliSource
             ///
             /// @return New connection
             //------------------------------------------------------------------
-            DelegateConnectionUPtr<TReturnType, TArgTypes...> OpenConnection()
+            Connection OpenConnection()
             {
-                DelegateConnectionUPtr<TReturnType, TArgTypes...> connection(new DelegateConnection<TReturnType, TArgTypes...>(this));
+                CS_ASSERT(m_delegate != nullptr, "Cannot open connection with null delegate");
                 
-                std::unique_lock<std::mutex> lock(m_mutex);
+                Connection connection(new DelegateConnection<TReturnType(TArgTypes...)>(this));
+                
+                std::unique_lock<std::mutex> lock(*m_mutex);
                 m_connections.push_back(connection.get());
                 lock.unlock();
                 
@@ -109,7 +152,7 @@ namespace ChilliSource
             //------------------------------------------------------------------
             void CloseAllConnections()
             {
-                std::unique_lock<std::mutex> lock(m_mutex);
+                std::unique_lock<std::mutex> lock(*m_mutex);
                 
                 for(auto connection : m_connections)
                 {
@@ -134,7 +177,7 @@ namespace ChilliSource
             
         private:
             
-            friend class DelegateConnection<TReturnType, TArgTypes...>;
+            friend class DelegateConnection<TReturnType(TArgTypes...)>;
             //------------------------------------------------------------------
             /// Executes the delegate if the connection is open
             ///
@@ -156,9 +199,9 @@ namespace ChilliSource
             ///
             /// @param Connection
             //------------------------------------------------------------------
-            void Close(DelegateConnection<TReturnType, TArgTypes...>* in_connection)
+            void Close(DelegateConnection<TReturnType(TArgTypes...)>* in_connection)
             {
-                std::unique_lock<std::mutex> lock(m_mutex);
+                std::unique_lock<std::mutex> lock(*m_mutex);
                 
                 for(u32 i=0; i<m_connections.size(); ++i)
                 {
@@ -174,8 +217,8 @@ namespace ChilliSource
             
             Delegate m_delegate;
             
-            std::mutex m_mutex;
-            std::vector<DelegateConnection<TReturnType, TArgTypes...>*> m_connections;
+            mutable std::unique_ptr<std::mutex> m_mutex;
+            std::vector<DelegateConnection<TReturnType(TArgTypes...)>*> m_connections;
         };
 	}
 }
