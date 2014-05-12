@@ -45,7 +45,7 @@ CSAppDelegate* singletonInstance = nil;
 }
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
-- (void) addAppDelegateListener:(NSObject<UIApplicationDelegate>*)in_delegate
+- (void) addAppDelegateListener:(id<UIApplicationDelegate>)in_delegate
 {
     [subdelegates addObject:in_delegate];
 }
@@ -89,7 +89,7 @@ CSAppDelegate* singletonInstance = nil;
     
     isFirstActive = YES;
     
-    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    for(id<UIApplicationDelegate> delegate in subdelegates)
     {
         [delegate application:in_application didFinishLaunchingWithOptions:in_launchingOptions];
     }
@@ -109,7 +109,7 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)applicationWillResignActive:(UIApplication*)in_application
 {
-    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    for(id<UIApplicationDelegate> delegate in subdelegates)
     {
         [delegate applicationWillResignActive:in_application];
     }
@@ -132,7 +132,7 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)applicationDidEnterBackground:(UIApplication*)in_application
 {
-    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    for(id<UIApplicationDelegate> delegate in subdelegates)
     {
         [delegate applicationDidEnterBackground:in_application];
     }
@@ -157,7 +157,7 @@ CSAppDelegate* singletonInstance = nil;
 {
     csApplication->Resume();
     
-    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    for(id<UIApplicationDelegate> delegate in subdelegates)
     {
         [delegate applicationWillEnterForeground:in_application];
     }
@@ -180,7 +180,7 @@ CSAppDelegate* singletonInstance = nil;
     
     csApplication->Foreground();
     
-    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    for(id<UIApplicationDelegate> delegate in subdelegates)
     {
         [delegate applicationDidBecomeActive:in_application];
     }
@@ -195,7 +195,7 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)applicationWillTerminate:(UIApplication*)in_application
 {
-    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    for(id<UIApplicationDelegate> delegate in subdelegates)
     {
         [delegate applicationWillTerminate:in_application];
     }
@@ -248,7 +248,7 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)applicationDidReceiveMemoryWarning:(UIApplication*)in_application
 {
-    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    for(id<UIApplicationDelegate> delegate in subdelegates)
     {
         [delegate applicationDidReceiveMemoryWarning:in_application];
     }
@@ -270,7 +270,7 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)application:(UIApplication*)in_application didReceiveLocalNotification:(UILocalNotification*)in_notification
 {
-    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    for(id<UIApplicationDelegate> delegate in subdelegates)
     {
         [delegate application:in_application didReceiveLocalNotification:in_notification];
     }
@@ -292,7 +292,7 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)application:(UIApplication*)in_application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)in_deviceToken
 {
-    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    for(id<UIApplicationDelegate> delegate in subdelegates)
     {
         [delegate application:in_application didRegisterForRemoteNotificationsWithDeviceToken:in_deviceToken];
     }
@@ -321,7 +321,7 @@ CSAppDelegate* singletonInstance = nil;
 {
 	NSLog(@"Failed to receive remote notification token %@", [in_error localizedDescription]);
     
-    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    for(id<UIApplicationDelegate> delegate in subdelegates)
     {
         [delegate application:in_application didFailToRegisterForRemoteNotificationsWithError:in_error];
     }
@@ -349,7 +349,7 @@ CSAppDelegate* singletonInstance = nil;
         CS_LOG_ERROR("Error: Unable to get remote notification system. Has the system been created?");
     }
     
-    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    for(id<UIApplicationDelegate> delegate in subdelegates)
     {
         [delegate application:in_application didReceiveRemoteNotification:in_userInfo];
     }

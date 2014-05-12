@@ -72,6 +72,6 @@ namespace ChilliSource
 ///
 /// @param UIApplicationDelegate
 //--------------------------------------------------------------------
-- (void) addAppDelegateListener:(NSObject<UIApplicationDelegate>*)in_delegate;
+- (void) addAppDelegateListener:(id<UIApplicationDelegate>)in_delegate;
 
 @end
