@@ -37,7 +37,7 @@
 //-------------------------------------------------------------
 @interface CSGLViewController : GLKViewController
 {
-
+    NSSet* supportedOrientations;
 }
 
 //-------------------------------------------------------------

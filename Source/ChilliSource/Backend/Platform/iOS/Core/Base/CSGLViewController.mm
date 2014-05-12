@@ -60,6 +60,34 @@
         self.view = view;
         self.delegate = in_delegate;
         
+        //Fetch the supported orientations from the plist
+        NSMutableSet* supportedOrientationTypes = [[NSMutableSet alloc] initWithCapacity:4];
+        supportedOrientations = supportedOrientationTypes;
+        
+        NSArray* supportedOrientationStrings = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
+        if(supportedOrientationStrings != nil)
+        {
+            for(NSString* string in supportedOrientationStrings)
+            {
+                if([string isEqualToString:@"UIInterfaceOrientationLandscapeLeft"])
+                {
+                    [supportedOrientationTypes addObject:[NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft]];
+                }
+                else if([string isEqualToString:@"UIInterfaceOrientationLandscapeRight"])
+                {
+                    [supportedOrientationTypes addObject:[NSNumber numberWithInt:UIInterfaceOrientationLandscapeRight]];
+                }
+                else if([string isEqualToString:@"UIInterfaceOrientationPortrait"])
+                {
+                    [supportedOrientationTypes addObject:[NSNumber numberWithInt:UIInterfaceOrientationPortrait]];
+                }
+                else if([string isEqualToString:@"UIInterfaceOrientationPortraitUpsideDown"])
+                {
+                    [supportedOrientationTypes addObject:[NSNumber numberWithInt:UIInterfaceOrientationPortraitUpsideDown]];
+                }
+            }
+        }
+        
         return self;
     }
 
@@ -69,27 +97,9 @@
     //TODO: Set frame rate
 }
 //-------------------------------------------------------------
-/// Called by the OS to fetch the supported orientations for
-/// the GL view.
-///
-/// @author S Downie
-///
-/// @return Integer mask representing supported orientations
-//-------------------------------------------------------------
-- (NSUInteger)supportedInterfaceOrientations
-{
-    //---Portrait
-    //return UIInterfaceOrientationMaskPortrait;
-    
-    //---Landscape
-    //return UIInterfaceOrientationMaskLandscape;
-    
-    //---All
-    return UIInterfaceOrientationMaskAll;
-}
-//-------------------------------------------------------------
 /// Called by the OS to query whether the view should be
-/// allowed to rotate to the given orientation
+/// allowed to rotate to the given orientation. The return
+/// is based on the values in the plist.
 ///
 /// @author S Downie
 ///
@@ -97,16 +107,9 @@
 ///
 /// @return Whether we support the given orientation
 //-------------------------------------------------------------
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)in_interfaceOrientation
 {
-	//---Portrait
-	//return interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown;
-	
-    //---Landscape
-	//return interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight;
-	
-    //---All
-	return YES;
+	return [supportedOrientations containsObject:[NSNumber numberWithInt:in_interfaceOrientation]];
 }
 //-------------------------------------------------------------
 /// Called by the OS immediately before a view rotation
@@ -118,10 +121,13 @@
 /// @param New orientation
 /// @param Time in seconds of orientation animation
 //-------------------------------------------------------------
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)in_toInterfaceOrientation duration:(NSTimeInterval)in_duration
 {
-    ChilliSource::iOS::Screen* screen = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::Screen>();
-    screen->OnOrientationChanged(toInterfaceOrientation);
+    if(ChilliSource::Core::Application::Get() != nullptr)
+    {
+        ChilliSource::iOS::Screen* screen = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::Screen>();
+        screen->OnOrientationChanged(in_toInterfaceOrientation);
+    }
 }
 //-------------------------------------------------------------
 /// Called by the OS when one or more touches start on the view
@@ -131,12 +137,12 @@
 /// @param Set of touches
 /// @param Event
 //-------------------------------------------------------------
-- (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
+- (void)touchesBegan:(NSSet*)in_touches withEvent:(UIEvent*)in_event
 {
     ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
     CS_ASSERT(pointerSystem, "touchesBegan callback requires the pointer system.");
     
-    for (UITouch* touch in touches)
+    for (UITouch* touch in in_touches)
     {
         pointerSystem->OnTouchBegan(touch);
     }
@@ -149,12 +155,12 @@
 /// @param Set of touches
 /// @param Event
 //-------------------------------------------------------------
-- (void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
+- (void)touchesCancelled:(NSSet*)in_touches withEvent:(UIEvent*)in_event
 {
     ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
     CS_ASSERT(pointerSystem, "touchesCancelled callback requires the pointer system.");
     
-    for (UITouch* touch in touches)
+    for (UITouch* touch in in_touches)
     {
         pointerSystem->OnTouchEnded(touch);
     }
@@ -167,12 +173,12 @@
 /// @param Set of touches
 /// @param Event
 //-------------------------------------------------------------
-- (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
+- (void)touchesEnded:(NSSet*)in_touches withEvent:(UIEvent*)in_event
 {
     ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
     CS_ASSERT(pointerSystem, "touchesEnded callback requires the pointer system.");
     
-	for (UITouch* touch in touches)
+	for (UITouch* touch in in_touches)
     {
         pointerSystem->OnTouchEnded(touch);
     }
@@ -186,12 +192,12 @@
 /// @param Set of touches
 /// @param Event
 //-------------------------------------------------------------
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent*)event
+- (void)touchesMoved:(NSSet*)in_touches withEvent:(UIEvent*)in_event
 {
     ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
     CS_ASSERT(pointerSystem, "touchesEnded callback requires the pointer system.");
     
-    for (UITouch* touch in touches)
+    for (UITouch* touch in in_touches)
     {
         pointerSystem->OnTouchMoved(touch);
     }
@@ -207,6 +213,8 @@
     [view.context release];
     view.context = nil;
     [view release];
+    
+    [supportedOrientations release];
     
     [super dealloc];
 }
