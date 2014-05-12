@@ -20,10 +20,6 @@
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
 //--------------------------------------------------------------------------------------
-/// Globals
-//--------------------------------------------------------------------------------------
-ChilliSource::Core::Application* (*BootFunctionPtr)() = nullptr;
-//--------------------------------------------------------------------------------------
 /// C function declarations
 //--------------------------------------------------------------------------------------
 extern "C"
@@ -167,7 +163,7 @@ void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject
 	in_env->GetJavaVM(&javaVM);
 
 	//create the application
-	ChilliSource::Core::Application* pApplication = BootFunctionPtr();
+	ChilliSource::Core::Application* pApplication = CreateApplication();
 	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CoreJavaInterface>()->SetApplication(pApplication);
 
 	//setup other interfaces

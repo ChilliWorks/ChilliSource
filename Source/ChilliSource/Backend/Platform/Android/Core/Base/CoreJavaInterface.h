@@ -15,8 +15,6 @@
 
 #include <jni.h>
 
-extern ChilliSource::Core::Application* (*BootFunctionPtr)();
-
 namespace ChilliSource
 {
 	namespace Android

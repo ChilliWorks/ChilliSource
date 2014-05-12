@@ -24,6 +24,13 @@ namespace ChilliSource
 				CS_LOG_FATAL("Cannot initialise GLFW");
 			}
 
+			//TODO: Expose these
+			glfwWindowHint(GLFW_RED_BITS, 32);
+			glfwWindowHint(GLFW_GREEN_BITS, 32);
+			glfwWindowHint(GLFW_BLUE_BITS, 32);
+			glfwWindowHint(GLFW_ALPHA_BITS, 32);
+			glfwWindowHint(GLFW_DEPTH_BITS, 32);
+
 			m_window = glfwCreateWindow(in_width, in_height, in_windowName, nullptr, nullptr);
 			if (m_window == nullptr)
 			{
