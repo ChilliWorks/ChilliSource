@@ -672,8 +672,8 @@ namespace ChilliSource
                 f32 fNewRelHeight = 0.0f;
                 f32 fNewAbsWidth = UnifiedMaxSize.vAbsolute.x;
                 f32 fNewAbsHeight = 0.0f;
-                f32 fTextWidth = builtText.m_width;// inpCanvas->CalculateTextWidth(mCachedChars);
-                f32 fTextHeight = builtText.m_height;// inpCanvas->CalculateTextHeight(mCachedChars);
+                f32 fTextWidth = builtText.m_width;
+                f32 fTextHeight = builtText.m_height;
 
                 //If the size of the text would actually fit inside the min bounds then clamp to that
                 if(fTextWidth < vAbsMinSize.x)
@@ -684,7 +684,7 @@ namespace ChilliSource
                     //Now that we have calculated the width of the label we
                     //can use that to work out the height
                     builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, vAbsMinSize, MaxNumLines, HorizontalJustification, VerticalJustification);
-                    fTextHeight = builtText.m_height;//fTextHeight = inpCanvas->CalculateTextHeight(mCachedChars);
+                    fTextHeight = builtText.m_height;
                 }
                 //If the size of text is smaller than the max bounds then clamp to that
                 else if(fTextWidth < vAbsMaxSize.x)
@@ -695,7 +695,7 @@ namespace ChilliSource
                     //Now that we have calculated the width of the label we
                     //can use that to work out the height
                     builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, Core::Vector2(fNewAbsWidth, vAbsMaxSize.y), MaxNumLines, HorizontalJustification, VerticalJustification);
-                    fTextHeight = builtText.m_height;//fTextHeight = inpCanvas->CalculateTextHeight(mCachedChars);
+                    fTextHeight = builtText.m_height;
                 }
                 
                 if(fTextHeight > vAbsMaxSize.y)
