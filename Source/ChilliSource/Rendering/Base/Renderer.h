@@ -292,7 +292,7 @@ namespace ChilliSource
             void OnDestroy() override;
         private:
             
-            CanvasRendererUPtr m_canvas;
+            CanvasRenderer* m_canvas = nullptr;
             
 			RenderSystem* mpRenderSystem;
 			CameraComponent* mpActiveCamera;

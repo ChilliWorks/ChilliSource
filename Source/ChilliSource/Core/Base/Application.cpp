@@ -37,6 +37,7 @@
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
+#include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
@@ -389,6 +390,7 @@ namespace ChilliSource
             Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();
             m_renderSystem = CreateSystem<Rendering::RenderSystem>(renderCapabilities);
             m_renderer = CreateSystem<Rendering::Renderer>(m_renderSystem);
+            CreateSystem<Rendering::CanvasRenderer>();
             CreateSystem<Rendering::MaterialFactory>(renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
             CreateSystem<Rendering::TextureAtlasProvider>();
