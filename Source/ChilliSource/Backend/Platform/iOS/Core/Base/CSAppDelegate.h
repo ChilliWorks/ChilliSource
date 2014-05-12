@@ -54,6 +54,8 @@ namespace ChilliSource
     //Used to manually invoke OnForeground to conform to
     //ChilliSource lifecycle events
     BOOL isFirstActive;
+    
+    NSMutableArray* subdelegates;
 }
 //--------------------------------------------------------------------
 /// @author S Downie
@@ -61,5 +63,15 @@ namespace ChilliSource
 /// @return Singleton instance of the application delegate
 //--------------------------------------------------------------------
 + (CSAppDelegate*) sharedInstance;
+//--------------------------------------------------------------------
+/// Add another UIApplication as a listener of AppDelegate events.
+/// This is useful for 3rd party iOS libraries that require
+/// hooks into the app delegate.
+///
+/// @author S Downie
+///
+/// @param UIApplicationDelegate
+//--------------------------------------------------------------------
+- (void) addAppDelegateListener:(NSObject<UIApplicationDelegate>*)in_delegate;
 
 @end

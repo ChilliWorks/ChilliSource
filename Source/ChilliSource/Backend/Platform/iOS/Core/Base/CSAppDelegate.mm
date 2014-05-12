@@ -43,6 +43,12 @@ CSAppDelegate* singletonInstance = nil;
 {
     return singletonInstance;
 }
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+- (void) addAppDelegateListener:(NSObject<UIApplicationDelegate>*)in_delegate
+{
+    [subdelegates addObject:in_delegate];
+}
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -57,9 +63,12 @@ CSAppDelegate* singletonInstance = nil;
 /// @param Application
 /// @param Launching options
 //-------------------------------------------------------------
-- (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchingOptions
+- (BOOL) application:(UIApplication*)in_application didFinishLaunchingWithOptions:(NSDictionary*)in_launchingOptions
 {
     singletonInstance = self;
+    
+    subdelegates = [[NSMutableArray alloc] init];
+    
     csApplication = CreateApplication();
     
 #if TARGET_IPHONE_SIMULATOR
@@ -76,26 +85,35 @@ CSAppDelegate* singletonInstance = nil;
     
     csApplication->Init();
     
-    ChilliSource::iOS::LocalNotificationSystem::ApplicationDidFinishLaunchingWithOptions(application, launchingOptions);
+    ChilliSource::iOS::LocalNotificationSystem::ApplicationDidFinishLaunchingWithOptions(in_application, in_launchingOptions);
     
     isFirstActive = YES;
+    
+    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    {
+        [delegate application:in_application didFinishLaunchingWithOptions:in_launchingOptions];
+    }
     
 	return YES;
 }
 //-------------------------------------------------------------
-/// Called when the app is suspended.
+/// Called when the app is suspended. This can occur
+/// when the user exits the application of as a result
+/// of interruptions such as phone calls.
+///
 /// The event is passed onto the listeners.
 ///
 /// @author S Downie
 ///
 /// @param Application
 //-------------------------------------------------------------
-- (void)applicationWillResignActive:(UIApplication*)application
+- (void)applicationWillResignActive:(UIApplication*)in_application
 {
-    /*
-     Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-     Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-     */
+    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    {
+        [delegate applicationWillResignActive:in_application];
+    }
+    
     UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
     
     dispatch_async(dispatch_get_main_queue(), ^
@@ -112,8 +130,13 @@ CSAppDelegate* singletonInstance = nil;
 ///
 /// @param Application
 //-------------------------------------------------------------
-- (void)applicationDidEnterBackground:(UIApplication*)application
+- (void)applicationDidEnterBackground:(UIApplication*)in_application
 {
+    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    {
+        [delegate applicationDidEnterBackground:in_application];
+    }
+    
     UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
     
     dispatch_async(dispatch_get_main_queue(), ^
@@ -130,9 +153,14 @@ CSAppDelegate* singletonInstance = nil;
 ///
 /// @param Application
 //-------------------------------------------------------------
-- (void)applicationWillEnterForeground:(UIApplication*)application
+- (void)applicationWillEnterForeground:(UIApplication*)in_application
 {
     csApplication->Resume();
+    
+    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    {
+        [delegate applicationWillEnterForeground:in_application];
+    }
 }
 //-------------------------------------------------------------
 /// Called when the app is resumed after being started or
@@ -142,7 +170,7 @@ CSAppDelegate* singletonInstance = nil;
 ///
 /// @param Application
 //-------------------------------------------------------------
-- (void)applicationDidBecomeActive:(UIApplication*)application
+- (void)applicationDidBecomeActive:(UIApplication*)in_application
 {
     if(isFirstActive == YES)
     {
@@ -151,6 +179,11 @@ CSAppDelegate* singletonInstance = nil;
     }
     
     csApplication->Foreground();
+    
+    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    {
+        [delegate applicationDidBecomeActive:in_application];
+    }
 }
 //-------------------------------------------------------------
 /// Called when the app is about to terminate. Allowing CS
@@ -160,12 +193,13 @@ CSAppDelegate* singletonInstance = nil;
 ///
 /// @param Application
 //-------------------------------------------------------------
-- (void)applicationWillTerminate:(UIApplication*)application
+- (void)applicationWillTerminate:(UIApplication*)in_application
 {
-    /*
-     Called when the application is about to terminate.
-     See also applicationDidEnterBackground:.
-     */
+    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    {
+        [delegate applicationWillTerminate:in_application];
+    }
+    
     UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
         
     dispatch_async(dispatch_get_main_queue(), ^
@@ -212,8 +246,13 @@ CSAppDelegate* singletonInstance = nil;
 ///
 /// @param Application
 //-------------------------------------------------------------
-- (void)applicationDidReceiveMemoryWarning:(UIApplication*)application
+- (void)applicationDidReceiveMemoryWarning:(UIApplication*)in_application
 {
+    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    {
+        [delegate applicationDidReceiveMemoryWarning:in_application];
+    }
+    
     csApplication->ApplicationMemoryWarning();
 }
 
@@ -229,9 +268,14 @@ CSAppDelegate* singletonInstance = nil;
 /// @param Application
 /// @param Notification
 //-------------------------------------------------------------
-- (void)application:(UIApplication*)application didReceiveLocalNotification:(UILocalNotification*)notification
+- (void)application:(UIApplication*)in_application didReceiveLocalNotification:(UILocalNotification*)in_notification
 {
-    ChilliSource::iOS::LocalNotificationSystem::ApplicationDidReceiveLocalNotification(application, notification);
+    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    {
+        [delegate application:in_application didReceiveLocalNotification:in_notification];
+    }
+    
+    ChilliSource::iOS::LocalNotificationSystem::ApplicationDidReceiveLocalNotification(in_application, in_notification);
 }
 
 #pragma mark -
@@ -246,13 +290,18 @@ CSAppDelegate* singletonInstance = nil;
 /// @param Application
 /// @param Token
 //-------------------------------------------------------------
-- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+- (void)application:(UIApplication*)in_application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)in_deviceToken
 {
+    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    {
+        [delegate application:in_application didRegisterForRemoteNotificationsWithDeviceToken:in_deviceToken];
+    }
+    
 	ChilliSource::iOS::RemoteNotificationSystem* remoteNotificationSystem = CSCore::Application::Get()->GetSystem<ChilliSource::iOS::RemoteNotificationSystem>();
     if(nullptr != remoteNotificationSystem)
     {
         CS_LOG_WARNING("Received new remote notification token");
-        remoteNotificationSystem->OnRemoteTokenReceived(deviceToken);
+        remoteNotificationSystem->OnRemoteTokenReceived(in_deviceToken);
     }
     else
     {
@@ -268,9 +317,14 @@ CSAppDelegate* singletonInstance = nil;
 /// @param Application
 /// @param Error
 //-------------------------------------------------------------
-- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+- (void)application:(UIApplication*)in_application didFailToRegisterForRemoteNotificationsWithError:(NSError*)in_error
 {
-	NSLog(@"Failed to receive remote notification token %@", [error localizedDescription]);
+	NSLog(@"Failed to receive remote notification token %@", [in_error localizedDescription]);
+    
+    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    {
+        [delegate application:in_application didFailToRegisterForRemoteNotificationsWithError:in_error];
+    }
 }
 //-------------------------------------------------------------
 /// Called when the app receives a remote/push notification
@@ -282,17 +336,22 @@ CSAppDelegate* singletonInstance = nil;
 /// @param Application
 /// @param Dictionary containing the notification data
 //-------------------------------------------------------------
-- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo
+- (void)application:(UIApplication*)in_application didReceiveRemoteNotification:(NSDictionary*)in_userInfo
 {
 	ChilliSource::iOS::RemoteNotificationSystem* remoteNotificationSystem = CSCore::Application::Get()->GetSystem<ChilliSource::iOS::RemoteNotificationSystem>();
     if(nullptr != remoteNotificationSystem)
     {
         CS_LOG_VERBOSE("Received remote notification");
-        remoteNotificationSystem->OnRemoteNotificationReceived(application, userInfo);
+        remoteNotificationSystem->OnRemoteNotificationReceived(in_application, in_userInfo);
     }
     else
     {
         CS_LOG_ERROR("Error: Unable to get remote notification system. Has the system been created?");
+    }
+    
+    for(NSObject<UIApplicationDelegate>* delegate in subdelegates)
+    {
+        [delegate application:in_application didReceiveRemoteNotification:in_userInfo];
     }
 }
 //-------------------------------------------------------------
@@ -307,6 +366,7 @@ CSAppDelegate* singletonInstance = nil;
     
 	[viewController release];
     [window release];
+    [subdelegates release];
     
     singletonInstance = nil;
     
