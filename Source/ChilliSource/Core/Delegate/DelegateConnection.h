@@ -44,9 +44,11 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //------------------------------------------------------------------
-        template <typename TReturnType, typename... TArgTypes> class DelegateConnection<TReturnType(TArgTypes...)>
+        template <typename TReturnType, typename... TArgTypes> class DelegateConnection<TReturnType(TArgTypes...)> final
         {
         public:
+            
+            CS_DECLARE_NOCOPY(DelegateConnection);
             
             //------------------------------------------------------------------
             /// Constructor

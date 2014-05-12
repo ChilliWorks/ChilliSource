@@ -48,7 +48,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //------------------------------------------------------------------
-        template <typename TReturnType, typename... TArgTypes> class ConnectableDelegate<TReturnType(TArgTypes...)>
+        template <typename TReturnType, typename... TArgTypes> class ConnectableDelegate<TReturnType(TArgTypes...)> final
         {
         public:
             
