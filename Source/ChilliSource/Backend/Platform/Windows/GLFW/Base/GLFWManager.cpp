@@ -70,7 +70,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void GLFWManager::SetMaxFPS(u32 in_fps)
+		void GLFWManager::SetPreferredFPS(u32 in_fps)
 		{
 			glfwSwapInterval(60 / in_fps);
 		}

@@ -55,7 +55,7 @@ namespace ChilliSource
             /// to clamp to. This should be in multiples
             /// of 15 (15, 30, 60)
             //---------------------------------------------------
-            virtual void SetMaxFPS(u32 in_fps) = 0;
+            virtual void SetPreferredFPS(u32 in_fps) = 0;
             //---------------------------------------------------
             /// Terminate the app
             ///

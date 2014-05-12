@@ -266,7 +266,7 @@ namespace ChilliSource
 			CreateMethodReference("getAndroidID", "()Ljava/lang/String;");
 			CreateMethodReference("forceQuit", "()V");
 			CreateMethodReference("getSystemTimeInMilliseconds", "()J");
-			CreateMethodReference("setMaxFPS", "(I)V");
+			CreateMethodReference("setPreferredFPS", "(I)V");
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
@@ -295,10 +295,10 @@ namespace ChilliSource
 		}
 		//-----------------------------------------
 		//-----------------------------------------
-		void CoreJavaInterface::SetMaxFPS(u32 in_maxFPS)
+		void CoreJavaInterface::SetPreferredFPS(u32 in_maxFPS)
 		{
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			env->CallVoidMethod(GetJavaObject(), GetMethodID("setMaxFPS"), in_maxFPS);
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("setPreferredFPS"), in_maxFPS);
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------

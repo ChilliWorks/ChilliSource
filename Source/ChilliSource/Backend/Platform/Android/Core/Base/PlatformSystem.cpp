@@ -55,9 +55,9 @@ namespace ChilliSource
 		}
         //-----------------------------------------
         //-----------------------------------------
-        void PlatformSystem::SetMaxFPS(u32 in_fps)
+        void PlatformSystem::SetPreferredFPS(u32 in_fps)
         {
-        	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->SetMaxFPS(in_fps);
+        	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->SetPreferredFPS(in_fps);
         }
 		//-----------------------------------------
         //-----------------------------------------

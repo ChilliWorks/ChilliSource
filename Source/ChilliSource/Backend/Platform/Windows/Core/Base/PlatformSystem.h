@@ -81,7 +81,7 @@ namespace ChilliSource
 			/// to. This should be in multiples of 15 
 			/// (15, 30, 60)
             //-------------------------------------------------
-			void SetMaxFPS(u32 in_fps) override;
+			void SetPreferredFPS(u32 in_fps) override;
 			//-------------------------------------------------
 			/// Stops the update loop causing the application 
 			/// to terminate.

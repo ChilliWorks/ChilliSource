@@ -133,9 +133,9 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void PlatformSystem::SetMaxFPS(u32 in_fps)
+		void PlatformSystem::SetPreferredFPS(u32 in_fps)
 		{
-			GLFWManager::Get()->SetMaxFPS(in_fps);
+			GLFWManager::Get()->SetPreferredFPS(in_fps);
 		}
 		//--------------------------------------------
 		//--------------------------------------------

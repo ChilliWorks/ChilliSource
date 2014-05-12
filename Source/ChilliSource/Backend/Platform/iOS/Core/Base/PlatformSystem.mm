@@ -28,6 +28,7 @@
 
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 
+#import <ChilliSource/Backend/Platform/iOS/Core/Base/CSAppDelegate.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #import <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #import <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
@@ -56,9 +57,9 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void PlatformSystem::SetMaxFPS(u32 in_fps)
+        void PlatformSystem::SetPreferredFPS(u32 in_fps)
         {
-            //TODO:
+            [[CSAppDelegate sharedInstance] setPreferredFPS:in_fps];
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

@@ -457,10 +457,10 @@ namespace ChilliSource
             Json::Value jRoot;
             if(Utils::ReadJson(StorageLocation::k_package, "App.config", &jRoot) == true)
             {
-                if(jRoot.isMember("MaxFPS"))
+                if(jRoot.isMember("PreferredFPS"))
                 {
-                    u32 udwMaxFPS = jRoot["MaxFPS"].asUInt();
-                    m_platformSystem->SetMaxFPS(udwMaxFPS);
+                    u32 udwPreferredFPS = jRoot["PreferredFPS"].asUInt();
+                    m_platformSystem->SetPreferredFPS(udwPreferredFPS);
                 }
                 
                 if(jRoot.isMember("DefaultText"))

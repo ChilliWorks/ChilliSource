@@ -374,9 +374,9 @@ public class CoreNativeInterface extends INativeInterface
 	 * 
 	 * @param Max FPS to limit device to
 	 */
-	public void setMaxFPS(int in_maxFPS)
+	public void setPreferredFPS(int in_maxFPS)
 	{
-		CSApplication.get().setMaxFPS(in_maxFPS);
+		CSApplication.get().setPreferredFPS(in_maxFPS);
 	}
 	/**
 	 * Terminate the activity and the app

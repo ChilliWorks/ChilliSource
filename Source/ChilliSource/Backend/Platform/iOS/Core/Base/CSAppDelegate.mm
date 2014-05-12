@@ -49,6 +49,12 @@ CSAppDelegate* singletonInstance = nil;
 {
     [subdelegates addObject:in_delegate];
 }
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+- (void) setPreferredFPS:(NSUInteger)in_fps
+{
+    viewController.preferredFramesPerSecond = in_fps;
+}
 
 #pragma mark -
 #pragma mark Application lifecycle

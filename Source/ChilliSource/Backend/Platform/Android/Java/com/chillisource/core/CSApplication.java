@@ -519,7 +519,7 @@ public class CSApplication
 	 * 
 	 * @param Max update frequency in seconds
 	 */
-	public void setMaxFPS(int in_maxFPS)
+	public void setPreferredFPS(int in_maxFPS)
 	{
 		m_milliSecsPerUpdate = (long) (1000.0f/(float)in_maxFPS);
 	}

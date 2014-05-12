@@ -73,5 +73,13 @@ namespace ChilliSource
 /// @param UIApplicationDelegate
 //--------------------------------------------------------------------
 - (void) addAppDelegateListener:(id<UIApplicationDelegate>)in_delegate;
+//--------------------------------------------------------------------
+/// Set the target frame rate in frames per second
+///
+/// @author S Downie
+///
+/// @param Target FPS (15, 30, 60, etc)
+//--------------------------------------------------------------------
+- (void) setPreferredFPS:(NSUInteger)in_fps;
 
 @end

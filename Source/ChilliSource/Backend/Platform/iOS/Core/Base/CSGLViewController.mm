@@ -48,6 +48,7 @@
             CS_LOG_FATAL("Cannot Create OpenGL ES 2.0 Context");
         }
         
+        //TODO: Expose colour and depth format
         GLKView* view = [[GLKView alloc] initWithFrame:[[UIScreen mainScreen] bounds] context:context];
         view.drawableColorFormat = GLKViewDrawableColorFormatRGB565;
         view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
