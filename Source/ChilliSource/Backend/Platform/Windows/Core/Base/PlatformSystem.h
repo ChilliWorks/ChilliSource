@@ -73,7 +73,7 @@ namespace ChilliSource
 			///
 			/// @author S Downie
 			//-------------------------------------------------
-			void Run() override;
+			void Run();
 			//-------------------------------------------------
 			/// @author S Downie
 			///
@@ -83,20 +83,12 @@ namespace ChilliSource
             //-------------------------------------------------
 			void SetMaxFPS(u32 in_fps) override;
 			//-------------------------------------------------
-			/// Starts or stops the platforms update loop.
-			///
-			/// @author S Downie
-			///
-			/// @param Whether to end or begin
-			//-------------------------------------------------
-			void SetUpdaterActive(bool in_isActive) override;
-			//-------------------------------------------------
 			/// Stops the update loop causing the application 
 			/// to terminate.
 			///
 			/// @author S Downie
 			//-------------------------------------------------
-			void TerminateUpdater() override;
+			void Quit() override;
 			//-------------------------------------------------
 	        /// @author S Downie
 	        ///
@@ -124,6 +116,32 @@ namespace ChilliSource
 			/// @author S Downie
 			//-------------------------------------------------
 			PlatformSystem();
+			//-------------------------------------------------
+			/// Called when the app resumes. This resumes
+			/// the main loop
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void OnResume() override;
+			//-------------------------------------------------
+			/// Called when the app gets focus
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void OnForeground() override;
+			//-------------------------------------------------
+			/// Called when the app loses focus
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void OnBackground() override;
+			//-------------------------------------------------
+			/// Called when the app suspends. This pauses
+			/// the main loop
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void OnSuspend() override;
 
 			//---GLFW Delegates
 			//-------------------------------------------------
@@ -146,8 +164,8 @@ namespace ChilliSource
 			static void OnWindowFocusChanged(GLFWwindow* in_window, s32 in_isFocused);
 				
 		private:
-			bool m_isRunning;
 			bool m_isSuspended;
+			bool m_isFocused;
 
 			u64 m_appStartTime;
 			f64 m_appPreviousTime;

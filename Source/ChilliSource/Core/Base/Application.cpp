@@ -157,7 +157,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void Application::Quit()
         {
-            m_platformSystem->TerminateUpdater();
+            m_platformSystem->Quit();
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -212,18 +212,12 @@ namespace ChilliSource
             
             OnInit();
             PushInitialState();
-
-			//Begin the update loop
-			m_platformSystem->Run();
 		}
         //----------------------------------------------------
         //----------------------------------------------------
 		void Application::Resume()
 		{
             m_shouldNotifyConnectionsResumeEvent = true;
-            
-			//We must restart the application timer. This will automatically restart system updates
-			m_platformSystem->SetUpdaterActive(true);
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -352,9 +346,6 @@ namespace ChilliSource
             
             m_renderSystem->Suspend();
             
-			//We must invalidate the application timer. This will stop sub-system updates
-			m_platformSystem->SetUpdaterActive(false);
-			
 			CS_LOG_VERBOSE("App Finished Suspending...");
 		}
         //----------------------------------------------------

@@ -94,6 +94,12 @@ namespace ChilliSource
 			/// (15, 30, 60)
 			//-------------------------------------------------
 			void SetMaxFPS(u32 in_fps);
+			//-------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return Whether the window exists
+			//-------------------------------------------------
+			bool IsWindowAlive() const;
 			//---------------------------------------------------
 			/// @author S Downie
 			///

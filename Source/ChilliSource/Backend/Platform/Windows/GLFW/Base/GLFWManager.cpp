@@ -74,6 +74,15 @@ namespace ChilliSource
 		{
 			glfwSwapInterval(60 / in_fps);
 		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		bool GLFWManager::IsWindowAlive() const
+		{
+			if (m_window == nullptr)
+				return false;
+
+			return glfwWindowShouldClose(m_window) == false;
+		}
 		//---------------------------------------------------
 		//---------------------------------------------------
 		void GLFWManager::SetCursorPosDelegate(GLFWcursorposfun in_delegate)

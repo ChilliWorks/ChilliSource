@@ -53,7 +53,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		//-----------------------------------------
 		PlatformSystem::PlatformSystem() 
-			: m_isRunning(true), m_isSuspended(false), m_appStartTime(0), m_appPreviousTime(0.0)
+			: m_isSuspended(false), m_isFocused(false), m_appStartTime(0), m_appPreviousTime(0.0)
 		{
 			QueryPerformanceFrequency(&g_frequency);
 
@@ -81,6 +81,18 @@ namespace ChilliSource
 		}
 		//-----------------------------------------
 		//-----------------------------------------
+		void PlatformSystem::OnResume()
+		{
+			m_isSuspended = false;
+		}
+		//-----------------------------------------
+		//-----------------------------------------
+		void PlatformSystem::OnForeground()
+		{
+			m_isFocused = true;
+		}
+		//-----------------------------------------
+		//-----------------------------------------
 		void PlatformSystem::Run()
 		{
 			Core::Application::Get()->Resume();
@@ -88,22 +100,36 @@ namespace ChilliSource
 
 			m_appStartTime = (u64)GLFWManager::Get()->GetTime();
 
-			while (m_isRunning)
+			while (GLFWManager::Get() && GLFWManager::Get()->IsWindowAlive() == true)
 			{
-				if(!m_isSuspended)
+				if (!m_isSuspended)
+				{
+					GLFWManager::Get()->PollEvents();
+				}
+				if (!m_isSuspended)
 				{
 					f64 appCurrentTime = GLFWManager::Get()->GetTime();
 
 					f32 deltaTime = (f32)(appCurrentTime - m_appPreviousTime);
 					u64 uddwAppRunningTime = ((u64)m_appPreviousTime - m_appStartTime);
-
-					GLFWManager::Get()->PollEvents();
-					Core::Application::Get()->Update(deltaTime, uddwAppRunningTime);
 					m_appPreviousTime = appCurrentTime;
 
+					Core::Application::Get()->Update(deltaTime, uddwAppRunningTime);
 					Core::Application::Get()->Render();
 				}
 			}
+		}
+		//-----------------------------------------
+		//-----------------------------------------
+		void PlatformSystem::OnBackground()
+		{
+			m_isFocused = false;
+		}
+		//-----------------------------------------
+		//-----------------------------------------
+		void PlatformSystem::OnSuspend()
+		{
+			m_isSuspended = true;
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -111,17 +137,20 @@ namespace ChilliSource
 		{
 			GLFWManager::Get()->SetMaxFPS(in_fps);
 		}
-		//-----------------------------------------
-		//-----------------------------------------
-		void PlatformSystem::SetUpdaterActive(bool in_isActive)
-		{
-			m_isSuspended = !in_isActive;
-		}
 		//--------------------------------------------
 		//--------------------------------------------
-		void PlatformSystem::TerminateUpdater()
+		void PlatformSystem::Quit()
 		{
-			m_isRunning = false;
+			if(m_isFocused == true)
+			{
+				Core::Application::Get()->Background();
+			}
+			if(m_isSuspended == false)
+			{
+				Core::Application::Get()->Suspend();
+			}
+
+			Core::Application::Get()->Destroy();
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -142,8 +171,6 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::OnWindowClosed(GLFWwindow* in_window)
 		{
-			Core::Application::Get()->Background();
-			Core::Application::Get()->Suspend();
 			Core::Application::Get()->Quit();
 		}
 		//-------------------------------------------------

@@ -32,6 +32,10 @@
 #import <UIKit/UIKit.h>
 #endif
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
+#endif
+
 //----------------------------------------------------------------------------------
 /// Includes the "main" function as required by iOS and Windows and will create
 /// the inherited CS application using the exposed CreateApplication method that
@@ -57,7 +61,8 @@ int main(int in_argc, char* in_argv[])
 #ifdef CS_TARGETPLATFORM_WINDOWS
     ChilliSource::Core::Application* app = CreateApplication();
     app->Init();
-    app->Destroy();
+    auto platformSys = app->GetSystem<ChilliSource::Windows::PlatformSystem>();
+	platformSys->Run();
     delete app;
     return 0;
 #endif

@@ -61,7 +61,7 @@ namespace ChilliSource
         }
 		//-----------------------------------------
         //-----------------------------------------
-        void PlatformSystem::TerminateUpdater()
+        void PlatformSystem::Quit()
         {
         	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->ForceQuit();
         }
