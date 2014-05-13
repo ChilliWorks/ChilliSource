@@ -1097,21 +1097,6 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void RenderSystem::Destroy()
 		{
-#ifdef CS_TARGETPLATFORM_IOS
-
-			//Release the context
-			if(mContext)
-			{
-				if([EAGLContext currentContext] == mContext)
-				{
-					[EAGLContext setCurrentContext:nil];
-				}
-				
-				[mContext release];
-				mContext = nullptr;
-			}
-#endif
-            
             free(mpbCurrentVertexAttribState);
             free(mpbLastVertexAttribState);
             
