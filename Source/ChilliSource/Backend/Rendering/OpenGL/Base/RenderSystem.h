@@ -156,16 +156,6 @@ namespace ChilliSource
 			/// @return An instantiated target
 			//----------------------------------------------------------
 			Rendering::RenderTarget* CreateRenderTarget(u32 inudwWidth, u32 inudwHeight) override;
-			//----------------------------------------------------------
-			/// Resize Frame Buffer
-			///
-			/// Re-build the frame buffer if the screen dimensions
-			/// change
-			///
-			/// @param Width
-			/// @param Height
-			//----------------------------------------------------------
-			void ResizeFrameBuffer(u32 inudwWidth, u32 inudwHeight);
             
             //---Render states
             //----------------------------------------------------------

@@ -438,6 +438,10 @@ namespace ChilliSource
 			{
 				inpActiveRenderTarget->Bind();
 			}
+            else
+            {
+                glViewport(0, 0, mudwViewWidth, mudwViewHeight);
+            }
 
 			EnableColourWriting(true);
             EnableDepthWriting(true);
@@ -534,19 +538,6 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_WINDOWS
 			Windows::GLFWManager::Get()->SwapBuffers();
 #endif
-		}
-		//----------------------------------------------------------
-		/// Resize Frame Buffer
-		//----------------------------------------------------------
-		void RenderSystem::ResizeFrameBuffer(u32 inudwWidth, u32 inudwHeight)
-		{
-            if(mbInvalidateAllCaches || mudwViewWidth != inudwWidth || mudwViewHeight != inudwHeight)
-            {
-                glViewport(0, 0, inudwWidth, inudwHeight);
-            }
-            
-            mudwViewHeight = inudwHeight;
-            mudwViewWidth = inudwWidth;
 		}
         //----------------------------------------------------------
 		/// Lock Alpha Blending
@@ -1065,7 +1056,8 @@ namespace ChilliSource
         //----------------------------------------------------------
         void RenderSystem::OnScreenResolutionChanged(const Core::Vector2& in_resolution)
         {
-            ResizeFrameBuffer((u32)in_resolution.x, (u32)in_resolution.y);
+            mudwViewHeight = (u32)in_resolution.y;
+            mudwViewWidth = (u32)in_resolution.x;
         }
         //----------------------------------------------------------
 		//----------------------------------------------------------
