@@ -1,5 +1,5 @@
 //
-//  Boot.cpp
+//  Main.cpp
 //  Chilli Source
 //  Created by Ian Copland on 06/07/2011.
 //
@@ -28,16 +28,10 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 
-#ifdef CS_TARGETPLATFORM_IOS
 #import <UIKit/UIKit.h>
-#endif
-
-#ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
-#endif
 
 //----------------------------------------------------------------------------------
-/// Includes the "main" function as required by iOS and Windows and will create
+/// Includes the "main" function as required by iOS and will create
 /// the inherited CS application using the exposed CreateApplication method that
 /// the application code base must implement.
 ///
@@ -50,20 +44,9 @@
 //----------------------------------------------------------------------------------
 int main(int in_argc, char* in_argv[])
 {
-#ifdef CS_TARGETPLATFORM_IOS
     @autoreleasepool
     {
         s32 retVal = UIApplicationMain(in_argc, in_argv, nil, @"CSAppDelegate");
         return retVal;
     }
-#endif
-    
-#ifdef CS_TARGETPLATFORM_WINDOWS
-    ChilliSource::Core::Application* app = CreateApplication();
-    app->Init();
-    auto platformSys = app->GetSystem<ChilliSource::Windows::PlatformSystem>();
-	platformSys->Run();
-    delete app;
-    return 0;
-#endif
 }
