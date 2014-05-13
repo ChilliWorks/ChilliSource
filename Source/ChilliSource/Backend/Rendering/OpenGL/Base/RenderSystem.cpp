@@ -92,18 +92,6 @@ namespace ChilliSource
         //----------------------------------------------------------
         void RenderSystem::Init()
 		{
-#ifdef CS_TARGETPLATFORM_IOS
-            mContext = [EAGLContext currentContext];
-#endif
-#ifdef CS_TARGETPLATFORM_WINDOWS
-			GLenum GlewError = glewInit();
-			if (GLEW_OK != GlewError)
-			{
-				//Problem: glewInit failed, something is seriously wrong.
-				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
-			}
-#endif
-            
             m_hasContext = true;
             
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
@@ -133,13 +121,7 @@ namespace ChilliSource
         void RenderSystem::Resume()
         {
 			mbInvalidateAllCaches = true;
-			
-#ifdef CS_TARGETPLATFORM_IOS
-            if([EAGLContext currentContext] != mContext)
-            {
-                [EAGLContext setCurrentContext:mContext];
-            }
-#endif
+
             RestoreContext();
         }
         //----------------------------------------------------------
@@ -449,14 +431,6 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void RenderSystem::BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
-#ifdef CS_TARGETPLATFORM_IOS
-            //Sometimes iOS steals the context and doesn't return it.
-            if([EAGLContext currentContext] != mContext)
-            {
-                [EAGLContext setCurrentContext:mContext];
-            }
-#endif
-            
 #ifdef CS_ENABLE_DEBUG
 			CheckForGLErrors();
 #endif

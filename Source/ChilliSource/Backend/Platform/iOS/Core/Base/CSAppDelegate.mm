@@ -91,14 +91,14 @@ CSAppDelegate* singletonInstance = nil;
     
     csApplication->Init();
     
-    ChilliSource::iOS::LocalNotificationSystem::ApplicationDidFinishLaunchingWithOptions(in_application, in_launchingOptions);
-    
     isFirstActive = YES;
     
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
         [delegate application:in_application didFinishLaunchingWithOptions:in_launchingOptions];
     }
+    
+    ChilliSource::iOS::LocalNotificationSystem::ApplicationDidFinishLaunchingWithOptions(in_application, in_launchingOptions);
     
 	return YES;
 }
@@ -161,6 +161,13 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)applicationWillEnterForeground:(UIApplication*)in_application
 {
+    //Sometimes iOS steals the context and doesn't return it.
+    GLKView* view = (GLKView*)viewController.view;
+    if([EAGLContext currentContext] != view.context)
+    {
+        [EAGLContext setCurrentContext:view.context];
+    }
+    
     csApplication->Resume();
     
     for(id<UIApplicationDelegate> delegate in subdelegates)
@@ -181,6 +188,14 @@ CSAppDelegate* singletonInstance = nil;
     if(isFirstActive == YES)
     {
         isFirstActive = NO;
+        
+        //Sometimes iOS steals the context and doesn't return it.
+        GLKView* view = (GLKView*)viewController.view;
+        if([EAGLContext currentContext] != view.context)
+        {
+            [EAGLContext setCurrentContext:view.context];
+        }
+        
         csApplication->Resume();
     }
     
@@ -238,6 +253,12 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)glkView:(GLKView*)view drawInRect:(CGRect)rect
 {
+    //Sometimes iOS steals the context and doesn't return it.
+    if([EAGLContext currentContext] != view.context)
+    {
+        [EAGLContext setCurrentContext:view.context];
+    }
+    
     ChilliSource::Core::Application::Get()->Render();
 }
 

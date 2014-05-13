@@ -65,6 +65,14 @@ namespace ChilliSource
 			//Register callbacks
 			GLFWManager::Get()->SetWindowFocusDelegate((GLFWwindowfocusfun)&PlatformSystem::OnWindowFocusChanged);
 			GLFWManager::Get()->SetWindowCloseDelegate((GLFWwindowclosefun)&PlatformSystem::OnWindowClosed);
+
+			//Create the GL context
+			GLenum GlewError = glewInit();
+			if (GLEW_OK != GlewError)
+			{
+				//Problem: glewInit failed, something is seriously wrong.
+				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
+			}
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------

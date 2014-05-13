@@ -511,9 +511,7 @@ namespace ChilliSource
             Rendering::CullFace meCurrentCullFace;
             Rendering::DepthTestComparison meDepthFunc;
             
-#ifdef CS_TARGETPLATFORM_IOS
-            EAGLContext* mContext;
-#elif defined CS_TARGETPLATFORM_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             ContextRestorer m_contextRestorer;
 #endif
             

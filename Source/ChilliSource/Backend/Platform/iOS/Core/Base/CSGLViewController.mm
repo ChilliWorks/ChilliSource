@@ -93,9 +93,6 @@
     }
 
     return nil;
-    
-    //TODO: Suspend rendering
-    //TODO: Set frame rate
 }
 //-------------------------------------------------------------
 /// Called by the OS to query whether the view should be
@@ -213,6 +210,7 @@
     GLKView* view = (GLKView*)self.view;
     [view.context release];
     view.context = nil;
+    [EAGLContext setCurrentContext:nil];
     [view release];
     
     [supportedOrientations release];
