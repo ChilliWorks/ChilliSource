@@ -53,7 +53,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureProvider::OnInit()
+        void TextureProvider::PostCreate()
         {
             std::vector<Core::ResourceProvider*> resourceProviders;
             Core::Application::Get()->GetSystems(resourceProviders);
@@ -172,13 +172,6 @@ namespace ChilliSource
                 });
                 Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
             }
-        }
-        //----------------------------------------------------------------------------
-        //----------------------------------------------------------------------------
-        void TextureProvider::OnDestroy()
-        {
-            m_imageProviders.clear();
-            m_imageProviders.shrink_to_fit();
         }
 	}
 }

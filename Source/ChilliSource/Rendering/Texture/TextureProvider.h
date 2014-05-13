@@ -57,6 +57,13 @@ namespace ChilliSource
             /// @return New provider with ownership transferred
             //-------------------------------------------------------
             static TextureProviderUPtr Create();
+            //----------------------------------------------------------------------------
+            /// Called when the system is initialised. Retrieves the image providers
+            /// to delegate image loading to
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------
+            void PostCreate();
 			//-------------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -110,19 +117,6 @@ namespace ChilliSource
             /// @author S Downie
             //----------------------------------------------------------------------------
             TextureProvider() = default;
-            //----------------------------------------------------------------------------
-            /// Called when the system is initialised. Retrieves the image providers
-            /// to delegate image loading to
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------
-            void OnInit() override;
-            //----------------------------------------------------------------------------
-            /// Called when the system is destroyed.
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------
-            void OnDestroy() override;
             //----------------------------------------------------------------------------
 			/// Does the heavy lifting for the 2 create methods. The building of the texture
             /// is always done on the main thread
