@@ -254,7 +254,7 @@ namespace ChilliSource
             CS_ASSERT(m_renderCapabilities, "Cannot find required system: Render Capabilities.");
             
             m_texUnitSystem = Core::Application::Get()->GetSystem<TextureUnitSystem>();
-            CS_ASSERT(m_renderCapabilities, "Cannot find required system: Texture Unit System.");
+            CS_ASSERT(m_texUnitSystem, "Cannot find required system: Texture Unit System.");
 		}
         //--------------------------------------------------
 		//--------------------------------------------------
