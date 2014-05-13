@@ -64,7 +64,7 @@ namespace ChilliSource
             //------------------------------------------------------------------
             /// Signature of the delegate function
             ///
-            /// @uathor S Downie
+            /// @author S Downie
             ///
             /// @params Variadic
             ///

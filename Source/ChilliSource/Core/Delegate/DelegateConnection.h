@@ -70,10 +70,7 @@ namespace ChilliSource
             bool IsOpen() const
             {
                 std::unique_lock<std::mutex> lock(m_mutex);
-                bool isOpen = m_owningDelegate != nullptr;
-                lock.unlock();
-                
-                return isOpen;
+                return m_owningDelegate != nullptr;
             }
             //------------------------------------------------------------------
             /// Close the connection and prevent the delegate from being executed
