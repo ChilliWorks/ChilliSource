@@ -89,14 +89,14 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------
-        ResourcePool::ResourceId ResourcePool::GenerateResourceId(StorageLocation in_location, const std::string& in_filePath) const
+        Resource::ResourceId ResourcePool::GenerateResourceId(StorageLocation in_location, const std::string& in_filePath) const
         {
             std::string combined(ToString((u32)in_location) + in_filePath);
             return HashCRC32::GenerateHashCode(combined);
         }
         //------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------
-        ResourcePool::ResourceId ResourcePool::GenerateResourceId(const std::string& in_uniqueId) const
+        Resource::ResourceId ResourcePool::GenerateResourceId(const std::string& in_uniqueId) const
         {
             return HashCRC32::GenerateHashCode(in_uniqueId);
         }

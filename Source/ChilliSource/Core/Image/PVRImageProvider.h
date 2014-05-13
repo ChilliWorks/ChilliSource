@@ -1,11 +1,11 @@
 //
-//  ImageProvider.h
+//  PVRImageProvider.h
 //  Chilli Source
-//  Created by S McGaw on 01/10/2010.
+//  Created by Scott Downie on 08/05/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,31 +26,29 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_IMAGE_IMAGEPROVIDER_H_
-#define _CHILLISOURCE_BACKEND_PLATFORM_IOS_IMAGE_IMAGEPROVIDER_H_
+#ifndef _CHILLISOURCE_CORE_IMAGE_PVRIMAGEPROVIDER_H_
+#define _CHILLISOURCE_CORE_IMAGE_PVRIMAGEPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Core/Image/ImageProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
 
 namespace ChilliSource
 {
-	namespace iOS
-	{
-        //----------------------------------------------------------------
-        /// The iOS backend for the image resource provider. This provides
-        /// PNG, JPEG and PVR images.
+    namespace Core
+    {
+        //---------------------------------------------------------------
+        /// An image loader that provides PVR images
         ///
-        /// @author S McGaw
-        //----------------------------------------------------------------
-		class ImageProvider final : public Core::ImageProvider
-		{
-		public:
-            CS_DECLARE_NAMEDTYPE(ImageProvider);
+        /// @author S Downie
+        //---------------------------------------------------------------
+        class PVRImageProvider final : public Core::ResourceProvider
+        {
+        public:
+            CS_DECLARE_NAMEDTYPE(PVRImageProvider);
 			//----------------------------------------------------------
 			/// Is the object of the given interface type
             ///
-            /// @author S McGaw
+            /// @author S Downie
             ///
 			/// @param Interface type to query
             ///
@@ -67,7 +65,7 @@ namespace ChilliSource
 			/// Whether or not the provider can create resources from
             /// files with the given extension.
             ///
-			/// @author S McGaw
+			/// @author S Downie
             ///
 			/// @param Extension to compare against
             ///
@@ -79,7 +77,7 @@ namespace ChilliSource
 			/// Creates a new image resource from file. Check the
             /// resource load state for success or failure
 			///
-            /// @author S McGaw
+            /// @author S Downie
             ///
             /// @param The storage location to load from
 			/// @param File path to resource
@@ -91,7 +89,7 @@ namespace ChilliSource
             /// Completion delegate is called when load is finished.
             /// Check the resource load state for success or failure
             ///
-            /// @author I Copland
+            /// @author S Downie
             ///
             /// @param The storage location.
             /// @param The filepath.
@@ -99,30 +97,25 @@ namespace ChilliSource
             /// @param [Out] The output resource.
             //----------------------------------------------------
 			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+        
         private:
-            
-            friend Core::ImageProviderUPtr Core::ImageProvider::Create();
-            //-----------------------------------------------------------
+            friend class Application;
+            //-------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend instance
+            //-------------------------------------------------------
+            static PVRImageProviderUPtr Create();
+            //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
-            //-----------------------------------------------------------
-            ImageProvider() = default;
-            //-----------------------------------------------------------
-            /// Performs the heavy lifting for the 2 create methods
-            ///
-            /// @author S Downie
-            ///
-            /// @param The storage location.
-            /// @param The filepath.
-            /// @param Completion delegate
-            /// @param [Out] The output resource
-            //-----------------------------------------------------------
-            void LoadImage(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
-		};
-	}
+            //-------------------------------------------------------
+            PVRImageProvider() = default;
+        };
+    }
 }
-
-
 
 #endif

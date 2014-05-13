@@ -67,6 +67,18 @@ namespace ChilliSource
 		{
 			return m_filePath;
 		}
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void Resource::SetId(ResourceId in_id)
+        {
+            m_id = in_id;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        Resource::ResourceId Resource::GetId() const
+        {
+            return m_id;
+        }
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void Resource::SetStorageLocation(StorageLocation in_location)

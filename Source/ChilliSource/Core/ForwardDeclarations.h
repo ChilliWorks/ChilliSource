@@ -76,10 +76,11 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Image
         //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(CSImageProvider);
         CS_FORWARDDECLARE_CLASS(ETC1ImageProvider);
         CS_FORWARDDECLARE_CLASS(Image);
-        CS_FORWARDDECLARE_CLASS(ImageProvider);
-        CS_FORWARDDECLARE_CLASS(CSImageProvider);
+        CS_FORWARDDECLARE_CLASS(PNGImageProvider);
+        CS_FORWARDDECLARE_CLASS(PVRImageProvider);
         enum class ImageFormat;
         enum class ImageCompression;
         //---------------------------------------------------------

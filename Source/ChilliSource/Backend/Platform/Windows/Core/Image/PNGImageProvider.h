@@ -1,5 +1,5 @@
 //
-//  ImageProvider.h
+//  PNGImageProvider.h
 //  Chilli Source
 //  Created by I Copland on 05/02/2011.
 //
@@ -26,27 +26,27 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_IMAGE_IMAGEPROVIDER_H_
-#define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_IMAGE_IMAGEPROVIDER_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_IMAGE_PNGIMAGEPROVIDER_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_IMAGE_PNGIMAGEPROVIDER_H_
 
 #include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/Image/Image.h>
-#include <ChilliSource/Core/Image/ImageProvider.h>
+#include <ChilliSource/Core/Image/PNGImageProvider.h>
 
 namespace ChilliSource
 {
 	namespace Windows
 	{
 		//--------------------------------------------------------------
-		/// The windows backend for the Image Provider. This loads
+		/// The windows backend for the PNG Image Provider. This loads
 		/// PNG images from file.
 		///
 		/// @author Ian Copland
 		//--------------------------------------------------------------
-		class ImageProvider final : public Core::ImageProvider
+		class PNGImageProvider final : public Core::PNGImageProvider
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(ImageProvider);
+			CS_DECLARE_NAMEDTYPE(PNGImageProvider);
 			//----------------------------------------------------------
 			/// Is the object of the given interface type
 			///
@@ -100,13 +100,13 @@ namespace ChilliSource
 			//----------------------------------------------------
 			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
 		private:
-			friend Core::ImageProviderUPtr Core::ImageProvider::Create();
+			friend Core::PNGImageProviderUPtr Core::PNGImageProvider::Create();
 			//-----------------------------------------------------------
 			/// Private constructor to force use of factory method
 			///
 			/// @author I Copland
 			//-----------------------------------------------------------
-			ImageProvider() = default;
+			PNGImageProvider() = default;
 		};
 	}
 }

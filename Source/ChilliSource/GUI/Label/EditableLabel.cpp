@@ -11,6 +11,7 @@
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Font/Font.h>
 
 namespace ChilliSource
 {
@@ -310,13 +311,13 @@ namespace ChilliSource
             //Check if we force clip our children 
             if(ClipSubviews)
             {
-                inpCanvas->EnableClippingToBounds(vBottomLeft, vAbsoluteLabelSize);
+                inpCanvas->PushClipBounds(vBottomLeft, vAbsoluteLabelSize);
             }
             
             //Draw ourself
             if(Background)
             {
-                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::ZERO, Core::Vector2::ZERO), AbsCol);
+                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::ZERO, Core::Vector2::ZERO), AbsCol, Rendering::AlignmentAnchor::k_middleCentre);
             }
         
             Core::UTF8String strutf8DisplayString(Text);
@@ -342,8 +343,13 @@ namespace ChilliSource
                     strutf8DisplayString = strSecureText;
                 }
                 
-                inpCanvas->DrawString(strutf8DisplayString, GetTransform(), TextScale, Font, mCachedChars, TextColour,
-                                      vAbsoluteLabelSize, CharacterSpacing, LineSpacing, HorizontalJustification, VerticalJustification, false, TextOverflowBehaviour::k_follow, MaxNumLines);
+                if(mCachedChars.empty())
+                {
+                    f32 fAssetTextScale = GetGlobalTextScale();
+                    mCachedChars = inpCanvas->BuildText(strutf8DisplayString, Font, TextScale * fAssetTextScale, LineSpacing, vAbsoluteLabelSize, MaxNumLines, HorizontalJustification, VerticalJustification).m_characters;
+                }
+                
+                inpCanvas->DrawText(mCachedChars, GetTransform(), TextColour, Font->GetTexture());
             }
             //Draw the kids
             for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
@@ -353,7 +359,7 @@ namespace ChilliSource
             
             if(ClipSubviews)
             {
-                inpCanvas->DisableClippingToBounds();
+                inpCanvas->PopClipBounds();
             }
         }
         //-------------------------------------------------------

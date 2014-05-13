@@ -35,8 +35,8 @@
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
-#include <ChilliSource/Core/Image/ImageProvider.h>
 #include <ChilliSource/Core/Image/CSImageProvider.h>
+#include <ChilliSource/Core/Image/PNGImageProvider.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Localisation/LocalisedTextProvider.h>
@@ -57,6 +57,7 @@
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
+#include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
@@ -394,15 +395,13 @@ namespace ChilliSource
             m_resourcePool = CreateSystem<ResourcePool>();
             CreateSystem<AppDataStore>();
             CreateSystem<CSImageProvider>();
+            CreateSystem<PNGImageProvider>();
             CreateSystem<DialogueBoxSystem>();
             CreateSystem<LocalisedTextProvider>();
             
 #ifdef CS_ENABLE_DEBUGSTATS
             m_debugStats = CreateSystem<Debugging::DebugStats>();
 #endif
-            
-            //TODO: Change this to a PNG image provider.
-            CreateSystem<ImageProvider>();
 
             //Input
             CreateSystem<Input::Keyboard>();
@@ -412,6 +411,7 @@ namespace ChilliSource
             Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();
             m_renderSystem = CreateSystem<Rendering::RenderSystem>(renderCapabilities);
             m_renderer = CreateSystem<Rendering::Renderer>(m_renderSystem);
+            CreateSystem<Rendering::CanvasRenderer>();
             CreateSystem<Rendering::MaterialFactory>(renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
             CreateSystem<Rendering::TextureAtlasProvider>();
@@ -445,6 +445,9 @@ namespace ChilliSource
             
             //Initialise the render system prior to the OnInit() event.
             m_renderSystem->Init();
+            
+            //Texture provider is a compound provider and needs to be informed when the other providers are created.
+            GetSystem<CSRendering::TextureProvider>()->PostCreate();
 		}
         //----------------------------------------------------
         //----------------------------------------------------

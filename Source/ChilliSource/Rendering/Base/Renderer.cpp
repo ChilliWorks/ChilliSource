@@ -80,15 +80,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         void Renderer::OnInit()
         {
-            m_canvas = CanvasRendererUPtr(new CanvasRenderer(mpRenderSystem));
+            m_canvas = Core::Application::Get()->GetSystem<CanvasRenderer>();
+            CS_ASSERT(m_canvas != nullptr, "Renderer cannot have null canvas renderer");
             
             mpTransparentSortPredicate = RendererSortPredicateSPtr(new BackToFrontSortPredicate());
             mpOpaqueSortPredicate = RendererSortPredicateSPtr(new MaterialSortPredicate());
             
             mpPerspectiveCullPredicate = ICullingPredicateSPtr(new FrustumCullPredicate());
             mpOrthoCullPredicate = ICullingPredicateSPtr(new ViewportCullPredicate());
-            
-            m_canvas->Init();
         }
 		//----------------------------------------------------------
 		/// Set Transparent Sort Predicate
@@ -403,7 +402,7 @@ namespace ChilliSource
         void Renderer::RenderUI(GUI::Window* inpWindow)
         {
             mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), Core::Colour::k_cornflowerBlue);
-			m_canvas->Render(inpWindow, 1.0f);
+			m_canvas->Render(inpWindow);
         }
         //----------------------------------------------------------
         /// Cull Renderables

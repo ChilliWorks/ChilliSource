@@ -26,13 +26,6 @@ namespace ChilliSource
             k_bottom
         };
 		
-		enum class TextOverflowBehaviour
-		{
-            k_none,
-            k_clip,
-            k_follow
-		};
-		
         class Label : public GUIView
         {
         public:
@@ -129,20 +122,6 @@ namespace ChilliSource
 			/// @return The space left vertically between lines 
 			//-------------------------------------------------------
 			f32 GetLineSpacing() const;
-            //-------------------------------------------------------
-            /// Set Character Spacing
-            ///
-            /// Set the space left horizontally between letters 
-            ///
-            /// @param Absolute Scalar
-            //-------------------------------------------------------
-            void SetCharacterSpacing(f32 infSpacing);
-			//-------------------------------------------------------
-			/// Get Character Spacing
-			///
-			/// @return The space left horizontally between letters 
-			//-------------------------------------------------------
-			f32 GetCharacterSpacing() const;
             //-------------------------------------------------------
             /// Set Text Scale
             ///
@@ -345,7 +324,7 @@ namespace ChilliSource
             
         protected:
             
-            Rendering::CanvasRenderer::CharacterList mCachedChars;
+            std::vector<Rendering::CanvasRenderer::DisplayCharacterInfo> mCachedChars;
             
             Rendering::TextureCSPtr mpWhiteTex;
             
@@ -369,7 +348,6 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(std::string, LocalisedTextID, SetLocalisedTextID, GetLocalisedTextID);
 			DECLARE_PROPERTY_A(u32, MaxNumLines, SetNumberOfLines, GetNumberOfLines);
 			DECLARE_PROPERTY_A(f32, TextScale, SetTextScale, GetTextScale);
-			DECLARE_PROPERTY_A(f32, CharacterSpacing, SetCharacterSpacing, GetCharacterSpacing);
 			DECLARE_PROPERTY_A(f32, LineSpacing, SetLineSpacing, GetLineSpacing);
 			DECLARE_PROPERTY_A(TextJustification, HorizontalJustification, SetHorizontalJustification, GetHorizontalJustification);
 			DECLARE_PROPERTY_A(TextJustification, VerticalJustification, SetVerticalJustification, GetVerticalJustification);
