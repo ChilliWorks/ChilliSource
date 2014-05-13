@@ -300,19 +300,21 @@ namespace ChilliSource
             glGenTextures(1, &m_texHandle);
             Bind();
             
+            u8* data = in_data.get();
+            
 			switch(in_desc.m_compression)
 			{
 				case Core::ImageCompression::k_none:
-                    UploadImageDataNoCompression(m_format, m_width, m_height, in_data.get());
+                    UploadImageDataNoCompression(m_format, m_width, m_height, data);
 					break;
 				case Core::ImageCompression::k_ETC1:
-                    UploadImageDataETC1(m_format, m_width, m_height, in_data.get(), in_desc.m_dataSize);
+                    UploadImageDataETC1(m_format, m_width, m_height, data, in_desc.m_dataSize);
 					break;
 				case Core::ImageCompression::k_PVR2Bpp:
-                    UploadImageDataPVR2(m_format, m_width, m_height, in_data.get(), in_desc.m_dataSize);
+                    UploadImageDataPVR2(m_format, m_width, m_height, data, in_desc.m_dataSize);
 					break;
 				case Core::ImageCompression::k_PVR4Bpp:
-                    UploadImageDataPVR4(m_format, m_width, m_height, in_data.get(), in_desc.m_dataSize);
+                    UploadImageDataPVR4(m_format, m_width, m_height, data, in_desc.m_dataSize);
 					break;
 			};
         }

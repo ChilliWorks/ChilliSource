@@ -425,7 +425,7 @@ namespace ChilliSource
             }
             else
             {
-                std::string materialId("_GUI:" + in_texture->GetFilePath());
+                std::string materialId("_GUI:" + Core::ToString(in_texture->GetId()));
                 MaterialCSPtr materialExisting = m_resourcePool->GetResource<Material>(materialId);
                 
                 if(materialExisting != nullptr)
