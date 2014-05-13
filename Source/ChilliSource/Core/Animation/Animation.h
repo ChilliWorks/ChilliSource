@@ -1,11 +1,11 @@
 //
 //  Animation.h
 //  Chilli Source
-//  Created by Stuart McGaw on 26/10/2010.
+//  Created by Scott Downie on 12/05/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -55,43 +55,6 @@ namespace ChilliSource
 			k_pingPongLoopingReverse
 		};
 		//-----------------------------------------------------------------------
-		/// Functor that performs linear interpolation on the start and end
-		/// values based on the given normalised progress (0 - 1)
-		///
-		/// @author S Downie
-		//-----------------------------------------------------------------------
-		template <typename TValueType> struct LinearInterpolate
-		{
-			TValueType m_startValue;
-			TValueType m_endValue;
-			//-----------------------------------------------------------------------
-			/// Linearly interpolate between the start and end
-			/// values based on the given normalised progress (0 - 1)
-			///
-			/// @author S Downie
-			///
-			/// @param Normalised progress (0 - 1)
-			///
-			/// @return Linearly interpolated type
-			//-----------------------------------------------------------------------
-			TValueType operator()(f32 in_progress) const
-			{
-				return MathUtils::Lerp(in_progress, m_startValue, m_endValue);
-			}
-		};
-
-		template <typename TValueType> using LinearAnimation = Animation<LinearInterpolate<TValueType>>;
-
-		template <typename TValueType>
-		LinearAnimation<TValueType> MakeLinearAnim(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_delay = 0.0f)
-		{
-			LinearInterpolate<TValueType> func;
-			func.m_startValue = in_start;
-			func.m_endValue = in_end;
-			return LinearAnimation<TValueType>(func, in_duration, in_delay);
-		}
-
-		//-----------------------------------------------------------------------
 		/// Generic animation class that combines value types and an interpolation
 		/// function to animate values over time.
 		///
@@ -123,8 +86,6 @@ namespace ChilliSource
 			/// @author S Downie
 			///
 			/// @param Interpolation function
-			/// @param Start value
-			/// @param End value
 			/// @param Duration of a single cycle in seconds
 			/// @param Delay of initial cycle in seconds
 			//-----------------------------------------------------------------------
@@ -218,26 +179,20 @@ namespace ChilliSource
 			//-----------------------------------------------------------------------
 			/// @author S Downie
 			///
-			/// @return Normalised progress (0 - 1)
+			/// @param Normalised T (0 - 1)
 			//-----------------------------------------------------------------------
-			f32 GetProgress() const;
-			//-----------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @param Normalised progress (0 - 1)
-			//-----------------------------------------------------------------------
-			void SetProgress(f32 in_progress);
+			void SetT(f32 in_t);
 			//-----------------------------------------------------------------------
 			/// Uses the set interpolation function to calculate an interpolated
-			/// value (based on start and end) from the current progress
+			/// value from the current normalised T
 			///
 			/// @author S Downie
 			///
-			/// @return Interpolated value at current progress
+			/// @return Interpolated value at current T
 			//-----------------------------------------------------------------------
 			auto GetValue() const -> decltype(std::declval<TInterpFunc>()(0.0f))
 			{
-				return m_interpFunc(m_currentProgress);
+				return m_interpFunc(m_currentT);
 			}
 
 		private:
@@ -248,20 +203,21 @@ namespace ChilliSource
 			TInterpFunc m_interpFunc;
 
 			f32 m_duration = 0.0f;
+			f32 m_stepDuration = 0.0f;
 			f32 m_startDelay = 0.0f;
 			f32 m_currentDelay = 0.0f;
 			f32 m_currentTime = 0.0f;
-			f32 m_currentDirection = 1.0f;
 			f32 m_timeScaler = 1.0f;
-			f32 m_currentProgress = 0.0f;
-			f32 m_startTime = 0.0f;
-			f32 m_endTime = 0.0f;
+			f32 m_currentT = 0.0f;
+
+			u32 m_currentStep = 0;
+			u32 m_steps = 0;
 
 			bool m_isPlaying = false;
 			bool m_isFinished = false;
 			bool m_isStarted = false;
-			bool m_isLoopingMode = false;
-			bool m_isLoopReverse = false;
+			bool m_isReverse = false;
+			bool m_isPingPong = false;
 		};
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
@@ -303,48 +259,67 @@ namespace ChilliSource
 		//-----------------------------------------------------------------------
 		template <typename TInterpFunc> void Animation<TInterpFunc>::Play(AnimationPlayMode in_playMode)
 		{
-			//TODO: Fix bug with ping pong. Fix bug with reverse
+			CS_ASSERT(m_duration >= 0.0f, "Must set a valid duration");
+
 			switch (in_playMode)
 			{
 			case AnimationPlayMode::k_once:
-				m_currentTime = 0.0f;
-				m_startTime = 0.0f;
-				m_endTime = m_duration;
-				m_currentDirection = 1.0f;
-				m_isLoopingMode = false;
-				m_isLoopReverse = false;
+				m_steps = 1;
+				m_isReverse = false;
+				m_isPingPong = false;
+				m_stepDuration = m_duration;
+				break;
+			case AnimationPlayMode::k_pingPong:
+				m_steps = 2;
+				m_isReverse = false;
+				m_isPingPong = true;
+				m_stepDuration = m_duration * 0.5f;
 				break;
 			case AnimationPlayMode::k_looping:
-			case AnimationPlayMode::k_pingPong:
+				//Zero is looping
+				m_steps = 0;
+				m_isReverse = false;
+				m_isPingPong = false;
+				m_stepDuration = m_duration;
+				break;
 			case AnimationPlayMode::k_pingPongLooping:
-				m_currentTime = 0.0f;
-				m_startTime = 0.0f;
-				m_endTime = m_duration;
-				m_currentDirection = 1.0f;
-				m_isLoopingMode = true;
-				m_isLoopReverse = false;
+				//Zero is looping
+				m_steps = 0;
+				m_isReverse = false;
+				m_isPingPong = true;
+				m_stepDuration = m_duration * 0.5f;
 				break;
 			case AnimationPlayMode::k_onceReverse:
-				m_currentTime = m_duration;
-				m_startTime = m_duration;
-				m_endTime = 0.0f;
-				m_currentDirection = -1.0f;
-				m_isLoopingMode = false;
-				m_isLoopReverse = false;
+				m_steps = 1;
+				m_isReverse = true;
+				m_isPingPong = false;
+				m_stepDuration = m_duration;
 				break;
 			case AnimationPlayMode::k_loopingReverse:
+				//Zero is looping
+				m_steps = 0;
+				m_isReverse = true;
+				m_isPingPong = false;
+				m_stepDuration = m_duration;
+				break;
 			case AnimationPlayMode::k_pingPongReverse:
+				m_steps = 2;
+				m_isReverse = true;
+				m_isPingPong = true;
+				m_stepDuration = m_duration * 0.5f;
+				break;
 			case AnimationPlayMode::k_pingPongLoopingReverse:
-				m_currentTime = m_duration;
-				m_startTime = m_duration;
-				m_endTime = 0.0f;
-				m_currentDirection = -1.0f;
-				m_isLoopingMode = true;
-				m_isLoopReverse = true;
+				//Zero is looping
+				m_steps = 0;
+				m_isReverse = true;
+				m_isPingPong = true;
+				m_stepDuration = m_duration * 0.5f;
 				break;
 			}
 
 			m_currentDelay = m_startDelay;
+			m_currentTime = 0.0f;
+			m_currentStep = 0;
 
 			m_isStarted = false;
 			m_isPlaying = true;
@@ -378,7 +353,6 @@ namespace ChilliSource
 		//-----------------------------------------------------------------------
 		template <typename TInterpFunc> void Animation<TInterpFunc>::Update(f32 in_timeSinceLastUpdate)
 		{
-			//Return if not playing
 			if (m_isPlaying == false)
 			{
 				return;
@@ -389,16 +363,16 @@ namespace ChilliSource
 #endif
 			in_timeSinceLastUpdate *= m_timeScaler;
 
-			//We may have a countdown before starting
-			m_currentDelay -= in_timeSinceLastUpdate;
-			if (m_currentDelay > 0.0f)
-			{
-				return;
-			}
-
 			//Inform the delegate that the animation has begun
 			if (m_isStarted == false)
 			{
+				//We may have a countdown before starting
+				m_currentDelay -= in_timeSinceLastUpdate;
+				if (m_currentDelay > 0.0f)
+				{
+					return;
+				}
+
 				m_isStarted = true;
 
 				if (m_startDelegate != nullptr)
@@ -407,14 +381,23 @@ namespace ChilliSource
 				}
 			}
 
-			m_currentTime += (in_timeSinceLastUpdate * m_currentDirection);
-			m_currentTime = MathUtils::Clamp(m_currentTime, 0.0f, m_duration);
+			m_currentTime = std::min(m_currentTime + in_timeSinceLastUpdate, m_duration);
 
-			m_currentProgress = GetProgress();
+			m_currentT = m_currentTime / m_stepDuration;
+			if (m_isReverse)
+				m_currentT = 1.0f - m_currentT;
 
-			if (m_currentProgress >= 1.0f)
+			if (m_currentTime >= m_stepDuration)
 			{
-				if (m_isLoopingMode == false)
+				m_currentStep++;
+
+				if (m_isPingPong == true)
+				{
+					m_isReverse = !m_isReverse;
+				}
+
+				//Step number of zero = looping
+				if (m_steps > 0 && m_currentStep >= m_steps)
 				{
 					m_isStarted = false;
 					m_isPlaying = false;
@@ -427,39 +410,18 @@ namespace ChilliSource
 				}
 				else
 				{
-					if (m_isLoopReverse == false)
-					{
-						m_currentTime = 0.0f;
-						m_currentProgress = 0.0f;
-						m_currentDirection = 1.0f;
-					}
-					else
-					{
-						m_currentProgress = 1.0f;
-						m_currentDirection = -1.0f;
-					}
+					m_currentTime = 0.0f;
 				}
 			}
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> f32 Animation<TInterpFunc>::GetProgress() const
+		template <typename TInterpFunc> void Animation<TInterpFunc>::SetT(f32 in_t)
 		{
-			return MathUtils::NormalisedRange(m_currentTime, m_startTime, m_endTime);
-		}
-		//-----------------------------------------------------------------------
-		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Animation<TInterpFunc>::SetProgress(f32 in_progress)
-		{
-			f32 progress = MathUtils::Clamp(in_progress, 0.0f, 1.0f);
+			CS_ASSERT(in_t >= 0.0f && in_t <= 1.0f, "T must be between 0 and 1");
 
-			if (m_currentDirection < 0.0f)
-			{
-				fProgress = 1.0f - fProgress;
-			}
-
-			m_currentTime = progress * m_duration;
-			m_currentProgress = progress;
+			m_currentTime = in_t * m_duration;
+			m_currentT = in_t;
 		}
 	}
 }
