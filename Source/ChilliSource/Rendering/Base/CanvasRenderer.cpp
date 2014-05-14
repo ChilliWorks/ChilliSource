@@ -30,7 +30,6 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ColourUtils.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/GUI/Label/Label.h>
 #include <ChilliSource/Rendering/Font/Font.h>
@@ -473,11 +472,11 @@ namespace ChilliSource
                 Core::Vector2 vNewBottomLeft = in_blPosition;
                 Core::Vector2 vNewTopRight = in_blPosition + in_size;
                 
-                vNewBottomLeft.x = Core::MathUtils::Max(vNewBottomLeft.x, vOldBottomLeft.x);
-                vNewBottomLeft.y = Core::MathUtils::Max(vNewBottomLeft.y, vOldBottomLeft.y);
+                vNewBottomLeft.x = std::max(vNewBottomLeft.x, vOldBottomLeft.x);
+                vNewBottomLeft.y = std::max(vNewBottomLeft.y, vOldBottomLeft.y);
                 
-                vNewTopRight.x = Core::MathUtils::Min(vNewTopRight.x, vOldTopRight.x);
-                vNewTopRight.y = Core::MathUtils::Min(vNewTopRight.y, vOldTopRight.y);
+                vNewTopRight.x = std::min(vNewTopRight.x, vOldTopRight.x);
+                vNewTopRight.y = std::min(vNewTopRight.y, vOldTopRight.y);
                 
                 Core::Vector2 vNewSize = vNewTopRight - vNewBottomLeft;
                 

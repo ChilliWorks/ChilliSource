@@ -40,7 +40,6 @@
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Localisation/LocalisedTextProvider.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
@@ -261,7 +260,7 @@ namespace ChilliSource
             //We do not need to render as often as we update so this callback will be triggered
             //less freqenctly than the update frequency suggests. We must work out how many times to update based on the time since last frame
             //and our actual update frequency. We carry the remainder to the next frame until we have a full update cycle
-            m_updateIntervalRemainder = MathUtils::Min(m_updateIntervalRemainder + in_deltaTime, GetUpdateIntervalMax());
+            m_updateIntervalRemainder = std::min(m_updateIntervalRemainder + in_deltaTime, GetUpdateIntervalMax());
             
 			//process any queued input received by the pointer system.
 			if(m_pointerSystem != nullptr)
