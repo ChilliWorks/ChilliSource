@@ -28,11 +28,15 @@
 
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 
+#import <ChilliSource/Backend/Platform/iOS/Core/Base/CSAppDelegate.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
 #import <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #import <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/Image/PVRImageProvider.h>
+
+#import <mach/mach.h>
+#import <mach/mach_time.h>
 
 namespace ChilliSource 
 {
@@ -49,32 +53,15 @@ namespace ChilliSource
         //-------------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
 		{
+            in_application->CreateSystem<Core::PVRImageProvider>();
             in_application->CreateSystem<OpenGL::GLSLShaderProvider>();
             in_application->CreateSystem<OpenGL::TextureUnitSystem>();
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void PlatformSystem::Run()
+        void PlatformSystem::SetPreferredFPS(u32 in_fps)
         {
-            iOSInit();
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void PlatformSystem::SetMaxFPS(u32 in_fps)
-        {
-            iOSSetMaxFPS(in_fps);
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-		void PlatformSystem::SetUpdaterActive(bool in_isActive)
-		{
-			iOSSetUpdaterActive(in_isActive);
-		}
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void PlatformSystem::TerminateUpdater() 
-        {
-            iOSInvalidateUpdater();
+            [[CSAppDelegate sharedInstance] setPreferredFPS:in_fps];
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -90,7 +77,10 @@ namespace ChilliSource
         //-------------------------------------------------------
 		TimeIntervalMs PlatformSystem::GetSystemTimeMS() const
 		{
-			return GetSystemTimeInNanoSeconds() / 1000000;
+            mach_timebase_info_data_t machtimeBase;
+            mach_timebase_info(&machtimeBase);
+            u64 nanoSecs = (mach_absolute_time() * machtimeBase.numer) / machtimeBase.denom;
+			return nanoSecs / 1000000;
 		}
 	}
 }

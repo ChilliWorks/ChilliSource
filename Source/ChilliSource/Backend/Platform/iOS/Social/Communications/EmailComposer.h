@@ -143,6 +143,7 @@ namespace ChilliSource
             SendResultDelegate m_resultDelegate;
 			EmailComposerDelegate* m_emailComposerDelegate;
 			MFMailComposeViewController* m_viewController;
+            UIViewController* m_rootViewController;
 		};
 		 
 	}

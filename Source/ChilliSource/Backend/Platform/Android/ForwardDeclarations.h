@@ -32,7 +32,7 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(FileSystem);
 		CS_FORWARDDECLARE_CLASS(SharedPreferencesJavaInterface);
 		CS_FORWARDDECLARE_CLASS(PngImage);
-		CS_FORWARDDECLARE_CLASS(ImageProvider);
+		CS_FORWARDDECLARE_CLASS(PNGImageProvider);
 		CS_FORWARDDECLARE_CLASS(LocalNotificationJavaInterface);
 		CS_FORWARDDECLARE_CLASS(LocalNotificationScheduler);
         CS_FORWARDDECLARE_CLASS(Device);

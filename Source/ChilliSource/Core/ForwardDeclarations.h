@@ -57,8 +57,6 @@ namespace ChilliSource
         /// Entity
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Component);
-        CS_FORWARDDECLARE_CLASS(ComponentFactory);
-        CS_FORWARDDECLARE_CLASS(ComponentFactoryDispenser);
         CS_FORWARDDECLARE_CLASS(Entity);
         CS_FORWARDDECLARE_CLASS(Transform);
         //---------------------------------------------------------
@@ -78,12 +76,18 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Image
         //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(CSImageProvider);
         CS_FORWARDDECLARE_CLASS(ETC1ImageProvider);
         CS_FORWARDDECLARE_CLASS(Image);
-        CS_FORWARDDECLARE_CLASS(ImageProvider);
-        CS_FORWARDDECLARE_CLASS(CSImageProvider);
+        CS_FORWARDDECLARE_CLASS(PNGImageProvider);
+        CS_FORWARDDECLARE_CLASS(PVRImageProvider);
         enum class ImageFormat;
         enum class ImageCompression;
+        //---------------------------------------------------------
+        /// Localisation
+        //---------------------------------------------------------
+	CS_FORWARDDECLARE_CLASS(LocalisedText);
+	CS_FORWARDDECLARE_CLASS(LocalisedTextProvider);
         //---------------------------------------------------------
         /// Math
         //---------------------------------------------------------

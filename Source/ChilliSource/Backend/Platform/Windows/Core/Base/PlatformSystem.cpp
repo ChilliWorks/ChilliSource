@@ -53,7 +53,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		//-----------------------------------------
 		PlatformSystem::PlatformSystem() 
-			: m_isRunning(true), m_isSuspended(false), m_appStartTime(0), m_appPreviousTime(0.0)
+			: m_isSuspended(false), m_isFocused(false), m_appStartTime(0), m_appPreviousTime(0.0)
 		{
 			QueryPerformanceFrequency(&g_frequency);
 
@@ -65,6 +65,14 @@ namespace ChilliSource
 			//Register callbacks
 			GLFWManager::Get()->SetWindowFocusDelegate((GLFWwindowfocusfun)&PlatformSystem::OnWindowFocusChanged);
 			GLFWManager::Get()->SetWindowCloseDelegate((GLFWwindowclosefun)&PlatformSystem::OnWindowClosed);
+
+			//Create the GL context
+			GLenum GlewError = glewInit();
+			if (GLEW_OK != GlewError)
+			{
+				//Problem: glewInit failed, something is seriously wrong.
+				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
+			}
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
@@ -81,6 +89,18 @@ namespace ChilliSource
 		}
 		//-----------------------------------------
 		//-----------------------------------------
+		void PlatformSystem::OnResume()
+		{
+			m_isSuspended = false;
+		}
+		//-----------------------------------------
+		//-----------------------------------------
+		void PlatformSystem::OnForeground()
+		{
+			m_isFocused = true;
+		}
+		//-----------------------------------------
+		//-----------------------------------------
 		void PlatformSystem::Run()
 		{
 			Core::Application::Get()->Resume();
@@ -88,39 +108,57 @@ namespace ChilliSource
 
 			m_appStartTime = (u64)GLFWManager::Get()->GetTime();
 
-			while (m_isRunning)
+			while (GLFWManager::Get() && GLFWManager::Get()->IsWindowAlive() == true)
 			{
-				if(!m_isSuspended)
+				if (!m_isSuspended)
+				{
+					GLFWManager::Get()->PollEvents();
+				}
+				if (!m_isSuspended)
 				{
 					f64 appCurrentTime = GLFWManager::Get()->GetTime();
 
 					f32 deltaTime = (f32)(appCurrentTime - m_appPreviousTime);
 					u64 uddwAppRunningTime = ((u64)m_appPreviousTime - m_appStartTime);
-
-					GLFWManager::Get()->PollEvents();
-					Core::Application::Get()->Update(deltaTime, uddwAppRunningTime);
-
 					m_appPreviousTime = appCurrentTime;
+
+					Core::Application::Get()->Update(deltaTime, uddwAppRunningTime);
+					Core::Application::Get()->Render();
 				}
 			}
 		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		void PlatformSystem::SetMaxFPS(u32 in_fps)
+		//-----------------------------------------
+		//-----------------------------------------
+		void PlatformSystem::OnBackground()
 		{
-			GLFWManager::Get()->SetMaxFPS(in_fps);
+			m_isFocused = false;
 		}
 		//-----------------------------------------
 		//-----------------------------------------
-		void PlatformSystem::SetUpdaterActive(bool in_isActive)
+		void PlatformSystem::OnSuspend()
 		{
-			m_isSuspended = !in_isActive;
+			m_isSuspended = true;
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void PlatformSystem::SetPreferredFPS(u32 in_fps)
+		{
+			GLFWManager::Get()->SetPreferredFPS(in_fps);
 		}
 		//--------------------------------------------
 		//--------------------------------------------
-		void PlatformSystem::TerminateUpdater()
+		void PlatformSystem::Quit()
 		{
-			m_isRunning = false;
+			if(m_isFocused == true)
+			{
+				Core::Application::Get()->Background();
+			}
+			if(m_isSuspended == false)
+			{
+				Core::Application::Get()->Suspend();
+			}
+
+			Core::Application::Get()->Destroy();
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -141,8 +179,6 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::OnWindowClosed(GLFWwindow* in_window)
 		{
-			Core::Application::Get()->Background();
-			Core::Application::Get()->Suspend();
 			Core::Application::Get()->Quit();
 		}
 		//-------------------------------------------------

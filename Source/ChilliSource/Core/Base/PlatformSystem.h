@@ -49,34 +49,19 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(PlatformSystem);
             //---------------------------------------------------
-            /// Begin the game loop.
-            ///
-            /// @author S Downie
-            //---------------------------------------------------
-            virtual void Run() = 0;
-            //---------------------------------------------------
             /// @author S Downie
             ///
             /// @param The maximum frames per second
             /// to clamp to. This should be in multiples
             /// of 15 (15, 30, 60)
             //---------------------------------------------------
-            virtual void SetMaxFPS(u32 in_fps) = 0;
+            virtual void SetPreferredFPS(u32 in_fps) = 0;
             //---------------------------------------------------
-            /// Starts or stops the platforms update loop.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Whether to start or suspend updating.
-            //---------------------------------------------------
-            virtual void SetUpdaterActive(bool in_active) = 0;
-            //---------------------------------------------------
-            /// Stops the update loop causing the application to
-            /// terminate.
+            /// Terminate the app
             ///
             /// @author S Downie
             //---------------------------------------------------
-            virtual void TerminateUpdater() = 0;
+            virtual void Quit() = 0;
             //---------------------------------------------------
             /// Adds default systems to the applications system
 			/// list.

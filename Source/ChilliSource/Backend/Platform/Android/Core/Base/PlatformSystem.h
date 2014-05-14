@@ -68,12 +68,6 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			void CreateDefaultSystems(Core::Application* in_application) override;
 			//-------------------------------------------------------
-            /// Begin the game loop
-			///
-			/// @author S Downie
-			//-------------------------------------------------------
-			void Run() override {}
-			//-------------------------------------------------------
             /// Lock the frame rate to the given FPS
 			///
 			/// @author S Downie
@@ -81,22 +75,13 @@ namespace ChilliSource
             /// @param The maximum frames per second to clamp to.
 			/// This should be in multiples of 15 (15, 30, 60)
 			//-------------------------------------------------------
-            void SetMaxFPS(u32 in_fps) override;
+            void SetPreferredFPS(u32 in_fps) override;
             //-------------------------------------------------------
-            /// Stops the update loop causing the application to
-            /// terminate
+            /// Terminate the app
 			///
 			/// @author S Downie
             //-------------------------------------------------------
-            void TerminateUpdater() override;
-            //-------------------------------------------------------
-			/// Starts or stops the platforms update loop.
-			///
-			/// @author S Downie
-			///
-			/// @param Whether to end or begin
-            //-------------------------------------------------------
-			void SetUpdaterActive(bool in_isActive) override {}
+            void Quit() override;
 			//-------------------------------------------------------
 	        /// @author S Downie
 	        ///

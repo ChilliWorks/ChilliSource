@@ -15,8 +15,6 @@
 
 #include <jni.h>
 
-extern ChilliSource::Core::Application* (*BootFunctionPtr)();
-
 namespace ChilliSource
 {
 	namespace Android
@@ -66,7 +64,7 @@ namespace ChilliSource
 			/// to clamp to. This should be in multiples
 			/// of 15 (15, 30, 60)
 			//-----------------------------------------
-			void SetMaxFPS(u32 in_maxFPS);
+			void SetPreferredFPS(u32 in_maxFPS);
 			//--------------------------------------------------------------------------------------
 			/// @author I Copland
 			///

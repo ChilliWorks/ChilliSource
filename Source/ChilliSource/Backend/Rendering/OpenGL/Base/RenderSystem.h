@@ -156,22 +156,6 @@ namespace ChilliSource
 			/// @return An instantiated target
 			//----------------------------------------------------------
 			Rendering::RenderTarget* CreateRenderTarget(u32 inudwWidth, u32 inudwHeight) override;
-			//----------------------------------------------------------
-			/// Get Default Render Target
-			///
-			/// @return Onscreen render target
-			//----------------------------------------------------------
-			Rendering::RenderTarget* GetDefaultRenderTarget() override;
-			//----------------------------------------------------------
-			/// Resize Frame Buffer
-			///
-			/// Re-build the frame buffer if the screen dimensions
-			/// change
-			///
-			/// @param Width
-			/// @param Height
-			//----------------------------------------------------------
-			void ResizeFrameBuffer(u32 inudwWidth, u32 inudwHeight);
             
             //---Render states
             //----------------------------------------------------------
@@ -462,8 +446,6 @@ namespace ChilliSource
             
             std::vector<std::string> m_textureUniformNames;
             
-			RenderTarget* mpDefaultRenderTarget;
-            
             Core::Vector2 mvCachedScissorPos;
             Core::Vector2 mvCachedScissorSize;
             
@@ -519,9 +501,7 @@ namespace ChilliSource
             Rendering::CullFace meCurrentCullFace;
             Rendering::DepthTestComparison meDepthFunc;
             
-#ifdef CS_TARGETPLATFORM_IOS
-            EAGLContext* mContext;
-#elif defined CS_TARGETPLATFORM_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             ContextRestorer m_contextRestorer;
 #endif
             

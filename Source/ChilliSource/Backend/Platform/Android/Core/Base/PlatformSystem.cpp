@@ -55,13 +55,13 @@ namespace ChilliSource
 		}
         //-----------------------------------------
         //-----------------------------------------
-        void PlatformSystem::SetMaxFPS(u32 in_fps)
+        void PlatformSystem::SetPreferredFPS(u32 in_fps)
         {
-        	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->SetMaxFPS(in_fps);
+        	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->SetPreferredFPS(in_fps);
         }
 		//-----------------------------------------
         //-----------------------------------------
-        void PlatformSystem::TerminateUpdater()
+        void PlatformSystem::Quit()
         {
         	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->ForceQuit();
         }

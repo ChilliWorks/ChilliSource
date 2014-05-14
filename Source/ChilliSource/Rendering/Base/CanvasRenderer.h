@@ -1,22 +1,39 @@
-/*
- *  CanvasRenderer.h
- *  moFlo
- *
- *  Created by Scott Downie on 12/01/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  CanvasRenderer.h
+//  Chilli Source
+//  Created by Scott Downie on 12/01/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
-#ifndef _MO_FLO_RENDERING_CANVAS_H_
-#define _MO_FLO_RENDERING_CANVAS_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_CANVASRENDERER_H_
+#define _CHILLISOURCE_RENDERING_BASE_CANVASRENDERER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
-#include <ChilliSource/Rendering/Font/Font.h>
-#include <ChilliSource/Core/Math/Geometry/Shapes.h>
-#include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
-#include <ChilliSource/Core/Math/Matrix3.h>
 
 #include <unordered_map>
 
@@ -24,206 +41,169 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CanvasRenderer
+        //----------------------------------------------------------------------------
+        /// System that renders simple shapes and text to screen space. Responsible
+        /// for rendering the UI system.
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------------------
+		class CanvasRenderer : public Core::AppSystem
 		{
 		public:
-
-            struct PlacedCharacter
+            CS_DECLARE_NAMEDTYPE(CanvasRenderer);
+            
+            //----------------------------------------------------------------------------
+            /// Holds the information required to build a sprite for a text character
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------
+            struct DisplayCharacterInfo
             {
-                Core::Rectangle sUVs;
-                Core::Vector2 vSize;
-                Core::Vector2 vPosition;
+                Core::Rectangle m_UVs;
+                Core::Vector2 m_size;
+                Core::Vector2 m_position;
             };
-            
-            typedef std::vector<PlacedCharacter> CharacterList;
-            
-            //----------------------------------------------------------
-            /// Constructor
+            //----------------------------------------------------------------------------
+            /// Holds the return information for building text including all the characters
+            /// and the total width and height
             ///
             /// @author S Downie
-            ///
-            /// @param Render system
-            //----------------------------------------------------------
-			CanvasRenderer(RenderSystem* in_renderSystem);
-            //----------------------------------------------------------
+            //----------------------------------------------------------------------------
+            struct BuiltText
+            {
+                std::vector<DisplayCharacterInfo> m_characters;
+                
+                f32 m_width;
+                f32 m_height;
+            };
+            //----------------------------------------------------------------------------
             /// @author S Downie
-            //----------------------------------------------------------
-            void Init();
-			//----------------------------------------------------------
-			/// Render
+            ///
+            /// @param Interface ID
+            ///
+            /// @return Whether the class implements the given interface
+            //----------------------------------------------------------------------------
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			//----------------------------------------------------------------------------
+			/// Recursively descened the view hierarchy drawing each view
 			///
-			/// Draw UI 
-			//----------------------------------------------------------
-			void Render(GUI::GUIView* inpRootSurface, f32 infNearClipDistance);
-            //----------------------------------------------------------
-            /// Enable Clipping To Bounds
+			/// @author S Downie
             ///
+            /// @param Root view to draw
+			//----------------------------------------------------------------------------
+			void Render(GUI::GUIView* in_rootView);
+            //----------------------------------------------------------------------------
             /// Set the bounds beyond which any subviews will clip
             /// Pushes to a stack which tracks when to enable and
             /// disable scissoring
             ///
-            /// @param Position of the bottom left corner of the rect
-            /// @param Size of the clip region
-            //---------------------------------------------------------
-            void EnableClippingToBounds(const Core::Vector2& invPosition, const Core::Vector2& invSize);
-            //----------------------------------------------------------
-            /// Disable Clipping To Bounds
+            /// @author A Mackie
             ///
-            /// Pop the scissor tracking stack
-            //----------------------------------------------------------                            
-            void DisableClippingToBounds();
-            //-----------------------------------------------------------
-            /// Draw Box
+            /// @param Position of the bottom left corner of the rect in screen space
+            /// @param Size of the clip region in screen space
+            //----------------------------------------------------------------------------
+            void PushClipBounds(const Core::Vector2& in_blPosition, const Core::Vector2& in_size);
+            //----------------------------------------------------------------------------
+            /// Pop the scissor tracking stack and disable clipping if the stack is empty
             ///
-            /// Build a sprite box and batch it ready for rendering
+            /// @author A Mackie
+            //----------------------------------------------------------------------------
+            void PopClipBounds();
+            //----------------------------------------------------------------------------
+            /// Build a sprite box and render it to screen
             ///
             /// @param Transform
             /// @param Dimensions
             /// @param Texture
+            /// @param UVs
             /// @param Colour
-            /// @param Box origin alignment
-            //-----------------------------------------------------------
-			void DrawBox(const Core::Matrix3& inmatTransform, const Core::Vector2 & invSize, const TextureCSPtr & inpTexture, const Core::Rectangle& inUVs,
-                         const Core::Colour & insTintColour, AlignmentAnchor ineAlignment = AlignmentAnchor::k_middleCentre);
-            //-----------------------------------------------------------
-            /// Draw String
+            /// @param Origin anchor
+            //----------------------------------------------------------------------------
+			void DrawBox(const Core::Matrix3x3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Core::Rectangle& in_UVs,
+                         const Core::Colour& in_colour, AlignmentAnchor in_anchor);
+            //----------------------------------------------------------------------------
+            /// Build the descriptions for all characters. The descriptions can then be
+            /// passed into the draw method for rendering. The characters will be
+            /// build to fit into the given bounds and will wrap and then clip in
+            /// order to fit.
             ///
-            /// Build a sprite font and batch it ready for rendering
+            /// @author S Downie
             ///
-            /// @param Text
-            /// @param Transform
+            /// @param Text to convert to display characters
             /// @param Font
-            /// @param Built character cache
-            /// @param Colour
-            /// @param Bounds
-            /// @param Letter spacing
-            /// @param Line spacing
-			/// @param Justification (Horizontal)
-			/// @param Justification (Vertical)
-            /// @param Whether or not to flip vertically.
-            /// @param Max num lines (0 = infinite)
-            /// @param Bool pointer. Bool set true if string is clipped, false if not, untouched if string not rebuilt
-            /// @param Bool pointer. Bool set true if invalid character is found.
-            //-----------------------------------------------------------
-			void DrawString(const Core::UTF8String & insString, const Core::Matrix3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
-							const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
-							GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped = nullptr, bool * outpInvalidCharacterFound = nullptr);
-            //-----------------------------------------------------------
-            /// Calculate String Width
-            ///
-            /// Calculate the length of a string based on the font
-            /// and attributes
-            ///
-            /// @param String
-            /// @param Font
-            /// @param Size
-            /// @param Character spacing
-            ///
-            /// @return String length
-            //------------------------------------------------------------
-            f32 CalculateStringWidth(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infSize, f32 infCharSpacing, bool inbIgnoreLineBreaks);
-            //-----------------------------------------------------------
-            /// Calculate String Height
-            ///
-            /// Calculate the height of a string based on the font, width
-            /// and attributes
-            ///
-            /// @param String
-            /// @param Font
-            /// @param Width
-            /// @param Size
-            /// @param Character spacing
-            /// @param Line spacing
-            /// @param Number of lines
-            ///
-            /// @return String height
-            //------------------------------------------------------------
-            f32 CalculateStringHeight(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines);
-			//-------------------------------------------
-			/// Build String
-			///
-			/// Construct a list of character sprites
-			/// from the given string
-			///
-			/// @param Font
-			/// @param String to display
-			/// @param List of characters to be filled
-            /// @param Text size
-            /// @param Spacing between each letter
-            /// @param Spacing between each line
-            /// @param Wrap bounds
-            /// @param Max number of lines
-			/// @param Justification (Horizontal)
-			/// @param Justification (Vertical)
-            /// @param Whether or not to flip the text
-            /// vertically.
-			//-------------------------------------------
-			static void BuildString(const FontCSPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
-							const Core::Vector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineJustification, GUI::TextJustification ineVerticalJustification,
-							bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour,  bool * outpClipped = nullptr, bool * outpInvalidCharacterFound = nullptr);
-			//----------------------------------------------------
-			/// Build Character
-			///
-			/// Build a sprite from the given character
-            /// @param Font
-			/// @param Character
-            /// @param Next Character (used for kerning)
-			/// @param Cursor pos
             /// @param Text scale
-            /// @param Character spacing
-			/// @param The width of the new character
-			/// @param List of characters that we can add too
-			//----------------------------------------------------
-			static void BuildCharacter(const FontCSPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
-                                                   const Core::Vector2& invCursor, f32 infTextScale, f32 infCharSpacing,
-                                                   f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound = nullptr);
-            //----------------------------------------------------
-            /// Wrap
+            /// @param Line spacing
+            /// @param Max bounds
+            /// @param Max num lines (ZERO = infinite)
+            /// @param Horizontal justification
+            /// @param Vertical justufication
             ///
-            /// @param Text justification (Horizontal)
-            /// @param Y - offset
-            /// @param Bounds 
-            /// @param Character list with characters in this line
-            /// @param Out: Cursor Pos
-            /// @param Out: Character list
-            //----------------------------------------------------
-            static void Wrap(GUI::TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::Vector2& invBounds, CharacterList &inCurrentLine,
-					  Core::Vector2& outvCursor, CharacterList &outCharacters);
+            /// @return Built text struct containing all the character infos
+            //----------------------------------------------------------------------------
+            BuiltText BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
+                                const Core::Vector2& in_bounds, u32 in_numLines, GUI::TextJustification in_horizontal, GUI::TextJustification in_vertical) const;
+            //----------------------------------------------------------------------------
+            /// Build the sprites for each given character and render them to screen.
+            ///
+            /// @param Characters in text space
+            /// @param Transform to screen space
+            /// @param Colour
+            /// @param Texture
+            //----------------------------------------------------------------------------
+			void DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3x3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture);
 			
 		private:
 			
-            //----------------------------------------------------------
+            friend class Core::Application;
+            //----------------------------------------------------------------------------
+            /// Creates a new instance of the system.
+            ///
+            /// @author S Downie
+            ///
+            /// @return New renderer instance
+            //----------------------------------------------------------------------------
+            static CanvasRendererUPtr Create();
+            //----------------------------------------------------------------------------
+            /// Private constructor to enforce use of factory method
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------
+			CanvasRenderer() = default;
+            //----------------------------------------------------------------------------
+            /// Called when the system is created
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------
+            void OnInit() override;
+            //----------------------------------------------------------------------------
+            /// Called when the system is destroyed
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------
+            void OnDestroy() override;
+            //----------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @param Texture
             ///
             /// @return Cached or new GUI material that has the given
             /// texture
-            //----------------------------------------------------------
+            //----------------------------------------------------------------------------
             MaterialCSPtr GetGUIMaterialForTexture(const TextureCSPtr& in_texture);
-            
-			//-----------------------------------------------------
-			/// Update Sprite Data
-			///
-			/// Rebuild the sprite data
-			//-----------------------------------------------------
-			void UpdateSpriteData(const Core::Matrix4& inTransform, const Core::Vector2 & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment);
             
 		private:
 			
-			SpriteComponent::SpriteData msCachedSprite;
+			SpriteComponent::SpriteData m_canvasSprite;
 
-            DynamicSpriteBatch mOverlayBatcher;
+            DynamicSpriteBatchUPtr m_overlayBatcher;
             
-			std::vector<Core::Vector2> mScissorPos;
-            std::vector<Core::Vector2> mScissorSize;
+			std::vector<Core::Vector2> m_scissorPositions;
+            std::vector<Core::Vector2> m_scissorSizes;
             
             std::unordered_map<TextureCSPtr, MaterialCSPtr> m_materialGUICache;
             
             Core::ResourcePool* m_resourcePool;
             MaterialFactory* m_materialFactory;
-            
-            f32 mfNearClippingDistance;
 		};
 	}
 }

@@ -216,7 +216,6 @@ namespace ChilliSource
             
         private:
             
-            using ResourceId = u32;
             //-------------------------------------------------------------------------------------
             /// Descriptor that holds the providers and cached resources for a given type
             ///
@@ -225,7 +224,7 @@ namespace ChilliSource
             struct PoolDesc
             {
                 std::vector<ResourceProvider*> m_providers;
-                std::unordered_map<ResourceId, ResourceSPtr> m_cachedResources;
+                std::unordered_map<Resource::ResourceId, ResourceSPtr> m_cachedResources;
             };
             //------------------------------------------------------------------------------------
             /// Called when the system receieves a memory warning. This will force the pool
@@ -251,7 +250,7 @@ namespace ChilliSource
             ///
             /// @return Unique ID based on the location and path
             //------------------------------------------------------------------------------------
-            ResourceId GenerateResourceId(StorageLocation in_location, const std::string& in_filePath) const;
+            Resource::ResourceId GenerateResourceId(StorageLocation in_location, const std::string& in_filePath) const;
             //------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -259,39 +258,12 @@ namespace ChilliSource
             ///
             /// @return Unique ID based on the location and path
             //------------------------------------------------------------------------------------
-            ResourceId GenerateResourceId(const std::string& in_uniqueId) const;
+            Resource::ResourceId GenerateResourceId(const std::string& in_uniqueId) const;
             
         private:
             
             std::unordered_map<InterfaceIDType, PoolDesc> m_descriptors;
         };
-
-        //------------------------------------------------------------------------------------
-        //-------------------------------------------------------------------------------------
-        template <typename TResourceType> std::shared_ptr<TResourceType> ResourcePool::CreateResource(const std::string& in_uniqueId)
-        {
-            ResourceId resourceId = GenerateResourceId(in_uniqueId);
-            
-            auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
-            if(itDescriptor == m_descriptors.end())
-            {
-                std::shared_ptr<TResourceType> resource(TResourceType::Create());
-                
-                PoolDesc desc;
-                desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
-                m_descriptors.insert(std::make_pair(TResourceType::InterfaceID, desc));
-                return resource;
-            }
-            
-            //Check to make sure this doesn't already exist
-            PoolDesc& desc = itDescriptor->second;
-            CS_ASSERT(desc.m_cachedResources.find(resourceId) == desc.m_cachedResources.end(), "Resource with Id: " + in_uniqueId + " already exists");
-            
-            std::shared_ptr<TResourceType> resource(TResourceType::Create());
-            desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
-            
-            return resource;
-        }
         //------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------
         template <typename TResourceType> std::shared_ptr<const TResourceType> ResourcePool::GetResource(const std::string& in_uniqueId) const
@@ -309,7 +281,7 @@ namespace ChilliSource
             const PoolDesc& desc(itDescriptor->second);
             
             //Check descriptor and see if this resource already exists
-            ResourceId resourceId = GenerateResourceId(in_uniqueId);
+            Resource::ResourceId resourceId = GenerateResourceId(in_uniqueId);
             auto itResource = desc.m_cachedResources.find(resourceId);
             if(itResource != desc.m_cachedResources.end())
             {
@@ -317,6 +289,30 @@ namespace ChilliSource
             }
             
             return nullptr;
+        }
+        //------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------
+        template <typename TResourceType> std::shared_ptr<TResourceType> ResourcePool::CreateResource(const std::string& in_uniqueId)
+        {
+            Resource::ResourceId resourceId = GenerateResourceId(in_uniqueId);
+            std::shared_ptr<TResourceType> resource(TResourceType::Create());
+            resource->SetId(resourceId);
+            
+            auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
+            if(itDescriptor == m_descriptors.end())
+            {
+                PoolDesc desc;
+                desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
+                m_descriptors.insert(std::make_pair(TResourceType::InterfaceID, desc));
+                return resource;
+            }
+            
+            //Check to make sure this doesn't already exist
+            PoolDesc& desc(itDescriptor->second);
+            CS_ASSERT(desc.m_cachedResources.find(resourceId) == desc.m_cachedResources.end(), "Resource with Id: " + in_uniqueId + " already exists");
+            desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
+            
+            return resource;
         }
         //-------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------
@@ -335,7 +331,7 @@ namespace ChilliSource
             PoolDesc& desc(itDescriptor->second);
             
             //Check descriptor and see if this resource already exists
-            ResourceId resourceId = GenerateResourceId(in_location, in_filePath);
+            Resource::ResourceId resourceId = GenerateResourceId(in_location, in_filePath);
             auto itResource = desc.m_cachedResources.find(resourceId);
             if(itResource != desc.m_cachedResources.end())
             {
@@ -361,6 +357,7 @@ namespace ChilliSource
             //Add it to the cache
             resource->SetStorageLocation(in_location);
             resource->SetFilePath(in_filePath);
+            resource->SetId(resourceId);
             desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
             
             return std::static_pointer_cast<TResourceType>(resource);
@@ -382,7 +379,7 @@ namespace ChilliSource
             PoolDesc& desc(itDescriptor->second);
             
             //Check descriptor and see if this resource already exists
-            ResourceId resourceId = GenerateResourceId(in_location, in_filePath);
+            Resource::ResourceId resourceId = GenerateResourceId(in_location, in_filePath);
             auto itResource = desc.m_cachedResources.find(resourceId);
             if(itResource == desc.m_cachedResources.end())
             {
@@ -466,7 +463,7 @@ namespace ChilliSource
             PoolDesc& desc(itDescriptor->second);
             
             //Check descriptor and see if this resource already exists
-            ResourceId resourceId = GenerateResourceId(in_location, in_filePath);
+            Resource::ResourceId resourceId = GenerateResourceId(in_location, in_filePath);
             auto itResource = desc.m_cachedResources.find(resourceId);
             if(itResource != desc.m_cachedResources.end())
             {

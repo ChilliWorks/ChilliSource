@@ -54,6 +54,8 @@ namespace ChilliSource
 		{
 		public:
             
+            using ResourceId = u32;
+            
             CS_DECLARE_NOCOPY(Resource);
             
             //-------------------------------------------------------
@@ -94,6 +96,21 @@ namespace ChilliSource
             /// was not loaded from file then this is empty.
 			//-------------------------------------------------------
 			const std::string& GetFilePath() const;
+            //-------------------------------------------------------
+            /// NOTE: Not for general application used by the providers
+            /// to set the id
+            ///
+			/// @author S Downie
+			///
+			/// @param The resource id
+			//-------------------------------------------------------
+			void SetId(ResourceId in_id);
+            //-------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return The resource id as set by the resource pool
+			//-------------------------------------------------------
+			ResourceId GetId() const;
 			//-------------------------------------------------------
 			/// @author S Downie
 			///
@@ -138,6 +155,7 @@ namespace ChilliSource
 			
 			std::string m_filePath;
 			StorageLocation m_location;
+            ResourceId m_id;
         
             std::atomic<LoadState> m_loadState;
 		};

@@ -52,7 +52,7 @@ namespace ChilliSource
             if (in_enabled == true && m_enabled == false && [m_textView canBecomeFirstResponder])
             {
                 //Show the keyboard!
-				[[EAGLView sharedInstance] addSubview:m_textView];
+                [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:m_textView];
 				m_textView.hidden = YES;
 				[m_textView becomeFirstResponder];
 				m_enabled = true;

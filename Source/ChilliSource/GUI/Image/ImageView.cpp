@@ -217,7 +217,7 @@ namespace ChilliSource
 					sNewUVs.vSize.y *= -1;
 				}
                 
-                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), Texture, sNewUVs, GetAbsoluteColour());
+                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), Texture, sNewUVs, GetAbsoluteColour(), Rendering::AlignmentAnchor::k_middleCentre);
             }
             
             GUIView::Draw(inpCanvas);

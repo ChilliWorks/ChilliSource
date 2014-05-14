@@ -1,56 +1,95 @@
 //
 //  ParticleEmitterFactory.cpp
-//  moFloTest
+//  Chilli Source
+//  Created by S Downie on 11/04/2011.
 //
-//  Created by Scott Downie on 11/04/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
 
-#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ConeParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Emitters/PointParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Emitters/RingParticleEmitter.h>
 
 namespace ChilliSource
 {
     namespace Rendering
     {
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        void ParticleEmitterFactory::AddCreator(const EmitterCreateDelegate& inDelegate, const std::string& instrKey)
+        CS_DEFINE_NAMEDTYPE(ParticleEmitterFactory);
+        
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        ParticleEmitterFactoryUPtr ParticleEmitterFactory::Create()
         {
-            mmapDelegateToType.insert(std::make_pair(instrKey, inDelegate));
+            return ParticleEmitterFactoryUPtr(new ParticleEmitterFactory());
+        }
+        //------------------------------------------------------------------
+        //------------------------------------------------------------------
+        bool ParticleEmitterFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+        {
+            return in_interfaceId == ParticleEmitterFactory::InterfaceID;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        void ParticleEmitterFactory::OnInit()
+        {
+            AddCreator("Point", Core::MakeDelegate(&PointParticleEmitter::Create));
+            AddCreator("Ring", Core::MakeDelegate(&RingParticleEmitter::Create));
+            AddCreator("Cone", Core::MakeDelegate(&ConeParticleEmitter::Create));
+        }
+        //------------------------------------------------------------------
+        //------------------------------------------------------------------
+        void ParticleEmitterFactory::AddCreator(const std::string& in_type, const EmitterCreateDelegate& in_delegate)
+        {
+            m_creators.insert(std::make_pair(in_type, in_delegate));
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
         void ParticleEmitterFactory::RemoveAllCreators()
         {
-            mmapDelegateToType.clear();
+            m_creators.clear();
         }
         //------------------------------------------------------------------
-        /// Create Particle Emitter
-        ///
-        /// Construct a particle emitter from the given shape identifier
-        ///
-        /// @param Shape type i.e. "Point", "Ring"
-        /// @param Param dictionary
-        /// @param Material
-        /// @param Owning particle system
-        /// @return Ownership of particle emitter of that type
         //-------------------------------------------------------------------
-        ParticleEmitterUPtr ParticleEmitterFactory::CreateParticleEmitter(const std::string& instrType, const Core::ParamDictionary& insParams,
-                                                                          const MaterialCSPtr& inpMaterial, ParticleComponent* inpOwner) const
+        ParticleEmitterUPtr ParticleEmitterFactory::CreateParticleEmitter(const std::string& in_type, const Core::ParamDictionary& in_properties, const MaterialCSPtr& in_material, ParticleComponent* in_owner) const
         {
-            MapDelegateToString::const_iterator it = mmapDelegateToType.find(instrType);
+            auto it = m_creators.find(in_type);
             
-            if(it != mmapDelegateToType.end())
+            if(it != m_creators.end())
             {
-                return (it->second)(insParams, inpMaterial, inpOwner);
+                return (it->second)(in_properties, in_material, in_owner);
             }
-            else
-            {
-                CS_LOG_ERROR("Cannot create particle emitter of type: " + instrType);
-                return nullptr;
-            }
+            
+            CS_LOG_ERROR("Cannot create particle emitter of type: " + in_type);
+            return nullptr;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        void ParticleEmitterFactory::OnDestroy()
+        {
+            RemoveAllCreators();
         }
     }
 }

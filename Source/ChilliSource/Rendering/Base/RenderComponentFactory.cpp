@@ -31,6 +31,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
@@ -41,10 +42,16 @@
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
 #include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
+#include <ChilliSource/Rendering/Particles/ParticleComponent.h>
+#include <ChilliSource/Rendering/Particles/ParticleEffect.h>
+#include <ChilliSource/Rendering/Particles/ParticleSystem.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffectorFactory.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
-
 
 namespace ChilliSource
 {
@@ -102,6 +109,15 @@ namespace ChilliSource
             
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             CS_ASSERT(m_screen, "Render Component Factory is missing required system: Screen.");
+            
+            m_particleSystem = Core::Application::Get()->GetSystem<ParticleSystem>();
+            CS_ASSERT(m_particleSystem, "Render Component Factory is missing required system: Particle System.");
+            
+            m_emitterFactory = Core::Application::Get()->GetSystem<ParticleEmitterFactory>();
+            CS_ASSERT(m_emitterFactory, "Render Component Factory is missing required system: Emitter Factory.");
+            
+            m_affectorFactory = Core::Application::Get()->GetSystem<ParticleAffectorFactory>();
+            CS_ASSERT(m_affectorFactory, "Render Component Factory is missing required system: Affector Factory.");
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -239,5 +255,47 @@ namespace ChilliSource
             PointLightComponentUPtr pLight(new PointLightComponent());
             return pLight;
         }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        ParticleComponentUPtr RenderComponentFactory::CreateParticleComponent()
+		{
+			ParticleComponentUPtr particleComp(new ParticleComponent());
+			m_particleSystem->AddParticleComponent(particleComp.get());
+			return particleComp;
+		}
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        ParticleComponentUPtr RenderComponentFactory::CreateParticleComponent(const ParticleEffectCSPtr& in_effect)
+		{
+			ParticleComponent* particleComp(new ParticleComponent());
+            
+            const MaterialCSPtr& material = in_effect->GetMaterial();
+            particleComp->SetMaterial(material);
+            
+            u32 numEmitters = in_effect->GetNumEmitters();
+            for(u32 i=0; i<numEmitters; ++i)
+            {
+                const auto& properties = in_effect->GetEmitterDesc(i);
+                const std::string& type = properties.ValueForKey("Type");
+                auto emitter = m_emitterFactory->CreateParticleEmitter(type, properties, material, particleComp);
+                CS_ASSERT(emitter != nullptr, "Cannot create particle emitter of type " + type);
+                emitter->SetTextureAtlas(in_effect->GetAtlas());
+                emitter->SetTextureAtlasId(in_effect->GetAtlasId());
+                particleComp->AddEmitter(std::move(emitter));
+            }
+            
+            u32 numAffectors = in_effect->GetNumAffectors();
+            for(u32 i=0; i<numAffectors; ++i)
+            {
+                const auto& properties = in_effect->GetAffectorDesc(i);
+                const std::string& type = properties.ValueForKey("Type");
+                auto affector = m_affectorFactory->CreateParticleAffector(type, properties);
+                CS_ASSERT(affector != nullptr, "Cannot create particle affector of type " + type);
+                particleComp->AddAffector(std::move(affector));
+            }
+            
+            m_particleSystem->AddParticleComponent(particleComp);
+			return ParticleComponentUPtr(particleComp);
+		}
 	}
 }

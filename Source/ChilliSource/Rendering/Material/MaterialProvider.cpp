@@ -407,7 +407,7 @@ namespace ChilliSource
                             {
                                 if(out_shaderFiles[udwShaderFilesIndex].m_pass == shaderNodes[i].second)
                                 {
-                                    out_shaderFiles[udwShaderFilesIndex].m_location = ChilliSource::Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(shaderEl, "location", "Package"));
+                                    out_shaderFiles[udwShaderFilesIndex].m_location = Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(shaderEl, "location", "Package"));
                                     out_shaderFiles[udwShaderFilesIndex].m_filePath = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(shaderEl, "file-name", "");
                                     break;
                                 }

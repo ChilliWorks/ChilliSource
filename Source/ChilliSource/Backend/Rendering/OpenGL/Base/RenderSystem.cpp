@@ -29,12 +29,6 @@
 #include <ChilliSource/Rendering/Base/DepthTestComparison.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>
 
-#ifdef CS_TARGETPLATFORM_IOS
-#include <UIKit/UIKit.h>
-#else
-#include <ChilliSource/Core/Base/Application.h>
-#endif
-
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
@@ -80,7 +74,7 @@ namespace ChilliSource
 		/// Constructor
 		//----------------------------------------------------------
 		RenderSystem::RenderSystem(Rendering::RenderCapabilities* in_renderCapabilities)
-		: mpDefaultRenderTarget(nullptr), mpCurrentMaterial(nullptr), m_currentShader(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0),
+		: mpCurrentMaterial(nullptr), m_currentShader(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0),
         mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mpLightComponent(nullptr),
         mbBlendFunctionLocked(false), mbInvalidateLigthingCache(true),
         mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities)), m_hasContextBeenBackedUp(false)
@@ -98,25 +92,6 @@ namespace ChilliSource
         //----------------------------------------------------------
         void RenderSystem::Init()
 		{
-#ifdef CS_TARGETPLATFORM_IOS
-            //Create the context with the specified GLES version
-			mContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-            
-			//Set the current context
-            if(!mContext || ![EAGLContext setCurrentContext: mContext])
-            {
-                CS_LOG_FATAL("Cannot Create OpenGL ES 2.0 Context");
-            }
-#endif
-#ifdef CS_TARGETPLATFORM_WINDOWS
-			GLenum GlewError = glewInit();
-			if (GLEW_OK != GlewError)
-			{
-				//Problem: glewInit failed, something is seriously wrong.
-				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
-			}
-#endif
-            
             m_hasContext = true;
             
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
@@ -146,13 +121,7 @@ namespace ChilliSource
         void RenderSystem::Resume()
         {
 			mbInvalidateAllCaches = true;
-			
-#ifdef CS_TARGETPLATFORM_IOS
-            if([EAGLContext currentContext] != mContext)
-            {
-                [EAGLContext setCurrentContext:mContext];
-            }
-#endif
+
             RestoreContext();
         }
         //----------------------------------------------------------
@@ -458,25 +427,10 @@ namespace ChilliSource
             mNewClearColour = inClearCol;
 		}
 		//----------------------------------------------------------
-		/// Get Default Render Target
-		//----------------------------------------------------------
-		Rendering::RenderTarget* RenderSystem::GetDefaultRenderTarget()
-		{
-			return mpDefaultRenderTarget;
-		}
-		//----------------------------------------------------------
 		/// Begin Frame
 		//----------------------------------------------------------
 		void RenderSystem::BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
-#ifdef CS_TARGETPLATFORM_IOS
-            //Sometimes iOS steals the context and doesn't return it.
-            if([EAGLContext currentContext] != mContext)
-            {
-                [EAGLContext setCurrentContext:mContext];
-            }
-#endif
-            
 #ifdef CS_ENABLE_DEBUG
 			CheckForGLErrors();
 #endif
@@ -484,6 +438,10 @@ namespace ChilliSource
 			{
 				inpActiveRenderTarget->Bind();
 			}
+            else
+            {
+                glViewport(0, 0, mudwViewWidth, mudwViewHeight);
+            }
 
 			EnableColourWriting(true);
             EnableDepthWriting(true);
@@ -577,43 +535,9 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void RenderSystem::EndFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
-#ifdef CS_TARGETPLATFORM_IOS
-            if (mpDefaultRenderTarget != nullptr && mpDefaultRenderTarget == inpActiveRenderTarget)
-            {
-                RenderTarget::PresentDefaultRenderTarget(mContext, mpDefaultRenderTarget);
-            }
-#else
-            glViewport(0, 0, mudwViewWidth, mudwViewHeight);
-#endif
 #ifdef CS_TARGETPLATFORM_WINDOWS
 			Windows::GLFWManager::Get()->SwapBuffers();
 #endif
-		}
-		//----------------------------------------------------------
-		/// Resize Frame Buffer
-		//----------------------------------------------------------
-		void RenderSystem::ResizeFrameBuffer(u32 inudwWidth, u32 inudwHeight)
-		{
-#ifdef CS_TARGETPLATFORM_IOS
-            if(mudwViewWidth != inudwWidth || mudwViewHeight != inudwHeight)
-            {
-                if(mpDefaultRenderTarget)
-                {
-                    RenderTarget::DestroyDefaultRenderTarget(mContext, mpDefaultRenderTarget);
-                }
-                
-                //Create a default frame buffer for on-screen rendering
-                mpDefaultRenderTarget = RenderTarget::CreateDefaultRenderTarget(mContext, inudwWidth, inudwHeight);
-            }
-#else
-            if(mbInvalidateAllCaches || mudwViewWidth != inudwWidth || mudwViewHeight != inudwHeight)
-            {
-                glViewport(0, 0, inudwWidth, inudwHeight);
-            }
-#endif
-            
-            mudwViewHeight = inudwHeight;
-            mudwViewWidth = inudwWidth;
 		}
         //----------------------------------------------------------
 		/// Lock Alpha Blending
@@ -1132,31 +1056,13 @@ namespace ChilliSource
         //----------------------------------------------------------
         void RenderSystem::OnScreenResolutionChanged(const Core::Vector2& in_resolution)
         {
-            ResizeFrameBuffer((u32)in_resolution.x, (u32)in_resolution.y);
+            mudwViewHeight = (u32)in_resolution.y;
+            mudwViewWidth = (u32)in_resolution.x;
         }
         //----------------------------------------------------------
 		//----------------------------------------------------------
 		void RenderSystem::Destroy()
 		{
-#ifdef CS_TARGETPLATFORM_IOS
-            if(mpDefaultRenderTarget)
-            {
-                RenderTarget::DestroyDefaultRenderTarget(mContext, mpDefaultRenderTarget);
-            }
-            
-			//Release the context
-			if(mContext)
-			{
-				if([EAGLContext currentContext] == mContext)
-				{
-					[EAGLContext setCurrentContext:nil];
-				}
-				
-				[mContext release];
-				mContext = nullptr;
-			}
-#endif
-            
             free(mpbCurrentVertexAttribState);
             free(mpbLastVertexAttribState);
             

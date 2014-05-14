@@ -59,12 +59,6 @@ public class CSApplication
 	private LifecycleState m_currentAppLifecycleState = LifecycleState.k_notInitialised;
 	
 	/**
-	 * Factory method for creating the application in native
-	 * 
-	 * @author S Downie
-	 */
-	private static native void createApplication();
-	/**
 	 * @author S Downie
 	 * 
 	 * @return Singleton instance of the application. This is not lazily created
@@ -123,8 +117,6 @@ public class CSApplication
 		m_currentAppLifecycleState = LifecycleState.k_notInitialised;
 		
 		loadSharedLibraries();
-		
-		createApplication();
 	}
 	/**
 	 * Triggered when the app is launched
@@ -527,7 +519,7 @@ public class CSApplication
 	 * 
 	 * @param Max update frequency in seconds
 	 */
-	public void setMaxFPS(int in_maxFPS)
+	public void setPreferredFPS(int in_maxFPS)
 	{
 		m_milliSecsPerUpdate = (long) (1000.0f/(float)in_maxFPS);
 	}

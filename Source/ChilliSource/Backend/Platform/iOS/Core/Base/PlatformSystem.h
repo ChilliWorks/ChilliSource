@@ -70,28 +70,13 @@ namespace ChilliSource
             /// @param The maximum frames per second to clamp to.
             /// This should be in multiples of 15 (15, 30, 60)
             //------------------------------------------------------
-            void SetMaxFPS(u32 in_fps) override;
+            void SetPreferredFPS(u32 in_fps) override;
             //------------------------------------------------------
-            /// Begin the game loop
-            ///
-            /// @author S Downie
-			//------------------------------------------------------
-			void Run() override;
-			//------------------------------------------------------
-			/// Starts or stops the platforms update loop.
-			///
-            /// @author S Downie
-            ///
-			/// @param Whether to end or begin.
-			//------------------------------------------------------
-			void SetUpdaterActive(bool in_isActive) override;
-            //------------------------------------------------------
-            /// Stops the update loop causing the application to
-            /// terminate
+            /// iOS cannot be manually quit
             ///
             /// @author S Downie
             //------------------------------------------------------
-            void TerminateUpdater() override;
+            void Quit() override {}
             //------------------------------------------------------
             /// @author S Downie
             ///

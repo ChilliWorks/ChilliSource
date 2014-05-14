@@ -7,7 +7,7 @@
 //
 
 #include <ChilliSource/Rendering/Particles/Emitters/RingParticleEmitter.h>
-#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffector.h>
 #include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 
 #include <ChilliSource/Core/Math/MathUtils.h>

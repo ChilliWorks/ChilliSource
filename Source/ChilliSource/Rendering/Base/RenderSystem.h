@@ -96,7 +96,6 @@ namespace ChilliSource
 			virtual void RenderBuffer(MeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::Matrix4&) = 0;
 			
 			virtual RenderTarget* CreateRenderTarget(u32 inWidth, u32 inHeight) = 0;
-			virtual RenderTarget* GetDefaultRenderTarget() = 0;
 			
             //----------------------------------------------------
             /// Get Dynamic Sprite Batch Pointer

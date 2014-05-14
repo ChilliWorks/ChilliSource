@@ -93,7 +93,13 @@ namespace ChilliSource
 			/// to. This should be in multiples of 15 
 			/// (15, 30, 60)
 			//-------------------------------------------------
-			void SetMaxFPS(u32 in_fps);
+			void SetPreferredFPS(u32 in_fps);
+			//-------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return Whether the window exists
+			//-------------------------------------------------
+			bool IsWindowAlive() const;
 			//---------------------------------------------------
 			/// @author S Downie
 			///

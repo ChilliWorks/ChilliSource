@@ -185,28 +185,6 @@ namespace ChilliSource
 			/// @return Rounded integer
 			//----------------------------------------------------------
 			s32 Round(f32 infValue);
-			//----------------------------------------------------------
-			/// Min
-			///
-			/// @param Value of type T
-			/// @param Value of type T
-			/// @return Minimum of two values
-			//----------------------------------------------------------
-			template<typename T> inline T Min(T inValue1, T inValue2)
-			{
-				return inValue1 < inValue2 ? inValue1 : inValue2;
-			}
-			//----------------------------------------------------------
-			/// Max
-			///
-			/// @param Value of type T
-			/// @param Value of type T
-			/// @return Maximum of two values
-			//----------------------------------------------------------
-			template<typename T> inline T Max(T inValue1, T inValue2)
-			{
-				return inValue2 < inValue1 ? inValue1 : inValue2;
-			}
             //----------------------------------------------------
             /// Mode 
             ///

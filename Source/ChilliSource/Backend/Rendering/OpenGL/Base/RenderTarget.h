@@ -15,49 +15,13 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Rendering/Base/RenderTarget.h>
 
-#ifdef CS_TARGETPLATFORM_IOS
-@class EAGLContext;
-#endif
-
 namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class RenderTarget : public ChilliSource::Rendering::RenderTarget
+		class RenderTarget final : public ChilliSource::Rendering::RenderTarget
 		{
 		public:
-#ifdef CS_TARGETPLATFORM_IOS
-            //------------------------------------------------------
-            /// Create Default Render Target
-            ///
-            /// iOS does not use an implicit onscreen render target
-            /// instead a render target with the surface view
-            /// attached as the render buffer must be provided.
-            ///
-            /// @param The iOS EAGLView
-            /// @param The width of the render target.
-            /// @param the height of the render target.
-            //------------------------------------------------------
-			static RenderTarget* CreateDefaultRenderTarget(EAGLContext* inpContext, u32 inudwWidth, u32 inudwHeight);
-            //------------------------------------------------------
-            /// Present Default Render Target
-            ///
-            /// Presents the default iOS render target.
-            ///
-            /// @param The iOS EAGLView
-            /// @param the render target to present
-            //------------------------------------------------------
-			static void PresentDefaultRenderTarget(EAGLContext* inpContext, RenderTarget* inpRenderTarget);
-            //------------------------------------------------------
-            /// Destroy Default Render Target
-            ///
-            /// Destroys the default iOS render target.
-            ///
-            /// @param The iOS EAGLView
-            /// @param the render target to destroy
-            //------------------------------------------------------
-			static void DestroyDefaultRenderTarget(EAGLContext* inpContext, RenderTarget* inpRenderTarget);
-#endif
             //--------------------------------------------------
 			/// Clear Cache
 			///
@@ -66,7 +30,7 @@ namespace ChilliSource
 			static void ClearCache();
             
             RenderTarget();
-			virtual ~RenderTarget();
+            ~RenderTarget();
             
             //------------------------------------------------------
             /// Init

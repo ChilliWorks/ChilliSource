@@ -170,6 +170,26 @@ namespace ChilliSource
             /// @return Ownership of new point light component
 			//---------------------------------------------------------------------------
             PointLightComponentUPtr CreatePointLightComponent() const;
+            //--------------------------------------------------------
+			/// Creates an empty particle component for customisation.
+            /// The component will have no emitters, affectors or
+            /// render properties.
+            ///
+            /// @author S Downie
+			///
+			/// @return New particle component
+			//--------------------------------------------------------
+			ParticleComponentUPtr CreateParticleComponent();
+            //--------------------------------------------------------
+            /// Creates a particle component build to the specifications
+            /// of the given effect resource. The effect describes
+            /// the emitters, affectors and render properties.
+            ///
+            /// @param Effect resource
+            ///
+            /// @return New particle component
+            //--------------------------------------------------------
+            ParticleComponentUPtr CreateParticleComponent(const ParticleEffectCSPtr& in_effect);
             
         private:
             
@@ -202,6 +222,9 @@ namespace ChilliSource
             Core::Screen* m_screen = nullptr;
 			Core::ResourcePool* m_resourcePool = nullptr;
 			RenderCapabilities* m_renderCapabilities = nullptr;
+            ParticleSystem* m_particleSystem = nullptr;
+            ParticleAffectorFactory* m_affectorFactory = nullptr;
+            ParticleEmitterFactory* m_emitterFactory = nullptr;
 		};
 	}
 }

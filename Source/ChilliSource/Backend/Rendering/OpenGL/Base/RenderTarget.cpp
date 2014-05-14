@@ -11,11 +11,6 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 
-#ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
-#include <OpenGLES/EAGL.h>
-#include <OpenGLES/EAGLDrawable.h>
-#endif
 
 namespace ChilliSource
 {
@@ -108,64 +103,6 @@ namespace ChilliSource
 				*inBuffer = 0;
 			}
         }
-#ifdef CS_TARGETPLATFORM_IOS
-        //------------------------------------------------------
-        /// Create Default Render Target
-        //------------------------------------------------------
-        RenderTarget* RenderTarget::CreateDefaultRenderTarget(EAGLContext* inpContext, u32 inudwWidth, u32 inudwHeight)
-        {
-            RenderTarget* pDefaultRenderTarget = new RenderTarget();
-            pDefaultRenderTarget->Init(inudwWidth, inudwHeight);
-            
-            BindFrameBuffer(pDefaultRenderTarget->mFrameBuffer);
-            CreateRenderBuffer(&pDefaultRenderTarget->mRenderBuffer);
-            
-			[inpContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)[EAGLView sharedInstance].layer];
-			
-			//Attach the colour buffer to the framebuffer
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, pDefaultRenderTarget->mRenderBuffer);
-			
-			//Get the dimensions of the renderbuffer
-			glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH,  (GLint*)&pDefaultRenderTarget->mudwWidth);
-			glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, (GLint*)&pDefaultRenderTarget->mudwHeight);
-            
-            //check everything is okay
-            bool bResult = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE && pDefaultRenderTarget->mudwWidth != 0 && pDefaultRenderTarget->mudwHeight != 0);
-            CS_ASSERT(bResult, "Cannot Create OpenGL ES 2.0 default render buffer");
-            
-            //attach depth buffer
-            bResult = pDefaultRenderTarget->CreateAndAttachDepthBuffer();
-            CS_ASSERT(bResult, "Cannot Create OpenGL ES 2.0 default depth buffer");
-            
-            return pDefaultRenderTarget;
-        }
-        //------------------------------------------------------
-        /// Present Default Render Target
-        //------------------------------------------------------
-        void RenderTarget::PresentDefaultRenderTarget(EAGLContext* inpContext, RenderTarget* inpRenderTarget)
-        {
-            BindRenderBuffer(inpRenderTarget->mRenderBuffer);
-            [inpContext presentRenderbuffer:GL_RENDERBUFFER];
-        }
-        //------------------------------------------------------
-        /// Destroy Default Render Target
-        //------------------------------------------------------
-        void RenderTarget::DestroyDefaultRenderTarget(EAGLContext* inpContext, RenderTarget* inpRenderTarget)
-        {
-            [inpContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:nil];
-            
-            if(RenderTarget::pCurrentlyBoundTarget == inpRenderTarget)
-                RenderTarget::pCurrentlyBoundTarget = nullptr;
-            
-            if(gCurrentlyBoundFrameBuffer == inpRenderTarget->mFrameBuffer)
-                gCurrentlyBoundFrameBuffer = -1;
-            
-            if(gCurrentlyBoundRenderBuffer == inpRenderTarget->mRenderBuffer || gCurrentlyBoundRenderBuffer == inpRenderTarget->mDepthBuffer)
-                gCurrentlyBoundRenderBuffer = -1;
-            
-            CS_SAFEDELETE(inpRenderTarget);
-        }
-#endif
         //--------------------------------------------------
         /// Clear Cache
         ///

@@ -8,7 +8,6 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxSystem.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxListener.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/Notification/ToastNotification.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
@@ -82,7 +81,7 @@ namespace ChilliSource
         {
             NSString* text = [NSStringUtils newNSStringWithUTF8String:in_text];
             ToastNotification* pToast = [[ToastNotification alloc] initWithMessage:text];
-            [[EAGLView sharedInstance] addSubview:pToast];
+            [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:pToast];
             [pToast animateIn];
             [text release];
         }

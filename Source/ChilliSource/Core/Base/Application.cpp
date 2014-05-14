@@ -1,9 +1,29 @@
 //
-//  Application.h
+//  Application.cpp
 //  Chilli Source
-//
 //  Created by Scott Downie on 23/09/2010.
-//  Copyright 2010 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/Core/Base/Application.h>
@@ -14,19 +34,16 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
-#include <ChilliSource/Core/Entity/ComponentFactory.h>
-#include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
-#include <ChilliSource/Core/Image/ImageProvider.h>
 #include <ChilliSource/Core/Image/CSImageProvider.h>
+#include <ChilliSource/Core/Image/PNGImageProvider.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Localisation/LocalisedTextProvider.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Time/CoreTimer.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -39,6 +56,7 @@
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
+#include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
@@ -50,6 +68,10 @@
 #include <ChilliSource/Rendering/Material/MaterialProvider.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
+#include <ChilliSource/Rendering/Particles/CSParticleEffectProvider.h>
+#include <ChilliSource/Rendering/Particles/ParticleSystem.h>
+#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffectorFactory.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
 #include <ChilliSource/Rendering/Texture/CubemapProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
@@ -135,7 +157,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void Application::Quit()
         {
-            m_platformSystem->TerminateUpdater();
+            m_platformSystem->Quit();
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -157,13 +179,17 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
+        const LocalisedTextCSPtr& Application::GetDefaultLocalisedText() const
+        {
+            return m_defaultLocalisedText;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
 		void Application::Init()
 		{
             CS_ASSERT(s_application == nullptr, "Application already initialised!");
             s_application = this;
             
-            m_componentFactoryDispenser = new ComponentFactoryDispenser(this);
-
 			Logging::Create();
             
             GUI::GUIViewFactory::RegisterDefaults();
@@ -186,18 +212,12 @@ namespace ChilliSource
             
             OnInit();
             PushInitialState();
-
-			//Begin the update loop
-			m_platformSystem->Run();
 		}
         //----------------------------------------------------
         //----------------------------------------------------
 		void Application::Resume()
 		{
             m_shouldNotifyConnectionsResumeEvent = true;
-            
-			//We must restart the application timer. This will automatically restart system updates
-			m_platformSystem->SetUpdaterActive(true);
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -240,7 +260,7 @@ namespace ChilliSource
             //We do not need to render as often as we update so this callback will be triggered
             //less freqenctly than the update frequency suggests. We must work out how many times to update based on the time since last frame
             //and our actual update frequency. We carry the remainder to the next frame until we have a full update cycle
-            m_updateIntervalRemainder = MathUtils::Min(m_updateIntervalRemainder + in_deltaTime, GetUpdateIntervalMax());
+            m_updateIntervalRemainder = std::min(m_updateIntervalRemainder + in_deltaTime, GetUpdateIntervalMax());
             
 			//process any queued input received by the pointer system.
 			if(m_pointerSystem != nullptr)
@@ -263,6 +283,16 @@ namespace ChilliSource
             
             //Tell the state manager to update the active state
             OnUpdate(in_deltaTime);
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Application::Render()
+        {
+            if(m_isSuspending)
+            {
+                // Updating after told to suspend so early out
+                return;
+            }
             
             //Render the scene
             m_renderer->RenderToScreen(m_stateManager->GetActiveState()->GetScene());
@@ -270,7 +300,7 @@ namespace ChilliSource
 #ifdef CS_ENABLE_DEBUGSTATS
             m_debugStats->Clear();
 #endif
-		}
+        }
         //----------------------------------------------------
         //----------------------------------------------------
 		void Application::ApplicationMemoryWarning()
@@ -316,9 +346,6 @@ namespace ChilliSource
             
             m_renderSystem->Suspend();
             
-			//We must invalidate the application timer. This will stop sub-system updates
-			m_platformSystem->SetUpdaterActive(false);
-			
 			CS_LOG_VERBOSE("App Finished Suspending...");
 		}
         //----------------------------------------------------
@@ -338,15 +365,13 @@ namespace ChilliSource
 			m_defaultFont.reset();
 			m_defaultMesh.reset();
 			m_defaultMaterial.reset();
+            m_defaultLocalisedText.reset();
             
             m_renderSystem->Destroy();
-            
+			m_resourcePool->Destroy();
+
             m_systems.clear();
-            
-            CS_SAFEDELETE(m_componentFactoryDispenser);
-            
-            m_resourcePool->Destroy();
-            
+
             Logging::Destroy();
             
             s_application = nullptr;
@@ -369,14 +394,13 @@ namespace ChilliSource
             m_resourcePool = CreateSystem<ResourcePool>();
             CreateSystem<AppDataStore>();
             CreateSystem<CSImageProvider>();
+            CreateSystem<PNGImageProvider>();
             CreateSystem<DialogueBoxSystem>();
+            CreateSystem<LocalisedTextProvider>();
             
 #ifdef CS_ENABLE_DEBUGSTATS
             m_debugStats = CreateSystem<Debugging::DebugStats>();
 #endif
-            
-            //TODO: Change this to a PNG image provider.
-            CreateSystem<ImageProvider>();
 
             //Input
             CreateSystem<Input::Keyboard>();
@@ -386,6 +410,7 @@ namespace ChilliSource
             Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();
             m_renderSystem = CreateSystem<Rendering::RenderSystem>(renderCapabilities);
             m_renderer = CreateSystem<Rendering::Renderer>(m_renderSystem);
+            CreateSystem<Rendering::CanvasRenderer>();
             CreateSystem<Rendering::MaterialFactory>(renderCapabilities);
             CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
             CreateSystem<Rendering::TextureAtlasProvider>();
@@ -394,6 +419,12 @@ namespace ChilliSource
             CreateSystem<Rendering::FontProvider>();
             CreateSystem<Rendering::RenderComponentFactory>();
             
+            //Particles
+            CreateSystem<CSRendering::ParticleSystem>();
+            CreateSystem<CSRendering::ParticleEmitterFactory>();
+            CreateSystem<CSRendering::ParticleAffectorFactory>();
+            CreateSystem<CSRendering::CSParticleEffectProvider>();
+
             //Create any platform specific default systems
             m_platformSystem->CreateDefaultSystems(this);
         }
@@ -409,22 +440,13 @@ namespace ChilliSource
 				{
                     m_resourcePool->AddProvider(dynamic_cast<ResourceProvider*>(system.get()));
 				}
-                
-                //TODO: Remove this when all Component producers have been changed to systems
-				if(system->IsA(IComponentProducer::InterfaceID))
-				{
-                    IComponentProducer* pProducer = dynamic_cast<IComponentProducer*>(system.get());
-                    u32 udwNumFactoriesInSystem = pProducer->GetNumComponentFactories();
-                    
-                    for(u32 i=0; i<udwNumFactoriesInSystem; ++i)
-                    {
-                        m_componentFactoryDispenser->RegisterComponentFactory(pProducer->GetComponentFactoryPtr(i));
-                    }
-				}
 			}
             
             //Initialise the render system prior to the OnInit() event.
             m_renderSystem->Init();
+            
+            //Texture provider is a compound provider and needs to be informed when the other providers are created.
+            GetSystem<CSRendering::TextureProvider>()->PostCreate();
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -437,17 +459,17 @@ namespace ChilliSource
             Json::Value jRoot;
             if(Utils::ReadJson(StorageLocation::k_package, "App.config", &jRoot) == true)
             {
-                if(jRoot.isMember("MaxFPS"))
+                if(jRoot.isMember("PreferredFPS"))
                 {
-                    u32 udwMaxFPS = jRoot["MaxFPS"].asUInt();
-                    m_platformSystem->SetMaxFPS(udwMaxFPS);
+                    u32 udwPreferredFPS = jRoot["PreferredFPS"].asUInt();
+                    m_platformSystem->SetPreferredFPS(udwPreferredFPS);
                 }
                 
-                if(jRoot.isMember("MasterText"))
+                if(jRoot.isMember("DefaultText"))
                 {
-                    StorageLocation eStorageLocation = ParseStorageLocation(jRoot["MasterText"].get("Location", "Package").asString());
-                    std::string strPath = jRoot["MasterText"].get("Path", "").asString();
-                    LocalisedText::RefreshMasterText(eStorageLocation, strPath);
+                    StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultText"].get("Location", "Package").asString());
+                    std::string strPath = jRoot["DefaultText"].get("Path", "").asString();
+                    m_defaultLocalisedText = m_resourcePool->LoadResource<LocalisedText>(eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultMesh"))

@@ -11,7 +11,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 
 @class VirtualKeyboardDelegate;

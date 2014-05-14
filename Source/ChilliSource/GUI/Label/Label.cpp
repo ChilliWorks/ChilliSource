@@ -16,6 +16,7 @@
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
+#include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
@@ -26,10 +27,9 @@ namespace ChilliSource
 
 		//---Properties
 		DEFINE_PROPERTY(Text);
-		DEFINE_PROPERTY(TextID);
+		DEFINE_PROPERTY(LocalisedTextID);
 		DEFINE_PROPERTY(MaxNumLines);
 		DEFINE_PROPERTY(TextScale);
-		DEFINE_PROPERTY(CharacterSpacing);
 		DEFINE_PROPERTY(LineSpacing);
 		DEFINE_PROPERTY(HorizontalJustification);
 		DEFINE_PROPERTY(VerticalJustification);
@@ -45,34 +45,54 @@ namespace ChilliSource
         
         f32 Label::mfGlobalTextScale = 1.0f;
         
+        namespace
+        {
+            //-------------------------------------------------------
+            /// Creates or returns a 2x2 white texture for use
+            /// with GUI.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Texture
+            //-------------------------------------------------------
+            Rendering::TextureCSPtr CreateDefaultWhiteTexture()
+            {
+                Rendering::TextureCSPtr result;
+                
+                result = Core::Application::Get()->GetResourcePool()->GetResource<Rendering::Texture>("_GUIBackgroundTex");
+                if(result == nullptr)
+                {
+                    const u32 k_numPixels = 4;
+                    const u32 k_numBytesPerPixel = 4;
+                    Rendering::Texture::Descriptor desc;
+                    desc.m_width = 2;
+                    desc.m_height = 2;
+                    desc.m_format = Core::ImageFormat::k_RGBA8888;
+                    desc.m_compression = Core::ImageCompression::k_none;
+                    desc.m_dataSize = k_numPixels * k_numBytesPerPixel;
+                    u8* data = new u8[desc.m_dataSize];
+                    memset(data, 255, desc.m_dataSize);
+                    
+                    Rendering::TextureSPtr texture = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_GUIBackgroundTex");
+                    texture->Build(desc, Rendering::Texture::TextureDataUPtr(data));
+                    result = texture;
+                }
+                
+                return result;
+            }
+        }
+        
         //-------------------------------------------------------
         /// Constructor
         ///
         /// Default
         //-------------------------------------------------------
-        Label::Label() : MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
+        Label::Label() : MaxNumLines(0), TextScale(1.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
 		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
         {
             SetColour(Core::Colour(0.18f, 0.3f, 0.4f, 0.6f));
 
-            mpWhiteTex = Core::Application::Get()->GetResourcePool()->GetResource<Rendering::Texture>("_GUIBackgroundTex");
-            if(mpWhiteTex == nullptr)
-            {
-                const u32 k_numPixels = 4;
-                const u32 k_numBytesPerPixel = 4;
-                Rendering::Texture::Descriptor desc;
-                desc.m_width = 2;
-                desc.m_height = 2;
-                desc.m_format = Core::ImageFormat::k_RGBA8888;
-                desc.m_compression = Core::ImageCompression::k_none;
-                desc.m_dataSize = k_numPixels * k_numBytesPerPixel;
-                u8* data = new u8[desc.m_dataSize];
-                memset(data, 255, desc.m_dataSize);
-                
-                Rendering::TextureSPtr texture = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_GUIBackgroundTex");
-                texture->Build(desc, Rendering::Texture::TextureDataUPtr(data));
-                mpWhiteTex = texture;
-            }
+            mpWhiteTex = CreateDefaultWhiteTexture();
             
             //Grab the default font
             Font = Core::Application::Get()->GetDefaultFont();
@@ -89,7 +109,7 @@ namespace ChilliSource
         /// From param dictionary
         //-------------------------------------------------------
         Label::Label(const Core::ParamDictionary& insParams) 
-        : GUIView(insParams), MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
+        : GUIView(insParams), MaxNumLines(0), TextScale(1.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
 		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), FlipVertical(false)
         {
             std::string strValue;
@@ -97,10 +117,21 @@ namespace ChilliSource
             UnifiedMaxSize = GetSize();
             UnifiedMinSize = GetSize();
             
-            //---Text ID
-            if(insParams.TryGetValue("TextID", strValue))
+            Core::StorageLocation localisedTextLocation = Core::StorageLocation::k_package;
+            if(insParams.TryGetValue("LocalisedTextLocation", strValue))
             {
-                SetTextID(strValue);
+                localisedTextLocation = Core::ParseStorageLocation(strValue);
+            }
+            //---Localised Text
+            if(insParams.TryGetValue("LocalisedText", strValue))
+            {
+                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                m_localisedText = resourcePool->LoadResource<Core::LocalisedText>(localisedTextLocation, strValue);
+            }
+            //---Localised Text ID
+            if(insParams.TryGetValue("LocalisedTextID", strValue))
+            {
+                SetLocalisedTextID(strValue);
             }
             //---Text
             if(insParams.TryGetValue("Text", strValue))
@@ -116,11 +147,6 @@ namespace ChilliSource
             if(insParams.TryGetValue("TextScale", strValue))
             {
                 TextScale = Core::ParseF32(strValue);
-            }
-            //---Character spacing
-            if(insParams.TryGetValue("CharacterSpacing", strValue))
-            {
-                CharacterSpacing = Core::ParseF32(strValue);
             }
             //---Unified maximum size
             if(insParams.TryGetValue("UnifiedMaxSize", strValue))
@@ -181,11 +207,7 @@ namespace ChilliSource
                 FlipVertical = true;
             }
             
-            mpWhiteTex = Core::Application::Get()->GetResourcePool()->GetResource<Rendering::Texture>("_GUIBackgroundTex");
-            if(mpWhiteTex == nullptr)
-            {
-                mpWhiteTex = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_GUIBackgroundTex");
-            }
+            mpWhiteTex = CreateDefaultWhiteTexture();
             
             if(!Font)
             {
@@ -213,18 +235,40 @@ namespace ChilliSource
         {
             return Text;
         }
+        //-------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Localised text resource used in conjunction with
+        /// id
+        //-------------------------------------------------------
+        void Label::SetLocalisedText(const Core::LocalisedTextCSPtr& in_text)
+        {
+            m_localisedText = in_text;
+        }
+        //-------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Localised text resource used in conjunction with
+        /// id
+        //-------------------------------------------------------
+        const Core::LocalisedTextCSPtr& Label::GetLocalisedText() const
+        {
+            return m_localisedText;
+        }
 		//-------------------------------------------------------
 		/// Set Text ID
 		///
 		/// @param Text string representing lookup ID
 		//-------------------------------------------------------
-		void Label::SetTextID(const std::string& instrText)
+		void Label::SetLocalisedTextID(const std::string& instrTextId)
 		{
-			TextID = instrText;
+            CS_ASSERT(m_localisedText != nullptr, "Label must have a localised text resource set before setting the text Id");
+            
+			LocalisedTextID = instrTextId;
 
-			if(!TextID.empty())
+			if(!LocalisedTextID.empty())
 			{
-				SetText(Core::LocalisedText::GetText(instrText));
+				SetText(m_localisedText->GetText(LocalisedTextID));
 			}
 			else
 			{
@@ -236,9 +280,9 @@ namespace ChilliSource
 		///
 		/// @return Text string representing lookup ID
 		//-------------------------------------------------------
-		const std::string& Label::GetTextID() const
+		const std::string& Label::GetLocalisedTextID() const
 		{
-			return TextID;
+			return LocalisedTextID;
 		}
         //-------------------------------------------------------
         /// Set Font
@@ -427,28 +471,6 @@ namespace ChilliSource
 			return LineSpacing;
 		}
         //-------------------------------------------------------
-        /// Set Character Spacing
-        ///
-        /// Set the space left horizontally between letters 
-        ///
-        /// @param Absolute Scalar
-        //-------------------------------------------------------
-        void Label::SetCharacterSpacing(f32 infSpacing)
-        {
-            CharacterSpacing = infSpacing;
-            
-            mCachedChars.clear();
-        }
-		//-------------------------------------------------------
-		/// Get Character Spacing
-		///
-		/// @return The space left horizontally between letters 
-		//-------------------------------------------------------
-		f32 Label::GetCharacterSpacing() const
-		{
-			return CharacterSpacing;
-		}
-        //-------------------------------------------------------
         /// Set Text Scale
         ///
         /// @param Absolute value by which the text is scaled
@@ -611,21 +633,24 @@ namespace ChilliSource
                 //Check if we force clip our children 
                 if(ClipSubviews)
                 {
-                    inpCanvas->EnableClippingToBounds(vBottomLeft, vAbsoluteLabelSize);
+                    inpCanvas->PushClipBounds(vBottomLeft, vAbsoluteLabelSize);
                 }
                 
                 //Draw ourself
                 if(Background)
                 {
-                    inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::k_zero, Core::Vector2::k_zero), AbsCol);
+                    inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::k_zero, Core::Vector2::k_zero), AbsCol, Rendering::AlignmentAnchor::k_middleCentre);
                 }
                 
-                f32 fAssetTextScale = GetGlobalTextScale();
+                if(mCachedChars.empty())
+                {
+                    f32 fAssetTextScale = GetGlobalTextScale();
+                    mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * fAssetTextScale, LineSpacing, vAbsoluteLabelSize, MaxNumLines, HorizontalJustification, VerticalJustification).m_characters;
+                }
                 
-                    Core::Colour sDrawColour = TextColour * GetAbsoluteColour();
-                    inpCanvas->DrawString(Text, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, sDrawColour,
-                                          vAbsoluteLabelSize, CharacterSpacing, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines,&mbLastDrawWasClipped,&mbLastDrawHadInvalidCharacter);
-            
+                Core::Colour sDrawColour = TextColour * GetAbsoluteColour();
+                inpCanvas->DrawText(mCachedChars, GetTransform(), sDrawColour, Font->GetTexture());
+                
                 //Draw the kids
                 for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
                 {
@@ -634,7 +659,7 @@ namespace ChilliSource
                 
                 if(ClipSubviews)
                 {
-                    inpCanvas->DisableClippingToBounds();
+                    inpCanvas->PopClipBounds();
                 }
             }
         }
@@ -656,40 +681,37 @@ namespace ChilliSource
                 Core::Vector2 vAbsMaxSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMaxSize.GetRelative()) + UnifiedMaxSize.GetAbsolute() : UnifiedMaxSize.GetAbsolute();
                 Core::Vector2 vAbsMinSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMinSize.GetRelative()) + UnifiedMinSize.GetAbsolute() : UnifiedMinSize.GetAbsolute();
                 
-                f32 fNewRelWidth = 0.0f;
+                //Build the text for the biggest possible bounds
+                Rendering::CanvasRenderer::BuiltText builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, vAbsMaxSize, MaxNumLines, HorizontalJustification, VerticalJustification);
+                
+                f32 fNewRelWidth = UnifiedMaxSize.vRelative.x;
                 f32 fNewRelHeight = 0.0f;
-                f32 fNewAbsWidth = 0.0f;
+                f32 fNewAbsWidth = UnifiedMaxSize.vAbsolute.x;
                 f32 fNewAbsHeight = 0.0f;
-                f32 fTextHeight = 0.0f;
-                
-                //Calculate the width of the label based on the bounds and the length of the text
-                f32 fTextWidth = inpCanvas->CalculateStringWidth(Text, Font, TextScale * mfGlobalTextScale, CharacterSpacing, false);
-                
-                if(fTextWidth > vAbsMaxSize.x)
-                {
-                    fNewRelWidth = UnifiedMaxSize.vRelative.x;
-                    fNewAbsWidth = UnifiedMaxSize.vAbsolute.x;
-                    
-                    //Now that we have calculated the width of the label we
-                    //can use that to work out the height
-                    fTextHeight = inpCanvas->CalculateStringHeight(Text, Font, vAbsMaxSize.x, TextScale * mfGlobalTextScale, CharacterSpacing, LineSpacing, MaxNumLines);
-                }
-                else if(fTextWidth < vAbsMinSize.x)
+                f32 fTextWidth = builtText.m_width;
+                f32 fTextHeight = builtText.m_height;
+
+                //If the size of the text would actually fit inside the min bounds then clamp to that
+                if(fTextWidth < vAbsMinSize.x)
                 {
                     fNewRelWidth = UnifiedMinSize.vRelative.x;
                     fNewAbsWidth = UnifiedMinSize.vAbsolute.x;
                     
                     //Now that we have calculated the width of the label we
                     //can use that to work out the height
-                    fTextHeight = inpCanvas->CalculateStringHeight(Text, Font, vAbsMinSize.x, TextScale * mfGlobalTextScale, CharacterSpacing, LineSpacing, MaxNumLines);
+                    builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, vAbsMinSize, MaxNumLines, HorizontalJustification, VerticalJustification);
+                    fTextHeight = builtText.m_height;
                 }
-                else
+                //If the size of text is smaller than the max bounds then clamp to that
+                else if(fTextWidth < vAbsMaxSize.x)
                 {
+                    fNewRelWidth = 0.0f;
                     fNewAbsWidth = fTextWidth;
                     
                     //Now that we have calculated the width of the label we
                     //can use that to work out the height
-                    fTextHeight = inpCanvas->CalculateStringHeight(Text, Font, fTextWidth, TextScale * mfGlobalTextScale, CharacterSpacing, LineSpacing, MaxNumLines);
+                    builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, Core::Vector2(fNewAbsWidth, vAbsMaxSize.y), MaxNumLines, HorizontalJustification, VerticalJustification);
+                    fTextHeight = builtText.m_height;
                 }
                 
                 if(fTextHeight > vAbsMaxSize.y)
@@ -706,6 +728,8 @@ namespace ChilliSource
                 {
                     fNewAbsHeight = fTextHeight;
                 }
+                
+                mCachedChars = std::move(builtText.m_characters);
                 
                 //Resize the label
                 SetSize(fNewRelWidth, fNewRelHeight, fNewAbsWidth, fNewAbsHeight);
