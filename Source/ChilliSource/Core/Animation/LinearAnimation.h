@@ -39,7 +39,7 @@ namespace ChilliSource
 	{
 		//-----------------------------------------------------------------------
 		/// Functor that performs linear interpolation on the start and end
-		/// values based on the given normalised progress (0 - 1)
+		/// values based on the given normalised T (0 - 1)
 		///
 		/// @author S Downie
 		//-----------------------------------------------------------------------
@@ -57,9 +57,9 @@ namespace ChilliSource
 			///
 			/// @return Linearly interpolated type
 			//-----------------------------------------------------------------------
-			TValueType operator()(f32 int_t) const
+			TValueType operator()(f32 in_t) const
 			{
-				return MathUtils::Lerp(int_t, m_startValue, m_endValue);
+				return MathUtils::Lerp(in_t, m_startValue, m_endValue);
 			}
 		};
 		template <typename TValueType> using LinearAnimation = Animation<LinearInterpolate<TValueType>>;
