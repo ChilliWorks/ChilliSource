@@ -429,7 +429,7 @@ namespace ChilliSource
 		template <typename TType> GenericQuaternion<TType>::GenericQuaternion(const GenericVector3<TType>& in_axis, TType in_angle)
 			: x(0), y(0), z(0), w(0)
 		{
-			GenericVector3<TType> normalised = in_axis.NormaliseCopy();
+			GenericVector3<TType> normalised = GenericVector3<TType>::Normalise(in_axis);
 			TType halfAngle = in_angle / 2;
 			TType sinAngle = (TType)std::sin(halfAngle);
 
@@ -536,7 +536,6 @@ namespace ChilliSource
 		//-----------------------------------------------
 		template <typename TType> void GenericQuaternion<TType>::Conjugate()
 		{
-			w = w;
 			x = -x;
 			y = -y;
 			z = -z;
