@@ -324,7 +324,7 @@ namespace ChilliSource
             /// @param Alignment
             /// @param [Out] Sprite
             //-----------------------------------------------------
-            void UpdateSpriteData(const Core::Matrix4x4& in_transform, const Core::Vector2& in_size, const Core::Rectangle& in_UVs, const Core::Colour& in_colour, AlignmentAnchor in_alignment,
+            void UpdateSpriteData(const Core::Matrix4& in_transform, const Core::Vector2& in_size, const Core::Rectangle& in_UVs, const Core::Colour& in_colour, AlignmentAnchor in_alignment,
                                   SpriteComponent::SpriteData& out_sprite)
             {
                 const f32 k_nearClipDistance = 2.0f;
@@ -348,27 +348,27 @@ namespace ChilliSource
                 Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
                 Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
                 
-                const Core::Matrix4x4& matTransform(in_transform);
+                const Core::Matrix4& matTransform(in_transform);
                 vTemp += vCentrePos;
-                Core::Matrix4x4::Multiply(&vTemp, &matTransform, &out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos);
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = vTemp * matTransform;
                 
                 vTemp.x = vHalfSize.x;
                 vTemp.y = vHalfSize.y;
                 
                 vTemp += vCentrePos;
-                Core::Matrix4x4::Multiply(&vTemp, &matTransform, &out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos);
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos = vTemp * matTransform;
                 
                 vTemp.x = -vHalfSize.x;
                 vTemp.y = -vHalfSize.y;
                 
                 vTemp += vCentrePos;
-                Core::Matrix4x4::Multiply(&vTemp, &matTransform, &out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos);
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos = vTemp * matTransform;
                 
                 vTemp.x = vHalfSize.x;
                 vTemp.y = -vHalfSize.y;
                 
                 vTemp += vCentrePos;
-                Core::Matrix4x4::Multiply(&vTemp, &matTransform, &out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos);
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos = vTemp * matTransform;
                 
                 out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.z = -k_nearClipDistance;
                 out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.w = 1.0f;
@@ -508,12 +508,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void CanvasRenderer::DrawBox(const Core::Matrix3x3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Core::Rectangle& in_UVs,
+        void CanvasRenderer::DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Core::Rectangle& in_UVs,
                                      const Core::Colour& in_colour, AlignmentAnchor in_anchor)
         {
             m_canvasSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
             
-			UpdateSpriteData(in_transform, in_size, in_UVs, in_colour, in_anchor, m_canvasSprite);
+			UpdateSpriteData(Core::Matrix4::CreateTransform(in_transform), in_size, in_UVs, in_colour, in_anchor, m_canvasSprite);
             
             //Draw us!
 			m_overlayBatcher->Render(m_canvasSprite);
@@ -599,22 +599,17 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void CanvasRenderer::DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3x3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture)
+		void CanvasRenderer::DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture)
 		{
             m_canvasSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
             
-            Core::Matrix4x4 matTransform(in_transform);
-            Core::Matrix4x4 matTransformedLocal;
+            Core::Matrix4 matTransform = Core::Matrix4::CreateTransform(in_transform);
+            Core::Matrix4 matTransformedLocal;
 			
 			for (const auto& character : in_characters)
             {
-				Core::Matrix4x4 matLocal;
-				matLocal.Translate(character.m_position.x, character.m_position.y, 0.0f);
-                
-                Core::Matrix4x4::Multiply(&matLocal, &matTransform, &matTransformedLocal);
-                
+                matTransformedLocal = Core::Matrix4::CreateTranslation(Core::Vector3(character.m_position, 0.0f)) * matTransform;
                 UpdateSpriteData(matTransformedLocal, character.m_size, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, m_canvasSprite);
-				
                 m_overlayBatcher->Render(m_canvasSprite);
 			}
             

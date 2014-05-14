@@ -57,6 +57,30 @@ namespace ChilliSource
 			static const GenericVector2<TType> k_unitNegativeX;
 			static const GenericVector2<TType> k_unitPositiveY;
 			static const GenericVector2<TType> k_unitNegativeY;
+            //-----------------------------------------------------
+			/// @author I Copland
+			///
+            /// @param A vector.
+            ///
+			/// @return a normalised copy of the vector.
+			//-----------------------------------------------------
+			static GenericVector2<TType> Normalise(GenericVector2<TType> in_a);
+            //-----------------------------------------------------
+			/// @author I Copland
+			///
+            /// @param A vector.
+			///
+			/// @return An inversed copy of the vector.
+			//-----------------------------------------------------
+			static GenericVector2<TType> Inverse(GenericVector2<TType> in_a);
+            //-----------------------------------------------------
+			/// @author I Copland
+			///
+            /// @param A vector.
+			///
+			/// @return an absolute copy of the vector.
+			//-----------------------------------------------------
+			static GenericVector2<TType> Abs(GenericVector2<TType> in_a);
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -66,7 +90,7 @@ namespace ChilliSource
 			/// @return A vector containing the minimum value for
 			/// each component in each vector.
 			//-----------------------------------------------------
-			static GenericVector2<TType> Min(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b);
+			static GenericVector2<TType> Min(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b);
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -76,7 +100,7 @@ namespace ChilliSource
 			/// @return A vector containing the maximum value for
 			/// each component in each vector.
 			//-----------------------------------------------------
-			static GenericVector2<TType> Max(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b);
+			static GenericVector2<TType> Max(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b);
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -87,7 +111,7 @@ namespace ChilliSource
 			/// @return A vector in which each component is clamped
 			/// between the equivalent in the min and max vectors.
 			//-----------------------------------------------------
-			static GenericVector2<TType> Clamp(const GenericVector2<TType>& in_value, const GenericVector2<TType>& in_min, const GenericVector2<TType>& in_max);
+			static GenericVector2<TType> Clamp(GenericVector2<TType> in_value, const GenericVector2<TType>& in_min, const GenericVector2<TType>& in_max);
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -97,7 +121,7 @@ namespace ChilliSource
 			///
 			/// @return The interpolated vector.
 			//-----------------------------------------------------
-			static GenericVector2<TType> Lerp(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b, f32 in_t);
+			static GenericVector2<TType> Lerp(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b, f32 in_t);
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -164,35 +188,58 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			void Normalise();
 			//-----------------------------------------------------
-			/// @author I Copland
-			///
-			/// @return a normalised copy of the vector.
-			//-----------------------------------------------------
-			GenericVector2<TType> NormaliseCopy() const;
-			//-----------------------------------------------------
 			/// Sets this contents of this vector to its inverse.
 			///
 			/// @author I Copland
 			//-----------------------------------------------------
 			void Inverse();
 			//-----------------------------------------------------
-			/// @author I Copland
-			///
-			/// @return An inversed copy of this vector.
-			//-----------------------------------------------------
-			GenericVector2<TType> InverseCopy() const;
-			//-----------------------------------------------------
 			/// Sets this vector to it's absolute value.
 			///
 			/// @author I Copland
 			//-----------------------------------------------------
 			void Abs();
-			//-----------------------------------------------------
+            //-----------------------------------------------------
+            /// Sets each component in this vector to which ever is
+            /// smaller, itself or the equivelent in the given
+            /// vector.
+            ///
 			/// @author I Copland
 			///
-			/// @return an absolute copy of the vector.
+			/// @param The other vector.
 			//-----------------------------------------------------
-			GenericVector2<TType> AbsCopy() const;
+			void Min(const GenericVector2<TType>& in_b);
+            //-----------------------------------------------------
+            /// Sets each component in this vector to which ever is
+            /// greater, itself or the equivelent in the given
+            /// vector.
+            ///
+			/// @author I Copland
+			///
+			/// @param The other vector.
+			//-----------------------------------------------------
+			void Max(const GenericVector2<TType>& in_b);
+			//-----------------------------------------------------
+            /// Clamps each component in this vector between the
+            /// values described by the min and max vectors.
+            ///
+			/// @author I Copland
+			///
+			/// @param The minimum vector.
+			/// @param The maximum vector.
+			//-----------------------------------------------------
+			void Clamp(const GenericVector2<TType>& in_min, const GenericVector2<TType>& in_max);
+			//-----------------------------------------------------
+            /// Sets the contents of the vector to the result of
+            /// interpolating between this and the given vector
+            /// with the given interpolation factor.
+            ///
+			/// @author I Copland
+			///
+			/// @param The other vector.
+			/// @param The interpolation factor.
+			//-----------------------------------------------------
+			void Lerp(const GenericVector2<TType>& in_b, f32 in_t);
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -372,39 +419,54 @@ namespace ChilliSource
 		template <typename TType> const GenericVector2<TType> GenericVector2<TType>::k_unitNegativeX(-1, 0);
 		template <typename TType> const GenericVector2<TType> GenericVector2<TType>::k_unitPositiveY(0, 1);
 		template <typename TType> const GenericVector2<TType> GenericVector2<TType>::k_unitNegativeY(0, -1);
+        //-----------------------------------------------------
 		//-----------------------------------------------------
-		//-----------------------------------------------------
-		template <typename TType> GenericVector2<TType> GenericVector2<TType>::Min(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b)
+		template <typename TType> GenericVector2<TType> GenericVector2<TType>::Normalise(GenericVector2<TType> in_a)
 		{
-			GenericVector2<TType> output;
-			output.x = std::min(in_a.x, in_b.x);
-			output.y = std::min(in_a.y, in_b.y);
-			return output;
+			in_a.Normalise();
+			return in_a;
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
-		template <typename TType> GenericVector2<TType> GenericVector2<TType>::Max(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b)
+		template <typename TType> GenericVector2<TType> GenericVector2<TType>::Inverse(GenericVector2<TType> in_a)
 		{
-			GenericVector2<TType> output;
-			output.x = std::max(in_a.x, in_b.x);
-			output.y = std::max(in_a.y, in_b.y);
-			return output;
+			in_a.Inverse();
+			return in_a;
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
-		template <typename TType> GenericVector2<TType> GenericVector2<TType>::Clamp(const GenericVector2<TType>& in_value, const GenericVector2<TType>& in_min, const GenericVector2<TType>& in_max)
+		template <typename TType> GenericVector2<TType> GenericVector2<TType>::Abs(GenericVector2<TType> in_a)
 		{
-			GenericVector2<TType> output;
-			output.x = std::min(std::max(in_value.x, in_min.x), in_max.x);
-			output.y = std::min(std::max(in_value.y, in_min.y), in_max.y);
-			return output;
+			in_a.Abs();
+			return in_a;
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
-		template <typename TType> GenericVector2<TType> GenericVector2<TType>::Lerp(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b, f32 in_t)
+		template <typename TType> GenericVector2<TType> GenericVector2<TType>::Min(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b)
 		{
-			f32 t = std::min(std::max(in_t, 0.0f), 1.0f);
-			return (in_a + t * (in_b - in_a));
+			in_a.Min(in_b);
+			return in_a;
+		}
+		//-----------------------------------------------------
+		//-----------------------------------------------------
+		template <typename TType> GenericVector2<TType> GenericVector2<TType>::Max(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b)
+		{
+			in_a.Max(in_b);
+			return in_a;
+		}
+		//-----------------------------------------------------
+		//-----------------------------------------------------
+		template <typename TType> GenericVector2<TType> GenericVector2<TType>::Clamp(GenericVector2<TType> in_value, const GenericVector2<TType>& in_min, const GenericVector2<TType>& in_max)
+		{
+            in_value.Clamp(in_min, in_max);
+            return in_value;
+		}
+		//-----------------------------------------------------
+		//-----------------------------------------------------
+		template <typename TType> GenericVector2<TType> GenericVector2<TType>::Lerp(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b, f32 in_t)
+		{
+			in_a.Lerp(in_b, in_t);
+            return in_a;
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
@@ -458,14 +520,6 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
-		template <typename TType> GenericVector2<TType> GenericVector2<TType>::NormaliseCopy() const
-		{
-			GenericVector2<TType> copy = *this;
-			copy.Normalise();
-			return copy;
-		}
-		//-----------------------------------------------------
-		//-----------------------------------------------------
 		template <typename TType> void GenericVector2<TType>::Inverse()
 		{
 			if (x != 0)
@@ -480,27 +534,39 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
-		template <typename TType> GenericVector2<TType> GenericVector2<TType>::InverseCopy() const
-		{
-			GenericVector2<TType> copy = *this;
-			copy.Inverse();
-			return copy;
-		}
-		//-----------------------------------------------------
-		//-----------------------------------------------------
 		template <typename TType> void GenericVector2<TType>::Abs()
 		{
 			x = std::abs(x);
 			y = std::abs(y);
 		}
-		//-----------------------------------------------------
-		//-----------------------------------------------------
-		template <typename TType> GenericVector2<TType> GenericVector2<TType>::AbsCopy() const
-		{
-			GenericVector2<TType> copy = *this;
-			copy.Abs();
-			return copy;
-		}
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> void GenericVector2<TType>::Min(const GenericVector2<TType>& in_b)
+        {
+			x = std::min(x, in_b.x);
+			y = std::min(y, in_b.y);
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> void GenericVector2<TType>::Max(const GenericVector2<TType>& in_b)
+        {
+            x = std::max(x, in_b.x);
+			y = std::max(y, in_b.y);
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> void GenericVector2<TType>::Clamp(const GenericVector2<TType>& in_min, const GenericVector2<TType>& in_max)
+        {
+            x = std::min(std::max(x, in_min.x), in_max.x);
+			y = std::min(std::max(y, in_min.y), in_max.y);
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> void GenericVector2<TType>::Lerp(const GenericVector2<TType>& in_b, f32 in_t)
+        {
+            f32 t = std::min(std::max(in_t, 0.0f), 1.0f);
+			*this = (*this + t * (in_b - *this));
+        }
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType>& GenericVector2<TType>::operator+=(const GenericVector2<TType>& in_b)

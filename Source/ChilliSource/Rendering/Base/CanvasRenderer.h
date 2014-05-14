@@ -119,7 +119,7 @@ namespace ChilliSource
             /// @param Colour
             /// @param Origin anchor
             //----------------------------------------------------------------------------
-			void DrawBox(const Core::Matrix3x3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Core::Rectangle& in_UVs,
+			void DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Core::Rectangle& in_UVs,
                          const Core::Colour& in_colour, AlignmentAnchor in_anchor);
             //----------------------------------------------------------------------------
             /// Build the descriptions for all characters. The descriptions can then be
@@ -150,7 +150,7 @@ namespace ChilliSource
             /// @param Colour
             /// @param Texture
             //----------------------------------------------------------------------------
-			void DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3x3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture);
+			void DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture);
 			
 		private:
 			
