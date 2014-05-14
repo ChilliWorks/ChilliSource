@@ -1,5 +1,5 @@
 //
-//  LinearAnimation.h
+//  Linear.h
 //  Chilli Source
 //  Created by Scott Downie on 12/05/2014.
 //
@@ -26,12 +26,12 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_ANIMATION_LINEARANIMATION_H_
-#define _CHILLISOURCE_CORE_ANIMATION_LINEARANIMATION_H_
+#ifndef _CHILLISOURCE_CORE_ANIMATION_LINEAR_H_
+#define _CHILLISOURCE_CORE_ANIMATION_LINEAR_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Animation/Animation.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Tween/Tween.h>
 
 namespace ChilliSource
 {
@@ -47,6 +47,7 @@ namespace ChilliSource
 		{
 			TValueType m_startValue;
 			TValueType m_endValue;
+            
 			//-----------------------------------------------------------------------
 			/// Linearly interpolate between the start and end
 			/// values based on the given normalised T (0 - 1)
@@ -62,25 +63,27 @@ namespace ChilliSource
 				return MathUtils::Lerp(in_t, m_startValue, m_endValue);
 			}
 		};
-		template <typename TValueType> using LinearAnimation = Animation<LinearInterpolate<TValueType>>;
+		template <typename TValueType> using LinearTween = Tween<LinearInterpolate<TValueType>>;
 		//-----------------------------------------------------------------------
-		/// Convenience method to create an animation that performs a linear
+		/// Convenience method to create an tween that performs a linear
 		/// interpolation
+        ///
+        /// @author S Downie
 		///
 		/// @param Start value
 		/// @param End value
 		/// @param Duration in seconds
 		/// @param Start delay in seconds
 		///
-		/// @return Animation with linear interp function
+		/// @return Tween with linear interp function
 		//-----------------------------------------------------------------------
 		template <typename TValueType>
-		LinearAnimation<TValueType> MakeLinearAnim(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_delay = 0.0f)
+		LinearTween<TValueType> MakeLinearTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_delay = 0.0f)
 		{
 			LinearInterpolate<TValueType> func;
 			func.m_startValue = in_start;
 			func.m_endValue = in_end;
-			return LinearAnimation<TValueType>(func, in_duration, in_delay);
+			return LinearTween<TValueType>(func, in_duration, in_delay);
 		}
 	}
 }

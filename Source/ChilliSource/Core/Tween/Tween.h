@@ -1,5 +1,5 @@
 //
-//  Animation.h
+//  Tween.h
 //  Chilli Source
 //  Created by Scott Downie on 12/05/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_ANIMATION_ANIMATION_H_
-#define _CHILLISOURCE_CORE_ANIMATION_ANIMATION_H_
+#ifndef _CHILLISOURCE_CORE_TWEEN_TWEEN_H_
+#define _CHILLISOURCE_CORE_TWEEN_TWEEN_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
@@ -39,11 +39,11 @@ namespace ChilliSource
 	namespace Core
 	{
 		//-----------------------------------------------------------------------
-		/// List of play modes for animations.
+		/// List of play modes for tweening.
 		///
 		/// @author S Downie
 		//-----------------------------------------------------------------------
-		enum class AnimationPlayMode
+		enum class TweenPlayMode
 		{
 			k_once,
 			k_looping,
@@ -60,7 +60,7 @@ namespace ChilliSource
 		///
 		/// @author S Downie
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> class Animation
+		template <typename TInterpFunc> class Tween
 		{
 		public:
 			//-----------------------------------------------------------------------
@@ -68,18 +68,15 @@ namespace ChilliSource
 			///
 			/// @author S Downie
 			///
-			/// @param Animation on which state has changed
+			/// @param Tween on which state has changed
 			//-----------------------------------------------------------------------
-			using StateChangeDelegate = std::function<void(Animation*)>;
+			using StateChangeDelegate = std::function<void(Tween*)>;
 			//-----------------------------------------------------------------------
 			/// Constructor for initialising later
 			///
 			/// @author S Downie
 			//-----------------------------------------------------------------------
-			Animation()
-			{
-
-			}
+			Tween() = default;
 			//-----------------------------------------------------------------------
 			/// Constructor
 			///
@@ -89,7 +86,7 @@ namespace ChilliSource
 			/// @param Duration of a single cycle in seconds
 			/// @param Delay of initial cycle in seconds
 			//-----------------------------------------------------------------------
-			Animation(const TInterpFunc& in_interpFunc, f32 in_duration, f32 in_delay = 0.0f)
+			Tween(const TInterpFunc& in_interpFunc, f32 in_duration, f32 in_delay = 0.0f)
 				: m_interpFunc(in_interpFunc), m_duration(in_duration), m_startDelay(in_delay)
 			{
 
@@ -104,13 +101,13 @@ namespace ChilliSource
 			//-----------------------------------------------------------------------
 			/// @author S Downie
 			///
-			/// @param Delegate to be triggered on animation start
+			/// @param Delegate to be triggered on tween start
 			//-----------------------------------------------------------------------
 			void SetOnStartDelegate(const StateChangeDelegate& in_delegate);
 			//-----------------------------------------------------------------------
 			/// @author S Downie
 			///
-			/// @param Delegate to be triggered on animation end (not on looping)
+			/// @param Delegate to be triggered on tween end (not on looping)
 			//-----------------------------------------------------------------------
 			void SetOnEndDelegate(const StateChangeDelegate& in_delegate);
 			//-----------------------------------------------------------------------
@@ -126,7 +123,7 @@ namespace ChilliSource
 			//-----------------------------------------------------------------------
 			void SetDuration(f32 in_duration);
 			//-----------------------------------------------------------------------
-			/// Scales the update time to slow down or speed up the animation
+			/// Scales the update time to slow down or speed up the tween
 			///
 			/// @author S Downie
 			///
@@ -134,13 +131,13 @@ namespace ChilliSource
 			//-----------------------------------------------------------------------
 			void SetTimeScaleFactor(f32 in_scaler);
 			//-----------------------------------------------------------------------
-			/// Start the animation and set the play mode
+			/// Start the tween and set the play mode
 			///
 			/// @author S Downie
 			///
 			/// @param Play mode
 			//-----------------------------------------------------------------------
-			void Play(AnimationPlayMode in_playMode);
+			void Play(TweenPlayMode in_playMode);
 			//-----------------------------------------------------------------------
 			/// Stop playback of the animation
 			///
@@ -150,26 +147,26 @@ namespace ChilliSource
 			//-----------------------------------------------------------------------
 			/// @author S Downie
 			///
-			/// @return Whether the animation is playing (animation is not playing if
+			/// @return Whether the tween is playing (tween is not playing if
 			/// delay is counting down)
 			//-----------------------------------------------------------------------
 			bool IsPlaying() const;
 			//-----------------------------------------------------------------------
 			/// @author S Downie
 			///
-			/// @return Whether the animation has finished (can't be finished unless
+			/// @return Whether the tween has finished (can't be finished unless
 			/// started).
 			//-----------------------------------------------------------------------
 			bool IsFinished() const;
 			//-----------------------------------------------------------------------
 			/// @author S Downie
 			///
-			/// @return Whether the animation has started (once finished it is no
+			/// @return Whether the tween has started (once finished it is no
 			/// longer started).
 			//-----------------------------------------------------------------------
 			bool IsStarted() const;
 			//-----------------------------------------------------------------------
-			/// Update the progress of the animation with respect to time
+			/// Update the progress of the tween with respect to time
 			///
 			/// @author S Downie
 			///
@@ -221,94 +218,94 @@ namespace ChilliSource
 		};
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Animation<TInterpFunc>::SetInterpolateFunction(const TInterpFunc& in_interpFunc)
+		template <typename TInterpFunc> void Tween<TInterpFunc>::SetInterpolateFunction(const TInterpFunc& in_interpFunc)
 		{
 			m_interpFunc = in_interpFunc;
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Animation<TInterpFunc>::SetOnStartDelegate(const StateChangeDelegate& in_delegate)
+		template <typename TInterpFunc> void Tween<TInterpFunc>::SetOnStartDelegate(const StateChangeDelegate& in_delegate)
 		{
 			m_startDelegate = in_delegate;
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Animation<TInterpFunc>::SetOnEndDelegate(const StateChangeDelegate& in_delegate)
+		template <typename TInterpFunc> void Tween<TInterpFunc>::SetOnEndDelegate(const StateChangeDelegate& in_delegate)
 		{
 			m_endDelegate = in_delegate;
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Animation<TInterpFunc>::SetStartDelay(f32 in_delay)
+		template <typename TInterpFunc> void Tween<TInterpFunc>::SetStartDelay(f32 in_delay)
 		{
 			m_startDelay = in_delay;
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Animation<TInterpFunc>::SetDuration(f32 in_duration)
+		template <typename TInterpFunc> void Tween<TInterpFunc>::SetDuration(f32 in_duration)
 		{
 			m_duration = in_duration;
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Animation<TInterpFunc>::SetTimeScaleFactor(f32 in_scaler)
+		template <typename TInterpFunc> void Tween<TInterpFunc>::SetTimeScaleFactor(f32 in_scaler)
 		{
 			m_timeScaler = in_scaler;
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Animation<TInterpFunc>::Play(AnimationPlayMode in_playMode)
+		template <typename TInterpFunc> void Tween<TInterpFunc>::Play(TweenPlayMode in_playMode)
 		{
 			CS_ASSERT(m_duration >= 0.0f, "Must set a valid duration");
 
 			switch (in_playMode)
 			{
-			case AnimationPlayMode::k_once:
+			case TweenPlayMode::k_once:
 				m_steps = 1;
 				m_isReverse = false;
 				m_isPingPong = false;
 				m_stepDuration = m_duration;
 				break;
-			case AnimationPlayMode::k_pingPong:
+			case TweenPlayMode::k_pingPong:
 				m_steps = 2;
 				m_isReverse = false;
 				m_isPingPong = true;
 				m_stepDuration = m_duration * 0.5f;
 				break;
-			case AnimationPlayMode::k_looping:
+			case TweenPlayMode::k_looping:
 				//Zero is looping
 				m_steps = 0;
 				m_isReverse = false;
 				m_isPingPong = false;
 				m_stepDuration = m_duration;
 				break;
-			case AnimationPlayMode::k_pingPongLooping:
+			case TweenPlayMode::k_pingPongLooping:
 				//Zero is looping
 				m_steps = 0;
 				m_isReverse = false;
 				m_isPingPong = true;
 				m_stepDuration = m_duration * 0.5f;
 				break;
-			case AnimationPlayMode::k_onceReverse:
+			case TweenPlayMode::k_onceReverse:
 				m_steps = 1;
 				m_isReverse = true;
 				m_isPingPong = false;
 				m_stepDuration = m_duration;
 				break;
-			case AnimationPlayMode::k_loopingReverse:
+			case TweenPlayMode::k_loopingReverse:
 				//Zero is looping
 				m_steps = 0;
 				m_isReverse = true;
 				m_isPingPong = false;
 				m_stepDuration = m_duration;
 				break;
-			case AnimationPlayMode::k_pingPongReverse:
+			case TweenPlayMode::k_pingPongReverse:
 				m_steps = 2;
 				m_isReverse = true;
 				m_isPingPong = true;
 				m_stepDuration = m_duration * 0.5f;
 				break;
-			case AnimationPlayMode::k_pingPongLoopingReverse:
+			case TweenPlayMode::k_pingPongLoopingReverse:
 				//Zero is looping
 				m_steps = 0;
 				m_isReverse = true;
@@ -327,31 +324,31 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Animation<TInterpFunc>::Stop()
+		template <typename TInterpFunc> void Tween<TInterpFunc>::Stop()
 		{
 			m_isPlaying = false;
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> bool Animation<TInterpFunc>::IsPlaying() const
+		template <typename TInterpFunc> bool Tween<TInterpFunc>::IsPlaying() const
 		{
 			return m_isPlaying;
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> bool Animation<TInterpFunc>::IsFinished() const
+		template <typename TInterpFunc> bool Tween<TInterpFunc>::IsFinished() const
 		{
 			return m_isFinished;
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> bool Animation<TInterpFunc>::IsStarted() const
+		template <typename TInterpFunc> bool Tween<TInterpFunc>::IsStarted() const
 		{
 			return m_isStarted;
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Animation<TInterpFunc>::Update(f32 in_timeSinceLastUpdate)
+		template <typename TInterpFunc> void Tween<TInterpFunc>::Update(f32 in_timeSinceLastUpdate)
 		{
 			if (m_isPlaying == false)
 			{
@@ -416,7 +413,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Animation<TInterpFunc>::SetT(f32 in_t)
+		template <typename TInterpFunc> void Tween<TInterpFunc>::SetT(f32 in_t)
 		{
 			CS_ASSERT(in_t >= 0.0f && in_t <= 1.0f, "T must be between 0 and 1");
 
