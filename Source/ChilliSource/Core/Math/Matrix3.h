@@ -95,6 +95,22 @@ namespace ChilliSource
 			/// @return The new transform matrix.
 			//------------------------------------------------------
 			static GenericMatrix3<TType> CreateTransform(const GenericVector2<TType>& in_translation, const GenericVector2<TType>& in_scale, TType in_angle);
+			//------------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+			///
+			/// @return A transposed copy of the matrix.
+			//------------------------------------------------------
+			static GenericMatrix3<TType> Transpose(const GenericMatrix3<TType>& in_matrix);
+			//------------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+			///
+			/// @return An inverted copy of the matrix.
+			//------------------------------------------------------
+			static GenericMatrix3<TType> Inverse(const GenericMatrix3<TType>& in_matrix);
 			//-----------------------------------------------------
 			/// Constructor. Sets the contents to the identity
 			/// matrix.
@@ -129,23 +145,11 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			void Transpose();
 			//------------------------------------------------------
-			/// @author I Copland
-			///
-			/// @return A transposed copy of this matrix.
-			//------------------------------------------------------
-			GenericMatrix3<TType> TransposeCopy() const;
-			//------------------------------------------------------
 			/// Sets this matrix to its inverse.
 			///
 			/// @author I Copland
 			//------------------------------------------------------
 			void Inverse();
-			//------------------------------------------------------
-			/// @author I Copland
-			///
-			/// @return An inverted copy of this matrix.
-			//------------------------------------------------------
-			GenericMatrix3<TType> InverseCopy() const;
 			//-----------------------------------------------------
 			/// Translates this matrix.
 			///
@@ -370,6 +374,39 @@ namespace ChilliSource
 			TType sinA = (TType)std::sin(in_angle);
 			return GenericMatrix3<TType>(cosA * in_scale.x, sinA * in_scale.x, 0, -sinA * in_scale.y, cosA * in_scale.y, 0, in_translation.x, in_translation.y, 1);
 		}
+        //------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::Transpose(const GenericMatrix3<TType>& in_a)
+		{
+			GenericMatrix3<TType> b;
+			b.m[0] = in_a.m[0]; b.m[1] = in_a.m[3]; b.m[2] = in_a.m[6];
+			b.m[3] = in_a.m[1]; b.m[4] = in_a.m[4]; b.m[5] = in_a.m[7];
+			b.m[6] = in_a.m[2]; b.m[7] = in_a.m[5]; b.m[8] = in_a.m[8];
+			return b;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::Inverse(const GenericMatrix3<TType>& in_a)
+		{
+			TType det = in_a.Determinant();
+			if (det == 0)
+			{
+				return in_a;
+			}
+			TType oneOverDet = 1 / det;
+            
+			GenericMatrix3<TType> c;
+			c.m[0] = (in_a.m[4] * in_a.m[8] - in_a.m[5] * in_a.m[7]) * oneOverDet;
+			c.m[1] = (in_a.m[2] * in_a.m[7] - in_a.m[1] * in_a.m[8]) * oneOverDet;
+			c.m[2] = (in_a.m[1] * in_a.m[5] - in_a.m[2] * in_a.m[4]) * oneOverDet;
+			c.m[3] = (in_a.m[5] * in_a.m[6] - in_a.m[3] * in_a.m[8]) * oneOverDet;
+			c.m[4] = (in_a.m[0] * in_a.m[8] - in_a.m[2] * in_a.m[6]) * oneOverDet;
+			c.m[5] = (in_a.m[2] * in_a.m[3] - in_a.m[0] * in_a.m[5]) * oneOverDet;
+			c.m[6] = (in_a.m[3] * in_a.m[7] - in_a.m[4] * in_a.m[6]) * oneOverDet;
+			c.m[7] = (in_a.m[1] * in_a.m[6] - in_a.m[0] * in_a.m[7]) * oneOverDet;
+			c.m[8] = (in_a.m[0] * in_a.m[4] - in_a.m[1] * in_a.m[3]) * oneOverDet;
+			return c;
+		}
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix3<TType>::GenericMatrix3()
@@ -409,42 +446,9 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
-		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::TransposeCopy() const
-		{
-			GenericMatrix3<TType> a = *this;
-			a.m[0] = m[0]; a.m[1] = m[3]; a.m[2] = m[6];
-			a.m[3] = m[1]; a.m[4] = m[4]; a.m[5] = m[7];
-			a.m[6] = m[2]; a.m[7] = m[5]; a.m[8] = m[8];
-			return a;
-		}
-		//------------------------------------------------------
-		//------------------------------------------------------
 		template <typename TType> void GenericMatrix3<TType>::Inverse()
 		{
-			*this = InverseCopy();
-		}
-		//------------------------------------------------------
-		//------------------------------------------------------
-		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::InverseCopy() const
-		{
-			TType det = Determinant();
-			if (det == 0)
-			{
-				return *this;
-			}
-			TType oneOverDet = 1 / det;
-
-			GenericMatrix3<TType> c;
-			c.m[0] = (m[4] * m[8] - m[5] * m[7]) * oneOverDet;
-			c.m[1] = (m[2] * m[7] - m[1] * m[8]) * oneOverDet;
-			c.m[2] = (m[1] * m[5] - m[2] * m[4]) * oneOverDet;
-			c.m[3] = (m[5] * m[6] - m[3] * m[8]) * oneOverDet;
-			c.m[4] = (m[0] * m[8] - m[2] * m[6]) * oneOverDet;
-			c.m[5] = (m[2] * m[3] - m[0] * m[5]) * oneOverDet;
-			c.m[6] = (m[3] * m[7] - m[4] * m[6]) * oneOverDet;
-			c.m[7] = (m[1] * m[6] - m[0] * m[7]) * oneOverDet;
-			c.m[8] = (m[0] * m[4] - m[1] * m[3]) * oneOverDet;
-			return c;
+			*this = Inverse(*this);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
