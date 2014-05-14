@@ -237,7 +237,7 @@ namespace ChilliSource
 			void Min(const GenericVector3<TType>& in_b);
 			//-----------------------------------------------------
             /// Sets each component in this vector to which ever is
-            /// smaller, itself or the equivelent in the given
+            /// greater, itself or the equivelent in the given
             /// vector.
             ///
 			/// @author I Copland
