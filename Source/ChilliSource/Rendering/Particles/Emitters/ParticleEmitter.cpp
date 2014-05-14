@@ -268,7 +268,7 @@ namespace ChilliSource
             const Core::Matrix4 & matTrans = mpOwningComponent->GetEntity()->GetTransform().GetWorldTransform();
             
             // Get quaternion to particle space
-            Core::Quaternion qParticleRot = Core::Quaternion(matTrans).ConjugateCopy();
+            Core::Quaternion qParticleRot = Core::Quaternion::Conjugate(Core::Quaternion(matTrans));
             
             const Core::Matrix4 & matCamWorld = inpCam->GetEntity()->GetTransform().GetWorldTransform();
             // Get cameras up and right vectors in particle space

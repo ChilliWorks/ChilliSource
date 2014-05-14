@@ -685,7 +685,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateRotation(const GenericQuaternion<TType>& in_rotation)
 		{
-			GenericQuaternion<TType> q = in_rotation.NormaliseCopy();
+			GenericQuaternion<TType> q = GenericQuaternion<TType>::Normalise(in_rotation);
 
 			TType wSquared = q.w * q.w;
 			TType xSquared = q.x * q.x;

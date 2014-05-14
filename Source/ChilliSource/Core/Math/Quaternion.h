@@ -48,6 +48,31 @@ namespace ChilliSource
 			/// Constants
 			//-----------------------------------------------
 			static const GenericQuaternion<TType> k_identity;
+            
+			//-----------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A quaternion
+			///
+			/// @return a normalised version of the quaternion.
+			//-----------------------------------------------
+			static GenericQuaternion<TType> Normalise(GenericQuaternion<TType> in_a);
+			//-----------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A quaternion
+			///
+			/// @return the conjugate of the quaternion.
+			//-----------------------------------------------
+			static GenericQuaternion<TType> Conjugate(GenericQuaternion<TType> in_a);
+			//-----------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A quaternion
+			///
+			/// @return the inverse of the quaternion.
+			//-----------------------------------------------
+			static GenericQuaternion<TType> Inverse(GenericQuaternion<TType> in_a);
 			//--------------------------------------------
 			/// @author I Copland
 			///
@@ -71,7 +96,7 @@ namespace ChilliSource
 			///
 			/// @return The interpolated quaternion.
 			//--------------------------------------------
-			static GenericQuaternion<TType> Slerp(const GenericQuaternion<TType>& in_a, const GenericQuaternion<TType>& in_b, f32 in_t);
+			static GenericQuaternion<TType> Slerp(GenericQuaternion<TType> in_a, const GenericQuaternion<TType>& in_b, f32 in_t);
 			//--------------------------------------------
 			/// Normalised Linear Interpolation on two
 			/// quaternions.
@@ -86,7 +111,7 @@ namespace ChilliSource
 			///
 			/// @return The interpolated quaternion.
 			//--------------------------------------------
-			static GenericQuaternion<TType> Nlerp(const GenericQuaternion<TType>& in_a, const GenericQuaternion<TType>& in_b, f32 in_t);
+			static GenericQuaternion<TType> Nlerp(GenericQuaternion<TType> in_a, const GenericQuaternion<TType>& in_b, f32 in_t);
 			//-----------------------------------------------
 			/// Constructor. Sets the contents to the
 			/// Identity quaternion.
@@ -158,35 +183,45 @@ namespace ChilliSource
 			//-----------------------------------------------
 			void Normalise();
 			//-----------------------------------------------
-			/// @author I Copland
-			///
-			/// @return a normalised version of the quaternion.
-			//-----------------------------------------------
-			GenericQuaternion<TType> NormaliseCopy() const;
-			//-----------------------------------------------
 			/// Sets this quaternion to its conjugate.
 			///
 			/// @author I Copland
 			//-----------------------------------------------
 			void Conjugate();
 			//-----------------------------------------------
-			/// @author I Copland
-			/// 
-			/// @return the conjugate of the quaternion.
-			//-----------------------------------------------
-			GenericQuaternion<TType> ConjugateCopy() const;
-			//-----------------------------------------------
 			/// Sets this quaternion to its inverse.
 			///
 			/// @author I Copland
 			//-----------------------------------------------
-			void Inverese();
-			//-----------------------------------------------
+			void Inverse();
+            //--------------------------------------------
+			/// Sets this to the result of spherical
+            /// linear interpolation of this and the given
+            /// quaternion with the given interpolation
+            /// factor.
+			///
 			/// @author I Copland
 			///
-			/// @return the inverse of the quaternion.
-			//-----------------------------------------------
-			GenericQuaternion<TType> InvereseCopy() const;
+			/// @param The other quaternion.
+			/// @param The step between the two values. This
+			/// is in the range 0.0 - 1.0 and will be clamped
+			/// if outside of it.
+			//--------------------------------------------
+			void Slerp(const GenericQuaternion<TType>& in_b, f32 in_t);
+			//--------------------------------------------
+			/// Sets this to the result of normalised
+            /// linear interpolation of this and the given
+            /// quaternion with the given interpolation
+            /// factor.
+			///
+			/// @author I Copland
+			///
+			/// @param The other quaternion.
+			/// @param The step between the two values. This
+			/// is in the range 0.0 - 1.0 and will be clamped
+			/// if outside of it.
+			//--------------------------------------------
+			void Nlerp(const GenericQuaternion<TType>& in_b, f32 in_t);
 			//-----------------------------------------------
 			/// Converts the quaternion into the axis and
 			/// angle it represents.
@@ -352,65 +387,44 @@ namespace ChilliSource
 
 		//-----------------------------------------------
 		//-----------------------------------------------
+		template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::Normalise(GenericQuaternion<TType> in_a)
+		{
+			in_a.Normalise();
+			return in_a;
+		}
+		//-----------------------------------------------
+		//-----------------------------------------------
+		template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::Conjugate(GenericQuaternion<TType> in_a)
+		{
+			in_a.Conjugate();
+			return in_a;
+		}
+		//-----------------------------------------------
+		//-----------------------------------------------
+		template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::Inverse(GenericQuaternion<TType> in_a)
+		{
+			in_a.Inverse();
+			return in_a;
+		}
+		//-----------------------------------------------
+		//-----------------------------------------------
 		template <typename TType> TType GenericQuaternion<TType>::Dot(const GenericQuaternion<TType>& in_a, const GenericQuaternion<TType>& in_b)
 		{
 			return (in_a.x * in_b.x + in_a.y * in_b.y + in_a.z * in_b.z + in_a.w * in_b.w);
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::Slerp(const GenericQuaternion<TType>& in_a, const GenericQuaternion<TType>& in_b, f32 in_t)
+		template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::Slerp(GenericQuaternion<TType> in_a, const GenericQuaternion<TType>& in_b, f32 in_t)
 		{
-			const TType k_epsilon = (TType)0.0001;
-
-			if (in_t <= 0)
-			{
-				return in_a;
-			}
-			if (in_t >= 1)
-			{
-				return in_b;
-			}
-
-			GenericQuaternion<TType> B = in_b;
-			TType aDotB = Dot(in_a, B);
-			if (aDotB < 0)
-			{
-				B.x = -B.x;
-				B.y = -B.y;
-				B.z = -B.z;
-				B.w = -B.w;
-				aDotB = -aDotB;
-			}
-
-			if (aDotB > 1 - k_epsilon)
-			{
-				GenericQuaternion<TType> output;
-				output = in_a + in_t * (B - in_a);
-				output.Normalise();
-				return output;
-			}
-
-			TType acosADotB = std::acos(aDotB);
-			return (std::sin((1 - in_t) * acosADotB) * in_a + std::sin(in_t * acosADotB) * B) / std::sin(acosADotB);
+			in_a.Slerp(in_b, in_t);
+            return in_a;
 		}
 		//--------------------------------------------
 		//--------------------------------------------
-		template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::Nlerp(const GenericQuaternion<TType>& in_a, const GenericQuaternion<TType>& in_b, f32 in_t)
+		template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::Nlerp(GenericQuaternion<TType> in_a, const GenericQuaternion<TType>& in_b, f32 in_t)
 		{
-			const f32 dot = Dot(in_a, in_b);
-			Quaternion output;
-
-			if (dot < 0)
-			{
-				output = in_a + (in_t * ((in_b * (TType)-1) - in_a));
-			}
-			else
-			{
-				output = in_a + (in_t * (in_b - in_a));
-			}
-
-			output.Normalise();
-			return output;
+			in_a.Nlerp(in_b, in_t);
+            return in_a;
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
@@ -526,14 +540,6 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::NormaliseCopy() const
-		{
-			GenericQuaternion<TType> output = *this;
-			output.Normalise();
-			return output;
-		}
-		//-----------------------------------------------
-		//-----------------------------------------------
 		template <typename TType> void GenericQuaternion<TType>::Conjugate()
 		{
 			x = -x;
@@ -542,15 +548,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::ConjugateCopy() const
-		{
-			GenericQuaternion<TType> output = *this;
-			output.Conjugate();
-			return output;
-		}
-		//-----------------------------------------------
-		//-----------------------------------------------
-		template <typename TType> void GenericQuaternion<TType>::Inverese()
+		template <typename TType> void GenericQuaternion<TType>::Inverse()
 		{
 			TType magnitudeSquared = MagnitudeSquared();
 			Conjugate();
@@ -559,6 +557,61 @@ namespace ChilliSource
 			y /= magnitudeSquared;
 			z /= magnitudeSquared;
 		}
+        //--------------------------------------------
+        //--------------------------------------------
+        template <typename TType> void GenericQuaternion<TType>::Slerp(const GenericQuaternion<TType>& in_b, f32 in_t)
+        {
+            const TType k_epsilon = (TType)0.0001;
+            
+			if (in_t <= 0)
+			{
+				return;
+			}
+			if (in_t >= 1)
+			{
+				*this = in_b;
+			}
+            
+			GenericQuaternion<TType> B = in_b;
+			TType aDotB = Dot(*this, B);
+			if (aDotB < 0)
+			{
+				B.x = -B.x;
+				B.y = -B.y;
+				B.z = -B.z;
+				B.w = -B.w;
+				aDotB = -aDotB;
+			}
+            
+			if (aDotB > 1 - k_epsilon)
+			{
+				*this = *this + in_t * (B - *this);
+				Normalise();
+			}
+            else
+            {
+                TType acosADotB = std::acos(aDotB);
+                *this = (std::sin((1 - in_t) * acosADotB) * *this + std::sin(in_t * acosADotB) * B) / std::sin(acosADotB);
+            }
+        }
+        //--------------------------------------------
+        //--------------------------------------------
+        template <typename TType> void GenericQuaternion<TType>::Nlerp(const GenericQuaternion<TType>& in_b, f32 in_t)
+        {
+            const f32 dot = Dot(*this, in_b);
+			Quaternion output;
+            
+			if (dot < 0)
+			{
+				*this = *this + (in_t * ((in_b * (TType)-1) - *this));
+			}
+			else
+			{
+				*this = *this + (in_t * (in_b - *this));
+			}
+            
+			Normalise();
+        }
 		//-----------------------------------------------
 		//-----------------------------------------------
 		template <typename TType> void GenericQuaternion<TType>::ToAxisAngle(GenericVector3<TType>& out_axis, TType& out_angle) const
@@ -595,14 +648,7 @@ namespace ChilliSource
 			out_zAxis.y = rotation(2, 1);
 			out_zAxis.z = rotation(2, 2);
 		}
-		//-----------------------------------------------
-		//-----------------------------------------------
-		template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::InvereseCopy() const
-		{
-			GenericQuaternion<TType> output = *this;
-			output.Inverese();
-			return output;
-		}
+
 		//-----------------------------------------------
 		//-----------------------------------------------
 		template <typename TType> GenericQuaternion<TType>& GenericQuaternion<TType>::operator+=(const GenericQuaternion<TType>& in_b)
