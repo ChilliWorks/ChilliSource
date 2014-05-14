@@ -187,7 +187,7 @@ namespace ChilliSource
 			MeshCSPtr mpModel;
 			std::vector<MaterialCSPtr> mMaterials;
             
-            Core::ConnectionUPtr m_transformChangedConnection;
+            Core::EventConnectionUPtr m_transformChangedConnection;
             
             bool mbBoundingSphereValid;
             bool mbAABBValid;

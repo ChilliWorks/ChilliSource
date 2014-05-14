@@ -50,6 +50,11 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(HMAC_SHA1);
         CS_FORWARDDECLARE_CLASS(SHA1);
         //---------------------------------------------------------
+        /// Delegate
+        //---------------------------------------------------------
+        template <typename TReturnType, typename... TArgTypes> class ConnectableDelegate;
+        template <typename TReturnType, typename... TArgTypes> class DelegateConnection;
+        //---------------------------------------------------------
         /// Dialogue
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(DialogueBoxSystem);
@@ -65,7 +70,7 @@ namespace ChilliSource
         template <typename TDelegateType> class Event;
         template <typename TDelegateType> class IConnectableEvent;
         CS_FORWARDDECLARE_CLASS(IDisconnectableEvent);
-        CS_FORWARDDECLARE_CLASS(Connection);
+        CS_FORWARDDECLARE_CLASS(EventConnection);
         //---------------------------------------------------------
         /// File
         //---------------------------------------------------------
@@ -149,7 +154,6 @@ namespace ChilliSource
         /// Threading
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(WaitCondition);
-        template <typename... TArgTypes> class Task;
         CS_FORWARDDECLARE_CLASS(TaskScheduler);
         CS_FORWARDDECLARE_CLASS(ThreadPool);
         //---------------------------------------------------------

@@ -35,8 +35,8 @@
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoOverlayView.h>
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
 #import <ChilliSource/Core/Base/Application.h>
-#import <ChilliSource/Core/Base/MakeDelegate.h>
 #import <ChilliSource/Core/Base/Screen.h>
+#import <ChilliSource/Core/Delegate/MakeDelegate.h>
 #import <ChilliSource/Core/Math/MathUtils.h>
 #import <ChilliSource/Core/String/StringUtils.h>
 
@@ -97,7 +97,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoCompleteDelegate& in_delegate, bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
+        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate& in_delegate, bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
         {
             @autoreleasepool
             {
@@ -105,7 +105,7 @@ namespace ChilliSource
                 
                 m_playing = true;
                 
-                m_completionDelegate = in_delegate;
+                m_completionDelegateConnection = in_delegate.OpenConnection();
                 m_backgroundColour = in_backgroundColour;
                 
                 std::string filePath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(in_storageLocation, in_fileName);
@@ -127,7 +127,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, const VideoCompleteDelegate& in_delegate,
+        void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate& in_delegate,
                                                      bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
         {
             m_subtitles = in_subtitles;
@@ -260,11 +260,11 @@ namespace ChilliSource
             [[NSNotificationAdapter sharedInstance] StopListeningForMPPlaybackDidFinish];
             m_moviePlayerPlaybackFinishedConnection = nullptr;
             
-            if (m_completionDelegate != nullptr)
+            if (m_completionDelegateConnection != nullptr)
             {
-                VideoCompleteDelegate delegate = m_completionDelegate;
-                m_completionDelegate = nullptr;
-                delegate();
+                auto delegateConnection = std::move(m_completionDelegateConnection);
+                m_completionDelegateConnection = nullptr;
+                delegateConnection->Call();
             }
         }
         //---------------------------------------------------------------

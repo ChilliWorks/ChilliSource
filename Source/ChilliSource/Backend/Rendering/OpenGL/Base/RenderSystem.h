@@ -508,7 +508,7 @@ namespace ChilliSource
             bool m_hasContext = false;
             
             Core::Screen* m_screen;
-            Core::ConnectionUPtr m_resolutionChangeConnection;
+            Core::EventConnectionUPtr m_resolutionChangeConnection;
 		};
 	}
 }

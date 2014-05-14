@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 
 #include <limits>

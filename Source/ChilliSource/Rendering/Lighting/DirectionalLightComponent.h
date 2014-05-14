@@ -116,7 +116,7 @@ namespace ChilliSource
             TextureSPtr mpShadowMap;
             TextureSPtr mpShadowMapDebug;
             
-            Core::ConnectionUPtr m_transformChangedConnection;
+            Core::EventConnectionUPtr m_transformChangedConnection;
             
             f32 mfShadowTolerance;
             

@@ -87,9 +87,9 @@ namespace ChilliSource
             GUI::GUIView* mpView;
             PointerSystem* m_pointerSystem;
             
-            Core::ConnectionUPtr m_pointerDownConnection;
-            Core::ConnectionUPtr m_pointerMovedConnection;
-            Core::ConnectionUPtr m_pointerUpConnection;
+            Core::EventConnectionUPtr m_pointerDownConnection;
+            Core::EventConnectionUPtr m_pointerMovedConnection;
+            Core::EventConnectionUPtr m_pointerUpConnection;
             
         private:
             
@@ -526,7 +526,7 @@ namespace ChilliSource
             Core::Event<GestureEventDelegate> m_gestureEndedEvent;
             Core::Event<GestureEventDelegate> m_gestureCancelledEvent;
             
-            Core::ConnectionUPtr m_periodicTimerConnection;
+            Core::EventConnectionUPtr m_periodicTimerConnection;
 		};
 	}
 }

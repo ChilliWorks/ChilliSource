@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/Threading/ThreadPool.h>
 
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
 namespace ChilliSource
 {

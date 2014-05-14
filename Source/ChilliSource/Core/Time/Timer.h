@@ -94,7 +94,7 @@ namespace ChilliSource
             ///
             /// @return Scoped connection
 			//----------------------------------------------------
-			ConnectionUPtr OpenConnection(Delegate in_delegate, f32 in_periodSecs);
+			EventConnectionUPtr OpenConnection(Delegate in_delegate, f32 in_periodSecs);
             //-------------------------------------------------------------
             /// Close connection to the event. The connection will
             /// no longer be notified of the event
@@ -103,7 +103,7 @@ namespace ChilliSource
             ///
             /// @param Connection to close
             //-------------------------------------------------------------
-            void CloseConnection(Connection* in_connection) override;
+            void CloseConnection(EventConnection* in_connection) override;
 			
 		private:
             
@@ -133,7 +133,7 @@ namespace ChilliSource
             struct ConnectionDesc
             {
                 Delegate m_delegate;
-                Connection* m_connection = nullptr;
+                EventConnection* m_connection = nullptr;
                 f32 m_updatePeriod;
 				f32 m_elapsedSinceLastUpdate = 0.0f;
             };
@@ -141,7 +141,7 @@ namespace ChilliSource
             typedef std::vector<ConnectionDesc> ConnectionList;
             ConnectionList m_connections;
             
-            ConnectionUPtr m_coreTimerUpdateConnection;
+            EventConnectionUPtr m_coreTimerUpdateConnection;
             
             f32 m_elapsedTime = 0.0f;
             

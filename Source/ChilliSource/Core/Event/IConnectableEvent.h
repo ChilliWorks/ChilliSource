@@ -55,7 +55,7 @@ namespace ChilliSource
             ///
             /// @return Scoped connection
             //-------------------------------------------------------------
-            virtual ConnectionUPtr OpenConnection(const TDelegateType& in_delegate) = 0;
+            virtual EventConnectionUPtr OpenConnection(const TDelegateType& in_delegate) = 0;
         };
     }
 }

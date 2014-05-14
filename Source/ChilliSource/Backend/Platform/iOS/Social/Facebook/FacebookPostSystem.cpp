@@ -9,7 +9,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthenticationSystem.h>
 
 #include <FacebookSDK/FacebookSDK.h>

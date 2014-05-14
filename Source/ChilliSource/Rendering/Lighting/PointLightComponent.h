@@ -145,7 +145,7 @@ namespace ChilliSource
             void CalculateLightingValues();
         private:
             
-            Core::ConnectionUPtr m_transformChangedConnection;
+            Core::EventConnectionUPtr m_transformChangedConnection;
             
             f32 mfConstantAttenuation;
             f32 mfLinearAttenuation;
