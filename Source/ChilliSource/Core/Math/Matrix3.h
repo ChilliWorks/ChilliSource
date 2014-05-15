@@ -111,6 +111,36 @@ namespace ChilliSource
 			/// @return An inverted copy of the matrix.
 			//------------------------------------------------------
 			static GenericMatrix3<TType> Inverse(const GenericMatrix3<TType>& in_matrix);
+            //-----------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+            /// @param A translation vector.
+			///
+			/// @return A copy of the matrix with the given translation
+            /// applied to it.
+			//-----------------------------------------------------
+			static GenericMatrix3<TType> Translate(const GenericMatrix3<TType>& in_matrix, const GenericVector2<TType>& in_translation);
+			//-----------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+            /// @param A scale vector.
+			///
+			/// @return A copy of the matrix with the given scale
+            /// applied to it.
+			//-----------------------------------------------------
+			static GenericMatrix3<TType> Scale(const GenericMatrix3<TType>& in_matrix, const GenericVector2<TType>& in_scale);
+			//-----------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+            /// @param A rotation.
+			///
+			/// @return A copy of the matrix with the given rotation
+            /// applied to it.
+			//-----------------------------------------------------
+			static GenericMatrix3<TType> Rotate(const GenericMatrix3<TType>& in_matrix, TType in_angle);
 			//-----------------------------------------------------
 			/// Constructor. Sets the contents to the identity
 			/// matrix.
@@ -132,6 +162,12 @@ namespace ChilliSource
 			/// @return The determinant of this matrix.
 			//------------------------------------------------------
 			TType Determinant() const;
+            //------------------------------------------------------
+			/// @author S Dowie
+			///
+			/// @param The translation part of the transform.
+			//------------------------------------------------------
+			GenericVector2<TType> GetTranslation() const;
 			//-----------------------------------------------------
 			/// Sets this matrix to the identity matrix.
 			///
@@ -174,12 +210,6 @@ namespace ChilliSource
 			/// @param the rotation.
 			//-----------------------------------------------------
 			void Rotate(TType in_angle);
-			//------------------------------------------------------
-			/// @author S Dowie
-			///
-			/// @param The translation part of the transform. 
-			//------------------------------------------------------
-			GenericVector2<TType> GetTranslation() const;
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -403,6 +433,24 @@ namespace ChilliSource
 			c.m[8] = (in_a.m[0] * in_a.m[4] - in_a.m[1] * in_a.m[3]) * oneOverDet;
 			return c;
 		}
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::Translate(const GenericMatrix3<TType>& in_matrix, const GenericVector2<TType>& in_translation)
+        {
+            return in_matrix * CreateTranslation(in_translation);
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::Scale(const GenericMatrix3<TType>& in_matrix, const GenericVector2<TType>& in_scale)
+        {
+            return in_matrix * CreateScale(in_scale);
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::Rotate(const GenericMatrix3<TType>& in_matrix, TType in_angle)
+        {
+            return in_matrix * CreateRotation(in_angle);
+        }
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix3<TType>::GenericMatrix3()
