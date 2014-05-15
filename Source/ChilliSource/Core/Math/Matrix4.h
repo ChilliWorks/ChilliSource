@@ -231,6 +231,66 @@ namespace ChilliSource
 			/// @return An inverted copy of the matrix.
 			//------------------------------------------------------
 			static GenericMatrix4<TType> Inverse(const GenericMatrix4<TType>& in_a);
+            //------------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+			/// @param A translation vector.
+            ///
+            /// @return A copy of the matrix with the given translation
+            /// applied to it.
+			//------------------------------------------------------
+			static GenericMatrix4<TType> Translate(const GenericMatrix4<TType>& in_a, const GenericVector3<TType>& in_translation);
+			//------------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+			/// @param A scale vector.
+            ///
+            /// @return A copy of the matrix with the given scale
+            /// applied to it.
+			//------------------------------------------------------
+			static GenericMatrix4<TType> Scale(const GenericMatrix4<TType>& in_a, const GenericVector3<TType>& in_scale);
+			//------------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+			/// @param A rotation angle.
+            ///
+            /// @return A copy of the matrix with the given X axis
+            /// rotation applied to it.
+			//------------------------------------------------------
+			static GenericMatrix4<TType> RotateX(const GenericMatrix4<TType>& in_a, TType in_angle);
+			//------------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+			/// @param A rotation angle.
+            ///
+            /// @return A copy of the matrix with the given Y axis
+            /// rotation applied to it.
+			//------------------------------------------------------
+			static GenericMatrix4<TType> RotateY(const GenericMatrix4<TType>& in_a, TType in_angle);
+			//------------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+			/// @param A rotation angle.
+            ///
+            /// @return A copy of the matrix with the given Z axis
+            /// rotation applied to it.
+			//------------------------------------------------------
+			static GenericMatrix4<TType> RotateZ(const GenericMatrix4<TType>& in_a, TType in_angle);
+			//------------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+			/// @param A orientation quaternion.
+            ///
+            /// @return A copy of the matrix with the given rotation
+            /// applied to it.
+			//------------------------------------------------------
+			static GenericMatrix4<TType> Rotate(const GenericMatrix4<TType>& in_a, const GenericQuaternion<TType>& inOrientation);
 			//------------------------------------------------------
 			/// Constructor. Sets the contents of the matrix to the
 			/// identity matrix.
@@ -317,7 +377,7 @@ namespace ChilliSource
 			///
 			/// @param the rotation quaternion.
 			//------------------------------------------------------
-			void Rotate(const GenericQuaternion<TType>& inOrientation);
+			void Rotate(const GenericQuaternion<TType>& in_orientation);
 			//------------------------------------------------------
 			/// @author S Dowie
 			///
@@ -755,6 +815,42 @@ namespace ChilliSource
 			b.m[15] = (in_a.m[1] * in_a.m[6] * in_a.m[8] - in_a.m[2] * in_a.m[5] * in_a.m[8] + in_a.m[2] * in_a.m[4] * in_a.m[9] - in_a.m[0] * in_a.m[6] * in_a.m[9] - in_a.m[1] * in_a.m[4] * in_a.m[10] + in_a.m[0] * in_a.m[5] * in_a.m[10]) / det;
 			return b;
 		}
+        //------------------------------------------------------
+        //------------------------------------------------------
+        template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::Translate(const GenericMatrix4<TType>& in_a, const GenericVector3<TType>& in_translation)
+        {
+            return in_a * CreateTranslation(in_translation);
+        }
+        //------------------------------------------------------
+        //------------------------------------------------------
+        template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::Scale(const GenericMatrix4<TType>& in_a, const GenericVector3<TType>& in_scale)
+        {
+            return in_a * CreateScale(in_scale);
+        }
+        //------------------------------------------------------
+        //------------------------------------------------------
+        template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::RotateX(const GenericMatrix4<TType>& in_a, TType in_angle)
+        {
+            return in_a * CreateRotationX(in_angle);
+        }
+        //------------------------------------------------------
+        //------------------------------------------------------
+        template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::RotateY(const GenericMatrix4<TType>& in_a, TType in_angle)
+        {
+            return in_a * CreateRotationY(in_angle);
+        }
+        //------------------------------------------------------
+        //------------------------------------------------------
+        template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::RotateZ(const GenericMatrix4<TType>& in_a, TType in_angle)
+        {
+            return in_a * CreateRotationZ(in_angle);
+        }
+        //------------------------------------------------------
+        //------------------------------------------------------
+        template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::Rotate(const GenericMatrix4<TType>& in_a, const GenericQuaternion<TType>& in_orientation)
+        {
+            return in_a * CreateRotation(in_orientation);
+        }
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType>::GenericMatrix4()
