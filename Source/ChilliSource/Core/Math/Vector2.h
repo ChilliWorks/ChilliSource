@@ -154,6 +154,25 @@ namespace ChilliSource
 			/// radians.
 			//-----------------------------------------------------
 			static TType Angle(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b);
+            //-----------------------------------------------------
+            /// calculates the result of transforming the vector by
+            /// the given regular transform matrix. This is more
+            /// efficient than standard matrix multiplication but
+            /// will only work for trasform matrices where the point
+            /// transformation is in the form:
+            ///
+            ///  Result = |x y 1|| a b 0 |
+            ///                  | c d 0 |
+            ///                  | g h 1 |
+            ///
+            /// This is the case for all non-projective transforms.
+            ///
+			/// @author I Copland
+			///
+			/// @param The vector.
+			/// @param The transform matrix.
+			//-----------------------------------------------------
+			static GenericVector2<TType> Transform2x3(const GenericVector2<TType>& in_a, const GenericMatrix3<TType>& in_transform);
 			//-----------------------------------------------------
 			/// Constructor
 			///
@@ -240,6 +259,24 @@ namespace ChilliSource
 			/// @param The interpolation factor.
 			//-----------------------------------------------------
 			void Lerp(const GenericVector2<TType>& in_b, f32 in_t);
+            //-----------------------------------------------------
+            /// Sets this vector to the result of transforming by
+            /// the given regular transform matrix. This is more
+            /// efficient than standard matrix multiplication but
+            /// will only work for trasform matrices where the point
+            /// transformation is in the form:
+            ///
+            ///  Result = |x y 1|| a b 0 |
+            ///                  | c d 0 |
+            ///                  | e f 0 |
+            ///
+            /// This is the case for all non-projective transforms.
+            ///
+			/// @author I Copland
+			///
+			/// @param The transform matrix.
+			//-----------------------------------------------------
+			void Transform2x3(const GenericMatrix3<TType>& in_transform);
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -486,6 +523,15 @@ namespace ChilliSource
 		{
 			return std::atan2(in_b.y, in_b.x) - std::atan2(in_a.y, in_a.x);
 		}
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> GenericVector2<TType> GenericVector2<TType>::Transform2x3(const GenericVector2<TType>& in_a, const GenericMatrix3<TType>& in_transform)
+        {
+            GenericVector2<TType> c;
+			c.x = in_a.x * in_transform.m[0] + in_a.y * in_transform.m[3] + in_transform.m[6];
+			c.y = in_a.x * in_transform.m[1] + in_a.y * in_transform.m[4] + in_transform.m[7];
+			return c;
+        }
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType>::GenericVector2()
@@ -566,6 +612,14 @@ namespace ChilliSource
         {
             f32 t = std::min(std::max(in_t, 0.0f), 1.0f);
 			*this = (*this + t * (in_b - *this));
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> void GenericVector2<TType>::Transform2x3(const GenericMatrix3<TType>& in_transform)
+        {
+            GenericVector2<TType> b = *this;
+			x = b.x * in_transform.m[0] + b.y * in_transform.m[3] + in_transform.m[6];
+			y = b.x * in_transform.m[1] + b.y * in_transform.m[4] + in_transform.m[7];
         }
 		//-----------------------------------------------------
 		//-----------------------------------------------------

@@ -163,6 +163,26 @@ namespace ChilliSource
 			/// @return The new vector after rotation.
 			//-----------------------------------------------------
 			static GenericVector3<TType> Rotate(GenericVector3<TType> in_a, const GenericQuaternion<TType>& in_b);
+            //-----------------------------------------------------
+            /// calculates the result of transforming the vector by
+            /// the given regular transform matrix. This is more
+            /// efficient than standard matrix multiplication but
+            /// will only work for trasform matrices where the point
+            /// transformation is in the form:
+            ///
+            ///  Result = |x y z 1|| a b c 0 |
+            ///                    | d e f 0 |
+            ///                    | g h i 0 |
+            ///                    | j k l 1 |
+            ///
+            /// This is the case for all non-projective transforms.
+            ///
+			/// @author I Copland
+			///
+			/// @param The vector.
+			/// @param The transform matrix.
+			//-----------------------------------------------------
+			static GenericVector3<TType> Transform3x4(const GenericVector3<TType>& in_a, const GenericMatrix4<TType>& in_transform);
 			//-----------------------------------------------------
 			/// Constructor
 			///
@@ -283,6 +303,25 @@ namespace ChilliSource
 			/// @param The quaternion to rotate by.
 			//-----------------------------------------------------
 			void Rotate(const GenericQuaternion<TType>& in_b);
+            //-----------------------------------------------------
+            /// Sets this vector to the result of transforming by
+            /// the given regular transform matrix. This is more
+            /// efficient than standard matrix multiplication but
+            /// will only work for trasform matrices where the point
+            /// transformation is in the form:
+            ///
+            ///  Result = |x y z 1|| a b c 0 |
+            ///                    | d e f 0 |
+            ///                    | g h i 0 |
+            ///                    | j k l 1 |
+            ///
+            /// This is the case for all non-projective transforms.
+            ///
+			/// @author I Copland
+			///
+			/// @param The transform matrix.
+			//-----------------------------------------------------
+			void Transform3x4(const GenericMatrix4<TType>& in_transform);
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -586,6 +625,16 @@ namespace ChilliSource
 			in_a.Rotate(in_b);
             return in_a;
 		}
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> GenericVector3<TType> GenericVector3<TType>::Transform3x4(const GenericVector3<TType>& in_a, const GenericMatrix4<TType>& in_transform)
+        {
+            GenericVector3<TType> b;
+			b.x = in_a.x * in_transform.m[0] + in_a.y * in_transform.m[4] + in_a.z * in_transform.m[8] + in_transform.m[12];
+			b.y = in_a.x * in_transform.m[1] + in_a.y * in_transform.m[5] + in_a.z * in_transform.m[9] + in_transform.m[13];
+			b.z = in_a.x * in_transform.m[2] + in_a.y * in_transform.m[6] + in_a.z * in_transform.m[10] + in_transform.m[14];
+            return b;
+        }
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector3<TType>::GenericVector3()
@@ -651,7 +700,6 @@ namespace ChilliSource
 				z = 1 / z;
 			}
 		}
-
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> void GenericVector3<TType>::Abs()
@@ -707,6 +755,15 @@ namespace ChilliSource
             GenericVector3<TType> xyzA(in_b.x, in_b.y, in_b.z);
 			GenericVector3<TType> t = ((TType)2) * CrossProduct(xyzA, *this);
 			*this = *this + in_b.w * t + CrossProduct(xyzA, t);
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> void GenericVector3<TType>::Transform3x4(const GenericMatrix4<TType>& in_transform)
+        {
+            GenericVector3<TType> b = *this;
+			x = b.x * in_transform.m[0] + b.y * in_transform.m[4] + b.z * in_transform.m[8] + in_transform.m[12];
+			y = b.x * in_transform.m[1] + b.y * in_transform.m[5] + b.z * in_transform.m[9] + in_transform.m[13];
+			z = b.x * in_transform.m[2] + b.y * in_transform.m[6] + b.z * in_transform.m[10] + in_transform.m[14];
         }
 		//-----------------------------------------------------
 		//-----------------------------------------------------
