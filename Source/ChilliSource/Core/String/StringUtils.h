@@ -11,7 +11,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/String/UTF8String.h>
-#include <ChilliSource/Core/Container/ParamDictionary.h>
 
 #include <sstream>
 #include <string>

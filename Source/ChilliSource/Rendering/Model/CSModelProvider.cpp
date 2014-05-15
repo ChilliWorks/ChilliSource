@@ -13,6 +13,8 @@
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
+#include <unordered_map>
+
 namespace ChilliSource
 {
 	namespace Rendering

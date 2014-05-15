@@ -28,6 +28,7 @@
 
 #include <ChilliSource/Rendering/Particles/ParticleEffect.h>
 
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
 namespace ChilliSource

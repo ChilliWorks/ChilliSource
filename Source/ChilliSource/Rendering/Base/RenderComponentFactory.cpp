@@ -276,7 +276,7 @@ namespace ChilliSource
             for(u32 i=0; i<numEmitters; ++i)
             {
                 const auto& properties = in_effect->GetEmitterDesc(i);
-                const std::string& type = properties.ValueForKey("Type");
+                const std::string& type = properties.GetValue("Type");
                 auto emitter = m_emitterFactory->CreateParticleEmitter(type, properties, material, particleComp);
                 CS_ASSERT(emitter != nullptr, "Cannot create particle emitter of type " + type);
                 emitter->SetTextureAtlas(in_effect->GetAtlas());
@@ -288,7 +288,7 @@ namespace ChilliSource
             for(u32 i=0; i<numAffectors; ++i)
             {
                 const auto& properties = in_effect->GetAffectorDesc(i);
-                const std::string& type = properties.ValueForKey("Type");
+                const std::string& type = properties.GetValue("Type");
                 auto affector = m_affectorFactory->CreateParticleAffector(type, properties);
                 CS_ASSERT(affector != nullptr, "Cannot create particle affector of type " + type);
                 particleComp->AddAffector(std::move(affector));

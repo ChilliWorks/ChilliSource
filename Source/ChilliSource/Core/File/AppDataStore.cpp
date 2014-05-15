@@ -30,9 +30,10 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
-#include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
 #include <ChilliSource/Core/Cryptographic/aes.h>
 #include <ChilliSource/Core/Cryptographic/AESEncrypt.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
 
@@ -108,7 +109,7 @@ namespace ChilliSource
 		bool AppDataStore::Contains(const std::string& in_key)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
-			return m_dictionary.HasValue(in_key);
+			return m_dictionary.HasKey(in_key);
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
@@ -327,7 +328,7 @@ namespace ChilliSource
                 // Convert to XML
                 TiXmlDocument xmlDoc;
                 TiXmlElement xmlRootElement("ADS");
-                m_dictionary.ToXml(&xmlRootElement);
+                ParamDictionarySerialiser::ToXml(m_dictionary, &xmlRootElement);
                 xmlDoc.InsertEndChild(xmlRootElement);
                 
                 // Encrypt
@@ -376,7 +377,7 @@ namespace ChilliSource
                     TiXmlElement* pRoot = xmlDoc.RootElement();
                     if(nullptr != pRoot)
                     {
-                        m_dictionary.FromXml(pRoot);
+                        m_dictionary = ParamDictionarySerialiser::FromXml(pRoot);
                     }
                     
                     CS_SAFEDELETE_ARRAY(pbyData);

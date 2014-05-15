@@ -34,6 +34,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
+#include <unordered_map>
+
 namespace ChilliSource
 {
     namespace Debugging

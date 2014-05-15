@@ -29,6 +29,8 @@
 #include <ChilliSource/Rendering/Particles/CSParticleEffectProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
+#include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -94,8 +96,7 @@ namespace ChilliSource
                 while(emitterEl)
                 {
                     //Get the param dictionary config values
-                    Core::ParamDictionary params;
-                    params.FromString(emitterEl->GetText());
+                    Core::ParamDictionary params = Core::ParamDictionarySerialiser::FromString(emitterEl->GetText());
                     
                     emitterDescs.push_back(std::move(params));
                     
@@ -124,8 +125,7 @@ namespace ChilliSource
                     while(affectorEl)
                     {
                         //Get the param dictionary config values
-                        Core::ParamDictionary params;
-                        params.FromString(affectorEl->GetText());
+                        Core::ParamDictionary params = Core::ParamDictionarySerialiser::FromString(affectorEl->GetText());
                         
                         affectorDescs.push_back(params);
                         

@@ -7,6 +7,8 @@
 //
 
 #include <ChilliSource/Core/String/StringUtils.h>
+
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
 #include <algorithm>

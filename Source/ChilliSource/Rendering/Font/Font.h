@@ -34,6 +34,8 @@
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 
+#include <unordered_map>
+
 namespace ChilliSource
 {
 	namespace Rendering

@@ -38,7 +38,7 @@ namespace ChilliSource
                 NSDictionary* nsParams = (NSDictionary*)[in_uiLocal.userInfo objectForKey:@"Params"];
                 for(id key in nsParams)
                 {
-                    notification->m_params.SetValueForKey([NSStringUtils newStringWithNSString:[nsParams objectForKey:key]], [NSStringUtils newStringWithNSString:key]);
+                    notification->m_params.SetValue([NSStringUtils newStringWithNSString:[nsParams objectForKey:key]], [NSStringUtils newStringWithNSString:key]);
                 }
                 
                 return notification;
@@ -82,13 +82,13 @@ namespace ChilliSource
                     nsNotification.timeZone = [NSTimeZone defaultTimeZone];
                     nsNotification.alertAction = @"View";
                     
-                    NSString* body = [NSStringUtils newNSStringWithString:in_params.ValueForKey("Body")];
+                    NSString* body = [NSStringUtils newNSStringWithString:in_params.GetValue("Body")];
                     nsNotification.alertBody = body;
                     [body release];
                     
-                    if(in_params.HasValue("Sound") == true)
+                    if(in_params.HasKey("Sound") == true)
                     {
-                        NSString* sound = [NSStringUtils newNSStringWithString:in_params.ValueForKey("Sound")];
+                        NSString* sound = [NSStringUtils newNSStringWithString:in_params.GetValue("Sound")];
                         nsNotification.soundName = sound;
                         [sound release];
                     }
@@ -100,7 +100,7 @@ namespace ChilliSource
                     nsNotification.applicationIconBadgeNumber = 1;
                     
                     NSMutableDictionary* nsParams = [[NSMutableDictionary alloc] init];
-                    for(Core::StringToStringMap::const_iterator it = in_params.begin(); it != in_params.end(); ++it)
+                    for(Core::ParamDictionary::const_iterator it = in_params.begin(); it != in_params.end(); ++it)
                     {
                         NSString* key = [NSStringUtils newNSStringWithString:it->first];
                         NSString* value = [NSStringUtils newNSStringWithString:it->second];

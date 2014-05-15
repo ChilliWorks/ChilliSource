@@ -13,6 +13,8 @@
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
+#include <unordered_map>
+
 @class UITouch;
 
 namespace ChilliSource
