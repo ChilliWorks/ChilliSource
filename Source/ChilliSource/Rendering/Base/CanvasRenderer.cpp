@@ -49,6 +49,25 @@ namespace ChilliSource
 	{
         namespace
         {
+            //------------------------------------------------------
+            /// Converts a 2D transformation matrix to a 3D
+            /// Transformation matrix. This will only work for
+            /// non-projective transforms.
+            ///
+            /// @author S Downie
+            ///
+            /// @param The 2D Transform.
+            ///
+            /// @return The 3D Transform.
+            //------------------------------------------------------
+            template <typename TType> Core::GenericMatrix4<TType> Convert2DTransformTo3D(const Core::GenericMatrix3<TType>& in_transform)
+            {
+                return Core::GenericMatrix4<TType>(
+                    in_transform.m[0], in_transform.m[1], in_transform.m[2], 0,
+                    in_transform.m[3], in_transform.m[4], in_transform.m[5], 0,
+                    0, 0, 1, 0,
+                    in_transform.m[6], in_transform.m[7], in_transform.m[8], 1);
+            }
             //----------------------------------------------------------------------------
             /// Get the width of the character
             ///
@@ -513,7 +532,7 @@ namespace ChilliSource
         {
             m_canvasSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
             
-			UpdateSpriteData(Core::Matrix4::CreateTransform(in_transform), in_size, in_UVs, in_colour, in_anchor, m_canvasSprite);
+			UpdateSpriteData(Convert2DTransformTo3D(in_transform), in_size, in_UVs, in_colour, in_anchor, m_canvasSprite);
             
             //Draw us!
 			m_overlayBatcher->Render(m_canvasSprite);
@@ -603,7 +622,7 @@ namespace ChilliSource
 		{
             m_canvasSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
             
-            Core::Matrix4 matTransform = Core::Matrix4::CreateTransform(in_transform);
+            Core::Matrix4 matTransform = Convert2DTransformTo3D(in_transform);
             Core::Matrix4 matTransformedLocal;
 			
 			for (const auto& character : in_characters)

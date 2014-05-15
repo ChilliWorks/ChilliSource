@@ -216,17 +216,6 @@ namespace ChilliSource
 			//------------------------------------------------------
 			static GenericMatrix4<TType> CreateTransform(const GenericVector3<TType>& in_translation, const GenericVector3<TType>& in_scale, const GenericQuaternion<TType>& in_rotation);
 			//------------------------------------------------------
-			/// Creates a transform matrix from a 3x3 2D transform 
-			/// matrix.
-			///
-			/// @author S Downie
-			///
-			/// @param The 2D transform matrix.
-			///
-			/// @return The new transform matrix.
-			//------------------------------------------------------
-			static GenericMatrix4<TType> CreateTransform(const GenericMatrix3<TType>& in_transform);
-			//------------------------------------------------------
 			/// @author I Copland
             ///
             /// @param A matrix.
@@ -726,16 +715,6 @@ namespace ChilliSource
 				in_scale.y * rotation.m[4], in_scale.y * rotation.m[5], in_scale.y * rotation.m[6], 0,
 				in_scale.z * rotation.m[8], in_scale.z * rotation.m[9], in_scale.z * rotation.m[10], 0,
 				in_translation.x, in_translation.y, in_translation.z, 1);
-		}
-		//------------------------------------------------------
-		//------------------------------------------------------
-		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateTransform(const GenericMatrix3<TType>& in_transform)
-		{
-			return GenericMatrix4<TType>(
-				in_transform.m[0], in_transform.m[1], in_transform.m[2], 0,
-				in_transform.m[3], in_transform.m[4], in_transform.m[5], 0,
-				0, 0, 1, 0,
-				in_transform.m[6], in_transform.m[7], in_transform.m[8], 1);
 		}
         //------------------------------------------------------
 		//------------------------------------------------------
