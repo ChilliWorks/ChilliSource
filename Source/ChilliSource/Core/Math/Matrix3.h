@@ -336,10 +336,6 @@ namespace ChilliSource
 
 #include <cmath>
 
-#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
-#include <Accelerate/Accelerate.h>
-#endif
-
 namespace ChilliSource
 {
 	namespace Core
@@ -512,9 +508,6 @@ namespace ChilliSource
 		{
 			Matrix3 c = *this;
 
-#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
-			vDSP_mmul(const_cast<f32*>(c.m), 1, const_cast<f32*>(in_b.m), 1, m, 1, 3, 3, 3);
-#else
 			m[0] = c.m[0] * in_b.m[0] + c.m[1] * in_b.m[3] + c.m[2] * in_b.m[6];
 			m[1] = c.m[0] * in_b.m[1] + c.m[1] * in_b.m[4] + c.m[2] * in_b.m[7];
 			m[2] = c.m[0] * in_b.m[2] + c.m[1] * in_b.m[5] + c.m[2] * in_b.m[8];
@@ -526,7 +519,7 @@ namespace ChilliSource
 			m[6] = c.m[6] * in_b.m[0] + c.m[7] * in_b.m[3] + c.m[8] * in_b.m[6];
 			m[7] = c.m[6] * in_b.m[1] + c.m[7] * in_b.m[4] + c.m[8] * in_b.m[7];
 			m[8] = c.m[6] * in_b.m[2] + c.m[7] * in_b.m[5] + c.m[8] * in_b.m[8];
-#endif
+
 			return *this;
 		}
 		//------------------------------------------------------
@@ -565,9 +558,6 @@ namespace ChilliSource
 		{
 			Matrix3 c;
 
-#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
-			vDSP_mmul(const_cast<f32*>(in_a.m), 1, const_cast<f32*>(in_b.m), 1, c.m, 1, 3, 3, 3);
-#else
 			c.m[0] = in_a.m[0] * in_b.m[0] + in_a.m[1] * in_b.m[3] + in_a.m[2] * in_b.m[6];
 			c.m[1] = in_a.m[0] * in_b.m[1] + in_a.m[1] * in_b.m[4] + in_a.m[2] * in_b.m[7];
 			c.m[2] = in_a.m[0] * in_b.m[2] + in_a.m[1] * in_b.m[5] + in_a.m[2] * in_b.m[8];
@@ -579,7 +569,7 @@ namespace ChilliSource
 			c.m[6] = in_a.m[6] * in_b.m[0] + in_a.m[7] * in_b.m[3] + in_a.m[8] * in_b.m[6];
 			c.m[7] = in_a.m[6] * in_b.m[1] + in_a.m[7] * in_b.m[4] + in_a.m[8] * in_b.m[7];
 			c.m[8] = in_a.m[6] * in_b.m[2] + in_a.m[7] * in_b.m[5] + in_a.m[8] * in_b.m[8];
-#endif
+
 			return c;
 		}
 		//------------------------------------------------------

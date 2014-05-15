@@ -79,7 +79,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		Core::Ray CameraComponent::Unproject(const Core::Vector2 &invScreenPos)
 		{
-            Core::Matrix4 matProj = (GetView() * GetProjection()).InverseCopy();
+            Core::Matrix4 matProj = Core::Matrix4::Inverse((GetView() * GetProjection()));
             
             Core::Vector2 vScreenSize = m_screen->GetResolution();
 			//Normalise the screen space co-ordinates into clip space
@@ -262,7 +262,7 @@ namespace ChilliSource
 		{
 			if(GetEntity())
 			{
-				mmatView = GetEntity()->GetTransform().GetWorldTransform().InverseCopy();
+				mmatView = Core::Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
 			}
 
 			return mmatView;

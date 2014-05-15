@@ -491,7 +491,7 @@ namespace ChilliSource
 		{
 			//Convert the point into our local space
 			//allowing us to do an AABB check
-			Matrix4 matToLocal = GetTransform().InverseCopy();
+			Matrix4 matToLocal = Matrix4::Inverse(GetTransform());
 			
 			Vector3 LocalPoint = invPoint * matToLocal;
 			
@@ -509,7 +509,7 @@ namespace ChilliSource
 		{
 			//Matrix to transform from world space to this objects local space
 			//In local space the OOBB is simply an AABB
-			Matrix4 matToLocal = GetTransform().InverseCopy();
+			Matrix4 matToLocal = Matrix4::Inverse(GetTransform());
 
 			//Convert the ray into our local space
 			//allowing us to do an AABB check

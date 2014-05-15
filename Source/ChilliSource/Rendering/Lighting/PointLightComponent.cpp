@@ -103,7 +103,7 @@ namespace ChilliSource
             //as the projection is done in the shader
             if(mbMatrixCacheValid == false && GetEntity() != nullptr)
             {
-                mmatLight = GetEntity()->GetTransform().GetWorldTransform().InverseCopy();
+                mmatLight = Core::Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
                 mbMatrixCacheValid = true;
             }
             

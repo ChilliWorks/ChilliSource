@@ -227,6 +227,22 @@ namespace ChilliSource
 			//------------------------------------------------------
 			static GenericMatrix4<TType> CreateTransform(const GenericMatrix3<TType>& in_transform);
 			//------------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+			///
+			/// @return A transposed copy of the matrix.
+			//------------------------------------------------------
+			static GenericMatrix4<TType> Transpose(const GenericMatrix4<TType>& in_a);
+			//------------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+			///
+			/// @return An inverted copy of the matrix.
+			//------------------------------------------------------
+			static GenericMatrix4<TType> Inverse(const GenericMatrix4<TType>& in_a);
+			//------------------------------------------------------
 			/// Constructor. Sets the contents of the matrix to the
 			/// identity matrix.
 			///
@@ -260,23 +276,11 @@ namespace ChilliSource
 			//------------------------------------------------------
 			void Transpose();
 			//------------------------------------------------------
-			/// @author I Copland
-			///
-			/// @return A transposed copy of this matrix.
-			//------------------------------------------------------
-			GenericMatrix4<TType> TransposeCopy() const;
-			//------------------------------------------------------
 			/// Sets this matrix to its inverse.
 			///
 			/// @author I Copland
 			//------------------------------------------------------
 			void Inverse();
-			//------------------------------------------------------
-			/// @author I Copland
-			///
-			/// @return An inverted copy of this matrix.
-			//------------------------------------------------------
-			GenericMatrix4<TType> InverseCopy() const;
 			//------------------------------------------------------
 			/// Translate this matrix.
 			///
@@ -516,10 +520,6 @@ namespace ChilliSource
 
 #include <cmath>
 
-#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
-#include <Accelerate/Accelerate.h>
-#endif
-
 namespace ChilliSource
 {
 	namespace Core
@@ -737,6 +737,45 @@ namespace ChilliSource
 				0, 0, 1, 0,
 				in_transform.m[6], in_transform.m[7], in_transform.m[8], 1);
 		}
+        //------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::Transpose(const GenericMatrix4<TType>& in_a)
+		{
+			return GenericMatrix4<TType>(
+                in_a.m[0], in_a.m[4], in_a.m[8], in_a.m[12],
+                in_a.m[1], in_a.m[5], in_a.m[9], in_a.m[13],
+                in_a.m[2], in_a.m[6], in_a.m[10], in_a.m[14],
+                in_a.m[3], in_a.m[7], in_a.m[11], in_a.m[15]);
+		}
+        //------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::Inverse(const GenericMatrix4<TType>& in_a)
+		{
+			TType det = in_a.Determinant();
+			if (det == 0)
+			{
+				return in_a;
+			}
+            
+			GenericMatrix4<TType> b;
+			b.m[0] = (in_a.m[6] * in_a.m[11] * in_a.m[13] - in_a.m[7] * in_a.m[10] * in_a.m[13] + in_a.m[7] * in_a.m[9] * in_a.m[14] - in_a.m[5] * in_a.m[11] * in_a.m[14] - in_a.m[6] * in_a.m[9] * in_a.m[15] + in_a.m[5] * in_a.m[10] * in_a.m[15]) / det;
+			b.m[1] = (in_a.m[3] * in_a.m[10] * in_a.m[13] - in_a.m[2] * in_a.m[11] * in_a.m[13] - in_a.m[3] * in_a.m[9] * in_a.m[14] + in_a.m[1] * in_a.m[11] * in_a.m[14] + in_a.m[2] * in_a.m[9] * in_a.m[15] - in_a.m[1] * in_a.m[10] * in_a.m[15]) / det;
+			b.m[2] = (in_a.m[2] * in_a.m[7] * in_a.m[13] - in_a.m[3] * in_a.m[6] * in_a.m[13] + in_a.m[3] * in_a.m[5] * in_a.m[14] - in_a.m[1] * in_a.m[7] * in_a.m[14] - in_a.m[2] * in_a.m[5] * in_a.m[15] + in_a.m[1] * in_a.m[6] * in_a.m[15]) / det;
+			b.m[3] = (in_a.m[3] * in_a.m[6] * in_a.m[9] - in_a.m[2] * in_a.m[7] * in_a.m[9] - in_a.m[3] * in_a.m[5] * in_a.m[10] + in_a.m[1] * in_a.m[7] * in_a.m[10] + in_a.m[2] * in_a.m[5] * in_a.m[11] - in_a.m[1] * in_a.m[6] * in_a.m[11]) / det;
+			b.m[4] = (in_a.m[7] * in_a.m[10] * in_a.m[12] - in_a.m[6] * in_a.m[11] * in_a.m[12] - in_a.m[7] * in_a.m[8] * in_a.m[14] + in_a.m[4] * in_a.m[11] * in_a.m[14] + in_a.m[6] * in_a.m[8] * in_a.m[15] - in_a.m[4] * in_a.m[10] * in_a.m[15]) / det;
+			b.m[5] = (in_a.m[2] * in_a.m[11] * in_a.m[12] - in_a.m[3] * in_a.m[10] * in_a.m[12] + in_a.m[3] * in_a.m[8] * in_a.m[14] - in_a.m[0] * in_a.m[11] * in_a.m[14] - in_a.m[2] * in_a.m[8] * in_a.m[15] + in_a.m[0] * in_a.m[10] * in_a.m[15]) / det;
+			b.m[6] = (in_a.m[3] * in_a.m[6] * in_a.m[12] - in_a.m[2] * in_a.m[7] * in_a.m[12] - in_a.m[3] * in_a.m[4] * in_a.m[14] + in_a.m[0] * in_a.m[7] * in_a.m[14] + in_a.m[2] * in_a.m[4] * in_a.m[15] - in_a.m[0] * in_a.m[6] * in_a.m[15]) / det;
+			b.m[7] = (in_a.m[2] * in_a.m[7] * in_a.m[8] - in_a.m[3] * in_a.m[6] * in_a.m[8] + in_a.m[3] * in_a.m[4] * in_a.m[10] - in_a.m[0] * in_a.m[7] * in_a.m[10] - in_a.m[2] * in_a.m[4] * in_a.m[11] + in_a.m[0] * in_a.m[6] * in_a.m[11]) / det;
+			b.m[8] = (in_a.m[5] * in_a.m[11] * in_a.m[12] - in_a.m[7] * in_a.m[9] * in_a.m[12] + in_a.m[7] * in_a.m[8] * in_a.m[13] - in_a.m[4] * in_a.m[11] * in_a.m[13] - in_a.m[5] * in_a.m[8] * in_a.m[15] + in_a.m[4] * in_a.m[9] * in_a.m[15]) / det;
+			b.m[9] = (in_a.m[3] * in_a.m[9] * in_a.m[12] - in_a.m[1] * in_a.m[11] * in_a.m[12] - in_a.m[3] * in_a.m[8] * in_a.m[13] + in_a.m[0] * in_a.m[11] * in_a.m[13] + in_a.m[1] * in_a.m[8] * in_a.m[15] - in_a.m[0] * in_a.m[9] * in_a.m[15]) / det;
+			b.m[10] = (in_a.m[1] * in_a.m[7] * in_a.m[12] - in_a.m[3] * in_a.m[5] * in_a.m[12] + in_a.m[3] * in_a.m[4] * in_a.m[13] - in_a.m[0] * in_a.m[7] * in_a.m[13] - in_a.m[1] * in_a.m[4] * in_a.m[15] + in_a.m[0] * in_a.m[5] * in_a.m[15]) / det;
+			b.m[11] = (in_a.m[3] * in_a.m[5] * in_a.m[8] - in_a.m[1] * in_a.m[7] * in_a.m[8] - in_a.m[3] * in_a.m[4] * in_a.m[9] + in_a.m[0] * in_a.m[7] * in_a.m[9] + in_a.m[1] * in_a.m[4] * in_a.m[11] - in_a.m[0] * in_a.m[5] * in_a.m[11]) / det;
+			b.m[12] = (in_a.m[6] * in_a.m[9] * in_a.m[12] - in_a.m[5] * in_a.m[10] * in_a.m[12] - in_a.m[6] * in_a.m[8] * in_a.m[13] + in_a.m[4] * in_a.m[10] * in_a.m[13] + in_a.m[5] * in_a.m[8] * in_a.m[14] - in_a.m[4] * in_a.m[9] * in_a.m[14]) / det;
+			b.m[13] = (in_a.m[1] * in_a.m[10] * in_a.m[12] - in_a.m[2] * in_a.m[9] * in_a.m[12] + in_a.m[2] * in_a.m[8] * in_a.m[13] - in_a.m[0] * in_a.m[10] * in_a.m[13] - in_a.m[1] * in_a.m[8] * in_a.m[14] + in_a.m[0] * in_a.m[9] * in_a.m[14]) / det;
+			b.m[14] = (in_a.m[2] * in_a.m[5] * in_a.m[12] - in_a.m[1] * in_a.m[6] * in_a.m[12] - in_a.m[2] * in_a.m[4] * in_a.m[13] + in_a.m[0] * in_a.m[6] * in_a.m[13] + in_a.m[1] * in_a.m[4] * in_a.m[14] - in_a.m[0] * in_a.m[5] * in_a.m[14]) / det;
+			b.m[15] = (in_a.m[1] * in_a.m[6] * in_a.m[8] - in_a.m[2] * in_a.m[5] * in_a.m[8] + in_a.m[2] * in_a.m[4] * in_a.m[9] - in_a.m[0] * in_a.m[6] * in_a.m[9] - in_a.m[1] * in_a.m[4] * in_a.m[10] + in_a.m[0] * in_a.m[5] * in_a.m[10]) / det;
+			return b;
+		}
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType>::GenericMatrix4()
@@ -751,6 +790,17 @@ namespace ChilliSource
 			m[4] = in_b0; m[5] = in_b1; m[6] = in_b2; m[7] = in_b3;
 			m[8] = in_c0; m[9] = in_c1; m[10] = in_c2; m[11] = in_c3;
 			m[12] = in_d0; m[13] = in_d1; m[14] = in_d2; m[15] = in_d3;
+		}
+        //------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> TType GenericMatrix4<TType>::Determinant() const
+		{
+			return	m[3] * m[6] * m[9] * m[12] - m[2] * m[7] * m[9] * m[12] - m[3] * m[5] * m[10] * m[12] + m[1] * m[7] * m[10] * m[12] +
+            m[2] * m[5] * m[11] * m[12] - m[1] * m[6] * m[11] * m[12] - m[3] * m[6] * m[8] * m[13] + m[2] * m[7] * m[8] * m[13] +
+            m[3] * m[4] * m[10] * m[13] - m[0] * m[7] * m[10] * m[13] - m[2] * m[4] * m[11] * m[13] + m[0] * m[6] * m[11] * m[13] +
+            m[3] * m[5] * m[8] * m[14] - m[1] * m[7] * m[8] * m[14] - m[3] * m[4] * m[9] * m[14] + m[0] * m[7] * m[9] * m[14] +
+            m[1] * m[4] * m[11] * m[14] - m[0] * m[5] * m[11] * m[14] - m[2] * m[5] * m[8] * m[15] + m[1] * m[6] * m[8] * m[15] +
+            m[2] * m[4] * m[9] * m[15] - m[0] * m[6] * m[9] * m[15] - m[1] * m[4] * m[10] * m[15] + m[0] * m[5] * m[10] * m[15];
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -767,76 +817,16 @@ namespace ChilliSource
 		{
 			GenericMatrix4<TType> a = *this;
 			
-#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
-			vDSP_mtrans(const_cast<f32*>(a.m), 1, m, 1, 4, 4);
-#else 
 			m[0] = a.m[0]; m[1] = a.m[4]; m[2] = a.m[8]; m[3] = a.m[12];
 			m[4] = a.m[1]; m[5] = a.m[5]; m[6] = a.m[9]; m[7] = a.m[13];
 			m[8] = a.m[2]; m[9] = a.m[6]; m[10] = a.m[10]; m[11] = a.m[14];
 			m[12] = a.m[3]; m[13] = a.m[7]; m[14] = a.m[11]; m[15] = a.m[15];
-#endif
-		}
-		//------------------------------------------------------
-		//------------------------------------------------------
-		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::TransposeCopy() const
-		{
-			Matrix4 A = *this;
-
-#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
-			vDSP_mtrans(const_cast<f32*>(m), 1, A.m, 1, 4, 4);
-#else 
-			A.m[0] = m[0]; A.m[1] = m[4]; A.m[2] = m[8]; A.m[3] = m[12];
-			A.m[4] = m[1]; A.m[5] = m[5]; A.m[6] = m[9]; A.m[7] = m[13];
-			A.m[8] = m[2]; A.m[9] = m[6]; A.m[10] = m[10]; A.m[11] = m[14];
-			A.m[12] = m[3]; A.m[13] = m[7]; A.m[14] = m[11]; A.m[15] = m[15];
-#endif
-			return A;
-		}
-		//------------------------------------------------------
-		//------------------------------------------------------
-		template <typename TType> TType GenericMatrix4<TType>::Determinant() const
-		{
-			return	m[3] * m[6] * m[9] * m[12] - m[2] * m[7] * m[9] * m[12] - m[3] * m[5] * m[10] * m[12] + m[1] * m[7] * m[10] * m[12] +
-				m[2] * m[5] * m[11] * m[12] - m[1] * m[6] * m[11] * m[12] - m[3] * m[6] * m[8] * m[13] + m[2] * m[7] * m[8] * m[13] +
-				m[3] * m[4] * m[10] * m[13] - m[0] * m[7] * m[10] * m[13] - m[2] * m[4] * m[11] * m[13] + m[0] * m[6] * m[11] * m[13] +
-				m[3] * m[5] * m[8] * m[14] - m[1] * m[7] * m[8] * m[14] - m[3] * m[4] * m[9] * m[14] + m[0] * m[7] * m[9] * m[14] +
-				m[1] * m[4] * m[11] * m[14] - m[0] * m[5] * m[11] * m[14] - m[2] * m[5] * m[8] * m[15] + m[1] * m[6] * m[8] * m[15] +
-				m[2] * m[4] * m[9] * m[15] - m[0] * m[6] * m[9] * m[15] - m[1] * m[4] * m[10] * m[15] + m[0] * m[5] * m[10] * m[15];
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> void GenericMatrix4<TType>::Inverse()
 		{
-			*this = InverseCopy();
-		}
-		//------------------------------------------------------
-		//------------------------------------------------------
-		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::InverseCopy() const
-		{
-			TType det = Determinant();
-			if (det == 0)
-			{
-				return *this;
-			}
-
-			GenericMatrix4<TType> a = *this;
-			a.m[0] = (m[6] * m[11] * m[13] - m[7] * m[10] * m[13] + m[7] * m[9] * m[14] - m[5] * m[11] * m[14] - m[6] * m[9] * m[15] + m[5] * m[10] * m[15]) / det;
-			a.m[1] = (m[3] * m[10] * m[13] - m[2] * m[11] * m[13] - m[3] * m[9] * m[14] + m[1] * m[11] * m[14] + m[2] * m[9] * m[15] - m[1] * m[10] * m[15]) / det;
-			a.m[2] = (m[2] * m[7] * m[13] - m[3] * m[6] * m[13] + m[3] * m[5] * m[14] - m[1] * m[7] * m[14] - m[2] * m[5] * m[15] + m[1] * m[6] * m[15]) / det;
-			a.m[3] = (m[3] * m[6] * m[9] - m[2] * m[7] * m[9] - m[3] * m[5] * m[10] + m[1] * m[7] * m[10] + m[2] * m[5] * m[11] - m[1] * m[6] * m[11]) / det;
-			a.m[4] = (m[7] * m[10] * m[12] - m[6] * m[11] * m[12] - m[7] * m[8] * m[14] + m[4] * m[11] * m[14] + m[6] * m[8] * m[15] - m[4] * m[10] * m[15]) / det;
-			a.m[5] = (m[2] * m[11] * m[12] - m[3] * m[10] * m[12] + m[3] * m[8] * m[14] - m[0] * m[11] * m[14] - m[2] * m[8] * m[15] + m[0] * m[10] * m[15]) / det;
-			a.m[6] = (m[3] * m[6] * m[12] - m[2] * m[7] * m[12] - m[3] * m[4] * m[14] + m[0] * m[7] * m[14] + m[2] * m[4] * m[15] - m[0] * m[6] * m[15]) / det;
-			a.m[7] = (m[2] * m[7] * m[8] - m[3] * m[6] * m[8] + m[3] * m[4] * m[10] - m[0] * m[7] * m[10] - m[2] * m[4] * m[11] + m[0] * m[6] * m[11]) / det;
-			a.m[8] = (m[5] * m[11] * m[12] - m[7] * m[9] * m[12] + m[7] * m[8] * m[13] - m[4] * m[11] * m[13] - m[5] * m[8] * m[15] + m[4] * m[9] * m[15]) / det;
-			a.m[9] = (m[3] * m[9] * m[12] - m[1] * m[11] * m[12] - m[3] * m[8] * m[13] + m[0] * m[11] * m[13] + m[1] * m[8] * m[15] - m[0] * m[9] * m[15]) / det;
-			a.m[10] = (m[1] * m[7] * m[12] - m[3] * m[5] * m[12] + m[3] * m[4] * m[13] - m[0] * m[7] * m[13] - m[1] * m[4] * m[15] + m[0] * m[5] * m[15]) / det;
-			a.m[11] = (m[3] * m[5] * m[8] - m[1] * m[7] * m[8] - m[3] * m[4] * m[9] + m[0] * m[7] * m[9] + m[1] * m[4] * m[11] - m[0] * m[5] * m[11]) / det;
-			a.m[12] = (m[6] * m[9] * m[12] - m[5] * m[10] * m[12] - m[6] * m[8] * m[13] + m[4] * m[10] * m[13] + m[5] * m[8] * m[14] - m[4] * m[9] * m[14]) / det;
-			a.m[13] = (m[1] * m[10] * m[12] - m[2] * m[9] * m[12] + m[2] * m[8] * m[13] - m[0] * m[10] * m[13] - m[1] * m[8] * m[14] + m[0] * m[9] * m[14]) / det;
-			a.m[14] = (m[2] * m[5] * m[12] - m[1] * m[6] * m[12] - m[2] * m[4] * m[13] + m[0] * m[6] * m[13] + m[1] * m[4] * m[14] - m[0] * m[5] * m[14]) / det;
-			a.m[15] = (m[1] * m[6] * m[8] - m[2] * m[5] * m[8] + m[2] * m[4] * m[9] - m[0] * m[6] * m[9] - m[1] * m[4] * m[10] + m[0] * m[5] * m[10]) / det;
-			return a;
+			*this = Inverse(*this);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -1005,9 +995,6 @@ namespace ChilliSource
 		{
 			GenericMatrix4<TType> c = *this;
 
-#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
-			vDSP_mmul(const_cast<f32*>(c.m), 1, const_cast<f32*>(in_b.m), 1, m, 1, 4, 4, 4);
-#else
 			m[0] = c.m[0] * in_b.m[0] + c.m[1] * in_b.m[4] + c.m[2] * in_b.m[8] + c.m[3] * in_b.m[12];
 			m[1] = c.m[0] * in_b.m[1] + c.m[1] * in_b.m[5] + c.m[2] * in_b.m[9] + c.m[3] * in_b.m[13];
 			m[2] = c.m[0] * in_b.m[2] + c.m[1] * in_b.m[6] + c.m[2] * in_b.m[10] + c.m[3] * in_b.m[14];
@@ -1027,7 +1014,7 @@ namespace ChilliSource
 			m[13] = c.m[12] * in_b.m[1] + c.m[13] * in_b.m[5] + c.m[14] * in_b.m[9] + c.m[15] * in_b.m[13];
 			m[14] = c.m[12] * in_b.m[2] + c.m[13] * in_b.m[6] + c.m[14] * in_b.m[10] + c.m[15] * in_b.m[14];
 			m[15] = c.m[12] * in_b.m[3] + c.m[13] * in_b.m[7] + c.m[14] * in_b.m[11] + c.m[15] * in_b.m[15];
-#endif
+
 			return *this;
 		}
 		//------------------------------------------------------
@@ -1068,9 +1055,6 @@ namespace ChilliSource
 		{
 			GenericMatrix4<TType> c;
 
-#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
-			vDSP_mmul(const_cast<f32*>(in_a.m), 1, const_cast<f32*>(in_b.m), 1, c.m, 1, 4, 4, 4);
-#else
 			c.m[0] = in_a.m[0] * in_b.m[0] + in_a.m[1] * in_b.m[4] + in_a.m[2] * in_b.m[8] + in_a.m[3] * in_b.m[12];
 			c.m[1] = in_a.m[0] * in_b.m[1] + in_a.m[1] * in_b.m[5] + in_a.m[2] * in_b.m[9] + in_a.m[3] * in_b.m[13];
 			c.m[2] = in_a.m[0] * in_b.m[2] + in_a.m[1] * in_b.m[6] + in_a.m[2] * in_b.m[10] + in_a.m[3] * in_b.m[14];
@@ -1090,7 +1074,7 @@ namespace ChilliSource
 			c.m[13] = in_a.m[12] * in_b.m[1] + in_a.m[13] * in_b.m[5] + in_a.m[14] * in_b.m[9] + in_a.m[15] * in_b.m[13];
 			c.m[14] = in_a.m[12] * in_b.m[2] + in_a.m[13] * in_b.m[6] + in_a.m[14] * in_b.m[10] + in_a.m[15] * in_b.m[14];
 			c.m[15] = in_a.m[12] * in_b.m[3] + in_a.m[13] * in_b.m[7] + in_a.m[14] * in_b.m[11] + in_a.m[15] * in_b.m[15];
-#endif
+
 			return c;
 		}
 		//------------------------------------------------------

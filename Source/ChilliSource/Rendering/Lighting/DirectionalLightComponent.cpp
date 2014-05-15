@@ -69,7 +69,7 @@ namespace ChilliSource
             //The matrix is a view projection
             if(mbMatrixCacheValid == false && GetEntity() != nullptr)
             {
-                Core::Matrix4 matView = GetEntity()->GetTransform().GetWorldTransform().InverseCopy();
+                Core::Matrix4 matView = Core::Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
 				mmatLight = matView * mmatProj;
                 mbMatrixCacheValid = true;
             }

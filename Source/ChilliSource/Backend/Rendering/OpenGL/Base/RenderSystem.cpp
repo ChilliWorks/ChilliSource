@@ -496,7 +496,7 @@ namespace ChilliSource
             m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
             if(m_currentShader->HasUniform("u_normalMat"))
             {
-                m_currentShader->SetUniform("u_normalMat", inmatWorld.InverseCopy().TransposeCopy());
+                m_currentShader->SetUniform("u_normalMat", Core::Matrix4::Transpose(Core::Matrix4::Inverse(inmatWorld)));
             }
             
 			EnableVertexAttributeForSemantic(inpBuffer);
@@ -521,7 +521,7 @@ namespace ChilliSource
             m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
             if(m_currentShader->HasUniform("u_normalMat"))
             {
-                m_currentShader->SetUniform("u_normalMat", inmatWorld.InverseCopy().TransposeCopy());
+                m_currentShader->SetUniform("u_normalMat", Core::Matrix4::Transpose(Core::Matrix4::Inverse(inmatWorld)));
             }
             
 			//Render the buffer contents
