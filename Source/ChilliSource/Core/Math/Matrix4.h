@@ -635,8 +635,17 @@ namespace ChilliSource
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix4<TType> GenericMatrix4<TType>::CreateOrthographicProjectionLH(TType in_left, f32 in_right, f32 in_bottom, f32 in_top, f32 in_near, f32 in_far)
 		{
-			//TODO:
-			return GenericMatrix4<TType>();
+            TType a0 = 2 / (in_right - in_left);
+			TType b1 = 2 / (in_top - in_bottom);
+			TType c2 = 2 / (in_far - in_near);
+			TType d0 = -(in_right + in_left) / (in_right - in_left);
+			TType d1 = -(in_top + in_bottom) / (in_top - in_bottom);
+			TType d2 = (in_near + in_far) / (in_far - in_near);
+			return GenericMatrix4<TType>(
+                a0, 0, 0, 0,
+                0, b1, 0, 0,
+                0, 0, c2, 0,
+                d0, d1, d2, 1);
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
