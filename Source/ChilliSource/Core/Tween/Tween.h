@@ -86,11 +86,7 @@ namespace ChilliSource
 			/// @param Duration of a single cycle in seconds
 			/// @param Delay of initial cycle in seconds
 			//-----------------------------------------------------------------------
-			Tween(const TInterpFunc& in_interpFunc, f32 in_duration, f32 in_delay = 0.0f)
-				: m_interpFunc(in_interpFunc), m_duration(in_duration), m_startDelay(in_delay)
-			{
-
-			}
+			Tween(const TInterpFunc& in_interpFunc, f32 in_duration, f32 in_delay = 0.0f);
 			//-----------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -216,6 +212,13 @@ namespace ChilliSource
 			bool m_isReverse = false;
 			bool m_isPingPong = false;
 		};
+        //-----------------------------------------------------------------------
+        //-----------------------------------------------------------------------
+        template <typename TInterpFunc> Tween<TInterpFunc>::Tween(const TInterpFunc& in_interpFunc, f32 in_duration, f32 in_delay)
+        : m_interpFunc(in_interpFunc), m_duration(in_duration), m_startDelay(in_delay)
+        {
+            
+        }
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
 		template <typename TInterpFunc> void Tween<TInterpFunc>::SetInterpolateFunction(const TInterpFunc& in_interpFunc)
