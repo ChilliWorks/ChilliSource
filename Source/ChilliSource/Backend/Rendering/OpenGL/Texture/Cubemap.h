@@ -75,8 +75,9 @@ namespace ChilliSource
             ///
             /// @param Texture descriptors (6)
             /// @param Image datas (6)
+            /// @param Whether the cubemap should be mip-mapped
             //--------------------------------------------------
-            void Build(const std::array<Rendering::Texture::Descriptor, 6>& in_descs, const std::array<Rendering::Texture::TextureDataUPtr, 6>& in_datas) override;
+            void Build(const std::array<Rendering::Texture::Descriptor, 6>& in_descs, const std::array<Rendering::Texture::TextureDataUPtr, 6>& in_datas, bool in_mipMap) override;
 			//--------------------------------------------------------------
             /// Binds this cubemap to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it
@@ -110,14 +111,6 @@ namespace ChilliSource
             /// @param Vertical wrapping
             //--------------------------------------------------------------
 			void SetWrapMode(Rendering::Texture::WrapMode in_sMode, Rendering::Texture::WrapMode in_tMode) override;
-            //--------------------------------------------------------------
-            /// Generate mip map levels for the cubemap to reduce
-            /// aliasing. This will bind the cubemap and generate the
-            /// 3 mip map levels.
-            ///
-            /// @author S Downie
-            //--------------------------------------------------------------
-            void GenerateMipMaps() override;
 			//--------------------------------------------------
 			/// @author S Downie
 			///

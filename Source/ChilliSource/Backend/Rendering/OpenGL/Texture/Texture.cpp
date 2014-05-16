@@ -286,7 +286,7 @@ namespace ChilliSource
         /// GL makes a copy of the data so we can just
         /// let the incoming data delete itself
         //--------------------------------------------------
-        void Texture::Build(const Descriptor& in_desc, TextureDataUPtr in_data)
+        void Texture::Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap)
         {
             Destroy();
             
@@ -299,6 +299,13 @@ namespace ChilliSource
             
             glGenTextures(1, &m_texHandle);
             Bind();
+            
+            if(in_mipMap == true)
+            {
+                glGenerateMipmap(GL_TEXTURE_2D);
+            }
+            
+            m_hasMipMaps = in_mipMap;
             
             u8* data = in_data.get();
             
@@ -371,14 +378,6 @@ namespace ChilliSource
             
             m_hasWrapModeChanged = true;
 		}
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        void Texture::GenerateMipMaps()
-        {
-            Bind();
-            glGenerateMipmap(GL_TEXTURE_2D);
-            m_hasMipMaps = true;
-        }
         //--------------------------------------------------
         //--------------------------------------------------
         void Texture::Destroy()
