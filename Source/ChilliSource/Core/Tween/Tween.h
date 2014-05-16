@@ -358,9 +358,6 @@ namespace ChilliSource
 				return;
 			}
 
-#if CS_ENABLE_DEBUG
-			in_timeSinceLastUpdate = std::min(in_timeSinceLastUpdate, 0.333f);
-#endif
 			in_timeSinceLastUpdate *= m_timeScaler;
 
 			//Inform the delegate that the animation has begun

@@ -120,7 +120,6 @@ namespace ChilliSource
                 u32 udwHigh32Bits = udwPFormat >> 32; //Shift to right 32bits
                 Core::ImageCompression compression = Core::ImageCompression::k_none;
                 Core::ImageFormat format = Core::ImageFormat::k_RGB888;
-                bool bSupported = false;
                 
                 //Calculate the data size for each texture level and respect the minimum number of blocks
                 u32 udwBpp = 4;
@@ -131,7 +130,6 @@ namespace ChilliSource
                     if(udwLow32Bits == (u32)PixelFormat::k_2BppRGB || udwLow32Bits == (u32)PixelFormat::k_2BppRGBA)
                     {
                         compression = Core::ImageCompression::k_PVR2Bpp;
-                        bSupported = true;
                         
                         //Pixel by pixel block size for 2bpp
                         udwBpp = 2;
@@ -145,7 +143,6 @@ namespace ChilliSource
                     else if(udwLow32Bits == (u32)PixelFormat::k_4BppRGB || udwLow32Bits == (u32)PixelFormat::k_4BppRGBA)
                     {
                         compression = Core::ImageCompression::k_PVR4Bpp;
-                        bSupported = true;
                         
                         //Pixel by pixel block size for 4bpp
                         udwBpp = 4;

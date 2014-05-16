@@ -247,6 +247,12 @@ namespace ChilliSource
                 return;
             }
             
+#if CS_ENABLE_DEBUG
+            //When debugging we may have breakpoints so restrict the time between
+            //updates to something feasible.
+            in_deltaTime = std::min(in_deltaTime, 0.5f);
+#endif
+            
 #ifdef CS_ENABLE_DEBUGSTATS
             m_debugStats->RecordEvent("FrameTime", in_deltaTime);
 			m_debugStats->RecordEvent("FPS", 1.0f / in_deltaTime);
