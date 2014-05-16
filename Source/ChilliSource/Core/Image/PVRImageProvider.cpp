@@ -164,8 +164,6 @@ namespace ChilliSource
                     //each byte containing a single character, or a null character if there are fewer than four channels; for example, {‘r’,‘g’,‘b’,‘a’} or {‘r’,‘g’,‘b’,‘\0’}.
                     //The most significant 4 bytes state the bit rate for each channel in the same order, each byte containing a single 8bit unsigned integer value,
                     //or zero if there are fewer than four channels; for example, {8,8,8,8} or {5,6,5,0}.
-                    
-                    //TODO:: Should never reach here through pvr format
                     CS_LOG_FATAL("Unimplemented PixelFormat for image");
                 }
                 

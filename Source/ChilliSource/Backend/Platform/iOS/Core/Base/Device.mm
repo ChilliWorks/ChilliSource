@@ -140,6 +140,7 @@ namespace ChilliSource
             //-----------------------------------------------
             std::string GetUDID()
             {
+                //TODO: address issues with Apple UDID policies
                 @autoreleasepool
                 {
                     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0f)
@@ -159,7 +160,6 @@ namespace ChilliSource
                     }
                     else
                     {
-                        //TODO: remove this?
                         NSString* udid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
                         return [NSStringUtils newStringWithNSString:udid];
                     }
