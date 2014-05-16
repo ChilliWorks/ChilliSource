@@ -307,10 +307,9 @@ namespace ChilliSource
             //----------------------------------------------------
             template <typename T> inline T NormalisedRange(T inValue, T inMin, T inMax)
             {
-                if(inMax == inMin)
-                    return 1.0f;
+				CS_ASSERT(inMax != inMin, "Divide by ZERO error");
                 
-                return Clamp( (inValue - inMin) / (inMax - inMin), 0.0f, 1.0f);
+                return (inValue - inMin) / (inMax - inMin);
             }
             //----------------------------------------------------
             /// Convert Range

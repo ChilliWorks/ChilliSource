@@ -18,15 +18,6 @@ namespace ChilliSource
 	namespace Core
 	{
         //---------------------------------------------------------
-        /// Animation
-        //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Animation);
-        template <typename TType> class ValueAnimation;
-        template <typename TType> class LinearAnimation;
-        template <typename TType> class BounceAnimation;
-        template <typename TType> class KeyframeAnimation;
-        enum class InterpolationType;
-        //---------------------------------------------------------
         /// Base
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Application);
@@ -162,6 +153,10 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(CoreTimer);
         CS_FORWARDDECLARE_CLASS(PerformanceTimer);
         CS_FORWARDDECLARE_CLASS(Timer);
+        //---------------------------------------------------------
+        /// Tween
+        //---------------------------------------------------------
+        template <typename TInterpType> class Tween;
         //---------------------------------------------------------
         /// Volume
         //---------------------------------------------------------
