@@ -441,7 +441,6 @@ namespace ChilliSource
 		//-----------------------------------------------
 		//-----------------------------------------------
 		template <typename TType> GenericQuaternion<TType>::GenericQuaternion(const GenericVector3<TType>& in_axis, TType in_angle)
-			: x(0), y(0), z(0), w(0)
 		{
 			GenericVector3<TType> normalised = GenericVector3<TType>::Normalise(in_axis);
 			TType halfAngle = in_angle / 2;
@@ -532,11 +531,15 @@ namespace ChilliSource
 		//-----------------------------------------------
 		template <typename TType> void GenericQuaternion<TType>::Normalise()
 		{
-			TType magnitude = Magnitude();
-			w = w / magnitude;
-			x = x / magnitude;
-			y = y / magnitude;
-			z = z / magnitude;
+            TType mangitude = Magnitude();
+            if (mangitude != 0)
+            {
+                TType invMagnitude = 1 / mangitude;
+                w *= invMagnitude;
+                x *= invMagnitude;
+                y *= invMagnitude;
+                z *= invMagnitude;
+            }
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
@@ -551,11 +554,15 @@ namespace ChilliSource
 		template <typename TType> void GenericQuaternion<TType>::Inverse()
 		{
 			TType magnitudeSquared = MagnitudeSquared();
-			Conjugate();
-			w /= magnitudeSquared;
-			x /= magnitudeSquared;
-			y /= magnitudeSquared;
-			z /= magnitudeSquared;
+            if (magnitudeSquared != 0)
+            {
+                Conjugate();
+                TType invMagnitudeSquared = 1 / magnitudeSquared;
+                w *= invMagnitudeSquared;
+                x *= invMagnitudeSquared;
+                y *= invMagnitudeSquared;
+                z *= invMagnitudeSquared;
+            }
 		}
         //--------------------------------------------
         //--------------------------------------------
@@ -740,11 +747,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		template <typename TType> bool operator==(const GenericQuaternion<TType>& in_a, const GenericQuaternion<TType>& in_b)
 		{
-			if (in_a.x != in_b.x || in_a.y != in_b.y || in_a.z != in_b.z || in_a.w != in_b.w)
-			{
-				return false;
-			}
-			return true;
+			return (in_a.x == in_b.x && in_a.y == in_b.y && in_a.z == in_b.z && in_a.w == in_b.w);
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------

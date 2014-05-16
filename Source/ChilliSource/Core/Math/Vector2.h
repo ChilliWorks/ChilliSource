@@ -560,9 +560,13 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> void GenericVector2<TType>::Normalise()
 		{
-			TType invLength = 1 / Length();
-			x = x * invLength;
-			y = y * invLength;
+            TType length = Length();
+            if (length != 0)
+            {
+                TType invLength = 1 / length;
+                x *= invLength;
+                y *= invLength;
+            }
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
@@ -737,11 +741,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> bool operator==(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b)
 		{
-			if (in_a.x == in_b.x && in_a.y == in_b.y)
-			{
-				return true;
-			}
-			return false;
+			return (in_a.x == in_b.x && in_a.y == in_b.y);
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
