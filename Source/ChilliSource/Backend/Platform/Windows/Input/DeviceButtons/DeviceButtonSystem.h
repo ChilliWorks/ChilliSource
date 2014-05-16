@@ -26,16 +26,19 @@
 //  THE SOFTWARE.
 //
 
-#import <ChilliSource/ChilliSource.h>
-#import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#import <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_INPUT_DEVICEBUTTONS_DEVICEBUTTONSYSTEM_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_INPUT_DEVICEBUTTONS_DEVICEBUTTONSYSTEM_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
+#include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace Windows
 	{
         //------------------------------------------------------------
-        /// The iOS backend implementation of the Device Button System.
+        /// The Windows backend implementation of the Device Button System.
         ///
         /// @author I Copland
         //------------------------------------------------------------
@@ -76,3 +79,5 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif

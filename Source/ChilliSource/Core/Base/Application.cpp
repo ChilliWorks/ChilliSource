@@ -53,6 +53,7 @@
 
 #include <ChilliSource/GUI/Base/GUIViewFactory.h>
 
+#include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
@@ -411,7 +412,8 @@ namespace ChilliSource
             //Input
             CreateSystem<Input::Keyboard>();
             m_pointerSystem = CreateSystem<Input::PointerSystem>();
-
+            CreateSystem<Input::DeviceButtonSystem>();
+            
             //Rendering
             Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();
             m_renderSystem = CreateSystem<Rendering::RenderSystem>(renderCapabilities);

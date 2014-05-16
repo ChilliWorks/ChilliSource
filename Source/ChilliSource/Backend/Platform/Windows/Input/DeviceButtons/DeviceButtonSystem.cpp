@@ -26,11 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#import <ChilliSource/Backend/Platform/iOS/Input/DeviceButtons/DeviceButtonSystem.h>
+#include <ChilliSource/Backend/Platform/Windows/Input/DeviceButtons/DeviceButtonSystem.h>
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace Windows
 	{
         CS_DEFINE_NAMEDTYPE(DeviceButtonSystem);
         //----------------------------------------------------

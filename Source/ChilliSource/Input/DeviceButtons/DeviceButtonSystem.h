@@ -33,6 +33,8 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/Event/Event.h>
 
+#include <functional>
+
 namespace ChilliSource
 {
 	namespace Input
@@ -82,6 +84,8 @@ namespace ChilliSource
 			//----------------------------------------------------
 			virtual ~DeviceButtonSystem(){}
         protected:
+            friend class Core::Application;
+            
             //----------------------------------------------------
             /// Creates a new platfrom specific instance of pointer
             /// system.
@@ -97,7 +101,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //----------------------------------------------------
-            DeviceButtonSystem()= default;
+            DeviceButtonSystem() = default;
 		};
 	}
 }
