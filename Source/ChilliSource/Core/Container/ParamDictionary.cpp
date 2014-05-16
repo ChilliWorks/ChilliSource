@@ -28,9 +28,6 @@
 
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
-#include <ChilliSource/Core/XML/rapidxml_utils.hpp>
-#include <ChilliSource/Core/XML/XMLUtils.h>
-
 namespace ChilliSource
 {
 	namespace Core

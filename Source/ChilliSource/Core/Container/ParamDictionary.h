@@ -30,11 +30,8 @@
 #define _CHILLISOURCE_CORE_CONTAINER_PARAMDICTIONARY_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/XML/rapidxml_forward.h>
 
 #include <unordered_map>
-
-class TiXmlElement;
 
 namespace ChilliSource
 {
