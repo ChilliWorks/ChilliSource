@@ -82,9 +82,10 @@ namespace ChilliSource
             ///
             /// @param The storage location to load from
             /// @param File path to resource
+            /// @param Options to customise the creation
             /// @param [Out] Resource
             //-------------------------------------------------------
-			void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
             /// Completion delegate is called on finish. Check
@@ -94,10 +95,11 @@ namespace ChilliSource
             ///
             /// @param The storage location.
             /// @param The filepath.
+            /// @param Options to customise the creation
             /// @param Completion delegate
             /// @param [Out] The output resource.
             //----------------------------------------------------
-			void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
         private:
             
             friend class Application;

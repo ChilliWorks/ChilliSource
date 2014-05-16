@@ -33,5 +33,12 @@ namespace ChilliSource
     namespace Core
     {
         CS_DEFINE_NAMEDTYPE(ResourceProvider);
+        
+        //----------------------------------------------------
+        //----------------------------------------------------
+        IResourceOptionsBaseCSPtr ResourceProvider::GetDefaultOptions() const
+        {
+            return nullptr;
+        }
     }
 }

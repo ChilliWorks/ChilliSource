@@ -85,14 +85,14 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		void CSSubtitlesProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
+		void CSSubtitlesProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
 		{
             SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(out_resource);
             LoadSubtitles(in_storageLocation, in_filePath, nullptr, pSubtitles);
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		void CSSubtitlesProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+		void CSSubtitlesProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
 			SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(out_resource);
 			

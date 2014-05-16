@@ -219,13 +219,13 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void LocalisedTextProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceSPtr& out_resource)
+		void LocalisedTextProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
 		{
             LoadResource(in_storageLocation, in_filePath, nullptr, out_resource);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void LocalisedTextProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
+		void LocalisedTextProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
 		{
             Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(LoadResource, in_storageLocation, in_filePath, in_delegate, out_resource));
 		}

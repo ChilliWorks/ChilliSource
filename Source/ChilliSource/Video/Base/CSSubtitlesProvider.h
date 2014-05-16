@@ -76,9 +76,10 @@ namespace ChilliSource
 			///
             /// @param The storage location to load from
 			/// @param File path
+            /// @param Options to customise the creation
 			/// @param [Out] Resource object
 			//-------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
 			//-------------------------------------------------------------------------
             /// Load the subtitles resource on a background thread from the given
             /// file location. Calls the completion delegate on completion. Check
@@ -88,10 +89,11 @@ namespace ChilliSource
 			///
             /// @param The storage location to load from
 			/// @param File path
+            /// @param Options to customise the creation
             /// @param Delegate
 			/// @param [Out] Resource object
 			//-------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
             //-------------------------------------------------------------------------
 			/// @author I Copland
 			///

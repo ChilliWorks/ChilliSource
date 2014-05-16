@@ -160,13 +160,13 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void ETC1ImageProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceSPtr& out_resource)
+		void ETC1ImageProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
         {
             LoadImage(in_storageLocation, in_filepath, nullptr, out_resource);
         }
         //----------------------------------------------------
         //----------------------------------------------------
-		void ETC1ImageProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
+		void ETC1ImageProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
         {
 			auto task = std::bind(LoadImage, in_storageLocation, in_filepath, in_delegate, out_resource);
 			Application::Get()->GetTaskScheduler()->ScheduleTask(task);

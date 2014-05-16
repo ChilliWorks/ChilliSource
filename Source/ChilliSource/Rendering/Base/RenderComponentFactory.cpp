@@ -230,7 +230,7 @@ namespace ChilliSource
                 desc.m_format = Core::ImageFormat::k_Depth16;
                 desc.m_compression = Core::ImageCompression::k_none;
                 desc.m_dataSize = 0;
-                pShadowMap->Build(desc, nullptr);
+                pShadowMap->Build(desc, nullptr, false);
         
 #ifdef CS_ENABLE_DEBUGSHADOW
                 pShadowMapDebug = m_resourcePool->CreateResource<Rendering::Texture>("_ShadowMapDebug" + Core::ToString(s_shadowMapCount));
@@ -239,7 +239,7 @@ namespace ChilliSource
                 desc.m_format = Core::ImageFormat::k_RGB888;
                 desc.m_compression = Core::ImageCompression::k_none;
                 desc.m_dataSize = 0;
-                pShadowMapDebug->Build(desc, nullptr);
+                pShadowMapDebug->Build(desc, nullptr, false);
 #endif
                 
                 s_shadowMapCount++;

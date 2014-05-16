@@ -122,6 +122,10 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(Resource);
         CS_FORWARDDECLARE_CLASS(ResourcePool);
         CS_FORWARDDECLARE_CLASS(ResourceProvider);
+        template <typename TResourceType> class IResourceOptions;
+        template <typename TResourceType> using IResourceOptionsSPtr = std::shared_ptr<IResourceOptions<TResourceType>>;
+        template <typename TResourceType> using IResourceOptionsCSPtr = std::shared_ptr<const IResourceOptions<TResourceType>>;
+        CS_FORWARDDECLARE_CLASS(IResourceOptionsBase);
         //---------------------------------------------------------
         /// Scene
         //---------------------------------------------------------
