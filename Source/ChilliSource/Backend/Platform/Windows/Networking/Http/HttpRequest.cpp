@@ -86,7 +86,7 @@ namespace ChilliSource
 					headerIndex += 2;
 
 					//Add to param dictionary
-					headers.SetValueForKey(WindowsStringUtils::UTF16ToUTF8(key), WindowsStringUtils::UTF16ToUTF8(value));
+					headers.SetValue(WindowsStringUtils::UTF16ToUTF8(key), WindowsStringUtils::UTF16ToUTF8(value));
 					key.clear();
 					value.clear();
 
