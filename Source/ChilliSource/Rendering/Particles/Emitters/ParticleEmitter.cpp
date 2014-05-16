@@ -30,7 +30,7 @@ namespace ChilliSource
         //-------------------------------------------------------------
         ParticleEmitter::ParticleEmitter(const Core::ParamDictionary& inParams, const MaterialCSPtr &inpMaterial, ParticleComponent* inpComponent)
         : mudwMaxNumParticles(100), mudwMaxNumParticlesPerEmission(1), mfEmissionFreq(0.5f), mfCurrentTime(0.0f), mfLastEmissionTime(0.0f), mfTimeToLive(1.0f), mvInitialScale(1.0f, 1.0f), mbShouldLoop(true)
-        ,mfEnergyLoss(1.0f/mfTimeToLive), mpOwningComponent(inpComponent), mbIsEmitting(true), mudwNumUsed(0), mpMaterial(inpMaterial),msParticleUVs(Core::Vector2::ZERO, Core::Vector2(1.0f,1.0f))
+        ,mfEnergyLoss(1.0f/mfTimeToLive), mpOwningComponent(inpComponent), mbIsEmitting(true), mudwNumUsed(0), mpMaterial(inpMaterial),msParticleUVs(Core::Vector2::k_zero, Core::Vector2(1.0f,1.0f))
 		,mudwBurstCounter(0), mbIsEmittingFinished(false)
         ,mbIsGlobalSpace(true)
         {
@@ -156,7 +156,7 @@ namespace ChilliSource
                         udwNum_particlesEmittedThisStep = 0;
                     }
                     Core::Quaternion qOrientation;
-                    Core::Vector3 vScale(Core::Vector3::ONE);
+                    Core::Vector3 vScale(Core::Vector3::k_one);
                     
                     if(mbIsGlobalSpace)
                     {
@@ -177,7 +177,7 @@ namespace ChilliSource
                     // We need to rotate our velocity by our emmiters orientation if in global space
                     if(mbIsGlobalSpace)
                     {
-                        m_particles[i].m_velocity = qOrientation * m_particles[i].m_velocity;
+						m_particles[i].m_velocity = Core::Vector3::Rotate(m_particles[i].m_velocity, qOrientation);
                     }
                     
                     for(std::vector<ParticleAffector*>::iterator itAffector = mAffectors.begin(); itAffector != mAffectors.end(); ++itAffector)
@@ -265,25 +265,25 @@ namespace ChilliSource
         {
             SpriteComponent::SpriteData sData;
             // Get world matrix
-            const Core::Matrix4x4 & matTrans = mpOwningComponent->GetEntity()->GetTransform().GetWorldTransform();
+            const Core::Matrix4 & matTrans = mpOwningComponent->GetEntity()->GetTransform().GetWorldTransform();
             
             // Get quaternion to particle space
-            Core::Quaternion qParticleRot = Core::Quaternion(matTrans).Conjugate();
+            Core::Quaternion qParticleRot = Core::Quaternion::Conjugate(Core::Quaternion(matTrans));
             
-            const Core::Matrix4x4 & matCamWorld = inpCam->GetEntity()->GetTransform().GetWorldTransform();
+            const Core::Matrix4 & matCamWorld = inpCam->GetEntity()->GetTransform().GetWorldTransform();
             // Get cameras up and right vectors in particle space
             
-            Core::Vector3 vRight = matCamWorld.Right();
-            Core::Vector3 vUp = matCamWorld.Up();
-            Core::Vector3 vForward = matCamWorld.Forward();
+            Core::Vector3 vRight = matCamWorld.GetRight();
+            Core::Vector3 vUp = matCamWorld.GetUp();
+            Core::Vector3 vForward = matCamWorld.GetForward();
             
-            const Core::Matrix4x4 * pTransform = nullptr;
+            const Core::Matrix4 * pTransform = nullptr;
             if(mbIsGlobalSpace == false)
             {
                 pTransform = &matTrans;
-                vRight = qParticleRot * vRight;
-                vUp = qParticleRot * vUp;
-                vForward = qParticleRot * vForward;
+				vRight = Core::Vector3::Rotate(vRight, qParticleRot);
+				vUp = Core::Vector3::Rotate(vUp, qParticleRot);
+				vForward = Core::Vector3::Rotate(vForward, qParticleRot);
             }
 
             for(u32 i=0; i<mudwMaxNumParticles; ++i)
@@ -293,7 +293,7 @@ namespace ChilliSource
                     // Rotate per particle
                     Core::Quaternion qRot(vForward, m_particles[i].m_angularRotation);
 
-                    UpdateSpriteData(m_particles[i].m_translation, m_particles[i].m_colour, sData, qRot * vRight, qRot * vUp, m_particles[i].m_scale);
+					UpdateSpriteData(m_particles[i].m_translation, m_particles[i].m_colour, sData, Core::Vector3::Rotate(vRight, qRot), Core::Vector3::Rotate(vUp, qRot), m_particles[i].m_scale);
                     
                     inpRenderSystem->GetDynamicSpriteBatchPtr()->Render(sData, pTransform);
                 }
@@ -495,17 +495,17 @@ namespace ChilliSource
             Core::Vector3 vHalfRight = (0.5f * mvInitialScale.x * invScale.x) * invRight;
             Core::Vector3 vHalfUp = (0.5f * mvInitialScale.y * invScale.y) * invUp;
             
-            Core::Vector4 vTemp(vHalfUp.x - vHalfRight.x, vHalfUp.y - vHalfRight.y, vHalfUp.z - vHalfRight.z, 1.0f);
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = invPos + vTemp;
+            Core::Vector3 vTemp(vHalfUp.x - vHalfRight.x, vHalfUp.y - vHalfRight.y, vHalfUp.z - vHalfRight.z);
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = Core::Vector4(invPos + vTemp, 1.0f);
             
             vTemp.x = vHalfUp.x + vHalfRight.x; vTemp.y = vHalfUp.y + vHalfRight.y; vTemp.z = vHalfUp.z + vHalfRight.z;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos = invPos + vTemp;
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos = Core::Vector4(invPos + vTemp, 1.0f);
             
             vTemp.x = -vHalfUp.x - vHalfRight.x; vTemp.y = -vHalfUp.y - vHalfRight.y; vTemp.z = -vHalfUp.z - vHalfRight.z;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos = invPos + vTemp;
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos = Core::Vector4(invPos + vTemp, 1.0f);
             
             vTemp.x = -vHalfUp.x + vHalfRight.x; vTemp.y = -vHalfUp.y + vHalfRight.y; vTemp.z = -vHalfUp.z + vHalfRight.z;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos = invPos + vTemp;
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos = Core::Vector4(invPos + vTemp, 1.0f);
 		}
         //-------------------------------------------------------
         /// Destructor

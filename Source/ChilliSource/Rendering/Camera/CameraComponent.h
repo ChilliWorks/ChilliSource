@@ -169,19 +169,19 @@ namespace ChilliSource
 			///
 			/// @return Projection matrix
 			//------------------------------------------------------
-			const Core::Matrix4x4& GetProjection();
+			const Core::Matrix4& GetProjection();
 			//------------------------------------------------------
 			/// Get View 
 			///
 			/// @return View matrix
 			//------------------------------------------------------
-			const Core::Matrix4x4& GetView();
+			const Core::Matrix4& GetView();
 			//------------------------------------------------------
 			/// Get Orthographic Projection 
 			///
 			/// @return Orthographic projection matrix
 			//------------------------------------------------------
-			const Core::Matrix4x4& GetOrthoProjection() const;
+			const Core::Matrix4& GetOrthoProjection() const;
 			//------------------------------------------------------
 			/// Unproject
 			///
@@ -217,7 +217,7 @@ namespace ChilliSource
             /// Orientate the given matrix to face the cameras
             /// view vector
             //------------------------------------------------------
-            void Billboard(const Core::Matrix4x4& inmatBillboarded, Core::Matrix4x4& outmatBillboarded);
+            void Billboard(const Core::Matrix4& inmatBillboarded, Core::Matrix4& outmatBillboarded);
 
 			CameraDescription& GetDescription() { return mDesc; }
             
@@ -295,10 +295,10 @@ namespace ChilliSource
 			CameraDescription mDesc;
 			Core::Frustum mFrustum;
 			
-			Core::Matrix4x4 mmatOrthoProj; //Ortho projection matrix;
-			Core::Matrix4x4 mmatProj;		//Projection matrix depending on whether we are an ortho or perspective camera
-			Core::Matrix4x4 mmatView;		//View matrix
-			Core::Matrix4x4 mmatViewProj;	//View projection;
+			Core::Matrix4 mmatOrthoProj; //Ortho projection matrix;
+			Core::Matrix4 mmatProj;		//Projection matrix depending on whether we are an ortho or perspective camera
+			Core::Matrix4 mmatView;		//View matrix
+			Core::Matrix4 mmatViewProj;	//View projection;
             
             Core::EventConnectionUPtr m_screenOrientationChangedConnection;
             Core::EventConnectionUPtr m_screenResizedConnection;

@@ -39,7 +39,7 @@ namespace ChilliSource
             
 			//The window is fullscreen and centred
 			SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), vAbsSize));
-			SetPosition(Core::UnifiedVector2(Core::Vector2::ZERO, vAbsSize * 0.5f));
+			SetPosition(Core::UnifiedVector2(Core::Vector2::k_zero, vAbsSize * 0.5f));
 			SetName("RootWindow");
             
 			//Register for screen rotation events

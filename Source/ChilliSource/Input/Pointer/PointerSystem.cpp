@@ -186,7 +186,7 @@ namespace ChilliSource
             event.m_type = PointerEventType::k_down;
             event.m_pointerUniqueId = in_pointerUniqueId;
             event.m_InputType = in_inputType;
-            event.m_position = Core::Vector2::ZERO;
+            event.m_position = Core::Vector2::k_zero;
             event.m_timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
             
             m_eventQueue.push(event);
@@ -216,7 +216,7 @@ namespace ChilliSource
             event.m_type = PointerEventType::k_up;
             event.m_pointerUniqueId = in_pointerUniqueId;
             event.m_InputType = in_inputType;
-            event.m_position = Core::Vector2::ZERO;
+            event.m_position = Core::Vector2::k_zero;
             event.m_timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
             
             m_eventQueue.push(event);
@@ -231,7 +231,7 @@ namespace ChilliSource
             event.m_type = PointerEventType::k_remove;
             event.m_pointerUniqueId = in_pointerUniqueId;
             event.m_InputType = InputType::k_none;
-            event.m_position = Core::Vector2::ZERO;
+            event.m_position = Core::Vector2::k_zero;
             event.m_timestamp = 0.0;
             
             m_eventQueue.push(event);

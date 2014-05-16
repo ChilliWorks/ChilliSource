@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
 
 #include <array>
 
@@ -195,7 +195,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const Core::Matrix4x4& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const Core::Matrix4& in_value, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             

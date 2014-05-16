@@ -167,7 +167,7 @@ namespace ChilliSource
 				return inDefault;
 			}
 		}
-		template <> const Matrix4x4 XMLUtils::GetAttributeValueOrDefault<Matrix4x4>(TiXmlElement* inpElement, const std::string & inAttributeName, const Matrix4x4 & inDefault)
+		template <> const Matrix4 XMLUtils::GetAttributeValueOrDefault<Matrix4>(TiXmlElement* inpElement, const std::string & inAttributeName, const Matrix4 & inDefault)
 		{
 			std::string Result;
 			

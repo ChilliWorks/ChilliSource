@@ -114,7 +114,7 @@ namespace ChilliSource
             /// @param Shader pass
             /// @param Skinned animation group
 			//-----------------------------------------------------------------
-			void Render(RenderSystem* in_renderSystem, const Core::Matrix4x4& in_worldMat, const std::vector<MaterialCSPtr>& in_materials, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& in_animGroup = SkinnedAnimationGroupSPtr()) const;
+			void Render(RenderSystem* in_renderSystem, const Core::Matrix4& in_worldMat, const std::vector<MaterialCSPtr>& in_materials, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& in_animGroup = SkinnedAnimationGroupSPtr()) const;
 		private:
             
             friend class Core::ResourcePool;

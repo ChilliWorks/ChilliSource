@@ -115,7 +115,7 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			CameraComponent* GetActiveCameraPtr();
             
-            static Core::Matrix4x4 matViewProjCache;
+            static Core::Matrix4 matViewProjCache;
 			
 		private:
             friend class Core::Application;
@@ -259,7 +259,7 @@ namespace ChilliSource
             /// rendering
             /// @return Projection matrix for overlay rendering
             //----------------------------------------------------------
-            Core::Matrix4x4 CreateOverlayProjection(GUI::Window* inpWindow) const;
+            Core::Matrix4 CreateOverlayProjection(GUI::Window* inpWindow) const;
             //----------------------------------------------------------
             /// Sort Opaque
             ///

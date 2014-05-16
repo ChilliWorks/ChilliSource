@@ -165,7 +165,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Render
 		//-----------------------------------------------------------------
-		void SubMesh::Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const MaterialCSPtr& inpMaterial, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
+		void SubMesh::Render(RenderSystem* inpRenderSystem, const Core::Matrix4 &inmatWorld, const MaterialCSPtr& inpMaterial, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
 		{
             CS_ASSERT(mpMeshBuffer->GetVertexCount() > 0, "Cannot render Sub Mesh without vertices");
             
@@ -174,7 +174,7 @@ namespace ChilliSource
             if (inpAnimationGroup != nullptr)
             {
                 //Apply inverse bind pose matrix.
-                std::vector<Core::Matrix4x4> combinedMatrices;
+                std::vector<Core::Matrix4> combinedMatrices;
                 inpAnimationGroup->ApplyInverseBindPose(mpInverseBindPose->mInverseBindPoseMatrices, combinedMatrices);
                 inpRenderSystem->ApplyJoints(combinedMatrices);
             }

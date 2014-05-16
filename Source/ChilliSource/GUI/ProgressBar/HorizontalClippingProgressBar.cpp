@@ -309,7 +309,7 @@ namespace ChilliSource
 				if (HeightFromImage)
 				{
 					Core::Vector2 vAbsSize = Core::Vector2(mpBackgroundImage->GetAbsoluteSize().x, mpBackgroundImage->GetSizeFromImage().y);
-					mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2::ZERO, vAbsSize));
+					mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2::k_zero, vAbsSize));
 					
 					fHeightProgressAbs = mpProgressImage->GetSizeFromImage().y;
 					fHeightProgressRel = 0.0f;

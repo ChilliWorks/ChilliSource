@@ -55,7 +55,7 @@ namespace ChilliSource
                 
 				//Rebuild the box
 				mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition());
-				mBoundingBox.SetSize(mvDimensions);
+				mBoundingBox.SetSize(Core::Vector3(mvDimensions, 0.0f));
 			}
 			return mBoundingBox;
 		}
@@ -68,7 +68,7 @@ namespace ChilliSource
 			{
                 mbOOBBValid = true;
                 
-				mOBBoundingBox.SetSize(mvDimensions);
+				mOBBoundingBox.SetSize(Core::Vector3(mvDimensions, 0.0f));
 				mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
 			}
 			return mOBBoundingBox;
@@ -398,25 +398,25 @@ namespace ChilliSource
             Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
             Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
 			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topLeft]);
+			mavVertexPos[(u32)Verts::k_topLeft] = vTemp * mmatTransformCache;
             
             vTemp.x = vHalfSize.x;
             vTemp.y = vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topRight]);
+			mavVertexPos[(u32)Verts::k_topRight] = vTemp * mmatTransformCache;
             
             vTemp.x = -vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomLeft]);
+			mavVertexPos[(u32)Verts::k_bottomLeft] = vTemp * mmatTransformCache;
             
             vTemp.x = vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomRight]);
+			mavVertexPos[(u32)Verts::k_bottomRight] = vTemp * mmatTransformCache;
             
 			mbCornerPosCacheValid = true;
             

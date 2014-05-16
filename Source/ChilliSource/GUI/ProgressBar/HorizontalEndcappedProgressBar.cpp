@@ -344,10 +344,10 @@ namespace ChilliSource
 				
 				f32 fFillDrawHeight = vMyAbsSize.y - (fBGImageHeight-fFillImageHeight);		
 				
-				mpBGImage->SetSize(Core::UnifiedVector2(Core::Vector2::ZERO,vMyAbsSize));
+				mpBGImage->SetSize(Core::UnifiedVector2(Core::Vector2::k_zero,vMyAbsSize));
 				mpBGImage->Draw(inpCanvas);
 				
-				mpFillImage->SetSize(Core::UnifiedVector2(Core::Vector2::ZERO,Core::Vector2(fFillWidth,fFillDrawHeight)));
+				mpFillImage->SetSize(Core::UnifiedVector2(Core::Vector2::k_zero,Core::Vector2(fFillWidth,fFillDrawHeight)));
 				mpFillImage->Draw(inpCanvas);
 			}
             

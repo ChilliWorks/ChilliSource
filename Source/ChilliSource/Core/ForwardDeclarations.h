@@ -99,15 +99,27 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(Line);
         CS_FORWARDDECLARE_CLASS(Plane);
         CS_FORWARDDECLARE_CLASS(Frustum);
-        CS_FORWARDDECLARE_CLASS(Matrix3x3);
-        CS_FORWARDDECLARE_CLASS(Matrix4x4);
-        CS_FORWARDDECLARE_CLASS(Quaternion);
         CS_FORWARDDECLARE_STRUCT(UnifiedScalar);
 		CS_FORWARDDECLARE_STRUCT(UnifiedVector2);
 		CS_FORWARDDECLARE_STRUCT(UnifiedRectangle);
-        CS_FORWARDDECLARE_CLASS(Vector2);
-        CS_FORWARDDECLARE_CLASS(Vector3);
-        CS_FORWARDDECLARE_CLASS(Vector4);
+		template <typename TType> class GenericVector2;
+		template <typename TType> class GenericVector3;
+		template <typename TType> class GenericVector4;
+		template <typename TType> class GenericQuaternion;
+		template <typename TType> class GenericMatrix3;
+		template <typename TType> class GenericMatrix4;
+		using Vector2 = GenericVector2<f32>;
+		using Float2 = GenericVector2<f32>;
+		using Integer2 = GenericVector2<s32>;
+		using Vector3 = GenericVector3<f32>;
+		using Float3 = GenericVector3<f32>;
+		using Integer3 = GenericVector3<s32>;
+		using Vector4 = GenericVector4<f32>;
+		using Float4 = GenericVector4<f32>;
+		using Integer4 = GenericVector4<s32>;
+		using Quaternion = GenericQuaternion<f32>;
+		using Matrix3 = GenericMatrix3<f32>;
+		using Matrix4 = GenericMatrix4<f32>;
         //---------------------------------------------------------
         /// Notifications
         //---------------------------------------------------------

@@ -43,7 +43,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void DirectionalLightComponent::SetShadowVolume(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar)
         {
-            mmatProj = Core::Matrix4x4::CreateOrthoMatrix(infWidth, infHeight, infNear, infFar);
+			mmatProj = Core::Matrix4::CreateOrthographicProjectionRH(infWidth, infHeight, infNear, infFar);
             
             mbCacheValid = false;
         }
@@ -54,23 +54,23 @@ namespace ChilliSource
         {
             if(GetEntity() != nullptr)
             {
-                return GetEntity()->GetTransform().GetWorldOrientation() * Core::Vector3::Z_UNIT_NEGATIVE;
+				return Core::Vector3::Rotate(Core::Vector3::k_unitNegativeZ, GetEntity()->GetTransform().GetWorldOrientation());
             }
             else
             {
-                return Core::Vector3::Z_UNIT_NEGATIVE;
+				return Core::Vector3::k_unitNegativeZ;
             }
         }
         //----------------------------------------------------------
         /// Get Light Matrix
         //----------------------------------------------------------
-        const Core::Matrix4x4& DirectionalLightComponent::GetLightMatrix() const
+        const Core::Matrix4& DirectionalLightComponent::GetLightMatrix() const
         {
             //The matrix is a view projection
             if(mbMatrixCacheValid == false && GetEntity() != nullptr)
             {
-                Core::Matrix4x4 matView = GetEntity()->GetTransform().GetWorldTransform().Inverse();
-                Core::Matrix4x4::Multiply(&matView, &mmatProj, &mmatLight);
+                Core::Matrix4 matView = Core::Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
+				mmatLight = matView * mmatProj;
                 mbMatrixCacheValid = true;
             }
             

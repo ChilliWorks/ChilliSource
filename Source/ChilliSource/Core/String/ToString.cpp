@@ -10,7 +10,7 @@
 
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
@@ -165,7 +165,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const Matrix4x4& in_value)
+        std::string ToString(const Matrix4& in_value)
         {
             std::stringstream stream;
 			stream << in_value.m[0] << " "

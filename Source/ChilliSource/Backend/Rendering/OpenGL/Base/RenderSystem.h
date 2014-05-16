@@ -13,7 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Base/Colour.h>
@@ -97,7 +97,7 @@ namespace ChilliSource
             /// @param Number of vertices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld) override;
+			void RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4& inmatWorld) override;
 			//----------------------------------------------------------
 			/// Render Buffer
 			///
@@ -109,7 +109,7 @@ namespace ChilliSource
             /// @param Number of indices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld) override;
+			void RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4& inmatWorld) override;
             //----------------------------------------------------------
 			/// Apply Camera
 			///
@@ -120,7 +120,7 @@ namespace ChilliSource
 			/// @param Camera view matrix
 			/// @param Frame buffer clear colour
 			//----------------------------------------------------------
-			void ApplyCamera(const Core::Vector3& invPos, const Core::Matrix4x4& inmatView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol) override;
+			void ApplyCamera(const Core::Vector3& invPos, const Core::Matrix4& inmatView, const Core::Matrix4& inmatProj, const Core::Colour& inClearCol) override;
             //----------------------------------------------------------
             /// Set Light
             ///
@@ -145,7 +145,7 @@ namespace ChilliSource
 			///
 			/// @param Dynamic array of joint matrices.
 			//----------------------------------------------------------
-            void ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints) override;
+            void ApplyJoints(const std::vector<Core::Matrix4>& inaJoints) override;
 			//----------------------------------------------------------
 			/// Create Render Target
 			///
@@ -431,9 +431,9 @@ namespace ChilliSource
             bool mbDiffuseSet;
             bool mbSpecularSet;
             
-			Core::Matrix4x4 mmatProj;
-			Core::Matrix4x4 mmatViewProj;
-            Core::Matrix4x4 mmatView;
+			Core::Matrix4 mmatProj;
+			Core::Matrix4 mmatViewProj;
+            Core::Matrix4 mmatView;
             Core::Vector3 mvCameraPos;
 			
             RenderCapabilities* mpRenderCapabilities;

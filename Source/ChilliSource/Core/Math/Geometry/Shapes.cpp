@@ -475,10 +475,10 @@ namespace ChilliSource
 		/// Container for an object oriented bounding box 
 		/// with it's origin at centre
 		//================================================
-		OOBB::OOBB() :  mHitBox(Vector3(1,1,1), Vector3::ZERO), mmatLocal(Matrix4x4::IDENTITY)
+		OOBB::OOBB() :  mHitBox(Vector3(1,1,1), Vector3::k_zero), mmatLocal(Matrix4::k_identity)
 		{
 		}
-		OOBB::OOBB(const Core::Vector3 &invOrigin, const Core::Vector3 &invSize) : mHitBox(invOrigin,invSize), mmatLocal(Matrix4x4::IDENTITY)
+		OOBB::OOBB(const Core::Vector3 &invOrigin, const Core::Vector3 &invSize) : mHitBox(invOrigin, invSize), mmatLocal(Matrix4::k_identity)
 		{
 		}
 		//-----------------------------------------------
@@ -491,7 +491,7 @@ namespace ChilliSource
 		{
 			//Convert the point into our local space
 			//allowing us to do an AABB check
-			Matrix4x4 matToLocal = GetTransform().Inverse();
+			Matrix4 matToLocal = Matrix4::Inverse(GetTransform());
 			
 			Vector3 LocalPoint = invPoint * matToLocal;
 			
@@ -509,7 +509,7 @@ namespace ChilliSource
 		{
 			//Matrix to transform from world space to this objects local space
 			//In local space the OOBB is simply an AABB
-			Matrix4x4 matToLocal = GetTransform().Inverse();
+			Matrix4 matToLocal = Matrix4::Inverse(GetTransform());
 
 			//Convert the ray into our local space
 			//allowing us to do an AABB check
@@ -575,7 +575,7 @@ namespace ChilliSource
 		/// to world space
 		/// @param To world matrix
 		//-----------------------------------------------
-		void OOBB::SetTransform(const Matrix4x4& inmatTransform)
+		void OOBB::SetTransform(const Matrix4& inmatTransform)
 		{
 			mmatLocal = inmatTransform;
 		}
@@ -586,7 +586,7 @@ namespace ChilliSource
 		/// object to world space
 		/// @return To world matrix
 		//-----------------------------------------------
-		const Matrix4x4& OOBB::GetTransform() const
+		const Matrix4& OOBB::GetTransform() const
 		{			
 			return mmatLocal;
 		}
@@ -612,7 +612,7 @@ namespace ChilliSource
 		}
 		f32 Ray::DistanceFromPoint(const Core::Vector3 &invPoint) const
         {
-			return vDirection.CrossProduct(invPoint).Length();
+			return Vector3::CrossProduct(vDirection, invPoint).Length();
 		}
 
 		//===============================================
@@ -623,7 +623,7 @@ namespace ChilliSource
 		Plane::Plane(const Core::Vector3& invOrigin, const Core::Vector3& invNormal)
 		:mvNormal(invNormal)
 		{
-			mfD = -invNormal.DotProduct(invOrigin);
+			mfD = -Vector3::DotProduct(invNormal, invOrigin);
 		}
 		Plane::Plane(f32 a, f32 b, f32 c, f32 d)
 		: mvNormal(a,b,c), mfD(d)
@@ -636,11 +636,11 @@ namespace ChilliSource
 			
 		}
 		f32 Plane::DistanceFromPoint(const Core::Vector3& invPoint) const{			
-			return mvNormal.DotProduct(invPoint) + mfD;
+			return Vector3::DotProduct(mvNormal, invPoint) + mfD;
 		}
 		
 		bool Plane::Intersects(const Ray& incRay) const{
-			f32 denom = mvNormal.DotProduct(incRay.vDirection);											 
+			f32 denom = Vector3::DotProduct(mvNormal, incRay.vDirection);
 			
 			
 			if (fabsf(denom) < std::numeric_limits<f32>::epsilon())
@@ -650,7 +650,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				f32 nom = mvNormal.DotProduct(incRay.vOrigin) + mfD;
+				f32 nom = Vector3::DotProduct(mvNormal, incRay.vOrigin) + mfD;
 				f32 t = -(nom/denom);
 				return t >= 0;
 			}
@@ -667,7 +667,7 @@ namespace ChilliSource
 		bool Plane::GetIsRayIntersecting(const Ray& incRay, Core::Vector3& outcIntersect) const
 		{
 			
-			f32 denom = mvNormal.DotProduct(incRay.vDirection);											 
+			f32 denom = Vector3::DotProduct(mvNormal, incRay.vDirection);
 											 
 											 
 			if (fabsf(denom) < std::numeric_limits<f32>::epsilon())
@@ -677,7 +677,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				f32 nom = mvNormal.DotProduct(incRay.vOrigin) + mfD;
+				f32 nom = Vector3::DotProduct(mvNormal, incRay.vOrigin) + mfD;
 				f32 t = -(nom/denom);
 				
 				if (t >= 0)
@@ -704,7 +704,7 @@ namespace ChilliSource
 		///
 		/// @param View projection matrix
 		//----------------------------------------------------------
-		void Frustum::CalculateClippingPlanes(const Core::Matrix4x4& inmatViewProj)
+		void Frustum::CalculateClippingPlanes(const Core::Matrix4& inmatViewProj)
 		{
 			f32 t = 0.0f;
 

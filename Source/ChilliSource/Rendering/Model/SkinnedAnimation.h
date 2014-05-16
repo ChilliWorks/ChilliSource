@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_RENDERING_MODEL_SKINNEDANIMATION_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Resource/Resource.h>

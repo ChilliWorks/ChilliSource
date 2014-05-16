@@ -159,7 +159,8 @@ namespace ChilliSource
 			
                 //Tell the render system to draw the contents of the buffer
                 m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
-                m_renderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::Matrix4x4::IDENTITY);
+
+                m_renderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::Matrix4::k_identity);
             }
 		}
         //------------------------------------------------------
@@ -177,7 +178,8 @@ namespace ChilliSource
                 
                 //Tell the render system to draw the contents of the buffer
                 m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
-                m_renderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::Matrix4x4::IDENTITY);
+
+                m_renderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::Matrix4::k_identity);
             }
 		}
 		//------------------------------------------------------

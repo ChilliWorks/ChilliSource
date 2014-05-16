@@ -54,7 +54,7 @@ namespace ChilliSource
                 return GetEntity()->GetTransform().GetWorldPosition();
             }
             
-            return Core::Vector3::ZERO;
+            return Core::Vector3::k_zero;
         }
         //----------------------------------------------------------
         /// Set Intensity

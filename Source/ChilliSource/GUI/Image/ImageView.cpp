@@ -384,7 +384,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void ImageView::SetSizeFromImage()
         {
-            SetSize(Core::UnifiedVector2(Core::Vector2::ZERO, GetSizeFromImage()));
+            SetSize(Core::UnifiedVector2(Core::Vector2::k_zero, GetSizeFromImage()));
         }
 		
         //--------------------------------------------------------

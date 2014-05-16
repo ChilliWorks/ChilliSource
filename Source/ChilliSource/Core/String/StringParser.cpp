@@ -98,7 +98,7 @@ namespace ChilliSource
             
 			if (udwSize != 2)
 			{
-				return Vector2::ZERO;
+				return Vector2::k_zero;
 			}
 			else
 			{
@@ -115,7 +115,7 @@ namespace ChilliSource
             
 			if (udwSize != 3)
 			{
-				return Vector3::ZERO;
+				return Vector3::k_zero;
 			}
 			else
 			{
@@ -132,7 +132,7 @@ namespace ChilliSource
 			
 			if (udwSize != 4)
 			{
-				return Vector4::ZERO;
+				return Vector4::k_zero;
 			}
 			else
 			{
@@ -143,17 +143,17 @@ namespace ChilliSource
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        Matrix4x4 ParseMatrix4(const std::string& in_string)
+        Matrix4 ParseMatrix4(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
             
 			if (udwSize != 16)
 			{
-				return Matrix4x4::IDENTITY;
+				return Matrix4::k_identity;
 			}
 			else
 			{
-                Matrix4x4 matRet;
+                Matrix4 matRet;
                 
 				CS_SSCANF(in_string.c_str(), "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ",
 						&matRet.m[0], &matRet.m[1], &matRet.m[2], &matRet.m[3],
@@ -173,7 +173,7 @@ namespace ChilliSource
             
 			if (udwSize != 4)
 			{
-				return Quaternion::IDENTITY;
+				return Quaternion::k_identity;
 			}
 			else
 			{

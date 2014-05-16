@@ -360,7 +360,7 @@ namespace ChilliSource
             
 			SpriteData mSpriteData;
             
-            Core::Matrix4x4 mmatTransformCache;
+            Core::Matrix4 mmatTransformCache;
             
             Core::Vector4 mavVertexPos[kudwVertsPerSprite];
 

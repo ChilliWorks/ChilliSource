@@ -48,7 +48,7 @@ namespace ChilliSource
 			/// @param Static mesh component
 			/// @param Transform
 			//------------------------------------------------------
-			void AddMesh(const StaticMeshComponentSPtr &inpSprite, const Core::Matrix4x4& inmatTransform);
+			void AddMesh(const StaticMeshComponentSPtr &inpSprite, const Core::Matrix4& inmatTransform);
 			//------------------------------------------------------
 			/// Set Material
 			///
@@ -113,7 +113,7 @@ namespace ChilliSource
 			MeshBuffer* mpMeshBuffer;
 			
 			//List of sprites in the batch
-			typedef std::unordered_map<StaticMeshComponentSPtr, Core::Matrix4x4> MapMeshToTransform;
+			typedef std::unordered_map<StaticMeshComponentSPtr, Core::Matrix4> MapMeshToTransform;
 			MapMeshToTransform mmapMeshCache;
 		};
 	}

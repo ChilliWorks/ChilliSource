@@ -57,7 +57,7 @@ namespace ChilliSource
         //-----------------------------------------------------
         GUIView::GUIView() : mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
         Rotation(0.0f), Opacity(1.0f), LocalAlignment(Rendering::AlignmentAnchor::k_middleCentre), ParentalAlignment(Rendering::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
-        Scale(Core::Vector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
+        Scale(Core::Vector2::k_one), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
         {
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
@@ -72,7 +72,7 @@ namespace ChilliSource
         GUIView::GUIView(const Core::ParamDictionary& insParams) 
 		: mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
         Rotation(0.0f), Opacity(1.0f), LocalAlignment(Rendering::AlignmentAnchor::k_middleCentre), ParentalAlignment(Rendering::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
-        Scale(Core::Vector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
+        Scale(Core::Vector2::k_one), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
         {
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
@@ -1533,22 +1533,21 @@ namespace ChilliSource
         ///
         /// @return Transformation matrix
         //-----------------------------------------------------
-        const Core::Matrix3x3& GUIView::GetTransform() const
+        const Core::Matrix3& GUIView::GetTransform() const
         {
 			if(!Core::Utils::BitmapCheck(mudwCacheValidaters, (u32)TransformCache::k_transform))
 			{
 				if(mpParentView)
 				{
 					//Create our transform without respect to our parent
-					Core::Matrix3x3 matTrans;
-					matTrans.SetTransform(GetAbsolutePosition(), Core::Vector2::ONE, GetAbsoluteRotation());
+					Core::Matrix3 matTrans = Core::Matrix3::CreateTransform(GetAbsolutePosition(), Core::Vector2::k_one, GetAbsoluteRotation());
 					
 					//Apply our parents transform
-					Core::Matrix3x3::Multiply(&matTrans, &mpParentView->GetTransform(), &mmatTransform);
+					mmatTransform = matTrans * mpParentView->GetTransform();
 				}
 				else
 				{
-					mmatTransform.SetTransform(GetAbsolutePosition(), Core::Vector2::ONE, Rotation);
+					mmatTransform = Core::Matrix3::CreateTransform(GetAbsolutePosition(), Core::Vector2::k_one, Rotation);
 				}
 				
 				Core::Utils::BitmapSet(mudwCacheValidaters, (u32)TransformCache::k_transform);
@@ -1735,11 +1734,11 @@ namespace ChilliSource
 				{
 					if(!AlignedWithParent)
 					{
-						SetPosition(Core::UnifiedVector2(Core::Vector2::ZERO, in_pointer.m_location));
+						SetPosition(Core::UnifiedVector2(Core::Vector2::k_zero, in_pointer.m_location));
 					}
 					else
 					{
-						SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::ZERO, in_pointer.m_location));
+						SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::k_zero, in_pointer.m_location));
 					}
 				}
 

@@ -175,7 +175,7 @@ namespace ChilliSource
         ///
         /// @return The value as a string.
         //---------------------------------------------------------
-        std::string ToString(const Matrix4x4& in_value);
+        std::string ToString(const Matrix4& in_value);
         //---------------------------------------------------------
         /// Converts a quaternion to a string.
         ///

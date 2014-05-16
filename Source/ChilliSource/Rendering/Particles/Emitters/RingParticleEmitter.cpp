@@ -56,10 +56,11 @@ namespace ChilliSource
             vPos.x = Core::MathUtils::RandomInRange(-1.0f, 1.0f);
             vPos.z = Core::MathUtils::RandomInRange(-1.0f, 1.0f);
             
-            vPos.Normalise() *=  mfRadius;
+            vPos.Normalise();
+			vPos *= mfRadius;
             
             in_particle.m_translation += vPos;
-            in_particle.m_velocity = Core::Vector3::Y_UNIT_POSITIVE * mfInitialVelocity;
+            in_particle.m_velocity = Core::Vector3::k_unitPositiveY * mfInitialVelocity;
             
         }
     }

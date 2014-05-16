@@ -430,15 +430,15 @@ namespace ChilliSource
                         }
                         else if(strType == "Vec2")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector2>(shaderVarEl, "value", Core::Vector2::ZERO));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector2>(shaderVarEl, "value", Core::Vector2::k_zero));
                         }
                         else if(strType == "Vec3")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector3>(shaderVarEl, "value", Core::Vector3::ZERO));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector3>(shaderVarEl, "value", Core::Vector3::k_zero));
                         }
                         else if(strType == "Vec4")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector4>(shaderVarEl, "value", Core::Vector4::ZERO));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector4>(shaderVarEl, "value", Core::Vector4::k_zero));
                         }
                         else if(strType == "Colour")
                         {
@@ -446,7 +446,7 @@ namespace ChilliSource
                         }
                         else if(strType == "Matrix")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Matrix4x4>(shaderVarEl, "value", Core::Matrix4x4::IDENTITY));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Matrix4>(shaderVarEl, "value", Core::Matrix4::k_identity));
                         }
                         //Move on to the next variable
                         shaderVarEl =  Core::XMLUtils::NextSiblingElementWithName(shaderVarEl);

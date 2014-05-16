@@ -46,8 +46,8 @@ namespace ChilliSource
         //-----------------------------------------------------------
         HighlightButton::HighlightButton() 
         : mpBackgroundImage(new ImageView()), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
-        msDefaultUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
-        msHighlightUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
+        msDefaultUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
+        msHighlightUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
@@ -67,8 +67,8 @@ namespace ChilliSource
         //------------------------------------------------------------
         HighlightButton::HighlightButton(const Core::ParamDictionary& insParams) 
         : Button(insParams), mpBackgroundImage(new ImageView()),
-        msDefaultUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
-        msHighlightUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
+        msDefaultUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
+        msHighlightUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
         mbSelected(false), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
 		SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
         {

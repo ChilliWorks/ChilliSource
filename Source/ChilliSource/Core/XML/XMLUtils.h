@@ -49,7 +49,7 @@ namespace ChilliSource
 		template <> const Vector2 XMLUtils::GetAttributeValueOrDefault<Vector2>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector2 & inDefault);
 		template <> const Vector3 XMLUtils::GetAttributeValueOrDefault<Vector3>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector3 & inDefault);
 		template <> const Vector4 XMLUtils::GetAttributeValueOrDefault<Vector4>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector4 & inDefault);
-		template <> const Matrix4x4 XMLUtils::GetAttributeValueOrDefault<Matrix4x4>(TiXmlElement* inpElement, const std::string & inAttributeName, const Matrix4x4 & inDefault);
+		template <> const Matrix4 XMLUtils::GetAttributeValueOrDefault<Matrix4>(TiXmlElement* inpElement, const std::string & inAttributeName, const Matrix4 & inDefault);
 		template <> const Quaternion XMLUtils::GetAttributeValueOrDefault<Quaternion>(TiXmlElement* inpElement, const std::string & inAttributeName, const Quaternion & inDefault);
 		template <> const Colour XMLUtils::GetAttributeValueOrDefault<Colour>(TiXmlElement* inpElement, const std::string & inAttributeName, const Colour & inDefault);
 	}

@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 
 namespace ChilliSource
@@ -95,14 +95,14 @@ namespace ChilliSource
             /// @param the current parent.
             /// @param the parent matrix.
 			//----------------------------------------------------------
-			void BuildMatrices(s32 indwCurrentParent = -1, const Core::Matrix4x4& inParentMatrix = Core::Matrix4x4());
+			void BuildMatrices(s32 indwCurrentParent = -1, const Core::Matrix4& inParentMatrix = Core::Matrix4());
             //----------------------------------------------------------
 			/// Get Matrix At Index
             ///
             /// @param the index of the required matrix.
             /// @return the matrix.
 			//----------------------------------------------------------
-            const Core::Matrix4x4& GetMatrixAtIndex(s32 indwIndex) const;
+            const Core::Matrix4& GetMatrixAtIndex(s32 indwIndex) const;
             //----------------------------------------------------------
 			/// Apply Inverse Bind Pose
             ///
@@ -112,7 +112,7 @@ namespace ChilliSource
             /// @param the inverse bind pose matrices.
             /// @param OUT: The combined matrices.
 			//----------------------------------------------------------
-			void ApplyInverseBindPose(const std::vector<Core::Matrix4x4>& inInverseBindPoseMatrices, std::vector<Core::Matrix4x4>& outCombinedMatrices);
+			void ApplyInverseBindPose(const std::vector<Core::Matrix4>& inInverseBindPoseMatrices, std::vector<Core::Matrix4>& outCombinedMatrices);
             //----------------------------------------------------------
 			/// Get Animation Length
             ///
@@ -182,7 +182,7 @@ namespace ChilliSource
             const Skeleton* mpSkeleton;
             std::vector<AnimationItemPtr> mAnimations;
             SkinnedAnimation::FrameCUPtr mCurrentAnimationData;
-            std::vector<Core::Matrix4x4> mCurrentAnimationMatrices;
+            std::vector<Core::Matrix4> mCurrentAnimationMatrices;
             bool mbAnimationLengthDirty;
             f32 mfAnimationLength;
             bool mbPrepared;

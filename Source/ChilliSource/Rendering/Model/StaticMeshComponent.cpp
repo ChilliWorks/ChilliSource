@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
 
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
@@ -56,7 +56,7 @@ namespace ChilliSource
                 
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
-                const Core::Matrix4x4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
+                const Core::Matrix4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
                 Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
                 Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
                 Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);

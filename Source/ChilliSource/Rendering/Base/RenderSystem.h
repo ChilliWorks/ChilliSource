@@ -67,8 +67,8 @@ namespace ChilliSource
 			virtual void EndFrame(RenderTarget* inpActiveRenderTarget) = 0;
 
 			virtual void ApplyMaterial(const MaterialCSPtr& inMaterial, ShaderPass in_shaderPass) = 0;
-            virtual void ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints) = 0;
-			virtual void ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4x4& inmatInvView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol) = 0;
+            virtual void ApplyJoints(const std::vector<Core::Matrix4>& inaJoints) = 0;
+			virtual void ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4& inmatInvView, const Core::Matrix4& inmatProj, const Core::Colour& inClearCol) = 0;
             virtual void SetLight(LightComponent* inpLightComponent) = 0;
 			
 			virtual void EnableAlphaBlending(bool inbIsEnabled) = 0;
@@ -92,8 +92,8 @@ namespace ChilliSource
             virtual void SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize) = 0;
 			
 			virtual MeshBuffer* CreateBuffer(BufferDescription&) = 0;
-			virtual void RenderVertexBuffer(MeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::Matrix4x4&) = 0;
-			virtual void RenderBuffer(MeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::Matrix4x4&) = 0;
+			virtual void RenderVertexBuffer(MeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::Matrix4&) = 0;
+			virtual void RenderBuffer(MeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::Matrix4&) = 0;
 			
 			virtual RenderTarget* CreateRenderTarget(u32 inWidth, u32 inHeight) = 0;
 			

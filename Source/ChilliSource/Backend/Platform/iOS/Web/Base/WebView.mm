@@ -258,7 +258,7 @@ namespace ChilliSource
             
             //Create the  view and present it, centered on screen
             m_absoluteSize = (dipsResolution * in_size.GetRelative()) + in_size.GetAbsolute();
-            m_absolutePosition =  (dipsResolution - m_absoluteSize)/2;
+            m_absolutePosition = (dipsResolution - m_absoluteSize) / 2.0f;
             m_webView = [[UIWebView alloc] initWithFrame:CGRectMake(m_absolutePosition.x, m_absolutePosition.y, m_absoluteSize.x, m_absoluteSize.y)];
         }
         //-----------------------------------------------

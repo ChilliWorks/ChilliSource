@@ -99,7 +99,7 @@ namespace ChilliSource
             ///
             /// @return Objects transform
             //-----------------------------------------------------
-            const Core::Matrix4x4& GetTransformationMatrix();
+            const Core::Matrix4& GetTransformationMatrix();
 			//-----------------------------------------------------
             /// Render 
             ///

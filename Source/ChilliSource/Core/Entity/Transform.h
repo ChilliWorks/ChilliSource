@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 
@@ -270,13 +270,13 @@ namespace ChilliSource
 			///
 			/// @return The currently cached transform (rebuilds if invalid)
 			//----------------------------------------------------------------
-			const Matrix4x4& GetLocalTransform() const;
+			const Matrix4& GetLocalTransform() const;
             //----------------------------------------------------------------
             /// Get World Transform
             ///
             /// @return The tranform in relation to its parent transform
             //----------------------------------------------------------------
-			const Matrix4x4& GetWorldTransform() const;
+			const Matrix4& GetWorldTransform() const;
             //----------------------------------------------------------------
             /// Set World Transform
             ///
@@ -284,7 +284,7 @@ namespace ChilliSource
             ///
             /// @param Objects transformation matrix
             //----------------------------------------------------------------
-            void SetWorldTransform(const Matrix4x4& inmatTransform);
+            void SetWorldTransform(const Matrix4& inmatTransform);
             //----------------------------------------------------------------
             /// Set Local Transform
             ///
@@ -292,7 +292,7 @@ namespace ChilliSource
             ///
             /// @param Objects transformation matrix
             //----------------------------------------------------------------
-            void SetLocalTransform(const Matrix4x4& inmatTransform);
+            void SetLocalTransform(const Matrix4& inmatTransform);
             //----------------------------------------------------------------
             /// Is Transform Valid
             ///
@@ -376,8 +376,8 @@ namespace ChilliSource
             
         private:
             
-            mutable Matrix4x4 mmatTransform;
-            mutable Matrix4x4 mmatWorldTransform;
+            mutable Matrix4 mmatTransform;
+            mutable Matrix4 mmatWorldTransform;
             
             Vector3 mvPosition;
 			Vector3 mvScale;

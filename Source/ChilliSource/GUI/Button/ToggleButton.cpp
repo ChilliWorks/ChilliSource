@@ -44,8 +44,8 @@ namespace ChilliSource
         //-----------------------------------------------------------
         ToggleButton::ToggleButton() 
         : mpBackgroundImage(new ImageView()),
-        msOnUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
-        msOffUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
+        msOnUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
+        msOffUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
         {
             mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
@@ -65,7 +65,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         ToggleButton::ToggleButton(const Core::ParamDictionary& insParams) 
         : Button(insParams), mpBackgroundImage(new ImageView()),
-        msOnUVs(Core::Vector2::ZERO, Core::Vector2::ONE), msOffUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
+        msOnUVs(Core::Vector2::k_zero, Core::Vector2::k_one), msOffUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
         {
             std::string strValue;

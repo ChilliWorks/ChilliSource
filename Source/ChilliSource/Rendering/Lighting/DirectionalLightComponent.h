@@ -70,7 +70,7 @@ namespace ChilliSource
             ///
             /// @return Matrix to transform into light space
             //----------------------------------------------------------
-            const Core::Matrix4x4& GetLightMatrix() const override;
+            const Core::Matrix4& GetLightMatrix() const override;
             //----------------------------------------------------
 			/// Triggered when the component is attached to
 			/// an entity on the scene
@@ -111,7 +111,7 @@ namespace ChilliSource
             
         private:
             
-            Core::Matrix4x4 mmatProj;
+            Core::Matrix4 mmatProj;
             
             TextureSPtr mpShadowMap;
             TextureSPtr mpShadowMapDebug;
