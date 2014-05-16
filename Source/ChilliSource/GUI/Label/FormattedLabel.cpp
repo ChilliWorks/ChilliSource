@@ -17,8 +17,8 @@ namespace ChilliSource
 		DEFINE_META_CLASS(FormattedLabel)
 
         //---Mark-up samples
-        // TODO: [img= image.png/atlaskey x=200 y=200]
-        // TODO: [url= http://www.example.com LinkText]
+        // IMPROVEMENT: [img= image.png/atlaskey x=200 y=200]
+        // IMPROVEMENT: [url= http://www.example.com LinkText]
         // [var= MyVariableName]
         //--------------------------------------------------
         /// Constructor 
