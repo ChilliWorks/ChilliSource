@@ -76,7 +76,10 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //------------------------------------------------------------------
-            ConnectableDelegate() = default;
+			ConnectableDelegate()
+			{
+				m_mutex = std::unique_ptr<std::mutex>(new std::mutex());
+			}
             //------------------------------------------------------------------
             /// Constructor
             ///
