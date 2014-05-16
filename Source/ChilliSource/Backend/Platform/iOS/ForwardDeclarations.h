@@ -32,6 +32,7 @@ namespace ChilliSource
 		/// Input
 		//------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Accelerometer);
+        CS_FORWARDDECLARE_CLASS(DeviceButtonSystem);
         CS_FORWARDDECLARE_CLASS(Keyboard);
         CS_FORWARDDECLARE_CLASS(PointerSystem);
         //------------------------------------------------------

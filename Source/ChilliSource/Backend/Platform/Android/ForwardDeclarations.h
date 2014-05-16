@@ -53,6 +53,8 @@ namespace ChilliSource
 		//------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(Accelerometer);
 		CS_FORWARDDECLARE_CLASS(AccelerometerJavaInterface);
+		CS_FORWARDDECLARE_CLASS(DeviceButtonSystem);
+		CS_FORWARDDECLARE_CLASS(DeviceButtonJavaInterface);
 		CS_FORWARDDECLARE_CLASS(VirtualKeyboard);
 		CS_FORWARDDECLARE_CLASS(KeyboardJavaInterface);
 		CS_FORWARDDECLARE_CLASS(PointerSystem);
