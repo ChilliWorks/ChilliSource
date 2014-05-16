@@ -22,6 +22,10 @@ namespace ChilliSource
         //--------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Accelerometer);
         //--------------------------------------------------
+        /// Device Buttons
+        //--------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(DeviceButtonSystem);
+        //--------------------------------------------------
         /// Gestures
         //--------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Gesture);
