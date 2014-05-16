@@ -55,7 +55,7 @@ void Java_com_chillisource_googleplay_GooglePlayRemoteNotificationNativeInterfac
 				continue;
 			}
 
-			sParams.SetValueForKey(strKey, strValue);
+			sParams.SetValue(strKey, strValue);
 		}
 
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface::OnRemoteNotificationReceived, pInterface.get(), sParams));

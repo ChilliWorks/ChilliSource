@@ -34,7 +34,7 @@ void Java_com_chillisource_core_LocalNotificationNativeInterface_nativeOnNotific
 		std::string key = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(keyJava);
 		std::string value = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(valueJava);
 
-		params.SetValueForKey(key, value);
+		params.SetValue(key, value);
 
 		in_environment->DeleteLocalRef(keyJava);
 		in_environment->DeleteLocalRef(valueJava);
@@ -86,7 +86,7 @@ namespace ChilliSource
 			jobjectArray values = environment->NewObjectArray(in_params.size(), stringClass, emptyString);
 
 			u32 paramCount = 0;
-			for(Core::StringToStringMap::const_iterator it = in_params.begin(); it != in_params.end(); ++it)
+			for(auto it = in_params.begin(); it != in_params.end(); ++it)
 			{
 				jstring key = JavaInterfaceUtils::CreateJStringFromSTDString(it->first);
 				jstring value = JavaInterfaceUtils::CreateJStringFromSTDString(it->second);

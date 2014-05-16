@@ -53,8 +53,8 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		GooglePlayIAPSystem::GooglePlayIAPSystem(const Core::ParamDictionary& in_params)
 		{
-			CS_ASSERT(in_params.HasValue(k_playStorePublicKeyKey) == true, "Cannot create GooglePlay IAP system without Play store public key - GooglePlayPublicKey");
-			m_publicKey = in_params.ValueForKey(k_playStorePublicKeyKey);
+			CS_ASSERT(in_params.HasKey(k_playStorePublicKeyKey) == true, "Cannot create GooglePlay IAP system without Play store public key - GooglePlayPublicKey");
+			m_publicKey = in_params.GetValue(k_playStorePublicKeyKey);
 		}
         //---------------------------------------------------------------
         //---------------------------------------------------------------

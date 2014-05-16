@@ -51,8 +51,8 @@ namespace ChilliSource
     	//---------------------------------------------------------------
 		AmazonIAPSystem::AmazonIAPSystem(const Core::ParamDictionary& in_params)
 		{
-			CS_ASSERT(in_params.HasValue(k_amazonPrivateKeyKey) == true, "Cannot create Amazon IAP system without store key - AmazonPrivateKey");
-			m_privateKey = in_params.ValueForKey(k_amazonPrivateKeyKey);
+			CS_ASSERT(in_params.HasKey(k_amazonPrivateKeyKey) == true, "Cannot create Amazon IAP system without store key - AmazonPrivateKey");
+			m_privateKey = in_params.GetValue(k_amazonPrivateKeyKey);
 		}
         //---------------------------------------------------------------
         //---------------------------------------------------------------

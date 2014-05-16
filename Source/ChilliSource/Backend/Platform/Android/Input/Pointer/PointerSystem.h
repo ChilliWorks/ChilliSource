@@ -13,6 +13,8 @@
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
+#include <unordered_map>
+
 namespace ChilliSource
 {
     namespace Android
