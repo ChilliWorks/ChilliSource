@@ -57,11 +57,22 @@ namespace ChilliSource
 			///
 			/// @author I Copland
 			///
-			/// @param the rotation.
+			/// @param the translation.
 			///
 			/// @return The new translation matrix.
 			//------------------------------------------------------
 			static GenericMatrix3<TType> CreateTranslation(const GenericVector2<TType>& in_translation);
+            //------------------------------------------------------
+			/// Creates a translation matrix.
+			///
+			/// @author I Copland
+			///
+			/// @param the x translation.
+            /// @param the y translation.
+			///
+			/// @return The new translation matrix.
+			//------------------------------------------------------
+			static GenericMatrix3<TType> CreateTranslation(TType in_x, TType in_y);
 			//------------------------------------------------------
 			/// Creates a scale matrix.
 			///
@@ -72,6 +83,17 @@ namespace ChilliSource
 			/// @return The new scale matrix.
 			//------------------------------------------------------
 			static GenericMatrix3<TType> CreateScale(const GenericVector2<TType>& in_scale);
+            //------------------------------------------------------
+			/// Creates a scale matrix.
+			///
+			/// @author I Copland
+			///
+			/// @param the x scale.
+			/// @param the y scale.
+			///
+			/// @return The new scale matrix.
+			//------------------------------------------------------
+			static GenericMatrix3<TType> CreateScale(TType in_x, TType in_y);
 			//------------------------------------------------------
 			/// Creates a rotation matrix.
 			///
@@ -121,6 +143,17 @@ namespace ChilliSource
             /// applied to it.
 			//-----------------------------------------------------
 			static GenericMatrix3<TType> Translate(const GenericMatrix3<TType>& in_matrix, const GenericVector2<TType>& in_translation);
+            //-----------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+            /// @param The x translation.
+            /// @param The y translation.
+			///
+			/// @return A copy of the matrix with the given translation
+            /// applied to it.
+			//-----------------------------------------------------
+			static GenericMatrix3<TType> Translate(const GenericMatrix3<TType>& in_matrix, TType in_x, TType in_y);
 			//-----------------------------------------------------
 			/// @author I Copland
             ///
@@ -131,6 +164,17 @@ namespace ChilliSource
             /// applied to it.
 			//-----------------------------------------------------
 			static GenericMatrix3<TType> Scale(const GenericMatrix3<TType>& in_matrix, const GenericVector2<TType>& in_scale);
+            //-----------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @param A matrix.
+            /// @param The x scale.
+            /// @param The y scale.
+			///
+			/// @return A copy of the matrix with the given scale
+            /// applied to it.
+			//-----------------------------------------------------
+			static GenericMatrix3<TType> Scale(const GenericMatrix3<TType>& in_matrix, TType in_x, TType in_y);
 			//-----------------------------------------------------
 			/// @author I Copland
             ///
@@ -194,6 +238,15 @@ namespace ChilliSource
 			/// @param the translation vector.
 			//-----------------------------------------------------
 			void Translate(const GenericVector2<TType>& in_translation);
+            //-----------------------------------------------------
+			/// Translates this matrix.
+			///
+			/// @author I Copland
+			///
+			/// @param the x translation.
+			/// @param the y translation.
+			//-----------------------------------------------------
+			void Translate(TType in_x, TType in_y);
 			//-----------------------------------------------------
 			/// Scales this matrix.
 			///
@@ -202,6 +255,15 @@ namespace ChilliSource
 			/// @param the scale vector.
 			//-----------------------------------------------------
 			void Scale(const GenericVector2<TType>& in_scale);
+            //-----------------------------------------------------
+			/// Scales this matrix.
+			///
+			/// @author I Copland
+			///
+			/// @param the x scale.
+			/// @param the y scale.
+			//-----------------------------------------------------
+			void Scale(TType in_x, TType in_y);
 			//-----------------------------------------------------
 			/// Rotates the matrix.
 			///
@@ -378,11 +440,23 @@ namespace ChilliSource
 		{
 			return GenericMatrix3<TType>(1, 0, 0, 0, 1, 0, in_translation.x, in_translation.y, 1);
 		}
+        //------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::CreateTranslation(TType in_x, TType in_y)
+		{
+			return CreateTranslation(GenericVector2<TType>(in_x, in_y));
+		}
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::CreateScale(const GenericVector2<TType>& in_scale)
 		{
 			return GenericMatrix3<TType>(in_scale.x, 0, 0, 0, in_scale.y, 0, 0, 0, 1);
+		}
+        //------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::CreateScale(TType in_x, TType in_y)
+		{
+			return CreateScale(GenericVector2<TType>(in_x, in_y));
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
@@ -441,9 +515,21 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
+        template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::Translate(const GenericMatrix3<TType>& in_matrix, TType in_x, TType in_y)
+        {
+            return Translate(in_matrix, GenericVector2<TType>(in_x, in_y));
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
         template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::Scale(const GenericMatrix3<TType>& in_matrix, const GenericVector2<TType>& in_scale)
         {
             return in_matrix * CreateScale(in_scale);
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> GenericMatrix3<TType> GenericMatrix3<TType>::Scale(const GenericMatrix3<TType>& in_matrix, TType in_x, TType in_y)
+        {
+            return Scale(in_matrix, GenericVector2<TType>(in_x, in_y));
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
@@ -500,11 +586,23 @@ namespace ChilliSource
 		{
 			*this *= CreateTranslation(in_translation);
 		}
+        //------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> void GenericMatrix3<TType>::Translate(TType in_x, TType in_y)
+		{
+			Translate(GenericVector2<TType>(in_x, in_y));
+		}
 		//------------------------------------------------------
 		//------------------------------------------------------
 		template <typename TType> void GenericMatrix3<TType>::Scale(const GenericVector2<TType>& in_scale)
 		{
 			*this *= CreateScale(in_scale);
+		}
+        //------------------------------------------------------
+		//------------------------------------------------------
+		template <typename TType> void GenericMatrix3<TType>::Scale(TType in_x, TType in_y)
+		{
+			Scale(GenericVector2<TType>(in_x, in_y));
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
