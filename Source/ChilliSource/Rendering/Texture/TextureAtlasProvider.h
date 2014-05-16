@@ -97,10 +97,11 @@ namespace ChilliSource
             /// @author S Downie
 			///
 			/// @param Location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Options to customise the creation
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Loads the two files that constitute a atlas resource and
             /// parses them into the output resource on a background thread. Delegate
@@ -109,11 +110,12 @@ namespace ChilliSource
             /// @author S Downie
 			///
 			/// @param Location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Options to customise the creation
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Performs the actual loading delegated to by the 2 create methods
             ///

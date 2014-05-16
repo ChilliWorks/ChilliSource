@@ -100,8 +100,9 @@ namespace ChilliSource
             ///
             /// @param Texture descriptor
             /// @param Image data
+            /// @param Whether the texture should have mip maps generated
             //--------------------------------------------------
-            virtual void Build(const Descriptor& in_desc, TextureDataUPtr in_data) = 0;
+            virtual void Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap) = 0;
 			//--------------------------------------------------------------
             /// Binds this texture to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it
@@ -147,13 +148,6 @@ namespace ChilliSource
             /// @return The height of the texture in texels
             //--------------------------------------------------------------
 			virtual u32 GetHeight() const = 0;
-            //--------------------------------------------------------------
-            /// Generate mip map levels for the texture to reduce
-            /// aliasing
-            ///
-            /// @author S Downie
-            //--------------------------------------------------------------
-			virtual void GenerateMipMaps() = 0;
             //--------------------------------------------------------------
             /// Virtual destructor
             ///

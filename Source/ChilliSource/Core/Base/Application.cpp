@@ -451,8 +451,9 @@ namespace ChilliSource
             //Initialise the render system prior to the OnInit() event.
             m_renderSystem->Init();
             
-            //Texture provider is a compound provider and needs to be informed when the other providers are created.
+            //Texture/Cubemap provider is a compound provider and needs to be informed when the other providers are created.
             GetSystem<CSRendering::TextureProvider>()->PostCreate();
+            GetSystem<CSRendering::CubemapProvider>()->PostCreate();
 		}
         //----------------------------------------------------
         //----------------------------------------------------

@@ -89,16 +89,26 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------
-        Resource::ResourceId ResourcePool::GenerateResourceId(StorageLocation in_location, const std::string& in_filePath) const
-        {
-            std::string combined(ToString((u32)in_location) + in_filePath);
-            return HashCRC32::GenerateHashCode(combined);
-        }
-        //------------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------------
         Resource::ResourceId ResourcePool::GenerateResourceId(const std::string& in_uniqueId) const
         {
             return HashCRC32::GenerateHashCode(in_uniqueId);
+        }
+        //------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------
+        Resource::ResourceId ResourcePool::GenerateResourceId(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options) const
+        {
+            std::string combined(ToString((u32)in_location) + in_filePath);
+            u32 fileHash = HashCRC32::GenerateHashCode(combined);
+            
+            if(in_options == nullptr)
+            {
+                return fileHash;
+            }
+            
+            u32 optionsHash = in_options->GenerateHash();
+            
+            u64 combinedHash = fileHash + ((u64)(optionsHash) << 32);
+            return HashCRC32::GenerateHashCode((const s8*)&combinedHash, sizeof(u64));
         }
         //-------------------------------------------------------------------------------------
         /// Resources often have references to other resources and therefore multiple release passes

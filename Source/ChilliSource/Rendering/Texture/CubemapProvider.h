@@ -49,6 +49,13 @@ namespace ChilliSource
             
             CS_DECLARE_NAMEDTYPE(CubemapProvider);
             
+            //----------------------------------------------------------------------------
+            /// Called when the system is initialised. Retrieves the image providers
+            /// to delegate image loading to
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------
+            void PostCreate();
 			//-------------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -82,10 +89,11 @@ namespace ChilliSource
             /// @author S Downie
 			///
 			/// @param Location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Options to customise the creation
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Loads the 6 face images on a background thread and generate the cubemap via the output resource.
             /// Delegate is called on completion. Check the resource load state for success or failure
@@ -97,12 +105,19 @@ namespace ChilliSource
             /// @author S Downie
 			///
 			/// @param Location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Options to customise the creation
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
-			
+			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @retrun Default options for cubemap loading
+            //----------------------------------------------------
+            Core::IResourceOptionsBaseCSPtr GetDefaultOptions() const;
+            
 		private:
             friend class Core::Application;
             //-------------------------------------------------------
@@ -120,19 +135,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             CubemapProvider() = default;
             //----------------------------------------------------------------------------
-            /// Called when the system is initialised. Retrieves the image providers
-            /// to delegate image loading to
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------
-            void OnInit() override;
-            //----------------------------------------------------------------------------
-            /// Called when the system is destroyed.
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------
-            void OnDestroy() override;
-            //----------------------------------------------------------------------------
 			/// Does the heavy lifting for the 2 create methods. The building of the cubemap
             /// is always done on the main thread
             ///
@@ -140,10 +142,11 @@ namespace ChilliSource
 			///
 			/// @param Location to load from
 			/// @param Filename
+            /// @param Options to customise the creation
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void LoadCubemap(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
+			void LoadCubemap(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
             
         private:
             
