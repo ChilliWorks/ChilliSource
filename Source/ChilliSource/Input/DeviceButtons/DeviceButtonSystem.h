@@ -41,9 +41,9 @@ namespace ChilliSource
 	{
 		//------------------------------------------------------------
 		/// A system that provides access to hard buttons on the device.
-        /// This includes buttons like the back button on and Android
-        /// device. Different devices and platorms may have different
-        /// sets of hard buttons meaning there is no guarentee that
+        /// This includes buttons like the back button on Android
+        /// devices. Different devices and platforms may have different
+        /// sets of hard buttons meaning there is no guarantee that
         /// an event for that button will ever be received.
         ///
         /// @author I Copland

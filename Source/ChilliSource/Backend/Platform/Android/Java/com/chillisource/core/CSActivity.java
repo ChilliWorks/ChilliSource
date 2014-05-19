@@ -14,6 +14,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.chillisource.input.DeviceButtonNativeInterface;
+import com.chillisource.input.DeviceButtonNativeInterface.DeviceButton;
 import com.chillisource.networking.HttpRequestNativeInterface;
 import com.chillisource.core.SharedPreferencesNativeInterface;
 import com.chillisource.web.WebViewNativeInterface;
@@ -182,17 +185,8 @@ public class CSActivity extends Activity
 	 */
     @Override public void onBackPressed() 
     {
-    	//create the task to be run on the rendering thread
-		Runnable task = new Runnable()
-		{
-			@Override public void run() 
-			{
-				//TODO: Handle back button
-			}
-		};
-		
-		//run the task.
-		m_surface.queueEvent(task);
+    	DeviceButtonNativeInterface nativeInterface = (DeviceButtonNativeInterface)CSApplication.get().getSystem(DeviceButtonNativeInterface.InterfaceID);
+    	nativeInterface.onPressed(DeviceButton.k_backButton);
     }
 	/**
 	 * @author I Copland

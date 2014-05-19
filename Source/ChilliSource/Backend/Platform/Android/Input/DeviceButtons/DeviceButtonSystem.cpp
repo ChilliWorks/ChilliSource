@@ -1,7 +1,7 @@
 //
 //  DeviceButtonSystem.cpp
 //  Chilli Source
-//  Created by Ian Copland on 16/06/2014.
+//  Created by Ian Copland on 16/05/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,12 +26,41 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Backend/Platform/Windows/Input/DeviceButtons/DeviceButtonSystem.h>
+#include <ChilliSource/Backend/Platform/Android/Input/DeviceButtons/DeviceButtonSystem.h>
+
+#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/Input/DeviceButtons/DeviceButtonJavaInterface.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
 namespace ChilliSource
 {
-	namespace Windows
+	namespace Android
 	{
+		namespace
+		{
+			//----------------------------------------------------
+			/// Converts from the integer received from java
+			/// to the button enum.
+			///
+			/// @author I Copland
+			///
+			/// @param An integer representing the button.
+			///
+			/// @param The button.
+			//----------------------------------------------------
+			DeviceButtonSystem::DeviceButton IntegerToButton(s32 in_buttonInteger)
+			{
+				switch (in_buttonInteger)
+				{
+				case 0:
+					return DeviceButtonSystem::DeviceButton::k_backButton;
+				default:
+					CS_LOG_ERROR("DeviceButtonSystem: Cannot convert from integer to button.");
+					return DeviceButtonSystem::DeviceButton::k_backButton;
+				}
+			}
+		}
+
         CS_DEFINE_NAMEDTYPE(DeviceButtonSystem);
         //----------------------------------------------------
         //----------------------------------------------------
@@ -44,6 +73,31 @@ namespace ChilliSource
         Core::IConnectableEvent<DeviceButtonSystem::DeviceButtonPressedDelegate>& DeviceButtonSystem::GetPressedEvent()
         {
             return m_pressedEvent;
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void DeviceButtonSystem::OnInit()
+        {
+        	m_javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::DeviceButtonJavaInterface>();
+        	if (m_javaInterface == nullptr)
+        	{
+        		m_javaInterface = DeviceButtonJavaInterfaceSPtr(new DeviceButtonJavaInterface());
+        		JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
+        	}
+
+        	m_javaInterface->SetPressedDelegate(Core::MakeDelegate(this, &DeviceButtonSystem::OnPressed));
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void DeviceButtonSystem::OnPressed(s32 in_pressedButton)
+        {
+        	m_pressedEvent.NotifyConnections(IntegerToButton(in_pressedButton));
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void DeviceButtonSystem::OnDestroy()
+        {
+        	m_javaInterface->SetPressedDelegate(nullptr);
         }
 	}
 }

@@ -1,7 +1,7 @@
 //
 //  DeviceButtonSystem.h
 //  Chilli Source
-//  Created by Ian Copland on 16/06/2014.
+//  Created by Ian Copland on 16/05/2014.
 //
 //  The MIT License (MIT)
 //
@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_INPUT_DEVICEBUTTONS_DEVICEBUTTONSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 
 namespace ChilliSource
@@ -74,8 +74,37 @@ namespace ChilliSource
             /// @author I Copland
 			//----------------------------------------------------
 			DeviceButtonSystem() = default;
+            //------------------------------------------------
+            /// Initialisation method called at a time when
+            /// all App Systems have been created. System
+            /// initialisation occurs in the order they were
+            /// created.
+            ///
+            /// @author I Copland
+            //------------------------------------------------
+            void OnInit() override;
+            //------------------------------------------------
+            /// Called when a device button is pressed.
+            ///
+            /// @author I Copland
+            ///
+            /// @param An integer representing the pressed
+            /// button.
+            //------------------------------------------------
+            void OnPressed(s32 in_pressedButton);
+            //------------------------------------------------
+            /// Called when the application is being destroyed.
+            /// This should be used to cleanup memory and
+            /// references to other systems. System destruction
+            /// occurs in the reverse order to which they
+            /// were created
+            ///
+            /// @author I Copland
+            //------------------------------------------------
+            void OnDestroy() override;
 
             Core::Event<DeviceButtonPressedDelegate> m_pressedEvent;
+            DeviceButtonJavaInterfaceSPtr m_javaInterface;
 		};
 	}
 }

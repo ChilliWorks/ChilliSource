@@ -1,7 +1,7 @@
 //
 //  DeviceButtonJavaInterface.cpp
 //  Chilli Source
-//  Created by Ian Copland on 16/06/2014.
+//  Created by Ian Copland on 16/05/2014.
 //
 //  The MIT License (MIT)
 //
@@ -48,16 +48,16 @@ extern "C"
 	/// @param The java object calling the function.
 	/// @param An integer representing the button pressed.
 	//-----------------------------------------------------
-	void Java_com_chillisource_input_DeviceButtonNativeInterface_OnDeviceButtonPressed(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed);
+	void Java_com_chillisource_input_DeviceButtonNativeInterface_onPressed(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed);
 }
 //-----------------------------------------------
 //-----------------------------------------------
-void Java_com_chillisource_input_DeviceButtonNativeInterface_OnDeviceButtonPressed(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed)
+void Java_com_chillisource_input_DeviceButtonNativeInterface_onPressed(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed)
 {
 	ChilliSource::Android::DeviceButtonJavaInterfaceSPtr javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::DeviceButtonJavaInterface>();
 	if (javaInterface != nullptr)
 	{
-		auto task = std::bind(&ChilliSource::Android::DeviceButtonJavaInterface::OnTextDeleted, pKeyboardJI.get());
+		auto task = std::bind(&ChilliSource::Android::DeviceButtonJavaInterface::OnPressed, javaInterface.get(), in_buttonPressed);
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
 }
@@ -71,7 +71,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		DeviceButtonJavaInterface::DeviceButtonJavaInterface()
 		{
-			CreateNativeInterface("com/chillisource/input/KeyboardNativeInterface");
+			CreateNativeInterface("com/chillisource/input/DeviceButtonNativeInterface");
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
@@ -81,7 +81,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void DeviceButtonJavaInterface::SetPressedDelegate(const DeviceButtonPressedDelegate& in_delegate);
+		void DeviceButtonJavaInterface::SetPressedDelegate(const DeviceButtonPressedDelegate& in_delegate)
 		{
 			m_pressedDelegate = in_delegate;
 		}
