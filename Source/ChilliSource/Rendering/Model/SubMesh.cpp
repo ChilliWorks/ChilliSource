@@ -169,25 +169,28 @@ namespace ChilliSource
 		{
             CS_ASSERT(mpMeshBuffer->GetVertexCount() > 0, "Cannot render Sub Mesh without vertices");
             
-            inpRenderSystem->ApplyMaterial(inpMaterial, in_shaderPass);
-            
-            if (inpAnimationGroup != nullptr)
+            if (inpMaterial->GetShader(in_shaderPass) != nullptr)
             {
-                //Apply inverse bind pose matrix.
-                std::vector<Core::Matrix4> combinedMatrices;
-                inpAnimationGroup->ApplyInverseBindPose(mpInverseBindPose->mInverseBindPoseMatrices, combinedMatrices);
-                inpRenderSystem->ApplyJoints(combinedMatrices);
-            }
-			
-			mpMeshBuffer->Bind();
+                inpRenderSystem->ApplyMaterial(inpMaterial, in_shaderPass);
+                
+                if (inpAnimationGroup != nullptr)
+                {
+                    //Apply inverse bind pose matrix.
+                    std::vector<Core::Matrix4> combinedMatrices;
+                    inpAnimationGroup->ApplyInverseBindPose(mpInverseBindPose->mInverseBindPoseMatrices, combinedMatrices);
+                    inpRenderSystem->ApplyJoints(combinedMatrices);
+                }
+                
+                mpMeshBuffer->Bind();
 
-            if(mpMeshBuffer->GetIndexCount() > 0)
-            {
-                inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), inmatWorld);
-            }
-            else
-            {
-                inpRenderSystem->RenderVertexBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetVertexCount(), inmatWorld);
+                if(mpMeshBuffer->GetIndexCount() > 0)
+                {
+                    inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), inmatWorld);
+                }
+                else
+                {
+                    inpRenderSystem->RenderVertexBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetVertexCount(), inmatWorld);
+                }
             }
 		}
 		//-----------------------------------------------------------------

@@ -203,9 +203,7 @@ namespace ChilliSource
             Shader* shader = (Shader*)(in_material->GetShader(in_shaderPass).get());
             CS_ASSERT(shader != nullptr, "Cannot render with null shader");
             
-            shader->SetUniform("u_cameraPos", mvCameraPos, Shader::UniformNotFoundPolicy::k_failSilent);
-            
-            bool hasMaterialChanged = mbInvalidateAllCaches == true || mpCurrentMaterial == nullptr || mpCurrentMaterial != in_material.get() || mpCurrentMaterial->IsCacheValid() == false;
+            bool hasMaterialChanged = mbInvalidateAllCaches == true || mpCurrentMaterial == nullptr || mpCurrentMaterial != in_material.get() || mpCurrentMaterial->IsCacheValid() == false || shader != m_currentShader;
             if(hasMaterialChanged == true)
             {
                 mudwNumBoundTextures = 0;
@@ -242,6 +240,8 @@ namespace ChilliSource
                 //will not be required
                 const_cast<Rendering::Material*>(mpCurrentMaterial)->SetCacheValid();
             }
+            
+            shader->SetUniform("u_cameraPos", mvCameraPos, Shader::UniformNotFoundPolicy::k_failSilent);
 		}
         //----------------------------------------------------------
         /// Apply Joints

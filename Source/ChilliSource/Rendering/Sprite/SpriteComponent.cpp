@@ -305,12 +305,15 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void SpriteComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
         {
-            CalculateSpriteData();
-            
-            //Add us to the render systems dynamic batch
-            //If we force a batch flush here then the previous sprites
-            //will be rendered.
-            inpRenderSystem->GetDynamicSpriteBatchPtr()->Render(mSpriteData);
+            if (ineShaderPass == ShaderPass::k_ambient)
+            {
+                CalculateSpriteData();
+                
+                //Add us to the render systems dynamic batch
+                //If we force a batch flush here then the previous sprites
+                //will be rendered.
+                inpRenderSystem->GetDynamicSpriteBatchPtr()->Render(mSpriteData);
+            }
         }
         //------------------------------------------------------------
         /// On Transform Changed
