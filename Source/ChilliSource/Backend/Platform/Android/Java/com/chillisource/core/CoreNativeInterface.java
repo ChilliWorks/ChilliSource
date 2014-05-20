@@ -124,12 +124,6 @@ public class CoreNativeInterface extends INativeInterface
 	 */
 	public native void onResolutionChanged(int in_width, int in_height);
 	/**
-	 * Triggered when the device back button hard key is pressed
-	 * 
-	 * @author I Copland
-	 */
-	public native void onBackPressed();
-	/**
 	 * Constructor
 	 * 
 	 * @author I Copland

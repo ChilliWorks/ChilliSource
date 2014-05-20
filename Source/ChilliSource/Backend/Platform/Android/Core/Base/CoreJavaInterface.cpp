@@ -122,16 +122,6 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	void Java_com_chillisource_core_CoreNativeInterface_onResolutionChanged(JNIEnv* in_env, jobject in_this, s32 in_width, s32 in_height);
 	//--------------------------------------------------------------------------------------
-	/// Interface function called from java. This is called when the back hardware button is
-	/// pressed
-	///
-	/// @author I Copland
-	///
-	/// @param JNIEnv - The jni environment.
-	/// @param jobject - the java object calling the function
-	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_onBackPressed(JNIEnv* in_env, jobject in_this);
-	//--------------------------------------------------------------------------------------
 	/// Application Did Receive Launching URL
 	///
 	///
@@ -226,12 +216,6 @@ void Java_com_chillisource_core_CoreNativeInterface_onResolutionChanged(JNIEnv* 
 	ChilliSource::Android::Screen* screen = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::Screen>();
 	CS_ASSERT(screen != nullptr, "Cannot find required system: Screen.");
 	screen->OnResolutionChanged(ChilliSource::Core::Vector2((f32)in_width, (f32)in_height));
-}
-//--------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_onBackPressed(JNIEnv* in_env, jobject in_this)
-{
-	ChilliSource::Core::Application::Get()->GoBack();
 }
 
 namespace ChilliSource

@@ -351,15 +351,6 @@ namespace ChilliSource
 			//----------------------------------------------------
 			void ApplicationMemoryWarning();
             //----------------------------------------------------
-			/// Triggered on receiving a "go back" event. This is
-            /// typically caused by pressing a physical back button
-            /// on the device, For example the Android back button.
-            /// This should not be called by a users application.
-            ///
-            /// @author I Copland
-			//----------------------------------------------------
-			void GoBack();
-            //----------------------------------------------------
 			/// Triggered when the application is pushed back from
             /// the front of the view stack. This should
             /// not be called by a users application.

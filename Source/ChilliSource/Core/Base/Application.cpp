@@ -322,14 +322,6 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::GoBack()
-		{
-			CS_LOG_VERBOSE("Go back event.");
-            
-			//TODO: Feed this to the application another way. m_stateManager.GetActiveState()->OnGoBack();
-		}
-        //----------------------------------------------------
-        //----------------------------------------------------
         void Application::Background()
         {
             for (const AppSystemUPtr& system : m_systems)

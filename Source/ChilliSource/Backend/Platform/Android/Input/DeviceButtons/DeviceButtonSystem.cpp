@@ -50,9 +50,11 @@ namespace ChilliSource
 			//----------------------------------------------------
 			DeviceButtonSystem::DeviceButton IntegerToButton(s32 in_buttonInteger)
 			{
+				const s32 k_backButton = 0;
+
 				switch (in_buttonInteger)
 				{
-				case 0:
+				case k_backButton:
 					return DeviceButtonSystem::DeviceButton::k_backButton;
 				default:
 					CS_LOG_ERROR("DeviceButtonSystem: Cannot convert from integer to button.");
