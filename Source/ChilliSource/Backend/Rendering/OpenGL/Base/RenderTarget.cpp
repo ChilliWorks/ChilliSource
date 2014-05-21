@@ -9,8 +9,13 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderTarget.h>
 
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 
+#ifdef CS_TARGETPLATFORM_IOS
+#import <ChilliSource/Backend/Platform/iOS/Core/Base/CSAppDelegate.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/Base/CSGLViewController.h>
+#endif
 
 namespace ChilliSource
 {
@@ -33,6 +38,8 @@ namespace ChilliSource
                 glBindFramebuffer(GL_FRAMEBUFFER, inBuffer);
                 gCurrentlyBoundFrameBuffer = inBuffer;
             }
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while binding frame buffer.");
         }
         //------------------------------------------------------
         /// Bind Render Buffer
@@ -46,6 +53,8 @@ namespace ChilliSource
                 glBindRenderbuffer(GL_RENDERBUFFER, inBuffer);
                 gCurrentlyBoundRenderBuffer = inBuffer;
             }
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while binding render buffer.");
         }
         //------------------------------------------------------
         /// Create Frame Buffer
@@ -55,6 +64,8 @@ namespace ChilliSource
         inline void CreateFrameBuffer(GLuint* inBuffer)
         {
             glGenFramebuffers(1, inBuffer);
+            CS_OPENGL_ASSERT("An OpenGL error occurred while creating frame buffer.");
+            
             BindFrameBuffer(*inBuffer);
         }
         //------------------------------------------------------
@@ -65,6 +76,8 @@ namespace ChilliSource
         inline void CreateRenderBuffer(GLuint* inBuffer)
         {
             glGenRenderbuffers(1, inBuffer);
+            CS_OPENGL_ASSERT("An OpenGL error occurred while creating render buffer.");
+            
             BindRenderBuffer(*inBuffer);
         }
         //------------------------------------------------------
@@ -84,6 +97,8 @@ namespace ChilliSource
 				glDeleteFramebuffers(1, inBuffer);
 				*inBuffer = 0;
 			}
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while deleting frame buffer.");
         }
         //------------------------------------------------------
         /// Delete Render Buffer
@@ -102,6 +117,8 @@ namespace ChilliSource
 				glDeleteRenderbuffers(1, inBuffer);
 				*inBuffer = 0;
 			}
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while deleting render buffer.");
         }
         //--------------------------------------------------
         /// Clear Cache
@@ -184,6 +201,8 @@ namespace ChilliSource
                     break;
             }
 #endif
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while setting render target textures.");
         }
         //------------------------------------------------------
 		/// Create and Attach Depth Buffer
@@ -197,18 +216,20 @@ namespace ChilliSource
             CreateRenderBuffer(&mDepthBuffer);
 			
 			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, mudwWidth, mudwHeight);
-			
+            
 			//Attach the depth buffer to the framebuffer
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepthBuffer);
 			
+            bool success = true;
 #ifdef CS_ENABLE_DEBUG
             //Check it has worked
             GLint Depth = 0;
 			glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_DEPTH_SIZE,  (GLint*)&Depth);
-			return ((glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) && Depth != 0);
-#else
-            return true;
+			success = ((glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) && Depth != 0);
 #endif
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while creating and attaching depth buffer.");
+            return success;
 		}
 		//------------------------------------------------------
 		/// Bind
@@ -221,6 +242,8 @@ namespace ChilliSource
                 glViewport(0, 0, mudwWidth, mudwHeight);
                 RenderTarget::pCurrentlyBoundTarget = this;
             }
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while binding render target.");
 		}
         //------------------------------------------------------
         /// Discard
@@ -231,6 +254,7 @@ namespace ChilliSource
             GLenum Attachments[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
             BindFrameBuffer(mFrameBuffer);
             glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, Attachments);
+            CS_OPENGL_ASSERT("An OpenGL error occurred while discarding the render target.");
 #endif
         }
 		//------------------------------------------------------
@@ -238,14 +262,21 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void RenderTarget::Destroy()
 		{
+            Bind();
+            DeleteRenderBuffer(&mRenderBuffer);
+            DeleteRenderBuffer(&mDepthBuffer);
+            
             if(RenderTarget::pCurrentlyBoundTarget == this)
             {
-                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#ifdef CS_TARGETPLATFORM_IOS
+                GLKView* glView = (GLKView*)[CSAppDelegate sharedInstance].viewController.view;
+                [glView bindDrawable];
+#else
+                BindFrameBuffer(0);
+#endif
                 RenderTarget::pCurrentlyBoundTarget = nullptr;
             }
             
-            DeleteRenderBuffer(&mRenderBuffer);
-            DeleteRenderBuffer(&mDepthBuffer);
             DeleteFrameBuffer(&mFrameBuffer);
 		}
 		//------------------------------------------------------

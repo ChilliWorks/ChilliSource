@@ -9,6 +9,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/MeshBuffer.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderTarget.h>
@@ -76,7 +77,7 @@ namespace ChilliSource
 		RenderSystem::RenderSystem(Rendering::RenderCapabilities* in_renderCapabilities)
 		: mpCurrentMaterial(nullptr), m_currentShader(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0),
         mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mpLightComponent(nullptr),
-        mbBlendFunctionLocked(false), mbInvalidateLigthingCache(true),
+        mbBlendFunctionLocked(false), mbInvalidateLightingCache(true),
         mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities)), m_hasContextBeenBackedUp(false)
 		{
 
@@ -179,14 +180,14 @@ namespace ChilliSource
             {
                 if(mpLightComponent != nullptr)
                 {
-                    mbInvalidateLigthingCache = mpLightComponent->IsCacheValid() == false;
+                    mbInvalidateLightingCache = mpLightComponent->IsCacheValid() == false;
                 }
                 
                 return;
             }
             
             mpLightComponent = inpLightComponent;
-            mbInvalidateLigthingCache = true;
+            mbInvalidateLightingCache = true;
         }
         //----------------------------------------------------------
 		//----------------------------------------------------------
@@ -223,7 +224,7 @@ namespace ChilliSource
                     mbAmbientSet = false;
                     mbDiffuseSet = false;
                     mbSpecularSet = false;
-                    mbInvalidateLigthingCache = true;
+                    mbInvalidateLightingCache = true;
                 }
                 
                 //Set all the custom shader variables
@@ -371,10 +372,10 @@ namespace ChilliSource
         //----------------------------------------------------------
         void RenderSystem::ApplyLighting(Rendering::LightComponent* inpLightComponent, Shader* out_shader)
         {
-            if(mbInvalidateLigthingCache == false || inpLightComponent == nullptr)
+            if(mbInvalidateLightingCache == false || inpLightComponent == nullptr)
                 return;
             
-            mbInvalidateLigthingCache = false;
+            mbInvalidateLightingCache = false;
             inpLightComponent->CalculateLightingValues();
             inpLightComponent->SetCacheValid();
             
@@ -391,7 +392,7 @@ namespace ChilliSource
                     if(mudwNumBoundTextures <= mpRenderCapabilities->GetNumTextureUnits())
                     {
                         pLightComponent->GetShadowMapPtr()->Bind(mudwNumBoundTextures);
-                        out_shader->SetUniform("u_shadowMap", (s32)mudwNumBoundTextures);
+                        out_shader->SetUniform("u_shadowMap", (s32)mudwNumBoundTextures, Shader::UniformNotFoundPolicy::k_failSilent);
                         ++mudwNumBoundTextures;
                     }
                     else
@@ -431,9 +432,6 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void RenderSystem::BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
-#ifdef CS_ENABLE_DEBUG
-			CheckForGLErrors();
-#endif
 			if (inpActiveRenderTarget != nullptr)
 			{
 				inpActiveRenderTarget->Bind();
@@ -455,6 +453,8 @@ namespace ChilliSource
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             m_attributeCache.clear();
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while beginning frame.");
 		}
 		//----------------------------------------------------------
 		/// Create Render Target
@@ -503,6 +503,8 @@ namespace ChilliSource
 			glDrawArrays(GetPrimitiveType(inpBuffer->GetPrimitiveType()), inudwOffset, inudwNumVerts);
             
             mbInvalidateAllCaches = false;
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while rendering vertex buffer.");
 		}
         //----------------------------------------------------------
         /// Render Buffer
@@ -529,6 +531,8 @@ namespace ChilliSource
 			glDrawElements(GetPrimitiveType(inpBuffer->GetPrimitiveType()), inudwNumIndices, GL_UNSIGNED_SHORT, (GLvoid*)inudwOffset);
             
             mbInvalidateAllCaches = false;
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while rendering buffer.");
 		}
 		//----------------------------------------------------------
 		/// End Frame
@@ -575,6 +579,8 @@ namespace ChilliSource
 				msCurrentRenderFlags.mbIsAlphaBlendingEnabled = false;
 				glDisable(GL_BLEND);
 			}
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling blending.");
 		}
 		//----------------------------------------------------------
 		/// Enable Depth Testing
@@ -593,6 +599,8 @@ namespace ChilliSource
 				msCurrentRenderFlags.mbIsDepthTestEnabled = false;
 				glDisable(GL_DEPTH_TEST);
 			}
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling depth test.");
 		}
         //----------------------------------------------------------
 		/// Enable Colour Writing
@@ -611,6 +619,8 @@ namespace ChilliSource
 				msCurrentRenderFlags.mbIsColourWriteEnabled = false;
 				glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 			}
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling colour writing.");
 		}
         //----------------------------------------------------------
 		/// Lock Depth Writing
@@ -648,6 +658,8 @@ namespace ChilliSource
 				msCurrentRenderFlags.mbIsDepthWriteEnabled = false;
 				glDepthMask(GL_FALSE);
 			}
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling depth writing.");
 		}
 		//----------------------------------------------------------
 		/// Enable Face Culling
@@ -666,6 +678,8 @@ namespace ChilliSource
 				msCurrentRenderFlags.mbIsCullingEnabled = false;
 				glDisable(GL_CULL_FACE);
 			}
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling face culling.");
 		}
         //----------------------------------------------------------
         /// Enable Scissor Testing
@@ -685,6 +699,8 @@ namespace ChilliSource
 				glDisable(GL_SCISSOR_TEST);
 				msCurrentRenderFlags.mbIsScissorTestingEnabled = false;
 			}
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling scissor testing.");
         }
         //----------------------------------------------------------
         /// Set Scissor Region
@@ -697,6 +713,8 @@ namespace ChilliSource
                 mvCachedScissorSize = invSize;
 				glScissor((GLsizei)invPosition.x, (GLsizei)invPosition.y, (GLsizei)invSize.x, (GLsizei)invSize.y);
             }
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while setting scissor region.");
         }
         //----------------------------------------------------------
         /// Set Cull Face
@@ -717,6 +735,8 @@ namespace ChilliSource
                 
                 meCurrentCullFace = ineCullface;
             }
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while setting face culling.");
         }
         //----------------------------------------------------------
         /// Set Depth Function
@@ -740,6 +760,8 @@ namespace ChilliSource
                 
                 meDepthFunc = ineFunc;
             }
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while setting depth function.");
         }
         //----------------------------------------------------------
 		/// Lock Blend Function
@@ -830,6 +852,8 @@ namespace ChilliSource
 				
 				glBlendFunc(SrcFunc, DstFunc);
 			}
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while setting blend function.");
 		}
         //----------------------------------------------------------
         /// Create Attrib State Cache
@@ -839,11 +863,16 @@ namespace ChilliSource
             if(mdwMaxVertAttribs == 0)
             {
                 glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &mdwMaxVertAttribs);
+                
                 mpbCurrentVertexAttribState = (bool*)calloc(mdwMaxVertAttribs, sizeof(bool));
                 mpbLastVertexAttribState = (bool*)calloc(mdwMaxVertAttribs, sizeof(bool));
             }
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while creating the attribute state cache.");
         }
-        void RenderSystem::ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void RenderSystem::ApplyVertexAttributePointer(Rendering::MeshBuffer* inpBuffer,
                                                        const char* in_attribName, GLint indwSize, GLenum ineType, GLboolean inbNormalized,
                                                        GLsizei indwStride, const GLvoid* inpOffset)
         {
@@ -851,13 +880,13 @@ namespace ChilliSource
             
             if(it != m_attributeCache.end())
             {
-                if(it->second.pBuffer == inpBuffer &&
-                   it->second.size == indwSize &&
-                   it->second.type == ineType &&
-                   it->second.normalised == inbNormalized &&
-                   it->second.stride == indwStride &&
-                   it->second.offset == inpOffset)
-                    return;
+//                if(it->second.pBuffer == inpBuffer &&
+//                   it->second.size == indwSize &&
+//                   it->second.type == ineType &&
+//                   it->second.normalised == inbNormalized &&
+//                   it->second.stride == indwStride &&
+//                   it->second.offset == inpOffset)
+//                    return;
                 
                 it->second.pBuffer = inpBuffer;
                 it->second.size = indwSize;
@@ -889,7 +918,6 @@ namespace ChilliSource
             {
                 CreateAttribStateCache();
             }
-            
             
             // If mesh buffer has changed we need to reset all its vertex attributes
             if(((ChilliSource::OpenGL::MeshBuffer*)inpBuffer)->IsCacheValid() == false)
@@ -962,8 +990,10 @@ namespace ChilliSource
                     eType = GL_UNSIGNED_BYTE;
                 }
                 
-                ApplyVertexAttributePointr(inpBuffer, attribName, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*)(s32)uwElementOffset);
+                ApplyVertexAttributePointer(inpBuffer, attribName, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*)(s32)uwElementOffset);
             }
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling vertex attributes for semantics.");
 		}
 		//------------------------------------------------------------
 		/// Get Primitive Type
@@ -999,6 +1029,8 @@ namespace ChilliSource
             glBlendEquation(GL_FUNC_ADD);
             
             mbInvalidateAllCaches = true;
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while forcing refresh of render states.");
 		}
         //----------------------------------------------------------
 		/// Remove Buffer
@@ -1008,49 +1040,6 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_ANDROID
             m_contextRestorer.RemoveMeshBuffer((MeshBuffer*)inpBuffer);
 #endif
-		}
-		//----------------------------------------------------------
-		/// CheckForGLErrors
-		//----------------------------------------------------------
-		void RenderSystem::CheckForGLErrors()
-		{
-			//get an array of all the errors that have occurred
-			std::vector<GLenum> errorArray;
-			GLenum currentError = glGetError();
-			while (currentError != GL_NO_ERROR)
-			{
-				errorArray.push_back(currentError);
-				currentError = glGetError();
-			}
-            
-			//print out the meaning of each error found
-			for (std::vector<GLenum>::iterator it = errorArray.begin(); it != errorArray.end(); ++it)
-			{
-				switch (*it)
-				{
-                    case GL_NO_ERROR:
-                        CS_LOG_ERROR("GL_NO_ERROR -> Somethings gone wrong, this should not be getting reported as an error.");
-                        break;
-                    case GL_INVALID_ENUM:
-                        CS_LOG_ERROR("GL_INVALID_ENUM -> An unacceptable value is specified for an enumerated argument. The offending command is ignored and has no other side effect than to set the error flag.");
-                        break;
-                    case GL_INVALID_VALUE:
-                        CS_LOG_ERROR("GL_INVALID_VALUE -> A numeric argument is out of range. The offending command is ignored and has no other side effect than to set the error flag.");
-                        break;
-                    case GL_INVALID_OPERATION:
-                        CS_LOG_ERROR("GL_INVALID_OPERATION -> The specified operation is not allowed in the current state. The offending command is ignored and has no other side effect than to set the error flag.");
-                        break;
-                    case GL_INVALID_FRAMEBUFFER_OPERATION:
-                        CS_LOG_ERROR("GL_INVALID_FRAMEBUFFER_OPERATION -> The command is trying to render to or read from the framebuffer while the currently bound framebuffer is not framebuffer complete (i.e. the return value from glCheckFramebufferStatus is not GL_FRAMEBUFFER_COMPLETE). The offending command is ignored and has no other side effect than to set the error flag.");
-                        break;
-                    case GL_OUT_OF_MEMORY:
-                        CS_LOG_ERROR("GL_OUT_OF_MEMORY -> There is not enough memory left to execute the command. The state of the GL is undefined, except for the state of the error flags, after this error is recorded.");
-                        break;
-                    default:
-                        CS_LOG_ERROR("Something's gone wrong, unknown GL error code.");
-                        break;
-				}
-			}
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------

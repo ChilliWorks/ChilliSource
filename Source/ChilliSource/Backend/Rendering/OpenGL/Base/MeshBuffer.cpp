@@ -9,6 +9,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/MeshBuffer.h>
 
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
@@ -82,6 +83,8 @@ namespace ChilliSource
             }
             
             MeshBuffer::pCurrentlyBoundBuffer = this;
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while creating mesh buffer.");
 		}
 		//-----------------------------------------------------
 		/// Bind
@@ -97,6 +100,8 @@ namespace ChilliSource
                 
                 MeshBuffer::pCurrentlyBoundBuffer = this;
             }
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while binding mesh buffer.");
 		}
 		//-----------------------------------------------------
 		/// Lock Vertex
@@ -133,7 +138,9 @@ namespace ChilliSource
 
 				(*outppBuffer) = mpVertexData;
 			}
+            
             mbCacheValid = false;
+            CS_OPENGL_ASSERT("An OpenGL error occurred while locking vertex buffer.");
 			return ((*outppBuffer) != nullptr);
 		}
 		//-----------------------------------------------------
@@ -161,7 +168,7 @@ namespace ChilliSource
 #elif defined CS_OPENGLVERSION_ES
 				(*outppBuffer) = static_cast<u16*>(glMapBufferOES(GL_ELEMENT_ARRAY_BUFFER, mBufferAccess));
 #endif
-				mpIndexData = (*outppBuffer);
+                mpIndexData = (*outppBuffer);
 			}
 			else
 			{
@@ -172,7 +179,9 @@ namespace ChilliSource
 
 				(*outppBuffer) = mpIndexData;
 			}
+            
             mbCacheValid = false;
+            CS_OPENGL_ASSERT("An OpenGL error occurred while locking index buffer.");
             return ((*outppBuffer) != nullptr);
 		}
 		//-----------------------------------------------------
@@ -186,15 +195,19 @@ namespace ChilliSource
 			if(mbMapBufferAvailable)
 			{
 				mpVertexData = nullptr;
+                bool success = false;
 #ifdef CS_OPENGLVERSION_STANDARD
-				return (glUnmapBuffer(GL_ARRAY_BUFFER) == GL_TRUE);
+				success = (glUnmapBuffer(GL_ARRAY_BUFFER) == GL_TRUE);
 #elif defined CS_OPENGLVERSION_ES
-				return (glUnmapBufferOES(GL_ARRAY_BUFFER) == GL_TRUE);
+				success = (glUnmapBufferOES(GL_ARRAY_BUFFER) == GL_TRUE);
 #endif
+                CS_OPENGL_ASSERT("An OpenGL error occurred while unlocking vertex buffer.");
+                return success;
 			}
 			else
 			{
 				glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, mpVertexData, mBufferUsage);
+                CS_OPENGL_ASSERT("An OpenGL error occurred while unlocking vertex buffer.");
 				return true;
 			}
 		}
@@ -212,15 +225,19 @@ namespace ChilliSource
 			if(mbMapBufferAvailable)
 			{
 				mpIndexData = nullptr;
+                bool success = false;
 #ifdef CS_OPENGLVERSION_STANDARD
-				return (glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER) == GL_TRUE);
+				success = (glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER) == GL_TRUE);
 #elif defined CS_OPENGLVERSION_ES
-				return (glUnmapBufferOES(GL_ELEMENT_ARRAY_BUFFER) == GL_TRUE);
+				success = (glUnmapBufferOES(GL_ELEMENT_ARRAY_BUFFER) == GL_TRUE);
 #endif
+                CS_OPENGL_ASSERT("An OpenGL error occurred while unlocking vertex buffer.");
+                return success;
 			}
 			else
 			{
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, mBufferDesc.IndexDataCapacity, mpIndexData, mBufferUsage);
+                CS_OPENGL_ASSERT("An OpenGL error occurred while unlocking vertex buffer.");
 				return true;
 			}
 		}
@@ -232,7 +249,6 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void MeshBuffer::Backup()
 		{
-			
 			if(!mpIndexDataBackup)
 			{
 				mpIndexDataBackup = (u16*)new u8[mBufferDesc.IndexDataCapacity];
@@ -309,8 +325,10 @@ namespace ChilliSource
                 UnlockIndex();
             }
 
-			CS_SAFEDELETE_ARRAY(mpVertexDataBackup);
+            CS_SAFEDELETE_ARRAY(mpVertexDataBackup);
 			CS_SAFEDELETE_ARRAY(mpIndexDataBackup);
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while restoring mesh buffer.");
 		}
 		//-----------------------------------------------------
 		/// Set Owning Render System
@@ -376,6 +394,8 @@ namespace ChilliSource
 			CS_SAFEDELETE_ARRAY(mpIndexData);
 			CS_SAFEDELETE_ARRAY(mpVertexDataBackup);
 			CS_SAFEDELETE_ARRAY(mpIndexDataBackup);
+            
+            CS_OPENGL_ASSERT("An OpenGL error occurred while destroying mesh buffer.");
 		}
 	}
 }
