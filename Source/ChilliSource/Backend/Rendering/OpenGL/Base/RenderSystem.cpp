@@ -70,6 +70,37 @@ namespace ChilliSource
                 CS_LOG_FATAL("No such vertex semantic type");
                 return "";
             }
+            //----------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @param The blend mode enum in the engine.
+            ///
+            /// @return The equivalent opengl blend mode.
+            //----------------------------------------------------------
+            GLenum BlendModeToGL(Rendering::BlendMode in_blendMode)
+            {
+				switch(in_blendMode)
+				{
+					case Rendering::BlendMode::k_zero:
+						return GL_ZERO;
+					case Rendering::BlendMode::k_one:
+						return GL_ONE;
+					case Rendering::BlendMode::k_sourceCol:
+						return GL_SRC_COLOR;
+					case Rendering::BlendMode::k_oneMinusSourceCol:
+						return GL_ONE_MINUS_SRC_COLOR;
+					case Rendering::BlendMode::k_sourceAlpha:
+						return GL_SRC_ALPHA;
+					case Rendering::BlendMode::k_oneMinusSourceAlpha:
+						return GL_ONE_MINUS_SRC_ALPHA;
+					case Rendering::BlendMode::k_destAlpha:
+						return GL_DST_ALPHA;
+					case Rendering::BlendMode::k_oneMinusDestAlpha:
+						return GL_ONE_MINUS_DST_ALPHA;
+                    default:
+                        return GL_SRC_ALPHA;
+				};
+            }
         }
 		//----------------------------------------------------------
 		/// Constructor
@@ -562,23 +593,25 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void RenderSystem::EnableAlphaBlending(bool inbIsEnabled)
 		{
-            if(mbInvalidateAllCaches != true && msCurrentRenderLocks.mbIsAlphaBlendingEnabled == true)
+            if(msCurrentRenderLocks.mbIsAlphaBlendingEnabled == false)
             {
-                return;
+                //Turn it on
+                if((mbInvalidateAllCaches || !msCurrentRenderFlags.mbIsAlphaBlendingEnabled) && inbIsEnabled)
+                {
+                    msCurrentRenderFlags.mbIsAlphaBlendingEnabled = true;
+                    glEnable(GL_BLEND);
+                }
+                //Get it off
+                else if((mbInvalidateAllCaches || msCurrentRenderFlags.mbIsAlphaBlendingEnabled) && !inbIsEnabled)
+                {
+                    msCurrentRenderFlags.mbIsAlphaBlendingEnabled = false;
+                    glDisable(GL_BLEND);
+                }
             }
-            
-			//Turn it on
-			if((mbInvalidateAllCaches || !msCurrentRenderFlags.mbIsAlphaBlendingEnabled) && inbIsEnabled)
-			{
-				msCurrentRenderFlags.mbIsAlphaBlendingEnabled = true;
-				glEnable(GL_BLEND);
-			}
-			//Get it off
-			else if((mbInvalidateAllCaches || msCurrentRenderFlags.mbIsAlphaBlendingEnabled) && !inbIsEnabled)
-			{
-				msCurrentRenderFlags.mbIsAlphaBlendingEnabled = false;
-				glDisable(GL_BLEND);
-			}
+            else if (mbInvalidateAllCaches == true)
+            {
+                msCurrentRenderFlags.mbIsAlphaBlendingEnabled ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
+            }
             
             CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling blending.");
 		}
@@ -641,23 +674,25 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void RenderSystem::EnableDepthWriting(bool inbIsEnabled)
 		{
-            if(mbInvalidateAllCaches != true && msCurrentRenderLocks.mbIsDepthWriteEnabled == true)
+            if(msCurrentRenderLocks.mbIsDepthWriteEnabled == false)
             {
-                return;
+                //Turn it on
+                if((mbInvalidateAllCaches || !msCurrentRenderFlags.mbIsDepthWriteEnabled) && inbIsEnabled)
+                {
+                    msCurrentRenderFlags.mbIsDepthWriteEnabled = true;
+                    glDepthMask(GL_TRUE);
+                }
+                //Get it off
+                else if((mbInvalidateAllCaches || msCurrentRenderFlags.mbIsDepthWriteEnabled) && !inbIsEnabled)
+                {
+                    msCurrentRenderFlags.mbIsDepthWriteEnabled = false;
+                    glDepthMask(GL_FALSE);
+                }
             }
-            
-			//Turn it on
-			if((mbInvalidateAllCaches || !msCurrentRenderFlags.mbIsDepthWriteEnabled) && inbIsEnabled)
-			{
-				msCurrentRenderFlags.mbIsDepthWriteEnabled = true;
-				glDepthMask(GL_TRUE);
-			}
-			//Get it off
-			else if((mbInvalidateAllCaches || msCurrentRenderFlags.mbIsDepthWriteEnabled) && !inbIsEnabled)
-			{
-				msCurrentRenderFlags.mbIsDepthWriteEnabled = false;
-				glDepthMask(GL_FALSE);
-			}
+            else if (mbInvalidateAllCaches == true)
+            {
+                msCurrentRenderFlags.mbIsDepthWriteEnabled ? glDepthMask(GL_TRUE) : glDepthMask(GL_FALSE);
+            }
             
             CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling depth writing.");
 		}
@@ -782,76 +817,24 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void RenderSystem::SetBlendFunction(Rendering::BlendMode ineSrcFunc, Rendering::BlendMode ineDstFunc)
 		{
-            if(mbInvalidateAllCaches != true && mbBlendFunctionLocked == true)
+            if(mbBlendFunctionLocked == false)
             {
-                return;
+                if(mbInvalidateAllCaches || ineSrcFunc != mSrcBlendFunc || ineDstFunc != mDstBlendFunc)
+                {
+                    mSrcBlendFunc = ineSrcFunc;
+                    mDstBlendFunc = ineDstFunc;
+                    
+                    GLenum srcFunc = BlendModeToGL(mSrcBlendFunc);
+                    GLenum dstFunc = BlendModeToGL(mDstBlendFunc);
+                    glBlendFunc(srcFunc, dstFunc);
+                }
             }
-            
-			if(mbInvalidateAllCaches || ineSrcFunc != mSrcBlendFunc || ineDstFunc != mDstBlendFunc)
-			{
-				mSrcBlendFunc = ineSrcFunc;
-				mDstBlendFunc = ineDstFunc;
-				
-				GLenum SrcFunc = GL_SRC_ALPHA;
-				switch(ineSrcFunc)
-				{
-					case Rendering::BlendMode::k_zero:
-						SrcFunc = GL_ZERO;
-						break;
-					case Rendering::BlendMode::k_one:
-						SrcFunc = GL_ONE;
-						break;
-					case Rendering::BlendMode::k_sourceCol:
-						SrcFunc = GL_SRC_COLOR;
-						break;
-					case Rendering::BlendMode::k_oneMinusSourceCol:
-						SrcFunc = GL_ONE_MINUS_SRC_COLOR;
-						break;
-					case Rendering::BlendMode::k_sourceAlpha:
-						SrcFunc = GL_SRC_ALPHA;
-						break;
-					case Rendering::BlendMode::k_oneMinusSourceAlpha:
-						SrcFunc = GL_ONE_MINUS_SRC_ALPHA;
-						break;
-					case Rendering::BlendMode::k_destAlpha:
-						SrcFunc = GL_DST_ALPHA;
-						break;
-					case Rendering::BlendMode::k_oneMinusDestAlpha:
-						SrcFunc = GL_ONE_MINUS_DST_ALPHA;
-						break;
-				};
-                
-				GLenum DstFunc = GL_ONE_MINUS_SRC_ALPHA;
-                switch(ineDstFunc)
-				{
-					case Rendering::BlendMode::k_zero:
-						DstFunc = GL_ZERO;
-						break;
-					case Rendering::BlendMode::k_one:
-						DstFunc = GL_ONE;
-						break;
-					case Rendering::BlendMode::k_sourceCol:
-						DstFunc = GL_SRC_COLOR;
-						break;
-					case Rendering::BlendMode::k_oneMinusSourceCol:
-						DstFunc = GL_ONE_MINUS_SRC_COLOR;
-						break;
-					case Rendering::BlendMode::k_sourceAlpha:
-						DstFunc = GL_SRC_ALPHA;
-						break;
-					case Rendering::BlendMode::k_oneMinusSourceAlpha:
-						DstFunc = GL_ONE_MINUS_SRC_ALPHA;
-						break;
-					case Rendering::BlendMode::k_destAlpha:
-						DstFunc = GL_DST_ALPHA;
-						break;
-					case Rendering::BlendMode::k_oneMinusDestAlpha:
-						DstFunc = GL_ONE_MINUS_DST_ALPHA;
-						break;
-				};
-				
-				glBlendFunc(SrcFunc, DstFunc);
-			}
+            else if (mbInvalidateAllCaches == true)
+            {
+                GLenum srcFunc = BlendModeToGL(mSrcBlendFunc);
+                GLenum dstFunc = BlendModeToGL(mDstBlendFunc);
+                glBlendFunc(srcFunc, dstFunc);
+            }
             
             CS_OPENGL_ASSERT("An OpenGL error occurred while setting blend function.");
 		}
@@ -880,6 +863,10 @@ namespace ChilliSource
             
             if(it != m_attributeCache.end())
             {
+                //TODO: This needs fixed. At the moment it will always cache the given info which causes problems if the shader doesn't actually contain the
+                //attribute. In this case the attribute will not actually get bound and therefore will cause weird issues when the same attribute is then used
+                //with a shader that does actually need it since the cache beleives it to already be set and wont set it again.
+                
 //                if(it->second.pBuffer == inpBuffer &&
 //                   it->second.size == indwSize &&
 //                   it->second.type == ineType &&
