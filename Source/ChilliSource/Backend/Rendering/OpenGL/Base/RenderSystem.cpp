@@ -413,7 +413,7 @@ namespace ChilliSource
             if(inpLightComponent->IsA(Rendering::DirectionalLightComponent::InterfaceID))
             {
                 Rendering::DirectionalLightComponent* pLightComponent = (Rendering::DirectionalLightComponent*)inpLightComponent;
-                out_shader->SetUniform("u_lightDir", pLightComponent->GetDirection());
+                out_shader->SetUniform("u_lightDir", pLightComponent->GetDirection(), Shader::UniformNotFoundPolicy::k_failSilent);
   
                 if(pLightComponent->GetShadowMapPtr() != nullptr)
                 {
