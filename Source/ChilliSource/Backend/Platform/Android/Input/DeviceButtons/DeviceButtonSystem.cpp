@@ -72,9 +72,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Core::IConnectableEvent<DeviceButtonSystem::DeviceButtonPressedDelegate>& DeviceButtonSystem::GetPressedEvent()
+        Core::IConnectableEvent<DeviceButtonSystem::TriggeredDelegate>& DeviceButtonSystem::GetTriggeredEvent()
         {
-            return m_pressedEvent;
+            return m_triggeredEvent;
         }
         //------------------------------------------------
         //------------------------------------------------
@@ -87,19 +87,20 @@ namespace ChilliSource
         		JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
         	}
 
-        	m_javaInterface->SetPressedDelegate(Core::MakeDelegate(this, &DeviceButtonSystem::OnPressed));
+        	m_javaInterface->SetTriggeredDelegate(Core::MakeDelegate(this, &DeviceButtonSystem::OnTriggered));
         }
         //------------------------------------------------
         //------------------------------------------------
-        void DeviceButtonSystem::OnPressed(s32 in_pressedButton)
+        void DeviceButtonSystem::OnTriggered(s32 in_button)
         {
-        	m_pressedEvent.NotifyConnections(IntegerToButton(in_pressedButton));
+        	m_triggeredEvent.NotifyConnections(IntegerToButton(in_button));
         }
         //------------------------------------------------
         //------------------------------------------------
         void DeviceButtonSystem::OnDestroy()
         {
-        	m_javaInterface->SetPressedDelegate(nullptr);
+        	m_javaInterface->SetTriggeredDelegate(nullptr);
+        	m_javaInterface = nullptr;
         }
 	}
 }

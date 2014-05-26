@@ -41,9 +41,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Core::IConnectableEvent<DeviceButtonSystem::DeviceButtonPressedDelegate>& DeviceButtonSystem::GetPressedEvent()
+        Core::IConnectableEvent<DeviceButtonSystem::TriggeredDelegate>& DeviceButtonSystem::GetTriggeredEvent()
         {
-            return m_pressedEvent;
+            return m_triggeredEvent;
         }
 	}
 }

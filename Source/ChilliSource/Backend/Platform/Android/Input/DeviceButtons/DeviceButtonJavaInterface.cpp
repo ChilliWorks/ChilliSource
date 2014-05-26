@@ -48,16 +48,16 @@ extern "C"
 	/// @param The java object calling the function.
 	/// @param An integer representing the button pressed.
 	//-----------------------------------------------------
-	void Java_com_chillisource_input_DeviceButtonNativeInterface_onPressed(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed);
+	void Java_com_chillisource_input_DeviceButtonNativeInterface_onTriggered(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed);
 }
 //-----------------------------------------------
 //-----------------------------------------------
-void Java_com_chillisource_input_DeviceButtonNativeInterface_onPressed(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed)
+void Java_com_chillisource_input_DeviceButtonNativeInterface_onTriggered(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed)
 {
 	ChilliSource::Android::DeviceButtonJavaInterfaceSPtr javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::DeviceButtonJavaInterface>();
 	if (javaInterface != nullptr)
 	{
-		auto task = std::bind(&ChilliSource::Android::DeviceButtonJavaInterface::OnPressed, javaInterface.get(), in_buttonPressed);
+		auto task = std::bind(&ChilliSource::Android::DeviceButtonJavaInterface::OnTriggered, javaInterface.get(), in_buttonPressed);
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
 }
@@ -81,17 +81,17 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void DeviceButtonJavaInterface::SetPressedDelegate(const DeviceButtonPressedDelegate& in_delegate)
+		void DeviceButtonJavaInterface::SetTriggeredDelegate(const TriggeredDelegate& in_delegate)
 		{
-			m_pressedDelegate = in_delegate;
+			m_triggeredDelegate = in_delegate;
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void DeviceButtonJavaInterface::OnPressed(s32 in_buttonPressed)
+		void DeviceButtonJavaInterface::OnTriggered(s32 in_button)
 		{
-			if (m_pressedDelegate != nullptr)
+			if (m_triggeredDelegate != nullptr)
 			{
-				m_pressedDelegate(in_buttonPressed);
+				m_triggeredDelegate(in_button);
 			}
 		}
 	}

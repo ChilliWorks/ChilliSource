@@ -186,7 +186,7 @@ public class CSActivity extends Activity
     @Override public void onBackPressed() 
     {
     	DeviceButtonNativeInterface nativeInterface = (DeviceButtonNativeInterface)CSApplication.get().getSystem(DeviceButtonNativeInterface.InterfaceID);
-    	nativeInterface.onPressed(DeviceButton.k_backButton);
+    	nativeInterface.onTriggered(DeviceButton.k_backButton);
     }
 	/**
 	 * @author I Copland

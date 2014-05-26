@@ -60,10 +60,10 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// @author I Copland
             ///
-            /// @param An event that will be called whenever a
-            /// device button is pressed.
+            /// @return An event that will be called whenever a
+            /// device button is triggered.
 			//----------------------------------------------------
-            Core::IConnectableEvent<DeviceButtonPressedDelegate>& GetPressedEvent() override;
+            Core::IConnectableEvent<TriggeredDelegate>& GetTriggeredEvent() override;
 		private:
             friend Input::DeviceButtonSystemUPtr Input::DeviceButtonSystem::Create();
             
@@ -75,7 +75,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			DeviceButtonSystem() = default;
 
-            Core::Event<DeviceButtonPressedDelegate> m_pressedEvent;
+            Core::Event<TriggeredDelegate> m_triggeredEvent;
 		};
 	}
 }

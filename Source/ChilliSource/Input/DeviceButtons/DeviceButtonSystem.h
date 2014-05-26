@@ -30,8 +30,8 @@
 #define _CHILLISOURCE_INPUT_DEVICEBUTTONS_DEVICEBUTTONSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/Event/Event.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 #include <functional>
 
@@ -69,14 +69,14 @@ namespace ChilliSource
             ///
             /// @param The recieved button.
 			//----------------------------------------------------
-            using DeviceButtonPressedDelegate = std::function<void(DeviceButton)>;
+            using TriggeredDelegate = std::function<void(DeviceButton)>;
             //----------------------------------------------------
 			/// @author I Copland
             ///
-            /// @param An event that will be called whenever a
-            /// device button is pressed.
+            /// @return An event that will be called whenever a
+            /// device button is triggered.
 			//----------------------------------------------------
-            virtual Core::IConnectableEvent<DeviceButtonPressedDelegate>& GetPressedEvent() = 0;
+            virtual Core::IConnectableEvent<TriggeredDelegate>& GetTriggeredEvent() = 0;
 			//----------------------------------------------------
 			/// Destructor
             ///

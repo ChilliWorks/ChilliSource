@@ -38,7 +38,7 @@ namespace ChilliSource
 	namespace Android
 	{
         //------------------------------------------------------------
-        /// The Windows backend implementation of the Device Button System.
+        /// The Android backend implementation of the Device Button System.
         ///
         /// @author I Copland
         //------------------------------------------------------------
@@ -60,10 +60,10 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// @author I Copland
             ///
-            /// @param An event that will be called whenever a
+            /// @return An event that will be called whenever a
             /// device button is pressed.
 			//----------------------------------------------------
-            Core::IConnectableEvent<DeviceButtonPressedDelegate>& GetPressedEvent() override;
+            Core::IConnectableEvent<TriggeredDelegate>& GetTriggeredEvent() override;
 		private:
             friend Input::DeviceButtonSystemUPtr Input::DeviceButtonSystem::Create();
             
@@ -84,14 +84,14 @@ namespace ChilliSource
             //------------------------------------------------
             void OnInit() override;
             //------------------------------------------------
-            /// Called when a device button is pressed.
+            /// Called when a device button is triggered.
             ///
             /// @author I Copland
             ///
-            /// @param An integer representing the pressed
+            /// @param An integer representing the triggered
             /// button.
             //------------------------------------------------
-            void OnPressed(s32 in_pressedButton);
+            void OnTriggered(s32 in_button);
             //------------------------------------------------
             /// Called when the application is being destroyed.
             /// This should be used to cleanup memory and
@@ -103,7 +103,7 @@ namespace ChilliSource
             //------------------------------------------------
             void OnDestroy() override;
 
-            Core::Event<DeviceButtonPressedDelegate> m_pressedEvent;
+            Core::Event<TriggeredDelegate> m_triggeredEvent;
             DeviceButtonJavaInterfaceSPtr m_javaInterface;
 		};
 	}

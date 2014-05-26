@@ -68,22 +68,22 @@ public final class DeviceButtonNativeInterface extends INativeInterface
 		return in_interfaceId.Equals(InterfaceID);
 	}
 	/**
-	 * Called when a device button pressed event is received.
+	 * Called when a device button triggered event is received.
 	 * 
 	 * @author I Copland
 	 * 
 	 * @param The button the event was received for.
 	 */
-	public void onPressed(DeviceButton in_button) 
+	public void onTriggered(DeviceButton in_button) 
 	{
-		onPressed(in_button.ordinal());
+		onTriggered(in_button.ordinal());
 	}
 	/**
-	 * Called when a device button pressed event is received.
+	 * Called when a device button triggered event is triggered.
 	 * 
 	 * @author I Copland
 	 * 
-	 * @param An integer representing the button pressed.
+	 * @param An integer representing the button.
 	 */
-	private native void onPressed(int in_button);
+	private native void onTriggered(int in_button);
 }

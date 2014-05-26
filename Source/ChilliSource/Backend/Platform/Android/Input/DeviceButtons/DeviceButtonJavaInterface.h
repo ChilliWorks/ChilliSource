@@ -57,7 +57,7 @@ namespace ChilliSource
 			/// @param An integer representing the button
 			/// pressed.
 			//-----------------------------------------------
-			using DeviceButtonPressedDelegate = std::function<void(s32)>;
+			using TriggeredDelegate = std::function<void(s32)>;
 			//-----------------------------------------------
 			/// Constructor
 			///
@@ -79,22 +79,22 @@ namespace ChilliSource
 			/// @author I Copland
 			///
 			/// @param The delegate that will be called when
-			/// a device button pressed event is received.
+			/// a device button triggered event is received.
 			//-----------------------------------------------
-			void SetPressedDelegate(const DeviceButtonPressedDelegate& in_delegate);
+			void SetTriggeredDelegate(const TriggeredDelegate& in_delegate);
 			//-----------------------------------------------
-			/// Called when a device button pressed event
+			/// Called when a device button triggered event
 			/// is received. This is for internal use and
 			/// should not be called manually by the user.
 			///
 			/// @author I Copland
 			///
 			/// @param An integer representing the button
-			/// pressed.
+			/// triggered.
 			//-----------------------------------------------
-			void OnPressed(s32 in_buttonPressed);
+			void OnTriggered(s32 in_button);
 		private:
-			DeviceButtonPressedDelegate m_pressedDelegate;
+			TriggeredDelegate m_triggeredDelegate;
 		};
 	}
 }
