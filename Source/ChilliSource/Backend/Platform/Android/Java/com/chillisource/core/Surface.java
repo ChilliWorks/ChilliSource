@@ -33,14 +33,18 @@ public class Surface extends GLSurfaceView
 	{
 		super(in_activity);
         
-		int depthBufferSize = 16;
-		int stencilBufferSize = 0;
-		
 		//create the context factory
 		setEGLContextFactory(new ContextFactory());
 		
 		//set the config
-		setEGLConfigChooser(new ConfigChooser(5, 6, 5, 0, depthBufferSize, stencilBufferSize));
+		int rSize = 5;
+		int gSize = 6;
+		int bSize = 5;
+		int aSize = 0;
+		int minDepthBufferSize = 16;
+		int preferredDepthBufferSize = 24;
+		int minStencilBufferSize = 0;
+		setEGLConfigChooser(new ConfigChooser(rSize, gSize, bSize, aSize, minDepthBufferSize, preferredDepthBufferSize, minStencilBufferSize));
 		
 		//create renderer
 		setRenderer(new com.chillisource.core.Renderer());

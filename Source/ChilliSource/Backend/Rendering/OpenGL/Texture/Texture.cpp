@@ -28,6 +28,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
@@ -70,6 +71,8 @@ namespace ChilliSource
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
                         break;
                 };
+                
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while applying texture wrap mode.");
             }
             //---------------------------------------------------
             /// Apply the currently set filter mode to the texture.
@@ -110,6 +113,8 @@ namespace ChilliSource
                             break;
                     }
                 }
+                
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while applying texture filter mode.");
             }
             //---------------------------------------------------
             /// Uploads image data with no compression in the
@@ -145,7 +150,15 @@ namespace ChilliSource
                     case Core::ImageFormat::k_Lum8:
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, in_imageWidth, in_imageHeight, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, in_imageData);
                         break;
+                    case Core::ImageFormat::k_Depth16:
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, in_imageWidth, in_imageHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, in_imageData);
+                        break;
+                    case Core::ImageFormat::k_Depth32:
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, in_imageWidth, in_imageHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, in_imageData);
+                        break;
                 };
+                
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while uploading uncompressed texture data.");
             }
             //---------------------------------------------------
             /// Uploads image data with ETC1 compression. ETC1
@@ -171,6 +184,7 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_ANDROID
                 glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_OES, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
 #endif
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while uploading ETC1 texture data.");
             }
             //---------------------------------------------------
             /// Uploads image data with PVR 2 bits per pixel compression.
@@ -206,6 +220,7 @@ namespace ChilliSource
                         break;
                 };
 #endif
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while uploading PVR2 texture data.");
             }
             //---------------------------------------------------
             /// Uploads image data with PVR 4 bits per pixel compression.
@@ -241,6 +256,7 @@ namespace ChilliSource
                         break;
                 };
 #endif
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while uploading PVR4 texture data.");
             }
         }
         
@@ -324,6 +340,8 @@ namespace ChilliSource
                     UploadImageDataPVR4(m_format, m_width, m_height, data, in_desc.m_dataSize);
 					break;
 			};
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while building texture.");
         }
         //--------------------------------------------------
 		//--------------------------------------------------
@@ -402,6 +420,8 @@ namespace ChilliSource
             }
             
             m_texHandle = 0;
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying texture.");
         }
 		//--------------------------------------------------
 		//--------------------------------------------------

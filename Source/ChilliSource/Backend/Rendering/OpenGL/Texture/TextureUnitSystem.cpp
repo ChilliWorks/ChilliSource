@@ -28,6 +28,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Core/Base/Application.h>
@@ -90,6 +91,8 @@ namespace ChilliSource
                 glBindTexture(in_type, in_handle);
                 m_texUnits[in_unit] = in_object;
             }
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding texture to unit.");
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -121,6 +124,8 @@ namespace ChilliSource
                     m_texUnits[i] = nullptr;
                 }
             }
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while unbinding texture.");
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

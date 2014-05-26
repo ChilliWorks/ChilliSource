@@ -48,7 +48,7 @@ namespace ChilliSource
 @interface CSAppDelegate : NSObject <UIApplicationDelegate, GLKViewControllerDelegate, GLKViewDelegate>
 {
     UIWindow* window;
-    GLKViewController* viewController;
+    GLKViewController* viewControllerInternal;
     ChilliSource::Core::Application* csApplication;
     
     //Used to manually invoke OnForeground to conform to
@@ -57,6 +57,12 @@ namespace ChilliSource
     
     NSMutableArray* subdelegates;
 }
+//--------------------------------------------------------------------
+/// @author I Copland
+///
+/// @return The view controller instance.
+//--------------------------------------------------------------------
+@property (readonly) GLKViewController* viewController;
 //--------------------------------------------------------------------
 /// @author S Downie
 ///

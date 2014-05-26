@@ -393,12 +393,6 @@ namespace ChilliSource
             /// @return Whether it has been set
             //----------------------------------------------------------
             bool IsAttribPointerSet(GLint indwAttribLocation) const;
-			//----------------------------------------------------------
-			/// CheckForGLErrors
-			///
-			/// Checks for any opengl errors and logs any errors found.
-			//----------------------------------------------------------
-			static void CheckForGLErrors();
             //----------------------------------------------------------
             /// Create Attrib State Cache
             //----------------------------------------------------------
@@ -415,7 +409,7 @@ namespace ChilliSource
             
 		private:
 			
-            void ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
+            void ApplyVertexAttributePointer(Rendering::MeshBuffer* inpBuffer,
                                             const char* in_attribName, GLint indwSize, GLenum ineType, GLboolean inbNormalized, GLsizei indwStride, const GLvoid* inpOffset);
             
             Rendering::LightComponent* mpLightComponent;
@@ -492,7 +486,7 @@ namespace ChilliSource
             RenderStates msCurrentRenderLocks;
             
             bool mbBlendFunctionLocked;
-            bool mbInvalidateLigthingCache;
+            bool mbInvalidateLightingCache;
             
             bool m_hasContextBeenBackedUp;
             

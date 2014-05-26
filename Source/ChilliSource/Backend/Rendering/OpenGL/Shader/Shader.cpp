@@ -28,6 +28,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
@@ -69,6 +70,7 @@ namespace ChilliSource
         void Shader::Bind()
         {
             glUseProgram(m_programId);
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding shader.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -92,6 +94,8 @@ namespace ChilliSource
                     m_attribHandles.insert(std::make_pair(name, handle));
                 }
             }
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while populating attribute handles.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -112,6 +116,8 @@ namespace ChilliSource
             }
             
             glUniform1i(handle, in_value);
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -132,6 +138,8 @@ namespace ChilliSource
             }
             
             glUniform1f(handle, in_value);
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -152,6 +160,8 @@ namespace ChilliSource
             }
             
             glUniform2fv(handle, 1, (GLfloat*)(&in_value));
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -172,6 +182,8 @@ namespace ChilliSource
             }
             
             glUniform3fv(handle, 1, (GLfloat*)(&in_value));
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -192,6 +204,8 @@ namespace ChilliSource
             }
             
             glUniform4fv(handle, 1, (GLfloat*)(&in_value));
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -212,6 +226,8 @@ namespace ChilliSource
             }
             
             glUniformMatrix4fv(handle, 1, GL_FALSE, (GLfloat*)(&in_value.m));
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -232,6 +248,8 @@ namespace ChilliSource
             }
             
             glUniform4fv(handle, 1, (GLfloat*)(&in_value));
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -252,6 +270,8 @@ namespace ChilliSource
             }
             
             glUniform4fv(handle, in_vec4Values.size(), (GLfloat*)(&in_vec4Values[0]));
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -271,6 +291,8 @@ namespace ChilliSource
             }
             
             glVertexAttribPointer(it->second, in_size, in_type, in_isNormalized, in_stride, in_offset);
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting attribute.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -285,6 +307,9 @@ namespace ChilliSource
             
             GLint handle = glGetUniformLocation(m_programId, in_name.c_str());
             m_uniformHandles.insert(std::make_pair(in_name, handle));
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while getting uniform handle.");
+            
             return handle;
         }
 		//----------------------------------------------------------
@@ -329,6 +354,8 @@ namespace ChilliSource
                 
                 CS_LOG_FATAL("Failed to compile GLSL shader");
 			}
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while compiling shader.");
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -360,6 +387,8 @@ namespace ChilliSource
                 
                 CS_LOG_FATAL("Failed to link GLSL shader");
 			}
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating shader program.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -391,6 +420,8 @@ namespace ChilliSource
             m_programId = 0;
             m_attribHandles.clear();
             m_uniformHandles.clear();
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying shader.");
         }
 		//----------------------------------------------------------
 		//----------------------------------------------------------

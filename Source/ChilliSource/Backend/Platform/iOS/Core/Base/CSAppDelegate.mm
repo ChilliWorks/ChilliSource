@@ -37,6 +37,8 @@ CSAppDelegate* singletonInstance = nil;
 
 @implementation CSAppDelegate
 
+@synthesize viewController = viewControllerInternal;
+
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
 + (CSAppDelegate*) sharedInstance
@@ -53,7 +55,7 @@ CSAppDelegate* singletonInstance = nil;
 //--------------------------------------------------------------------
 - (void) setPreferredFPS:(NSUInteger)in_fps
 {
-    viewController.preferredFramesPerSecond = in_fps;
+    viewControllerInternal.preferredFramesPerSecond = in_fps;
 }
 
 #pragma mark -
@@ -85,8 +87,8 @@ CSAppDelegate* singletonInstance = nil;
 #endif
     
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-	viewController = [[CSGLViewController alloc] initWithDelegate:self];
-    [window setRootViewController: viewController];
+	viewControllerInternal = [[CSGLViewController alloc] initWithDelegate:self];
+    [window setRootViewController: viewControllerInternal];
     [window makeKeyAndVisible];
     
     csApplication->Init();
@@ -162,7 +164,7 @@ CSAppDelegate* singletonInstance = nil;
 - (void)applicationWillEnterForeground:(UIApplication*)in_application
 {
     //Sometimes iOS steals the context and doesn't return it.
-    GLKView* view = (GLKView*)viewController.view;
+    GLKView* view = (GLKView*)viewControllerInternal.view;
     if([EAGLContext currentContext] != view.context)
     {
         [EAGLContext setCurrentContext:view.context];
@@ -190,7 +192,7 @@ CSAppDelegate* singletonInstance = nil;
         isFirstActive = NO;
         
         //Sometimes iOS steals the context and doesn't return it.
-        GLKView* view = (GLKView*)viewController.view;
+        GLKView* view = (GLKView*)viewControllerInternal.view;
         if([EAGLContext currentContext] != view.context)
         {
             [EAGLContext setCurrentContext:view.context];
@@ -391,7 +393,7 @@ CSAppDelegate* singletonInstance = nil;
     csApplication->Destroy();
 	CS_SAFEDELETE(csApplication);
     
-	[viewController release];
+	[viewControllerInternal release];
     [window release];
     [subdelegates release];
     

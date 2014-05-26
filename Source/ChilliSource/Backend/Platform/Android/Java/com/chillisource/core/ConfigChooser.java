@@ -14,10 +14,16 @@ import javax.microedition.khronos.egl.EGLDisplay;
 
 import android.opengl.GLSurfaceView;
 
-public class ConfigChooser implements GLSurfaceView.EGLConfigChooser 
+/**
+ * A custom config builder for generating configs with a preferred depth size, but
+ * able to fall back on a minimum.
+ * 
+ * @author I Copland
+ */
+public final class ConfigChooser implements GLSurfaceView.EGLConfigChooser 
 {
-    private static int 		EGL_OPENGL_ES2_BIT 		= 4;
-    private static int[] 	s_configAttribs2 =
+    private static int EGL_OPENGL_ES2_BIT = 4;
+    private static int[] s_configAttribs2 =
     {
         EGL10.EGL_RED_SIZE, 4,
         EGL10.EGL_GREEN_SIZE, 4,
@@ -26,83 +32,130 @@ public class ConfigChooser implements GLSurfaceView.EGLConfigChooser
         EGL10.EGL_NONE
     };
 	
-    protected int mRedSize;
-    protected int mGreenSize;
-    protected int mBlueSize;
-    protected int mAlphaSize;
-    protected int mDepthSize;
-    protected int mStencilSize;
-    private int[] mValue = new int[1];
+    private int m_redSize;
+    private int m_greenSize;
+    private int m_blueSize;
+    private int m_alphaSize;
+    private int m_minDepthSize;
+    private int m_preferredDepthSize;
+    private int m_minStencilSize;
     
-    public ConfigChooser(int r, int g, int b, int a, int depth, int stencil) 
+    /**
+     * Constructor.
+     * 
+     * @author I Copland
+     * 
+     * @param Size of the red channel.
+     * @param Size of the green channel.
+     * @param Size of the blue channel.
+     * @param Size of the alpha channel.
+     * @param Minimum depth buffer size.
+     * @param Preferred depth buffer size.
+     * @param The minimum stencil buffer size.
+     */
+    public ConfigChooser(int in_r, int in_g, int in_b, int in_a, int in_minDepth, int in_preferredDepth, int in_minStencil) 
     {
-        mRedSize = r;
-        mGreenSize = g;
-        mBlueSize = b;
-        mAlphaSize = a;
-        mDepthSize = depth;
-        mStencilSize = stencil;
+        m_redSize = in_r;
+        m_greenSize = in_g;
+        m_blueSize = in_b;
+        m_alphaSize = in_a;
+        m_minDepthSize = in_minDepth;
+        m_preferredDepthSize = in_preferredDepth;
+        m_minStencilSize = in_minStencil;
     }
-    
-    public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) 
+    /**
+     * Chooses the best config for the given parameters.
+     * 
+     * @author I Copland
+     * 
+     * @param The gl context.
+     * @param The display.
+     * 
+     * @return The config.
+     */
+    public EGLConfig chooseConfig(EGL10 in_egl, EGLDisplay in_display) 
     {
-
-        /* Get the number of minimally matching EGL configurations
-         */
+        //Get the number of minimally matching EGL configurations
         int[] num_config = new int[1];
-        egl.eglChooseConfig(display, s_configAttribs2, null, 0, num_config);
+        in_egl.eglChooseConfig(in_display, s_configAttribs2, null, 0, num_config);
 
         int numConfigs = num_config[0];
-
-        if (numConfigs <= 0) {
+        if (numConfigs <= 0) 
+        {
             throw new IllegalArgumentException("No configs match configSpec");
         }
 
-        /* Allocate then read the array of minimally matching EGL configs
-         */
+        //Allocate then read the array of minimally matching EGL configs
         EGLConfig[] configs = new EGLConfig[numConfigs];
-        egl.eglChooseConfig(display, s_configAttribs2, configs, numConfigs, num_config);
+        in_egl.eglChooseConfig(in_display, s_configAttribs2, configs, numConfigs, num_config);
 
-        /* Now return the "best" one
-         */
-        return chooseConfig(egl, display, configs);
-    }
-
-    public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display, EGLConfig[] configs) 
-    {
-        for(EGLConfig config : configs) 
+        //Now return the "best" one
+        EGLConfig output = chooseConfig(in_egl, in_display, configs, true);
+        if (output == null)
         {
-            int d = findConfigAttrib(egl, display, config,
-                    EGL10.EGL_DEPTH_SIZE, 0);
-            int s = findConfigAttrib(egl, display, config,
-                    EGL10.EGL_STENCIL_SIZE, 0);
+        	output = chooseConfig(in_egl, in_display, configs, false);
+        }
+        return output;
+    }
+    /**
+     * Chooses the best config for the given parameters.
+     * 
+     * @author I Copland
+     * 
+     * @param The gl context
+     * @param The display
+     * @param The list of poddible configs.
+     * @param Whether or not to only look for preferred depth sizes.
+     * 
+     * @return The config.
+     */
+    private EGLConfig chooseConfig(EGL10 in_egl, EGLDisplay in_display, EGLConfig[] in_configs, boolean in_preferred) 
+    {
+        for(EGLConfig config : in_configs) 
+        {
+            int d = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_DEPTH_SIZE, 0);
+            int s = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_STENCIL_SIZE, 0);
 
             // We need at least mDepthSize and mStencilSize bits
-            if (d < mDepthSize || s < mStencilSize)
+            if ((in_preferred == true && d < m_preferredDepthSize) || (in_preferred == false && d < m_minDepthSize) || s < m_minStencilSize)
+            {
                 continue;
+            }
 
             // We want an *exact* match for red/green/blue/alpha
-            int r = findConfigAttrib(egl, display, config,
-                    EGL10.EGL_RED_SIZE, 0);
-            int g = findConfigAttrib(egl, display, config,
-                        EGL10.EGL_GREEN_SIZE, 0);
-            int b = findConfigAttrib(egl, display, config,
-                        EGL10.EGL_BLUE_SIZE, 0);
-            int a = findConfigAttrib(egl, display, config,
-                    EGL10.EGL_ALPHA_SIZE, 0);
+            int r = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_RED_SIZE, 0);
+            int g = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_GREEN_SIZE, 0);
+            int b = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_BLUE_SIZE, 0);
+            int a = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_ALPHA_SIZE, 0);
 
-            if (r == mRedSize && g == mGreenSize && b == mBlueSize && a == mAlphaSize)
+            if (r == m_redSize && g == m_greenSize && b == m_blueSize && a == m_alphaSize)
+            {
                 return config;
+            }
         }
         return null;
     }
-
-    private int findConfigAttrib(EGL10 egl, EGLDisplay display, EGLConfig config, int attribute, int defaultValue) 
+    /**
+     * Get the value for a single attribute within the config.
+     * 
+     * @author I Copland
+     * 
+     * @param The gl context
+     * @param The display
+     * @param The config.
+     * @param The attribute.
+     * @param The default value.
+     * 
+     * @return The value.
+     */
+    private int findConfigAttrib(EGL10 in_egl, EGLDisplay in_display, EGLConfig in_config, int in_attribute, int in_defaultValue) 
     {
-        if (egl.eglGetConfigAttrib(display, config, attribute, mValue)) 
+    	int[] value = new int[1];
+        if (in_egl.eglGetConfigAttrib(in_display, in_config, in_attribute, value) == true) 
         {
-            return mValue[0];
+            return value[0];
         }
-        return defaultValue;
+        
+        return in_defaultValue;
     }
 }

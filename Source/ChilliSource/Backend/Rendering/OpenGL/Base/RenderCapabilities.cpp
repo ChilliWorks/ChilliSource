@@ -8,6 +8,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
 
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 
 namespace ChilliSource
@@ -70,6 +71,8 @@ namespace ChilliSource
             m_areShadowMapsSupported = (m_areDepthTexturesSupported && areHighPrecFragmentsSupported);
             glGetIntegerv(GL_MAX_TEXTURE_SIZE, (s32*)&m_maxTextureSize);
             glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (s32*)&m_maxTextureUnits);
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while getting render capabilities.");
         }
         //-------------------------------------------------
         //-------------------------------------------------
