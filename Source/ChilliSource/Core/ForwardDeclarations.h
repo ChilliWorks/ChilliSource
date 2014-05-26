@@ -148,10 +148,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(State);
         CS_FORWARDDECLARE_CLASS(StateManager);
         //---------------------------------------------------------
-        /// String
-        //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(UTF8String);
-        //---------------------------------------------------------
         /// System
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(AppSystem);
