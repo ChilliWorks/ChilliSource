@@ -29,7 +29,7 @@ namespace ChilliSource
 			//-----------------------------------------------
 			/// Events
 			//-----------------------------------------------
-			typedef std::function<void(const Core::UTF8String&)> TextAddedDelegate;
+			typedef std::function<void(const std::string&)> TextAddedDelegate;
 			typedef std::function<void()> TextDeletedDelegate;
 			typedef std::function<void()> KeyboardDismissedDelegate;
 			//-----------------------------------------------
@@ -100,9 +100,9 @@ namespace ChilliSource
 			/// Called when the there is new text to add that
             /// has been received from the keyboard.
 			///
-			/// @param The new text.
+			/// @param The new text (UTF-8).
 			//-----------------------------------------------
-			void OnTextAdded(const Core::UTF8String& instrText);
+			void OnTextAdded(const std::string& instrText);
 			//-----------------------------------------------
 			/// On Text Deleted
 			///

@@ -95,7 +95,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Present
 		//--------------------------------------------------------------
-		void VideoPlayerJavaInterface::Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour, const VideoCompleteDelegate& inVideoCompleteDelegate)
+		void VideoPlayerJavaInterface::Present(bool inbInAPK, const std::string& instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour, const VideoCompleteDelegate& inVideoCompleteDelegate)
 		{
 			mVideoCompleteDelegate = inVideoCompleteDelegate;
 
@@ -143,10 +143,10 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Create Subtitle
 		//--------------------------------------------------------------
-		s64 VideoPlayerJavaInterface::CreateSubtitle(const Core::UTF8String& inText, const std::string& instrFontName, u32 inudwFontSize, const std::string& instrAlignment, f32 infX, f32 infY, f32 infWidth, f32 infHeight)
+		s64 VideoPlayerJavaInterface::CreateSubtitle(const std::string& inText, const std::string& instrFontName, u32 inudwFontSize, const std::string& instrAlignment, f32 infX, f32 infY, f32 infWidth, f32 infHeight)
 		{
 			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrText = JavaInterfaceUtils::CreateJStringFromUTF8String(inText);
+			jstring jstrText = JavaInterfaceUtils::CreateJStringFromSTDString(inText);
 			jstring jstrFontName = JavaInterfaceUtils::CreateJStringFromSTDString(instrFontName);
 			jstring jstrAlignment = JavaInterfaceUtils::CreateJStringFromSTDString(instrAlignment);
 			s64 lwSubtitleID = pEnv->CallLongMethod(GetJavaObject(), GetMethodID("CreateSubtitle"), jstrText, jstrFontName, inudwFontSize, jstrAlignment, infX, infY, infWidth, infHeight);

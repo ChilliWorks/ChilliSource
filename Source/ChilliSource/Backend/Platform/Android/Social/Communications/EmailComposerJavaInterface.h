@@ -73,14 +73,14 @@ namespace ChilliSource
 			///
 			/// Presents the user with the email interface.
 			///
-			/// @param vector of email addresses
-			/// @param subject line
-			/// @param content
+			/// @param vector of email addresses (UTF-8)
+			/// @param subject line (UTF-8)
+			/// @param content (UTF-8)
 			/// @param bool if to format as html
 			/// @param The attachment filename.
 			/// @param result callback delegate
 			//--------------------------------------------------------------
-			void Present(const std::vector<Core::UTF8String>& inastrRecipientAddresses, const Core::UTF8String& instrSubject, const Core::UTF8String& instrContents,
+			void Present(const std::vector<std::string>& inastrRecipientAddresses, const std::string& instrSubject, const std::string& instrContents,
 					bool inbFormatAsHtml, const std::string& instrAttachmentFilename, const ResultDelegate& inDelegate);
 			//--------------------------------------------------------------
 			/// On Email Closed

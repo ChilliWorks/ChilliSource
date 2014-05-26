@@ -10,8 +10,11 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_JAVAINTERFACEUTILS_H_
 #define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_JAVAINTERFACEUTILS_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #include <jni.h>
-#include <ChilliSource/Core/String/UTF8String.h>
+
+#include <string>
 
 namespace ChilliSource
 {
@@ -28,15 +31,6 @@ namespace ChilliSource
 			/// @return the new java string
 			//--------------------------------------------------------------------------------------
 			jstring CreateJStringFromSTDString(const std::string& instrString);
-			//--------------------------------------------------------------------------------------
-			/// Create Jstring From UTF8String
-			///
-			/// Converts a UTF8String into a JString.
-			///
-			/// @param the UTF8String
-			/// @return the new java string
-			//--------------------------------------------------------------------------------------
-			jstring CreateJStringFromUTF8String(const Core::UTF8String& instrString);
 			//--------------------------------------------------------------------------------------
 			/// Create STDString From JString
 			///
@@ -55,15 +49,6 @@ namespace ChilliSource
 			/// @return the new std::string
 			//--------------------------------------------------------------------------------------
 			std::string CreateSTDStringFromJByteArray(jbyteArray injabyArray, int indwLength);
-			//--------------------------------------------------------------------------------------
-			/// Create UTF8String From JString
-			///
-			/// Takes a java string and converts it to a UTF8String
-			///
-			/// @param the java string
-			/// @return the new UTF8String
-			//--------------------------------------------------------------------------------------
-			Core::UTF8String CreateUTF8StringFromJString(jstring injstrString);
 			//--------------------------------------------------------------------------------------
 			/// Get Int Element From JArray
 			///
