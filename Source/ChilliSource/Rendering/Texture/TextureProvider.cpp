@@ -40,10 +40,7 @@ namespace ChilliSource
 	{
         CS_DEFINE_NAMEDTYPE(TextureProvider);
         
-        namespace
-        {
-            static const auto s_defaultOptions(std::make_shared<TextureResourceOptions>());
-        }
+        const Core::IResourceOptionsBaseCSPtr TextureProvider::s_defaultOptions(std::make_shared<TextureResourceOptions>());
         
         //-------------------------------------------------------
         //-------------------------------------------------------

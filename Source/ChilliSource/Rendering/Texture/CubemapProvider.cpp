@@ -42,10 +42,7 @@ namespace ChilliSource
 	{
         CS_DEFINE_NAMEDTYPE(CubemapProvider);
         
-        namespace
-        {
-            static const auto s_defaultOptions(std::make_shared<CubemapResourceOptions>());
-        }
+        const Core::IResourceOptionsBaseCSPtr CubemapProvider::s_defaultOptions(std::make_shared<CubemapResourceOptions>());
         
         //-------------------------------------------------------
         //-------------------------------------------------------

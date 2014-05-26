@@ -100,6 +100,12 @@ namespace ChilliSource
             
         private:
             
+            //-------------------------------------------------------
+            /// The options for loading textures. These are held
+            /// in a struct to more easily allow hashing of the data
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
             struct Options
             {
                 Texture::WrapMode m_wrapModeS = Texture::WrapMode::k_clamp;

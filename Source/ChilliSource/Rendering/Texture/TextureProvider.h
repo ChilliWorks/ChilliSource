@@ -143,6 +143,7 @@ namespace ChilliSource
         private:
             
             std::vector<Core::ResourceProvider*> m_imageProviders;
+            static const Core::IResourceOptionsBaseCSPtr s_defaultOptions;
 		};
 	}
 }
