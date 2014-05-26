@@ -56,33 +56,93 @@ namespace ChilliSource
                 else if(in_char <= 0x7FF)
                 {
                     out_appendedResult.reserve(2);
-                    out_appendedResult +=0xC0 | ((in_char>>6) & 0x1F);
-                    out_appendedResult +=0x80 | ((in_char) & 0x3F);
+                    out_appendedResult += 0xC0 | ((in_char>>6) & 0x1F);
+                    out_appendedResult += 0x80 | ((in_char) & 0x3F);
 
                 }
                 //Three byte code
                 else if(in_char <= 0xFFFF)
                 {
                     out_appendedResult.reserve(3);
-                    out_appendedResult +=0xE0 | ((in_char>>12) & 0x0F);
-                    out_appendedResult +=0x80 | ((in_char>>6) & 0x3F);
-                    out_appendedResult +=0x80 | ((in_char) & 0x3F);
+                    out_appendedResult += 0xE0 | ((in_char>>12) & 0x0F);
+                    out_appendedResult += 0x80 | ((in_char>>6) & 0x3F);
+                    out_appendedResult += 0x80 | ((in_char) & 0x3F);
 
                 }
                 //Four byte code
                 else if(in_char <= 0x1FFFFF)
                 {
                     out_appendedResult.reserve(4);
-                    out_appendedResult +=0xF0 | ((in_char>>18) & 0x07);
-                    out_appendedResult +=0x80 | ((in_char>>12) & 0x3F);
-                    out_appendedResult +=0x80 | ((in_char>>6) & 0x3F);
-                    out_appendedResult +=0x80 | ((in_char) & 0x3F);
+                    out_appendedResult += 0xF0 | ((in_char>>18) & 0x07);
+                    out_appendedResult += 0x80 | ((in_char>>12) & 0x3F);
+                    out_appendedResult += 0x80 | ((in_char>>6) & 0x3F);
+                    out_appendedResult += 0x80 | ((in_char) & 0x3F);
                 }
                 //Invalid format
                 else
                 {
-                    CS_LOG_FATAL("Invalid UT8 format");
+                    CS_LOG_FATAL("Invalid UTF8 format");
                 }
+            }
+            //-----------------------------------------------------
+            //-----------------------------------------------------
+            std::string Substr(const std::string& in_string, u32 in_start, u32 in_length)
+            {
+                if (in_length == 0)
+                {
+                    return "";
+                }
+                
+                u32 codePointStart = std::string::npos;
+                u32 codePointLength = std::string::npos;
+                u32 numCodePoints = in_string.length();
+                
+                u32 codePointIdx = 0;
+                for (u32 charIdx=0; charIdx<numCodePoints; ++charIdx, ++codePointIdx)
+                {
+                    if (codePointIdx == in_start)
+                    {
+                        codePointStart = charIdx;
+                    }
+                    
+                    if (codePointIdx <= in_start + in_length || in_length == std::string::npos)
+                    {
+                        codePointLength = charIdx;
+                    }
+                    
+                    UTF8Char character = (UTF8Char)in_string[charIdx];
+                    if (character <= 127)
+                    {
+                        charIdx += 0;
+                    }
+                    else if ((character & 0xE0) == 0xC0)
+                    {
+                        charIdx += 1;
+                    }
+                    else if ((character & 0xF0) == 0xE0)
+                    {
+                        charIdx += 2;
+                    }
+                    else if ((character & 0xF8) == 0xF0)
+                    {
+                        charIdx += 3;
+                    }
+                    else
+                    {
+                        CS_LOG_FATAL("Invalid UTF8 format");
+                    }
+                }
+                
+                if (codePointIdx <= in_start + in_length || in_length == std::string::npos)
+                {
+                    codePointLength = numCodePoints;
+                }
+                if (codePointStart == std::string::npos || codePointLength == std::string::npos)
+                {
+                    return "";
+                }
+            
+                return in_string.substr(codePointStart, codePointLength);
             }
         }
     }

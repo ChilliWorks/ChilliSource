@@ -156,6 +156,21 @@ namespace ChilliSource
             /// @param [Out] String of code points
             //-----------------------------------------------------
             void Append(UTF8Char in_char, std::string& out_appendedResult);
+            //-----------------------------------------------------
+            /// Return a sub-string copy going from begin for
+            /// the given number of characters
+            ///
+            /// Note: Length should not exceed end of string
+            ///
+            /// @author S Downie
+            ///
+            /// @param UTF8 String
+            /// @param Start character index (UTF-8)
+            /// @param Num UTF-8 characters from start to copy
+            ///
+            /// @return Sub-string of code points
+            //-----------------------------------------------------
+            std::string Substr(const std::string& in_string, u32 in_start, u32 in_length);
         }
     }
 }
