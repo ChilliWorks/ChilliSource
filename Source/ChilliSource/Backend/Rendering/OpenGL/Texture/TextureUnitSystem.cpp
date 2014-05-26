@@ -92,7 +92,7 @@ namespace ChilliSource
                 m_texUnits[in_unit] = in_object;
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while binding texture to unit.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding texture to unit.");
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -125,7 +125,7 @@ namespace ChilliSource
                 }
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while unbinding texture.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while unbinding texture.");
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

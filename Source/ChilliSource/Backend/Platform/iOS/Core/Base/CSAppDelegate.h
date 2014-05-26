@@ -62,7 +62,7 @@ namespace ChilliSource
 ///
 /// @return The view controller instance.
 //--------------------------------------------------------------------
-@property (readonly, retain) GLKViewController* viewController;
+@property (readonly) GLKViewController* viewController;
 //--------------------------------------------------------------------
 /// @author S Downie
 ///

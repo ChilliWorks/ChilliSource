@@ -485,7 +485,7 @@ namespace ChilliSource
             
             m_attributeCache.clear();
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while beginning frame.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while beginning frame.");
 		}
 		//----------------------------------------------------------
 		/// Create Render Target
@@ -535,7 +535,7 @@ namespace ChilliSource
             
             mbInvalidateAllCaches = false;
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while rendering vertex buffer.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while rendering vertex buffer.");
 		}
         //----------------------------------------------------------
         /// Render Buffer
@@ -563,7 +563,7 @@ namespace ChilliSource
             
             mbInvalidateAllCaches = false;
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while rendering buffer.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while rendering buffer.");
 		}
 		//----------------------------------------------------------
 		/// End Frame
@@ -613,7 +613,7 @@ namespace ChilliSource
                 msCurrentRenderFlags.mbIsAlphaBlendingEnabled ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling blending.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling/disabling blending.");
 		}
 		//----------------------------------------------------------
 		/// Enable Depth Testing
@@ -633,7 +633,7 @@ namespace ChilliSource
 				glDisable(GL_DEPTH_TEST);
 			}
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling depth test.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling/disabling depth test.");
 		}
         //----------------------------------------------------------
 		/// Enable Colour Writing
@@ -653,7 +653,7 @@ namespace ChilliSource
 				glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 			}
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling colour writing.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling/disabling colour writing.");
 		}
         //----------------------------------------------------------
 		/// Lock Depth Writing
@@ -694,7 +694,7 @@ namespace ChilliSource
                 msCurrentRenderFlags.mbIsDepthWriteEnabled ? glDepthMask(GL_TRUE) : glDepthMask(GL_FALSE);
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling depth writing.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling/disabling depth writing.");
 		}
 		//----------------------------------------------------------
 		/// Enable Face Culling
@@ -714,7 +714,7 @@ namespace ChilliSource
 				glDisable(GL_CULL_FACE);
 			}
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling face culling.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling/disabling face culling.");
 		}
         //----------------------------------------------------------
         /// Enable Scissor Testing
@@ -735,7 +735,7 @@ namespace ChilliSource
 				msCurrentRenderFlags.mbIsScissorTestingEnabled = false;
 			}
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling/disabling scissor testing.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling/disabling scissor testing.");
         }
         //----------------------------------------------------------
         /// Set Scissor Region
@@ -749,7 +749,7 @@ namespace ChilliSource
 				glScissor((GLsizei)invPosition.x, (GLsizei)invPosition.y, (GLsizei)invSize.x, (GLsizei)invSize.y);
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting scissor region.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting scissor region.");
         }
         //----------------------------------------------------------
         /// Set Cull Face
@@ -771,7 +771,7 @@ namespace ChilliSource
                 meCurrentCullFace = ineCullface;
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting face culling.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting face culling.");
         }
         //----------------------------------------------------------
         /// Set Depth Function
@@ -796,7 +796,7 @@ namespace ChilliSource
                 meDepthFunc = ineFunc;
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting depth function.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting depth function.");
         }
         //----------------------------------------------------------
 		/// Lock Blend Function
@@ -836,7 +836,7 @@ namespace ChilliSource
                 glBlendFunc(srcFunc, dstFunc);
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting blend function.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting blend function.");
 		}
         //----------------------------------------------------------
         /// Create Attrib State Cache
@@ -851,7 +851,7 @@ namespace ChilliSource
                 mpbLastVertexAttribState = (bool*)calloc(mdwMaxVertAttribs, sizeof(bool));
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while creating the attribute state cache.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating the attribute state cache.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -980,7 +980,7 @@ namespace ChilliSource
                 ApplyVertexAttributePointer(inpBuffer, attribName, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*)(s32)uwElementOffset);
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while enabling vertex attributes for semantics.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling vertex attributes for semantics.");
 		}
 		//------------------------------------------------------------
 		/// Get Primitive Type
@@ -1017,7 +1017,7 @@ namespace ChilliSource
             
             mbInvalidateAllCaches = true;
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while forcing refresh of render states.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while forcing refresh of render states.");
 		}
         //----------------------------------------------------------
 		/// Remove Buffer

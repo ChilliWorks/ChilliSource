@@ -70,7 +70,7 @@ namespace ChilliSource
         void Shader::Bind()
         {
             glUseProgram(m_programId);
-            CS_OPENGL_ASSERT("An OpenGL error occurred while binding shader.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding shader.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -95,7 +95,7 @@ namespace ChilliSource
                 }
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while populating attribute handles.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while populating attribute handles.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -117,7 +117,7 @@ namespace ChilliSource
             
             glUniform1i(handle, in_value);
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting uniform.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -139,7 +139,7 @@ namespace ChilliSource
             
             glUniform1f(handle, in_value);
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting uniform.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -161,7 +161,7 @@ namespace ChilliSource
             
             glUniform2fv(handle, 1, (GLfloat*)(&in_value));
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting uniform.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -183,7 +183,7 @@ namespace ChilliSource
             
             glUniform3fv(handle, 1, (GLfloat*)(&in_value));
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting uniform.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -205,7 +205,7 @@ namespace ChilliSource
             
             glUniform4fv(handle, 1, (GLfloat*)(&in_value));
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting uniform.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -227,7 +227,7 @@ namespace ChilliSource
             
             glUniformMatrix4fv(handle, 1, GL_FALSE, (GLfloat*)(&in_value.m));
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting uniform.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -249,7 +249,7 @@ namespace ChilliSource
             
             glUniform4fv(handle, 1, (GLfloat*)(&in_value));
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting uniform.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -271,7 +271,7 @@ namespace ChilliSource
             
             glUniform4fv(handle, in_vec4Values.size(), (GLfloat*)(&in_vec4Values[0]));
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting uniform.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -292,7 +292,7 @@ namespace ChilliSource
             
             glVertexAttribPointer(it->second, in_size, in_type, in_isNormalized, in_stride, in_offset);
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting attribute.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting attribute.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -308,7 +308,7 @@ namespace ChilliSource
             GLint handle = glGetUniformLocation(m_programId, in_name.c_str());
             m_uniformHandles.insert(std::make_pair(in_name, handle));
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while getting uniform handle.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while getting uniform handle.");
             
             return handle;
         }
@@ -355,7 +355,7 @@ namespace ChilliSource
                 CS_LOG_FATAL("Failed to compile GLSL shader");
 			}
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while compiling shader.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while compiling shader.");
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -388,7 +388,7 @@ namespace ChilliSource
                 CS_LOG_FATAL("Failed to link GLSL shader");
 			}
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while creating shader program.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating shader program.");
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -421,7 +421,7 @@ namespace ChilliSource
             m_attribHandles.clear();
             m_uniformHandles.clear();
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while destroying shader.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying shader.");
         }
 		//----------------------------------------------------------
 		//----------------------------------------------------------

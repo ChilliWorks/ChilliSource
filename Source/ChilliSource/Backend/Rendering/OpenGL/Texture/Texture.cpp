@@ -72,7 +72,7 @@ namespace ChilliSource
                         break;
                 };
                 
-                CS_OPENGL_ASSERT("An OpenGL error occurred while applying texture wrap mode.");
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while applying texture wrap mode.");
             }
             //---------------------------------------------------
             /// Apply the currently set filter mode to the texture.
@@ -114,7 +114,7 @@ namespace ChilliSource
                     }
                 }
                 
-                CS_OPENGL_ASSERT("An OpenGL error occurred while applying texture filter mode.");
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while applying texture filter mode.");
             }
             //---------------------------------------------------
             /// Uploads image data with no compression in the
@@ -158,7 +158,7 @@ namespace ChilliSource
                         break;
                 };
                 
-                CS_OPENGL_ASSERT("An OpenGL error occurred while uploading uncompressed texture data.");
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while uploading uncompressed texture data.");
             }
             //---------------------------------------------------
             /// Uploads image data with ETC1 compression. ETC1
@@ -184,7 +184,7 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_ANDROID
                 glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_OES, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
 #endif
-                CS_OPENGL_ASSERT("An OpenGL error occurred while uploading ETC1 texture data.");
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while uploading ETC1 texture data.");
             }
             //---------------------------------------------------
             /// Uploads image data with PVR 2 bits per pixel compression.
@@ -220,7 +220,7 @@ namespace ChilliSource
                         break;
                 };
 #endif
-                CS_OPENGL_ASSERT("An OpenGL error occurred while uploading PVR2 texture data.");
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while uploading PVR2 texture data.");
             }
             //---------------------------------------------------
             /// Uploads image data with PVR 4 bits per pixel compression.
@@ -256,7 +256,7 @@ namespace ChilliSource
                         break;
                 };
 #endif
-                CS_OPENGL_ASSERT("An OpenGL error occurred while uploading PVR4 texture data.");
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while uploading PVR4 texture data.");
             }
         }
         
@@ -334,7 +334,7 @@ namespace ChilliSource
 					break;
 			};
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while building texture.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while building texture.");
         }
         //--------------------------------------------------
 		//--------------------------------------------------
@@ -397,7 +397,7 @@ namespace ChilliSource
             glGenerateMipmap(GL_TEXTURE_2D);
             m_hasMipMaps = true;
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while generating texture mipmaps.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while generating texture mipmaps.");
         }
         //--------------------------------------------------
         //--------------------------------------------------
@@ -424,7 +424,7 @@ namespace ChilliSource
             
             m_texHandle = 0;
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while destroying texture.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying texture.");
         }
 		//--------------------------------------------------
 		//--------------------------------------------------

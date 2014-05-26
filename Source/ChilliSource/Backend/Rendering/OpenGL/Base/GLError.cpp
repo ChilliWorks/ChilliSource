@@ -82,7 +82,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------
             //---------------------------------------------------
-            void Assert(const std::string in_message)
+            void AssertNoGLError(const std::string in_message)
             {
 #ifdef CS_ENABLE_DEBUG
                 std::vector<GLenum> errors;

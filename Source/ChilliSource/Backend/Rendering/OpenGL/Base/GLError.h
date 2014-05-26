@@ -26,16 +26,16 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_BACKEND_RENDERING_OPENGL_BASE_GLUTILS_H_
-#define _CHILLISOURCE_BACKEND_RENDERING_OPENGL_BASE_GLUTILS_H_
+#ifndef _CHILLISOURCE_BACKEND_RENDERING_OPENGL_BASE_GLERROR_H_
+#define _CHILLISOURCE_BACKEND_RENDERING_OPENGL_BASE_GLERROR_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 
 #ifdef CS_ENABLE_DEBUG
-#define CS_OPENGL_ASSERT(in_message) {ChilliSource::OpenGL::GLError::Assert(in_message);}
+#define CS_ASSERT_NOGLERROR(in_message) {ChilliSource::OpenGL::GLError::AssertNoGLError(in_message);}
 #else
-#define CS_OPENGL_ASSERT(in_message) {}
+#define CS_ASSERT_NOGLERROR(in_message) {}
 #endif
 
 namespace ChilliSource
@@ -67,7 +67,7 @@ namespace ChilliSource
             /// @param The message to print if an error has
             /// occurred.
             //---------------------------------------------------
-            void Assert(const std::string in_message);
+            void AssertNoGLError(const std::string in_message);
         }
     }
 }

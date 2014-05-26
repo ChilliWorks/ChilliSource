@@ -39,7 +39,7 @@ namespace ChilliSource
                 gCurrentlyBoundFrameBuffer = inBuffer;
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while binding frame buffer.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding frame buffer.");
         }
         //------------------------------------------------------
         /// Bind Render Buffer
@@ -54,7 +54,7 @@ namespace ChilliSource
                 gCurrentlyBoundRenderBuffer = inBuffer;
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while binding render buffer.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding render buffer.");
         }
         //------------------------------------------------------
         /// Create Frame Buffer
@@ -64,7 +64,7 @@ namespace ChilliSource
         inline void CreateFrameBuffer(GLuint* inBuffer)
         {
             glGenFramebuffers(1, inBuffer);
-            CS_OPENGL_ASSERT("An OpenGL error occurred while creating frame buffer.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating frame buffer.");
             
             BindFrameBuffer(*inBuffer);
         }
@@ -76,7 +76,7 @@ namespace ChilliSource
         inline void CreateRenderBuffer(GLuint* inBuffer)
         {
             glGenRenderbuffers(1, inBuffer);
-            CS_OPENGL_ASSERT("An OpenGL error occurred while creating render buffer.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating render buffer.");
             
             BindRenderBuffer(*inBuffer);
         }
@@ -98,7 +98,7 @@ namespace ChilliSource
 				*inBuffer = 0;
 			}
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while deleting frame buffer.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while deleting frame buffer.");
         }
         //------------------------------------------------------
         /// Delete Render Buffer
@@ -118,7 +118,7 @@ namespace ChilliSource
 				*inBuffer = 0;
 			}
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while deleting render buffer.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while deleting render buffer.");
         }
         //--------------------------------------------------
         /// Clear Cache
@@ -202,7 +202,7 @@ namespace ChilliSource
             }
 #endif
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while setting render target textures.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting render target textures.");
         }
         //------------------------------------------------------
 		/// Create and Attach Depth Buffer
@@ -228,7 +228,7 @@ namespace ChilliSource
 			success = ((glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) && Depth != 0);
 #endif
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while creating and attaching depth buffer.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating and attaching depth buffer.");
             return success;
 		}
 		//------------------------------------------------------
@@ -243,7 +243,7 @@ namespace ChilliSource
                 RenderTarget::pCurrentlyBoundTarget = this;
             }
             
-            CS_OPENGL_ASSERT("An OpenGL error occurred while binding render target.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding render target.");
 		}
         //------------------------------------------------------
         /// Discard
@@ -254,7 +254,7 @@ namespace ChilliSource
             GLenum Attachments[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
             BindFrameBuffer(mFrameBuffer);
             glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, Attachments);
-            CS_OPENGL_ASSERT("An OpenGL error occurred while discarding the render target.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while discarding the render target.");
 #endif
         }
 		//------------------------------------------------------
