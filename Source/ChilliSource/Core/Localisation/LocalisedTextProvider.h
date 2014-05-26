@@ -82,10 +82,11 @@ namespace ChilliSource
 			///
 			/// @param The storage location.
 			/// @param The filepath.
+            /// @param Options to customise the creation
 			/// @param Delegate to callback on completion either success or failure
 			/// @param [Out] The output resource.
 			//----------------------------------------------------
-			void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
 			//----------------------------------------------------
 			/// Creates a localised text resource asynchronously.
 			/// The delegate will be called on completion. Check
@@ -95,10 +96,11 @@ namespace ChilliSource
 			///
 			/// @param The storage location.
 			/// @param The filepath.
+            /// @param Options to customise the creation
 			/// @param Completion delegate
 			/// @param [Out] The output resource.
 			//----------------------------------------------------
-			void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
 
 		private:
 

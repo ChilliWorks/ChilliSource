@@ -95,9 +95,10 @@ namespace ChilliSource
 			///
             /// @param The storage location to load from
 			/// @param File path
+            /// @param Options to customise the creation
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Load the shader from the external file into a resource on a background
             /// thread. Delegate is called when the load is complete. Check resource
@@ -107,10 +108,11 @@ namespace ChilliSource
 			///
             /// @param The storage location to load from
 			/// @param File path
+            /// @param Options to customise the creation
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
 		};
 	}
 }

@@ -66,8 +66,9 @@ namespace ChilliSource
             ///
             /// @param Texture descriptor
             /// @param Image data
+            /// @param Whether the texture should have mip maps generated
             //--------------------------------------------------
-            void Build(const Descriptor& in_desc, TextureDataUPtr in_data) override;
+            void Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap) override;
 			//--------------------------------------------------------------
             /// Binds this texture to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it
@@ -101,14 +102,6 @@ namespace ChilliSource
             /// @param Vertical wrapping
             //--------------------------------------------------------------
 			void SetWrapMode(WrapMode in_sMode, WrapMode in_tMode) override;
-            //--------------------------------------------------------------
-            /// Generate mip map levels for the texture to reduce
-            /// aliasing. This will bind the texture and generate the
-            /// 3 mip map levels.
-            ///
-            /// @author S Downie
-            //--------------------------------------------------------------
-            void GenerateMipMaps() override;
 			//--------------------------------------------------
 			/// @author S Downie
 			///

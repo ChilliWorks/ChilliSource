@@ -82,9 +82,10 @@ namespace ChilliSource
             ///
             /// @param The storage location to load from
 			/// @param File path to resource
+            /// @param Options to customise the creation
 			/// @param [Out] Resource
 			//-----------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
             /// Completion delegate is called when load is finished.
@@ -94,10 +95,11 @@ namespace ChilliSource
             ///
             /// @param The storage location.
             /// @param The filepath.
+            /// @param Options to customise the creation
             /// @param Completion delegate
             /// @param [Out] The output resource.
             //----------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
         private:
             
             friend Core::PNGImageProviderUPtr Core::PNGImageProvider::Create();

@@ -32,6 +32,7 @@
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
+#include <ChilliSource/Rendering/Texture/CubemapResourceOptions.h>
 
 #include <array>
 
@@ -40,7 +41,9 @@ namespace ChilliSource
 	namespace Rendering
 	{
         CS_DEFINE_NAMEDTYPE(CubemapProvider);
-      
+        
+        const Core::IResourceOptionsBaseCSPtr CubemapProvider::s_defaultOptions(std::make_shared<CubemapResourceOptions>());
+        
         //-------------------------------------------------------
         //-------------------------------------------------------
         CubemapProviderUPtr CubemapProvider::Create()
@@ -55,7 +58,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void CubemapProvider::OnInit()
+        void CubemapProvider::PostCreate()
         {
             std::vector<Core::ResourceProvider*> resourceProviders;
             Core::Application::Get()->GetSystems(resourceProviders);
@@ -88,22 +91,28 @@ namespace ChilliSource
             
 			return false;
 		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::IResourceOptionsBaseCSPtr CubemapProvider::GetDefaultOptions() const
+        {
+            return s_defaultOptions;
+        }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void CubemapProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
+		void CubemapProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
 		{
-            LoadCubemap(in_location, in_filePath, nullptr, out_resource);
+            LoadCubemap(in_location, in_filePath, in_options, nullptr, out_resource);
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void CubemapProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+		void CubemapProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
-            auto task = std::bind(&CubemapProvider::LoadCubemap, this, in_location, in_filePath, in_delegate, out_resource);
+            auto task = std::bind(&CubemapProvider::LoadCubemap, this, in_location, in_filePath, in_options, in_delegate, out_resource);
             Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void CubemapProvider::LoadCubemap(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+		void CubemapProvider::LoadCubemap(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
             std::string fileName;
             std::string fileExtension;
@@ -140,7 +149,7 @@ namespace ChilliSource
             {
                 std::string facePath = fileName + Core::ToString(i) + "." + fileExtension;
                 Core::ResourceSPtr imageResource(Core::Image::Create());
-                imageProvider->CreateResourceFromFile(in_location, facePath, imageResource);
+                imageProvider->CreateResourceFromFile(in_location, facePath, nullptr, imageResource);
                 Core::ImageSPtr image(std::static_pointer_cast<Core::Image>(imageResource));
                 
                 if(image->GetLoadState() == Core::Resource::LoadState::k_failed)
@@ -169,27 +178,26 @@ namespace ChilliSource
             if(in_delegate == nullptr)
             {
                 Cubemap* cubemap = (Cubemap*)out_resource.get();
-				cubemap->Build(descs, *imageDataContainer);
+                const CubemapResourceOptions* options = (const CubemapResourceOptions*)in_options.get();
+                cubemap->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
+                cubemap->SetFilterMode(options->GetFilterMode());
+                cubemap->Build(descs, *imageDataContainer, options->IsMipMapsEnabled());
                 out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
             }
             else
             {
-				auto task([descs, imageDataContainer, in_delegate, out_resource]()
+				auto task([descs, imageDataContainer, in_options, in_delegate, out_resource]()
                 {
                     Cubemap* cubemap = (Cubemap*)out_resource.get();
-					cubemap->Build(descs, *imageDataContainer);
+                    const CubemapResourceOptions* options = (const CubemapResourceOptions*)in_options.get();
+                    cubemap->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
+                    cubemap->SetFilterMode(options->GetFilterMode());
+                    cubemap->Build(descs, *imageDataContainer, options->IsMipMapsEnabled());
                     out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
                     in_delegate(out_resource);
                 });
                 Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
             }
-        }
-        //----------------------------------------------------------------------------
-        //----------------------------------------------------------------------------
-        void CubemapProvider::OnDestroy()
-        {
-            m_imageProviders.clear();
-            m_imageProviders.shrink_to_fit();
         }
 	}
 }

@@ -74,7 +74,7 @@ namespace ChilliSource
                     memset(data, 255, desc.m_dataSize);
                     
                     Rendering::TextureSPtr texture = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_GUIBackgroundTex");
-                    texture->Build(desc, Rendering::Texture::TextureDataUPtr(data));
+                    texture->Build(desc, Rendering::Texture::TextureDataUPtr(data), false);
                     result = texture;
                 }
                 

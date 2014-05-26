@@ -289,12 +289,18 @@ namespace ChilliSource
         /// GL makes a copy of the data so we can just
         /// let the incoming data delete itself
         //--------------------------------------------------
-        void Cubemap::Build(const std::array<Rendering::Texture::Descriptor, 6>& in_descs, const std::array<Rendering::Texture::TextureDataUPtr, 6>& in_datas)
+        void Cubemap::Build(const std::array<Rendering::Texture::Descriptor, 6>& in_descs, const std::array<Rendering::Texture::TextureDataUPtr, 6>& in_datas, bool in_mipMap)
         {
             Destroy();
             
             glGenTextures(1, &m_cubemapHandle);
             Bind();
+            
+            if(in_mipMap == true)
+            {
+                glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+            }
+            m_hasMipMaps = in_mipMap;
             
             for(u32 i=0; i<in_descs.size(); ++i)
             {
@@ -361,14 +367,6 @@ namespace ChilliSource
             
             m_hasWrapModeChanged = true;
 		}
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        void Cubemap::GenerateMipMaps()
-        {
-            Bind();
-            glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
-            m_hasMipMaps = true;
-        }
         //--------------------------------------------------
         //--------------------------------------------------
         void Cubemap::Destroy()
