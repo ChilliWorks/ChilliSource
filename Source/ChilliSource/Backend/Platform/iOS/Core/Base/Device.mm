@@ -49,7 +49,7 @@ namespace ChilliSource
                 @autoreleasepool
                 {
                     NSString * type = [[UIDevice currentDevice] model];
-                    return [NSStringUtils newStringWithNSString:type];
+                    return [NSStringUtils newUTF8StringWithNSString:type];
                 }
             }
             //----------------------------------------------
@@ -92,7 +92,7 @@ namespace ChilliSource
                 @autoreleasepool
                 {
                     NSString* version = [[UIDevice currentDevice] systemVersion];
-                    return [NSStringUtils newStringWithNSString:version];
+                    return [NSStringUtils newUTF8StringWithNSString:version];
                 }
             }
             //---------------------------------------------
@@ -106,11 +106,11 @@ namespace ChilliSource
                     NSString* countryCode = [locale objectForKey:NSLocaleCountryCode];
                     if (countryCode != nil && [countryCode length] > 0)
                     {
-                        return [NSStringUtils newStringWithNSString:languageCode] + "_" + [NSStringUtils newStringWithNSString:countryCode];
+                        return [NSStringUtils newUTF8StringWithNSString:languageCode] + "_" + [NSStringUtils newUTF8StringWithNSString:countryCode];
                     }
                     else
                     {
-                        return [NSStringUtils newStringWithNSString:languageCode];
+                        return [NSStringUtils newUTF8StringWithNSString:languageCode];
                     }
                 }
             }
@@ -156,12 +156,12 @@ namespace ChilliSource
                             uid = [UIDevice currentDevice].identifierForVendor;
                         }
                         
-                        return [NSStringUtils newStringWithNSString:[uid UUIDString]];
+                        return [NSStringUtils newUTF8StringWithNSString:[uid UUIDString]];
                     }
                     else
                     {
                         NSString* udid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
-                        return [NSStringUtils newStringWithNSString:udid];
+                        return [NSStringUtils newUTF8StringWithNSString:udid];
                     }
                 }
             }

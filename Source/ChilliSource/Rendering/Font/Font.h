@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Resource/Resource.h>
-#include <ChilliSource/Core/String/UTF8String.h>
+#include <ChilliSource/Core/String/UTF8StringUtils.h>
 
 #include <unordered_map>
 
@@ -40,13 +40,13 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        const Core::UTF8String::Char k_returnCharacter = '\n';
-        const Core::UTF8String::Char k_tabCharacter = '\t';
-        const Core::UTF8String::Char k_spaceCharacter = ' ';
+        const Core::UTF8Char k_returnCharacter = '\n';
+        const Core::UTF8Char k_tabCharacter = '\t';
+        const Core::UTF8Char k_spaceCharacter = ' ';
         
         //The nbsp character has the hex code C2A0 which converts to
         //160 in decimal after utf-8 conversion
-        const Core::UTF8String::Char k_nbspCharacter = 160;
+        const Core::UTF8Char k_nbspCharacter = 160;
         
         //---------------------------------------------------------------------
         /// The font resource describing the size, spacing and kerning of
@@ -58,7 +58,7 @@ namespace ChilliSource
 		{
 		public:
             
-            typedef Core::UTF8String CharacterSet;
+            typedef std::string CharacterSet;
             
             //---------------------------------------------------------------------
             /// Holds the information relating to a single character such as
@@ -193,7 +193,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the character exists in the font
 			//---------------------------------------------------------------------
-			bool TryGetCharacterInfo(Core::UTF8String::Char in_char, CharacterInfo& out_info) const;
+			bool TryGetCharacterInfo(Core::UTF8Char in_char, CharacterInfo& out_info) const;
 			//---------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -213,7 +213,7 @@ namespace ChilliSource
             ///
             /// @return Spacing between characters
             //---------------------------------------------------------------------
-            f32 GetKerningBetweenCharacters(Core::UTF8String::Char in_char1, Core::UTF8String::Char in_char2) const;
+            f32 GetKerningBetweenCharacters(Core::UTF8Char in_char1, Core::UTF8Char in_char2) const;
             //---------------------------------------------------------------------
             /// Sets a value that will be used to offset all kerning values
             ///
@@ -251,7 +251,7 @@ namespace ChilliSource
             
         private:
             
-			std::unordered_map<Core::UTF8String::Char, CharacterInfo> m_characterInfos;
+			std::unordered_map<Core::UTF8Char, CharacterInfo> m_characterInfos;
 			CharacterSet m_characters;
 			
             std::vector<KernLookup> m_kerningLookups;

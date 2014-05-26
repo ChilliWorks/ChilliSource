@@ -54,7 +54,7 @@
     }
     else
     {
-        CS_LOG_ERROR([NSStringUtils newStringWithNSString:[error localizedDescription]]);
+        CS_LOG_ERROR([NSStringUtils newUTF8StringWithNSString:[error localizedDescription]]);
         emailComposer->OnResult(controller, MFMailComposeResultFailed);
     }
 }

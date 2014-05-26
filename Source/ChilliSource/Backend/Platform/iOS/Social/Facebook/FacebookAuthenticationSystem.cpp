@@ -33,7 +33,7 @@ namespace ChilliSource
                 
                 for (u32 i=0; i<in_strings.size(); ++i)
                 {
-                    NSString* string = [NSStringUtils newNSStringWithString:in_strings[i]];
+                    NSString* string = [NSStringUtils newNSStringWithUTF8String:in_strings[i]];
                     [result addObject: string];
                     [string release];
                 }
@@ -136,7 +136,7 @@ namespace ChilliSource
                     if(m_authenticateDelegate)
                     {
                         AuthenticateResponse response;
-                        response.m_token = [NSStringUtils newStringWithNSString:[[in_session accessTokenData] accessToken]];
+                        response.m_token = [NSStringUtils newUTF8StringWithNSString:[[in_session accessTokenData] accessToken]];
                         response.m_result = AuthenticateResult::k_success;
                         m_authenticateDelegate(response);
                         m_authenticateDelegate = nullptr;
@@ -172,7 +172,7 @@ namespace ChilliSource
         //----------------------------------------------------
         std::string FacebookAuthenticationSystem::GetActiveToken() const
 		{
-			return [NSStringUtils newStringWithNSString:FBSession.activeSession.accessTokenData.accessToken];
+			return [NSStringUtils newUTF8StringWithNSString:FBSession.activeSession.accessTokenData.accessToken];
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -285,7 +285,7 @@ namespace ChilliSource
         //----------------------------------------------------
         bool FacebookAuthenticationSystem::HasPermission(const std::string& in_permission) const
         {
-            NSString* permission = [NSStringUtils newNSStringWithString:in_permission];
+            NSString* permission = [NSStringUtils newNSStringWithUTF8String:in_permission];
             NSInteger result = [FBSession.activeSession.permissions indexOfObject:permission];
             [permission release];
             return (result != NSNotFound);

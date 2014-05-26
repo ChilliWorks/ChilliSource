@@ -147,7 +147,7 @@ namespace ChilliSource
                 
             }
 #elif defined (CS_TARGETPLATFORM_IOS)
-            NSString* message = [NSStringUtils newNSStringWithString:in_message];
+            NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
             NSLog(@"[Chilli Source] %@", message);
             [message release];
 #else

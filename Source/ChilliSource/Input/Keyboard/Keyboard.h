@@ -11,7 +11,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <functional>
@@ -75,7 +74,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            typedef std::function<void(const Core::UTF8String&, bool*)> TextInputEventDelegate;
+            typedef std::function<void(const std::string&, bool*)> TextInputEventDelegate;
             //-------------------------------------------------------
             /// Factory method from creating a new platform specific
             /// instance of the keyboard system.
@@ -103,15 +102,15 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return The currently text input buffer.
+            /// @return The current text input buffer (UTF-8).
             //-------------------------------------------------------
-			virtual const Core::UTF8String& GetText() const = 0;
+			virtual const std::string& GetText() const = 0;
             //-------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param The new text input buffer.
+            /// @param The new text input buffer (UTF-8).
             //-------------------------------------------------------
-            virtual void SetText(const Core::UTF8String& in_text) = 0;
+            virtual void SetText(const std::string& in_text) = 0;
             //-------------------------------------------------------
             /// Sets the type of keyboard to display if using a
             /// virtual keyboard. This must be set prior to the keyboard

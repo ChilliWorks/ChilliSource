@@ -41,11 +41,11 @@ namespace ChilliSource
             ///
             /// @param ID
             /// @param SystemConfirmDialogDelegate
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
+            /// @param Title text (UTF-8)
+            /// @param Message text (UTF-8)
+            /// @param Confirm text (UTF-8)
             //------------------------------------------------------
-            void ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm) override;
+            void ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm) override;
             //-----------------------------------------------------
             /// Display a system confirmation dialog with the given
             /// ID and delegate.
@@ -54,20 +54,20 @@ namespace ChilliSource
             ///
             /// @param ID
             /// @param SystemConfirmDialogDelegate
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
-            /// @param Cancel text
+            /// @param Title text (UTF-8)
+            /// @param Message text (UTF-8)
+            /// @param Confirm text (UTF-8)
+            /// @param Cancel text (UTF-8)
             //-----------------------------------------------------
-            void ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm, const Core::UTF8String& in_cancel) override;
+            void ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel) override;
             //-----------------------------------------------------
             /// Display a toast notification with the given text
             ///
             /// @author I Copland
             ///
-            /// @param The text to display.
+            /// @param The text to display (UTF-8).
             //-----------------------------------------------------
-            void MakeToast(const Core::UTF8String& in_text) override;
+            void MakeToast(const std::string& in_text) override;
             //------------------------------------------------------
             /// Triggered from a system dialog confirmation event
             ///

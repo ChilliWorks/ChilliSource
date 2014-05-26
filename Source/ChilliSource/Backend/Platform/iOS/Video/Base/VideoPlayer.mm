@@ -110,7 +110,7 @@ namespace ChilliSource
                 
                 std::string filePath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(in_storageLocation, in_fileName);
                 
-                NSString* urlString = [NSStringUtils newNSStringWithString:filePath];
+                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:filePath];
                 NSURL* pMovieURL = [NSURL fileURLWithPath:urlString];
                 [urlString release];
                 

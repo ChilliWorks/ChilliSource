@@ -31,6 +31,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ColourUtils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Core/String/UTF8StringUtils.h>
 #include <ChilliSource/GUI/Label/Label.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Material/Material.h>
@@ -76,7 +77,7 @@ namespace ChilliSource
             /// @param Character
             /// @param Font
             //----------------------------------------------------------------------------
-            f32 GetCharacterWidth(Core::UTF8String::Char in_character, const FontCSPtr& in_font)
+            f32 GetCharacterWidth(Core::UTF8Char in_character, const FontCSPtr& in_font)
             {
                 Font::CharacterInfo charInfo;
                 if(in_font->TryGetCharacterInfo(in_character, charInfo) == true)
@@ -93,7 +94,7 @@ namespace ChilliSource
             ///
             /// @return Whether the character can safely be line broken on.
             //----------------------------------------------------------------------------
-            bool IsBreakableCharacter(Core::UTF8String::Char in_character)
+            bool IsBreakableCharacter(Core::UTF8Char in_character)
             {
                 return in_character == ' ' || in_character == '\t' || in_character == '\n' || in_character == '-';
             }
@@ -102,17 +103,17 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Text
             /// @param Iterator pointing to start
+            /// @param Iterator pointing to end
             /// @param Font
             //----------------------------------------------------------------------------
-            f32 CalculateDistanceToNextBreak(const Core::UTF8String& in_text, Core::UTF8String::iterator in_itStart, const FontCSPtr& in_font)
+            f32 CalculateDistanceToNextBreak(std::string::const_iterator in_itStart, std::string::const_iterator in_itEnd, const FontCSPtr& in_font)
             {
                 f32 totalWidth = 0.0f;
                 
-                while(in_itStart < in_text.end())
+                while(in_itStart < in_itEnd)
                 {
-                    auto nextCharacter = in_text.next(in_itStart);
+                    auto nextCharacter = Core::UTF8StringUtils::Next(in_itStart);
                     
                     if(IsBreakableCharacter(nextCharacter) == true)
                     {
@@ -130,20 +131,20 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Text
+            /// @param Text (UTF-8)
             /// @param [Out] Array of lines split by '\n'
             //----------------------------------------------------------------------------
-            void SplitByNewLine(const Core::UTF8String& in_text, std::vector<Core::UTF8String>& out_lines)
+            void SplitByNewLine(const std::string& in_text, std::vector<std::string>& out_lines)
             {
-                Core::UTF8String::iterator it = (Core::UTF8String::iterator)in_text.begin();
-                Core::UTF8String line;
+                auto it = in_text.begin();
+                std::string line;
                 while(it < in_text.end())
                 {
-                    Core::UTF8String::Char character = in_text.next(it);
+                    auto character = Core::UTF8StringUtils::Next(it);
                     
                     if(character != '\n')
                     {
-                        line.appendChar(character);
+                        Core::UTF8StringUtils::Append(character, line);
                     }
                     else
                     {
@@ -164,23 +165,23 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Text
+            /// @param Text (UTF-8)
             /// @param Font
             /// @param Text scale
             /// @param Bounds
             /// @param [Out] Array of lines split to fit in bounds
             //----------------------------------------------------------------------------
-            void SplitByBounds(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, const Core::Vector2& in_bounds, std::vector<Core::UTF8String>& out_lines)
+            void SplitByBounds(const std::string& in_text, const FontCSPtr& in_font, f32 in_textScale, const Core::Vector2& in_bounds, std::vector<std::string>& out_lines)
             {
                 f32 maxLineWidth = in_bounds.x;
  
-                Core::UTF8String::iterator it = (Core::UTF8String::iterator)in_text.begin();
-                Core::UTF8String line;
+                auto it = in_text.begin();
+                std::string line;
                 f32 currentLineWidth = 0.0f;
                 
                 while(it < in_text.end())
                 {
-                    auto character = in_text.next(it);
+                    auto character = Core::UTF8StringUtils::Next(it);
                     currentLineWidth += (GetCharacterWidth(character, in_font) * in_textScale);
                     
                     //If we come across a character on which we can wrap we need
@@ -188,7 +189,7 @@ namespace ChilliSource
                     //whether we need to wrap now
                     if(IsBreakableCharacter(character) == true)
                     {
-                        f32 nextBreakWidth = currentLineWidth + (CalculateDistanceToNextBreak(in_text, it, in_font) * in_textScale);
+                        f32 nextBreakWidth = currentLineWidth + (CalculateDistanceToNextBreak(it, in_text.end(), in_font) * in_textScale);
                         
                         if(nextBreakWidth >= maxLineWidth && line.size() > 0)
                         {
@@ -205,7 +206,7 @@ namespace ChilliSource
                     if(it < in_text.end())
                     {
                         auto itNext = it;
-                        auto nextCharacter = in_text.next(itNext);
+                        auto nextCharacter = Core::UTF8StringUtils::Next(itNext);
                         nextCharacterWidth = GetCharacterWidth(nextCharacter, in_font) * in_textScale;
                     }
                     
@@ -216,7 +217,7 @@ namespace ChilliSource
                         currentLineWidth = 0.0f;
                     }
                     
-                    line.appendChar(character);
+                    Core::UTF8StringUtils::Append(character, line);
                 }
                 
                 if(line.size() > 0)
@@ -238,7 +239,7 @@ namespace ChilliSource
             ///
             /// @return Display characer info
             //----------------------------------------------------------------------------
-            CanvasRenderer::DisplayCharacterInfo BuildCharacter(Core::UTF8String::Char in_character, const FontCSPtr& in_font, f32 in_cursorX, f32 in_cursorY, f32 in_textScale)
+            CanvasRenderer::DisplayCharacterInfo BuildCharacter(Core::UTF8Char in_character, const FontCSPtr& in_font, f32 in_cursorX, f32 in_cursorY, f32 in_textScale)
             {
                 CanvasRenderer::DisplayCharacterInfo result;
                 
@@ -543,7 +544,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        CanvasRenderer::BuiltText CanvasRenderer::BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
+        CanvasRenderer::BuiltText CanvasRenderer::BuildText(const std::string& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
                                                             const Core::Vector2& in_bounds, u32 in_numLines, GUI::TextJustification in_horizontal, GUI::TextJustification in_vertical) const
         {
             BuiltText result;
@@ -557,7 +558,7 @@ namespace ChilliSource
             //Split the string into lines by the forced line breaks (i.e. the \n)
             //- |The quick brown fox| jumped over
             //- |the ferocious honey| badger
-            std::vector<Core::UTF8String> linesOnNewLine;
+            std::vector<std::string> linesOnNewLine;
             SplitByNewLine(in_text, linesOnNewLine);
             
             //Split the lines further based on the line width, breakable characters and the bounds
@@ -565,7 +566,7 @@ namespace ChilliSource
             //- |jumped over        |
             //- |the ferocious honey|
             //- |badger             |
-            std::vector<Core::UTF8String> linesOnBounds;
+            std::vector<std::string> linesOnBounds;
             for(const auto& line : linesOnNewLine)
             {
                 SplitByBounds(line, in_font, in_textScale, in_bounds, linesOnBounds);
@@ -587,10 +588,11 @@ namespace ChilliSource
             for(u32 lineIdx=0; lineIdx<numLines; ++lineIdx)
             {
                 u32 lineStartIdx = result.m_characters.size();
-                u32 numCharacters = linesOnBounds[lineIdx].size();
-                for(u32 charIdx=0; charIdx<numCharacters; ++charIdx)
+
+                auto characterIt = linesOnBounds[lineIdx].begin();
+                while(characterIt < linesOnBounds[lineIdx].end())
                 {
-                    auto character = linesOnBounds[lineIdx][charIdx];
+                    auto character = Core::UTF8StringUtils::Next(characterIt);
                     auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_textScale));
                     
                     cursorX += builtCharacter.m_size.x;

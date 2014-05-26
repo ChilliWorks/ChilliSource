@@ -49,9 +49,9 @@ namespace ChilliSource
 			/// @author S Downie
 			///
 			/// @param Valid file stream
-			/// @param [Out] The text split into lines
+			/// @param [Out] The text split into lines of UTF8 codepoints
 			//----------------------------------------------------
-            void LoadLocalisedText(FileStreamSPtr& in_fileStream, std::vector<UTF8String>& out_text)
+            void LoadLocalisedText(FileStreamSPtr& in_fileStream, std::vector<std::string>& out_text)
 			{
 				// Read file
 				std::string fileBuffer;
@@ -108,7 +108,7 @@ namespace ChilliSource
 					}
 					else
 					{
-                        out_text.push_back(UTF8String(strTextLine));
+                        out_text.push_back(strTextLine);
 						strTextLine.clear();
 					}
 				}
@@ -178,7 +178,7 @@ namespace ChilliSource
                     }
 				}
                 
-                std::vector<UTF8String> values;
+                std::vector<std::string> values;
 				LoadLocalisedText(textFile, values);
                 
                 textResource->Build(keys, values);

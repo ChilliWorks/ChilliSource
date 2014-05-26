@@ -129,7 +129,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Text to convert to display characters
+            /// @param Text to convert to display characters (UTF-8)
             /// @param Font
             /// @param Text scale
             /// @param Line spacing
@@ -140,7 +140,7 @@ namespace ChilliSource
             ///
             /// @return Built text struct containing all the character infos
             //----------------------------------------------------------------------------
-            BuiltText BuildText(const Core::UTF8String& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
+            BuiltText BuildText(const std::string& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
                                 const Core::Vector2& in_bounds, u32 in_numLines, GUI::TextJustification in_horizontal, GUI::TextJustification in_vertical) const;
             //----------------------------------------------------------------------------
             /// Build the sprites for each given character and render them to screen.

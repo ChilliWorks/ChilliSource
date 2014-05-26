@@ -50,7 +50,7 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
-		void LocalisedText::Build(const std::vector<std::string>& in_keys, const std::vector<UTF8String>& in_values)
+		void LocalisedText::Build(const std::vector<std::string>& in_keys, const std::vector<std::string>& in_values)
 		{
 			CS_ASSERT(in_keys.size() == in_values.size(), "Localised text must have equal numbers of keys and values");
 
@@ -62,7 +62,7 @@ namespace ChilliSource
 		}
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
-        const UTF8String& LocalisedText::GetText(const std::string& in_key) const
+        const std::string& LocalisedText::GetText(const std::string& in_key) const
         {
 			auto it = m_text.find(in_key);
 
@@ -72,7 +72,7 @@ namespace ChilliSource
 			}
 
 			CS_LOG_ERROR("No localised text for key: " + in_key);
-			return StringUtils::UTF8_BLANK;
+			return StringUtils::BLANK;
         }
 	}
 }

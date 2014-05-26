@@ -31,7 +31,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
-#include <ChilliSource/Core/String/UTF8String.h>
 
 #include <unordered_map>
 
@@ -42,6 +41,8 @@ namespace ChilliSource
 		//----------------------------------------------------------------------
 		/// Holds a resource loaded from the master text for a particular language.
 		/// The text comprises of Ids which act as the key and the text value.
+        ///
+        /// All localised text is in UTF-8 encoding format
 		///
 		/// @author S Downie
 		//----------------------------------------------------------------------
@@ -65,17 +66,17 @@ namespace ChilliSource
 			/// @author S Downie
 			///
 			/// @param Keys
-			/// @param Values
+			/// @param Values - list of strings containing UTF8 codepoints
 			//---------------------------------------------------------------------
-			void Build(const std::vector<std::string>& in_keys, const std::vector<UTF8String>& in_values);
+			void Build(const std::vector<std::string>& in_keys, const std::vector<std::string>& in_values);
             //---------------------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @param String key
 			///
-			/// @return The localised text string that maps to this key
+			/// @return String containing UTF8 codepoints that maps to this key
 			//---------------------------------------------------------------------
-			const UTF8String& GetText(const std::string& in_key) const;
+			const std::string& GetText(const std::string& in_key) const;
 
 		private:
 
@@ -98,7 +99,7 @@ namespace ChilliSource
             
         private:
             
-			std::unordered_map<std::string, UTF8String> m_text;
+			std::unordered_map<std::string, std::string> m_text;
 		};
 	}
 }

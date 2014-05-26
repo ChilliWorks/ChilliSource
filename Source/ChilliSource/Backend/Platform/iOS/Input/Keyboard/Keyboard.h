@@ -61,15 +61,15 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return The currently text input buffer.
+            /// @return The current text input buffer (UTF-8).
             //-------------------------------------------------------
-			const Core::UTF8String& GetText() const override;
+			const std::string& GetText() const override;
             //-------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param The new text input buffer.
+            /// @param The new text input buffer (UTF-8).
             //-------------------------------------------------------
-            void SetText(const Core::UTF8String& in_text) override;
+            void SetText(const std::string& in_text) override;
             //-------------------------------------------------------
             /// Sets the type of keyboard to display if using a
             /// virtual keyboard. This must be set prior to the keyboard
@@ -161,7 +161,7 @@ namespace ChilliSource
             Core::Event<TextInputEventDelegate> m_textInputReceivedDelegate;
             Core::Event<KeyboardEventDelegate> m_textInputDisabledDelegate;
             bool m_enabled;
-            Core::UTF8String m_text;
+            std::string m_text;
 		};
 	}
 }
