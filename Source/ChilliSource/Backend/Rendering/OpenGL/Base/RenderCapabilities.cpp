@@ -66,8 +66,12 @@ namespace ChilliSource
 #endif
             
 #endif
-            
-            m_areDepthTexturesSupported = CheckForOpenGLExtension("GL_OES_depth_texture");
+
+#ifdef CS_OPENGLVERSION_STANDARD
+			m_areDepthTexturesSupported = CheckForOpenGLExtension("GL_ARB_depth_texture");
+#elif defined(CS_OPENGLVERSION_ES)
+			m_areDepthTexturesSupported = CheckForOpenGLExtension("GL_OES_depth_texture");
+#endif
             m_areShadowMapsSupported = (m_areDepthTexturesSupported && areHighPrecFragmentsSupported);
             glGetIntegerv(GL_MAX_TEXTURE_SIZE, (s32*)&m_maxTextureSize);
             glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (s32*)&m_maxTextureUnits);

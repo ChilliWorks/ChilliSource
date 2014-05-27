@@ -80,6 +80,13 @@ namespace ChilliSource
             /// frame buffer object
             //------------------------------------------------------
 			bool CreateAndAttachDepthBuffer();
+			//------------------------------------------------------
+			/// Create and Attach Colour Buffer
+			///
+			/// Instantiate a render buffer and bind it to the
+			/// frame buffer object
+			//------------------------------------------------------
+			bool CreateAndAttachColourBuffer();
             
 			GLuint mFrameBuffer;
 			GLuint mRenderBuffer;

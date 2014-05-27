@@ -166,7 +166,16 @@ namespace ChilliSource
             {
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(inpColourTexture)->GetTextureHandle(), 0);
             }
-            
+//Regular OpenGL must always have a colour buffer bound
+#ifdef CS_OPENGLVERSION_STANDARD
+			else
+			{
+				if (CreateAndAttachColourBuffer() == false)
+				{
+					CS_LOG_ERROR("Failed to attach Colour Buffer to render target.");
+				}
+			}
+#endif
             if (inpDepthTexture != nullptr)
             {
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(inpDepthTexture)->GetTextureHandle(), 0);
@@ -230,6 +239,33 @@ namespace ChilliSource
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating and attaching depth buffer.");
             return success;
+		}
+		//------------------------------------------------------
+		/// Create and Attach Colour Buffer
+		///
+		/// Instantiate a render buffer and bind it to the
+		/// frame buffer object
+		//------------------------------------------------------
+		bool RenderTarget::CreateAndAttachColourBuffer()
+		{
+			BindFrameBuffer(mFrameBuffer);
+			CreateRenderBuffer(&mRenderBuffer);
+
+			glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB, mudwWidth, mudwHeight);
+
+			//Attach the depth buffer to the framebuffer
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, mRenderBuffer);
+
+			bool success = true;
+#ifdef CS_ENABLE_DEBUG
+			//Check it has worked
+			GLint red = 0;
+			glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_RED_SIZE, (GLint*)&red);
+			success = ((glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) && red != 0);
+#endif
+
+			CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating and attaching colour buffer.");
+			return success;
 		}
 		//------------------------------------------------------
 		/// Bind
