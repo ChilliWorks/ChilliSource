@@ -66,7 +66,7 @@ namespace ChilliSource
                     case Rendering::VertexDataSemantic::k_jointIndex:
                         return "a_jointIndices";
                 }
-
+                
                 CS_LOG_FATAL("No such vertex semantic type");
                 return "";
             }
@@ -109,9 +109,9 @@ namespace ChilliSource
 		: mpCurrentMaterial(nullptr), m_currentShader(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0),
         mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mpLightComponent(nullptr),
         mbBlendFunctionLocked(false), mbInvalidateLightingCache(true),
-        mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities)), m_hasContextBeenBackedUp(false)
+		mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities)), m_hasContextBeenBackedUp(false), mpbLastVertexAttribState(nullptr), mpbCurrentVertexAttribState(nullptr)
 		{
-
+            
 		}
         //----------------------------------------------------------
 		/// Is A
@@ -131,7 +131,7 @@ namespace ChilliSource
             
             m_textureUnitSystem = Core::Application::Get()->GetSystem<TextureUnitSystem>();
             CS_ASSERT(m_textureUnitSystem, "Cannot find required system: Texture Unit System.");
-
+            
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
             mpRenderCapabilities->DetermineCapabilities();
             
@@ -153,7 +153,7 @@ namespace ChilliSource
         void RenderSystem::Resume()
         {
 			mbInvalidateAllCaches = true;
-
+            
             RestoreContext();
         }
         //----------------------------------------------------------
@@ -300,7 +300,7 @@ namespace ChilliSource
         {
             EnableAlphaBlending(inMaterial->IsTransparencyEnabled());
             SetBlendFunction(inMaterial->GetSourceBlendMode(), inMaterial->GetDestBlendMode());
-
+            
             EnableFaceCulling(inMaterial->IsFaceCullingEnabled());
             SetCullFace(inMaterial->GetCullFace());
             
@@ -414,7 +414,7 @@ namespace ChilliSource
             {
                 Rendering::DirectionalLightComponent* pLightComponent = (Rendering::DirectionalLightComponent*)inpLightComponent;
                 out_shader->SetUniform("u_lightDir", pLightComponent->GetDirection(), Shader::UniformNotFoundPolicy::k_failSilent);
-  
+                
                 if(pLightComponent->GetShadowMapPtr() != nullptr)
                 {
                     out_shader->SetUniform("u_shadowTolerance", pLightComponent->GetShadowTolerance(), Shader::UniformNotFoundPolicy::k_failSilent);
@@ -471,7 +471,7 @@ namespace ChilliSource
             {
                 glViewport(0, 0, mudwViewWidth, mudwViewHeight);
             }
-
+            
 			EnableColourWriting(true);
             EnableDepthWriting(true);
             
@@ -546,10 +546,10 @@ namespace ChilliSource
             Core::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
             Core::Application::Get()->GetDebugStats()->AddToEvent("Verts", inpBuffer->GetVertexCount());
 #endif
-
+            
 			//Set the new model view matrix based on the camera view matrix and the object matrix
             static Core::Matrix4 matWorldViewProj;
-			matWorldViewProj = inmatWorld * mmatViewProj; 
+			matWorldViewProj = inmatWorld * mmatViewProj;
             m_currentShader->SetUniform("u_wvpMat", matWorldViewProj, Shader::UniformNotFoundPolicy::k_failSilent);
             m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
             if(m_currentShader->HasUniform("u_normalMat"))
@@ -867,13 +867,13 @@ namespace ChilliSource
                 //attribute. In this case the attribute will not actually get bound and therefore will cause weird issues when the same attribute is then used
                 //with a shader that does actually need it since the cache beleives it to already be set and wont set it again.
                 
-//                if(it->second.pBuffer == inpBuffer &&
-//                   it->second.size == indwSize &&
-//                   it->second.type == ineType &&
-//                   it->second.normalised == inbNormalized &&
-//                   it->second.stride == indwStride &&
-//                   it->second.offset == inpOffset)
-//                    return;
+                //                if(it->second.pBuffer == inpBuffer &&
+                //                   it->second.size == indwSize &&
+                //                   it->second.type == ineType &&
+                //                   it->second.normalised == inbNormalized &&
+                //                   it->second.stride == indwStride &&
+                //                   it->second.offset == inpOffset)
+                //                    return;
                 
                 it->second.pBuffer = inpBuffer;
                 it->second.size = indwSize;
@@ -893,7 +893,7 @@ namespace ChilliSource
                 set.offset = inpOffset;
                 m_attributeCache.insert(std::make_pair(in_attribName, set));
             }
-  
+            
             m_currentShader->SetAttribute(in_attribName, indwSize, ineType, inbNormalized, indwStride, inpOffset);
         }
 		//------------------------------------------------------------
@@ -1039,8 +1039,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void RenderSystem::Destroy()
 		{
-            free(mpbCurrentVertexAttribState);
-            free(mpbLastVertexAttribState);
+			if (mpbCurrentVertexAttribState != nullptr)
+			{
+				free(mpbCurrentVertexAttribState);
+			}
+			if (mpbLastVertexAttribState != nullptr)
+			{
+				free(mpbLastVertexAttribState);
+			}
             
             m_resolutionChangeConnection = nullptr;
 		}
