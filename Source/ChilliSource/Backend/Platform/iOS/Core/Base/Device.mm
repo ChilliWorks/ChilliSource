@@ -34,7 +34,6 @@
 #import <UIKit/UIKit.h>
 #import <sys/types.h>
 #import <sys/sysctl.h>
-#import <AdSupport/ASIdentifierManager.h>
 
 namespace ChilliSource
 {
@@ -140,29 +139,15 @@ namespace ChilliSource
             //-----------------------------------------------
             std::string GetUDID()
             {
-                //TODO: address issues with Apple UDID policies
                 @autoreleasepool
                 {
                     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0f)
                     {
-                        NSUUID* uid = nil;
-                        
-                        if([ASIdentifierManager sharedManager].advertisingTrackingEnabled)
-                        {
-                            uid = [ASIdentifierManager sharedManager].advertisingIdentifier;
-                        }
-                        else
-                        {
-                            uid = [UIDevice currentDevice].identifierForVendor;
-                        }
-                        
+                        NSUUID* uid = [UIDevice currentDevice].identifierForVendor;
                         return [NSStringUtils newUTF8StringWithNSString:[uid UUIDString]];
                     }
-                    else
-                    {
-                        NSString* udid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
-                        return [NSStringUtils newUTF8StringWithNSString:udid];
-                    }
+                    
+                    return "";
                 }
             }
             //-------------------------------------------------
