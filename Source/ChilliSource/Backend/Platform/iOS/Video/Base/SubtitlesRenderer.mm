@@ -12,7 +12,6 @@
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Base/Screen.h>
 #import <ChilliSource/Core/String/StringUtils.h>
-#import <ChilliSource/Core/String/UTF8String.h>
 #import <ChilliSource/Core/Localisation/LocalisedText.h>
 #import <ChilliSource/Video/Base/Subtitles.h>
 

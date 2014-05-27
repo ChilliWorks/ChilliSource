@@ -136,7 +136,7 @@ namespace ChilliSource
             //---Text
             if(insParams.TryGetValue("Text", strValue))
             {
-                SetText(Core::UTF8String(strValue));
+                SetText(strValue);
             }
             //---Number of lines
             if(insParams.TryGetValue("NumLines", strValue))
@@ -216,22 +216,16 @@ namespace ChilliSource
             }
         }
         //-------------------------------------------------------
-        /// Set Text
-        ///
-        /// @param Text string
         //-------------------------------------------------------
-        void Label::SetText(const Core::UTF8String& instrText)
+        void Label::SetText(const std::string& instrText)
         {
             Text = instrText;
             
             mCachedChars.clear();
         }
         //-------------------------------------------------------
-        /// Get Text
-        ///
-        /// @returnText string
         //-------------------------------------------------------
-        const Core::UTF8String& Label::GetText() const
+        const std::string& Label::GetText() const
         {
             return Text;
         }

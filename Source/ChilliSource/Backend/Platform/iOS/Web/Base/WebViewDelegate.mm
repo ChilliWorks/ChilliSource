@@ -74,7 +74,7 @@
 //----------------------------------------------------
 -(void)webView:(UIWebView*)webView didFailLoadWithError:(NSError*)error
 {
-    CS_LOG_ERROR([NSStringUtils newStringWithNSString:[error localizedDescription]]);
+    CS_LOG_ERROR([NSStringUtils newUTF8StringWithNSString:[error localizedDescription]]);
     
     if(webViewSystem)
     {

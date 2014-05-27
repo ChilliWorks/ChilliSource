@@ -107,7 +107,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Present
 		//--------------------------------------------------------------
-		void EmailComposerJavaInterface::Present(const std::vector<Core::UTF8String>& inastrRecipientAddresses, const Core::UTF8String& instrSubject, const Core::UTF8String& instrContents,
+		void EmailComposerJavaInterface::Present(const std::vector<std::string>& inastrRecipientAddresses, const std::string& instrSubject, const std::string& instrContents,
 				bool inbFormatAsHtml, const std::string& instrAttachmentFilename, const ResultDelegate& inDelegate)
 		{
 			mDelegate = inDelegate;
@@ -117,16 +117,16 @@ namespace ChilliSource
 			//build the recipient list
 			u32 udwCount = 0;
 			jobjectArray ajstrRecipients = pEnv->NewObjectArray(inastrRecipientAddresses.size(), pEnv->FindClass("java/lang/String"), pEnv->NewStringUTF(""));
-			for(std::vector<Core::UTF8String>::const_iterator it = inastrRecipientAddresses.begin(); it != inastrRecipientAddresses.end(); ++it)
+			for(auto it = inastrRecipientAddresses.begin(); it != inastrRecipientAddresses.end(); ++it)
 			{
-				jstring jstrRecipient = JavaInterfaceUtils::CreateJStringFromUTF8String(*it);
+				jstring jstrRecipient = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
 				pEnv->SetObjectArrayElement(ajstrRecipients,udwCount++, jstrRecipient);
 				pEnv->DeleteLocalRef(jstrRecipient);
 			}
 
-			jstring jstrSubject = JavaInterfaceUtils::CreateJStringFromUTF8String(instrSubject);
-			jstring jstrContents = JavaInterfaceUtils::CreateJStringFromUTF8String(instrContents);
-			jstring jstrAttachmentFilename = JavaInterfaceUtils::CreateJStringFromUTF8String(instrAttachmentFilename);
+			jstring jstrSubject = JavaInterfaceUtils::CreateJStringFromSTDString(instrSubject);
+			jstring jstrContents = JavaInterfaceUtils::CreateJStringFromSTDString(instrContents);
+			jstring jstrAttachmentFilename = JavaInterfaceUtils::CreateJStringFromSTDString(instrAttachmentFilename);
 
 			//call method
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Present"), ajstrRecipients, jstrSubject, jstrContents, inbFormatAsHtml, jstrAttachmentFilename);

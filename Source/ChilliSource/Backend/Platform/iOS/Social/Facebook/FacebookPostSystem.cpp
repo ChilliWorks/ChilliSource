@@ -40,12 +40,12 @@ namespace ChilliSource
             //----------------------------------------------------
             NSDictionary* CreateNSDisctionaryFromPostDesc(const Social::FacebookPostSystem::PostDesc& in_desc)
             {
-                NSString* url = [NSStringUtils newNSStringWithString:in_desc.m_url];
-                NSString* picUrl = [NSStringUtils newNSStringWithString:in_desc.m_picUrl];
-                NSString* name = [NSStringUtils newNSStringWithString:in_desc.m_name];
-                NSString* caption = [NSStringUtils newNSStringWithString:in_desc.m_caption];
-                NSString* description = [NSStringUtils newNSStringWithString:in_desc.m_description];
-                NSString* to = [NSStringUtils newNSStringWithString:in_desc.m_to];
+                NSString* url = [NSStringUtils newNSStringWithUTF8String:in_desc.m_url];
+                NSString* picUrl = [NSStringUtils newNSStringWithUTF8String:in_desc.m_picUrl];
+                NSString* name = [NSStringUtils newNSStringWithUTF8String:in_desc.m_name];
+                NSString* caption = [NSStringUtils newNSStringWithUTF8String:in_desc.m_caption];
+                NSString* description = [NSStringUtils newNSStringWithUTF8String:in_desc.m_description];
+                NSString* to = [NSStringUtils newNSStringWithUTF8String:in_desc.m_to];
                 
                 NSDictionary* postParams = [[NSMutableDictionary alloc] initWithObjectsAndKeys: url, @"link", picUrl, @"picture", name, @"name", caption, @"caption", description, @"description", to, @"to", nil];
                 
@@ -128,14 +128,14 @@ namespace ChilliSource
                         break;
                 }
                 
-                NSString* nsReciptients = [NSStringUtils newNSStringWithString:recipients];
+                NSString* nsReciptients = [NSStringUtils newNSStringWithUTF8String:recipients];
                 
                 NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjectsAndKeys:nsReciptients, requestType, nil];
                 
                 [nsReciptients release];
                 
-                NSString* description = [NSStringUtils newNSStringWithString:in_desc.m_description];
-                NSString* caption = [NSStringUtils newNSStringWithString:in_desc.m_caption];
+                NSString* description = [NSStringUtils newNSStringWithUTF8String:in_desc.m_description];
+                NSString* caption = [NSStringUtils newNSStringWithUTF8String:in_desc.m_caption];
                 
                 [FBWebDialogs presentRequestsDialogModallyWithSession:nil message:description title:caption parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error)
                  {
@@ -190,8 +190,8 @@ namespace ChilliSource
         //----------------------------------------------------
         void FacebookPostSystem::PostNative(const PostDesc& in_desc)
         {
-            NSString* initialText = [NSStringUtils newNSStringWithString:in_desc.m_name + " " + in_desc.m_description];
-            NSString* url = [NSStringUtils newNSStringWithString:in_desc.m_url];
+            NSString* initialText = [NSStringUtils newNSStringWithUTF8String:in_desc.m_name + " " + in_desc.m_description];
+            NSString* url = [NSStringUtils newNSStringWithUTF8String:in_desc.m_url];
             
             [FBDialogs presentOSIntegratedShareDialogModallyFrom:[UIApplication sharedApplication].keyWindow.rootViewController initialText:initialText image:nil url:[NSURL URLWithString:url]
                                                          handler:^(FBOSIntegratedShareDialogResult result, NSError *error)

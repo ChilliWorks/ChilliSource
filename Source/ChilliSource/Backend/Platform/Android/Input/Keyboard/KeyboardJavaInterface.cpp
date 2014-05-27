@@ -39,7 +39,7 @@ void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextAdded(JNIEn
 	ChilliSource::Android::KeyboardJavaInterfaceSPtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
 	if (pKeyboardJI != nullptr)
 	{
-		CSCore::UTF8String strText = ChilliSource::Android::JavaInterfaceUtils::CreateUTF8StringFromJString(injstrText);
+		std::string strText = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(injstrText);
 		auto task = std::bind(&ChilliSource::Android::KeyboardJavaInterface::OnTextAdded, pKeyboardJI.get(), strText);
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
@@ -217,7 +217,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// On Text Added
 		//-----------------------------------------------
-		void KeyboardJavaInterface::OnTextAdded(const Core::UTF8String& instrText)
+		void KeyboardJavaInterface::OnTextAdded(const std::string& instrText)
 		{
 			if (mTextAddedDelegate != nullptr)
 			{

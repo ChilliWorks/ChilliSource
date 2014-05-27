@@ -38,7 +38,7 @@ namespace ChilliSource
                 NSDictionary* nsParams = (NSDictionary*)[in_uiLocal.userInfo objectForKey:@"Params"];
                 for(id key in nsParams)
                 {
-                    notification->m_params.SetValue([NSStringUtils newStringWithNSString:[nsParams objectForKey:key]], [NSStringUtils newStringWithNSString:key]);
+                    notification->m_params.SetValue([NSStringUtils newUTF8StringWithNSString:[nsParams objectForKey:key]], [NSStringUtils newUTF8StringWithNSString:key]);
                 }
                 
                 return notification;
@@ -82,13 +82,13 @@ namespace ChilliSource
                     nsNotification.timeZone = [NSTimeZone defaultTimeZone];
                     nsNotification.alertAction = @"View";
                     
-                    NSString* body = [NSStringUtils newNSStringWithString:in_params.GetValue("Body")];
+                    NSString* body = [NSStringUtils newNSStringWithUTF8String:in_params.GetValue("Body")];
                     nsNotification.alertBody = body;
                     [body release];
                     
                     if(in_params.HasKey("Sound") == true)
                     {
-                        NSString* sound = [NSStringUtils newNSStringWithString:in_params.GetValue("Sound")];
+                        NSString* sound = [NSStringUtils newNSStringWithUTF8String:in_params.GetValue("Sound")];
                         nsNotification.soundName = sound;
                         [sound release];
                     }
@@ -102,8 +102,8 @@ namespace ChilliSource
                     NSMutableDictionary* nsParams = [[NSMutableDictionary alloc] init];
                     for(Core::ParamDictionary::const_iterator it = in_params.begin(); it != in_params.end(); ++it)
                     {
-                        NSString* key = [NSStringUtils newNSStringWithString:it->first];
-                        NSString* value = [NSStringUtils newNSStringWithString:it->second];
+                        NSString* key = [NSStringUtils newNSStringWithUTF8String:it->first];
+                        NSString* value = [NSStringUtils newNSStringWithUTF8String:it->second];
                         [nsParams setObject:key forKey:value];
                         [key release];
                         [value release];

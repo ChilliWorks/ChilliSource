@@ -37,15 +37,15 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// Set Text
             ///
-            /// @param Text string
+            /// @param Text string (UTF-8)
             //-------------------------------------------------------
-            virtual void SetText(const Core::UTF8String& instrText);
+            virtual void SetText(const std::string& instrText);
 			//-------------------------------------------------------
 			/// Get Text
 			///
-			/// @returnText string
+			/// @return Text string (UTF-8)
 			//-------------------------------------------------------
-			const Core::UTF8String& GetText() const;
+			const std::string& GetText() const;
             //-------------------------------------------------------
             /// @author S Downie
             ///
@@ -344,7 +344,7 @@ namespace ChilliSource
 			void OnTransformChanged(u32 inudwInvalidFlags);
             
 			//---Properties
-			DECLARE_PROPERTY_A(Core::UTF8String, Text, SetText, GetText);
+			DECLARE_PROPERTY_A(std::string, Text, SetText, GetText);
 			DECLARE_PROPERTY_A(std::string, LocalisedTextID, SetLocalisedTextID, GetLocalisedTextID);
 			DECLARE_PROPERTY_A(u32, MaxNumLines, SetNumberOfLines, GetNumberOfLines);
 			DECLARE_PROPERTY_A(f32, TextScale, SetTextScale, GetTextScale);

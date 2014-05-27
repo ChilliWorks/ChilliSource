@@ -38,7 +38,8 @@ namespace ChilliSource
 	{
 		//---------------------------------------------------------------
 		/// Provider that loads localised text files and corresponding
-		/// keys based on the current device language.
+		/// keys based on the current device language. All text is
+        /// UTF8 encoded
 		///
 		/// @author S Downie
 		//---------------------------------------------------------------

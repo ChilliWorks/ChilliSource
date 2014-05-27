@@ -70,7 +70,7 @@ namespace ChilliSource
             @autoreleasepool
             {
                 NSString* version = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-                return [NSStringUtils newStringWithNSString:version];
+                return [NSStringUtils newUTF8StringWithNSString:version];
             }
         }
         //-------------------------------------------------------

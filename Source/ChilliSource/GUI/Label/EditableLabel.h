@@ -122,10 +122,6 @@ namespace ChilliSource
 			u32 GetInputLimit() const;
             //-------------------------------------------------------
 			/// Clears the text
-			///
-			/// 
-			///
-			///
 			//-------------------------------------------------------
             void ClearText();
             //-------------------------------------------------
@@ -146,27 +142,7 @@ namespace ChilliSource
             /// @param Capitalisation Type
             //------------------------
             void SetKeyboardCapitalisationMethod(Input::Keyboard::Capitalisation ineCapitalisationType);
-            //-------------------------------------------------------
-			/// SetTextSeparator
-			///
-			/// Sets the separator for text display
-			/// @param The string to use as a separator
-			//-------------------------------------------------------
-            void SetTextSeparator(const Core::UTF8String& inutf8strSeparator);
-            //-------------------------------------------------------
-			/// SetTextSeparatorSpacing
-			///
-			/// Sets the characters between separators for diplay
-			/// @param The number of spaces between seperators
-			//-------------------------------------------------------
-            void SetTextSeparatorSpacing(u32 inu32Spacing);
-            //-------------------------------------------------------
-			/// SetText
-			///
-			/// Overridden set text method, updates cached separator string
-            /// @param instrText text to set as entry
-			//-------------------------------------------------------
-            void SetText(const Core::UTF8String& instrText);
+
 		protected:
 
 			//-------------------------------------------------
@@ -181,10 +157,10 @@ namespace ChilliSource
 			///
             /// @author S Downie
             ///
-			/// @param Contents of the keyboard.
+			/// @param Contents of the keyboard (UTF-8).
 			/// @param [Out] Whether to accept the input.
 			//----------------------------------------------------
-			void OnKeyboardTextInputReceived(const Core::UTF8String& in_text, bool* out_rejectText);
+			void OnKeyboardTextInputReceived(const std::string& in_text, bool* out_rejectText);
 			//-------------------------------------------------
 			/// Called when Text Input is disabled on the
             /// keyboard.
@@ -231,12 +207,6 @@ namespace ChilliSource
 			/// @param Time between frames
 			//-------------------------------------------------------
 			void Update(f32 infDt);
-            //-------------------------------------------------------
-			/// GetTextWithSeparators
-			///
-			/// Returns the stored text separated by set separators
-			//-------------------------------------------------------
-            Core::UTF8String GetTextWithSeparators() const;
 
 		private:
 
@@ -258,9 +228,6 @@ namespace ChilliSource
 
 			static EditableLabel* pKeyboardListener;
             
-            Core::UTF8String mutf8strTextWithSeparators;
-            Core::UTF8String mutf8strSeparator;
-            u32 mu32SeparatorSpacing;
             bool mbSelected;
 		};
 	}

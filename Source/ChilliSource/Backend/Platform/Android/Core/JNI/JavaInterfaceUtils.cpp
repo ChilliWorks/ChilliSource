@@ -31,19 +31,6 @@ namespace ChilliSource
 				return nullptr;
 			}
 			//--------------------------------------------------------------------------------------
-			/// Create JString From UTF8String
-			//--------------------------------------------------------------------------------------
-			jstring CreateJStringFromUTF8String(const Core::UTF8String& instrString)
-			{
-				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				if (pEnv != nullptr)
-				{
-					jstring jstrNewString = pEnv->NewStringUTF(instrString.ToASCII().c_str());
-					return jstrNewString;
-				}
-				return nullptr;
-			}
-			//--------------------------------------------------------------------------------------
 			/// Create STDString From JString
 			//--------------------------------------------------------------------------------------
 			std::string CreateSTDStringFromJString(jstring injstrString)
@@ -75,24 +62,6 @@ namespace ChilliSource
 						std::string strOutput((const char*)pBytes, indwLength);
 						pEnv->ReleaseByteArrayElements(injabyArray, pBytes, 0);
 						return strOutput;
-					}
-				}
-				return "";
-			}
-			//--------------------------------------------------------------------------------------
-			/// Create UTF8String From JString
-			//--------------------------------------------------------------------------------------
-			Core::UTF8String CreateUTF8StringFromJString(jstring injstrString)
-			{
-				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				if (pEnv != nullptr && injstrString != nullptr)
-				{
-					const char * cString = pEnv->GetStringUTFChars(injstrString, JNI_FALSE);
-					if (cString != nullptr)
-					{
-						Core::UTF8String utf8String = Core::UTF8String(cString);
-						pEnv->ReleaseStringUTFChars(injstrString, cString);
-						return utf8String;
 					}
 				}
 				return "";

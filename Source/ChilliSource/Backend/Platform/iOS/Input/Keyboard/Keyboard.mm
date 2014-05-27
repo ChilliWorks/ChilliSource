@@ -81,13 +81,13 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        const Core::UTF8String& Keyboard::GetText() const
+        const std::string& Keyboard::GetText() const
         {
             return m_text;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void Keyboard::SetText(const Core::UTF8String& in_text)
+        void Keyboard::SetText(const std::string& in_text)
         {
             m_text = in_text;
             NSString* text = [NSStringUtils newNSStringWithUTF8String:m_text];
@@ -167,7 +167,7 @@ namespace ChilliSource
             //Inform subscripted to this event and receive if text was rejected lower down
             bool rejectText = false;
             
-            Core::UTF8String text = [NSStringUtils newUTF8StringWithNSString:in_text];
+            auto text = [NSStringUtils newUTF8StringWithNSString:in_text];
             m_textInputReceivedDelegate.NotifyConnections(text, &rejectText);
             
             if(rejectText == false)

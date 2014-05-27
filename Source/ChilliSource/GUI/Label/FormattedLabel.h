@@ -41,11 +41,11 @@ namespace ChilliSource
 			/// For instance "My string contains [var =a] variable
 			/// and [var= b] variable called a and b
 			///
-			/// @param Text string
+			/// @param Text string (UTF-8)
 			/// @param Params
             /// @param Bool Overwrite
 			//-------------------------------------------------------
-			void SetText(const Core::UTF8String& instrText, const Core::ParamDictionary& insParams,bool inbOverwriteText = false);
+			void SetText(const std::string& instrText, const Core::ParamDictionary& insParams,bool inbOverwriteText = false);
 		};
 	}
 }

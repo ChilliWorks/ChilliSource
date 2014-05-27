@@ -29,7 +29,7 @@ namespace ChilliSource
         ///
         /// Default
         //-------------------------------------------------
-        EditableLabel::EditableLabel() : mpKeyboard(nullptr), SecureEntry(false), CharacterLimit(0), mbShowKeyboard(false), mfTimeToShow(0.0f), mu32SeparatorSpacing(0), mutf8strSeparator(""), mutf8strTextWithSeparators(""), mbSelected(false)
+        EditableLabel::EditableLabel() : mpKeyboard(nullptr), SecureEntry(false), CharacterLimit(0), mbShowKeyboard(false), mfTimeToShow(0.0f), mbSelected(false)
         {
             
         }
@@ -39,7 +39,7 @@ namespace ChilliSource
         /// From param dictionary
         //-------------------------------------------------
         EditableLabel::EditableLabel(const Core::ParamDictionary& insParams) 
-        : Label(insParams), mpKeyboard(nullptr), CharacterLimit(0), SecureEntry(false), mbShowKeyboard(false), mfTimeToShow(0.0f), mu32SeparatorSpacing(0), mutf8strSeparator(""), mutf8strTextWithSeparators("")
+        : Label(insParams), mpKeyboard(nullptr), CharacterLimit(0), SecureEntry(false), mbShowKeyboard(false), mfTimeToShow(0.0f)
         {
 			std::string strValue;
 
@@ -201,24 +201,23 @@ namespace ChilliSource
         }
         //----------------------------------------------------
 		//----------------------------------------------------
-		void EditableLabel::OnKeyboardTextInputReceived(const Core::UTF8String& instrText, bool* inbRejectInput)
+		void EditableLabel::OnKeyboardTextInputReceived(const std::string& instrText, bool* inbRejectInput)
 		{
-            //We can reject the text if it exceeds our input limit
-            if(CharacterLimit > 0 && instrText.length() > CharacterLimit)
+            if(CharacterLimit > 0)
             {
-                *inbRejectInput = true;
+                //We can reject the text if it exceeds our input limit
+                auto length = Core::UTF8StringUtils::CalcLength(instrText.begin(), instrText.end());
+                if(length > CharacterLimit)
+                {
+                    *inbRejectInput = true;
+                    return;
+                }
             }
-            else
-            {
-                Label::SetText(instrText);
-                *inbRejectInput = false;
-                
-                // if we're using separators, calculate the separated string now
-                if(mutf8strSeparator.size() > 0)
-                    mutf8strTextWithSeparators = GetTextWithSeparators();
 
-                m_textInputReceivedEvent.NotifyConnections(this);
-            }
+            Label::SetText(instrText);
+            *inbRejectInput = false;
+            
+            m_textInputReceivedEvent.NotifyConnections(this);
 		}
         //-------------------------------------------------
         //-------------------------------------------------
@@ -320,24 +319,18 @@ namespace ChilliSource
                 inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::k_zero, Core::Vector2::k_zero), AbsCol, Rendering::AlignmentAnchor::k_middleCentre);
             }
         
-            Core::UTF8String strutf8DisplayString(Text);
-            
-            // handle separators if we're using one
-            if(mutf8strSeparator.length() > 0)
+            if(Text.length() > 0)
             {
-                strutf8DisplayString = mutf8strTextWithSeparators;
-            }
-            
-            if(strutf8DisplayString.length() > 0)
-            {
+                std::string strutf8DisplayString(Text);
+                
                 if(SecureEntry)
                 {
-                    Core::UTF8String strSecureText;
-                    u32 udwTextLength = strutf8DisplayString.length();
+                    std::string strSecureText;
+                    u32 udwTextLength = Core::UTF8StringUtils::CalcLength(strutf8DisplayString.begin(), strutf8DisplayString.end());
                     
                     for(u32 i=0; i<udwTextLength; ++i)
                     {
-                        strSecureText.appendChar('*');
+                        strSecureText.append("*");
                     }
                     
                     strutf8DisplayString = strSecureText;
@@ -361,22 +354,6 @@ namespace ChilliSource
             {
                 inpCanvas->PopClipBounds();
             }
-        }
-        //-------------------------------------------------------
-        /// SetText
-        ///
-        /// Overridden set text method, updates cached separator string
-        /// @param instrText text to set as entry
-        //-------------------------------------------------------
-        void EditableLabel::SetText(const Core::UTF8String& instrText)
-        {
-            Label::SetText(instrText);
-            
-            // handle cached separator string
-            if(mutf8strSeparator.size() > 0)
-                mutf8strTextWithSeparators = GetTextWithSeparators();
-            else
-                mutf8strTextWithSeparators = instrText;
         }
         //-------------------------------------------------
         /// SetKeyboardInputTypeNumeric
@@ -407,55 +384,6 @@ namespace ChilliSource
         {
             if(mpKeyboard)
                 mpKeyboard->SetCapitalisation(ineCapitalisationType);
-        }
-        //-------------------------------------------------
-        /// SetText
-        ///
-        /// override to permit last text length tracking
-        //-------------------------------------------------
-        Core::UTF8String EditableLabel::GetTextWithSeparators() const
-        {
-            Core::UTF8String strutf8Out("");
-            
-            // put in spacers for readability
-            for(u32 i(0), sep(0); i < Text.size(); ++i)
-            {
-                strutf8Out += Text[i];
-                
-                // every seglength, push a separator, unless we're at the end
-                if(sep == mu32SeparatorSpacing-1 && i < Text.size()-1)
-                {
-                    for(u32 s(0); s < mutf8strSeparator.size(); ++s)
-                    {
-                        strutf8Out += mutf8strSeparator[s];
-                    }
-                    sep = 0;
-                }
-                else
-                {
-                    ++sep;
-                }
-            }
-            
-            return strutf8Out;
-        }
-        //-------------------------------------------------
-        /// SetTextSeparator
-        ///
-        /// Sets the separator that will be used in GetTextWithSeparators
-        //-------------------------------------------------
-        void EditableLabel::SetTextSeparator(const Core::UTF8String& inutf8strSeparator)
-        {
-            mutf8strSeparator = inutf8strSeparator;
-        }
-        //-------------------------------------------------
-        /// SetTextSeparatorSpacing
-        ///
-        /// Sets the chars between separators, 0 for no separators
-        //-------------------------------------------------
-        void EditableLabel::SetTextSeparatorSpacing(u32 inu32Spacing)
-        {
-            mu32SeparatorSpacing = inu32Spacing;
         }
         //-------------------------------------------------
         /// Destructor

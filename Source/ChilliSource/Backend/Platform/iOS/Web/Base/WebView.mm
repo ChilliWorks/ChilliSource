@@ -102,7 +102,7 @@ namespace ChilliSource
                     
                     m_anchor = "";
                     
-                    NSString* urlString = [NSStringUtils newNSStringWithString:in_url];
+                    NSString* urlString = [NSStringUtils newNSStringWithUTF8String:in_url];
                     NSURL* url = [NSURL URLWithString:urlString];
                     [urlString release];
                     
@@ -155,8 +155,8 @@ namespace ChilliSource
                 pHTMLFile->GetAll(strHTMLFileContents);
                 pHTMLFile->Close();
                 
-                NSString* pstrHTML = [NSStringUtils newNSStringWithString:strHTMLFileContents];
-                NSString* urlString = [NSStringUtils newNSStringWithString:fullFilePath];
+                NSString* pstrHTML = [NSStringUtils newNSStringWithUTF8String:strHTMLFileContents];
+                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:fullFilePath];
                 [m_webView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:urlString]];
                 [urlString release];
                 [pstrHTML release];
@@ -175,7 +175,7 @@ namespace ChilliSource
 		{
             @autoreleasepool
             {
-                NSString* urlString = [NSStringUtils newNSStringWithString:in_url];
+                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:in_url];
                 NSURL* url = [NSURL URLWithString:urlString];
                 [urlString release];
                 
@@ -234,7 +234,7 @@ namespace ChilliSource
             if(m_anchor.length() > 0)
             {
                 std::string strJavaScript = "window.location.href = '" + m_anchor + "';";
-                NSString* nsJavaString = [NSStringUtils newNSStringWithString:strJavaScript];
+                NSString* nsJavaString = [NSStringUtils newNSStringWithUTF8String:strJavaScript];
                 [m_webView stringByEvaluatingJavaScriptFromString:nsJavaString];
                 [nsJavaString release];
             }

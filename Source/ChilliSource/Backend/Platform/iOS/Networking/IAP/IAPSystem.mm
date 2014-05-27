@@ -116,8 +116,8 @@ namespace ChilliSource
             }
             
             TransactionSPtr transaction(new Transaction());
-            transaction->m_productId = [NSStringUtils newStringWithNSString:in_productID];
-            transaction->m_transactionId = [NSStringUtils newStringWithNSString:in_skTransaction.transactionIdentifier];
+            transaction->m_productId = [NSStringUtils newUTF8StringWithNSString:in_productID];
+            transaction->m_transactionId = [NSStringUtils newUTF8StringWithNSString:in_skTransaction.transactionIdentifier];
             if(hasReceipt)
             {
                 transaction->m_receipt = Core::BaseEncoding::Base64Encode((s8*)[in_skTransaction.transactionReceipt bytes], [in_skTransaction.transactionReceipt length]);
@@ -145,7 +145,7 @@ namespace ChilliSource
 			
 			for (u32 i=0; i<in_productIds.size(); ++i)
             {
-                NSString* projectId = [NSStringUtils newNSStringWithString:in_productIds[i]];
+                NSString* projectId = [NSStringUtils newNSStringWithUTF8String:in_productIds[i]];
 				[idSet addObject:projectId];
                 [projectId release];
 			}
@@ -186,15 +186,15 @@ namespace ChilliSource
                 for(SKProduct* product in in_products)
                 {
                     ProductDesc description;
-                    description.m_id = [NSStringUtils newStringWithNSString:product.productIdentifier];
-                    description.m_name = [NSStringUtils newStringWithNSString:product.localizedTitle];
-                    description.m_description = [NSStringUtils newStringWithNSString:product.localizedDescription];
+                    description.m_id = [NSStringUtils newUTF8StringWithNSString:product.productIdentifier];
+                    description.m_name = [NSStringUtils newUTF8StringWithNSString:product.localizedTitle];
+                    description.m_description = [NSStringUtils newUTF8StringWithNSString:product.localizedDescription];
                     
                     [formatter setLocale:product.priceLocale];
-                    description.m_formattedPrice = [NSStringUtils newStringWithNSString:[formatter stringFromNumber:product.price]];
+                    description.m_formattedPrice = [NSStringUtils newUTF8StringWithNSString:[formatter stringFromNumber:product.price]];
                     
                     NSLocale* storeLocale = product.priceLocale;
-                    description.m_countryCode = [NSStringUtils newStringWithNSString:(NSString*)CFLocaleGetValue((CFLocaleRef)storeLocale, kCFLocaleCountryCode)];
+                    description.m_countryCode = [NSStringUtils newUTF8StringWithNSString:(NSString*)CFLocaleGetValue((CFLocaleRef)storeLocale, kCFLocaleCountryCode)];
                     
                     descriptions.push_back(description);
                 }
@@ -216,7 +216,7 @@ namespace ChilliSource
         void IAPSystem::RequestProductPurchase(const std::string& in_productId)
         {
             CS_ASSERT(ContainsProductId(m_productRegInfos, in_productId), "Products must be registered with the IAP system before purchasing");
-            NSString* productID = [NSStringUtils newNSStringWithString:in_productId];
+            NSString* productID = [NSStringUtils newNSStringWithUTF8String:in_productId];
             [m_storeKitSystem requestPurchaseWithProductID:productID andQuantity:1];
             [productID release];
         }
@@ -229,7 +229,7 @@ namespace ChilliSource
             
             m_transactionCloseDelegate = in_delegate;
             
-            NSString* transactionId = [NSStringUtils newNSStringWithString:in_transaction->m_transactionId];
+            NSString* transactionId = [NSStringUtils newNSStringWithUTF8String:in_transaction->m_transactionId];
             [m_storeKitSystem closeTransactionWithID:transactionId];
             [transactionId release];
             

@@ -61,7 +61,7 @@ namespace ChilliSource
 			/// @param Background colour
 			/// @param video complete delegate
 			//--------------------------------------------------------------
-			void Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour, const VideoCompleteDelegate& in_completeDelegate);
+			void Present(bool inbInAPK, const std::string& instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour, const VideoCompleteDelegate& in_completeDelegate);
 			//--------------------------------------------------------------
 			/// Get Time
 			///
@@ -87,7 +87,7 @@ namespace ChilliSource
 			///
 			/// Creates a new subtitle object.
 			///
-			/// @param The text.
+			/// @param The text (UTF-8).
 			/// @param The font name.
 			/// @param The font size.
 			/// @param The alignment
@@ -97,7 +97,7 @@ namespace ChilliSource
 			/// @param Height.
 			/// @return The subtitle id.
 			//--------------------------------------------------------------
-			s64 CreateSubtitle(const Core::UTF8String& inText, const std::string& instrFontName, u32 inudwFontSize, const std::string& instrAlignment, f32 infX, f32 infY, f32 infWidth, f32 infHeight);
+			s64 CreateSubtitle(const std::string& inText, const std::string& instrFontName, u32 inudwFontSize, const std::string& instrAlignment, f32 infX, f32 infY, f32 infWidth, f32 infHeight);
 			//--------------------------------------------------------------
 			/// Set Subtitle Colour
 			///

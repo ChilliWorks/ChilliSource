@@ -37,7 +37,7 @@ namespace ChilliSource
             {
                 if (in_error != nil)
                 {
-                    return [NSStringUtils newStringWithNSString:[in_error localizedDescription]];
+                    return [NSStringUtils newUTF8StringWithNSString:[in_error localizedDescription]];
                 }
                 
                 return nil;
@@ -139,7 +139,7 @@ namespace ChilliSource
                 std::vector<std::string> output;
                 for(NSString* filePath in in_objFilePaths)
                 {
-                    output.push_back([NSStringUtils newStringWithNSString:filePath]);
+                    output.push_back([NSStringUtils newUTF8StringWithNSString:filePath]);
                 }
                 return output;
             }
@@ -408,7 +408,7 @@ namespace ChilliSource
                 
                 NSError* error = nil;
                 
-                NSString* nsPath = [NSStringUtils newNSStringWithString:path];
+                NSString* nsPath = [NSStringUtils newNSStringWithUTF8String:path];
                 [[NSFileManager defaultManager] removeItemAtPath:nsPath error:&error];
                 [nsPath release];
                 
@@ -434,7 +434,7 @@ namespace ChilliSource
                 
                 NSError* error = nil;
                 
-                NSString* nsPath = [NSStringUtils newNSStringWithString:directoryPath];
+                NSString* nsPath = [NSStringUtils newNSStringWithUTF8String:directoryPath];
                 [[NSFileManager defaultManager] removeItemAtPath:nsPath error:&error];
                 [nsPath release];
                 
@@ -703,7 +703,7 @@ namespace ChilliSource
             @autoreleasepool
             {
                 NSMutableArray* contents = [NSMutableArray array];
-                NSString* directory = [NSStringUtils newNSStringWithString:m_bundlePath];
+                NSString* directory = [NSStringUtils newNSStringWithUTF8String:m_bundlePath];
                 
                 NSError* error = nil;
                 [contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:directory error:&error]];

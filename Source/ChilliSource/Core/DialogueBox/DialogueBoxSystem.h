@@ -56,11 +56,11 @@ namespace ChilliSource
             ///
             /// @param ID
             /// @param SystemConfirmDialogDelegate
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
+            /// @param Title text (UTF-8)
+            /// @param Message text (UTF-8)
+            /// @param Confirm text (UTF-8)
             //------------------------------------------------------
-            virtual void ShowSystemDialogue(u32 in_id, const DialogueDelegate& in_delegate, const UTF8String& in_title, const UTF8String& in_message, const UTF8String& in_confirm) = 0;
+            virtual void ShowSystemDialogue(u32 in_id, const DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm) = 0;
             //-----------------------------------------------------
             /// Display a system confirmation dialog with the given
             /// ID and delegate.
@@ -69,20 +69,20 @@ namespace ChilliSource
             ///
             /// @param ID
             /// @param SystemConfirmDialogDelegate
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
-            /// @param Cancel text
+            /// @param Title text (UTF-8)
+            /// @param Message text (UTF-8)
+            /// @param Confirm text (UTF-8)
+            /// @param Cancel text (UTF-8)
             //-----------------------------------------------------
-            virtual void ShowSystemConfirmDialogue(u32 in_id, const DialogueDelegate& in_delegate, const UTF8String& in_title, const UTF8String& in_message, const UTF8String& in_confirm, const UTF8String& in_cancel) = 0;
+            virtual void ShowSystemConfirmDialogue(u32 in_id, const DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel) = 0;
             //-----------------------------------------------------
             /// Display a toast notification with the given text
             ///
             /// @author I Copland
             ///
-            /// @param The text to display.
+            /// @param The text to display (UTF-8).
             //-----------------------------------------------------
-            virtual void MakeToast(const UTF8String& in_text) = 0;
+            virtual void MakeToast(const std::string& in_text) = 0;
             //----------------------------------------------------
 			/// Destructor.
             ///

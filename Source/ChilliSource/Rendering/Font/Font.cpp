@@ -28,7 +28,6 @@
 
 #include <ChilliSource/Rendering/Font/Font.h>
 
-#include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 #include <algorithm>
@@ -39,7 +38,7 @@ namespace ChilliSource
 	{
         namespace
         {
-            const Core::UTF8String::Char k_similarSpaceCharacter = '-';
+            const Core::UTF8Char k_similarSpaceCharacter = '-';
             const u32 k_spacesPerTab = 5;
         }
         
@@ -101,11 +100,16 @@ namespace ChilliSource
             const f32 textureAtlasWidth = (f32)in_charData->GetWidth();
             const f32 textureAtlasHeight = (f32)in_charData->GetHeight();
 
-			for (u32 i=0; i<m_characters.length(); ++i)
+            u32 frameIdx = 0;
+            
+            auto it = m_characters.begin();
+            while(it < m_characters.end())
             {
+                auto character = Core::UTF8StringUtils::Next(it);
+            
 				CharacterInfo info;
 				
-				const TextureAtlas::Frame& frame = in_charData->GetFrame(i);
+				const TextureAtlas::Frame& frame = in_charData->GetFrame(frameIdx);
 							
 				info.m_UVs.vOrigin.x = (f32)(frame.m_texCoordU - 0.5f) / textureAtlasWidth;
 				info.m_UVs.vOrigin.y = (f32)(frame.m_texCoordV - 0.5f) / textureAtlasHeight;
@@ -120,8 +124,9 @@ namespace ChilliSource
                 
                 m_lineHeight = std::max((f32)frame.m_height, m_lineHeight);
 
-                Core::UTF8String::Char utf8Char = m_characters[i];
-				m_characterInfos.insert(std::make_pair(utf8Char, info));
+				m_characterInfos.insert(std::make_pair(character, info));
+                
+                ++frameIdx;
 			}
 		
 			
@@ -152,7 +157,7 @@ namespace ChilliSource
         }
 		//-------------------------------------------
 		//-------------------------------------------
-		bool Font::TryGetCharacterInfo(Core::UTF8String::Char in_char, CharacterInfo& out_info) const
+		bool Font::TryGetCharacterInfo(Core::UTF8Char in_char, CharacterInfo& out_info) const
 		{
 			auto itCharEntry = m_characterInfos.find(in_char);
 			
@@ -166,7 +171,7 @@ namespace ChilliSource
 		}
         //-------------------------------------------
         //-------------------------------------------
-        f32 Font::GetKerningBetweenCharacters(Core::UTF8String::Char in_char1, Core::UTF8String::Char in_char2) const
+        f32 Font::GetKerningBetweenCharacters(Core::UTF8Char in_char1, Core::UTF8Char in_char2) const
         {
             const KernLookup* pLookup = &(*std::lower_bound(m_kerningLookups.begin(), m_kerningLookups.end(), KernLookup(in_char1, 0)));
 			if(nullptr == pLookup || pLookup->m_character != in_char1)
