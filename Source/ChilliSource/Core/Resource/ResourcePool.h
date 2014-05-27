@@ -325,6 +325,7 @@ namespace ChilliSource
             Resource::ResourceId resourceId = GenerateResourceId(in_uniqueId);
             std::shared_ptr<TResourceType> resource(TResourceType::Create());
             resource->SetId(resourceId);
+			resource->SetFilePath(in_uniqueId);
             
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             if(itDescriptor == m_descriptors.end())

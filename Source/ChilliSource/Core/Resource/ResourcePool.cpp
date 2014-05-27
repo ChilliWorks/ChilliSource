@@ -186,6 +186,7 @@ namespace ChilliSource
                 {
                     //The pool is the sole owner so we can safely release the object
                     CS_LOG_ERROR("Resource still in use: " + itResource->second->GetFilePath());
+					error = true;
                 }
             }
             

@@ -57,9 +57,7 @@ namespace ChilliSource
             //-------------------------------------------------------
             Rendering::TextureCSPtr CreateDefaultWhiteTexture()
             {
-                Rendering::TextureCSPtr result;
-                
-                result = Core::Application::Get()->GetResourcePool()->GetResource<Rendering::Texture>("_GUIBackgroundTex");
+                Rendering::TextureCSPtr result = Core::Application::Get()->GetResourcePool()->GetResource<Rendering::Texture>("_GUIBackgroundTex");
                 if(result == nullptr)
                 {
                     const u32 k_numPixels = 4;
