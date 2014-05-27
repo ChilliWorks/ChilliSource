@@ -26,6 +26,7 @@ extern "C"
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
+#include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <Windows.h>
 #endif
 
@@ -150,8 +151,8 @@ namespace ChilliSource
             NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
             NSLog(@"[Chilli Source] %@", message);
             [message release];
-#else
-            std::cout << "[Chilli Source] " + in_message << std::endl;
+#elif defined (CS_TARGETPLATFORM_WINDOWS)
+			OutputDebugString(Windows::WindowsStringUtils::UTF8ToUTF16("[Chilli Source] " + in_message + "\n").c_str());
 #endif
             
 #ifdef CS_ENABLE_LOGTOFILE

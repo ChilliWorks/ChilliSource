@@ -29,6 +29,8 @@
 #include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 
+#include <Windows.h>
+
 //----------------------------------------------------------------------------------
 /// Includes the "main" function as required by Windows and will create
 /// the inherited CS application using the exposed CreateApplication method that
@@ -36,12 +38,14 @@
 ///
 /// @author S Downie
 ///
-/// @param Num arguments from command line
-/// @param Arguments array from command line
+/// @param Handle to current application instance
+/// @param Handle to previous application instance
+/// @param Command line
+/// @param Controls how the window is to be shown (i.e hide, maximize, etc)
 ///
 /// @return Exit status
 //----------------------------------------------------------------------------------
-int main(int in_argc, char* in_argv[])
+int CALLBACK WinMain(_In_ HINSTANCE in_instance, _In_ HINSTANCE in_prevInstance, _In_ LPSTR in_cmdLine, _In_ int in_cmdShow)
 {
     ChilliSource::Core::Application* app = CreateApplication();
     app->Init();
