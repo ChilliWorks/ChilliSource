@@ -475,6 +475,7 @@ namespace ChilliSource
 			m_overlayBatcher->ForceRender();
             
             m_materialGUICache.clear();
+            m_canvasSprite.pMaterial = nullptr;
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
@@ -535,7 +536,6 @@ namespace ChilliSource
             
 			UpdateSpriteData(Convert2DTransformTo3D(in_transform), in_size, in_UVs, in_colour, in_anchor, m_canvasSprite);
             
-            //Draw us!
 			m_overlayBatcher->Render(m_canvasSprite);
             
 #ifdef CS_ENABLE_DEBUGSTATS
@@ -643,6 +643,8 @@ namespace ChilliSource
         void CanvasRenderer::OnDestroy()
         {
             m_overlayBatcher = nullptr;
+            m_materialGUICache.clear();
+            m_canvasSprite.pMaterial = nullptr;
         }
 	}
 }
