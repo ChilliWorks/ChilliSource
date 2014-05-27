@@ -203,6 +203,7 @@ namespace ChilliSource
             std::unordered_map<TextureCSPtr, MaterialCSPtr> m_materialGUICache;
             
             Core::ResourcePool* m_resourcePool;
+            Core::Screen* m_screen;
             MaterialFactory* m_materialFactory;
 		};
 	}
