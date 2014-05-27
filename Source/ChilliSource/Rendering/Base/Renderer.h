@@ -302,6 +302,9 @@ namespace ChilliSource
             
             ICullingPredicateSPtr mpPerspectiveCullPredicate;
             ICullingPredicateSPtr mpOrthoCullPredicate;
+            
+            MaterialCSPtr m_staticDirShadowMaterial;
+            MaterialCSPtr m_animDirShadowMaterial;
 		};
 	}
 }

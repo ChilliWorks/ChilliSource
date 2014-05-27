@@ -88,6 +88,10 @@ namespace ChilliSource
             
             mpPerspectiveCullPredicate = ICullingPredicateSPtr(new FrustumCullPredicate());
             mpOrthoCullPredicate = ICullingPredicateSPtr(new ViewportCullPredicate());
+            
+            auto materialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
+            m_staticDirShadowMaterial = materialFactory->CreateStaticDirectionalShadowMap("_StaticDirShadowMap");
+            m_animDirShadowMaterial = materialFactory->CreateAnimatedDirectionalShadowMap("_AnimDirShadowMap");
         }
 		//----------------------------------------------------------
 		/// Set Transparent Sort Predicate
@@ -376,7 +380,7 @@ namespace ChilliSource
             //Only opaque objects cast and receive shadows
             for(std::vector<RenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
             {
-                (*it)->RenderShadowMap(mpRenderSystem, inpCameraComponent);
+                (*it)->RenderShadowMap(mpRenderSystem, inpCameraComponent, m_staticDirShadowMaterial, m_animDirShadowMaterial);
             }
             
             mpRenderSystem->EndFrame(pRenderTarget);
@@ -504,6 +508,8 @@ namespace ChilliSource
         void Renderer::OnDestroy()
         {
             m_canvas = nullptr;
+            m_staticDirShadowMaterial = nullptr;
+            m_animDirShadowMaterial = nullptr;
         }
 	}
 }

@@ -28,8 +28,6 @@ namespace ChilliSource
 	namespace Rendering
 	{
         CS_DEFINE_NAMEDTYPE(StaticMeshComponent);
-    
-        MaterialCSPtr StaticMeshComponent::mspShadowMapMaterial;
         
         StaticMeshComponent::StaticMeshComponent()
         : mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
@@ -296,14 +294,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Shadow Map
         //----------------------------------------------------------
-        void StaticMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam)
+        void StaticMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap)
 		{
-            if (mspShadowMapMaterial == nullptr)
-            {
-                mspShadowMapMaterial = Core::Application::Get()->GetSystem<MaterialFactory>()->CreateStaticDirectionalShadowMap("_StaticDirShadowMap");
-            }
-            
-			mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {mspShadowMapMaterial}, ShaderPass::k_ambient);
+			mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {in_staticShadowMap}, ShaderPass::k_ambient);
 		}
         //----------------------------------------------------
         //----------------------------------------------------

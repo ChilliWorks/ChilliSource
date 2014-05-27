@@ -128,8 +128,10 @@ namespace ChilliSource
             ///
             /// @param Render system
             /// @param Active camera component
+            /// @param Material to render static shadows with
+            /// @param Material to render skinned shadows with
             //-----------------------------------------------------
-            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam) override {};
+            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap) override {};
 			//-------------------------------------------------
 			/// Set Owning System
 			///
