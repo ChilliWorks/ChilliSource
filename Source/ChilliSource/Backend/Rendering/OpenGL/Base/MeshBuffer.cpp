@@ -395,7 +395,7 @@ namespace ChilliSource
 			CS_SAFEDELETE_ARRAY(mpVertexDataBackup);
 			CS_SAFEDELETE_ARRAY(mpIndexDataBackup);
             
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying mesh buffer.");
+            //CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying mesh buffer.");
 		}
 	}
 }
