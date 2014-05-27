@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_STRING_UTF8STRING_UTILS_H_
-#define _CHILLISOURCE_CORE_STRING_UTF8STRING_UTILS_H_
+#ifndef _CHILLISOURCE_CORE_STRING_UTF8STRINGUTILS_H_
+#define _CHILLISOURCE_CORE_STRING_UTF8STRINGUTILS_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -120,7 +120,7 @@ namespace ChilliSource
             ///
             /// @return Number of characters between begin and end
             //-----------------------------------------------------
-            template<typename TCodePointIter> u32 GetLength(TCodePointIter in_begin, TCodePointIter in_end)
+            template<typename TCodePointIter> u32 CalcLength(TCodePointIter in_begin, TCodePointIter in_end)
             {
                 //UTF-8 is a multi-byte standard which means the characters
                 //are not fixed length but each character contains the 'trail' bytes bit pattern of 10xxxxxx.
@@ -170,7 +170,7 @@ namespace ChilliSource
             ///
             /// @return Sub-string of code points
             //-----------------------------------------------------
-            std::string Substr(const std::string& in_string, u32 in_start, u32 in_length);
+            std::string SubString(const std::string& in_string, u32 in_start, u32 in_length);
         }
     }
 }

@@ -86,7 +86,7 @@ namespace ChilliSource
             }
             //-----------------------------------------------------
             //-----------------------------------------------------
-            std::string Substr(const std::string& in_string, u32 in_start, u32 in_length)
+            std::string SubString(const std::string& in_string, u32 in_start, u32 in_length)
             {
                 if (in_length == 0)
                 {

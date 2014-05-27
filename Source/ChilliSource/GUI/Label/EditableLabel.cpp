@@ -206,7 +206,7 @@ namespace ChilliSource
             if(CharacterLimit > 0)
             {
                 //We can reject the text if it exceeds our input limit
-                auto length = Core::UTF8StringUtils::GetLength(instrText.begin(), instrText.end());
+                auto length = Core::UTF8StringUtils::CalcLength(instrText.begin(), instrText.end());
                 if(length > CharacterLimit)
                 {
                     *inbRejectInput = true;
@@ -326,7 +326,7 @@ namespace ChilliSource
                 if(SecureEntry)
                 {
                     std::string strSecureText;
-                    u32 udwTextLength = Core::UTF8StringUtils::GetLength(strutf8DisplayString.begin(), strutf8DisplayString.end());
+                    u32 udwTextLength = Core::UTF8StringUtils::CalcLength(strutf8DisplayString.begin(), strutf8DisplayString.end());
                     
                     for(u32 i=0; i<udwTextLength; ++i)
                     {

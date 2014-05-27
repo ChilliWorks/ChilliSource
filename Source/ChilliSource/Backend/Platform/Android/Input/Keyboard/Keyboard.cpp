@@ -133,8 +133,8 @@ namespace ChilliSource
 			std::string newText = m_text;
 			if (newText.size() > 0)
 			{
-				s32 newLength = std::max((s32)(Core::UTF8StringUtils::GetLength(m_text.begin(), m_text.end())) - 1, 0);
-				newText = Core::UTF8StringUtils::Substr(m_text, 0, newLength);
+				s32 newLength = std::max((s32)(Core::UTF8StringUtils::CalcLength(m_text.begin(), m_text.end())) - 1, 0);
+				newText = Core::UTF8StringUtils::SubString(m_text, 0, newLength);
 			}
 
 			bool rejectText = false;
