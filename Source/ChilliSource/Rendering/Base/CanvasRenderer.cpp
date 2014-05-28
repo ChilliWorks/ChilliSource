@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ColourUtils.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
 #include <ChilliSource/GUI/Label/Label.h>
@@ -431,6 +432,9 @@ namespace ChilliSource
             RenderSystem* renderSystem = Core::Application::Get()->GetRenderSystem();
             CS_ASSERT(renderSystem != nullptr, "Canvas renderer cannot find render system");
             
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            CS_ASSERT(m_screen != nullptr, "Canvas renderer cannot find screen system");
+            
             m_overlayBatcher = DynamicSpriteBatchUPtr(new DynamicSpriteBatch(renderSystem));
         }
         //----------------------------------------------------------------------------
@@ -493,11 +497,14 @@ namespace ChilliSource
                 Core::Vector2 vNewBottomLeft = in_blPosition;
                 Core::Vector2 vNewTopRight = in_blPosition + in_size;
                 
-                vNewBottomLeft.x = std::max(vNewBottomLeft.x, vOldBottomLeft.x);
-                vNewBottomLeft.y = std::max(vNewBottomLeft.y, vOldBottomLeft.y);
+                //If the scissor region extends outside the bounds of the screen this is undefined behaviour and
+                //the render system may wrap the values causing artefacts. We clamp them here to make sure this
+                //doesn't happen.
+                vNewBottomLeft.x = Core::MathUtils::Clamp(std::max(vNewBottomLeft.x, vOldBottomLeft.x), 0.0f, m_screen->GetResolution().x);
+                vNewBottomLeft.y = Core::MathUtils::Clamp(std::max(vNewBottomLeft.y, vOldBottomLeft.y), 0.0f, m_screen->GetResolution().y);
                 
-                vNewTopRight.x = std::min(vNewTopRight.x, vOldTopRight.x);
-                vNewTopRight.y = std::min(vNewTopRight.y, vOldTopRight.y);
+                vNewTopRight.x = Core::MathUtils::Clamp(std::min(vNewTopRight.x, vOldTopRight.x), 0.0f, m_screen->GetResolution().x);
+                vNewTopRight.y = Core::MathUtils::Clamp(std::min(vNewTopRight.y, vOldTopRight.y), 0.0f, m_screen->GetResolution().y);
                 
                 Core::Vector2 vNewSize = vNewTopRight - vNewBottomLeft;
                 
