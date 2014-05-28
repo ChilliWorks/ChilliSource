@@ -316,13 +316,6 @@ namespace ChilliSource
             glGenTextures(1, &m_texHandle);
             Bind();
             
-            if(in_mipMap == true)
-            {
-                glGenerateMipmap(GL_TEXTURE_2D);
-            }
-            
-            m_hasMipMaps = in_mipMap;
-            
             u8* data = in_data.get();
             
 			switch(in_desc.m_compression)
@@ -340,6 +333,13 @@ namespace ChilliSource
                     UploadImageDataPVR4(m_format, m_width, m_height, data, in_desc.m_dataSize);
 					break;
 			};
+            
+            if(in_mipMap == true)
+            {
+                glGenerateMipmap(GL_TEXTURE_2D);
+            }
+            
+            m_hasMipMaps = in_mipMap;
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while building texture.");
         }
