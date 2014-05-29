@@ -74,7 +74,8 @@ def delete_file(file_path):
 # @author I Copland
 #
 # @param The path.
-# @param The extension.
+# @param The extension. This is not case
+# sensitive.
 # @return Whether or not the path has
 # the given extension.
 #----------------------------------------
@@ -85,12 +86,13 @@ def has_extension(file_path, extension):
 #----------------------------------------
 # Returns a list of all file paths with
 # any of the given extensions in the
-# requested directory.
+# requested directory. 
 #
 # @author I Copland
 #
 # @param The directory path.
-# @param A list of possible extensions.
+# @param A list of possible extensions. This
+# is not case sensitive.
 #----------------------------------------
 def get_file_paths_with_extensions(directory_path, extensions):
     output = []
