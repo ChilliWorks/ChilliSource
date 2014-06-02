@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <GLKit/GLKit.h>
 #import <UIKit/UIKit.h>
 
@@ -89,3 +91,5 @@ namespace ChilliSource
 - (void) setPreferredFPS:(NSUInteger)in_fps;
 
 @end
+
+#endif

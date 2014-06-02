@@ -6,6 +6,8 @@
 //  Copyright 2013 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
 
 #import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
@@ -291,3 +293,5 @@
     [super dealloc];
 }
 @end
+
+#endif

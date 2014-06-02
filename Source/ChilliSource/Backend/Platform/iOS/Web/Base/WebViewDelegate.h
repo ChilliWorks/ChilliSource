@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/ChilliSource.h>
 #import <ChilliSource/Backend/Platform/iOS/Web/Base/WebView.h>
 
@@ -62,3 +64,5 @@
 -(void) onDismissButtonPressed:(id)object;
 
 @end
+
+#endif

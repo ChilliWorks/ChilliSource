@@ -6,6 +6,8 @@
 //  Copyright 2013 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #ifndef _MOFLOW_PLATFORM_IOS_VIDEO_SUBTITLESRENDERER_H_
 #define _MOFLOW_PLATFORM_IOS_VIDEO_SUBTITLESRENDERER_H_
 
@@ -114,5 +116,7 @@
 //--------------------------------------------------------
 -(void) dealloc;
 @end
+
+#endif
 
 #endif

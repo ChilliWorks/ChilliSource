@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_INPUT_KEYBOARD_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_IOS_INPUT_KEYBOARD_H_
 
@@ -56,5 +58,7 @@
 -(VirtualKeyboardDelegate*) initWithKeyboard:(ChilliSource::iOS::Keyboard*) keyboardSystem;
 
 @end
+
+#endif
 
 #endif

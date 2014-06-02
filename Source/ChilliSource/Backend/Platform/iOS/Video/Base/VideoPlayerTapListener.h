@@ -6,6 +6,8 @@
 //  Copyright 2012 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/ChilliSource.h>
 
 #import <Foundation/Foundation.h>
@@ -87,3 +89,5 @@ namespace ChilliSource
 -(void) dealloc;
 
 @end
+
+#endif

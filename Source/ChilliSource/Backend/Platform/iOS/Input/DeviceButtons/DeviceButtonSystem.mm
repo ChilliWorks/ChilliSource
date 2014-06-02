@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Input/DeviceButtons/DeviceButtonSystem.h>
 
 namespace ChilliSource
@@ -47,3 +49,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

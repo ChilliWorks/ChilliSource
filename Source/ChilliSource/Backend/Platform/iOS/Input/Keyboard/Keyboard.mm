@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/Keyboard.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
@@ -221,3 +223,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
 
 #include <ChilliSource/Backend/Platform/iOS/Networking/IAP/StoreKitIAPSystem.h>
 
@@ -281,3 +282,5 @@
 }
 
 @end
+
+#endif

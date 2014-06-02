@@ -6,6 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #ifndef _NS_NOTIFICATION_ADAPTER_H_
 #define _NS_NOTIFICATION_ADAPTER_H_
 
@@ -74,5 +76,7 @@ typedef std::function<void()> NotificationEventDelegate;
 -(void) OnMoviePlayerPlaybackDidFinish;
 
 @end
+
+#endif
 
 #endif

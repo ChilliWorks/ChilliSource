@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_CORE_NOTIFICATION_REMOTENOTIFICATIONSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_IOS_CORE_NOTIFICATION_REMOTENOTIFICATIONSYSTEM_H_
 
@@ -113,5 +115,7 @@ namespace ChilliSource
         };
     }
 }
+
+#endif
 
 #endif

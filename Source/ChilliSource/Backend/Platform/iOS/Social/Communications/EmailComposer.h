@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/ChilliSource.h>
 #import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #import <ChilliSource/Social/Communications/EmailComposer.h>
@@ -148,3 +150,5 @@ namespace ChilliSource
 		 
 	}
 }
+
+#endif

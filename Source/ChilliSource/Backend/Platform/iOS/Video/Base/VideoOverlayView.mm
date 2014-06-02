@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoOverlayView.h>
 
 @implementation VideoOverlayView
@@ -62,3 +64,5 @@
 }
 
 @end
+
+#endif

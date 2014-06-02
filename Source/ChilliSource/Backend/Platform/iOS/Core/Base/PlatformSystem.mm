@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/CSAppDelegate.h>
@@ -84,3 +86,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

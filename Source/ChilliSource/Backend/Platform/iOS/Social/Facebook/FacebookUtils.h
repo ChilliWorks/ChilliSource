@@ -7,6 +7,8 @@
  *
  */
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #ifndef _MOFLO_PLATFORM_IOS_SOCIAL_FACEBOOK_FACEBOOKUTILS_H_
 #define _MOFLO_PLATFORM_IOS_SOCIAL_FACEBOOK_FACEBOOKUTILS_H_
 
@@ -18,5 +20,7 @@
 +(NSDictionary*)parseURLParams:(NSString *)query;
 
 @end
+
+#endif
 
 #endif

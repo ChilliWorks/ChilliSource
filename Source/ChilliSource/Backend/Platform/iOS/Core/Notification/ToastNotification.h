@@ -1,4 +1,6 @@
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #include <ChilliSource/ChilliSource.h>
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -49,3 +51,5 @@
 
 
 @end
+
+#endif

@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #include <ChilliSource/Backend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 
 #import <CoreMotion/CoreMotion.h>
@@ -124,3 +126,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

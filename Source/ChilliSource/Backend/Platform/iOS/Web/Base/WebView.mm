@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Web/Base/WebView.h>
 
 #import <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
@@ -336,4 +338,4 @@ namespace ChilliSource
 	}
 }
 
-
+#endif

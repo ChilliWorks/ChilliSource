@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/CSGLViewController.h>
 
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/Screen.h>
@@ -219,3 +221,5 @@
 }
 
 @end
+
+#endif

@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 
 @implementation NSStringUtils
@@ -35,3 +37,5 @@
 }
 
 @end
+
+#endif

@@ -6,6 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
 
 #import <GameKit/GameKit.h>
@@ -106,3 +108,5 @@ NSNotificationAdapter* gpSharedInstance = nil;
 }
 
 @end
+
+#endif

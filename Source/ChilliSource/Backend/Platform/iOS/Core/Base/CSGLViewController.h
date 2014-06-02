@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <GLKit/GLKit.h>
 
 //-------------------------------------------------------------
@@ -51,3 +53,5 @@
 - (id)initWithDelegate:(id)in_delegate;
 
 @end
+
+#endif

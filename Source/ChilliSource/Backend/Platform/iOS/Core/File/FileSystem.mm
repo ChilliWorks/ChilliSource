@@ -6,6 +6,8 @@
 //  Copyright 2011 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
@@ -835,3 +837,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

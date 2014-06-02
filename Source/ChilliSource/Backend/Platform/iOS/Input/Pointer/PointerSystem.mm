@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #include <ChilliSource/Backend/Platform/iOS/Input/Pointer/PointerSystem.h>
 
 #include <ChilliSource/Core/Base/Application.h>
@@ -94,3 +96,5 @@ namespace ChilliSource
         }
     }
 }
+
+#endif

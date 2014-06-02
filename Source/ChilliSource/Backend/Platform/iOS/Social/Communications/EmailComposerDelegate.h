@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/ChilliSource.h>
 #import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposer.h>
@@ -54,3 +56,5 @@
 -(id) initWithSystem:(ChilliSource::iOS::EmailComposer*)system;
 
 @end
+
+#endif

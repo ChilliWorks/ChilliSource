@@ -45,6 +45,8 @@
  
 */
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <sys/socket.h>
 #import <netinet/in.h>
 #import <netinet6/in6.h>
@@ -271,3 +273,5 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 	return retVal;
 }
 @end
+
+#endif

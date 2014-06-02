@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #include <ChilliSource/Core/Base/Application.h>
 
 #import <UIKit/UIKit.h>
@@ -50,3 +52,5 @@ int main(int in_argc, char* in_argv[])
         return retVal;
     }
 }
+
+#endif

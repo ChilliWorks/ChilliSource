@@ -6,6 +6,8 @@
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #include <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxSystem.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxListener.h>
@@ -103,3 +105,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

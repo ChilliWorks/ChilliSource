@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/ChilliSource.h>
 #import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #import <ChilliSource/Core/Delegate/ConnectableDelegate.h>
@@ -224,3 +226,5 @@ namespace ChilliSource
         };
     }
 }
+
+#endif
