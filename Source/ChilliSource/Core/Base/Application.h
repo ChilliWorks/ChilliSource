@@ -185,42 +185,6 @@ namespace ChilliSource
             /// @author S Downie.
             //-----------------------------------------------------
             void Quit();
-            //-----------------------------------------------------
-			/// Returns the default font described in the App.config
-            /// file.
-			///
-            /// @author S Downie.
-            ///
-            /// @return The default font.
-            //-----------------------------------------------------
-            const Rendering::FontCSPtr& GetDefaultFont() const;
-            //-----------------------------------------------------
-			/// Returns the default mesh described in the App.config
-            /// file.
-            ///
-            /// @author S Downie.
-			///
-            /// @return The default mesh.
-            //-----------------------------------------------------
-            const Rendering::MeshCSPtr& GetDefaultMesh() const;
-            //-----------------------------------------------------
-			/// Returns the default material described in the
-            /// App.config file.
-            ///
-            /// @author S Downie.
-			///
-            /// @return The default material.
-            //-----------------------------------------------------
-            const Rendering::MaterialCSPtr& GetDefaultMaterial() const;
-            //-----------------------------------------------------
-			/// Returns the default localised text described in the
-            /// App.config file.
-            ///
-            /// @author S Downie.
-			///
-            /// @return The default text.
-            //-----------------------------------------------------
-            const LocalisedTextCSPtr& GetDefaultLocalisedText() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the state manager.
             ///
@@ -286,6 +250,24 @@ namespace ChilliSource
 			inline ResourcePool* GetResourcePool()
             {
                 return m_resourcePool;
+            }
+            //-----------------------------------------------------
+            /// @author I Copland
+			///
+			/// @return A pointer to the App Config.
+			//-----------------------------------------------------
+			inline AppConfig* GetAppConfig()
+            {
+                return m_appConfig;
+            }
+            //-----------------------------------------------------
+            /// @author I Copland
+			///
+			/// @return A pointer to the Default Resources
+			//-----------------------------------------------------
+			inline DefaultResources* GetDefaultResources()
+            {
+                return m_defaultResources;
             }
 #ifdef CS_ENABLE_DEBUGSTATS
             //-----------------------------------------------------
@@ -442,13 +424,6 @@ namespace ChilliSource
 			//------------------------------------------------------
 			void PostCreateSystems();
             //------------------------------------------------------
-            /// Open the app config file and load any of the specified
-            /// resources to act as the defaults.
-            ///
-            /// @author S Downie
-            //------------------------------------------------------
-            void LoadDefaultResources();
-            //------------------------------------------------------
             /// Depedending on the device decide which folders
             /// resources should be loaded from.
             ///
@@ -493,7 +468,9 @@ namespace ChilliSource
             PlatformSystem* m_platformSystem;
             FileSystem* m_fileSystem;
             Input::PointerSystem* m_pointerSystem;
-
+            AppConfig* m_appConfig;
+            DefaultResources* m_defaultResources;
+            
 #ifdef CS_ENABLE_DEBUGSTATS
             Debugging::DebugStats* m_debugStats;
 #endif

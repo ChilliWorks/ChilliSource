@@ -28,16 +28,16 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 
+#include <ChilliSource/Core/Base/AppConfig.h>
+#include <ChilliSource/Core/Base/DefaultResources.h>
 #include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/Base/Logging.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
 #include <ChilliSource/Core/Image/CSImageProvider.h>
 #include <ChilliSource/Core/Image/PNGImageProvider.h>
-#include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Localisation/LocalisedTextProvider.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
@@ -102,7 +102,7 @@ namespace ChilliSource
         //----------------------------------------------------
 		Application::Application()
         : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_resourcePool(nullptr),
-        m_renderer(nullptr), m_fileSystem(nullptr), m_stateManager(nullptr), m_taskScheduler(nullptr), m_updateIntervalRemainder(0.0f),
+        m_renderer(nullptr), m_fileSystem(nullptr), m_appConfig(nullptr), m_stateManager(nullptr), m_taskScheduler(nullptr), m_defaultResources(nullptr), m_updateIntervalRemainder(0.0f),
         m_shouldNotifyConnectionsResumeEvent(false), m_shouldNotifyConnectionsForegroundEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
 		{
 		}
@@ -162,30 +162,6 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        const Rendering::FontCSPtr& Application::GetDefaultFont() const
-        {
-            return m_defaultFont;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        const Rendering::MeshCSPtr& Application::GetDefaultMesh() const
-        {
-            return m_defaultMesh;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        const Rendering::MaterialCSPtr& Application::GetDefaultMaterial() const
-        {
-            return m_defaultMaterial;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        const LocalisedTextCSPtr& Application::GetDefaultLocalisedText() const
-        {
-            return m_defaultLocalisedText;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
 		void Application::Init()
 		{
             CS_ASSERT(s_application == nullptr, "Application already initialised!");
@@ -208,8 +184,6 @@ namespace ChilliSource
             {
                 system->OnInit();
             }
-            
-            LoadDefaultResources();
             
             OnInit();
             PushInitialState();
@@ -381,6 +355,7 @@ namespace ChilliSource
         {
             //Core
             m_platformSystem = CreateSystem<PlatformSystem>();
+            m_appConfig = CreateSystem<AppConfig>();
             CreateSystem<Device>();
             CreateSystem<Screen>();
             
@@ -396,6 +371,7 @@ namespace ChilliSource
             CreateSystem<PNGImageProvider>();
             CreateSystem<DialogueBoxSystem>();
             CreateSystem<LocalisedTextProvider>();
+            m_defaultResources = CreateSystem<DefaultResources>();
             
 #ifdef CS_ENABLE_DEBUGSTATS
             m_debugStats = CreateSystem<Debugging::DebugStats>();
@@ -448,53 +424,11 @@ namespace ChilliSource
             //Texture/Cubemap provider is a compound provider and needs to be informed when the other providers are created.
             GetSystem<CSRendering::TextureProvider>()->PostCreate();
             GetSystem<CSRendering::CubemapProvider>()->PostCreate();
+            
+            //Load the app config and default resources
+            m_appConfig->Load();
+            m_defaultResources->Load();
 		}
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void Application::LoadDefaultResources()
-        {
-            //TODO: This should be moved to a separate system.
-            
-            CS_ASSERT(m_resourcePool, "Resource pool must be available when loading default resources");
-            
-            Json::Value jRoot;
-            if(Utils::ReadJson(StorageLocation::k_package, "App.config", &jRoot) == true)
-            {
-                if(jRoot.isMember("PreferredFPS"))
-                {
-                    u32 udwPreferredFPS = jRoot["PreferredFPS"].asUInt();
-                    m_platformSystem->SetPreferredFPS(udwPreferredFPS);
-                }
-                
-                if(jRoot.isMember("DefaultText"))
-                {
-                    StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultText"].get("Location", "Package").asString());
-                    std::string strPath = jRoot["DefaultText"].get("Path", "").asString();
-                    m_defaultLocalisedText = m_resourcePool->LoadResource<LocalisedText>(eStorageLocation, strPath);
-                }
-                
-                if(jRoot.isMember("DefaultMesh"))
-                {
-                    StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultMesh"].get("Location", "Package").asString());
-                    std::string strPath = jRoot["DefaultMesh"].get("Path", "").asString();
-                    m_defaultMesh = m_resourcePool->LoadResource<Rendering::Mesh>(eStorageLocation, strPath);
-                }
-                
-                if(jRoot.isMember("DefaultFont"))
-                {
-                    StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultFont"].get("Location", "Package").asString());
-                    std::string strPath = jRoot["DefaultFont"].get("Path", "").asString();
-                    m_defaultFont = m_resourcePool->LoadResource<Rendering::Font>(eStorageLocation, strPath);
-                }
-                
-                if(jRoot.isMember("DefaultMaterial"))
-                {
-                    StorageLocation eStorageLocation = ParseStorageLocation(jRoot["DefaultMaterial"].get("Location", "Package").asString());
-                    std::string strPath = jRoot["DefaultMaterial"].get("Path", "").asString();
-                    m_defaultMaterial = m_resourcePool->LoadResource<Rendering::Material>(eStorageLocation, strPath);
-                }
-            }
-        }
         //----------------------------------------------------
         //----------------------------------------------------
         void Application::DetermineResourceDirectories()

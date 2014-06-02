@@ -32,6 +32,7 @@
 
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/DefaultResources.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
@@ -119,7 +120,7 @@ namespace ChilliSource
                 CleanupGUIStats();
                 
                 const f32 k_bestFitTextSize = 15.0f;
-                const f32 currentLetterHeight = Core::Application::Get()->GetDefaultFont()->GetLineHeight();
+                const f32 currentLetterHeight = Core::Application::Get()->GetDefaultResources()->GetFont()->GetLineHeight();
                 const f32 textScale = k_bestFitTextSize / currentLetterHeight;
                 
                 u32 count = 0;
