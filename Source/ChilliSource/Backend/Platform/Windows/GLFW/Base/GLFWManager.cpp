@@ -10,6 +10,8 @@
 
 #include <ChilliSource/Backend/Platform/Windows/GLFW/Base/GLFWManager.h>
 
+#include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
+
 //This needs to be included after windows.h
 #include <Platform/Windows/glfw3.h>
 
@@ -19,7 +21,7 @@ namespace ChilliSource
 	{
 		//---------------------------------------------------
 		//---------------------------------------------------
-		void GLFWManager::Init(u32 in_width, u32 in_height, const char* in_windowName)
+		void GLFWManager::Init(u32 in_width, u32 in_height)
 		{
 			if (!glfwInit())
 			{
@@ -33,7 +35,7 @@ namespace ChilliSource
 			glfwWindowHint(GLFW_ALPHA_BITS, 32);
 			glfwWindowHint(GLFW_DEPTH_BITS, 32);
 
-			m_window = glfwCreateWindow(in_width, in_height, in_windowName, nullptr, nullptr);
+			m_window = glfwCreateWindow(in_width, in_height, "", nullptr, nullptr);
 			if (m_window == nullptr)
 			{
 				glfwTerminate();
@@ -119,6 +121,13 @@ namespace ChilliSource
 		{
 			CS_ASSERT(m_window != nullptr, "Must have created a window");
 			glfwSetWindowCloseCallback(m_window, in_delegate);
+		}
+		//---------------------------------------------------
+		//---------------------------------------------------
+		void GLFWManager::SetWindowTitle(const std::string& in_title)
+		{
+			CS_ASSERT(m_window != nullptr, "Must have created a window");
+			glfwSetWindowTitle(m_window, in_title.c_str());
 		}
 		//---------------------------------------------------
 		//---------------------------------------------------

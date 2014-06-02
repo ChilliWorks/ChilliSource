@@ -32,6 +32,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
+#include <ChilliSource/Core/Base/AppConfig.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 #define WIN32_LEAN_AND_MEAN
@@ -62,7 +63,7 @@ namespace ChilliSource
 			GLFWManager::Create();
 
 			//TODO: Expose the window name through app.config.
-			GLFWManager::Get()->Init(960, 640, "ChilliSource");
+			GLFWManager::Get()->Init(960, 640);
 
 			//Register callbacks
 			GLFWManager::Get()->SetWindowFocusDelegate((GLFWwindowfocusfun)&PlatformSystem::OnWindowFocusChanged);
@@ -105,6 +106,8 @@ namespace ChilliSource
 		//-----------------------------------------
 		void PlatformSystem::Run()
 		{
+			GLFWManager::Get()->SetWindowTitle(Core::Application::Get()->GetAppConfig()->GetDisplayableName());
+
 			Core::Application::Get()->Resume();
 			Core::Application::Get()->Foreground();
 

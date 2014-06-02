@@ -423,8 +423,9 @@ namespace ChilliSource
             GetSystem<CSRendering::TextureProvider>()->PostCreate();
             GetSystem<CSRendering::CubemapProvider>()->PostCreate();
             
-            //Load the app config and default resources
+            //Load the app config set preferred FPS.
             m_appConfig->Load();
+            m_platformSystem->SetPreferredFPS(m_appConfig->GetPreferredFPS());
 		}
         //----------------------------------------------------
         //----------------------------------------------------

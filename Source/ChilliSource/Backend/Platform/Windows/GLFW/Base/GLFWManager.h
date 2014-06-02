@@ -53,9 +53,8 @@ namespace ChilliSource
 			///
 			/// @param Window width
 			/// @param Window height
-			/// @param Window name
 			//---------------------------------------------------
-			void Init(u32 in_windowWidth, u32 in_windowHeight, const char* in_windowName);
+			void Init(u32 in_windowWidth, u32 in_windowHeight);
 			//---------------------------------------------------
 			/// @author S Downie
 			///
@@ -146,6 +145,14 @@ namespace ChilliSource
 			/// is closed
 			//---------------------------------------------------
 			void SetWindowCloseDelegate(GLFWwindowclosefun in_delegate);
+			//---------------------------------------------------
+			/// Sets the title of the window.
+			///
+			/// @author I Copland
+			///
+			/// @param The new window title.
+			//---------------------------------------------------
+			void SetWindowTitle(const std::string& in_title);
 
 		private:
 
