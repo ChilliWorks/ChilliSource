@@ -32,7 +32,6 @@
 
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/DefaultResources.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
@@ -46,6 +45,8 @@ namespace ChilliSource
 	{
         namespace
         {
+            const std::string k_defaultFont = "Fonts/DefaultFont.png";
+            
             //--------------------------------------------------
             /// Creates the GUI background texture if it does
             /// not already exist.
@@ -119,8 +120,10 @@ namespace ChilliSource
             {
                 CleanupGUIStats();
                 
+                Rendering::FontCSPtr font = Core::Application::Get()->GetResourcePool()->LoadResource(Core::StorageLocation::k_package, k_defaultFont);
+                
                 const f32 k_bestFitTextSize = 15.0f;
-                const f32 currentLetterHeight = Core::Application::Get()->GetDefaultResources()->GetFont()->GetLineHeight();
+                const f32 currentLetterHeight = font->GetLineHeight();
                 const f32 textScale = k_bestFitTextSize / currentLetterHeight;
                 
                 u32 count = 0;
@@ -129,6 +132,7 @@ namespace ChilliSource
                     GUIStat guiStat;
                     
                     guiStat.m_nameLabel = GUI::LabelSPtr(new GUI::Label());
+                    guiStat.m_nameLabel->SetFont(font);
                     guiStat.m_nameLabel->SetText(stat.first);
                     guiStat.m_nameLabel->SetTextScale(textScale);
                     guiStat.m_nameLabel->SetAlignmentToParent(Rendering::AlignmentAnchor::k_topLeft);

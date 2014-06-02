@@ -71,55 +71,6 @@ namespace ChilliSource
             /// @param The prefered FPS.
             //--------------------------------------------------------
             u32 GetPreferredFPS() const;
-            //---------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return The file path of the default text resource.
-            //--------------------------------------------------------
-            const std::string& GetDefaultLocalisedTextFilePath() const;
-            //---------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return The storage location of the default text resource.
-            //--------------------------------------------------------
-            StorageLocation GetDefaultLocalisedTextStorageLocation() const;
-            //---------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return The file path of the default font resource.
-            //--------------------------------------------------------
-            const std::string& GetDefaultFontFilePath() const;
-            //---------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return The storage location of the default font resource.
-            //--------------------------------------------------------
-            StorageLocation GetDefaultFontStorageLocation() const;
-            //---------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return The file path of the default material resource.
-            //--------------------------------------------------------
-            const std::string& GetDefaultMaterialFilePath() const;
-            //---------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return The storage location of the default material
-            /// resource.
-            //--------------------------------------------------------
-            StorageLocation GetDefaultMaterialStorageLocation() const;
-            //---------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return The file path of the default mesh resource.
-            //--------------------------------------------------------
-            const std::string& GetDefaultMeshFilePath() const;
-            //---------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return The storage location of the default mesh resource.
-            //--------------------------------------------------------
-            StorageLocation GetDefaultMeshStorageLocation() const;
         private:
             friend class Application;
             //---------------------------------------------------------
@@ -147,14 +98,6 @@ namespace ChilliSource
             
             std::string m_displayableName;
             u32 m_preferredFPS;
-            std::string m_defaultLocalisedTextFilePath;
-            StorageLocation m_defaultLocalisedTextStorageLocation;
-            std::string m_defaultFontFilePath;
-            StorageLocation m_defaultFontStorageLocation;
-            std::string m_defaultMaterialFilePath;
-            StorageLocation m_defaultMaterialStorageLocation;
-            std::string m_defaultMeshFilePath;
-            StorageLocation m_defaultMeshStorageLocation;
         };
     }
 }

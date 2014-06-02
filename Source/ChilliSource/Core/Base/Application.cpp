@@ -29,7 +29,6 @@
 #include <ChilliSource/Core/Base/Application.h>
 
 #include <ChilliSource/Core/Base/AppConfig.h>
-#include <ChilliSource/Core/Base/DefaultResources.h>
 #include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/Base/Logging.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
@@ -102,7 +101,7 @@ namespace ChilliSource
         //----------------------------------------------------
 		Application::Application()
         : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_resourcePool(nullptr),
-        m_renderer(nullptr), m_fileSystem(nullptr), m_appConfig(nullptr), m_stateManager(nullptr), m_taskScheduler(nullptr), m_defaultResources(nullptr), m_updateIntervalRemainder(0.0f),
+        m_renderer(nullptr), m_fileSystem(nullptr), m_appConfig(nullptr), m_stateManager(nullptr), m_taskScheduler(nullptr), m_updateIntervalRemainder(0.0f),
         m_shouldNotifyConnectionsResumeEvent(false), m_shouldNotifyConnectionsForegroundEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
 		{
 		}
@@ -371,7 +370,6 @@ namespace ChilliSource
             CreateSystem<PNGImageProvider>();
             CreateSystem<DialogueBoxSystem>();
             CreateSystem<LocalisedTextProvider>();
-            m_defaultResources = CreateSystem<DefaultResources>();
             
 #ifdef CS_ENABLE_DEBUGSTATS
             m_debugStats = CreateSystem<Debugging::DebugStats>();
@@ -427,7 +425,6 @@ namespace ChilliSource
             
             //Load the app config and default resources
             m_appConfig->Load();
-            m_defaultResources->Load();
 		}
         //----------------------------------------------------
         //----------------------------------------------------

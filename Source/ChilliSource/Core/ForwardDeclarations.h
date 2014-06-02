@@ -29,7 +29,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(QueryableInterface);
         CS_FORWARDDECLARE_CLASS(Screen);
         CS_FORWARDDECLARE_CLASS(AppConfig);
-        CS_FORWARDDECLARE_CLASS(DefaultResources);
         //---------------------------------------------------------
         /// Container
         //---------------------------------------------------------

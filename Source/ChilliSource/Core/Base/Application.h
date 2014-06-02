@@ -260,15 +260,6 @@ namespace ChilliSource
             {
                 return m_appConfig;
             }
-            //-----------------------------------------------------
-            /// @author I Copland
-			///
-			/// @return A pointer to the Default Resources
-			//-----------------------------------------------------
-			inline DefaultResources* GetDefaultResources()
-            {
-                return m_defaultResources;
-            }
 #ifdef CS_ENABLE_DEBUGSTATS
             //-----------------------------------------------------
 			/// Returns a pointer to the debug stats system. This
@@ -469,7 +460,6 @@ namespace ChilliSource
             FileSystem* m_fileSystem;
             Input::PointerSystem* m_pointerSystem;
             AppConfig* m_appConfig;
-            DefaultResources* m_defaultResources;
             
 #ifdef CS_ENABLE_DEBUGSTATS
             Debugging::DebugStats* m_debugStats;
