@@ -76,6 +76,7 @@
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 
+#include <algorithm>
 #include <ctime>
 
 namespace ChilliSource
