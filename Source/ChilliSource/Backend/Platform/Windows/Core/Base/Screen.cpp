@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #include <ChilliSource/Backend/Platform/Windows/Core/Base/Screen.h>
 
 //This must be included last.
@@ -113,3 +115,5 @@ namespace ChilliSource
 		}
     }
 }
+
+#endif

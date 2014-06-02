@@ -6,6 +6,8 @@
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #include <ChilliSource/Backend/Platform/Windows/Core/File/WindowsFileUtils.h>
 
 namespace ChilliSource
@@ -53,3 +55,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

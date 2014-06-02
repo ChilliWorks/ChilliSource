@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/Device.h>
@@ -126,3 +128,5 @@ namespace ChilliSource
         };
     }
 }
+
+#endif

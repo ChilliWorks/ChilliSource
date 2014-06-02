@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_GLFW_BASE_GLFWMANAGER_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_GLFW_BASE_GLFWMANAGER_H_
 
@@ -154,3 +156,4 @@ namespace ChilliSource
 
 #endif
 
+#endif

@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
@@ -202,3 +204,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

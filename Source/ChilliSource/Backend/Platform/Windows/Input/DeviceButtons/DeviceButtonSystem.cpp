@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #include <ChilliSource/Backend/Platform/Windows/Input/DeviceButtons/DeviceButtonSystem.h>
 
 namespace ChilliSource
@@ -47,3 +49,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #include <ChilliSource/Backend/Platform/Windows/GLFW/Base/GLFWManager.h>
 
 //This needs to be included after windows.h
@@ -134,3 +136,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

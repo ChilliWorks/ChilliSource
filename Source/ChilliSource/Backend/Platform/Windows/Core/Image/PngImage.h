@@ -7,6 +7,8 @@
  *
  */
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #ifndef _MOFLO_WINDOWSPLATFORM_IMAGELOADING_PNGIMAGE_
 #define _MOFLO_WINDOWSPLATFORM_IMAGELOADING_PNGIMAGE_
 
@@ -102,5 +104,7 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif
 
 #endif

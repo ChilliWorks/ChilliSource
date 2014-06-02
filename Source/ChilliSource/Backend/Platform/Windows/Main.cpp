@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 
@@ -54,3 +56,5 @@ int CALLBACK WinMain(_In_ HINSTANCE in_instance, _In_ HINSTANCE in_prevInstance,
     delete app;
     return 0;
 }
+
+#endif

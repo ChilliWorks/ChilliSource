@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #include <ChilliSource/Backend/Platform/Windows/Input/Pointer/PointerSystem.h>
 
 #include <ChilliSource/Backend/Platform/Windows/GLFW/Base/GLFWManager.h>
@@ -163,3 +165,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

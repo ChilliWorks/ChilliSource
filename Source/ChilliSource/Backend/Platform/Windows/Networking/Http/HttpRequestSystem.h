@@ -6,6 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_HTTP_HTTPREQUESTSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_HTTP_HTTPREQUESTSYSTEM_H_
 
@@ -109,4 +111,8 @@ namespace ChilliSource
 		};
 	}
 }
+
 #endif
+
+#endif
+
