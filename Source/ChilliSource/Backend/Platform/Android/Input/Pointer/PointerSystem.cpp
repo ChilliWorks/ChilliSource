@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Input/Pointer/PointerSystem.h>
 
 #include <ChilliSource/Backend/Platform/Android/Input/Pointer/TouchInputJavaInterface.h>
@@ -94,3 +96,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

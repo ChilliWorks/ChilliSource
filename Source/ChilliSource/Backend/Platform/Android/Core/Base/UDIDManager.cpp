@@ -7,6 +7,8 @@
  *
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Core/Base/UDIDManager.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
@@ -140,3 +142,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

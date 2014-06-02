@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_SCREEN_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_SCREEN_H_
 
@@ -121,5 +123,7 @@ namespace ChilliSource
         };
     }
 }
+
+#endif
 
 #endif

@@ -6,6 +6,8 @@
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/DialogueBox/DialogueBoxJavaInterface.h>
@@ -72,3 +74,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

@@ -6,6 +6,8 @@
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_DIALOGUE_DIALOGUESYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_DIALOGUE_DIALOGUESYSTEM_H_
 
@@ -98,5 +100,7 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif
 
 #endif

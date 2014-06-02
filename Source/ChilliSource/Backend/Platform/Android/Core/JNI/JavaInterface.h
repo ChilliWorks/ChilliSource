@@ -7,6 +7,8 @@
  *
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_JAVAINTERFACE_H_
 #define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_JAVAINTERFACE_H_
 
@@ -76,5 +78,7 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif
 
 #endif

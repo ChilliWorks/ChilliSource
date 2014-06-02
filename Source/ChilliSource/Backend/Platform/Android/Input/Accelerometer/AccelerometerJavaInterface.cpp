@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Input/Accelerometer/AccelerometerJavaInterface.h>
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
@@ -133,3 +135,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

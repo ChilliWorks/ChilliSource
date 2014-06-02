@@ -6,6 +6,8 @@
 // Copyright 2012 Tag Games Limited - All rights reserved
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthenticationSystem.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
@@ -162,3 +164,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

@@ -11,6 +11,8 @@
  * Copyright �2010 Tag Games Limited - All rights reserved
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE__JAVAINTERFACE_
 #define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE__JAVAINTERFACE_
 
@@ -115,5 +117,7 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif
 
 #endif

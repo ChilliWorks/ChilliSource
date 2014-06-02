@@ -6,6 +6,8 @@
 //  Copyright 2011 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_FILE_FILESYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_FILE_FILESYSTEM_H_
 
@@ -390,5 +392,7 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif
 
 #endif

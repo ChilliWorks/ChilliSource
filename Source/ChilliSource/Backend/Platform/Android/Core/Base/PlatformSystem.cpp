@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Core/Base/PlatformSystem.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
@@ -79,3 +81,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

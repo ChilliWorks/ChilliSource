@@ -6,6 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
 
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
@@ -116,3 +118,6 @@ namespace ChilliSource
 		}
 	}
 }
+
+
+#endif

@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Core/Image/PNGImageProvider.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/Image/PngImage.h>
@@ -128,3 +130,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

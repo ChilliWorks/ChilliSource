@@ -6,6 +6,8 @@
 //  Copyright 2012 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
@@ -504,3 +506,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

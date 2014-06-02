@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifdef CS_ANDROIDEXTENSION_AMAZON
 
 #include <ChilliSource/Backend/Platform/Android/Extensions/Amazon/AmazonIAPSystem.h>
@@ -161,5 +163,7 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif
 
 #endif
