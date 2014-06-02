@@ -595,6 +595,8 @@ namespace ChilliSource
         //-------------------------------------------------------
         void Label::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
+            CS_ASSERT(Font, "Cannot render label without font.");
+            
             if(Visible)
             {
                 //Check if this is on screen

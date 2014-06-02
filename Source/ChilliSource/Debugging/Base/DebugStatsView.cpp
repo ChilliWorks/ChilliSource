@@ -45,7 +45,7 @@ namespace ChilliSource
 	{
         namespace
         {
-            const std::string k_defaultFont = "Fonts/DefaultFont.png";
+            const std::string k_defaultFont = "Fonts/ArialMed.alphabet";
             
             //--------------------------------------------------
             /// Creates the GUI background texture if it does
@@ -120,7 +120,7 @@ namespace ChilliSource
             {
                 CleanupGUIStats();
                 
-                Rendering::FontCSPtr font = Core::Application::Get()->GetResourcePool()->LoadResource(Core::StorageLocation::k_package, k_defaultFont);
+                Rendering::FontCSPtr font = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Font>(Core::StorageLocation::k_package, k_defaultFont);
                 
                 const f32 k_bestFitTextSize = 15.0f;
                 const f32 currentLetterHeight = font->GetLineHeight();
@@ -148,6 +148,7 @@ namespace ChilliSource
                     AddSubview(guiStat.m_nameLabel);
                     
                     guiStat.m_valueLabel = GUI::LabelSPtr(new GUI::Label());
+                    guiStat.m_valueLabel->SetFont(font);
                     guiStat.m_valueLabel->SetTextScale(textScale);
                     guiStat.m_valueLabel->SetLocalAlignment(Rendering::AlignmentAnchor::k_middleLeft);
                     guiStat.m_valueLabel->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleRight);
