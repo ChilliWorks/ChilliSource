@@ -53,9 +53,14 @@ namespace ChilliSource
 			{
                 mbAABBValid = true;
                 
-				//Rebuild the box
-				mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition());
+                // Realign the origin
+                Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+                Core::Vector2 vAlignedPos;
+                Align(meAlignment, vHalfSize, vAlignedPos);
+                
+				// Rebuild the box
 				mBoundingBox.SetSize(Core::Vector3(mvDimensions, 0.0f));
+				mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition() + Core::Vector3(vAlignedPos, 0.0f));
 			}
 			return mBoundingBox;
 		}
@@ -68,6 +73,13 @@ namespace ChilliSource
 			{
                 mbOOBBValid = true;
                 
+                // Realign the origin
+                Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+                Core::Vector2 vAlignedPos;
+                Align(meAlignment, vHalfSize, vAlignedPos);
+                
+				// Rebuild the box
+                mOBBoundingBox.SetOrigin(Core::Vector3(vAlignedPos, 0.0f));
 				mOBBoundingBox.SetSize(Core::Vector3(mvDimensions, 0.0f));
 				mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
 			}
@@ -82,7 +94,12 @@ namespace ChilliSource
 			{
                 mbBoundingSphereValid = true;
                 
-				mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition();
+                // Realign the origin
+                Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+                Core::Vector2 vAlignedPos;
+                Align(meAlignment, vHalfSize, vAlignedPos);
+                
+				mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition() + Core::Vector3(vAlignedPos, 0.0f);
 				mBoundingSphere.fRadius = std::max(mvDimensions.x, mvDimensions.y) * 0.5f;
 			}
 			return mBoundingSphere;
