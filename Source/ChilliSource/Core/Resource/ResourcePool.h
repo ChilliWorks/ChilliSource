@@ -30,12 +30,15 @@
 #define _CHILLISOURCE_CORE_RESOURCE_RESOURCEPOOL_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/IResourceOptions.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <functional>
+#include <mutex>
 #include <unordered_map>
 
 namespace ChilliSource
@@ -291,12 +294,15 @@ namespace ChilliSource
         private:
             
             std::unordered_map<InterfaceIDType, PoolDesc> m_descriptors;
+            mutable std::mutex m_mutex;
         };
         //------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------
         template <typename TResourceType> std::shared_ptr<const TResourceType> ResourcePool::GetResource(const std::string& in_uniqueId) const
         {
             CS_ASSERT(in_uniqueId.empty() == false, "Cannot find resource with empty unique Id");
+            
+            std::unique_lock<std::mutex> lock(m_mutex);
             
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             
@@ -322,10 +328,14 @@ namespace ChilliSource
         //-------------------------------------------------------------------------------------
         template <typename TResourceType> std::shared_ptr<TResourceType> ResourcePool::CreateResource(const std::string& in_uniqueId)
         {
+            CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be created on the main thread");
+            
             Resource::ResourceId resourceId = GenerateResourceId(in_uniqueId);
             std::shared_ptr<TResourceType> resource(TResourceType::Create());
             resource->SetId(resourceId);
 			resource->SetFilePath(in_uniqueId);
+            
+            std::unique_lock<std::mutex> lock(m_mutex);
             
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             if(itDescriptor == m_descriptors.end())
@@ -347,8 +357,10 @@ namespace ChilliSource
         //-------------------------------------------------------------------------------------
         template <typename TResourceType> std::shared_ptr<const TResourceType> ResourcePool::LoadResource(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsCSPtr<TResourceType>& in_options)
         {
+            CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be loaded on the main thread - use LoadResourceAsync");
             CS_ASSERT(in_filePath.empty() == false, "Cannot load resource with no file path");
             
+            std::unique_lock<std::mutex> lock(m_mutex);
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             
             if(itDescriptor == m_descriptors.end())
@@ -365,6 +377,7 @@ namespace ChilliSource
             {
                 return nullptr;
             }
+            lock.unlock();
             
             IResourceOptionsBaseCSPtr options(in_options);
             if(options == nullptr)
@@ -374,11 +387,14 @@ namespace ChilliSource
             
             //Check descriptor and see if this resource already exists
             Resource::ResourceId resourceId = GenerateResourceId(in_location, in_filePath, options);
+            
+            lock.lock();
             auto itResource = desc.m_cachedResources.find(resourceId);
             if(itResource != desc.m_cachedResources.end())
             {
                 return std::static_pointer_cast<TResourceType>(itResource->second);
             }
+            lock.unlock();
             
             //Load the resource
             ResourceSPtr resource(TResourceType::Create());
@@ -394,7 +410,19 @@ namespace ChilliSource
             resource->SetFilePath(in_filePath);
             resource->SetOptions(options);
             resource->SetId(resourceId);
-            desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
+            
+            lock.lock();
+            //Check the async call hasn't sneaked in here with the same resource
+            itResource = desc.m_cachedResources.find(resourceId);
+            if(itResource == desc.m_cachedResources.end())
+            {
+                desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
+            }
+            else
+            {
+                resource = itResource->second;
+            }
+            lock.unlock();
             
             return std::static_pointer_cast<TResourceType>(resource);
         }
@@ -402,8 +430,10 @@ namespace ChilliSource
         //-------------------------------------------------------------------------------------
         template <typename TResourceType> std::shared_ptr<const TResourceType> ResourcePool::RefreshResource(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsCSPtr<TResourceType>& in_options)
         {
+            CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be refreshed on the main thread");
             CS_ASSERT(in_filePath.empty() == false, "Cannot refresh resource with no file path");
             
+            std::unique_lock<std::mutex> lock(m_mutex);
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             
             if(itDescriptor == m_descriptors.end())
@@ -420,6 +450,7 @@ namespace ChilliSource
             {
                 return nullptr;
             }
+            lock.unlock();
             
             IResourceOptionsBaseCSPtr options(in_options);
             if(options == nullptr)
@@ -429,6 +460,8 @@ namespace ChilliSource
             
             //Check descriptor and see if this resource already exists
             Resource::ResourceId resourceId = GenerateResourceId(in_location, in_filePath, options);
+            
+            lock.lock();
             auto itResource = desc.m_cachedResources.find(resourceId);
             if(itResource == desc.m_cachedResources.end())
             {
@@ -437,7 +470,10 @@ namespace ChilliSource
             }
             
             //Load the resource
-            ResourceSPtr& resource(itResource->second);
+            ResourceSPtr resource(itResource->second);
+            
+            lock.unlock();
+            
             resource->SetLoadState(Resource::LoadState::k_loading);
             provider->CreateResourceFromFile(in_location, in_filePath, options, resource);
             if(resource->GetLoadState() != Resource::LoadState::k_loaded)
@@ -452,6 +488,10 @@ namespace ChilliSource
         //-------------------------------------------------------------------------------------
         template <typename TResourceType> void ResourcePool::RefreshResources()
         {
+            CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be refreshed on the main thread");
+            
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             
             if(itDescriptor == m_descriptors.end())
@@ -499,6 +539,7 @@ namespace ChilliSource
             CS_ASSERT(in_filePath.empty() == false, "Cannot load resource async with no file path");
             CS_ASSERT(in_delegate != nullptr, "Cannot load resource async with null delegate");
             
+            std::unique_lock<std::mutex> lock(m_mutex);
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             
             if(itDescriptor == m_descriptors.end())
@@ -517,6 +558,7 @@ namespace ChilliSource
                 in_delegate(nullptr);
                 return;
             }
+            lock.unlock();
             
             IResourceOptionsBaseCSPtr options(in_options);
             if(options == nullptr)
@@ -526,6 +568,8 @@ namespace ChilliSource
             
             //Check descriptor and see if this resource already exists
             Resource::ResourceId resourceId = GenerateResourceId(in_location, in_filePath, options);
+            
+            lock.lock();
             auto itResource = desc.m_cachedResources.find(resourceId);
             if(itResource != desc.m_cachedResources.end())
             {
@@ -541,6 +585,7 @@ namespace ChilliSource
             resource->SetFilePath(in_filePath);
             resource->SetOptions(options);
             desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
+            lock.unlock();
             
             ResourceProvider::AsyncLoadDelegate convertDelegate([=](const ResourceSPtr& in_resource)
             {
@@ -554,6 +599,9 @@ namespace ChilliSource
         //-------------------------------------------------------------------------------------
         template <typename TResourceType> void ResourcePool::ReleaseUnused()
         {
+            CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be released on the main thread");
+            
+            std::unique_lock<std::mutex> lock(m_mutex);
             //Find the descriptor that handles this type of resource
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             CS_ASSERT(itDescriptor != m_descriptors.end(), "Failed to find resource provider for " + TResourceType::TypeName);

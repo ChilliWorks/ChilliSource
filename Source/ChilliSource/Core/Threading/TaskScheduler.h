@@ -86,6 +86,13 @@ namespace ChilliSource
 			/// @author S Downie
             //----------------------------------------------------
             void ExecuteMainThreadTasks();
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Whether the calling thread is the main
+            /// thread
+            //----------------------------------------------------
+            bool IsMainThread() const;
 
 		private:
 			friend class Application;
@@ -126,6 +133,8 @@ namespace ChilliSource
             
             std::recursive_mutex m_mainThreadQueueMutex;
             std::vector<GenericTaskType> m_mainThreadTasks;
+            
+            std::thread::id m_mainThreadId;
         };
     }
 }

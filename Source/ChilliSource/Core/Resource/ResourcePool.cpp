@@ -116,6 +116,9 @@ namespace ChilliSource
         //-------------------------------------------------------------------------------------
         void ResourcePool::ReleaseAllUnused()
         {
+            CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be released on the main thread");
+            
+            std::unique_lock<std::mutex> lock(m_mutex);
             u32 numReleased = 0;
             
             do
@@ -146,8 +149,11 @@ namespace ChilliSource
         //-------------------------------------------------------------------------------------
         void ResourcePool::Release(const Resource* in_resource)
         {
+            CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be released on the main thread");
             CS_ASSERT(in_resource != nullptr, "Pool cannot release null resource");
             //Find the descriptor that handles this type of resource
+            
+            std::unique_lock<std::mutex> lock(m_mutex);
             auto itDescriptor = m_descriptors.find(in_resource->GetInterfaceID());
             CS_ASSERT(itDescriptor != m_descriptors.end(), "Failed to find resource pool for " + in_resource->GetInterfaceTypeName());
             
