@@ -185,42 +185,6 @@ namespace ChilliSource
             /// @author S Downie.
             //-----------------------------------------------------
             void Quit();
-            //-----------------------------------------------------
-			/// Returns the default font described in the App.config
-            /// file.
-			///
-            /// @author S Downie.
-            ///
-            /// @return The default font.
-            //-----------------------------------------------------
-            const Rendering::FontCSPtr& GetDefaultFont() const;
-            //-----------------------------------------------------
-			/// Returns the default mesh described in the App.config
-            /// file.
-            ///
-            /// @author S Downie.
-			///
-            /// @return The default mesh.
-            //-----------------------------------------------------
-            const Rendering::MeshCSPtr& GetDefaultMesh() const;
-            //-----------------------------------------------------
-			/// Returns the default material described in the
-            /// App.config file.
-            ///
-            /// @author S Downie.
-			///
-            /// @return The default material.
-            //-----------------------------------------------------
-            const Rendering::MaterialCSPtr& GetDefaultMaterial() const;
-            //-----------------------------------------------------
-			/// Returns the default localised text described in the
-            /// App.config file.
-            ///
-            /// @author S Downie.
-			///
-            /// @return The default text.
-            //-----------------------------------------------------
-            const LocalisedTextCSPtr& GetDefaultLocalisedText() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the state manager.
             ///
@@ -286,6 +250,15 @@ namespace ChilliSource
 			inline ResourcePool* GetResourcePool()
             {
                 return m_resourcePool;
+            }
+            //-----------------------------------------------------
+            /// @author I Copland
+			///
+			/// @return A pointer to the App Config.
+			//-----------------------------------------------------
+			inline AppConfig* GetAppConfig()
+            {
+                return m_appConfig;
             }
 #ifdef CS_ENABLE_DEBUGSTATS
             //-----------------------------------------------------
@@ -442,13 +415,6 @@ namespace ChilliSource
 			//------------------------------------------------------
 			void PostCreateSystems();
             //------------------------------------------------------
-            /// Open the app config file and load any of the specified
-            /// resources to act as the defaults.
-            ///
-            /// @author S Downie
-            //------------------------------------------------------
-            void LoadDefaultResources();
-            //------------------------------------------------------
             /// Depedending on the device decide which folders
             /// resources should be loaded from.
             ///
@@ -485,33 +451,30 @@ namespace ChilliSource
         private:
             std::vector<AppSystemUPtr> m_systems;
             
-            ResourcePool* m_resourcePool;
-			StateManager* m_stateManager;
-			TaskScheduler* m_taskScheduler;
-			Rendering::Renderer* m_renderer;
-            Rendering::RenderSystem* m_renderSystem;
-            PlatformSystem* m_platformSystem;
-            FileSystem* m_fileSystem;
-            Input::PointerSystem* m_pointerSystem;
-
+            ResourcePool* m_resourcePool = nullptr;
+			StateManager* m_stateManager = nullptr;
+			TaskScheduler* m_taskScheduler = nullptr;
+			Rendering::Renderer* m_renderer = nullptr;
+            Rendering::RenderSystem* m_renderSystem = nullptr;
+            PlatformSystem* m_platformSystem = nullptr;
+            FileSystem* m_fileSystem = nullptr;
+            Input::PointerSystem* m_pointerSystem = nullptr;
+            AppConfig* m_appConfig = nullptr;
+            
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats* m_debugStats;
+            Debugging::DebugStats* m_debugStats = nullptr;
 #endif
             
-			TimeIntervalSecs m_currentAppTime;
-            LocalisedTextCSPtr m_defaultLocalisedText;
-            Rendering::FontCSPtr m_defaultFont;
-            Rendering::MeshCSPtr m_defaultMesh;
-            Rendering::MaterialCSPtr m_defaultMaterial;
+			TimeIntervalSecs m_currentAppTime = 0;
 			f32 m_updateInterval;
-            f32 m_updateSpeed;
+            f32 m_updateSpeed = 1.0f;
+            f32 m_updateIntervalRemainder = 0.0f;
             
-            f32 m_updateIntervalRemainder;
-            bool m_shouldNotifyConnectionsResumeEvent;
-            bool m_shouldNotifyConnectionsForegroundEvent;
-            bool m_isFirstFrame;
-            bool m_isSuspending;
-            bool m_isSystemCreationAllowed;
+            bool m_shouldNotifyConnectionsResumeEvent = false;
+            bool m_shouldNotifyConnectionsForegroundEvent = false;
+            bool m_isFirstFrame = true;
+            bool m_isSuspending = false;
+            bool m_isSystemCreationAllowed = false;
             
             static Application* s_application;
 		};

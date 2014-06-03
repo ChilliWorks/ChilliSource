@@ -92,9 +92,6 @@ namespace ChilliSource
 
             mpWhiteTex = CreateDefaultWhiteTexture();
             
-            //Grab the default font
-            Font = Core::Application::Get()->GetDefaultFont();
-            
             ConsumesTouches = false;
             
 			UnifiedSize = Core::UnifiedVector2(0.2f, 0.05f, 0.0f, 0.0f);
@@ -206,12 +203,6 @@ namespace ChilliSource
             }
             
             mpWhiteTex = CreateDefaultWhiteTexture();
-            
-            if(!Font)
-            {
-                //Load default placeholder font
-                Font = Core::Application::Get()->GetDefaultFont();
-            }
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -604,6 +595,8 @@ namespace ChilliSource
         //-------------------------------------------------------
         void Label::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
+            CS_ASSERT(Font, "Cannot render label without font.");
+            
             if(Visible)
             {
                 //Check if this is on screen

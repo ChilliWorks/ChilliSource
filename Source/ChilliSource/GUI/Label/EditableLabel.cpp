@@ -291,6 +291,8 @@ namespace ChilliSource
         //-------------------------------------------------------
         void EditableLabel::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
+            CS_ASSERT(Font != nullptr, "Cannot draw editable label without a font.");
+            
 			//Check if this is on screen
 			Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
 			Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
