@@ -39,12 +39,9 @@ namespace ChilliSource
     {
         namespace
         {
+            const std::string k_configFilePath = "App.config";
             const std::string k_defaultDisplayableName = "Chilli Source App";
             const u32 k_defaultPreferredFPS = 30;
-            
-            const std::string k_configFilePath = "App.config";
-            const std::string k_displayableNameTag = "DisplayableName";
-            const std::string k_preferredFPSTag = "PreferredFPS";
         }
         
         CS_DEFINE_NAMEDTYPE(AppConfig);
@@ -85,15 +82,8 @@ namespace ChilliSource
             Json::Value root;
             if(Utils::ReadJson(StorageLocation::k_package, k_configFilePath, &root) == true)
             {
-                if(root.isMember(k_displayableNameTag) == true)
-                {
-                    m_displayableName = root[k_displayableNameTag].asString();
-                }
-                
-                if(root.isMember(k_preferredFPSTag) == true)
-                {
-                    m_preferredFPS = root[k_preferredFPSTag].asUInt();
-                }
+                m_displayableName = root.get("DisplayableName", k_defaultDisplayableName).asString();
+                m_preferredFPS = root.get("PreferredFPS", k_defaultPreferredFPS).asUInt();
             }
         }
     }

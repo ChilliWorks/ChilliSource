@@ -61,8 +61,6 @@ namespace ChilliSource
 			QueryPerformanceFrequency(&g_frequency);
 
 			GLFWManager::Create();
-
-			//TODO: Expose the window name through app.config.
 			GLFWManager::Get()->Init(960, 640);
 
 			//Register callbacks

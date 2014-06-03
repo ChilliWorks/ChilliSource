@@ -62,7 +62,9 @@ namespace ChilliSource
             //---------------------------------------------------------
             /// @author I Copland
             ///
-            /// @return The displayable name of the application.
+            /// @return The displayable name of the application. This
+            /// is not necessarily the name of the app displayed when
+            /// launching the App.
             //--------------------------------------------------------
             const std::string& GetDisplayableName() const;
             //---------------------------------------------------------

@@ -451,34 +451,30 @@ namespace ChilliSource
         private:
             std::vector<AppSystemUPtr> m_systems;
             
-            ResourcePool* m_resourcePool;
-			StateManager* m_stateManager;
-			TaskScheduler* m_taskScheduler;
-			Rendering::Renderer* m_renderer;
-            Rendering::RenderSystem* m_renderSystem;
-            PlatformSystem* m_platformSystem;
-            FileSystem* m_fileSystem;
-            Input::PointerSystem* m_pointerSystem;
-            AppConfig* m_appConfig;
+            ResourcePool* m_resourcePool = nullptr;
+			StateManager* m_stateManager = nullptr;
+			TaskScheduler* m_taskScheduler = nullptr;
+			Rendering::Renderer* m_renderer = nullptr;
+            Rendering::RenderSystem* m_renderSystem = nullptr;
+            PlatformSystem* m_platformSystem = nullptr;
+            FileSystem* m_fileSystem = nullptr;
+            Input::PointerSystem* m_pointerSystem = nullptr;
+            AppConfig* m_appConfig = nullptr;
             
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats* m_debugStats;
+            Debugging::DebugStats* m_debugStats = nullptr;
 #endif
             
-			TimeIntervalSecs m_currentAppTime;
-            LocalisedTextCSPtr m_defaultLocalisedText;
-            Rendering::FontCSPtr m_defaultFont;
-            Rendering::MeshCSPtr m_defaultMesh;
-            Rendering::MaterialCSPtr m_defaultMaterial;
+			TimeIntervalSecs m_currentAppTime = 0;
 			f32 m_updateInterval;
-            f32 m_updateSpeed;
+            f32 m_updateSpeed = 1.0f;
+            f32 m_updateIntervalRemainder = 0.0f;
             
-            f32 m_updateIntervalRemainder;
-            bool m_shouldNotifyConnectionsResumeEvent;
-            bool m_shouldNotifyConnectionsForegroundEvent;
-            bool m_isFirstFrame;
-            bool m_isSuspending;
-            bool m_isSystemCreationAllowed;
+            bool m_shouldNotifyConnectionsResumeEvent = false;
+            bool m_shouldNotifyConnectionsForegroundEvent = false;
+            bool m_isFirstFrame = true;
+            bool m_isSuspending = false;
+            bool m_isSystemCreationAllowed = false;
             
             static Application* s_application;
 		};

@@ -101,9 +101,7 @@ namespace ChilliSource
         //----------------------------------------------------
         //----------------------------------------------------
 		Application::Application()
-        : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_pointerSystem(nullptr), m_resourcePool(nullptr),
-        m_renderer(nullptr), m_fileSystem(nullptr), m_appConfig(nullptr), m_stateManager(nullptr), m_taskScheduler(nullptr), m_updateIntervalRemainder(0.0f),
-        m_shouldNotifyConnectionsResumeEvent(false), m_shouldNotifyConnectionsForegroundEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
+            : m_updateInterval(k_defaultUpdateInterval)
 		{
 		}
         //----------------------------------------------------
@@ -334,11 +332,6 @@ namespace ChilliSource
             {
                 (*it)->OnDestroy();
             }
-            
-			m_defaultFont.reset();
-			m_defaultMesh.reset();
-			m_defaultMaterial.reset();
-            m_defaultLocalisedText.reset();
             
             m_renderSystem->Destroy();
 			m_resourcePool->Destroy();
