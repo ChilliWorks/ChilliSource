@@ -1,10 +1,30 @@
-//  
-//  CFileUtils.java
-//  moFlow
-//  
-//  Created by Ian Copland on 16/12/2013
-//  Copyright (c)2013 Tag Games Limited - All rights reserved
-// 
+/**
+ * FileUtils.java
+ * Chilli Source
+ * Created by Ian Copland on 16/12/2013
+ * 
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2013 Tag Games Limited
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 package com.chillisource.core;
 
@@ -18,38 +38,39 @@ import java.io.OutputStream;
 
 import com.chillisource.core.CSActivity;
 
+import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.os.Environment;
 
-//=======================================================
-/// File Utils
-///
-/// A collection of convenience methods for working with 
-/// File input and output.
-//=======================================================
-public class FileUtils
+/**
+ * A collection of convenience methods for working with 
+ * File input and output.
+ * 
+ * @author I Copland
+ */
+public final class FileUtils
 {
-	//------------------------------------------------
-	/// Storage Location
-	///
-	/// An enum describing the different storage locations
-	/// available on Android. Note that this is not
-	/// the same as Storage Location in the native
-	/// side of the engine. This refers to specific
-	/// storage media such as internal or external
-	/// storage.
-	//------------------------------------------------
+	/**
+	 * An enum describing the different storage locations available on Android. Note that this 
+	 * is not the same as Storage Location in the native side of the engine. This refers to 
+	 * specific storage media such as internal or external storage.
+	 * 
+	 * @author I Copland
+	 */
 	public enum StorageLocation
 	{
-		ROOT,
-		EXTERNAL_STORAGE,
-		INTERNAL_STORAGE
+		k_root,
+		k_externalStorage,
+		k_internalStorage,
+		k_apk
 	}
-	//------------------------------------------------
-	/// Get External Storage Directory
-	///
-	/// @return the "external storage" directory.
-	//------------------------------------------------
-	public static final String GetExternalStorageDirectory()
+	/**
+	 * @author I Copland
+	 * 
+	 * @return the "external storage" directory.
+	 */
+	public static String getExternalStorageDirectory()
 	{
 		String state = Environment.getExternalStorageState();
 
@@ -58,171 +79,173 @@ public class FileUtils
 		
 		return "";
 	}
-	//------------------------------------------------
-	/// Get External Files Directory
-	///
-	/// This will return the path to the directory on
-	/// external storage that important files should be 
-	/// stored in for the application with the given
-	/// package name. This directory will be:
-	///  
-	/// 	Android/data/<PackageName>/files/
-	///
-	/// @param The package name of the relevant app.
-	/// @return The files directory.
-	//------------------------------------------------
-	public static final String GetExternalFilesDirectory(final String instrPackageName)
+	/**
+	 * This will return the path to the directory on external storage 
+	 * that important files should be stored in for the application 
+	 * with the given package name. This directory will be:
+	 *  	Android/data/<PackageName>/files/
+	 *  
+	 * @author I Copland
+	 * 
+	 * @param The package name.
+	 * 
+	 * @return The files directory.
+	 */
+	public static String getExternalFilesDirectory(String in_packageName)
 	{
-		return "Android/data/" + instrPackageName + "/files/";
+		return "Android/data/" + in_packageName + "/files/";
 	}
-	//-----------------------------------------------
-	/// Does File Exist
-	///
-	/// Returns whether or not the given file exists
-	/// in the given storage location.
-	///
-	/// @param The storage location.
-	/// @param The file path.
-	/// @returns Whether or not the path exists.
-	//-----------------------------------------------
-	public static boolean DoesFileExist(StorageLocation ineStorageLocation, final String instrFilepath)
+	/**
+	 * Returns whether or not the given file exists in the given 
+	 * storage location.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The storage location.
+	 * @param The file path.
+	 * 
+	 * @return Whether or not the path exists.
+	 */
+	public static boolean doesFileExist(StorageLocation in_storageLocation, String in_filePath)
 	{
-		String strStorageLocation = "";
-		switch (ineStorageLocation)
+		switch (in_storageLocation)
 		{
-			case EXTERNAL_STORAGE:
-				strStorageLocation = GetExternalStorageDirectory();
-				break;
-			case INTERNAL_STORAGE:
-				return DoesFileExistInternal(instrFilepath);
+			case k_root:
+				return doesFileExist(in_filePath);
+			case k_externalStorage:
+				return doesFileExist(StringUtils.StandardisePath(getExternalStorageDirectory()) + in_filePath);
+			case k_internalStorage:
+				return doesFileExistInternal(in_filePath);
+			case k_apk:
+				return doesFileExistAPK(in_filePath);
 			default:
-				break;
+				Logging.logFatal("FileUtils: Invalid storage location.");
+				return false;
 		}
-		
-		return DoesFileExist(StringUtils.StandardisePath(strStorageLocation) + instrFilepath);
 	}
-	//-----------------------------------------------
-	/// Read File
-	///
-	/// Reads the entire contents of a binary file in
-	/// the given storage location. The contents are
-	/// read as a byte array.
-	///
-	/// @param The storage location.
-	/// @param The filename.
-	/// @return The byte array.
-	//-----------------------------------------------
-	public static byte[] ReadFile(StorageLocation ineStorageLocation, final String instrFilename)
+	/**
+	 * Reads the entire contents of a binary file in the given 
+	 * storage location. The contents are read as a byte array.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The storage location.
+	 * @param The filename.
+	 * 
+	 * @return The byte array.
+	 */
+	public static byte[] readFile(StorageLocation in_storageLocation, String in_filePath)
 	{
-		String strStorageLocation = "";
-		switch (ineStorageLocation)
+		switch (in_storageLocation)
 		{
-			case EXTERNAL_STORAGE:
-				strStorageLocation = GetExternalStorageDirectory();
-				break;
-			case INTERNAL_STORAGE:
-				return ReadFileInternal(instrFilename);
+			case k_root:
+				return readFile(in_filePath);
+			case k_externalStorage:
+				return readFile(StringUtils.StandardisePath(getExternalStorageDirectory()) + in_filePath);
+			case k_internalStorage:
+				return readFileInternal(in_filePath);
+			case k_apk:
+				return readFileAPK(in_filePath);
 			default:
-				break;
+				Logging.logFatal("FileUtils: Invalid storage location.");
+				return null;
 		}
-		
-		return ReadFile(StringUtils.StandardisePath(strStorageLocation) + instrFilename);
 	}
-	//-----------------------------------------------
-	/// Write File
-	///
-	/// Writes a byte array to file in the given
-	/// storage location.
-	///
-	/// @param The storage location.
-	/// @param The filename.
-	/// @param The data to be written to file.
-	/// @param Whether or not the file was successfully
-	/// written.
-	//-----------------------------------------------
-	public static boolean WriteFile(StorageLocation ineStorageLocation, final String instrFilename, final byte[] instrFileContents)
+	/**
+	 * Writes a byte array to file in the given storage location.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The storage location.
+	 * @param The filename.
+	 * @param The data to be written to file.
+	 * 
+	 * @return Whether or not the file was successfully written.
+	 */
+	public static boolean writeFile(StorageLocation in_storageLocation, String in_filePath, byte[] in_fileContents)
 	{
-		String strStorageLocation = "";
-		
-		switch (ineStorageLocation)
+		switch (in_storageLocation)
 		{
-			case EXTERNAL_STORAGE:
-				strStorageLocation = GetExternalStorageDirectory();
-				break;
-			case INTERNAL_STORAGE:
-				return WriteFileInternal(instrFilename, instrFileContents);
+			case k_root:
+				return writeFile(in_filePath, in_fileContents);
+			case k_externalStorage:
+				return writeFile(StringUtils.StandardisePath(getExternalStorageDirectory()) + in_filePath, in_fileContents);
+			case k_internalStorage:
+				return writeFileInternal(in_filePath, in_fileContents);
+			case k_apk:
+				Logging.logFatal("FileUtils: Cannot write to the APK.");
+				return false;
 			default:
-				break;
+				Logging.logFatal("FileUtils: Invalid storage location.");
+				return false;
 		}
-		
-		return WriteFile(StringUtils.StandardisePath(strStorageLocation) + instrFilename, instrFileContents);
 	}
-	//-----------------------------------------------
-	/// Remove File
-	///
-	/// Deletes the given file from the given storage
-	/// location. If the file doesn't exist this will still 
-	/// return success. it will only return an error 
-	/// if the file still exists after this has been 
-	/// called.
-	///
-	/// @param The storage location.
-	/// @param The filename.
-	/// @return Whether or not the file removal was
-	/// successful.
-	//-----------------------------------------------
-	public static boolean RemoveFile(StorageLocation ineStorageLocation, final String instrFilename)
+	/**
+	 * Deletes the given file from the given storage location. If the file 
+	 * doesn't exist this will still return success. it will only return 
+	 * an error if the file still exists after this has been called.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The storage location.
+	 * @param The filename.
+	 * 
+	 * @return Whether or not the file removal was successful.
+	 */
+	public static boolean removeFile(StorageLocation in_storageLocation, String in_filePath)
 	{
-		String strStorageLocation = "";
-		
-		switch (ineStorageLocation)
+		switch (in_storageLocation)
 		{
-			case EXTERNAL_STORAGE:
-				strStorageLocation = GetExternalStorageDirectory();
-				break;
-			case INTERNAL_STORAGE:
-				return RemoveFileInternal(instrFilename);
+			case k_root:
+				return removeFile(in_filePath);
+			case k_externalStorage:
+				return removeFile(StringUtils.StandardisePath(getExternalStorageDirectory()) + in_filePath);
+			case k_internalStorage:
+				return removeFileInternal(in_filePath);
+			case k_apk:
+				Logging.logFatal("FileUtils: Cannot remove file from APK.");
+				return false;
 			default:
-				break;
+				Logging.logFatal("FileUtils: Invalid storage location.");
+				return false;
 		}
-		
-		return RemoveFile(StringUtils.StandardisePath(strStorageLocation) + instrFilename);
 	}
-	//-----------------------------------------------
-	/// Does File Exist
-	///
-	/// @param The file path.
-	/// @returns whether or not the given path exists.
-	//-----------------------------------------------
-	private static boolean DoesFileExist(final String instrFilepath)
+	/**
+	 * @author I Copland
+	 * 
+	 * @param The file path.
+	 * 
+	 * @return whether or not the given path exists.
+	 */
+	private static boolean doesFileExist(String in_filePath)
 	{
-		File file = new File(instrFilepath);
+		File file = new File(in_filePath);
 		if (file.exists() == true && file.isFile() == true)
 		{
 			return true;
 		}
 		return false;
 	}
-	//-----------------------------------------------
-	/// Read File
-	///
-	/// Reads the entire contents of a binary file to
-	/// a byte array.
-	///
-	/// @param The filename.
-	/// @return The byte array.
-	//-----------------------------------------------
-	private static byte[] ReadFile(final String instrFilename)
+	/**
+	 * Reads the entire contents of a binary file to a byte array.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The filename.
+	 * 
+	 * @return The byte array.
+	 */
+	private static byte[] readFile(String in_filePath)
 	{
 		byte[] abyOutput = null;
 		try
 		{
-			if (DoesFileExist(instrFilename) == true)
+			if (doesFileExist(in_filePath) == true)
 			{
 				InputStream stream = null;
 				try
 				{
-					File file = new File(instrFilename);
+					File file = new File(in_filePath);
 					abyOutput = new byte[(int)file.length()];
 					stream = new BufferedInputStream(new FileInputStream(file));
 					int dwTotalRead = 0;
@@ -256,17 +279,17 @@ public class FileUtils
 		
 		return abyOutput;
 	}
-	//-----------------------------------------------
-	/// Write File
-	///
-	/// Writes a byte array to file.
-	///
-	/// @param The filename.
-	/// @param The data to be written to file.
-	/// @param Whether or not the file was successfully
-	/// written.
-	//-----------------------------------------------
-	private static boolean WriteFile(final String instrFilename, final byte[] instrFileContents)
+	/**
+	 * Writes a byte array to file.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The filename.
+	 * @param The data to be written to file.
+	 * 
+	 * @return Whether or not the file was successfully written.
+	 */
+	private static boolean writeFile(String in_filePath, byte[] in_fileContents)
 	{
 		boolean bSuccess = false;
 		try
@@ -274,9 +297,9 @@ public class FileUtils
 			OutputStream stream = null;
 			try
 			{
-				File file = new File(instrFilename);
+				File file = new File(in_filePath);
 				stream = new BufferedOutputStream(new FileOutputStream(file));
-				stream.write(instrFileContents);
+				stream.write(in_fileContents);
 				bSuccess = true;
 			}
 	        catch (Exception e)
@@ -297,71 +320,70 @@ public class FileUtils
 		}
 		return bSuccess;
 	}
-	//-----------------------------------------------
-	/// Remove File
-	///
-	/// Deletes the given file on disk if it exists.
-	/// If the file doesn't exist this will still return
-	/// successful, it will only return an error if
-	/// the file still exists after this has been
-	/// called.
-	///
-	/// @param The filename.
-	/// @return Whether or not this was succcessful.
-	//-----------------------------------------------
-	private static boolean RemoveFile(final String instrFilename)
+	/**
+	 * Deletes the given file on disk if it exists. If the file 
+	 * doesn't exist this will still return successful, it will 
+	 * only return an error if the file still exists after this 
+	 * has been called.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The filename.
+	 * 
+	 * @return Whether or not this was succcessful.
+	 */
+	private static boolean removeFile(String in_filePath)
 	{
-		if (DoesFileExist(instrFilename) == true)
+		if (doesFileExist(in_filePath) == true)
 		{
-			File file = new File(instrFilename);
+			File file = new File(in_filePath);
 			return file.delete();
 		}
 		return true;
 	}
-	//-----------------------------------------------
-	/// Does File Exist Internal
-	///
-	/// Note: This method requires the MoFlow activity
-	/// to have been created to work.
-	///
-	/// @param The file path.
-	/// @returns whether or not the given file exists
-	/// on internal storage.
-	//-----------------------------------------------
-	private static boolean DoesFileExistInternal(final String instrFilepath)
+	/**
+	 * Note: This method requires the Chilli Source activity to have 
+	 * been created to work.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The file path.
+	 * 
+	 * @return Whether or not the given file exists on internal 
+	 * storage.
+	 */
+	private static boolean doesFileExistInternal(String in_filePath)
 	{
-		File file = CSApplication.get().getAppContext().getFileStreamPath(instrFilepath);
+		File file = CSApplication.get().getAppContext().getFileStreamPath(in_filePath);
 	    if (file.exists() == true && file.isFile() == true)
 	    {
 	    	return true;
 	    }
 	    return false;
 	}
-	//-----------------------------------------------
-	/// Read File Internal
-	///
-	/// Reads the entire contents of a binary file
-	/// from internal storage. The contents are
-	/// returned as a byte array. Note: This method 
-	/// requires the MoFlow activity to have been 
-	/// created to work.
-	///
-	/// @param The filename.
-	/// @return The file contents.
-	//-----------------------------------------------
-	private static byte[] ReadFileInternal(final String instrFilename)
+	/**
+	 * Reads the entire contents of a binary file from internal storage. 
+	 * The contents are returned as a byte array. Note: This method 
+	 * requires the Chilli Source activity to have been created to work.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The filename.
+	 * @return The file contents.
+	 */
+	private static byte[] readFileInternal(String in_filePath)
 	{
 		byte[] abyOutput = null;
 		try
 		{
-			if (DoesFileExistInternal(instrFilename) == true)
+			if (doesFileExistInternal(in_filePath) == true)
 			{
 				InputStream stream = null;
 				try
 				{
-					File file = CSApplication.get().getAppContext().getFileStreamPath(instrFilename);
+					File file = CSApplication.get().getAppContext().getFileStreamPath(in_filePath);
 					abyOutput = new byte[(int)file.length()];
-					stream = new BufferedInputStream(CSApplication.get().getAppContext().openFileInput(instrFilename));
+					stream = new BufferedInputStream(CSApplication.get().getAppContext().openFileInput(in_filePath));
 					int dwTotalRead = 0;
 					while(dwTotalRead < abyOutput.length)
 					{
@@ -393,19 +415,18 @@ public class FileUtils
 		
 		return abyOutput;
 	}
-	//-----------------------------------------------
-	/// Write File Internal
-	///
-	/// Writes a byte array to a file on internal 
-	/// storage.  Note: This method requires the MoFlow 
-	/// activity to have been created to work.
-	///
-	/// @param The filename.
-	/// @param The data to be written to file.
-	/// @param Whether or not the file was successfully
-	/// written.
-	//-----------------------------------------------
-	private static boolean WriteFileInternal(final String instrFilename, final byte[] instrFileContents)
+	/**
+	 * Writes a byte array to a file on internal storage. 
+	 * Note: This method requires the Chilli Source activity to 
+	 * have been created to work.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The filename.
+	 * @param The data to be written to file.
+	 * @return Whether or not the file was successfully written.
+	 */
+	private static boolean writeFileInternal(String in_filePath, byte[] in_fileContents)
 	{
 		boolean bSuccess = false;
 		try
@@ -413,8 +434,8 @@ public class FileUtils
 			OutputStream stream = null;
 			try
 			{
-				stream = new BufferedOutputStream(CSApplication.get().getAppContext().openFileOutput(instrFilename, CSActivity.MODE_PRIVATE));
-				stream.write(instrFileContents);
+				stream = new BufferedOutputStream(CSApplication.get().getAppContext().openFileOutput(in_filePath, CSActivity.MODE_PRIVATE));
+				stream.write(in_fileContents);
 				bSuccess = true;
 			}
 	        catch (Exception e)
@@ -435,26 +456,109 @@ public class FileUtils
 		}
 		return bSuccess;
 	}
-	//-----------------------------------------------
-	/// Remove File Internal
-	///
-	/// Deletes the given file from internal storage.
-	/// If the file doesn't exist this will still return
-	/// successful, it will only return an error if
-	/// the file still exists after this has been
-	/// called. Note: This method requires the MoFlow 
-	/// activity to have been created to work.
-	///
-	/// @param The filename.
-	/// @return Whether or not this was successful.
-	//-----------------------------------------------
-	private static boolean RemoveFileInternal(final String instrFilename)
+	/**
+	 * Deletes the given file from internal storage. If the file doesn't 
+	 * exist this will still return successful, it will only return an 
+	 * error if the file still exists after this has been called. 
+	 * Note: This method requires the Chilli Source activity to have 
+	 * been created to work.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The filename
+	 * @return Whether or not this was successful
+	 */
+	private static boolean removeFileInternal(String in_filePath)
 	{
-		if (DoesFileExistInternal(instrFilename) == true)
+		if (doesFileExistInternal(in_filePath) == true)
 		{
-			return CSApplication.get().getAppContext().deleteFile(instrFilename);
+			return CSApplication.get().getAppContext().deleteFile(in_filePath);
 		}
 		
 		return true;
+	}
+	/**
+	 * Note: This method requires the Chilli Source activity to have 
+	 * been created to work.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The file path inside the APK.
+	 * 
+	 * @return Whether or not the given file exists in the APK.
+	 */
+	private static boolean doesFileExistAPK(String in_filePath)
+	{
+		try
+		{
+			Context context = CSApplication.get().getActivityContext();
+			AssetManager assets = context.getAssets();
+			String[] files = assets.list(in_filePath);
+		    if (files != null && files.length > 0)
+		    {
+		    	return true;
+		    }
+		}
+		catch (Exception e)
+		{
+			Logging.logError(ExceptionUtils.ConvertToString(e));
+		}
+		
+	    return false;
+	}
+	/**
+	 * Reads the entire contents of a binary file from the APK. 
+	 * The contents are returned as a byte array. Note: This method 
+	 * requires the Chilli Source activity to have been created to work.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The filename.
+	 * @return The file contents.
+	 */
+	private static byte[] readFileAPK(String in_filePath)
+	{
+		byte[] abyOutput = null;
+		try
+		{
+			if (doesFileExistAPK(in_filePath) == true)
+			{
+				InputStream stream = null;
+				try
+				{
+					AssetFileDescriptor file = CSApplication.get().getAppContext().getAssets().openFd(in_filePath);
+					stream = CSApplication.get().getAppContext().getAssets().open(in_filePath);
+					abyOutput = new byte[(int)file.getLength()];
+					stream = new BufferedInputStream(CSApplication.get().getAppContext().openFileInput(in_filePath));
+					int dwTotalRead = 0;
+					while(dwTotalRead < abyOutput.length)
+					{
+						int dwRemaining = abyOutput.length - dwTotalRead;
+						int dwRead = stream.read(abyOutput, dwTotalRead, dwRemaining); 
+						if (dwRead > 0)
+						{
+							dwTotalRead += dwRead;
+						}
+					}
+				}
+		        catch (Exception e)
+		        {
+		        	throw e;
+		        }
+				finally
+				{
+					if (stream != null)
+					{
+						stream.close();
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			Logging.logError(ExceptionUtils.ConvertToString(e));
+		}
+		
+		return abyOutput;
 	}
 }

@@ -43,8 +43,8 @@ namespace ChilliSource
         //---------------------------------------------------------
         enum class SurfaceFormat
         {
-            k_rgb545_depth24,
-            k_rgb545_depth32,
+            k_rgb565_depth24,
+            k_rgb565_depth32,
             k_rgb888_depth24,
             k_rgb888_depth32
         };

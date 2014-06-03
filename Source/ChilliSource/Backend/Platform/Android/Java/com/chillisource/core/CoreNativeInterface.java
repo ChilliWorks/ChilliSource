@@ -150,7 +150,7 @@ public class CoreNativeInterface extends INativeInterface
 	 */
 	public String getExternalStorageDirectory()
 	{
-		return FileUtils.GetExternalStorageDirectory();
+		return FileUtils.getExternalStorageDirectory();
 	}
 	/**
 	 * @author I Copland

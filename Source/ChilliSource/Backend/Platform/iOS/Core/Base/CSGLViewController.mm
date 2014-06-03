@@ -124,18 +124,18 @@
     {
         CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormattedErrorMessages());
     }
-    ChilliSource::Rendering::SurfaceFormat preferredFormat = ChilliSource::Core::ParseSurfaceFormat(root.get("PreferredSurfaceFormat", "rgb545_depth24").asString());
+    ChilliSource::Rendering::SurfaceFormat preferredFormat = ChilliSource::Core::ParseSurfaceFormat(root.get("PreferredSurfaceFormat", "rgb565_depth24").asString());
     
     //apply format
     switch (preferredFormat)
     {
-        case ChilliSource::Rendering::SurfaceFormat::k_rgb545_depth24:
+        case ChilliSource::Rendering::SurfaceFormat::k_rgb565_depth24:
         default:
             in_view.drawableColorFormat = GLKViewDrawableColorFormatRGB565;
             in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
             in_view.drawableStencilFormat = GLKViewDrawableStencilFormatNone;
             break;
-        case ChilliSource::Rendering::SurfaceFormat::k_rgb545_depth32:
+        case ChilliSource::Rendering::SurfaceFormat::k_rgb565_depth32:
             in_view.drawableColorFormat = GLKViewDrawableColorFormatRGB565;
             in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
             in_view.drawableStencilFormat = GLKViewDrawableStencilFormatNone;

@@ -8,6 +8,9 @@
  */
 
 package com.chillisource.core;
+import org.json.JSONObject;
+
+import com.chillisource.core.FileUtils.StorageLocation;
 import com.chillisource.input.TouchInputNativeInterface;
 
 import android.app.Activity;
@@ -37,18 +40,82 @@ public class Surface extends GLSurfaceView
 		setEGLContextFactory(new ContextFactory());
 		
 		//set the config
-		int rSize = 5;
-		int gSize = 6;
-		int bSize = 5;
-		int aSize = 0;
-		int minDepthBufferSize = 16;
-		int preferredDepthBufferSize = 24;
-		int minStencilBufferSize = 0;
-		setEGLConfigChooser(new ConfigChooser(rSize, gSize, bSize, aSize, minDepthBufferSize, preferredDepthBufferSize, minStencilBufferSize));
+		setEGLConfigChooser(createConfigChooser());
 		
 		//create renderer
 		setRenderer(new com.chillisource.core.Renderer());
     }
+	/**
+	 * Creates a new config chooser with the params as defined in
+	 * the App.config file.
+	 *
+	 * @author I Copland
+	 * 
+	 * @return The config chooser.
+	 */
+	private ConfigChooser createConfigChooser()
+	{
+		String surfaceFormat = readSurfaceFormat();
+		
+		if (surfaceFormat.equalsIgnoreCase("rgb565_depth24") == true)
+		{
+			return new ConfigChooser(5, 6, 5, 0, 16, 24, 0);
+		}
+		else if (surfaceFormat.equalsIgnoreCase("rgb565_depth32") == true)
+		{
+			return new ConfigChooser(5, 6, 5, 0, 16, 32, 0);
+		}
+		else if (surfaceFormat.equalsIgnoreCase("rgb888_depth24") == true)
+		{
+			return new ConfigChooser(8, 8, 8, 0, 16, 24, 0);
+		}
+		else if (surfaceFormat.equalsIgnoreCase("rgb888_depth32") == true)
+		{
+			return new ConfigChooser(8, 8, 8, 0, 16, 32, 0);
+		}
+		else
+		{
+			Logging.logFatal("Surface: Invalid surface format.");
+			return null;
+		}
+	}
+	/**
+	 * Reads the surface format from the App.config file.
+	 *
+	 * @author I Copland
+	 * 
+	 * @return The config chooser.
+	 */
+	private String readSurfaceFormat()
+	{
+		final String k_configFilePath = "Shared/App.config";
+		
+		String output = "rgb565_depth24";
+		if (FileUtils.doesFileExist(StorageLocation.k_apk, k_configFilePath))
+		{
+			byte[] byteContents = FileUtils.readFile(StorageLocation.k_apk, k_configFilePath);
+			String stringContents = StringUtils.UTF8ByteArrayToString(byteContents);
+			
+			try
+			{
+				JSONObject jObject = new JSONObject(stringContents);
+				if (jObject.has("PreferredSurfaceFormat") == true)
+				{
+					output = jObject.getString("PreferredSurfaceFormat");
+				}
+			}
+			catch (Exception e)
+			{
+				Logging.logFatal("Could not load App.config!");
+			}
+		}
+		else
+		{
+			Logging.logFatal("App.config does not exist!");
+		}
+		
+		return output;
+	}
 	/**
 	 * Triggered when the surface receives a touch input event
 	 *

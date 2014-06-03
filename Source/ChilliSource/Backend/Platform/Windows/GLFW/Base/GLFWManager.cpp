@@ -29,6 +29,45 @@ namespace ChilliSource
 		namespace
 		{
 			//-------------------------------------------------------------
+			/// Reads the surface format from the App.config file.
+			///
+			/// @author I Copland
+			///
+			/// @param The surface format.
+			//-------------------------------------------------------------
+			ChilliSource::Rendering::SurfaceFormat GetSurfaceFormat()
+			{
+				const std::string k_defaultFormat = "rgb565_depth24";
+
+				//get the path to here
+				wchar_t pathChars[MAX_PATH];
+				GetModuleFileName(nullptr, pathChars, MAX_PATH);
+				std::string path = WindowsStringUtils::ConvertWindowsPathToStandard(std::wstring(pathChars));
+				std::string::size_type pos = path.find_last_of("/");
+				std::string workingDir = Core::StringUtils::StandardisePath(path.substr(0, pos));
+
+				//open the file
+				std::ifstream file(workingDir + "assets/Shared/App.config");
+
+				std::string formatString = k_defaultFormat;
+				if (file.good() == true)
+				{
+					std::string contents((std::istreambuf_iterator<s8>(file)), std::istreambuf_iterator<s8>());
+
+					//parse the json
+					Json::Reader jReader;
+					Json::Value root;
+					if (!jReader.parse(contents, root))
+					{
+						CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormattedErrorMessages());
+					}
+
+					formatString = root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
+				}
+
+				return ChilliSource::Core::ParseSurfaceFormat(formatString);
+			}
+			//-------------------------------------------------------------
 			/// Applies the surface format described in the App.config file
 			/// to the glfw window.
 			///
@@ -36,29 +75,11 @@ namespace ChilliSource
 			//-------------------------------------------------------------
 			void ApplySurfaceFormat()
 			{
-				//load the JSON string from file.
-				wchar_t pathChars[MAX_PATH];
-				GetModuleFileName(nullptr, pathChars, MAX_PATH);
-				std::string path = WindowsStringUtils::ConvertWindowsPathToStandard(std::wstring(pathChars));
-				std::string::size_type pos = path.find_last_of("/");
-				std::string workingDir = Core::StringUtils::StandardisePath(path.substr(0, pos));
-				std::ifstream file(workingDir + "assets/Shared/App.config");
-				std::string contents((std::istreambuf_iterator<s8>(file)), std::istreambuf_iterator<s8>());
-				file.close();
+				ChilliSource::Rendering::SurfaceFormat format = GetSurfaceFormat();
 
-				//parse the json
-				Json::Reader jReader;
-				Json::Value root;
-				if (!jReader.parse(contents, root))
+				switch (format)
 				{
-					CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormattedErrorMessages());
-				}
-				ChilliSource::Rendering::SurfaceFormat preferredFormat = ChilliSource::Core::ParseSurfaceFormat(root.get("PreferredSurfaceFormat", "rgb545_depth24").asString());
-
-				//apply format
-				switch (preferredFormat)
-				{
-				case ChilliSource::Rendering::SurfaceFormat::k_rgb545_depth24:
+				case ChilliSource::Rendering::SurfaceFormat::k_rgb565_depth24:
 				default:
 					glfwWindowHint(GLFW_RED_BITS, 5);
 					glfwWindowHint(GLFW_GREEN_BITS, 6);
@@ -67,7 +88,7 @@ namespace ChilliSource
 					glfwWindowHint(GLFW_DEPTH_BITS, 24);
 					glfwWindowHint(GLFW_STENCIL_BITS, 0);
 					break;
-				case ChilliSource::Rendering::SurfaceFormat::k_rgb545_depth32:
+				case ChilliSource::Rendering::SurfaceFormat::k_rgb565_depth32:
 					glfwWindowHint(GLFW_RED_BITS, 5);
 					glfwWindowHint(GLFW_GREEN_BITS, 6);
 					glfwWindowHint(GLFW_BLUE_BITS, 5);

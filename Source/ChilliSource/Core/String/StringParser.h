@@ -184,8 +184,8 @@ namespace ChilliSource
         /// Converts from a string to a surface format type. Valid
         /// formats are:
         ///
-        ///  - RGB545_DEPTH24
-        ///  - RGB545_DEPTH32
+        ///  - RGB565_DEPTH24
+        ///  - RGB565_DEPTH32
         ///  - RGB888_DEPTH24
         ///  - RGB888_DEPTH32
         ///

@@ -240,13 +240,13 @@ namespace ChilliSource
             std::string lowerCase = in_surfaceFormat;
             StringUtils::ToLowerCase(lowerCase);
             
-            if (lowerCase == "rgb545_depth24")
+            if (lowerCase == "rgb565_depth24")
             {
-                return Rendering::SurfaceFormat::k_rgb545_depth24;
+                return Rendering::SurfaceFormat::k_rgb565_depth24;
             }
-            else if (lowerCase == "rgb545_depth32")
+            else if (lowerCase == "rgb565_depth32")
             {
-                return Rendering::SurfaceFormat::k_rgb545_depth32;
+                return Rendering::SurfaceFormat::k_rgb565_depth32;
             }
             else if (lowerCase == "rgb888_depth24")
             {
@@ -258,7 +258,7 @@ namespace ChilliSource
             }
             
             CS_LOG_ERROR("String Parser: Invalid surface format.");
-            return Rendering::SurfaceFormat::k_rgb545_depth24;
+            return Rendering::SurfaceFormat::k_rgb565_depth24;
         }
     }
 }

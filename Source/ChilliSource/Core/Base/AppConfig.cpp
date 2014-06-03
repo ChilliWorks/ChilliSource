@@ -43,7 +43,7 @@ namespace ChilliSource
         {
             const std::string k_defaultDisplayableName = "Chilli Source App";
             const u32 k_defaultPreferredFPS = 30;
-            const std::string k_defaultPreferredSurfaceFormat = "rgb545_depth24";
+            const std::string k_defaultPreferredSurfaceFormat = "rgb565_depth24";
         }
         
         CS_DEFINE_NAMEDTYPE(AppConfig);
@@ -59,7 +59,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         //---------------------------------------------------------
         AppConfig::AppConfig()
-        : m_preferredFPS(k_defaultPreferredFPS), m_displayableName(k_defaultDisplayableName), m_preferredSurfaceFormat(Rendering::SurfaceFormat::k_rgb545_depth24)
+        : m_preferredFPS(k_defaultPreferredFPS), m_displayableName(k_defaultDisplayableName), m_preferredSurfaceFormat(Rendering::SurfaceFormat::k_rgb565_depth24)
         {
         }
         //---------------------------------------------------------
