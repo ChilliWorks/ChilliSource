@@ -31,8 +31,14 @@
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/CSGLViewController.h>
 
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/Screen.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #import <ChilliSource/Backend/Platform/iOS/Input/Pointer/PointerSystem.h>
+#import <ChilliSource/Core/Base/AppConfig.h>
 #import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/Base/Utils.h>
+#import <ChilliSource/Core/JSON/json.h>
+#import <ChilliSource/Core/String/StringParser.h>
+#import <ChilliSource/Rendering/Base/SurfaceFormat.h>
 
 @implementation CSGLViewController
 
@@ -52,9 +58,7 @@
         
         //TODO: Expose colour and depth format
         GLKView* view = [[GLKView alloc] initWithFrame:[[UIScreen mainScreen] bounds] context:context];
-        view.drawableColorFormat = GLKViewDrawableColorFormatRGB565;
-        view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
-        view.drawableStencilFormat = GLKViewDrawableStencilFormat8;
+        [self applySurfaceFormat:view];
         view.drawableMultisample = GLKViewDrawableMultisampleNone;
         view.userInteractionEnabled = YES;
         view.enableSetNeedsDisplay = NO;
@@ -95,6 +99,61 @@
     }
 
     return nil;
+}
+//-------------------------------------------------------------
+/// Called by the OS to query whether the view should be
+/// allowed to rotate to the given orientation. The return
+/// is based on the values in the plist.
+///
+/// @author S Downie
+///
+/// @param Interface orientation to rotate to
+///
+/// @return Whether we support the given orientation
+//-------------------------------------------------------------
+- (void)applySurfaceFormat:(GLKView*)in_view
+{
+    //load the JSON string from file.
+    NSString* relativePath = [NSStringUtils newNSStringWithUTF8String:"Shared/App"];
+    NSString* fullPath = [[NSBundle mainBundle] pathForResource:relativePath ofType:@"config"];
+    [relativePath release];
+    NSString* content = [NSString stringWithContentsOfFile:fullPath encoding:NSUTF8StringEncoding error:nil];
+    std::string jsonString = [NSStringUtils newUTF8StringWithNSString:content];
+    
+    //parse the json
+    Json::Reader jReader;
+    Json::Value root;
+    if(!jReader.parse(jsonString, root))
+    {
+        CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormattedErrorMessages());
+    }
+    ChilliSource::Rendering::SurfaceFormat preferredFormat = ChilliSource::Core::ParseSurfaceFormat(root.get("PreferredSurfaceFormat", "rgb545_depth24").asString());
+    
+    //apply format
+    switch (preferredFormat)
+    {
+        case ChilliSource::Rendering::SurfaceFormat::k_rgb545_depth24:
+        default:
+            in_view.drawableColorFormat = GLKViewDrawableColorFormatRGB565;
+            in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+            in_view.drawableStencilFormat = GLKViewDrawableStencilFormatNone;
+            break;
+        case ChilliSource::Rendering::SurfaceFormat::k_rgb545_depth32:
+            in_view.drawableColorFormat = GLKViewDrawableColorFormatRGB565;
+            in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+            in_view.drawableStencilFormat = GLKViewDrawableStencilFormatNone;
+            break;
+        case ChilliSource::Rendering::SurfaceFormat::k_rgb888_depth24:
+            in_view.drawableColorFormat = GLKViewDrawableColorFormatRGBA8888;
+            in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+            in_view.drawableStencilFormat = GLKViewDrawableStencilFormatNone;
+            break;
+        case ChilliSource::Rendering::SurfaceFormat::k_rgb888_depth32:
+            in_view.drawableColorFormat = GLKViewDrawableColorFormatRGBA8888;
+            in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+            in_view.drawableStencilFormat = GLKViewDrawableStencilFormatNone;
+            break;
+    }
 }
 //-------------------------------------------------------------
 /// Called by the OS to query whether the view should be

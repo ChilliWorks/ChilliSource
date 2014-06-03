@@ -164,9 +164,14 @@ namespace ChilliSource
         Colour ParseColour(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a storage location. Acceptable storage locations are:
+        ///
         ///  - Package
         ///  - DLC
         ///  - SaveData
+        ///  - Cache
+        ///  - Root
+        ///
+        /// Note that the location strings are not case sensitive.
         ///
         /// @author Ian Copland
         ///
@@ -175,6 +180,24 @@ namespace ChilliSource
         /// @return The colour value.
         //------------------------------------------------------------
         StorageLocation ParseStorageLocation(const std::string &in_string);
+        //------------------------------------------------------------
+        /// Converts from a string to a surface format type. Valid
+        /// formats are:
+        ///
+        ///  - RGB545_DEPTH24
+        ///  - RGB545_DEPTH32
+        ///  - RGB888_DEPTH24
+        ///  - RGB888_DEPTH32
+        ///
+        /// Note that the format strings are not case sensitive.
+        ///
+        /// @author I Copland
+        ///
+        /// @param The string.
+        ///
+        /// @return The surface format.
+        //------------------------------------------------------------
+        Rendering::SurfaceFormat ParseSurfaceFormat(const std::string& in_surfaceFormat);
     }
 }
 

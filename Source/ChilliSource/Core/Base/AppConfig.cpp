@@ -32,6 +32,8 @@
 #include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 
 namespace ChilliSource
 {
@@ -39,12 +41,15 @@ namespace ChilliSource
     {
         namespace
         {
-            const std::string k_configFilePath = "App.config";
             const std::string k_defaultDisplayableName = "Chilli Source App";
             const u32 k_defaultPreferredFPS = 30;
+            const std::string k_defaultPreferredSurfaceFormat = "rgb545_depth24";
         }
         
         CS_DEFINE_NAMEDTYPE(AppConfig);
+        
+        const std::string AppConfig::k_filePath = "App.config";
+        
         //---------------------------------------------------------
         //---------------------------------------------------------
         AppConfigUPtr AppConfig::Create()
@@ -54,7 +59,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         //---------------------------------------------------------
         AppConfig::AppConfig()
-        : m_preferredFPS(k_defaultPreferredFPS), m_displayableName(k_defaultDisplayableName)
+        : m_preferredFPS(k_defaultPreferredFPS), m_displayableName(k_defaultDisplayableName), m_preferredSurfaceFormat(Rendering::SurfaceFormat::k_rgb545_depth24)
         {
         }
         //---------------------------------------------------------
@@ -76,14 +81,21 @@ namespace ChilliSource
             return m_preferredFPS;
         }
         //---------------------------------------------------------
+        //--------------------------------------------------------
+        Rendering::SurfaceFormat AppConfig::GetPreferredSurfaceFormat() const
+        {
+            return m_preferredSurfaceFormat;
+        }
+        //---------------------------------------------------------
         //---------------------------------------------------------
         void AppConfig::Load()
         {
             Json::Value root;
-            if(Utils::ReadJson(StorageLocation::k_package, k_configFilePath, &root) == true)
+            if(Utils::ReadJson(StorageLocation::k_package, k_filePath, &root) == true)
             {
                 m_displayableName = root.get("DisplayableName", k_defaultDisplayableName).asString();
                 m_preferredFPS = root.get("PreferredFPS", k_defaultPreferredFPS).asUInt();
+                m_preferredSurfaceFormat = ParseSurfaceFormat(root.get("PreferredSurfaceFormat", k_defaultPreferredSurfaceFormat).asString());
             }
         }
     }

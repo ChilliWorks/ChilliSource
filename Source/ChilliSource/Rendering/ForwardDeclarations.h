@@ -61,6 +61,7 @@ namespace ChilliSource
         enum class BlendMode;
         enum class CullFace;
         enum class DepthTestComparison;
+        enum class SurfaceFormat;
         //------------------------------------------------------------
         /// Camera
         //------------------------------------------------------------

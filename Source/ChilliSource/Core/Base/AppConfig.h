@@ -48,6 +48,9 @@ namespace ChilliSource
         {
         public:
             CS_DECLARE_NAMEDTYPE(AppConfig);
+            
+            static const std::string k_filePath;
+            
 			//---------------------------------------------------------
             /// Allows querying of whether or not the system implements
             /// the interface with the associated interface Id.
@@ -70,9 +73,15 @@ namespace ChilliSource
             //---------------------------------------------------------
             /// @author I Copland
             ///
-            /// @param The prefered FPS.
+            /// @param The preferred FPS.
             //--------------------------------------------------------
             u32 GetPreferredFPS() const;
+            //---------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @param The preferred surface format.
+            //--------------------------------------------------------
+            Rendering::SurfaceFormat GetPreferredSurfaceFormat() const;
         private:
             friend class Application;
             //---------------------------------------------------------
@@ -100,6 +109,7 @@ namespace ChilliSource
             
             std::string m_displayableName;
             u32 m_preferredFPS;
+            Rendering::SurfaceFormat m_preferredSurfaceFormat;
         };
     }
 }
