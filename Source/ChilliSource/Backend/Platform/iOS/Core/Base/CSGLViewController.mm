@@ -101,15 +101,12 @@
     return nil;
 }
 //-------------------------------------------------------------
-/// Called by the OS to query whether the view should be
-/// allowed to rotate to the given orientation. The return
-/// is based on the values in the plist.
+/// Applies the surface format described in the App.config file
+/// to the given view.
 ///
-/// @author S Downie
+/// @author I Copland
 ///
-/// @param Interface orientation to rotate to
-///
-/// @return Whether we support the given orientation
+/// @param The view to apply the format to.
 //-------------------------------------------------------------
 - (void)applySurfaceFormat:(GLKView*)in_view
 {
