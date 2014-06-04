@@ -35,9 +35,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import com.chillisource.core.CSActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
@@ -101,7 +104,8 @@ public final class FileUtils
 	 * 
 	 * @author I Copland
 	 * 
-	 * @param The storage location.
+	 * @param The storage location. If APK, the CSApplication and CSActivity
+	 * must exist.
 	 * @param The file path.
 	 * 
 	 * @return Whether or not the path exists.
@@ -117,7 +121,7 @@ public final class FileUtils
 			case k_internalStorage:
 				return doesFileExistInternal(in_filePath);
 			case k_apk:
-				return doesFileExistAPK(in_filePath);
+				return doesFileExistAPK(CSApplication.get().getActivity(), in_filePath);
 			default:
 				Logging.logFatal("FileUtils: Invalid storage location.");
 				return false;
@@ -129,7 +133,8 @@ public final class FileUtils
 	 * 
 	 * @author I Copland
 	 * 
-	 * @param The storage location.
+	 * @param The storage location. If APK, the CSApplication and CSActivity
+	 * must exist.
 	 * @param The filename.
 	 * 
 	 * @return The byte array.
@@ -145,7 +150,7 @@ public final class FileUtils
 			case k_internalStorage:
 				return readFileInternal(in_filePath);
 			case k_apk:
-				return readFileAPK(in_filePath);
+				return readFileAPK(CSApplication.get().getActivity(), in_filePath);
 			default:
 				Logging.logFatal("FileUtils: Invalid storage location.");
 				return null;
@@ -209,6 +214,92 @@ public final class FileUtils
 				Logging.logFatal("FileUtils: Invalid storage location.");
 				return false;
 		}
+	}
+	/**
+	 * @author I Copland
+	 * 
+	 * @param The activiy.
+	 * @param The file path inside the APK.
+	 * 
+	 * @return Whether or not the given file exists in the APK.
+	 */
+	public static boolean doesFileExistAPK(Activity in_activity, String in_filePath)
+	{
+		try
+		{
+			File file = new File(in_filePath);
+			
+			AssetManager assets = in_activity.getAssets();
+			String[] filesArray = assets.list(file.getParent());
+			
+		    if (filesArray != null && filesArray.length > 0)
+		    {
+		    	List<String> filesList = Arrays.asList(filesArray);
+		    	return filesList.contains(file.getName());
+		    }
+		}
+		catch (Exception e)
+		{
+			Logging.logError(ExceptionUtils.ConvertToString(e));
+		}
+		
+	    return false;
+	}
+	/**
+	 * Reads the entire contents of a binary file from the APK. 
+	 * The contents are returned as a byte array. 
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param The activity
+	 * @param The filename.
+	 * 
+	 * @return The file contents.
+	 */
+	public static byte[] readFileAPK(Activity in_activity, String in_filePath)
+	{
+		final int k_bufferSize = 1024;
+		
+		DynamicByteBuffer dynamicByteBuffer = new DynamicByteBuffer(k_bufferSize);
+		try
+		{
+			if (doesFileExistAPK(in_activity, in_filePath) == true)
+			{
+				InputStream stream = null;
+				try
+				{
+					stream = new BufferedInputStream(in_activity.getAssets().open(in_filePath));
+					
+					byte[] buffer = new byte[k_bufferSize];
+					int numRead = 0;
+					while(numRead != -1)
+					{
+						numRead = stream.read(buffer, 0, k_bufferSize); 
+						if (numRead > 0)
+						{
+							dynamicByteBuffer.appendBytes(buffer, numRead);
+						}
+					}
+				}
+		        catch (Exception e)
+		        {
+		        	throw e;
+		        }
+				finally
+				{
+					if (stream != null)
+					{
+						stream.close();
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			Logging.logError(ExceptionUtils.ConvertToString(e));
+		}
+		
+		return dynamicByteBuffer.toByteArray();
 	}
 	/**
 	 * @author I Copland
@@ -476,89 +567,5 @@ public final class FileUtils
 		}
 		
 		return true;
-	}
-	/**
-	 * Note: This method requires the Chilli Source activity to have 
-	 * been created to work.
-	 * 
-	 * @author I Copland
-	 * 
-	 * @param The file path inside the APK.
-	 * 
-	 * @return Whether or not the given file exists in the APK.
-	 */
-	private static boolean doesFileExistAPK(String in_filePath)
-	{
-		try
-		{
-			Context context = CSApplication.get().getActivityContext();
-			AssetManager assets = context.getAssets();
-			String[] files = assets.list(in_filePath);
-		    if (files != null && files.length > 0)
-		    {
-		    	return true;
-		    }
-		}
-		catch (Exception e)
-		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
-		}
-		
-	    return false;
-	}
-	/**
-	 * Reads the entire contents of a binary file from the APK. 
-	 * The contents are returned as a byte array. Note: This method 
-	 * requires the Chilli Source activity to have been created to work.
-	 * 
-	 * @author I Copland
-	 * 
-	 * @param The filename.
-	 * @return The file contents.
-	 */
-	private static byte[] readFileAPK(String in_filePath)
-	{
-		byte[] abyOutput = null;
-		try
-		{
-			if (doesFileExistAPK(in_filePath) == true)
-			{
-				InputStream stream = null;
-				try
-				{
-					AssetFileDescriptor file = CSApplication.get().getAppContext().getAssets().openFd(in_filePath);
-					stream = CSApplication.get().getAppContext().getAssets().open(in_filePath);
-					abyOutput = new byte[(int)file.getLength()];
-					stream = new BufferedInputStream(CSApplication.get().getAppContext().openFileInput(in_filePath));
-					int dwTotalRead = 0;
-					while(dwTotalRead < abyOutput.length)
-					{
-						int dwRemaining = abyOutput.length - dwTotalRead;
-						int dwRead = stream.read(abyOutput, dwTotalRead, dwRemaining); 
-						if (dwRead > 0)
-						{
-							dwTotalRead += dwRead;
-						}
-					}
-				}
-		        catch (Exception e)
-		        {
-		        	throw e;
-		        }
-				finally
-				{
-					if (stream != null)
-					{
-						stream.close();
-					}
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
-		}
-		
-		return abyOutput;
 	}
 }

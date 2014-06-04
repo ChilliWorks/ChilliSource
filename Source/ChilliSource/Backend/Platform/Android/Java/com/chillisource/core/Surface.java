@@ -40,7 +40,7 @@ public class Surface extends GLSurfaceView
 		setEGLContextFactory(new ContextFactory());
 		
 		//set the config
-		setEGLConfigChooser(createConfigChooser());
+		setEGLConfigChooser(createConfigChooser(in_activity));
 		
 		//create renderer
 		setRenderer(new com.chillisource.core.Renderer());
@@ -51,11 +51,13 @@ public class Surface extends GLSurfaceView
 	 *
 	 * @author I Copland
 	 * 
+	 * @param The activity.
+	 * 
 	 * @return The config chooser.
 	 */
-	private ConfigChooser createConfigChooser()
+	private ConfigChooser createConfigChooser(Activity in_activity)
 	{
-		String surfaceFormat = readSurfaceFormat();
+		String surfaceFormat = readSurfaceFormat(in_activity);
 		
 		if (surfaceFormat.equalsIgnoreCase("rgb565_depth24") == true)
 		{
@@ -84,16 +86,18 @@ public class Surface extends GLSurfaceView
 	 *
 	 * @author I Copland
 	 * 
+	 * @param The activity
+	 * 
 	 * @return The config chooser.
 	 */
-	private String readSurfaceFormat()
+	private String readSurfaceFormat(Activity in_activity)
 	{
 		final String k_configFilePath = "Shared/App.config";
 		
 		String output = "rgb565_depth24";
-		if (FileUtils.doesFileExist(StorageLocation.k_apk, k_configFilePath))
+		if (FileUtils.doesFileExistAPK(in_activity, k_configFilePath))
 		{
-			byte[] byteContents = FileUtils.readFile(StorageLocation.k_apk, k_configFilePath);
+			byte[] byteContents = FileUtils.readFileAPK(in_activity, k_configFilePath);
 			String stringContents = StringUtils.UTF8ByteArrayToString(byteContents);
 			
 			try
