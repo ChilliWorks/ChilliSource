@@ -46,9 +46,7 @@ namespace ChilliSource
             /// description. If no user is specified then post
             /// to the wall of the currently authenticated user.
             ///
-            /// User must be authenticated and have granted
-            /// the appropriate write permissions "publish_actions"
-            /// and "publish_stream"
+            /// User must be authenticated
             ///
             /// Note: For the time being only one post can
             /// happen at a time
@@ -63,8 +61,7 @@ namespace ChilliSource
             /// Send a request to a group of friends using the
             /// iOS Facebook framework
             ///
-            /// User must be authenticated and must have granted
-            /// publish permissions
+            /// User must be authenticated
             ///
             /// Note: For the time being only one request can
             /// happen at a time

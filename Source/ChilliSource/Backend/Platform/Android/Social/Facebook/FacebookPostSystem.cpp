@@ -106,8 +106,6 @@ namespace ChilliSource
 		{
             CS_ASSERT(m_postCompleteDelegate == nullptr, "Cannot post more than once at a time");
             CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to post");
-            CS_ASSERT(m_authSystem->HasPermission("publish_actions") == true, "User must have publish_actions write permission granted");
-            CS_ASSERT(in_desc.m_to.empty() == true || m_authSystem->HasPermission("publish_stream") == true, "User must have publish_stream write permissions in order to post to their wall");
 
             m_postCompleteDelegate = in_delegate;
 
