@@ -17,10 +17,10 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
 
+import com.chillisource.core.DynamicByteBuffer;
 import com.chillisource.core.Logging;
 import com.chillisource.networking.InsecureHostnameVerifier;
 import com.chillisource.networking.InsecureTrustManager;
-import com.chillisource.networking.DynamicByteContainer;
 
 import android.app.Activity;
 import android.content.Context;
@@ -231,7 +231,7 @@ public class HttpRequestNativeInterface
 	
 	private static byte[] ReadStream(int indwResponseCode, HttpURLConnection inurlConnection, int[] outadwResultLength) throws IOException
 	{
-		DynamicByteContainer byteContainer = new DynamicByteContainer(kdwDataBlockSize);
+		DynamicByteBuffer byteContainer = new DynamicByteBuffer(kdwDataBlockSize);
     	byte[] byDataBlock = new byte[kdwDataBlockSize];
     	byte[] abyOutputData = null;
 		
@@ -257,14 +257,14 @@ public class HttpRequestNativeInterface
     			// Keep reading until the end has been found
     			while (dwAmountRead != -1)
     			{
-    				byteContainer.AddBytes(byDataBlock, 0, dwAmountRead);
+    				byteContainer.appendBytes(byDataBlock, dwAmountRead);
     				dwAmountRead = reader.read(byDataBlock);
     			}
 
     			reader.close();
 
-    			abyOutputData = byteContainer.GetBytes();
-    			outadwResultLength[0] = byteContainer.GetSize();
+    			abyOutputData = byteContainer.getInternalBuffer();
+    			outadwResultLength[0] = byteContainer.getByteCount();
     		}
     		return abyOutputData;
     	}

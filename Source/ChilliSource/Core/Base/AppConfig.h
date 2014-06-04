@@ -70,9 +70,15 @@ namespace ChilliSource
             //---------------------------------------------------------
             /// @author I Copland
             ///
-            /// @param The prefered FPS.
+            /// @param The preferred FPS.
             //--------------------------------------------------------
             u32 GetPreferredFPS() const;
+            //---------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @param The preferred surface format.
+            //--------------------------------------------------------
+            Rendering::SurfaceFormat GetPreferredSurfaceFormat() const;
         private:
             friend class Application;
             //---------------------------------------------------------

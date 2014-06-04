@@ -48,8 +48,8 @@ public class CSActivity extends Activity
         	requestWindowFeature(Window.FEATURE_NO_TITLE);
         	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
-    		m_surface = new Surface(this);
-        
+        	m_surface = new Surface(this);
+        	
         	CSApplication.create(this);
       
         	CSApplication.get().activityIntent(getIntent());

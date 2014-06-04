@@ -7,7 +7,9 @@
 //
 
 #include <ChilliSource/Core/String/StringParser.h>
+
 #include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 
 #include <cstdlib>
 #include <string>
@@ -204,17 +206,59 @@ namespace ChilliSource
         //------------------------------------------------------------
         StorageLocation ParseStorageLocation(const std::string &in_string)
         {
-            if(in_string == "Package")
+            std::string lowerCase = in_string;
+            StringUtils::ToLowerCase(lowerCase);
+            
+            if(lowerCase == "package")
+            {
                 return StorageLocation::k_package;
-			if(in_string == "SaveData")
+            }
+			else if(lowerCase == "savedata")
+            {
                 return StorageLocation::k_saveData;
-			if(in_string == "Cache")
+            }
+			else if(lowerCase == "cache")
+            {
                 return StorageLocation::k_cache;
-			if(in_string == "DLC")
+            }
+			else if(lowerCase == "dlc")
+            {
                 return StorageLocation::k_DLC;
+            }
+            else if(lowerCase == "root")
+            {
+                return StorageLocation::k_root;
+            }
 			
-			//No test function found
+			CS_LOG_ERROR("String Parser: Invalid storage location.");
 			return StorageLocation::k_package;
+        }
+        //------------------------------------------------------------
+        //------------------------------------------------------------
+        Rendering::SurfaceFormat ParseSurfaceFormat(const std::string& in_surfaceFormat)
+        {
+            std::string lowerCase = in_surfaceFormat;
+            StringUtils::ToLowerCase(lowerCase);
+            
+            if (lowerCase == "rgb565_depth24")
+            {
+                return Rendering::SurfaceFormat::k_rgb565_depth24;
+            }
+            else if (lowerCase == "rgb565_depth32")
+            {
+                return Rendering::SurfaceFormat::k_rgb565_depth32;
+            }
+            else if (lowerCase == "rgb888_depth24")
+            {
+                return Rendering::SurfaceFormat::k_rgb888_depth24;
+            }
+            else if (lowerCase == "rgb888_depth32")
+            {
+                return Rendering::SurfaceFormat::k_rgb888_depth32;
+            }
+            
+            CS_LOG_ERROR("String Parser: Invalid surface format.");
+            return Rendering::SurfaceFormat::k_rgb565_depth24;
         }
     }
 }

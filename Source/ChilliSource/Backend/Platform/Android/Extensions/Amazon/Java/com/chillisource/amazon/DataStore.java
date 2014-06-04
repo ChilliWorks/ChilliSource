@@ -220,7 +220,7 @@ public class DataStore
 		
 		try
 		{
-			byte[] abyEncryptedJson = FileUtils.ReadFile(FileUtils.StorageLocation.INTERNAL_STORAGE, mstrCacheFilename);
+			byte[] abyEncryptedJson = FileUtils.readFile(FileUtils.StorageLocation.k_internalStorage, mstrCacheFilename);
 			if (abyEncryptedJson != null && abyEncryptedJson.length > 0)
 			{
 				byte[] abyJson = AESEncryption.Decrypt(abyEncryptedJson, CalculateSaltedPrivateKey());
@@ -306,7 +306,7 @@ public class DataStore
 			byte[] abyEncryptedJson = AESEncryption.Encrypt(StringUtils.StringToUTF8ByteArray(strJson), CalculateSaltedPrivateKey());
 			if (abyEncryptedJson != null)
 			{
-				FileUtils.WriteFile(FileUtils.StorageLocation.INTERNAL_STORAGE, mstrCacheFilename, abyEncryptedJson);
+				FileUtils.writeFile(FileUtils.StorageLocation.k_internalStorage, mstrCacheFilename, abyEncryptedJson);
 			}
 			else
 			{
