@@ -55,6 +55,7 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 	 * @param The context.
 	 * @param The intent.
 	 */
+	@SuppressWarnings("deprecation")
 	@Override public void onReceive(Context in_context, Intent in_intent)
 	{
 		//evaluate whether or not the main engine activity is in the foreground

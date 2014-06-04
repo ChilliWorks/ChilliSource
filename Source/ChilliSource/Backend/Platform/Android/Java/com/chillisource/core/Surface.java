@@ -68,6 +68,7 @@ public class Surface extends GLSurfaceView
 		//ACTION_POINTER_ID_MASK and ACTION_POINTER_ID_SHIFT are now depreciated and have been replaced with ACTION_POINTER_INDEX_SHIFT
 		//and ACTION_POINTER_INDEX_MASK in order to match the data they are used to retrieve. They are only available in API lv8 however, 
 		//so this will need to be updated when lv8 is our minimum target.
+		@SuppressWarnings("deprecation")
 		int pointerIndex = (actionData & MotionEvent.ACTION_POINTER_ID_MASK) >> MotionEvent.ACTION_POINTER_ID_SHIFT;
 		final int pointerID = event.getPointerId(pointerIndex);
 
