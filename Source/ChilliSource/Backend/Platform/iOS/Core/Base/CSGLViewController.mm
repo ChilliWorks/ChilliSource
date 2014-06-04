@@ -101,14 +101,13 @@
     return nil;
 }
 //-------------------------------------------------------------
-/// Applies the surface format described in the App.config file
-/// to the given view.
+/// Reads the surface format from the App.config file.
 ///
 /// @author I Copland
 ///
-/// @param The view to apply the format to.
+/// @return The surface format.
 //-------------------------------------------------------------
-- (void)applySurfaceFormat:(GLKView*)in_view
+ - (ChilliSource::Rendering::SurfaceFormat)readSurfaceFormat
 {
     //load the JSON string from file.
     NSString* relativePath = [NSStringUtils newNSStringWithUTF8String:"Shared/App"];
@@ -124,7 +123,20 @@
     {
         CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormattedErrorMessages());
     }
-    ChilliSource::Rendering::SurfaceFormat preferredFormat = ChilliSource::Core::ParseSurfaceFormat(root.get("PreferredSurfaceFormat", "rgb565_depth24").asString());
+   
+    return ChilliSource::Core::ParseSurfaceFormat(root.get("PreferredSurfaceFormat", "rgb565_depth24").asString());
+}
+//-------------------------------------------------------------
+/// Applies the surface format described in the App.config file
+/// to the given view.
+///
+/// @author I Copland
+///
+/// @param The view to apply the format to.
+//-------------------------------------------------------------
+- (void)applySurfaceFormat:(GLKView*)in_view
+{
+    ChilliSource::Rendering::SurfaceFormat preferredFormat = [self readSurfaceFormat];
     
     //apply format
     switch (preferredFormat)

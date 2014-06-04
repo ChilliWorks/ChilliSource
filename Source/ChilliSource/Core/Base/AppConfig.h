@@ -48,9 +48,6 @@ namespace ChilliSource
         {
         public:
             CS_DECLARE_NAMEDTYPE(AppConfig);
-            
-            static const std::string k_filePath;
-            
 			//---------------------------------------------------------
             /// Allows querying of whether or not the system implements
             /// the interface with the associated interface Id.
@@ -109,7 +106,6 @@ namespace ChilliSource
             
             std::string m_displayableName;
             u32 m_preferredFPS;
-            Rendering::SurfaceFormat m_preferredSurfaceFormat;
         };
     }
 }
