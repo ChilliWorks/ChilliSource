@@ -41,8 +41,6 @@ import java.util.List;
 import com.chillisource.core.CSActivity;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.os.Environment;
 

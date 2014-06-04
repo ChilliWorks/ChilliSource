@@ -10,7 +10,6 @@
 package com.chillisource.core;
 import org.json.JSONObject;
 
-import com.chillisource.core.FileUtils.StorageLocation;
 import com.chillisource.input.TouchInputNativeInterface;
 
 import android.app.Activity;
