@@ -223,6 +223,7 @@ public class CoreNativeInterface extends INativeInterface
 	 * 
 	 * @return Screen width in pixels
 	 */
+	@SuppressWarnings("deprecation")
 	public int getScreenWidth()
 	{
 		return CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getWidth();
@@ -232,6 +233,7 @@ public class CoreNativeInterface extends INativeInterface
 	 * 
 	 * @return Screen height in pixels
 	 */
+	@SuppressWarnings("deprecation")
 	public int getScreenHeight()
 	{
 		return CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getHeight();
