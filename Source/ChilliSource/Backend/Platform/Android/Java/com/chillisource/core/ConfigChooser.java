@@ -1,10 +1,29 @@
-/*
- *  CMoFlowConfigChooser.java
- *  moFlow
- *
- *  Created by Ian Copland on 14/08/2012.
- *  Copyright 2012 Tag Games. All rights reserved.
- *
+/**
+ * ConfigChooser.java
+ * Chilli Source
+ * Created by Ian Copland on 14/08/2012.
+ * 
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2012 Tag Games Limited
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 
 package com.chillisource.core;
@@ -90,12 +109,7 @@ public final class ConfigChooser implements GLSurfaceView.EGLConfigChooser
         in_egl.eglChooseConfig(in_display, s_configAttribs2, configs, numConfigs, num_config);
 
         //Now return the "best" one
-        EGLConfig output = chooseConfig(in_egl, in_display, configs, true);
-        if (output == null)
-        {
-        	output = chooseConfig(in_egl, in_display, configs, false);
-        }
-        return output;
+        return chooseConfig(in_egl, in_display, configs);
     }
     /**
      * Chooses the best config for the given parameters.
@@ -109,30 +123,34 @@ public final class ConfigChooser implements GLSurfaceView.EGLConfigChooser
      * 
      * @return The config.
      */
-    private EGLConfig chooseConfig(EGL10 in_egl, EGLDisplay in_display, EGLConfig[] in_configs, boolean in_preferred) 
+    private EGLConfig chooseConfig(EGL10 in_egl, EGLDisplay in_display, EGLConfig[] in_configs) 
     {
-        for(EGLConfig config : in_configs) 
-        {
-            int d = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_DEPTH_SIZE, 0);
-            int s = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_STENCIL_SIZE, 0);
-
-            // We need at least mDepthSize and mStencilSize bits
-            if ((in_preferred == true && d < m_preferredDepthSize) || (in_preferred == false && d < m_minDepthSize) || s < m_minStencilSize)
-            {
-                continue;
-            }
-
-            // We want an *exact* match for red/green/blue/alpha
-            int r = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_RED_SIZE, 0);
-            int g = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_GREEN_SIZE, 0);
-            int b = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_BLUE_SIZE, 0);
-            int a = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_ALPHA_SIZE, 0);
-
-            if (r == m_redSize && g == m_greenSize && b == m_blueSize && a == m_alphaSize)
-            {
-                return config;
-            }
-        }
+    	int depthSize = m_preferredDepthSize;
+    	while (depthSize >= m_minDepthSize)
+    	{
+	        for(EGLConfig config : in_configs) 
+	        {
+	            int d = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_DEPTH_SIZE, 0);
+	            int s = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_STENCIL_SIZE, 0);
+	
+	            // We need at least mDepthSize and mStencilSize bits
+	            if (d >= depthSize && s >= m_minStencilSize)
+	            {
+	            	// We want an *exact* match for red/green/blue/alpha
+		            int r = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_RED_SIZE, 0);
+		            int g = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_GREEN_SIZE, 0);
+		            int b = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_BLUE_SIZE, 0);
+		            int a = findConfigAttrib(in_egl, in_display, config, EGL10.EGL_ALPHA_SIZE, 0);
+		
+		            if (r == m_redSize && g == m_greenSize && b == m_blueSize && a == m_alphaSize)
+		            {
+		                return config;
+		            }
+	            }
+	        }
+	        
+	        depthSize -= 8;
+    	}
         return null;
     }
     /**

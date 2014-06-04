@@ -32,6 +32,8 @@
 #include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 
 namespace ChilliSource
 {
@@ -45,6 +47,7 @@ namespace ChilliSource
         }
         
         CS_DEFINE_NAMEDTYPE(AppConfig);
+
         //---------------------------------------------------------
         //---------------------------------------------------------
         AppConfigUPtr AppConfig::Create()
