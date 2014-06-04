@@ -240,6 +240,8 @@ namespace ChilliSource
 		{
 			CancelAllRequests();
 
+			HttpRequest::Shutdown();
+
 			for (auto it = m_requests.begin(); it != m_requests.end(); ++it)
 			{
 				CS_SAFEDELETE(*it);

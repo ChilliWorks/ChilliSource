@@ -26,6 +26,10 @@ namespace ChilliSource
 {
 	namespace Windows
 	{
+		std::list<std::shared_ptr<std::mutex>> HttpRequest::s_destroyingMutexes;
+		std::mutex HttpRequest::s_addingMutexesMutex;
+		bool HttpRequest::s_isDestroying = false;
+
 		namespace
 		{
 			const u32 k_readBufferSize = 1024 * 50;
@@ -136,12 +140,16 @@ namespace ChilliSource
 		//------------------------------------------------------------------
 		HttpRequest::HttpRequest(const Desc& in_requestDesc, HINTERNET in_requestHandle, HINTERNET in_connectionHandle, u32 in_bufferFlushSize, const Delegate& in_delegate)
 			: m_desc(in_requestDesc), m_bufferFlushSize(in_bufferFlushSize), m_completionDelegate(in_delegate), m_shouldKillThread(false), m_isPollingComplete(false), m_isRequestComplete(false),
-			m_responseCode(0), m_requestResult(Result::k_failed), m_totalBytesRead(0), m_totalBytesReadThisBlock(0)
+			m_responseCode(0), m_requestResult(Result::k_failed), m_totalBytesRead(0)
 		{
 			CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
 
 			//Begin the read loop as a threaded task
-			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&HttpRequest::PollReadStream, this, in_requestHandle, in_connectionHandle));
+			auto destroyingMutex = std::make_shared<std::mutex>();
+			std::unique_lock<std::mutex> lock(s_addingMutexesMutex);
+			s_destroyingMutexes.push_back(destroyingMutex);
+			lock.unlock();
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&HttpRequest::PollReadStream, this, in_requestHandle, in_connectionHandle, destroyingMutex));
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
@@ -162,66 +170,102 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
-		void HttpRequest::PollReadStream(HINTERNET in_requestHandle, HINTERNET in_connectionHandle)
-		{
-			if (WinHttpSendRequest(in_requestHandle, 0, WINHTTP_NO_REQUEST_DATA, (LPVOID)m_desc.m_body.data(), m_desc.m_body.length(), m_desc.m_body.length(), NULL) == false)
-			{
-				DWORD error = GetLastError();
+		void HttpRequest::PollReadStream(HINTERNET in_requestHandle, HINTERNET in_connectionHandle, std::shared_ptr<std::mutex> in_destroyingMutex)
+		{	
+			std::unique_lock<std::mutex> lock(*in_destroyingMutex);
 
-				switch (error)
-				{
-					case ERROR_WINHTTP_TIMEOUT:
-						m_requestResult = Result::k_timeout;
-						break;
-					default:
-						m_requestResult = Result::k_failed;
-						break;
-				}
-
-				WinHttpCloseHandle(in_requestHandle);
-				WinHttpCloseHandle(in_connectionHandle);
-				m_isPollingComplete = true;
+			if (s_isDestroying == true)
 				return;
-			}
 
-			if (WinHttpReceiveResponse(in_requestHandle, nullptr) == false)
+			u32 bufferFlushSize = m_bufferFlushSize;
+			std::string body = m_desc.m_body;
+
+			lock.unlock();
+			BOOL sendRequestResult = WinHttpSendRequest(in_requestHandle, 0, WINHTTP_NO_REQUEST_DATA, (LPVOID)body.data(), body.length(), body.length(), NULL);
+			lock.lock();
+
+			if (s_isDestroying == true)
+				return;
+		
+			if (sendRequestResult == FALSE)
 			{
 				DWORD error = GetLastError();
-
+				Result result;
 				switch (error)
 				{
 				case ERROR_WINHTTP_TIMEOUT:
-					m_requestResult = Result::k_timeout;
+					result = Result::k_timeout;
 					break;
 				default:
-					m_requestResult = Result::k_failed;
+					result = Result::k_failed;
 					break;
 				}
 
 				WinHttpCloseHandle(in_requestHandle);
 				WinHttpCloseHandle(in_connectionHandle);
 				m_isPollingComplete = true;
+				m_requestResult = result;
+				return;
+			}
+
+			lock.unlock();
+			BOOL receiveResponseResult = WinHttpReceiveResponse(in_requestHandle, nullptr);
+			lock.lock();
+
+			if (s_isDestroying == true)
+				return;
+
+			if (receiveResponseResult == FALSE)
+			{
+				DWORD error = GetLastError();
+				Result result;
+				switch (error)
+				{
+				case ERROR_WINHTTP_TIMEOUT:
+					result = Result::k_timeout;
+					break;
+				default:
+					result = Result::k_failed;
+					break;
+				}
+
+				WinHttpCloseHandle(in_requestHandle);
+				WinHttpCloseHandle(in_connectionHandle);
+				m_isPollingComplete = true;
+				m_requestResult = result;
 				return;
 			}
 
 			//Get the status from the server
 			DWORD headerSize = sizeof(DWORD);
-			WinHttpQueryHeaders(in_requestHandle, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER, nullptr, &m_responseCode, &headerSize, nullptr);
+			u32 responseCode = 0;
+			WinHttpQueryHeaders(in_requestHandle, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER, nullptr, &responseCode, &headerSize, nullptr);
 
 			//Pull the headers and check for a redirect URL
+			std::string redirectUrl;
 			Core::ParamDictionary headers = GetHeaders(in_requestHandle);
-			headers.TryGetValue("Location", m_desc.m_redirectionUrl);
+			headers.TryGetValue("Location", redirectUrl);
 
 			// Keep reading from the remote server until there's
 			// nothing left to read
 			DWORD bytesToBeRead = 0;
 			DWORD bytesRead = 0;
+			Result result = Result::k_failed;
+			u32 totalBytesRead = 0;
+			u32 totalBytesReadThisBlock = 0;
 			s8 readBuffer[k_readBufferSize];
 			std::stringstream streamBuffer;
 
 			do
 			{
-				if (WinHttpQueryDataAvailable(in_requestHandle, &bytesToBeRead) == false)
+				lock.unlock();
+				BOOL queryAvailableResult = WinHttpQueryDataAvailable(in_requestHandle, &bytesToBeRead);
+				lock.lock();
+
+				if (s_isDestroying == true)
+					return;
+
+				if (queryAvailableResult == FALSE)
 				{
 					WinHttpCloseHandle(in_requestHandle);
 					WinHttpCloseHandle(in_connectionHandle);
@@ -230,12 +274,19 @@ namespace ChilliSource
 					return;
 				}
 
-				if (!WinHttpReadData(in_requestHandle, readBuffer, k_readBufferSize, &bytesRead))
+				lock.unlock();
+				BOOL readDataResult = WinHttpReadData(in_requestHandle, readBuffer, k_readBufferSize, &bytesRead);
+				lock.lock();
+
+				if (s_isDestroying == true)
+					return;
+
+				if (readDataResult == FALSE)
 				{
 					WinHttpCloseHandle(in_requestHandle);
 					WinHttpCloseHandle(in_connectionHandle);
 					m_requestResult = Result::k_failed;
-					m_isPollingComplete = true;;
+					m_isPollingComplete = true;
 					return;
 				}
 
@@ -243,30 +294,34 @@ namespace ChilliSource
 				if (bytesRead > 0)
 				{
 					streamBuffer.write(readBuffer, bytesRead);
-					m_totalBytesRead += bytesRead;
-					m_totalBytesReadThisBlock += bytesRead;
+					totalBytesRead += bytesRead;
+					totalBytesReadThisBlock += bytesRead;
 
-					if (m_bufferFlushSize != 0 && m_totalBytesReadThisBlock >= m_bufferFlushSize)
+					if (bufferFlushSize != 0 && totalBytesReadThisBlock >= bufferFlushSize)
 					{
 						m_responseData = streamBuffer.str();
+						m_completionDelegate(this, Result::k_flushed);
 						streamBuffer.clear();
 						streamBuffer.str("");
-						m_totalBytesReadThisBlock = 0;
-						m_completionDelegate(this, Result::k_flushed);
+						totalBytesReadThisBlock = 0;
 					}
 				}
 
-			} while (bytesRead > 0 && m_shouldKillThread == false);	
+			} while (bytesRead > 0 && m_shouldKillThread == false);
 
 			if (m_shouldKillThread == false)
 			{
-				m_responseData = streamBuffer.str();
-				m_requestResult = Result::k_completed;
+				result = Result::k_completed;
 			}
 
 			WinHttpCloseHandle(in_requestHandle);
 			WinHttpCloseHandle(in_connectionHandle);
 			m_isPollingComplete = true;
+			m_requestResult = result;
+			m_responseCode = responseCode;
+			m_totalBytesRead = totalBytesRead;
+			m_responseData = streamBuffer.str();
+			m_desc.m_redirectionUrl = redirectUrl;
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
@@ -304,6 +359,22 @@ namespace ChilliSource
 		u32 HttpRequest::GetBytesRead() const
 		{
 			return m_totalBytesRead;
+		}
+		//----------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------
+		void HttpRequest::Shutdown()
+		{
+			std::unique_lock<std::mutex> mutexLock(s_addingMutexesMutex);
+
+			std::vector<std::unique_lock<std::mutex>> locks;
+			locks.reserve(s_destroyingMutexes.size());
+
+			for (auto& mutex : s_destroyingMutexes)
+			{
+				locks.push_back(std::unique_lock<std::mutex>(*mutex));
+			}
+
+			s_isDestroying = true;
 		}
 	}
 }
