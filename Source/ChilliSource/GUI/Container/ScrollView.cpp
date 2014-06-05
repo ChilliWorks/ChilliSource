@@ -300,7 +300,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         bool ScrollView::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
         {
-            if(UserInteraction && Visible && mbTouchActive && Contains(in_pointer.m_location))
+            if(UserInteraction && Visible && mbTouchActive && (Contains(in_pointer.m_location) == true || IsAcceptTouchesOutsideOfBoundsEnabled() == true))
             {
                 //Calculate the displacement
                 mvVelocity = in_pointer.m_location - mvRealPreviousTouchPosition;
