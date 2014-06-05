@@ -190,12 +190,12 @@ namespace ChilliSource
 		}
         //---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
-		CameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(f32 in_FOV, f32 in_near, f32 in_far)
+		CameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far)
 		{
 			CameraDescription desc;
-			desc.vViewSize = m_screen->GetResolution();
+			desc.vViewSize = in_viewportSize;
 			desc.fAspect = (desc.vViewSize.x/desc.vViewSize.y);
-			desc.fFOV = in_FOV;
+			desc.fFOV = 60.0f;
 			desc.fNearClipping = in_near;
 			desc.fFarClipping = in_far;
 			desc.ClearCol = Core::Colour::k_white;

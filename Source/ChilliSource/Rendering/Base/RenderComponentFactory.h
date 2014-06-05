@@ -131,13 +131,13 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Field of view in degrees
+            /// @param Viewport size
             /// @param Distance of near clip plane from the camera
             /// @param Distance of far clip plane from the camera
 			///
 			/// @return Ownership of new camera component
 			//---------------------------------------------------------------------------
-            CameraComponentUPtr CreateOrthographicCameraComponent(f32 in_FOV, f32 in_near, f32 in_far);
+            CameraComponentUPtr CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far);
 			//---------------------------------------------------------------------------
 			/// Create a new light component that is applied in the ambient render pass.
             /// This light simulates global light scattering as a base colour
