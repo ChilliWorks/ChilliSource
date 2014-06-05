@@ -61,9 +61,9 @@ namespace ChilliSource
             /// @author R Henning
             ///
             /// @param Post description
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //----------------------------------------------------
-            void Post(const PostDesc& in_desc, const PostResultDelegate& in_delegate) override;
+            void Post(const PostDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection) override;
             //---------------------------------------------------
             /// Send a request to a group of friends using the
             /// Android Facebook SDK
@@ -76,9 +76,9 @@ namespace ChilliSource
             /// @author A Mackie
             ///
             /// @param Request description
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //---------------------------------------------------
-            void SendRequest(const RequestDesc& in_desc, const PostResultDelegate& in_delegate) override;
+            void SendRequest(const RequestDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection) override;
 
             //---Internal functions called by the JNI
             //---------------------------------------------------
@@ -123,8 +123,8 @@ namespace ChilliSource
 
 			FacebookJavaInterfaceSPtr m_javaInterface;
 			Social::FacebookAuthenticationSystem* m_authSystem;
-            PostResultDelegate m_postCompleteDelegate;
-            PostResultDelegate m_requestCompleteDelegate;
+            PostResultDelegate::Connection m_postCompleteDelegateConnection;
+            PostResultDelegate::Connection m_requestCompleteDelegateConnection;
 		};
 	}
 }

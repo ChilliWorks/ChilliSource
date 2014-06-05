@@ -60,12 +60,13 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate& in_delegate, bool in_dismissWithTap,
+        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap,
         		const Core::Colour& in_backgroundColour)
         {
         	CS_ASSERT(m_isPlaying == false, "Cannot present a video while one is already playing.");
         	m_isPlaying = true;
-        	m_completionDelegateConnection = in_delegate.OpenConnection();
+
+            m_completionDelegateConnection = std::move(in_delegateConnection);
 
         	//calculate the storage location and full filename.
         	bool isPackage = false;
@@ -99,12 +100,12 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
 		//--------------------------------------------------------------
-		void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate& in_delegate,
+		void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                 bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
 		{
 			m_subtitles = in_subtitles;
 			m_javaInterface->SetUpdateSubtitlesDelegate(Core::MakeDelegate(this, &VideoPlayer::OnUpdateSubtitles));
-			Present(in_storageLocation, in_fileName, in_delegate, in_dismissWithTap, in_backgroundColour);
+			Present(in_storageLocation, in_fileName, std::move(in_delegateConnection), in_dismissWithTap, in_backgroundColour);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------

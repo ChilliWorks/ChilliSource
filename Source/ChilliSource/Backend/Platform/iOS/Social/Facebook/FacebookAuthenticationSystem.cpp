@@ -54,22 +54,24 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------
         //----------------------------------------------------
-		void FacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate)
+		void FacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection)
 		{
-            CS_ASSERT(m_authenticateDelegate == nullptr, "Cannot authenticate more than once at the same time");
+            CS_ASSERT(m_authenticateDelegateConnection == nullptr, "Cannot authenticate more than once at the same time");
             
-            m_authenticateDelegate = in_delegate;
+            m_authenticateDelegateConnection = std::move(in_delegateConnection);
 
             if(IsSignedIn())
             {
                 //If we already have an open session then just return a success
-                if(m_authenticateDelegate)
+                if(m_authenticateDelegateConnection)
                 {
                     AuthenticateResponse response;
                     response.m_token = GetActiveToken();
                     response.m_result = AuthenticateResult::k_success;
-                    m_authenticateDelegate(response);
-                    m_authenticateDelegate = nullptr;
+
+                    auto delegateConnection = std::move(m_authenticateDelegateConnection);
+                    m_authenticateDelegateConnection = nullptr;
+                    delegateConnection->Call(response);
                 }
                 
                 return;
@@ -110,12 +112,14 @@ namespace ChilliSource
                  {
                      NSLog(@"%@", error.localizedDescription);
                      
-                     if(m_authenticateDelegate)
+                     if(m_authenticateDelegateConnection)
                      {
                          AuthenticateResponse response;
                          response.m_result = AuthenticateResult::k_failed;
-                         m_authenticateDelegate(response);
-                         m_authenticateDelegate = nullptr;
+           
+                         auto delegateConnection = std::move(m_authenticateDelegateConnection);
+                         m_authenticateDelegateConnection = nullptr;
+                         delegateConnection->Call(response);
                      }
                  }
              }];
@@ -135,13 +139,15 @@ namespace ChilliSource
             {
                 case FBSessionStateOpen:
                 {
-                    if(m_authenticateDelegate)
+                    if(m_authenticateDelegateConnection)
                     {
                         AuthenticateResponse response;
                         response.m_token = [NSStringUtils newUTF8StringWithNSString:[[in_session accessTokenData] accessToken]];
                         response.m_result = AuthenticateResult::k_success;
-                        m_authenticateDelegate(response);
-                        m_authenticateDelegate = nullptr;
+  
+                        auto delegateConnection = std::move(m_authenticateDelegateConnection);
+                        m_authenticateDelegateConnection = nullptr;
+                        delegateConnection->Call(response);
                     }
                     break;
                 }
@@ -153,12 +159,14 @@ namespace ChilliSource
                 case FBSessionStateClosedLoginFailed:
                 default:
                 {
-                    if(m_authenticateDelegate)
+                    if(m_authenticateDelegateConnection)
                     {
                         AuthenticateResponse response;
                         response.m_result = AuthenticateResult::k_failed;
-                        m_authenticateDelegate(response);
-                        m_authenticateDelegate = nullptr;
+     
+                        auto delegateConnection = std::move(m_authenticateDelegateConnection);
+                        m_authenticateDelegateConnection = nullptr;
+                        delegateConnection->Call(response);
                     }
                     break;
                 }
@@ -178,12 +186,12 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-        void FacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate)
+        void FacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection)
         {
-            CS_ASSERT(m_authoriseReadDelegate == nullptr, "Only one read permission request can be active at a time");
+            CS_ASSERT(m_authoriseReadDelegateConnection == nullptr, "Only one read permission request can be active at a time");
             CS_ASSERT(IsSignedIn() == true, "Must be authenticated");
             
-            m_authoriseReadDelegate = in_delegate;
+            m_authoriseReadDelegateConnection = std::move(in_delegateConnection);
             
             NSArray * permissionsArray = CreateNSArrayFromStringArray(in_readPermissions);
             
@@ -194,21 +202,25 @@ namespace ChilliSource
                  {
                      NSLog(@"%@", error.localizedDescription);
              
-                     if(m_authoriseReadDelegate)
+                     if(m_authoriseReadDelegateConnection)
                      {
                          AuthenticateResponse response;
                          response.m_result = AuthenticateResult::k_failed;
-                         m_authoriseReadDelegate(response);
-                         m_authoriseReadDelegate = nullptr;
+
+                         auto delegateConnection = std::move(m_authoriseReadDelegateConnection);
+                         m_authoriseReadDelegateConnection = nullptr;
+                         delegateConnection->Call(response);
                      }
                  }
-                 else if(m_authoriseReadDelegate)
+                 else if(m_authoriseReadDelegateConnection)
                  {
                      AuthenticateResponse response;
                      response.m_result = AuthenticateResult::k_success;
                      response.m_token = GetActiveToken();
-                     m_authoriseReadDelegate(response);
-                     m_authoriseReadDelegate = nullptr;
+  
+                     auto delegateConnection = std::move(m_authoriseReadDelegateConnection);
+                     m_authoriseReadDelegateConnection = nullptr;
+                     delegateConnection->Call(response);
                  }
             }];
             
@@ -216,12 +228,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void FacebookAuthenticationSystem::AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, const AuthenticationCompleteDelegate& in_delegate)
+        void FacebookAuthenticationSystem::AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection)
         {
-            CS_ASSERT(m_authoriseWriteDelegate == nullptr, "Only one write permission request can be active at a time");
+            CS_ASSERT(m_authoriseWriteDelegateConnection == nullptr, "Only one write permission request can be active at a time");
             CS_ASSERT(IsSignedIn() == true, "Must be authenticated");
             
-            m_authoriseWriteDelegate = in_delegate;
+            m_authoriseWriteDelegateConnection = std::move(in_delegateConnection);
             
             //We store these so we can check that the user granted all our permissions
             m_currentRequestedWritePermissions = in_writePermissions;
@@ -236,15 +248,17 @@ namespace ChilliSource
                 {
                     NSLog(@"%@", error.localizedDescription);
              
-                    if(m_authoriseWriteDelegate)
+                    if(m_authoriseWriteDelegateConnection)
                     {
-                        AuthenticateResponse response;
-                        response.m_result = AuthenticateResult::k_failed;
-                        m_authoriseWriteDelegate(response);
-                        m_authoriseWriteDelegate = nullptr;
+                         AuthenticateResponse response;
+                         response.m_result = AuthenticateResult::k_failed;
+     
+                         auto delegateConnection = std::move(m_authoriseWriteDelegateConnection);
+                         m_authoriseWriteDelegateConnection = nullptr;
+                         delegateConnection->Call(response);
                     }
                 }
-                else if(m_authoriseWriteDelegate)
+                else if(m_authoriseWriteDelegateConnection)
                 {
                     //Check to see if the user granted the permissions we asked for.
                     bool permissionMismatch = false;
@@ -274,10 +288,10 @@ namespace ChilliSource
                     {
                         response.m_result = AuthenticateResult::k_permissionMismatch;
                     }
-                    
-                    response.m_token = GetActiveToken();
-                    m_authoriseWriteDelegate(response);
-                    m_authoriseWriteDelegate = nullptr;
+             
+                     auto delegateConnection = std::move(m_authoriseWriteDelegateConnection);
+                     m_authoriseWriteDelegateConnection = nullptr;
+                     delegateConnection->Call(response);
                 }
             }];
             

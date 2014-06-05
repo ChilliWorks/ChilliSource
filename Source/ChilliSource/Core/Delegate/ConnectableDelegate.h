@@ -72,6 +72,17 @@ namespace ChilliSource
             //------------------------------------------------------------------
             using Delegate = std::function<TReturnType(TArgTypes...)>;
             //------------------------------------------------------------------
+            /// Constructor null
+            ///
+            /// @author S Downie
+            ///
+            /// @param Null ptr
+            //------------------------------------------------------------------
+			ConnectableDelegate(std::nullptr_t in_null)
+            {
+                m_mutex = std::unique_ptr<std::mutex>(new std::mutex());
+            }
+            //------------------------------------------------------------------
             /// Constructor
             ///
             /// @author S Downie
@@ -166,6 +177,37 @@ namespace ChilliSource
                 }
                 
                 m_connections.clear();
+            }
+            //------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Nullptr
+            ///
+            /// @return Whether the object is considered null
+            //------------------------------------------------------------------
+            bool operator==(std::nullptr_t in_null) const
+            {
+                return m_delegate == nullptr;
+            }
+            //------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Nullptr
+            ///
+            /// @return Whether the object is NOT considered null
+            //------------------------------------------------------------------
+            bool operator!=(std::nullptr_t in_null) const
+            {
+                return m_delegate != nullptr;
+            }
+            //------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Whether the object is NOT considered null
+            //------------------------------------------------------------------
+            operator bool() const
+            {
+                return m_delegate != nullptr;
             }
             //------------------------------------------------------------------
             /// Closes all open connections

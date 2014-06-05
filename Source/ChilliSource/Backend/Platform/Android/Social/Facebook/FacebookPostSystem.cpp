@@ -102,12 +102,12 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void FacebookPostSystem::Post(const PostDesc& in_desc, const PostResultDelegate& in_delegate)
+		void FacebookPostSystem::Post(const PostDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection)
 		{
-            CS_ASSERT(m_postCompleteDelegate == nullptr, "Cannot post more than once at a time");
+            CS_ASSERT(m_postCompleteDelegateConnection == nullptr, "Cannot post more than once at a time");
             CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to post");
 
-            m_postCompleteDelegate = in_delegate;
+            m_postCompleteDelegateConnection = std::move(in_delegateConnection);
 
             //If we aren't posting to anyone we are posting to the
             //signed in user feed.
@@ -123,12 +123,12 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void FacebookPostSystem::SendRequest(const RequestDesc& in_desc, const PostResultDelegate& in_delegate)
+		void FacebookPostSystem::SendRequest(const RequestDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection)
 		{
-            CS_ASSERT(m_requestCompleteDelegate == nullptr, "Cannot request more than once at a time");
+            CS_ASSERT(m_requestCompleteDelegateConnection == nullptr, "Cannot request more than once at a time");
             CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to request");
 
-            m_requestCompleteDelegate = in_delegate;
+            m_requestCompleteDelegateConnection = std::move(in_delegateConnection);
 
             std::vector<std::string> requestParamsKeyValue;
             RequestDescToKeyValueArray(in_desc, requestParamsKeyValue);
@@ -138,24 +138,27 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void FacebookPostSystem::OnPostToFeedComplete(PostResult in_result)
 		{
-			if(!m_postCompleteDelegate)
+			if(!m_postCompleteDelegateConnection)
 			{
 				return;
 			}
 
-			m_postCompleteDelegate(in_result);
-			m_postCompleteDelegate = nullptr;
+            auto delegateConnection = std::move(m_postCompleteDelegateConnection);
+            m_postCompleteDelegateConnection = nullptr;
+            delegateConnection->Call(in_result);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
 		void FacebookPostSystem::OnPostRequestComplete(PostResult in_result)
 		{
-			if(!m_requestCompleteDelegate)
+			if(!m_requestCompleteDelegateConnection)
 			{
 				return;
 			}
-			m_requestCompleteDelegate(in_result);
-			m_requestCompleteDelegate = nullptr;
+
+            auto delegateConnection = std::move(m_requestCompleteDelegateConnection);
+            m_requestCompleteDelegateConnection = nullptr;
+            delegateConnection->Call(in_result);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------

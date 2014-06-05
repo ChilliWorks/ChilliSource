@@ -33,7 +33,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Core/Delegate/ConnectableDelegate.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
 #include <ChilliSource/Video/Base/VideoPlayer.h>
 
@@ -70,13 +69,13 @@ namespace ChilliSource
             ///
             /// @param The storage location of the video.
             /// @param The video file name.
-            /// @param The completion delegate.
+            /// @param Connection to complete delegate.
             /// @param [Optional] Whether or not the video can be
             /// dismissed by tapping. Defaults to true.
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate& in_delegate, bool in_dismissWithTap = true,
+            void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap = true,
                          const Core::Colour& in_backgroundColour = Core::Colour::k_black) override;
             //--------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
@@ -86,13 +85,13 @@ namespace ChilliSource
             /// @param The storage location of the video.
             /// @param The video file name.
             /// @param The subtitles resource.
-            /// @param The completion delegate.
+            /// @param Connection to complete delegate.
             /// @param [Optional] Whether or not the video can be
             /// dismissed by tapping. Defaults to true.
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate& in_delegate,
+            void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                                       bool in_dismissWithTap, const Core::Colour& in_backgroundColour = Core::Colour::k_black) override;
         private:
             friend Video::VideoPlayerUPtr Video::VideoPlayer::Create();

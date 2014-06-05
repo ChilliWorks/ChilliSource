@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Delegate/ConnectableDelegate.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Core/System/StateSystem.h>
@@ -63,13 +64,13 @@ namespace ChilliSource
             ///
             /// @param The storage location of the video.
             /// @param The video file name.
-            /// @param The completion delegate.
+            /// @param Connection to the completion delegate.
             /// @param [Optional] Whether or not the video can be
             /// dismissed by tapping. Defaults to true.
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            virtual void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate& in_delegate, bool in_dismissWithTap = true,
+            virtual void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap = true,
                                  const Core::Colour& in_backgroundColour = Core::Colour::k_black) = 0;
             //--------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
@@ -79,13 +80,13 @@ namespace ChilliSource
             /// @param The storage location of the video.
             /// @param The video file name.
             /// @param The subtitles resource.
-            /// @param The completion delegate.
+            /// @param Connection to the completion delegate.
             /// @param [Optional] Whether or not the video can be
             /// dismissed by tapping. Defaults to true.
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            virtual void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate& in_delegate,
+            virtual void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                                               bool in_dismissWithTap, const Core::Colour& in_backgroundColour = Core::Colour::k_black) = 0;
             //--------------------------------------------------------
             /// Destructor

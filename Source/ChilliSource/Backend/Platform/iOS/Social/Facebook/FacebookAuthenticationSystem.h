@@ -54,9 +54,9 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Read permissions (http://developers.facebook.com/docs/authentication/permissions/)
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //------------------------------------------------
-            void Authenticate(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate) override;
+            void Authenticate(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) override;
 			//------------------------------------------------
             /// @author S Downie
             ///
@@ -73,9 +73,9 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Read permissions
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //------------------------------------------------
-            void AuthoriseReadPermissions(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate) override;
+            void AuthoriseReadPermissions(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) override;
             //------------------------------------------------
             /// Request that the user grant write
             /// permissions (http://developers.facebook.com/docs/authentication/permissions/)
@@ -86,9 +86,9 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Write permissions
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //------------------------------------------------
-            void AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, const AuthenticationCompleteDelegate& in_delegate) override;
+            void AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) override;
             //------------------------------------------------
             /// @author S Downie
             ///
@@ -180,9 +180,9 @@ namespace ChilliSource
             
         private:
             
-            AuthenticationCompleteDelegate m_authenticateDelegate;
-            AuthenticationCompleteDelegate m_authoriseReadDelegate;
-            AuthenticationCompleteDelegate m_authoriseWriteDelegate;
+            AuthenticationCompleteDelegate::Connection m_authenticateDelegateConnection;
+            AuthenticationCompleteDelegate::Connection m_authoriseReadDelegateConnection;
+            AuthenticationCompleteDelegate::Connection m_authoriseWriteDelegateConnection;
             
             std::vector<std::string> m_currentRequestedWritePermissions;
 		};

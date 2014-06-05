@@ -10,6 +10,7 @@
 #define _CHILLISOURCE_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Delegate/ConnectableDelegate.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Social/ForwardDeclarations.h>
@@ -87,7 +88,7 @@ namespace ChilliSource
             ///
             /// @param Result - Success, failure, etc.
             //-------------------------------------------------
-			typedef std::function<void(const PostResult&)> PostResultDelegate;
+            using PostResultDelegate = Core::ConnectableDelegate<void(const PostResult&)>;
             
             //---------------------------------------------------
             /// Creates a new instance of the facebook post system.
@@ -112,9 +113,9 @@ namespace ChilliSource
             ///
             /// @param Post description containing recipient
             /// and post text.
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //---------------------------------------------------
-			virtual void Post(const PostDesc& in_desc, const PostResultDelegate& in_delegate) = 0;
+			virtual void Post(const PostDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection) = 0;
             //---------------------------------------------------
             /// Send a request to a group of friends using the
             /// backend Facebook SDK.
@@ -125,9 +126,9 @@ namespace ChilliSource
             /// @author A Mackie
             ///
             /// @param Request description
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //---------------------------------------------------
-            virtual void SendRequest(const RequestDesc& in_desc, const PostResultDelegate& in_delegate) = 0;
+            virtual void SendRequest(const RequestDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection) = 0;
             //---------------------------------------------------
             /// Destructor
             ///

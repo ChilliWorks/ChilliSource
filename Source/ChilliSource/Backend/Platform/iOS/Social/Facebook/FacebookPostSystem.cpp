@@ -81,12 +81,12 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void FacebookPostSystem::Post(const PostDesc& in_desc, const PostResultDelegate& in_delegate)
+		void FacebookPostSystem::Post(const PostDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection)
 		{
-            CS_ASSERT(m_postCompleteDelegate == nullptr, "Cannot post more than once at a time");
+            CS_ASSERT(m_postCompleteDelegateConnection == nullptr, "Cannot post more than once at a time");
             CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to post");
             
-			m_postCompleteDelegate = in_delegate;
+            m_postCompleteDelegateConnection = std::move(in_delegateConnection);
 			
             //Currently the iOS native dialog does not provide all the functionality of the web based one so we
             //cannot use it
@@ -103,9 +103,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void FacebookPostSystem::SendRequest(const RequestDesc& in_desc, const PostResultDelegate& in_delegate)
+        void FacebookPostSystem::SendRequest(const RequestDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection)
         {
-            CS_ASSERT(m_requestCompleteDelegate == nullptr, "Cannot request more than once at a time");
+            CS_ASSERT(m_requestCompleteDelegateConnection == nullptr, "Cannot request more than once at a time");
             CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to request");
             
             @autoreleasepool
@@ -114,7 +114,7 @@ namespace ChilliSource
                 std::string recipients;
                 Core::StringUtils::ToCSV(in_desc.m_recipients, recipients);
                 
-                m_requestCompleteDelegate = in_delegate;
+                m_requestCompleteDelegateConnection = std::move(in_delegateConnection);
                 
                 NSString* requestType = @"to";
                 
@@ -141,7 +141,7 @@ namespace ChilliSource
                  {
                      if(!error)
                      {
-                         if(m_requestCompleteDelegate)
+                         if(m_requestCompleteDelegateConnection)
                          {
                              if(result == FBWebDialogResultDialogCompleted)
                              {
@@ -149,14 +149,16 @@ namespace ChilliSource
                                  if (![urlParams valueForKey:@"request"])
                                  {
                                      // User clicked the Cancel button
-                                    m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
-                                    m_requestCompleteDelegate = nullptr;
+                                     auto delegateConnection = std::move(m_requestCompleteDelegateConnection);
+                                     m_requestCompleteDelegateConnection = nullptr;
+                                     delegateConnection->Call(Social::FacebookPostSystem::PostResult::k_cancelled);
                                  }
                                  else
                                  {
-                                    // User clicked the Share button
-                                    m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
-                                    m_requestCompleteDelegate = nullptr;
+                                     // User clicked the Share button
+                                     auto delegateConnection = std::move(m_requestCompleteDelegateConnection);
+                                     m_requestCompleteDelegateConnection = nullptr;
+                                     delegateConnection->Call(Social::FacebookPostSystem::PostResult::k_success);
                                  }
                  
                                  [urlParams release];
@@ -164,8 +166,9 @@ namespace ChilliSource
                              else
                              {
                                  // User clicked the X button
-                                 m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
-                                 m_requestCompleteDelegate = nullptr;
+                                 auto delegateConnection = std::move(m_requestCompleteDelegateConnection);
+                                 m_requestCompleteDelegateConnection = nullptr;
+                                 delegateConnection->Call(Social::FacebookPostSystem::PostResult::k_cancelled);
                              }
                          }
                      }
@@ -174,10 +177,11 @@ namespace ChilliSource
                          NSLog(@"%@", error.localizedDescription);
                          NSLog(@"%@", error.description);
                  
-                         if(m_requestCompleteDelegate)
+                         if(m_requestCompleteDelegateConnection)
                          {
-                             m_requestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
-                             m_requestCompleteDelegate = nullptr;
+                             auto delegateConnection = std::move(m_requestCompleteDelegateConnection);
+                             m_requestCompleteDelegateConnection = nullptr;
+                             delegateConnection->Call(Social::FacebookPostSystem::PostResult::k_failed);
                          }
                      }
                  }];
@@ -200,28 +204,32 @@ namespace ChilliSource
                 {
                     NSLog(@"%@", error.localizedDescription);
 
-                    if(m_postCompleteDelegate)
+                    if(m_postCompleteDelegateConnection)
                     {
-                        m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
-                        m_postCompleteDelegate = nullptr;
+                         auto delegateConnection = std::move(m_postCompleteDelegateConnection);
+                         m_postCompleteDelegateConnection = nullptr;
+                         delegateConnection->Call(Social::FacebookPostSystem::PostResult::k_failed);
                     }
                 }
-                else if(m_postCompleteDelegate)
+                else if(m_postCompleteDelegateConnection)
                 {
+                    Social::FacebookPostSystem::PostResult convertedResult;
                     switch(result)
                     {
-                        case FBNativeDialogResultSucceeded:
-                            m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
-                            break;
-                        case FBNativeDialogResultCancelled:
-                            m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
-                            break;
-                        case FBNativeDialogResultError:
-                            m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
-                            break;
+                    case FBNativeDialogResultSucceeded:
+                        convertedResult = Social::FacebookPostSystem::PostResult::k_success;
+                        break;
+                    case FBNativeDialogResultCancelled:
+                        convertedResult = Social::FacebookPostSystem::PostResult::k_cancelled;
+                        break;
+                    case FBNativeDialogResultError:
+                        convertedResult = Social::FacebookPostSystem::PostResult::k_failed;
+                        break;
                     }
              
-                    m_postCompleteDelegate = nullptr;
+                     auto delegateConnection = std::move(m_postCompleteDelegateConnection);
+                     m_postCompleteDelegateConnection = nullptr;
+                     delegateConnection->Call(convertedResult);
                 }
             }];
             
@@ -248,7 +256,7 @@ namespace ChilliSource
             {
                 if(!error)
                 {
-                    if(m_postCompleteDelegate)
+                    if(m_postCompleteDelegateConnection)
                     {
                         if(result == FBWebDialogResultDialogCompleted)
                         {
@@ -256,22 +264,25 @@ namespace ChilliSource
                             if (![urlParams valueForKey:@"post_id"])
                             {
                                 // User clicked the Cancel button
-                                m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
-                                m_postCompleteDelegate = nullptr;
+                                 auto delegateConnection = std::move(m_postCompleteDelegateConnection);
+                                 m_postCompleteDelegateConnection = nullptr;
+                                 delegateConnection->Call(Social::FacebookPostSystem::PostResult::k_cancelled);
                             }
                             else
                             {
                                 // User clicked the Share button
-                                m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
-                                m_postCompleteDelegate = nullptr;
+                                 auto delegateConnection = std::move(m_postCompleteDelegateConnection);
+                                 m_postCompleteDelegateConnection = nullptr;
+                                 delegateConnection->Call(Social::FacebookPostSystem::PostResult::k_success);
                             }
                             [urlParams release];
                         }
                         else
                         {
                             // User clicked the X button
-                            m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
-                            m_postCompleteDelegate = nullptr;
+                             auto delegateConnection = std::move(m_postCompleteDelegateConnection);
+                             m_postCompleteDelegateConnection = nullptr;
+                             delegateConnection->Call(Social::FacebookPostSystem::PostResult::k_cancelled);
                         }
                     }
                 }
@@ -280,10 +291,11 @@ namespace ChilliSource
                     NSLog(@"%@", error.localizedDescription);
                     NSLog(@"%@", error.description);
              
-                    if(m_postCompleteDelegate)
+                    if(m_postCompleteDelegateConnection)
                     {
-                        m_postCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
-                        m_postCompleteDelegate = nullptr;
+                         auto delegateConnection = std::move(m_postCompleteDelegateConnection);
+                         m_postCompleteDelegateConnection = nullptr;
+                         delegateConnection->Call(Social::FacebookPostSystem::PostResult::k_failed);
                     }
                 }
             }];

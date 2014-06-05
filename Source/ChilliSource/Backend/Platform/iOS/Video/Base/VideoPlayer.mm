@@ -99,7 +99,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate& in_delegate, bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
+        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
         {
             @autoreleasepool
             {
@@ -107,7 +107,7 @@ namespace ChilliSource
                 
                 m_playing = true;
                 
-                m_completionDelegateConnection = in_delegate.OpenConnection();
+                m_completionDelegateConnection = std::move(in_delegateConnection);
                 m_backgroundColour = in_backgroundColour;
                 
                 std::string filePath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(in_storageLocation, in_fileName);
@@ -129,11 +129,11 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate& in_delegate,
+        void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                                                      bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
         {
             m_subtitles = in_subtitles;
-            Present(in_storageLocation, in_fileName, in_delegate, in_dismissWithTap);
+            Present(in_storageLocation, in_fileName, std::move(in_delegateConnection), in_dismissWithTap);
         }
         //-------------------------------------------------------------
         //-------------------------------------------------------------
