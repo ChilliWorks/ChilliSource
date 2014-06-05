@@ -98,9 +98,10 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void TaskScheduler::OnDestroy()
+		void TaskScheduler::Destroy()
 		{
 			m_threadPool.reset();
+			m_mainThreadTasks.clear();
 		}
     }
 }

@@ -323,8 +323,10 @@ namespace ChilliSource
         //----------------------------------------------------
         void Application::Destroy()
         {
+			m_taskScheduler->Destroy();
+
             m_stateManager->DestroyStates();
-            
+
             OnDestroy();
 
             //suspend all application systems in reverse order.
