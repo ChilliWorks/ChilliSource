@@ -360,27 +360,31 @@ namespace ChilliSource
             FileSystem* pFileSystem = Application::Get()->GetFileSystem();
             if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, k_filename) == true)
             {
-                FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_read);
-                if(pFileStream->IsOpen() && !pFileStream->IsBad())
+				FileStreamSPtr fileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_read);
+				if (fileStream->IsOpen() == true && fileStream->IsBad() == false)
                 {
-                    std::string strEncryptedXML;
-                    pFileStream->GetAll(strEncryptedXML);
-                    pFileStream->Close();
+					fileStream->SeekG(0, SeekDir::k_end);
+					u32 encryptedDataSize = fileStream->TellG();
+					fileStream->SeekG(0, SeekDir::k_beginning);
                     
-                    u32 udwEncryptedSize = strEncryptedXML.size();
-                    s8* pbyData = new s8[udwEncryptedSize];
-                    const u8* udwDocBinary = reinterpret_cast<const u8*>(strEncryptedXML.c_str());
-                    AESEncrypt::Decrypt(udwDocBinary, udwEncryptedSize, GenerateEncryptionKey(), reinterpret_cast<u8*>(pbyData));
+					s8* encryptedData = new s8[encryptedDataSize];
+					fileStream->Read(encryptedData, encryptedDataSize);
+					fileStream->Close();
+                    
+					s8* decryptedData = new s8[encryptedDataSize];
+					const u8* udwDocBinary = reinterpret_cast<const u8*>(encryptedData);
+					AESEncrypt::Decrypt(udwDocBinary, encryptedDataSize, GenerateEncryptionKey(), reinterpret_cast<u8*>(decryptedData));
                     
                     TiXmlDocument xmlDoc;
-                    xmlDoc.Parse(pbyData, 0, TIXML_DEFAULT_ENCODING);
+					xmlDoc.Parse(decryptedData, 0, TIXML_DEFAULT_ENCODING);
                     TiXmlElement* pRoot = xmlDoc.RootElement();
                     if(nullptr != pRoot)
                     {
                         m_dictionary = ParamDictionarySerialiser::FromXml(pRoot);
                     }
                     
-                    CS_SAFEDELETE_ARRAY(pbyData);
+					CS_SAFEDELETE_ARRAY(encryptedData);
+					CS_SAFEDELETE_ARRAY(decryptedData);
                 }
             }
             

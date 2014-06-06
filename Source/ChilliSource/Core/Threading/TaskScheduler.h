@@ -120,12 +120,12 @@ namespace ChilliSource
 			//-------------------------------------------------
 			void OnInit() override;
 			//-------------------------------------------------
-			/// Called when the system is destroyed. Joins
-			/// all the threads back to main.
+			/// Cleans up the task scheduler, joining all threads
+			/// and clearing all remaining tasks.
 			///
 			/// @author S Downie
 			//-------------------------------------------------
-			void OnDestroy() override;
+			void Destroy();
             
         private:
         
