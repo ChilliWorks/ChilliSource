@@ -35,7 +35,7 @@
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -47,7 +47,7 @@ namespace ChilliSource
 		///
 		/// @author S Downie
 		//-------------------------------------------------------------
-		class PlatformSystem final : public Core::PlatformSystem
+		class PlatformSystem final : public CSCore::PlatformSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(PlatformSystem);
@@ -60,7 +60,7 @@ namespace ChilliSource
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//--------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//-------------------------------------------------
 			/// Adds default systems to the applications system
 			/// list.
@@ -69,7 +69,7 @@ namespace ChilliSource
 			///
 			/// @param the system list
 			//-------------------------------------------------
-			void CreateDefaultSystems(Core::Application* in_application) override;
+			void CreateDefaultSystems(CSCore::Application* in_application) override;
 			//-------------------------------------------------
 			/// Begin the game loop.
 			///
@@ -110,7 +110,7 @@ namespace ChilliSource
 			//--------------------------------------------------
 			~PlatformSystem();
 		private:
-			friend Core::PlatformSystemUPtr Core::PlatformSystem::Create();
+			friend CSCore::PlatformSystemUPtr CSCore::PlatformSystem::Create();
 			//--------------------------------------------------
 			/// Private constructor to enforce use of create
 			/// method.

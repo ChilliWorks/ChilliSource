@@ -17,7 +17,7 @@
 #import <CSBackend/Platform/iOS/Core/Base/CSGLViewController.h>
 #endif
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace OpenGL
 	{
@@ -156,7 +156,7 @@ namespace ChilliSource
         //------------------------------------------------------
         /// Set Target Textures
         //------------------------------------------------------
-        void RenderTarget::SetTargetTextures(const Rendering::TextureSPtr& inpColourTexture, const Rendering::TextureSPtr& inpDepthTexture)
+        void RenderTarget::SetTargetTextures(const CSRendering::TextureSPtr& inpColourTexture, const CSRendering::TextureSPtr& inpDepthTexture)
         {
             DeleteRenderBuffer(&mRenderBuffer);
             DeleteRenderBuffer(&mDepthBuffer);

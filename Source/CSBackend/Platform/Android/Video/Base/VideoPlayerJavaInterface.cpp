@@ -37,12 +37,12 @@ extern "C"
 //-------------------------------------------
 void Java_com_chillisource_video_VideoPlayerNativeInterface_OnVideoComplete(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
+	CSBackend::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::VideoPlayerJavaInterface>();
 
 	if (pVideoPJI != nullptr)
 	{
-		auto task = std::bind(&ChilliSource::Android::VideoPlayerJavaInterface::OnVideoComplete, pVideoPJI.get());
-		ChilliSource::Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
+		auto task = std::bind(&CSBackend::Android::VideoPlayerJavaInterface::OnVideoComplete, pVideoPJI.get());
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
 }
 //-------------------------------------------
@@ -56,14 +56,14 @@ void Java_com_chillisource_video_VideoPlayerNativeInterface_OnVideoComplete(JNIE
 //-------------------------------------------
 void Java_com_chillisource_video_VideoPlayerNativeInterface_OnUpdateSubtitles(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
+	CSBackend::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::VideoPlayerJavaInterface>();
 	if (pVideoPJI != nullptr)
 	{
 		pVideoPJI->OnUpdateSubtitles();
 	}
 }
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -83,7 +83,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Is A
 		//--------------------------------------------------------------------------------------
-		bool VideoPlayerJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool VideoPlayerJavaInterface::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == VideoPlayerJavaInterface::InterfaceID);
 		}
@@ -97,7 +97,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Present
 		//--------------------------------------------------------------
-		void VideoPlayerJavaInterface::Present(bool inbInAPK, const std::string& instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour, const VideoCompleteDelegate& inVideoCompleteDelegate)
+		void VideoPlayerJavaInterface::Present(bool inbInAPK, const std::string& instrFilename, bool inbCanDismissWithTap, const CSCore::Colour& inBackgroundColour, const VideoCompleteDelegate& inVideoCompleteDelegate)
 		{
 			mVideoCompleteDelegate = inVideoCompleteDelegate;
 

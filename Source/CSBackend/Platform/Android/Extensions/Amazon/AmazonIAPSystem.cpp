@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -33,7 +33,7 @@ namespace ChilliSource
             /// @return Whether a product reg info exists in the list
             /// with the given Id.
             //---------------------------------------------------------------
-            bool ContainsProductId(const std::vector<Networking::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId)
+            bool ContainsProductId(const std::vector<CSNetworking::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId)
             {
                 for(u32 i=0; i<in_productInfos.size(); ++i)
                 {
@@ -51,16 +51,16 @@ namespace ChilliSource
 
     	//---------------------------------------------------------------
     	//---------------------------------------------------------------
-		AmazonIAPSystem::AmazonIAPSystem(const Core::ParamDictionary& in_params)
+		AmazonIAPSystem::AmazonIAPSystem(const CSCore::ParamDictionary& in_params)
 		{
 			CS_ASSERT(in_params.HasKey(k_amazonPrivateKeyKey) == true, "Cannot create Amazon IAP system without store key - AmazonPrivateKey");
 			m_privateKey = in_params.GetValue(k_amazonPrivateKeyKey);
 		}
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        bool AmazonIAPSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool AmazonIAPSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceId == Networking::IAPSystem::InterfaceID || in_interfaceId == AmazonIAPSystem::InterfaceID;
+            return in_interfaceId == CSNetworking::IAPSystem::InterfaceID || in_interfaceId == AmazonIAPSystem::InterfaceID;
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -69,7 +69,7 @@ namespace ChilliSource
 			m_javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<AmazonIAPJavaInterface>();
 			if (m_javaInterface == nullptr)
 			{
-				Core::Device* device = Core::Application::Get()->GetSystem<Core::Device>();
+				CSCore::Device* device = CSCore::Application::Get()->GetSystem<CSCore::Device>();
 				m_javaInterface = AmazonIAPJavaInterfaceSPtr(new AmazonIAPJavaInterface(m_privateKey, device->GetUDID()));
 	        	JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
 			}

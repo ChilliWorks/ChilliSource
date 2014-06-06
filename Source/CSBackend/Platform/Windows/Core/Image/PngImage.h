@@ -15,7 +15,7 @@
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -29,7 +29,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------------------------------------
-			PngImage(Core::StorageLocation ineLocation, const std::string& instrFilename);
+			PngImage(CSCore::StorageLocation ineLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ namespace ChilliSource
 			/// @param std::string instrFilename - the path to the file relative to either
 			///									   documents or the package.
 			//----------------------------------------------------------------------------------
-			void Load(Core::StorageLocation ineLocation, const std::string& instrFilename);
+			void Load(CSCore::StorageLocation ineLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Release
 			///
@@ -85,7 +85,7 @@ namespace ChilliSource
 			///
 			/// @return the image format
 			//----------------------------------------------------------------------------------
-			Core::ImageFormat GetImageFormat() const;
+			CSCore::ImageFormat GetImageFormat() const;
 		protected:
 			//----------------------------------------------------------------------------------
 			/// Load with lib png
@@ -93,13 +93,13 @@ namespace ChilliSource
 			/// Loads the png data using lib png
 			/// @param FileStreamSPtr inStream - the stream lib png should use to read the data.
 			//----------------------------------------------------------------------------------
-			bool LoadWithLibPng(Core::FileStreamSPtr inStream);
+			bool LoadWithLibPng(CSCore::FileStreamSPtr inStream);
 
 			bool mbIsLoaded;
 			s32 mdwHeight;
 			s32 mdwWidth;
 			u8 * mpData;
-			Core::ImageFormat m_format;
+			CSCore::ImageFormat m_format;
 			u32 m_dataSize = 0;
 		};
 	}

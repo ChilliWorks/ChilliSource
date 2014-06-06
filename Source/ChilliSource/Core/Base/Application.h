@@ -531,6 +531,6 @@ namespace ChilliSource
 ///
 /// @return Instance of concrete CS application
 //--------------------------------------------------------
-ChilliSource::Core::Application* CreateApplication();
+CSCore::Application* CreateApplication();
 
 #endif

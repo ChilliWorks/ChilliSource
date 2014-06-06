@@ -37,7 +37,7 @@
 //This needs to be included after windows.h
 #include <Platform/Windows/glfw3.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -50,14 +50,14 @@ namespace ChilliSource
 			///
 			/// @return The current mouse position.
 			//------------------------------------------------
-			Core::Vector2 GetMousePosition()
+			CSCore::Vector2 GetMousePosition()
 			{
 				f64 x = 0.0;
 				f64 y = 0.0;
 
 				GLFWManager::Get()->GetCursorPos(&x, &y);
 
-				return Core::Vector2((f32)x, (f32)y);
+				return CSCore::Vector2((f32)x, (f32)y);
 			}
 			//------------------------------------------------
 			/// @author I Copland
@@ -86,9 +86,9 @@ namespace ChilliSource
 		CS_DEFINE_NAMEDTYPE(PointerSystem);
 		//----------------------------------------------------
 		//----------------------------------------------------
-		bool PointerSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool PointerSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (Input::PointerSystem::InterfaceID == in_interfaceId || PointerSystem::InterfaceID == in_interfaceId);
+			return (CSInput::PointerSystem::InterfaceID == in_interfaceId || PointerSystem::InterfaceID == in_interfaceId);
 		}
 		//----------------------------------------------
 		//----------------------------------------------
@@ -96,7 +96,7 @@ namespace ChilliSource
 		{
 			CS_ASSERT(g_pointerSystem, "OnMouseMoved callback requires a pointer system.");
 
-			Core::Vector2 touchLocation((f32)in_xPos, g_pointerSystem->m_screen->GetResolution().y - ((f32)in_yPos));
+			CSCore::Vector2 touchLocation((f32)in_xPos, g_pointerSystem->m_screen->GetResolution().y - ((f32)in_yPos));
 			g_pointerSystem->AddPointerMovedEvent(g_pointerSystem->m_pointerId, touchLocation);
 		}
 		//----------------------------------------------
@@ -135,7 +135,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		void PointerSystem::OnInit()
 		{
-			m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+			m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
 			CS_ASSERT(m_screen != nullptr, "Cannot find system required by PointerSystem: Screen.");
 			
 			g_pointerSystem = this;
@@ -145,7 +145,7 @@ namespace ChilliSource
 			GLFWManager::Get()->SetMouseButtonDelegate(&PointerSystem::OnMouseButtonPressed);
 
 			//create the mouse pointer
-			Core::Vector2 mousePos = GetMousePosition();
+			CSCore::Vector2 mousePos = GetMousePosition();
 			mousePos.y = m_screen->GetResolution().y - mousePos.y;
 
 			m_pointerId = AddPointerCreateEvent(mousePos);

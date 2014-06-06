@@ -35,11 +35,11 @@
 
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
-		class EmailComposerJavaInterface: public ChilliSource::Android::IJavaInterface
+		class EmailComposerJavaInterface: public CSBackend::Android::IJavaInterface
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(EmailCompositionJavaInterface);
@@ -69,7 +69,7 @@ namespace ChilliSource
 			///
 			/// @return whether or not this object implements the given interface.
 			//--------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
 			//--------------------------------------------------------------
 			/// Present
 			///

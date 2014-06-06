@@ -39,7 +39,7 @@
 @class UIActivityIndicatorView;
 @class UIButton;
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
 	{
@@ -48,7 +48,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------
-		class WebView final : public Web::WebView
+		class WebView final : public CSWeb::WebView
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(WebView);
@@ -61,7 +61,7 @@ namespace ChilliSource
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------
             /// Displays the website at the given URL in an in-app
             /// web view.
@@ -73,7 +73,7 @@ namespace ChilliSource
             /// @param The relative size of the dismiss button.
             /// @param The dismissed delegate.
             //---------------------------------------------------------
-            void Present(const std::string& in_url, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate) override;
+            void Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate) override;
             //---------------------------------------------------------
             /// Displays the website at the given location on disk in
             /// an in-app web view.
@@ -86,7 +86,7 @@ namespace ChilliSource
             /// @param The relative size of the dismiss button.
             /// @param The dismissed delegate.
             //---------------------------------------------------------
-            void PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate) override;
+            void PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate) override;
             //---------------------------------------------------------
             /// Displays the website at the given Url in an external
             /// browser.
@@ -119,7 +119,7 @@ namespace ChilliSource
             void OnViewDidFinishLoad();
             
         private:
-            friend Web::WebViewUPtr Web::WebView::Create();
+            friend CSWeb::WebViewUPtr CSWeb::WebView::Create();
             //---------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -140,7 +140,7 @@ namespace ChilliSource
             ///
             /// @param The size.
             //---------------------------------------------------------
-            void CreateWebview(const Core::UnifiedVector2& in_size);
+            void CreateWebview(const CSCore::UnifiedVector2& in_size);
             //---------------------------------------------------------
             /// Adds the webview to the main view.
             ///
@@ -175,7 +175,7 @@ namespace ChilliSource
             void OnDestroy() override;
 		private:
 			
-            Core::Screen* m_screen;
+            CSCore::Screen* m_screen;
             
             bool m_isPresented;
             DismissedDelegate m_dismissedDelegate;
@@ -184,8 +184,8 @@ namespace ChilliSource
             UIActivityIndicatorView* m_activityIndicator;
 			WebViewDelegate* m_webViewDelegate;
 			
-			Core::Vector2 m_absoluteSize;
-			Core::Vector2 m_absolutePosition;
+			CSCore::Vector2 m_absoluteSize;
+			CSCore::Vector2 m_absolutePosition;
             f32 m_dismissButtonRelativeSize;
 			
             std::string m_anchor;

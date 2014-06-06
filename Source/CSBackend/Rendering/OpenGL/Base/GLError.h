@@ -33,12 +33,12 @@
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
 #ifdef CS_ENABLE_DEBUG
-#define CS_ASSERT_NOGLERROR(in_message) {ChilliSource::OpenGL::GLError::AssertNoGLError(in_message);}
+#define CS_ASSERT_NOGLERROR(in_message) {CSBackend::OpenGL::GLError::AssertNoGLError(in_message);}
 #else
 #define CS_ASSERT_NOGLERROR(in_message) {}
 #endif
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace OpenGL
     {

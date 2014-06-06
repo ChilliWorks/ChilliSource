@@ -32,7 +32,7 @@
 
 #include <vector>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace OpenGL
     {

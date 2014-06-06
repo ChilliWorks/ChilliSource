@@ -22,7 +22,7 @@
 //This needs to be included after windows.h
 #include <Platform/Windows/glfw3.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -35,7 +35,7 @@ namespace ChilliSource
 			///
 			/// @param The surface format.
 			//-------------------------------------------------------------
-			ChilliSource::Rendering::SurfaceFormat GetSurfaceFormat()
+			CSRendering::SurfaceFormat GetSurfaceFormat()
 			{
 				const std::string k_defaultFormat = "rgb565_depth24";
 
@@ -44,7 +44,7 @@ namespace ChilliSource
 				GetModuleFileName(nullptr, pathChars, MAX_PATH);
 				std::string path = WindowsStringUtils::ConvertWindowsPathToStandard(std::wstring(pathChars));
 				std::string::size_type pos = path.find_last_of("/");
-				std::string workingDir = Core::StringUtils::StandardisePath(path.substr(0, pos));
+				std::string workingDir = CSCore::StringUtils::StandardisePath(path.substr(0, pos));
 
 				//open the file
 				std::ifstream file(workingDir + "assets/Shared/App.config");
@@ -65,7 +65,7 @@ namespace ChilliSource
 					formatString = root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
 				}
 
-				return ChilliSource::Core::ParseSurfaceFormat(formatString);
+				return CSCore::ParseSurfaceFormat(formatString);
 			}
 			//-------------------------------------------------------------
 			/// Applies the surface format described in the App.config file
@@ -75,11 +75,11 @@ namespace ChilliSource
 			//-------------------------------------------------------------
 			void ApplySurfaceFormat()
 			{
-				ChilliSource::Rendering::SurfaceFormat format = GetSurfaceFormat();
+				CSRendering::SurfaceFormat format = GetSurfaceFormat();
 
 				switch (format)
 				{
-				case ChilliSource::Rendering::SurfaceFormat::k_rgb565_depth24:
+				case CSRendering::SurfaceFormat::k_rgb565_depth24:
 				default:
 					glfwWindowHint(GLFW_RED_BITS, 5);
 					glfwWindowHint(GLFW_GREEN_BITS, 6);
@@ -88,7 +88,7 @@ namespace ChilliSource
 					glfwWindowHint(GLFW_DEPTH_BITS, 24);
 					glfwWindowHint(GLFW_STENCIL_BITS, 0);
 					break;
-				case ChilliSource::Rendering::SurfaceFormat::k_rgb565_depth32:
+				case CSRendering::SurfaceFormat::k_rgb565_depth32:
 					glfwWindowHint(GLFW_RED_BITS, 5);
 					glfwWindowHint(GLFW_GREEN_BITS, 6);
 					glfwWindowHint(GLFW_BLUE_BITS, 5);
@@ -96,7 +96,7 @@ namespace ChilliSource
 					glfwWindowHint(GLFW_DEPTH_BITS, 32);
 					glfwWindowHint(GLFW_STENCIL_BITS, 0);
 					break;
-				case ChilliSource::Rendering::SurfaceFormat::k_rgb888_depth24:
+				case CSRendering::SurfaceFormat::k_rgb888_depth24:
 					glfwWindowHint(GLFW_RED_BITS, 8);
 					glfwWindowHint(GLFW_GREEN_BITS, 8);
 					glfwWindowHint(GLFW_BLUE_BITS, 8);
@@ -104,7 +104,7 @@ namespace ChilliSource
 					glfwWindowHint(GLFW_DEPTH_BITS, 24);
 					glfwWindowHint(GLFW_STENCIL_BITS, 0);
 					break;
-				case ChilliSource::Rendering::SurfaceFormat::k_rgb888_depth32:
+				case CSRendering::SurfaceFormat::k_rgb888_depth32:
 					glfwWindowHint(GLFW_RED_BITS, 8);
 					glfwWindowHint(GLFW_GREEN_BITS, 8);
 					glfwWindowHint(GLFW_BLUE_BITS, 8);

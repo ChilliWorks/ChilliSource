@@ -43,7 +43,7 @@ namespace ChilliSource
         CubemapUPtr Cubemap::Create()
         {
 #if defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_WINDOWS)
-            return CubemapUPtr(new OpenGL::Cubemap());
+            return CubemapUPtr(new CSBackend::OpenGL::Cubemap());
 #else
             return nullptr;
 #endif

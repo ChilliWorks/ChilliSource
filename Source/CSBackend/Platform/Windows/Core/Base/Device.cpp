@@ -37,7 +37,7 @@
 //this needs to be included last
 #include <windows.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace Windows
     {
@@ -83,7 +83,7 @@ namespace ChilliSource
 				OSVERSIONINFOEX osvi;
 				ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX)); osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 				GetVersionEx((OSVERSIONINFO*)&osvi);
-				return std::string(Core::ToString((u32)osvi.dwMajorVersion) + "." + Core::ToString((u32)osvi.dwMinorVersion));
+				return std::string(CSCore::ToString((u32)osvi.dwMajorVersion) + "." + CSCore::ToString((u32)osvi.dwMinorVersion));
             }
 			//----------------------------------------------
 			/// @author I Copland
@@ -115,7 +115,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			std::string ParseLanguageFromLocale(const std::string& in_locale)
 			{
-				std::vector<std::string> strLocaleBrokenUp = ChilliSource::Core::StringUtils::Split(in_locale, "_", 0);
+				std::vector<std::string> strLocaleBrokenUp = CSCore::StringUtils::Split(in_locale, "_", 0);
 
 				if (strLocaleBrokenUp.size() > 0)
 				{
@@ -166,9 +166,9 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Device::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool Device::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (Core::Device::InterfaceID == in_interfaceId || Device::InterfaceID == in_interfaceId);
+            return (CSCore::Device::InterfaceID == in_interfaceId || Device::InterfaceID == in_interfaceId);
         }
         //---------------------------------------------------
         //---------------------------------------------------

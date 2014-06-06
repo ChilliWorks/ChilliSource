@@ -13,7 +13,7 @@
 
 #include <CSBackend/Platform/Android/Core/File/FileSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android 
 	{
@@ -37,7 +37,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Open APK
 		//--------------------------------------------------------------------------------------------------
-		void FileStreamAPK::OpenFromAPK(const std::string& instrApkPath, const unz_file_pos& inFilePos, Core::FileMode ineMode)
+		void FileStreamAPK::OpenFromAPK(const std::string& instrApkPath, const unz_file_pos& inFilePos, CSCore::FileMode ineMode)
 		{
 			std::unique_lock<std::mutex> lock(*mpMinizipMutex);
 			mUnzipper = unzOpen(instrApkPath.c_str());
@@ -52,7 +52,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Open
 		//--------------------------------------------------------------------------------------------------			
-		void FileStreamAPK::Open(const unz_file_pos& inFilePos, Core::FileMode ineMode)
+		void FileStreamAPK::Open(const unz_file_pos& inFilePos, CSCore::FileMode ineMode)
 		{
 			meFileMode = ineMode;
 
@@ -254,19 +254,19 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// SeekG
 		//--------------------------------------------------------------------------------------------------
-		void FileStreamAPK::SeekG(s32 indwPosition, Core::SeekDir ineDir)
+		void FileStreamAPK::SeekG(s32 indwPosition, CSCore::SeekDir ineDir)
 		{
 			std::ios_base::seekdir dir;
 			switch (ineDir)
 			{
 				default:
-				case Core::SeekDir::k_beginning:
+				case CSCore::SeekDir::k_beginning:
 					dir = std::ios_base::beg;
 					break;
-				case Core::SeekDir::k_current:
+				case CSCore::SeekDir::k_current:
 					dir = std::ios_base::cur;
 					break;
-				case Core::SeekDir::k_end:
+				case CSCore::SeekDir::k_end:
 					dir = std::ios_base::end;
 					break;
 			}
@@ -317,19 +317,19 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// SeekP
 		//--------------------------------------------------------------------------------------------------
-		void FileStreamAPK::SeekP(s32 indwPosition, Core::SeekDir ineDir)
+		void FileStreamAPK::SeekP(s32 indwPosition, CSCore::SeekDir ineDir)
 		{
 			std::ios_base::seekdir dir;
 			switch (ineDir)
 			{
 				default:
-				case Core::SeekDir::k_beginning:
+				case CSCore::SeekDir::k_beginning:
 					dir = std::ios_base::beg;
 					break;
-				case Core::SeekDir::k_current:
+				case CSCore::SeekDir::k_current:
 					dir = std::ios_base::cur;
 					break;
-				case Core::SeekDir::k_end:
+				case CSCore::SeekDir::k_end:
 					dir = std::ios_base::end;
 					break;
 			}
@@ -350,25 +350,25 @@ namespace ChilliSource
 		{
 			switch (meFileMode)
 			{
-				case Core::FileMode::k_read:
+				case CSCore::FileMode::k_read:
 					return (std::ios_base::in);
-				case Core::FileMode::k_readBinary:
+				case CSCore::FileMode::k_readBinary:
 					return (std::ios_base::in | std::ios_base::binary);
-				case Core::FileMode::k_write:
+				case CSCore::FileMode::k_write:
 					return (std::ios_base::out);
-				case Core::FileMode::k_writeAppend:
+				case CSCore::FileMode::k_writeAppend:
 					return (std::ios_base::out | std::ios_base::app);
-				case Core::FileMode::k_writeAtEnd:
+				case CSCore::FileMode::k_writeAtEnd:
 					return (std::ios_base::out | std::ios_base::ate);
-				case Core::FileMode::k_writeTruncate:
+				case CSCore::FileMode::k_writeTruncate:
 					return (std::ios_base::out | std::ios_base::trunc);
-				case Core::FileMode::k_writeBinary:
+				case CSCore::FileMode::k_writeBinary:
 					return (std::ios_base::out | std::ios_base::binary);
-				case Core::FileMode::k_writeBinaryAppend:
+				case CSCore::FileMode::k_writeBinaryAppend:
 					return (std::ios_base::out | std::ios_base::binary | std::ios_base::app);
-				case Core::FileMode::k_writeBinaryAtEnd:
+				case CSCore::FileMode::k_writeBinaryAtEnd:
 					return (std::ios_base::out | std::ios_base::binary | std::ios_base::ate);
-				case Core::FileMode::k_writeBinaryTruncate:
+				case CSCore::FileMode::k_writeBinaryTruncate:
 					return (std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
 				default:
 					return (std::ios_base::in);

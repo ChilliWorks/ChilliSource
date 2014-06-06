@@ -17,7 +17,7 @@
 
 #include <UIKit/UIKit.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace iOS
     {
@@ -35,9 +35,9 @@ namespace ChilliSource
         }
         //--------------------------------------------------
         //--------------------------------------------------
-        bool RemoteNotificationSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool RemoteNotificationSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (RemoteNotificationSystem::InterfaceID == in_interfaceId || Core::RemoteNotificationSystem::InterfaceID == in_interfaceId);
+            return (RemoteNotificationSystem::InterfaceID == in_interfaceId || CSCore::RemoteNotificationSystem::InterfaceID == in_interfaceId);
         }
         //--------------------------------------------------
         //--------------------------------------------------
@@ -69,7 +69,7 @@ namespace ChilliSource
         //--------------------------------------------------
         void RemoteNotificationSystem::OnRemoteTokenReceived(NSData* in_token)
         {
-            m_token = Core::BaseEncoding::Base64Encode((const s8*)[in_token bytes], in_token.length);
+            m_token = CSCore::BaseEncoding::Base64Encode((const s8*)[in_token bytes], in_token.length);
             
             if(m_delegate != nullptr)
             {
@@ -87,9 +87,9 @@ namespace ChilliSource
                 {
                     in_application.applicationIconBadgeNumber = 0;
                     
-                    Core::NotificationSPtr notification = std::make_shared<Core::Notification>();
+                    CSCore::NotificationSPtr notification = std::make_shared<CSCore::Notification>();
                     notification->m_id = 0;
-                    notification->m_priority = Core::Notification::Priority::k_standard;
+                    notification->m_priority = CSCore::Notification::Priority::k_standard;
                     
                     // Add the message
                     NSObject* apsObject = [in_payload objectForKey:@"aps"];
@@ -130,7 +130,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------
         //---------------------------------------------------
-        Core::IConnectableEvent<Core::RemoteNotificationSystem::NotificationReceivedDelegate>& RemoteNotificationSystem::GetRecievedEvent()
+        CSCore::IConnectableEvent<CSCore::RemoteNotificationSystem::NotificationReceivedDelegate>& RemoteNotificationSystem::GetRecievedEvent()
         {
             return m_receivedEvent;
         }

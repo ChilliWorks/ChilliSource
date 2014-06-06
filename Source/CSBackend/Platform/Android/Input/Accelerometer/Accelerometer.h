@@ -35,7 +35,7 @@
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -45,7 +45,7 @@ namespace ChilliSource
 		///
 		/// @author I Copland
 		//------------------------------------------------------------
-		class Accelerometer final : public Input::Accelerometer
+		class Accelerometer final : public CSInput::Accelerometer
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(Accelerometer);
@@ -55,7 +55,7 @@ namespace ChilliSource
 			/// @return whether or not this object implements
 			/// the given interface.
 			//----------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------
 			/// @author I Copland
 			///
@@ -75,7 +75,7 @@ namespace ChilliSource
 			/// @return The acceleration applied to the device
 			/// measured in "G"s.
 			//----------------------------------------------------
-			Core::Vector3 GetAcceleration() const override;
+			CSCore::Vector3 GetAcceleration() const override;
 			//----------------------------------------------------
 			/// @author I Copland
 			///
@@ -83,7 +83,7 @@ namespace ChilliSource
 			/// acceleration is updated. The acceleration will not
 			/// necessarily have changed between updates.
 			//----------------------------------------------------
-			Core::IConnectableEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent() override;
+			CSCore::IConnectableEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent() override;
 			//----------------------------------------------------
 			/// Stop listening for accelerometer changes.
 			///
@@ -92,7 +92,7 @@ namespace ChilliSource
 			void StopUpdating() override;
 
 		private:
-            friend Input::AccelerometerUPtr Input::Accelerometer::Create();
+            friend CSInput::AccelerometerUPtr CSInput::Accelerometer::Create();
 			//----------------------------------------------------
 			/// Constructor. Declared private to force the use of
             /// the factory method.
@@ -134,12 +134,12 @@ namespace ChilliSource
 			///
 			/// @param The new acceleration.
 			//------------------------------------------------
-			void OnAccelerationChanged(const Core::Vector3& in_acceleration);
+			void OnAccelerationChanged(const CSCore::Vector3& in_acceleration);
 
-			Core::Vector3 m_acceleration;
+			CSCore::Vector3 m_acceleration;
 			AccelerometerJavaInterfaceSPtr m_accelerometerJI;
 			bool m_isUpdating;
-			Core::Event<AccelerationUpdatedDelegate> m_accelerationUpdatedEvent;
+			CSCore::Event<AccelerationUpdatedDelegate> m_accelerationUpdatedEvent;
 		};
 	}
 }

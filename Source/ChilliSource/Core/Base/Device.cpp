@@ -50,7 +50,7 @@ namespace ChilliSource
         DeviceUPtr Device::Create()
         {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return DeviceUPtr(new Android::Device());
+            return DeviceUPtr(new CSBackend::Android::Device());
 #elif defined CS_TARGETPLATFORM_IOS
             return DeviceUPtr(new iOS::Device());
 #elif defined CS_TARGETPLATFORM_WINDOWS

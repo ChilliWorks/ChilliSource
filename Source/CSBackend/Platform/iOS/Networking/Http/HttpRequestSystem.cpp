@@ -19,7 +19,7 @@
 
 #include <CFNetwork/CFNetwork.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
 	{
@@ -63,13 +63,13 @@ namespace ChilliSource
             ///
             /// @return New CFNetwork request message initialised based on the description
             //--------------------------------------------------------------------------------------------------
-            CFHTTPMessageRef CreateRequestMessage(const Networking::HttpRequest::Desc& in_requestDesc, CFURLRef in_url)
+            CFHTTPMessageRef CreateRequestMessage(const CSNetworking::HttpRequest::Desc& in_requestDesc, CFURLRef in_url)
             {
                 CFHTTPMessageRef requestMessage = nullptr;
                 
                 switch(in_requestDesc.m_type)
                 {
-                    case Networking::HttpRequest::Type::k_post:
+                    case CSNetworking::HttpRequest::Type::k_post:
                     {
                         //Set message body if we're posting
                         requestMessage = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("POST"), in_url, kCFHTTPVersion1_1);
@@ -78,7 +78,7 @@ namespace ChilliSource
                         CFRelease(body);
                         break;
                     }
-                    case Networking::HttpRequest::Type::k_get:
+                    case CSNetworking::HttpRequest::Type::k_get:
                     {
                         requestMessage = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("GET"), in_url, kCFHTTPVersion1_1);
                         break;
@@ -95,7 +95,7 @@ namespace ChilliSource
             /// @param Request description
             /// @param [Out] Request message
             //--------------------------------------------------------------------------------------------------
-            void SetRequestHeaders(const Networking::HttpRequest::Desc& in_requestDesc, CFHTTPMessageRef out_requestMessage)
+            void SetRequestHeaders(const CSNetworking::HttpRequest::Desc& in_requestDesc, CFHTTPMessageRef out_requestMessage)
             {
                 if(!in_requestDesc.m_headers.empty())
                 {
@@ -124,7 +124,7 @@ namespace ChilliSource
                 std::string hostName = [NSStringUtils newUTF8StringWithNSString:(NSString*)cfHostName];
                 CFRelease(cfHostName);
                 
-                HttpRequestSystem::ConnectionId propId = Core::HashCRC32::GenerateHashCode(in_scheme + hostName + Core::ToString(portNum));
+                HttpRequestSystem::ConnectionId propId = CSCore::HashCRC32::GenerateHashCode(in_scheme + hostName + CSCore::ToString(portNum));
                 return propId;
             }
         }
@@ -133,9 +133,9 @@ namespace ChilliSource
         
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		bool HttpRequestSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool HttpRequestSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == Networking::HttpRequestSystem::InterfaceID || in_interfaceId == HttpRequestSystem::InterfaceID;
+			return in_interfaceId == CSNetworking::HttpRequestSystem::InterfaceID || in_interfaceId == HttpRequestSystem::InterfaceID;
 		}
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ namespace ChilliSource
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		Networking::HttpRequest* HttpRequestSystem::MakeRequest(const Networking::HttpRequest::Desc& in_requestDesc, const Networking::HttpRequest::Delegate& in_delegate)
+		CSNetworking::HttpRequest* HttpRequestSystem::MakeRequest(const CSNetworking::HttpRequest::Desc& in_requestDesc, const CSNetworking::HttpRequest::Delegate& in_delegate)
         {
             CS_ASSERT(in_requestDesc.m_url.empty() == false, "Cannot make an http request to a blank url");
             
@@ -228,7 +228,7 @@ namespace ChilliSource
                 connectionInfo.m_connectionId = connectionId;
                 connectionInfo.m_streamId = streamId;
                 connectionInfo.m_readStream = readStream;
-                connectionInfo.m_connectionOpenTime = Core::Application::Get()->GetSystemTime();
+                connectionInfo.m_connectionOpenTime = CSCore::Application::Get()->GetSystemTime();
                 m_activeConnections.insert(std::make_pair(httpRequest, connectionInfo));
             }
             
@@ -312,7 +312,7 @@ namespace ChilliSource
             {
                 const ConnectionInfo& connectionInfo = it->second;
                 
-                if(Core::Application::Get()->GetSystemTime() > (connectionInfo.m_connectionOpenTime + k_keepAliveTimeSecs))
+                if(CSCore::Application::Get()->GetSystemTime() > (connectionInfo.m_connectionOpenTime + k_keepAliveTimeSecs))
                 {
                     //Close the old stream
                     CFReadStreamClose(connectionInfo.m_readStream);

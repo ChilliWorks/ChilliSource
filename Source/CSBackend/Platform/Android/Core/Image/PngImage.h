@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Image/Image.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -91,7 +91,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------------------------------------
-			PngImage(Core::StorageLocation ineStorageLocation, const std::string& instrFilename);
+			PngImage(CSCore::StorageLocation ineStorageLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ namespace ChilliSource
 			/// @param The storage location to load from.
 			/// @param The file path.
 			//----------------------------------------------------------------------------------
-			void Load(Core::StorageLocation ineStorageLocation, const std::string& instrFilename);
+			void Load(CSCore::StorageLocation ineStorageLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Release
 			///
@@ -147,7 +147,7 @@ namespace ChilliSource
 			///
 			/// @return the image format
 			//----------------------------------------------------------------------------------
-			Core::ImageFormat GetImageFormat();
+			CSCore::ImageFormat GetImageFormat();
 		protected:
 			//----------------------------------------------------------------------------------
 			/// Load with lib png
@@ -156,13 +156,13 @@ namespace ChilliSource
 			///
 			/// @param the stream lib png should use to read the data.
 			//----------------------------------------------------------------------------------
-			bool LoadWithLibPng(Core::FileStreamSPtr inStream);
+			bool LoadWithLibPng(CSCore::FileStreamSPtr inStream);
 
 			bool mbIsLoaded;
 			s32 mdwHeight;
 			s32 mdwWidth;
 			u8 * mpData;
-			Core::ImageFormat meFormat;
+			CSCore::ImageFormat meFormat;
 			u32 m_dataSize = 0;
 		};
 	}

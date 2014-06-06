@@ -10,7 +10,7 @@
 
 #include <CSBackend/Platform/Windows/Core/File/WindowsFileUtils.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{

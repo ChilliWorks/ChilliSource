@@ -337,7 +337,7 @@ namespace ChilliSource
             /// @param Type of checksum to report
             /// @return SHA1 checksum
             //--------------------------------------------------------------
-            std::string GetSHA1Checksum(ChilliSource::Core::SHA1::ReportType ineReportType);
+            std::string GetSHA1Checksum(CSCore::SHA1::ReportType ineReportType);
             //--------------------------------------------------------------------------------------------------
 			/// Open
 			///

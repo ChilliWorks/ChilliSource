@@ -19,7 +19,7 @@
 #include <mutex>
 #include <string>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android 
 	{
@@ -28,7 +28,7 @@ namespace ChilliSource
 		///
 		/// @author I Copland
 		//------------------------------------------------------------------
-		class FileSystem final : public Core::FileSystem
+		class FileSystem final : public CSCore::FileSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(FileSystem);
@@ -54,7 +54,7 @@ namespace ChilliSource
 			///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//--------------------------------------------------------------
 			/// Creates a new file stream to the given file in the given
 			/// storage location.
@@ -67,7 +67,7 @@ namespace ChilliSource
 			///
 			/// @return The new file stream.
 			//--------------------------------------------------------------
-			Core::FileStreamUPtr CreateFileStream(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::FileMode in_fileMode) const override;
+			CSCore::FileStreamUPtr CreateFileStream(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, CSCore::FileMode in_fileMode) const override;
 			//--------------------------------------------------------------
 			/// Creates the given directory. The full directory hierarchy will
 			/// be created.
@@ -81,7 +81,7 @@ namespace ChilliSource
 			/// create the directory becuase it already exists is considered
 			/// a success.
 			//--------------------------------------------------------------
-			bool CreateDirectoryPath(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
+			bool CreateDirectoryPath(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
 			//--------------------------------------------------------------
 			/// Copies a file from one location to another.
 			///
@@ -94,8 +94,8 @@ namespace ChilliSource
 			///
 			/// @return Whether or not the file was successfully copied.
 			//--------------------------------------------------------------
-			bool CopyFile(Core::StorageLocation in_sourceStorageLocation, const std::string& in_sourceFilePath,
-						  Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const override;
+			bool CopyFile(CSCore::StorageLocation in_sourceStorageLocation, const std::string& in_sourceFilePath,
+						  CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const override;
 			//--------------------------------------------------------------
 			/// Copies a directory from one location to another. If the
 			/// destination directory does not exist, it will be created.
@@ -109,8 +109,8 @@ namespace ChilliSource
 			///
 			/// @return Whether or not the files were successfully copied.
 			//--------------------------------------------------------------
-			bool CopyDirectory(Core::StorageLocation in_sourceStorageLocation, const std::string& in_sourceDirectoryPath,
-							   Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationDirectoryPath) const override;
+			bool CopyDirectory(CSCore::StorageLocation in_sourceStorageLocation, const std::string& in_sourceDirectoryPath,
+							   CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationDirectoryPath) const override;
 			//--------------------------------------------------------------
 			/// Deletes the specified file.
 			///
@@ -121,7 +121,7 @@ namespace ChilliSource
 			///
 			/// @return Whether or not the file was successfully deleted.
 			//--------------------------------------------------------------
-			bool DeleteFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath) const override;
+			bool DeleteFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filepath) const override;
 			//--------------------------------------------------------------
 			/// Deletes a directory and all its contents.
 			///
@@ -132,7 +132,7 @@ namespace ChilliSource
 			///
 			/// @return Whether or not the directory was successfully deleted.
 			//--------------------------------------------------------------
-			bool DeleteDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
+			bool DeleteDirectory(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
 			//--------------------------------------------------------------
 			/// Creates a dynamic array containing the filenames of each file
 			/// in the given directory. File paths will be relative to the
@@ -147,7 +147,7 @@ namespace ChilliSource
 			///
 			/// @return dynamic array containing the filenames.
 			//--------------------------------------------------------------
-			std::vector<std::string> GetFilePaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const override;
+			std::vector<std::string> GetFilePaths(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const override;
 			//--------------------------------------------------------------
 			/// Creates a dynamic array containing the names of each directory
 			/// in the given directory. Directory paths will be relative to
@@ -161,7 +161,7 @@ namespace ChilliSource
 			///
 			/// @return Output dynamic array containing the dir names.
 			//--------------------------------------------------------------
-			std::vector<std::string> GetDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const override;
+			std::vector<std::string> GetDirectoryPaths(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const override;
 			//--------------------------------------------------------------
 			/// returns whether or not the given file exists.
 			///
@@ -172,7 +172,7 @@ namespace ChilliSource
 			///
 			/// @return Whether or not it exists.
 			//--------------------------------------------------------------
-			bool DoesFileExist(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
+			bool DoesFileExist(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
 			//--------------------------------------------------------------
 			/// Returns whether or not the file exists in the Cached DLC
 			/// directory.
@@ -205,7 +205,7 @@ namespace ChilliSource
 			///
 			/// @return Whether or not it exists.
 			//--------------------------------------------------------------
-			bool DoesDirectoryExist(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
+			bool DoesDirectoryExist(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
 			//--------------------------------------------------------------
 			/// Returns the absolute path to the given storage location. The
 			/// value this returns is platform specific and use of this
@@ -218,7 +218,7 @@ namespace ChilliSource
 			/// @return The directory. returns an empty string if the location
 			/// is not available.
 			//--------------------------------------------------------------
-			std::string GetAbsolutePathToStorageLocation(Core::StorageLocation in_storageLocation) const override;
+			std::string GetAbsolutePathToStorageLocation(CSCore::StorageLocation in_storageLocation) const override;
             //--------------------------------------------------------------
 			/// Returns the absolute path to the file in the given storage
             /// location. The file must exist otherwise an empty string
@@ -233,7 +233,7 @@ namespace ChilliSource
             ///
 			/// @return The full path to the file.
 			//--------------------------------------------------------------
-			std::string GetAbsolutePathToFile(Core::StorageLocation in_storageLocation, const std::string& in_path) const override;
+			std::string GetAbsolutePathToFile(CSCore::StorageLocation in_storageLocation, const std::string& in_path) const override;
             //--------------------------------------------------------------
 			/// Returns the absolute path to the directory in the given storage
             /// location. The directory must exist otherwise an empty string
@@ -248,10 +248,10 @@ namespace ChilliSource
             ///
 			/// @return The full path to the directory.
 			//--------------------------------------------------------------
-			std::string GetAbsolutePathToDirectory(Core::StorageLocation in_storageLocation, const std::string& in_path) const override;
+			std::string GetAbsolutePathToDirectory(CSCore::StorageLocation in_storageLocation, const std::string& in_path) const override;
 
 		private:
-			friend Core::FileSystemUPtr Core::FileSystem::Create();
+			friend CSCore::FileSystemUPtr CSCore::FileSystem::Create();
 
 			//--------------------------------------------------------------
 			/// A container for the storage location and path of a single
@@ -262,7 +262,7 @@ namespace ChilliSource
 			struct PathInfo
 			{
 				std::string m_path;
-				Core::StorageLocation m_storageLocation;
+				CSCore::StorageLocation m_storageLocation;
 			};
             //--------------------------------------------------------------
             /// Private constructor to force use of factory method
@@ -301,7 +301,7 @@ namespace ChilliSource
             ///
 			/// @return the APK filestream.
 			//--------------------------------------------------------------
-			Core::FileStreamUPtr CreateFileStreamInAPK(const std::string& in_filePath, Core::FileMode in_fileMode) const;
+			CSCore::FileStreamUPtr CreateFileStreamInAPK(const std::string& in_filePath, CSCore::FileMode in_fileMode) const;
 			//--------------------------------------------------------------
 			/// Copies a file from the APK to one of the writable storage
 			/// locations.
@@ -314,7 +314,7 @@ namespace ChilliSource
 			///
 			/// @return whether or not this has succeeded.
 			//--------------------------------------------------------------
-			bool CopyFileFromAPK(const std::string& in_sourcefilePath, Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilepath) const;
+			bool CopyFileFromAPK(const std::string& in_sourcefilePath, CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilepath) const;
 			//--------------------------------------------------------------
 			/// returns all files and directories in a directory of the APK.
 			/// Note: Unlike other similar methods, empty directories will
@@ -373,7 +373,7 @@ namespace ChilliSource
             ///
             /// @return All the paths for the given location
             //------------------------------------------------------------
-			std::vector<PathInfo> GetPossibleAbsoluteDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
+			std::vector<PathInfo> GetPossibleAbsoluteDirectoryPaths(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
 	        //------------------------------------------------------------
 	        /// @author S Downie
 	        ///

@@ -33,7 +33,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace OpenGL
 	{
@@ -43,7 +43,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------
-		class GLSLShaderProvider final : public Core::ResourceProvider
+		class GLSLShaderProvider final : public CSCore::ResourceProvider
 		{
 		public:
             
@@ -64,13 +64,13 @@ namespace ChilliSource
             ///
 			/// @return Whether the object implements the given interface
 			//-------------------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return The type of resource loaded by this provider
 			//----------------------------------------------------------------------------
-            Core::InterfaceIDType GetResourceType() const override;
+            CSCore::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -98,7 +98,7 @@ namespace ChilliSource
             /// @param Options to customise the creation
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(CSCore::StorageLocation in_location, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Load the shader from the external file into a resource on a background
             /// thread. Delegate is called when the load is complete. Check resource
@@ -112,7 +112,7 @@ namespace ChilliSource
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(CSCore::StorageLocation in_location, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const CSCore::ResourceSPtr& out_resource) override;
 		};
 	}
 }

@@ -34,7 +34,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace OpenGL
 	{
@@ -44,7 +44,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //--------------------------------------------------------------
-		class Texture final : public Rendering::Texture
+		class Texture final : public CSRendering::Texture
 		{
 		public:
             
@@ -57,7 +57,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the object is of this type
 			//--------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------
             /// Construct the texture from the given image data.
             /// The texture will take ownership of the image data
@@ -121,7 +121,7 @@ namespace ChilliSource
             /// @return The format of the image used to create
             ///			the texture.
             //--------------------------------------------------
-            Core::ImageFormat GetFormat() const;
+            CSCore::ImageFormat GetFormat() const;
             //--------------------------------------------------------------
             /// @author S Downie
             ///
@@ -150,7 +150,7 @@ namespace ChilliSource
 			
 		private:
             
-            friend Rendering::TextureUPtr Rendering::Texture::Create();
+            friend CSRendering::TextureUPtr CSRendering::Texture::Create();
 			//----------------------------------------------------------
             /// Private constructor to enforce the use of the factory
             /// method
@@ -161,7 +161,7 @@ namespace ChilliSource
 			
 		private:
             
-            Rendering::RenderCapabilities* m_renderCapabilities;
+            CSRendering::RenderCapabilities* m_renderCapabilities;
             TextureUnitSystem* m_texUnitSystem;
             
             GLuint m_texHandle = 0;
@@ -173,7 +173,7 @@ namespace ChilliSource
             WrapMode m_sWrapMode = WrapMode::k_clamp;
             WrapMode m_tWrapMode = WrapMode::k_clamp;
             
-            Core::ImageFormat m_format;
+            CSCore::ImageFormat m_format;
             
             bool m_hasFilterModeChanged = true;
             bool m_hasWrapModeChanged = true;

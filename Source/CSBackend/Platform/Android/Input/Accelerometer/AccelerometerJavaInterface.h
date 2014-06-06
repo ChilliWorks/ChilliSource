@@ -34,7 +34,7 @@
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -51,7 +51,7 @@ namespace ChilliSource
 			//------------------------------------------------
 			/// Delegates
 			//------------------------------------------------
-			typedef std::function<void(const Core::Vector3&)> AccelerationChangedDelegate;
+			typedef std::function<void(const CSCore::Vector3&)> AccelerationChangedDelegate;
 			//------------------------------------------------
 			/// Constructor
 			//------------------------------------------------
@@ -62,7 +62,7 @@ namespace ChilliSource
 			/// @return whether or not this object implements
 			/// the given interface.
 			//------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
 			//------------------------------------------------
 			/// Is Available
 			///

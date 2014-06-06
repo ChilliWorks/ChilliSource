@@ -15,7 +15,7 @@
 #include <CSBackend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 #include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -27,7 +27,7 @@ namespace ChilliSource
 		///
 		/// @author R Henning
 		//----------------------------------------------------
-		class FacebookPostSystem final : public Social::FacebookPostSystem
+		class FacebookPostSystem final : public ChilliSource::Social::FacebookPostSystem
 		{
 		public:
 
@@ -40,7 +40,7 @@ namespace ChilliSource
             ///
             /// @return Whether the object has the same interface ID
             //----------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
             /// Called when the system is created allocating any
 			/// resources
@@ -108,7 +108,7 @@ namespace ChilliSource
             void OnDestroy() override;
 
 		private:
-			friend Social::FacebookPostSystemUPtr Social::FacebookPostSystem::Create(Social::FacebookAuthenticationSystem* in_authSystem);
+			friend ChilliSource::Social::FacebookPostSystemUPtr ChilliSource::Social::FacebookPostSystem::Create(ChilliSource::Social::FacebookAuthenticationSystem* in_authSystem);
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
@@ -117,12 +117,12 @@ namespace ChilliSource
             ///
             /// @param The facebook authentication system.
             //----------------------------------------------------
-            FacebookPostSystem(Social::FacebookAuthenticationSystem* in_authSystem);
+            FacebookPostSystem(ChilliSource::Social::FacebookAuthenticationSystem* in_authSystem);
 
 		private:
 
 			FacebookJavaInterfaceSPtr m_javaInterface;
-			Social::FacebookAuthenticationSystem* m_authSystem;
+			ChilliSource::Social::FacebookAuthenticationSystem* m_authSystem;
             PostResultDelegate::Connection m_postCompleteDelegateConnection;
             PostResultDelegate::Connection m_requestCompleteDelegateConnection;
 		};

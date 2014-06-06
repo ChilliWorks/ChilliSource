@@ -42,11 +42,11 @@ namespace ChilliSource
 			std::string mstrName;
 			u32 mudwNumVertices;
 			u32 mudwNumIndices;
-			ChilliSource::Core::Vector3 mvMinBounds;
-			ChilliSource::Core::Vector3 mvMaxBounds;
+			CSCore::Vector3 mvMinBounds;
+			CSCore::Vector3 mvMaxBounds;
 			u8* mpVertexData;
 			u8* mpIndexData;
-			std::vector<ChilliSource::Core::Matrix4> mInverseBindPoseMatrices;
+			std::vector<CSCore::Matrix4> mInverseBindPoseMatrices;
 			PrimitiveType ePrimitiveType;            
 		};
         //-------------------------------------------------------------------------

@@ -50,14 +50,14 @@ extern "C"
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_social_EmailComposerNativeInterface_OnEmailClosed(JNIEnv* inpEnv, jobject inpThis, s32 indwResultCode)
 {
-	ChilliSource::Android::EmailComposerJavaInterfaceSPtr pJavaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::EmailComposerJavaInterface>();
+	CSBackend::Android::EmailComposerJavaInterfaceSPtr pJavaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::EmailComposerJavaInterface>();
 	if (pJavaInterface != nullptr)
 	{
 		pJavaInterface->OnEmailClosed(indwResultCode);
 	}
 }
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -102,7 +102,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Is A
 		//--------------------------------------------------------------
-		bool EmailComposerJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool EmailComposerJavaInterface::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == EmailComposerJavaInterface::InterfaceID);
 		}

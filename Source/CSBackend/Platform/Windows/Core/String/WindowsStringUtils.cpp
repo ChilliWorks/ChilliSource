@@ -14,7 +14,7 @@
 
 #include <algorithm>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -53,7 +53,7 @@ namespace ChilliSource
 			//------------------------------------------------------------
 			std::string ConvertWindowsPathToStandard(const std::wstring& in_windowsPath)
 			{
-				return Core::StringUtils::StandardisePath(UTF16ToUTF8(in_windowsPath));
+				return CSCore::StringUtils::StandardisePath(UTF16ToUTF8(in_windowsPath));
 			}
 		}
 	}

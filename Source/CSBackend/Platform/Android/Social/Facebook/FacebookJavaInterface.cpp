@@ -19,8 +19,8 @@
 
 #include <jni.h>
 
-ChilliSource::Android::FacebookAuthenticationSystem* gpAndroidAuthSystem = nullptr;
-ChilliSource::Android::FacebookPostSystem* gpAndroidPostSystem = nullptr;
+CSBackend::Android::FacebookAuthenticationSystem* gpAndroidAuthSystem = nullptr;
+CSBackend::Android::FacebookPostSystem* gpAndroidPostSystem = nullptr;
 
 //function definitions
 extern "C"
@@ -45,7 +45,7 @@ void Java_com_chillisource_social_FacebookNativeInterface_OnAuthenticationComple
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::FacebookAuthenticationSystem::OnAuthenticationComplete, gpAndroidAuthSystem, inbSuccess));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::FacebookAuthenticationSystem::OnAuthenticationComplete, gpAndroidAuthSystem, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -61,7 +61,7 @@ void Java_com_chillisource_social_FacebookNativeInterface_OnReadAuthorisationCom
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::FacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete, gpAndroidAuthSystem, inbSuccess));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::FacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete, gpAndroidAuthSystem, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -77,7 +77,7 @@ void Java_com_chillisource_social_FacebookNativeInterface_OnWriteAuthorisationCo
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::FacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete, gpAndroidAuthSystem, inbSuccess));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::FacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete, gpAndroidAuthSystem, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -107,7 +107,7 @@ void Java_com_chillisource_social_FacebookNativeInterface_OnPostToFeedComplete(J
 			break;
 		}
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::FacebookPostSystem::OnPostToFeedComplete, gpAndroidPostSystem, result));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::FacebookPostSystem::OnPostToFeedComplete, gpAndroidPostSystem, result));
 	}
 }
 //------------------------------------------------------------
@@ -137,12 +137,12 @@ void Java_com_chillisource_social_FacebookNativeInterface_OnPostRequestComplete(
 			break;
 		}
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::FacebookPostSystem::OnPostRequestComplete, gpAndroidPostSystem, result));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::FacebookPostSystem::OnPostRequestComplete, gpAndroidPostSystem, result));
 	}
 }
 
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -163,7 +163,7 @@ namespace ChilliSource
 			CreateMethodReference("MakeRequestToUser", "([Ljava/lang/String;)V");
 		}
 
-		bool FacebookJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool FacebookJavaInterface::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == FacebookJavaInterface::InterfaceID;
 		}
@@ -198,7 +198,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		void FacebookJavaInterface::Authenticate(const std::vector<std::string>& inaReadPerms)
 		{
-			JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaReadPerms.size(), jStringClass, jstrEmptyString);
@@ -223,7 +223,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		bool FacebookJavaInterface::IsSignedIn()
 		{
-			JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("IsSignedIn"));
 		}
 		//--------------------------------------------------------------------------------------
@@ -233,9 +233,9 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		std::string FacebookJavaInterface::GetActiveToken()
 		{
-			JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrToken = (jstring)pEnv->CallObjectMethod(GetJavaObject(), GetMethodID("GetActiveToken"));
-			std::string strToken = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrToken);
+			std::string strToken = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrToken);
 			pEnv->DeleteLocalRef(jstrToken);
 			return strToken;
 		}
@@ -247,8 +247,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 	    bool FacebookJavaInterface::HasPermission(const std::string& instrPermission)
 	    {
-			JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrPermission = ChilliSource::Android::JavaInterfaceUtils::CreateJStringFromSTDString(instrPermission);
+			JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			jstring jstrPermission = CSBackend::Android::JavaInterfaceUtils::CreateJStringFromSTDString(instrPermission);
 			bool bHasPermission = pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("HasPermission"), jstrPermission);
 			pEnv->DeleteLocalRef(jstrPermission);
 			return bHasPermission;
@@ -263,7 +263,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 	    void FacebookJavaInterface::AuthoriseReadPermissions(const std::vector<std::string>& inaReadPerms)
 	    {
-	    	JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaReadPerms.size(), jStringClass, jstrEmptyString);
@@ -291,7 +291,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 	    void FacebookJavaInterface::AuthoriseWritePermissions(const std::vector<std::string>& inaWritePerms)
 	    {
-	    	JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaWritePerms.size(), jStringClass, jstrEmptyString);
@@ -316,7 +316,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 	    void FacebookJavaInterface::SignOut()
 	    {
-			JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("SignOut"));
 	    }
 		//--------------------------------------------------------------------------------------
@@ -327,7 +327,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 	    void FacebookJavaInterface::TryPostToFeed(const std::string& instrGraphPath, const std::vector<std::string>& inaKeyValues)
 	    {
-	    	JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaKeyValues = pEnv->NewObjectArray(inaKeyValues.size(), jStringClass, jstrEmptyString);
@@ -354,7 +354,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 	    void FacebookJavaInterface::TryPostRequest(const std::vector<std::string>& inaKeyValues)
 	    {
-	    	JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaKeyValues = pEnv->NewObjectArray(inaKeyValues.size(), jStringClass, jstrEmptyString);

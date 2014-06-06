@@ -13,7 +13,7 @@
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace OpenGL
     {
@@ -23,7 +23,7 @@ namespace ChilliSource
         ///
         /// @author I Copland
         //---------------------------------------------------------
-        class RenderCapabilities final : public Rendering::RenderCapabilities
+        class RenderCapabilities final : public CSRendering::RenderCapabilities
         {
         public:
             CS_DECLARE_NAMEDTYPE(RenderCapabilities);
@@ -38,7 +38,7 @@ namespace ChilliSource
 			/// @return Whether the object implements that
             /// interface
 			//-------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------
             /// Determine the capabilities of the device
             /// in terms of GL and render support. This needs
@@ -85,7 +85,7 @@ namespace ChilliSource
             
         private:
             
-            friend Rendering::RenderCapabilitiesUPtr Rendering::RenderCapabilities::Create();
+            friend CSRendering::RenderCapabilitiesUPtr CSRendering::RenderCapabilities::Create();
             //-------------------------------------------------
 			/// Private constructor to enforce use of the
             /// factory method.

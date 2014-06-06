@@ -17,7 +17,7 @@
 
 #include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPJavaInterface.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -33,7 +33,7 @@ namespace ChilliSource
 		///
 		/// @author S Downie
 		//----------------------------------------------------------------------------------
-		class GooglePlayIAPSystem final : public Networking::IAPSystem
+		class GooglePlayIAPSystem final : public CSNetworking::IAPSystem
 		{
 		public:
 
@@ -45,7 +45,7 @@ namespace ChilliSource
             ///
             /// @return Whether the class is of the given type
             //---------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------------
             /// Inform the system of which products are available for
             /// purchase and whether they are managed or unmanaged
@@ -140,7 +140,7 @@ namespace ChilliSource
             void RestoreManagedPurchases() override;
 
 		private:
-            friend Networking::IAPSystemUPtr Networking::IAPSystem::Create(const Core::ParamDictionary&);
+            friend CSNetworking::IAPSystemUPtr CSNetworking::IAPSystem::Create(const CSCore::ParamDictionary&);
             //---------------------------------------------------------------
             /// Private constructor to force the use of the factory method
             ///
@@ -152,7 +152,7 @@ namespace ChilliSource
             /// 	GooglePlayPublicKey  	The public key used for connecting
             ///								to the Google Play store.
             //---------------------------------------------------------------
-			GooglePlayIAPSystem(const Core::ParamDictionary& in_params);
+			GooglePlayIAPSystem(const CSCore::ParamDictionary& in_params);
             //-------------------------------------------------------
             /// Called when the system is created. Initialises
             /// the Java backend

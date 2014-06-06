@@ -21,7 +21,7 @@
 #include <sstream>
 #include <thread>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
 	{
@@ -45,7 +45,7 @@ namespace ChilliSource
         void HttpRequest::Start(CFReadStreamRef in_readStream)
         {
             //Begin the read loop as a threaded task
-			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&HttpRequest::PollReadStream, this, in_readStream));
+			CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&HttpRequest::PollReadStream, this, in_readStream));
         }
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------

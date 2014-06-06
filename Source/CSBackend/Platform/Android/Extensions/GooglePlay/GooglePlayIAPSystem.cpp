@@ -14,7 +14,7 @@
 
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -34,9 +34,9 @@ namespace ChilliSource
 			///
 			/// @return Whether product was found
 			//---------------------------------------------------------------
-			bool TryGetProductType(const std::vector<Networking::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId, Networking::IAPSystem::ProductRegInfo::Type& out_type)
+			bool TryGetProductType(const std::vector<CSNetworking::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId, CSNetworking::IAPSystem::ProductRegInfo::Type& out_type)
 			{
-				for(std::vector<Networking::IAPSystem::ProductRegInfo>::const_iterator it = in_productInfos.begin(); it != in_productInfos.end(); ++it)
+				for(std::vector<CSNetworking::IAPSystem::ProductRegInfo>::const_iterator it = in_productInfos.begin(); it != in_productInfos.end(); ++it)
 				{
 					if(it->m_id == in_productId)
 					{
@@ -53,16 +53,16 @@ namespace ChilliSource
 
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-		GooglePlayIAPSystem::GooglePlayIAPSystem(const Core::ParamDictionary& in_params)
+		GooglePlayIAPSystem::GooglePlayIAPSystem(const CSCore::ParamDictionary& in_params)
 		{
 			CS_ASSERT(in_params.HasKey(k_playStorePublicKeyKey) == true, "Cannot create GooglePlay IAP system without Play store public key - GooglePlayPublicKey");
 			m_publicKey = in_params.GetValue(k_playStorePublicKeyKey);
 		}
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        bool GooglePlayIAPSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool GooglePlayIAPSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceId == Networking::IAPSystem::InterfaceID || in_interfaceId == GooglePlayIAPSystem::InterfaceID;
+            return in_interfaceId == CSNetworking::IAPSystem::InterfaceID || in_interfaceId == GooglePlayIAPSystem::InterfaceID;
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------

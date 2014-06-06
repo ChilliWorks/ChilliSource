@@ -16,7 +16,7 @@
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -46,7 +46,7 @@ namespace ChilliSource
 			///
 			/// @return whether or not this object implements the given interface.
 			//--------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------------
 			/// @author I Copland
 			///
@@ -63,7 +63,7 @@ namespace ChilliSource
             ///
             /// @param Delegate
             //---------------------------------------------------------------
-            void StartListeningForTransactionUpdates(const Networking::IAPSystem::TransactionStatusDelegate& in_delegate);
+            void StartListeningForTransactionUpdates(const CSNetworking::IAPSystem::TransactionStatusDelegate& in_delegate);
             //---------------------------------------------------------------
             /// Prevent any more transaction updates from being triggered.
             ///
@@ -79,7 +79,7 @@ namespace ChilliSource
 			/// @param List of product IDs to request descriptions for
             /// @param Delegate to invoke when the request completes
             //---------------------------------------------------------------
-            void RequestProductDescriptions(const std::vector<std::string>& in_productIds, const Networking::IAPSystem::ProductDescDelegate& in_delegate);
+            void RequestProductDescriptions(const std::vector<std::string>& in_productIds, const CSNetworking::IAPSystem::ProductDescDelegate& in_delegate);
             //---------------------------------------------------------------
 			/// Prevent the completion delegate being called for
             /// any pending product description requests and attempt to
@@ -108,7 +108,7 @@ namespace ChilliSource
             /// @param Transaction ID
             /// @param Delegate to call when closed (either with success or failure)
             //---------------------------------------------------------------
-            void CloseTransaction(const std::string& in_productId, const std::string& in_transactionId, const Networking::IAPSystem::TransactionCloseDelegate& in_delegate);
+            void CloseTransaction(const std::string& in_productId, const std::string& in_transactionId, const CSNetworking::IAPSystem::TransactionCloseDelegate& in_delegate);
             //---------------------------------------------------------------
             /// Request that the store trigger new purchase requests for
             /// owned non-consumable items
@@ -125,7 +125,7 @@ namespace ChilliSource
             ///
             /// @param List of product descriptions
             //---------------------------------------------------------------
-            void OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPSystem::ProductDesc>& in_products);
+            void OnProductDescriptionsRequestComplete(const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_products);
             //---------------------------------------------------------------
     		/// Called when transaction status changes
             ///
@@ -134,7 +134,7 @@ namespace ChilliSource
             /// @param Status ID
             /// @param Transaction description
             //---------------------------------------------------------------
-            void OnTransactionStatusUpdated(u32 in_statusId, const Networking::IAPSystem::Transaction& in_transaction);
+            void OnTransactionStatusUpdated(u32 in_statusId, const CSNetworking::IAPSystem::Transaction& in_transaction);
             //---------------------------------------------------------------
     		/// Called when transaction close request completes
             ///
@@ -147,9 +147,9 @@ namespace ChilliSource
 
 		private:
 
-            Networking::IAPSystem::ProductDescDelegate m_productsRequestDelegate;
-            Networking::IAPSystem::TransactionStatusDelegate m_transactionStatusDelegate;
-            Networking::IAPSystem::TransactionCloseDelegate m_transactionCloseDelegate;
+            CSNetworking::IAPSystem::ProductDescDelegate m_productsRequestDelegate;
+            CSNetworking::IAPSystem::TransactionStatusDelegate m_transactionStatusDelegate;
+            CSNetworking::IAPSystem::TransactionCloseDelegate m_transactionCloseDelegate;
 		};
 	}
 }

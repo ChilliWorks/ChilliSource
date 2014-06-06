@@ -35,7 +35,7 @@
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace OpenGL
     {
@@ -63,16 +63,16 @@ namespace ChilliSource
         {
             if(m_hasContextBeenBackedUp == true)
             {
-                Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+                CSCore::ResourcePool* resourcePool = CSCore::Application::Get()->GetResourcePool();
                 
                 //---Shaders
-                resourcePool->RefreshResources<Rendering::Shader>();
+                resourcePool->RefreshResources<CSRendering::Shader>();
                 
                 //---Textures
-                resourcePool->RefreshResources<Rendering::Texture>();
+                resourcePool->RefreshResources<CSRendering::Texture>();
                 
                 //---Cubemaps
-                resourcePool->RefreshResources<Rendering::Cubemap>();
+                resourcePool->RefreshResources<CSRendering::Cubemap>();
                 
                 //---Meshes
                 for(auto& buffer : m_meshBuffers)

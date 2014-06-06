@@ -32,7 +32,7 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_IOS
             return DialogueBoxSystemUPtr(new iOS::DialogueBoxSystem());
 #elif defined CS_TARGETPLATFORM_ANDROID
-            return DialogueBoxSystemUPtr(new Android::DialogueBoxSystem());
+            return DialogueBoxSystemUPtr(new CSBackend::Android::DialogueBoxSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
             return DialogueBoxSystemUPtr(new Windows::DialogueBoxSystem());
 #else

@@ -15,7 +15,7 @@
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -23,7 +23,7 @@ namespace ChilliSource
 		/// A system used to display platform specific system
         /// dialogue boxes.
 		//-----------------------------------------------------------
-		class DialogueBoxSystem final : public Core::DialogueBoxSystem
+		class DialogueBoxSystem final : public CSCore::DialogueBoxSystem
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(DialogueBoxSystem);
@@ -33,7 +33,7 @@ namespace ChilliSource
             /// @return Whether this implements the passed in
             /// interface id.
             //-----------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //-----------------------------------------------------
             /// Display a system dialog with the given ID and delegate
             ///
@@ -45,7 +45,7 @@ namespace ChilliSource
             /// @param Message text (UTF-8)
             /// @param Confirm text (UTF-8)
             //------------------------------------------------------
-            void ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm) override;
+            void ShowSystemDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm) override;
             //-----------------------------------------------------
             /// Display a system confirmation dialog with the given
             /// ID and delegate.
@@ -59,7 +59,7 @@ namespace ChilliSource
             /// @param Confirm text (UTF-8)
             /// @param Cancel text (UTF-8)
             //-----------------------------------------------------
-            void ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel) override;
+            void ShowSystemConfirmDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel) override;
             //-----------------------------------------------------
             /// Display a toast notification with the given text
             ///
@@ -76,7 +76,7 @@ namespace ChilliSource
             /// @param ID
             /// @param Result
             //------------------------------------------------------
-            void OnSystemConfirmDialogueResult(u32 in_id, Core::DialogueBoxSystem::DialogueResult in_result);
+            void OnSystemConfirmDialogueResult(u32 in_id, CSCore::DialogueBoxSystem::DialogueResult in_result);
             //----------------------------------------------------
 			/// Destructor.
             ///
@@ -85,7 +85,7 @@ namespace ChilliSource
             ~DialogueBoxSystem();
 
 		private:
-            friend Core::DialogueBoxSystemUPtr Core::DialogueBoxSystem::Create();
+            friend CSCore::DialogueBoxSystemUPtr CSCore::DialogueBoxSystem::Create();
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -96,7 +96,7 @@ namespace ChilliSource
         private:
             
             DialogueBoxJavaInterfaceSPtr m_dialogueBoxJI;
-			Core::DialogueBoxSystem::DialogueDelegate m_activeSysConfirmDelegate;
+			CSCore::DialogueBoxSystem::DialogueDelegate m_activeSysConfirmDelegate;
 		};
 	}
 }

@@ -87,7 +87,7 @@ namespace ChilliSource
             return FileSystemUPtr(new iOS::FileSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
-            return FileSystemUPtr(new Android::FileSystem());
+            return FileSystemUPtr(new CSBackend::Android::FileSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_WINDOWS
             return FileSystemUPtr(new Windows::FileSystem());

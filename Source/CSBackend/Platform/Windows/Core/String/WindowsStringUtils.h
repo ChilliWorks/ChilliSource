@@ -17,7 +17,7 @@
 #include <locale>
 #include <string>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{

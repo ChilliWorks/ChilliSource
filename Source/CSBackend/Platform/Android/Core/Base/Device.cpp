@@ -33,7 +33,7 @@
 #include <CSBackend/Platform/Android/Core/Base/CoreJavaInterface.h>
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace Android
     {
@@ -53,7 +53,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			std::string ParseLanguageFromLocale(const std::string& in_locale)
 			{
-				std::vector<std::string> strLocaleBrokenUp = ChilliSource::Core::StringUtils::Split(in_locale, "_", 0);
+				std::vector<std::string> strLocaleBrokenUp = CSCore::StringUtils::Split(in_locale, "_", 0);
 
 				if (strLocaleBrokenUp.size() > 0)
 				{
@@ -85,9 +85,9 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Device::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool Device::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (Core::Device::InterfaceID == in_interfaceId || Device::InterfaceID == in_interfaceId);
+            return (CSCore::Device::InterfaceID == in_interfaceId || Device::InterfaceID == in_interfaceId);
         }
         //---------------------------------------------------
         //---------------------------------------------------

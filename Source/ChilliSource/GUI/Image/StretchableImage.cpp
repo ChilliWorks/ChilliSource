@@ -54,7 +54,7 @@ namespace ChilliSource
             Core::StorageLocation eTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("TextureLocation", strValue))
             {
-                eTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eTextureLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("Texture", strValue))
             {
@@ -66,7 +66,7 @@ namespace ChilliSource
             Core::StorageLocation eTextureAtlasLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("TextureAtlasLocation", strValue))
             {
-                eTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eTextureAtlasLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("TextureAtlas", strValue))
             {

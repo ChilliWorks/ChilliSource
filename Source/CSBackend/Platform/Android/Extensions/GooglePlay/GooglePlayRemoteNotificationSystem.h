@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Notification/RemoteNotificationSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace Android
     {
@@ -25,7 +25,7 @@ namespace ChilliSource
     	///
     	/// @author Robert Henning
 		//-------------------------------------------------------
-        class GooglePlayRemoteNotificationSystem : public Core::RemoteNotificationSystem
+        class GooglePlayRemoteNotificationSystem : public CSCore::RemoteNotificationSystem
         {
         public:
         	CS_DECLARE_NAMEDTYPE(GooglePlayRemoteNotificationSystem);
@@ -36,7 +36,7 @@ namespace ChilliSource
             /// @return Whether this implements the passed in
             /// interface id.
             //--------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------
             /// Enables and disables addition of remote notifications.
             /// All existing notifications will be cancelled
@@ -77,7 +77,7 @@ namespace ChilliSource
             /// @return An event that can be used to listen for
             /// new notifications being recieved.
             //---------------------------------------------------
-            Core::IConnectableEvent<NotificationReceivedDelegate>& GetRecievedEvent() override;
+            CSCore::IConnectableEvent<NotificationReceivedDelegate>& GetRecievedEvent() override;
             //------------------------------------------------
             /// @author Robert Henning
             ///
@@ -93,9 +93,9 @@ namespace ChilliSource
             ///
             /// @param Dictionary payload of remote notification
             //------------------------------------------------
-            void OnRemoteNotificationReceived(const Core::ParamDictionary& in_params);
+            void OnRemoteNotificationReceived(const CSCore::ParamDictionary& in_params);
         private:
-            friend Core::RemoteNotificationSystemUPtr Core::RemoteNotificationSystem::Create();
+            friend CSCore::RemoteNotificationSystemUPtr CSCore::RemoteNotificationSystem::Create();
             //------------------------------------------------
             /// Private constructor to force use of factory method.
             ///
@@ -107,7 +107,7 @@ namespace ChilliSource
             GooglePlayRemoteNotificationJavaInterfaceSPtr m_javaInterface;
             std::string	m_token;
             TokenReceivedDelegate m_delegate;
-            Core::Event<NotificationReceivedDelegate> m_receivedEvent;
+            CSCore::Event<NotificationReceivedDelegate> m_receivedEvent;
         };
     }
 }

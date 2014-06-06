@@ -15,7 +15,7 @@
 
 #include <windows.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{

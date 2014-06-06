@@ -33,9 +33,9 @@ namespace ChilliSource
         	return IAPSystemUPtr(new iOS::IAPSystem());
 #elif defined(CS_TARGETPLATFORM_ANDROID)
 #	ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
-        	return IAPSystemUPtr(new Android::GooglePlayIAPSystem(inParams));
+        	return IAPSystemUPtr(new CSBackend::Android::GooglePlayIAPSystem(inParams));
 #	elif defined(CS_ANDROIDEXTENSION_AMAZON)
-        	return IAPSystemUPtr(new Android::AmazonIAPSystem(inParams));
+        	return IAPSystemUPtr(new CSBackend::Android::AmazonIAPSystem(inParams));
 #	endif
 #endif
         	return nullptr;

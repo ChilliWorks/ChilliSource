@@ -26,7 +26,7 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_IOS
             return FacebookPostSystemUPtr(new iOS::FacebookPostSystem(inpAuthSystem));
 #elif CS_TARGETPLATFORM_ANDROID
-            return FacebookPostSystemUPtr(new Android::FacebookPostSystem(inpAuthSystem));
+            return FacebookPostSystemUPtr(new CSBackend::Android::FacebookPostSystem(inpAuthSystem));
 #else
 			return FacebookPostSystemUPtr();
 #endif

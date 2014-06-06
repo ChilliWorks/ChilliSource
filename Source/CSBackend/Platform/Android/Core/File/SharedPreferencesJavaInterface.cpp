@@ -10,7 +10,7 @@
 
 #include <CSBackend/Platform/Android/Core/File/SharedPreferencesJavaInterface.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{

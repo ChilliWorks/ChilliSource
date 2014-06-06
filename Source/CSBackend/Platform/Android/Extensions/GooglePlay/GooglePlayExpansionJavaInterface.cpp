@@ -16,7 +16,7 @@
 
 #include <jni.h>
 
-ChilliSource::Android::GooglePlayExpansionSystem* g_expansionSystem = nullptr;
+CSBackend::Android::GooglePlayExpansionSystem* g_expansionSystem = nullptr;
 
 extern "C"
 {
@@ -32,7 +32,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 {
 	if(g_expansionSystem)
 	{
-		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::GooglePlayExpansionSystem::DownloadStatus::k_downloading);
+		g_expansionSystem->OnDownloadStatusChanged(CSBackend::Android::GooglePlayExpansionSystem::DownloadStatus::k_downloading);
 	}
 }
 
@@ -40,7 +40,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 {
 	if(g_expansionSystem)
 	{
-		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::GooglePlayExpansionSystem::DownloadStatus::k_complete);
+		g_expansionSystem->OnDownloadStatusChanged(CSBackend::Android::GooglePlayExpansionSystem::DownloadStatus::k_complete);
 	}
 }
 
@@ -48,7 +48,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 {
 	if(g_expansionSystem)
 	{
-		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::GooglePlayExpansionSystem::DownloadStatus::k_failed);
+		g_expansionSystem->OnDownloadStatusChanged(CSBackend::Android::GooglePlayExpansionSystem::DownloadStatus::k_failed);
 	}
 }
 
@@ -56,7 +56,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 {
 	if(g_expansionSystem)
 	{
-		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::GooglePlayExpansionSystem::DownloadStatus::k_failedInsufficientStorage);
+		g_expansionSystem->OnDownloadStatusChanged(CSBackend::Android::GooglePlayExpansionSystem::DownloadStatus::k_failedInsufficientStorage);
 	}
 }
 
@@ -64,7 +64,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 {
 	if(g_expansionSystem)
 	{
-		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::GooglePlayExpansionSystem::DownloadStatus::k_paused);
+		g_expansionSystem->OnDownloadStatusChanged(CSBackend::Android::GooglePlayExpansionSystem::DownloadStatus::k_paused);
 	}
 }
 
@@ -72,11 +72,11 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 {
 	if(g_expansionSystem)
 	{
-		g_expansionSystem->OnDownloadStatusChanged(ChilliSource::Android::GooglePlayExpansionSystem::DownloadStatus::k_pausedNoWiFi);
+		g_expansionSystem->OnDownloadStatusChanged(CSBackend::Android::GooglePlayExpansionSystem::DownloadStatus::k_pausedNoWiFi);
 	}
 }
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -100,7 +100,7 @@ namespace ChilliSource
 			CreateMethodReference("GetExpansionPath", "(I)Ljava/lang/String;");
 		}
 
-		bool GooglePlayExpansionJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool GooglePlayExpansionJavaInterface::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
 			return GooglePlayExpansionJavaInterface::InterfaceID == inInterfaceID;
 		}
@@ -110,62 +110,62 @@ namespace ChilliSource
 		}
 		void GooglePlayExpansionJavaInterface::Init()
 		{
-			JNIEnv* env = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("Init"));
 		}
 		void GooglePlayExpansionJavaInterface::Download()
 		{
-			JNIEnv* env = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("Download"));
 		}
 		void GooglePlayExpansionJavaInterface::PauseDownload()
 		{
-			JNIEnv* env = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("PauseDownload"));
 		}
 		void GooglePlayExpansionJavaInterface::ResumeDownload()
 		{
-			JNIEnv* env = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("ResumeDownload"));
 		}
 		f32 GooglePlayExpansionJavaInterface::GetDownloadProgress()
 		{
-			JNIEnv* env = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return env->CallFloatMethod(GetJavaObject(), GetMethodID("GetDownloadProgress"));
 		}
 		u64 GooglePlayExpansionJavaInterface::GetExternalFreeStorageInBytes()
 		{
-			JNIEnv* env = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return env->CallLongMethod(GetJavaObject(), GetMethodID("GetExternalFreeStorageInBytes"));
 		}
 		void GooglePlayExpansionJavaInterface::KeepAppAwake()
 		{
-			JNIEnv* env = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("KeepAppAwake"));
 		}
 		void GooglePlayExpansionJavaInterface::AllowAppToSleep()
 		{
-			JNIEnv* env = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("AllowAppToSleep"));
 		}
 		u32 GooglePlayExpansionJavaInterface::GetNumExpansions()
 		{
-			JNIEnv* env = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return env->CallIntMethod(GetJavaObject(), GetMethodID("GetNumExpansions"));
 		}
 		u32 GooglePlayExpansionJavaInterface::GetExpansionVersionCode(u32 inudwIndex)
 		{
-			JNIEnv* env = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return env->CallIntMethod(GetJavaObject(), GetMethodID("GetExpansionVersionCode"), inudwIndex);
 		}
 		u64 GooglePlayExpansionJavaInterface::GetExpansionFileSizeInBytes(u32 inudwIndex)
 		{
-			JNIEnv* env = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return env->CallLongMethod(GetJavaObject(), GetMethodID("GetExpansionFileSize"), inudwIndex);
 		}
 		std::string GooglePlayExpansionJavaInterface::GetExpansionPath(u32 inudwIndex)
 		{
-			JNIEnv* env = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrZipPath = (jstring) env->CallObjectMethod(GetJavaObject(), GetMethodID("GetExpansionPath"), inudwIndex);
 			std::string strZipPath = JavaInterfaceUtils::CreateSTDStringFromJString(jstrZipPath);
 			return strZipPath;

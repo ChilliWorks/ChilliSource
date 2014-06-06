@@ -46,7 +46,7 @@ namespace ChilliSource
         RenderSystemUPtr RenderSystem::Create(RenderCapabilities* in_renderCapabilities)
         {
 #if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID || defined CS_TARGETPLATFORM_WINDOWS
-            return RenderSystemUPtr(new OpenGL::RenderSystem(in_renderCapabilities));
+            return RenderSystemUPtr(new CSBackend::OpenGL::RenderSystem(in_renderCapabilities));
 #else
             return nullptr;
 #endif

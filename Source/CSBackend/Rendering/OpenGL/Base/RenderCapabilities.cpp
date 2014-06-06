@@ -11,7 +11,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 #include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace OpenGL
     {
@@ -42,9 +42,9 @@ namespace ChilliSource
         }
         //-------------------------------------------------
         //-------------------------------------------------
-        bool RenderCapabilities::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool RenderCapabilities::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (Rendering::RenderCapabilities::InterfaceID == in_interfaceId || RenderCapabilities::InterfaceID == in_interfaceId);
+            return (CSRendering::RenderCapabilities::InterfaceID == in_interfaceId || RenderCapabilities::InterfaceID == in_interfaceId);
         }
         //-------------------------------------------------
         //-------------------------------------------------

@@ -12,7 +12,7 @@
 
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -20,9 +20,9 @@ namespace ChilliSource
 
 		//----------------------------------------------------
 		//----------------------------------------------------
-		bool FacebookAuthenticationSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool FacebookAuthenticationSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == FacebookAuthenticationSystem::InterfaceID) || (in_interfaceId == Social::FacebookAuthenticationSystem::InterfaceID);
+			return (in_interfaceId == FacebookAuthenticationSystem::InterfaceID) || (in_interfaceId == ChilliSource::Social::FacebookAuthenticationSystem::InterfaceID);
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -33,7 +33,7 @@ namespace ChilliSource
         	if(m_javaInterface == nullptr)
         	{
         		m_javaInterface = FacebookJavaInterfaceSPtr(new FacebookJavaInterface());
-        		ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
+        		CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
         	}
 
         	m_javaInterface->SetAuthenticationSystem(this);

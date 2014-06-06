@@ -49,7 +49,7 @@ namespace ChilliSource
             return VideoPlayerUPtr(new iOS::VideoPlayer());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
-            return VideoPlayerUPtr(new Android::VideoPlayer());
+            return VideoPlayerUPtr(new CSBackend::Android::VideoPlayer());
 #endif
             return nullptr;
         }

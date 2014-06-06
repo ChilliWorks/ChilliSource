@@ -43,7 +43,7 @@ namespace ChilliSource
         TextureUPtr Texture::Create()
         {
 #if defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_WINDOWS)
-            return TextureUPtr(new OpenGL::Texture());
+            return TextureUPtr(new CSBackend::OpenGL::Texture());
 #else
             return nullptr;
 #endif

@@ -35,7 +35,7 @@
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -45,7 +45,7 @@ namespace ChilliSource
 		///
 		/// @author I Copland
 		//----------------------------------------------------------------
-		class Keyboard final : public Input::Keyboard
+		class Keyboard final : public CSInput::Keyboard
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(Keyboard);
@@ -60,7 +60,7 @@ namespace ChilliSource
 			/// @return Whether the object implements an interface
 			/// that has the given ID
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//-------------------------------------------------------
 			/// Sets whether or not the text input is currently
 			/// enabled or disabled. If the keyboard is virtual, it
@@ -114,23 +114,23 @@ namespace ChilliSource
 			/// @param An event that is called when text input is
 			/// enabled.
 			//-------------------------------------------------------
-			Core::IConnectableEvent<KeyboardEventDelegate>& GetTextInputEnabledEvent() override;
+			CSCore::IConnectableEvent<KeyboardEventDelegate>& GetTextInputEnabledEvent() override;
 			//-------------------------------------------------------
 			/// @author I Copland
 			///
 			/// @param An event that is called when text input is
 			/// received.
 			//-------------------------------------------------------
-			Core::IConnectableEvent<TextInputEventDelegate>& GetTextInputReceivedEvent() override;
+			CSCore::IConnectableEvent<TextInputEventDelegate>& GetTextInputReceivedEvent() override;
 			//-------------------------------------------------------
 			/// @author I Copland
 			///
 			/// @param An event that is called when text input is
 			/// disabled.
 			//-------------------------------------------------------
-			Core::IConnectableEvent<KeyboardEventDelegate>& GetTextInputDisabledEvent() override;
+			CSCore::IConnectableEvent<KeyboardEventDelegate>& GetTextInputDisabledEvent() override;
 		private:
-			friend Input::KeyboardUPtr Input::Keyboard::Create();
+			friend CSInput::KeyboardUPtr CSInput::Keyboard::Create();
 
 			//-------------------------------------------------------
 			/// Constructor. Declared private to force the use of the
@@ -180,9 +180,9 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			void OnDestroy() override;
 
-			Core::Event<KeyboardEventDelegate> m_textInputEnabledEvent;
-			Core::Event<TextInputEventDelegate> m_textInputReceivedEvent;
-			Core::Event<KeyboardEventDelegate> m_textInputDisabledEvent;
+			CSCore::Event<KeyboardEventDelegate> m_textInputEnabledEvent;
+			CSCore::Event<TextInputEventDelegate> m_textInputReceivedEvent;
+			CSCore::Event<KeyboardEventDelegate> m_textInputDisabledEvent;
 			bool m_enabled;
 			std::string m_text;
 			KeyboardJavaInterfaceSPtr m_keyboardJI;

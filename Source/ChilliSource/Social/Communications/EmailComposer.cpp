@@ -55,7 +55,7 @@ namespace ChilliSource
                 return nullptr;
             }
 #elif defined CS_TARGETPLATFORM_ANDROID
-            return EmailComposerUPtr(new Android::EmailComposer());
+            return EmailComposerUPtr(new CSBackend::Android::EmailComposer());
 #else
             return nullptr;
 #endif

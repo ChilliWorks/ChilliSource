@@ -36,7 +36,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Event/Event.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace Windows
     {
@@ -46,7 +46,7 @@ namespace ChilliSource
         ///
         /// @author I Copland
         //----------------------------------------------------------------
-		class Screen final : public Core::Screen
+		class Screen final : public CSCore::Screen
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(Screen);
@@ -59,7 +59,7 @@ namespace ChilliSource
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//-----------------------------------------------------------
 			/// @author I Copland
 			///
@@ -68,7 +68,7 @@ namespace ChilliSource
             /// this will be the current size of the window. For a mobile
             /// application this will be full size of the screen.
 			//-----------------------------------------------------------
-			const Core::Vector2& GetResolution() const override;
+			const CSCore::Vector2& GetResolution() const override;
             //-----------------------------------------------------------
             /// The density scale factor as reported by the device. What
             /// this factor relates to is platform dependant. On iOS it
@@ -94,7 +94,7 @@ namespace ChilliSource
 			/// @return An event that is called when the screen resolution
             /// changes.
 			//-----------------------------------------------------------
-            Core::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() override;
+            CSCore::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() override;
             //-----------------------------------------------------------
             /// Called when the screen resolution changes. This will update
             /// the screen resolution and notify listeners that the resolution
@@ -105,9 +105,9 @@ namespace ChilliSource
             ///
             /// @param The new resolution.
 			//------------------------------------------------------------
-			void OnResolutionChanged(const Core::Vector2& in_resolution);
+			void OnResolutionChanged(const CSCore::Vector2& in_resolution);
         private:
-            friend Core::ScreenUPtr Core::Screen::Create();
+            friend CSCore::ScreenUPtr CSCore::Screen::Create();
             //-------------------------------------------------------
 			/// Private constructor to force the use of the Create()
             /// factory method.
@@ -135,10 +135,10 @@ namespace ChilliSource
 			//------------------------------------------------
 			void OnDestroy() override;
             
-            Core::Vector2 m_resolution;
+            CSCore::Vector2 m_resolution;
             f32 m_densityScale;
             f32 m_invDensityScale;
-            Core::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
+            CSCore::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
         };
     }
 }

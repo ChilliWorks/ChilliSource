@@ -37,7 +37,7 @@ namespace ChilliSource
     {
         namespace Utils
         {
-            bool ReadJson(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrPath, Json::Value *outpJson)
+            bool ReadJson(CSCore::StorageLocation ineStorageLocation, const std::string &instrPath, Json::Value *outpJson)
             {
                 if(!outpJson)
                 {

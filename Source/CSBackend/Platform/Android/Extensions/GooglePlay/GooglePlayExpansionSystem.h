@@ -17,7 +17,7 @@
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace Android
     {
@@ -26,7 +26,7 @@ namespace ChilliSource
     	///
     	/// @author H McLaughlin
     	//------------------------------------------------------------------------
-        class GooglePlayExpansionSystem final : public Core::AppSystem
+        class GooglePlayExpansionSystem final : public CSCore::AppSystem
         {
         public:
         	CS_DECLARE_NAMEDTYPE(GooglePlayExpansionSystem);
@@ -63,7 +63,7 @@ namespace ChilliSource
         	///
             /// @return Whether the system implements the given Id.
             //-------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------------
             /// Check to see if the files have already been downloaded
             /// and if they are complete
@@ -124,7 +124,7 @@ namespace ChilliSource
             //-------------------------------------------------------------
             void OnDownloadStatusChanged(DownloadStatus in_Status);
         private:
-        	friend class Core::Application;
+        	friend class CSCore::Application;
         	//----------------------------------------------------------------
         	/// Creates a new instance of the system.
         	///

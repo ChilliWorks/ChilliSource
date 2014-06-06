@@ -30,20 +30,20 @@
 
 #include <CSBackend/Platform/Windows/Input/DeviceButtons/DeviceButtonSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
         CS_DEFINE_NAMEDTYPE(DeviceButtonSystem);
         //----------------------------------------------------
         //----------------------------------------------------
-        bool DeviceButtonSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+        bool DeviceButtonSystem::IsA(CSCore::InterfaceIDType in_interfaceID) const
         {
-            return (in_interfaceID == Input::DeviceButtonSystem::InterfaceID || in_interfaceID == DeviceButtonSystem::InterfaceID);
+            return (in_interfaceID == CSInput::DeviceButtonSystem::InterfaceID || in_interfaceID == DeviceButtonSystem::InterfaceID);
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Core::IConnectableEvent<DeviceButtonSystem::TriggeredDelegate>& DeviceButtonSystem::GetTriggeredEvent()
+        CSCore::IConnectableEvent<DeviceButtonSystem::TriggeredDelegate>& DeviceButtonSystem::GetTriggeredEvent()
         {
             return m_triggeredEvent;
         }

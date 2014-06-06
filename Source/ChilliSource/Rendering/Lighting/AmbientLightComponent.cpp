@@ -37,7 +37,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool AmbientLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool AmbientLightComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == AmbientLightComponent::InterfaceID;
 		}

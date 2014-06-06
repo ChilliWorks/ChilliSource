@@ -15,7 +15,7 @@
 
 #include <memory>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{

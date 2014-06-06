@@ -18,7 +18,7 @@
 
 #include <UIKit/UIKit.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace iOS
     {
@@ -27,7 +27,7 @@ namespace ChilliSource
         ///
         /// @author Robert Henning
         //---------------------------------------------------------
-        class RemoteNotificationSystem : public Core::RemoteNotificationSystem
+        class RemoteNotificationSystem : public CSCore::RemoteNotificationSystem
         {
         public:
             CS_DECLARE_NAMEDTYPE(RemoteNotificationSystem);
@@ -39,7 +39,7 @@ namespace ChilliSource
             /// @return Whether this implements the passed in
             /// interface id.
             //--------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------
             /// Request the remote token for this device for use
             /// with Push Notifications.
@@ -80,7 +80,7 @@ namespace ChilliSource
             /// @return An event that can be used to listen for
             /// new notifications being recieved.
             //---------------------------------------------------
-            Core::IConnectableEvent<NotificationReceivedDelegate>& GetRecievedEvent() override;
+            CSCore::IConnectableEvent<NotificationReceivedDelegate>& GetRecievedEvent() override;
             //---------------------------------------------------
             /// @author Robert Henning
             ///
@@ -100,7 +100,7 @@ namespace ChilliSource
             void OnRemoteNotificationReceived(UIApplication* in_application, NSDictionary* in_payload);
             
         private:
-            friend Core::RemoteNotificationSystemUPtr Core::RemoteNotificationSystem::Create();
+            friend CSCore::RemoteNotificationSystemUPtr CSCore::RemoteNotificationSystem::Create();
             //----------------------------------------------------------
             /// Private constructor to force use of factory method.
             ///
@@ -111,7 +111,7 @@ namespace ChilliSource
             bool m_enabled;
             std::string m_token;
             TokenReceivedDelegate m_delegate;
-            Core::Event<NotificationReceivedDelegate> m_receivedEvent;
+            CSCore::Event<NotificationReceivedDelegate> m_receivedEvent;
         };
     }
 }

@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/PNGImageProvider.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -45,7 +45,7 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//--------------------------------------------------------------
-		class PNGImageProvider final : public Core::PNGImageProvider
+		class PNGImageProvider final : public CSCore::PNGImageProvider
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(PNGImageProvider);
@@ -58,13 +58,13 @@ namespace ChilliSource
 			///
 			/// @return Whether the object is of given type
 			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//-------------------------------------------------------
 			/// @author I Copland
 			///
 			/// @return The resource type this provider can load
 			//-------------------------------------------------------
-			Core::InterfaceIDType GetResourceType() const override;
+			CSCore::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------
 			/// Whether or not the provider can create resources from
 			/// files with the given extension.
@@ -88,7 +88,7 @@ namespace ChilliSource
 			/// @param Options to customise the creation
 			/// @param [Out] Resource
 			//-----------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------
 			/// Creates a new resource from file asynchronously.
 			/// Completion delegate is called when load is finished.
@@ -102,9 +102,9 @@ namespace ChilliSource
 			/// @param Completion delegate
 			/// @param [Out] The output resource.
 			//----------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const CSCore::ResourceSPtr& out_resource) override;
 		private:
-			friend Core::PNGImageProviderUPtr Core::PNGImageProvider::Create();
+			friend CSCore::PNGImageProviderUPtr CSCore::PNGImageProvider::Create();
 			//-----------------------------------------------------------
 			/// Private constructor to force use of factory method
 			///

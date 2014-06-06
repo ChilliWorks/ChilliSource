@@ -36,7 +36,7 @@
 
 #include <array>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace OpenGL
 	{
@@ -46,7 +46,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //--------------------------------------------------------------
-		class Cubemap final : public Rendering::Cubemap
+		class Cubemap final : public CSRendering::Cubemap
 		{
 		public:
             
@@ -58,7 +58,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the object is of this type
 			//--------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------
             /// Construct the cubemap from the given image data.
             /// The texture will take ownership of the image data
@@ -77,7 +77,7 @@ namespace ChilliSource
             /// @param Image datas (6)
             /// @param Whether the cubemap should be mip-mapped
             //--------------------------------------------------
-            void Build(const std::array<Rendering::Texture::Descriptor, 6>& in_descs, const std::array<Rendering::Texture::TextureDataUPtr, 6>& in_datas, bool in_mipMap) override;
+            void Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, const std::array<CSRendering::Texture::TextureDataUPtr, 6>& in_datas, bool in_mipMap) override;
 			//--------------------------------------------------------------
             /// Binds this cubemap to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it
@@ -101,7 +101,7 @@ namespace ChilliSource
             ///
             /// @param Filter mode
             //--------------------------------------------------------------
-            void SetFilterMode(Rendering::Texture::FilterMode in_mode) override;
+            void SetFilterMode(CSRendering::Texture::FilterMode in_mode) override;
             //--------------------------------------------------------------
             /// Future sampling of the cubemap will use the given wrap mode
             ///
@@ -110,7 +110,7 @@ namespace ChilliSource
             /// @param Horizontal wrapping
             /// @param Vertical wrapping
             //--------------------------------------------------------------
-			void SetWrapMode(Rendering::Texture::WrapMode in_sMode, Rendering::Texture::WrapMode in_tMode) override;
+			void SetWrapMode(CSRendering::Texture::WrapMode in_sMode, CSRendering::Texture::WrapMode in_tMode) override;
 			//--------------------------------------------------
 			/// @author S Downie
 			///
@@ -132,7 +132,7 @@ namespace ChilliSource
             /// @return The format of the image used to create
             ///			the cubemap face.
             //--------------------------------------------------
-            Core::ImageFormat GetFormat(Face in_face) const;
+            CSCore::ImageFormat GetFormat(Face in_face) const;
             //--------------------------------------------------
             /// Destroys the cubemap and resets it to the state
             /// prior to build being called.
@@ -149,7 +149,7 @@ namespace ChilliSource
 			
 		private:
             
-            friend Rendering::CubemapUPtr Rendering::Cubemap::Create();
+            friend CSRendering::CubemapUPtr CSRendering::Cubemap::Create();
 			//----------------------------------------------------------
             /// Private constructor to enforce the use of the factory
             /// method
@@ -160,16 +160,16 @@ namespace ChilliSource
 			
 		private:
             
-            Rendering::RenderCapabilities* m_renderCapabilities;
+            CSRendering::RenderCapabilities* m_renderCapabilities;
             TextureUnitSystem* m_texUnitSystem;
             
             GLuint m_cubemapHandle = 0;
             
-            Rendering::Texture::FilterMode m_filterMode = Rendering::Texture::FilterMode::k_bilinear;
-            Rendering::Texture::WrapMode m_sWrapMode = Rendering::Texture::WrapMode::k_clamp;
-            Rendering::Texture::WrapMode m_tWrapMode = Rendering::Texture::WrapMode::k_clamp;
+            CSRendering::Texture::FilterMode m_filterMode = CSRendering::Texture::FilterMode::k_bilinear;
+            CSRendering::Texture::WrapMode m_sWrapMode = CSRendering::Texture::WrapMode::k_clamp;
+            CSRendering::Texture::WrapMode m_tWrapMode = CSRendering::Texture::WrapMode::k_clamp;
             
-            std::array<Core::ImageFormat, 6> m_formats;
+            std::array<CSCore::ImageFormat, 6> m_formats;
             
             bool m_hasFilterModeChanged = true;
             bool m_hasWrapModeChanged = true;

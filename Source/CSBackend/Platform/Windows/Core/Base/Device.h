@@ -32,7 +32,7 @@
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/Device.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace Windows
     {
@@ -42,7 +42,7 @@ namespace ChilliSource
         ///
         /// @author I Copland
         //---------------------------------------------------------
-        class Device final : public Core::Device
+        class Device final : public CSCore::Device
         {
         public:
             CS_DECLARE_NAMEDTYPE(Device);
@@ -55,7 +55,7 @@ namespace ChilliSource
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------
             /// @author I Copland
             ///
@@ -108,7 +108,7 @@ namespace ChilliSource
 			//--------------------------------------------------
 			u32 GetNumberOfCPUCores() const override;
         private:
-            friend Core::DeviceUPtr Core::Device::Create();
+            friend CSCore::DeviceUPtr CSCore::Device::Create();
             //----------------------------------------------------
 			/// Constructor. Declared private to force the use of
             /// the factory method.

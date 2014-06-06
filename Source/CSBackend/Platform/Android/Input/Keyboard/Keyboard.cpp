@@ -36,7 +36,7 @@
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -49,9 +49,9 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		bool Keyboard::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool Keyboard::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (Input::Keyboard::InterfaceID == in_interfaceId || Keyboard::InterfaceID == in_interfaceId);
+			return (CSInput::Keyboard::InterfaceID == in_interfaceId || Keyboard::InterfaceID == in_interfaceId);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -103,19 +103,19 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		Core::IConnectableEvent<Keyboard::KeyboardEventDelegate>& Keyboard::GetTextInputEnabledEvent()
+		CSCore::IConnectableEvent<Keyboard::KeyboardEventDelegate>& Keyboard::GetTextInputEnabledEvent()
 		{
 			return m_textInputEnabledEvent;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		Core::IConnectableEvent<Keyboard::TextInputEventDelegate>& Keyboard::GetTextInputReceivedEvent()
+		CSCore::IConnectableEvent<Keyboard::TextInputEventDelegate>& Keyboard::GetTextInputReceivedEvent()
 		{
 			return m_textInputReceivedEvent;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		Core::IConnectableEvent<Keyboard::KeyboardEventDelegate>& Keyboard::GetTextInputDisabledEvent()
+		CSCore::IConnectableEvent<Keyboard::KeyboardEventDelegate>& Keyboard::GetTextInputDisabledEvent()
 		{
 			return m_textInputDisabledEvent;
 		}
@@ -130,9 +130,9 @@ namespace ChilliSource
 				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_keyboardJI);
 			}
 
-			m_keyboardJI->SetTextAddedDelegate(Core::MakeDelegate(this, &Keyboard::OnTextAdded));
-			m_keyboardJI->SetTextDeletedDelegate(Core::MakeDelegate(this, &Keyboard::OnTextDeleted));
-			m_keyboardJI->SetKeyboardDismissedDelegate(Core::MakeDelegate(this, &Keyboard::OnKeyboardDismissed));
+			m_keyboardJI->SetTextAddedDelegate(CSCore::MakeDelegate(this, &Keyboard::OnTextAdded));
+			m_keyboardJI->SetTextDeletedDelegate(CSCore::MakeDelegate(this, &Keyboard::OnTextDeleted));
+			m_keyboardJI->SetKeyboardDismissedDelegate(CSCore::MakeDelegate(this, &Keyboard::OnKeyboardDismissed));
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -155,8 +155,8 @@ namespace ChilliSource
 			std::string newText = m_text;
 			if (newText.size() > 0)
 			{
-				s32 newLength = std::max((s32)(Core::UTF8StringUtils::CalcLength(m_text.begin(), m_text.end())) - 1, 0);
-				newText = Core::UTF8StringUtils::SubString(m_text, 0, newLength);
+				s32 newLength = std::max((s32)(CSCore::UTF8StringUtils::CalcLength(m_text.begin(), m_text.end())) - 1, 0);
+				newText = CSCore::UTF8StringUtils::SubString(m_text, 0, newLength);
 			}
 
 			bool rejectText = false;

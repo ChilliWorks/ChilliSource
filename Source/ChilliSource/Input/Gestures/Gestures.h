@@ -153,14 +153,14 @@ namespace ChilliSource
 			///
 			/// Return start swipe position
 			//----------------------------------------------------
-            ChilliSource::Core::Vector2 GetStartPosition() const { return mvStartPos; }
+            CSCore::Vector2 GetStartPosition() const { return mvStartPos; }
             
             //----------------------------------------------------
 			/// Get Swipe end position
 			///
 			/// Return end swipe position
 			//----------------------------------------------------
-            ChilliSource::Core::Vector2 GetEndPosition() const { return mvEndPos; }
+            CSCore::Vector2 GetEndPosition() const { return mvEndPos; }
             
 		private:
 			
@@ -238,11 +238,11 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// Populate Start Positions For First Touch
 			//----------------------------------------------------
-			void PopulateStartPositions(ChilliSource::Core::Vector2& outvFirstPosition, ChilliSource::Core::Vector2& outvSecondPosition) const;
+			void PopulateStartPositions(CSCore::Vector2& outvFirstPosition, CSCore::Vector2& outvSecondPosition) const;
             //----------------------------------------------------
 			/// Get Current Position
 			//----------------------------------------------------
-			void PopulateCurrentPositions(ChilliSource::Core::Vector2& outvFirstPosition, ChilliSource::Core::Vector2& outvSecondPosition) const;
+			void PopulateCurrentPositions(CSCore::Vector2& outvFirstPosition, CSCore::Vector2& outvSecondPosition) const;
             
 			
 		private:
@@ -400,7 +400,7 @@ namespace ChilliSource
 			///
 			/// Return start swipe position
 			//----------------------------------------------------
-            ChilliSource::Core::Vector2 GetStartPosition() const { return mvStartPos; }
+            CSCore::Vector2 GetStartPosition() const { return mvStartPos; }
             //----------------------------------------------------
 			/// Get Touch ID
 			///

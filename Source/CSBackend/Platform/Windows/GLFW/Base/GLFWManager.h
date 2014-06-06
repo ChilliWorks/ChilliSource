@@ -22,7 +22,7 @@ typedef void(*GLFWwindowfocusfun)(GLFWwindow*, int);
 typedef void(*GLFWwindowsizefun)(GLFWwindow*, int, int);
 typedef void(*GLFWwindowclosefun)(GLFWwindow*);
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -30,7 +30,7 @@ namespace ChilliSource
 		/// Helper singleton for creating and managing
 		/// a GLFW window
 		//---------------------------------------------------
-		class GLFWManager : public Core::Singleton<GLFWManager>
+		class GLFWManager : public CSCore::Singleton<GLFWManager>
 		{
 		public:
 

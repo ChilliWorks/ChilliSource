@@ -43,7 +43,7 @@
 
 #include <unordered_map>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace OpenGL
 	{
@@ -57,7 +57,7 @@ namespace ChilliSource
 		/// Creates and manages the OpenGL ES context and
 		/// handles the rendering of scene objects
 		//=======================================================
-		class RenderSystem final : public Rendering::RenderSystem
+		class RenderSystem final : public CSRendering::RenderSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(RenderSystem);
@@ -69,7 +69,7 @@ namespace ChilliSource
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+			bool IsA(CSCore::InterfaceIDType inInterfaceID) const override;
             //----------------------------------------------------------
             /// Called when the system is created. Sets up the
             /// render target, viewport, etc.
@@ -105,7 +105,7 @@ namespace ChilliSource
 			/// Create a hardware accelerated VBO
 			/// @return An instantiated buffer
 			//----------------------------------------------------------
-			Rendering::MeshBuffer* CreateBuffer(Rendering::BufferDescription &inDesc) override;
+			CSRendering::MeshBuffer* CreateBuffer(CSRendering::BufferDescription &inDesc) override;
 			//----------------------------------------------------------
 			/// Render Vertex Buffer
 			///
@@ -116,7 +116,7 @@ namespace ChilliSource
             /// @param Number of vertices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4& inmatWorld) override;
+			void RenderVertexBuffer(CSRendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const CSCore::Matrix4& inmatWorld) override;
 			//----------------------------------------------------------
 			/// Render Buffer
 			///
@@ -128,7 +128,7 @@ namespace ChilliSource
             /// @param Number of indices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4& inmatWorld) override;
+			void RenderBuffer(CSRendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const CSCore::Matrix4& inmatWorld) override;
             //----------------------------------------------------------
 			/// Apply Camera
 			///
@@ -139,7 +139,7 @@ namespace ChilliSource
 			/// @param Camera view matrix
 			/// @param Frame buffer clear colour
 			//----------------------------------------------------------
-			void ApplyCamera(const Core::Vector3& invPos, const Core::Matrix4& inmatView, const Core::Matrix4& inmatProj, const Core::Colour& inClearCol) override;
+			void ApplyCamera(const CSCore::Vector3& invPos, const CSCore::Matrix4& inmatView, const CSCore::Matrix4& inmatProj, const CSCore::Colour& inClearCol) override;
             //----------------------------------------------------------
             /// Set Light
             ///
@@ -147,7 +147,7 @@ namespace ChilliSource
             ///
             /// @param lighting components
             //----------------------------------------------------------
-            void SetLight(Rendering::LightComponent* inpLightComponent) override;
+            void SetLight(CSRendering::LightComponent* inpLightComponent) override;
 			//----------------------------------------------------------
 			/// Apply Material
 			///
@@ -156,7 +156,7 @@ namespace ChilliSource
 			/// @param Material
             /// @param Shader pass
 			//----------------------------------------------------------
-			void ApplyMaterial(const Rendering::MaterialCSPtr& inMaterial, Rendering::ShaderPass in_shaderPass) override;
+			void ApplyMaterial(const CSRendering::MaterialCSPtr& inMaterial, CSRendering::ShaderPass in_shaderPass) override;
             //----------------------------------------------------------
 			/// Apply Joints
 			///
@@ -164,7 +164,7 @@ namespace ChilliSource
 			///
 			/// @param Dynamic array of joint matrices.
 			//----------------------------------------------------------
-            void ApplyJoints(const std::vector<Core::Matrix4>& inaJoints) override;
+            void ApplyJoints(const std::vector<CSCore::Matrix4>& inaJoints) override;
 			//----------------------------------------------------------
 			/// Create Render Target
 			///
@@ -174,7 +174,7 @@ namespace ChilliSource
             /// @param Height
 			/// @return An instantiated target
 			//----------------------------------------------------------
-			Rendering::RenderTarget* CreateRenderTarget(u32 inudwWidth, u32 inudwHeight) override;
+			CSRendering::RenderTarget* CreateRenderTarget(u32 inudwWidth, u32 inudwHeight) override;
             
             //---Render states
             //----------------------------------------------------------
@@ -254,14 +254,14 @@ namespace ChilliSource
             /// @param Position of the bottom left corner of the rect
             /// @param Size of the scissor region
             //---------------------------------------------------------
-            void SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize) override;
+            void SetScissorRegion(const CSCore::Vector2& invPosition, const CSCore::Vector2& invSize) override;
             //----------------------------------------------------------
 			/// Set Cull Face
 			///
 			/// Sets the cull face
 			/// @param Cull face
 			//----------------------------------------------------------
-			void SetCullFace(Rendering::CullFace ineCullface) override;
+			void SetCullFace(CSRendering::CullFace ineCullface) override;
             //----------------------------------------------------------
             /// Lock Blend Function
             ///
@@ -280,13 +280,13 @@ namespace ChilliSource
 			/// @param Source function
 			/// @param Destination function
 			//----------------------------------------------------------
-			void SetBlendFunction(Rendering::BlendMode ineSrcFunc, Rendering::BlendMode ineDstFunc) override;
+			void SetBlendFunction(CSRendering::BlendMode ineSrcFunc, CSRendering::BlendMode ineDstFunc) override;
             //----------------------------------------------------------
 			/// Set Depth Function
 			///
             /// @param Function to be used for depth testing
 			//----------------------------------------------------------
-            void SetDepthFunction(Rendering::DepthTestComparison ineFunc) override;
+            void SetDepthFunction(CSRendering::DepthTestComparison ineFunc) override;
             //----------------------------------------------------------
             /// Remove Buffer
             ///
@@ -295,7 +295,7 @@ namespace ChilliSource
             ///
             /// @param Mesh buffer pointer.
             //----------------------------------------------------------
-            void RemoveBuffer(Rendering::MeshBuffer* inpBuffer);
+            void RemoveBuffer(CSRendering::MeshBuffer* inpBuffer);
             //----------------------------------------------------------
             /// @author S Downie
             ///
@@ -305,7 +305,7 @@ namespace ChilliSource
 			
 		private:
             
-            friend Rendering::RenderSystemUPtr Rendering::RenderSystem::Create(Rendering::RenderCapabilities*);
+            friend CSRendering::RenderSystemUPtr CSRendering::RenderSystem::Create(CSRendering::RenderCapabilities*);
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -313,7 +313,7 @@ namespace ChilliSource
             ///
             /// @param Render capabilities
             //-------------------------------------------------------
-            RenderSystem(Rendering::RenderCapabilities* in_renderCapabilities);
+            RenderSystem(CSRendering::RenderCapabilities* in_renderCapabilities);
             //----------------------------------------------------------
             /// Backup Context
             ///
@@ -333,7 +333,7 @@ namespace ChilliSource
             ///
             /// @param Material
             //----------------------------------------------------------
-            void ApplyRenderStates(const Rendering::Material* inMaterial);
+            void ApplyRenderStates(const CSRendering::Material* inMaterial);
             //----------------------------------------------------------
             /// Apply Textures
             ///
@@ -342,7 +342,7 @@ namespace ChilliSource
             /// @param Material
             /// @param Shader
             //----------------------------------------------------------
-            void ApplyTextures(const Rendering::Material* inMaterial, Shader* out_shader);
+            void ApplyTextures(const CSRendering::Material* inMaterial, Shader* out_shader);
             //----------------------------------------------------------
             /// Apply Lighting Values
             ///
@@ -351,7 +351,7 @@ namespace ChilliSource
             /// @param Material
             /// @param [Out] Shader
             //----------------------------------------------------------
-            void ApplyLightingValues(const Rendering::Material* inMaterial, Shader* out_shader);
+            void ApplyLightingValues(const CSRendering::Material* inMaterial, Shader* out_shader);
 			//------------------------------------------------------------
 			/// Enable Vertex Attribute For Semantic (Programmable pipeline)
 			///
@@ -360,7 +360,7 @@ namespace ChilliSource
 			///
 			/// @param Element
 			//------------------------------------------------------------
-			void EnableVertexAttributeForSemantic(Rendering::MeshBuffer* inpBuffer);
+			void EnableVertexAttributeForSemantic(CSRendering::MeshBuffer* inpBuffer);
 			//------------------------------------------------------------
 			/// Get Primitive Type
 			///
@@ -368,19 +368,19 @@ namespace ChilliSource
 			///
 			/// @param moFlo primitive type
 			//------------------------------------------------------------
-			s32 GetPrimitiveType(Rendering::PrimitiveType inType);
+			s32 GetPrimitiveType(CSRendering::PrimitiveType inType);
             //----------------------------------------------------------
 			/// Begin Frame
 			///
 			/// Clear the back buffer to the clear colour
 			//----------------------------------------------------------
-			void BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget) override;
+			void BeginFrame(CSRendering::RenderTarget* inpActiveRenderTarget) override;
 			//----------------------------------------------------------
 			/// End Frame
 			///
 			/// Present the buffer to the screen
 			//----------------------------------------------------------
-			void EndFrame(Rendering::RenderTarget* inpActiveRenderTarget) override;
+			void EndFrame(CSRendering::RenderTarget* inpActiveRenderTarget) override;
 			//----------------------------------------------------------
 			/// Apply Shader Variables
 			///
@@ -389,7 +389,7 @@ namespace ChilliSource
 			/// @param Material
 			/// @param Shader
 			//----------------------------------------------------------
-			void ApplyShaderVariables(const Rendering::Material* inMaterial, Shader* out_shader);
+			void ApplyShaderVariables(const CSRendering::Material* inMaterial, Shader* out_shader);
             //----------------------------------------------------------
             /// Apply Lighting
             ///
@@ -398,7 +398,7 @@ namespace ChilliSource
             /// @param Lighting component
             /// @param [Out] Shader
             //----------------------------------------------------------
-            void ApplyLighting(Rendering::LightComponent* inpLightComponent, Shader* out_shader);
+            void ApplyLighting(CSRendering::LightComponent* inpLightComponent, Shader* out_shader);
 			//----------------------------------------------------------
 			/// Force Refresh Render States
 			///
@@ -424,30 +424,30 @@ namespace ChilliSource
             ///
             /// @param The new screen resolution.
             //----------------------------------------------------------
-            void OnScreenResolutionChanged(const Core::Vector2& in_resolution);
+            void OnScreenResolutionChanged(const CSCore::Vector2& in_resolution);
             
 		private:
 			
-            void ApplyVertexAttributePointer(Rendering::MeshBuffer* inpBuffer,
+            void ApplyVertexAttributePointer(CSRendering::MeshBuffer* inpBuffer,
                                             const char* in_attribName, GLint indwSize, GLenum ineType, GLboolean inbNormalized, GLsizei indwStride, const GLvoid* inpOffset);
             
-            Rendering::LightComponent* mpLightComponent;
+            CSRendering::LightComponent* mpLightComponent;
             
-            Core::Colour mNewClearColour;
-			Core::Colour mClearColour;
-            Core::Colour mCurrentEmissive;
-            Core::Colour mCurrentAmbient;
-            Core::Colour mCurrentDiffuse;
-            Core::Colour mCurrentSpecular;
+            CSCore::Colour mNewClearColour;
+			CSCore::Colour mClearColour;
+            CSCore::Colour mCurrentEmissive;
+            CSCore::Colour mCurrentAmbient;
+            CSCore::Colour mCurrentDiffuse;
+            CSCore::Colour mCurrentSpecular;
             bool mbEmissiveSet;
             bool mbAmbientSet;
             bool mbDiffuseSet;
             bool mbSpecularSet;
             
-			Core::Matrix4 mmatProj;
-			Core::Matrix4 mmatViewProj;
-            Core::Matrix4 mmatView;
-            Core::Vector3 mvCameraPos;
+			CSCore::Matrix4 mmatProj;
+			CSCore::Matrix4 mmatViewProj;
+            CSCore::Matrix4 mmatView;
+            CSCore::Vector3 mvCameraPos;
 			
             RenderCapabilities* mpRenderCapabilities;
             TextureUnitSystem* m_textureUnitSystem;
@@ -459,10 +459,10 @@ namespace ChilliSource
             
             std::vector<std::string> m_textureUniformNames;
             
-            Core::Vector2 mvCachedScissorPos;
-            Core::Vector2 mvCachedScissorSize;
+            CSCore::Vector2 mvCachedScissorPos;
+            CSCore::Vector2 mvCachedScissorSize;
             
-            const Rendering::Material* mpCurrentMaterial;
+            const CSRendering::Material* mpCurrentMaterial;
             Shader* m_currentShader;
             
             u32 mudwViewWidth;
@@ -474,7 +474,7 @@ namespace ChilliSource
             
             struct VertexAttribSet
             {
-                Rendering::MeshBuffer* pBuffer;
+                CSRendering::MeshBuffer* pBuffer;
                 GLint size;
                 GLenum type;
                 GLboolean normalised;
@@ -509,10 +509,10 @@ namespace ChilliSource
             
             bool m_hasContextBeenBackedUp;
             
-            Rendering::BlendMode mSrcBlendFunc;
-            Rendering::BlendMode mDstBlendFunc;
-            Rendering::CullFace meCurrentCullFace;
-            Rendering::DepthTestComparison meDepthFunc;
+            CSRendering::BlendMode mSrcBlendFunc;
+            CSRendering::BlendMode mDstBlendFunc;
+            CSRendering::CullFace meCurrentCullFace;
+            CSRendering::DepthTestComparison meDepthFunc;
             
 #ifdef CS_TARGETPLATFORM_ANDROID
             ContextRestorer m_contextRestorer;
@@ -520,8 +520,8 @@ namespace ChilliSource
             
             bool m_hasContext = false;
             
-            Core::Screen* m_screen;
-            Core::EventConnectionUPtr m_resolutionChangeConnection;
+            CSCore::Screen* m_screen;
+            CSCore::EventConnectionUPtr m_resolutionChangeConnection;
 		};
 	}
 }

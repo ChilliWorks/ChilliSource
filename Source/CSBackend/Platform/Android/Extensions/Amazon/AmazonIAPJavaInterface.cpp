@@ -65,7 +65,7 @@ extern "C"
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices)
 {
-	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
+	CSBackend::Android::AmazonIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::AmazonIAPJavaInterface>();
 	if (javaInterface != nullptr)
 	{
 		u32 numProducts = in_env->GetArrayLength(in_productIds);
@@ -76,51 +76,51 @@ void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescr
 		{
 			CSNetworking::IAPSystem::ProductDesc desc;
 			jstring id = (jstring)in_env->GetObjectArrayElement(in_productIds, i);
-			desc.m_id = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(id);
+			desc.m_id = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(id);
 
 			jstring name = (jstring)in_env->GetObjectArrayElement(in_names, i);
-			desc.m_name = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(name);
+			desc.m_name = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(name);
 
 			jstring description = (jstring)in_env->GetObjectArrayElement(in_descs, i);
-			desc.m_description = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(description);
+			desc.m_description = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(description);
 
 			jstring price = (jstring)in_env->GetObjectArrayElement(in_prices, i);
-			desc.m_formattedPrice = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(price);
+			desc.m_formattedPrice = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(price);
 
 			products.push_back(desc);
 		}
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete, javaInterface.get(), products));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete, javaInterface.get(), products));
 	}
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint in_result, jstring in_productId, jstring in_transactionId, jstring in_receipt)
 {
-	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
+	CSBackend::Android::AmazonIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::AmazonIAPJavaInterface>();
 	if (javaInterface != nullptr)
 	{
 		CSNetworking::IAPSystem::Transaction transaction;
-		transaction.m_productId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
-		transaction.m_transactionId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
-		transaction.m_receipt = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_receipt);
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::AmazonIAPJavaInterface::OnTransactionStatusUpdated, javaInterface.get(), in_result, transaction));
+		transaction.m_productId = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
+		transaction.m_transactionId = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
+		transaction.m_receipt = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_receipt);
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::AmazonIAPJavaInterface::OnTransactionStatusUpdated, javaInterface.get(), in_result, transaction));
 	}
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId)
 {
-	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
+	CSBackend::Android::AmazonIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::AmazonIAPJavaInterface>();
 	if (javaInterface != nullptr)
 	{
-		std::string productId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
-		std::string transactionId = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::AmazonIAPJavaInterface::OnTransactionClosed, javaInterface.get(), productId, transactionId));
+		std::string productId = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
+		std::string transactionId = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::AmazonIAPJavaInterface::OnTransactionClosed, javaInterface.get(), productId, transactionId));
 	}
 }
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -150,7 +150,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool AmazonIAPJavaInterface::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool AmazonIAPJavaInterface::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
 			return in_interfaceId == AmazonIAPJavaInterface::InterfaceID;
 		}
@@ -163,7 +163,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::StartListeningForTransactionUpdates(const Networking::IAPSystem::TransactionStatusDelegate& in_delegate)
+        void AmazonIAPJavaInterface::StartListeningForTransactionUpdates(const CSNetworking::IAPSystem::TransactionStatusDelegate& in_delegate)
         {
         	CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction delegate");
 
@@ -183,7 +183,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& in_productIds, const Networking::IAPSystem::ProductDescDelegate& in_delegate)
+        void AmazonIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& in_productIds, const CSNetworking::IAPSystem::ProductDescDelegate& in_delegate)
         {
             CS_ASSERT(in_productIds.empty() == false, "Cannot request no product descriptions");
             CS_ASSERT(in_delegate != nullptr, "Cannot have null product description delegate");
@@ -213,7 +213,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPSystem::ProductDesc>& in_products)
+        void AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_products)
         {
         	if(m_productsRequestDelegate != nullptr)
         	{
@@ -239,11 +239,11 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::OnTransactionStatusUpdated(u32 in_statusId, const Networking::IAPSystem::Transaction& in_transaction)
+        void AmazonIAPJavaInterface::OnTransactionStatusUpdated(u32 in_statusId, const CSNetworking::IAPSystem::Transaction& in_transaction)
         {
         	if(m_transactionStatusDelegate != nullptr)
         	{
-				Networking::IAPSystem::Transaction::Status status = Networking::IAPSystem::Transaction::Status::k_failed;
+				CSNetworking::IAPSystem::Transaction::Status status = CSNetworking::IAPSystem::Transaction::Status::k_failed;
 
 				//This requires a little bit of faith. These numbers correspond to the constants defined
 				//in the java class CPurchaseTransaction
@@ -255,21 +255,21 @@ namespace ChilliSource
 				switch(in_statusId)
 				{
 					case k_purchaseSucceeded:
-						status = Networking::IAPSystem::Transaction::Status::k_succeeded;
+						status = CSNetworking::IAPSystem::Transaction::Status::k_succeeded;
 						break;
 					case k_purchaseResumed:
-						status = Networking::IAPSystem::Transaction::Status::k_resumed;
+						status = CSNetworking::IAPSystem::Transaction::Status::k_resumed;
 						break;
 					case k_purchaseRestored:
-						status = Networking::IAPSystem::Transaction::Status::k_restored;
+						status = CSNetworking::IAPSystem::Transaction::Status::k_restored;
 						break;
 					case k_purchaseFailed:
 					default:
-						status = Networking::IAPSystem::Transaction::Status::k_failed;
+						status = CSNetworking::IAPSystem::Transaction::Status::k_failed;
 						break;
 				}
 
-				Networking::IAPSystem::TransactionSPtr transaction(new Networking::IAPSystem::Transaction());
+				CSNetworking::IAPSystem::TransactionSPtr transaction(new CSNetworking::IAPSystem::Transaction());
 				transaction->m_productId = in_transaction.m_productId;
 				transaction->m_transactionId = in_transaction.m_transactionId;
 				transaction->m_receipt = in_transaction.m_receipt;
@@ -279,7 +279,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::CloseTransaction(const std::string& in_productId, const std::string& in_transactionId, const Networking::IAPSystem::TransactionCloseDelegate& in_delegate)
+        void AmazonIAPJavaInterface::CloseTransaction(const std::string& in_productId, const std::string& in_transactionId, const CSNetworking::IAPSystem::TransactionCloseDelegate& in_delegate)
         {
         	CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction close delegate");
         	CS_ASSERT(m_transactionCloseDelegate == nullptr, "Only 1 transaction can be closed at a time");

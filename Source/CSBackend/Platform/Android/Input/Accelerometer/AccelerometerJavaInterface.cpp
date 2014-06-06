@@ -58,14 +58,14 @@ extern "C"
 //-------------------------------------------
 void Java_com_chillisource_input_AccelerometerNativeInterface_UpdateAcceleration(JNIEnv* inpEnv, jobject inThis, f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ)
 {
-	ChilliSource::Android::AccelerometerJavaInterfaceSPtr pAccelerometerJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AccelerometerJavaInterface>();
+	CSBackend::Android::AccelerometerJavaInterfaceSPtr pAccelerometerJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::AccelerometerJavaInterface>();
 	if (nullptr != pAccelerometerJI)
 	{
 		pAccelerometerJI->UpdateAcceleration(infAccelerationX, infAccelerationY, infAccelerationZ);
 	}
 }
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -84,7 +84,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Is A
 		//-----------------------------------------------
-		bool AccelerometerJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool AccelerometerJavaInterface::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == AccelerometerJavaInterface::InterfaceID);
 		}
@@ -130,7 +130,7 @@ namespace ChilliSource
 		{
 			if (true == mbListening && nullptr != mAccelerationChangedDelegate)
 			{
-				mAccelerationChangedDelegate(Core::Vector3(infAccelerationX, infAccelerationY, infAccelerationZ));
+				mAccelerationChangedDelegate(CSCore::Vector3(infAccelerationX, infAccelerationY, infAccelerationZ));
 			}
 		}
 	}

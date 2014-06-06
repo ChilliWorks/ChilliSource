@@ -36,24 +36,24 @@
 #include <CSBackend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #include <ChilliSource/Core/Image/ETC1ImageProvider.h>
 
-namespace ChilliSource 
+namespace CSBackend 
 {
 	namespace Android
 	{
 		CS_DEFINE_NAMEDTYPE(PlatformSystem);
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		bool PlatformSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool PlatformSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (Core::PlatformSystem::InterfaceID == in_interfaceId || PlatformSystem::InterfaceID == in_interfaceId);
+			return (CSCore::PlatformSystem::InterfaceID == in_interfaceId || PlatformSystem::InterfaceID == in_interfaceId);
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
+		void PlatformSystem::CreateDefaultSystems(CSCore::Application* in_application)
 		{
-			in_application->CreateSystem<OpenGL::GLSLShaderProvider>();
-			in_application->CreateSystem<Core::ETC1ImageProvider>();
-			in_application->CreateSystem<OpenGL::TextureUnitSystem>();
+			in_application->CreateSystem<CSBackend::OpenGL::GLSLShaderProvider>();
+			in_application->CreateSystem<CSCore::ETC1ImageProvider>();
+			in_application->CreateSystem<CSBackend::OpenGL::TextureUnitSystem>();
 		}
         //-----------------------------------------
         //-----------------------------------------

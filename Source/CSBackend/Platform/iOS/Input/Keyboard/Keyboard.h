@@ -39,7 +39,7 @@
 @class UITextField;
 @class NSString;
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
 	{
@@ -49,7 +49,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------------
-		class Keyboard final : public Input::Keyboard
+		class Keyboard final : public CSInput::Keyboard
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(Keyboard);
@@ -64,7 +64,7 @@ namespace ChilliSource
             /// @return Whether the object implements an interface
             /// that has the given ID
             //-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
             /// Sets whether or not the text input is currently
             /// enabled or disabled. If the keyboard is virtual, it
@@ -118,21 +118,21 @@ namespace ChilliSource
             /// @param An event that is called when text input is
             /// enabled.
             //-------------------------------------------------------
-			Core::IConnectableEvent<KeyboardEventDelegate>& GetTextInputEnabledEvent() override;
+			CSCore::IConnectableEvent<KeyboardEventDelegate>& GetTextInputEnabledEvent() override;
             //-------------------------------------------------------
             /// @author I Copland
             ///
             /// @param An event that is called when text input is
             /// received.
             //-------------------------------------------------------
-			Core::IConnectableEvent<TextInputEventDelegate>& GetTextInputReceivedEvent() override;
+			CSCore::IConnectableEvent<TextInputEventDelegate>& GetTextInputReceivedEvent() override;
             //-------------------------------------------------------
             /// @author I Copland
             ///
             /// @param An event that is called when text input is
             /// disabled.
             //-------------------------------------------------------
-			Core::IConnectableEvent<KeyboardEventDelegate>& GetTextInputDisabledEvent() override;
+			CSCore::IConnectableEvent<KeyboardEventDelegate>& GetTextInputDisabledEvent() override;
             //-------------------------------------------------------
             /// Called when the keyboard text is updated.
             ///
@@ -148,7 +148,7 @@ namespace ChilliSource
             //-------------------------------------------------------
 			~Keyboard();
 		private:
-            friend Input::KeyboardUPtr Input::Keyboard::Create();
+            friend CSInput::KeyboardUPtr CSInput::Keyboard::Create();
         
             //-------------------------------------------------------
             /// Constructor. Declared private to force the use of the
@@ -179,9 +179,9 @@ namespace ChilliSource
             
 			UITextField* m_textView;
             VirtualKeyboardDelegate* m_delegate;
-            Core::Event<KeyboardEventDelegate> m_textInputEnabledDelegate;
-            Core::Event<TextInputEventDelegate> m_textInputReceivedDelegate;
-            Core::Event<KeyboardEventDelegate> m_textInputDisabledDelegate;
+            CSCore::Event<KeyboardEventDelegate> m_textInputEnabledDelegate;
+            CSCore::Event<TextInputEventDelegate> m_textInputReceivedDelegate;
+            CSCore::Event<KeyboardEventDelegate> m_textInputDisabledDelegate;
             bool m_enabled;
             std::string m_text;
 		};

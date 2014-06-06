@@ -37,7 +37,7 @@
 
 struct GLFWwindow;
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -47,7 +47,7 @@ namespace ChilliSource
 		///
 		/// @author I Copland
 		//------------------------------------------------------------
-		class PointerSystem final : public Input::PointerSystem
+		class PointerSystem final : public CSInput::PointerSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(PointerSystem);
@@ -61,9 +61,9 @@ namespace ChilliSource
 			///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 		private:
-			friend Input::PointerSystemUPtr Input::PointerSystem::Create();
+			friend CSInput::PointerSystemUPtr CSInput::PointerSystem::Create();
 
 			//----------------------------------------------
 			/// Triggered by GLFW when the cursor moves
@@ -114,7 +114,7 @@ namespace ChilliSource
 			//------------------------------------------------
 			void OnDestroy() override;
 
-			Core::Screen* m_screen;
+			CSCore::Screen* m_screen;
 			PointerId m_pointerId;
 		};
 	}

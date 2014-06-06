@@ -50,7 +50,7 @@ namespace ChilliSource
             return WebViewUPtr(new iOS::WebView());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
-            return WebViewUPtr(new Android::WebView());
+            return WebViewUPtr(new CSBackend::Android::WebView());
 #endif
             return nullptr;
         }

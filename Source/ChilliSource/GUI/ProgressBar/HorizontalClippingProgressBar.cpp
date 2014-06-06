@@ -73,7 +73,7 @@ namespace ChilliSource
             Core::StorageLocation eBackgroundTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BackgroundTextureLocation", strValue))
             {
-                eBackgroundTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eBackgroundTextureLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("BackgroundTexture", strValue))
             {
@@ -84,7 +84,7 @@ namespace ChilliSource
             Core::StorageLocation eProgressTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("ProgressTextureLocation", strValue))
             {
-                eProgressTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eProgressTextureLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("ProgressTexture", strValue))
             {
@@ -95,7 +95,7 @@ namespace ChilliSource
             Core::StorageLocation eBackgroundTextureAtlasLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BackgroundTextureAtlasLocation", strValue))
             {
-                eBackgroundTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eBackgroundTextureAtlasLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("BackgroundTextureAtlas", strValue))
             {
@@ -106,7 +106,7 @@ namespace ChilliSource
             Core::StorageLocation eProgressTextureAtlasLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("ProgressTextureAtlasLocation", strValue))
             {
-                eProgressTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eProgressTextureAtlasLocation = CSCore::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("ProgressTextureAtlas", strValue))
 			{

@@ -17,7 +17,7 @@
 
 #include <jni.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -45,7 +45,7 @@ namespace ChilliSource
 			///
 			/// @return whether or not this object implements the given interface.
 			//--------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
 			//--------------------------------------------------------------
 			/// Set Update Subtitles Delegate
 			///
@@ -63,7 +63,7 @@ namespace ChilliSource
 			/// @param Background colour
 			/// @param video complete delegate
 			//--------------------------------------------------------------
-			void Present(bool inbInAPK, const std::string& instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour, const VideoCompleteDelegate& in_completeDelegate);
+			void Present(bool inbInAPK, const std::string& instrFilename, bool inbCanDismissWithTap, const CSCore::Colour& inBackgroundColour, const VideoCompleteDelegate& in_completeDelegate);
 			//--------------------------------------------------------------
 			/// Get Time
 			///

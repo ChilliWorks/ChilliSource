@@ -25,7 +25,7 @@ extern "C"
 
 void Java_com_chillisource_core_LocalNotificationNativeInterface_nativeOnNotificationReceived(JNIEnv* in_environment, jobject in_this, s32 in_id, jobjectArray in_keys, jobjectArray in_values, s32 in_priority)
 {
-	ChilliSource::Core::ParamDictionary params;
+	CSCore::ParamDictionary params;
 
 	u32 numParams = in_environment->GetArrayLength(in_keys);
 	for(u32 keyIndex = 0; keyIndex < numParams; ++keyIndex)
@@ -33,8 +33,8 @@ void Java_com_chillisource_core_LocalNotificationNativeInterface_nativeOnNotific
 		jstring keyJava = (jstring)in_environment->GetObjectArrayElement(in_keys, keyIndex);
 		jstring valueJava =  (jstring)in_environment->GetObjectArrayElement(in_values, keyIndex);
 
-		std::string key = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(keyJava);
-		std::string value = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(valueJava);
+		std::string key = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(keyJava);
+		std::string value = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(valueJava);
 
 		params.SetValue(key, value);
 
@@ -42,14 +42,14 @@ void Java_com_chillisource_core_LocalNotificationNativeInterface_nativeOnNotific
 		in_environment->DeleteLocalRef(valueJava);
 	}
 
-	ChilliSource::Android::LocalNotificationSystem* localNotificationSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::LocalNotificationSystem>();
+	CSBackend::Android::LocalNotificationSystem* localNotificationSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::LocalNotificationSystem>();
 	if (localNotificationSystem != nullptr)
 	{
-		localNotificationSystem->OnNotificationReceived((ChilliSource::Core::Notification::ID)in_id, params, (ChilliSource::Core::Notification::Priority)in_priority);
+		localNotificationSystem->OnNotificationReceived((CSCore::Notification::ID)in_id, params, (CSCore::Notification::Priority)in_priority);
 	}
 }
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -65,13 +65,13 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------
 		//--------------------------------------------------------
-		bool LocalNotificationJavaInterface::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool LocalNotificationJavaInterface::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
 			return (in_interfaceId == LocalNotificationJavaInterface::InterfaceID);
 		}
 		//--------------------------------------------------------
 		//--------------------------------------------------------
-		void LocalNotificationJavaInterface::ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority)
+		void LocalNotificationJavaInterface::ScheduleNotificationForTime(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, TimeIntervalSecs in_time, CSCore::Notification::Priority in_priority)
 		{
 			JNIEnv* environment = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 

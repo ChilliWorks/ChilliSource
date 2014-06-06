@@ -27,7 +27,7 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_IOS
             return FacebookAuthenticationSystemUPtr(new ChilliSource::iOS::FacebookAuthenticationSystem());
 #elif CS_TARGETPLATFORM_ANDROID
-            return FacebookAuthenticationSystemUPtr(new ChilliSource::Android::FacebookAuthenticationSystem());
+            return FacebookAuthenticationSystemUPtr(new CSBackend::Android::FacebookAuthenticationSystem());
 #else
 			return FacebookAuthenticationSystemUPtr();
 #endif

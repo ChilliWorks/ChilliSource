@@ -29,7 +29,7 @@ namespace ChilliSource
 		//===============================================
 		struct InverseBindPose
 		{
-			std::vector<ChilliSource::Core::Matrix4> mInverseBindPoseMatrices;
+			std::vector<CSCore::Matrix4> mInverseBindPoseMatrices;
 		};
 		typedef std::shared_ptr<InverseBindPose> InverseBindPosePtr;
 		

@@ -16,7 +16,7 @@
 #include <CSBackend/Platform/iOS/Networking/IAP/StoreKitIAPSystem.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace iOS
     {
@@ -30,7 +30,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------
-        class IAPSystem final : public Networking::IAPSystem
+        class IAPSystem final : public CSNetworking::IAPSystem
         {
         public:
 
@@ -42,7 +42,7 @@ namespace ChilliSource
             ///
             /// @return Whether the class is of the given type
             //---------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------------
             /// Inform the system of which products are available for
             /// purchase and whether they are managed or unmanaged
@@ -138,7 +138,7 @@ namespace ChilliSource
             
         private:
             
-            friend Networking::IAPSystemUPtr Networking::IAPSystem::Create(const Core::ParamDictionary&);
+            friend CSNetworking::IAPSystemUPtr CSNetworking::IAPSystem::Create(const CSCore::ParamDictionary&);
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///

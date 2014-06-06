@@ -680,7 +680,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void ContentManagementSystem::DeleteDirectory(const std::string& in_directory) const
         {
-            ChilliSource::Core::Application::Get()->GetFileSystem()->DeleteDirectory(Core::StorageLocation::k_DLC, in_directory);
+            CSCore::Application::Get()->GetFileSystem()->DeleteDirectory(Core::StorageLocation::k_DLC, in_directory);
         }
     }
 }

@@ -22,7 +22,7 @@
 
 #pragma comment(lib, "winhttp")
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -44,7 +44,7 @@ namespace ChilliSource
 			///
 			/// @return Key value dictionary
 			//-------------------------------------------------------------------
-			Core::ParamDictionary ParseHeaders(const WCHAR* in_headerBlob, DWORD in_headerSize)
+			CSCore::ParamDictionary ParseHeaders(const WCHAR* in_headerBlob, DWORD in_headerSize)
 			{
 				//---SAMPLE
 
@@ -56,7 +56,7 @@ namespace ChilliSource
 				//Server : Apache\r\n
 				//X - Powered - By: PHP / 5.3.10 - 1ubuntu3.9\r\n\r\n"
 
-				Core::ParamDictionary headers;
+				CSCore::ParamDictionary headers;
 
 				std::wstring key;
 				std::wstring value;
@@ -114,9 +114,9 @@ namespace ChilliSource
 			///
 			/// @return Key value dictionary
 			//-------------------------------------------------------------------
-			Core::ParamDictionary GetHeaders(HINTERNET in_requestHandle)
+			CSCore::ParamDictionary GetHeaders(HINTERNET in_requestHandle)
 			{
-				Core::ParamDictionary headers;
+				CSCore::ParamDictionary headers;
 
 				DWORD headerSize;
 				WinHttpQueryHeaders(in_requestHandle, WINHTTP_QUERY_RAW_HEADERS_CRLF, WINHTTP_HEADER_NAME_BY_INDEX, nullptr, &headerSize, WINHTTP_NO_HEADER_INDEX);
@@ -149,7 +149,7 @@ namespace ChilliSource
 			std::unique_lock<std::mutex> lock(s_addingMutexesMutex);
 			s_destroyingMutexes.push_back(destroyingMutex);
 			lock.unlock();
-			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&HttpRequest::PollReadStream, this, in_requestHandle, in_connectionHandle, destroyingMutex));
+			CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&HttpRequest::PollReadStream, this, in_requestHandle, in_connectionHandle, destroyingMutex));
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
@@ -243,7 +243,7 @@ namespace ChilliSource
 
 			//Pull the headers and check for a redirect URL
 			std::string redirectUrl;
-			Core::ParamDictionary headers = GetHeaders(in_requestHandle);
+			CSCore::ParamDictionary headers = GetHeaders(in_requestHandle);
 			headers.TryGetValue("Location", redirectUrl);
 
 			// Keep reading from the remote server until there's
@@ -338,7 +338,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
-		const Networking::HttpRequest::Desc& HttpRequest::GetDescription() const
+		const CSNetworking::HttpRequest::Desc& HttpRequest::GetDescription() const
 		{
 			return m_desc;
 		}

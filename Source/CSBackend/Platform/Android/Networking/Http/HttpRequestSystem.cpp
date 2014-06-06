@@ -13,7 +13,7 @@
 #include <CSBackend/Platform/Android/Networking/Http/HttpRequest.h>
 #include <CSBackend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -21,9 +21,9 @@ namespace ChilliSource
 
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		bool HttpRequestSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool HttpRequestSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == Networking::HttpRequestSystem::InterfaceID || in_interfaceId == HttpRequestSystem::InterfaceID;
+			return in_interfaceId == CSNetworking::HttpRequestSystem::InterfaceID || in_interfaceId == HttpRequestSystem::InterfaceID;
 		}
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ namespace ChilliSource
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		Networking::HttpRequest* HttpRequestSystem::MakeRequest(const Networking::HttpRequest::Desc& in_requestDesc, const Networking::HttpRequest::Delegate& in_delegate)
+		CSNetworking::HttpRequest* HttpRequestSystem::MakeRequest(const CSNetworking::HttpRequest::Desc& in_requestDesc, const CSNetworking::HttpRequest::Delegate& in_delegate)
         {
 			CS_ASSERT(in_requestDesc.m_url.empty() == false, "Cannot make an http request to a blank url");
 

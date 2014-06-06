@@ -51,7 +51,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool PointLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool PointLightComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == PointLightComponent::InterfaceID;
 		}

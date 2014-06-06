@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Delegate/ConnectableDelegate.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthenticationSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -26,7 +26,7 @@ namespace ChilliSource
 		///
 		/// @author R Henning
 		//------------------------------------------------
-		class FacebookAuthenticationSystem final : public Social::FacebookAuthenticationSystem
+		class FacebookAuthenticationSystem final : public ChilliSource::Social::FacebookAuthenticationSystem
 		{
 		public:
 
@@ -39,7 +39,7 @@ namespace ChilliSource
             ///
             /// @return Whether the interface ID matches this object
             //----------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
             /// Called when the system is created allocating any
 			/// resources
@@ -148,7 +148,7 @@ namespace ChilliSource
 			void OnAuthoriseWritePermissionsComplete(bool in_success);
 
 		private:
-			friend Social::FacebookAuthenticationSystemUPtr Social::FacebookAuthenticationSystem::Create();
+			friend ChilliSource::Social::FacebookAuthenticationSystemUPtr ChilliSource::Social::FacebookAuthenticationSystem::Create();
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.

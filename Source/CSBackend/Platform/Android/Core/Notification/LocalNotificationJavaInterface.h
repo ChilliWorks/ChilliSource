@@ -16,7 +16,7 @@
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 #include <ChilliSource/Core/Notification/Notification.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -42,7 +42,7 @@ namespace ChilliSource
 			/// @return whether or not this object implements the
 			/// given interface.
 			//---------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//---------------------------------------------------
 			/// Schedules a notification to be displayed to the user
 			///
@@ -54,7 +54,7 @@ namespace ChilliSource
 			/// @param [Optional] The notification priority. Defaults
 			/// to standard priority.
 			//---------------------------------------------------
-			void ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority);
+			void ScheduleNotificationForTime(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, TimeIntervalSecs in_time, CSCore::Notification::Priority in_priority);
 			//---------------------------------------------------
 			/// Prevent any notifications with given ID type from
 			/// firing
@@ -63,7 +63,7 @@ namespace ChilliSource
 			///
 			/// @param ID type
 			//---------------------------------------------------
-			void CancelByID(Core::Notification::ID in_id);
+			void CancelByID(CSCore::Notification::ID in_id);
 			//---------------------------------------------------
 			/// Terminate all currently scheduled notifications.
 			///

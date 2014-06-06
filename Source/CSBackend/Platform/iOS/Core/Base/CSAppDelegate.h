@@ -31,7 +31,7 @@
 #import <GLKit/GLKit.h>
 #import <UIKit/UIKit.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace Core
     {
@@ -51,7 +51,7 @@ namespace ChilliSource
 {
     UIWindow* window;
     GLKViewController* viewControllerInternal;
-    ChilliSource::Core::Application* csApplication;
+    CSCore::Application* csApplication;
     
     //Used to manually invoke OnForeground to conform to
     //ChilliSource lifecycle events

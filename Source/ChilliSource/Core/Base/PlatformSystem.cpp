@@ -52,7 +52,7 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_IOS
             return PlatformSystemUPtr(new iOS::PlatformSystem());
 #elif defined CS_TARGETPLATFORM_ANDROID
-            return PlatformSystemUPtr(new Android::PlatformSystem());
+            return PlatformSystemUPtr(new CSBackend::Android::PlatformSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
 			return PlatformSystemUPtr(new Windows::PlatformSystem());
 #else

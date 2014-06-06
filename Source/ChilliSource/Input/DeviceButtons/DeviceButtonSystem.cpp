@@ -50,7 +50,7 @@ namespace ChilliSource
         DeviceButtonSystemUPtr DeviceButtonSystem::Create()
         {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return DeviceButtonSystemUPtr(new Android::DeviceButtonSystem());
+            return DeviceButtonSystemUPtr(new CSBackend::Android::DeviceButtonSystem());
 #elif defined CS_TARGETPLATFORM_IOS
             return DeviceButtonSystemUPtr(new iOS::DeviceButtonSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS

@@ -224,7 +224,7 @@ public:
 		(For an unformatted stream, use the << operator.)
 	*/
 #ifdef TIXML_MOFLO
-	virtual void Print( ChilliSource::Core::FileStreamSPtr cfile, int depth ) const = 0;
+	virtual void Print( CSCore::FileStreamSPtr cfile, int depth ) const = 0;
 #else
 	virtual void Print( FILE* cfile, int depth ) const = 0;
 #endif
@@ -851,10 +851,10 @@ public:
 
 	// Prints this Attribute to a FILE stream.
 #ifdef TIXML_MOFLO
-	virtual void Print( ChilliSource::Core::FileStreamSPtr cfile, int depth ) const {
+	virtual void Print( CSCore::FileStreamSPtr cfile, int depth ) const {
 		Print( cfile, depth, 0 );
 	}
-	void Print( ChilliSource::Core::FileStreamSPtr cfile, int depth, TIXML_STRING* str ) const;
+	void Print( CSCore::FileStreamSPtr cfile, int depth, TIXML_STRING* str ) const;
 #else
 	virtual void Print( FILE* cfile, int depth ) const {
 		Print( cfile, depth, 0 );
@@ -1104,7 +1104,7 @@ public:
 	virtual TiXmlNode* Clone() const;
 	// Print the Element to a FILE stream.
 #ifdef TIXML_MOFLO
-	virtual void Print( ChilliSource::Core::FileStreamSPtr cfile, int depth ) const;
+	virtual void Print( CSCore::FileStreamSPtr cfile, int depth ) const;
 #else
 	virtual void Print( FILE* cfile, int depth ) const;
 #endif
@@ -1162,7 +1162,7 @@ public:
 	virtual TiXmlNode* Clone() const;
 	// Write this Comment to a FILE stream.
 #ifdef TIXML_MOFLO
-	virtual void Print( ChilliSource::Core::FileStreamSPtr cfile, int depth ) const;
+	virtual void Print( CSCore::FileStreamSPtr cfile, int depth ) const;
 #else
 	virtual void Print( FILE* cfile, int depth ) const;
 #endif
@@ -1227,7 +1227,7 @@ public:
 
 	// Write this text object to a FILE stream.
 #ifdef TIXML_MOFLO
-	virtual void Print( ChilliSource::Core::FileStreamSPtr cfile, int depth ) const;
+	virtual void Print( CSCore::FileStreamSPtr cfile, int depth ) const;
 #else
 	virtual void Print( FILE* cfile, int depth ) const;
 #endif
@@ -1309,8 +1309,8 @@ public:
 	virtual TiXmlNode* Clone() const;
 	// Print this declaration to a FILE stream.
 #ifdef TIXML_MOFLO
-	virtual void Print( ChilliSource::Core::FileStreamSPtr cfile, int depth, TIXML_STRING* str ) const;
-	virtual void Print( ChilliSource::Core::FileStreamSPtr cfile, int depth ) const {
+	virtual void Print( CSCore::FileStreamSPtr cfile, int depth, TIXML_STRING* str ) const;
+	virtual void Print( CSCore::FileStreamSPtr cfile, int depth ) const {
 		Print( cfile, depth, 0 );
 	}
 #else
@@ -1364,7 +1364,7 @@ public:
 	virtual TiXmlNode* Clone() const;
 	// Print this Unknown to a FILE stream.
 #ifdef TIXML_MOFLO
-	virtual void Print( ChilliSource::Core::FileStreamSPtr cfile, int depth ) const;
+	virtual void Print( CSCore::FileStreamSPtr cfile, int depth ) const;
 #else
 	virtual void Print( FILE* cfile, int depth ) const;
 #endif
@@ -1416,14 +1416,14 @@ public:
 
 #ifdef TIXML_MOFLO
     //TinyXML calls that have been altered to work with MoFlow's File IO system
-	bool LoadFile(ChilliSource::Core::StorageLocation ineStorageLocation, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
-	bool LoadFile(ChilliSource::Core::StorageLocation ineStorageLocation, const char * filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
-	bool LoadFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
-	bool LoadFile( ChilliSource::Core::FileStreamSPtr file, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
-	bool SaveFile(ChilliSource::Core::StorageLocation ineStorageLocation);
-	bool SaveFile(ChilliSource::Core::StorageLocation ineStorageLocation, const char * filename);
-	bool SaveFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& filename);
-	bool SaveFile(ChilliSource::Core::FileStreamSPtr file);
+	bool LoadFile(CSCore::StorageLocation ineStorageLocation, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
+	bool LoadFile(CSCore::StorageLocation ineStorageLocation, const char * filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
+	bool LoadFile(CSCore::StorageLocation ineStorageLocation, const std::string& filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
+	bool LoadFile( CSCore::FileStreamSPtr file, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
+	bool SaveFile(CSCore::StorageLocation ineStorageLocation);
+	bool SaveFile(CSCore::StorageLocation ineStorageLocation, const char * filename);
+	bool SaveFile(CSCore::StorageLocation ineStorageLocation, const std::string& filename);
+	bool SaveFile(CSCore::FileStreamSPtr file);
 #else
 	
 	/** Load a file using the current document value.
@@ -1553,7 +1553,7 @@ public:
 
 	/// Print this Document to a FILE stream.
 #ifdef TIXML_MOFLO
-	virtual void Print( ChilliSource::Core::FileStreamSPtr cfile, int depth = 0 ) const;
+	virtual void Print( CSCore::FileStreamSPtr cfile, int depth = 0 ) const;
 #else
 	virtual void Print( FILE* cfile, int depth = 0 ) const;
 #endif

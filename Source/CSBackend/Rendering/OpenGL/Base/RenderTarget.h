@@ -15,11 +15,11 @@
 #include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Rendering/Base/RenderTarget.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace OpenGL
 	{
-		class RenderTarget final : public ChilliSource::Rendering::RenderTarget
+		class RenderTarget final : public CSRendering::RenderTarget
 		{
 		public:
             //--------------------------------------------------
@@ -50,7 +50,7 @@ namespace ChilliSource
             /// @param The colour texture.
             /// @param The depth texture.
             //------------------------------------------------------
-			void SetTargetTextures(const Rendering::TextureSPtr& inpColourTexture, const Rendering::TextureSPtr& inpDepthTexture);
+			void SetTargetTextures(const CSRendering::TextureSPtr& inpColourTexture, const CSRendering::TextureSPtr& inpDepthTexture);
             //------------------------------------------------------
             /// Bind
             ///

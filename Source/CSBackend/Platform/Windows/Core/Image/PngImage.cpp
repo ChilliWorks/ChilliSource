@@ -30,14 +30,14 @@ void ReadPngData(png_structp png_ptr, png_bytep data, png_size_t length)
 	if (png_ptr == nullptr)
 		return;
 
-	ChilliSource::Core::FileStream* pStream = (ChilliSource::Core::FileStream*)png_get_io_ptr(png_ptr);
+	CSCore::FileStream* pStream = (CSCore::FileStream*)png_get_io_ptr(png_ptr);
 	pStream->Read((s8*)data, length);
 
 	if (pStream->IsBad() == true)
 		png_error(png_ptr, "Read Error");
 }
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -54,7 +54,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------------------------------
-		PngImage::PngImage(Core::StorageLocation ineLocation, const std::string& instrFilename)
+		PngImage::PngImage(CSCore::StorageLocation ineLocation, const std::string& instrFilename)
 		{
 			mbIsLoaded = false;
 			mdwHeight = -1;
@@ -81,13 +81,13 @@ namespace ChilliSource
 		/// @param std::string instrFilename - the path to the file relative to either
 		///									   documents or the package.
 		//----------------------------------------------------------------------------------
-		void PngImage::Load(Core::StorageLocation ineLocation, const std::string& instrFilename)
+		void PngImage::Load(CSCore::StorageLocation ineLocation, const std::string& instrFilename)
 		{
 			//create the file stream
-			ChilliSource::Core::FileStreamSPtr stream = ChilliSource::Core::Application::Get()->GetFileSystem()->CreateFileStream(ineLocation, instrFilename, ChilliSource::Core::FileMode::k_readBinary);
+			CSCore::FileStreamSPtr stream = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(ineLocation, instrFilename, CSCore::FileMode::k_readBinary);
 
 			//insure the stream is not broken
-			if (stream == ChilliSource::Core::FileStreamSPtr() || stream->IsBad() == true || stream->IsOpen() == false)
+			if (stream == CSCore::FileStreamSPtr() || stream->IsBad() == true || stream->IsOpen() == false)
 			{
 				stream->Close();
 				return;
@@ -164,7 +164,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------
-		Core::ImageFormat PngImage::GetImageFormat() const
+		CSCore::ImageFormat PngImage::GetImageFormat() const
 		{
 			return m_format;
 		}
@@ -174,7 +174,7 @@ namespace ChilliSource
 		/// Loads the png data using lib png
 		/// @param FileStreamSPtr inStream - the steam lib png should use to read the data.
 		//----------------------------------------------------------------------------------
-		bool PngImage::LoadWithLibPng(Core::FileStreamSPtr inStream)
+		bool PngImage::LoadWithLibPng(CSCore::FileStreamSPtr inStream)
 		{
 			//insure that it is indeed a png
 			const s32 dwHeaderSize = 8;
@@ -284,16 +284,16 @@ namespace ChilliSource
 			switch (dwColorType)
 			{
 			case PNG_COLOR_TYPE_GRAY:
-				m_format = Core::ImageFormat::k_Lum8;
+				m_format = CSCore::ImageFormat::k_Lum8;
 				break;
 			case PNG_COLOR_TYPE_GRAY_ALPHA:
-				m_format = Core::ImageFormat::k_LumA88;
+				m_format = CSCore::ImageFormat::k_LumA88;
 				break;
 			case PNG_COLOR_TYPE_RGB:
-				m_format = Core::ImageFormat::k_RGB888;
+				m_format = CSCore::ImageFormat::k_RGB888;
 				break;
 			case PNG_COLOR_TYPE_RGB_ALPHA:
-				m_format = Core::ImageFormat::k_RGBA8888;
+				m_format = CSCore::ImageFormat::k_RGBA8888;
 				break;
 			default:
 				CS_LOG_ERROR("Trying to load a PNG with an unknown colour format!");

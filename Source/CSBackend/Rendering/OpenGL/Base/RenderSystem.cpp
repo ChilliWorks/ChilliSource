@@ -53,7 +53,7 @@
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace OpenGL
 	{
@@ -68,21 +68,21 @@ namespace ChilliSource
             ///
             /// @return Vertex attribute variable name
             //----------------------------------------------------------
-            const char* GetAttribNameForVertexSemantic(Rendering::VertexDataSemantic in_semantic)
+            const char* GetAttribNameForVertexSemantic(CSRendering::VertexDataSemantic in_semantic)
             {
                 switch(in_semantic)
                 {
-                    case Rendering::VertexDataSemantic::k_position:
+                    case CSRendering::VertexDataSemantic::k_position:
                         return "a_position";
-                    case Rendering::VertexDataSemantic::k_normal:
+                    case CSRendering::VertexDataSemantic::k_normal:
                         return  "a_normal";
-                    case Rendering::VertexDataSemantic::k_uv:
+                    case CSRendering::VertexDataSemantic::k_uv:
                         return "a_texCoord";
-                    case Rendering::VertexDataSemantic::k_colour:
+                    case CSRendering::VertexDataSemantic::k_colour:
                         return "a_colour";
-                    case Rendering::VertexDataSemantic::k_weight:
+                    case CSRendering::VertexDataSemantic::k_weight:
                         return "a_weights";
-                    case Rendering::VertexDataSemantic::k_jointIndex:
+                    case CSRendering::VertexDataSemantic::k_jointIndex:
                         return "a_jointIndices";
                 }
                 
@@ -96,25 +96,25 @@ namespace ChilliSource
             ///
             /// @return The equivalent opengl blend mode.
             //----------------------------------------------------------
-            GLenum BlendModeToGL(Rendering::BlendMode in_blendMode)
+            GLenum BlendModeToGL(CSRendering::BlendMode in_blendMode)
             {
 				switch(in_blendMode)
 				{
-					case Rendering::BlendMode::k_zero:
+					case CSRendering::BlendMode::k_zero:
 						return GL_ZERO;
-					case Rendering::BlendMode::k_one:
+					case CSRendering::BlendMode::k_one:
 						return GL_ONE;
-					case Rendering::BlendMode::k_sourceCol:
+					case CSRendering::BlendMode::k_sourceCol:
 						return GL_SRC_COLOR;
-					case Rendering::BlendMode::k_oneMinusSourceCol:
+					case CSRendering::BlendMode::k_oneMinusSourceCol:
 						return GL_ONE_MINUS_SRC_COLOR;
-					case Rendering::BlendMode::k_sourceAlpha:
+					case CSRendering::BlendMode::k_sourceAlpha:
 						return GL_SRC_ALPHA;
-					case Rendering::BlendMode::k_oneMinusSourceAlpha:
+					case CSRendering::BlendMode::k_oneMinusSourceAlpha:
 						return GL_ONE_MINUS_SRC_ALPHA;
-					case Rendering::BlendMode::k_destAlpha:
+					case CSRendering::BlendMode::k_destAlpha:
 						return GL_DST_ALPHA;
-					case Rendering::BlendMode::k_oneMinusDestAlpha:
+					case CSRendering::BlendMode::k_oneMinusDestAlpha:
 						return GL_ONE_MINUS_DST_ALPHA;
                     default:
                         return GL_SRC_ALPHA;
@@ -124,7 +124,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
-		RenderSystem::RenderSystem(Rendering::RenderCapabilities* in_renderCapabilities)
+		RenderSystem::RenderSystem(CSRendering::RenderCapabilities* in_renderCapabilities)
 		: mpCurrentMaterial(nullptr), m_currentShader(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0),
         mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mpLightComponent(nullptr),
         mbBlendFunctionLocked(false), mbInvalidateLightingCache(true),
@@ -135,9 +135,9 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool RenderSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool RenderSystem::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == RenderSystem::InterfaceID || inInterfaceID == Rendering::RenderSystem::InterfaceID;
+			return inInterfaceID == RenderSystem::InterfaceID || inInterfaceID == CSRendering::RenderSystem::InterfaceID;
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -145,10 +145,10 @@ namespace ChilliSource
 		{
             m_hasContext = true;
             
-            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
             CS_ASSERT((m_screen->GetResolution().x > 0.0f && m_screen->GetResolution().y > 0.0f), "Cannot create and OpenGL ES view with size ZERO");
             
-            m_textureUnitSystem = Core::Application::Get()->GetSystem<TextureUnitSystem>();
+            m_textureUnitSystem = CSCore::Application::Get()->GetSystem<TextureUnitSystem>();
             CS_ASSERT(m_textureUnitSystem, "Cannot find required system: Texture Unit System.");
             
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
@@ -157,13 +157,13 @@ namespace ChilliSource
             m_textureUniformNames.clear();
             for(u32 i=0; i<mpRenderCapabilities->GetNumTextureUnits(); ++i)
             {
-                m_textureUniformNames.push_back("u_texture" + Core::ToString(i));
+                m_textureUniformNames.push_back("u_texture" + CSCore::ToString(i));
             }
             
             ForceRefreshRenderStates();
 			
             OnScreenResolutionChanged(m_screen->GetResolution());
-            m_resolutionChangeConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate(this, &RenderSystem::OnScreenResolutionChanged));
+            m_resolutionChangeConnection = m_screen->GetResolutionChangedEvent().OpenConnection(CSCore::MakeDelegate(this, &RenderSystem::OnScreenResolutionChanged));
             
             m_hasContextBeenBackedUp = false;
 		}
@@ -224,7 +224,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Light
         //----------------------------------------------------------
-        void RenderSystem::SetLight(Rendering::LightComponent* inpLightComponent)
+        void RenderSystem::SetLight(CSRendering::LightComponent* inpLightComponent)
         {
             if(inpLightComponent == mpLightComponent && mbInvalidateAllCaches == false)
             {
@@ -241,7 +241,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
 		//----------------------------------------------------------
-		void RenderSystem::ApplyMaterial(const Rendering::MaterialCSPtr& in_material, Rendering::ShaderPass in_shaderPass)
+		void RenderSystem::ApplyMaterial(const CSRendering::MaterialCSPtr& in_material, CSRendering::ShaderPass in_shaderPass)
 		{
             //TODO: We can remove alot of these cache checks one we move to our render command buffer
             //as the apply material function will only be called once per "batch" rather than for each
@@ -289,7 +289,7 @@ namespace ChilliSource
                 
                 //TODO: Once we change the render system to be a list of commands this hack
                 //will not be required
-                const_cast<Rendering::Material*>(mpCurrentMaterial)->SetCacheValid();
+                const_cast<CSRendering::Material*>(mpCurrentMaterial)->SetCacheValid();
             }
             
             shader->SetUniform("u_cameraPos", mvCameraPos, Shader::UniformNotFoundPolicy::k_failSilent);
@@ -297,17 +297,17 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Joints
         //----------------------------------------------------------
-        void RenderSystem::ApplyJoints(const std::vector<Core::Matrix4>& inaJoints)
+        void RenderSystem::ApplyJoints(const std::vector<CSCore::Matrix4>& inaJoints)
         {
             CS_ASSERT(m_currentShader != nullptr,  "Cannot set joints without binding shader");
             
             //Remove the final column from the joint matrix data as it is always going to be [0 0 0 1].
-            std::vector<Core::Vector4> jointVectors;
+            std::vector<CSCore::Vector4> jointVectors;
             for (const auto& joint : inaJoints)
             {
-                jointVectors.push_back(Core::Vector4(joint.m[0], joint.m[4], joint.m[8], joint.m[12]));
-                jointVectors.push_back(Core::Vector4(joint.m[1], joint.m[5], joint.m[9], joint.m[13]));
-                jointVectors.push_back(Core::Vector4(joint.m[2], joint.m[6], joint.m[10], joint.m[14]));
+                jointVectors.push_back(CSCore::Vector4(joint.m[0], joint.m[4], joint.m[8], joint.m[12]));
+                jointVectors.push_back(CSCore::Vector4(joint.m[1], joint.m[5], joint.m[9], joint.m[13]));
+                jointVectors.push_back(CSCore::Vector4(joint.m[2], joint.m[6], joint.m[10], joint.m[14]));
             }
             
             m_currentShader->SetUniform("u_joints", jointVectors);
@@ -315,7 +315,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Apply Render States
 		//----------------------------------------------------------
-		void RenderSystem::ApplyRenderStates(const Rendering::Material* inMaterial)
+		void RenderSystem::ApplyRenderStates(const CSRendering::Material* inMaterial)
         {
             EnableAlphaBlending(inMaterial->IsTransparencyEnabled());
             SetBlendFunction(inMaterial->GetSourceBlendMode(), inMaterial->GetDestBlendMode());
@@ -330,7 +330,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Apply Shader Variables
 		//----------------------------------------------------------
-		void RenderSystem::ApplyShaderVariables(const Rendering::Material* inMaterial, Shader* out_shader)
+		void RenderSystem::ApplyShaderVariables(const CSRendering::Material* inMaterial, Shader* out_shader)
 		{
 			//Get and set all the custom shader variables
 			for(auto it = inMaterial->m_floatVars.begin(); it!= inMaterial->m_floatVars.end(); ++it)
@@ -361,7 +361,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Textures
         //----------------------------------------------------------
-        void RenderSystem::ApplyTextures(const Rendering::Material* inMaterial, Shader* out_shader)
+        void RenderSystem::ApplyTextures(const CSRendering::Material* inMaterial, Shader* out_shader)
         {
             //Cubemap takes precedence over texture
             if(inMaterial->GetCubemap() != nullptr)
@@ -390,7 +390,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void RenderSystem::ApplyLightingValues(const Rendering::Material* inMaterial, Shader* out_shader)
+        void RenderSystem::ApplyLightingValues(const CSRendering::Material* inMaterial, Shader* out_shader)
         {
             if(mbInvalidateAllCaches || mbEmissiveSet == false || mCurrentEmissive != inMaterial->GetEmissive())
             {
@@ -420,7 +420,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Lighting
         //----------------------------------------------------------
-        void RenderSystem::ApplyLighting(Rendering::LightComponent* inpLightComponent, Shader* out_shader)
+        void RenderSystem::ApplyLighting(CSRendering::LightComponent* inpLightComponent, Shader* out_shader)
         {
             if(mbInvalidateLightingCache == false || inpLightComponent == nullptr)
                 return;
@@ -429,9 +429,9 @@ namespace ChilliSource
             inpLightComponent->CalculateLightingValues();
             inpLightComponent->SetCacheValid();
             
-            if(inpLightComponent->IsA(Rendering::DirectionalLightComponent::InterfaceID))
+            if(inpLightComponent->IsA(CSRendering::DirectionalLightComponent::InterfaceID))
             {
-                Rendering::DirectionalLightComponent* pLightComponent = (Rendering::DirectionalLightComponent*)inpLightComponent;
+                CSRendering::DirectionalLightComponent* pLightComponent = (CSRendering::DirectionalLightComponent*)inpLightComponent;
                 out_shader->SetUniform("u_lightDir", pLightComponent->GetDirection(), Shader::UniformNotFoundPolicy::k_failSilent);
                 
                 if(pLightComponent->GetShadowMapPtr() != nullptr)
@@ -451,9 +451,9 @@ namespace ChilliSource
                     }
                 }
             }
-            else if(inpLightComponent->IsA(Rendering::PointLightComponent::InterfaceID))
+            else if(inpLightComponent->IsA(CSRendering::PointLightComponent::InterfaceID))
             {
-                Rendering::PointLightComponent* pLightComponent = (Rendering::PointLightComponent*)inpLightComponent;
+                CSRendering::PointLightComponent* pLightComponent = (CSRendering::PointLightComponent*)inpLightComponent;
                 out_shader->SetUniform("u_attenuationConstant", pLightComponent->GetConstantAttenuation(), Shader::UniformNotFoundPolicy::k_failSilent);
                 out_shader->SetUniform("u_attenuationLinear", pLightComponent->GetLinearAttenuation(), Shader::UniformNotFoundPolicy::k_failSilent);
                 out_shader->SetUniform("u_attenuationQuadratic", pLightComponent->GetQuadraticAttenuation(), Shader::UniformNotFoundPolicy::k_failSilent);
@@ -466,7 +466,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Apply Camera
 		//----------------------------------------------------------
-		void RenderSystem::ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4& inmatView, const Core::Matrix4& inmatProj, const Core::Colour& inClearCol)
+		void RenderSystem::ApplyCamera(const CSCore::Vector3& invPosition, const CSCore::Matrix4& inmatView, const CSCore::Matrix4& inmatProj, const CSCore::Colour& inClearCol)
 		{
 			//Set the new view matrix based on the camera position
 			mmatView = inmatView;
@@ -480,7 +480,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Begin Frame
 		//----------------------------------------------------------
-		void RenderSystem::BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget)
+		void RenderSystem::BeginFrame(CSRendering::RenderTarget* inpActiveRenderTarget)
 		{
 			if (inpActiveRenderTarget != nullptr)
 			{
@@ -509,7 +509,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Create Render Target
 		//----------------------------------------------------------
-		Rendering::RenderTarget* RenderSystem::CreateRenderTarget(u32 inudwWidth, u32 inudwHeight)
+		CSRendering::RenderTarget* RenderSystem::CreateRenderTarget(u32 inudwWidth, u32 inudwHeight)
 		{
 			RenderTarget* pDefaultRenderTarget = new RenderTarget();
 			pDefaultRenderTarget->Init(inudwWidth, inudwHeight);
@@ -519,7 +519,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Create Buffer
 		//----------------------------------------------------------
-		Rendering::MeshBuffer* RenderSystem::CreateBuffer(Rendering::BufferDescription &inDesc)
+		CSRendering::MeshBuffer* RenderSystem::CreateBuffer(CSRendering::BufferDescription &inDesc)
 		{
 			MeshBuffer* pBuffer = new MeshBuffer(inDesc);
 			pBuffer->SetOwningRenderSystem(this);
@@ -532,21 +532,21 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Vertex Buffer
         //----------------------------------------------------------
-        void RenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4& inmatWorld)
+        void RenderSystem::RenderVertexBuffer(CSRendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const CSCore::Matrix4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
-            Core::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
-			Core::Application::Get()->GetDebugStats()->AddToEvent("Verts", inudwNumVerts);
+            CSCore::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
+			CSCore::Application::Get()->GetDebugStats()->AddToEvent("Verts", inudwNumVerts);
 #endif
             
 			//Set the new model view matrix based on the camera view matrix and the object matrix
-            static Core::Matrix4 matWorldViewProj;
+            static CSCore::Matrix4 matWorldViewProj;
 			matWorldViewProj = inmatWorld * mmatViewProj;
             m_currentShader->SetUniform("u_wvpMat", matWorldViewProj, Shader::UniformNotFoundPolicy::k_failSilent);
             m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
             if(m_currentShader->HasUniform("u_normalMat"))
             {
-                m_currentShader->SetUniform("u_normalMat", Core::Matrix4::Transpose(Core::Matrix4::Inverse(inmatWorld)));
+                m_currentShader->SetUniform("u_normalMat", CSCore::Matrix4::Transpose(CSCore::Matrix4::Inverse(inmatWorld)));
             }
             
 			EnableVertexAttributeForSemantic(inpBuffer);
@@ -559,21 +559,21 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Buffer
         //----------------------------------------------------------
-        void RenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4& inmatWorld)
+        void RenderSystem::RenderBuffer(CSRendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const CSCore::Matrix4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
-            Core::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
-            Core::Application::Get()->GetDebugStats()->AddToEvent("Verts", inpBuffer->GetVertexCount());
+            CSCore::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
+            CSCore::Application::Get()->GetDebugStats()->AddToEvent("Verts", inpBuffer->GetVertexCount());
 #endif
             
 			//Set the new model view matrix based on the camera view matrix and the object matrix
-            static Core::Matrix4 matWorldViewProj;
+            static CSCore::Matrix4 matWorldViewProj;
 			matWorldViewProj = inmatWorld * mmatViewProj;
             m_currentShader->SetUniform("u_wvpMat", matWorldViewProj, Shader::UniformNotFoundPolicy::k_failSilent);
             m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
             if(m_currentShader->HasUniform("u_normalMat"))
             {
-                m_currentShader->SetUniform("u_normalMat", Core::Matrix4::Transpose(Core::Matrix4::Inverse(inmatWorld)));
+                m_currentShader->SetUniform("u_normalMat", CSCore::Matrix4::Transpose(CSCore::Matrix4::Inverse(inmatWorld)));
             }
             
 			//Render the buffer contents
@@ -587,7 +587,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// End Frame
 		//----------------------------------------------------------
-		void RenderSystem::EndFrame(Rendering::RenderTarget* inpActiveRenderTarget)
+		void RenderSystem::EndFrame(CSRendering::RenderTarget* inpActiveRenderTarget)
 		{
 #ifdef CS_TARGETPLATFORM_WINDOWS
 			Windows::GLFWManager::Get()->SwapBuffers();
@@ -759,7 +759,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Scissor Region
         //---------------------------------------------------------
-        void RenderSystem::SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize)
+        void RenderSystem::SetScissorRegion(const CSCore::Vector2& invPosition, const CSCore::Vector2& invSize)
         {
 			if(mbInvalidateAllCaches || mvCachedScissorPos != invPosition || mvCachedScissorSize != invSize)
             {
@@ -773,16 +773,16 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Cull Face
         //----------------------------------------------------------
-        void RenderSystem::SetCullFace(Rendering::CullFace ineCullface)
+        void RenderSystem::SetCullFace(CSRendering::CullFace ineCullface)
 		{
 			if(mbInvalidateAllCaches || meCurrentCullFace != ineCullface)
             {
                 switch (ineCullface)
                 {
-                    case Rendering::CullFace::k_front:
+                    case CSRendering::CullFace::k_front:
                         glCullFace(GL_FRONT);
                         break;
-                    case Rendering::CullFace::k_back:
+                    case CSRendering::CullFace::k_back:
                         glCullFace(GL_BACK);
                         break;
                 }
@@ -795,19 +795,19 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Depth Function
         //----------------------------------------------------------
-        void RenderSystem::SetDepthFunction(Rendering::DepthTestComparison ineFunc)
+        void RenderSystem::SetDepthFunction(CSRendering::DepthTestComparison ineFunc)
         {
             if(mbInvalidateAllCaches || meDepthFunc != ineFunc)
             {
                 switch (ineFunc)
                 {
-                    case Rendering::DepthTestComparison::k_less:
+                    case CSRendering::DepthTestComparison::k_less:
                         glDepthFunc(GL_LESS);
                         break;
-                    case Rendering::DepthTestComparison::k_equal:
+                    case CSRendering::DepthTestComparison::k_equal:
                         glDepthFunc(GL_EQUAL);
                         break;
-                    case Rendering::DepthTestComparison::k_lequal:
+                    case CSRendering::DepthTestComparison::k_lequal:
                         glDepthFunc(GL_LEQUAL);
                         break;
                 }
@@ -834,7 +834,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Set Blend Function
 		//----------------------------------------------------------
-		void RenderSystem::SetBlendFunction(Rendering::BlendMode ineSrcFunc, Rendering::BlendMode ineDstFunc)
+		void RenderSystem::SetBlendFunction(CSRendering::BlendMode ineSrcFunc, CSRendering::BlendMode ineDstFunc)
 		{
             if(mbBlendFunctionLocked == false)
             {
@@ -874,7 +874,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void RenderSystem::ApplyVertexAttributePointer(Rendering::MeshBuffer* inpBuffer,
+        void RenderSystem::ApplyVertexAttributePointer(CSRendering::MeshBuffer* inpBuffer,
                                                        const char* in_attribName, GLint indwSize, GLenum ineType, GLboolean inbNormalized,
                                                        GLsizei indwStride, const GLvoid* inpOffset)
         {
@@ -918,7 +918,7 @@ namespace ChilliSource
 		//------------------------------------------------------------
 		/// Enable Vertex Attribute For Semantic
 		//------------------------------------------------------------
-		void RenderSystem::EnableVertexAttributeForSemantic(Rendering::MeshBuffer* inpBuffer)
+		void RenderSystem::EnableVertexAttributeForSemantic(CSRendering::MeshBuffer* inpBuffer)
 		{
             if(mbInvalidateAllCaches || mdwMaxVertAttribs == 0)
             {
@@ -926,14 +926,14 @@ namespace ChilliSource
             }
             
             // If mesh buffer has changed we need to reset all its vertex attributes
-            if(((ChilliSource::OpenGL::MeshBuffer*)inpBuffer)->IsCacheValid() == false)
+            if(((CSBackend::OpenGL::MeshBuffer*)inpBuffer)->IsCacheValid() == false)
             {
                 for(auto& entry : m_attributeCache)
                 {
                     if(entry.second.pBuffer == inpBuffer)
                         entry.second.pBuffer = nullptr;
                 }
-                ((ChilliSource::OpenGL::MeshBuffer*)inpBuffer)->SetCacheValid();
+                ((CSBackend::OpenGL::MeshBuffer*)inpBuffer)->SetCacheValid();
             }
             
             //Check if the total size of the vertex declaration has changed
@@ -956,7 +956,7 @@ namespace ChilliSource
 			//Check we don't exceed the GL limits of this device
 			if(udwAttributeCount > (u32)mdwMaxVertAttribs)
 			{
-				CS_LOG_FATAL("OpenGL ES 2.0: Shader exceeds maximum vertex attributes " + Core::ToString(mdwMaxVertAttribs));
+				CS_LOG_FATAL("OpenGL ES 2.0: Shader exceeds maximum vertex attributes " + CSCore::ToString(mdwMaxVertAttribs));
 			}
 			
             // Enable and disable the vertex attribs that have changed
@@ -973,7 +973,7 @@ namespace ChilliSource
             // Apply vertex attribute pointers if needed
             for(u32 i=0; i<nElements; ++i)
 			{
-                const Rendering::VertexElement &Element = inpBuffer->GetVertexDeclaration().GetElementAtIndex(i);
+                const CSRendering::VertexElement &Element = inpBuffer->GetVertexDeclaration().GetElementAtIndex(i);
                 
                 // Get parameters for vertex attribute pointer call
                 const char* attribName = GetAttribNameForVertexSemantic(Element.eSemantic);
@@ -986,12 +986,12 @@ namespace ChilliSource
                 
                 
                 // Specific settings for those that differ from default
-                if(Element.eSemantic == Rendering::VertexDataSemantic::k_colour)
+                if(Element.eSemantic == CSRendering::VertexDataSemantic::k_colour)
                 {
                     eType = GL_UNSIGNED_BYTE;
                     bNormalise = GL_TRUE;
                 }
-                else if(Element.eSemantic == Rendering::VertexDataSemantic::k_jointIndex)
+                else if(Element.eSemantic == CSRendering::VertexDataSemantic::k_jointIndex)
                 {
                     eType = GL_UNSIGNED_BYTE;
                 }
@@ -1004,15 +1004,15 @@ namespace ChilliSource
 		//------------------------------------------------------------
 		/// Get Primitive Type
 		//------------------------------------------------------------
-		s32 RenderSystem::GetPrimitiveType(Rendering::PrimitiveType inType)
+		s32 RenderSystem::GetPrimitiveType(CSRendering::PrimitiveType inType)
 		{
 			switch(inType)
 			{
-				case Rendering::PrimitiveType::k_tri:
+				case CSRendering::PrimitiveType::k_tri:
 					return GL_TRIANGLES;
-				case Rendering::PrimitiveType::k_triStrip:
+				case CSRendering::PrimitiveType::k_triStrip:
 					return GL_TRIANGLE_STRIP;
-				case Rendering::PrimitiveType::k_line:
+				case CSRendering::PrimitiveType::k_line:
 					return GL_LINES;
 				default:
 					CS_LOG_ERROR("Invalid primitive type OpenGLES");
@@ -1029,7 +1029,7 @@ namespace ChilliSource
             RenderTarget::ClearCache();
             
             //Set the default blend function and alpha function
-            SetDepthFunction(Rendering::DepthTestComparison::k_lequal);
+            SetDepthFunction(CSRendering::DepthTestComparison::k_lequal);
             
 			//we're using pre-multiplied alpha and multipass rendering and therefore require the add blend equation
             glBlendEquation(GL_FUNC_ADD);
@@ -1041,7 +1041,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Remove Buffer
 		//----------------------------------------------------------
-		void RenderSystem::RemoveBuffer(Rendering::MeshBuffer* inpBuffer)
+		void RenderSystem::RemoveBuffer(CSRendering::MeshBuffer* inpBuffer)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
             m_contextRestorer.RemoveMeshBuffer((MeshBuffer*)inpBuffer);
@@ -1049,7 +1049,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void RenderSystem::OnScreenResolutionChanged(const Core::Vector2& in_resolution)
+        void RenderSystem::OnScreenResolutionChanged(const CSCore::Vector2& in_resolution)
         {
             mudwViewHeight = (u32)in_resolution.y;
             mudwViewWidth = (u32)in_resolution.x;

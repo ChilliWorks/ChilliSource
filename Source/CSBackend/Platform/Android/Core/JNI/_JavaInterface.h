@@ -21,7 +21,7 @@
 #include <jni.h>
 #include <map>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{

@@ -15,7 +15,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace OpenGL
 	{
@@ -26,10 +26,10 @@ namespace ChilliSource
 		/// Concrete implementation of a vertex buffer object 
 		/// for OpenGL ES
 		//==========================================================
-		class MeshBuffer : public ChilliSource::Rendering::MeshBuffer
+		class MeshBuffer : public CSRendering::MeshBuffer
 		{
 		public:
-			MeshBuffer(ChilliSource::Rendering::BufferDescription &inBuffDesc);
+			MeshBuffer(CSRendering::BufferDescription &inBuffDesc);
 			virtual ~MeshBuffer();
 			
             //-----------------------------------------------------

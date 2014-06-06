@@ -15,11 +15,11 @@
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
-        class GooglePlayExpansionJavaInterface : public ChilliSource::Android::IJavaInterface
+        class GooglePlayExpansionJavaInterface : public CSBackend::Android::IJavaInterface
         {
         public:
 
@@ -27,7 +27,7 @@ namespace ChilliSource
 
         	GooglePlayExpansionJavaInterface();
 
-        	bool IsA(Core::InterfaceIDType inInterfaceID) const;
+        	bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
         	void SetGooglePlayExpansionSystem(GooglePlayExpansionSystem* in_expansionSystem);
         	void Init();
 

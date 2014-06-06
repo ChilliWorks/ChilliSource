@@ -14,7 +14,7 @@
 
 #include <string>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{

@@ -34,7 +34,7 @@
 #include <CSBackend/Platform/Android/Input/Accelerometer/AccelerometerJavaInterface.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -47,9 +47,9 @@ namespace ChilliSource
 		}
 		//------------------------------------------------
 		//------------------------------------------------
-		bool Accelerometer::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool Accelerometer::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == Input::Accelerometer::InterfaceID || in_interfaceId == Accelerometer::InterfaceID);
+			return (in_interfaceId == CSInput::Accelerometer::InterfaceID || in_interfaceId == Accelerometer::InterfaceID);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
@@ -64,18 +64,18 @@ namespace ChilliSource
 			if (false == m_isUpdating)
 			{
 				m_isUpdating = true;
-				m_accelerometerJI->StartListening(Core::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
+				m_accelerometerJI->StartListening(CSCore::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
 			}
 		}
 		//------------------------------------------------
 		//------------------------------------------------
-		Core::Vector3 Accelerometer::GetAcceleration() const
+		CSCore::Vector3 Accelerometer::GetAcceleration() const
 		{
 			return m_acceleration;
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		Core::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
+		CSCore::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
 		{
 			return m_accelerationUpdatedEvent;
 		}
@@ -109,7 +109,7 @@ namespace ChilliSource
         	//and now must restart listening
         	if(true == m_isUpdating)
         	{
-        		m_accelerometerJI->StartListening(Core::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
+        		m_accelerometerJI->StartListening(CSCore::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
         	}
         }
         //----------------------------------------------------
@@ -131,7 +131,7 @@ namespace ChilliSource
         }
 		//------------------------------------------------
 		//------------------------------------------------
-		void Accelerometer::OnAccelerationChanged(const Core::Vector3& in_acceleration)
+		void Accelerometer::OnAccelerationChanged(const CSCore::Vector3& in_acceleration)
 		{
 			m_acceleration = in_acceleration;
 			m_accelerationUpdatedEvent.NotifyConnections(m_acceleration);

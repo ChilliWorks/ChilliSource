@@ -42,7 +42,7 @@ namespace ChilliSource
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const override;
+			bool IsA(CSCore::InterfaceIDType inInterfaceID) const override;
 			
 			
 			//---------------------------------------------------

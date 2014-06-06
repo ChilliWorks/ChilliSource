@@ -9,7 +9,7 @@
 //includes
 #include <CSBackend/Platform/Android/Core/JNI/_JavaInterface.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{

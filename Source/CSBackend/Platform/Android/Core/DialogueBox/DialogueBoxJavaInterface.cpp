@@ -39,10 +39,10 @@ extern "C"
 //-------------------------------------------------
 void Java_com_chillisource_core_DialogueBoxNativeInterface_onDialogueConfirmPressed(JNIEnv* in_env, jobject in_this, s32 in_id)
 {
-	ChilliSource::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::DialogueBoxSystem>();
+	CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
 	if (dialogueBoxSystem != nullptr)
 	{
-		dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_id, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_confirm);
+		dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_id, CSCore::DialogueBoxSystem::DialogueResult::k_confirm);
 	}
 }
 //-------------------------------------------------
@@ -58,14 +58,14 @@ void Java_com_chillisource_core_DialogueBoxNativeInterface_onDialogueConfirmPres
 //------------------------------------------------
 void Java_com_chillisource_core_DialogueBoxNativeInterface_onDialogueCancelPressed(JNIEnv* in_env, jobject in_this, s32 in_id)
 {
-	ChilliSource::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::DialogueBoxSystem>();
+	CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
 	if (dialogueBoxSystem != nullptr)
 	{
-		dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_env, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_cancel);
+		dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_env, CSCore::DialogueBoxSystem::DialogueResult::k_cancel);
 	}
 }
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -82,7 +82,7 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
-		bool DialogueBoxJavaInterface::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool DialogueBoxJavaInterface::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
 			return (in_interfaceId == DialogueBoxJavaInterface::InterfaceID);
 		}

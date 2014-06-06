@@ -16,7 +16,7 @@
 #include <CSBackend/Platform/Android/Extensions/Amazon/AmazonIAPJavaInterface.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -32,7 +32,7 @@ namespace ChilliSource
 		///
 		/// @author I Copland
 		//----------------------------------------------------------------------------------
-		class AmazonIAPSystem final : public Networking::IAPSystem
+		class AmazonIAPSystem final : public CSNetworking::IAPSystem
 		{
 		public:
 
@@ -45,7 +45,7 @@ namespace ChilliSource
             ///
             /// @return Whether the class is of the given type
             //---------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------------
             /// Inform the system of which products are available for
             /// purchase and whether they are managed or unmanaged
@@ -141,7 +141,7 @@ namespace ChilliSource
 
 		private:
 
-            friend Networking::IAPSystemUPtr Networking::IAPSystem::Create(const Core::ParamDictionary&);
+            friend CSNetworking::IAPSystemUPtr CSNetworking::IAPSystem::Create(const CSCore::ParamDictionary&);
             //---------------------------------------------------------------
             /// Private constructor to enforce use of factory method
             ///
@@ -153,7 +153,7 @@ namespace ChilliSource
 			/// 	AmazonPrivateKey	The private key used to encrypt
             ///							the on disk Amazon IAP cache.
             //---------------------------------------------------------------
-			AmazonIAPSystem(const Core::ParamDictionary& in_params);
+			AmazonIAPSystem(const CSCore::ParamDictionary& in_params);
             //-------------------------------------------------------
             /// Called when the system is created. Initialises
             /// the StoreKit backend

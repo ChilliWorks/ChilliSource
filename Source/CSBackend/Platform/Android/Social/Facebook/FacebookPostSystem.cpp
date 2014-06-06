@@ -14,7 +14,7 @@
 #include <CSBackend/Platform/Android/Social/Facebook/FacebookAuthenticationSystem.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -26,7 +26,7 @@ namespace ChilliSource
 			/// @param Post description
 			/// @param [Out] Key value array in the form key, value, key, value
 			//----------------------------------------------------
-			void PostDescToKeyValueArray(const Social::FacebookPostSystem::PostDesc& in_desc, std::vector<std::string>& out_keyValues)
+			void PostDescToKeyValueArray(const ChilliSource::Social::FacebookPostSystem::PostDesc& in_desc, std::vector<std::string>& out_keyValues)
 			{
 				out_keyValues.push_back("link");
 				out_keyValues.push_back(in_desc.m_url);
@@ -49,7 +49,7 @@ namespace ChilliSource
 			/// @param Request description
 			/// @param [Out] Key value array in the form key, value, key, value
 			//----------------------------------------------------
-			void RequestDescToKeyValueArray(const Social::FacebookPostSystem::RequestDesc& in_desc, std::vector<std::string>& out_keyValues)
+			void RequestDescToKeyValueArray(const ChilliSource::Social::FacebookPostSystem::RequestDesc& in_desc, std::vector<std::string>& out_keyValues)
 			{
 				out_keyValues.push_back("caption");
 				out_keyValues.push_back(in_desc.m_caption);
@@ -58,16 +58,16 @@ namespace ChilliSource
 				out_keyValues.push_back(in_desc.m_description);
 
 	            std::string recipients;
-	            Core::StringUtils::ToCSV(in_desc.m_recipients, recipients);
+	            CSCore::StringUtils::ToCSV(in_desc.m_recipients, recipients);
 
 	            std::string requestType = "to";
 
 	            switch (in_desc.m_type)
 	            {
-	                case Social::FacebookPostSystem::RequestRecipientMode::k_fixed:
+	                case ChilliSource::Social::FacebookPostSystem::RequestRecipientMode::k_fixed:
 	                    requestType = "to";
 	                    break;
-	                case Social::FacebookPostSystem::RequestRecipientMode::k_optional:
+	                case ChilliSource::Social::FacebookPostSystem::RequestRecipientMode::k_optional:
 	                    requestType = "suggestions";
 	                    break;
 	            }
@@ -81,16 +81,16 @@ namespace ChilliSource
 
 		//----------------------------------------------------
 		//----------------------------------------------------
-		FacebookPostSystem::FacebookPostSystem(Social::FacebookAuthenticationSystem* in_authSystem)
+		FacebookPostSystem::FacebookPostSystem(ChilliSource::Social::FacebookAuthenticationSystem* in_authSystem)
 		: m_authSystem(in_authSystem)
 		{
 
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		bool FacebookPostSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool FacebookPostSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return Social::FacebookPostSystem::InterfaceID == in_interfaceId || FacebookPostSystem::InterfaceID == in_interfaceId;
+			return ChilliSource::Social::FacebookPostSystem::InterfaceID == in_interfaceId || FacebookPostSystem::InterfaceID == in_interfaceId;
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------

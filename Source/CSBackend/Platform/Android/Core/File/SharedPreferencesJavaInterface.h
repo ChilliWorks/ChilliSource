@@ -15,7 +15,7 @@
 
 #include <jni.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{

@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace OpenGL
 	{
@@ -132,16 +132,16 @@ namespace ChilliSource
             /// @param Completion delegate
             /// @param [Out] Shader resource
             //----------------------------------------------
-			void LoadShader(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const ShaderSPtr& out_shader)
+			void LoadShader(CSCore::StorageLocation in_location, const std::string& in_filePath, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const ShaderSPtr& out_shader)
             {
-                Core::FileStreamSPtr shaderStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_read);
+                CSCore::FileStreamSPtr shaderStream = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, CSCore::FileMode::k_read);
                 if(shaderStream == nullptr || shaderStream->IsBad())
                 {
                     CS_LOG_ERROR("Failed to open shader file: " + in_filePath);
-                    out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
+                    out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
+						CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
                     }
                     return;
                 }
@@ -154,10 +154,10 @@ namespace ChilliSource
                 if(languageChunk.empty() == true)
                 {
                     CS_LOG_ERROR("Failed to find GLSL chunk in shader: " + in_filePath);
-                    out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
+                    out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
+						CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
                     }
                     return;
                 }
@@ -166,10 +166,10 @@ namespace ChilliSource
                 if(vsChunk.empty() == true)
                 {
                     CS_LOG_ERROR("Failed to find VertexShader chunk in shader: " + in_filePath);
-                    out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
+                    out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
+						CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
                     }
                     return;
                 }
@@ -178,10 +178,10 @@ namespace ChilliSource
                 if(fsChunk.empty() == true)
                 {
                     CS_LOG_ERROR("Failed to find FragmentShader chunk in shader: " + in_filePath);
-                    out_shader->SetLoadState(Core::Resource::LoadState::k_failed);
+                    out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
+						CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
                     }
                     return;
                 }
@@ -189,19 +189,19 @@ namespace ChilliSource
                 if(in_delegate == nullptr)
                 {
                     out_shader->Build(vsChunk, fsChunk);
-                    out_shader->SetLoadState(Core::Resource::LoadState::k_loaded);
+                    out_shader->SetLoadState(CSCore::Resource::LoadState::k_loaded);
                 }
                 else
                 {
                     //All GL related tasks must be performed on the main thread.
-					auto buildTask = [](const std::string& in_vs, const std::string& in_ps, const Core::ResourceProvider::AsyncLoadDelegate& in_completionDelegate, const ShaderSPtr& out_shaderResource)
+					auto buildTask = [](const std::string& in_vs, const std::string& in_ps, const CSCore::ResourceProvider::AsyncLoadDelegate& in_completionDelegate, const ShaderSPtr& out_shaderResource)
                     {
                         out_shaderResource->Build(in_vs, in_ps);
-                        out_shaderResource->SetLoadState(Core::Resource::LoadState::k_loaded);
+                        out_shaderResource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
                         in_completionDelegate(out_shaderResource);
                     };
 					auto task = std::bind(buildTask, vsChunk, fsChunk, in_delegate, out_shader);
-					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
+					CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
                 }
             }
         }
@@ -216,13 +216,13 @@ namespace ChilliSource
         }
 		//-------------------------------------------------------------------------
 		//-------------------------------------------------------------------------
-		bool GLSLShaderProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool GLSLShaderProvider::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
 			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == GLSLShaderProvider::InterfaceID;
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        Core::InterfaceIDType GLSLShaderProvider::GetResourceType() const
+        CSCore::InterfaceIDType GLSLShaderProvider::GetResourceType() const
         {
             return Shader::InterfaceID;
         }
@@ -234,14 +234,14 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void GLSLShaderProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
+		void GLSLShaderProvider::CreateResourceFromFile(CSCore::StorageLocation in_location, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceSPtr& out_resource)
         {
             ShaderSPtr shaderResource = std::static_pointer_cast<Shader>(out_resource);
             LoadShader(in_location, in_filePath, nullptr, shaderResource);
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void GLSLShaderProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+		void GLSLShaderProvider::CreateResourceFromFileAsync(CSCore::StorageLocation in_location, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const CSCore::ResourceSPtr& out_resource)
         {
             ShaderSPtr shaderResource = std::static_pointer_cast<Shader>(out_resource);
             LoadShader(in_location, in_filePath, in_delegate, shaderResource);

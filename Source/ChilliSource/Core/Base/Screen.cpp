@@ -50,7 +50,7 @@ namespace ChilliSource
         ScreenUPtr Screen::Create()
         {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return ScreenUPtr(new Android::Screen());
+            return ScreenUPtr(new CSBackend::Android::Screen());
 #elif defined CS_TARGETPLATFORM_IOS
             return ScreenUPtr(new iOS::Screen());
 #elif defined CS_TARGETPLATFORM_WINDOWS

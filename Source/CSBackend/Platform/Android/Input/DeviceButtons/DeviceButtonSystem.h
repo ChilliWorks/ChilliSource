@@ -35,7 +35,7 @@
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -44,7 +44,7 @@ namespace ChilliSource
         ///
         /// @author I Copland
         //------------------------------------------------------------
-		class DeviceButtonSystem final : public Input::DeviceButtonSystem
+		class DeviceButtonSystem final : public CSInput::DeviceButtonSystem
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(DeviceButtonSystem);
@@ -58,16 +58,16 @@ namespace ChilliSource
             ///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
 			/// @author I Copland
             ///
             /// @return An event that will be called whenever a
             /// device button is pressed.
 			//----------------------------------------------------
-            Core::IConnectableEvent<TriggeredDelegate>& GetTriggeredEvent() override;
+            CSCore::IConnectableEvent<TriggeredDelegate>& GetTriggeredEvent() override;
 		private:
-            friend Input::DeviceButtonSystemUPtr Input::DeviceButtonSystem::Create();
+            friend CSInput::DeviceButtonSystemUPtr CSInput::DeviceButtonSystem::Create();
             
             //----------------------------------------------------
 			/// Constructor. Declared private to force the use of
@@ -105,7 +105,7 @@ namespace ChilliSource
             //------------------------------------------------
             void OnDestroy() override;
 
-            Core::Event<TriggeredDelegate> m_triggeredEvent;
+            CSCore::Event<TriggeredDelegate> m_triggeredEvent;
             DeviceButtonJavaInterfaceSPtr m_javaInterface;
 		};
 	}

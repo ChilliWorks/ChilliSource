@@ -23,7 +23,7 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		class HMAC_SHA1 : public ChilliSource::Core::SHA1
+		class HMAC_SHA1 : public CSCore::SHA1
 		{
 			private:
 				s8 m_ipad[64];

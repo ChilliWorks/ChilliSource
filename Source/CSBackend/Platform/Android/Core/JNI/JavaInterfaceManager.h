@@ -17,7 +17,7 @@
 
 #include <jni.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -83,7 +83,7 @@ namespace ChilliSource
 			/// @param The type ID of the java interface you wish to implement
 			/// @return Java Interface that implements the given interface or nullptr if none
 			//--------------------------------------------------------
-			IJavaInterfaceSPtr GetJavaInterface(Core::InterfaceIDType inInterfaceID);
+			IJavaInterfaceSPtr GetJavaInterface(CSCore::InterfaceIDType inInterfaceID);
 			//--------------------------------------------------------
 			/// Get Java Interface
 			///
@@ -109,7 +109,7 @@ namespace ChilliSource
 			/// @param The type ID of the Java Interface you wish to implement
 			/// @param OUT: The array of java interfaces.
 			//--------------------------------------------------------
-			void GetJavaInterfaces(Core::InterfaceIDType inInterfaceID, std::vector<IJavaInterfaceSPtr>& outJavaInterfaces);
+			void GetJavaInterfaces(CSCore::InterfaceIDType inInterfaceID, std::vector<IJavaInterfaceSPtr>& outJavaInterfaces);
 			//--------------------------------------------------------
 			/// Get Java Interfaces
 			///

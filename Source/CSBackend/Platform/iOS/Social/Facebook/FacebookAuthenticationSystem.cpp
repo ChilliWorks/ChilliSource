@@ -16,7 +16,7 @@
 #	include <Accounts/Accounts.h>
 #endif
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
 	{
@@ -48,9 +48,9 @@ namespace ChilliSource
         
 		//----------------------------------------------------
         //----------------------------------------------------
-		bool FacebookAuthenticationSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool FacebookAuthenticationSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == FacebookAuthenticationSystem::InterfaceID) || (in_interfaceId == Social::FacebookAuthenticationSystem::InterfaceID);
+			return (in_interfaceId == FacebookAuthenticationSystem::InterfaceID) || (in_interfaceId == ChilliSource::Social::FacebookAuthenticationSystem::InterfaceID);
 		}
 		//----------------------------------------------------
         //----------------------------------------------------

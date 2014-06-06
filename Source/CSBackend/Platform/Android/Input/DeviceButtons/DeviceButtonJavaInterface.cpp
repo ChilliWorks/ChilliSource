@@ -56,15 +56,15 @@ extern "C"
 //-----------------------------------------------
 void Java_com_chillisource_input_DeviceButtonNativeInterface_onTriggered(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed)
 {
-	ChilliSource::Android::DeviceButtonJavaInterfaceSPtr javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::DeviceButtonJavaInterface>();
+	CSBackend::Android::DeviceButtonJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::DeviceButtonJavaInterface>();
 	if (javaInterface != nullptr)
 	{
-		auto task = std::bind(&ChilliSource::Android::DeviceButtonJavaInterface::OnTriggered, javaInterface.get(), in_buttonPressed);
+		auto task = std::bind(&CSBackend::Android::DeviceButtonJavaInterface::OnTriggered, javaInterface.get(), in_buttonPressed);
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
 }
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -77,7 +77,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		bool DeviceButtonJavaInterface::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool DeviceButtonJavaInterface::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
 			return (DeviceButtonJavaInterface::InterfaceID == in_interfaceId);
 		}

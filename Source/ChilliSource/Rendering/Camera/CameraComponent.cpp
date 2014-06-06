@@ -68,7 +68,7 @@ namespace ChilliSource
 		/// @param Comparison Type
 		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool CameraComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool CameraComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == CameraComponent::InterfaceID);
 		}

@@ -36,7 +36,7 @@
 
 @class EmailComposerDelegate;
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
     {
@@ -45,7 +45,7 @@ namespace ChilliSource
         ///
         /// @author S McGaw
         //-------------------------------------------------------------
-        class EmailComposer final : public Social::EmailComposer
+        class EmailComposer final : public ChilliSource::Social::EmailComposer
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(EmailComposer);
@@ -58,7 +58,7 @@ namespace ChilliSource
 			/// @param The interface Id.
 			/// @return Whether system is of given type.
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
             /// Displays the email activity with the given recipients,
             /// subject and contents.
@@ -104,7 +104,7 @@ namespace ChilliSource
             //-------------------------------------------------------
 			void OnResult(MFMailComposeViewController* in_viewController, MFMailComposeResult in_result);
 		private:
-            friend Social::EmailComposerUPtr Social::EmailComposer::Create();
+            friend ChilliSource::Social::EmailComposerUPtr ChilliSource::Social::EmailComposer::Create();
             
             //-------------------------------------------------------
             /// This checks whether or not the current iOS device

@@ -18,7 +18,7 @@
 #include <list>
 #include <mutex>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -31,7 +31,7 @@ namespace ChilliSource
 		///
 		/// @author S Downie
 		//----------------------------------------------------------------------------------------
-		class HttpRequest final : public Networking::HttpRequest
+		class HttpRequest final : public CSNetworking::HttpRequest
 		{
 		public:
 			//----------------------------------------------------------------------------------------

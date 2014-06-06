@@ -13,7 +13,7 @@
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Core/Notification/LocalNotificationJavaInterface.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -33,9 +33,9 @@ namespace ChilliSource
 		}
         //--------------------------------------------------
         //--------------------------------------------------
-        bool LocalNotificationSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool LocalNotificationSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-        	return (LocalNotificationSystem::InterfaceID == in_interfaceId || Core::LocalNotificationSystem::InterfaceID == in_interfaceId);
+        	return (LocalNotificationSystem::InterfaceID == in_interfaceId || CSCore::LocalNotificationSystem::InterfaceID == in_interfaceId);
         }
 		//--------------------------------------------------
 		//--------------------------------------------------
@@ -50,7 +50,7 @@ namespace ChilliSource
         }
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void LocalNotificationSystem::ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority)
+		void LocalNotificationSystem::ScheduleNotificationForTime(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, TimeIntervalSecs in_time, CSCore::Notification::Priority in_priority)
         {
 			if (m_enabled == true)
 			{
@@ -59,13 +59,13 @@ namespace ChilliSource
         }
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void LocalNotificationSystem::GetScheduledNotifications(std::vector<Core::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
+		void LocalNotificationSystem::GetScheduledNotifications(std::vector<CSCore::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
 		{
 			CS_LOG_WARNING("LocalNotificationScheduler::GetScheduledNotifications() is unimplemented on Android!");
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void LocalNotificationSystem::CancelByID(Core::Notification::ID in_id)
+		void LocalNotificationSystem::CancelByID(CSCore::Notification::ID in_id)
 		{
 			m_localNotificationJI->CancelByID(in_id);
 		}
@@ -77,15 +77,15 @@ namespace ChilliSource
 		}
         //--------------------------------------------------
         //--------------------------------------------------
-		Core::IConnectableEvent<Core::LocalNotificationSystem::RecievedDelegate>& LocalNotificationSystem::GetRecievedEvent()
+		CSCore::IConnectableEvent<CSCore::LocalNotificationSystem::RecievedDelegate>& LocalNotificationSystem::GetRecievedEvent()
 		{
         	return m_recievedEvent;
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void LocalNotificationSystem::OnNotificationReceived(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, Core::Notification::Priority in_priority)
+		void LocalNotificationSystem::OnNotificationReceived(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, CSCore::Notification::Priority in_priority)
 		{
-			Core::NotificationSPtr notification = std::make_shared<Core::Notification>();
+			CSCore::NotificationSPtr notification = std::make_shared<CSCore::Notification>();
 			notification->m_id = in_id;
 			notification->m_params = in_params;
 			notification->m_priority = in_priority;

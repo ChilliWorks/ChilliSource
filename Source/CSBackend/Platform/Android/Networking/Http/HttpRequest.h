@@ -15,7 +15,7 @@
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Networking/Http/HttpRequest.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{	
@@ -25,7 +25,7 @@ namespace ChilliSource
 		///
 		/// @author I Copland
 		//----------------------------------------------------------------------------------------
-		class HttpRequest final : public Networking::HttpRequest
+		class HttpRequest final : public CSNetworking::HttpRequest
 		{
 		public:
 			//----------------------------------------------------------------------------------------

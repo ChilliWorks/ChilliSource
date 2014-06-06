@@ -16,7 +16,7 @@
 
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -40,7 +40,7 @@ namespace ChilliSource
 			/// @return whether or not this object implements
 			/// the given interface.
 			//-----------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const;
             //-----------------------------------------------
             /// Display the systems confirmation dialog
             ///

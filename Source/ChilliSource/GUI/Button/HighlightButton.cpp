@@ -78,7 +78,7 @@ namespace ChilliSource
             Core::StorageLocation eNormalTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("NormalTextureLocation", strValue))
             {
-                eNormalTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eNormalTextureLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("NormalTexture", strValue))
             {
@@ -89,7 +89,7 @@ namespace ChilliSource
             Core::StorageLocation eHighlightTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("HighlightTextureLocation", strValue))
             {
-                eHighlightTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eHighlightTextureLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("HighlightTexture", strValue))
             {
@@ -100,7 +100,7 @@ namespace ChilliSource
             Core::StorageLocation eNormalTextureAtlasLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("NormalTextureAtlasLocation", strValue))
             {
-                eNormalTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eNormalTextureAtlasLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("NormalTextureAtlas", strValue))
             {
@@ -111,7 +111,7 @@ namespace ChilliSource
             Core::StorageLocation eHighlightTextureAtlasLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("HighlightTextureAtlasLocation", strValue))
             {
-                eHighlightTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eHighlightTextureAtlasLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("HighlightTextureAtlas", strValue))
             {

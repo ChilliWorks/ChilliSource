@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Notification/LocalNotificationSystem.h>
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -24,7 +24,7 @@ namespace ChilliSource
 		///
 		/// @author Steven Hendrie
 		//--------------------------------------------------------
-		class LocalNotificationSystem : public Core::LocalNotificationSystem
+		class LocalNotificationSystem : public CSCore::LocalNotificationSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(LocalNotificationSystem);
@@ -35,7 +35,7 @@ namespace ChilliSource
             /// @return Whether this implements the passed in
 			/// interface id.
             //--------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//--------------------------------------------------
 			/// Enables and disables addition of local notifications.
 			/// All existing notifications will be cancelled
@@ -62,7 +62,7 @@ namespace ChilliSource
 			/// @param [Optional] The notification priority. Defaults
 			/// to standard priority.
 			//---------------------------------------------------
-			void ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority = Core::Notification::Priority::k_standard) override;
+			void ScheduleNotificationForTime(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, TimeIntervalSecs in_time, CSCore::Notification::Priority in_priority = CSCore::Notification::Priority::k_standard) override;
 			//--------------------------------------------------------
 			/// Builds a list of all notifications currently scheduled
 			/// within the given time period.
@@ -73,7 +73,7 @@ namespace ChilliSource
 			/// @param [Optional] The start time.
 			/// @param [Optional] The end time.
 			//--------------------------------------------------------
-			void GetScheduledNotifications(std::vector<Core::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const override;
+			void GetScheduledNotifications(std::vector<CSCore::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const override;
 			//-------------------------------------------------------
 			/// Prevent any notifications with given ID type from firing
 			///
@@ -81,7 +81,7 @@ namespace ChilliSource
 			///
 			/// @param ID type
 			//------------------------------------------------------
-			void CancelByID(Core::Notification::ID in_id) override;
+			void CancelByID(CSCore::Notification::ID in_id) override;
 			//------------------------------------------------------
 			/// @author Steven Hendrie
 			///
@@ -94,7 +94,7 @@ namespace ChilliSource
             /// @return An event that can be used to listen for
             /// new notifications being recieved.
             //---------------------------------------------------
-            Core::IConnectableEvent<RecievedDelegate>& GetRecievedEvent() override;
+            CSCore::IConnectableEvent<RecievedDelegate>& GetRecievedEvent() override;
 			//-----------------------------------------------------
 			/// Called when game receives a local notification.
 			///
@@ -104,9 +104,9 @@ namespace ChilliSource
             /// @param The notification params.
             /// @param The notification priority.
 			//----------------------------------------------------
-			void OnNotificationReceived(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, Core::Notification::Priority in_priority);
+			void OnNotificationReceived(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, CSCore::Notification::Priority in_priority);
 		private:
-            friend Core::LocalNotificationSystemUPtr Core::LocalNotificationSystem::Create();
+            friend CSCore::LocalNotificationSystemUPtr CSCore::LocalNotificationSystem::Create();
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -116,7 +116,7 @@ namespace ChilliSource
 
 		private:
             bool m_enabled;
-            Core::Event<RecievedDelegate> m_recievedEvent;
+            CSCore::Event<RecievedDelegate> m_recievedEvent;
 			LocalNotificationJavaInterfaceSPtr m_localNotificationJI;
 		};
 	}

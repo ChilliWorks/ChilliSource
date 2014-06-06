@@ -16,7 +16,7 @@
 
 #include <windows.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -28,13 +28,13 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool DialogueBoxSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool DialogueBoxSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (DialogueBoxSystem::InterfaceID == in_interfaceId || Core::DialogueBoxSystem::InterfaceID == in_interfaceId);
+            return (DialogueBoxSystem::InterfaceID == in_interfaceId || CSCore::DialogueBoxSystem::InterfaceID == in_interfaceId);
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-		void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
+		void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
 			MessageBox(nullptr, WindowsStringUtils::UTF8ToUTF16(in_title).c_str(), WindowsStringUtils::UTF8ToUTF16(in_message).c_str(), MB_OK);
 			if (in_delegate)
@@ -44,7 +44,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-		void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
+		void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
 			if (MessageBox(NULL, WindowsStringUtils::UTF8ToUTF16(in_title).c_str(), WindowsStringUtils::UTF8ToUTF16(in_message).c_str(), MB_OKCANCEL) == IDOK)
 			{

@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -27,7 +27,7 @@ namespace ChilliSource
 			CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
 
 			//Begin the read loop as a threaded task
-			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&HttpRequest::PerformRequest, this));
+			CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&HttpRequest::PerformRequest, this));
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
@@ -51,7 +51,7 @@ namespace ChilliSource
 		void HttpRequest::PerformRequest()
 		{
 			HttpRequestJavaInterface::RequestType type = HttpRequestJavaInterface::RequestType::k_get;
-			if (m_desc.m_type == Networking::HttpRequest::Type::k_post)
+			if (m_desc.m_type == CSNetworking::HttpRequest::Type::k_post)
 			{
 				type = HttpRequestJavaInterface::RequestType::k_post;
 			}

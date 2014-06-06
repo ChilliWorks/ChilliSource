@@ -36,7 +36,7 @@
 #include <CSBackend/Platform/Android/Social/Communications/EmailComposerJavaInterface.h>
 #include <ChilliSource/Social/Communications/EmailComposer.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -45,7 +45,7 @@ namespace ChilliSource
 		///
 		/// @author S Hendrie
 		//---------------------------------------------------------------
-		class EmailComposer final : public Social::EmailComposer
+		class EmailComposer final : public ChilliSource::Social::EmailComposer
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(EmailComposer);
@@ -58,7 +58,7 @@ namespace ChilliSource
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
             /// Displays the email activity with the given recipients,
             /// subject and contents.
@@ -95,7 +95,7 @@ namespace ChilliSource
             //-------------------------------------------------------
 			void Dismiss() override;
 		private:
-			friend Social::EmailComposerUPtr Social::EmailComposer::Create();
+			friend ChilliSource::Social::EmailComposerUPtr ChilliSource::Social::EmailComposer::Create();
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.

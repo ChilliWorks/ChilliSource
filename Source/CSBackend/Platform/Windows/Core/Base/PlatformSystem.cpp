@@ -41,7 +41,7 @@
 //As the opengl classes need to include glfw.h, they need to be included after windows.h to avoid macro redefinitions.
 #include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
 
-namespace ChilliSource 
+namespace CSBackend 
 {
 	namespace Windows
 	{
@@ -77,16 +77,16 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		bool PlatformSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool PlatformSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (Core::PlatformSystem::InterfaceID == in_interfaceId || PlatformSystem::InterfaceID == in_interfaceId);
+			return (CSCore::PlatformSystem::InterfaceID == in_interfaceId || PlatformSystem::InterfaceID == in_interfaceId);
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
+		void PlatformSystem::CreateDefaultSystems(CSCore::Application* in_application)
 		{
-			in_application->CreateSystem<OpenGL::GLSLShaderProvider>();
-			in_application->CreateSystem<OpenGL::TextureUnitSystem>();
+			in_application->CreateSystem<CSBackend::OpenGL::GLSLShaderProvider>();
+			in_application->CreateSystem<CSBackend::OpenGL::TextureUnitSystem>();
 		}
 		//-----------------------------------------
 		//-----------------------------------------
@@ -104,10 +104,10 @@ namespace ChilliSource
 		//-----------------------------------------
 		void PlatformSystem::Run()
 		{
-			GLFWManager::Get()->SetWindowTitle(Core::Application::Get()->GetAppConfig()->GetDisplayableName());
+			GLFWManager::Get()->SetWindowTitle(CSCore::Application::Get()->GetAppConfig()->GetDisplayableName());
 
-			Core::Application::Get()->Resume();
-			Core::Application::Get()->Foreground();
+			CSCore::Application::Get()->Resume();
+			CSCore::Application::Get()->Foreground();
 
 			m_appStartTime = (u64)GLFWManager::Get()->GetTime();
 
@@ -125,8 +125,8 @@ namespace ChilliSource
 					u64 uddwAppRunningTime = ((u64)m_appPreviousTime - m_appStartTime);
 					m_appPreviousTime = appCurrentTime;
 
-					Core::Application::Get()->Update(deltaTime, uddwAppRunningTime);
-					Core::Application::Get()->Render();
+					CSCore::Application::Get()->Update(deltaTime, uddwAppRunningTime);
+					CSCore::Application::Get()->Render();
 				}
 			}
 		}
@@ -154,14 +154,14 @@ namespace ChilliSource
 		{
 			if(m_isFocused == true)
 			{
-				Core::Application::Get()->Background();
+				CSCore::Application::Get()->Background();
 			}
 			if(m_isSuspended == false)
 			{
-				Core::Application::Get()->Suspend();
+				CSCore::Application::Get()->Suspend();
 			}
 
-			Core::Application::Get()->Destroy();
+			CSCore::Application::Get()->Destroy();
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -182,7 +182,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::OnWindowClosed(GLFWwindow* in_window)
 		{
-			Core::Application::Get()->Quit();
+			CSCore::Application::Get()->Quit();
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -190,11 +190,11 @@ namespace ChilliSource
 		{
 			if (in_isFocused)
 			{
-				Core::Application::Get()->Foreground();
+				CSCore::Application::Get()->Foreground();
 			}
 			else
 			{
-				Core::Application::Get()->Background();
+				CSCore::Application::Get()->Background();
 			}
 		}
 		//-----------------------------------------

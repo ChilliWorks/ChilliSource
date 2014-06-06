@@ -37,7 +37,7 @@
 
 #include <unordered_map>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace Android
     {
@@ -47,7 +47,7 @@ namespace ChilliSource
         ///
         /// @author I Copland
         //------------------------------------------------------------
-        class PointerSystem final : public Input::PointerSystem
+        class PointerSystem final : public CSInput::PointerSystem
         {
         public:
             CS_DECLARE_NAMEDTYPE(PointerSystem);
@@ -61,7 +61,7 @@ namespace ChilliSource
             ///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
 			/// Called when a touch down event is received.
             ///
@@ -70,7 +70,7 @@ namespace ChilliSource
             /// @param The system Id of the touch.
             /// @param The touch location.
 			//----------------------------------------------------
-            void OnTouchDown(s32 in_systemId, const Core::Vector2& in_location);
+            void OnTouchDown(s32 in_systemId, const CSCore::Vector2& in_location);
             //----------------------------------------------------
 			/// Called when a touch moved event is received.
             ///
@@ -79,7 +79,7 @@ namespace ChilliSource
             /// @param The system Id of the touch.
             /// @param The touch location.
 			//----------------------------------------------------
-			void OnTouchMoved(s32 in_systemId, const Core::Vector2& in_location);
+			void OnTouchMoved(s32 in_systemId, const CSCore::Vector2& in_location);
             //----------------------------------------------------
 			/// Called when a touch up event is received.
             ///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			void OnTouchUp(s32 in_systemId);
         private:
-            friend Input::PointerSystemUPtr Input::PointerSystem::Create();
+            friend CSInput::PointerSystemUPtr CSInput::PointerSystem::Create();
 
             //------------------------------------------------
             /// Default constructor. Declared private to force
@@ -118,7 +118,7 @@ namespace ChilliSource
             //------------------------------------------------
             void OnDestroy() override;
 
-            Core::Screen* m_screen = nullptr;
+            CSCore::Screen* m_screen = nullptr;
             std::unordered_map<s32, PointerId> m_systemIdToPointerIdMap;
         };
     }

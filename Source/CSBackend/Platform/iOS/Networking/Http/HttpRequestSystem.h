@@ -20,7 +20,7 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
 	{
@@ -30,7 +30,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //--------------------------------------------------------------------------------------------------
-		class HttpRequestSystem final : public Networking::HttpRequestSystem
+		class HttpRequestSystem final : public CSNetworking::HttpRequestSystem
 		{
 		public:
             
@@ -45,7 +45,7 @@ namespace ChilliSource
             ///
 			/// @return Whether object if of argument type
 			//--------------------------------------------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -63,7 +63,7 @@ namespace ChilliSource
             ///
             /// @return A pointer to the request. The system owns this pointer. Returns nullptr if the request cannot be created.
             //--------------------------------------------------------------------------------------------------
-            Networking::HttpRequest* MakeRequest(const Networking::HttpRequest::Desc& in_requestDesc, const Networking::HttpRequest::Delegate& in_delegate) override;
+            CSNetworking::HttpRequest* MakeRequest(const CSNetworking::HttpRequest::Desc& in_requestDesc, const CSNetworking::HttpRequest::Delegate& in_delegate) override;
 			//--------------------------------------------------------------------------------------------------
             /// Equivalent to calling cancel on every incomplete request in progress.
             ///
@@ -81,7 +81,7 @@ namespace ChilliSource
             
         private:
             
-            friend Networking::HttpRequestSystemUPtr Networking::HttpRequestSystem::Create();
+            friend CSNetworking::HttpRequestSystemUPtr CSNetworking::HttpRequestSystem::Create();
             //--------------------------------------------------------------------------------------------------
             /// Private constructor to fore use of factory method
             ///

@@ -20,7 +20,7 @@
 #include <mutex>
 #include <sstream>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -30,7 +30,7 @@ namespace ChilliSource
 		/// A filestream is used for all reading and writing of files. This will emulate the functionality
 		/// of fstream and allows for cross platform filereading.
 		//======================================================================================================
-		class FileStreamAPK : public Core::FileStream
+		class FileStreamAPK : public CSCore::FileStream
 		{
 		public:
 			//--------------------------------------------------------------------------------------------------
@@ -214,7 +214,7 @@ namespace ChilliSource
 			/// @param the new position.
 			/// @param the direction from which to seek.
 			//--------------------------------------------------------------------------------------------------
-			void SeekG(s32 indwPosition, Core::SeekDir ineDir) override;
+			void SeekG(s32 indwPosition, CSCore::SeekDir ineDir) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Sync
 			///
@@ -268,7 +268,7 @@ namespace ChilliSource
 			/// @param the new position.
 			/// @param the direction from which to seek.
 			//--------------------------------------------------------------------------------------------------
-			void SeekP(s32 indwPosition, Core::SeekDir ineDir) override;
+			void SeekP(s32 indwPosition, CSCore::SeekDir ineDir) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Flush
 			///
@@ -291,7 +291,7 @@ namespace ChilliSource
 			/// @param The zip file position.
 			/// @param File mode
 			//--------------------------------------------------------------------------------------------------
-			void OpenFromAPK(const std::string& instrApkPath, const unz_file_pos& inFilePos, Core::FileMode ineMode);
+			void OpenFromAPK(const std::string& instrApkPath, const unz_file_pos& inFilePos, CSCore::FileMode ineMode);
 			//--------------------------------------------------------------------------------------------------
 			/// Open
 			///
@@ -300,7 +300,7 @@ namespace ChilliSource
 			/// @param The zip file position.
 			/// @param The file mode with which the file should be opened.
 			//--------------------------------------------------------------------------------------------------
-			void Open(const unz_file_pos& inFilePos, Core::FileMode ineMode);
+			void Open(const unz_file_pos& inFilePos, CSCore::FileMode ineMode);
 			//--------------------------------------------------------------------------------------------------
 			/// Get File Mode
 			///
@@ -318,7 +318,7 @@ namespace ChilliSource
 			bool mbOpen;
 
 			s8 * mpDataBuffer;
-			Core::FileMode meFileMode;
+			CSCore::FileMode meFileMode;
 			std::stringstream mStringStream;
 		};
 	}

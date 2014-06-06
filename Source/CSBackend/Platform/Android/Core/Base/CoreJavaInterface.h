@@ -17,7 +17,7 @@
 
 #include <jni.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -38,7 +38,7 @@ namespace ChilliSource
 			///
 			/// @return Whether or not this object implements the given interface.
 			//--------------------------------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//--------------------------------------------------------------------------------------
 			/// Sets the Chilli Source Application pointer.
 			///
@@ -46,7 +46,7 @@ namespace ChilliSource
 			///
 			/// @param the application pointer.
 			//--------------------------------------------------------------------------------------
-			void SetApplication(Core::Application* in_application);
+			void SetApplication(CSCore::Application* in_application);
 			//--------------------------------------------------------------------------------------
 			/// Deletes the Chilli Source Application pointer.
 			///
@@ -58,7 +58,7 @@ namespace ChilliSource
 			///
 			/// @return returns the global instance of the MoFlow application.
 			//--------------------------------------------------------------------------------------
-			Core::Application* GetApplication();
+			CSCore::Application* GetApplication();
 			//-----------------------------------------
 			/// @author I Copland
 			///
@@ -230,7 +230,7 @@ namespace ChilliSource
             
 		private:
 
-			Core::Application* m_application;
+			CSCore::Application* m_application;
 			s32 m_screenWidth;
 			s32 m_screenHeight;
 			std::string m_deviceModel;

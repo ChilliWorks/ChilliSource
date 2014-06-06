@@ -45,7 +45,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool AnimatedMeshComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool AnimatedMeshComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
 			return  (inInterfaceID == AnimatedMeshComponent::InterfaceID) ||
                     (inInterfaceID == RenderComponent::InterfaceID) ||

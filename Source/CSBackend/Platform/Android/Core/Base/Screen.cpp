@@ -33,7 +33,7 @@
 #include <CSBackend/Platform/Android/Core/Base/CoreJavaInterface.h>
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace Android
     {
@@ -45,19 +45,19 @@ namespace ChilliSource
         	CoreJavaInterfaceSPtr javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
         	CS_ASSERT(javaInterface != nullptr, "Cannot get CoreJavaInterface!");
 
-			m_resolution = Core::Vector2((f32)javaInterface->GetScreenWidth(), (f32)javaInterface->GetScreenHeight());
+			m_resolution = CSCore::Vector2((f32)javaInterface->GetScreenWidth(), (f32)javaInterface->GetScreenHeight());
 			m_densityScale = javaInterface->GetScreenDensity();
 			m_invDensityScale = 1.0f / m_densityScale;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Screen::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool Screen::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (Core::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
+            return (CSCore::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        const Core::Vector2& Screen::GetResolution() const
+        const CSCore::Vector2& Screen::GetResolution() const
         {
             return m_resolution;
         }
@@ -75,13 +75,13 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        Core::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
+        CSCore::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
         {
             return m_resolutionChangedEvent;
         }
         //-----------------------------------------------------------
         //------------------------------------------------------------
-        void Screen::OnResolutionChanged(const Core::Vector2& in_resolution)
+        void Screen::OnResolutionChanged(const CSCore::Vector2& in_resolution)
         {
         	m_resolution = in_resolution;
         	m_resolutionChangedEvent.NotifyConnections(m_resolution);

@@ -33,7 +33,7 @@
 //This must be included last.
 #include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace Windows
     {
@@ -46,7 +46,7 @@ namespace ChilliSource
 			{
 				if (g_screen != nullptr)
 				{
-					g_screen->OnResolutionChanged(Core::Vector2((f32)in_width, (f32)in_height));
+					g_screen->OnResolutionChanged(CSCore::Vector2((f32)in_width, (f32)in_height));
 				}
 			}
 		}
@@ -64,13 +64,13 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Screen::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool Screen::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (Core::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
+            return (CSCore::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        const Core::Vector2& Screen::GetResolution() const
+        const CSCore::Vector2& Screen::GetResolution() const
         {
             return m_resolution;
         }
@@ -88,13 +88,13 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        Core::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
+        CSCore::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
         {
             return m_resolutionChangedEvent;
         }
         //-----------------------------------------------------------
         //------------------------------------------------------------
-        void Screen::OnResolutionChanged(const Core::Vector2& in_resolution)
+        void Screen::OnResolutionChanged(const CSCore::Vector2& in_resolution)
         {
         	m_resolution = in_resolution;
         	m_resolutionChangedEvent.NotifyConnections(m_resolution);

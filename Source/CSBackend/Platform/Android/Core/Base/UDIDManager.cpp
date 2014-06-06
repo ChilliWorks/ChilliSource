@@ -19,7 +19,7 @@
 #include <cstdlib>
 #include <ctime>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -93,7 +93,7 @@ namespace ChilliSource
 			std::string strMacAddress = pCoreJI->GetMacAddress();
 			if (strMacAddress != "")
 			{
-				mstrUDID = "m-" + Core::HashMD5::GenerateHexHashCode(strMacAddress);
+				mstrUDID = "m-" + CSCore::HashMD5::GenerateHexHashCode(strMacAddress);
 				SaveUDID();
 				return;
 			}
@@ -102,7 +102,7 @@ namespace ChilliSource
 			std::string strAndroidID = pCoreJI->GetAndroidID();
 			if (strAndroidID != "")
 			{
-				mstrUDID = "a-" + Core::HashMD5::GenerateHexHashCode(strAndroidID);
+				mstrUDID = "a-" + CSCore::HashMD5::GenerateHexHashCode(strAndroidID);
 				SaveUDID();
 				return;
 			}
@@ -111,7 +111,7 @@ namespace ChilliSource
 			std::string strTelephonyID = pCoreJI->GetTelephonyDeviceID();
 			if (strTelephonyID != "")
 			{
-				mstrUDID = "t-" + Core::HashMD5::GenerateHexHashCode(strTelephonyID);
+				mstrUDID = "t-" + CSCore::HashMD5::GenerateHexHashCode(strTelephonyID);
 				SaveUDID();
 				return;
 			}
@@ -131,7 +131,7 @@ namespace ChilliSource
 				dwRandomNumber += rand();
 
 			//use this random number to generate a UDID
-			mstrUDID = "r-" + Core::HashMD5::GenerateHexHashCode(Core::ToString(dwRandomNumber));
+			mstrUDID = "r-" + CSCore::HashMD5::GenerateHexHashCode(CSCore::ToString(dwRandomNumber));
 			SaveUDID();
 		}
 		//-----------------------------------------

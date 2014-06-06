@@ -74,7 +74,7 @@ namespace ChilliSource
             Core::StorageLocation eOnTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OnTextureLocation", strValue))
             {
-                eOnTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eOnTextureLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("OnTexture", strValue))
             {
@@ -85,7 +85,7 @@ namespace ChilliSource
             Core::StorageLocation eOffTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OffTextureLocation", strValue))
             {
-                eOffTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eOffTextureLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("OffTexture", strValue))
             {
@@ -96,7 +96,7 @@ namespace ChilliSource
             Core::StorageLocation eOnTextureAtlasLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OnTextureAtlasLocation", strValue))
             {
-                eOnTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eOnTextureAtlasLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("OnTextureAtlas", strValue))
             {
@@ -107,7 +107,7 @@ namespace ChilliSource
             Core::StorageLocation eOffTextureAtlasLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OffTextureAtlasLocation", strValue))
             {
-                eOffTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eOffTextureAtlasLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("OffTextureAtlas", strValue))
             {

@@ -13,7 +13,7 @@
 
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace Android
     {
@@ -30,7 +30,7 @@ namespace ChilliSource
 			///
 			/// @return whether or not this object implements the given interface.
 			//--------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
 			//--------------------------------------------------------------
 			/// Request Remote Token
 			///
@@ -49,7 +49,7 @@ namespace ChilliSource
 			///
 			/// @param Dictionary of notification keys and values.
 			//-------------------------------------------------------------------------
-			void OnRemoteNotificationReceived(const Core::ParamDictionary& insParams);
+			void OnRemoteNotificationReceived(const CSCore::ParamDictionary& insParams);
         };
     }
 }

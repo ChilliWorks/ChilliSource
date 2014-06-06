@@ -36,7 +36,7 @@
 
 #include <algorithm>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace OpenGL
 	{
@@ -49,7 +49,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------
         //--------------------------------------------------
-        bool TextureUnitSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool TextureUnitSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
             return in_interfaceId == TextureUnitSystem::InterfaceID;
         }
@@ -77,7 +77,7 @@ namespace ChilliSource
             
             if(m_texUnits.empty() == true)
 			{
-                Rendering::RenderCapabilities* renderCapabilities = Core::Application::Get()->GetSystem<Rendering::RenderCapabilities>();
+                CSRendering::RenderCapabilities* renderCapabilities = CSCore::Application::Get()->GetSystem<CSRendering::RenderCapabilities>();
                 CS_ASSERT(renderCapabilities, "Cannot find required system: Render Capabilities.");
                 
                 //Create the available texture unit slots

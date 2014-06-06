@@ -37,7 +37,7 @@
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -91,25 +91,25 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		bool WebView::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool WebView::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (Web::WebView::InterfaceID == in_interfaceId || WebView::InterfaceID == in_interfaceId);
+			return (CSWeb::WebView::InterfaceID == in_interfaceId || WebView::InterfaceID == in_interfaceId);
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void WebView::Present(const std::string& in_url, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
+		void WebView::Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
 
 			m_isPresented = true;
 			m_delegate = in_delegate;
-			Core::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
+			CSCore::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
 
 			WebViewJavaInterface::Present(m_index, in_url, absoluteSize, in_dismissButtonRelativeSize);
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void WebView::PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
+		void WebView::PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
 
@@ -117,10 +117,10 @@ namespace ChilliSource
 			std::string filePath;
 			GetFilePathAndAnchor(in_filePath, filePath, anchor);
 
-			Android::FileSystem* fileSystem = static_cast<Android::FileSystem*>(Core::Application::Get()->GetFileSystem());
+			CSBackend::Android::FileSystem* fileSystem = static_cast<CSBackend::Android::FileSystem*>(CSCore::Application::Get()->GetFileSystem());
 
 			std::string htmlFileContents;
-			Core::FileStreamUPtr htmlFile = fileSystem->CreateFileStream(in_storageLocation, filePath, Core::FileMode::k_read);
+			CSCore::FileStreamUPtr htmlFile = fileSystem->CreateFileStream(in_storageLocation, filePath, CSCore::FileMode::k_read);
 			htmlFile->GetAll(htmlFileContents);
 			htmlFile->Close();
 			htmlFile.reset();
@@ -129,12 +129,12 @@ namespace ChilliSource
 
             switch(in_storageLocation)
             {
-                case Core::StorageLocation::k_package:
+                case CSCore::StorageLocation::k_package:
                 {
                 	fullFilePath = "file:///android_asset/" + fullFilePath;
                     break;
                 }
-                case Core::StorageLocation::k_DLC:
+                case CSCore::StorageLocation::k_DLC:
                 {
                 	if(fileSystem->DoesFileExistInCachedDLC(filePath) == true)
                 	{
@@ -161,7 +161,7 @@ namespace ChilliSource
 
 			m_isPresented = true;
 			m_delegate = in_delegate;
-			Core::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
+			CSCore::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
 			WebViewJavaInterface::PresentFromFile(m_index, htmlFileContents, absoluteSize, fullFilePath, anchor, in_dismissButtonRelativeSize);
 		}
 		//-----------------------------------------------
@@ -186,7 +186,7 @@ namespace ChilliSource
         //-----------------------------------------------
 		void WebView::OnInit()
 		{
-			m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+			m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
 			s_indexToWebViewMap.emplace(m_index, this);
 		}
 		//---------------------------------------------------------

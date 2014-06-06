@@ -19,7 +19,7 @@
 @class UITapGestureRecognizer;
 @class CADisplayLink;
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace iOS
     {

@@ -39,7 +39,7 @@
 
 @class UITouch;
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace iOS
     {
@@ -49,7 +49,7 @@ namespace ChilliSource
         ///
         /// @author I Copland
         //------------------------------------------------------------
-        class PointerSystem final : public Input::PointerSystem
+        class PointerSystem final : public CSInput::PointerSystem
         {
         public:
             CS_DECLARE_NAMEDTYPE(PointerSystem);
@@ -63,7 +63,7 @@ namespace ChilliSource
             ///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
 			/// Called when a touch begin event is received.
             ///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			void OnTouchEnded(UITouch* in_touch);
         private:
-            friend Input::PointerSystemUPtr Input::PointerSystem::Create();
+            friend CSInput::PointerSystemUPtr CSInput::PointerSystem::Create();
             
             //------------------------------------------------
             /// Default constructor. Declared private to force
@@ -119,7 +119,7 @@ namespace ChilliSource
             void OnDestroy() override;
             
             std::unordered_map<UITouch*, PointerId> m_touchToIdMap;
-            Core::Screen* m_screen;
+            CSCore::Screen* m_screen;
         };
     }
 }

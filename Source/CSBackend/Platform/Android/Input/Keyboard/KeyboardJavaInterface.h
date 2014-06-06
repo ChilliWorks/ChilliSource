@@ -35,7 +35,7 @@
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -64,7 +64,7 @@ namespace ChilliSource
 			/// @return whether or not this object implements
 			/// the given interface.
 			//-----------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
 			//-----------------------------------------------
 			/// Set Text Added Delegate
 			///
@@ -107,7 +107,7 @@ namespace ChilliSource
 			/// @param The keyboard type to be used the
 			/// next time the keyboard is displayed.
 			//-------------------------------------------
-            void SetKeyboardType(Input::Keyboard::Type ineKeyboardType);
+            void SetKeyboardType(CSInput::Keyboard::Type ineKeyboardType);
 			//-------------------------------------------
 			/// Set Capitalisation Method
 			///
@@ -115,7 +115,7 @@ namespace ChilliSource
             /// used the next time the keyboard is
             /// displayed.
 			//-------------------------------------------
-            void SetCapitalisationMethod(Input::Keyboard::Capitalisation ineKeyboardCapitalisation);
+            void SetCapitalisationMethod(CSInput::Keyboard::Capitalisation ineKeyboardCapitalisation);
 			//-----------------------------------------------
 			/// On Text Added
 			///

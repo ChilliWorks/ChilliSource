@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -38,7 +38,7 @@ namespace ChilliSource
 				return;
 			}
 
-			ChilliSource::Core::FileStream* pStream = (ChilliSource::Core::FileStream*)png_get_io_ptr(inpPng);
+			CSCore::FileStream* pStream = (CSCore::FileStream*)png_get_io_ptr(inpPng);
 
 			if (pStream->IsBad() == true || pStream->IsOpen() == false)
 			{
@@ -57,18 +57,18 @@ namespace ChilliSource
 			mdwHeight = -1;
 			mdwWidth = -1;
 			mpData = nullptr;
-			meFormat = Core::ImageFormat::k_RGBA8888;
+			meFormat = CSCore::ImageFormat::k_RGBA8888;
 		}
 		//----------------------------------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------------------------------
-		PngImage::PngImage(Core::StorageLocation ineStorageLocation, const std::string& instrFilename)
+		PngImage::PngImage(CSCore::StorageLocation ineStorageLocation, const std::string& instrFilename)
 		{
 			mbIsLoaded = false;
 			mdwHeight = -1;
 			mdwWidth = -1;
 			mpData = nullptr;
-			meFormat = Core::ImageFormat::k_RGBA8888;
+			meFormat = CSCore::ImageFormat::k_RGBA8888;
 
 			Load(ineStorageLocation, instrFilename);
 		}
@@ -85,13 +85,13 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Load
 		//----------------------------------------------------------------------------------
-		void PngImage::Load(Core::StorageLocation ineStorageLocation, const std::string& instrFilename)
+		void PngImage::Load(CSCore::StorageLocation ineStorageLocation, const std::string& instrFilename)
 		{
 			//create the file stream
-			ChilliSource::Core::FileStreamSPtr stream = ChilliSource::Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrFilename, ChilliSource::Core::FileMode::k_readBinary);
+			CSCore::FileStreamSPtr stream = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrFilename, CSCore::FileMode::k_readBinary);
 
 			//insure the stream is not broken
-			if (stream == ChilliSource::Core::FileStreamSPtr() || stream->IsBad() == true || stream->IsOpen() == false)
+			if (stream == CSCore::FileStreamSPtr() || stream->IsBad() == true || stream->IsOpen() == false)
 			{
 				stream->Close();
 				return;
@@ -158,14 +158,14 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Get Image Format
 		//----------------------------------------------------------------------------------
-		Core::ImageFormat PngImage::GetImageFormat()
+		CSCore::ImageFormat PngImage::GetImageFormat()
 		{
 			return meFormat;
 		}
 		//----------------------------------------------------------------------------------
 		/// Load with lib png
 		//----------------------------------------------------------------------------------
-		bool PngImage::LoadWithLibPng(Core::FileStreamSPtr inStream)
+		bool PngImage::LoadWithLibPng(CSCore::FileStreamSPtr inStream)
 		{
 			//-------- Intialisation
 			//read the header to insure it is indeed a png
@@ -275,16 +275,16 @@ namespace ChilliSource
 			switch (dwColorType)
 			{
 			case PNG_COLOR_TYPE_GRAY:
-				meFormat = Core::ImageFormat::k_Lum8;
+				meFormat = CSCore::ImageFormat::k_Lum8;
 				break;
 			case PNG_COLOR_TYPE_GRAY_ALPHA:
-				meFormat = Core::ImageFormat::k_LumA88;
+				meFormat = CSCore::ImageFormat::k_LumA88;
 				break;
 			case PNG_COLOR_TYPE_RGB:
-				meFormat = Core::ImageFormat::k_RGB888;
+				meFormat = CSCore::ImageFormat::k_RGB888;
 				break;
 			case PNG_COLOR_TYPE_RGB_ALPHA:
-				meFormat = Core::ImageFormat::k_RGBA8888;
+				meFormat = CSCore::ImageFormat::k_RGBA8888;
 				break;
 			default:
 				CS_LOG_ERROR("Trying to load a PNG with an unknown colour format!");

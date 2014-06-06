@@ -11,7 +11,7 @@
 
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -81,7 +81,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		/// Get Java Interface
 		//--------------------------------------------------------
-		IJavaInterfaceSPtr JavaInterfaceManager::GetJavaInterface(Core::InterfaceIDType inInterfaceID)
+		IJavaInterfaceSPtr JavaInterfaceManager::GetJavaInterface(CSCore::InterfaceIDType inInterfaceID)
 		{
 			for (std::vector<IJavaInterfaceSPtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)
 			{
@@ -97,7 +97,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		/// Get Java Interfaces
 		//--------------------------------------------------------
-		void JavaInterfaceManager::GetJavaInterfaces(Core::InterfaceIDType inInterfaceID, std::vector<IJavaInterfaceSPtr>& outJavaInterfaces)
+		void JavaInterfaceManager::GetJavaInterfaces(CSCore::InterfaceIDType inInterfaceID, std::vector<IJavaInterfaceSPtr>& outJavaInterfaces)
 		{
 			outJavaInterfaces.clear();
 			for (std::vector<IJavaInterfaceSPtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)

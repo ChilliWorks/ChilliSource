@@ -49,7 +49,7 @@
 //----------------------------------------------------------------------------------
 int CALLBACK WinMain(_In_ HINSTANCE in_instance, _In_ HINSTANCE in_prevInstance, _In_ LPSTR in_cmdLine, _In_ int in_cmdShow)
 {
-    ChilliSource::Core::Application* app = CreateApplication();
+    CSCore::Application* app = CreateApplication();
     app->Init();
     auto platformSys = app->GetSystem<ChilliSource::Windows::PlatformSystem>();
 	platformSys->Run();

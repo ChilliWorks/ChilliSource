@@ -19,7 +19,7 @@
 
 #include <map>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -29,7 +29,7 @@ namespace ChilliSource
 		/// Handles all of the java interfaces and provides an
 		/// interface to access them.
 		//========================================================
-		class IJavaInterface : public Core::QueryableInterface
+		class IJavaInterface : public CSCore::QueryableInterface
 		{
 		public:
 			//--------------------------------------------------------

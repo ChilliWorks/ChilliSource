@@ -36,7 +36,7 @@
 
 #include <vector>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace OpenGL
 	{
@@ -47,7 +47,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
 		//-----------------------------------------------------------
-		class TextureUnitSystem final : public Core::AppSystem
+		class TextureUnitSystem final : public CSCore::AppSystem
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(TextureUnitSystem);
@@ -59,7 +59,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the object is of this type
 			//--------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
             /// Bind the object to the given texture unit only if
             /// required (i.e. not already bound). GL hates
@@ -107,7 +107,7 @@ namespace ChilliSource
             void Clear();
 
         private:
-            friend class Core::Application;
+            friend class CSCore::Application;
             //----------------------------------------------------
 			/// Creates a new instance of this system.
             ///

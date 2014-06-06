@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Notification/Notification.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
     {
@@ -30,18 +30,18 @@ namespace ChilliSource
         //--------------------------------------------------
     	GooglePlayRemoteNotificationSystem::GooglePlayRemoteNotificationSystem()
     	{
-    		m_javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<GooglePlayRemoteNotificationJavaInterface>();
+    		m_javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<GooglePlayRemoteNotificationJavaInterface>();
     		if(nullptr == m_javaInterface)
     		{
     			m_javaInterface = GooglePlayRemoteNotificationJavaInterfaceSPtr(new GooglePlayRemoteNotificationJavaInterface());
-				ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
+				CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
     		}
     	}
         //--------------------------------------------------
         //--------------------------------------------------
-        bool GooglePlayRemoteNotificationSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool GooglePlayRemoteNotificationSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (GooglePlayRemoteNotificationSystem::InterfaceID == in_interfaceId || Core::RemoteNotificationSystem::InterfaceID == in_interfaceId);
+            return (GooglePlayRemoteNotificationSystem::InterfaceID == in_interfaceId || CSCore::RemoteNotificationSystem::InterfaceID == in_interfaceId);
         }
         //--------------------------------------------------
         //--------------------------------------------------
@@ -70,7 +70,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------
         //---------------------------------------------------
-        Core::IConnectableEvent<Core::RemoteNotificationSystem::NotificationReceivedDelegate>& GooglePlayRemoteNotificationSystem::GetRecievedEvent()
+        CSCore::IConnectableEvent<CSCore::RemoteNotificationSystem::NotificationReceivedDelegate>& GooglePlayRemoteNotificationSystem::GetRecievedEvent()
 		{
         	return m_receivedEvent;
 		}
@@ -78,7 +78,7 @@ namespace ChilliSource
         //--------------------------------------------------
 		void GooglePlayRemoteNotificationSystem::OnRemoteTokenReceived(const std::string& in_token)
 		{
-			m_token = Core::BaseEncoding::Base64Encode(in_token);
+			m_token = CSCore::BaseEncoding::Base64Encode(in_token);
 			if(m_delegate != nullptr)
 			{
 				m_delegate(m_token);
@@ -87,14 +87,14 @@ namespace ChilliSource
 		}
         //--------------------------------------------------
         //--------------------------------------------------
-		void GooglePlayRemoteNotificationSystem::OnRemoteNotificationReceived(const Core::ParamDictionary& in_params)
+		void GooglePlayRemoteNotificationSystem::OnRemoteNotificationReceived(const CSCore::ParamDictionary& in_params)
 		{
 			if (m_enabled == true)
 			{
-				Core::NotificationSPtr notification(std::make_shared<CSCore::Notification>());
+				CSCore::NotificationSPtr notification(std::make_shared<CSCore::Notification>());
 				notification->m_id = 0;
 				notification->m_params = in_params;
-				notification->m_priority = Core::Notification::Priority::k_standard;
+				notification->m_priority = CSCore::Notification::Priority::k_standard;
 				m_receivedEvent.NotifyConnections(notification);
 			}
 		}

@@ -18,7 +18,7 @@
 
 #pragma comment(lib, "winhttp")
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Windows
 	{
@@ -61,7 +61,7 @@ namespace ChilliSource
 			///
 			/// @return Header blob
 			//--------------------------------------------------------------------------------------------------
-			std::wstring ConvertHeaders(const Core::ParamDictionary& in_headers)
+			std::wstring ConvertHeaders(const CSCore::ParamDictionary& in_headers)
 			{
 				//The headers must be passed as a single string with each header except the last
 				//terminated by a carraige return/line feed
@@ -96,9 +96,9 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		bool HttpRequestSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool HttpRequestSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == Networking::HttpRequestSystem::InterfaceID || in_interfaceId == HttpRequestSystem::InterfaceID;
+			return in_interfaceId == CSNetworking::HttpRequestSystem::InterfaceID || in_interfaceId == HttpRequestSystem::InterfaceID;
 		}
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		Networking::HttpRequest* HttpRequestSystem::MakeRequest(const Networking::HttpRequest::Desc& in_requestDesc, const Networking::HttpRequest::Delegate& in_delegate)
+		CSNetworking::HttpRequest* HttpRequestSystem::MakeRequest(const CSNetworking::HttpRequest::Desc& in_requestDesc, const CSNetworking::HttpRequest::Delegate& in_delegate)
 		{
 			CS_ASSERT(in_requestDesc.m_url.empty() == false, "Cannot make an http request to a blank url");
 
@@ -148,7 +148,7 @@ namespace ChilliSource
 			}
 
 			//Set up the request based on whether it is POST or GET and whether it is SSL
-			LPCWSTR type = (in_requestDesc.m_type == Networking::HttpRequest::Type::k_get ? L"GET" : L"POST");
+			LPCWSTR type = (in_requestDesc.m_type == CSNetworking::HttpRequest::Type::k_get ? L"GET" : L"POST");
 			HINTERNET requestHandle = 0;
 
 			std::wstring urlPath = urlComps.lpszUrlPath;

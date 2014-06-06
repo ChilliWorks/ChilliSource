@@ -16,7 +16,7 @@
 
 #include <jni.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -86,7 +86,7 @@ namespace ChilliSource
 			///
 			/// @return The result code.
 			//--------------------------------------------------------------------------------------
-			static RequestResultCode MakeHttpRequest(const std::string& in_url, RequestType in_type, const Core::ParamDictionary& in_headers, const std::string& in_body,
+			static RequestResultCode MakeHttpRequest(const std::string& in_url, RequestType in_type, const CSCore::ParamDictionary& in_headers, const std::string& in_body,
 													std::string& out_response, std::string& out_redirectUrl, s32& out_reponseCode);
 			//--------------------------------------------------------------------------------------
 			/// Calls into java to find whether or not the device is currently connected to the

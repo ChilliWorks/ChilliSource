@@ -41,7 +41,7 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace Android
     {
@@ -54,14 +54,14 @@ namespace ChilliSource
         }
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool VideoPlayer::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool VideoPlayer::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == Video::VideoPlayer::InterfaceID || in_interfaceId == VideoPlayer::InterfaceID);
+			return (in_interfaceId == CSVideo::VideoPlayer::InterfaceID || in_interfaceId == VideoPlayer::InterfaceID);
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap,
-        		const Core::Colour& in_backgroundColour)
+        void VideoPlayer::Present(CSCore::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap,
+        		const CSCore::Colour& in_backgroundColour)
         {
         	CS_ASSERT(m_isPlaying == false, "Cannot present a video while one is already playing.");
         	m_isPlaying = true;
@@ -71,40 +71,40 @@ namespace ChilliSource
         	//calculate the storage location and full filename.
         	bool isPackage = false;
         	std::string fileName;
-        	if (in_storageLocation == Core::StorageLocation::k_package)
+        	if (in_storageLocation == CSCore::StorageLocation::k_package)
         	{
         		isPackage = true;
-        		fileName = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(Core::StorageLocation::k_package, in_fileName);
+        		fileName = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(CSCore::StorageLocation::k_package, in_fileName);
         	}
-        	else if (in_storageLocation == Core::StorageLocation::k_DLC)
+        	else if (in_storageLocation == CSCore::StorageLocation::k_DLC)
 			{
-        		if (Core::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(in_fileName) == true)
+        		if (CSCore::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(in_fileName) == true)
         		{
         			isPackage = false;
-        			fileName = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_fileName;
+        			fileName = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_fileName;
         		}
         		else
         		{
         			isPackage = true;
-        			fileName = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_fileName);
+        			fileName = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(CSCore::StorageLocation::k_package, CSCore::Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_fileName);
         		}
 			}
         	else
         	{
         		isPackage = false;
-        		fileName = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_storageLocation) + in_fileName;
+        		fileName = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_storageLocation) + in_fileName;
         	}
 
         	//start the video
-        	m_javaInterface->Present(isPackage, fileName, in_dismissWithTap, in_backgroundColour, Core::MakeDelegate(this, &VideoPlayer::OnVideoComplete));
+        	m_javaInterface->Present(isPackage, fileName, in_dismissWithTap, in_backgroundColour, CSCore::MakeDelegate(this, &VideoPlayer::OnVideoComplete));
         }
         //--------------------------------------------------------------
 		//--------------------------------------------------------------
-		void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
-                bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
+		void VideoPlayer::PresentWithSubtitles(CSCore::StorageLocation in_storageLocation, const std::string& in_fileName, const CSVideo::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
+                bool in_dismissWithTap, const CSCore::Colour& in_backgroundColour)
 		{
 			m_subtitles = in_subtitles;
-			m_javaInterface->SetUpdateSubtitlesDelegate(Core::MakeDelegate(this, &VideoPlayer::OnUpdateSubtitles));
+			m_javaInterface->SetUpdateSubtitlesDelegate(CSCore::MakeDelegate(this, &VideoPlayer::OnUpdateSubtitles));
 			Present(in_storageLocation, in_fileName, std::move(in_delegateConnection), in_dismissWithTap, in_backgroundColour);
 		}
         //-------------------------------------------------------
@@ -156,8 +156,8 @@ namespace ChilliSource
 					if (mapEntry == m_subtitleMap.end())
 					{
 						const std::string& text = localisedText->GetText((*it)->m_localisedTextId);
-						const Video::Subtitles::Style* style = m_subtitles->GetStyleWithName((*it)->m_styleName);
-						s64 subtitleID = m_javaInterface->CreateSubtitle(text, style->m_fontName, style->m_fontSize, Rendering::StringFromAlignmentAnchor(style->m_alignment), style->m_bounds.vOrigin.x, style->m_bounds.vOrigin.y, style->m_bounds.vSize.x, style->m_bounds.vSize.y);
+						const CSVideo::Subtitles::Style* style = m_subtitles->GetStyleWithName((*it)->m_styleName);
+						s64 subtitleID = m_javaInterface->CreateSubtitle(text, style->m_fontName, style->m_fontSize, CSRendering::StringFromAlignmentAnchor(style->m_alignment), style->m_bounds.vOrigin.x, style->m_bounds.vOrigin.y, style->m_bounds.vSize.x, style->m_bounds.vSize.y);
 						m_javaInterface->SetSubtitleColour(subtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
 						m_subtitleMap.insert(std::make_pair(*it, subtitleID));
 					}
@@ -184,9 +184,9 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------------
 		//---------------------------------------------------------------
-		void VideoPlayer::UpdateSubtitle(const Video::Subtitles::Subtitle* in_subtitle, s64 in_subtitleID, TimeIntervalMs in_timeMS)
+		void VideoPlayer::UpdateSubtitle(const CSVideo::Subtitles::Subtitle* in_subtitle, s64 in_subtitleID, TimeIntervalMs in_timeMS)
 		{
-			const Video::Subtitles::Style* style = m_subtitles->GetStyleWithName(in_subtitle->m_styleName);
+			const CSVideo::Subtitles::Style* style = m_subtitles->GetStyleWithName(in_subtitle->m_styleName);
 
 			f32 fade = 0.0f;
 			s64 relativeTime = ((s64)in_timeMS) - ((s64)in_subtitle->m_startTimeMS);

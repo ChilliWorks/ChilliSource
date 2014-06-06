@@ -36,7 +36,7 @@
 
 #include <functional>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -76,7 +76,7 @@ namespace ChilliSource
             ///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const;
 			//-----------------------------------------------
 			/// @author I Copland
 			///

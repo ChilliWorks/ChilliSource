@@ -141,10 +141,10 @@ void Java_com_chillisource_core_CoreNativeInterface_create(JNIEnv* in_env, jobje
 	JavaVM* javaVM;
 	in_env->GetJavaVM(&javaVM);
 
-	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->Initialise(javaVM);
+	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->Initialise(javaVM);
 
 	//add the core native interface
-	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(ChilliSource::Android::IJavaInterfaceSPtr(new ChilliSource::Android::CoreJavaInterface()));
+	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(CSBackend::Android::IJavaInterfaceSPtr(new CSBackend::Android::CoreJavaInterface()));
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
@@ -155,14 +155,14 @@ void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject
 	in_env->GetJavaVM(&javaVM);
 
 	//create the application
-	ChilliSource::Core::Application* pApplication = CreateApplication();
-	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CoreJavaInterface>()->SetApplication(pApplication);
+	CSCore::Application* pApplication = CreateApplication();
+	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>()->SetApplication(pApplication);
 
 	//setup other interfaces
-	ChilliSource::Android::TouchInputJavaInterface::SetupJavaInterface(javaVM);
-	ChilliSource::Android::HttpRequestJavaInterface::SetupJavaInterface(javaVM);
-	ChilliSource::Android::SharedPreferencesJavaInterface::SetupJavaInterface(javaVM);
-	ChilliSource::Android::WebViewJavaInterface::SetupJavaInterface(javaVM);
+	CSBackend::Android::TouchInputJavaInterface::SetupJavaInterface(javaVM);
+	CSBackend::Android::HttpRequestJavaInterface::SetupJavaInterface(javaVM);
+	CSBackend::Android::SharedPreferencesJavaInterface::SetupJavaInterface(javaVM);
+	CSBackend::Android::WebViewJavaInterface::SetupJavaInterface(javaVM);
     
 	//run the application
     pApplication->Init();
@@ -171,56 +171,56 @@ void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_resume(JNIEnv* in_env, jobject in_this)
 {
-	ChilliSource::Core::Application::Get()->Resume();
+	CSCore::Application::Get()->Resume();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_foreground(JNIEnv* in_env, jobject in_this)
 {
-	ChilliSource::Core::Application::Get()->Foreground();
+	CSCore::Application::Get()->Foreground();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_background(JNIEnv* in_env, jobject in_this)
 {
-	ChilliSource::Core::Application::Get()->Background();
+	CSCore::Application::Get()->Background();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_suspend(JNIEnv* in_env, jobject in_this)
 {
-	ChilliSource::Core::Application::Get()->Suspend();
+	CSCore::Application::Get()->Suspend();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_destroy(JNIEnv* in_env, jobject in_this)
 {
-	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CoreJavaInterface>()->DestroyApplication();
+	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>()->DestroyApplication();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobject in_this, f32 in_deltaTime, s64 in_elaspedTime)
 {
 	//Create the message with the time between frames
-	ChilliSource::Core::Application::Get()->Update(in_deltaTime, (u64)in_elaspedTime);
-	ChilliSource::Core::Application::Get()->Render();
+	CSCore::Application::Get()->Update(in_deltaTime, (u64)in_elaspedTime);
+	CSCore::Application::Get()->Render();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env, jobject in_this)
 {
-	ChilliSource::Core::Application::Get()->ApplicationMemoryWarning();
+	CSCore::Application::Get()->ApplicationMemoryWarning();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_onResolutionChanged(JNIEnv* in_env, jobject in_this, s32 in_width, s32 in_height)
 {
-	ChilliSource::Android::Screen* screen = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::Screen>();
+	CSBackend::Android::Screen* screen = CSCore::Application::Get()->GetSystem<CSBackend::Android::Screen>();
 	CS_ASSERT(screen != nullptr, "Cannot find required system: Screen.");
-	screen->OnResolutionChanged(ChilliSource::Core::Vector2((f32)in_width, (f32)in_height));
+	screen->OnResolutionChanged(CSCore::Vector2((f32)in_width, (f32)in_height));
 }
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -256,13 +256,13 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
-		bool CoreJavaInterface::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool CoreJavaInterface::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
 			return (in_interfaceId == CoreJavaInterface::InterfaceID);
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
-		void CoreJavaInterface::SetApplication(ChilliSource::Core::Application* in_application)
+		void CoreJavaInterface::SetApplication(CSCore::Application* in_application)
 		{
 			m_application = in_application;
 		}
@@ -275,7 +275,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
-		ChilliSource::Core::Application* CoreJavaInterface::GetApplication()
+		CSCore::Application* CoreJavaInterface::GetApplication()
 		{
 			return m_application;
 		}

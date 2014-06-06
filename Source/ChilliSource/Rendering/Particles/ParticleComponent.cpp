@@ -32,7 +32,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool ParticleComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool ParticleComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == ParticleComponent::InterfaceID) || 
             (inInterfaceID == RenderComponent::InterfaceID);

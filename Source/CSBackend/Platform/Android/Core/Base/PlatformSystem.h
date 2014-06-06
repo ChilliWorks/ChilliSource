@@ -35,7 +35,7 @@
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -45,7 +45,7 @@ namespace ChilliSource
 		///
 		/// @author I Copland
 		//---------------------------------------------------------------
-		class PlatformSystem final : public Core::PlatformSystem
+		class PlatformSystem final : public CSCore::PlatformSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(PlatformSystem);
@@ -58,7 +58,7 @@ namespace ChilliSource
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//-------------------------------------------------------
 			/// Adds default systems to the applications system
 			/// list.
@@ -68,7 +68,7 @@ namespace ChilliSource
 			/// @param Application instance to add the default
             /// platform systems to.
 			//-------------------------------------------------------
-			void CreateDefaultSystems(Core::Application* in_application) override;
+			void CreateDefaultSystems(CSCore::Application* in_application) override;
 			//-------------------------------------------------------
             /// Lock the frame rate to the given FPS
 			///
@@ -98,7 +98,7 @@ namespace ChilliSource
 	        //-------------------------------------------------------
 			TimeIntervalMs GetSystemTimeMS() const override;
 		private:
-            friend Core::PlatformSystemUPtr Core::PlatformSystem::Create();
+            friend CSCore::PlatformSystemUPtr CSCore::PlatformSystem::Create();
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///

@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace OpenGL
 	{
@@ -27,11 +27,11 @@ namespace ChilliSource
 		/// the given buffer description
 		/// @param Buffer desciption
 		//-----------------------------------------------------
-		MeshBuffer::MeshBuffer(ChilliSource::Rendering::BufferDescription &inBuffDesc) 
-        : ChilliSource::Rendering::MeshBuffer(inBuffDesc), mVertexBuffer(0), mIndexBuffer(0), mBufferUsage(0), mBufferAccess(0),
+		MeshBuffer::MeshBuffer(CSRendering::BufferDescription &inBuffDesc) 
+        : CSRendering::MeshBuffer(inBuffDesc), mVertexBuffer(0), mIndexBuffer(0), mBufferUsage(0), mBufferAccess(0),
           mpVertexData(nullptr), mpIndexData(nullptr), mpVertexDataBackup(nullptr), mpIndexDataBackup(nullptr), mbMapBufferAvailable(false), mbCacheValid(false)
 		{
-            mbMapBufferAvailable = Core::Application::Get()->GetSystem<Rendering::RenderCapabilities>()->IsMapBufferSupported();
+            mbMapBufferAvailable = CSCore::Application::Get()->GetSystem<CSRendering::RenderCapabilities>()->IsMapBufferSupported();
             
 			glGenBuffers(1, &mVertexBuffer);
             
@@ -40,30 +40,30 @@ namespace ChilliSource
 			
 			switch(mBufferDesc.eUsageFlag)
 			{
-				case Rendering::BufferUsage::k_dynamic:
+				case CSRendering::BufferUsage::k_dynamic:
 					mBufferUsage = GL_DYNAMIC_DRAW;
 					break;
-				case Rendering::BufferUsage::k_static:
+				case CSRendering::BufferUsage::k_static:
 					mBufferUsage = GL_STATIC_DRAW;
 					break;
 			};
 			switch(mBufferDesc.eAccessFlag)
 			{
-				case Rendering::BufferAccess::k_write:
+				case CSRendering::BufferAccess::k_write:
 #ifdef CS_OPENGLVERSION_STANDARD
 					mBufferAccess = GL_WRITE_ONLY;
 #elif defined CS_OPENGLVERSION_ES
 					mBufferAccess = GL_WRITE_ONLY_OES;
 #endif
 					break;
-				case Rendering::BufferAccess::k_read:
+				case CSRendering::BufferAccess::k_read:
 #ifdef CS_OPENGLVERSION_STANDARD
 					mBufferAccess = GL_WRITE_ONLY;
 #elif defined CS_OPENGLVERSION_ES
 					mBufferAccess = GL_WRITE_ONLY_OES;
 #endif
 					break;
-				case Rendering::BufferAccess::k_readWrite:
+				case CSRendering::BufferAccess::k_readWrite:
 				default:
 #ifdef CS_OPENGLVERSION_STANDARD
 					mBufferAccess = GL_WRITE_ONLY;
@@ -117,7 +117,7 @@ namespace ChilliSource
 		{
 			if(mbMapBufferAvailable)
 			{
-				if (mBufferDesc.eUsageFlag == Rendering::BufferUsage::k_dynamic)
+				if (mBufferDesc.eUsageFlag == CSRendering::BufferUsage::k_dynamic)
 				{
 					glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, nullptr, mBufferUsage);
 				}

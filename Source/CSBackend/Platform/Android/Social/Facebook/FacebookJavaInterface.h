@@ -13,7 +13,7 @@
 
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -27,7 +27,7 @@ namespace ChilliSource
 			FacebookJavaInterface();
 
 			CS_DECLARE_NAMEDTYPE(FacebookJavaInterface);
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
 
 			//--------------------------------------------------------------------------------------
 			/// Set Authentication System

@@ -46,7 +46,7 @@ namespace ChilliSource
         KeyboardUPtr Keyboard::Create()
         {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return KeyboardUPtr(new Android::Keyboard());
+            return KeyboardUPtr(new CSBackend::Android::Keyboard());
 #elif defined CS_TARGETPLATFORM_IOS
             return KeyboardUPtr(new iOS::Keyboard());
 #else

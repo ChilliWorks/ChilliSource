@@ -38,7 +38,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool SpriteComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool SpriteComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
 			return  (inInterfaceID == SpriteComponent::InterfaceID) || 
                     (inInterfaceID == RenderComponent::InterfaceID) ||
@@ -345,7 +345,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Upper Left Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::Vector4 & SpriteComponent::GetUpperLeftCornerPos()
+		const CSCore::Vector4 & SpriteComponent::GetUpperLeftCornerPos()
         {
 			if (!mbCornerPosCacheValid)
             {
@@ -357,7 +357,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Lower Left Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::Vector4 & SpriteComponent::GetLowerLeftCornerPos()
+		const CSCore::Vector4 & SpriteComponent::GetLowerLeftCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -369,7 +369,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Upper Right Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::Vector4 & SpriteComponent::GetUpperRightCornerPos()
+		const CSCore::Vector4 & SpriteComponent::GetUpperRightCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -381,7 +381,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Lower Right Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::Vector4 & SpriteComponent::GetLowerRightCornerPos()
+		const CSCore::Vector4 & SpriteComponent::GetLowerRightCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {

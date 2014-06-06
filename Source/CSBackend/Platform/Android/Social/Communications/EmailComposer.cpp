@@ -36,7 +36,7 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace Android
 	{
@@ -54,9 +54,9 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------
 		//-------------------------------------------------------
-		bool EmailComposer::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool EmailComposer::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == Social::EmailComposer::InterfaceID || in_interfaceId == EmailComposer::InterfaceID);
+			return (in_interfaceId == ChilliSource::Social::EmailComposer::InterfaceID || in_interfaceId == EmailComposer::InterfaceID);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -64,7 +64,7 @@ namespace ChilliSource
 				const SendResultDelegate& in_callback)
 		{
 			Attachment emptyAttachment;
-			emptyAttachment.m_storageLocation = Core::StorageLocation::k_none;
+			emptyAttachment.m_storageLocation = CSCore::StorageLocation::k_none;
 			PresentWithAttachment(in_recipientAddresses, in_subject, in_contents, in_contentFormat, emptyAttachment, in_callback);
 		}
 		//-------------------------------------------------------
@@ -78,14 +78,14 @@ namespace ChilliSource
 			m_resultDelegate = in_callback;
 
 			std::string filename;
-			Core::FileSystem* fileSystem = Core::Application::Get()->GetFileSystem();
+			CSCore::FileSystem* fileSystem = CSCore::Application::Get()->GetFileSystem();
 			if (in_attachment.m_filename.size() > 0)
 			{
-				if (in_attachment.m_storageLocation == Core::StorageLocation::k_package || (in_attachment.m_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_attachment.m_filename) == false))
+				if (in_attachment.m_storageLocation == CSCore::StorageLocation::k_package || (in_attachment.m_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_attachment.m_filename) == false))
 				{
-					fileSystem->CreateDirectoryPath(Core::StorageLocation::k_cache, k_tempAttachmentDirectory);
-					fileSystem->CopyFile(in_attachment.m_storageLocation, in_attachment.m_filename, Core::StorageLocation::k_cache, k_tempAttachmentDirectory + in_attachment.m_filename);
-					filename = fileSystem->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_cache) + k_tempAttachmentDirectory + in_attachment.m_filename;
+					fileSystem->CreateDirectoryPath(CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory);
+					fileSystem->CopyFile(in_attachment.m_storageLocation, in_attachment.m_filename, CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory + in_attachment.m_filename);
+					filename = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_cache) + k_tempAttachmentDirectory + in_attachment.m_filename;
 				}
 				else
 				{
@@ -93,7 +93,7 @@ namespace ChilliSource
 				}
 			}
 
-			m_javaInterface->Present(in_recipientAddresses, in_subject, in_contents, (in_contentFormat == ContentFormat::k_html), filename, Core::MakeDelegate(this, &EmailComposer::OnEmailClosed));
+			m_javaInterface->Present(in_recipientAddresses, in_subject, in_contents, (in_contentFormat == ContentFormat::k_html), filename, CSCore::MakeDelegate(this, &EmailComposer::OnEmailClosed));
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -147,7 +147,7 @@ namespace ChilliSource
         //------------------------------------------------------
         void EmailComposer::OnDestroy()
         {
-        	Core::Application::Get()->GetFileSystem()->DeleteDirectory(Core::StorageLocation::k_cache, k_tempAttachmentDirectory);
+        	CSCore::Application::Get()->GetFileSystem()->DeleteDirectory(CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory);
         	m_javaInterface.reset();
         }
 	}

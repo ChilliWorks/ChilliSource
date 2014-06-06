@@ -17,7 +17,7 @@
 
 #include <FacebookSDK/FacebookSDK.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
 	{
@@ -28,7 +28,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //------------------------------------------------
-		class FacebookAuthenticationSystem final : public Social::FacebookAuthenticationSystem
+		class FacebookAuthenticationSystem final : public ChilliSource::Social::FacebookAuthenticationSystem
 		{
 		public:
 
@@ -41,7 +41,7 @@ namespace ChilliSource
             ///
             /// @return Whether the interface ID matches this object
             //----------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //------------------------------------------------
             /// Log the user into Facebook with the given
             /// read permissions. If no permissions are specified
@@ -115,7 +115,7 @@ namespace ChilliSource
 			
 		private:
             
-            friend Social::FacebookAuthenticationSystemUPtr Social::FacebookAuthenticationSystem::Create();
+            friend ChilliSource::Social::FacebookAuthenticationSystemUPtr ChilliSource::Social::FacebookAuthenticationSystem::Create();
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
