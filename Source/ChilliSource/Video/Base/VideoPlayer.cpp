@@ -46,7 +46,7 @@ namespace ChilliSource
         VideoPlayerUPtr VideoPlayer::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return VideoPlayerUPtr(new iOS::VideoPlayer());
+            return VideoPlayerUPtr(new CSBackend::iOS::VideoPlayer());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
             return VideoPlayerUPtr(new CSBackend::Android::VideoPlayer());

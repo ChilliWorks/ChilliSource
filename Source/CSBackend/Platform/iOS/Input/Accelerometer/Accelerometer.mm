@@ -32,7 +32,7 @@
 
 #import <CoreMotion/CoreMotion.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
 	{

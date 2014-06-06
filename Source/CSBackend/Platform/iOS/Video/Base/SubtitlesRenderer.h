@@ -29,7 +29,7 @@
     CADisplayLink* mpDisplayLink;
     CSCore::Screen* m_screen;
     CSVideo::SubtitlesCSPtr mpSubtitles;
-    ChilliSource::iOS::VideoPlayer* m_videoPlayer;
+    CSBackend::iOS::VideoPlayer* m_videoPlayer;
     std::unordered_map<const CSVideo::Subtitles::Subtitle*, UITextView*> maTextViewMap;
     std::vector<const CSVideo::Subtitles::Subtitle*> maSubtitlesToRemove;
     TimeIntervalMs mCurrentTimeMS;
@@ -43,7 +43,7 @@
 /// @param The view.
 /// @param The subtitles.
 //--------------------------------------------------------
--(id) initWithVideoPlayer:(ChilliSource::iOS::VideoPlayer*)in_videoPlayer view:(UIView*)inpView andSubtitles:(const CSVideo::SubtitlesCSPtr&)in_subtitles;
+-(id) initWithVideoPlayer:(CSBackend::iOS::VideoPlayer*)in_videoPlayer view:(UIView*)inpView andSubtitles:(const CSVideo::SubtitlesCSPtr&)in_subtitles;
 //--------------------------------------------------------
 /// On Update
 ///

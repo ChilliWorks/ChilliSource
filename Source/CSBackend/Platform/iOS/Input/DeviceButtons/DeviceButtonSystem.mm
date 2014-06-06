@@ -30,7 +30,7 @@
 
 #import <CSBackend/Platform/iOS/Input/DeviceButtons/DeviceButtonSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
 	{

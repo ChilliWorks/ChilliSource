@@ -28,16 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
+#import <ChilliSource/ChilliSource.h>
 #import <GLKit/GLKit.h>
 #import <UIKit/UIKit.h>
 
-namespace CSBackend
-{
-    namespace Core
-    {
-        class Application;
-    }
-}
 //--------------------------------------------------------------------
 /// iOS application delegate. This receieves events from the OS
 /// and controls the lifecycle and view hierarchy of the application.

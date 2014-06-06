@@ -30,7 +30,7 @@ namespace ChilliSource
         IAPSystemUPtr IAPSystem::Create(const Core::ParamDictionary& inParams)
         {
 #ifdef CS_TARGETPLATFORM_IOS
-        	return IAPSystemUPtr(new iOS::IAPSystem());
+        	return IAPSystemUPtr(new CSBackend::iOS::IAPSystem());
 #elif defined(CS_TARGETPLATFORM_ANDROID)
 #	ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
         	return IAPSystemUPtr(new CSBackend::Android::GooglePlayIAPSystem(inParams));

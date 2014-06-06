@@ -28,7 +28,7 @@ namespace ChilliSource
         LocalNotificationSystemUPtr LocalNotificationSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return LocalNotificationSystemUPtr(new iOS::LocalNotificationSystem());
+            return LocalNotificationSystemUPtr(new CSBackend::iOS::LocalNotificationSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
             return LocalNotificationSystemUPtr(new CSBackend::Android::LocalNotificationSystem());

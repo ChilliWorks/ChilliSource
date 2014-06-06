@@ -155,14 +155,14 @@ namespace CSBackend
         Device::Device()
 			: m_locale(k_defaultLocale), m_language(k_defaultLanguage)
         {
-			m_model = Windows::GetDeviceModel();
-			m_modelType = Windows::GetDeviceModelType();
-			m_manufacturer = Windows::GetDeviceManufacturer();
-			m_locale = Windows::GetLocale();
-			m_language = Windows::ParseLanguageFromLocale(m_locale);
-			m_osVersion = Windows::GetOSVersion();
-			m_udid = Windows::GetUDID();
-            m_numCPUCores = Windows::GetNumberOfCPUCores();
+			m_model = CSBackend::Windows::GetDeviceModel();
+			m_modelType = CSBackend::Windows::GetDeviceModelType();
+			m_manufacturer = CSBackend::Windows::GetDeviceManufacturer();
+			m_locale = CSBackend::Windows::GetLocale();
+			m_language = CSBackend::Windows::ParseLanguageFromLocale(m_locale);
+			m_osVersion = CSBackend::Windows::GetOSVersion();
+			m_udid = CSBackend::Windows::GetUDID();
+            m_numCPUCores = CSBackend::Windows::GetNumberOfCPUCores();
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

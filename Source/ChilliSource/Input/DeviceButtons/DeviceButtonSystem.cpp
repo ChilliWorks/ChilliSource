@@ -52,9 +52,9 @@ namespace ChilliSource
 #if defined CS_TARGETPLATFORM_ANDROID
             return DeviceButtonSystemUPtr(new CSBackend::Android::DeviceButtonSystem());
 #elif defined CS_TARGETPLATFORM_IOS
-            return DeviceButtonSystemUPtr(new iOS::DeviceButtonSystem());
+            return DeviceButtonSystemUPtr(new CSBackend::iOS::DeviceButtonSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return DeviceButtonSystemUPtr(new Windows::DeviceButtonSystem());
+            return DeviceButtonSystemUPtr(new CSBackend::Windows::DeviceButtonSystem());
 #else
             return nullptr;
 #endif

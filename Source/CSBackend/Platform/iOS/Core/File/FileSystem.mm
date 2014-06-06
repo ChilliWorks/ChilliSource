@@ -19,7 +19,7 @@
 #import <sys/types.h>
 #import <sys/sysctl.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS 
 	{
@@ -537,7 +537,7 @@ namespace ChilliSource
             }
             
             //return whether or not the file exists
-			return iOS::DoesFileExist(CSCore::StringUtils::StandardisePath(path));
+			return CSBackend::iOS::DoesFileExist(CSCore::StringUtils::StandardisePath(path));
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
@@ -560,7 +560,7 @@ namespace ChilliSource
                 const std::string* resourceDirectories = GetResourceDirectories();
                 for (u32 i = 0; i < 3; ++i)
                 {
-                    if(iOS::DoesDirectoryExist(m_bundlePath + resourceDirectories[i] + in_directoryPath))
+                    if(CSBackend::iOS::DoesDirectoryExist(m_bundlePath + resourceDirectories[i] + in_directoryPath))
                     {
                         return true;
                     }
@@ -584,7 +584,7 @@ namespace ChilliSource
             }
             
             //return whether or not the dir exists
-			return iOS::DoesDirectoryExist(CSCore::StringUtils::StandardisePath(path));
+			return CSBackend::iOS::DoesDirectoryExist(CSCore::StringUtils::StandardisePath(path));
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
@@ -640,7 +640,7 @@ namespace ChilliSource
                     case CSCore::StorageLocation::k_DLC:
                     {
                         std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
-                        if(iOS::DoesFileExist(filePath) == true)
+                        if(CSBackend::iOS::DoesFileExist(filePath) == true)
                         {
                             return filePath;
                         }
@@ -683,7 +683,7 @@ namespace ChilliSource
                     case CSCore::StorageLocation::k_DLC:
                     {
                         std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
-                        if(iOS::DoesDirectoryExist(filePath) == true)
+                        if(CSBackend::iOS::DoesDirectoryExist(filePath) == true)
                         {
                             return filePath;
                         }
@@ -795,11 +795,11 @@ namespace ChilliSource
         {
             if(in_isDirectory == true)
             {
-                return iOS::DoesDirectoryExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path));
+                return CSBackend::iOS::DoesDirectoryExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path));
             }
             else
             {
-                return iOS::DoesFileExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path));
+                return CSBackend::iOS::DoesFileExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path));
             }
         }
         //--------------------------------------------------------------

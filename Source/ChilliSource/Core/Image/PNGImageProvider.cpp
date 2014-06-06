@@ -49,13 +49,13 @@ namespace ChilliSource
         PNGImageProviderUPtr PNGImageProvider::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return PNGImageProviderUPtr(new iOS::PNGImageProvider());
+            return PNGImageProviderUPtr(new CSBackend::iOS::PNGImageProvider());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
             return PNGImageProviderUPtr(new CSBackend::Android::PNGImageProvider());
 #endif
 #ifdef CS_TARGETPLATFORM_WINDOWS
-            return PNGImageProviderUPtr(new Windows::PNGImageProvider());
+            return PNGImageProviderUPtr(new CSBackend::Windows::PNGImageProvider());
 #endif
         }
     }

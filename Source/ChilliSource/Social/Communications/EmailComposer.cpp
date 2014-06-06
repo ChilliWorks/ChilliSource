@@ -46,9 +46,9 @@ namespace ChilliSource
         EmailComposerUPtr EmailComposer::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            if (iOS::EmailComposer::IsSupportedByDevice() == true)
+            if (CSBackend::iOS::EmailComposer::IsSupportedByDevice() == true)
             {
-                return EmailComposerUPtr(new iOS::EmailComposer());
+                return EmailComposerUPtr(new CSBackend::iOS::EmailComposer());
             }
             else
             {

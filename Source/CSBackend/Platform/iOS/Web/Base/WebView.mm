@@ -42,7 +42,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/CALayer.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
 	{

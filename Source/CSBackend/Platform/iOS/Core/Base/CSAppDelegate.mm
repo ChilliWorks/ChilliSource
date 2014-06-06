@@ -102,7 +102,7 @@ CSAppDelegate* singletonInstance = nil;
         [delegate application:in_application didFinishLaunchingWithOptions:in_launchingOptions];
     }
     
-    ChilliSource::iOS::LocalNotificationSystem::ApplicationDidFinishLaunchingWithOptions(in_application, in_launchingOptions);
+    CSBackend::iOS::LocalNotificationSystem::ApplicationDidFinishLaunchingWithOptions(in_application, in_launchingOptions);
     
 	return YES;
 }
@@ -306,7 +306,7 @@ CSAppDelegate* singletonInstance = nil;
         [delegate application:in_application didReceiveLocalNotification:in_notification];
     }
     
-    ChilliSource::iOS::LocalNotificationSystem::ApplicationDidReceiveLocalNotification(in_application, in_notification);
+    CSBackend::iOS::LocalNotificationSystem::ApplicationDidReceiveLocalNotification(in_application, in_notification);
 }
 
 #pragma mark -
@@ -328,7 +328,7 @@ CSAppDelegate* singletonInstance = nil;
         [delegate application:in_application didRegisterForRemoteNotificationsWithDeviceToken:in_deviceToken];
     }
     
-	ChilliSource::iOS::RemoteNotificationSystem* remoteNotificationSystem = CSCore::Application::Get()->GetSystem<ChilliSource::iOS::RemoteNotificationSystem>();
+	CSBackend::iOS::RemoteNotificationSystem* remoteNotificationSystem = CSCore::Application::Get()->GetSystem<CSBackend::iOS::RemoteNotificationSystem>();
     if(nullptr != remoteNotificationSystem)
     {
         CS_LOG_WARNING("Received new remote notification token");
@@ -369,7 +369,7 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)application:(UIApplication*)in_application didReceiveRemoteNotification:(NSDictionary*)in_userInfo
 {
-	ChilliSource::iOS::RemoteNotificationSystem* remoteNotificationSystem = CSCore::Application::Get()->GetSystem<ChilliSource::iOS::RemoteNotificationSystem>();
+	CSBackend::iOS::RemoteNotificationSystem* remoteNotificationSystem = CSCore::Application::Get()->GetSystem<CSBackend::iOS::RemoteNotificationSystem>();
     if(nullptr != remoteNotificationSystem)
     {
         CS_LOG_VERBOSE("Received remote notification");

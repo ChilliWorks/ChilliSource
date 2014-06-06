@@ -36,7 +36,7 @@
 
 //---------------------------------------------------------
 //---------------------------------------------------------
--(VirtualKeyboardDelegate*) initWithKeyboard:(ChilliSource::iOS::Keyboard*) keyboardSystem
+-(VirtualKeyboardDelegate*) initWithKeyboard:(CSBackend::iOS::Keyboard*) keyboardSystem
 {
     if(self = [super init])
     {

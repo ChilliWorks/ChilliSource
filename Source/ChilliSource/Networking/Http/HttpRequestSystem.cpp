@@ -32,13 +32,13 @@ namespace ChilliSource
         HttpRequestSystemUPtr HttpRequestSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return HttpRequestSystemUPtr(new iOS::HttpRequestSystem());
+            return HttpRequestSystemUPtr(new CSBackend::iOS::HttpRequestSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
             return HttpRequestSystemUPtr(new CSBackend::Android::HttpRequestSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_WINDOWS
-            return HttpRequestSystemUPtr(new Windows::HttpRequestSystem());
+            return HttpRequestSystemUPtr(new CSBackend::Windows::HttpRequestSystem());
 #endif
             return nullptr;
         }

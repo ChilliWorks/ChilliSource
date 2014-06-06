@@ -16,7 +16,7 @@
 #import <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #import <ChilliSource/Core/String/StringUtils.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace iOS
     {

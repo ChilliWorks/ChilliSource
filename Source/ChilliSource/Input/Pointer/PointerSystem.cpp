@@ -57,9 +57,9 @@ namespace ChilliSource
 #if defined CS_TARGETPLATFORM_ANDROID
             return PointerSystemUPtr(new CSBackend::Android::PointerSystem());
 #elif defined CS_TARGETPLATFORM_IOS
-            return PointerSystemUPtr(new iOS::PointerSystem());
+            return PointerSystemUPtr(new CSBackend::iOS::PointerSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return PointerSystemUPtr(new Windows::PointerSystem());
+            return PointerSystemUPtr(new CSBackend::Windows::PointerSystem());
 #else
             return nullptr;
 #endif

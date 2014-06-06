@@ -172,7 +172,7 @@ namespace ChilliSource
             NSLog(@"[Chilli Source] %@", message);
             [message release];
 #elif defined (CS_TARGETPLATFORM_WINDOWS)
-			OutputDebugString(Windows::WindowsStringUtils::UTF8ToUTF16("[Chilli Source] " + in_message + "\n").c_str());
+			OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[Chilli Source] " + in_message + "\n").c_str());
 #endif
             
 #ifdef CS_ENABLE_LOGTOFILE

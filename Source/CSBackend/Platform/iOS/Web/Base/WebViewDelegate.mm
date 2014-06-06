@@ -35,7 +35,7 @@
 @implementation WebViewDelegate
 //----------------------------------------------------
 //----------------------------------------------------
--(id) initWithSystem:(ChilliSource::iOS::WebView*)system
+-(id) initWithSystem:(CSBackend::iOS::WebView*)system
 {
     if (self = [super init])
     {

@@ -40,7 +40,7 @@ namespace CSBackend
     UITapGestureRecognizer* mpRecogniser;
     CADisplayLink* mpDisplayLink;
     bool mbReceivedTap;
-    ChilliSource::iOS::VideoPlayerTappedDelegate mTappedDelegate;
+    CSBackend::iOS::VideoPlayerTappedDelegate mTappedDelegate;
     UIView* mpView;
 }
 //--------------------------------------------------------
@@ -58,7 +58,7 @@ namespace CSBackend
 /// @param the view.
 /// @param the tapped delegate.
 //--------------------------------------------------------
--(void) SetupWithView:(UIView*)inpView AndDelegate:(ChilliSource::iOS::VideoPlayerTappedDelegate)inTappedDelegate;
+-(void) SetupWithView:(UIView*)inpView AndDelegate:(CSBackend::iOS::VideoPlayerTappedDelegate)inTappedDelegate;
 //--------------------------------------------------------
 /// On Tap
 ///

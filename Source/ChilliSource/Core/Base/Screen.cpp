@@ -52,9 +52,9 @@ namespace ChilliSource
 #if defined CS_TARGETPLATFORM_ANDROID
             return ScreenUPtr(new CSBackend::Android::Screen());
 #elif defined CS_TARGETPLATFORM_IOS
-            return ScreenUPtr(new iOS::Screen());
+            return ScreenUPtr(new CSBackend::iOS::Screen());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return ScreenUPtr(new Windows::Screen());
+            return ScreenUPtr(new CSBackend::Windows::Screen());
 #else
             return nullptr;
 #endif

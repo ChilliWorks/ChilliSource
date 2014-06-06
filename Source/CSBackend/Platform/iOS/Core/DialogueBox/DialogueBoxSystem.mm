@@ -19,7 +19,7 @@
 
 #import <UIKit/UIKit.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
 	{

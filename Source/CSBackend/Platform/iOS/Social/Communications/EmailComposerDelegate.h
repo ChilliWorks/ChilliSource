@@ -42,7 +42,7 @@
 //---------------------------------------------------------
 @interface EmailComposerDelegate : NSObject<MFMailComposeViewControllerDelegate>
 {
-	ChilliSource::iOS::EmailComposer* emailComposer;
+	CSBackend::iOS::EmailComposer* emailComposer;
 }
 //-------------------------------------------------------
 /// Constructor
@@ -53,7 +53,7 @@
 ///
 /// @return The constructed object.
 //-------------------------------------------------------
--(id) initWithSystem:(ChilliSource::iOS::EmailComposer*)system;
+-(id) initWithSystem:(CSBackend::iOS::EmailComposer*)system;
 
 @end
 

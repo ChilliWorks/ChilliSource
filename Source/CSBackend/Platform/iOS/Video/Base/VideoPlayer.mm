@@ -45,7 +45,7 @@
 #import <AudioToolbox/AudioSession.h>
 #import <MediaPlayer/MediaPlayer.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace iOS
     {

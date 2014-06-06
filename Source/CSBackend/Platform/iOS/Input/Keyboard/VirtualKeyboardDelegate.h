@@ -44,7 +44,7 @@
 //---------------------------------------------------------
 @interface VirtualKeyboardDelegate : NSObject<UITextFieldDelegate>
 {
-    ChilliSource::iOS::Keyboard* keyboard;
+    CSBackend::iOS::Keyboard* keyboard;
 }
 //---------------------------------------------------------
 /// Constructor.
@@ -55,7 +55,7 @@
 ///
 /// @return The new instance of the delegate.
 //---------------------------------------------------------
--(VirtualKeyboardDelegate*) initWithKeyboard:(ChilliSource::iOS::Keyboard*) keyboardSystem;
+-(VirtualKeyboardDelegate*) initWithKeyboard:(CSBackend::iOS::Keyboard*) keyboardSystem;
 
 @end
 

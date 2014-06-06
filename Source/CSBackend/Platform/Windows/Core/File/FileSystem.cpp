@@ -256,7 +256,7 @@ namespace CSBackend
 			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
 
 			std::string directoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
-			if (Windows::DoesDirectoryExist(directoryPath) == false)
+			if (CSBackend::Windows::DoesDirectoryExist(directoryPath) == false)
 			{
 				if (WindowsFileUtils::WindowsCreateDirectory(WindowsStringUtils::ConvertStandardPathToWindows(directoryPath).c_str(), NULL) == FALSE)
 				{
@@ -359,7 +359,7 @@ namespace CSBackend
 			std::string directoryPath = GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath);
 			if (directoryPath != "")
 			{
-				if (Windows::DeleteDirectory(directoryPath) == false)
+				if (CSBackend::Windows::DeleteDirectory(directoryPath) == false)
 				{
 					CS_LOG_ERROR("File System: Failed to delete directory '" + in_directoryPath + "'");
 					return false;
@@ -426,7 +426,7 @@ namespace CSBackend
 					const std::string* resourceDirectories = GetResourceDirectories();
 					for (u32 i = 0; i < 3; ++i)
 					{
-						if (Windows::DoesFileExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_filePath) == true)
+						if (CSBackend::Windows::DoesFileExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_filePath) == true)
 						{
 							return true;
 						}
@@ -445,7 +445,7 @@ namespace CSBackend
 				default:
 				{
 					std::string path = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath);
-					return Windows::DoesFileExist(path);
+					return CSBackend::Windows::DoesFileExist(path);
 				}
 			}
 		}
@@ -460,7 +460,7 @@ namespace CSBackend
 					const std::string* resourceDirectories = GetResourceDirectories();
 					for (u32 i = 0; i < 3; ++i)
 					{
-						if (Windows::DoesDirectoryExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_directoryPath) == true)
+						if (CSBackend::Windows::DoesDirectoryExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_directoryPath) == true)
 						{
 							return true;
 						}
@@ -479,7 +479,7 @@ namespace CSBackend
 				default:
 				{
 					std::string path = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath);
-					return Windows::DoesDirectoryExist(path);
+					return CSBackend::Windows::DoesDirectoryExist(path);
 				}
 			}
 		}
@@ -532,7 +532,7 @@ namespace CSBackend
 						for (u32 i = 0; i < 3; ++i)
 						{
 							absoluteFilePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_filePath);
-							if (Windows::DoesFileExist(absoluteFilePath) == true)
+							if (CSBackend::Windows::DoesFileExist(absoluteFilePath) == true)
 							{
 								break;
 							}
@@ -543,7 +543,7 @@ namespace CSBackend
 					case CSCore::StorageLocation::k_DLC:
 					{
 						std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
-						if (Windows::DoesFileExist(filePath) == true)
+						if (CSBackend::Windows::DoesFileExist(filePath) == true)
 						{
 							return filePath;
 						}
@@ -574,7 +574,7 @@ namespace CSBackend
 						for (u32 i = 0; i < 3; ++i)
 						{
 							absoluteDirectoryPath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_directoryPath);
-							if (Windows::DoesDirectoryExist(absoluteDirectoryPath) == true)
+							if (CSBackend::Windows::DoesDirectoryExist(absoluteDirectoryPath) == true)
 							{
 								break;
 							}
@@ -585,7 +585,7 @@ namespace CSBackend
 					case CSCore::StorageLocation::k_DLC:
 					{
 						std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
-						if (Windows::DoesDirectoryExist(filePath) == true)
+						if (CSBackend::Windows::DoesDirectoryExist(filePath) == true)
 						{
 							return filePath;
 						}
@@ -608,11 +608,11 @@ namespace CSBackend
 			std::string path = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path);
 			if (in_isDirectory == true)
 			{
-				return Windows::DoesDirectoryExist(path);
+				return CSBackend::Windows::DoesDirectoryExist(path);
 			}
 			else
 			{
-				return Windows::DoesFileExist(path);
+				return CSBackend::Windows::DoesFileExist(path);
 			}
 		}
 		//------------------------------------------------------------

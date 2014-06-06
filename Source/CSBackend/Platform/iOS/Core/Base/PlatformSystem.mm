@@ -40,7 +40,7 @@
 #import <mach/mach.h>
 #import <mach/mach_time.h>
 
-namespace ChilliSource 
+namespace CSBackend 
 {
 	namespace iOS
 	{

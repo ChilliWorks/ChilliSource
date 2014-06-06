@@ -50,11 +50,11 @@ namespace ChilliSource
         PlatformSystemUPtr PlatformSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return PlatformSystemUPtr(new iOS::PlatformSystem());
+            return PlatformSystemUPtr(new CSBackend::iOS::PlatformSystem());
 #elif defined CS_TARGETPLATFORM_ANDROID
             return PlatformSystemUPtr(new CSBackend::Android::PlatformSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-			return PlatformSystemUPtr(new Windows::PlatformSystem());
+			return PlatformSystemUPtr(new CSBackend::Windows::PlatformSystem());
 #else
             return nullptr;
 #endif

@@ -19,7 +19,7 @@
 //------------------------------------------------------------
 @interface DialogueBoxListener : NSObject
 {
-    ChilliSource::iOS::DialogueBoxSystem* dialogueBoxSystem;
+    CSBackend::iOS::DialogueBoxSystem* dialogueBoxSystem;
 }
 //------------------------------------------------------------
 /// Constructor
@@ -28,7 +28,7 @@
 ///
 /// @param The dialogue box system.
 //------------------------------------------------------------
--(id) initWithDialogueBoxSystem:(ChilliSource::iOS::DialogueBoxSystem*)system;
+-(id) initWithDialogueBoxSystem:(CSBackend::iOS::DialogueBoxSystem*)system;
 //------------------------------------------------------------
 /// Listens for callbacks from alert views.
 ///

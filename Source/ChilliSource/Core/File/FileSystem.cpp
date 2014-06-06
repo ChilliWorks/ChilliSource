@@ -84,13 +84,13 @@ namespace ChilliSource
         FileSystemUPtr FileSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return FileSystemUPtr(new iOS::FileSystem());
+            return FileSystemUPtr(new CSBackend::iOS::FileSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
             return FileSystemUPtr(new CSBackend::Android::FileSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_WINDOWS
-            return FileSystemUPtr(new Windows::FileSystem());
+            return FileSystemUPtr(new CSBackend::Windows::FileSystem());
 #endif
             return nullptr;
         }

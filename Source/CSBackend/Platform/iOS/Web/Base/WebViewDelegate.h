@@ -41,7 +41,7 @@
 //---------------------------------------------------------
 @interface WebViewDelegate : NSObject<UIWebViewDelegate>
 {
-	ChilliSource::iOS::WebView* webViewSystem;
+	CSBackend::iOS::WebView* webViewSystem;
 }
 //----------------------------------------------------
 /// Constructor for creating the delegate with the
@@ -51,7 +51,7 @@
 ///
 /// @param The web view system.
 //----------------------------------------------------
--(id) initWithSystem:(ChilliSource::iOS::WebView*)system;
+-(id) initWithSystem:(CSBackend::iOS::WebView*)system;
 //----------------------------------------------------
 /// Called when the dismiss button is pressed. This
 /// is for internal use and should not be called

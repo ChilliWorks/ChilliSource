@@ -12,8 +12,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import <ChilliSource/Core/Base/Screen.h>
 
-using namespace ChilliSource;
-using namespace ChilliSource::iOS;
+using namespace CSBackend;
+using namespace CSBackend::iOS;
 
 @implementation CVideoPlayerTapListener
 //--------------------------------------------------------

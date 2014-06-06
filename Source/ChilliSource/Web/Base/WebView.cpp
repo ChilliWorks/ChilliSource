@@ -47,7 +47,7 @@ namespace ChilliSource
         WebViewUPtr WebView::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return WebViewUPtr(new iOS::WebView());
+            return WebViewUPtr(new CSBackend::iOS::WebView());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
             return WebViewUPtr(new CSBackend::Android::WebView());

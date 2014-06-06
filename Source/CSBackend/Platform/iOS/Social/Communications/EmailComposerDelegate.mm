@@ -35,7 +35,7 @@
 @implementation EmailComposerDelegate
 //-------------------------------------------------------
 //-------------------------------------------------------
--(id) initWithSystem:(ChilliSource::iOS::EmailComposer*)system
+-(id) initWithSystem:(CSBackend::iOS::EmailComposer*)system
 {
 	if (self = [super init])
     {

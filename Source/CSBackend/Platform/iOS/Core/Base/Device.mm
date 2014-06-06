@@ -37,7 +37,7 @@
 #import <sys/types.h>
 #import <sys/sysctl.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace iOS
     {
@@ -176,14 +176,14 @@ namespace ChilliSource
         Device::Device()
             : m_locale("en_GB"), m_language("en")
         {
-            m_model = iOS::GetDeviceModel();
-            m_modelType = iOS::GetDeviceModelType();
-            m_manufacturer = iOS::GetDeviceManufacturer();
-            m_locale = iOS::GetLocale();
-            m_language = iOS::GetLanguage();
-            m_osVersion = iOS::GetOSVersion();
-            m_udid = iOS::GetUDID();
-            m_numCPUCores = iOS::GetNumberOfCPUCores();
+            m_model = CSBackend::iOS::GetDeviceModel();
+            m_modelType = CSBackend::iOS::GetDeviceModelType();
+            m_manufacturer = CSBackend::iOS::GetDeviceManufacturer();
+            m_locale = CSBackend::iOS::GetLocale();
+            m_language = CSBackend::iOS::GetLanguage();
+            m_osVersion = CSBackend::iOS::GetOSVersion();
+            m_udid = CSBackend::iOS::GetUDID();
+            m_numCPUCores = CSBackend::iOS::GetNumberOfCPUCores();
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

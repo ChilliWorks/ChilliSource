@@ -48,9 +48,9 @@ namespace ChilliSource
 #if defined CS_TARGETPLATFORM_ANDROID
             return AccelerometerUPtr(new CSBackend::Android::Accelerometer());
 #elif defined CS_TARGETPLATFORM_IOS
-            if (iOS::Accelerometer::IsSupportedByDevice() == true)
+            if (CSBackend::iOS::Accelerometer::IsSupportedByDevice() == true)
             {
-                return AccelerometerUPtr(new iOS::Accelerometer());
+                return AccelerometerUPtr(new CSBackend::iOS::Accelerometer());
             }
             else
             {

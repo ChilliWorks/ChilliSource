@@ -15,7 +15,7 @@
 @implementation DialogueBoxListener
 //------------------------------------------------------------
 //------------------------------------------------------------
--(id) initWithDialogueBoxSystem:(ChilliSource::iOS::DialogueBoxSystem*)system
+-(id) initWithDialogueBoxSystem:(CSBackend::iOS::DialogueBoxSystem*)system
 {
     if (self = [super init])
     {

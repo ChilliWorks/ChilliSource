@@ -22,7 +22,7 @@
 @implementation CSubtitlesRenderer
 //--------------------------------------------------------
 //--------------------------------------------------------
--(id) initWithVideoPlayer:(ChilliSource::iOS::VideoPlayer*)in_videoPlayer view:(UIView*)inpView andSubtitles:(const CSVideo::SubtitlesCSPtr&)in_subtitles
+-(id) initWithVideoPlayer:(CSBackend::iOS::VideoPlayer*)in_videoPlayer view:(UIView*)inpView andSubtitles:(const CSVideo::SubtitlesCSPtr&)in_subtitles
 {
     if(!(self = [super init]))
 	{
@@ -174,22 +174,22 @@
 //--------------------------------------------------------
 /// Set Alignment
 //--------------------------------------------------------
--(void) SetAlignment:(UITextView*)inpView WithAnchor:(ChilliSource::CSRendering::AlignmentAnchor)ineAnchor
+-(void) SetAlignment:(UITextView*)inpView WithAnchor:(CSRendering::AlignmentAnchor)ineAnchor
 {
     inpView.textAlignment = [self TextAlignmentFromAnchor: ineAnchor];
     
     switch (ineAnchor)
     {
-        case ChilliSource::CSRendering::AlignmentAnchor::k_topLeft:
-        case ChilliSource::CSRendering::AlignmentAnchor::k_topCentre:
-        case ChilliSource::CSRendering::AlignmentAnchor::k_topRight:
+        case CSRendering::AlignmentAnchor::k_topLeft:
+        case CSRendering::AlignmentAnchor::k_topCentre:
+        case CSRendering::AlignmentAnchor::k_topRight:
         {
             inpView.contentOffset = (CGPoint){.x = 0.0f, .y = 0.0f};
             break;
         }
-        case ChilliSource::CSRendering::AlignmentAnchor::k_middleLeft:
-        case ChilliSource::CSRendering::AlignmentAnchor::k_middleCentre:
-        case ChilliSource::CSRendering::AlignmentAnchor::k_middleRight:
+        case CSRendering::AlignmentAnchor::k_middleLeft:
+        case CSRendering::AlignmentAnchor::k_middleCentre:
+        case CSRendering::AlignmentAnchor::k_middleRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
             f32 fContentSize = [inpView contentSize].height;
@@ -202,9 +202,9 @@
             break;
             break;
         }
-        case ChilliSource::CSRendering::AlignmentAnchor::k_bottomLeft:
-        case ChilliSource::CSRendering::AlignmentAnchor::k_bottomCentre:
-        case ChilliSource::CSRendering::AlignmentAnchor::k_bottomRight:
+        case CSRendering::AlignmentAnchor::k_bottomLeft:
+        case CSRendering::AlignmentAnchor::k_bottomCentre:
+        case CSRendering::AlignmentAnchor::k_bottomRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
             f32 fContentSize = [inpView contentSize].height;
@@ -224,21 +224,21 @@
 //--------------------------------------------------------
 /// Text Alignment From Anchor
 //--------------------------------------------------------
--(NSTextAlignment) TextAlignmentFromAnchor:(ChilliSource::CSRendering::AlignmentAnchor)ineAnchor
+-(NSTextAlignment) TextAlignmentFromAnchor:(CSRendering::AlignmentAnchor)ineAnchor
 {
     switch (ineAnchor)
     {
-        case ChilliSource::CSRendering::AlignmentAnchor::k_topLeft:
-        case ChilliSource::CSRendering::AlignmentAnchor::k_middleLeft:
-        case ChilliSource::CSRendering::AlignmentAnchor::k_bottomLeft:
+        case CSRendering::AlignmentAnchor::k_topLeft:
+        case CSRendering::AlignmentAnchor::k_middleLeft:
+        case CSRendering::AlignmentAnchor::k_bottomLeft:
             return NSTextAlignmentLeft;
-        case ChilliSource::CSRendering::AlignmentAnchor::k_topCentre:
-        case ChilliSource::CSRendering::AlignmentAnchor::k_middleCentre:
-        case ChilliSource::CSRendering::AlignmentAnchor::k_bottomCentre:
+        case CSRendering::AlignmentAnchor::k_topCentre:
+        case CSRendering::AlignmentAnchor::k_middleCentre:
+        case CSRendering::AlignmentAnchor::k_bottomCentre:
             return NSTextAlignmentCenter;
-        case ChilliSource::CSRendering::AlignmentAnchor::k_topRight:
-        case ChilliSource::CSRendering::AlignmentAnchor::k_middleRight:
-        case ChilliSource::CSRendering::AlignmentAnchor::k_bottomRight:
+        case CSRendering::AlignmentAnchor::k_topRight:
+        case CSRendering::AlignmentAnchor::k_middleRight:
+        case CSRendering::AlignmentAnchor::k_bottomRight:
             return NSTextAlignmentRight;
         default:
             CS_LOG_WARNING("Could not convert alignment anchor to NSTextAlignment.");

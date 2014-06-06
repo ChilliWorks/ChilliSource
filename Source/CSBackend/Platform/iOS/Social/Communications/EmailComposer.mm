@@ -36,7 +36,7 @@
 #import <ChilliSource/Core/File/FileSystem.h>
 #import <ChilliSource/Core/String/StringUtils.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
 	namespace iOS
     {
