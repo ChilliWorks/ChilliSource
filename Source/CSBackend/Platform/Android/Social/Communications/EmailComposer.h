@@ -45,7 +45,7 @@ namespace CSBackend
 		///
 		/// @author S Hendrie
 		//---------------------------------------------------------------
-		class EmailComposer final : public ChilliSource::Social::EmailComposer
+		class EmailComposer final : public CSSocial::EmailComposer
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(EmailComposer);
@@ -95,7 +95,7 @@ namespace CSBackend
             //-------------------------------------------------------
 			void Dismiss() override;
 		private:
-			friend ChilliSource::Social::EmailComposerUPtr ChilliSource::Social::EmailComposer::Create();
+			friend CSSocial::EmailComposerUPtr CSSocial::EmailComposer::Create();
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.

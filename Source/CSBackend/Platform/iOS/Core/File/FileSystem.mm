@@ -219,7 +219,7 @@ namespace ChilliSource
                     {
                         if (DoesDirectoryExist(*it) == true)
                         {
-                            std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
+                            std::string path = CSCore::StringUtils::StandardisePath(*it);
                             NSString* Dir = [NSString stringWithCString:path.c_str() encoding:NSASCIIStringEncoding];
                             NSError* error = nil;
                             
@@ -252,23 +252,23 @@ namespace ChilliSource
             m_documentsPath = RetrieveDocumentsPath();
             m_libraryPath = RetrieveLibraryPath();
             
-            CreateDirectoryPath(Core::StorageLocation::k_saveData, "");
-            CreateDirectoryPath(Core::StorageLocation::k_cache, "");
-            CreateDirectoryPath(Core::StorageLocation::k_DLC, "");
+            CreateDirectoryPath(CSCore::StorageLocation::k_saveData, "");
+            CreateDirectoryPath(CSCore::StorageLocation::k_cache, "");
+            CreateDirectoryPath(CSCore::StorageLocation::k_DLC, "");
             
             CreatePackageManifest();
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
-        bool FileSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool FileSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (Core::FileSystem::InterfaceID == in_interfaceId || FileSystem::InterfaceID == in_interfaceId);
+            return (CSCore::FileSystem::InterfaceID == in_interfaceId || FileSystem::InterfaceID == in_interfaceId);
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        Core::FileStreamUPtr FileSystem::CreateFileStream(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Core::FileMode in_fileMode) const
+        CSCore::FileStreamUPtr FileSystem::CreateFileStream(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, CSCore::FileMode in_fileMode) const
         {
-            Core::FileStreamUPtr fileStream = Core::FileStreamUPtr(new Core::FileStream());
+            CSCore::FileStreamUPtr fileStream = CSCore::FileStreamUPtr(new CSCore::FileStream());
             if (IsWriteMode(in_fileMode) == true)
             {
                 CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
@@ -286,7 +286,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool FileSystem::CreateDirectoryPath(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+        bool FileSystem::CreateDirectoryPath(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
         {
             CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
             
@@ -310,8 +310,8 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool FileSystem::CopyFile(Core::StorageLocation in_sourceStorageLocation, const std::string& in_sourceFilePath,
-                                   Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const
+        bool FileSystem::CopyFile(CSCore::StorageLocation in_sourceStorageLocation, const std::string& in_sourceFilePath,
+                                   CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const
         {
             CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
             
@@ -326,7 +326,7 @@ namespace ChilliSource
                 
                 //get the path to the file
                 std::string destinationFileName, destinationDirectoryPath;
-                Core::StringUtils::SplitFilename(in_destinationFilePath, destinationFileName, destinationDirectoryPath);
+                CSCore::StringUtils::SplitFilename(in_destinationFilePath, destinationFileName, destinationDirectoryPath);
                 
                 //create the output directory
                 CreateDirectoryPath(in_destinationStorageLocation, destinationDirectoryPath);
@@ -363,8 +363,8 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool FileSystem::CopyDirectory(Core::StorageLocation in_sourceStorageLocation, const std::string& in_sourceDirectoryPath,
-                                        Core::StorageLocation in_destinationStorageLocation, const std::string& in_destinationDirectoryPath) const
+        bool FileSystem::CopyDirectory(CSCore::StorageLocation in_sourceStorageLocation, const std::string& in_sourceDirectoryPath,
+                                        CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationDirectoryPath) const
         {
             CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
             
@@ -385,8 +385,8 @@ namespace ChilliSource
             else
             {
                 //copy each of these files individually
-                std::string sourcePath = Core::StringUtils::StandardisePath(in_sourceDirectoryPath);
-                std::string destPath = Core::StringUtils::StandardisePath(in_destinationDirectoryPath);
+                std::string sourcePath = CSCore::StringUtils::StandardisePath(in_sourceDirectoryPath);
+                std::string destPath = CSCore::StringUtils::StandardisePath(in_destinationDirectoryPath);
                 for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
                 {
                     if (CopyFile(in_sourceStorageLocation, sourcePath + *it, in_destinationStorageLocation, destPath + *it) == false)
@@ -400,7 +400,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool FileSystem::DeleteFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const
+        bool FileSystem::DeleteFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath) const
         {
             CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to delete from a read only storage location.");
             
@@ -427,7 +427,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool FileSystem::DeleteDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+        bool FileSystem::DeleteDirectory(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
         {
             CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to delete from a read only storage location.");
             
@@ -452,7 +452,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        std::vector<std::string> FileSystem::GetFilePaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
+        std::vector<std::string> FileSystem::GetFilePaths(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
         {
             std::vector<std::string> output;
             
@@ -479,7 +479,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        std::vector<std::string> FileSystem::GetDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
+        std::vector<std::string> FileSystem::GetDirectoryPaths(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
         {
             std::vector<std::string> output;
             
@@ -506,9 +506,9 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool FileSystem::DoesFileExist(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const
+        bool FileSystem::DoesFileExist(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath) const
         {
-            if(in_storageLocation == Core::StorageLocation::k_package)
+            if(in_storageLocation == CSCore::StorageLocation::k_package)
             {
                 const std::string* resourceDirectories = GetResourceDirectories();
                 for(u32 i = 0; i < 3; ++i)
@@ -526,18 +526,18 @@ namespace ChilliSource
             std::string path = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
             
             //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-            if (in_storageLocation == Core::StorageLocation::k_DLC)
+            if (in_storageLocation == CSCore::StorageLocation::k_DLC)
             {
                 if (DoesItemExistInDLCCache(in_filePath, false) == true)
                 {
                     return true;
                 }
                 
-                return DoesFileExist(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+                return DoesFileExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
             }
             
             //return whether or not the file exists
-			return iOS::DoesFileExist(Core::StringUtils::StandardisePath(path));
+			return iOS::DoesFileExist(CSCore::StringUtils::StandardisePath(path));
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
@@ -549,13 +549,13 @@ namespace ChilliSource
         //--------------------------------------------------------------
         bool FileSystem::DoesFileExistInPackageDLC(const std::string& in_filePath) const
         {
-            return DoesFileExist(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+            return DoesFileExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool FileSystem::DoesDirectoryExist(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+        bool FileSystem::DoesDirectoryExist(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
         {
-            if(in_storageLocation == Core::StorageLocation::k_package)
+            if(in_storageLocation == CSCore::StorageLocation::k_package)
             {
                 const std::string* resourceDirectories = GetResourceDirectories();
                 for (u32 i = 0; i < 3; ++i)
@@ -573,37 +573,37 @@ namespace ChilliSource
             std::string path = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
             
             //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-            if (in_storageLocation == Core::StorageLocation::k_DLC)
+            if (in_storageLocation == CSCore::StorageLocation::k_DLC)
             {
                 if (DoesItemExistInDLCCache(in_directoryPath, true) == true)
                 {
                     return true;
                 }
                 
-                return DoesDirectoryExist(Core::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
+                return DoesDirectoryExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
             }
             
             //return whether or not the dir exists
-			return iOS::DoesDirectoryExist(Core::StringUtils::StandardisePath(path));
+			return iOS::DoesDirectoryExist(CSCore::StringUtils::StandardisePath(path));
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        std::string FileSystem::GetAbsolutePathToStorageLocation(Core::StorageLocation in_storageLocation) const
+        std::string FileSystem::GetAbsolutePathToStorageLocation(CSCore::StorageLocation in_storageLocation) const
         {
             //get the storage location path
             std::string strStorageLocationPath;
             switch (in_storageLocation)
             {
-                case Core::StorageLocation::k_package:
+                case CSCore::StorageLocation::k_package:
                     strStorageLocationPath = m_bundlePath;
                     break;
-                case Core::StorageLocation::k_saveData:
+                case CSCore::StorageLocation::k_saveData:
                     strStorageLocationPath = m_documentsPath + k_saveDataPath;
                     break;
-                case Core::StorageLocation::k_cache:
+                case CSCore::StorageLocation::k_cache:
                     strStorageLocationPath = m_libraryPath + k_cachePath;
                     break;
-                case Core::StorageLocation::k_DLC:
+                case CSCore::StorageLocation::k_DLC:
                     strStorageLocationPath = m_libraryPath + k_dlcPath;
                     break;
                 default:
@@ -615,37 +615,37 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        std::string FileSystem::GetAbsolutePathToFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath) const
+        std::string FileSystem::GetAbsolutePathToFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath) const
         {
             if (DoesFileExist(in_storageLocation, in_filePath) == true)
             {
                 switch (in_storageLocation)
                 {
-                    case Core::StorageLocation::k_package:
+                    case CSCore::StorageLocation::k_package:
                     {
                         std::string absoluteFilePath;
                         for(u32 i = 0; i < 3; ++i)
                         {
                             const std::string* resourceDirectories = GetResourceDirectories();
-                            std::string filePath = Core::StringUtils::StandardisePath(resourceDirectories[i] + in_filePath);
+                            std::string filePath = CSCore::StringUtils::StandardisePath(resourceDirectories[i] + in_filePath);
                             if(DoesFileExistInPackage(filePath) == true)
                             {
-                                absoluteFilePath = GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + filePath;
+                                absoluteFilePath = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + filePath;
                                 break;
                             }
                         }
                         
                         return absoluteFilePath;
                     }
-                    case Core::StorageLocation::k_DLC:
+                    case CSCore::StorageLocation::k_DLC:
                     {
-                        std::string filePath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_filePath);
+                        std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
                         if(iOS::DoesFileExist(filePath) == true)
                         {
                             return filePath;
                         }
                         
-                        return GetAbsolutePathToFile(Core::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+                        return GetAbsolutePathToFile(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
                     }
                     default:
                     {
@@ -658,37 +658,37 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        std::string FileSystem::GetAbsolutePathToDirectory(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+        std::string FileSystem::GetAbsolutePathToDirectory(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
         {
             if (DoesDirectoryExist(in_storageLocation, in_directoryPath) == true)
             {
                 switch (in_storageLocation)
                 {
-                    case Core::StorageLocation::k_package:
+                    case CSCore::StorageLocation::k_package:
                     {
                         std::string absoluteDirectoryPath;
                         for(u32 i = 0; i < 3; ++i)
                         {
                             const std::string* resourceDirectories = GetResourceDirectories();
-                            std::string directoryPath = Core::StringUtils::StandardisePath(resourceDirectories[i] + in_directoryPath);
+                            std::string directoryPath = CSCore::StringUtils::StandardisePath(resourceDirectories[i] + in_directoryPath);
                             if(DoesDirectoryExistInPackage(directoryPath) == true)
                             {
-                                absoluteDirectoryPath = GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + directoryPath;
+                                absoluteDirectoryPath = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + directoryPath;
                                 break;
                             }
                         }
                         
                         return absoluteDirectoryPath;
                     }
-                    case Core::StorageLocation::k_DLC:
+                    case CSCore::StorageLocation::k_DLC:
                     {
-                        std::string filePath = Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_directoryPath);
+                        std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
                         if(iOS::DoesDirectoryExist(filePath) == true)
                         {
                             return filePath;
                         }
                         
-                        return GetAbsolutePathToDirectory(Core::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
+                        return GetAbsolutePathToDirectory(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
                     }
                     default:
                     {
@@ -725,7 +725,7 @@ namespace ChilliSource
                     {
                         std::string path([nsPath UTF8String]);
                         PackageManifestItem item;
-                        item.m_pathHash = Core::HashCRC32::GenerateHashCode(Core::StringUtils::StandardisePath(path));
+                        item.m_pathHash = CSCore::HashCRC32::GenerateHashCode(CSCore::StringUtils::StandardisePath(path));
                         item.m_isFile = (isDirectory == NO);
                         m_packageManifestItems.push_back(item);
                     }
@@ -744,7 +744,7 @@ namespace ChilliSource
         bool FileSystem::TryGetPackageManifestItem(const std::string& in_path, PackageManifestItem& out_manifestItem) const
         {
             PackageManifestItem searchItem;
-			searchItem.m_pathHash = Core::HashCRC32::GenerateHashCode(Core::StringUtils::StandardisePath(in_path));
+			searchItem.m_pathHash = CSCore::HashCRC32::GenerateHashCode(CSCore::StringUtils::StandardisePath(in_path));
             
 			auto it = std::lower_bound(m_packageManifestItems.begin(), m_packageManifestItems.end(), searchItem, [](const FileSystem::PackageManifestItem& in_lhs, const FileSystem::PackageManifestItem& in_rhs)
             {
@@ -795,21 +795,21 @@ namespace ChilliSource
         {
             if(in_isDirectory == true)
             {
-                return iOS::DoesDirectoryExist(Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_path));
+                return iOS::DoesDirectoryExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path));
             }
             else
             {
-                return iOS::DoesFileExist(Core::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_path));
+                return iOS::DoesFileExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path));
             }
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        std::vector<std::string> FileSystem::GetPossibleAbsoluteDirectoryPaths(Core::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+        std::vector<std::string> FileSystem::GetPossibleAbsoluteDirectoryPaths(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
         {
             std::vector<std::string> output;
             switch(in_storageLocation)
             {
-                case Core::StorageLocation::k_package:
+                case CSCore::StorageLocation::k_package:
                 {
                     const std::string* resourceDirectories = GetResourceDirectories();
                     for(u32 i = 0; i < 3; ++i)
@@ -818,14 +818,14 @@ namespace ChilliSource
                     }
                     break;
                 }
-                case Core::StorageLocation::k_DLC:
+                case CSCore::StorageLocation::k_DLC:
                 {
                     const std::string* resourceDirectories = GetResourceDirectories();
                     for(u32 i = 0; i < 3; ++i)
                     {
-                        output.push_back(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_package) + resourceDirectories[i] + GetPackageDLCPath() + in_directoryPath);
+                        output.push_back(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + GetPackageDLCPath() + in_directoryPath);
                     }
-                    output.push_back(GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC) + in_directoryPath);
+                    output.push_back(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
                     break;
                 }
                 default:

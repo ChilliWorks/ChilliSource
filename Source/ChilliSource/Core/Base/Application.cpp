@@ -390,10 +390,10 @@ namespace ChilliSource
             CreateSystem<Rendering::RenderComponentFactory>();
             
             //Particles
-            CreateSystem<CSRendering::ParticleSystem>();
-            CreateSystem<CSRendering::ParticleEmitterFactory>();
-            CreateSystem<CSRendering::ParticleAffectorFactory>();
-            CreateSystem<CSRendering::CSParticleEffectProvider>();
+            CreateSystem<Rendering::ParticleSystem>();
+            CreateSystem<Rendering::ParticleEmitterFactory>();
+            CreateSystem<Rendering::ParticleAffectorFactory>();
+            CreateSystem<Rendering::CSParticleEffectProvider>();
 
             //Create any platform specific default systems
             m_platformSystem->CreateDefaultSystems(this);

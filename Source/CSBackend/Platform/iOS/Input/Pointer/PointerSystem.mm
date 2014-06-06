@@ -42,9 +42,9 @@ namespace ChilliSource
         CS_DEFINE_NAMEDTYPE(PointerSystem);
         //----------------------------------------------------
         //----------------------------------------------------
-        bool PointerSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool PointerSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (Input::PointerSystem::InterfaceID == in_interfaceId || PointerSystem::InterfaceID == in_interfaceId);
+            return (CSInput::PointerSystem::InterfaceID == in_interfaceId || PointerSystem::InterfaceID == in_interfaceId);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -52,7 +52,7 @@ namespace ChilliSource
         {
             //Grab the touch location from the OS
 			CGPoint uitouchLocation = [in_touch locationInView:in_touch.view];
-            Core::Vector2 touchLocation(uitouchLocation.x * m_screen->GetDensityScale(), m_screen->GetResolution().y - uitouchLocation.y * m_screen->GetDensityScale());
+            CSCore::Vector2 touchLocation(uitouchLocation.x * m_screen->GetDensityScale(), m_screen->GetResolution().y - uitouchLocation.y * m_screen->GetDensityScale());
 			u64 pointerId = AddPointerCreateEvent(touchLocation);
             AddPointerDownEvent(pointerId, InputType::k_touch);
 			m_touchToIdMap.emplace(in_touch, pointerId);
@@ -65,7 +65,7 @@ namespace ChilliSource
 			if (it != m_touchToIdMap.end())
 			{
                 CGPoint uitouchLocation = [in_touch locationInView:in_touch.view];
-                Core::Vector2 touchLocation(uitouchLocation.x * m_screen->GetDensityScale(), m_screen->GetResolution().y - uitouchLocation.y * m_screen->GetDensityScale());
+                CSCore::Vector2 touchLocation(uitouchLocation.x * m_screen->GetDensityScale(), m_screen->GetResolution().y - uitouchLocation.y * m_screen->GetDensityScale());
 				AddPointerMovedEvent(it->second, touchLocation);
 			}
         }
@@ -85,7 +85,7 @@ namespace ChilliSource
         //------------------------------------------------
         void PointerSystem::OnInit()
         {
-            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
         }
         //------------------------------------------------
         //------------------------------------------------

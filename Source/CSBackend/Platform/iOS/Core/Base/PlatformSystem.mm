@@ -47,15 +47,15 @@ namespace ChilliSource
         CS_DEFINE_NAMEDTYPE(PlatformSystem);
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool PlatformSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool PlatformSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (Core::PlatformSystem::InterfaceID == in_interfaceId || PlatformSystem::InterfaceID == in_interfaceId);
+            return (CSCore::PlatformSystem::InterfaceID == in_interfaceId || PlatformSystem::InterfaceID == in_interfaceId);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
+		void PlatformSystem::CreateDefaultSystems(CSCore::Application* in_application)
 		{
-            in_application->CreateSystem<Core::PVRImageProvider>();
+            in_application->CreateSystem<CSCore::PVRImageProvider>();
             in_application->CreateSystem<OpenGL::GLSLShaderProvider>();
             in_application->CreateSystem<OpenGL::TextureUnitSystem>();
 		}

@@ -50,9 +50,9 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Keyboard::IsA(Core::InterfaceIDType in_interfaceID) const
+        bool Keyboard::IsA(CSCore::InterfaceIDType in_interfaceID) const
         {
-            return (in_interfaceID == Input::Keyboard::InterfaceID || in_interfaceID == Keyboard::InterfaceID);
+            return (in_interfaceID == CSInput::Keyboard::InterfaceID || in_interfaceID == Keyboard::InterfaceID);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -125,10 +125,10 @@ namespace ChilliSource
             {
                 switch (in_type)
                 {
-                    case Input::Keyboard::Type::k_text:
+                    case CSInput::Keyboard::Type::k_text:
                         m_textView.keyboardType = UIKeyboardTypeASCIICapable;
                         break;
-                    case Input::Keyboard::Type::k_numeric:
+                    case CSInput::Keyboard::Type::k_numeric:
                         m_textView.keyboardType = UIKeyboardTypeNumberPad;
                         break;
                     default:
@@ -146,16 +146,16 @@ namespace ChilliSource
             {
                 switch (in_capitalisation)
                 {
-                    case Input::Keyboard::Capitalisation::k_none:
+                    case CSInput::Keyboard::Capitalisation::k_none:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
                         break;
-                    case Input::Keyboard::Capitalisation::k_words:
+                    case CSInput::Keyboard::Capitalisation::k_words:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeWords;
                         break;
-                    case Input::Keyboard::Capitalisation::k_sentences:
+                    case CSInput::Keyboard::Capitalisation::k_sentences:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
                         break;
-                    case Input::Keyboard::Capitalisation::k_all:
+                    case CSInput::Keyboard::Capitalisation::k_all:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
                         break;
                     default:
@@ -167,19 +167,19 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        Core::IConnectableEvent<Keyboard::KeyboardEventDelegate>& Keyboard::GetTextInputEnabledEvent()
+        CSCore::IConnectableEvent<Keyboard::KeyboardEventDelegate>& Keyboard::GetTextInputEnabledEvent()
         {
             return m_textInputEnabledDelegate;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        Core::IConnectableEvent<Keyboard::TextInputEventDelegate>& Keyboard::GetTextInputReceivedEvent()
+        CSCore::IConnectableEvent<Keyboard::TextInputEventDelegate>& Keyboard::GetTextInputReceivedEvent()
         {
             return m_textInputReceivedDelegate;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        Core::IConnectableEvent<Keyboard::KeyboardEventDelegate>& Keyboard::GetTextInputDisabledEvent()
+        CSCore::IConnectableEvent<Keyboard::KeyboardEventDelegate>& Keyboard::GetTextInputDisabledEvent()
         {
             return m_textInputDisabledDelegate;
         }

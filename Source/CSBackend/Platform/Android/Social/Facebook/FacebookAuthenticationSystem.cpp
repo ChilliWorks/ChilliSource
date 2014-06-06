@@ -22,7 +22,7 @@ namespace CSBackend
 		//----------------------------------------------------
 		bool FacebookAuthenticationSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == FacebookAuthenticationSystem::InterfaceID) || (in_interfaceId == ChilliSource::Social::FacebookAuthenticationSystem::InterfaceID);
+			return (in_interfaceId == FacebookAuthenticationSystem::InterfaceID) || (in_interfaceId == CSSocial::FacebookAuthenticationSystem::InterfaceID);
 		}
         //----------------------------------------------------
         //----------------------------------------------------

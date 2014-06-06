@@ -59,9 +59,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool Accelerometer::IsA(Core::InterfaceIDType in_interfaceID) const
+        bool Accelerometer::IsA(CSCore::InterfaceIDType in_interfaceID) const
         {
-            return (in_interfaceID == Input::Accelerometer::InterfaceID || in_interfaceID == Accelerometer::InterfaceID);
+            return (in_interfaceID == CSInput::Accelerometer::InterfaceID || in_interfaceID == Accelerometer::InterfaceID);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -81,13 +81,13 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Core::Vector3 Accelerometer::GetAcceleration() const
+        CSCore::Vector3 Accelerometer::GetAcceleration() const
         {
-            return Core::Vector3(m_motionManager.accelerometerData.acceleration.x, m_motionManager.accelerometerData.acceleration.y, m_motionManager.accelerometerData.acceleration.z);
+            return CSCore::Vector3(m_motionManager.accelerometerData.acceleration.x, m_motionManager.accelerometerData.acceleration.y, m_motionManager.accelerometerData.acceleration.z);
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Core::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
+        CSCore::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
         {
             return m_accelerationUpdatedEvent;
         }

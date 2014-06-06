@@ -126,7 +126,7 @@ namespace ChilliSource
                     NSString* userLocale = [supportedLanguages objectAtIndex:0];
                     std::string localeCode = [userLocale UTF8String];
                     
-                    std::vector<std::string> localeBrokenUp = ChilliSource::Core::StringUtils::Split(localeCode, "-", 0);
+                    std::vector<std::string> localeBrokenUp = CSCore::StringUtils::Split(localeCode, "-", 0);
                     if (localeBrokenUp.size() > 0)
                     {
                         return localeBrokenUp[0];
@@ -187,9 +187,9 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Device::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool Device::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (Core::Device::InterfaceID == in_interfaceId || Device::InterfaceID == in_interfaceId);
+            return (CSCore::Device::InterfaceID == in_interfaceId || Device::InterfaceID == in_interfaceId);
         }
         //---------------------------------------------------
         //---------------------------------------------------

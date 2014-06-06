@@ -49,9 +49,9 @@ namespace ChilliSource
 		}
         //------------------------------------------------------
         //------------------------------------------------------
-		bool EmailComposer::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool EmailComposer::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-			return (in_interfaceId == Social::EmailComposer::InterfaceID || in_interfaceId == EmailComposer::InterfaceID);
+			return (in_interfaceId == CSSocial::EmailComposer::InterfaceID || in_interfaceId == EmailComposer::InterfaceID);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -59,7 +59,7 @@ namespace ChilliSource
                                     const SendResultDelegate& in_callback)
         {
             Attachment emptyAttachment;
-            emptyAttachment.m_storageLocation = Core::StorageLocation::k_none;
+            emptyAttachment.m_storageLocation = CSCore::StorageLocation::k_none;
 			PresentWithAttachment(in_recipientAddresses, in_subject, in_contents, in_contentFormat, emptyAttachment, in_callback);
 		}
         //-------------------------------------------------------
@@ -107,21 +107,21 @@ namespace ChilliSource
                 if (in_attachment.m_filename.size() > 0)
                 {
                     std::string strFilename;
-                    if (in_attachment.m_storageLocation == Core::StorageLocation::k_package)
+                    if (in_attachment.m_storageLocation == CSCore::StorageLocation::k_package)
                     {
-                        strFilename = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(Core::StorageLocation::k_package, in_attachment.m_filename);
+                        strFilename = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(CSCore::StorageLocation::k_package, in_attachment.m_filename);
                     }
-                    else if (in_attachment.m_storageLocation == Core::StorageLocation::k_DLC && Core::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(in_attachment.m_filename) == false)
+                    else if (in_attachment.m_storageLocation == CSCore::StorageLocation::k_DLC && CSCore::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(in_attachment.m_filename) == false)
                     {
-                        strFilename = Core::Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_attachment.m_filename;
+                        strFilename = CSCore::Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_attachment.m_filename;
                     }
                     else
                     {
-                        strFilename = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_attachment.m_storageLocation) + in_attachment.m_filename;
+                        strFilename = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_attachment.m_storageLocation) + in_attachment.m_filename;
                     }
                     
                     std::string strPath, strBasename;
-                    Core::StringUtils::SplitFilename(in_attachment.m_filename, strBasename, strPath);
+                    CSCore::StringUtils::SplitFilename(in_attachment.m_filename, strBasename, strPath);
                     NSData* pData = [NSData dataWithContentsOfFile: [NSString stringWithUTF8String:strFilename.c_str()]];
                     [m_viewController addAttachmentData:pData mimeType:[NSString stringWithUTF8String:in_attachment.m_mimeType.c_str()] fileName:[NSString stringWithUTF8String:strBasename.c_str()]];
                 }

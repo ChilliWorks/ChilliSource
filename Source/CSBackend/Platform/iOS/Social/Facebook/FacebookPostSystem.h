@@ -27,7 +27,7 @@ namespace CSBackend
         ///
         /// @author S McGaw
         //----------------------------------------------------
-		class FacebookPostSystem final : public ChilliSource::Social::FacebookPostSystem
+		class FacebookPostSystem final : public CSSocial::FacebookPostSystem
 		{
 		public:
 			
@@ -82,7 +82,7 @@ namespace CSBackend
             ///
             /// @param The facebook authentication system.
             //----------------------------------------------------
-            FacebookPostSystem(ChilliSource::Social::FacebookAuthenticationSystem* in_authSystem);
+            FacebookPostSystem(CSSocial::FacebookAuthenticationSystem* in_authSystem);
             //----------------------------------------------------
             /// Post to wall using the native iOS view
             ///
@@ -96,11 +96,11 @@ namespace CSBackend
             //----------------------------------------------------
             void PostWeb(const PostDesc& in_desc);
 			
-            friend ChilliSource::Social::FacebookPostSystemUPtr ChilliSource::Social::FacebookPostSystem::Create(ChilliSource::Social::FacebookAuthenticationSystem* in_authSystem);
+            friend CSSocial::FacebookPostSystemUPtr CSSocial::FacebookPostSystem::Create(CSSocial::FacebookAuthenticationSystem* in_authSystem);
             
         private:
             
-            ChilliSource::Social::FacebookAuthenticationSystem* m_authSystem;
+            CSSocial::FacebookAuthenticationSystem* m_authSystem;
             PostResultDelegate::Connection m_postCompleteDelegateConnection;
             PostResultDelegate::Connection m_requestCompleteDelegateConnection;
 		};

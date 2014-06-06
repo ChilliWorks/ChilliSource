@@ -27,7 +27,7 @@ namespace CSBackend
 		///
 		/// @author R Henning
 		//----------------------------------------------------
-		class FacebookPostSystem final : public ChilliSource::Social::FacebookPostSystem
+		class FacebookPostSystem final : public CSSocial::FacebookPostSystem
 		{
 		public:
 
@@ -108,7 +108,7 @@ namespace CSBackend
             void OnDestroy() override;
 
 		private:
-			friend ChilliSource::Social::FacebookPostSystemUPtr ChilliSource::Social::FacebookPostSystem::Create(ChilliSource::Social::FacebookAuthenticationSystem* in_authSystem);
+			friend CSSocial::FacebookPostSystemUPtr CSSocial::FacebookPostSystem::Create(CSSocial::FacebookAuthenticationSystem* in_authSystem);
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
@@ -117,12 +117,12 @@ namespace CSBackend
             ///
             /// @param The facebook authentication system.
             //----------------------------------------------------
-            FacebookPostSystem(ChilliSource::Social::FacebookAuthenticationSystem* in_authSystem);
+            FacebookPostSystem(CSSocial::FacebookAuthenticationSystem* in_authSystem);
 
 		private:
 
 			FacebookJavaInterfaceSPtr m_javaInterface;
-			ChilliSource::Social::FacebookAuthenticationSystem* m_authSystem;
+			CSSocial::FacebookAuthenticationSystem* m_authSystem;
             PostResultDelegate::Connection m_postCompleteDelegateConnection;
             PostResultDelegate::Connection m_requestCompleteDelegateConnection;
 		};

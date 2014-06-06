@@ -33,11 +33,11 @@
         // NO = 0, YES = 1
         if(buttonIndex == 0)
         {
-            dialogueBoxSystem->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_cancel);
+            dialogueBoxSystem->OnSystemConfirmDialogResult(alertView.tag, CSCore::DialogueBoxSystem::DialogueResult::k_cancel);
         }
         else
         {
-            dialogueBoxSystem->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_confirm);
+            dialogueBoxSystem->OnSystemConfirmDialogResult(alertView.tag, CSCore::DialogueBoxSystem::DialogueResult::k_confirm);
         }
     }
 }

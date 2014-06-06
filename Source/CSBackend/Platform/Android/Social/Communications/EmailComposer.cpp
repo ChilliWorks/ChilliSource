@@ -56,7 +56,7 @@ namespace CSBackend
 		//-------------------------------------------------------
 		bool EmailComposer::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == ChilliSource::Social::EmailComposer::InterfaceID || in_interfaceId == EmailComposer::InterfaceID);
+			return (in_interfaceId == CSSocial::EmailComposer::InterfaceID || in_interfaceId == EmailComposer::InterfaceID);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------

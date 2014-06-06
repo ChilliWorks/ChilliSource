@@ -45,7 +45,7 @@ namespace CSBackend
         ///
         /// @author S McGaw
         //-------------------------------------------------------------
-        class EmailComposer final : public ChilliSource::Social::EmailComposer
+        class EmailComposer final : public CSSocial::EmailComposer
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(EmailComposer);
@@ -104,7 +104,7 @@ namespace CSBackend
             //-------------------------------------------------------
 			void OnResult(MFMailComposeViewController* in_viewController, MFMailComposeResult in_result);
 		private:
-            friend ChilliSource::Social::EmailComposerUPtr ChilliSource::Social::EmailComposer::Create();
+            friend CSSocial::EmailComposerUPtr CSSocial::EmailComposer::Create();
             
             //-------------------------------------------------------
             /// This checks whether or not the current iOS device

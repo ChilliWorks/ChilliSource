@@ -93,13 +93,13 @@ namespace ChilliSource
         }
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool VideoPlayer::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool VideoPlayer::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == Video::VideoPlayer::InterfaceID || in_interfaceId == VideoPlayer::InterfaceID);
+			return (in_interfaceId == CSVideo::VideoPlayer::InterfaceID || in_interfaceId == VideoPlayer::InterfaceID);
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
+        void VideoPlayer::Present(CSCore::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap, const CSCore::Colour& in_backgroundColour)
         {
             @autoreleasepool
             {
@@ -110,7 +110,7 @@ namespace ChilliSource
                 m_completionDelegateConnection = std::move(in_delegateConnection);
                 m_backgroundColour = in_backgroundColour;
                 
-                std::string filePath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(in_storageLocation, in_fileName);
+                std::string filePath = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(in_storageLocation, in_fileName);
                 
                 NSString* urlString = [NSStringUtils newNSStringWithUTF8String:filePath];
                 NSURL* pMovieURL = [NSURL fileURLWithPath:urlString];
@@ -129,8 +129,8 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
-                                                     bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
+        void VideoPlayer::PresentWithSubtitles(CSCore::StorageLocation in_storageLocation, const std::string& in_fileName, const CSVideo::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
+                                                     bool in_dismissWithTap, const CSCore::Colour& in_backgroundColour)
         {
             m_subtitles = in_subtitles;
             Present(in_storageLocation, in_fileName, std::move(in_delegateConnection), in_dismissWithTap);
@@ -150,15 +150,15 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        Core::Vector2 VideoPlayer::GetVideoDimensions() const
+        CSCore::Vector2 VideoPlayer::GetVideoDimensions() const
         {
-            return Core::Vector2(m_moviePlayerController.naturalSize.width, m_moviePlayerController.naturalSize.height);
+            return CSCore::Vector2(m_moviePlayerController.naturalSize.width, m_moviePlayerController.naturalSize.height);
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
         void VideoPlayer::OnInit()
         {
-            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
             m_tapListener = [[CVideoPlayerTapListener alloc] init];
         }
         //---------------------------------------------------------------
@@ -182,9 +182,9 @@ namespace ChilliSource
         void VideoPlayer::ListenForMoviePlayerNotifications()
         {
             [[NSNotificationAdapter sharedInstance] BeginListeningForMPLoadStateChanged];
-            m_moviePlayerLoadStateChangedConnection = [[NSNotificationAdapter sharedInstance] GetMPLoadStateChangeEvent].OpenConnection(Core::MakeDelegate(this, &VideoPlayer::OnLoadStateChanged));
+            m_moviePlayerLoadStateChangedConnection = [[NSNotificationAdapter sharedInstance] GetMPLoadStateChangeEvent].OpenConnection(CSCore::MakeDelegate(this, &VideoPlayer::OnLoadStateChanged));
             [[NSNotificationAdapter sharedInstance] BeginListeningForMPPlaybackDidFinish];
-            m_moviePlayerPlaybackFinishedConnection = [[NSNotificationAdapter sharedInstance] GetMPPlaybackDidFinishEvent].OpenConnection(Core::MakeDelegate(this, &VideoPlayer::OnPlaybackFinished));
+            m_moviePlayerPlaybackFinishedConnection = [[NSNotificationAdapter sharedInstance] GetMPPlaybackDidFinishEvent].OpenConnection(CSCore::MakeDelegate(this, &VideoPlayer::OnPlaybackFinished));
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -297,7 +297,7 @@ namespace ChilliSource
                 //setup the tap gesture if we can dismiss with tap
                 if (m_dismissWithTap && m_tapListener != nil)
                 {
-                    [m_tapListener SetupWithView: m_videoOverlayView AndDelegate:Core::MakeDelegate(this, &VideoPlayer::OnTapped)];
+                    [m_tapListener SetupWithView: m_videoOverlayView AndDelegate:CSCore::MakeDelegate(this, &VideoPlayer::OnTapped)];
                 }
                 
                 //create the subtitles renderer

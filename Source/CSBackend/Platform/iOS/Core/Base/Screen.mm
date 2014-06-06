@@ -46,15 +46,15 @@ namespace ChilliSource
             ///
             /// @return The iOS device resolution.
             //----------------------------------------------------
-            Core::Vector2 CalculateResolution(UIInterfaceOrientation in_orientation)
+            CSCore::Vector2 CalculateResolution(UIInterfaceOrientation in_orientation)
             {
                 CGSize size = [[UIScreen mainScreen] bounds].size;
                 f32 scale = [UIScreen mainScreen].scale;
-                ChilliSource::Core::Vector2 resolution(size.width * scale, size.height * scale);
+                CSCore::Vector2 resolution(size.width * scale, size.height * scale);
                 
                 if (in_orientation == UIInterfaceOrientationLandscapeLeft || in_orientation == UIInterfaceOrientationLandscapeRight)
                 {
-                    resolution = ChilliSource::Core::Vector2(resolution.y, resolution.x);
+                    resolution = CSCore::Vector2(resolution.y, resolution.x);
                 }
                 
                 return resolution;
@@ -75,13 +75,13 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Screen::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool Screen::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (Core::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
+            return (CSCore::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        const Core::Vector2& Screen::GetResolution() const
+        const CSCore::Vector2& Screen::GetResolution() const
         {
             return m_resolution;
         }
@@ -99,7 +99,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        Core::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
+        CSCore::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
         {
             return m_resolutionChangedEvent;
         }

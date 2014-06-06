@@ -107,7 +107,7 @@
 ///
 /// @return The surface format.
 //-------------------------------------------------------------
- - (ChilliSource::Rendering::SurfaceFormat)readSurfaceFormat
+ - (ChilliSource::CSRendering::SurfaceFormat)readSurfaceFormat
 {
     //load the JSON string from file.
     NSString* relativePath = [NSStringUtils newNSStringWithUTF8String:"Shared/App"];
@@ -124,7 +124,7 @@
         CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormattedErrorMessages());
     }
    
-    return ChilliSource::Core::ParseSurfaceFormat(root.get("PreferredSurfaceFormat", "rgb565_depth24").asString());
+    return CSCore::ParseSurfaceFormat(root.get("PreferredSurfaceFormat", "rgb565_depth24").asString());
 }
 //-------------------------------------------------------------
 /// Applies the surface format described in the App.config file
@@ -136,28 +136,28 @@
 //-------------------------------------------------------------
 - (void)applySurfaceFormat:(GLKView*)in_view
 {
-    ChilliSource::Rendering::SurfaceFormat preferredFormat = [self readSurfaceFormat];
+    ChilliSource::CSRendering::SurfaceFormat preferredFormat = [self readSurfaceFormat];
     
     //apply format
     switch (preferredFormat)
     {
-        case ChilliSource::Rendering::SurfaceFormat::k_rgb565_depth24:
+        case ChilliSource::CSRendering::SurfaceFormat::k_rgb565_depth24:
         default:
             in_view.drawableColorFormat = GLKViewDrawableColorFormatRGB565;
             in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
             in_view.drawableStencilFormat = GLKViewDrawableStencilFormatNone;
             break;
-        case ChilliSource::Rendering::SurfaceFormat::k_rgb565_depth32:
+        case ChilliSource::CSRendering::SurfaceFormat::k_rgb565_depth32:
             in_view.drawableColorFormat = GLKViewDrawableColorFormatRGB565;
             in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
             in_view.drawableStencilFormat = GLKViewDrawableStencilFormatNone;
             break;
-        case ChilliSource::Rendering::SurfaceFormat::k_rgb888_depth24:
+        case ChilliSource::CSRendering::SurfaceFormat::k_rgb888_depth24:
             in_view.drawableColorFormat = GLKViewDrawableColorFormatRGBA8888;
             in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
             in_view.drawableStencilFormat = GLKViewDrawableStencilFormatNone;
             break;
-        case ChilliSource::Rendering::SurfaceFormat::k_rgb888_depth32:
+        case ChilliSource::CSRendering::SurfaceFormat::k_rgb888_depth32:
             in_view.drawableColorFormat = GLKViewDrawableColorFormatRGBA8888;
             in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
             in_view.drawableStencilFormat = GLKViewDrawableStencilFormatNone;
@@ -191,9 +191,9 @@
 //-------------------------------------------------------------
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)in_toInterfaceOrientation duration:(NSTimeInterval)in_duration
 {
-    if(ChilliSource::Core::Application::Get() != nullptr)
+    if(CSCore::Application::Get() != nullptr)
     {
-        ChilliSource::iOS::Screen* screen = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::Screen>();
+        ChilliSource::iOS::Screen* screen = CSCore::Application::Get()->GetSystem<ChilliSource::iOS::Screen>();
         screen->OnOrientationChanged(in_toInterfaceOrientation);
     }
 }
@@ -207,7 +207,7 @@
 //-------------------------------------------------------------
 - (void)touchesBegan:(NSSet*)in_touches withEvent:(UIEvent*)in_event
 {
-    ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
+    ChilliSource::iOS::PointerSystem* pointerSystem = CSCore::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
     CS_ASSERT(pointerSystem, "touchesBegan callback requires the pointer system.");
     
     for (UITouch* touch in in_touches)
@@ -225,7 +225,7 @@
 //-------------------------------------------------------------
 - (void)touchesCancelled:(NSSet*)in_touches withEvent:(UIEvent*)in_event
 {
-    ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
+    ChilliSource::iOS::PointerSystem* pointerSystem = CSCore::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
     CS_ASSERT(pointerSystem, "touchesCancelled callback requires the pointer system.");
     
     for (UITouch* touch in in_touches)
@@ -243,7 +243,7 @@
 //-------------------------------------------------------------
 - (void)touchesEnded:(NSSet*)in_touches withEvent:(UIEvent*)in_event
 {
-    ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
+    ChilliSource::iOS::PointerSystem* pointerSystem = CSCore::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
     CS_ASSERT(pointerSystem, "touchesEnded callback requires the pointer system.");
     
 	for (UITouch* touch in in_touches)
@@ -262,7 +262,7 @@
 //-------------------------------------------------------------
 - (void)touchesMoved:(NSSet*)in_touches withEvent:(UIEvent*)in_event
 {
-    ChilliSource::iOS::PointerSystem* pointerSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
+    ChilliSource::iOS::PointerSystem* pointerSystem = CSCore::Application::Get()->GetSystem<ChilliSource::iOS::PointerSystem>();
     CS_ASSERT(pointerSystem, "touchesEnded callback requires the pointer system.");
     
     for (UITouch* touch in in_touches)

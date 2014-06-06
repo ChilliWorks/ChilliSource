@@ -82,13 +82,13 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool WebView::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool WebView::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return (Web::WebView::InterfaceID == in_interfaceId || WebView::InterfaceID == in_interfaceId);
+            return (CSWeb::WebView::InterfaceID == in_interfaceId || WebView::InterfaceID == in_interfaceId);
         }
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void WebView::Present(const std::string& in_url, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
+		void WebView::Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
 		{
             @autoreleasepool
             {
@@ -121,7 +121,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void WebView::PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
+		void WebView::PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
 		{
             @autoreleasepool
             {
@@ -136,7 +136,7 @@ namespace ChilliSource
                 std::string filePath;
                 GetFilePathAndAnchor(in_filePath, filePath, m_anchor);
                 
-                Core::FileSystem* fileSystem = Core::Application::Get()->GetFileSystem();
+                CSCore::FileSystem* fileSystem = CSCore::Application::Get()->GetFileSystem();
 
                 std::string fullFilePath;
                 switch(in_storageLocation)
@@ -144,16 +144,16 @@ namespace ChilliSource
                     default:
                         fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + filePath;
                         break;
-                    case Core::StorageLocation::k_package:
-                        fullFilePath = fileSystem->GetAbsolutePathToFile(Core::StorageLocation::k_package, filePath);
+                    case CSCore::StorageLocation::k_package:
+                        fullFilePath = fileSystem->GetAbsolutePathToFile(CSCore::StorageLocation::k_package, filePath);
                         break;
-                    case Core::StorageLocation::k_DLC:
-                        fullFilePath = fileSystem->GetAbsolutePathToFile(Core::StorageLocation::k_DLC, filePath);
+                    case CSCore::StorageLocation::k_DLC:
+                        fullFilePath = fileSystem->GetAbsolutePathToFile(CSCore::StorageLocation::k_DLC, filePath);
                         break;
                 }
 
                 std::string strHTMLFileContents;
-                Core::FileStreamSPtr pHTMLFile = fileSystem->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_read);
+                CSCore::FileStreamSPtr pHTMLFile = fileSystem->CreateFileStream(in_storageLocation, in_filePath, CSCore::FileMode::k_read);
                 pHTMLFile->GetAll(strHTMLFileContents);
                 pHTMLFile->Close();
                 
@@ -248,15 +248,15 @@ namespace ChilliSource
         //---------------------------------------------------------
         void WebView::OnInit()
         {
-            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
         }
         //-----------------------------------------------
         //-----------------------------------------------
-        void WebView::CreateWebview(const Core::UnifiedVector2& in_size)
+        void WebView::CreateWebview(const CSCore::UnifiedVector2& in_size)
         {
             CS_ASSERT(m_webView == nil, "Cannot create webview becuase one already exists!");
             
-            Core::Vector2 dipsResolution = m_screen->GetResolution() * m_screen->GetInverseDensityScale();
+            CSCore::Vector2 dipsResolution = m_screen->GetResolution() * m_screen->GetInverseDensityScale();
             
             //Create the  view and present it, centered on screen
             m_absoluteSize = (dipsResolution * in_size.GetRelative()) + in_size.GetAbsolute();

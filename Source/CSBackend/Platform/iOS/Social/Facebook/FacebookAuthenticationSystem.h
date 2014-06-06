@@ -28,7 +28,7 @@ namespace CSBackend
         ///
         /// @author S Downie
         //------------------------------------------------
-		class FacebookAuthenticationSystem final : public ChilliSource::Social::FacebookAuthenticationSystem
+		class FacebookAuthenticationSystem final : public CSSocial::FacebookAuthenticationSystem
 		{
 		public:
 
@@ -115,7 +115,7 @@ namespace CSBackend
 			
 		private:
             
-            friend ChilliSource::Social::FacebookAuthenticationSystemUPtr ChilliSource::Social::FacebookAuthenticationSystem::Create();
+            friend CSSocial::FacebookAuthenticationSystemUPtr CSSocial::FacebookAuthenticationSystem::Create();
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.

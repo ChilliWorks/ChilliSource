@@ -31,7 +31,7 @@ namespace ChilliSource
             /// @return Whether a product reg info exists in the list
             /// with the given Id.
             //---------------------------------------------------------------
-            bool ContainsProductId(const std::vector<Networking::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId)
+            bool ContainsProductId(const std::vector<CSNetworking::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId)
             {
                 for(u32 i=0; i<in_productInfos.size(); ++i)
                 {
@@ -49,9 +49,9 @@ namespace ChilliSource
         
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        bool IAPSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool IAPSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceId == Networking::IAPSystem::InterfaceID || in_interfaceId == IAPSystem::InterfaceID;
+            return in_interfaceId == CSNetworking::IAPSystem::InterfaceID || in_interfaceId == IAPSystem::InterfaceID;
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -85,7 +85,7 @@ namespace ChilliSource
             CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction delegate");
             m_transactionStatusDelegate = in_delegate;
             
-            [m_storeKitSystem startListeningForTransactions:Core::MakeDelegate(this, &IAPSystem::OnTransactionUpdate)];
+            [m_storeKitSystem startListeningForTransactions:CSCore::MakeDelegate(this, &IAPSystem::OnTransactionUpdate)];
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -123,7 +123,7 @@ namespace ChilliSource
             transaction->m_transactionId = [NSStringUtils newUTF8StringWithNSString:in_skTransaction.transactionIdentifier];
             if(hasReceipt)
             {
-                transaction->m_receipt = Core::BaseEncoding::Base64Encode((s8*)[in_skTransaction.transactionReceipt bytes], [in_skTransaction.transactionReceipt length]);
+                transaction->m_receipt = CSCore::BaseEncoding::Base64Encode((s8*)[in_skTransaction.transactionReceipt bytes], [in_skTransaction.transactionReceipt length]);
             }
             
             m_transactionStatusDelegate(result, transaction);
@@ -153,7 +153,7 @@ namespace ChilliSource
                 [projectId release];
 			}
 			
-            [m_storeKitSystem requestProducts:idSet forDelegate:Core::MakeDelegate(this, &IAPSystem::OnProductDescriptionRequestComplete)];
+            [m_storeKitSystem requestProducts:idSet forDelegate:CSCore::MakeDelegate(this, &IAPSystem::OnProductDescriptionRequestComplete)];
             
             [idSet release];
         }

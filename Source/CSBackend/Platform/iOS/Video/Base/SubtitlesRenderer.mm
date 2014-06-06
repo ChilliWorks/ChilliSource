@@ -22,7 +22,7 @@
 @implementation CSubtitlesRenderer
 //--------------------------------------------------------
 //--------------------------------------------------------
--(id) initWithVideoPlayer:(ChilliSource::iOS::VideoPlayer*)in_videoPlayer view:(UIView*)inpView andSubtitles:(const ChilliSource::Video::SubtitlesCSPtr&)in_subtitles
+-(id) initWithVideoPlayer:(ChilliSource::iOS::VideoPlayer*)in_videoPlayer view:(UIView*)inpView andSubtitles:(const CSVideo::SubtitlesCSPtr&)in_subtitles
 {
     if(!(self = [super init]))
 	{
@@ -31,7 +31,7 @@
     
     m_videoPlayer = in_videoPlayer;
     mpBaseView = inpView;
-    m_screen = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Core::Screen>();
+    m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
     
     //create the display link
     mpDisplayLink = [CADisplayLink displayLinkWithTarget: self selector: @selector(OnUpdate)];
@@ -92,10 +92,10 @@
 //--------------------------------------------------------
 /// Add Text View
 //--------------------------------------------------------
--(void) AddTextViewWithSubtitle:(const ChilliSource::Video::Subtitles::Subtitle*)inpSubtitle andLocalisedText:(const ChilliSource::Core::LocalisedText*) in_localisedText
+-(void) AddTextViewWithSubtitle:(const CSVideo::Subtitles::Subtitle*)inpSubtitle andLocalisedText:(const CSCore::LocalisedText*) in_localisedText
 {
     //get the style
-    const ChilliSource::Video::Subtitles::Style* pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
+    const CSVideo::Subtitles::Style* pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
     if (pStyle == nullptr)
     {
         CS_LOG_ERROR("Cannot find style '" + inpSubtitle->m_styleName + "' in subtitles.");
@@ -124,9 +124,9 @@
 //--------------------------------------------------------
 /// Update Text View
 //--------------------------------------------------------
--(void) UpdateTextView:(UITextView*)inpTextView Subtitle:(const ChilliSource::Video::Subtitles::Subtitle*)inpSubtitle Time:(TimeIntervalMs)inTimeMS
+-(void) UpdateTextView:(UITextView*)inpTextView Subtitle:(const CSVideo::Subtitles::Subtitle*)inpSubtitle Time:(TimeIntervalMs)inTimeMS
 {
-    const ChilliSource::Video::Subtitles::Style* pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
+    const CSVideo::Subtitles::Style* pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
     
     f32 fFade = 0.0f;
     s64 lwRelativeTime = ((s64)inTimeMS) - ((s64)inpSubtitle->m_startTimeMS);
@@ -167,29 +167,29 @@
 //--------------------------------------------------------
 /// Remove Text View
 //--------------------------------------------------------
--(void) RemoveTextView:(const ChilliSource::Video::Subtitles::Subtitle*)inpSubtitle
+-(void) RemoveTextView:(const CSVideo::Subtitles::Subtitle*)inpSubtitle
 {
     maSubtitlesToRemove.push_back(inpSubtitle);
 }
 //--------------------------------------------------------
 /// Set Alignment
 //--------------------------------------------------------
--(void) SetAlignment:(UITextView*)inpView WithAnchor:(ChilliSource::Rendering::AlignmentAnchor)ineAnchor
+-(void) SetAlignment:(UITextView*)inpView WithAnchor:(ChilliSource::CSRendering::AlignmentAnchor)ineAnchor
 {
     inpView.textAlignment = [self TextAlignmentFromAnchor: ineAnchor];
     
     switch (ineAnchor)
     {
-        case ChilliSource::Rendering::AlignmentAnchor::k_topLeft:
-        case ChilliSource::Rendering::AlignmentAnchor::k_topCentre:
-        case ChilliSource::Rendering::AlignmentAnchor::k_topRight:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_topLeft:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_topCentre:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_topRight:
         {
             inpView.contentOffset = (CGPoint){.x = 0.0f, .y = 0.0f};
             break;
         }
-        case ChilliSource::Rendering::AlignmentAnchor::k_middleLeft:
-        case ChilliSource::Rendering::AlignmentAnchor::k_middleCentre:
-        case ChilliSource::Rendering::AlignmentAnchor::k_middleRight:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_middleLeft:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_middleCentre:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_middleRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
             f32 fContentSize = [inpView contentSize].height;
@@ -202,9 +202,9 @@
             break;
             break;
         }
-        case ChilliSource::Rendering::AlignmentAnchor::k_bottomLeft:
-        case ChilliSource::Rendering::AlignmentAnchor::k_bottomCentre:
-        case ChilliSource::Rendering::AlignmentAnchor::k_bottomRight:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_bottomLeft:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_bottomCentre:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_bottomRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
             f32 fContentSize = [inpView contentSize].height;
@@ -224,21 +224,21 @@
 //--------------------------------------------------------
 /// Text Alignment From Anchor
 //--------------------------------------------------------
--(NSTextAlignment) TextAlignmentFromAnchor:(ChilliSource::Rendering::AlignmentAnchor)ineAnchor
+-(NSTextAlignment) TextAlignmentFromAnchor:(ChilliSource::CSRendering::AlignmentAnchor)ineAnchor
 {
     switch (ineAnchor)
     {
-        case ChilliSource::Rendering::AlignmentAnchor::k_topLeft:
-        case ChilliSource::Rendering::AlignmentAnchor::k_middleLeft:
-        case ChilliSource::Rendering::AlignmentAnchor::k_bottomLeft:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_topLeft:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_middleLeft:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_bottomLeft:
             return NSTextAlignmentLeft;
-        case ChilliSource::Rendering::AlignmentAnchor::k_topCentre:
-        case ChilliSource::Rendering::AlignmentAnchor::k_middleCentre:
-        case ChilliSource::Rendering::AlignmentAnchor::k_bottomCentre:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_topCentre:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_middleCentre:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_bottomCentre:
             return NSTextAlignmentCenter;
-        case ChilliSource::Rendering::AlignmentAnchor::k_topRight:
-        case ChilliSource::Rendering::AlignmentAnchor::k_middleRight:
-        case ChilliSource::Rendering::AlignmentAnchor::k_bottomRight:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_topRight:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_middleRight:
+        case ChilliSource::CSRendering::AlignmentAnchor::k_bottomRight:
             return NSTextAlignmentRight;
         default:
             CS_LOG_WARNING("Could not convert alignment anchor to NSTextAlignment.");
@@ -251,14 +251,14 @@
 /// @return the rectangle in which the text box should
 /// appear on screen.
 //--------------------------------------------------------
--(CGRect) CalculateTextBoxRect:(const ChilliSource::Core::Rectangle&)inRelativeBounds
+-(CGRect) CalculateTextBoxRect:(const CSCore::Rectangle&)inRelativeBounds
 {
-    ChilliSource::Core::Vector2 vScreenDimensions(m_screen->GetResolution().x * m_screen->GetInverseDensityScale(), m_screen->GetResolution().y * m_screen->GetInverseDensityScale());
-    ChilliSource::Core::Vector2 vVideoDimensions = m_videoPlayer->GetVideoDimensions();
+    CSCore::Vector2 vScreenDimensions(m_screen->GetResolution().x * m_screen->GetInverseDensityScale(), m_screen->GetResolution().y * m_screen->GetInverseDensityScale());
+    CSCore::Vector2 vVideoDimensions = m_videoPlayer->GetVideoDimensions();
     float fScreenAspectRatio = vScreenDimensions.x / vScreenDimensions.y;
     float fVideoAspectRatio = vVideoDimensions.x / vVideoDimensions.y;
     
-    ChilliSource::Core::Vector2 vVideoViewDimensions;
+    CSCore::Vector2 vVideoViewDimensions;
     if (fScreenAspectRatio < fVideoAspectRatio)
     {
         vVideoViewDimensions.x = vScreenDimensions.x;
@@ -270,7 +270,7 @@
         vVideoViewDimensions.y = vScreenDimensions.y;
     }
     
-    ChilliSource::Core::Vector2 vVideoViewTopLeft = (vScreenDimensions - vVideoViewDimensions) * 0.5f;
+    CSCore::Vector2 vVideoViewTopLeft = (vScreenDimensions - vVideoViewDimensions) * 0.5f;
     return CGRectMake(vVideoViewTopLeft.x + inRelativeBounds.Left() * vVideoViewDimensions.x, vVideoViewTopLeft.y + inRelativeBounds.Top() * vVideoViewDimensions.y, inRelativeBounds.vSize.x * vVideoViewDimensions.x, inRelativeBounds.vSize.y * vVideoViewDimensions.y);
     
 }

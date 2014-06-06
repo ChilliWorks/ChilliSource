@@ -245,7 +245,7 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)glkViewControllerUpdate:(GLKViewController*)controller;
 {
-    ChilliSource::Core::Application::Get()->Update(controller.timeSinceLastUpdate, controller.timeSinceFirstResume);
+    CSCore::Application::Get()->Update(controller.timeSinceLastUpdate, controller.timeSinceFirstResume);
 }
 //-------------------------------------------------------------
 /// The main render loop for the application
@@ -263,7 +263,7 @@ CSAppDelegate* singletonInstance = nil;
         [EAGLContext setCurrentContext:view.context];
     }
     
-    ChilliSource::Core::Application::Get()->Render();
+    CSCore::Application::Get()->Render();
 }
 
 #pragma mark -

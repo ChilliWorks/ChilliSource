@@ -26,7 +26,7 @@ namespace CSBackend
 			/// @param Post description
 			/// @param [Out] Key value array in the form key, value, key, value
 			//----------------------------------------------------
-			void PostDescToKeyValueArray(const ChilliSource::Social::FacebookPostSystem::PostDesc& in_desc, std::vector<std::string>& out_keyValues)
+			void PostDescToKeyValueArray(const CSSocial::FacebookPostSystem::PostDesc& in_desc, std::vector<std::string>& out_keyValues)
 			{
 				out_keyValues.push_back("link");
 				out_keyValues.push_back(in_desc.m_url);
@@ -49,7 +49,7 @@ namespace CSBackend
 			/// @param Request description
 			/// @param [Out] Key value array in the form key, value, key, value
 			//----------------------------------------------------
-			void RequestDescToKeyValueArray(const ChilliSource::Social::FacebookPostSystem::RequestDesc& in_desc, std::vector<std::string>& out_keyValues)
+			void RequestDescToKeyValueArray(const CSSocial::FacebookPostSystem::RequestDesc& in_desc, std::vector<std::string>& out_keyValues)
 			{
 				out_keyValues.push_back("caption");
 				out_keyValues.push_back(in_desc.m_caption);
@@ -64,10 +64,10 @@ namespace CSBackend
 
 	            switch (in_desc.m_type)
 	            {
-	                case ChilliSource::Social::FacebookPostSystem::RequestRecipientMode::k_fixed:
+	                case CSSocial::FacebookPostSystem::RequestRecipientMode::k_fixed:
 	                    requestType = "to";
 	                    break;
-	                case ChilliSource::Social::FacebookPostSystem::RequestRecipientMode::k_optional:
+	                case CSSocial::FacebookPostSystem::RequestRecipientMode::k_optional:
 	                    requestType = "suggestions";
 	                    break;
 	            }
@@ -81,7 +81,7 @@ namespace CSBackend
 
 		//----------------------------------------------------
 		//----------------------------------------------------
-		FacebookPostSystem::FacebookPostSystem(ChilliSource::Social::FacebookAuthenticationSystem* in_authSystem)
+		FacebookPostSystem::FacebookPostSystem(CSSocial::FacebookAuthenticationSystem* in_authSystem)
 		: m_authSystem(in_authSystem)
 		{
 
@@ -90,7 +90,7 @@ namespace CSBackend
 		//----------------------------------------------------
 		bool FacebookPostSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return ChilliSource::Social::FacebookPostSystem::InterfaceID == in_interfaceId || FacebookPostSystem::InterfaceID == in_interfaceId;
+			return CSSocial::FacebookPostSystem::InterfaceID == in_interfaceId || FacebookPostSystem::InterfaceID == in_interfaceId;
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
