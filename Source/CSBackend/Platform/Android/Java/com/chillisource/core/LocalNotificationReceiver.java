@@ -133,12 +133,12 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 			PendingIntent sContentIntent = PendingIntent.getActivity(in_context, intentId, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			
 			Bitmap largeIconBitmap = null;
-			int LargeIconID = ResourceHelper.GetDynamicResourceIDForField(in_context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmiconlarge");
+			int LargeIconID = ResourceHelper.GetDynamicResourceIDForField(in_context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "ic_stat_notify_large");
 			
 			//Use small icon if no large icon
 			if(LargeIconID == 0)
 			{
-				LargeIconID = ResourceHelper.GetDynamicResourceIDForField(in_context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmicon");
+				LargeIconID = ResourceHelper.GetDynamicResourceIDForField(in_context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "ic_stat_notify");
 			}
 			
 			if(LargeIconID > 0)
@@ -149,7 +149,7 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 			Notification notification = new NotificationCompat.Builder(in_context)
 				.setContentTitle(title)
 				.setContentText(text)
-				.setSmallIcon(ResourceHelper.GetDynamicResourceIDForField(in_context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmicon"))
+				.setSmallIcon(ResourceHelper.GetDynamicResourceIDForField(in_context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "ic_stat_notify"))
 				.setLargeIcon(largeIconBitmap)
 				.setContentIntent(sContentIntent)
 				.build();

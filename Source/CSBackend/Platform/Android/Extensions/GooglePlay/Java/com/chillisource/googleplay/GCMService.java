@@ -172,12 +172,12 @@ public class GCMService extends GCMBaseIntentService
             PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
             
 			Bitmap largeIconBitmap = null;
-			int largeIconID = ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmiconlarge");
+			int largeIconID = ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "ic_stat_notify_large");
 			
 			//If no large icon then use the small icon
         	if(largeIconID == 0)
         	{
-        		largeIconID = ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmicon");
+        		largeIconID = ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "ic_stat_notify");
         	}
 			
 			if(largeIconID > 0)
@@ -188,7 +188,7 @@ public class GCMService extends GCMBaseIntentService
 			Notification notification = new NotificationCompat.Builder(context)
 			.setContentTitle(strTitle)
 			.setContentText(strMessage)
-			.setSmallIcon(ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmicon"))
+			.setSmallIcon(ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "ic_stat_notify"))
 			.setLargeIcon(largeIconBitmap)
 			.setContentIntent(intent)
 			.build();
