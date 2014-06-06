@@ -1,17 +1,36 @@
-/*
- *  Renderer.h
- *  moFlo
- *
- *  Created by Scott Downie on 30/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Renderer.h
+//  Chilli Source
+//  Created by Scott Downie on 30/09/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
-#ifndef _MO_FLO_RENDERING_RENDERER_H_
-#define _MO_FLO_RENDERING_RENDERER_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_RENDERER_H_
+#define _CHILLISOURCE_RENDERING_BASE_RENDERER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Entity/Component.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 namespace ChilliSource
@@ -24,23 +43,21 @@ namespace ChilliSource
 		/// Does a pre-pass on the scene to convert moFlo
 		/// components to plain data for the render system
 		//==================================================
-		class Renderer 
+		class Renderer final : public Core::AppSystem
 		{
 		public:
-            //-------------------------------------------------------
-            /// Factory method
-            ///
-            /// @author S Downie
-            ///
-            /// @param Render system
-            ///
-            /// @return Ownership of new instance
-            //-------------------------------------------------------
-            static RendererUPtr Create(RenderSystem* in_renderSystem);
+            CS_DECLARE_NAMEDTYPE(Renderer);
             //----------------------------------------------------------
-            /// @author S Downie
-            //----------------------------------------------------------
-            void Init();
+            /// Allows querying of whether or not this system implements
+            /// a given interface.
+            ///
+			/// @author I Copland
+			///
+			/// @param Interface Id
+			///
+			/// @return Whether this object is of the given type.
+			//----------------------------------------------------------
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------------
 			/// Set Transparent Sort Predicate
 			///
@@ -55,7 +72,6 @@ namespace ChilliSource
 			/// @param Our RendererSortPredicate functor. If this is nullptr the renderer will not sort opaque objects
 			//----------------------------------------------------------
 			void SetOpaqueSortPredicate(const RendererSortPredicateSPtr & inpFunctor);
-            
             //----------------------------------------------------------
 			/// Set Perspective Cull Predicate
 			///
@@ -100,10 +116,21 @@ namespace ChilliSource
 			/// @return A weak pointer to the active scene camera
 			//----------------------------------------------------------
 			CameraComponent* GetActiveCameraPtr();
-            
-            static Core::Matrix4x4 matViewProjCache;
-			
+
+            static Core::Matrix4 matViewProjCache;
+
 		private:
+            friend class Core::Application;
+            //-------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @param Render system
+            ///
+            /// @return Ownership of new instance
+            //-------------------------------------------------------
+            static RendererUPtr Create(RenderSystem* in_renderSystem);
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -112,6 +139,15 @@ namespace ChilliSource
             /// @param Render system
             //-------------------------------------------------------
 			Renderer(RenderSystem* in_renderSystem);
+            //----------------------------------------------------------
+            /// Initialisation method called at a time when
+            /// all App Systems have been created. System
+            /// initialisation occurs in the order they were
+            /// created.
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+            void OnInit() override;
             //----------------------------------------------------------
             /// Render Shadow Map
             ///
@@ -232,7 +268,8 @@ namespace ChilliSource
             /// rendering
             /// @return Projection matrix for overlay rendering
             //----------------------------------------------------------
-            Core::Matrix4x4 CreateOverlayProjection(const Core::Vector2& in_size) const;
+            Core::Matrix4 CreateOverlayProjection(const Core::Vector2& in_size) const;
+
             //----------------------------------------------------------
             /// Sort Opaque
             ///
@@ -253,19 +290,31 @@ namespace ChilliSource
             /// @param Renderables
             //----------------------------------------------------------
             void SortTransparent(CameraComponent* inpCameraComponent, std::vector<RenderComponent*>& inaRenderables) const;
-            
+            //------------------------------------------------
+            /// Called when the application is being destroyed.
+            /// This should be used to cleanup memory and
+            /// references to other systems. System destruction
+            /// occurs in the reverse order to which they
+            /// were created
+            ///
+            /// @author I Copland
+            //------------------------------------------------
+            void OnDestroy() override;
         private:
-            
-            CanvasRenderer mCanvas;
-            
+
+            CanvasRenderer* m_canvas = nullptr;
+
 			RenderSystem* mpRenderSystem;
 			CameraComponent* mpActiveCamera;
-            
+
 			RendererSortPredicateSPtr mpTransparentSortPredicate;
             RendererSortPredicateSPtr mpOpaqueSortPredicate;
-            
+
             ICullingPredicateSPtr mpPerspectiveCullPredicate;
             ICullingPredicateSPtr mpOrthoCullPredicate;
+
+            MaterialCSPtr m_staticDirShadowMaterial;
+            MaterialCSPtr m_animDirShadowMaterial;
 		};
 	}
 }

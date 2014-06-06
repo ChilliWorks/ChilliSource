@@ -7,7 +7,9 @@
 //
 
 #include <ChilliSource/Core/String/StringParser.h>
+
 #include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 
 #include <cstdlib>
 #include <string>
@@ -98,7 +100,7 @@ namespace ChilliSource
             
 			if (udwSize != 2)
 			{
-				return Vector2::ZERO;
+				return Vector2::k_zero;
 			}
 			else
 			{
@@ -115,7 +117,7 @@ namespace ChilliSource
             
 			if (udwSize != 3)
 			{
-				return Vector3::ZERO;
+				return Vector3::k_zero;
 			}
 			else
 			{
@@ -132,7 +134,7 @@ namespace ChilliSource
 			
 			if (udwSize != 4)
 			{
-				return Vector4::ZERO;
+				return Vector4::k_zero;
 			}
 			else
 			{
@@ -143,17 +145,17 @@ namespace ChilliSource
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        Matrix4x4 ParseMatrix4(const std::string& in_string)
+        Matrix4 ParseMatrix4(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
             
 			if (udwSize != 16)
 			{
-				return Matrix4x4::IDENTITY;
+				return Matrix4::k_identity;
 			}
 			else
 			{
-                Matrix4x4 matRet;
+                Matrix4 matRet;
                 
 				CS_SSCANF(in_string.c_str(), "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ",
 						&matRet.m[0], &matRet.m[1], &matRet.m[2], &matRet.m[3],
@@ -173,7 +175,7 @@ namespace ChilliSource
             
 			if (udwSize != 4)
 			{
-				return Quaternion::IDENTITY;
+				return Quaternion::k_identity;
 			}
 			else
 			{
@@ -204,17 +206,59 @@ namespace ChilliSource
         //------------------------------------------------------------
         StorageLocation ParseStorageLocation(const std::string &in_string)
         {
-            if(in_string == "Package")
+            std::string lowerCase = in_string;
+            StringUtils::ToLowerCase(lowerCase);
+            
+            if(lowerCase == "package")
+            {
                 return StorageLocation::k_package;
-			if(in_string == "SaveData")
+            }
+			else if(lowerCase == "savedata")
+            {
                 return StorageLocation::k_saveData;
-			if(in_string == "Cache")
+            }
+			else if(lowerCase == "cache")
+            {
                 return StorageLocation::k_cache;
-			if(in_string == "DLC")
+            }
+			else if(lowerCase == "dlc")
+            {
                 return StorageLocation::k_DLC;
+            }
+            else if(lowerCase == "root")
+            {
+                return StorageLocation::k_root;
+            }
 			
-			//No test function found
+			CS_LOG_ERROR("String Parser: Invalid storage location.");
 			return StorageLocation::k_package;
+        }
+        //------------------------------------------------------------
+        //------------------------------------------------------------
+        Rendering::SurfaceFormat ParseSurfaceFormat(const std::string& in_surfaceFormat)
+        {
+            std::string lowerCase = in_surfaceFormat;
+            StringUtils::ToLowerCase(lowerCase);
+            
+            if (lowerCase == "rgb565_depth24")
+            {
+                return Rendering::SurfaceFormat::k_rgb565_depth24;
+            }
+            else if (lowerCase == "rgb565_depth32")
+            {
+                return Rendering::SurfaceFormat::k_rgb565_depth32;
+            }
+            else if (lowerCase == "rgb888_depth24")
+            {
+                return Rendering::SurfaceFormat::k_rgb888_depth24;
+            }
+            else if (lowerCase == "rgb888_depth32")
+            {
+                return Rendering::SurfaceFormat::k_rgb888_depth32;
+            }
+            
+            CS_LOG_ERROR("String Parser: Invalid surface format.");
+            return Rendering::SurfaceFormat::k_rgb565_depth24;
         }
     }
 }

@@ -6,26 +6,21 @@
 //  Copyright 2012 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/Core/Base/Screen.h>
 #include <ChilliSource/Backend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Core/File/SharedPreferencesJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
 #include <ChilliSource/Backend/Platform/Android/Input/Pointer/TouchInputJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Social/Communications/ContactInformationProviderJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterAuthenticationActivityJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Web/Base/WebViewJavaInterface.h>
-#include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
-#include <ChilliSource/Core/LaunchingActions/LaunchingActions.h>
 
-//--------------------------------------------------------------------------------------
-/// Globals
-//--------------------------------------------------------------------------------------
-ChilliSource::Core::Application* (*BootFunctionPtr)() = nullptr;
 //--------------------------------------------------------------------------------------
 /// C function declarations
 //--------------------------------------------------------------------------------------
@@ -118,25 +113,16 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	void Java_com_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
-	/// Interface function called from java. This is called when the orientation has changed.
+	/// Interface function called from java. This is called when the resolution changes.
 	///
 	/// @author I Copland
 	///
-	/// @param JNIEnv - The jni environment.
-	/// @param jobject - the java object calling the function
-	/// @param the new orientation as an int that maps to the orientation enum.
+	/// @param The jni environment.
+	/// @param the java object calling the function
+	/// @param The new width.
+	/// @param The new height.
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_orientationChanged(JNIEnv* in_env, jobject in_this, s32 in_orientationID);
-	//--------------------------------------------------------------------------------------
-	/// Interface function called from java. This is called when the back hardware button is
-	/// pressed
-	///
-	/// @author I Copland
-	///
-	/// @param JNIEnv - The jni environment.
-	/// @param jobject - the java object calling the function
-	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_onBackPressed(JNIEnv* in_env, jobject in_this);
+	void Java_com_chillisource_core_CoreNativeInterface_onResolutionChanged(JNIEnv* in_env, jobject in_this, s32 in_width, s32 in_height);
 	//--------------------------------------------------------------------------------------
 	/// Application Did Receive Launching URL
 	///
@@ -169,7 +155,7 @@ void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject
 	in_env->GetJavaVM(&javaVM);
 
 	//create the application
-	ChilliSource::Core::Application* pApplication = BootFunctionPtr();
+	ChilliSource::Core::Application* pApplication = CreateApplication();
 	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CoreJavaInterface>()->SetApplication(pApplication);
 
 	//setup other interfaces
@@ -177,8 +163,6 @@ void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject
 	ChilliSource::Android::HttpRequestJavaInterface::SetupJavaInterface(javaVM);
 	ChilliSource::Android::SharedPreferencesJavaInterface::SetupJavaInterface(javaVM);
 	ChilliSource::Android::WebViewJavaInterface::SetupJavaInterface(javaVM);
-	ChilliSource::Android::ContactInformationProviderJavaInterface::SetupJavaInterface(javaVM);
-	ChilliSource::Android::TwitterAuthenticationActivityJavaInterface::SetupJavaInterface(javaVM);
     
 	//run the application
     pApplication->Init();
@@ -219,6 +203,7 @@ void Java_com_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobje
 {
 	//Create the message with the time between frames
 	ChilliSource::Core::Application::Get()->Update(in_deltaTime, (u64)in_elaspedTime);
+	ChilliSource::Core::Application::Get()->Render();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
@@ -228,34 +213,11 @@ void Java_com_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_orientationChanged(JNIEnv* in_env, jobject thiz, s32 in_orientationID)
+void Java_com_chillisource_core_CoreNativeInterface_onResolutionChanged(JNIEnv* in_env, jobject in_this, s32 in_width, s32 in_height)
 {
-	ChilliSource::Core::ScreenOrientation screenOrientation;
-
-	if (in_orientationID == 1)
-	{
-		screenOrientation = ChilliSource::Core::ScreenOrientation::k_portraitUp;
-		CS_LOG_VERBOSE("Changing orientation to portrait");
-	}
-	else
-	{
-		screenOrientation = ChilliSource::Core::ScreenOrientation::k_landscapeLeft;
-		CS_LOG_VERBOSE("Changing orientation to landscape");
-	}
-
-	ChilliSource::Core::Application::Get()->ScreenChangedOrientation(screenOrientation);
-}
-//--------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_onBackPressed(JNIEnv* in_env, jobject in_this)
-{
-	ChilliSource::Core::Application::Get()->GoBack();
-}
-//--------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_applicationDidReceiveLaunchingURL(JNIEnv* in_env, jobject in_this, jstring in_url)
-{
-	CSCore::LaunchingActions::ApplicationDidReceiveLaunchingURL(ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_url));
+	ChilliSource::Android::Screen* screen = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::Screen>();
+	CS_ASSERT(screen != nullptr, "Cannot find required system: Screen.");
+	screen->OnResolutionChanged(ChilliSource::Core::Vector2((f32)in_width, (f32)in_height));
 }
 
 namespace ChilliSource
@@ -276,9 +238,6 @@ namespace ChilliSource
 			CreateMethodReference("getApplicationVersionName", "()Ljava/lang/String;");
 			CreateMethodReference("getPackageName", "()Ljava/lang/String;");
 			CreateMethodReference("getAPKDirectory", "()Ljava/lang/String;");
-			CreateMethodReference("getOrientation", "()I");
-			CreateMethodReference("getOrientationLandscapeConstant", "()I");
-			CreateMethodReference("getOrientationPortraitConstant", "()I");
 			CreateMethodReference("getScreenWidth", "()I");
 			CreateMethodReference("getScreenHeight", "()I");
 			CreateMethodReference("getDefaultLocaleCode", "()Ljava/lang/String;");
@@ -293,8 +252,7 @@ namespace ChilliSource
 			CreateMethodReference("getAndroidID", "()Ljava/lang/String;");
 			CreateMethodReference("forceQuit", "()V");
 			CreateMethodReference("getSystemTimeInMilliseconds", "()J");
-			CreateMethodReference("getPhysicalScreenSize", "()F");
-			CreateMethodReference("setMaxFPS", "(I)V");
+			CreateMethodReference("setPreferredFPS", "(I)V");
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
@@ -323,10 +281,10 @@ namespace ChilliSource
 		}
 		//-----------------------------------------
 		//-----------------------------------------
-		void CoreJavaInterface::SetMaxFPS(u32 in_maxFPS)
+		void CoreJavaInterface::SetPreferredFPS(u32 in_maxFPS)
 		{
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			env->CallVoidMethod(GetJavaObject(), GetMethodID("setMaxFPS"), in_maxFPS);
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("setPreferredFPS"), in_maxFPS);
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
@@ -389,29 +347,6 @@ namespace ChilliSource
 			apkRootPath = JavaInterfaceUtils::CreateSTDStringFromJString(jstrAkpPath);
 			env->DeleteLocalRef(jstrAkpPath);
 			return apkRootPath;
-		}
-		//--------------------------------------------------------------------------------------
-		//--------------------------------------------------------------------------------------
-		s32 CoreJavaInterface::GetOrientation()
-		{
-			s32 result = -1;
-			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			s32 OSOrientation = env->CallIntMethod(GetJavaObject(), GetMethodID("getOrientation"));
-			s32 OSConstOrientationLandscape = env->CallIntMethod(GetJavaObject(), GetMethodID("getOrientationLandscapeConstant"));
-			s32 OSConstOrientationPortrait = env->CallIntMethod(GetJavaObject(), GetMethodID("getOrientationPortraitConstant"));
-
-			// Here we need to map the orientation reported back by Android to
-			// moFlow orientation
-			if(OSOrientation == OSConstOrientationPortrait)
-			{
-				result = (s32)Core::ScreenOrientation::k_portraitUp;
-			}
-			else if(OSOrientation == OSConstOrientationLandscape)
-			{
-				result = (s32)Core::ScreenOrientation::k_landscapeRight;
-			}
-
-			return result;
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
@@ -569,16 +504,7 @@ namespace ChilliSource
 			output = (TimeIntervalMs)env->CallLongMethod(GetJavaObject(), GetMethodID("getSystemTimeInMilliseconds"));
 			return output;
         }
-        //-----------------------------------------------------------------------------------------------------
-        //-----------------------------------------------------------------------------------------------------
-        f32 CoreJavaInterface::GetPhysicalScreenSize()
-        {
-        	if (m_physicalScreenSize < 0.0f)
-        	{
-				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				m_physicalScreenSize = env->CallFloatMethod(GetJavaObject(), GetMethodID("getPhysicalScreenSize"));
-        	}
-        	return m_physicalScreenSize;
-        }
 	}
 }
+
+#endif

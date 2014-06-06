@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposerDelegate.h>
 
 #import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
@@ -54,9 +56,11 @@
     }
     else
     {
-        CS_LOG_ERROR([NSStringUtils newStringWithNSString:[error localizedDescription]]);
+        CS_LOG_ERROR([NSStringUtils newUTF8StringWithNSString:[error localizedDescription]]);
         emailComposer->OnResult(controller, MFMailComposeResultFailed);
     }
 }
 
 @end
+
+#endif

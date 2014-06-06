@@ -7,6 +7,8 @@
  *
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _MOFLO_PLATFORM_ANDROID_FILEIO_FILE_STREAM_ANDROID_APK_
 #define _MOFLO_PLATFORM_ANDROID_FILEIO_FILE_STREAM_ANDROID_APK_
 
@@ -322,5 +324,7 @@ namespace ChilliSource
 	}
 }
 
+
+#endif
 
 #endif

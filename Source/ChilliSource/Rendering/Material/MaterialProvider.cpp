@@ -40,7 +40,11 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
+#include <ChilliSource/Rendering/Texture/CubemapResourceOptions.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureResourceOptions.h>
+
+//TODO: Expose wrap and filter mode of texture and cubemap through texture
 
 namespace ChilliSource
 {
@@ -407,7 +411,7 @@ namespace ChilliSource
                             {
                                 if(out_shaderFiles[udwShaderFilesIndex].m_pass == shaderNodes[i].second)
                                 {
-                                    out_shaderFiles[udwShaderFilesIndex].m_location = ChilliSource::Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(shaderEl, "location", "Package"));
+                                    out_shaderFiles[udwShaderFilesIndex].m_location = Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(shaderEl, "location", "Package"));
                                     out_shaderFiles[udwShaderFilesIndex].m_filePath = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(shaderEl, "file-name", "");
                                     break;
                                 }
@@ -430,15 +434,15 @@ namespace ChilliSource
                         }
                         else if(strType == "Vec2")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector2>(shaderVarEl, "value", Core::Vector2::ZERO));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector2>(shaderVarEl, "value", Core::Vector2::k_zero));
                         }
                         else if(strType == "Vec3")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector3>(shaderVarEl, "value", Core::Vector3::ZERO));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector3>(shaderVarEl, "value", Core::Vector3::k_zero));
                         }
                         else if(strType == "Vec4")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector4>(shaderVarEl, "value", Core::Vector4::ZERO));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector4>(shaderVarEl, "value", Core::Vector4::k_zero));
                         }
                         else if(strType == "Colour")
                         {
@@ -446,7 +450,7 @@ namespace ChilliSource
                         }
                         else if(strType == "Matrix")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Matrix4x4>(shaderVarEl, "value", Core::Matrix4x4::IDENTITY));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Matrix4>(shaderVarEl, "value", Core::Matrix4::k_identity));
                         }
                         //Move on to the next variable
                         shaderVarEl =  Core::XMLUtils::NextSiblingElementWithName(shaderVarEl);
@@ -550,7 +554,8 @@ namespace ChilliSource
                     }
                     case ResourceType::k_texture:
                     {
-                        resourcePool->LoadResourceAsync<Texture>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, [in_loadIndex, in_descs, in_delegate, out_material](const TextureCSPtr& in_texture)
+                        auto options(std::make_shared<TextureResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, Texture::FilterMode::k_bilinear, Texture::WrapMode::k_clamp, Texture::WrapMode::k_clamp));
+                        resourcePool->LoadResourceAsync<Texture>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [in_loadIndex, in_descs, in_delegate, out_material](const TextureCSPtr& in_texture)
                         {
                             if(in_texture->GetLoadState() == Core::Resource::LoadState::k_loaded)
                             {
@@ -580,7 +585,8 @@ namespace ChilliSource
                     }
                     case ResourceType::k_cubemap:
                     {
-                        resourcePool->LoadResourceAsync<Cubemap>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, [in_loadIndex, in_descs, in_delegate, out_material](const CubemapCSPtr& in_cubemap)
+                        auto options(std::make_shared<CubemapResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, Texture::FilterMode::k_bilinear, Texture::WrapMode::k_clamp, Texture::WrapMode::k_clamp));
+                        resourcePool->LoadResourceAsync<Cubemap>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [in_loadIndex, in_descs, in_delegate, out_material](const CubemapCSPtr& in_cubemap)
                         {
                             if(in_cubemap->GetLoadState() == Core::Resource::LoadState::k_loaded)
                             {
@@ -647,7 +653,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void MaterialProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
+		void MaterialProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
 		{
             std::vector<ShaderDesc> shaderFiles;
             std::vector<TextureDesc> textureFiles;
@@ -681,17 +687,14 @@ namespace ChilliSource
             {
                 if(textureFiles[i].m_filePath.empty() == false)
                 {
-                    TextureCSPtr texture = resourcePool->LoadResource<Texture>(textureFiles[i].m_location, textureFiles[i].m_filePath);
+                    auto options(std::make_shared<TextureResourceOptions>(textureFiles[i].m_shouldMipMap, Texture::FilterMode::k_bilinear, Texture::WrapMode::k_clamp, Texture::WrapMode::k_clamp));
+                    TextureCSPtr texture = resourcePool->LoadResource<Texture>(textureFiles[i].m_location, textureFiles[i].m_filePath, options);
                     if(texture == nullptr)
                     {
                         out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                         return;
                     }
                     material->AddTexture(texture);
-                    if(textureFiles[i].m_shouldMipMap == true)
-                    {
-                        //TODO: Generate mipmaps
-                    }
                 }
             }
             
@@ -700,17 +703,14 @@ namespace ChilliSource
             {
                 if(cubemapFiles[i].m_filePath.empty() == false)
                 {
-                    CubemapCSPtr cubemap = resourcePool->LoadResource<Cubemap>(cubemapFiles[i].m_location, cubemapFiles[i].m_filePath);
+                    auto options(std::make_shared<CubemapResourceOptions>(cubemapFiles[i].m_shouldMipMap, Texture::FilterMode::k_bilinear, Texture::WrapMode::k_clamp, Texture::WrapMode::k_clamp));
+                    CubemapCSPtr cubemap = resourcePool->LoadResource<Cubemap>(cubemapFiles[i].m_location, cubemapFiles[i].m_filePath, options);
                     if(cubemap == nullptr)
                     {
                         out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                         return;
                     }
                     material->SetCubemap(cubemap);
-                    if(cubemapFiles[i].m_shouldMipMap == true)
-                    {
-                        //TODO: Generate mipmaps
-                    }
                 }
             }
             
@@ -718,7 +718,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void MaterialProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+		void MaterialProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
 			auto task = std::bind(&MaterialProvider::BuildMaterialTask, this, in_location, in_filePath, in_delegate, out_resource);
 			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);

@@ -68,13 +68,13 @@ namespace ChilliSource
 			ParticleEmitter* GetEmitter(u32 inudwIndex);
 			
             //---------------------------------------------------
-            /// Add Effector
+            /// Add Affector
             ///
-            /// Add a new particle effector to all emitters
+            /// Add a new particle affector to all emitters
             ///
-            /// @param Effector
+            /// @param Affector
             //---------------------------------------------------
-            void AddEffector(ParticleEffectorUPtr inpEffector);
+            void AddAffector(ParticleAffectorUPtr inpAffector);
             //---------------------------------------------------
             /// Start Emitting
             ///
@@ -128,8 +128,10 @@ namespace ChilliSource
             ///
             /// @param Render system
             /// @param Active camera component
+            /// @param Material to render static shadows with
+            /// @param Material to render skinned shadows with
             //-----------------------------------------------------
-            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam) override {};
+            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap) override {};
 			//-------------------------------------------------
 			/// Set Owning System
 			///
@@ -156,7 +158,7 @@ namespace ChilliSource
 		private:
 			
 			std::vector<ParticleEmitterUPtr> mEmitters;
-			std::vector<ParticleEffectorUPtr> mEffectors;
+			std::vector<ParticleAffectorUPtr> mAffectors;
 			
 			ParticleSystem* mpOwningSystem;
             

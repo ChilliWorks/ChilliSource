@@ -1,14 +1,34 @@
-/*
- *  OpenGLES_2_0.cpp
- *  moFlo
- *
- *  Created by Scott Downie on 27/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  RenderSystem.cpp
+//  Chilli Source
+//  Created by Scott Downie on 27/09/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/MeshBuffer.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderTarget.h>
@@ -16,7 +36,10 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
@@ -25,12 +48,6 @@
 #include <ChilliSource/Rendering/Base/CullFace.h>
 #include <ChilliSource/Rendering/Base/DepthTestComparison.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>
-
-#ifdef CS_TARGETPLATFORM_IOS
-#include <UIKit/UIKit.h>
-#else
-#include <ChilliSource/Core/Base/Application.h>
-#endif
 
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
@@ -68,59 +85,72 @@ namespace ChilliSource
                     case Rendering::VertexDataSemantic::k_jointIndex:
                         return "a_jointIndices";
                 }
-
+                
                 CS_LOG_FATAL("No such vertex semantic type");
                 return "";
+            }
+            //----------------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @param The blend mode enum in the engine.
+            ///
+            /// @return The equivalent opengl blend mode.
+            //----------------------------------------------------------
+            GLenum BlendModeToGL(Rendering::BlendMode in_blendMode)
+            {
+				switch(in_blendMode)
+				{
+					case Rendering::BlendMode::k_zero:
+						return GL_ZERO;
+					case Rendering::BlendMode::k_one:
+						return GL_ONE;
+					case Rendering::BlendMode::k_sourceCol:
+						return GL_SRC_COLOR;
+					case Rendering::BlendMode::k_oneMinusSourceCol:
+						return GL_ONE_MINUS_SRC_COLOR;
+					case Rendering::BlendMode::k_sourceAlpha:
+						return GL_SRC_ALPHA;
+					case Rendering::BlendMode::k_oneMinusSourceAlpha:
+						return GL_ONE_MINUS_SRC_ALPHA;
+					case Rendering::BlendMode::k_destAlpha:
+						return GL_DST_ALPHA;
+					case Rendering::BlendMode::k_oneMinusDestAlpha:
+						return GL_ONE_MINUS_DST_ALPHA;
+                    default:
+                        return GL_SRC_ALPHA;
+				};
             }
         }
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
 		RenderSystem::RenderSystem(Rendering::RenderCapabilities* in_renderCapabilities)
-		: mpDefaultRenderTarget(nullptr), mpCurrentMaterial(nullptr), m_currentShader(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0),
+		: mpCurrentMaterial(nullptr), m_currentShader(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0),
         mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mpLightComponent(nullptr),
-        mbBlendFunctionLocked(false), mbInvalidateLigthingCache(true),
-        mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities)), m_hasContextBeenBackedUp(false)
+        mbBlendFunctionLocked(false), mbInvalidateLightingCache(true),
+		mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities)), m_hasContextBeenBackedUp(false), mpbLastVertexAttribState(nullptr), mpbCurrentVertexAttribState(nullptr)
 		{
-
+            
 		}
         //----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
 		bool RenderSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == RenderSystem::InterfaceID || inInterfaceID == Rendering::RenderSystem::InterfaceID || inInterfaceID == Core::IComponentProducer::InterfaceID;
+			return inInterfaceID == RenderSystem::InterfaceID || inInterfaceID == Rendering::RenderSystem::InterfaceID;
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
         void RenderSystem::Init()
 		{
-#ifdef CS_TARGETPLATFORM_IOS
-            //Create the context with the specified GLES version
-			mContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-            
-			//Set the current context
-            if(!mContext || ![EAGLContext setCurrentContext: mContext])
-            {
-                CS_LOG_FATAL("Cannot Create OpenGL ES 2.0 Context");
-            }
-#endif
-#ifdef CS_TARGETPLATFORM_WINDOWS
-			GLenum GlewError = glewInit();
-			if (GLEW_OK != GlewError)
-			{
-				//Problem: glewInit failed, something is seriously wrong.
-				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
-			}
-#endif
-            
             m_hasContext = true;
             
-            CS_ASSERT((Core::Screen::GetRawDimensions() > Core::Vector2::ZERO), "Cannot create and OpenGL ES view with size ZERO");
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            CS_ASSERT((m_screen->GetResolution().x > 0.0f && m_screen->GetResolution().y > 0.0f), "Cannot create and OpenGL ES view with size ZERO");
             
             m_textureUnitSystem = Core::Application::Get()->GetSystem<TextureUnitSystem>();
             CS_ASSERT(m_textureUnitSystem, "Cannot find required system: Texture Unit System.");
-
+            
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
             mpRenderCapabilities->DetermineCapabilities();
             
@@ -132,7 +162,8 @@ namespace ChilliSource
             
             ForceRefreshRenderStates();
 			
-            OnScreenOrientationChanged((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
+            OnScreenResolutionChanged(m_screen->GetResolution());
+            m_resolutionChangeConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate(this, &RenderSystem::OnScreenResolutionChanged));
             
             m_hasContextBeenBackedUp = false;
 		}
@@ -141,13 +172,7 @@ namespace ChilliSource
         void RenderSystem::Resume()
         {
 			mbInvalidateAllCaches = true;
-			
-#ifdef CS_TARGETPLATFORM_IOS
-            if([EAGLContext currentContext] != mContext)
-            {
-                [EAGLContext setCurrentContext:mContext];
-            }
-#endif
+            
             RestoreContext();
         }
         //----------------------------------------------------------
@@ -205,14 +230,14 @@ namespace ChilliSource
             {
                 if(mpLightComponent != nullptr)
                 {
-                    mbInvalidateLigthingCache = mpLightComponent->IsCacheValid() == false;
+                    mbInvalidateLightingCache = mpLightComponent->IsCacheValid() == false;
                 }
                 
                 return;
             }
             
             mpLightComponent = inpLightComponent;
-            mbInvalidateLigthingCache = true;
+            mbInvalidateLightingCache = true;
         }
         //----------------------------------------------------------
 		//----------------------------------------------------------
@@ -229,9 +254,7 @@ namespace ChilliSource
             Shader* shader = (Shader*)(in_material->GetShader(in_shaderPass).get());
             CS_ASSERT(shader != nullptr, "Cannot render with null shader");
             
-            shader->SetUniform("u_cameraPos", mvCameraPos, Shader::UniformNotFoundPolicy::k_failSilent);
-            
-            bool hasMaterialChanged = mbInvalidateAllCaches == true || mpCurrentMaterial == nullptr || mpCurrentMaterial != in_material.get() || mpCurrentMaterial->IsCacheValid() == false;
+            bool hasMaterialChanged = mbInvalidateAllCaches == true || mpCurrentMaterial == nullptr || mpCurrentMaterial != in_material.get() || mpCurrentMaterial->IsCacheValid() == false || shader != m_currentShader;
             if(hasMaterialChanged == true)
             {
                 mudwNumBoundTextures = 0;
@@ -251,7 +274,7 @@ namespace ChilliSource
                     mbAmbientSet = false;
                     mbDiffuseSet = false;
                     mbSpecularSet = false;
-                    mbInvalidateLigthingCache = true;
+                    mbInvalidateLightingCache = true;
                 }
                 
                 //Set all the custom shader variables
@@ -268,11 +291,13 @@ namespace ChilliSource
                 //will not be required
                 const_cast<Rendering::Material*>(mpCurrentMaterial)->SetCacheValid();
             }
+            
+            shader->SetUniform("u_cameraPos", mvCameraPos, Shader::UniformNotFoundPolicy::k_failSilent);
 		}
         //----------------------------------------------------------
         /// Apply Joints
         //----------------------------------------------------------
-        void RenderSystem::ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints)
+        void RenderSystem::ApplyJoints(const std::vector<Core::Matrix4>& inaJoints)
         {
             CS_ASSERT(m_currentShader != nullptr,  "Cannot set joints without binding shader");
             
@@ -294,7 +319,7 @@ namespace ChilliSource
         {
             EnableAlphaBlending(inMaterial->IsTransparencyEnabled());
             SetBlendFunction(inMaterial->GetSourceBlendMode(), inMaterial->GetDestBlendMode());
-
+            
             EnableFaceCulling(inMaterial->IsFaceCullingEnabled());
             SetCullFace(inMaterial->GetCullFace());
             
@@ -397,18 +422,18 @@ namespace ChilliSource
         //----------------------------------------------------------
         void RenderSystem::ApplyLighting(Rendering::LightComponent* inpLightComponent, Shader* out_shader)
         {
-            if(mbInvalidateLigthingCache == false || inpLightComponent == nullptr)
+            if(mbInvalidateLightingCache == false || inpLightComponent == nullptr)
                 return;
             
-            mbInvalidateLigthingCache = false;
+            mbInvalidateLightingCache = false;
             inpLightComponent->CalculateLightingValues();
             inpLightComponent->SetCacheValid();
             
             if(inpLightComponent->IsA(Rendering::DirectionalLightComponent::InterfaceID))
             {
                 Rendering::DirectionalLightComponent* pLightComponent = (Rendering::DirectionalLightComponent*)inpLightComponent;
-                out_shader->SetUniform("u_lightDir", pLightComponent->GetDirection());
-  
+                out_shader->SetUniform("u_lightDir", pLightComponent->GetDirection(), Shader::UniformNotFoundPolicy::k_failSilent);
+                
                 if(pLightComponent->GetShadowMapPtr() != nullptr)
                 {
                     out_shader->SetUniform("u_shadowTolerance", pLightComponent->GetShadowTolerance(), Shader::UniformNotFoundPolicy::k_failSilent);
@@ -417,7 +442,7 @@ namespace ChilliSource
                     if(mudwNumBoundTextures <= mpRenderCapabilities->GetNumTextureUnits())
                     {
                         pLightComponent->GetShadowMapPtr()->Bind(mudwNumBoundTextures);
-                        out_shader->SetUniform("u_shadowMap", (s32)mudwNumBoundTextures);
+                        out_shader->SetUniform("u_shadowMap", (s32)mudwNumBoundTextures, Shader::UniformNotFoundPolicy::k_failSilent);
                         ++mudwNumBoundTextures;
                     }
                     else
@@ -441,45 +466,31 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Apply Camera
 		//----------------------------------------------------------
-		void RenderSystem::ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4x4& inmatView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol)
+		void RenderSystem::ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4& inmatView, const Core::Matrix4& inmatProj, const Core::Colour& inClearCol)
 		{
 			//Set the new view matrix based on the camera position
 			mmatView = inmatView;
 			mmatProj = inmatProj;
             mvCameraPos = invPosition;
-            Core::Matrix4x4::Multiply(&mmatView, &mmatProj, &mmatViewProj);
+			mmatViewProj = mmatView * mmatProj;
 			
 			//Set the clear colour
             mNewClearColour = inClearCol;
-		}
-		//----------------------------------------------------------
-		/// Get Default Render Target
-		//----------------------------------------------------------
-		Rendering::RenderTarget* RenderSystem::GetDefaultRenderTarget()
-		{
-			return mpDefaultRenderTarget;
 		}
 		//----------------------------------------------------------
 		/// Begin Frame
 		//----------------------------------------------------------
 		void RenderSystem::BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
-#ifdef CS_TARGETPLATFORM_IOS
-            //Sometimes iOS steals the context and doesn't return it.
-            if([EAGLContext currentContext] != mContext)
-            {
-                [EAGLContext setCurrentContext:mContext];
-            }
-#endif
-            
-#ifdef CS_ENABLE_DEBUG
-			CheckForGLErrors();
-#endif
 			if (inpActiveRenderTarget != nullptr)
 			{
 				inpActiveRenderTarget->Bind();
 			}
-
+            else
+            {
+                glViewport(0, 0, mudwViewWidth, mudwViewHeight);
+            }
+            
 			EnableColourWriting(true);
             EnableDepthWriting(true);
             
@@ -492,6 +503,8 @@ namespace ChilliSource
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             m_attributeCache.clear();
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while beginning frame.");
 		}
 		//----------------------------------------------------------
 		/// Create Render Target
@@ -519,45 +532,48 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Vertex Buffer
         //----------------------------------------------------------
-        void RenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld)
+        void RenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("DrawCalls", 1u);
-			Debugging::DebugStats::AddToEvent("Verts", inudwNumVerts);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
+			Core::Application::Get()->GetDebugStats()->AddToEvent("Verts", inudwNumVerts);
 #endif
             
 			//Set the new model view matrix based on the camera view matrix and the object matrix
-            static Core::Matrix4x4 matWorldViewProj;
-            Core::Matrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
+            static Core::Matrix4 matWorldViewProj;
+			matWorldViewProj = inmatWorld * mmatViewProj;
             m_currentShader->SetUniform("u_wvpMat", matWorldViewProj, Shader::UniformNotFoundPolicy::k_failSilent);
             m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
             if(m_currentShader->HasUniform("u_normalMat"))
             {
-                m_currentShader->SetUniform("u_normalMat", inmatWorld.Inverse().GetTranspose());
+                m_currentShader->SetUniform("u_normalMat", Core::Matrix4::Transpose(Core::Matrix4::Inverse(inmatWorld)));
             }
             
 			EnableVertexAttributeForSemantic(inpBuffer);
 			glDrawArrays(GetPrimitiveType(inpBuffer->GetPrimitiveType()), inudwOffset, inudwNumVerts);
             
             mbInvalidateAllCaches = false;
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while rendering vertex buffer.");
 		}
         //----------------------------------------------------------
         /// Render Buffer
         //----------------------------------------------------------
-        void RenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld)
+        void RenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("DrawCalls", 1u);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("Verts", inpBuffer->GetVertexCount());
 #endif
-
+            
 			//Set the new model view matrix based on the camera view matrix and the object matrix
-            static Core::Matrix4x4 matWorldViewProj;
-            Core::Matrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
+            static Core::Matrix4 matWorldViewProj;
+			matWorldViewProj = inmatWorld * mmatViewProj;
             m_currentShader->SetUniform("u_wvpMat", matWorldViewProj, Shader::UniformNotFoundPolicy::k_failSilent);
             m_currentShader->SetUniform("u_worldMat", inmatWorld, Shader::UniformNotFoundPolicy::k_failSilent);
             if(m_currentShader->HasUniform("u_normalMat"))
             {
-                m_currentShader->SetUniform("u_normalMat", inmatWorld.Inverse().GetTranspose());
+                m_currentShader->SetUniform("u_normalMat", Core::Matrix4::Transpose(Core::Matrix4::Inverse(inmatWorld)));
             }
             
 			//Render the buffer contents
@@ -565,56 +581,17 @@ namespace ChilliSource
 			glDrawElements(GetPrimitiveType(inpBuffer->GetPrimitiveType()), inudwNumIndices, GL_UNSIGNED_SHORT, (GLvoid*)inudwOffset);
             
             mbInvalidateAllCaches = false;
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while rendering buffer.");
 		}
 		//----------------------------------------------------------
 		/// End Frame
 		//----------------------------------------------------------
 		void RenderSystem::EndFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
-#ifdef CS_TARGETPLATFORM_IOS
-            if (mpDefaultRenderTarget != nullptr && mpDefaultRenderTarget == inpActiveRenderTarget)
-            {
-                RenderTarget::PresentDefaultRenderTarget(mContext, mpDefaultRenderTarget);
-            }
-#else
-            glViewport(0, 0, mudwViewWidth, mudwViewHeight);
-#endif
 #ifdef CS_TARGETPLATFORM_WINDOWS
 			Windows::GLFWManager::Get()->SwapBuffers();
 #endif
-		}
-		//----------------------------------------------------------
-		/// On Screen Orientation Changed
-		//----------------------------------------------------------
-        void RenderSystem::OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight)
-		{
-            ResizeFrameBuffer(inudwWidth, inudwHeight);
-		}
-		//----------------------------------------------------------
-		/// Resize Frame Buffer
-		//----------------------------------------------------------
-		void RenderSystem::ResizeFrameBuffer(u32 inudwWidth, u32 inudwHeight)
-		{
-#ifdef CS_TARGETPLATFORM_IOS
-            if(mudwViewWidth != inudwWidth || mudwViewHeight != inudwHeight)
-            {
-                if(mpDefaultRenderTarget)
-                {
-                    RenderTarget::DestroyDefaultRenderTarget(mContext, mpDefaultRenderTarget);
-                }
-                
-                //Create a default frame buffer for on-screen rendering
-                mpDefaultRenderTarget = RenderTarget::CreateDefaultRenderTarget(mContext, inudwWidth, inudwHeight);
-            }
-#else
-            if(mbInvalidateAllCaches || mudwViewWidth != inudwWidth || mudwViewHeight != inudwHeight)
-            {
-                glViewport(0, 0, inudwWidth, inudwHeight);
-            }
-#endif
-            
-            mudwViewHeight = inudwHeight;
-            mudwViewWidth = inudwWidth;
 		}
         //----------------------------------------------------------
 		/// Lock Alpha Blending
@@ -635,23 +612,27 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void RenderSystem::EnableAlphaBlending(bool inbIsEnabled)
 		{
-            if(mbInvalidateAllCaches != true && msCurrentRenderLocks.mbIsAlphaBlendingEnabled == true)
+            if(msCurrentRenderLocks.mbIsAlphaBlendingEnabled == false)
             {
-                return;
+                //Turn it on
+                if((mbInvalidateAllCaches || !msCurrentRenderFlags.mbIsAlphaBlendingEnabled) && inbIsEnabled)
+                {
+                    msCurrentRenderFlags.mbIsAlphaBlendingEnabled = true;
+                    glEnable(GL_BLEND);
+                }
+                //Get it off
+                else if((mbInvalidateAllCaches || msCurrentRenderFlags.mbIsAlphaBlendingEnabled) && !inbIsEnabled)
+                {
+                    msCurrentRenderFlags.mbIsAlphaBlendingEnabled = false;
+                    glDisable(GL_BLEND);
+                }
+            }
+            else if (mbInvalidateAllCaches == true)
+            {
+                msCurrentRenderFlags.mbIsAlphaBlendingEnabled ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
             }
             
-			//Turn it on
-			if((mbInvalidateAllCaches || !msCurrentRenderFlags.mbIsAlphaBlendingEnabled) && inbIsEnabled)
-			{
-				msCurrentRenderFlags.mbIsAlphaBlendingEnabled = true;
-				glEnable(GL_BLEND);
-			}
-			//Get it off
-			else if((mbInvalidateAllCaches || msCurrentRenderFlags.mbIsAlphaBlendingEnabled) && !inbIsEnabled)
-			{
-				msCurrentRenderFlags.mbIsAlphaBlendingEnabled = false;
-				glDisable(GL_BLEND);
-			}
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling/disabling blending.");
 		}
 		//----------------------------------------------------------
 		/// Enable Depth Testing
@@ -670,6 +651,8 @@ namespace ChilliSource
 				msCurrentRenderFlags.mbIsDepthTestEnabled = false;
 				glDisable(GL_DEPTH_TEST);
 			}
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling/disabling depth test.");
 		}
         //----------------------------------------------------------
 		/// Enable Colour Writing
@@ -688,6 +671,8 @@ namespace ChilliSource
 				msCurrentRenderFlags.mbIsColourWriteEnabled = false;
 				glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 			}
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling/disabling colour writing.");
 		}
         //----------------------------------------------------------
 		/// Lock Depth Writing
@@ -708,23 +693,27 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void RenderSystem::EnableDepthWriting(bool inbIsEnabled)
 		{
-            if(mbInvalidateAllCaches != true && msCurrentRenderLocks.mbIsDepthWriteEnabled == true)
+            if(msCurrentRenderLocks.mbIsDepthWriteEnabled == false)
             {
-                return;
+                //Turn it on
+                if((mbInvalidateAllCaches || !msCurrentRenderFlags.mbIsDepthWriteEnabled) && inbIsEnabled)
+                {
+                    msCurrentRenderFlags.mbIsDepthWriteEnabled = true;
+                    glDepthMask(GL_TRUE);
+                }
+                //Get it off
+                else if((mbInvalidateAllCaches || msCurrentRenderFlags.mbIsDepthWriteEnabled) && !inbIsEnabled)
+                {
+                    msCurrentRenderFlags.mbIsDepthWriteEnabled = false;
+                    glDepthMask(GL_FALSE);
+                }
+            }
+            else if (mbInvalidateAllCaches == true)
+            {
+                msCurrentRenderFlags.mbIsDepthWriteEnabled ? glDepthMask(GL_TRUE) : glDepthMask(GL_FALSE);
             }
             
-			//Turn it on
-			if((mbInvalidateAllCaches || !msCurrentRenderFlags.mbIsDepthWriteEnabled) && inbIsEnabled)
-			{
-				msCurrentRenderFlags.mbIsDepthWriteEnabled = true;
-				glDepthMask(GL_TRUE);
-			}
-			//Get it off
-			else if((mbInvalidateAllCaches || msCurrentRenderFlags.mbIsDepthWriteEnabled) && !inbIsEnabled)
-			{
-				msCurrentRenderFlags.mbIsDepthWriteEnabled = false;
-				glDepthMask(GL_FALSE);
-			}
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling/disabling depth writing.");
 		}
 		//----------------------------------------------------------
 		/// Enable Face Culling
@@ -743,6 +732,8 @@ namespace ChilliSource
 				msCurrentRenderFlags.mbIsCullingEnabled = false;
 				glDisable(GL_CULL_FACE);
 			}
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling/disabling face culling.");
 		}
         //----------------------------------------------------------
         /// Enable Scissor Testing
@@ -762,18 +753,22 @@ namespace ChilliSource
 				glDisable(GL_SCISSOR_TEST);
 				msCurrentRenderFlags.mbIsScissorTestingEnabled = false;
 			}
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling/disabling scissor testing.");
         }
         //----------------------------------------------------------
         /// Set Scissor Region
         //---------------------------------------------------------
         void RenderSystem::SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize)
         {
-            if(mbInvalidateAllCaches || mvCachedScissorPos != invPosition || mvCachedScissorSize != invSize)
+			if(mbInvalidateAllCaches || mvCachedScissorPos != invPosition || mvCachedScissorSize != invSize)
             {
                 mvCachedScissorPos = invPosition;
                 mvCachedScissorSize = invSize;
 				glScissor((GLsizei)invPosition.x, (GLsizei)invPosition.y, (GLsizei)invSize.x, (GLsizei)invSize.y);
             }
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting scissor region.");
         }
         //----------------------------------------------------------
         /// Set Cull Face
@@ -794,6 +789,8 @@ namespace ChilliSource
                 
                 meCurrentCullFace = ineCullface;
             }
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting face culling.");
         }
         //----------------------------------------------------------
         /// Set Depth Function
@@ -817,6 +814,8 @@ namespace ChilliSource
                 
                 meDepthFunc = ineFunc;
             }
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting depth function.");
         }
         //----------------------------------------------------------
 		/// Lock Blend Function
@@ -837,76 +836,26 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void RenderSystem::SetBlendFunction(Rendering::BlendMode ineSrcFunc, Rendering::BlendMode ineDstFunc)
 		{
-            if(mbInvalidateAllCaches != true && mbBlendFunctionLocked == true)
+            if(mbBlendFunctionLocked == false)
             {
-                return;
+                if(mbInvalidateAllCaches || ineSrcFunc != mSrcBlendFunc || ineDstFunc != mDstBlendFunc)
+                {
+                    mSrcBlendFunc = ineSrcFunc;
+                    mDstBlendFunc = ineDstFunc;
+                    
+                    GLenum srcFunc = BlendModeToGL(mSrcBlendFunc);
+                    GLenum dstFunc = BlendModeToGL(mDstBlendFunc);
+                    glBlendFunc(srcFunc, dstFunc);
+                }
+            }
+            else if (mbInvalidateAllCaches == true)
+            {
+                GLenum srcFunc = BlendModeToGL(mSrcBlendFunc);
+                GLenum dstFunc = BlendModeToGL(mDstBlendFunc);
+                glBlendFunc(srcFunc, dstFunc);
             }
             
-			if(mbInvalidateAllCaches || ineSrcFunc != mSrcBlendFunc || ineDstFunc != mDstBlendFunc)
-			{
-				mSrcBlendFunc = ineSrcFunc;
-				mDstBlendFunc = ineDstFunc;
-				
-				GLenum SrcFunc = GL_SRC_ALPHA;
-				switch(ineSrcFunc)
-				{
-					case Rendering::BlendMode::k_zero:
-						SrcFunc = GL_ZERO;
-						break;
-					case Rendering::BlendMode::k_one:
-						SrcFunc = GL_ONE;
-						break;
-					case Rendering::BlendMode::k_sourceCol:
-						SrcFunc = GL_SRC_COLOR;
-						break;
-					case Rendering::BlendMode::k_oneMinusSourceCol:
-						SrcFunc = GL_ONE_MINUS_SRC_COLOR;
-						break;
-					case Rendering::BlendMode::k_sourceAlpha:
-						SrcFunc = GL_SRC_ALPHA;
-						break;
-					case Rendering::BlendMode::k_oneMinusSourceAlpha:
-						SrcFunc = GL_ONE_MINUS_SRC_ALPHA;
-						break;
-					case Rendering::BlendMode::k_destAlpha:
-						SrcFunc = GL_DST_ALPHA;
-						break;
-					case Rendering::BlendMode::k_oneMinusDestAlpha:
-						SrcFunc = GL_ONE_MINUS_DST_ALPHA;
-						break;
-				};
-                
-				GLenum DstFunc = GL_ONE_MINUS_SRC_ALPHA;
-                switch(ineDstFunc)
-				{
-					case Rendering::BlendMode::k_zero:
-						DstFunc = GL_ZERO;
-						break;
-					case Rendering::BlendMode::k_one:
-						DstFunc = GL_ONE;
-						break;
-					case Rendering::BlendMode::k_sourceCol:
-						DstFunc = GL_SRC_COLOR;
-						break;
-					case Rendering::BlendMode::k_oneMinusSourceCol:
-						DstFunc = GL_ONE_MINUS_SRC_COLOR;
-						break;
-					case Rendering::BlendMode::k_sourceAlpha:
-						DstFunc = GL_SRC_ALPHA;
-						break;
-					case Rendering::BlendMode::k_oneMinusSourceAlpha:
-						DstFunc = GL_ONE_MINUS_SRC_ALPHA;
-						break;
-					case Rendering::BlendMode::k_destAlpha:
-						DstFunc = GL_DST_ALPHA;
-						break;
-					case Rendering::BlendMode::k_oneMinusDestAlpha:
-						DstFunc = GL_ONE_MINUS_DST_ALPHA;
-						break;
-				};
-				
-				glBlendFunc(SrcFunc, DstFunc);
-			}
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting blend function.");
 		}
         //----------------------------------------------------------
         /// Create Attrib State Cache
@@ -916,11 +865,16 @@ namespace ChilliSource
             if(mdwMaxVertAttribs == 0)
             {
                 glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &mdwMaxVertAttribs);
+                
                 mpbCurrentVertexAttribState = (bool*)calloc(mdwMaxVertAttribs, sizeof(bool));
                 mpbLastVertexAttribState = (bool*)calloc(mdwMaxVertAttribs, sizeof(bool));
             }
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating the attribute state cache.");
         }
-        void RenderSystem::ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void RenderSystem::ApplyVertexAttributePointer(Rendering::MeshBuffer* inpBuffer,
                                                        const char* in_attribName, GLint indwSize, GLenum ineType, GLboolean inbNormalized,
                                                        GLsizei indwStride, const GLvoid* inpOffset)
         {
@@ -928,13 +882,17 @@ namespace ChilliSource
             
             if(it != m_attributeCache.end())
             {
-                if(it->second.pBuffer == inpBuffer &&
-                   it->second.size == indwSize &&
-                   it->second.type == ineType &&
-                   it->second.normalised == inbNormalized &&
-                   it->second.stride == indwStride &&
-                   it->second.offset == inpOffset)
-                    return;
+                //TODO: This needs fixed. At the moment it will always cache the given info which causes problems if the shader doesn't actually contain the
+                //attribute. In this case the attribute will not actually get bound and therefore will cause weird issues when the same attribute is then used
+                //with a shader that does actually need it since the cache beleives it to already be set and wont set it again.
+                
+                //                if(it->second.pBuffer == inpBuffer &&
+                //                   it->second.size == indwSize &&
+                //                   it->second.type == ineType &&
+                //                   it->second.normalised == inbNormalized &&
+                //                   it->second.stride == indwStride &&
+                //                   it->second.offset == inpOffset)
+                //                    return;
                 
                 it->second.pBuffer = inpBuffer;
                 it->second.size = indwSize;
@@ -954,7 +912,7 @@ namespace ChilliSource
                 set.offset = inpOffset;
                 m_attributeCache.insert(std::make_pair(in_attribName, set));
             }
-  
+            
             m_currentShader->SetAttribute(in_attribName, indwSize, ineType, inbNormalized, indwStride, inpOffset);
         }
 		//------------------------------------------------------------
@@ -966,7 +924,6 @@ namespace ChilliSource
             {
                 CreateAttribStateCache();
             }
-            
             
             // If mesh buffer has changed we need to reset all its vertex attributes
             if(((ChilliSource::OpenGL::MeshBuffer*)inpBuffer)->IsCacheValid() == false)
@@ -1039,8 +996,10 @@ namespace ChilliSource
                     eType = GL_UNSIGNED_BYTE;
                 }
                 
-                ApplyVertexAttributePointr(inpBuffer, attribName, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*)(s32)uwElementOffset);
+                ApplyVertexAttributePointer(inpBuffer, attribName, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*)(s32)uwElementOffset);
             }
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling vertex attributes for semantics.");
 		}
 		//------------------------------------------------------------
 		/// Get Primitive Type
@@ -1076,6 +1035,8 @@ namespace ChilliSource
             glBlendEquation(GL_FUNC_ADD);
             
             mbInvalidateAllCaches = true;
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while forcing refresh of render states.");
 		}
         //----------------------------------------------------------
 		/// Remove Buffer
@@ -1086,74 +1047,27 @@ namespace ChilliSource
             m_contextRestorer.RemoveMeshBuffer((MeshBuffer*)inpBuffer);
 #endif
 		}
-		//----------------------------------------------------------
-		/// CheckForGLErrors
-		//----------------------------------------------------------
-		void RenderSystem::CheckForGLErrors()
-		{
-			//get an array of all the errors that have occurred
-			std::vector<GLenum> errorArray;
-			GLenum currentError = glGetError();
-			while (currentError != GL_NO_ERROR)
-			{
-				errorArray.push_back(currentError);
-				currentError = glGetError();
-			}
-            
-			//print out the meaning of each error found
-			for (std::vector<GLenum>::iterator it = errorArray.begin(); it != errorArray.end(); ++it)
-			{
-				switch (*it)
-				{
-                    case GL_NO_ERROR:
-                        CS_LOG_ERROR("GL_NO_ERROR -> Somethings gone wrong, this should not be getting reported as an error.");
-                        break;
-                    case GL_INVALID_ENUM:
-                        CS_LOG_ERROR("GL_INVALID_ENUM -> An unacceptable value is specified for an enumerated argument. The offending command is ignored and has no other side effect than to set the error flag.");
-                        break;
-                    case GL_INVALID_VALUE:
-                        CS_LOG_ERROR("GL_INVALID_VALUE -> A numeric argument is out of range. The offending command is ignored and has no other side effect than to set the error flag.");
-                        break;
-                    case GL_INVALID_OPERATION:
-                        CS_LOG_ERROR("GL_INVALID_OPERATION -> The specified operation is not allowed in the current state. The offending command is ignored and has no other side effect than to set the error flag.");
-                        break;
-                    case GL_INVALID_FRAMEBUFFER_OPERATION:
-                        CS_LOG_ERROR("GL_INVALID_FRAMEBUFFER_OPERATION -> The command is trying to render to or read from the framebuffer while the currently bound framebuffer is not framebuffer complete (i.e. the return value from glCheckFramebufferStatus is not GL_FRAMEBUFFER_COMPLETE). The offending command is ignored and has no other side effect than to set the error flag.");
-                        break;
-                    case GL_OUT_OF_MEMORY:
-                        CS_LOG_ERROR("GL_OUT_OF_MEMORY -> There is not enough memory left to execute the command. The state of the GL is undefined, except for the state of the error flags, after this error is recorded.");
-                        break;
-                    default:
-                        CS_LOG_ERROR("Something's gone wrong, unknown GL error code.");
-                        break;
-				}
-			}
-		}
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void RenderSystem::OnScreenResolutionChanged(const Core::Vector2& in_resolution)
+        {
+            mudwViewHeight = (u32)in_resolution.y;
+            mudwViewWidth = (u32)in_resolution.x;
+        }
         //----------------------------------------------------------
 		//----------------------------------------------------------
 		void RenderSystem::Destroy()
 		{
-#ifdef CS_TARGETPLATFORM_IOS
-            if(mpDefaultRenderTarget)
-            {
-                RenderTarget::DestroyDefaultRenderTarget(mContext, mpDefaultRenderTarget);
-            }
-            
-			//Release the context
-			if(mContext)
+			if (mpbCurrentVertexAttribState != nullptr)
 			{
-				if([EAGLContext currentContext] == mContext)
-				{
-					[EAGLContext setCurrentContext:nil];
-				}
-				
-				[mContext release];
-				mContext = nullptr;
+				free(mpbCurrentVertexAttribState);
 			}
-#endif
+			if (mpbLastVertexAttribState != nullptr)
+			{
+				free(mpbLastVertexAttribState);
+			}
             
-            free(mpbCurrentVertexAttribState);
-            free(mpbLastVertexAttribState);
+            m_resolutionChangeConnection = nullptr;
 		}
 	}
 }

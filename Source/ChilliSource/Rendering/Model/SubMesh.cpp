@@ -9,6 +9,7 @@
 
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Base/VertexLayouts.h>
 #include <ChilliSource/Rendering/Material/Material.h>
@@ -164,31 +165,32 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Render
 		//-----------------------------------------------------------------
-		void SubMesh::Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const MaterialCSPtr& inpMaterial, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
+		void SubMesh::Render(RenderSystem* inpRenderSystem, const Core::Matrix4 &inmatWorld, const MaterialCSPtr& inpMaterial, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
 		{
             CS_ASSERT(mpMeshBuffer->GetVertexCount() > 0, "Cannot render Sub Mesh without vertices");
             
-            inpRenderSystem->ApplyMaterial(inpMaterial, in_shaderPass);
-            
-            if (inpAnimationGroup != nullptr)
+            if (inpMaterial->GetShader(in_shaderPass) != nullptr)
             {
-                //Apply inverse bind pose matrix.
-                std::vector<Core::Matrix4x4> combinedMatrices;
-                inpAnimationGroup->ApplyInverseBindPose(mpInverseBindPose->mInverseBindPoseMatrices, combinedMatrices);
-                inpRenderSystem->ApplyJoints(combinedMatrices);
-            }
-			
-			mpMeshBuffer->Bind();
-#ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
-#endif
-            if(mpMeshBuffer->GetIndexCount() > 0)
-            {
-                inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), inmatWorld);
-            }
-            else
-            {
-                inpRenderSystem->RenderVertexBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetVertexCount(), inmatWorld);
+                inpRenderSystem->ApplyMaterial(inpMaterial, in_shaderPass);
+                
+                if (inpAnimationGroup != nullptr)
+                {
+                    //Apply inverse bind pose matrix.
+                    std::vector<Core::Matrix4> combinedMatrices;
+                    inpAnimationGroup->ApplyInverseBindPose(mpInverseBindPose->mInverseBindPoseMatrices, combinedMatrices);
+                    inpRenderSystem->ApplyJoints(combinedMatrices);
+                }
+                
+                mpMeshBuffer->Bind();
+
+                if(mpMeshBuffer->GetIndexCount() > 0)
+                {
+                    inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), inmatWorld);
+                }
+                else
+                {
+                    inpRenderSystem->RenderVertexBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetVertexCount(), inmatWorld);
+                }
             }
 		}
 		//-----------------------------------------------------------------

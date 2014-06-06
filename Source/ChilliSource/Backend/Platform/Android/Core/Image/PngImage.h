@@ -7,6 +7,8 @@
  *
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _MOFLO_ANDROIDPLATFORM_IMAGELOADING_PNGIMAGE_
 #define _MOFLO_ANDROIDPLATFORM_IMAGELOADING_PNGIMAGE_
 
@@ -165,5 +167,7 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif
 
 #endif

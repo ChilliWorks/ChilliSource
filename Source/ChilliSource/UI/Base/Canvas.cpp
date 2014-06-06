@@ -28,7 +28,10 @@
 
 #include <ChilliSource/UI/Base/Canvas.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Delegate/ConnectableDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
 namespace ChilliSource
 {
@@ -51,20 +54,19 @@ namespace ChilliSource
         //-------------------------------------------------------
         void Canvas::OnInit()
         {
-            m_size.x = Core::Screen::GetOrientedWidth();
-            m_size.y = Core::Screen::GetOrientedHeight();
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             
             m_canvas = WidgetUPtr(new Widget());
             m_canvas->SetName("Canvas");
-            m_canvas->SetAbsoluteSize(m_size);
+            m_canvas->SetAbsoluteSize(GetSize());
             m_canvas->SetCanvas(m_canvas.get());
-            m_canvas->SetAbsolutePosition(m_size * 0.5f);
+            m_canvas->SetAbsolutePosition(GetSize() * 0.5f);
         }
         //----------------------------------------------------
         //----------------------------------------------------
         const Core::Vector2& Canvas::GetSize() const
         {
-            return m_size;
+            return m_screen->GetResolution();
         }
         //----------------------------------------------------
         //----------------------------------------------------

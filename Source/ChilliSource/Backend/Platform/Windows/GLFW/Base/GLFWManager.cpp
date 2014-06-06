@@ -6,7 +6,18 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #include <ChilliSource/Backend/Platform/Windows/GLFW/Base/GLFWManager.h>
+
+#include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#include <ChilliSource/Core/JSON/json.h>
+#include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Rendering/Base/SurfaceFormat.h>
+
+#include <fstream>
+
+#include <windows.h>
 
 //This needs to be included after windows.h
 #include <Platform/Windows/glfw3.h>
@@ -15,16 +26,107 @@ namespace ChilliSource
 {
 	namespace Windows
 	{
+		namespace
+		{
+			//-------------------------------------------------------------
+			/// Reads the surface format from the App.config file.
+			///
+			/// @author I Copland
+			///
+			/// @param The surface format.
+			//-------------------------------------------------------------
+			ChilliSource::Rendering::SurfaceFormat GetSurfaceFormat()
+			{
+				const std::string k_defaultFormat = "rgb565_depth24";
+
+				//get the path to here
+				wchar_t pathChars[MAX_PATH];
+				GetModuleFileName(nullptr, pathChars, MAX_PATH);
+				std::string path = WindowsStringUtils::ConvertWindowsPathToStandard(std::wstring(pathChars));
+				std::string::size_type pos = path.find_last_of("/");
+				std::string workingDir = Core::StringUtils::StandardisePath(path.substr(0, pos));
+
+				//open the file
+				std::ifstream file(workingDir + "assets/Shared/App.config");
+
+				std::string formatString = k_defaultFormat;
+				if (file.good() == true)
+				{
+					std::string contents((std::istreambuf_iterator<s8>(file)), std::istreambuf_iterator<s8>());
+
+					//parse the json
+					Json::Reader jReader;
+					Json::Value root;
+					if (!jReader.parse(contents, root))
+					{
+						CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormattedErrorMessages());
+					}
+
+					formatString = root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
+				}
+
+				return ChilliSource::Core::ParseSurfaceFormat(formatString);
+			}
+			//-------------------------------------------------------------
+			/// Applies the surface format described in the App.config file
+			/// to the glfw window.
+			///
+			/// @author I Copland
+			//-------------------------------------------------------------
+			void ApplySurfaceFormat()
+			{
+				ChilliSource::Rendering::SurfaceFormat format = GetSurfaceFormat();
+
+				switch (format)
+				{
+				case ChilliSource::Rendering::SurfaceFormat::k_rgb565_depth24:
+				default:
+					glfwWindowHint(GLFW_RED_BITS, 5);
+					glfwWindowHint(GLFW_GREEN_BITS, 6);
+					glfwWindowHint(GLFW_BLUE_BITS, 5);
+					glfwWindowHint(GLFW_ALPHA_BITS, 0);
+					glfwWindowHint(GLFW_DEPTH_BITS, 24);
+					glfwWindowHint(GLFW_STENCIL_BITS, 0);
+					break;
+				case ChilliSource::Rendering::SurfaceFormat::k_rgb565_depth32:
+					glfwWindowHint(GLFW_RED_BITS, 5);
+					glfwWindowHint(GLFW_GREEN_BITS, 6);
+					glfwWindowHint(GLFW_BLUE_BITS, 5);
+					glfwWindowHint(GLFW_ALPHA_BITS, 0);
+					glfwWindowHint(GLFW_DEPTH_BITS, 32);
+					glfwWindowHint(GLFW_STENCIL_BITS, 0);
+					break;
+				case ChilliSource::Rendering::SurfaceFormat::k_rgb888_depth24:
+					glfwWindowHint(GLFW_RED_BITS, 8);
+					glfwWindowHint(GLFW_GREEN_BITS, 8);
+					glfwWindowHint(GLFW_BLUE_BITS, 8);
+					glfwWindowHint(GLFW_ALPHA_BITS, 0);
+					glfwWindowHint(GLFW_DEPTH_BITS, 24);
+					glfwWindowHint(GLFW_STENCIL_BITS, 0);
+					break;
+				case ChilliSource::Rendering::SurfaceFormat::k_rgb888_depth32:
+					glfwWindowHint(GLFW_RED_BITS, 8);
+					glfwWindowHint(GLFW_GREEN_BITS, 8);
+					glfwWindowHint(GLFW_BLUE_BITS, 8);
+					glfwWindowHint(GLFW_ALPHA_BITS, 0);
+					glfwWindowHint(GLFW_DEPTH_BITS, 32);
+					glfwWindowHint(GLFW_STENCIL_BITS, 0);
+					break;
+				}
+			}
+		}
 		//---------------------------------------------------
 		//---------------------------------------------------
-		void GLFWManager::Init(u32 in_width, u32 in_height, const char* in_windowName)
+		void GLFWManager::Init(u32 in_width, u32 in_height)
 		{
 			if (!glfwInit())
 			{
 				CS_LOG_FATAL("Cannot initialise GLFW");
 			}
 
-			m_window = glfwCreateWindow(in_width, in_height, in_windowName, nullptr, nullptr);
+			ApplySurfaceFormat();
+
+			m_window = glfwCreateWindow(in_width, in_height, "", nullptr, nullptr);
 			if (m_window == nullptr)
 			{
 				glfwTerminate();
@@ -60,6 +162,21 @@ namespace ChilliSource
 		void GLFWManager::PollEvents()
 		{
 			glfwPollEvents();
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void GLFWManager::SetPreferredFPS(u32 in_fps)
+		{
+			glfwSwapInterval(60 / in_fps);
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		bool GLFWManager::IsWindowAlive() const
+		{
+			if (m_window == nullptr)
+				return false;
+
+			return glfwWindowShouldClose(m_window) == false;
 		}
 		//---------------------------------------------------
 		//---------------------------------------------------
@@ -98,6 +215,13 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------
 		//---------------------------------------------------
+		void GLFWManager::SetWindowTitle(const std::string& in_title)
+		{
+			CS_ASSERT(m_window != nullptr, "Must have created a window");
+			glfwSetWindowTitle(m_window, in_title.c_str());
+		}
+		//---------------------------------------------------
+		//---------------------------------------------------
 		void GLFWManager::SwapBuffers()
 		{
 			CS_ASSERT(m_window != nullptr, "Must have created a window");
@@ -112,3 +236,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

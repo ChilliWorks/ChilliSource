@@ -7,6 +7,8 @@
  *
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Web/Base/WebViewJavaInterface.h>
 
 #include <ChilliSource/Backend/Platform/Android/Web/Base/WebView.h>
@@ -110,3 +112,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

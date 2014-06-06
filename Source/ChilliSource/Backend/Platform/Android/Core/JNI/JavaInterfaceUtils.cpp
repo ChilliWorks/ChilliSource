@@ -7,6 +7,8 @@
  *
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
@@ -26,19 +28,6 @@ namespace ChilliSource
 				if (pEnv != nullptr)
 				{
 					jstring jstrNewString = pEnv->NewStringUTF(instrString.c_str());
-					return jstrNewString;
-				}
-				return nullptr;
-			}
-			//--------------------------------------------------------------------------------------
-			/// Create JString From UTF8String
-			//--------------------------------------------------------------------------------------
-			jstring CreateJStringFromUTF8String(const Core::UTF8String& instrString)
-			{
-				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				if (pEnv != nullptr)
-				{
-					jstring jstrNewString = pEnv->NewStringUTF(instrString.ToASCII().c_str());
 					return jstrNewString;
 				}
 				return nullptr;
@@ -80,24 +69,6 @@ namespace ChilliSource
 				return "";
 			}
 			//--------------------------------------------------------------------------------------
-			/// Create UTF8String From JString
-			//--------------------------------------------------------------------------------------
-			Core::UTF8String CreateUTF8StringFromJString(jstring injstrString)
-			{
-				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				if (pEnv != nullptr && injstrString != nullptr)
-				{
-					const char * cString = pEnv->GetStringUTFChars(injstrString, JNI_FALSE);
-					if (cString != nullptr)
-					{
-						Core::UTF8String utf8String = Core::UTF8String(cString);
-						pEnv->ReleaseStringUTFChars(injstrString, cString);
-						return utf8String;
-					}
-				}
-				return "";
-			}
-			//--------------------------------------------------------------------------------------
 			/// Get Int Element From JArray
 			//--------------------------------------------------------------------------------------
 			s32 GetIntElementFromJArray(jintArray injadwArray, u32 inudwIndex)
@@ -118,3 +89,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

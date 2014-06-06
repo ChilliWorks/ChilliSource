@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/ChilliSource.h>
 #import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #import <ChilliSource/Core/File/FileSystem.h>
@@ -125,6 +127,12 @@ namespace ChilliSource
             //---------------------------------------------------------
             WebView();
             //---------------------------------------------------------
+            /// Called when the the owning state is initialised.
+            ///
+            /// @author I Copland
+            //---------------------------------------------------------
+            void OnInit() override;
+            //---------------------------------------------------------
             /// Create a webview instance from the size member and
             /// centre it on-screen.
             ///
@@ -167,6 +175,8 @@ namespace ChilliSource
             void OnDestroy() override;
 		private:
 			
+            Core::Screen* m_screen;
+            
             bool m_isPresented;
             DismissedDelegate m_dismissedDelegate;
 			UIWebView* m_webView;
@@ -182,3 +192,5 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif

@@ -7,7 +7,10 @@
 //
 
 #include <ChilliSource/Core/String/StringUtils.h>
+
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/String/UTF8StringUtils.h>
 
 #include <algorithm>
 #include <cctype>
@@ -37,20 +40,19 @@ namespace ChilliSource
                 /// Furthermore, [var= Var_[var= a]_b] has variables
                 /// called a, and e.g.  Var_12_b   (if a == "12")
                 ///
-                /// @param Text string
                 /// @param Params
-                /// @param Out: Text string
-                /// @param Out: String iterator
+                /// @param Out: Text string (UTF-8)
+                /// @param Out: String iterator (UTF-8)
                 //-------------------------------------------------------
-                void ReplaceVariableRecursive(const UTF8String& instrText, const Core::ParamDictionary& insParams, UTF8String& outstrText, UTF8String::iterator& it)
+                void ReplaceVariableRecursive(const Core::ParamDictionary& insParams, std::string& outstrText, std::string::const_iterator& it)
                 {
                     //Found some mark-up. What type is it?
                     std::string strType;
-                    s8 byNextChar = '\0';
+                    UTF8Char byNextChar = '\0';
                     
                     while(byNextChar != '=')
                     {
-                        byNextChar = (s8)instrText.next(it);
+                        byNextChar = UTF8StringUtils::Next(it);
                         
                         if(byNextChar != '=' && byNextChar != ' ')
                         {
@@ -63,7 +65,7 @@ namespace ChilliSource
                     std::string strVarValue;
                     
                     // There may be some whitespace that we need to ignore
-                    byNextChar = (s8)instrText.next(it);
+                    byNextChar = UTF8StringUtils::Next(it);
                     if(byNextChar != ' ')
                     {
                         strVarName += byNextChar;
@@ -72,7 +74,7 @@ namespace ChilliSource
                     // Find the closing bracket
                     while(byNextChar != ']')
                     {
-                        byNextChar = (s8)instrText.next(it);
+                        byNextChar = UTF8StringUtils::Next(it);
                         
                         if(byNextChar != ']' && byNextChar != '[' && byNextChar != ' ')
                         {
@@ -82,9 +84,9 @@ namespace ChilliSource
                         // Nested variable
                         if(byNextChar == '[')
                         {
-                            UTF8String strVariableName;
-                            ReplaceVariableRecursive(instrText, insParams, strVariableName, it);
-                            strVarName += strVariableName.ToASCII();
+                            std::string strVariableName;
+                            ReplaceVariableRecursive(insParams, strVariableName, it);
+                            strVarName += strVariableName;
                         }
                     }
                     
@@ -632,33 +634,22 @@ namespace ChilliSource
 
         
             //-------------------------------------------------------
-            /// Insert Variables
-            ///
-            /// Find any variable mark-up and insert the
-            /// value of the variables
-            ///
-            /// For instance "My string contains [var =a] variable
-            /// and [var= b] variable called a and b
-            ///
-            /// @param Text string
-            /// @param Params
-            /// @param Out: Text string
             //-------------------------------------------------------
-            void InsertVariables(const UTF8String& instrText, const Core::ParamDictionary& insParams, UTF8String& outstrText)
+            void InsertVariables(const std::string& instrText, const Core::ParamDictionary& insParams, std::string& outstrText)
             {
-                UTF8String::iterator it = (UTF8String::iterator)instrText.begin();
-                while(it != instrText.end())
+                auto it = instrText.begin();
+                while(it < instrText.end())
                 {
-                    UTF8String::Char NextUTFChar = instrText.next(it);
-                    
-                    if(NextUTFChar != '[')
+                    auto character = UTF8StringUtils::Next(it);
+
+                    if(character != '[')
                     {
-                        outstrText.appendChar(NextUTFChar);
+                        UTF8StringUtils::Append(character, outstrText);
                     }
                     else
                     {
                         // Found a mark up, check it
-                        ReplaceVariableRecursive(instrText, insParams, outstrText, it);
+                        ReplaceVariableRecursive(insParams, outstrText, it);
                     }
                 }
             }

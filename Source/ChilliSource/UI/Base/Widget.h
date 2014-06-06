@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Math/Matrix3x3.h>
+#include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
@@ -593,7 +593,7 @@ namespace ChilliSource
             ///
             /// @return Local transformation matrix
             //----------------------------------------------------------------------------------------
-            Core::Matrix3x3 GetLocalTransform() const;
+            Core::Matrix3 GetLocalTransform() const;
             //----------------------------------------------------------------------------------------
             /// Calculate the transform matrix of the object based on the local transform and the
             /// parent transform.
@@ -602,7 +602,7 @@ namespace ChilliSource
             ///
             /// @return Screen space transformation matrix
             //----------------------------------------------------------------------------------------
-            Core::Matrix3x3 GetFinalTransform() const;
+            Core::Matrix3 GetFinalTransform() const;
             //----------------------------------------------------------------------------------------
             /// Calculate the parent space position of the object based on the local position, local
             /// alignment to parent and local alignment to origin. This method exists to create
@@ -646,13 +646,13 @@ namespace ChilliSource
             
             Core::UnifiedVector2 m_localPosition;
             Core::UnifiedVector2 m_localSize;
-            Core::Vector2 m_preferredSize = Core::Vector2::ONE;
-            Core::Vector2 m_localScale = Core::Vector2::ONE;
+            Core::Vector2 m_preferredSize = Core::Vector2::k_one;
+            Core::Vector2 m_localScale = Core::Vector2::k_one;
             Core::Colour m_localColour;
             f32 m_localRotation = 0.0f;
             
-            mutable Core::Matrix3x3 m_cachedLocalTransform;
-            mutable Core::Matrix3x3 m_cachedFinalTransform;
+            mutable Core::Matrix3 m_cachedLocalTransform;
+            mutable Core::Matrix3 m_cachedFinalTransform;
             mutable Core::Vector2 m_cachedFinalSize;
             
             std::array<SizePolicyDelegate, (u32)SizePolicy::k_totalNum> m_sizePolicyFuncs;
@@ -684,6 +684,8 @@ namespace ChilliSource
             mutable bool m_isParentSizeCacheValid = false;
             
             mutable std::mutex m_sizeMutex;
+    
+            Core::Screen* m_screen;
         };
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

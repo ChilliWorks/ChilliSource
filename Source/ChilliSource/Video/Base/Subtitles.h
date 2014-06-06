@@ -15,6 +15,8 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 
+#include <unordered_map>
+
 namespace ChilliSource
 {
 	namespace Video
@@ -58,7 +60,7 @@ namespace ChilliSource
                 std::string m_styleName;
                 TimeIntervalMs m_startTimeMS;
                 TimeIntervalMs m_endTimeMS;
-                std::string m_textId;
+                std::string m_localisedTextId;
             };
             typedef std::unique_ptr<const Subtitle> SubtitleCUPtr;
             typedef std::unique_ptr<Subtitle> SubtitleUPtr;
@@ -100,6 +102,20 @@ namespace ChilliSource
 			/// @return The style with the given name or null
 			//----------------------------------------------------------
             const Style* GetStyleWithName(const std::string& in_name) const;
+            //----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Localised text resource used by the internal
+            /// subtitles
+            //----------------------------------------------------------
+            void SetLocalisedText(const Core::LocalisedTextCSPtr& in_text);
+            //----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Localised text resource used by the internal
+            /// subtitles
+            //----------------------------------------------------------
+            const Core::LocalisedTextCSPtr& GetLocalisedText() const;
             
         private:
             
@@ -123,6 +139,8 @@ namespace ChilliSource
             
             std::unordered_map<std::string, StyleCUPtr> m_styles;
             std::vector<SubtitleCUPtr> m_subtitles;
+            
+            Core::LocalisedTextCSPtr m_localisedText;
 		};
 	}
 }

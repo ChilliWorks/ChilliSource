@@ -1,6 +1,6 @@
 //
 //  ChilliSource.h
-//  MoFlowSkeleton
+//  Chilli Source
 //
 //  Created by Tag Games on 25/02/2014.
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.

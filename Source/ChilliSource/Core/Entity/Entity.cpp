@@ -125,7 +125,7 @@ namespace ChilliSource
             
 			for(SharedEntityList::iterator it = m_children.begin(); it != m_children.end(); ++it)
 			{
-				(*it)->OnAddedToScene();
+				m_scene->Add(*it);
 			}
 		}
 		//-------------------------------------------------------------
@@ -134,7 +134,7 @@ namespace ChilliSource
 		{
             for(SharedEntityList::iterator it = m_children.begin(); it != m_children.end(); ++it)
 			{
-				(*it)->OnRemovedFromScene();
+				m_scene->Remove(it->get());
 			}
             
             for(ComponentList::iterator it = m_components.begin(); it != m_components.end(); ++it)

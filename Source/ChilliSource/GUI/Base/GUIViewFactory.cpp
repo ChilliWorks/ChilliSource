@@ -9,6 +9,7 @@
 #include <ChilliSource/GUI/Base/GUIViewFactory.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/XML/rapidxml.hpp>
 
@@ -144,7 +145,7 @@ namespace ChilliSource
             std::string strType;
             std::string strSource;
             bool bExtern = false;
-            Core::StorageLocation eStorageLoc;
+            Core::StorageLocation eStorageLoc = Core::StorageLocation::k_none;
             
             for(rapidxml::xml_attribute<> * pAttr = inpViewElement->first_attribute(); pAttr != nullptr; pAttr = pAttr->next_attribute())
             {
@@ -168,9 +169,8 @@ namespace ChilliSource
 			MapDelegateToString::iterator it = mmapDelegateToType.find(strType);
 			if(it != mmapDelegateToType.end())
 			{
-				Core::ParamDictionary sParams;
-				sParams.FromString(inpViewElement->value());
-
+				Core::ParamDictionary sParams = Core::ParamDictionarySerialiser::FromString(inpViewElement->value());
+	
 				//Lets load the given type!
 				pView = (it->second)(sParams);
                 

@@ -7,6 +7,8 @@
  *
  */
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import "FacebookUtils.h"
 
 
@@ -30,3 +32,5 @@
         return params;
     }
 @end
+
+#endif

@@ -6,8 +6,11 @@
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #include <ChilliSource/Backend/Platform/Windows/Core/DialogueBox/DialogueBoxSystem.h>
 
+#include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
@@ -31,9 +34,9 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm)
+		void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
-			MessageBoxA(nullptr, in_title.ToASCII().c_str(), in_message.ToASCII().c_str(), MB_OK);
+			MessageBox(nullptr, WindowsStringUtils::UTF8ToUTF16(in_title).c_str(), WindowsStringUtils::UTF8ToUTF16(in_message).c_str(), MB_OK);
 			if (in_delegate)
 			{
 				in_delegate(in_id, DialogueResult::k_confirm);
@@ -41,9 +44,9 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm, const Core::UTF8String& in_cancel)
+		void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
-			if (MessageBoxA(NULL, in_title.ToASCII().c_str(), in_message.ToASCII().c_str(), MB_OKCANCEL) == IDOK)
+			if (MessageBox(NULL, WindowsStringUtils::UTF8ToUTF16(in_title).c_str(), WindowsStringUtils::UTF8ToUTF16(in_message).c_str(), MB_OKCANCEL) == IDOK)
 			{
 				if (in_delegate)
 				{
@@ -60,7 +63,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        void DialogueBoxSystem::MakeToast(const Core::UTF8String& in_text)
+		void DialogueBoxSystem::MakeToast(const std::string& in_text)
         {
 			CS_LOG_WARNING("Toast not available on Windows");
         }
@@ -71,3 +74,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

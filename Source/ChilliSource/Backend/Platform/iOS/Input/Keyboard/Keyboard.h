@@ -1,17 +1,38 @@
 //
 //  Keyboard.h
 //  Chilli Source
+//  Created by Scott Downie on 26/11/2010
 //
-//  Created by S Downie on 26/11/2010
-//  Copyright (c)2010 Tag Games Limited. All rights reserved.
+//  The MIT License (MIT)
 //
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+#ifdef CS_TARGETPLATFORM_IOS
 
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_INPUT_KEYBOARD_KEYBOARD_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_INPUT_KEYBOARD_KEYBOARD_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 
 @class VirtualKeyboardDelegate;
@@ -62,15 +83,15 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return The currently text input buffer.
+            /// @return The current text input buffer (UTF-8).
             //-------------------------------------------------------
-			const Core::UTF8String& GetText() const override;
+			const std::string& GetText() const override;
             //-------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param The new text input buffer.
+            /// @param The new text input buffer (UTF-8).
             //-------------------------------------------------------
-            void SetText(const Core::UTF8String& in_text) override;
+            void SetText(const std::string& in_text) override;
             //-------------------------------------------------------
             /// Sets the type of keyboard to display if using a
             /// virtual keyboard. This must be set prior to the keyboard
@@ -162,11 +183,11 @@ namespace ChilliSource
             Core::Event<TextInputEventDelegate> m_textInputReceivedDelegate;
             Core::Event<KeyboardEventDelegate> m_textInputDisabledDelegate;
             bool m_enabled;
-            Core::UTF8String m_text;
+            std::string m_text;
 		};
 	}
 }
 
 #endif
 
-
+#endif

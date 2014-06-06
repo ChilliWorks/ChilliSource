@@ -8,6 +8,8 @@
  */
 
 package com.chillisource.core;
+import org.json.JSONObject;
+
 import com.chillisource.input.TouchInputNativeInterface;
 
 import android.app.Activity;
@@ -33,18 +35,90 @@ public class Surface extends GLSurfaceView
 	{
 		super(in_activity);
         
-		int depthBufferSize = 16;
-		int stencilBufferSize = 0;
-		
 		//create the context factory
 		setEGLContextFactory(new ContextFactory());
 		
 		//set the config
-		setEGLConfigChooser(new ConfigChooser(5, 6, 5, 0, depthBufferSize, stencilBufferSize));
+		setEGLConfigChooser(createConfigChooser(in_activity));
 		
 		//create renderer
 		setRenderer(new com.chillisource.core.Renderer());
     }
+	/**
+	 * Creates a new config chooser with the params as defined in
+	 * the App.config file.
+	 *
+	 * @author I Copland
+	 * 
+	 * @param The activity.
+	 * 
+	 * @return The config chooser.
+	 */
+	private ConfigChooser createConfigChooser(Activity in_activity)
+	{
+		String surfaceFormat = readSurfaceFormat(in_activity);
+		
+		if (surfaceFormat.equalsIgnoreCase("rgb565_depth24") == true)
+		{
+			return new ConfigChooser(5, 6, 5, 0, 16, 24, 0);
+		}
+		else if (surfaceFormat.equalsIgnoreCase("rgb565_depth32") == true)
+		{
+			return new ConfigChooser(5, 6, 5, 0, 16, 32, 0);
+		}
+		else if (surfaceFormat.equalsIgnoreCase("rgb888_depth24") == true)
+		{
+			return new ConfigChooser(8, 8, 8, 0, 16, 24, 0);
+		}
+		else if (surfaceFormat.equalsIgnoreCase("rgb888_depth32") == true)
+		{
+			return new ConfigChooser(8, 8, 8, 0, 16, 32, 0);
+		}
+		else
+		{
+			Logging.logFatal("Surface: Invalid surface format.");
+			return null;
+		}
+	}
+	/**
+	 * Reads the surface format from the App.config file.
+	 *
+	 * @author I Copland
+	 * 
+	 * @param The activity
+	 * 
+	 * @return The config chooser.
+	 */
+	private String readSurfaceFormat(Activity in_activity)
+	{
+		final String k_configFilePath = "Shared/App.config";
+		
+		String output = "rgb565_depth24";
+		if (FileUtils.doesFileExistAPK(in_activity, k_configFilePath))
+		{
+			byte[] byteContents = FileUtils.readFileAPK(in_activity, k_configFilePath);
+			String stringContents = StringUtils.UTF8ByteArrayToString(byteContents);
+			
+			try
+			{
+				JSONObject jObject = new JSONObject(stringContents);
+				if (jObject.has("PreferredSurfaceFormat") == true)
+				{
+					output = jObject.getString("PreferredSurfaceFormat");
+				}
+			}
+			catch (Exception e)
+			{
+				Logging.logFatal("Could not load App.config!");
+			}
+		}
+		else
+		{
+			Logging.logFatal("App.config does not exist!");
+		}
+		
+		return output;
+	}
 	/**
 	 * Triggered when the surface receives a touch input event
 	 *
@@ -64,6 +138,7 @@ public class Surface extends GLSurfaceView
 		//ACTION_POINTER_ID_MASK and ACTION_POINTER_ID_SHIFT are now depreciated and have been replaced with ACTION_POINTER_INDEX_SHIFT
 		//and ACTION_POINTER_INDEX_MASK in order to match the data they are used to retrieve. They are only available in API lv8 however, 
 		//so this will need to be updated when lv8 is our minimum target.
+		@SuppressWarnings("deprecation")
 		int pointerIndex = (actionData & MotionEvent.ACTION_POINTER_ID_MASK) >> MotionEvent.ACTION_POINTER_ID_SHIFT;
 		final int pointerID = event.getPointerId(pointerIndex);
 

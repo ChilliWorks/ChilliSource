@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_FORWARDDECLARATIONS_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_FORWARDDECLARATIONS_H_
 
@@ -32,9 +34,11 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(FileSystem);
 		CS_FORWARDDECLARE_CLASS(SharedPreferencesJavaInterface);
 		CS_FORWARDDECLARE_CLASS(PngImage);
-		CS_FORWARDDECLARE_CLASS(ImageProvider);
+		CS_FORWARDDECLARE_CLASS(PNGImageProvider);
 		CS_FORWARDDECLARE_CLASS(LocalNotificationJavaInterface);
 		CS_FORWARDDECLARE_CLASS(LocalNotificationScheduler);
+        CS_FORWARDDECLARE_CLASS(Device);
+        CS_FORWARDDECLARE_CLASS(Screen);
 		//------------------------------------------------------
 		/// Extensions
 		//------------------------------------------------------
@@ -51,6 +55,8 @@ namespace ChilliSource
 		//------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(Accelerometer);
 		CS_FORWARDDECLARE_CLASS(AccelerometerJavaInterface);
+		CS_FORWARDDECLARE_CLASS(DeviceButtonSystem);
+		CS_FORWARDDECLARE_CLASS(DeviceButtonJavaInterface);
 		CS_FORWARDDECLARE_CLASS(VirtualKeyboard);
 		CS_FORWARDDECLARE_CLASS(KeyboardJavaInterface);
 		CS_FORWARDDECLARE_CLASS(PointerSystem);
@@ -64,16 +70,11 @@ namespace ChilliSource
 		//------------------------------------------------------
 		/// Social
 		//------------------------------------------------------
-		CS_FORWARDDECLARE_CLASS(ContactInformationProvider);
-		CS_FORWARDDECLARE_CLASS(ContactInformationProviderJavaInterface);
 		CS_FORWARDDECLARE_CLASS(EmailComposer);
 		CS_FORWARDDECLARE_CLASS(EmailComposerJavaInterface);
 		CS_FORWARDDECLARE_CLASS(FacebookAuthentication);
 		CS_FORWARDDECLARE_CLASS(FacebookPostSystem);
 		CS_FORWARDDECLARE_CLASS(FacebookJavaInterface);
-		CS_FORWARDDECLARE_CLASS(TwitterAuthenticationActivity);
-		CS_FORWARDDECLARE_CLASS(TwitterPostSystem);
-		CS_FORWARDDECLARE_CLASS(TwitterAuthenticationActivityJavaInterface);
 		//------------------------------------------------------
 		/// Video
 		//------------------------------------------------------
@@ -86,5 +87,7 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(WebView);
 	}
 }
+
+#endif
 
 #endif

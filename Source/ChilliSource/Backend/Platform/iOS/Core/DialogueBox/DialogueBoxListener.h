@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
@@ -45,3 +46,5 @@
 -(void) dealloc;
 
 @end
+
+#endif

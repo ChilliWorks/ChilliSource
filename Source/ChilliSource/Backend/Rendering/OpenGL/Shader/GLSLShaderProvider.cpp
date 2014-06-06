@@ -234,14 +234,14 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void GLSLShaderProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
+		void GLSLShaderProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
         {
             ShaderSPtr shaderResource = std::static_pointer_cast<Shader>(out_resource);
             LoadShader(in_location, in_filePath, nullptr, shaderResource);
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void GLSLShaderProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+		void GLSLShaderProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
             ShaderSPtr shaderResource = std::static_pointer_cast<Shader>(out_resource);
             LoadShader(in_location, in_filePath, in_delegate, shaderResource);

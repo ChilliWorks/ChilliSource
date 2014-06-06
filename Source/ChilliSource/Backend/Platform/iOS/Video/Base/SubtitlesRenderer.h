@@ -6,6 +6,8 @@
 //  Copyright 2013 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #ifndef _MOFLOW_PLATFORM_IOS_VIDEO_SUBTITLESRENDERER_H_
 #define _MOFLOW_PLATFORM_IOS_VIDEO_SUBTITLESRENDERER_H_
 
@@ -25,6 +27,7 @@
 {
     UIView* mpBaseView;
     CADisplayLink* mpDisplayLink;
+    ChilliSource::Core::Screen* m_screen;
     ChilliSource::Video::SubtitlesCSPtr mpSubtitles;
     ChilliSource::iOS::VideoPlayer* m_videoPlayer;
     std::unordered_map<const ChilliSource::Video::Subtitles::Subtitle*, UITextView*> maTextViewMap;
@@ -53,8 +56,9 @@
 /// Adds a new text view for the given subtitle.
 ///
 /// @param the subtitle.
+/// @param Localised text resource
 //--------------------------------------------------------
--(void) AddTextView:(const ChilliSource::Video::Subtitles::Subtitle*)inpSubtitle;
+-(void) AddTextViewWithSubtitle:(const ChilliSource::Video::Subtitles::Subtitle*)inpSubtitle andLocalisedText:(const ChilliSource::Core::LocalisedText*) in_localisedText;
 //--------------------------------------------------------
 /// Update Text View
 ///
@@ -112,5 +116,7 @@
 //--------------------------------------------------------
 -(void) dealloc;
 @end
+
+#endif
 
 #endif

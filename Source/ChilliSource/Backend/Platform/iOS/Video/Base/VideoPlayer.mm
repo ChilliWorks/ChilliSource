@@ -26,9 +26,10 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayer.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
@@ -36,8 +37,8 @@
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoOverlayView.h>
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
 #import <ChilliSource/Core/Base/Application.h>
-#import <ChilliSource/Core/Base/MakeDelegate.h>
 #import <ChilliSource/Core/Base/Screen.h>
+#import <ChilliSource/Core/Delegate/MakeDelegate.h>
 #import <ChilliSource/Core/Math/MathUtils.h>
 #import <ChilliSource/Core/String/StringUtils.h>
 
@@ -98,7 +99,7 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoCompleteDelegate& in_delegate, bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
+        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
         {
             @autoreleasepool
             {
@@ -106,12 +107,12 @@ namespace ChilliSource
                 
                 m_playing = true;
                 
-                m_completionDelegate = in_delegate;
+                m_completionDelegateConnection = std::move(in_delegateConnection);
                 m_backgroundColour = in_backgroundColour;
                 
                 std::string filePath = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(in_storageLocation, in_fileName);
                 
-                NSString* urlString = [NSStringUtils newNSStringWithString:filePath];
+                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:filePath];
                 NSURL* pMovieURL = [NSURL fileURLWithPath:urlString];
                 [urlString release];
                 
@@ -128,11 +129,11 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, const VideoCompleteDelegate& in_delegate,
+        void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                                                      bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
         {
             m_subtitles = in_subtitles;
-            Present(in_storageLocation, in_fileName, in_delegate, in_dismissWithTap);
+            Present(in_storageLocation, in_fileName, std::move(in_delegateConnection), in_dismissWithTap);
         }
         //-------------------------------------------------------------
         //-------------------------------------------------------------
@@ -157,6 +158,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void VideoPlayer::OnInit()
         {
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             m_tapListener = [[CVideoPlayerTapListener alloc] init];
         }
         //---------------------------------------------------------------
@@ -224,8 +226,8 @@ namespace ChilliSource
         {
             @autoreleasepool
             {
-                f32 orientedWidthDensityCorrected = Core::Screen::GetOrientedWidth() * Core::Screen::GetInverseDensity();
-                f32 orientedHeightDensityCorrected = Core::Screen::GetOrientedHeight() * Core::Screen::GetInverseDensity();
+                f32 orientedWidthDensityCorrected = m_screen->GetResolution().x * m_screen->GetInverseDensityScale();
+                f32 orientedHeightDensityCorrected = m_screen->GetResolution().y * m_screen->GetInverseDensityScale();
             
                 m_moviePlayerController.backgroundView.backgroundColor = [UIColor colorWithRed:m_backgroundColour.r green:m_backgroundColour.g blue:m_backgroundColour.b alpha:m_backgroundColour.a];
                 [[m_moviePlayerController view] setFrame:CGRectMake(0, 0, orientedWidthDensityCorrected, orientedHeightDensityCorrected)];
@@ -260,11 +262,11 @@ namespace ChilliSource
             [[NSNotificationAdapter sharedInstance] StopListeningForMPPlaybackDidFinish];
             m_moviePlayerPlaybackFinishedConnection = nullptr;
             
-            if (m_completionDelegate != nullptr)
+            if (m_completionDelegateConnection != nullptr)
             {
-                VideoCompleteDelegate delegate = m_completionDelegate;
-                m_completionDelegate = nullptr;
-                delegate();
+                auto delegateConnection = std::move(m_completionDelegateConnection);
+                m_completionDelegateConnection = nullptr;
+                delegateConnection->Call();
             }
         }
         //---------------------------------------------------------------
@@ -286,7 +288,7 @@ namespace ChilliSource
             if (m_videoOverlayView == nil)
             {
                 //create the overlay
-                CGRect rect = CGRectMake(0, 0, Core::Screen::GetOrientedWidth() * Core::Screen::GetInverseDensity(), Core::Screen::GetOrientedHeight() * Core::Screen::GetInverseDensity());
+                CGRect rect = CGRectMake(0, 0, m_screen->GetResolution().x * m_screen->GetInverseDensityScale(), m_screen->GetResolution().y * m_screen->GetInverseDensityScale());
                 m_videoOverlayView = [[VideoOverlayView alloc] initWithFrame: rect];
                 UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
                 [rootView addSubview:m_videoOverlayView];
@@ -342,3 +344,5 @@ namespace ChilliSource
         }
     }
 }
+
+#endif

@@ -6,6 +6,8 @@
 //  Copyright 2012 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_COREJAVAINTERFACE_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_COREJAVAINTERFACE_H_
 
@@ -14,8 +16,6 @@
 #include <ChilliSource/Core/Base/Application.h>
 
 #include <jni.h>
-
-extern ChilliSource::Core::Application* (*BootFunctionPtr)();
 
 namespace ChilliSource
 {
@@ -66,7 +66,7 @@ namespace ChilliSource
 			/// to clamp to. This should be in multiples
 			/// of 15 (15, 30, 60)
 			//-----------------------------------------
-			void SetMaxFPS(u32 in_maxFPS);
+			void SetPreferredFPS(u32 in_maxFPS);
 			//--------------------------------------------------------------------------------------
 			/// @author I Copland
 			///
@@ -109,12 +109,6 @@ namespace ChilliSource
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetAPKDirectory();
-			//--------------------------------------------------------------------------------------
-			/// @author I Copland
-			///
-			/// @return Orientation as reported by the OS returned as an int (relates to CS orientation enum)
-			//--------------------------------------------------------------------------------------
-			s32 GetOrientation();
 			//--------------------------------------------------------------------------------------
 			/// @author I Copland
 			///
@@ -233,12 +227,6 @@ namespace ChilliSource
             /// @return the system time in milliseconds.
             //-----------------------------------------------------------------------------------------------------
             TimeIntervalMs GetSystemTimeInMilliseconds();
-            //-----------------------------------------------------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return the physical screen size in inches (diagonal length)
-            //-----------------------------------------------------------------------------------------------------
-            f32 GetPhysicalScreenSize();
             
 		private:
 
@@ -256,5 +244,7 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif
 
 #endif

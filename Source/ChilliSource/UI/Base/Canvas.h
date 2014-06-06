@@ -130,7 +130,7 @@ namespace ChilliSource
         private:
             
             WidgetUPtr m_canvas;
-            Core::Vector2 m_size;
+            Core::Screen* m_screen;
 		};
 	}
 }

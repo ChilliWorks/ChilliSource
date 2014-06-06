@@ -26,9 +26,10 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposer.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
 #import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposerDelegate.h>
 #import <ChilliSource/Core/Base/Application.h>
@@ -43,7 +44,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         //-------------------------------------------------------
         EmailComposer::EmailComposer()
-            : m_isPresented(false), m_emailComposerDelegate(nil), m_viewController(nil)
+            : m_isPresented(false), m_emailComposerDelegate(nil), m_viewController(nil), m_rootViewController(nil)
 		{
 		}
         //------------------------------------------------------
@@ -54,7 +55,7 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void EmailComposer::Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
+		void EmailComposer::Present(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat,
                                     const SendResultDelegate& in_callback)
         {
             Attachment emptyAttachment;
@@ -63,7 +64,7 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void EmailComposer::PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
+		void EmailComposer::PresentWithAttachment(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat,
                                                   const Attachment& in_attachment, const SendResultDelegate& in_callback)
         {
             @autoreleasepool
@@ -80,8 +81,6 @@ namespace ChilliSource
                     in_callback(SendResult::k_failed);
                     return;
                 }
-                
-                UIViewController* pRootVC = [EAGLView sharedInstance].viewController;
                 
                 m_viewController.mailComposeDelegate = m_emailComposerDelegate;
                 
@@ -126,8 +125,9 @@ namespace ChilliSource
                     NSData* pData = [NSData dataWithContentsOfFile: [NSString stringWithUTF8String:strFilename.c_str()]];
                     [m_viewController addAttachmentData:pData mimeType:[NSString stringWithUTF8String:in_attachment.m_mimeType.c_str()] fileName:[NSString stringWithUTF8String:strBasename.c_str()]];
                 }
-                 
-                [pRootVC presentModalViewController:m_viewController animated:YES];
+                
+                m_rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+                [m_rootViewController presentModalViewController:m_viewController animated:YES];
                 
                 [pNamesArray release];
             }
@@ -140,7 +140,8 @@ namespace ChilliSource
             {
                 m_viewController.mailComposeDelegate = nil;
                 
-                [[EAGLView sharedInstance].viewController dismissModalViewControllerAnimated:YES];
+                [m_rootViewController dismissModalViewControllerAnimated:YES];
+                m_rootViewController = nil;
                 
                 [m_viewController release];
                 m_viewController = nil;
@@ -231,3 +232,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

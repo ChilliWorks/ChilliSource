@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
@@ -55,7 +57,7 @@ void Java_com_chillisource_googleplay_GooglePlayRemoteNotificationNativeInterfac
 				continue;
 			}
 
-			sParams.SetValueForKey(strKey, strValue);
+			sParams.SetValue(strKey, strValue);
 		}
 
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface::OnRemoteNotificationReceived, pInterface.get(), sParams));
@@ -111,3 +113,6 @@ namespace ChilliSource
 		}
     }
 }
+
+
+#endif

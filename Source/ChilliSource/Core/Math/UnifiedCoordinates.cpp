@@ -12,7 +12,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        const UnifiedVector2 UnifiedVector2::ZERO(Core::Vector2::ZERO, Core::Vector2::ZERO);
+		const UnifiedVector2 UnifiedVector2::ZERO(Core::Vector2::k_zero, Core::Vector2::k_zero);
         
         //------------------------------------------------------
         /// Get Absolute

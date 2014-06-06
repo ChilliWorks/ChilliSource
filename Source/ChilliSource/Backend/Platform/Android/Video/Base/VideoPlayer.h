@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_VIDEO_BASE_VIDEOPLAYER_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_VIDEO_BASE_VIDEOPLAYER_H_
 
@@ -67,13 +69,13 @@ namespace ChilliSource
             ///
             /// @param The storage location of the video.
             /// @param The video file name.
-            /// @param The completion delegate.
+            /// @param Connection to complete delegate.
             /// @param [Optional] Whether or not the video can be
             /// dismissed by tapping. Defaults to true.
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoCompleteDelegate& in_delegate, bool in_dismissWithTap = true,
+            void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap = true,
                          const Core::Colour& in_backgroundColour = Core::Colour::k_black) override;
             //--------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
@@ -83,13 +85,13 @@ namespace ChilliSource
             /// @param The storage location of the video.
             /// @param The video file name.
             /// @param The subtitles resource.
-            /// @param The completion delegate.
+            /// @param Connection to complete delegate.
             /// @param [Optional] Whether or not the video can be
             /// dismissed by tapping. Defaults to true.
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, const VideoCompleteDelegate& in_delegate,
+            void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                                       bool in_dismissWithTap, const Core::Colour& in_backgroundColour = Core::Colour::k_black) override;
         private:
             friend Video::VideoPlayerUPtr Video::VideoPlayer::Create();
@@ -136,7 +138,7 @@ namespace ChilliSource
             void OnDestroy() override;
 
             bool m_isPlaying;
-            VideoCompleteDelegate m_completionDelegate;
+            VideoCompleteDelegate::Connection m_completionDelegateConnection;
             VideoPlayerJavaInterfaceSPtr m_javaInterface;
             Video::SubtitlesCSPtr m_subtitles;
             std::unordered_map<const Video::Subtitles::Subtitle*, s64> m_subtitleMap;
@@ -145,5 +147,7 @@ namespace ChilliSource
         };
     }
 }
+
+#endif
 
 #endif

@@ -7,6 +7,8 @@
  *
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _MO_FLO_PLATFORM_ANDROID_UDID_MANAGER_H_
 #define _MO_FLO_PLATFORM_ANDROID_UDID_MANAGER_H_
 
@@ -32,7 +34,7 @@ namespace ChilliSource
 			///
 			/// @return The UDID
 			//-----------------------------------------
-			std::string GetUDID();
+			const std::string& GetUDID();
 
 		private:
 			//-----------------------------------------
@@ -69,5 +71,7 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif
 
 #endif

@@ -6,6 +6,8 @@
  * Copyright �2011 Tag Games Limited - All rights reserved
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Core/File/SharedPreferencesJavaInterface.h>
 
 namespace ChilliSource
@@ -149,3 +151,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

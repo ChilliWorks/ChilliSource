@@ -6,11 +6,14 @@
 //  Copyright (c) 2013 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifdef CS_ANDROIDEXTENSION_AMAZON
 
 #include <ChilliSource/Backend/Platform/Android/Extensions/Amazon/AmazonIAPSystem.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
 
 namespace ChilliSource
@@ -50,8 +53,8 @@ namespace ChilliSource
     	//---------------------------------------------------------------
 		AmazonIAPSystem::AmazonIAPSystem(const Core::ParamDictionary& in_params)
 		{
-			CS_ASSERT(in_params.HasValue(k_amazonPrivateKeyKey) == true, "Cannot create Amazon IAP system without store key - AmazonPrivateKey");
-			m_privateKey = in_params.ValueForKey(k_amazonPrivateKeyKey);
+			CS_ASSERT(in_params.HasKey(k_amazonPrivateKeyKey) == true, "Cannot create Amazon IAP system without store key - AmazonPrivateKey");
+			m_privateKey = in_params.GetValue(k_amazonPrivateKeyKey);
 		}
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -66,7 +69,8 @@ namespace ChilliSource
 			m_javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<AmazonIAPJavaInterface>();
 			if (m_javaInterface == nullptr)
 			{
-				m_javaInterface = AmazonIAPJavaInterfaceSPtr(new AmazonIAPJavaInterface(m_privateKey, Core::Device::GetUDID()));
+				Core::Device* device = Core::Application::Get()->GetSystem<Core::Device>();
+				m_javaInterface = AmazonIAPJavaInterfaceSPtr(new AmazonIAPJavaInterface(m_privateKey, device->GetUDID()));
 	        	JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
 			}
         }
@@ -159,5 +163,7 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif
 
 #endif

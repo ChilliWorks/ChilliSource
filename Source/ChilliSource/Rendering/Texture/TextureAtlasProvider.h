@@ -1,9 +1,29 @@
 //
 //  TextureAtlasProvider.h
 //  Chilli Source
-//
 //  Created by Scott Downie on 22/10/2010.
-//  Copyright 2010 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifndef _CHILLISOURCE_RENDERING_TEXTURE_TEXTUREATLASPROVIDER_H_
@@ -30,14 +50,6 @@ namespace ChilliSource
             
             CS_DECLARE_NAMEDTYPE(TextureAtlasProvider);
             
-            //-------------------------------------------------------
-            /// Factory method
-            ///
-            /// @author S Downie
-            ///
-            /// @return New backend with ownership transferred
-            //-------------------------------------------------------
-            static TextureAtlasProviderUPtr Create();
 			//-------------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -62,6 +74,15 @@ namespace ChilliSource
 			bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
 			
 		private:
+			friend class Core::Application;
+			//-------------------------------------------------------
+			/// Factory method
+			///
+			/// @author S Downie
+			///
+			/// @return New backend with ownership transferred
+			//-------------------------------------------------------
+			static TextureAtlasProviderUPtr Create();
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -76,10 +97,11 @@ namespace ChilliSource
             /// @author S Downie
 			///
 			/// @param Location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Options to customise the creation
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Loads the two files that constitute a atlas resource and
             /// parses them into the output resource on a background thread. Delegate
@@ -88,11 +110,12 @@ namespace ChilliSource
             /// @author S Downie
 			///
 			/// @param Location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Options to customise the creation
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Performs the actual loading delegated to by the 2 create methods
             ///

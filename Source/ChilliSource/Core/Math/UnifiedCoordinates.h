@@ -73,14 +73,8 @@ namespace ChilliSource
             UnifiedVector2 operator+(const UnifiedVector2 &Vec) const
             {UnifiedVector2 Result; Result.vRelative = this->vRelative + Vec.vRelative; Result.vAbsolute = this->vAbsolute + Vec.vAbsolute; return Result;}
             
-            UnifiedVector2 operator+(f32 infValue) const
-            {UnifiedVector2 Result; Result.vRelative = this->vRelative + infValue; Result.vAbsolute = this->vAbsolute + infValue; return Result;}
-
             UnifiedVector2 operator-(const UnifiedVector2 &Vec) const
             {UnifiedVector2 Result; Result.vRelative = this->vRelative - Vec.vRelative; Result.vAbsolute = this->vAbsolute - Vec.vAbsolute; return Result;}
-            
-            UnifiedVector2 operator-(f32 infValue) const
-            {UnifiedVector2 Result; Result.vRelative = this->vRelative - infValue; Result.vAbsolute = this->vAbsolute - infValue; return Result;}
 
             UnifiedVector2 operator*(const UnifiedVector2 &Vec) const
             {UnifiedVector2 Result; Result.vRelative = this->vRelative * Vec.vRelative; Result.vAbsolute = this->vAbsolute * Vec.vAbsolute; return Result;}
@@ -111,18 +105,6 @@ namespace ChilliSource
 
             bool operator!=(const UnifiedVector2 &Vec) const
             {return (Vec.vRelative != vRelative || Vec.vAbsolute != vAbsolute);}
-
-            bool operator>(const UnifiedVector2 &Vec) const
-            {return Vec.vRelative > vRelative && Vec.vAbsolute > vAbsolute;}
-
-            bool operator<(const UnifiedVector2 &Vec) const
-            {return Vec.vRelative < vRelative && Vec.vAbsolute < vAbsolute;}
-
-            bool operator>=(const UnifiedVector2 &Vec) const
-            {return Vec.vRelative >= vRelative && Vec.vAbsolute >= vAbsolute;}
-
-            bool operator<=(const UnifiedVector2 &Vec) const
-            {return Vec.vRelative <= vRelative && Vec.vAbsolute <= vAbsolute;}
             
             static const UnifiedVector2 ZERO;
         };

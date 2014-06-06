@@ -201,7 +201,7 @@ namespace ChilliSource
 				//Decelaration
 				if(mbTouchActive && !mbTouchMoved)
 				{
-					mvVelocity = Core::Vector2::ZERO;
+					mvVelocity = Core::Vector2::k_zero;
 				}
 				else if(!mbTouchActive)
 				{
@@ -223,8 +223,8 @@ namespace ChilliSource
         //-----------------------------------------------------
         void ScrollView::Reset()
         {
-            mvVelocity = Core::Vector2::ZERO;
-            mpContainerView->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::ZERO, Core::Vector2::ZERO));
+            mvVelocity = Core::Vector2::k_zero;
+            mpContainerView->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::k_zero, Core::Vector2::k_zero));
         }
         //-----------------------------------------------------
         /// Jump To
@@ -256,7 +256,7 @@ namespace ChilliSource
         Core::Vector2 ScrollView::GetAbsoluteContentSize() const
         {
             if(!mpContainerView)
-                return Core::Vector2::ZERO;
+                return Core::Vector2::k_zero;
             return mpContainerView->GetAbsoluteSize();
         }
         //-----------------------------------------------------------
@@ -268,7 +268,7 @@ namespace ChilliSource
         Core::Vector2 ScrollView::GetAbsoluteContentPosition() const
         {
             if(!mpContainerView)
-                return Core::Vector2::ZERO;
+                return Core::Vector2::k_zero;
             return mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topLeft) - GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
         }
         //-----------------------------------------------------
@@ -290,7 +290,7 @@ namespace ChilliSource
 				mvRealPreviousTouchPosition = in_pointer.m_location;
 				
                 //Stop! Hammer time...
-                mvVelocity = Core::Vector2::ZERO; 
+                mvVelocity = Core::Vector2::k_zero; 
 				mfTouchTravel = 0.0f;
             }
             
@@ -300,7 +300,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         bool ScrollView::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
         {
-            if(UserInteraction && Visible && mbTouchActive && Contains(in_pointer.m_location))
+            if(UserInteraction && Visible && mbTouchActive && (Contains(in_pointer.m_location) == true || IsAcceptTouchesOutsideOfBoundsEnabled() == true))
             {
                 //Calculate the displacement
                 mvVelocity = in_pointer.m_location - mvRealPreviousTouchPosition;
@@ -348,7 +348,7 @@ namespace ChilliSource
             if(mbDrawDebug)
             {
                 Rendering::TextureManager* pMgr = (Rendering::TextureManager*)(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Rendering::Texture::InterfaceID));
-                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), pMgr->GetDefaultTexture(), Core::Rectangle(Core::Vector2::ZERO, Core::Vector2::ZERO), Core::Colour(1.0f,0.0f,0.0f,0.5f));
+                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), pMgr->GetDefaultTexture(), Core::Rectangle(Core::Vector2::k_zero, Core::Vector2::k_zero), Core::Colour(1.0f,0.0f,0.0f,0.5f));
             }
 #endif
         

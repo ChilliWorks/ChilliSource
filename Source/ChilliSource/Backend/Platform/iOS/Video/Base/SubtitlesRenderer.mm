@@ -6,12 +6,14 @@
 //  Copyright 2013 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
 
 #import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Base/Screen.h>
 #import <ChilliSource/Core/String/StringUtils.h>
-#import <ChilliSource/Core/String/UTF8String.h>
 #import <ChilliSource/Core/Localisation/LocalisedText.h>
 #import <ChilliSource/Video/Base/Subtitles.h>
 
@@ -29,6 +31,7 @@
     
     m_videoPlayer = in_videoPlayer;
     mpBaseView = inpView;
+    m_screen = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Core::Screen>();
     
     //create the display link
     mpDisplayLink = [CADisplayLink displayLinkWithTarget: self selector: @selector(OnUpdate)];
@@ -53,6 +56,7 @@
     {
         mCurrentTimeMS = currentTimeMS;
         auto pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentTimeMS);
+        auto localisedText = mpSubtitles->GetLocalisedText().get();
 
         //add any new subtitles
         for (auto it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
@@ -61,7 +65,7 @@
             auto mapEntry = maTextViewMap.find(*it);
             if (mapEntry == maTextViewMap.end())
             {
-                [self AddTextView:*it];
+                [self AddTextViewWithSubtitle:*it andLocalisedText:localisedText];
             }
         }
 
@@ -88,7 +92,7 @@
 //--------------------------------------------------------
 /// Add Text View
 //--------------------------------------------------------
--(void) AddTextView:(const ChilliSource::Video::Subtitles::Subtitle*)inpSubtitle
+-(void) AddTextViewWithSubtitle:(const ChilliSource::Video::Subtitles::Subtitle*)inpSubtitle andLocalisedText:(const ChilliSource::Core::LocalisedText*) in_localisedText
 {
     //get the style
     const ChilliSource::Video::Subtitles::Style* pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->m_styleName);
@@ -105,7 +109,7 @@
     pNewTextView.backgroundColor = [UIColor clearColor];
     
     //setup the text.
-    NSString* text = [NSStringUtils newNSStringWithUTF8String:CSCore::LocalisedText::GetText(inpSubtitle->m_textId)];
+    NSString* text = [NSStringUtils newNSStringWithUTF8String:in_localisedText->GetText(inpSubtitle->m_localisedTextId)];
     NSString* fontName = [NSStringUtils newNSStringWithUTF8String:pStyle->m_fontName];
     [pNewTextView setText:text];
     [pNewTextView setFont:[UIFont fontWithName:fontName size: pStyle->m_fontSize]];
@@ -249,7 +253,7 @@
 //--------------------------------------------------------
 -(CGRect) CalculateTextBoxRect:(const ChilliSource::Core::Rectangle&)inRelativeBounds
 {
-    ChilliSource::Core::Vector2 vScreenDimensions(ChilliSource::Core::Screen::GetOrientedWidth() * ChilliSource::Core::Screen::GetInverseDensity(), ChilliSource::Core::Screen::GetOrientedHeight() * ChilliSource::Core::Screen::GetInverseDensity());
+    ChilliSource::Core::Vector2 vScreenDimensions(m_screen->GetResolution().x * m_screen->GetInverseDensityScale(), m_screen->GetResolution().y * m_screen->GetInverseDensityScale());
     ChilliSource::Core::Vector2 vVideoDimensions = m_videoPlayer->GetVideoDimensions();
     float fScreenAspectRatio = vScreenDimensions.x / vScreenDimensions.y;
     float fVideoAspectRatio = vVideoDimensions.x / vVideoDimensions.y;
@@ -289,3 +293,5 @@
     [super dealloc];
 }
 @end
+
+#endif

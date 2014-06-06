@@ -411,7 +411,7 @@ namespace ChilliSource
 			/// object to world space
 			/// @return To world matrix
 			//-----------------------------------------------
-			const Matrix4x4 & GetTransform() const;
+			const Matrix4 & GetTransform() const;
 			//----------------------------------------------- 
 			/// Set Transform
 			///
@@ -419,7 +419,7 @@ namespace ChilliSource
 			/// to world space
 			/// @param To world matrix
 			//-----------------------------------------------
-			void SetTransform(const Matrix4x4& inmatTransform);
+			void SetTransform(const Matrix4& inmatTransform);
 			
 			//-----------------------------------------------
 			/// Contains (Point)
@@ -443,7 +443,7 @@ namespace ChilliSource
 			///AABB in Local Space
             AABB mHitBox;
 			
-            Matrix4x4 mmatLocal;
+            Matrix4 mmatLocal;
 		};
 		//===============================================
 		/// Ray
@@ -527,7 +527,7 @@ namespace ChilliSource
 			///
 			/// @param View projection matrix
 			//----------------------------------------------------------
-			void CalculateClippingPlanes(const Core::Matrix4x4& inmatViewProj);
+			void CalculateClippingPlanes(const Core::Matrix4& inmatViewProj);
 			//----------------------------------------------------------
 			/// Sphere Cull Test
 			///

@@ -6,12 +6,17 @@
 //  Copyright 2012 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_HTTP_HTTPREQUEST_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_HTTP_HTTPREQUEST_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Networking/Http/HttpRequest.h>
+
+#include <list>
+#include <mutex>
 
 namespace ChilliSource
 {
@@ -87,6 +92,12 @@ namespace ChilliSource
 			/// @return Whether the request has completed - regardless of success or failure
 			//----------------------------------------------------------------------------------------
 			bool HasCompleted() const;
+			//----------------------------------------------------------------------------------------
+			/// Inform the polling threads in a thread-safe manner that the system is shutting down
+			///
+			/// @author S Downie
+			//----------------------------------------------------------------------------------------
+			static void Shutdown();
 
 		private:
 			//----------------------------------------------------------------------------------------
@@ -97,10 +108,15 @@ namespace ChilliSource
 			///
 			/// @param Request handle
 			/// @param Connection handle
+			/// @param Mutex that manages the critical section of the HTTP system being shutdown
 			//----------------------------------------------------------------------------------------
-			void PollReadStream(HINTERNET inRequestHandle, HINTERNET inConnectionHandle);
+			void PollReadStream(HINTERNET inRequestHandle, HINTERNET inConnectionHandle, std::shared_ptr<std::mutex> in_destroyingMutex);
 
 		private:
+
+			static std::mutex s_addingMutexesMutex;
+			static std::list<std::shared_ptr<std::mutex>> s_destroyingMutexes;
+			static bool s_isDestroying;
 
 			Delegate m_completionDelegate;
 			Desc m_desc;
@@ -111,7 +127,6 @@ namespace ChilliSource
 			Result m_requestResult;
 
 			u32 m_totalBytesRead;
-			u32 m_totalBytesReadThisBlock;
 			u32 m_bufferFlushSize;
 
 			bool m_shouldKillThread;
@@ -120,4 +135,7 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif
+
 #endif

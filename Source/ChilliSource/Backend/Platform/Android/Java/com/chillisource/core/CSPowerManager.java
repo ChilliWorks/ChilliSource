@@ -50,6 +50,7 @@ public class CSPowerManager
 	///
 	/// @param the lock type.
 	//--------------------------------------------------------
+	@SuppressWarnings("deprecation")
 	public static boolean RequestWakeLock(LOCK_TYPE ineLockType)
 	{
 		if(mpcPowerManager == null)

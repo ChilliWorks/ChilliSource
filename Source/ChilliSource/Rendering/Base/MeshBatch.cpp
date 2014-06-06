@@ -1,17 +1,38 @@
-/*
- *  MeshBatch.cpp
- *  moFloTest
- *
- *  Created by Scott Downie on 10/12/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  MeshBatch.cpp
+//  Chilli Source
+//  Created by Scott Downie on 10/12/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
-#include <ChilliSource/Rendering/Model/SubMesh.h>
+
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/MeshBatch.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Model/SubMesh.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
@@ -86,7 +107,7 @@ namespace ChilliSource
 		/// @param Static mesh component
 		/// @param Transform
 		//------------------------------------------------------
-		void MeshBatch::AddMesh(const StaticMeshComponentSPtr &inpMesh, const Core::Matrix4x4& inmatTransform)
+		void MeshBatch::AddMesh(const StaticMeshComponentSPtr &inpMesh, const Core::Matrix4& inmatTransform)
 		{
 			mmapMeshCache.insert(std::make_pair(inpMesh, inmatTransform));
 		}
@@ -125,7 +146,7 @@ namespace ChilliSource
 			for(MapMeshToTransform::const_iterator it = mmapMeshCache.begin(); it != mmapMeshCache.end(); ++it)
 			{
 				//build the normal matrix. NOTE: This normal matrix will NOT work if there is a scale component to the transform.
-				Core::Matrix4x4 NormalMatrix = it->second;
+				Core::Matrix4 NormalMatrix = it->second;
 				NormalMatrix.m[12] = 0.0f;
 				NormalMatrix.m[13] = 0.0f;
 				NormalMatrix.m[14] = 0.0f;
@@ -156,8 +177,8 @@ namespace ChilliSource
                         memcpy(&sTempVert, _pVSubBuffer + i, VertexStride);
                         
                         //Transform the vertex
-                        Core::Matrix4x4::Multiply(&sTempVert.Pos, &it->second, &sTempVert.Pos);
-                        Core::Matrix4x4::Multiply(&sTempVert.Norm, &NormalMatrix, &sTempVert.Norm);
+						sTempVert.Pos = sTempVert.Pos * it->second;
+						sTempVert.Norm = sTempVert.Norm * NormalMatrix;
                         
                         //Copy the vertex into our new buffer
                         memcpy(pVBatchBuffer, &sTempVert, VertexStride);
@@ -222,10 +243,8 @@ namespace ChilliSource
 		
 			//Tell the render system to draw the contents of the buffer
 			inpRenderSystem->ApplyMaterial(mpMaterial, in_shaderPass);
-#ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
-#endif
-			inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), Core::Matrix4x4::IDENTITY);
+
+			inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), Core::Matrix4::k_identity);
 		}
 		//------------------------------------------------------
 		/// Get Material

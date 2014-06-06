@@ -18,20 +18,9 @@ namespace ChilliSource
 	namespace Core
 	{
         //---------------------------------------------------------
-        /// Animation
-        //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Animation);
-        template <typename TType> class ValueAnimation;
-        template <typename TType> class LinearAnimation;
-        template <typename TType> class BounceAnimation;
-        template <typename TType> class KeyframeAnimation;
-        enum class InterpolationType;
-        //---------------------------------------------------------
         /// Base
         //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Activity);
         CS_FORWARDDECLARE_CLASS(Application);
-        CS_FORWARDDECLARE_CLASS(ApplicationEvents);
         CS_FORWARDDECLARE_CLASS(Colour);
         CS_FORWARDDECLARE_CLASS(Device);
         CS_FORWARDDECLARE_CLASS(IInformationProvider);
@@ -39,20 +28,24 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(PlatformSystem);
         CS_FORWARDDECLARE_CLASS(QueryableInterface);
         CS_FORWARDDECLARE_CLASS(Screen);
+        CS_FORWARDDECLARE_CLASS(AppConfig);
         //---------------------------------------------------------
         /// Container
         //---------------------------------------------------------
         template <typename TKey, typename TValue> class HashedArray;
         template <typename TType> class ObjectPool;
-        CS_FORWARDDECLARE_CLASS(Octree);
         CS_FORWARDDECLARE_CLASS(ParamDictionary);
-        CS_FORWARDDECLARE_CLASS(StaticMemPool);
         template <typename T> class WorkerQueue;
         //---------------------------------------------------------
         /// Cryptographic
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(HMAC_SHA1);
         CS_FORWARDDECLARE_CLASS(SHA1);
+        //---------------------------------------------------------
+        /// Delegate
+        //---------------------------------------------------------
+        template <typename TReturnType, typename... TArgTypes> class ConnectableDelegate;
+        template <typename TReturnType, typename... TArgTypes> class DelegateConnection;
         //---------------------------------------------------------
         /// Dialogue
         //---------------------------------------------------------
@@ -61,8 +54,6 @@ namespace ChilliSource
         /// Entity
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Component);
-        CS_FORWARDDECLARE_CLASS(ComponentFactory);
-        CS_FORWARDDECLARE_CLASS(ComponentFactoryDispenser);
         CS_FORWARDDECLARE_CLASS(Entity);
         CS_FORWARDDECLARE_CLASS(Transform);
         //---------------------------------------------------------
@@ -71,28 +62,29 @@ namespace ChilliSource
         template <typename TDelegateType> class Event;
         template <typename TDelegateType> class IConnectableEvent;
         CS_FORWARDDECLARE_CLASS(IDisconnectableEvent);
-        CS_FORWARDDECLARE_CLASS(Connection);
+        CS_FORWARDDECLARE_CLASS(EventConnection);
         //---------------------------------------------------------
         /// File
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(FileStream);
         CS_FORWARDDECLARE_CLASS(FileSystem);
-        CS_FORWARDDECLARE_CLASS(LocalDataStore);
-        CS_FORWARDDECLARE_CLASS(TweakableConstants);
+        CS_FORWARDDECLARE_CLASS(AppDataStore);
         enum class StorageLocation;
         //---------------------------------------------------------
         /// Image
         //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(CSImageProvider);
         CS_FORWARDDECLARE_CLASS(ETC1ImageProvider);
         CS_FORWARDDECLARE_CLASS(Image);
-        CS_FORWARDDECLARE_CLASS(ImageProvider);
-        CS_FORWARDDECLARE_CLASS(CSImageProvider);
+        CS_FORWARDDECLARE_CLASS(PNGImageProvider);
+        CS_FORWARDDECLARE_CLASS(PVRImageProvider);
         enum class ImageFormat;
         enum class ImageCompression;
         //---------------------------------------------------------
         /// Localisation
         //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Locale);
+	CS_FORWARDDECLARE_CLASS(LocalisedText);
+	CS_FORWARDDECLARE_CLASS(LocalisedTextProvider);
         //---------------------------------------------------------
         /// Math
         //---------------------------------------------------------
@@ -108,15 +100,27 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(Line);
         CS_FORWARDDECLARE_CLASS(Plane);
         CS_FORWARDDECLARE_CLASS(Frustum);
-        CS_FORWARDDECLARE_CLASS(Matrix3x3);
-        CS_FORWARDDECLARE_CLASS(Matrix4x4);
-        CS_FORWARDDECLARE_CLASS(Quaternion);
         CS_FORWARDDECLARE_STRUCT(UnifiedScalar);
 		CS_FORWARDDECLARE_STRUCT(UnifiedVector2);
 		CS_FORWARDDECLARE_STRUCT(UnifiedRectangle);
-        CS_FORWARDDECLARE_CLASS(Vector2);
-        CS_FORWARDDECLARE_CLASS(Vector3);
-        CS_FORWARDDECLARE_CLASS(Vector4);
+		template <typename TType> class GenericVector2;
+		template <typename TType> class GenericVector3;
+		template <typename TType> class GenericVector4;
+		template <typename TType> class GenericQuaternion;
+		template <typename TType> class GenericMatrix3;
+		template <typename TType> class GenericMatrix4;
+		using Vector2 = GenericVector2<f32>;
+		using Float2 = GenericVector2<f32>;
+		using Integer2 = GenericVector2<s32>;
+		using Vector3 = GenericVector3<f32>;
+		using Float3 = GenericVector3<f32>;
+		using Integer3 = GenericVector3<s32>;
+		using Vector4 = GenericVector4<f32>;
+		using Float4 = GenericVector4<f32>;
+		using Integer4 = GenericVector4<s32>;
+		using Quaternion = GenericQuaternion<f32>;
+		using Matrix3 = GenericMatrix3<f32>;
+		using Matrix4 = GenericMatrix4<f32>;
         //---------------------------------------------------------
         /// Notifications
         //---------------------------------------------------------
@@ -131,6 +135,10 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(Resource);
         CS_FORWARDDECLARE_CLASS(ResourcePool);
         CS_FORWARDDECLARE_CLASS(ResourceProvider);
+        template <typename TResourceType> class IResourceOptions;
+        template <typename TResourceType> using IResourceOptionsSPtr = std::shared_ptr<IResourceOptions<TResourceType>>;
+        template <typename TResourceType> using IResourceOptionsCSPtr = std::shared_ptr<const IResourceOptions<TResourceType>>;
+        CS_FORWARDDECLARE_CLASS(IResourceOptionsBase);
         //---------------------------------------------------------
         /// Scene
         //---------------------------------------------------------
@@ -141,10 +149,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(State);
         CS_FORWARDDECLARE_CLASS(StateManager);
         //---------------------------------------------------------
-        /// String
-        //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(UTF8String);
-        //---------------------------------------------------------
         /// System
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(AppSystem);
@@ -154,7 +158,6 @@ namespace ChilliSource
         /// Threading
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(WaitCondition);
-        template <typename... TArgTypes> class Task;
         CS_FORWARDDECLARE_CLASS(TaskScheduler);
         CS_FORWARDDECLARE_CLASS(ThreadPool);
         //---------------------------------------------------------
@@ -163,6 +166,10 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(CoreTimer);
         CS_FORWARDDECLARE_CLASS(PerformanceTimer);
         CS_FORWARDDECLARE_CLASS(Timer);
+        //---------------------------------------------------------
+        /// Tween
+        //---------------------------------------------------------
+        template <typename TInterpType> class Tween;
         //---------------------------------------------------------
         /// Volume
         //---------------------------------------------------------

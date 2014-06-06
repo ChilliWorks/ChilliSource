@@ -26,13 +26,14 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Video/Base/VideoPlayer.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Video/Base/VideoPlayerJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/ApplicationEvents.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
@@ -59,12 +60,13 @@ namespace ChilliSource
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const VideoCompleteDelegate& in_delegate, bool in_dismissWithTap,
+        void VideoPlayer::Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap,
         		const Core::Colour& in_backgroundColour)
         {
         	CS_ASSERT(m_isPlaying == false, "Cannot present a video while one is already playing.");
         	m_isPlaying = true;
-        	m_completionDelegate = in_delegate;
+
+            m_completionDelegateConnection = std::move(in_delegateConnection);
 
         	//calculate the storage location and full filename.
         	bool isPackage = false;
@@ -98,12 +100,12 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
 		//--------------------------------------------------------------
-		void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, const VideoCompleteDelegate& in_delegate,
+		void VideoPlayer::PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const Video::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                 bool in_dismissWithTap, const Core::Colour& in_backgroundColour)
 		{
 			m_subtitles = in_subtitles;
 			m_javaInterface->SetUpdateSubtitlesDelegate(Core::MakeDelegate(this, &VideoPlayer::OnUpdateSubtitles));
-			Present(in_storageLocation, in_fileName, in_delegate, in_dismissWithTap, in_backgroundColour);
+			Present(in_storageLocation, in_fileName, std::move(in_delegateConnection), in_dismissWithTap, in_backgroundColour);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -125,10 +127,12 @@ namespace ChilliSource
         	m_subtitles.reset();
         	m_isPlaying = false;
 
-        	if (m_completionDelegate != nullptr)
-        	{
-        		m_completionDelegate();
-        	}
+            if (m_completionDelegateConnection != nullptr)
+            {
+                auto delegateConnection = std::move(m_completionDelegateConnection);
+                m_completionDelegateConnection = nullptr;
+                delegateConnection->Call();
+            }
         }
 		//---------------------------------------------------------------
 		//---------------------------------------------------------------
@@ -143,6 +147,7 @@ namespace ChilliSource
 
 				//get the current subtitles
 				auto subtitleArray = m_subtitles->GetSubtitlesAtTime(m_currentSubtitleTimeMS);
+				auto localisedText = m_subtitles->GetLocalisedText().get();
 
 				//add any new subtitles
 				for (auto it = subtitleArray.begin(); it != subtitleArray.end(); ++it)
@@ -150,7 +155,7 @@ namespace ChilliSource
 					auto mapEntry = m_subtitleMap.find(*it);
 					if (mapEntry == m_subtitleMap.end())
 					{
-						Core::UTF8String text = Core::LocalisedText::GetText((*it)->m_textId);
+						const std::string& text = localisedText->GetText((*it)->m_localisedTextId);
 						const Video::Subtitles::Style* style = m_subtitles->GetStyleWithName((*it)->m_styleName);
 						s64 subtitleID = m_javaInterface->CreateSubtitle(text, style->m_fontName, style->m_fontSize, Rendering::StringFromAlignmentAnchor(style->m_alignment), style->m_bounds.vOrigin.x, style->m_bounds.vOrigin.y, style->m_bounds.vSize.x, style->m_bounds.vSize.y);
 						m_javaInterface->SetSubtitleColour(subtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
@@ -227,3 +232,5 @@ namespace ChilliSource
         }
     }
 }
+
+#endif

@@ -9,13 +9,12 @@
 #include <ChilliSource/Networking/ContentDownload/ContentManagementSystem.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/FileStream.h>
-#include <ChilliSource/Core/File/LocalDataStore.h>
-#include <ChilliSource/Core/File/TweakableConstants.h>
+#include <ChilliSource/Core/File/AppDataStore.h>
 #include <ChilliSource/Core/Minizip/unzip.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -25,6 +24,8 @@ namespace ChilliSource
     {
         namespace
         {
+            const std::string k_adsKeyHasCached = "_CMSCachedDLC";
+            
             //--------------------------------------------------------
             /// @author S Downie
             ///
@@ -139,7 +140,8 @@ namespace ChilliSource
             in_currentManifest->LoadFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
             
             //If there is no DLC we should check to see if there ever was any
-            if(!in_currentManifest->RootElement() && Core::LocalDataStore::GetSingletonPtr()->HasValueForKey("MOCMSCachedDLC"))
+            Core::AppDataStore* ads = Core::Application::Get()->GetSystem<Core::AppDataStore>();
+            if(!in_currentManifest->RootElement() && ads->Contains(k_adsKeyHasCached) == true)
             {
                 m_dlcCachePurged = true;
             }
@@ -257,7 +259,8 @@ namespace ChilliSource
                 
                 //Store that we have DLC cached. If there is no DLC on next check then 
                 //we know the cache has been purged and we have to block on download
-                Core::LocalDataStore::GetSingletonPtr()->SetValueForKey("MOCMSCachedDLC", true);
+                Core::AppDataStore* ads = Core::Application::Get()->GetSystem<Core::AppDataStore>();
+                ads->SetValue(k_adsKeyHasCached, true);
                 
                 //Tell the delegate all is good
                 inDelegate(Result::k_succeeded);

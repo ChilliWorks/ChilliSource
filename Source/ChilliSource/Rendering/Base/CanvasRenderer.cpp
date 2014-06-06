@@ -1,26 +1,43 @@
-/*
- *  CanvasRenderer.cpp
- *  moFloTest
- *
- *  Created by Scott Downie on 12/01/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  CanvasRenderer.cpp
+//  Chilli Source
+//  Created by Scott Downie on 12/01/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/ColourUtils.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Core/String/UTF8StringUtils.h>
+#include <ChilliSource/GUI/Label/Label.h>
+#include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-
-#include <ChilliSource/Core/Base/ColourUtils.h>
-#include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Resource/ResourcePool.h>
-
-#include <ChilliSource/GUI/Label/Label.h>
 #include <ChilliSource/UI/Base/Canvas.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
@@ -35,28 +52,394 @@ namespace ChilliSource
 	{
         namespace
         {
-            const f32 k_maxKernRatio = 0.25;
-        }
-        //----------------------------------------------------------
-        //----------------------------------------------------------
-		CanvasRenderer::CanvasRenderer(RenderSystem* inpRenderSystem)
-        : mOverlayBatcher(inpRenderSystem)
-        , mfNearClippingDistance(2.0f)
-		{
+            //------------------------------------------------------
+            /// Converts a 2D transformation matrix to a 3D
+            /// Transformation matrix. This will only work for
+            /// non-projective transforms.
+            ///
+            /// @author S Downie
+            ///
+            /// @param The 2D Transform.
+            ///
+            /// @return The 3D Transform.
+            //------------------------------------------------------
+            template <typename TType> Core::GenericMatrix4<TType> Convert2DTransformTo3D(const Core::GenericMatrix3<TType>& in_transform)
+            {
+                return Core::GenericMatrix4<TType>(
+                    in_transform.m[0], in_transform.m[1], in_transform.m[2], 0,
+                    in_transform.m[3], in_transform.m[4], in_transform.m[5], 0,
+                    0, 0, 1, 0,
+                    in_transform.m[6], in_transform.m[7], in_transform.m[8], 1);
+            }
+            //----------------------------------------------------------------------------
+            /// Get the width of the character
+            ///
+            /// @author S Downie
+            ///
+            /// @param Character
+            /// @param Font
+            //----------------------------------------------------------------------------
+            f32 GetCharacterWidth(Core::UTF8Char in_character, const FontCSPtr& in_font)
+            {
+                Font::CharacterInfo charInfo;
+                if(in_font->TryGetCharacterInfo(in_character, charInfo) == true)
+                {
+                    return charInfo.m_size.x;
+                }
 
-		}
-        //----------------------------------------------------------
-        //----------------------------------------------------------
-        void CanvasRenderer::Init()
+                return 0.0f;
+            }
+            //----------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Character
+            ///
+            /// @return Whether the character can safely be line broken on.
+            //----------------------------------------------------------------------------
+            bool IsBreakableCharacter(Core::UTF8Char in_character)
+            {
+                return in_character == ' ' || in_character == '\t' || in_character == '\n' || in_character == '-';
+            }
+            //----------------------------------------------------------------------------
+            /// Calculate the distance in text space to the next 'breakable' character
+            ///
+            /// @author S Downie
+            ///
+            /// @param Iterator pointing to start
+            /// @param Iterator pointing to end
+            /// @param Font
+            //----------------------------------------------------------------------------
+            f32 CalculateDistanceToNextBreak(std::string::const_iterator in_itStart, std::string::const_iterator in_itEnd, const FontCSPtr& in_font)
+            {
+                f32 totalWidth = 0.0f;
+
+                while(in_itStart < in_itEnd)
+                {
+                    auto nextCharacter = Core::UTF8StringUtils::Next(in_itStart);
+
+                    if(IsBreakableCharacter(nextCharacter) == true)
+                    {
+                        break;
+                    }
+
+                    totalWidth += GetCharacterWidth(nextCharacter, in_font);
+                }
+
+                return totalWidth;
+            }
+            //----------------------------------------------------------------------------
+            /// Split the given text into lines based on any '\n' characters. The newline
+            /// characters do not appear in the returned lines
+            ///
+            /// @author S Downie
+            ///
+            /// @param Text (UTF-8)
+            /// @param [Out] Array of lines split by '\n'
+            //----------------------------------------------------------------------------
+            void SplitByNewLine(const std::string& in_text, std::vector<std::string>& out_lines)
+            {
+                auto it = in_text.begin();
+                std::string line;
+                while(it < in_text.end())
+                {
+                    auto character = Core::UTF8StringUtils::Next(it);
+
+                    if(character != '\n')
+                    {
+                        Core::UTF8StringUtils::Append(character, line);
+                    }
+                    else
+                    {
+                        out_lines.push_back(line);
+                        line.clear();
+                    }
+                }
+
+                if(line.size() > 0)
+                {
+                    out_lines.push_back(line);
+                }
+            }
+            //----------------------------------------------------------------------------
+            /// Split the given text into lines based on the constrained bounds.
+            /// Splits will prefer to happen on breakable whitespace characters but
+            /// will split mid-word if neccessary.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Text (UTF-8)
+            /// @param Font
+            /// @param Text scale
+            /// @param Bounds
+            /// @param [Out] Array of lines split to fit in bounds
+            //----------------------------------------------------------------------------
+            void SplitByBounds(const std::string& in_text, const FontCSPtr& in_font, f32 in_textScale, const Core::Vector2& in_bounds, std::vector<std::string>& out_lines)
+            {
+                f32 maxLineWidth = in_bounds.x;
+
+                auto it = in_text.begin();
+                std::string line;
+                f32 currentLineWidth = 0.0f;
+
+                while(it < in_text.end())
+                {
+                    auto character = Core::UTF8StringUtils::Next(it);
+                    currentLineWidth += (GetCharacterWidth(character, in_font) * in_textScale);
+
+                    //If we come across a character on which we can wrap we need
+                    //to check ahead to see if the next space is within the bounds or
+                    //whether we need to wrap now
+                    if(IsBreakableCharacter(character) == true)
+                    {
+                        f32 nextBreakWidth = currentLineWidth + (CalculateDistanceToNextBreak(it, in_text.end(), in_font) * in_textScale);
+
+                        if(nextBreakWidth >= maxLineWidth && line.size() > 0)
+                        {
+                            out_lines.push_back(line);
+                            line.clear();
+                            currentLineWidth = 0.0f;
+                            continue;
+                        }
+                    }
+
+                    //If text has no characters to break on then we need break anyway should
+                    //we exceed the bounds.
+                    f32 nextCharacterWidth = 0.0f;
+                    if(it < in_text.end())
+                    {
+                        auto itNext = it;
+                        auto nextCharacter = Core::UTF8StringUtils::Next(itNext);
+                        nextCharacterWidth = GetCharacterWidth(nextCharacter, in_font) * in_textScale;
+                    }
+
+                    if((currentLineWidth + nextCharacterWidth) >= maxLineWidth)
+                    {
+                        out_lines.push_back(line);
+                        line.clear();
+                        currentLineWidth = 0.0f;
+                    }
+
+                    Core::UTF8StringUtils::Append(character, line);
+                }
+
+                if(line.size() > 0)
+                {
+                    out_lines.push_back(line);
+                }
+            }
+            //----------------------------------------------------------------------------
+            /// Create the data required to display a character. This includes
+            /// the size, UV and position.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Character
+            /// @param Font
+            /// @param Current cursor X pos
+            /// @param Current cursor Y pos
+            /// @param Text scale
+            ///
+            /// @return Display characer info
+            //----------------------------------------------------------------------------
+            CanvasRenderer::DisplayCharacterInfo BuildCharacter(Core::UTF8Char in_character, const FontCSPtr& in_font, f32 in_cursorX, f32 in_cursorY, f32 in_textScale)
+            {
+                CanvasRenderer::DisplayCharacterInfo result;
+
+                Font::CharacterInfo info;
+                if(in_font->TryGetCharacterInfo(in_character, info) == true)
+                {
+                    //TODO: The font maker seems to add a 2 unit padding to the font. We need to
+                    //remove this or at least find out its purpose.
+                    const f32 k_hackToolCorrection = 2.0f;
+
+                    result.m_UVs = info.m_UVs;
+                    result.m_size = info.m_size * in_textScale;
+                    result.m_position.x = in_cursorX;
+                    result.m_position.y = in_cursorY - ((info.m_offset.y - k_hackToolCorrection) * in_textScale);
+                }
+                else
+                {
+                    CS_LOG_ERROR("Unknown character not provided by font: " + in_font->GetFilePath());
+                }
+
+                return result;
+            }
+            //----------------------------------------------------------------------------
+            /// The text by default is left justfied. If another justification
+            /// is required this function will update the character positions of a given line
+            ///
+            /// @author S Downie
+            ///
+            /// @param Horizontal justification
+            /// @param Bounds width
+            /// @param Index of the first character in a line
+            /// @param Index of the last character in a line
+            /// @param Line width in text space.
+            /// @param [In/Out] List of display character infos that will be manipulated.
+            ///         These are the charcters for all lines.
+            //----------------------------------------------------------------------------
+            void ApplyHorizontalTextJustifications(GUI::TextJustification in_horizontal, f32 in_boundsWidth, u32 in_lineStartIdx, u32 in_lineEndIdx, f32 in_lineWidth,
+                                                   std::vector<CanvasRenderer::DisplayCharacterInfo>& inout_characters)
+            {
+                f32 horizontalOffset = 0.0f;
+
+                switch(in_horizontal)
+                {
+                    default:
+                    case GUI::TextJustification::k_left:
+                        return;
+                    case GUI::TextJustification::k_centre:
+                        horizontalOffset = (in_boundsWidth * 0.5f) - (in_lineWidth * 0.5f);
+                        break;
+                    case GUI::TextJustification::k_right:
+                        horizontalOffset = in_boundsWidth - in_lineWidth;
+                        break;
+                }
+
+                for(u32 i=in_lineStartIdx; i<=in_lineEndIdx; ++i)
+                {
+                    inout_characters[i].m_position.x += horizontalOffset;
+                }
+            }
+            //----------------------------------------------------------------------------
+            /// The text by default is top justfied. If another justification
+            /// is required this function will update all the characters positions
+            ///
+            /// @author S Downie
+            ///
+            /// @param Vertical justification
+            /// @param Bounds height
+            /// @param Height of all the built lines combined
+            /// @param [In/Out] List of display character infos that will be manipulated
+            //----------------------------------------------------------------------------
+            void ApplyVerticalTextJustifications(GUI::TextJustification in_vertical, f32 in_boundsHeight, f32 in_totalLinesHeight, std::vector<CanvasRenderer::DisplayCharacterInfo>& inout_characters)
+            {
+                f32 verticalOffset = 0.0f;
+
+                switch(in_vertical)
+                {
+                    default:
+                    case GUI::TextJustification::k_top:
+                        return;
+                    case GUI::TextJustification::k_centre:
+                        verticalOffset = (in_boundsHeight * 0.5f) - (in_totalLinesHeight * 0.5f);
+                        break;
+                    case GUI::TextJustification::k_bottom:
+                        verticalOffset = in_boundsHeight - in_totalLinesHeight;
+                        break;
+                }
+
+                for(auto& character : inout_characters)
+                {
+                    character.m_position.y -= verticalOffset;
+                }
+            }
+            //-----------------------------------------------------
+            /// Build the sprite from the given data
+            ///
+            /// @author S Downie
+            ///
+            /// @param Transform
+            /// @param Size
+            /// @param UVs
+            /// @param Colour
+            /// @param Alignment
+            /// @param [Out] Sprite
+            //-----------------------------------------------------
+            void UpdateSpriteData(const Core::Matrix4& in_transform, const Core::Vector2& in_size, const Core::Rectangle& in_UVs, const Core::Colour& in_colour, AlignmentAnchor in_alignment,
+                                  SpriteComponent::SpriteData& out_sprite)
+            {
+                const f32 k_nearClipDistance = 2.0f;
+
+                Core::ByteColour Col = Core::ColourUtils::ColourToByteColour(in_colour);
+
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].Col = Col;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].Col = Col;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].Col = Col;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].Col = Col;
+
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex = in_UVs.TopLeft();
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex = in_UVs.BottomLeft();
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex = in_UVs.TopRight();
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex = in_UVs.BottomRight();
+
+                Core::Vector2 vHalfSize(in_size.x * 0.5f, in_size.y * 0.5f);
+                Core::Vector2 vAlignedPos;
+                Align(in_alignment, vHalfSize, vAlignedPos);
+
+                Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
+                Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
+
+                const Core::Matrix4& matTransform(in_transform);
+                vTemp += vCentrePos;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = vTemp * matTransform;
+
+                vTemp.x = vHalfSize.x;
+                vTemp.y = vHalfSize.y;
+
+                vTemp += vCentrePos;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos = vTemp * matTransform;
+
+                vTemp.x = -vHalfSize.x;
+                vTemp.y = -vHalfSize.y;
+
+                vTemp += vCentrePos;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos = vTemp * matTransform;
+
+                vTemp.x = vHalfSize.x;
+                vTemp.y = -vHalfSize.y;
+
+                vTemp += vCentrePos;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos = vTemp * matTransform;
+
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.z = -k_nearClipDistance;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.w = 1.0f;
+
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos.z = -k_nearClipDistance;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos.w = 1.0f;
+
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos.z = -k_nearClipDistance;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos.w = 1.0f;
+
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos.z = -k_nearClipDistance;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos.w = 1.0f;
+            }
+        }
+
+        CS_DEFINE_NAMEDTYPE(CanvasRenderer);
+
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        CanvasRendererUPtr CanvasRenderer::Create()
+        {
+            return CanvasRendererUPtr(new CanvasRenderer());
+        }
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        bool CanvasRenderer::IsA(Core::InterfaceIDType in_interfaceId) const
+        {
+            return in_interfaceId == CanvasRenderer::InterfaceID;
+        }
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void CanvasRenderer::OnInit()
         {
             m_materialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
             CS_ASSERT(m_materialFactory != nullptr, "Must have a material factory");
-            
+
             m_resourcePool = Core::Application::Get()->GetResourcePool();
             CS_ASSERT(m_resourcePool != nullptr, "Must have a resource pool");
+
+            RenderSystem* renderSystem = Core::Application::Get()->GetRenderSystem();
+            CS_ASSERT(renderSystem != nullptr, "Canvas renderer cannot find render system");
+
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            CS_ASSERT(m_screen != nullptr, "Canvas renderer cannot find screen system");
+
+            m_overlayBatcher = DynamicSpriteBatchUPtr(new DynamicSpriteBatch(renderSystem));
         }
-        //----------------------------------------------------------
-		//----------------------------------------------------------
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
         MaterialCSPtr CanvasRenderer::GetGUIMaterialForTexture(const TextureCSPtr& in_texture)
         {
             auto itExistingEntry = m_materialGUICache.find(in_texture);
@@ -66,38 +449,38 @@ namespace ChilliSource
             }
             else
             {
-                std::string materialId("_GUI:" + in_texture->GetFilePath());
+                std::string materialId("_GUI:" + Core::ToString(in_texture->GetId()));
                 MaterialCSPtr materialExisting = m_resourcePool->GetResource<Material>(materialId);
-                
+
                 if(materialExisting != nullptr)
                 {
                     m_materialGUICache.insert(std::make_pair(in_texture, materialExisting));
                     return materialExisting;
                 }
-                
+
                 MaterialSPtr materialNew = m_materialFactory->CreateGUI(materialId);
                 materialNew->AddTexture(in_texture);
                 m_materialGUICache.insert(std::make_pair(in_texture, materialNew));
-                
+
                 return materialNew;
             }
-            
+
             CS_LOG_FATAL("CanvasRenderer: No GUI material created. Some logic has gone wrong");
             return nullptr;
         }
-		//----------------------------------------------------------
-		/// Render
-		///
-		/// Draw the UI
-		//----------------------------------------------------------
-		void CanvasRenderer::Render(GUI::GUIView* inpView)
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+		void CanvasRenderer::Render(GUI::GUIView* in_rootView)
 		{
-            inpView->Draw(this);
-			
-            mOverlayBatcher.DisableScissoring();
-			mOverlayBatcher.ForceRender();
-            
+            CS_ASSERT(in_rootView != nullptr, "Canvas cannot render null view");
+
+            in_rootView->Draw(this);
+
+            m_overlayBatcher->DisableScissoring();
+			m_overlayBatcher->ForceRender();
+
             m_materialGUICache.clear();
+            m_canvasSprite.pMaterial = nullptr;
 		}
         //----------------------------------------------------------
 		/// Render
@@ -106,653 +489,187 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CanvasRenderer::Render(UI::Canvas* in_canvas)
 		{
+			CS_ASSERT(in_canvas != nullptr, "Canvas cannot render null UI canvas");
+
             in_canvas->Draw(this);
-			
-            mOverlayBatcher.DisableScissoring();
-			mOverlayBatcher.ForceRender();
-            
+
+			m_overlayBatcher->DisableScissoring();
+			m_overlayBatcher->ForceRender();
+
             m_materialGUICache.clear();
+			m_canvasSprite.pMaterial = nullptr;
 		}
-        //----------------------------------------------------------
-        /// Enable Clipping To Bounds
-        ///
-        /// Set the bounds beyond which any subviews will clip
-        /// Pushes to a stack which tracks when to enable and
-        /// disable scissoring
-        //---------------------------------------------------------
-        void CanvasRenderer::EnableClippingToBounds(const Core::Vector2& invPosition, const Core::Vector2& invSize)
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void CanvasRenderer::PushClipBounds(const Core::Vector2& in_blPosition, const Core::Vector2& in_size)
         {
-            if(mScissorPos.empty())
+            if(m_scissorPositions.empty())
             {
-                mScissorPos.push_back(invPosition);
-                mScissorSize.push_back(invSize);
-            } 
+                m_scissorPositions.push_back(in_blPosition);
+                m_scissorSizes.push_back(in_size);
+            }
             else
             {
-                Core::Vector2 vOldBottomLeft = mScissorPos.back();
-                Core::Vector2 vOldTopRight = mScissorSize.back()+vOldBottomLeft;
-                Core::Vector2 vNewBottomLeft = invPosition;
-                Core::Vector2 vNewTopRight = invPosition+invSize;
-                
-                vNewBottomLeft.x = Core::MathUtils::Max(vNewBottomLeft.x, vOldBottomLeft.x);
-                vNewBottomLeft.y = Core::MathUtils::Max(vNewBottomLeft.y, vOldBottomLeft.y);
-                
-                vNewTopRight.x = Core::MathUtils::Min(vNewTopRight.x, vOldTopRight.x);
-                vNewTopRight.y = Core::MathUtils::Min(vNewTopRight.y, vOldTopRight.y);
-                
+                Core::Vector2 vOldBottomLeft = m_scissorPositions.back();
+                Core::Vector2 vOldTopRight = m_scissorSizes.back() + vOldBottomLeft;
+                Core::Vector2 vNewBottomLeft = in_blPosition;
+                Core::Vector2 vNewTopRight = in_blPosition + in_size;
+
+                //If the scissor region extends outside the bounds of the screen this is undefined behaviour and
+                //the render system may wrap the values causing artefacts. We clamp them here to make sure this
+                //doesn't happen.
+                vNewBottomLeft.x = Core::MathUtils::Clamp(std::max(vNewBottomLeft.x, vOldBottomLeft.x), 0.0f, m_screen->GetResolution().x);
+                vNewBottomLeft.y = Core::MathUtils::Clamp(std::max(vNewBottomLeft.y, vOldBottomLeft.y), 0.0f, m_screen->GetResolution().y);
+
+                vNewTopRight.x = Core::MathUtils::Clamp(std::min(vNewTopRight.x, vOldTopRight.x), 0.0f, m_screen->GetResolution().x);
+                vNewTopRight.y = Core::MathUtils::Clamp(std::min(vNewTopRight.y, vOldTopRight.y), 0.0f, m_screen->GetResolution().y);
+
                 Core::Vector2 vNewSize = vNewTopRight - vNewBottomLeft;
-                
-                mScissorPos.push_back(vNewBottomLeft);
-                mScissorSize.push_back(vNewSize);
+
+                m_scissorPositions.push_back(vNewBottomLeft);
+                m_scissorSizes.push_back(vNewSize);
             }
-            
-            mOverlayBatcher.EnableScissoring(mScissorPos.back(), mScissorSize.back());
+
+            m_overlayBatcher->EnableScissoring(m_scissorPositions.back(), m_scissorSizes.back());
         }
-        //----------------------------------------------------------
-        /// Disable Clipping To Bounds
-        ///
-        /// Pop the scissor tracking stack
-        //----------------------------------------------------------                            
-        void CanvasRenderer::DisableClippingToBounds()
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void CanvasRenderer::PopClipBounds()
         {
-            if(!mScissorPos.empty())
+            if(!m_scissorPositions.empty())
             {
-                mScissorPos.erase(mScissorPos.end()-1);
-                mScissorSize.erase(mScissorSize.end()-1);
-                
-                if(!mScissorPos.empty())
+                m_scissorPositions.erase(m_scissorPositions.end()-1);
+                m_scissorSizes.erase(m_scissorSizes.end()-1);
+
+                if(!m_scissorPositions.empty())
                 {
-                    mOverlayBatcher.EnableScissoring(mScissorPos.back(), mScissorSize.back());
+                    m_overlayBatcher->EnableScissoring(m_scissorPositions.back(), m_scissorSizes.back());
                 }
             }
-            
-            if(mScissorPos.empty())
+
+            if(m_scissorPositions.empty())
             {
-                mOverlayBatcher.DisableScissoring();
+                m_overlayBatcher->DisableScissoring();
             }
         }
-        //-----------------------------------------------------------
-        /// Draw Box
-        ///
-        /// Build a sprite box and batch it ready for rendering
-        //-----------------------------------------------------------
-        void CanvasRenderer::DrawBox(const Core::Matrix3x3& inmatTransform, const Core::Vector2 & invSize, const TextureCSPtr & inpTexture, 
-                                      const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void CanvasRenderer::DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Core::Rectangle& in_UVs,
+                                     const Core::Colour& in_colour, AlignmentAnchor in_anchor)
         {
-            msCachedSprite.pMaterial = GetGUIMaterialForTexture(inpTexture);
-            
-			UpdateSpriteData(inmatTransform, invSize, inUVs, insTintColour, ineAlignment);
-            
-            //Draw us!
-			mOverlayBatcher.Render(msCachedSprite);
-            
+            m_canvasSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
+
+			UpdateSpriteData(Convert2DTransformTo3D(in_transform), in_size, in_UVs, in_colour, in_anchor, m_canvasSprite);
+
+			m_overlayBatcher->Render(m_canvasSprite);
+
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("GUI", 1);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("GUI", 1);
 #endif
         }
-        //-----------------------------------------------------------
-        /// Draw String
-        //-----------------------------------------------------------
-		void CanvasRenderer::DrawString(const Core::UTF8String & insString, const Core::Matrix3x3& inmatTransform, f32 infSize, const FontCSPtr& inpFont, CharacterList& outCharCache,
-                                         const Core::Colour & insColour, const Core::Vector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
-										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped, bool *outpInvalidCharacterFound)
-		{
-            msCachedSprite.pMaterial = GetGUIMaterialForTexture(inpFont->GetTexture());
-            
-			//Get the data about how to draw each character
-            //This will be in text space and will be in a single line
-            if(outCharCache.empty())
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        CanvasRenderer::BuiltText CanvasRenderer::BuildText(const std::string& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
+                                                            const Core::Vector2& in_bounds, u32 in_numLines, GUI::TextJustification in_horizontal, GUI::TextJustification in_vertical) const
+        {
+            BuiltText result;
+            result.m_width = 0.0f;
+            result.m_height = 0.0f;
+            result.m_characters.reserve(in_text.size());
+
+            //NOTE: | denotes the bounds of the box
+            //- |The quick brown fox| jumped over\nthe ferocious honey badger
+
+            //Split the string into lines by the forced line breaks (i.e. the \n)
+            //- |The quick brown fox| jumped over
+            //- |the ferocious honey| badger
+            std::vector<std::string> linesOnNewLine;
+            SplitByNewLine(in_text, linesOnNewLine);
+
+            //Split the lines further based on the line width, breakable characters and the bounds
+            //- |The quick brown fox|
+            //- |jumped over        |
+            //- |the ferocious honey|
+            //- |badger             |
+            std::vector<std::string> linesOnBounds;
+            for(const auto& line : linesOnNewLine)
             {
-                if(outpInvalidCharacterFound)
-                    (*outpInvalidCharacterFound)=false;
-                BuildString(inpFont, insString, outCharCache, infSize, infCharacterSpacing, infLineSpacing, invBounds, inudwNumLines,
-							ineHorizontalJustification, ineVerticalJustification, inbFlipVertical, ineBehaviour, outpClipped,outpInvalidCharacterFound);
+                SplitByBounds(line, in_font, in_textScale, in_bounds, linesOnBounds);
             }
-            
-            Core::Matrix4x4 matTransform(inmatTransform);
-            Core::Matrix4x4 matTransformedLocal;
-			
-            //Build each character sprite from the draw info
-			for (u32 nChar = 0; nChar < outCharCache.size(); nChar++)
+
+            //Only build as many lines as we have been told to. If ZERO is specified
+            //this means build all lines. We are also constrained by the size of the bounds
+            u32 numLines = (in_numLines == 0) ? linesOnBounds.size() : std::min((u32)linesOnBounds.size(), in_numLines);
+
+            f32 lineHeight = in_lineSpacing * (in_font->GetLineHeight() * in_textScale);
+            f32 maxHeight = in_bounds.y;
+            numLines = std::min(numLines, (u32)(maxHeight/lineHeight));
+
+            //The middle of the text label is 0,0. We want to be starting at the top left.
+            f32 cursorXReturnPos = -in_bounds.x * 0.5f;
+            f32 cursorX = cursorXReturnPos;
+            f32 cursorY = in_bounds.y * 0.5f;
+
+            for(u32 lineIdx=0; lineIdx<numLines; ++lineIdx)
             {
-				Core::Matrix4x4 matLocal;
-                
-                f32 fXPos = outCharCache[nChar].vPosition.x;
-                f32 fYPos = outCharCache[nChar].vPosition.y - outCharCache[nChar].vSize.y * 0.5f;
-				matLocal.Translate((fXPos), (fYPos), 0.0f);
-                
-                Core::Matrix4x4::Multiply(&matLocal, &matTransform, &matTransformedLocal);
-                
-                UpdateSpriteData(matTransformedLocal, outCharCache[nChar].vSize, outCharCache[nChar].sUVs, insColour, AlignmentAnchor::k_middleCentre);
-				
-                mOverlayBatcher.Render(msCachedSprite);
+                u32 lineStartIdx = result.m_characters.size();
+
+                auto characterIt = linesOnBounds[lineIdx].begin();
+                while(characterIt < linesOnBounds[lineIdx].end())
+                {
+                    auto character = Core::UTF8StringUtils::Next(characterIt);
+                    auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_textScale));
+
+                    cursorX += builtCharacter.m_size.x;
+
+                    if(builtCharacter.m_size.y > 0.0f)
+                    {
+                        //No point rendering whitespaces
+                        result.m_characters.push_back(builtCharacter);
+                    }
+                }
+
+                f32 lineWidth = cursorX - cursorXReturnPos;
+                ApplyHorizontalTextJustifications(in_horizontal, in_bounds.x, lineStartIdx, result.m_characters.size() - 1, lineWidth, result.m_characters);
+
+                result.m_width = std::max(lineWidth, result.m_width);
+
+                cursorX = cursorXReturnPos;
+                cursorY -= lineHeight;
+            }
+
+            result.m_height = numLines * lineHeight;
+            ApplyVerticalTextJustifications(in_vertical, in_bounds.y, result.m_height, result.m_characters);
+
+            return result;
+        }
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+		void CanvasRenderer::DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture)
+		{
+            m_canvasSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
+
+            Core::Matrix4 matTransform = Convert2DTransformTo3D(in_transform);
+            Core::Matrix4 matTransformedLocal;
+
+			for (const auto& character : in_characters)
+            {
+                matTransformedLocal = Core::Matrix4::CreateTranslation(Core::Vector3(character.m_position, 0.0f)) * matTransform;
+                UpdateSpriteData(matTransformedLocal, character.m_size, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, m_canvasSprite);
+                m_overlayBatcher->Render(m_canvasSprite);
 			}
-            
+
 #ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::AddToEvent("GUI", 1);
+            Core::Application::Get()->GetDebugStats()->AddToEvent("GUI", 1);
 #endif
 		}
-        //-----------------------------------------------------------
-        /// Calculate String Width
-        ///
-        /// Calculate the length of a string based on the font
-        /// and attributes
-        //------------------------------------------------------------
-        f32 CanvasRenderer::CalculateStringWidth(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infSize, f32 infCharSpacing, bool inbIgnoreLinesBreaks)
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        void CanvasRenderer::OnDestroy()
         {
-            Core::Vector2 vSize;
-            
-            //Track the character width
-            std::vector<f32> aLineWidths;
-            aLineWidths.push_back(0.0f);
-            
-			f32 fLastCharacterWidth = 0.0f;
-            
-            //Make sure we scale the spacing if we have scaled the text
-            infCharSpacing *= infSize;
-			
-            //Track all the characters in this line
-            CharacterList CurrentLine;
-            
-            //Loop round each character and get it's size
-            Core::UTF8String::iterator it = (Core::UTF8String::iterator)insString.begin();
-			while(insString.end() != it)
-			{
-                //Get character for iterator codepoint and bump the iterator to the beginning of
-                //the next character
-                Core::UTF8String::Char Char = insString.next(it);
-                
-                // If we are breaking on new lines, create a new counter.
-                if(!inbIgnoreLinesBreaks && (Char == k_returnCharacter))
-                {
-                    aLineWidths.push_back(0.0f);
-                    continue;
-                }
-                
-                // If kerning is supported, then we need the next character
-                Core::UTF8String::Char NextChar = Char;
-                if(inpFont->SupportsKerning() && insString.end() != it)
-                {
-                    Core::UTF8String::iterator it2 = it;
-                    NextChar = insString.next(it2);
-                }
-                
-                //Construct the characters position and size from the font sheet and add it to the line
-                BuildCharacter(inpFont, Char, NextChar, vSize, infSize, infCharSpacing, fLastCharacterWidth, CurrentLine);
-                
-                aLineWidths.back() += fLastCharacterWidth;
-            }
-            
-            // Return the largest line.
-            return *std::max_element(aLineWidths.begin(), aLineWidths.end());
+            m_overlayBatcher = nullptr;
+            m_materialGUICache.clear();
+            m_canvasSprite.pMaterial = nullptr;
         }
-        //-----------------------------------------------------------
-        /// Calculate String Height
-        ///
-        /// Calculate the height of a string based on the font, width
-        /// and attributes
-        //------------------------------------------------------------
-        f32 CanvasRenderer::CalculateStringHeight(const Core::UTF8String& insString, const FontCSPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines)
-        {
-            Core::Vector2 vCursorPos;
-            
-            //Track the character height
-			f32 fLastCharacterWidth = 0.0f;
-            
-            //Required to be passed into BuildCharacter
-            CharacterList CurrentLine;
-            
-            //Make sure we scale the spacing if we have scaled the text
-            infLineSpacing *= infSize;
-            infCharSpacing *= infSize;
-            const f32 fLineHeight = inpFont->GetLineHeight() * infLineSpacing;
-        
-            u32 udwCurrentNumLines = 1;
-
-            //Loop round each character and get it's size
-            Core::UTF8String::iterator it = (Core::UTF8String::iterator)insString.begin();
-			while(it != insString.end())
-			{
-                //Get character for iterator codepoint and bump the iterator to the beginning of 
-                //the next character
-                Core::UTF8String::Char Char = insString.next(it);
-                
-                //Decide whether to wrap or clip. If max num lines is zero this means wrap text infinetly
-                if(inudwNumLines == 0 || udwCurrentNumLines <= inudwNumLines)
-                {
-                    // If kerning is supported, then we need the next character
-                    Core::UTF8String::Char NextChar = Char;
-                    if(inpFont->SupportsKerning() && insString.end() != it)
-                    {
-                        Core::UTF8String::iterator it2 = it;
-                        NextChar = insString.next(it2);
-                    }
-                    
-                    //Construct the characters position and size from the font sheet to get the width
-                    BuildCharacter(inpFont, Char, NextChar, Core::Vector2::ZERO, infSize, infCharSpacing, fLastCharacterWidth, CurrentLine);
-                    vCursorPos.x += fLastCharacterWidth;
-
-                    Core::UTF8String sTemp;
-                    sTemp.appendChar(Char);
-                    
-                    //Added by Joe 9/1/14
-                    //Prepare to relocate last character to the next line if it breaches the bounds
-                    //by removing it from the current line and stepping back the iterator
-                    bool bExceededBounds = false;
-                    if(vCursorPos.x > infWidth)
-                    {
-                        bExceededBounds=true;
-                        
-                        if(CurrentLine.size()==1)
-                        {
-                            // this character won't ever fit in this label so stop here.
-                            return udwCurrentNumLines * fLineHeight;
-                        }
-                        
-                        if(insString.begin() != it && Char != k_spaceCharacter && Char != k_tabCharacter)
-                        {
-                            it--;
-                            vCursorPos.x -= fLastCharacterWidth;
-                            CurrentLine.pop_back();
-                        }
-                    }
-                    
-                    //If we are a return character or we exceed the bounds then we must wrap the text
-                    if(Char == k_returnCharacter || bExceededBounds)
-                    {
-                        udwCurrentNumLines++;  
-                        vCursorPos.x = 0.0f;
-                        CurrentLine.clear();
-                    }
-                    //Check if we need to wrap before the next space so that words are not split
-                    //across multiple lines
-                    else if(Char == k_spaceCharacter || Char == k_tabCharacter)
-                    {
-                        //Find the length to the next space/tab from the cursor pos
-                        //and if it exceed the bounds then wrap
-                        f32 fLengthToNextSpace = vCursorPos.x;
-                        Core::UTF8String::iterator jt = it;
-                        Core::UTF8String::Char NextCharacter = 0;
-                        
-                        while(jt != insString.end() && NextCharacter != k_spaceCharacter && NextCharacter != k_tabCharacter && NextCharacter != k_returnCharacter)
-                        {
-                            NextCharacter = insString.next(jt);
-                            
-                            //Add it to the length
-                            Font::CharacterInfo sInfo;
-                            inpFont->TryGetCharacterInfo(NextCharacter, sInfo);
-                            fLengthToNextSpace += (sInfo.m_size.x * infSize) + infCharSpacing;
-                            
-                            if(fLengthToNextSpace > infWidth)
-                            {
-                                //We can wrap to the next line
-                                udwCurrentNumLines++;
-                                vCursorPos.x = 0.0f;
-                                CurrentLine.clear();
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            
-            return udwCurrentNumLines * fLineHeight;
-        }
-		//-------------------------------------------
-		/// Build String
-		///
-		/// Construct a list of character sprites
-		/// from the given string
-        //-------------------------------------------
-		void CanvasRenderer::BuildString(const FontCSPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
-										  const Core::Vector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification,
-                                          bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
-		{
-            // don't attempt to draw zero or negative sized text
-            if(infTextSize <= 0.0f)
-                return;
-            
-            bool bClipped=false;
-            
-            outCharacters.reserve(inText.length());
-			
-			//This will be positioned in local space where the characters are relative to each either.
-            Core::Vector2 vCursorPos;
-			
-			//Track the width of the last character so we can offset the next correctly
-			f32 fLastCharacterWidth = 0.0f;
-            
-            //Make sure we scale the spacing if we have scaled the text
-            infCharacterSpacing *= infTextSize;
-			infLineSpacing *= infTextSize;
-            const f32 fLineHeight = infLineSpacing * inpFont->GetLineHeight();
-            
-            CharacterList CurrentLine;
-            u32 udwCurrentNumLines = 1;
-            
-            bool bNoMoreLines = false;
-			
-            Core::UTF8String::iterator it = (Core::UTF8String::iterator)inText.begin();
-            while(inText.end() != it)
-			{
-                //Get character for iterator codepoint and bump the iterator to the beginning of
-                //the next character
-                Core::UTF8String::Char Char = inText.next(it);
-                
-                // If kerning is supported, then we need the next character
-                Core::UTF8String::Char NextChar = Char;
-                if(inpFont->SupportsKerning() && inText.end() != it)
-                {
-                    Core::UTF8String::iterator it2 = it;
-                    NextChar = inText.next(it2);
-                }
-                
-                //Decide whether to wrap or clip. If max num lines is zero this means wrap text infinetly
-                if(!bNoMoreLines && (inudwNumLines == 0 || udwCurrentNumLines <= inudwNumLines))
-                {
-                    //Construct the characters position and size from the font sheet and add it to the line
-                    BuildCharacter(inpFont, Char, NextChar, vCursorPos, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLine, outpInvalidCharacterFound);
-                    
-                    //Offset the cursor to the start of the next character
-                    vCursorPos.x += fLastCharacterWidth;
-                    
-                    //Added by Joe 9/1/14
-                    //Prepare to relocate last character to the next line if it breaches the bounds
-                    //by removing it from the current line and stepping back the iterator
-                    bool bExceededBounds = false;
-                    if(vCursorPos.x > invBounds.x)
-                    {
-                        bExceededBounds=true;
-                        
-                        if(CurrentLine.size()==1)
-                        {
-                            // don't add any more lines because the width of the bounds is too
-                            // small to allow one of the characters to appear at all.
-                            bNoMoreLines=true;
-                        }
-                        
-                        else if(inText.begin() != it && Char != k_spaceCharacter && Char != k_tabCharacter)
-                        {
-                            it--;
-                            vCursorPos.x -= fLastCharacterWidth;
-                            CurrentLine.pop_back();
-                        }
-                    }
-                    
-                    if(!bNoMoreLines)
-                    {
-                        //If we are a return character or we exceed the bounds then we must wrap the text
-                        if(Char == k_returnCharacter || bExceededBounds)
-                        {
-                            Wrap(ineHorizontalJustification, fLineHeight, invBounds, CurrentLine, vCursorPos, outCharacters);
-                            
-                            //Make sure we don't exceed our vertical bounds
-                            if(vCursorPos.y - fLineHeight <= -invBounds.y || udwCurrentNumLines==inudwNumLines)
-                            {
-                                bNoMoreLines = true;
-                                vCursorPos.y += fLineHeight;
-                            }
-                            else
-                            {
-                                udwCurrentNumLines++;
-                            }
-                        }
-                        //Check if we need to wrap before the next space so that words are not split
-                        //across multiple lines
-                        else if(Char == k_spaceCharacter || Char == k_tabCharacter)
-                        {
-                            //Find the length to the next space/tab from the cursor pos
-                            //and if it exceed the bounds then wrap
-                            f32 fLengthToNextSpace = vCursorPos.x;
-                            Core::UTF8String::iterator jt = it;
-                            Core::UTF8String::Char LookAheadChar;
-                            Core::UTF8String::Char LookAheadNextChar;
-                            CharacterList CurrentLineTemp;
-                            
-                            //This while loop exits through break statements only.
-                            while(jt != inText.end())
-                            {
-                                LookAheadChar = inText.next(jt);
-                                
-                                //Break if the next spacing or return character is reached
-                                if(LookAheadChar == k_spaceCharacter || LookAheadChar == k_tabCharacter || LookAheadChar == k_returnCharacter)
-                                    break;
-                                
-                                LookAheadNextChar = LookAheadChar;
-                                Core::UTF8String::iterator jt2 = jt;
-                                if(jt!=inText.end())
-                                    LookAheadNextChar=inText.next(jt2);
-                                
-                                //Construct the characters position and size from the font sheet to get the width
-                                BuildCharacter(inpFont, LookAheadChar, LookAheadNextChar, Core::Vector2::ZERO, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLineTemp, outpInvalidCharacterFound);
-                                fLengthToNextSpace += fLastCharacterWidth;
-                                
-                                if(fLengthToNextSpace > invBounds.x)
-                                {
-                                    //We can wrap to the next line
-                                    Wrap(ineHorizontalJustification, fLineHeight, invBounds, CurrentLine, vCursorPos, outCharacters);
-                                    
-                                    //Make sure we don't exceed our vertical bounds
-                                    if(vCursorPos.y - fLineHeight <= -invBounds.y || udwCurrentNumLines==inudwNumLines)
-                                    {
-                                        bNoMoreLines = true;
-                                        vCursorPos.y += fLineHeight;
-                                    }
-                                    else
-                                    {
-                                        udwCurrentNumLines++;
-                                    }
-                                    
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    //We are out of room so we can either over-run the label or clip the text
-                    switch(ineBehaviour)
-                    {
-                        case GUI::TextOverflowBehaviour::k_none:
-                        case GUI::TextOverflowBehaviour::k_clip:
-                            //Don't process any further characters
-                            it = (Core::UTF8String::iterator)inText.end();
-                            bClipped=true;
-                            break;
-                        case GUI::TextOverflowBehaviour::k_follow:
-                            //Shunt the text backwards so it appears to scroll
-                            ineHorizontalJustification = GUI::TextJustification::k_right;
-                            break;
-                    }
-                }
-			}
-            
-            //Add the last line to the string
-            Wrap(ineHorizontalJustification, fLineHeight, invBounds, CurrentLine, vCursorPos, outCharacters);
-            
-            //flip the text vertically if required
-            f32 fHeight = udwCurrentNumLines * fLineHeight;
-            if (inbFlipVertical == true)
-            {
-                for(CharacterList::iterator itChar = outCharacters.begin(); itChar != outCharacters.end(); ++itChar)
-                {
-                    itChar->vPosition.y = -itChar->vPosition.y + itChar->vSize.y - fHeight;
-                    itChar->sUVs.vOrigin.y += itChar->sUVs.vSize.y;
-                    itChar->sUVs.vSize.y = -itChar->sUVs.vSize.y;
-                }
-            }
-            
-            //Now vertically justify the text
-            f32 fOffsetY = 0.0f;
-            
-            switch(ineVerticalJustification)
-            {
-                case GUI::TextJustification::k_top:
-                default:
-                    fOffsetY = (invBounds.y * 0.5f);
-                    break;
-                case GUI::TextJustification::k_centre:
-                    fOffsetY = (fHeight * 0.5f);
-                    break;
-                case GUI::TextJustification::k_bottom:
-                    fOffsetY = -((invBounds.y * 0.5f) - fHeight);
-                    break;
-            };
-            
-			for(CharacterList::iterator itChar = outCharacters.begin(); itChar != outCharacters.end(); ++itChar)
-			{
-                itChar->vPosition.y += fOffsetY;
-			}
-            
-            if(outpClipped)
-                (*outpClipped)=bClipped;
-		}
-		//----------------------------------------------------
-		/// Build Character
-		//----------------------------------------------------
-		void CanvasRenderer::BuildCharacter(const FontCSPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
-                                                         const Core::Vector2& invCursor, f32 infTextScale, f32 infCharSpacing,
-                                                         f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound)
-		{
-			Font::CharacterInfo sInfo;
-            if(inpFont->TryGetCharacterInfo(inCharacter, sInfo) == false)
-            {
-                outfCharacterWidth = 0.0f;
-                if(outpInvalidCharacterFound)
-                    (*outpInvalidCharacterFound)=true;
-                CS_LOG_ERROR("Invalid character in text component");
-                return;
-            }
-
-            sInfo.m_size *= infTextScale;
-            sInfo.m_offset *= infTextScale;
-            
-            f32 fCharWidth = sInfo.m_size.x + infCharSpacing;
-            
-            if(sInfo.m_size.y > 0.0f)
-            {
-                PlacedCharacter sOutCharacter;
-                sOutCharacter.sUVs = sInfo.m_UVs;
-                sOutCharacter.vSize = sInfo.m_size;
-                sOutCharacter.vPosition.x = invCursor.x + sInfo.m_offset.x;
-                sOutCharacter.vPosition.y = invCursor.y - sInfo.m_offset.y;
-                
-                if(inpFont->SupportsKerning() && fCharWidth > 2)
-                {
-                    f32 fKernAmount = (inpFont->GetKerningBetweenCharacters(inCharacter, inNextCharacter) * infTextScale);
-                    
-                    if(fKernAmount > (fCharWidth * k_maxKernRatio))
-                    {
-                        fKernAmount = fCharWidth * k_maxKernRatio;
-                    }
-                    
-                    fCharWidth -= fKernAmount;
-                }
-                
-                outCharacters.push_back(sOutCharacter);
-            }
-            
-            outfCharacterWidth = fCharWidth;
-        }
-		
-        //----------------------------------------------------
-        /// Wrap
-        //----------------------------------------------------
-        void CanvasRenderer::Wrap(GUI::TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::Vector2& invBounds,
-								   CharacterList &inCurrentLine, Core::Vector2& outvCursor, CharacterList &outCharacters)
-        {
-            if(!inCurrentLine.empty())
-            {
-                //Move the characters based on the justification
-                //We must centre align everything for rendering
-                f32 fOffsetX = 0.0f;
-                
-                switch(ineHorizontalJustification)
-                {
-                    case GUI::TextJustification::k_left:
-                    default:
-                        fOffsetX = -(invBounds.x * 0.5f);
-                        break;
-                    case GUI::TextJustification::k_centre:
-                        fOffsetX = -(outvCursor.x * 0.5f);
-                        break;
-                    case GUI::TextJustification::k_right:
-                        fOffsetX = (invBounds.x * 0.5f) - outvCursor.x;
-                        break;
-                };
-                
-                for(CharacterList::iterator it = inCurrentLine.begin(); it != inCurrentLine.end(); ++it)
-                {
-                    it->vPosition.x += fOffsetX;
-                    outCharacters.push_back(*it);
-                }
-                
-                inCurrentLine.clear();
-            }
-            
-            outvCursor.y -= infLineSpacing;
-            outvCursor.x = 0.0f;
-		}
-		//-----------------------------------------------------
-		/// Update Sprite Data
-		///
-		/// Rebuild the sprite data
-		//-----------------------------------------------------
-		void CanvasRenderer::UpdateSpriteData(const Core::Matrix4x4 & inTransform, const Core::Vector2 & invSize, const Core::Rectangle& inUVs, const Core::Colour & insTintColour, AlignmentAnchor ineAlignment)
-		{
-			Core::ByteColour Col = Core::ColourUtils::ColourToByteColour(insTintColour);
-			
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].Col = Col;
-            msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].Col = Col;
-            msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].Col = Col;
-            msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].Col = Col;
-			
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex = inUVs.TopLeft();
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex = inUVs.BottomLeft();
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex = inUVs.TopRight();
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex = inUVs.BottomRight();
-			
-			Core::Vector2 vHalfSize(invSize.x * 0.5f, invSize.y * 0.5f);
-			Core::Vector2 vAlignedPos;
-            Align(ineAlignment, vHalfSize, vAlignedPos);
-            
-            Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
-            Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
-			
-            const Core::Matrix4x4 &matTransform(inTransform);
-			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos);
-            
-            vTemp.x = vHalfSize.x;
-            vTemp.y = vHalfSize.y;
-			
-			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos);
-            
-            vTemp.x = -vHalfSize.x;
-            vTemp.y = -vHalfSize.y;
-			
-			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos);
-            
-            vTemp.x = vHalfSize.x;
-            vTemp.y = -vHalfSize.y;
-			
-			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos);
-
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.w = 1.0f;
-			
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos.w = 1.0f;
-			
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos.w = 1.0f;
-			
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos.w = 1.0f;
-		}
 	}
 }

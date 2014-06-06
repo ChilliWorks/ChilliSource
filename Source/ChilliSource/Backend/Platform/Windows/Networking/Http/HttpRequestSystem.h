@@ -6,11 +6,12 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_HTTP_HTTPREQUESTSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_HTTP_HTTPREQUESTSYSTEM_H_
 
 #include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
-#include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 namespace ChilliSource
@@ -110,4 +111,8 @@ namespace ChilliSource
 		};
 	}
 }
+
 #endif
+
+#endif
+

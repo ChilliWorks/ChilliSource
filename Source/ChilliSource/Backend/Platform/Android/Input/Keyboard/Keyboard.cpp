@@ -1,17 +1,40 @@
 //
 //  Keyboard.cpp
 //  Chilli Source
-//
 //  Created by Ian Copland on 31/12/2011
-//  Copyright (c)2010 Tag Games Limited. All rights reserved.
 //
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+#ifdef CS_TARGETPLATFORM_ANDROID
 
 #include <ChilliSource/Backend/Platform/Android/Input/Keyboard/Keyboard.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Input/Keyboard/KeyboardJavaInterface.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/String/UTF8StringUtils.h>
 
 namespace ChilliSource
 {
@@ -56,13 +79,13 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		const Core::UTF8String& Keyboard::GetText() const
+		const std::string& Keyboard::GetText() const
 		{
 			return m_text;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void Keyboard::SetText(const Core::UTF8String& in_text)
+		void Keyboard::SetText(const std::string& in_text)
 		{
 			m_text = in_text;
 		}
@@ -113,9 +136,9 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void Keyboard::OnTextAdded(const Core::UTF8String& in_text)
+		void Keyboard::OnTextAdded(const std::string& in_text)
 		{
-			Core::UTF8String newText = m_text + in_text;
+			std::string newText = m_text + in_text;
 
 			bool rejectText = false;
 			m_textInputReceivedEvent.NotifyConnections(newText, &rejectText);
@@ -129,10 +152,11 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void Keyboard::OnTextDeleted()
 		{
-			Core::UTF8String newText = m_text;
+			std::string newText = m_text;
 			if (newText.size() > 0)
 			{
-				newText = m_text.substr(0, m_text.length() - 1);
+				s32 newLength = std::max((s32)(Core::UTF8StringUtils::CalcLength(m_text.begin(), m_text.end())) - 1, 0);
+				newText = Core::UTF8StringUtils::SubString(m_text, 0, newLength);
 			}
 
 			bool rejectText = false;
@@ -168,3 +192,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

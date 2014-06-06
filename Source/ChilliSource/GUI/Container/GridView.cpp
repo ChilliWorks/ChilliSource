@@ -8,7 +8,6 @@
 
 #include <ChilliSource/GUI/Container/GridView.h>
 
-#include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
@@ -18,6 +17,8 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #endif
+
+#include <algorithm>
 
 namespace ChilliSource
 {
@@ -387,8 +388,8 @@ namespace ChilliSource
             u32 udwNumCols = 0;
             u32 udwNumRows = 0;
             
-            MaxNumRows ? udwNumRows = Core::MathUtils::Min(MaxNumRows, udwNumContentToDraw) : udwNumRows = (u32)std::ceil((f32)udwNumContentToDraw/(f32)MaxNumColumns);
-            MaxNumColumns ? udwNumCols = Core::MathUtils::Min(MaxNumColumns, udwNumContentToDraw) : udwNumCols = (u32)std::ceil((f32)udwNumContentToDraw/(f32)MaxNumRows);
+            MaxNumRows ? udwNumRows = std::min(MaxNumRows, udwNumContentToDraw) : udwNumRows = (u32)std::ceil((f32)udwNumContentToDraw/(f32)MaxNumColumns);
+            MaxNumColumns ? udwNumCols = std::min(MaxNumColumns, udwNumContentToDraw) : udwNumCols = (u32)std::ceil((f32)udwNumContentToDraw/(f32)MaxNumRows);
             
             if(!RowFill)
             {
@@ -471,7 +472,7 @@ namespace ChilliSource
 				Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
 				Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 				
-				if(vTopRight.y < 0 || vBottomLeft.y > Core::Screen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::Screen::GetOrientedWidth())
+				if(vTopRight.y < 0 || vBottomLeft.y > GetScreen()->GetResolution().y || vTopRight.x < 0 || vBottomLeft.x > GetScreen()->GetResolution().x)
 				{
 					//Offscreen
 					return;
@@ -484,7 +485,7 @@ namespace ChilliSource
 				if(GridView::mbDrawDebug)
 				{
 					Rendering::TextureManager* pMgr = (Rendering::TextureManager*)(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Rendering::Texture::InterfaceID));
-					inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), pMgr->GetDefaultTexture(), Core::Rectangle(Core::Vector2::ZERO, Core::Vector2::ZERO), Core::Colour(1.0f,0.0f,0.0f,0.5f));
+					inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), pMgr->GetDefaultTexture(), Core::Rectangle(Core::Vector2::k_zero, Core::Vector2::k_zero), Core::Colour(1.0f,0.0f,0.0f,0.5f));
 				}
 #endif
 				

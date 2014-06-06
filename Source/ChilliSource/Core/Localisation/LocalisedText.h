@@ -1,92 +1,105 @@
-/*
- *  LocalisedText.h
- *  moFlo
- *
- *  Created by Scott Downie on 07/12/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  LocalisedText.h
+//  Chilli Source
+//  Created by Scott Downie on 07/12/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
-#ifndef _MO_FLO_CORE_LOCALISED_TEXT_H_
-#define _MO_FLO_CORE_LOCALISED_TEXT_H_
+#ifndef _CHILLISOURCE_CORE_LOCALISATION_LOCALISEDTEXT_H_
+#define _CHILLISOURCE_CORE_LOCALISATION_LOCALISEDTEXT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Container/HashedArray.h>
-#include <ChilliSource/Core/String/UTF8String.h>
+#include <ChilliSource/Core/Resource/Resource.h>
+
+#include <unordered_map>
 
 namespace ChilliSource
 {
 	namespace Core
 	{
-		typedef s32 LocalisedTextKey;
-		
-		class LocalisedText 
+		//----------------------------------------------------------------------
+		/// Holds a resource loaded from the master text for a particular language.
+		/// The text comprises of Ids which act as the key and the text value.
+        ///
+        /// All localised text is in UTF-8 encoding format
+		///
+		/// @author S Downie
+		//----------------------------------------------------------------------
+		class LocalisedText final : public Resource
 		{
 		public:
             
-            //-----------------------------------------------------
-			/// Refreshes the master text. This should be called
-            /// whenever the master text changes on disc, for example
-            /// after a DLC update.
-            ///
-            /// @author I Copland
-            ///
-            /// @param The storage location of the master text.
-            /// @param Directory path excluding name, i.e. if root then
-            /// just "" should be passed.
-            //-----------------------------------------------------
-            static void RefreshMasterText(StorageLocation ineStorageLocation, const std::string& instrDirectory);
+			CS_DECLARE_NAMEDTYPE(LocalisedText);
+
 			//---------------------------------------------------------------------
-			/// Get Text
+			/// @author S Downie
 			///
-			/// @param The key corresponding to some localised text
-			/// @return The localised text string
+			/// @param Interface Id
+			///
+			/// @return Whether object is of given type
 			//---------------------------------------------------------------------
-			static const UTF8String& GetText(const LocalisedTextKey &inKey);
+			bool IsA(InterfaceIDType in_interfaceId) const override;
+			//---------------------------------------------------------------------
+			/// Populate the resource with the given keys and values
+			///
+			/// @author S Downie
+			///
+			/// @param Keys
+			/// @param Values - list of strings containing UTF8 codepoints
+			//---------------------------------------------------------------------
+			void Build(const std::vector<std::string>& in_keys, const std::vector<std::string>& in_values);
             //---------------------------------------------------------------------
-			/// Get Text
+			/// @author S Downie
 			///
 			/// @param String key
-			/// @return The localised text string
-			//---------------------------------------------------------------------
-			static const UTF8String& GetText(const std::string &instrID);
-			//----------------------------------------------------------------------------
-			/// Load Text From File
 			///
-			/// Load the font from the external file
-			/// @param Storage location to load from
-			/// @param File path
-			/// @param File name
-			/// @return Success
-			//----------------------------------------------------------------------------
-			static bool LoadTextFromFile(StorageLocation ineLocation, const std::string & inFilePath, const std::string & inFileName);
-			
+			/// @return String containing UTF8 codepoints that maps to this key
+			//---------------------------------------------------------------------
+			const std::string& GetText(const std::string& in_key) const;
+
 		private:
-   
-            //----------------------------------------------------------------------------
-            /// Load Localised Text
-            ///
-            /// Load the localised text from the external file
-            /// @param File object for the locale file
-            /// @return Success
-            //----------------------------------------------------------------------------
-            static bool LoadLocalisedText(FileStreamSPtr& incLocaleFile);
-            //----------------------------------------------------------------------------
-            /// Load Text ID
-            ///
-            /// Load the text ids from the external file
-            /// @param File object for the text ids file
-            /// @return Success
-            //----------------------------------------------------------------------------
-            static bool LoadTextID(FileStreamSPtr& incIDFile);
+
+			friend class ResourcePool;
+			//---------------------------------------------------------------------
+			/// Factory method to create empty text resource. Only called
+			/// by the resource pool
+			///
+			/// @author S Downie
+			///
+			/// @return Ownership of resource
+			//---------------------------------------------------------------------
+			static LocalisedTextUPtr Create();
+			//---------------------------------------------------------------------
+			/// Private constructor to enforce use of factory create method
+			///
+			/// @author S Downie
+			//---------------------------------------------------------------------
+			LocalisedText() = default;
             
         private:
             
-            typedef HashedArray<std::string, LocalisedTextKey> IDToLookupIndex;
-            static IDToLookupIndex* mpTextLookup;
-			static UTF8String * mpText;
-            static u32 mudwLineCount;
+			std::unordered_map<std::string, std::string> m_text;
 		};
 	}
 }

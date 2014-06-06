@@ -241,6 +241,7 @@ namespace ChilliSource
 			std::ios_base::seekdir dir;
 			switch (ineDir)
 			{
+				default:
 				case Core::SeekDir::k_beginning:
 					dir = std::ios_base::beg;
 					break;
@@ -303,6 +304,7 @@ namespace ChilliSource
 			std::ios_base::seekdir dir;
 			switch (ineDir)
 			{
+				default:
 				case Core::SeekDir::k_beginning:
 					dir = std::ios_base::beg;
 					break;

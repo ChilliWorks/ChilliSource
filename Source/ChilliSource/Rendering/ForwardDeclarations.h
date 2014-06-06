@@ -1,11 +1,30 @@
 //
 //  ForwardDeclarations.h
 //  Chilli Source
-//
 //  Created by Ian Copland on 26/02/2014.
-//  Copyright 2014 Tag Games. All rights reserved.
 //
-
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #ifndef _CHILLISOURCE_RENDERING_FORWARDDECLARATIONS_H_
 #define _CHILLISOURCE_RENDERING_FORWARDDECLARATIONS_H_
@@ -43,6 +62,7 @@ namespace ChilliSource
         enum class BlendMode;
         enum class CullFace;
         enum class DepthTestComparison;
+        enum class SurfaceFormat;
         //------------------------------------------------------------
         /// Camera
         //------------------------------------------------------------
@@ -86,15 +106,16 @@ namespace ChilliSource
         /// Particles
         //------------------------------------------------------------
         CS_FORWARDDECLARE_STRUCT(Particle);
+        CS_FORWARDDECLARE_CLASS(ParticleEffect);
+        CS_FORWARDDECLARE_CLASS(CSParticleEffectProvider);
         CS_FORWARDDECLARE_CLASS(ParticleComponent);
-        CS_FORWARDDECLARE_CLASS(ParticleComponentFactory);
         CS_FORWARDDECLARE_CLASS(ParticleSystem);
-        CS_FORWARDDECLARE_CLASS(ColourChangerParticleEffector);
-        CS_FORWARDDECLARE_CLASS(LinearForceParticleEffector);
-        CS_FORWARDDECLARE_CLASS(ParticleEffector);
-        CS_FORWARDDECLARE_CLASS(ParticleEffectorFactory);
-        CS_FORWARDDECLARE_CLASS(ScalerParticleEffector);
-        CS_FORWARDDECLARE_CLASS(SpinnerParticleEffector);
+        CS_FORWARDDECLARE_CLASS(ColourChangerParticleAffector);
+        CS_FORWARDDECLARE_CLASS(LinearForceParticleAffector);
+        CS_FORWARDDECLARE_CLASS(ParticleAffector);
+        CS_FORWARDDECLARE_CLASS(ParticleAffectorFactory);
+        CS_FORWARDDECLARE_CLASS(ScalerParticleAffector);
+        CS_FORWARDDECLARE_CLASS(SpinnerParticleAffector);
         CS_FORWARDDECLARE_CLASS(ConeParticleEmitter);
         CS_FORWARDDECLARE_CLASS(ParticleEmitter);
         CS_FORWARDDECLARE_CLASS(ParticleEmitterFactory);

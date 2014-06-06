@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #include <ChilliSource/Backend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
@@ -102,7 +104,7 @@ namespace ChilliSource
                             if(bodyObject != nil && [bodyObject isKindOfClass:[NSString class]])
                             {
                                 NSString* body = (NSString*) bodyObject;
-                                notification->m_params.SetValueForKey("message", [NSStringUtils newStringWithNSString:body]);
+                                notification->m_params.SetValue("message", [NSStringUtils newUTF8StringWithNSString:body]);
                             }
                         }
                     }
@@ -116,7 +118,7 @@ namespace ChilliSource
                             if([payloadObject isKindOfClass:[NSString class]])
                             {
                                 NSString* payloadString = (NSString*)payloadObject;
-                                notification->m_params.SetValueForKey([NSStringUtils newStringWithNSString:key], [NSStringUtils newStringWithNSString:payloadString]);
+                                notification->m_params.SetValue([NSStringUtils newUTF8StringWithNSString:key], [NSStringUtils newUTF8StringWithNSString:payloadString]);
                             }
                         }
                     }
@@ -134,3 +136,5 @@ namespace ChilliSource
         }
     }
 }
+
+#endif

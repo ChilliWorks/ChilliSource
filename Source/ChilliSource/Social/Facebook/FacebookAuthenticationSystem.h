@@ -10,6 +10,7 @@
 #define _CHILLISOURCE_SOCIAL_FACEBOOK_FACEBOOKAUTHENTICATIONSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Delegate/ConnectableDelegate.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <functional>
@@ -57,7 +58,7 @@ namespace ChilliSource
             /// @param Response containing result and token
             /// if successful
             //------------------------------------------------
-            typedef std::function<void(const AuthenticateResponse&)> AuthenticationCompleteDelegate;
+            using AuthenticationCompleteDelegate = Core::ConnectableDelegate<void(const AuthenticateResponse&)>;
             
 			CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
 			
@@ -79,9 +80,9 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Read permissions (http://developers.facebook.com/docs/authentication/permissions/)
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //------------------------------------------------
-			virtual void Authenticate(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate) = 0;
+			virtual void Authenticate(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) = 0;
 			//------------------------------------------------
             /// @author S Downie
             ///
@@ -95,9 +96,9 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Read permissions
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //------------------------------------------------
-            virtual void AuthoriseReadPermissions(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate) = 0;
+            virtual void AuthoriseReadPermissions(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) = 0;
             //------------------------------------------------
             /// Request that the user grant write
             /// permissions (http://developers.facebook.com/docs/authentication/permissions/)
@@ -105,9 +106,9 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Write permissions
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //------------------------------------------------
-            virtual void AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, const AuthenticationCompleteDelegate& in_delegate) = 0;
+            virtual void AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) = 0;
             //------------------------------------------------
             /// @author S Downie
             ///

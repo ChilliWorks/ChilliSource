@@ -1,92 +1,122 @@
 //
 //  Device.h
-//  moFloTest
-//
+//  Chilli Source
 //  Created by Scott Downie on 03/05/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
-
-#ifndef _MO_FLO_CORE_DEVICE_H_
-#define _MO_FLO_CORE_DEVICE_H_
+#ifndef _CHILLISOURCE_CORE_BASE_DEVICE_H_
+#define _CHILLISOURCE_CORE_BASE_DEVICE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Localisation/Locales.h>
-#include <ChilliSource/Core/Base/PlatformSystem.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 namespace ChilliSource
 {
     namespace Core
     {
-        class Device
+        //---------------------------------------------------------
+        /// An application system for providing cross platform
+        /// access to information about the current device. This
+        /// includes information like the current model name and
+        /// the number of CPU cores. It is safe to use this during
+        /// the OnInit() and OnDestroy() lifecycle events.
+        ///
+        /// @author S Downie
+        //---------------------------------------------------------
+        class Device : public AppSystem
         {
         public:
-            //---------------------------------------------
-            /// Init
+            CS_DECLARE_NAMEDTYPE(Device);
+            //---------------------------------------------------
+            /// @author I Copland
             ///
-            /// @param Platform system
-            //---------------------------------------------
-            static void Init(PlatformSystem* inpPlatformSystem);
-            //---------------------------------------------
-            /// Get Model Name
+            /// @return The device model name.
+            //---------------------------------------------------
+            virtual const std::string& GetModel() const = 0;
+            //---------------------------------------------------
+            /// @author I Copland
             ///
-            /// @return Device model Name
-            //---------------------------------------------
-            static const std::string& GetModelName();
-            //---------------------------------------------
-            /// Get Model Type Name
+            /// @return The name of the device model type.
+            //---------------------------------------------------
+            virtual const std::string& GetModelType() const = 0;
+            //---------------------------------------------------
+            /// @author I Copland
             ///
-            /// @return Device model type Name
-            //---------------------------------------------
-            static const std::string& GetModelTypeName();
-            //---------------------------------------------
-            /// Get Manufacturer Name
+            /// @return The name of the device manufacturer.
+            //---------------------------------------------------
+            virtual const std::string& GetManufacturer() const = 0;
+            //---------------------------------------------------
+            /// @author S Downie
             ///
-            /// @return Device manufacturer Name
-            //---------------------------------------------
-            static const std::string& GetManufacturerName();
-            //---------------------------------------------
-            /// Get Locale
+            /// @return The locale code registered with the
+            /// device.
+            //---------------------------------------------------
+            virtual const std::string& GetLocale() const = 0;
+            //---------------------------------------------------
+            /// @author S Downie
             ///
-            /// @return the locale.
-            //---------------------------------------------
-            static Locale& GetLocale();
-            //---------------------------------------------
-            /// Get Langauge
+            /// @return The language the device is set to.
+            //---------------------------------------------------
+            virtual const std::string& GetLanguage() const = 0;
+            //---------------------------------------------------
+            /// @author S Downie
             ///
-            /// @return the langauge in locale format
-            //---------------------------------------------
-            static Locale& GetLanguage();
-            //---------------------------------------------
-            /// Get OS Version
+            /// @return The version of the operating system.
+            //---------------------------------------------------
+            virtual const std::string& GetOSVersion() const = 0;
+            //---------------------------------------------------
+            /// @author S Downie
             ///
-            /// @return String containing OS version
-            //---------------------------------------------
-            static const std::string& GetOSVersion();
-            //---------------------------------------------
-            /// Get UDID
-            ///
-            /// @return String containing unique device ID
-            //---------------------------------------------
-            static const std::string& GetUDID();
-			//---------------------------------------------
-			/// Get Num CPU Cores
+            /// @return An identifier that can be used to uniquely
+            /// identify the device.
+            //---------------------------------------------------
+            virtual const std::string& GetUDID() const = 0;
+			//---------------------------------------------------
+			/// @author S Downie
 			///
-			/// @return The number of cores available on device
-			//--------------------------------------------
-			static u32 GetNumCPUCores();
-            
-        private:
-            
-            static std::string mstrDeviceModel;
-            static std::string mstrDeviceModelType;
-            static std::string mstrDeviceManufacturer;
-            static std::string mstrDeviceID;
-            static Locale mLocale;
-            static Locale mLanguage;
-            static std::string mstrOSVersion;
-			static u32 mudwNumCores;
-			static f32 mfPhysicalScreenSize;
+			/// @return The number of CPU cores available on the
+            /// device.
+			//---------------------------------------------------
+			virtual u32 GetNumberOfCPUCores() const = 0;
+            //---------------------------------------------------
+            /// Destructor
+            ///
+			/// @author I Copland
+			//---------------------------------------------------
+			virtual ~Device() {};
+        protected:
+            friend class Core::Application;
+            //---------------------------------------------------
+            /// Creates a new platform specific backend for the
+            /// system.
+            ///
+            /// @author I Copland
+            ///
+            /// @return The new instance.
+            //---------------------------------------------------
+            static DeviceUPtr Create();
         };
     }
 }

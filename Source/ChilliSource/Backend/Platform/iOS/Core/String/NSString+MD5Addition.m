@@ -6,6 +6,8 @@
 //  Copyright 2011 Aurora Apps. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import "NSString+MD5Addition.h"
 #import <CommonCrypto/CommonDigest.h>
 
@@ -30,3 +32,5 @@
 }
 
 @end
+
+#endif

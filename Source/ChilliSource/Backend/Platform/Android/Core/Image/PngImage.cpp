@@ -7,6 +7,8 @@
  *
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Core/Image/PngImage.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/Image/LibPng/png.h>
@@ -304,3 +306,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

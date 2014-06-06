@@ -241,7 +241,7 @@ namespace ChilliSource
 			Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
 			Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 			
-			if(vTopRight.y < 0 || vBottomLeft.y > Core::Screen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::Screen::GetOrientedWidth())
+			if(vTopRight.y < 0 || vBottomLeft.y > GetScreen()->GetResolution().y || vTopRight.x < 0 || vBottomLeft.x > GetScreen()->GetResolution().x)
 			{
 				//Offscreen
 				return;
@@ -258,11 +258,7 @@ namespace ChilliSource
                 
                 //We need to use a matrix so that we can rotate all the patches with respect
                 //to the view
-                Core::Matrix3x3 matTransform;
-                Core::Matrix3x3 matPatchTransform;
-                Core::Matrix3x3 matViewTransform;
-                
-                matViewTransform.SetTransform(vPanelPos, Core::Vector2(1, 1), GetRotation());
+				Core::Matrix3 matViewTransform = Core::Matrix3::CreateTransform(vPanelPos, Core::Vector2(1, 1), GetRotation());
                 
                 //Get the patch sizes
                 Core::Vector2 vTPatchSize = m_panels.m_topSize;
@@ -302,12 +298,11 @@ namespace ChilliSource
                     f32 fScale = vPanelSize.y/fTotal;
                     vBPatchSize.y *= fScale;
                 }
-                
+
                 //Render ourself
                 //Draw the corners first
-                matPatchTransform.Translate(vTopLeft);
-                
-                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+				Core::Matrix3 matPatchTransform = Core::Matrix3::CreateTranslation(vTopLeft);
+				Core::Matrix3 matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform,
                                    vTPatchSize, 
 								   Texture,
@@ -316,8 +311,8 @@ namespace ChilliSource
                                    Rendering::AlignmentAnchor::k_topLeft);
                 
                 
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft));
-                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+				matPatchTransform = Core::Matrix3::CreateTranslation(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft));
+				matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform, 
                                    vBPatchSize, 
 								   Texture,
@@ -332,8 +327,8 @@ namespace ChilliSource
                 vPatchPos.x = vTopLeft.x;
                 vPatchPos.y = vTopLeft.y - vTPatchSize.y;
                
-                matPatchTransform.Translate(vPatchPos);
-                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
+				matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform,
                                    vMCPatchSize, 
 								   Texture,

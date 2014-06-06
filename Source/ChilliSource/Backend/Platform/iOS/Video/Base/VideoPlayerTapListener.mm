@@ -6,6 +6,8 @@
 //  Copyright 2012 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
 #import <QuartzCore/QuartzCore.h>
 #import <ChilliSource/Core/Base/Screen.h>
@@ -123,3 +125,5 @@ using namespace ChilliSource::iOS;
     [super dealloc];
 }
 @end
+
+#endif

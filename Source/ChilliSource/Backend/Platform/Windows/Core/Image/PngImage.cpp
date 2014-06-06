@@ -7,6 +7,8 @@
 *
 */
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #include <ChilliSource/Backend/Platform/Windows/Core/Image/PngImage.h>
 
 #include <ChilliSource/Backend/Platform/Windows/Core/Image/LibPng/png.h>
@@ -310,3 +312,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

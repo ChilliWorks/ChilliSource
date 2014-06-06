@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/Threading/ThreadPool.h>
 
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
 namespace ChilliSource
 {
@@ -86,10 +86,8 @@ namespace ChilliSource
         //----------------------------------------------
         ThreadPool::~ThreadPool()
         {
+			m_isFinished = true;
 			m_tasks.awake_all();
-            m_isFinished = true;
-            
-            m_awakeCondition.notify_all();
             
             //join all threads.
             for (u32 i=0; i<m_threadGroup.size(); ++i)

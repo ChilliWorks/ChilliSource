@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/ChilliSource.h>
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -87,3 +89,5 @@
 - (void) touchesCancelled:(NSSet *)in_touches withEvent:(UIEvent*)in_event;
 
 @end
+
+#endif

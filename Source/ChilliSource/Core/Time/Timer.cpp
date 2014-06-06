@@ -9,8 +9,8 @@
 
 #include <ChilliSource/Core/Time/Timer.h>
 
-#include <ChilliSource/Core/Base/MakeDelegate.h>
-#include <ChilliSource/Core/Event/Connection.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Event/EventConnection.h>
 
 namespace ChilliSource
 {
@@ -51,9 +51,9 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-        ConnectionUPtr Timer::OpenConnection(Delegate in_delegate, f32 in_periodSecs)
+        EventConnectionUPtr Timer::OpenConnection(Delegate in_delegate, f32 in_periodSecs)
         {
-            ConnectionUPtr connection(new Connection());
+            EventConnectionUPtr connection(new EventConnection());
             connection->SetOwningEvent(this);
             
             ConnectionDesc desc;
@@ -94,7 +94,7 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------------
         //-------------------------------------------------------------
-        void Timer::CloseConnection(Connection* in_connection)
+        void Timer::CloseConnection(EventConnection* in_connection)
         {
             for(u32 i=0; i<m_connections.size(); ++i)
             {

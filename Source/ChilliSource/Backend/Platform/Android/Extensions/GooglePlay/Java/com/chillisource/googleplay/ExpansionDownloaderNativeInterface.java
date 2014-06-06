@@ -147,6 +147,7 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
 	public long GetExternalFreeStorageInBytes()
 	{
 		StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+		@SuppressWarnings("deprecation")
 		long sdAvailSize = (long) ((long)stat.getAvailableBlocks() * (long)stat.getBlockSize());
 		return sdAvailSize;
 	}

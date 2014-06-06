@@ -10,7 +10,7 @@
 
 #include <ChilliSource/GUI/Image/ImageView.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Core/String/StringParser.h>

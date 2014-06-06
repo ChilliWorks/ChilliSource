@@ -20,7 +20,7 @@
 #include <ChilliSource/GUI/Base/InputEvents.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Math/Matrix3x3.h>
+#include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Core/Reflection/Reflection.h>
 #include <ChilliSource/Core/Base/Colour.h>
@@ -804,12 +804,12 @@ namespace ChilliSource
 			//-----------------------------------------------------------
 			bool IsAcceptTouchesOutsideOfBoundsEnabled() const;
 			//-----------------------------------------------------------
-			/// On Screen Orientation Changed
+			/// On Screen Resolution Changed
 			///
-			/// Triggered if the screen orientation changes so we can
+			/// Triggered if the screen resolution changes so we can
 			/// resize ourself
 			//-----------------------------------------------------------
-			virtual void OnScreenOrientationChanged();
+			virtual void OnScreenResolutionChanged();
 
 			//---Touch Delegates
 			//-----------------------------------------------------------
@@ -892,13 +892,18 @@ namespace ChilliSource
             Core::IConnectableEvent<Input::PointerSystem::PointerUpDelegate>& GetPointerUpEvent();
             
 		protected:
-
+			//-----------------------------------------------------
+			/// @author I Copland
+            ///
+            /// @return The screen.
+			//-----------------------------------------------------
+            Core::Screen* GetScreen() const;
 			//-----------------------------------------------------
 			/// Get Transform
 			///
 			/// @return Transformation matrix
 			//-----------------------------------------------------
-			const Core::Matrix3x3& GetTransform() const;
+			const Core::Matrix3& GetTransform() const;
 			//-----------------------------------------------------
 			/// On Transform Changed
 			///
@@ -921,11 +926,10 @@ namespace ChilliSource
 			/// attached to root window.
 			//-----------------------------------------------------
 			void LayoutChildrensContent();
-
 		private:
 
 
-			mutable Core::Matrix3x3 mmatTransform;
+			mutable Core::Matrix3 mmatTransform;
 
 			Core::Colour mAbsoluteColour;
 			mutable Core::Vector2 mvAbsolutePosition;
@@ -934,8 +938,10 @@ namespace ChilliSource
 			mutable Core::Vector2 mvAbsoluteParentalOffset;
 			mutable Core::Vector2 mvAbsolutePositionOffset;
 
+            Core::Screen* m_screen;
+            
 		protected:
-
+            
             Core::Event<Input::PointerSystem::PointerDownDelegate> m_pointerDownEvent;
             Core::Event<Input::PointerSystem::PointerMovedDelegate> m_pointerMovedEvent;
             Core::Event<Input::PointerSystem::PointerUpDelegate> m_pointerUpEvent;

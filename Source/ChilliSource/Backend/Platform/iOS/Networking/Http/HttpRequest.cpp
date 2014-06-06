@@ -6,6 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequest.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
@@ -154,7 +156,7 @@ namespace ChilliSource
                         
                         if(redirectUrlString != nullptr)
                         {
-                            m_desc.m_redirectionUrl = [NSStringUtils newStringWithNSString:(NSString*)redirectUrlString];
+                            m_desc.m_redirectionUrl = [NSStringUtils newUTF8StringWithNSString:(NSString*)redirectUrlString];
                             CFRelease(redirectUrlString);
                         }
                         
@@ -241,3 +243,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

@@ -217,7 +217,7 @@ namespace ChilliSource
 					sNewUVs.vSize.y *= -1;
 				}
                 
-                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), Texture, sNewUVs, GetAbsoluteColour());
+                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), Texture, sNewUVs, GetAbsoluteColour(), Rendering::AlignmentAnchor::k_middleCentre);
             }
             
             GUIView::Draw(inpCanvas);
@@ -384,7 +384,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void ImageView::SetSizeFromImage()
         {
-            SetSize(Core::UnifiedVector2(Core::Vector2::ZERO, GetSizeFromImage()));
+            SetSize(Core::UnifiedVector2(Core::Vector2::k_zero, GetSizeFromImage()));
         }
 		
         //--------------------------------------------------------

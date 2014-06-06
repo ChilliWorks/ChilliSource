@@ -89,16 +89,26 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------
-        ResourcePool::ResourceId ResourcePool::GenerateResourceId(StorageLocation in_location, const std::string& in_filePath) const
+        Resource::ResourceId ResourcePool::GenerateResourceId(const std::string& in_uniqueId) const
         {
-            std::string combined(ToString((u32)in_location) + in_filePath);
-            return HashCRC32::GenerateHashCode(combined);
+            return HashCRC32::GenerateHashCode(in_uniqueId);
         }
         //------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------
-        ResourcePool::ResourceId ResourcePool::GenerateResourceId(const std::string& in_uniqueId) const
+        Resource::ResourceId ResourcePool::GenerateResourceId(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options) const
         {
-            return HashCRC32::GenerateHashCode(in_uniqueId);
+            std::string combined(ToString((u32)in_location) + in_filePath);
+            u32 fileHash = HashCRC32::GenerateHashCode(combined);
+            
+            if(in_options == nullptr)
+            {
+                return fileHash;
+            }
+            
+            u32 optionsHash = in_options->GenerateHash();
+            
+            u64 combinedHash = fileHash + ((u64)(optionsHash) << 32);
+            return HashCRC32::GenerateHashCode((const s8*)&combinedHash, sizeof(u64));
         }
         //-------------------------------------------------------------------------------------
         /// Resources often have references to other resources and therefore multiple release passes
@@ -106,6 +116,9 @@ namespace ChilliSource
         //-------------------------------------------------------------------------------------
         void ResourcePool::ReleaseAllUnused()
         {
+            CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be released on the main thread");
+            
+            std::unique_lock<std::mutex> lock(m_mutex);
             u32 numReleased = 0;
             
             do
@@ -136,8 +149,11 @@ namespace ChilliSource
         //-------------------------------------------------------------------------------------
         void ResourcePool::Release(const Resource* in_resource)
         {
+            CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be released on the main thread");
             CS_ASSERT(in_resource != nullptr, "Pool cannot release null resource");
             //Find the descriptor that handles this type of resource
+            
+            std::unique_lock<std::mutex> lock(m_mutex);
             auto itDescriptor = m_descriptors.find(in_resource->GetInterfaceID());
             CS_ASSERT(itDescriptor != m_descriptors.end(), "Failed to find resource pool for " + in_resource->GetInterfaceTypeName());
             
@@ -176,6 +192,7 @@ namespace ChilliSource
                 {
                     //The pool is the sole owner so we can safely release the object
                     CS_LOG_ERROR("Resource still in use: " + itResource->second->GetFilePath());
+					error = true;
                 }
             }
             

@@ -32,8 +32,6 @@ namespace ChilliSource
 	{
 		CS_DEFINE_NAMEDTYPE(AnimatedMeshComponent);
         
-        MaterialCSPtr AnimatedMeshComponent::mspShadowMapMaterial;
-        
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
@@ -62,7 +60,7 @@ namespace ChilliSource
 			{
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
-                const Core::Matrix4x4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
+                const Core::Matrix4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
                 Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
                 Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
                 Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
@@ -617,15 +615,10 @@ namespace ChilliSource
         //-----------------------------------------------------
         /// Render Shadow Map
         //-----------------------------------------------------
-        void AnimatedMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam)
+        void AnimatedMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap)
         {
             if (nullptr != mActiveAnimationGroup)
             {
-                if (mspShadowMapMaterial == nullptr)
-                {
-                    mspShadowMapMaterial = Core::Application::Get()->GetSystem<MaterialFactory>()->CreateAnimatedDirectionalShadowMap("_AnimatedDirShadowMap");
-                }
-                
                 if (mbAnimationDataDirty == true)
                 {
                     UpdateAnimation(0.0f);
@@ -634,11 +627,11 @@ namespace ChilliSource
                 //render the model with the animation data.
                 if (mActiveAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {mspShadowMapMaterial}, ShaderPass::k_ambient, mActiveAnimationGroup);
+                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {in_animShadowMap}, ShaderPass::k_ambient, mActiveAnimationGroup);
                 }
                 else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {mspShadowMapMaterial}, ShaderPass::k_ambient, mFadingAnimationGroup);
+                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {in_animShadowMap}, ShaderPass::k_ambient, mFadingAnimationGroup);
                 }
             }
         }
@@ -728,7 +721,7 @@ namespace ChilliSource
                     {
                         s32 dwNodeIndex = it->second;
                         
-                        const Core::Matrix4x4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
+                        const Core::Matrix4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
                         pEntity->GetTransform().SetLocalTransform(matTransform);
                         ++it;
                     }

@@ -1,16 +1,38 @@
 //
 //  PlatformSystem.h
 //  Chilli Source
-//
 //  Created by Scott Downie on 24/11/2010.
-//  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
 
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_BASE_PLATFORMSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_BASE_PLATFORMSYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
-#include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
 namespace ChilliSource
@@ -19,27 +41,26 @@ namespace ChilliSource
 	{
 		struct GLFWwindow;
 
-		//---------------------------------------------
-		/// Allows generic access to platform 
-		/// specific code via common function calls
+		//-------------------------------------------------------------
+		/// The Windows backend for the platform system. This creates the
+		/// Windows specfic default systems and sets up the updater.
 		///
 		/// @author S Downie
-		//---------------------------------------------
+		//-------------------------------------------------------------
 		class PlatformSystem final : public Core::PlatformSystem
 		{
 		public:
+			CS_DECLARE_NAMEDTYPE(PlatformSystem);
 			//--------------------------------------------------
-			/// Destructor
+			/// Queries whether or not this system implements the
+			/// interface with the given Id.
 			///
-			/// @author S Downie
-			//--------------------------------------------------
-			~PlatformSystem();
-			//--------------------------------------------------
-			/// Create the GLFW window.
+			/// @author I Copland
 			///
-			/// @author S Downie
-			//-------------------------------------------------
-			void Init() override;
+			/// @param The interface Id.
+			/// @param Whether system is of given type.
+			//--------------------------------------------------
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//-------------------------------------------------
 			/// Adds default systems to the applications system
 			/// list.
@@ -50,118 +71,44 @@ namespace ChilliSource
 			//-------------------------------------------------
 			void CreateDefaultSystems(Core::Application* in_application) override;
 			//-------------------------------------------------
-			/// Deals with anything that needs to be handled after
-			/// creating the systems.
-			///
-			/// @author S Downie
-			///
-			/// @param the system list
-			//-------------------------------------------------
-			void PostCreateSystems() override;
-			//-------------------------------------------------
 			/// Begin the game loop.
 			///
 			/// @author S Downie
 			//-------------------------------------------------
-			void Run() override;
+			void Run();
 			//-------------------------------------------------
-            /// @param The maximum frames per second
-            /// to clamp to. This should be in multiples
-            /// of 15 (15, 30, 60)
+			/// @author S Downie
+			///
+            /// @param The maximum frames per second to clamp 
+			/// to. This should be in multiples of 15 
+			/// (15, 30, 60)
             //-------------------------------------------------
-			void SetMaxFPS(u32 in_fps) override {}
+			void SetPreferredFPS(u32 in_fps) override;
 			//-------------------------------------------------
-			/// Starts or stops the platforms 
-			/// update loop.
-			///
-			/// @param Whether to end or begin
-			//-------------------------------------------------
-			void SetUpdaterActive(bool in_isActive) override;
-			//-------------------------------------------------
-			/// Stops the update loop causing the 
-			/// application to terminate
-			//-------------------------------------------------
-			void TerminateUpdater() override;
-			//-------------------------------------------------
-			/// Retrieves the screen dimensions. These dimensions 
-			/// are always in the default orientation for the device.
+			/// Stops the update loop causing the application 
+			/// to terminate.
 			///
 			/// @author S Downie
-			///
-			/// @return A Vector2 containing the screen size in 
-			/// its x + y components
 			//-------------------------------------------------
-			Core::Vector2 GetScreenDimensions() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The above information stringified
-			//------------------------------------------------
-			std::string GetDeviceModelName() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The above information stringified
-			//-------------------------------------------------
-			std::string GetDeviceModelTypeName() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The above information stringified
-			//-------------------------------------------------
-			std::string GetDeviceManufacturerName() const override;
-            //-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return  String containing the OS version of the device
-			//-------------------------------------------------
-			std::string GetOSVersion() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// Get the active language locale of the device
-			/// @return Locale ID
-			//-------------------------------------------------
-			Core::Locale GetLocale() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// Get the active language of the device in locale format
-			/// @return Locale ID
-			//-------------------------------------------------
-			Core::Locale GetLanguage() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The density scale factor of the screen
-			/// to convert from DIPS to physical pixels
-			//-------------------------------------------------
-			f32 GetScreenDensity() const override;
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The UDID of the device
-			//-------------------------------------------------
-			std::string GetDeviceID() override;
+			void Quit() override;
 			//-------------------------------------------------
 	        /// @author S Downie
 	        ///
 	        /// @return The version of the application
 	        //-------------------------------------------------
-			std::string GetAppVersion() const override { return ""; }
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The number of cores available
-			//------------------------------------------------
-			u32 GetNumberOfCPUCores() const override;
+			std::string GetAppVersion() const override;
 			//------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return the current time in milliseconds
 			//-------------------------------------------------
 			u64 GetSystemTimeMS() const override;
-
+			//--------------------------------------------------
+			/// Destructor
+			///
+			/// @author S Downie
+			//--------------------------------------------------
+			~PlatformSystem();
 		private:
 			friend Core::PlatformSystemUPtr Core::PlatformSystem::Create();
 			//--------------------------------------------------
@@ -171,18 +118,34 @@ namespace ChilliSource
 			/// @author S Downie
 			//-------------------------------------------------
 			PlatformSystem();
-
-			//---GLFW Delegates
 			//-------------------------------------------------
-			/// Triggered when glfw resizes the window
+			/// Called when the app resumes. This resumes
+			/// the main loop
 			///
 			/// @author S Downie
-			///
-			/// @param Window width
-			/// @param Window Height
-			/// @param Window that resized
 			//-------------------------------------------------
-			static void OnWindowResized(GLFWwindow* in_window, s32 in_width, s32 in_height);
+			void OnResume() override;
+			//-------------------------------------------------
+			/// Called when the app gets focus
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void OnForeground() override;
+			//-------------------------------------------------
+			/// Called when the app loses focus
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void OnBackground() override;
+			//-------------------------------------------------
+			/// Called when the app suspends. This pauses
+			/// the main loop
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void OnSuspend() override;
+
+			//---GLFW Delegates
 			//-------------------------------------------------
 			/// Triggered when glfw exits the window
 			///
@@ -203,13 +166,15 @@ namespace ChilliSource
 			static void OnWindowFocusChanged(GLFWwindow* in_window, s32 in_isFocused);
 				
 		private:
-			bool m_isRunning;
 			bool m_isSuspended;
+			bool m_isFocused;
 
 			u64 m_appStartTime;
 			f64 m_appPreviousTime;
 		};
 	}
 }
+
+#endif
 
 #endif

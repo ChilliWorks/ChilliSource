@@ -1,9 +1,29 @@
 //
 //  Font.h
 //  Chilli Source
-//
 //  Created by Scott Downie on 26/10/2010.
-//  Copyright (c) 2010 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifndef _CHILLISOURCE_RENDERING_FONT_FONT_H_
@@ -12,19 +32,21 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Resource/Resource.h>
-#include <ChilliSource/Core/String/UTF8String.h>
+#include <ChilliSource/Core/String/UTF8StringUtils.h>
+
+#include <unordered_map>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-        const Core::UTF8String::Char k_returnCharacter = '\n';
-        const Core::UTF8String::Char k_tabCharacter = '\t';
-        const Core::UTF8String::Char k_spaceCharacter = ' ';
+        const Core::UTF8Char k_returnCharacter = '\n';
+        const Core::UTF8Char k_tabCharacter = '\t';
+        const Core::UTF8Char k_spaceCharacter = ' ';
         
         //The nbsp character has the hex code C2A0 which converts to
         //160 in decimal after utf-8 conversion
-        const Core::UTF8String::Char k_nbspCharacter = 160;
+        const Core::UTF8Char k_nbspCharacter = 160;
         
         //---------------------------------------------------------------------
         /// The font resource describing the size, spacing and kerning of
@@ -36,7 +58,7 @@ namespace ChilliSource
 		{
 		public:
             
-            typedef Core::UTF8String CharacterSet;
+            typedef std::string CharacterSet;
             
             //---------------------------------------------------------------------
             /// Holds the information relating to a single character such as
@@ -171,7 +193,7 @@ namespace ChilliSource
             ///
 			/// @return Whether the character exists in the font
 			//---------------------------------------------------------------------
-			bool TryGetCharacterInfo(Core::UTF8String::Char in_char, CharacterInfo& out_info) const;
+			bool TryGetCharacterInfo(Core::UTF8Char in_char, CharacterInfo& out_info) const;
 			//---------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -191,7 +213,7 @@ namespace ChilliSource
             ///
             /// @return Spacing between characters
             //---------------------------------------------------------------------
-            f32 GetKerningBetweenCharacters(Core::UTF8String::Char in_char1, Core::UTF8String::Char in_char2) const;
+            f32 GetKerningBetweenCharacters(Core::UTF8Char in_char1, Core::UTF8Char in_char2) const;
             //---------------------------------------------------------------------
             /// Sets a value that will be used to offset all kerning values
             ///
@@ -229,7 +251,7 @@ namespace ChilliSource
             
         private:
             
-			std::unordered_map<Core::UTF8String::Char, CharacterInfo> m_characterInfos;
+			std::unordered_map<Core::UTF8Char, CharacterInfo> m_characterInfos;
 			CharacterSet m_characters;
 			
             std::vector<KernLookup> m_kerningLookups;

@@ -6,6 +6,8 @@
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Core/DialogueBox/DialogueBoxJavaInterface.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
@@ -86,22 +88,22 @@ namespace ChilliSource
 		}
         //------------------------------------------------------
         //------------------------------------------------------
-        void DialogueBoxJavaInterface::MakeToast(const Core::UTF8String& in_text)
+        void DialogueBoxJavaInterface::MakeToast(const std::string& in_text)
         {
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring message = JavaInterfaceUtils::CreateJStringFromUTF8String(in_text);
+			jstring message = JavaInterfaceUtils::CreateJStringFromSTDString(in_text);
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("makeToast"), message);
 			env->DeleteLocalRef(message);
         }
         //------------------------------------------------------
         //------------------------------------------------------
-        void DialogueBoxJavaInterface::ShowSystemConfirmDialogue(s32 in_dialogID, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm, const Core::UTF8String& in_cancel)
+        void DialogueBoxJavaInterface::ShowSystemConfirmDialogue(s32 in_dialogID, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring title = JavaInterfaceUtils::CreateJStringFromUTF8String(in_title);
-			jstring message = JavaInterfaceUtils::CreateJStringFromUTF8String(in_message);
-			jstring confirm = JavaInterfaceUtils::CreateJStringFromUTF8String(in_confirm);
-			jstring cancel = JavaInterfaceUtils::CreateJStringFromUTF8String(in_cancel);
+			jstring title = JavaInterfaceUtils::CreateJStringFromSTDString(in_title);
+			jstring message = JavaInterfaceUtils::CreateJStringFromSTDString(in_message);
+			jstring confirm = JavaInterfaceUtils::CreateJStringFromSTDString(in_confirm);
+			jstring cancel = JavaInterfaceUtils::CreateJStringFromSTDString(in_cancel);
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("showSystemConfirmDialogue"), in_dialogID, title, message, confirm, cancel);
 			env->DeleteLocalRef(title);
 			env->DeleteLocalRef(message);
@@ -110,12 +112,12 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        void DialogueBoxJavaInterface::ShowSystemDialogue(s32 in_dialogID, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm)
+        void DialogueBoxJavaInterface::ShowSystemDialogue(s32 in_dialogID, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring title = JavaInterfaceUtils::CreateJStringFromUTF8String(in_title);
-			jstring message = JavaInterfaceUtils::CreateJStringFromUTF8String(in_message);
-			jstring confirm = JavaInterfaceUtils::CreateJStringFromUTF8String(in_confirm);
+			jstring title = JavaInterfaceUtils::CreateJStringFromSTDString(in_title);
+			jstring message = JavaInterfaceUtils::CreateJStringFromSTDString(in_message);
+			jstring confirm = JavaInterfaceUtils::CreateJStringFromSTDString(in_confirm);
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("showSystemDialogue"), in_dialogID, title, message, confirm);
 			env->DeleteLocalRef(title);
 			env->DeleteLocalRef(message);
@@ -123,3 +125,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

@@ -158,8 +158,10 @@ namespace ChilliSource
             ///
             /// @param Render system
             /// @param Active camera component
+            /// @param Material to render static shadows with
+            /// @param Material to render skinned shadows with
             //-----------------------------------------------------
-            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam) override;
+            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap) override;
             //----------------------------------------------------
             /// Triggered when the component is attached to
             /// an entity on the scene
@@ -187,13 +189,11 @@ namespace ChilliSource
 			MeshCSPtr mpModel;
 			std::vector<MaterialCSPtr> mMaterials;
             
-            Core::ConnectionUPtr m_transformChangedConnection;
+            Core::EventConnectionUPtr m_transformChangedConnection;
             
             bool mbBoundingSphereValid;
             bool mbAABBValid;
             bool mbOOBBValid;
-            
-            static MaterialCSPtr mspShadowMapMaterial;
 		};
 	}
 }

@@ -1,16 +1,35 @@
-/*
- *  Renderer.cpp
- *  moFlo
- *
- *  Created by Scott Downie on 30/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Renderer.cpp
+//  Chilli Source
+//  Created by Scott Downie on 30/09/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Rendering/Base/Renderer.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 #include <ChilliSource/GUI/Base/Window.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>
@@ -35,10 +54,11 @@ namespace ChilliSource
 	namespace Rendering
 	{
         //---Matrix caches
-        Core::Matrix4x4 Renderer::matViewProjCache;
-		
+        Core::Matrix4 Renderer::matViewProjCache;
+
 		typedef std::function<bool(RenderComponent*, RenderComponent*)> RenderSortDelegate;
-		
+
+        CS_DEFINE_NAMEDTYPE(Renderer);
         //-------------------------------------------------------
         //-------------------------------------------------------
         RendererUPtr Renderer::Create(RenderSystem* in_renderSystem)
@@ -49,22 +69,31 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		Renderer::Renderer(RenderSystem* in_renderSystem)
         : mpRenderSystem(in_renderSystem)
-        , mCanvas(in_renderSystem)
         , mpActiveCamera(nullptr)
 		{
-
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Renderer::Init()
+        bool Renderer::IsA(Core::InterfaceIDType in_interfaceId) const
         {
+            return (Renderer::InterfaceID == in_interfaceId);
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Renderer::OnInit()
+        {
+            m_canvas = Core::Application::Get()->GetSystem<CanvasRenderer>();
+            CS_ASSERT(m_canvas != nullptr, "Renderer cannot have null canvas renderer");
+
             mpTransparentSortPredicate = RendererSortPredicateSPtr(new BackToFrontSortPredicate());
             mpOpaqueSortPredicate = RendererSortPredicateSPtr(new MaterialSortPredicate());
-            
+
             mpPerspectiveCullPredicate = ICullingPredicateSPtr(new FrustumCullPredicate());
             mpOrthoCullPredicate = ICullingPredicateSPtr(new ViewportCullPredicate());
-            
-            mCanvas.Init();
+
+            auto materialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
+            m_staticDirShadowMaterial = materialFactory->CreateStaticDirectionalShadowMap("_StaticDirShadowMap");
+            m_animDirShadowMaterial = materialFactory->CreateAnimatedDirectionalShadowMap("_AnimDirShadowMap");
         }
 		//----------------------------------------------------------
 		/// Set Transparent Sort Predicate
@@ -106,7 +135,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void Renderer::RenderToScreen(Core::Scene* inpScene, UI::Canvas* in_canvas)
 		{
-            RenderSceneToTarget(inpScene, in_canvas, mpRenderSystem->GetDefaultRenderTarget());
+            RenderSceneToTarget(inpScene, in_canvas, nullptr);
 		}
         //----------------------------------------------------------
         /// Render To Texture
@@ -126,7 +155,7 @@ namespace ChilliSource
                 udwWidth = inpDepthTarget->GetWidth();
                 udwHeight = inpDepthTarget->GetHeight();
             }
-            
+
             RenderTarget* pOffscreenTarget = mpRenderSystem->CreateRenderTarget(udwWidth, udwHeight);
             pOffscreenTarget->SetTargetTextures(inpColourTarget, inpDepthTarget);
             RenderSceneToTarget(inpScene, in_canvas, pOffscreenTarget);
@@ -144,53 +173,53 @@ namespace ChilliSource
             std::vector<DirectionalLightComponent*> aDirLightCache;
             std::vector<PointLightComponent*> aPointLightCache;
             AmbientLightComponent* pAmbientLight = nullptr;
-            
+
 			FindRenderableObjectsInScene(inpScene, aPreFilteredRenderCache, aCameraCache, aDirLightCache, aPointLightCache, pAmbientLight);
             mpActiveCamera = (aCameraCache.empty() ? nullptr : aCameraCache.back());
-            
+
             if(mpActiveCamera)
             {
                 //Apply the world view projection matrix
                 mpRenderSystem->ApplyCamera(mpActiveCamera->GetEntity()->GetTransform().GetWorldPosition(), mpActiveCamera->GetView(), mpActiveCamera->GetProjection(), mpActiveCamera->GetClearColour());
                 //Calculate the view-projection matrix as we will need it for sorting
-                Core::Matrix4x4::Multiply(&mpActiveCamera->GetView(), &mpActiveCamera->GetProjection(), &matViewProjCache);
-                
+				matViewProjCache = mpActiveCamera->GetView() * mpActiveCamera->GetProjection();
+
                 //Render shadow maps
                 RenderShadowMap(mpActiveCamera, aDirLightCache, aPreFilteredRenderCache);
-                
+
                 //Cull items based on camera
                 std::vector<RenderComponent*> aCameraRenderCache;
                 std::vector<RenderComponent*> aCameraOpaqueCache;
                 std::vector<RenderComponent*> aCameraTransparentCache;
                 CullRenderables(mpActiveCamera, aPreFilteredRenderCache, aCameraRenderCache);
                 FilterSceneRenderables(aCameraRenderCache, aCameraOpaqueCache, aCameraTransparentCache);
-                
+
                 //Render scene
                 mpRenderSystem->BeginFrame(inpRenderTarget);
-                
+
                 //Perform the ambient pass
                 mpRenderSystem->SetLight(pAmbientLight);
                 SortOpaque(mpActiveCamera, aCameraOpaqueCache);
                 Render(mpActiveCamera, ShaderPass::k_ambient, aCameraOpaqueCache);
-                
+
                 //Perform the diffuse pass
                 if(aDirLightCache.empty() == false || aPointLightCache.empty() == false)
                 {
                     mpRenderSystem->SetBlendFunction(BlendMode::k_one, BlendMode::k_one);
                     mpRenderSystem->LockBlendFunction();
-                    
+
                     mpRenderSystem->EnableDepthWriting(false);
                     mpRenderSystem->LockDepthWriting();
-                    
+
                     mpRenderSystem->EnableAlphaBlending(true);
                     mpRenderSystem->LockAlphaBlending();
-                    
+
                     for(u32 i=0; i<aDirLightCache.size(); ++i)
                     {
                         mpRenderSystem->SetLight(aDirLightCache[i]);
                         Render(mpActiveCamera, ShaderPass::k_directional, aCameraOpaqueCache);
                     }
-                    
+
                     for(u32 i=0; i<aPointLightCache.size(); ++i)
                     {
                         mpRenderSystem->SetLight(aPointLightCache[i]);
@@ -198,7 +227,7 @@ namespace ChilliSource
                         CullRenderables(aPointLightCache[i], aCameraOpaqueCache, aPointLightOpaqueCache);
                         Render(mpActiveCamera, ShaderPass::k_point, aPointLightOpaqueCache);
                     }
-                    
+
                     mpRenderSystem->UnlockAlphaBlending();
                     mpRenderSystem->UnlockDepthWriting();
                     mpRenderSystem->UnlockBlendFunction();
@@ -206,11 +235,11 @@ namespace ChilliSource
 
                 SortTransparent(mpActiveCamera, aCameraTransparentCache);
                 Render(mpActiveCamera, ShaderPass::k_ambient, aCameraTransparentCache);
-                
+
                 mpRenderSystem->SetLight(nullptr);
                 RenderUI(inpScene->GetWindow());
                 RenderUI(in_canvas);
-                
+
                 //Present contents of buffer to screen
                 if (inpRenderTarget != nullptr)
                 {
@@ -223,11 +252,11 @@ namespace ChilliSource
                 //Render the UI only
                 //Clear the frame buffer ready for rendering
                 mpRenderSystem->BeginFrame(inpRenderTarget);
-                
+
                 mpRenderSystem->SetLight(nullptr);
                 RenderUI(inpScene->GetWindow());
                 RenderUI(in_canvas);
-                
+
                 //Present contents of buffer to screen
                 if (inpRenderTarget != nullptr)
                 {
@@ -244,15 +273,15 @@ namespace ChilliSource
 		{
             static std::vector<LightComponent*> aLightComponentCache;
             aLightComponentCache.clear();
-            
+
             pScene->QuerySceneForComponents<RenderComponent, CameraComponent, LightComponent>(outaRenderCache, outaCameraCache, aLightComponentCache);
-            
+
             //Split the lights
             for(u32 i=0; i<aLightComponentCache.size(); ++i)
             {
                 if(aLightComponentCache[i]->GetEntity()->IsVisible() == false)
                     continue;
-                
+
                 if(aLightComponentCache[i]->IsA(DirectionalLightComponent::InterfaceID))
                 {
                     outaDirectionalLightComponentCache.push_back((DirectionalLightComponent*)aLightComponentCache[i]);
@@ -273,16 +302,17 @@ namespace ChilliSource
         ICullingPredicateSPtr Renderer::GetCullPredicate(CameraComponent* inpActiveCamera) const
         {
             ICullingPredicateSPtr pCullPredicate = inpActiveCamera->GetCullingPredicate();
-            
+
             if(pCullPredicate)
             {
                 return pCullPredicate;
             }
-            if(inpActiveCamera->IsOrthographicView())
+
+            if(inpActiveCamera->GetType() == CameraType::k_orthographic)
             {
                 return mpOrthoCullPredicate;
             }
-            
+
             return mpPerspectiveCullPredicate;
         }
         //----------------------------------------------------------
@@ -295,7 +325,7 @@ namespace ChilliSource
             {
                 pOpaqueSort = mpOpaqueSortPredicate;
             }
-            
+
             if(pOpaqueSort)
             {
                 pOpaqueSort->PrepareForSort(&inaRenderables);
@@ -312,7 +342,7 @@ namespace ChilliSource
             {
                 pTransparentSort = mpTransparentSortPredicate;
             }
-            
+
 			if(pTransparentSort)
             {
 				pTransparentSort->PrepareForSort(&inaRenderables);
@@ -325,13 +355,13 @@ namespace ChilliSource
         void Renderer::RenderShadowMap(CameraComponent* inpCameraComponent, std::vector<DirectionalLightComponent*>& inaLightComponents, std::vector<RenderComponent*>& inaRenderables)
         {
             std::vector<RenderComponent*> aFilteredShadowMapRenderCache;
-            
+
             if(inaLightComponents.size() > 0)
             {
                 //Cull items based on whether they cast shadows
                 FilterShadowMapRenderables(inaRenderables, aFilteredShadowMapRenderCache);
             }
-            
+
             for(u32 i=0; i<inaLightComponents.size(); ++i)
             {
                 if(inaLightComponents[i]->GetShadowMapPtr() != nullptr)
@@ -349,17 +379,17 @@ namespace ChilliSource
 			//Create a new offscreen render target using the given texture
 			RenderTarget* pRenderTarget = mpRenderSystem->CreateRenderTarget(inpLightComponent->GetShadowMapPtr()->GetWidth(), inpLightComponent->GetShadowMapPtr()->GetHeight());
 			pRenderTarget->SetTargetTextures(inpLightComponent->GetShadowMapDebugPtr(), inpLightComponent->GetShadowMapPtr());
-            
+
             mpRenderSystem->BeginFrame(pRenderTarget);
-            
+
             //Only opaque objects cast and receive shadows
             for(std::vector<RenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
             {
-                (*it)->RenderShadowMap(mpRenderSystem, inpCameraComponent);
+                (*it)->RenderShadowMap(mpRenderSystem, inpCameraComponent, m_staticDirShadowMaterial, m_animDirShadowMaterial);
             }
-            
+
             mpRenderSystem->EndFrame(pRenderTarget);
-            
+
             CS_SAFEDELETE(pRenderTarget);
 		}
         //----------------------------------------------------------
@@ -371,7 +401,7 @@ namespace ChilliSource
             {
                 (*it)->Render(mpRenderSystem, inpCameraComponent, ineShaderPass);
             }
-			
+
             //The final dynamic sprite batch needs to be flushed
             mpRenderSystem->GetDynamicSpriteBatchPtr()->ForceRender();
         }
@@ -380,16 +410,16 @@ namespace ChilliSource
         //----------------------------------------------------------
         void Renderer::RenderUI(GUI::Window* inpWindow)
         {
-            mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(inpWindow->GetAbsoluteSize()), Core::Colour::k_cornflowerBlue);
-			mCanvas.Render(inpWindow);
+            mpRenderSystem->ApplyCamera(Core::Vector3::k_zero, Core::Matrix4::k_identity, CreateOverlayProjection(inpWindow->GetAbsoluteSize()), Core::Colour::k_cornflowerBlue);
+			m_canvas->Render(inpWindow);
         }
         //----------------------------------------------------------
         /// Render UI
         //----------------------------------------------------------
         void Renderer::RenderUI(UI::Canvas* in_canvas)
         {
-            mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(in_canvas->GetSize()), Core::Colour::k_cornflowerBlue);
-			mCanvas.Render(in_canvas);
+            mpRenderSystem->ApplyCamera(Core::Vector3::k_zero, Core::Matrix4::k_identity, CreateOverlayProjection(in_canvas->GetSize()), Core::Colour::k_cornflowerBlue);
+			m_canvas->Render(in_canvas);
         }
         //----------------------------------------------------------
         /// Cull Renderables
@@ -397,26 +427,26 @@ namespace ChilliSource
 		void Renderer::CullRenderables(CameraComponent* inpCamera, const std::vector<RenderComponent*>& inaRenderCache, std::vector<RenderComponent*>& outaRenderCache) const
 		{
             ICullingPredicate * pCullingPredicate = GetCullPredicate(inpCamera).get();
-            
+
             if(pCullingPredicate == nullptr)
             {
                 outaRenderCache = inaRenderCache;
                 return;
             }
-            
+
             outaRenderCache.reserve(inaRenderCache.size());
-            
+
             inpCamera->UpdateFrustum();
-            
+
 			for(std::vector<RenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
 			{
 				RenderComponent* pRenderable = (*it);
-				
+
 				if(pRenderable->IsVisible() == false)
                 {
                     continue;
                 }
-                
+
                 if(pRenderable->IsCullingEnabled() == false || pCullingPredicate->CullItem(inpCamera, pRenderable) == false)
                 {
                     outaRenderCache.push_back(pRenderable);
@@ -431,11 +461,11 @@ namespace ChilliSource
         {
             //Reserve estimated space
             outaRenderCache.reserve(inaRenderCache.size());
-            
+
             Core::Sphere aLightSphere;
             aLightSphere.vOrigin = inpLightComponent->GetWorldPosition();
             aLightSphere.fRadius = inpLightComponent->GetRangeOfInfluence();
-            
+
             for(std::vector<RenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
             {
                 if(Core::ShapeIntersection::Intersects(aLightSphere, (*it)->GetBoundingSphere()) == true)
@@ -452,7 +482,7 @@ namespace ChilliSource
             //Reserve estimated space
             outaOpaque.reserve(inaRenderables.size());
             outaTransparent.reserve(inaRenderables.size());
-            
+
 			for(std::vector<RenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
 			{
 				RenderComponent* pRenderable = (*it);
@@ -466,7 +496,7 @@ namespace ChilliSource
         {
             //Reserve estimated space
             outaRenderables.reserve(inaRenderables.size());
-            
+
             for(std::vector<RenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
 			{
 				RenderComponent* pRenderable = (*it);
@@ -479,11 +509,20 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Create Overlay Projection
         //----------------------------------------------------------
-        Core::Matrix4x4 Renderer::CreateOverlayProjection(const Core::Vector2& in_size) const
+        Core::Matrix4 Renderer::CreateOverlayProjection(const Core::Vector2& in_size) const
         {
             const f32 kfOverlayNear = 1.0f;
             const f32 kfOverlayFar = 100.0f;
-            return Core::Matrix4x4::CreateOrthoMatrixOffset(0, in_size.x, 0, in_size.y, kfOverlayNear, kfOverlayFar);
+
+            return Core::Matrix4::CreateOrthographicProjectionRH(0, in_size.x, 0, in_size.y, kfOverlayNear, kfOverlayFar);
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void Renderer::OnDestroy()
+        {
+            m_canvas = nullptr;
+            m_staticDirShadowMaterial = nullptr;
+            m_animDirShadowMaterial = nullptr;
         }
 	}
 }

@@ -1,11 +1,30 @@
-/*
- *  OpenGLES_2_0.h
- *  moFlo
- *
- *  Created by Scott Downie on 28/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  RenderSystem.h
+//  Chilli Source
+//  Created by Scott Downie on 27/09/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #ifndef _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
 #define _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
@@ -13,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Base/Colour.h>
@@ -97,7 +116,7 @@ namespace ChilliSource
             /// @param Number of vertices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld) override;
+			void RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4& inmatWorld) override;
 			//----------------------------------------------------------
 			/// Render Buffer
 			///
@@ -109,7 +128,7 @@ namespace ChilliSource
             /// @param Number of indices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld) override;
+			void RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4& inmatWorld) override;
             //----------------------------------------------------------
 			/// Apply Camera
 			///
@@ -120,7 +139,7 @@ namespace ChilliSource
 			/// @param Camera view matrix
 			/// @param Frame buffer clear colour
 			//----------------------------------------------------------
-			void ApplyCamera(const Core::Vector3& invPos, const Core::Matrix4x4& inmatView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol) override;
+			void ApplyCamera(const Core::Vector3& invPos, const Core::Matrix4& inmatView, const Core::Matrix4& inmatProj, const Core::Colour& inClearCol) override;
             //----------------------------------------------------------
             /// Set Light
             ///
@@ -145,7 +164,7 @@ namespace ChilliSource
 			///
 			/// @param Dynamic array of joint matrices.
 			//----------------------------------------------------------
-            void ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints) override;
+            void ApplyJoints(const std::vector<Core::Matrix4>& inaJoints) override;
 			//----------------------------------------------------------
 			/// Create Render Target
 			///
@@ -156,30 +175,6 @@ namespace ChilliSource
 			/// @return An instantiated target
 			//----------------------------------------------------------
 			Rendering::RenderTarget* CreateRenderTarget(u32 inudwWidth, u32 inudwHeight) override;
-			//----------------------------------------------------------
-			/// Get Default Render Target
-			///
-			/// @return Onscreen render target
-			//----------------------------------------------------------
-			Rendering::RenderTarget* GetDefaultRenderTarget() override;
-			//----------------------------------------------------------
-			/// Resize Frame Buffer
-			///
-			/// Re-build the frame buffer if the screen dimensions
-			/// change
-			///
-			/// @param Width
-			/// @param Height
-			//----------------------------------------------------------
-			void ResizeFrameBuffer(u32 inudwWidth, u32 inudwHeight);
-			//----------------------------------------------------------
-			/// On Screen Orientation Changed
-			///
-			/// Resize the frame buffer
-			/// @param Width
-			/// @param Height
-			//----------------------------------------------------------
-			void OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight) override;
             
             //---Render states
             //----------------------------------------------------------
@@ -417,20 +412,23 @@ namespace ChilliSource
             /// @return Whether it has been set
             //----------------------------------------------------------
             bool IsAttribPointerSet(GLint indwAttribLocation) const;
-			//----------------------------------------------------------
-			/// CheckForGLErrors
-			///
-			/// Checks for any opengl errors and logs any errors found.
-			//----------------------------------------------------------
-			static void CheckForGLErrors();
             //----------------------------------------------------------
             /// Create Attrib State Cache
             //----------------------------------------------------------
             void CreateAttribStateCache();
-			
+            //----------------------------------------------------------
+            /// Called when the resolution of the screen changes. This
+            /// then updates the size of the frame buffer.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The new screen resolution.
+            //----------------------------------------------------------
+            void OnScreenResolutionChanged(const Core::Vector2& in_resolution);
+            
 		private:
 			
-            void ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
+            void ApplyVertexAttributePointer(Rendering::MeshBuffer* inpBuffer,
                                             const char* in_attribName, GLint indwSize, GLenum ineType, GLboolean inbNormalized, GLsizei indwStride, const GLvoid* inpOffset);
             
             Rendering::LightComponent* mpLightComponent;
@@ -446,9 +444,9 @@ namespace ChilliSource
             bool mbDiffuseSet;
             bool mbSpecularSet;
             
-			Core::Matrix4x4 mmatProj;
-			Core::Matrix4x4 mmatViewProj;
-            Core::Matrix4x4 mmatView;
+			Core::Matrix4 mmatProj;
+			Core::Matrix4 mmatViewProj;
+            Core::Matrix4 mmatView;
             Core::Vector3 mvCameraPos;
 			
             RenderCapabilities* mpRenderCapabilities;
@@ -460,8 +458,6 @@ namespace ChilliSource
             bool* mpbCurrentVertexAttribState;
             
             std::vector<std::string> m_textureUniformNames;
-            
-			RenderTarget* mpDefaultRenderTarget;
             
             Core::Vector2 mvCachedScissorPos;
             Core::Vector2 mvCachedScissorSize;
@@ -509,7 +505,7 @@ namespace ChilliSource
             RenderStates msCurrentRenderLocks;
             
             bool mbBlendFunctionLocked;
-            bool mbInvalidateLigthingCache;
+            bool mbInvalidateLightingCache;
             
             bool m_hasContextBeenBackedUp;
             
@@ -518,13 +514,14 @@ namespace ChilliSource
             Rendering::CullFace meCurrentCullFace;
             Rendering::DepthTestComparison meDepthFunc;
             
-#ifdef CS_TARGETPLATFORM_IOS
-            EAGLContext* mContext;
-#elif defined CS_TARGETPLATFORM_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             ContextRestorer m_contextRestorer;
 #endif
             
             bool m_hasContext = false;
+            
+            Core::Screen* m_screen;
+            Core::EventConnectionUPtr m_resolutionChangeConnection;
 		};
 	}
 }

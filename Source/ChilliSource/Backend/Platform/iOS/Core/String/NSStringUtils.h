@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_CORE_STRING_NSSTRINGUTILS_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_IOS_CORE_STRING_NSSTRINGUTILS_H_
 
@@ -30,40 +32,22 @@
 ///
 /// @param The NSString
 ///
-/// @return The std::string
+/// @return The std::string containing UTF-8 codepoints
 //----------------------------------------------------------
-+ (std::string) newStringWithNSString:(NSString*)string;
-//----------------------------------------------------------
-/// Converts from a NSString to a UTF8 string.
-///
-/// @author S Downie
-///
-/// @param The NSString
-///
-/// @return The UTF8 String.
-//----------------------------------------------------------
-+ (CSCore::UTF8String) newUTF8StringWithNSString:(NSString*)string;
++ (std::string) newUTF8StringWithNSString:(NSString*)string;
 //----------------------------------------------------------
 /// Converts from an std::string to a NSString.
 ///
 /// @author S Downie
 ///
-/// @param The std::string.
+/// @param The std::string of UTF-8 codepoints.
 ///
 /// @return The NSString.
 //----------------------------------------------------------
-+ (NSString*) newNSStringWithString:(const std::string&)string;
-//----------------------------------------------------------
-/// Converts from an UTF8 String to a NSString.
-///
-/// @author S Downie
-///
-/// @param The UTF8 String
-///
-/// @return The NSString.
-//----------------------------------------------------------
-+ (NSString*) newNSStringWithUTF8String:(const CSCore::UTF8String&)string;
++ (NSString*) newNSStringWithUTF8String:(const std::string&)string;
 
 @end
+
+#endif
 
 #endif

@@ -6,6 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequestSystem.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
@@ -119,7 +121,7 @@ namespace ChilliSource
             {
                 s32 portNum = CFURLGetPortNumber(in_url);
                 CFStringRef cfHostName = CFURLCopyHostName(in_url);
-                std::string hostName = [NSStringUtils newStringWithNSString:(NSString*)cfHostName];
+                std::string hostName = [NSStringUtils newUTF8StringWithNSString:(NSString*)cfHostName];
                 CFRelease(cfHostName);
                 
                 HttpRequestSystem::ConnectionId propId = Core::HashCRC32::GenerateHashCode(in_scheme + hostName + Core::ToString(portNum));
@@ -170,7 +172,7 @@ namespace ChilliSource
             //Grab the connection information that allows us to identify the domain and the scheme
             CFStringRef cfScheme = CFURLCopyScheme(url);
             CS_ASSERT(cfScheme != nullptr, "Invalid http request url scheme: " + in_requestDesc.m_url);
-            std::string scheme = [NSStringUtils newStringWithNSString:(NSString*)cfScheme];
+            std::string scheme = [NSStringUtils newUTF8StringWithNSString:(NSString*)cfScheme];
             CFRelease(cfScheme);
             if(scheme == "https")
             {
@@ -357,3 +359,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

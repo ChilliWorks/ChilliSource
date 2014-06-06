@@ -28,6 +28,7 @@
 
 #include <ChilliSource/UI/Base/Widget.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
@@ -96,10 +97,11 @@ namespace ChilliSource
             ///
             /// @param Absolute position
             /// @param Absolute size
+            /// @param Canvas size
             ///
             /// @return Whether the widget is considered offscreen and should be culled
             //----------------------------------------------------------------------------------------
-            bool ShouldCull(const Core::Vector2& in_absPos, const Core::Vector2& in_absSize)
+            bool ShouldCull(const Core::Vector2& in_absPos, const Core::Vector2& in_absSize, const Core::Vector2& in_canvasSize)
             {
                 Core::Vector2 halfSize(in_absSize * 0.5f);
                 //Treat it like a square so that we do not need to take rotation into account
@@ -114,7 +116,7 @@ namespace ChilliSource
                 Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_topRight, halfSize, topRight);
                 topRight += in_absPos;
                 
-                return (topRight.y < 0 || bottomLeft.y > Core::Screen::GetOrientedHeight() || topRight.x < 0 || bottomLeft.x > Core::Screen::GetOrientedWidth());
+                return (topRight.y < 0 || bottomLeft.y > in_canvasSize.y || topRight.x < 0 || bottomLeft.x > in_canvasSize.x);
             }
             
             namespace SizePolicyFuncs
@@ -249,6 +251,8 @@ namespace ChilliSource
             m_sizePolicyFuncs[(u32)SizePolicy::k_useHeightMaintainingAspect] = SizePolicyFuncs::KeepHeightAdaptWidth;
             m_sizePolicyFuncs[(u32)SizePolicy::k_fillMaintainingAspect] = SizePolicyFuncs::FillOriginal;
             m_sizePolicyFuncs[(u32)SizePolicy::k_fitMaintainingAspect] = SizePolicyFuncs::FitOriginal;
+            
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -651,7 +655,7 @@ namespace ChilliSource
             
             Core::Vector2 finalSize(GetFinalSize());
             
-            if(m_drawable != nullptr && ShouldCull(GetFinalPosition(), finalSize) == false)
+            if(m_drawable != nullptr && ShouldCull(GetFinalPosition(), finalSize, m_screen->GetResolution()) == false)
             {
                 m_drawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
             }
@@ -663,7 +667,7 @@ namespace ChilliSource
                 Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, halfSize, bottomLeftPos);
                 bottomLeftPos += GetFinalPosition();
                 
-                in_renderer->EnableClippingToBounds(bottomLeftPos, finalSize);
+                in_renderer->PushClipBounds(bottomLeftPos, finalSize);
             }
             
             for(auto& child : m_internalChildren)
@@ -678,12 +682,12 @@ namespace ChilliSource
             
             if(m_isSubviewClippingEnabled == true)
             {
-                in_renderer->DisableClippingToBounds();
+                in_renderer->PopClipBounds();
             }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Matrix3x3 Widget::GetLocalTransform() const
+        Core::Matrix3 Widget::GetLocalTransform() const
         {
             if(m_isLocalTransformCacheValid == true)
             {
@@ -694,9 +698,9 @@ namespace ChilliSource
             Core::Vector2 pivotPos;
             Rendering::GetAnchorPoint(m_originAnchor, halfSize, pivotPos);
             
-            Core::Matrix3x3 pivot(-pivotPos, Core::Vector2::ONE, 0.0f);
-            Core::Matrix3x3 rotate(Core::Vector2::ZERO, Core::Vector2::ONE, m_localRotation);
-            Core::Matrix3x3 translate(GetParentSpacePosition() + pivotPos, Core::Vector2::ONE, 0.0f);
+            Core::Matrix3 pivot(Core::Matrix3::CreateTransform(-pivotPos, Core::Vector2::k_one, 0.0f));
+            Core::Matrix3 rotate(Core::Matrix3::CreateTransform(Core::Vector2::k_zero, Core::Vector2::k_one, m_localRotation));
+            Core::Matrix3 translate(Core::Matrix3::CreateTransform(GetParentSpacePosition() + pivotPos, Core::Vector2::k_one, 0.0f));
             
             m_cachedLocalTransform = pivot * rotate * translate;
             
@@ -705,7 +709,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Matrix3x3 Widget::GetFinalTransform() const
+        Core::Matrix3 Widget::GetFinalTransform() const
         {
             if(m_isParentTransformCacheValid == true && m_isLocalTransformCacheValid == true)
             {
@@ -714,7 +718,7 @@ namespace ChilliSource
             
             if(m_canvas == this)
             {
-                m_cachedFinalTransform = Core::Matrix3x3(m_localPosition.vAbsolute, Core::Vector2::ONE, m_localRotation);
+                m_cachedFinalTransform = Core::Matrix3::CreateTransform(m_localPosition.vAbsolute, Core::Vector2::k_one, m_localRotation);
                 
                 m_isParentTransformCacheValid = true;
                 m_isLocalTransformCacheValid = true;
@@ -730,7 +734,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         Core::Vector2 Widget::GetFinalPosition() const
         {
-			Core::Matrix3x3 finalTransform(GetFinalTransform());
+			Core::Matrix3 finalTransform(GetFinalTransform());
             return Core::Vector2(finalTransform.m[6], finalTransform.m[7]);
         }
         //----------------------------------------------------------------------------------------

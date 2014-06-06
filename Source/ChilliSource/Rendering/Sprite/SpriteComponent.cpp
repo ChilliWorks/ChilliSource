@@ -8,7 +8,7 @@
  */
 
 #include <ChilliSource/Core/Base/ColourUtils.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 #include <ChilliSource/Rendering/Material/Material.h>
@@ -53,9 +53,14 @@ namespace ChilliSource
 			{
                 mbAABBValid = true;
                 
-				//Rebuild the box
-				mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition());
-				mBoundingBox.SetSize(mvDimensions);
+                // Realign the origin
+                Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+                Core::Vector2 vAlignedPos;
+                Align(meAlignment, vHalfSize, vAlignedPos);
+                
+				// Rebuild the box
+				mBoundingBox.SetSize(Core::Vector3(mvDimensions, 0.0f));
+				mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition() + Core::Vector3(vAlignedPos, 0.0f));
 			}
 			return mBoundingBox;
 		}
@@ -68,7 +73,14 @@ namespace ChilliSource
 			{
                 mbOOBBValid = true;
                 
-				mOBBoundingBox.SetSize(mvDimensions);
+                // Realign the origin
+                Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+                Core::Vector2 vAlignedPos;
+                Align(meAlignment, vHalfSize, vAlignedPos);
+                
+				// Rebuild the box
+                mOBBoundingBox.SetOrigin(Core::Vector3(vAlignedPos, 0.0f));
+				mOBBoundingBox.SetSize(Core::Vector3(mvDimensions, 0.0f));
 				mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
 			}
 			return mOBBoundingBox;
@@ -82,7 +94,12 @@ namespace ChilliSource
 			{
                 mbBoundingSphereValid = true;
                 
-				mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition();
+                // Realign the origin
+                Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+                Core::Vector2 vAlignedPos;
+                Align(meAlignment, vHalfSize, vAlignedPos);
+                
+				mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition() + Core::Vector3(vAlignedPos, 0.0f);
 				mBoundingSphere.fRadius = std::max(mvDimensions.x, mvDimensions.y) * 0.5f;
 			}
 			return mBoundingSphere;
@@ -305,12 +322,15 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void SpriteComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
         {
-            CalculateSpriteData();
-            
-            //Add us to the render systems dynamic batch
-            //If we force a batch flush here then the previous sprites
-            //will be rendered.
-            inpRenderSystem->GetDynamicSpriteBatchPtr()->Render(mSpriteData);
+            if (ineShaderPass == ShaderPass::k_ambient)
+            {
+                CalculateSpriteData();
+                
+                //Add us to the render systems dynamic batch
+                //If we force a batch flush here then the previous sprites
+                //will be rendered.
+                inpRenderSystem->GetDynamicSpriteBatchPtr()->Render(mSpriteData);
+            }
         }
         //------------------------------------------------------------
         /// On Transform Changed
@@ -398,25 +418,25 @@ namespace ChilliSource
             Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
             Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
 			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topLeft]);
+			mavVertexPos[(u32)Verts::k_topLeft] = vTemp * mmatTransformCache;
             
             vTemp.x = vHalfSize.x;
             vTemp.y = vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topRight]);
+			mavVertexPos[(u32)Verts::k_topRight] = vTemp * mmatTransformCache;
             
             vTemp.x = -vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomLeft]);
+			mavVertexPos[(u32)Verts::k_bottomLeft] = vTemp * mmatTransformCache;
             
             vTemp.x = vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomRight]);
+			mavVertexPos[(u32)Verts::k_bottomRight] = vTemp * mmatTransformCache;
             
 			mbCornerPosCacheValid = true;
             

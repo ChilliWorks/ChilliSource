@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_FORWARDDECLARATIONS_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_IOS_FORWARDDECLARATIONS_H_
 
@@ -23,13 +25,16 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(PlatformSystem);
         CS_FORWARDDECLARE_CLASS(DialogueBoxSystem);
         CS_FORWARDDECLARE_CLASS(FileSystem);
-        CS_FORWARDDECLARE_CLASS(ImageProvider);
+        CS_FORWARDDECLARE_CLASS(PNGImageProvider);
         CS_FORWARDDECLARE_CLASS(LocalNotificationSystem);
         CS_FORWARDDECLARE_CLASS(RemoteNotificationSystem);
+        CS_FORWARDDECLARE_CLASS(Device);
+        CS_FORWARDDECLARE_CLASS(Screen);
         //------------------------------------------------------
 		/// Input
 		//------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Accelerometer);
+        CS_FORWARDDECLARE_CLASS(DeviceButtonSystem);
         CS_FORWARDDECLARE_CLASS(Keyboard);
         CS_FORWARDDECLARE_CLASS(PointerSystem);
         //------------------------------------------------------
@@ -42,12 +47,9 @@ namespace ChilliSource
         //------------------------------------------------------
 		/// Social
 		//------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(ContactInformationProvider);
         CS_FORWARDDECLARE_CLASS(EmailComposer);
         CS_FORWARDDECLARE_CLASS(FacebookAuthenticationSystem);
         CS_FORWARDDECLARE_CLASS(FacebookPostSystem);
-        CS_FORWARDDECLARE_CLASS(TwitterAuthenticationActivity);
-        CS_FORWARDDECLARE_CLASS(TwitterPostSystem);
         //------------------------------------------------------
 		/// Video
 		//------------------------------------------------------
@@ -58,5 +60,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(WebView);
     }
 }
+
+#endif
 
 #endif

@@ -1,11 +1,30 @@
-/*
- *  RendererSortPredicates.cpp
- *  MoFlow
- *
- *  Created by Stuart McGaw on 26/04/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  RendererSortPredicates.cpp
+//  Chilli Source
+//  Created by Stuart McGaw on 26/04/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Rendering/Base/RendererSortPredicates.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
@@ -24,17 +43,14 @@ namespace ChilliSource
         {
 			mCameraViewProj = Renderer::matViewProjCache;
             
-            Matrix4x4 matViewTrans;
-            Matrix4x4 matWorld;
+            Matrix4 matViewTrans;
+            Matrix4 matWorld;
             
             for(u32 i = 0; i < inpRenderable->size(); ++i)
             {
-                Core::Matrix4x4 matLocalTrans;
-                matLocalTrans.SetTranslation((*inpRenderable)[i]->GetAABB().GetOrigin() - (*inpRenderable)[i]->GetEntity()->GetTransform().GetWorldPosition());
-                
-                Core::Matrix4x4::Multiply(&((*inpRenderable)[i]->GetTransformationMatrix()), &matLocalTrans, &matWorld);
-                
-                Core::Matrix4x4::Multiply(&matWorld, &mCameraViewProj, &matViewTrans);
+				Core::Matrix4 matLocalTrans = Core::Matrix4::CreateTranslation((*inpRenderable)[i]->GetAABB().GetOrigin() - (*inpRenderable)[i]->GetEntity()->GetTransform().GetWorldPosition());
+                matWorld = (*inpRenderable)[i]->GetTransformationMatrix() * matLocalTrans;
+				matViewTrans = matWorld * mCameraViewProj;
                 (*inpRenderable)[i]->SetSortValue(matViewTrans.GetTranslation().z);
             }
 		}

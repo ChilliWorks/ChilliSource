@@ -6,10 +6,13 @@
 // Copyright 2012 Tag Games Limited - All rights reserved
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_SOCIAL_FACEBOOKAUTHENTICATIONSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_SOCIAL_FACEBOOKAUTHENTICATIONSYSTEM_H_
 
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+#include <ChilliSource/Core/Delegate/ConnectableDelegate.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthenticationSystem.h>
 
 namespace ChilliSource
@@ -56,9 +59,9 @@ namespace ChilliSource
             /// @author R Henning
             ///
             /// @param Read permissions (http://developers.facebook.com/docs/authentication/permissions/)
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //------------------------------------------------
-            void Authenticate(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate) override;
+            void Authenticate(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) override;
 			//------------------------------------------------
             /// @author R Henning
             ///
@@ -75,9 +78,9 @@ namespace ChilliSource
             /// @author R Henning
             ///
             /// @param Read permissions
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //------------------------------------------------
-            void AuthoriseReadPermissions(const std::vector<std::string>& in_readPermissions, const AuthenticationCompleteDelegate& in_delegate) override;
+            void AuthoriseReadPermissions(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) override;
             //------------------------------------------------
             /// Request that the user grant write
             /// permissions (http://developers.facebook.com/docs/authentication/permissions/)
@@ -88,9 +91,9 @@ namespace ChilliSource
             /// @author R Henning
             ///
             /// @param Write permissions
-            /// @param Result delegate
+            /// @param Connection to result delegate
             //------------------------------------------------
-            void AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, const AuthenticationCompleteDelegate& in_delegate) override;
+            void AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) override;
             //------------------------------------------------
             /// @author R Henning
             ///
@@ -164,11 +167,13 @@ namespace ChilliSource
 
 			FacebookJavaInterfaceSPtr m_javaInterface;
 
-			AuthenticationCompleteDelegate m_authDelegate;
-			AuthenticationCompleteDelegate m_authReadDelegate;
-			AuthenticationCompleteDelegate m_authWriteDelegate;
+			AuthenticationCompleteDelegate::Connection m_authDelegateConnection;
+			AuthenticationCompleteDelegate::Connection m_authReadDelegateConnection;
+			AuthenticationCompleteDelegate::Connection m_authWriteDelegateConnection;
 		};
 	}
 }
+
+#endif
 
 #endif

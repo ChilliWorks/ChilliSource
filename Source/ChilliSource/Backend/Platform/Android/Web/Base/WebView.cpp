@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Web/Base/WebView.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
@@ -101,7 +103,7 @@ namespace ChilliSource
 
 			m_isPresented = true;
 			m_delegate = in_delegate;
-			Core::Vector2 absoluteSize = (Core::Screen::GetOrientedDimensions() * in_size.GetRelative()) + in_size.GetAbsolute();
+			Core::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
 
 			WebViewJavaInterface::Present(m_index, in_url, absoluteSize, in_dismissButtonRelativeSize);
 		}
@@ -159,7 +161,7 @@ namespace ChilliSource
 
 			m_isPresented = true;
 			m_delegate = in_delegate;
-			Core::Vector2 absoluteSize = (Core::Screen::GetOrientedDimensions() * in_size.GetRelative()) + in_size.GetAbsolute();
+			Core::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
 			WebViewJavaInterface::PresentFromFile(m_index, htmlFileContents, absoluteSize, fullFilePath, anchor, in_dismissButtonRelativeSize);
 		}
 		//-----------------------------------------------
@@ -184,6 +186,7 @@ namespace ChilliSource
         //-----------------------------------------------
 		void WebView::OnInit()
 		{
+			m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
 			s_indexToWebViewMap.emplace(m_index, this);
 		}
 		//---------------------------------------------------------
@@ -212,3 +215,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

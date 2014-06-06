@@ -6,6 +6,8 @@
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
 
 #include <ChilliSource/Core/String/StringUtils.h>
@@ -56,3 +58,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

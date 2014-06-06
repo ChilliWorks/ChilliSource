@@ -31,7 +31,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/System/StateSystem.h>
 
 #include <functional>
@@ -99,13 +98,13 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param A list of recipients.
-            /// @param The subject.
-            /// @param The body of the email.
+            /// @param A list of recipients (UTF8).
+            /// @param The subject (UTF8).
+            /// @param The body of the email (UTF8).
             /// @param The format of the body of the email.
             /// @param The callback describing the result of the email.
             //-------------------------------------------------------
-			virtual void Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
+			virtual void Present(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat,
                                  const SendResultDelegate& in_callback) = 0;
             //-------------------------------------------------------
             /// Displays the email activity with the given recipients,
@@ -114,14 +113,14 @@ namespace ChilliSource
             ///
             /// @author I Copland
             ///
-            /// @param A list of recipients.
-            /// @param The subject.
-            /// @param The body of the email.
+            /// @param A list of recipients (UTF8).
+            /// @param The subject (UTF8).
+            /// @param The body of the email (UTF8).
             /// @param The format of the body of the email.
             /// @param The attachment.
             /// @param The callback describing the result of the email.
             //-------------------------------------------------------
-            virtual void PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
+            virtual void PresentWithAttachment(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat,
                                                const Attachment& in_attachment, const SendResultDelegate& in_callback) = 0;
             //-------------------------------------------------------
 			/// Dismisses the activity if it is currently displayed.

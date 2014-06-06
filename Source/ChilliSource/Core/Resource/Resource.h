@@ -32,6 +32,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 
 #include <atomic>
 
@@ -53,6 +54,8 @@ namespace ChilliSource
 		class Resource : public QueryableInterface
 		{
 		public:
+            
+            using ResourceId = u32;
             
             CS_DECLARE_NOCOPY(Resource);
             
@@ -77,23 +80,18 @@ namespace ChilliSource
             //-------------------------------------------------------
 			Resource();
 			//-------------------------------------------------------
-            /// NOTE: Not for general application used by the providers
-            /// to set the file path as the resource may need to be
-            /// reloaded on context loss
-            ///
-			/// @author S Downie
-			///
-			/// @param The file path of the resource. Used to load
-            /// again if context is lost
-			//-------------------------------------------------------
-			void SetFilePath(const std::string& in_filePath);
-			//-------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return The file path of the resource. If the resource
             /// was not loaded from file then this is empty.
 			//-------------------------------------------------------
 			const std::string& GetFilePath() const;
+            //-------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return The resource id as set by the resource pool
+			//-------------------------------------------------------
+			ResourceId GetId() const;
 			//-------------------------------------------------------
 			/// @author S Downie
 			///
@@ -133,11 +131,56 @@ namespace ChilliSource
             /// @author S Downie
             //-------------------------------------------------------
 			virtual ~Resource(){}
+            
+        private:
+            
+            friend class ResourcePool;
+            //-------------------------------------------------------
+            /// NOTE: Not for general application used by the providers
+            /// to set the file path as the resource may need to be
+            /// reloaded on context loss
+            ///
+			/// @author S Downie
+			///
+			/// @param The file path of the resource. Used to load
+            /// again if context is lost
+			//-------------------------------------------------------
+			void SetFilePath(const std::string& in_filePath);
+            //-------------------------------------------------------
+            /// NOTE: Not for general application used by the providers
+            /// to set the id
+            ///
+			/// @author S Downie
+			///
+			/// @param The resource id
+			//-------------------------------------------------------
+			void SetId(ResourceId in_id);
+            //-------------------------------------------------------
+            /// NOTE: Not for general application used by the providers
+            /// to set the load options as the resource may need to be
+            /// reloaded on context loss
+            ///
+			/// @author S Downie
+			///
+			/// @param The load options of the resource. Used to load
+            /// again if context is lost
+			//-------------------------------------------------------
+			void SetOptions(const IResourceOptionsBaseCSPtr& in_options);
+			//-------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return The options that were set on the resource on
+            /// loading.
+			//-------------------------------------------------------
+			const IResourceOptionsBaseCSPtr& GetOptions() const;
 			
 		private:
 			
+            IResourceOptionsBaseCSPtr m_options;
+            
 			std::string m_filePath;
 			StorageLocation m_location;
+            ResourceId m_id;
         
             std::atomic<LoadState> m_loadState;
 		};

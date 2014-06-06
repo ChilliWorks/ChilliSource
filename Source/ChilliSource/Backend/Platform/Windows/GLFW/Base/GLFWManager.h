@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_GLFW_BASE_GLFWMANAGER_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_GLFW_BASE_GLFWMANAGER_H_
 
@@ -51,9 +53,8 @@ namespace ChilliSource
 			///
 			/// @param Window width
 			/// @param Window height
-			/// @param Window name
 			//---------------------------------------------------
-			void Init(u32 in_windowWidth, u32 in_windowHeight, const char* in_windowName);
+			void Init(u32 in_windowWidth, u32 in_windowHeight);
 			//---------------------------------------------------
 			/// @author S Downie
 			///
@@ -86,6 +87,20 @@ namespace ChilliSource
 			/// @author S Downie
 			//---------------------------------------------------
 			void PollEvents();
+			//-------------------------------------------------
+			/// @author S Downie
+			///
+			/// @param The maximum frames per second to clamp 
+			/// to. This should be in multiples of 15 
+			/// (15, 30, 60)
+			//-------------------------------------------------
+			void SetPreferredFPS(u32 in_fps);
+			//-------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return Whether the window exists
+			//-------------------------------------------------
+			bool IsWindowAlive() const;
 			//---------------------------------------------------
 			/// @author S Downie
 			///
@@ -130,6 +145,14 @@ namespace ChilliSource
 			/// is closed
 			//---------------------------------------------------
 			void SetWindowCloseDelegate(GLFWwindowclosefun in_delegate);
+			//---------------------------------------------------
+			/// Sets the title of the window.
+			///
+			/// @author I Copland
+			///
+			/// @param The new window title.
+			//---------------------------------------------------
+			void SetWindowTitle(const std::string& in_title);
 
 		private:
 
@@ -140,3 +163,4 @@ namespace ChilliSource
 
 #endif
 
+#endif

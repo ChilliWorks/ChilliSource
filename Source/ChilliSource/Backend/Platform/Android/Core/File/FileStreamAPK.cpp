@@ -7,6 +7,8 @@
  *
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Core/File/FileStreamAPK.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
@@ -257,6 +259,7 @@ namespace ChilliSource
 			std::ios_base::seekdir dir;
 			switch (ineDir)
 			{
+				default:
 				case Core::SeekDir::k_beginning:
 					dir = std::ios_base::beg;
 					break;
@@ -319,6 +322,7 @@ namespace ChilliSource
 			std::ios_base::seekdir dir;
 			switch (ineDir)
 			{
+				default:
 				case Core::SeekDir::k_beginning:
 					dir = std::ios_base::beg;
 					break;
@@ -372,3 +376,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

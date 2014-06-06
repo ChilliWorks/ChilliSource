@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #import <ChilliSource/Backend/Platform/iOS/Web/Base/WebView.h>
 
 #import <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
@@ -102,7 +104,7 @@ namespace ChilliSource
                     
                     m_anchor = "";
                     
-                    NSString* urlString = [NSStringUtils newNSStringWithString:in_url];
+                    NSString* urlString = [NSStringUtils newNSStringWithUTF8String:in_url];
                     NSURL* url = [NSURL URLWithString:urlString];
                     [urlString release];
                     
@@ -155,8 +157,8 @@ namespace ChilliSource
                 pHTMLFile->GetAll(strHTMLFileContents);
                 pHTMLFile->Close();
                 
-                NSString* pstrHTML = [NSStringUtils newNSStringWithString:strHTMLFileContents];
-                NSString* urlString = [NSStringUtils newNSStringWithString:fullFilePath];
+                NSString* pstrHTML = [NSStringUtils newNSStringWithUTF8String:strHTMLFileContents];
+                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:fullFilePath];
                 [m_webView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:urlString]];
                 [urlString release];
                 [pstrHTML release];
@@ -175,7 +177,7 @@ namespace ChilliSource
 		{
             @autoreleasepool
             {
-                NSString* urlString = [NSStringUtils newNSStringWithString:in_url];
+                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:in_url];
                 NSURL* url = [NSURL URLWithString:urlString];
                 [urlString release];
                 
@@ -234,7 +236,7 @@ namespace ChilliSource
             if(m_anchor.length() > 0)
             {
                 std::string strJavaScript = "window.location.href = '" + m_anchor + "';";
-                NSString* nsJavaString = [NSStringUtils newNSStringWithString:strJavaScript];
+                NSString* nsJavaString = [NSStringUtils newNSStringWithUTF8String:strJavaScript];
                 [m_webView stringByEvaluatingJavaScriptFromString:nsJavaString];
                 [nsJavaString release];
             }
@@ -242,15 +244,23 @@ namespace ChilliSource
             AddDismissButton();
             RemoveActivityIndicator();
         }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        void WebView::OnInit()
+        {
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+        }
         //-----------------------------------------------
         //-----------------------------------------------
         void WebView::CreateWebview(const Core::UnifiedVector2& in_size)
         {
             CS_ASSERT(m_webView == nil, "Cannot create webview becuase one already exists!");
             
+            Core::Vector2 dipsResolution = m_screen->GetResolution() * m_screen->GetInverseDensityScale();
+            
             //Create the  view and present it, centered on screen
-            m_absoluteSize = (Core::Screen::GetOrientedDimensions() * Core::Screen::GetInverseDensity() * in_size.GetRelative()) + in_size.GetAbsolute();
-            m_absolutePosition =  (Core::Screen::GetOrientedDimensions() * Core::Screen::GetInverseDensity() - m_absoluteSize)/2;
+            m_absoluteSize = (dipsResolution * in_size.GetRelative()) + in_size.GetAbsolute();
+            m_absolutePosition = (dipsResolution - m_absoluteSize) / 2.0f;
             m_webView = [[UIWebView alloc] initWithFrame:CGRectMake(m_absolutePosition.x, m_absolutePosition.y, m_absoluteSize.x, m_absoluteSize.y)];
         }
         //-----------------------------------------------
@@ -328,4 +338,4 @@ namespace ChilliSource
 	}
 }
 
-
+#endif

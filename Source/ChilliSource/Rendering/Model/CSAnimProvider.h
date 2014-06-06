@@ -66,9 +66,10 @@ namespace ChilliSource
 			///
             /// @param The storage location to load from
 			/// @param File path
+            /// @param Options to customise the creation
 			/// @param [Out] the output resource pointer
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// Load a skinned animation from the given CSAnim file on a background
             /// thread. Delegate is called on completion. Check the load state of the
@@ -78,10 +79,11 @@ namespace ChilliSource
 			///
             /// @param The storage location to load from
 			/// @param File path
+            /// @param Options to customise the creation
             /// @param Delegate
 			/// @param [Out] the output resource pointer
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
 			/// Loads an anim file into a SkinnedAnimation.
             ///

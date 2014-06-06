@@ -49,14 +49,13 @@ namespace ChilliSource
             
             CS_DECLARE_NAMEDTYPE(TextureProvider);
             
-            //-------------------------------------------------------
-            /// Factory method
+            //----------------------------------------------------------------------------
+            /// Called when the system is initialised. Retrieves the image providers
+            /// to delegate image loading to
             ///
             /// @author S Downie
-            ///
-            /// @return New provider with ownership transferred
-            //-------------------------------------------------------
-            static TextureProviderUPtr Create();
+            //----------------------------------------------------------------------------
+            void PostCreate();
 			//-------------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -86,10 +85,11 @@ namespace ChilliSource
             /// @author S Downie
 			///
 			/// @param Location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Options to customise the creation
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Loads the image on a background thread and generate the texture via the output resource.
             /// Delegate is called on completion. Check the resource load state for success or failure
@@ -97,13 +97,29 @@ namespace ChilliSource
             /// @author S Downie
 			///
 			/// @param Location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Options to customise the creation
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @retrun Default options for texture loading
+            //----------------------------------------------------
+            Core::IResourceOptionsBaseCSPtr GetDefaultOptions() const;
 			
 		private:
+            friend class Core::Application;
+            //-------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @return New provider with ownership transferred
+            //-------------------------------------------------------
+            static TextureProviderUPtr Create();
             //----------------------------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -111,34 +127,23 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             TextureProvider() = default;
             //----------------------------------------------------------------------------
-            /// Called when the system is initialised. Retrieves the image providers
-            /// to delegate image loading to
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------
-            void OnInit() override;
-            //----------------------------------------------------------------------------
-            /// Called when the system is destroyed.
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------
-            void OnDestroy() override;
-            //----------------------------------------------------------------------------
 			/// Does the heavy lifting for the 2 create methods. The building of the texture
             /// is always done on the main thread
             ///
             /// @author S Downie
 			///
 			/// @param Location to load from
-			/// @param Filename
+			/// @param File path
+            /// @param Options to customise the creation
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void LoadTexture(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
+			void LoadTexture(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
             
         private:
             
             std::vector<Core::ResourceProvider*> m_imageProviders;
+            static const Core::IResourceOptionsBaseCSPtr s_defaultOptions;
 		};
 	}
 }

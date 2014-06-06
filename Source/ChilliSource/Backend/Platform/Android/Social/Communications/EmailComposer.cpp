@@ -26,12 +26,14 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailComposer.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailComposerJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
@@ -58,7 +60,7 @@ namespace ChilliSource
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void EmailComposer::Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
+		void EmailComposer::Present(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat,
 				const SendResultDelegate& in_callback)
 		{
 			Attachment emptyAttachment;
@@ -67,7 +69,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void EmailComposer::PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents,
+		void EmailComposer::PresentWithAttachment(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents,
 				ContentFormat in_contentFormat, const Attachment& in_attachment, const SendResultDelegate & in_callback)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present email composer while one is already presented.");
@@ -150,3 +152,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

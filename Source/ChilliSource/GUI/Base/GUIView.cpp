@@ -8,11 +8,11 @@
 
 #include <ChilliSource/GUI/Base/GUIView.h>
 
-#include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Utils.h>
-
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 #include <algorithm>
@@ -57,10 +57,10 @@ namespace ChilliSource
         //-----------------------------------------------------
         GUIView::GUIView() : mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
         Rotation(0.0f), Opacity(1.0f), LocalAlignment(Rendering::AlignmentAnchor::k_middleCentre), ParentalAlignment(Rendering::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
-        Scale(Core::Vector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
+        Scale(Core::Vector2::k_one), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
         {
-
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
         }
         //------------------------------------------------------
         /// Constructor
@@ -72,9 +72,11 @@ namespace ChilliSource
         GUIView::GUIView(const Core::ParamDictionary& insParams) 
 		: mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
         Rotation(0.0f), Opacity(1.0f), LocalAlignment(Rendering::AlignmentAnchor::k_middleCentre), ParentalAlignment(Rendering::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
-        Scale(Core::Vector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
+        Scale(Core::Vector2::k_one), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
         {
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            
             std::string strValue;
             
             //---Name
@@ -1521,26 +1523,31 @@ namespace ChilliSource
 			return vPos + GetAbsoluteScreenSpacePosition();
         }
         //-----------------------------------------------------
+        //-----------------------------------------------------
+        Core::Screen* GUIView::GetScreen() const
+        {
+            return m_screen;
+        }
+        //-----------------------------------------------------
         /// Get Transform
         ///
         /// @return Transformation matrix
         //-----------------------------------------------------
-        const Core::Matrix3x3& GUIView::GetTransform() const
+        const Core::Matrix3& GUIView::GetTransform() const
         {
 			if(!Core::Utils::BitmapCheck(mudwCacheValidaters, (u32)TransformCache::k_transform))
 			{
 				if(mpParentView)
 				{
 					//Create our transform without respect to our parent
-					Core::Matrix3x3 matTrans;
-					matTrans.SetTransform(GetAbsolutePosition(), Core::Vector2::ONE, GetAbsoluteRotation());
+					Core::Matrix3 matTrans = Core::Matrix3::CreateTransform(GetAbsolutePosition(), Core::Vector2::k_one, GetAbsoluteRotation());
 					
 					//Apply our parents transform
-					Core::Matrix3x3::Multiply(&matTrans, &mpParentView->GetTransform(), &mmatTransform);
+					mmatTransform = matTrans * mpParentView->GetTransform();
 				}
 				else
 				{
-					mmatTransform.SetTransform(GetAbsolutePosition(), Core::Vector2::ONE, Rotation);
+					mmatTransform = Core::Matrix3::CreateTransform(GetAbsolutePosition(), Core::Vector2::k_one, Rotation);
 				}
 				
 				Core::Utils::BitmapSet(mudwCacheValidaters, (u32)TransformCache::k_transform);
@@ -1560,7 +1567,7 @@ namespace ChilliSource
             Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
             Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
         
-            return (vTopRight.y >= 0 && vBottomLeft.y <= Core::Screen::GetOrientedHeight() && vTopRight.x >= 0 && vBottomLeft.x <= Core::Screen::GetOrientedWidth());
+            return (vTopRight.y >= 0 && vBottomLeft.y <= m_screen->GetResolution().y && vTopRight.x >= 0 && vBottomLeft.x <= m_screen->GetResolution().x);
         }
         
         //---Functional overrides
@@ -1602,7 +1609,7 @@ namespace ChilliSource
 				if(ClipSubviews)
 				{
                     Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
-					inpCanvas->EnableClippingToBounds(vBottomLeft, GetAbsoluteSize());
+					inpCanvas->PushClipBounds(vBottomLeft, GetAbsoluteSize());
 				}
 				
 				for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
@@ -1615,7 +1622,7 @@ namespace ChilliSource
 				
 				if(ClipSubviews)
 				{
-					inpCanvas->DisableClippingToBounds();
+					inpCanvas->PopClipBounds();
 				}
 			}
         }
@@ -1656,18 +1663,14 @@ namespace ChilliSource
 			return AcceptTouchesOutsideOfBounds;
 		}
 		//-----------------------------------------------------------
-		/// On Screen Orientation Changed
-		///
-		/// Triggered if the screen orientation changes so we can
-		/// resize ourself
 		//-----------------------------------------------------------
-		void GUIView::OnScreenOrientationChanged()
+		void GUIView::OnScreenResolutionChanged()
 		{
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize|(u32)TransformCache::k_absPos);
 
 			for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
 			{
-				(*it)->OnScreenOrientationChanged();
+				(*it)->OnScreenResolutionChanged();
 			}
 		}
         //---Touch Delegates
@@ -1731,11 +1734,11 @@ namespace ChilliSource
 				{
 					if(!AlignedWithParent)
 					{
-						SetPosition(Core::UnifiedVector2(Core::Vector2::ZERO, in_pointer.m_location));
+						SetPosition(Core::UnifiedVector2(Core::Vector2::k_zero, in_pointer.m_location));
 					}
 					else
 					{
-						SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::ZERO, in_pointer.m_location));
+						SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::k_zero, in_pointer.m_location));
 					}
 				}
 

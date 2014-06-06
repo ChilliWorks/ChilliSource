@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_WEB_BASE_WEBVIEW_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_WEB_BASE_WEBVIEW_H_
 
@@ -143,6 +145,8 @@ namespace ChilliSource
             //---------------------------------------------------------
 			void OnDestroy() override;
 		private:
+
+			Core::Screen* m_screen;
 			bool m_isPresented;
 			const s32 m_index;
 			DismissedDelegate m_delegate;
@@ -153,4 +157,7 @@ namespace ChilliSource
 
 	}
 }
+
+#endif
+
 #endif

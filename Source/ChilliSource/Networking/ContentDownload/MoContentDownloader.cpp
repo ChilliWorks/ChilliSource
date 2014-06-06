@@ -8,8 +8,9 @@
 
 #include <ChilliSource/Networking/ContentDownload/MoContentDownloader.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/JSON/json.h>
 
 namespace ChilliSource
@@ -44,13 +45,15 @@ namespace ChilliSource
             //Request the content manifest
             if(mpHttpRequestSystem->CheckReachability())
             {
+                Core::Device* device = Core::Application::Get()->GetSystem<Core::Device>();
+                
                 //Build the JSON request with the device info so the server can decide what
                 //assets are suitable for us
                 Json::Value JDeviceData(Json::objectValue);
-                JDeviceData["Type"] = Core::Device::GetManufacturerName() + Core::Device::GetModelName() + Core::Device::GetModelTypeName();
-                JDeviceData["OS"] = Core::Device::GetOSVersion();
-                JDeviceData["Locale"] = Core::Device::GetLocale().GetCountryCode();
-                JDeviceData["Language"] = Core::Device::GetLanguage().GetLocaleCode();
+                JDeviceData["Type"] = device->GetManufacturer() + device->GetModel() + device->GetModelType();
+                JDeviceData["OS"] = device->GetOSVersion();
+                JDeviceData["Locale"] = device->GetLocale();
+                JDeviceData["Language"] = device->GetLanguage();
                 
                 //The server uses the tags to determine which content to serve
                 Json::Value JTags(Json::arrayValue);

@@ -17,8 +17,8 @@ namespace ChilliSource
 		DEFINE_META_CLASS(FormattedLabel)
 
         //---Mark-up samples
-        // TODO: [img= image.png/atlaskey x=200 y=200]
-        // TODO: [url= http://www.example.com LinkText]
+        // IMPROVEMENT: [img= image.png/atlaskey x=200 y=200]
+        // IMPROVEMENT: [url= http://www.example.com LinkText]
         // [var= MyVariableName]
         //--------------------------------------------------
         /// Constructor 
@@ -39,18 +39,8 @@ namespace ChilliSource
             
         }
         //-------------------------------------------------------
-        /// Set Text
-        /// 
-        /// Set the text string and a param dictionary that
-        /// contains any string variables that require
-        /// inserting into the string.
-        ///
-        /// For instance "My string contains [var =a] variable
-        /// and [var= b] variable called a and b
-        ///
-        /// @param Text string
         //-------------------------------------------------------
-        void FormattedLabel::SetText(const Core::UTF8String& instrText, const Core::ParamDictionary& insParams,bool inbOverwriteText)
+        void FormattedLabel::SetText(const std::string& instrText, const Core::ParamDictionary& insParams,bool inbOverwriteText)
         {
 			mCachedChars.clear();
 			

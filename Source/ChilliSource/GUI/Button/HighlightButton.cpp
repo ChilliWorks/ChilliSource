@@ -13,7 +13,7 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
@@ -46,8 +46,8 @@ namespace ChilliSource
         //-----------------------------------------------------------
         HighlightButton::HighlightButton() 
         : mpBackgroundImage(new ImageView()), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
-        msDefaultUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
-        msHighlightUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
+        msDefaultUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
+        msHighlightUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
@@ -67,8 +67,8 @@ namespace ChilliSource
         //------------------------------------------------------------
         HighlightButton::HighlightButton(const Core::ParamDictionary& insParams) 
         : Button(insParams), mpBackgroundImage(new ImageView()),
-        msDefaultUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
-        msHighlightUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
+        msDefaultUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
+        msHighlightUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
         mbSelected(false), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
 		SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
         {
@@ -478,7 +478,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void HighlightButton::OnButtonDeselectThreshold(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
         {
-            const f32 kfThreshold = (f32)(Core::Screen::GetOrientedWidth()) * 0.02f;
+            const f32 kfThreshold = (f32)(GetScreen()->GetResolution().x) * 0.02f;
             f32 fDistX = std::abs(in_pointer.m_location.x - mvSelectedPos.x);
             f32 fDisty = std::abs(in_pointer.m_location.y - mvSelectedPos.y);
 			if(fDistX >= kfThreshold || fDisty >= kfThreshold)

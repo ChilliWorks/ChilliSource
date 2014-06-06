@@ -10,11 +10,10 @@
 #define _MOFLO_CORE_STRINGUTILITIES_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/String/UTF8String.h>
-#include <ChilliSource/Core/Container/ParamDictionary.h>
 
 #include <sstream>
 #include <string>
+#include <vector>
 
 namespace ChilliSource 
 {
@@ -33,8 +32,6 @@ namespace ChilliSource
             
             /// Constant blank string, useful for returning by ref where local does not exist
 			const std::string BLANK;
-            const UTF8String UTF8_BLANK;
-			const UTF8String UTF8_MISSING = "MISSING";
             
 			/** Removes any whitespace characters, be it standard space or
 			 TABs and so on.
@@ -168,24 +165,6 @@ namespace ChilliSource
 			 @returns standardised name
 			 */
 			const std::string StandardiseClassName(const std::string & insClassName);
-            /**
-			 //Given a std::string it converts it to a UTF-8 string
-			 @param input string
-			 @returns utf8 string
-			 */
-            inline UTF8String StringToUTF8String(const std::string& instrString)
-            {
-                return UTF8String(instrString);
-            }
-            /**
-			 //Given a UTF-8 map each code point to a char in the std::string
-			 @param utf8 string
-			 @returns std::string
-			 */
-            inline std::string UTF8StringToString(const UTF8String& instrString)
-            {
-                return instrString.ToASCII();
-            }
             
 			// Utility function for comparing two characters in a case insensitive way
             bool CaseInsensitiveCompare(const char & inA, const char & inB);
@@ -199,11 +178,11 @@ namespace ChilliSource
 			/// For instance "My string contains [var =a] variable
 			/// and [var= b] variable called a and b
 			///
-			/// @param Text string
+			/// @param Text string (UTF-8)
 			/// @param Params
-            /// @param Out: Text string
+            /// @param Out: Text string (UTF-8)
 			//-------------------------------------------------------
-			void InsertVariables(const UTF8String& instrText, const Core::ParamDictionary& insParams, UTF8String& outstrText);
+			void InsertVariables(const std::string& instrText, const Core::ParamDictionary& insParams, std::string& outstrText);
             
             /** Checks the std::string is a inValid number inValue. */
 			bool isNumber(const std::string& inVal);

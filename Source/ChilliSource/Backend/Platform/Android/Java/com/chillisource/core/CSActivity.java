@@ -14,10 +14,11 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-import com.chillisource.social.ContactInformationProviderNativeInterface;
+
+import com.chillisource.input.DeviceButtonNativeInterface;
+import com.chillisource.input.DeviceButtonNativeInterface.DeviceButton;
 import com.chillisource.networking.HttpRequestNativeInterface;
 import com.chillisource.core.SharedPreferencesNativeInterface;
-import com.chillisource.social.TwitterAuthenticationViewNativeInterface;
 import com.chillisource.web.WebViewNativeInterface;
 import com.chillisource.core.CSPowerManager;
 
@@ -47,8 +48,8 @@ public class CSActivity extends Activity
         	requestWindowFeature(Window.FEATURE_NO_TITLE);
         	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
-    		m_surface = new Surface(this);
-        
+        	m_surface = new Surface(this);
+        	
         	CSApplication.create(this);
       
         	CSApplication.get().activityIntent(getIntent());
@@ -56,10 +57,8 @@ public class CSActivity extends Activity
           	//initialise the old style native interfaces (These should be removed over time as each of these is changed over to the new system!)
         	HttpRequestNativeInterface.Setup(this);
         	SharedPreferencesNativeInterface.Setup(this);
-        	ContactInformationProviderNativeInterface.Setup(this);
             WebViewNativeInterface.Setup(this);
             CSPowerManager.Setup(this);
-            TwitterAuthenticationViewNativeInterface.Setup(this);
         }
         catch (Exception e)
         {
@@ -186,17 +185,8 @@ public class CSActivity extends Activity
 	 */
     @Override public void onBackPressed() 
     {
-    	//create the task to be run on the rendering thread
-		Runnable task = new Runnable()
-		{
-			@Override public void run() 
-			{
-				//TODO: Handle back button
-			}
-		};
-		
-		//run the task.
-		m_surface.queueEvent(task);
+    	DeviceButtonNativeInterface nativeInterface = (DeviceButtonNativeInterface)CSApplication.get().getSystem(DeviceButtonNativeInterface.InterfaceID);
+    	nativeInterface.onTriggered(DeviceButton.k_backButton);
     }
 	/**
 	 * @author I Copland

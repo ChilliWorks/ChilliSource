@@ -13,6 +13,8 @@
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
+#include <unordered_map>
+
 namespace ChilliSource
 {
 	namespace Rendering
@@ -164,7 +166,7 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<in_meshDesc.m_skeletonDesc.m_jointIndices.size(); ++i)
                     {
-                        ChilliSource::Core::Matrix4x4 IBPMat;
+                        ChilliSource::Core::Matrix4 IBPMat;
                         ReadBlock<f32>(in_meshStream, 16, IBPMat.m);
                         out_subMeshDesc.mInverseBindPoseMatrices.push_back(IBPMat);
                     }
@@ -455,7 +457,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void CSModelProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
+		void CSModelProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
 		{
 			MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
 			
@@ -471,7 +473,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void CSModelProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+		void CSModelProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
             CS_ASSERT(in_delegate != nullptr, "Cannot load mesh async with null delegate");
             

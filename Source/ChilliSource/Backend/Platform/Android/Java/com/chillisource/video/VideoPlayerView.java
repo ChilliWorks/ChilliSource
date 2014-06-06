@@ -47,6 +47,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	//------------------------------------------------------------------------
 	/// Constructor
 	//------------------------------------------------------------------------
+	@SuppressWarnings("deprecation")
 	public VideoPlayerView(Context inContext, boolean inbInAPK, String instrFilename, boolean inbCanDismissWithTap, int indwSeekPosition) 
 	{
 		super(inContext);
@@ -180,6 +181,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	/// Called once the video is prepared. This will start the video
 	/// playing and call OnVideoStarted.
 	//--------------------------------------------------------------
+	@SuppressWarnings("deprecation")
 	@Override public synchronized void onPrepared(MediaPlayer inMediaPlayer) 
 	{
 		if (mMediaPlayer == inMediaPlayer)

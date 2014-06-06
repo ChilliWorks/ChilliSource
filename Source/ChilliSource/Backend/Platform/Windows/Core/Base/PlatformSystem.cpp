@@ -1,18 +1,41 @@
 //
 //  PlatformSystem.cpp
 //  Chilli Source
-//
 //  Created by Scott Downie on 24/11/2010.
-//  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
-#define WIN32_LEAN_AND_MEAN
+#ifdef CS_TARGETPLATFORM_WINDOWS
 
 #include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
+#include <ChilliSource/Core/Base/AppConfig.h>
+#include <ChilliSource/Core/Base/Application.h>
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 //As the opengl classes need to include glfw.h, they need to be included after windows.h to avoid macro redefinitions.
@@ -20,35 +43,43 @@
 
 namespace ChilliSource 
 {
-	//This is global as LARGE_INTEGER is defined in windows.h. Including windows.h in PlatformSystemWindows.h will cause compiler errors
-	//in FileSystemWindows.h
-	LARGE_INTEGER gFrequency;
-
 	namespace Windows
 	{
+		namespace
+		{
+			//This is global as LARGE_INTEGER is defined in windows.h. Including windows.h in 
+			//PlatformSystem.h will cause compiler errors in FileSystem.h
+			LARGE_INTEGER g_frequency;
+		}
+
+		CS_DEFINE_NAMEDTYPE(PlatformSystem);
 		//-----------------------------------------
 		//-----------------------------------------
 		PlatformSystem::PlatformSystem() 
-		: m_isRunning(true), m_isSuspended(false), m_appStartTime(0), m_appPreviousTime(0.0)
+			: m_isSuspended(false), m_isFocused(false), m_appStartTime(0), m_appPreviousTime(0.0)
 		{
-		}
-		//-----------------------------------------
-		//-----------------------------------------
-		void PlatformSystem::Init()
-		{
-			QueryPerformanceFrequency(&gFrequency);
+			QueryPerformanceFrequency(&g_frequency);
 
 			GLFWManager::Create();
-
-			GLFWManager::Get()->Init(960, 640, "ChilliSource");
+			GLFWManager::Get()->Init(960, 640);
 
 			//Register callbacks
 			GLFWManager::Get()->SetWindowFocusDelegate((GLFWwindowfocusfun)&PlatformSystem::OnWindowFocusChanged);
-			GLFWManager::Get()->SetWindowSizeDelegate((GLFWwindowsizefun)&PlatformSystem::OnWindowResized);
 			GLFWManager::Get()->SetWindowCloseDelegate((GLFWwindowclosefun)&PlatformSystem::OnWindowClosed);
 
-			Core::Application::Get()->Resume();
-			Core::Application::Get()->Foreground();
+			//Create the GL context
+			GLenum GlewError = glewInit();
+			if (GLEW_OK != GlewError)
+			{
+				//Problem: glewInit failed, something is seriously wrong.
+				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
+			}
+		}
+		//--------------------------------------------------
+		//--------------------------------------------------
+		bool PlatformSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+		{
+			return (Core::PlatformSystem::InterfaceID == in_interfaceId || PlatformSystem::InterfaceID == in_interfaceId);
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -57,145 +88,86 @@ namespace ChilliSource
 			in_application->CreateSystem<OpenGL::GLSLShaderProvider>();
 			in_application->CreateSystem<OpenGL::TextureUnitSystem>();
 		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		void PlatformSystem::PostCreateSystems()
+		//-----------------------------------------
+		//-----------------------------------------
+		void PlatformSystem::OnResume()
 		{
-
+			m_isSuspended = false;
+		}
+		//-----------------------------------------
+		//-----------------------------------------
+		void PlatformSystem::OnForeground()
+		{
+			m_isFocused = true;
 		}
 		//-----------------------------------------
 		//-----------------------------------------
 		void PlatformSystem::Run()
 		{
+			GLFWManager::Get()->SetWindowTitle(Core::Application::Get()->GetAppConfig()->GetDisplayableName());
+
+			Core::Application::Get()->Resume();
+			Core::Application::Get()->Foreground();
+
 			m_appStartTime = (u64)GLFWManager::Get()->GetTime();
 
-			while (m_isRunning)
+			while (GLFWManager::Get() && GLFWManager::Get()->IsWindowAlive() == true)
 			{
-				if(!m_isSuspended)
+				if (!m_isSuspended)
+				{
+					GLFWManager::Get()->PollEvents();
+				}
+				if (!m_isSuspended)
 				{
 					f64 appCurrentTime = GLFWManager::Get()->GetTime();
 
 					f32 deltaTime = (f32)(appCurrentTime - m_appPreviousTime);
 					u64 uddwAppRunningTime = ((u64)m_appPreviousTime - m_appStartTime);
-
-					GLFWManager::Get()->PollEvents();
-					Core::Application::Get()->Update(deltaTime, uddwAppRunningTime);
-
 					m_appPreviousTime = appCurrentTime;
+
+					Core::Application::Get()->Update(deltaTime, uddwAppRunningTime);
+					Core::Application::Get()->Render();
 				}
 			}
 		}
 		//-----------------------------------------
 		//-----------------------------------------
-		void PlatformSystem::SetUpdaterActive(bool inbIsActive)
+		void PlatformSystem::OnBackground()
 		{
-			m_isSuspended = !inbIsActive;
+			m_isFocused = false;
+		}
+		//-----------------------------------------
+		//-----------------------------------------
+		void PlatformSystem::OnSuspend()
+		{
+			m_isSuspended = true;
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void PlatformSystem::SetPreferredFPS(u32 in_fps)
+		{
+			GLFWManager::Get()->SetPreferredFPS(in_fps);
 		}
 		//--------------------------------------------
 		//--------------------------------------------
-		void PlatformSystem::TerminateUpdater()
+		void PlatformSystem::Quit()
 		{
-			m_isRunning = false;
-		}
-		//---------------------------------------------
-		//---------------------------------------------
-		Core::Vector2 PlatformSystem::GetScreenDimensions() const
-		{
-			Core::Vector2 result;
-
-			s32 width, height = 0;
-			GLFWManager::Get()->GetWindowSize(&width, &height);
-
-			result.x = (f32)width;
-			result.y = (f32)height;
-
-			return result;
-		}
-		//------------------------------------------------
-		//------------------------------------------------
-		std::string PlatformSystem::GetOSVersion() const
-		{
-			OSVERSIONINFOEX osvi;
-			ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX)); osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-			GetVersionEx((OSVERSIONINFO*) &osvi);
-			return std::string(Core::ToString((u32)osvi.dwMajorVersion) + "." + Core::ToString((u32)osvi.dwMinorVersion));
-		}
-		//------------------------------------------------
-		//------------------------------------------------
-		Core::Locale PlatformSystem::GetLocale() const
-		{
-			wchar_t localeName[LOCALE_NAME_MAX_LENGTH]={0};
-
-			if(GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t)))
+			if(m_isFocused == true)
 			{
-				if(wcscmp(localeName, L"en") == 0)	return Core::Locale("en");
-				if(wcscmp(localeName, L"fr") == 0)	return Core::Locale("fr");
-				if(wcscmp(localeName, L"it") == 0)  return Core::Locale("it");
-				if(wcscmp(localeName, L"de") == 0)  return Core::Locale("de");
-				if(wcscmp(localeName, L"es") == 0)  return Core::Locale("es");
-				if(wcscmp(localeName, L"jp") == 0)  return Core::Locale("jp");
+				Core::Application::Get()->Background();
+			}
+			if(m_isSuspended == false)
+			{
+				Core::Application::Get()->Suspend();
 			}
 
-			//Just default to english
-			return Core::Locale("en");
-		}
-		//------------------------------------------------
-		//------------------------------------------------
-		std::string PlatformSystem::GetDeviceModelName() const
-		{
-			return "Windows";
-		}
-		//------------------------------------------------
-		//------------------------------------------------
-		std::string PlatformSystem::GetDeviceModelTypeName() const
-		{
-			return "PC";
-		}
-		//------------------------------------------------
-		//------------------------------------------------
-		std::string PlatformSystem::GetDeviceManufacturerName() const
-		{
-			return "Microsoft";
-		}
-		//------------------------------------------------
-		//------------------------------------------------
-		Core::Locale PlatformSystem::GetLanguage() const
-		{
-			wchar_t localeName[LOCALE_NAME_MAX_LENGTH]={0};
-
-			if(GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t)))
-			{
-				if(wcscmp(localeName, L"en") == 0)	return Core::Locale("en");
-				if(wcscmp(localeName, L"fr") == 0)	return Core::Locale("fr");
-				if(wcscmp(localeName, L"it") == 0)  return Core::Locale("it");
-				if(wcscmp(localeName, L"de") == 0)  return Core::Locale("de");
-				if(wcscmp(localeName, L"es") == 0)  return Core::Locale("es");
-				if(wcscmp(localeName, L"jp") == 0)  return Core::Locale("jp");
-			}
-
-			//Just default to english
-			return Core::Locale("en");
+			Core::Application::Get()->Destroy();
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		f32 PlatformSystem::GetScreenDensity() const
+		std::string PlatformSystem::GetAppVersion() const
 		{
-			return 1.0f;
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		std::string PlatformSystem::GetDeviceID()
-		{
-			CS_LOG_ERROR("PlatformSystem::GetDeviceID() has not been implemented!");
-			return "FAKE ID";
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		u32 PlatformSystem::GetNumberOfCPUCores() const
-		{
-			SYSTEM_INFO SysInfo;
-			GetSystemInfo(&SysInfo);
-			return SysInfo.dwNumberOfProcessors;
+			return ""; 
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
@@ -203,21 +175,13 @@ namespace ChilliSource
 		{
 			LARGE_INTEGER currentTime;
             QueryPerformanceCounter(&currentTime);
-            return (u64)((currentTime.QuadPart) * 1000.0 / gFrequency.QuadPart);
+			return (u64)((currentTime.QuadPart) * 1000.0 / g_frequency.QuadPart);
 		}
 		//---GLFW Delegates
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void PlatformSystem::OnWindowResized(GLFWwindow* in_window, s32 in_width, s32 in_height)
-		{
-			Core::Application::Get()->ScreenResized((u32)in_width, (u32)in_height);
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
 		void PlatformSystem::OnWindowClosed(GLFWwindow* in_window)
 		{
-			Core::Application::Get()->Background();
-			Core::Application::Get()->Suspend();
 			Core::Application::Get()->Quit();
 		}
 		//-------------------------------------------------
@@ -241,3 +205,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

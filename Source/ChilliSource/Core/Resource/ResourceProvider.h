@@ -85,23 +85,39 @@ namespace ChilliSource
             ///
             /// @param The storage location.
             /// @param The filepath.
+            /// @param Options to customise the creation
             /// @param Delegate to callback on completion either success or failure
             /// @param [Out] The output resource.
             //----------------------------------------------------
-			virtual void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceSPtr& out_resource) = 0;
+			virtual void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) = 0;
             //----------------------------------------------------
             /// Creates a new resource from file asynchronously.
-            /// The resource will be returned immediately but
-            /// cannot be used until the loaded flag is set. This
-            /// can be queried using IsLoaded() on the resource.
+            /// Check the load state on the resource for success
+			/// or failure
             ///
             /// @author S Downie
             ///
             /// @param The storage location.
             /// @param The filepath.
+            /// @param Options to customise the creation
+			/// @param Completion delegate
             /// @param [Out] The output resource.
             //----------------------------------------------------
-			virtual void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) = 0;
+			virtual void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) = 0;
+            //----------------------------------------------------
+            /// Options can be used to customise the loading
+            /// of resources. Not all resource will require
+            /// custom options so this function will return null.
+            ///
+            /// Default options are required for resources
+            /// that use options in order to make options optional
+            /// but ensure resource pool cache is correct
+            ///
+            /// @author S Downie
+            ///
+            /// @retrun Default options (null)
+            //----------------------------------------------------
+            virtual IResourceOptionsBaseCSPtr GetDefaultOptions() const;
             //----------------------------------------------------
             /// Destructor.
             ///

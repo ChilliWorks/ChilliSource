@@ -32,12 +32,15 @@
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureResourceOptions.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
         CS_DEFINE_NAMEDTYPE(TextureProvider);
+        
+        const Core::IResourceOptionsBaseCSPtr TextureProvider::s_defaultOptions(std::make_shared<TextureResourceOptions>());
         
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -53,7 +56,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void TextureProvider::OnInit()
+        void TextureProvider::PostCreate()
         {
             std::vector<Core::ResourceProvider*> resourceProviders;
             Core::Application::Get()->GetSystems(resourceProviders);
@@ -86,23 +89,31 @@ namespace ChilliSource
             
 			return false;
 		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::IResourceOptionsBaseCSPtr TextureProvider::GetDefaultOptions() const
+        {
+            return s_defaultOptions;
+        }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void TextureProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceSPtr& out_resource)
+		void TextureProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
 		{
-            LoadTexture(in_location, in_filePath, nullptr, out_resource);
+            LoadTexture(in_location, in_filePath, in_options, nullptr, out_resource);
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void TextureProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+		void TextureProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
-			auto task = std::bind(&TextureProvider::LoadTexture, this, in_location, in_filePath, in_delegate, out_resource);
+			auto task = std::bind(&TextureProvider::LoadTexture, this, in_location, in_filePath, in_options, in_delegate, out_resource);
             Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void TextureProvider::LoadTexture(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+		void TextureProvider::LoadTexture(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
+            CS_ASSERT(in_options != nullptr, "Options for texture load cannot be null");
+            
             std::string fileName;
             std::string fileExtension;
             Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
@@ -129,7 +140,7 @@ namespace ChilliSource
             }
             
             Core::ResourceSPtr imageResource(Core::Image::Create());
-            imageProvider->CreateResourceFromFile(in_location, in_filePath, imageResource);
+            imageProvider->CreateResourceFromFile(in_location, in_filePath, nullptr, imageResource);
             Core::ImageSPtr image(std::static_pointer_cast<Core::Image>(imageResource));
             
             if(image->GetLoadState() == Core::Resource::LoadState::k_failed)
@@ -152,12 +163,15 @@ namespace ChilliSource
                 desc.m_compression = image->GetCompression();
                 desc.m_dataSize = image->GetDataSize();
                 Texture* texture = (Texture*)out_resource.get();
-                texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()));
+                const TextureResourceOptions* options = (const TextureResourceOptions*)in_options.get();
+                texture->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
+                texture->SetFilterMode(options->GetFilterMode());
+                texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled());
                 out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
             }
             else
             {
-                auto task([image, in_delegate, out_resource]()
+                auto task([image, in_options, in_delegate, out_resource]()
                 {
                     Texture::Descriptor desc;
                     desc.m_width = image->GetWidth();
@@ -166,19 +180,15 @@ namespace ChilliSource
                     desc.m_compression = image->GetCompression();
                     desc.m_dataSize = image->GetDataSize();
                     Texture* texture = (Texture*)out_resource.get();
-                    texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()));
+                    const TextureResourceOptions* options = (const TextureResourceOptions*)in_options.get();
+                    texture->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
+                    texture->SetFilterMode(options->GetFilterMode());
+                    texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled());
                     out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
                     in_delegate(out_resource);
                 });
                 Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
             }
-        }
-        //----------------------------------------------------------------------------
-        //----------------------------------------------------------------------------
-        void TextureProvider::OnDestroy()
-        {
-            m_imageProviders.clear();
-            m_imageProviders.shrink_to_fit();
         }
 	}
 }

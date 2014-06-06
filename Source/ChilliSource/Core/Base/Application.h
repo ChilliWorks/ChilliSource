@@ -1,20 +1,39 @@
 //
 //  Application.h
 //  Chilli Source
+//  Created by Scott Downie on 23/09/2010.
 //
-//  Created by S Downie on 23/09/2010.
-//  Copyright 2010 Tag Games. All rights reserved.
+//  The MIT License (MIT)
 //
-
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #ifndef _CHILLISOURCE_CORE_BASE_APPLICATION_H_
 #define _CHILLISOURCE_CORE_BASE_APPLICATION_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/State/StateManager.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 #include <limits>
 
@@ -166,33 +185,6 @@ namespace ChilliSource
             /// @author S Downie.
             //-----------------------------------------------------
             void Quit();
-            //-----------------------------------------------------
-			/// Returns the default font described in the App.config
-            /// file.
-			///
-            /// @author S Downie.
-            ///
-            /// @return The default font.
-            //-----------------------------------------------------
-            const Rendering::FontCSPtr& GetDefaultFont() const;
-            //-----------------------------------------------------
-			/// Returns the default mesh described in the App.config
-            /// file.
-            ///
-            /// @author S Downie.
-			///
-            /// @return The default mesh.
-            //-----------------------------------------------------
-            const Rendering::MeshCSPtr& GetDefaultMesh() const;
-            //-----------------------------------------------------
-			/// Returns the default material described in the
-            /// App.config file.
-            ///
-            /// @author S Downie.
-			///
-            /// @return The default material.
-            //-----------------------------------------------------
-            const Rendering::MaterialCSPtr& GetDefaultMaterial() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the state manager.
             ///
@@ -213,7 +205,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			inline Rendering::Renderer* GetRenderer()
             {
-                return m_renderer.get();
+                return m_renderer;
             }
 			//-----------------------------------------------------
 			/// Returns a pointer to the render system.
@@ -225,17 +217,6 @@ namespace ChilliSource
 			inline Rendering::RenderSystem* GetRenderSystem()
             {
                 return m_renderSystem;
-            }
-            //-----------------------------------------------------
-			/// Returns a pointer to the platform system.
-            ///
-            /// @author S Downie.
-			///
-            /// @return Pointer to the platform system
-            //-----------------------------------------------------
-			inline PlatformSystem* GetPlatformSystem()
-            {
-                return m_platformSystem.get();
             }
 			//-----------------------------------------------------
 			/// Returns a pointer to the file system.
@@ -270,6 +251,30 @@ namespace ChilliSource
             {
                 return m_resourcePool;
             }
+            //-----------------------------------------------------
+            /// @author I Copland
+			///
+			/// @return A pointer to the App Config.
+			//-----------------------------------------------------
+			inline AppConfig* GetAppConfig()
+            {
+                return m_appConfig;
+            }
+#ifdef CS_ENABLE_DEBUGSTATS
+            //-----------------------------------------------------
+			/// Returns a pointer to the debug stats system. This
+            /// is only available when the debug stats proprocessor
+            /// flag CS_ENABLE_DEBUGSTATS is defined.
+            ///
+            /// @author I Copland
+			///
+			/// @return Pointer to the debug stats system.
+			//-----------------------------------------------------
+			inline Debugging::DebugStats* GetDebugStats()
+            {
+                return m_debugStats;
+            }
+#endif
             //----------------------------------------------------
 			/// Initialises the application and kicks off the update
             /// loop. This should not be called by a users application.
@@ -304,25 +309,11 @@ namespace ChilliSource
 			//----------------------------------------------------
 			void Update(f32 in_deltaTime, TimeIntervalSecs in_timestamp);
             //----------------------------------------------------
-			/// Triggered on receiving a "orientation changed"
-            /// event. Used to tell the camera and input to rotate.
-            /// This should not be called by a users application.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The new orientation.
-			//----------------------------------------------------
-			void ScreenChangedOrientation(ScreenOrientation in_orientation);
-			//----------------------------------------------------
-			/// Triggered on receiving a "screen resized" event.
-            /// This should not be called by a users application.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The new width.
-            /// @param The new height.
-			//----------------------------------------------------
-			void ScreenResized(u32 in_width, u32 in_height);
+            /// The main draw loop of the application that will
+            /// render to the screen. This should not be called
+            /// by a users application.
+            //----------------------------------------------------
+            void Render();
 			//----------------------------------------------------
 			/// Triggered on receiving a "application memory warning"
             /// event. This will notify active resource managers to
@@ -332,15 +323,6 @@ namespace ChilliSource
             /// @author S Downie
 			//----------------------------------------------------
 			void ApplicationMemoryWarning();
-            //----------------------------------------------------
-			/// Triggered on receiving a "go back" event. This is
-            /// typically caused by pressing a physical back button
-            /// on the device, For example the Android back button.
-            /// This should not be called by a users application.
-            ///
-            /// @author I Copland
-			//----------------------------------------------------
-			void GoBack();
             //----------------------------------------------------
 			/// Triggered when the application is pushed back from
             /// the front of the view stack. This should
@@ -433,13 +415,6 @@ namespace ChilliSource
 			//------------------------------------------------------
 			void PostCreateSystems();
             //------------------------------------------------------
-            /// Open the app config file and load any of the specified
-            /// resources to act as the defaults.
-            ///
-            /// @author S Downie
-            //------------------------------------------------------
-            void LoadDefaultResources();
-            //------------------------------------------------------
             /// Depedending on the device decide which folders
             /// resources should be loaded from.
             ///
@@ -472,46 +447,34 @@ namespace ChilliSource
             /// @author S Downie
             //---------------------------------------------------
             void OnForeground();
-            //------------------------------------------------------
-			/// Tell the active camera to roate its view and if we
-            /// are using touch input we must rotate the input
-            /// co-ordinates.
-            ///
-            /// @author S Downie
-            ///
-			/// @param Screen orientation flag
-			//------------------------------------------------------
-			void SetOrientation(ScreenOrientation inOrientation);
 
         private:
             std::vector<AppSystemUPtr> m_systems;
             
-            ResourcePool* m_resourcePool;
-			StateManager* m_stateManager;
-			TaskScheduler* m_taskScheduler;
-			Rendering::RendererUPtr m_renderer;
-            Rendering::RenderSystem* m_renderSystem;
-            PlatformSystemUPtr m_platformSystem;
-            FileSystem* m_fileSystem;
-            Input::PointerSystem* m_pointerSystem;
-
-			ScreenOrientation m_defaultOrientation;
+            ResourcePool* m_resourcePool = nullptr;
+			StateManager* m_stateManager = nullptr;
+			TaskScheduler* m_taskScheduler = nullptr;
+			Rendering::Renderer* m_renderer = nullptr;
+            Rendering::RenderSystem* m_renderSystem = nullptr;
+            PlatformSystem* m_platformSystem = nullptr;
+            FileSystem* m_fileSystem = nullptr;
+            Input::PointerSystem* m_pointerSystem = nullptr;
+            AppConfig* m_appConfig = nullptr;
             
-            ComponentFactoryDispenser* m_componentFactoryDispenser;
-
-			TimeIntervalSecs m_currentAppTime;
-            Rendering::FontCSPtr m_defaultFont;
-            Rendering::MeshCSPtr m_defaultMesh;
-            Rendering::MaterialCSPtr m_defaultMaterial;
+#ifdef CS_ENABLE_DEBUGSTATS
+            Debugging::DebugStats* m_debugStats = nullptr;
+#endif
+            
+			TimeIntervalSecs m_currentAppTime = 0;
 			f32 m_updateInterval;
-            f32 m_updateSpeed;
+            f32 m_updateSpeed = 1.0f;
+            f32 m_updateIntervalRemainder = 0.0f;
             
-            f32 m_updateIntervalRemainder;
-            bool m_shouldNotifyConnectionsResumeEvent;
-            bool m_shouldNotifyConnectionsForegroundEvent;
-            bool m_isFirstFrame;
-            bool m_isSuspending;
-            bool m_isSystemCreationAllowed;
+            bool m_shouldNotifyConnectionsResumeEvent = false;
+            bool m_shouldNotifyConnectionsForegroundEvent = false;
+            bool m_isFirstFrame = true;
+            bool m_isSuspending = false;
+            bool m_isSystemCreationAllowed = false;
             
             static Application* s_application;
 		};
@@ -559,5 +522,15 @@ namespace ChilliSource
         }
 	}
 }
+
+//--------------------------------------------------------
+/// Factory method that must be implemented by the
+/// the derived application.
+///
+/// @author S Downie
+///
+/// @return Instance of concrete CS application
+//--------------------------------------------------------
+ChilliSource::Core::Application* CreateApplication();
 
 #endif

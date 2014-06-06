@@ -1,18 +1,37 @@
-/*
-*  CameraComponent.cpp
-*  moFlo
-*
-*  Created by Scott Downie on 12/10/2010.
-*  Copyright 2010 Tag Games. All rights reserved.
-*
-*/
+//
+//  CameraComponent.cpp
+//  Chilli Source
+//  Created by Scott Downie on 12/10/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Entity/Entity.h>
-#include <ChilliSource/Core/Base/ApplicationEvents.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
 namespace ChilliSource
@@ -28,9 +47,19 @@ namespace ChilliSource
 		CameraComponent::CameraComponent(const CameraDescription &inCamDesc) 
 			: mDesc(inCamDesc), mbProjectionCacheValid(false)
 		{
-			EnableViewportRotationWithScreen(mDesc.bShouldRotateToScreen);
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            
 			EnableViewportResizeWithScreen(mDesc.bShouldResizeToScreen);
-			mDesc.IsOrthographic ? CalculateOrthographicMatrix() : CalculatePerspectiveMatrix();
+            
+            switch(mDesc.m_type)
+            {
+                case CameraType::k_orthographic:
+                    CalculateOrthographicMatrix();
+                    break;
+                case CameraType::k_perspective:
+                    CalculatePerspectiveMatrix();
+                    break;
+            }
 		}
 		//----------------------------------------------------------
 		/// Is A
@@ -69,9 +98,9 @@ namespace ChilliSource
 		//------------------------------------------------------
 		Core::Ray CameraComponent::Unproject(const Core::Vector2 &invScreenPos)
 		{
-            Core::Matrix4x4 matProj = (GetView() * GetProjection()).Inverse();
+            Core::Matrix4 matProj = Core::Matrix4::Inverse((GetView() * GetProjection()));
             
-            Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
+            Core::Vector2 vScreenSize = m_screen->GetResolution();
 			//Normalise the screen space co-ordinates into clip space
 			f32 nx = ((2.0f * (invScreenPos.x/vScreenSize.x)) - 1.0f);
 			f32 ny = ((2.0f * (invScreenPos.y/vScreenSize.y)) - 1.0f);
@@ -83,8 +112,11 @@ namespace ChilliSource
             
             Core::Ray cRay;
             
-            cRay.vOrigin = vNear/vNear.w;
-            cRay.vDirection = vFar/vFar.w - cRay.vOrigin;
+			vNear /= vNear.w;
+			cRay.vOrigin = Core::Vector3(vNear.x, vNear.y, vNear.z);
+
+			vFar /= vFar.w;
+			cRay.vDirection = Core::Vector3(vFar.x, vFar.y, vFar.z) - cRay.vOrigin;
             
             cRay.fLength = cRay.vDirection.Length();
             cRay.vDirection /= cRay.fLength;
@@ -100,10 +132,10 @@ namespace ChilliSource
 		Core::Vector2 CameraComponent::Project(const Core::Vector3 &invWorldPos)
 		{
 			//Convert the world space position to clip space
-			Core::Matrix4x4 matToClip = (GetView() * GetProjection());
+			Core::Matrix4 matToClip = (GetView() * GetProjection());
 			Core::Vector4 vScreenPos = Core::Vector4(invWorldPos, 1.0f) * matToClip;
 			
-            Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
+            Core::Vector2 vScreenSize = m_screen->GetResolution();
 			
 			// Normalize co-ordinates
 			vScreenPos.x = vScreenPos.x / vScreenPos.w;
@@ -114,28 +146,21 @@ namespace ChilliSource
 			vScreenPos.y = (vScreenSize.y * 0.5f)* vScreenPos.y + vScreenSize.y * 0.5f;
 
 			//Return 2D screen space co-ordinates
-			return (Core::Vector2)vScreenPos;
-		}
-		//----------------------------------------------------------
-		/// Use Orthographic View
-		///
-		/// Switch between ortho and perspective
-		/// @param On or off
-		//----------------------------------------------------------
-		void CameraComponent::UseOrthographicView(bool inbOrthoEnabled)
-		{
-			mDesc.IsOrthographic = inbOrthoEnabled;
-
-			mbProjectionCacheValid = false;
+			return Core::Vector2(vScreenPos.x, vScreenPos.y);
 		}
         //----------------------------------------------------------
-        /// Is Orthographic View
-        ///
-        /// @return On or off
         //----------------------------------------------------------
-        bool CameraComponent::IsOrthographicView() const
+        void CameraComponent::SetType(CameraType in_type)
         {
-            return mDesc.IsOrthographic;
+            mDesc.m_type = in_type;
+            
+            mbProjectionCacheValid = false;
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        CameraType CameraComponent::GetType() const
+        {
+            return mDesc.m_type;
         }
 		//----------------------------------------------------------
 		/// Set Viewport Size
@@ -175,7 +200,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::CalculatePerspectiveMatrix()
 		{
-			f32 Top = mDesc.fNearClipping * (f32)tanf(mDesc.fFOV * Core::MathUtils::kPI / 360.0f);
+			f32 Top = mDesc.fNearClipping * (f32)tanf(mDesc.fFOV * 0.5f * Core::MathUtils::kPI / 360.0f);
 			f32 Bottom = -Top;
 			f32 Left = Bottom * mDesc.fAspect;
 			f32 Right = Top * mDesc.fAspect;	
@@ -188,7 +213,7 @@ namespace ChilliSource
 			f32 F = (2.0f * mDesc.fNearClipping)/(Top - Bottom);
 			f32 G = (2.0f * mDesc.fNearClipping)/(Right - Left);
 
-			mmatProj = Core::Matrix4x4
+			mmatProj = Core::Matrix4
 				(
 				G, 0, 0, 0, 
 				0, F, 0, 0, 
@@ -205,30 +230,15 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::CalculateOrthographicMatrix()
 		{
-			mmatOrthoProj = Core::Matrix4x4::CreateOrthoMatrix(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
+			mmatOrthoProj = Core::Matrix4::CreateOrthographicProjectionRH(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
 			mbProjectionCacheValid = true;
-		}
-		//------------------------------------------------------
-		/// Set Viewport Orientation
-		///
-		/// Rotate the view matrix of this camera to match the 
-		/// screen orientation
-		/// @param Screen orientation flag
-		//------------------------------------------------------
-		void CameraComponent::SetViewportOrientation(Core::ScreenOrientation ineOrientation)
-		{
-			//Save the camera's new orientation
-			mViewOrientation = ineOrientation;
-
-			//Invalidate our view projection
-			mbProjectionCacheValid = false;
 		}
 		//------------------------------------------------------
 		/// Get Orthographic Projection 
 		///
 		/// @return Orthographic projection matrix
 		//------------------------------------------------------
-		const Core::Matrix4x4& CameraComponent::GetOrthoProjection() const
+		const Core::Matrix4& CameraComponent::GetOrthoProjection() const
 		{
 			return mmatOrthoProj;
 		}
@@ -240,7 +250,7 @@ namespace ChilliSource
 		/// 
 		/// @return Projection matrix
 		//------------------------------------------------------
-		const Core::Matrix4x4& CameraComponent::GetProjection() 
+		const Core::Matrix4& CameraComponent::GetProjection() 
 		{
 			if(!mbProjectionCacheValid)
 			{
@@ -248,14 +258,16 @@ namespace ChilliSource
 				//If we are using a perspective matrix we will also
 				//need the orthographic matrix for screen space overlays
 				CalculateOrthographicMatrix();
-				if(mDesc.IsOrthographic) 
-				{
-					mmatProj = mmatOrthoProj;
-				} 
-				else 
-				{
-					CalculatePerspectiveMatrix();
-				}
+                
+                switch(mDesc.m_type)
+                {
+                    case CameraType::k_orthographic:
+                        mmatProj = mmatOrthoProj;
+                        break;
+                    case CameraType::k_perspective:
+                        CalculatePerspectiveMatrix();
+                        break;
+                }
 			}
 
 			return mmatProj;
@@ -265,11 +277,11 @@ namespace ChilliSource
 		///
 		/// @return View matrix
 		//------------------------------------------------------
-		const Core::Matrix4x4& CameraComponent::GetView()
+		const Core::Matrix4& CameraComponent::GetView()
 		{
 			if(GetEntity())
 			{
-				mmatView = GetEntity()->GetTransform().GetWorldTransform().Inverse();
+				mmatView = Core::Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
 			}
 
 			return mmatView;
@@ -290,7 +302,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::UpdateFrustum()
 		{
-			Core::Matrix4x4::Multiply(&GetView(), &GetProjection(), &mmatViewProj);
+			mmatViewProj = GetView() * GetProjection();
 
 			//Re-calculate the clip planes
 			mFrustum.CalculateClippingPlanes(mmatViewProj);
@@ -301,10 +313,10 @@ namespace ChilliSource
 		/// Orientate the given matrix to face the cameras
 		/// view vector
 		//------------------------------------------------------
-		void CameraComponent::Billboard(const Core::Matrix4x4& inmatBillboarded, Core::Matrix4x4& outmatBillboarded)
+		void CameraComponent::Billboard(const Core::Matrix4& inmatBillboarded, Core::Matrix4& outmatBillboarded)
 		{
-            const Core::Matrix4x4 matView = GetView();
-            Core::Matrix4x4::Multiply(&inmatBillboarded, &matView, &outmatBillboarded);
+            const Core::Matrix4 matView = GetView();
+			outmatBillboarded = inmatBillboarded * matView;
             
 			outmatBillboarded.m[12] = inmatBillboarded.m[12];
 			outmatBillboarded.m[13] = inmatBillboarded.m[13];
@@ -451,7 +463,15 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         ICullingPredicateSPtr CameraComponent::GetCullingPredicate() const
         {
-            return IsOrthographicView() ? mpOrthographicCulling : mpPerspectiveCulling;
+            switch(mDesc.m_type)
+            {
+                case CameraType::k_orthographic:
+                    return mpOrthographicCulling;
+                case CameraType::k_perspective:
+                    return mpPerspectiveCulling;
+            }
+            
+            return nullptr;
         }
         //--------------------------------------------------------------------------------------------------
         /// Get Perspective Culling Predicate
@@ -472,16 +492,6 @@ namespace ChilliSource
             mpOrthographicCulling = inpPredicate;
         }        
 		//------------------------------------------------------
-		/// Enable Viewport Rotation with Screen
-		///
-		/// @param Whether the viewport should rotate when
-		/// the screen rotates
-		//-----------------------------------------------------
-		void CameraComponent::EnableViewportRotationWithScreen(bool inbEnable)
-		{
-			m_screenOrientationChangedConnection = inbEnable ? Core::ApplicationEvents::GetScreenOrientationChangedEvent().OpenConnection(Core::MakeDelegate(this, &CameraComponent::SetViewportOrientation)) : nullptr;
-		}
-		//------------------------------------------------------
 		/// Enable Viewport Resize with Screen
 		///
 		/// @param Whether the viewport should resize when
@@ -489,9 +499,22 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void CameraComponent::EnableViewportResizeWithScreen(bool inbEnable)
 		{
-            m_screenResizedConnection = inbEnable ? Core::ApplicationEvents::GetScreenResizedEvent().OpenConnection(Core::MakeDelegate<CameraComponent, CameraComponent, void, u32, u32>(this, &CameraComponent::SetViewportSize))
-                                                             : nullptr;
+            if (inbEnable == true && m_screenResizedConnection == nullptr)
+            {
+                m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate<CameraComponent, CameraComponent, void, const Core::Vector2&>(this, &CameraComponent::OnResolutionChanged));
+            }
+            else if (inbEnable == false && m_screenResizedConnection != nullptr)
+            {
+                m_screenResizedConnection = nullptr;
+            }
 		}
+        //------------------------------------------------------
+        //------------------------------------------------------
+        void CameraComponent::OnResolutionChanged(const Core::Vector2& in_resolution)
+        {
+            SetViewportSize(in_resolution);
+            SetAspectRatio(in_resolution.x / in_resolution.y);
+        }
 		//-----------------------------------------------------
 		/// Destructor
 		///
@@ -501,10 +524,6 @@ namespace ChilliSource
 			if(mDesc.bShouldResizeToScreen)
 			{
 				EnableViewportResizeWithScreen(false);
-			}
-			if(mDesc.bShouldRotateToScreen)
-			{
-				EnableViewportRotationWithScreen(false);
 			}
 		}
 	}

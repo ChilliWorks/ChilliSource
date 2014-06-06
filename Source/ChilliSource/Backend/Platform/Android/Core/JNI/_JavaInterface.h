@@ -11,12 +11,15 @@
  * Copyright �2010 Tag Games Limited - All rights reserved
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE__JAVAINTERFACE_
 #define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE__JAVAINTERFACE_
 
+#include <ChilliSource/ChilliSource.h>
+
 #include <jni.h>
 #include <map>
-#include <ChilliSource/Core/String/UTF8String.h>
 
 namespace ChilliSource
 {
@@ -68,15 +71,6 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------
 			static jstring CreateJStringFromSTDString(std::string instrString);
 			//--------------------------------------------------------------------------------------
-			/// Create Jstring From UTF8String
-			///
-			/// Converts a UTF8String into a JString.
-			///
-			/// @param the UTF8String
-			/// @return the new java string
-			//--------------------------------------------------------------------------------------
-			static jstring CreateJStringFromUTF8String(Core::UTF8String instrString);
-			//--------------------------------------------------------------------------------------
 			/// Create STDString From JString
 			///
 			/// Takes a java string and converts it to a std::string
@@ -94,15 +88,6 @@ namespace ChilliSource
 			/// @return the new std::string
 			//--------------------------------------------------------------------------------------
 			static std::string CreateSTDStringFromJByteArray(jbyteArray injabyArray, int indwLength);
-			//--------------------------------------------------------------------------------------
-			/// Create UTF8String From JString
-			///
-			/// Takes a java string and converts it to a UTF8String
-			///
-			/// @param the java string
-			/// @return the new UTF8String
-			//--------------------------------------------------------------------------------------
-			static Core::UTF8String CreateUTF8StringFromJString(jstring injstrString);
 			//--------------------------------------------------------------------------------------
 			/// Get Int Element From JArray
 			///
@@ -132,5 +117,7 @@ namespace ChilliSource
 		};
 	}
 }
+
+#endif
 
 #endif

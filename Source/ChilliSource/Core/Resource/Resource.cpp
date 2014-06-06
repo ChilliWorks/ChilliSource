@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/Resource/Resource.h>
 
-#include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Core/File/StorageLocation.h>
 
 namespace ChilliSource
 {
@@ -67,6 +67,30 @@ namespace ChilliSource
 		{
 			return m_filePath;
 		}
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void Resource::SetId(ResourceId in_id)
+        {
+            m_id = in_id;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        Resource::ResourceId Resource::GetId() const
+        {
+            return m_id;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void Resource::SetOptions(const IResourceOptionsBaseCSPtr& in_options)
+        {
+            m_options = in_options;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        const IResourceOptionsBaseCSPtr& Resource::GetOptions() const
+        {
+            return m_options;
+        }
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void Resource::SetStorageLocation(StorageLocation in_location)

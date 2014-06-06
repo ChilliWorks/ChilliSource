@@ -4,6 +4,8 @@
  * Description: A interface class for
  */
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 //includes
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/_JavaInterface.h>
 
@@ -85,19 +87,6 @@ namespace ChilliSource
 			return nullptr;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Create JString From UTF8String
-		//--------------------------------------------------------------------------------------
-		jstring _IJavaInterface::CreateJStringFromUTF8String(Core::UTF8String instrString)
-		{
-			JNIEnv* pEnv = GetJNIEnvironmentPtr();
-			if (pEnv != nullptr)
-			{
-				jstring jstrNewString = pEnv->NewStringUTF(instrString.ToASCII().c_str());
-				return jstrNewString;
-			}
-			return nullptr;
-		}
-		//--------------------------------------------------------------------------------------
 		/// Create STDString From JString
 		//--------------------------------------------------------------------------------------
 		std::string _IJavaInterface::CreateSTDStringFromJString(jstring injstrString)
@@ -138,24 +127,6 @@ namespace ChilliSource
 			return "";
 		}
 		//--------------------------------------------------------------------------------------
-		/// Create UTF8String From JString
-		//--------------------------------------------------------------------------------------
-		Core::UTF8String _IJavaInterface::CreateUTF8StringFromJString(jstring injstrString)
-		{
-			JNIEnv* pEnv = GetJNIEnvironmentPtr();
-			if (pEnv != nullptr && injstrString != nullptr)
-			{
-				const char * cString = pEnv->GetStringUTFChars(injstrString, JNI_FALSE);
-				if (cString != nullptr)
-				{
-					Core::UTF8String utf8String = Core::UTF8String(cString);
-					pEnv->ReleaseStringUTFChars(injstrString, cString);
-					return utf8String;
-				}
-			}
-			return "";
-		}
-		//--------------------------------------------------------------------------------------
 		/// Get Int Element From JArray
 		//--------------------------------------------------------------------------------------
 		s32 _IJavaInterface::GetIntElementFromJArray(jintArray injadwArray, u32 inudwIndex)
@@ -176,3 +147,4 @@ namespace ChilliSource
 	}
 }
 
+#endif

@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_SOCIAL_COMMUNICATIONS_EMAILCOMPOSER_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_SOCIAL_COMMUNICATIONS_EMAILCOMPOSER_H_
 
@@ -63,13 +65,13 @@ namespace ChilliSource
 			///
 			/// @author S Hendrie
             ///
-            /// @param A list of recipients.
-            /// @param The subject.
-            /// @param The body of the email.
+            /// @param A list of recipients (UTF-8).
+            /// @param The subject (UTF-8).
+            /// @param The body of the email (UTF-8).
             /// @param The format of the body of the email.
             /// @param The callback describing the result of the email.
             //-------------------------------------------------------
-			void Present(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat, const SendResultDelegate& in_callback) override;
+			void Present(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat, const SendResultDelegate& in_callback) override;
 			//-------------------------------------------------------
 			/// Displays the email activity with the given recipients,
 			/// subject and contents, and adds a list of attachments
@@ -77,14 +79,14 @@ namespace ChilliSource
 			///
 			/// @author I Copland
 			///
-			/// @param A list of recipients.
-			/// @param The subject.
-			/// @param The body of the email.
+			/// @param A list of recipients (UTF-8).
+			/// @param The subject (UTF-8).
+			/// @param The body of the email (UTF-8).
             /// @param The format of the body of the email.
 			/// @param The attachment
 			/// @param The callback describing the result of the email.
 			//-------------------------------------------------------
-			void PresentWithAttachment(const std::vector<Core::UTF8String>& in_recipientAddresses, const Core::UTF8String& in_subject, const Core::UTF8String& in_contents, ContentFormat in_contentFormat,
+			void PresentWithAttachment(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat,
 					const Attachment& in_attachment, const SendResultDelegate& in_callback) override;
             //-------------------------------------------------------
             /// Dismisses the activity if it is currently displayed.
@@ -129,4 +131,7 @@ namespace ChilliSource
 
 	}
 }
+
+#endif
+
 #endif

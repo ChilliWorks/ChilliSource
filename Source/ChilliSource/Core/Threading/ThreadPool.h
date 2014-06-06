@@ -33,10 +33,8 @@
 #include <ChilliSource/Core/Container/WorkerQueue.h>
 
 #include <atomic>
-#include <condition_variable>
-#include <mutex>
 #include <thread>
-#include <queue>
+#include <vector>
 
 namespace ChilliSource
 {
@@ -97,8 +95,6 @@ namespace ChilliSource
             ThreadGroup m_threadGroup;
             TaskQueue m_tasks;
             
-            std::mutex m_taskMutex;
-            std::condition_variable m_awakeCondition;
             std::atomic<bool> m_isFinished;
         };
     }

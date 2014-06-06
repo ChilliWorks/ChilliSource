@@ -14,9 +14,9 @@
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
-#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
 
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
@@ -28,8 +28,6 @@ namespace ChilliSource
 	namespace Rendering
 	{
         CS_DEFINE_NAMEDTYPE(StaticMeshComponent);
-    
-        MaterialCSPtr StaticMeshComponent::mspShadowMapMaterial;
         
         StaticMeshComponent::StaticMeshComponent()
         : mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
@@ -56,7 +54,7 @@ namespace ChilliSource
                 
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
-                const Core::Matrix4x4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
+                const Core::Matrix4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
                 Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
                 Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
                 Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
@@ -296,14 +294,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Shadow Map
         //----------------------------------------------------------
-        void StaticMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam)
+        void StaticMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap)
 		{
-            if (mspShadowMapMaterial == nullptr)
-            {
-                mspShadowMapMaterial = Core::Application::Get()->GetSystem<MaterialFactory>()->CreateStaticDirectionalShadowMap("_StaticDirShadowMap");
-            }
-            
-			mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {mspShadowMapMaterial}, ShaderPass::k_ambient);
+			mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {in_staticShadowMap}, ShaderPass::k_ambient);
 		}
         //----------------------------------------------------
         //----------------------------------------------------

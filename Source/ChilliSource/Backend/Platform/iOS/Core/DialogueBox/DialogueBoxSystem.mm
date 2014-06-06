@@ -6,9 +6,10 @@
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_IOS
+
 #include <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxSystem.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxListener.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/Notification/ToastNotification.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
@@ -36,7 +37,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm)
+        void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
             NSString* title = [NSStringUtils newNSStringWithUTF8String:in_title];
             NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
@@ -56,7 +57,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm, const Core::UTF8String& in_cancel)
+        void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
             NSString* title = [NSStringUtils newNSStringWithUTF8String:in_title];
             NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
@@ -78,11 +79,11 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        void DialogueBoxSystem::MakeToast(const Core::UTF8String& in_text)
+        void DialogueBoxSystem::MakeToast(const std::string& in_text)
         {
             NSString* text = [NSStringUtils newNSStringWithUTF8String:in_text];
             ToastNotification* pToast = [[ToastNotification alloc] initWithMessage:text];
-            [[EAGLView sharedInstance] addSubview:pToast];
+            [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:pToast];
             [pToast animateIn];
             [text release];
         }
@@ -104,3 +105,5 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif

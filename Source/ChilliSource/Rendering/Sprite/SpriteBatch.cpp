@@ -8,10 +8,12 @@
  */
 
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
-#include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
+
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/ShaderPass.h>
 #include <ChilliSource/Rendering/Base/VertexLayouts.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
@@ -157,10 +159,8 @@ namespace ChilliSource
 			
                 //Tell the render system to draw the contents of the buffer
                 m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
-#ifdef CS_ENABLE_DEBUGSTATS
-                Debugging::DebugStats::AddToEvent("Verts", (inudwStride*2)/3);
-#endif
-                m_renderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::Matrix4x4::IDENTITY);
+
+                m_renderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::Matrix4::k_identity);
             }
 		}
         //------------------------------------------------------
@@ -178,10 +178,8 @@ namespace ChilliSource
                 
                 //Tell the render system to draw the contents of the buffer
                 m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
-#ifdef CS_ENABLE_DEBUGSTATS
-                Debugging::DebugStats::AddToEvent("Verts", (mpSpriteBuffer->GetIndexCount()*2)/3);
-#endif
-                m_renderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::Matrix4x4::IDENTITY);
+
+                m_renderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::Matrix4::k_identity);
             }
 		}
 		//------------------------------------------------------

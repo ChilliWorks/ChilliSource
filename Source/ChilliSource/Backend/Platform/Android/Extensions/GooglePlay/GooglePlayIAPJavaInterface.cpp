@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
 
 #include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPJavaInterface.h>
@@ -391,5 +393,7 @@ namespace ChilliSource
         }
 	}
 }
+
+#endif
 
 #endif

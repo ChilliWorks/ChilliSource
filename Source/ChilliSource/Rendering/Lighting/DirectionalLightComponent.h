@@ -1,11 +1,30 @@
-/*
- *  DirectionalLightComponent.h
- *  moFlo
- *
- *  Created by Scott Downie on 31/1/2014.
- *  Copyright 2014 Tag Games. All rights reserved.
- *
- */
+//
+//  DirectionalLightComponent.h
+//  Chilli Source
+//  Created by Scott Downie on 31/01/2014.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #ifndef _MOFLOW_RENDERING_COMPONENTS_DIRECTIONALLIGHTCOMPONENT_H_
 #define _MOFLOW_RENDERING_COMPONENTS_DIRECTIONALLIGHTCOMPONENT_H_
@@ -70,7 +89,7 @@ namespace ChilliSource
             ///
             /// @return Matrix to transform into light space
             //----------------------------------------------------------
-            const Core::Matrix4x4& GetLightMatrix() const override;
+            const Core::Matrix4& GetLightMatrix() const override;
             //----------------------------------------------------
 			/// Triggered when the component is attached to
 			/// an entity on the scene
@@ -111,12 +130,12 @@ namespace ChilliSource
             
         private:
             
-            Core::Matrix4x4 mmatProj;
+            Core::Matrix4 mmatProj;
             
             TextureSPtr mpShadowMap;
             TextureSPtr mpShadowMapDebug;
             
-            Core::ConnectionUPtr m_transformChangedConnection;
+            Core::EventConnectionUPtr m_transformChangedConnection;
             
             f32 mfShadowTolerance;
             

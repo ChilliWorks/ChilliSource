@@ -26,13 +26,6 @@ namespace ChilliSource
             k_bottom
         };
 		
-		enum class TextOverflowBehaviour
-		{
-            k_none,
-            k_clip,
-            k_follow
-		};
-		
         class Label : public GUIView
         {
         public:
@@ -44,27 +37,41 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// Set Text
             ///
-            /// @param Text string
+            /// @param Text string (UTF-8)
             //-------------------------------------------------------
-            virtual void SetText(const Core::UTF8String& instrText);
+            virtual void SetText(const std::string& instrText);
 			//-------------------------------------------------------
 			/// Get Text
 			///
-			/// @returnText string
+			/// @return Text string (UTF-8)
 			//-------------------------------------------------------
-			const Core::UTF8String& GetText() const;
+			const std::string& GetText() const;
+            //-------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Localised text resource used in conjunction with
+            /// id
+            //-------------------------------------------------------
+            void SetLocalisedText(const Core::LocalisedTextCSPtr& in_text);
+            //-------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Localised text resource used in conjunction with
+            /// id
+            //-------------------------------------------------------
+            const Core::LocalisedTextCSPtr& GetLocalisedText() const;
 			//-------------------------------------------------------
 			/// Set Text ID
 			///
 			/// @param Text string representing lookup ID
 			//-------------------------------------------------------
-			void SetTextID(const std::string& instrText);
+			void SetLocalisedTextID(const std::string& instrText);
 			//-------------------------------------------------------
 			/// Get Text ID
 			///
 			/// @return Text string representing lookup ID
 			//-------------------------------------------------------
-			const std::string& GetTextID() const;
+			const std::string& GetLocalisedTextID() const;
             //-------------------------------------------------------
             /// Set Font
             ///
@@ -115,20 +122,6 @@ namespace ChilliSource
 			/// @return The space left vertically between lines 
 			//-------------------------------------------------------
 			f32 GetLineSpacing() const;
-            //-------------------------------------------------------
-            /// Set Character Spacing
-            ///
-            /// Set the space left horizontally between letters 
-            ///
-            /// @param Absolute Scalar
-            //-------------------------------------------------------
-            void SetCharacterSpacing(f32 infSpacing);
-			//-------------------------------------------------------
-			/// Get Character Spacing
-			///
-			/// @return The space left horizontally between letters 
-			//-------------------------------------------------------
-			f32 GetCharacterSpacing() const;
             //-------------------------------------------------------
             /// Set Text Scale
             ///
@@ -202,12 +195,12 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			bool IsBackgroundEnabled() const;
 			//-----------------------------------------------------------
-			/// On Screen Orientation Changed
+			/// On Screen Resolution Changed
 			///
-			/// Triggered if the screen orientation changes so we can
+			/// Triggered if the screen resolution changes so we can
 			/// resize ourself
 			//-----------------------------------------------------------
-			void OnScreenOrientationChanged();
+			void OnScreenResolutionChanged();
             //-------------------------------------------------------
             /// Draw
             ///
@@ -331,9 +324,11 @@ namespace ChilliSource
             
         protected:
             
-            Rendering::CanvasRenderer::CharacterList mCachedChars;
+            std::vector<Rendering::CanvasRenderer::DisplayCharacterInfo> mCachedChars;
             
             Rendering::TextureCSPtr mpWhiteTex;
+            
+            Core::LocalisedTextCSPtr m_localisedText;
             
             static f32 mfGlobalTextScale;
             
@@ -349,11 +344,10 @@ namespace ChilliSource
 			void OnTransformChanged(u32 inudwInvalidFlags);
             
 			//---Properties
-			DECLARE_PROPERTY_A(Core::UTF8String, Text, SetText, GetText);
-			DECLARE_PROPERTY_A(std::string, TextID, SetTextID, GetTextID);
+			DECLARE_PROPERTY_A(std::string, Text, SetText, GetText);
+			DECLARE_PROPERTY_A(std::string, LocalisedTextID, SetLocalisedTextID, GetLocalisedTextID);
 			DECLARE_PROPERTY_A(u32, MaxNumLines, SetNumberOfLines, GetNumberOfLines);
 			DECLARE_PROPERTY_A(f32, TextScale, SetTextScale, GetTextScale);
-			DECLARE_PROPERTY_A(f32, CharacterSpacing, SetCharacterSpacing, GetCharacterSpacing);
 			DECLARE_PROPERTY_A(f32, LineSpacing, SetLineSpacing, GetLineSpacing);
 			DECLARE_PROPERTY_A(TextJustification, HorizontalJustification, SetHorizontalJustification, GetHorizontalJustification);
 			DECLARE_PROPERTY_A(TextJustification, VerticalJustification, SetVerticalJustification, GetVerticalJustification);
