@@ -28,9 +28,9 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Core/Image/PNGImageProvider.h>
+#include <CSBackend/Platform/iOS/Core/Image/PNGImageProvider.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
+#include <CSBackend/Platform/iOS/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>

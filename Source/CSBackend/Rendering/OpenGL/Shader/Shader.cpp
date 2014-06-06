@@ -26,10 +26,10 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
+#include <CSBackend/Rendering/OpenGL/Shader/Shader.h>
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLError.h>
+#include <CSBackend/Rendering/OpenGL/Base/RenderSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 

@@ -29,11 +29,11 @@
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#   include <ChilliSource/Backend/Platform/Android/Input/Keyboard/Keyboard.h>
+#include <CSBackend/Platform/Android/Input/Keyboard/Keyboard.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS
-#   include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/Keyboard.h>
+#include <CSBackend/Platform/iOS/Input/Keyboard/Keyboard.h>
 #endif
 
 namespace ChilliSource

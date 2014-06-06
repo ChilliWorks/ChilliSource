@@ -29,7 +29,7 @@
 #ifdef CS_TARGETPLATFORM_IOS
 
 #import <ChilliSource/ChilliSource.h>
-#import <ChilliSource/Backend/Platform/iOS/Web/Base/WebView.h>
+#import <CSBackend/Platform/iOS/Web/Base/WebView.h>
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>

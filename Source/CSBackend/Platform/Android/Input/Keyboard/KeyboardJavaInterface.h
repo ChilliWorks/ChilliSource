@@ -31,8 +31,8 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_INPUT_KEYBOARDJAVAINTERFACE_H_
 #define _MOFLOW_PLATFORM_ANDROID_INPUT_KEYBOARDJAVAINTERFACE_H_
 
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 
 namespace ChilliSource

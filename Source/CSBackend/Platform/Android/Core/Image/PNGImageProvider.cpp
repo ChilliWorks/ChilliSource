@@ -28,9 +28,9 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Core/Image/PNGImageProvider.h>
+#include <CSBackend/Platform/Android/Core/Image/PNGImageProvider.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/Image/PngImage.h>
+#include <CSBackend/Platform/Android/Core/Image/PngImage.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>

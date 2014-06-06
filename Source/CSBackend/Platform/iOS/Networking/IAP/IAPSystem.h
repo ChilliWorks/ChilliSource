@@ -12,8 +12,8 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_IOS_NETWORKING_IAP_IAPSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Platform/iOS/Networking/IAP/StoreKitIAPSystem.h>
+#include <CSBackend/Platform/iOS/ForwardDeclarations.h>
+#include <CSBackend/Platform/iOS/Networking/IAP/StoreKitIAPSystem.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 namespace ChilliSource

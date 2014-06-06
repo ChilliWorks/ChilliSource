@@ -26,9 +26,9 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/ContextRestorer.h>
+#include <CSBackend/Rendering/OpenGL/Base/ContextRestorer.h>
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/MeshBuffer.h>
+#include <CSBackend/Rendering/OpenGL/Base/MeshBuffer.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>

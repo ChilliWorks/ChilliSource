@@ -8,15 +8,16 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
+#import <CSBackend/Platform/iOS/Core/File/FileSystem.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#include <ChilliSource/Core/String/StringUtils.h>
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 
-#include <iostream>
-#include <UIKit/UIKit.h>
-#include <sys/types.h>
-#include <sys/sysctl.h>
+#import <ChilliSource/Core/String/StringUtils.h>
+
+#import <iostream>
+#import <UIKit/UIKit.h>
+#import <sys/types.h>
+#import <sys/sysctl.h>
 
 namespace ChilliSource
 {

@@ -8,9 +8,9 @@
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#include <ChilliSource/Backend/Platform/Windows/GLFW/Base/GLFWManager.h>
+#include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
 
-#include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>

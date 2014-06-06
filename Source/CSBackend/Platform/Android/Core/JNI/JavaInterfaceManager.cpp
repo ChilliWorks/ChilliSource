@@ -9,7 +9,7 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 
 namespace ChilliSource
 {

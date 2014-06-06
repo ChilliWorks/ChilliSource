@@ -28,10 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Input/Accelerometer/Accelerometer.h>
+#include <CSBackend/Platform/Android/Input/Accelerometer/Accelerometer.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Platform/Android/Input/Accelerometer/AccelerometerJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Input/Accelerometer/AccelerometerJavaInterface.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
 namespace ChilliSource

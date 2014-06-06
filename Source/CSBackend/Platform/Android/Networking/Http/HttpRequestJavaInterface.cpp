@@ -8,7 +8,7 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
+#include <CSBackend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
 
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 

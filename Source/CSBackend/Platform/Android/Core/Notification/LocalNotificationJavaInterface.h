@@ -12,8 +12,8 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_NOTIFICATION_LOCALNOTIFCATIONSJAVAINTERFACE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 #include <ChilliSource/Core/Notification/Notification.h>
 
 namespace ChilliSource

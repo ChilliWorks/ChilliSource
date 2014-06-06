@@ -11,7 +11,7 @@
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_HTTP_HTTPREQUESTSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_HTTP_HTTPREQUESTSYSTEM_H_
 
-#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
+#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 namespace ChilliSource

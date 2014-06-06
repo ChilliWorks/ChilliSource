@@ -34,15 +34,15 @@
 #include <algorithm>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#   include <ChilliSource/Backend/Platform/Android/Input/Pointer/PointerSystem.h>
+#include <CSBackend/Platform/Android/Input/Pointer/PointerSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS
-#   include <ChilliSource/Backend/Platform/iOS/Input/Pointer/PointerSystem.h>
+#include <CSBackend/Platform/iOS/Input/Pointer/PointerSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#   include <ChilliSource/Backend/Platform/Windows/Input/Pointer/PointerSystem.h>
+#include <CSBackend/Platform/Windows/Input/Pointer/PointerSystem.h>
 #endif
 
 namespace ChilliSource

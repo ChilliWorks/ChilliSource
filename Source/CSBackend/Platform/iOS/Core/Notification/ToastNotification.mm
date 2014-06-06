@@ -2,7 +2,7 @@
 #ifdef CS_TARGETPLATFORM_IOS
 
 #import <GameKit/GameKit.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/Notification/ToastNotification.h>
+#import <CSBackend/Platform/iOS/Core/Notification/ToastNotification.h>
 
 #pragma mark -
 

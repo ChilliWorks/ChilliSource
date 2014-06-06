@@ -12,8 +12,8 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_GOOGLEPLAYEXPANSIONSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 

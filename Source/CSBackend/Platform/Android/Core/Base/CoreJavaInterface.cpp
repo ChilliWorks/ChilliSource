@@ -8,17 +8,17 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/Base/CoreJavaInterface.h>
 
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Platform/Android/Core/Base/Screen.h>
-#include <ChilliSource/Backend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
-#include <ChilliSource/Backend/Platform/Android/Core/File/SharedPreferencesJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
-#include <ChilliSource/Backend/Platform/Android/Input/Pointer/TouchInputJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Web/Base/WebViewJavaInterface.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Core/Base/Screen.h>
+#include <CSBackend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
+#include <CSBackend/Platform/Android/Core/File/SharedPreferencesJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Input/Pointer/TouchInputJavaInterface.h>
+#include <CSBackend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
+#include <CSBackend/Platform/Android/Web/Base/WebViewJavaInterface.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
 //--------------------------------------------------------------------------------------

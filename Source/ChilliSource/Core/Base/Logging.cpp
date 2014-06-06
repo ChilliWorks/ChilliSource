@@ -46,7 +46,7 @@ extern "C"
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <Windows.h>
 #endif
 
@@ -60,7 +60,7 @@ extern "C"
 
 #if CS_TARGETPLATFORM_IOS
 #import <Foundation/Foundation.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#include <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 #endif
 
 namespace ChilliSource

@@ -7,10 +7,10 @@
  *
  */
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/MeshBuffer.h>
+#include <CSBackend/Rendering/OpenGL/Base/MeshBuffer.h>
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLError.h>
+#include <CSBackend/Rendering/OpenGL/Base/RenderSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 

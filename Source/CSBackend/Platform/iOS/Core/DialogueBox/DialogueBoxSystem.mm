@@ -8,13 +8,14 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxSystem.h>
+#import <CSBackend/Platform/iOS/Core/DialogueBox/DialogueBoxSystem.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxListener.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/Notification/ToastNotification.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/PlatformSystem.h>
+#import <CSBackend/Platform/iOS/Core/DialogueBox/DialogueBoxListener.h>
+#import <CSBackend/Platform/iOS/Core/Notification/ToastNotification.h>
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
+
+#import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/Base/PlatformSystem.h>
 
 #import <UIKit/UIKit.h>
 

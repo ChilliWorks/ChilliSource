@@ -8,11 +8,11 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
+#include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
-#include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayRemoteNotificationSystem.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayRemoteNotificationSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>

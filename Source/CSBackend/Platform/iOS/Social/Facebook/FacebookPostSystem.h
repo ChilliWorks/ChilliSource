@@ -12,7 +12,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_IOS_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#include <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
 
 namespace ChilliSource

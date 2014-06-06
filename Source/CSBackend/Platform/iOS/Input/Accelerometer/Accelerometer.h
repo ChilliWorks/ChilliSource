@@ -32,7 +32,7 @@
 #define _CHILLISOURCE_BACKEND_IOS_INPUT_ACCELEROMETER_ACCELEROMETER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#include <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 
 @class CMMotionManager;

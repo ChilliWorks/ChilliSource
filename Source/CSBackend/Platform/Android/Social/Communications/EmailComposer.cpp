@@ -28,10 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailComposer.h>
+#include <CSBackend/Platform/Android/Social/Communications/EmailComposer.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailComposerJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Social/Communications/EmailComposerJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/File/FileSystem.h>

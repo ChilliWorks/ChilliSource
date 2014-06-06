@@ -29,7 +29,7 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 #if defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_WINDOWS)
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
+#include <CSBackend/Rendering/OpenGL/Texture/Texture.h>
 #endif
 
 namespace ChilliSource

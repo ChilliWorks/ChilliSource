@@ -8,10 +8,10 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
+#include <CSBackend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthenticationSystem.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Social/Facebook/FacebookAuthenticationSystem.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
 namespace ChilliSource

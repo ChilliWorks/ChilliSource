@@ -9,9 +9,9 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Core/Image/PngImage.h>
+#include <CSBackend/Platform/Android/Core/Image/PngImage.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/Image/LibPng/png.h>
+#include <CSBackend/Platform/Android/Core/Image/LibPng/png.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 

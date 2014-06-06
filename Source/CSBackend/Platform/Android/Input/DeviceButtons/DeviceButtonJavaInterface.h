@@ -31,8 +31,8 @@
 #ifndef _CHILLISOURCE_PLATFORM_ANDROID_INPUT_DEVICEBUTTONS_DEVICEBUTTONJAVAINTERFACE_H_
 #define _CHILLISOURCE_PLATFORM_ANDROID_INPUT_DEVICEBUTTONS_DEVICEBUTTONJAVAINTERFACE_H_
 
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 
 #include <functional>
 

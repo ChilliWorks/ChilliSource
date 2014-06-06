@@ -32,7 +32,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_VIDEO_BASE_VIDEOPLAYER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
 #include <ChilliSource/Video/Base/VideoPlayer.h>
 

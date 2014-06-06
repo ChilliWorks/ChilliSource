@@ -26,12 +26,12 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
+#include <CSBackend/Rendering/OpenGL/Texture/Cubemap.h>
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLError.h>
+#include <CSBackend/Rendering/OpenGL/Base/RenderCapabilities.h>
+#include <CSBackend/Rendering/OpenGL/Base/RenderSystem.h>
+#include <CSBackend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>

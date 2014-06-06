@@ -8,12 +8,13 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
+#import <CSBackend/Platform/iOS/Networking/IAP/IAPSystem.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#include <ChilliSource/Core/Delegate/MakeDelegate.h>
-#include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
-#include <ChilliSource/Core/String/StringUtils.h>
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
+
+#import <ChilliSource/Core/Delegate/MakeDelegate.h>
+#import <ChilliSource/Core/Cryptographic/BaseEncoding.h>
+#import <ChilliSource/Core/String/StringUtils.h>
 
 namespace ChilliSource
 {

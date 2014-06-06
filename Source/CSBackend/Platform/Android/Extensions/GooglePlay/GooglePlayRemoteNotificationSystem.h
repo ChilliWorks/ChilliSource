@@ -11,7 +11,7 @@
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_REMOTENOTIFICATIONSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_REMOTENOTIFICATIONSYSTEM_H_
 
-#include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
+#include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Notification/RemoteNotificationSystem.h>
 

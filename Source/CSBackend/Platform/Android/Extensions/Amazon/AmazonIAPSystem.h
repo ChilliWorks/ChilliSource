@@ -13,7 +13,7 @@
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_EXTENSIONS_AMAZON_AMAZONIAPSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_EXTENSIONS_AMAZON_AMAZONIAPSYSTEM_H_
 
-#include <ChilliSource/Backend/Platform/Android/Extensions/Amazon/AmazonIAPJavaInterface.h>
+#include <CSBackend/Platform/Android/Extensions/Amazon/AmazonIAPJavaInterface.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 namespace ChilliSource

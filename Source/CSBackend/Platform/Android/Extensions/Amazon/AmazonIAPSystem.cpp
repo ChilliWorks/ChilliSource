@@ -10,9 +10,9 @@
 
 #ifdef CS_ANDROIDEXTENSION_AMAZON
 
-#include <ChilliSource/Backend/Platform/Android/Extensions/Amazon/AmazonIAPSystem.h>
+#include <CSBackend/Platform/Android/Extensions/Amazon/AmazonIAPSystem.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
 

@@ -32,7 +32,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_INPUT_DEVICEBUTTONS_DEVICEBUTTONSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 
 namespace ChilliSource

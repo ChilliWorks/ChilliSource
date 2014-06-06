@@ -29,15 +29,15 @@
 #include <ChilliSource/Core/Base/Screen.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Core/Base/Screen.h>
+#include <CSBackend/Platform/Android/Core/Base/Screen.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Core/Base/Screen.h>
+#include <CSBackend/Platform/iOS/Core/Base/Screen.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Core/Base/Screen.h>
+#include <CSBackend/Platform/Windows/Core/Base/Screen.h>
 #endif
 
 namespace ChilliSource

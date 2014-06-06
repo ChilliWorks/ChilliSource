@@ -11,7 +11,7 @@
 #ifndef _MOFLO_PLATFORM_ANDROID_FACEBOOK_JAVA_INTERFACE_
 #define _MOFLO_PLATFORM_ANDROID_FACEBOOK_JAVA_INTERFACE_
 
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 
 namespace ChilliSource
 {

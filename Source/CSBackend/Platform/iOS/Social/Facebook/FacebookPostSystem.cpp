@@ -8,9 +8,9 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
+#include <CSBackend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#include <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthenticationSystem.h>
 
@@ -19,9 +19,9 @@
 #ifdef __IPHONE_6_0
 #include <UIKit/UIKit.h>
 #include <Social/Social.h>
-#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookUtils.h>
-#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookUtils.h>
-#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookUtils.h>
+#include <CSBackend/Platform/iOS/Social/Facebook/FacebookUtils.h>
+#include <CSBackend/Platform/iOS/Social/Facebook/FacebookUtils.h>
+#include <CSBackend/Platform/iOS/Social/Facebook/FacebookUtils.h>
 #endif
 
 namespace ChilliSource

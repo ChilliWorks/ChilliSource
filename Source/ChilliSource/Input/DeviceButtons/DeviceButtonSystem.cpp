@@ -29,15 +29,15 @@
 #include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Input/DeviceButtons/DeviceButtonSystem.h>
+#include <CSBackend/Platform/Android/Input/DeviceButtons/DeviceButtonSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS
-#import <ChilliSource/Backend/Platform/iOS/Input/DeviceButtons/DeviceButtonSystem.h>
+#import <CSBackend/Platform/iOS/Input/DeviceButtons/DeviceButtonSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Input/DeviceButtons/DeviceButtonSystem.h>
+#include <CSBackend/Platform/Windows/Input/DeviceButtons/DeviceButtonSystem.h>
 #endif
 
 namespace ChilliSource

@@ -28,12 +28,12 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Input/Pointer/PointerSystem.h>
+#import <CSBackend/Platform/iOS/Input/Pointer/PointerSystem.h>
 
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/Screen.h>
+#import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/Base/Screen.h>
 
-#include <UIKit/UIKit.h>
+#import <UIKit/UIKit.h>
 
 namespace ChilliSource
 {

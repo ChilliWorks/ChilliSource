@@ -28,9 +28,9 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/Device.h>
+#import <CSBackend/Platform/iOS/Core/Base/Device.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>

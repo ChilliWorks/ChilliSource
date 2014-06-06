@@ -29,8 +29,8 @@
 #ifdef CS_TARGETPLATFORM_IOS
 
 #import <ChilliSource/ChilliSource.h>
-#import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposer.h>
+#import <CSBackend/Platform/iOS/ForwardDeclarations.h>
+#import <CSBackend/Platform/iOS/Social/Communications/EmailComposer.h>
 
 #import <Foundation/Foundation.h>
 #import <MessageUI/MessageUI.h>

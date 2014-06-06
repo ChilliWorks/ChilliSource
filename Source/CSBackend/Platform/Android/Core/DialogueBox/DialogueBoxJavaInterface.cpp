@@ -8,11 +8,11 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Core/DialogueBox/DialogueBoxJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/DialogueBox/DialogueBoxJavaInterface.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 #include <jni.h>

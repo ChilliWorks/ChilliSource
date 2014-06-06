@@ -32,7 +32,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_PLATFORMSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
 namespace ChilliSource

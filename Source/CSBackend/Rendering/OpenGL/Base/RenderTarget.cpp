@@ -7,14 +7,14 @@
  *
  */
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderTarget.h>
+#include <CSBackend/Rendering/OpenGL/Base/RenderTarget.h>
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLError.h>
+#include <CSBackend/Rendering/OpenGL/Texture/Texture.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/CSAppDelegate.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/CSGLViewController.h>
+#import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
+#import <CSBackend/Platform/iOS/Core/Base/CSGLViewController.h>
 #endif
 
 namespace ChilliSource

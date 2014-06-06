@@ -28,14 +28,14 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayer.h>
+#import <CSBackend/Platform/iOS/Video/Base/VideoPlayer.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#import <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
-#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoOverlayView.h>
-#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
+#import <CSBackend/Platform/iOS/Core/File/FileSystem.h>
+#import <CSBackend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <CSBackend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
+#import <CSBackend/Platform/iOS/Video/Base/VideoOverlayView.h>
+#import <CSBackend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Base/Screen.h>
 #import <ChilliSource/Core/Delegate/MakeDelegate.h>

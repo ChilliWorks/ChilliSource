@@ -8,7 +8,7 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Networking/IAP/StoreKitIAPSystem.h>
+#import <CSBackend/Platform/iOS/Networking/IAP/StoreKitIAPSystem.h>
 
 @implementation StoreKitIAPSystem
 

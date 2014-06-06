@@ -12,7 +12,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_FILE_FILESYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Minizip/unzip.h>
 

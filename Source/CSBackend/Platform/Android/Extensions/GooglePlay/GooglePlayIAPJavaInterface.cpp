@@ -10,11 +10,11 @@
 
 #ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
 
-#include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPJavaInterface.h>
+#include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPJavaInterface.h>
 
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileSystem.h>

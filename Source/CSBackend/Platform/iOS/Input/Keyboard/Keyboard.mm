@@ -28,13 +28,14 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/Keyboard.h>
+#import <CSBackend/Platform/iOS/Input/Keyboard/Keyboard.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboardDelegate.h>
-#include <ChilliSource/Core/String/StringUtils.h>
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <CSBackend/Platform/iOS/Input/Keyboard/VirtualKeyboardDelegate.h>
 
-#include <UIKit/UIKit.h>
+#import <ChilliSource/Core/String/StringUtils.h>
+
+#import <UIKit/UIKit.h>
 
 namespace ChilliSource
 {

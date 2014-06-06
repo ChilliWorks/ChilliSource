@@ -8,11 +8,11 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
+#include <CSBackend/Platform/Android/Core/File/FileSystem.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Core/File/FileStreamAPK.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Core/Base/CoreJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/File/FileStreamAPK.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>

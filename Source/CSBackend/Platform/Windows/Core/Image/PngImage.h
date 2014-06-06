@@ -12,7 +12,7 @@
 #ifndef _MOFLO_WINDOWSPLATFORM_IMAGELOADING_PNGIMAGE_
 #define _MOFLO_WINDOWSPLATFORM_IMAGELOADING_PNGIMAGE_
 
-#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
+#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource

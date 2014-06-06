@@ -11,7 +11,7 @@
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_HTTP_HTTPREQUESTSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_HTTP_HTTPREQUESTSYSTEM_H_
 
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 #include <vector>

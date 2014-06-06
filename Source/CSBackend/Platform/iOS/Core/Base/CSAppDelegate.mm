@@ -28,11 +28,11 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/CSAppDelegate.h>
+#import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/CSGLViewController.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/Notification/LocalNotificationSystem.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
+#import <CSBackend/Platform/iOS/Core/Base/CSGLViewController.h>
+#import <CSBackend/Platform/iOS/Core/Notification/LocalNotificationSystem.h>
+#import <CSBackend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
 
 CSAppDelegate* singletonInstance = nil;

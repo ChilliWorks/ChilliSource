@@ -8,9 +8,9 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxListener.h>
+#import <CSBackend/Platform/iOS/Core/DialogueBox/DialogueBoxListener.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxSystem.h>
+#import <CSBackend/Platform/iOS/Core/DialogueBox/DialogueBoxSystem.h>
 
 @implementation DialogueBoxListener
 //------------------------------------------------------------

@@ -13,7 +13,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Notification/LocalNotificationSystem.h>
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
 
 namespace ChilliSource
 {

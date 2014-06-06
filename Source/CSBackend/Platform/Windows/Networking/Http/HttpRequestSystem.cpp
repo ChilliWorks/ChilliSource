@@ -8,10 +8,10 @@
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#include <ChilliSource/Backend/Platform/Windows/Networking/Http/HttpRequestSystem.h>
+#include <CSBackend/Platform/Windows/Networking/Http/HttpRequestSystem.h>
 
-#include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
-#include <ChilliSource/Backend/Platform/Windows/Networking/Http/HttpRequest.h>
+#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#include <CSBackend/Platform/Windows/Networking/Http/HttpRequest.h>
 
 #include <Windows.h>
 #include <winhttp.h>

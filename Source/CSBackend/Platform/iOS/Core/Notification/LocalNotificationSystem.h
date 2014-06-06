@@ -12,7 +12,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_IOS_CORE_NOTIFICATION_LOCALNOTIFICATIONSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#include <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/Notification/LocalNotificationSystem.h>
 
 @class UIApplication;

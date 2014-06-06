@@ -31,9 +31,9 @@
 #ifndef MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_EMAILCOMPOSITION_H
 #define MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_EMAILCOMPOSITION_H
 
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
 
 namespace ChilliSource
 {

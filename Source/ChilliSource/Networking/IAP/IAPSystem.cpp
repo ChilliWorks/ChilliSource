@@ -9,13 +9,15 @@
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#	include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
-#elif defined(CS_TARGETPLATFORM_ANDROID)
-#	ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
-#		include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPSystem.h>
-#	elif defined(CS_ANDROIDEXTENSION_AMAZON)
-#		include <ChilliSource/Backend/Platform/Android/Extensions/Amazon/AmazonIAPSystem.h>
-#	endif
+#include <CSBackend/Platform/iOS/Networking/IAP/IAPSystem.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_ANDROID
+#ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
+#include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPSystem.h>
+#elif defined(CS_ANDROIDEXTENSION_AMAZON)
+#include <CSBackend/Platform/Android/Extensions/Amazon/AmazonIAPSystem.h>
+#endif
 #endif
 
 namespace ChilliSource

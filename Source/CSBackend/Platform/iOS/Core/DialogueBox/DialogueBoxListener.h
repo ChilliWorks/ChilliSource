@@ -9,7 +9,7 @@
 #ifdef CS_TARGETPLATFORM_IOS
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#include <CSBackend/Platform/iOS/ForwardDeclarations.h>
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>

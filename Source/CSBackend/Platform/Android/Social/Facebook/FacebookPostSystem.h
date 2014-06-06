@@ -12,7 +12,7 @@
 #define _CHILLISOURCE_PLATFORM_ANDROID_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+#include <CSBackend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 #include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
 
 namespace ChilliSource

@@ -28,9 +28,9 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <ChilliSource/Backend/Platform/iOS/Web/Base/WebViewDelegate.h>
+#import <CSBackend/Platform/iOS/Web/Base/WebViewDelegate.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 
 @implementation WebViewDelegate
 //----------------------------------------------------

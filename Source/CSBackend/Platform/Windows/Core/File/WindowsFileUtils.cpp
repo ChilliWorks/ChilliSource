@@ -8,7 +8,7 @@
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#include <ChilliSource/Backend/Platform/Windows/Core/File/WindowsFileUtils.h>
+#include <CSBackend/Platform/Windows/Core/File/WindowsFileUtils.h>
 
 namespace ChilliSource
 {

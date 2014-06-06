@@ -28,10 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#include <ChilliSource/Backend/Platform/Windows/Core/Base/Screen.h>
+#include <CSBackend/Platform/Windows/Core/Base/Screen.h>
 
 //This must be included last.
-#include <ChilliSource/Backend/Platform/Windows/GLFW/Base/GLFWManager.h>
+#include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
 
 namespace ChilliSource
 {

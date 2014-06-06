@@ -29,11 +29,11 @@
 #include <ChilliSource/Social/Communications/EmailComposer.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposer.h>
+#import <CSBackend/Platform/iOS/Social/Communications/EmailComposer.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailComposer.h>
+#include <CSBackend/Platform/Android/Social/Communications/EmailComposer.h>
 #endif
 
 namespace ChilliSource

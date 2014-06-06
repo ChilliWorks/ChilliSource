@@ -28,11 +28,11 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/CSGLViewController.h>
+#import <CSBackend/Platform/iOS/Core/Base/CSGLViewController.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/Screen.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#import <ChilliSource/Backend/Platform/iOS/Input/Pointer/PointerSystem.h>
+#import <CSBackend/Platform/iOS/Core/Base/Screen.h>
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <CSBackend/Platform/iOS/Input/Pointer/PointerSystem.h>
 #import <ChilliSource/Core/Base/AppConfig.h>
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Base/Utils.h>

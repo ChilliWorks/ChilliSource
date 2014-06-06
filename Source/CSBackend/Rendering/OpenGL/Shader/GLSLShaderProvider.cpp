@@ -26,9 +26,9 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
+#include <CSBackend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
+#include <CSBackend/Rendering/OpenGL/Shader/Shader.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>

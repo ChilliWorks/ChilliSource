@@ -28,9 +28,9 @@
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#include <ChilliSource/Backend/Platform/Windows/Core/Image/PNGImageProvider.h>
+#include <CSBackend/Platform/Windows/Core/Image/PNGImageProvider.h>
 
-#include <ChilliSource/Backend/Platform/Windows/Core/Image/PngImage.h>
+#include <CSBackend/Platform/Windows/Core/Image/PngImage.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>

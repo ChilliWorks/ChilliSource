@@ -29,11 +29,11 @@
 #include <ChilliSource/Video/Base/VideoPlayer.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayer.h>
+#import <CSBackend/Platform/iOS/Video/Base/VideoPlayer.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Video/Base/VideoPlayer.h>
+#include <CSBackend/Platform/Android/Video/Base/VideoPlayer.h>
 #endif
 
 namespace ChilliSource

@@ -8,9 +8,9 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequest.h>
+#include <CSBackend/Platform/iOS/Networking/Http/HttpRequest.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#include <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>

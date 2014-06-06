@@ -12,7 +12,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_HTTP_HTTPREQUESTJAVAINTERFACE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/_JavaInterface.h>
+#include <CSBackend/Platform/Android/Core/JNI/_JavaInterface.h>
 
 #include <jni.h>
 

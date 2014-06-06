@@ -32,7 +32,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_INPUT_KEYBOARD_KEYBOARD_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#include <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 
 @class VirtualKeyboardDelegate;

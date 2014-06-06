@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_BACKEND_RENDERING_OPENGL_BASE_GLERROR_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
 #ifdef CS_ENABLE_DEBUG
 #define CS_ASSERT_NOGLERROR(in_message) {ChilliSource::OpenGL::GLError::AssertNoGLError(in_message);}

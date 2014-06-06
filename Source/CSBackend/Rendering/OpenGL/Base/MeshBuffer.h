@@ -11,8 +11,8 @@
 #define _MOFLOW_OPENGL_MESHBUFFER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
+#include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 
 namespace ChilliSource

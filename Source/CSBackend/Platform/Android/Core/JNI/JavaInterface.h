@@ -12,7 +12,7 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_JAVAINTERFACE_H_
 #define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_JAVAINTERFACE_H_
 
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
 #include <jni.h>

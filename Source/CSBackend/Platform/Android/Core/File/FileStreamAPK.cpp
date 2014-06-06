@@ -9,9 +9,9 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Core/File/FileStreamAPK.h>
+#include <CSBackend/Platform/Android/Core/File/FileStreamAPK.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
+#include <CSBackend/Platform/Android/Core/File/FileSystem.h>
 
 namespace ChilliSource
 {

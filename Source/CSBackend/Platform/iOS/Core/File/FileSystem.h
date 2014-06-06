@@ -12,7 +12,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_IOS_CORE_FILE_FILESYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#include <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 #include <string>

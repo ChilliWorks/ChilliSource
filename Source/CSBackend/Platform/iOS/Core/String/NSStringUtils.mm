@@ -8,7 +8,7 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 
 @implementation NSStringUtils
 

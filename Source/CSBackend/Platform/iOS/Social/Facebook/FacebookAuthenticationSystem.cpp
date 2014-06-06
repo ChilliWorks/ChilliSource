@@ -8,9 +8,9 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookAuthenticationSystem.h>
+#include <CSBackend/Platform/iOS/Social/Facebook/FacebookAuthenticationSystem.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#include <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 
 #ifdef __IPHONE_6_0
 #	include <Accounts/Accounts.h>

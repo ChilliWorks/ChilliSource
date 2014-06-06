@@ -8,9 +8,9 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Core/Notification/LocalNotificationSystem.h>
+#include <CSBackend/Platform/iOS/Core/Notification/LocalNotificationSystem.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#include <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 
 #import <UIKit/UIKit.h>
 

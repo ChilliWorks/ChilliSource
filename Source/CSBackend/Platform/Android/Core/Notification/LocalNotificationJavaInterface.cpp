@@ -8,11 +8,11 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Core/Notification/LocalNotificationJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/Notification/LocalNotificationJavaInterface.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
-#include <ChilliSource/Backend/Platform/Android/Core/Notification/LocalNotificationSystem.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Core/Notification/LocalNotificationSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringParser.h>
 

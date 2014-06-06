@@ -11,7 +11,7 @@
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_SOCIAL_FACEBOOKAUTHENTICATIONSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_SOCIAL_FACEBOOKAUTHENTICATIONSYSTEM_H_
 
-#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+#include <CSBackend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 #include <ChilliSource/Core/Delegate/ConnectableDelegate.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthenticationSystem.h>
 

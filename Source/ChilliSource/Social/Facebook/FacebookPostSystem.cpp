@@ -9,9 +9,9 @@
 #include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
+#include <CSBackend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
 #elif CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
+#include <CSBackend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
 #endif
 
 namespace ChilliSource

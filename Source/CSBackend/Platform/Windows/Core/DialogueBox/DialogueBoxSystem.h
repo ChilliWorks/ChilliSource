@@ -12,7 +12,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_DIALOGUE_DIALOGUESYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#include <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 
 namespace ChilliSource

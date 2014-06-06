@@ -28,10 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Core/Base/Device.h>
+#include <CSBackend/Platform/Android/Core/Base/Device.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Core/Base/CoreJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 
 namespace ChilliSource
 {

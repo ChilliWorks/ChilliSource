@@ -28,9 +28,9 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboardDelegate.h>
+#import <CSBackend/Platform/iOS/Input/Keyboard/VirtualKeyboardDelegate.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/Keyboard.h>
+#import <CSBackend/Platform/iOS/Input/Keyboard/Keyboard.h>
 
 @implementation VirtualKeyboardDelegate
 

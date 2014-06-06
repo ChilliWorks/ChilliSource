@@ -29,15 +29,15 @@
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Core/Base/PlatformSystem.h>
+#include <CSBackend/Platform/Android/Core/Base/PlatformSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
+#import <CSBackend/Platform/iOS/Core/Base/PlatformSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
+#include <CSBackend/Platform/Windows/Core/Base/PlatformSystem.h>
 #endif
 
 namespace ChilliSource

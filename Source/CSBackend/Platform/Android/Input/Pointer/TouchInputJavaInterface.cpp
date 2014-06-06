@@ -28,10 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Input/Pointer/TouchInputJavaInterface.h>
+#include <CSBackend/Platform/Android/Input/Pointer/TouchInputJavaInterface.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Input/Pointer/PointerSystem.h>
+#include <CSBackend/Platform/Android/Core/Base/CoreJavaInterface.h>
+#include <CSBackend/Platform/Android/Input/Pointer/PointerSystem.h>
 
 extern "C"
 {

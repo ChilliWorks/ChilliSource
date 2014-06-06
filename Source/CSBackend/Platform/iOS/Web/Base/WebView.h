@@ -29,7 +29,7 @@
 #ifdef CS_TARGETPLATFORM_IOS
 
 #import <ChilliSource/ChilliSource.h>
-#import <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#import <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #import <ChilliSource/Core/File/FileSystem.h>
 #import <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #import <ChilliSource/Web/Base/WebView.h>

@@ -11,7 +11,7 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYREMOTENOTIFICATIONJAVAINTERFACE_H_
 #define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYREMOTENOTIFICATIONJAVAINTERFACE_H_
 
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 
 namespace ChilliSource
 {

@@ -8,7 +8,7 @@
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 
 #include <ChilliSource/Core/String/StringUtils.h>
 

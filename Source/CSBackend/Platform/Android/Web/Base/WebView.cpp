@@ -28,10 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Web/Base/WebView.h>
+#include <CSBackend/Platform/Android/Web/Base/WebView.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
-#include <ChilliSource/Backend/Platform/Android/Web/Base/WebViewJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/File/FileSystem.h>
+#include <CSBackend/Platform/Android/Web/Base/WebViewJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/File/FileStream.h>

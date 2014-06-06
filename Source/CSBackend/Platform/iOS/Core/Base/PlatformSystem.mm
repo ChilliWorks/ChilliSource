@@ -28,12 +28,12 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
+#import <CSBackend/Platform/iOS/Core/Base/PlatformSystem.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/CSAppDelegate.h>
-#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#import <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
-#import <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
+#import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <CSBackend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
+#import <CSBackend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Image/PVRImageProvider.h>
 

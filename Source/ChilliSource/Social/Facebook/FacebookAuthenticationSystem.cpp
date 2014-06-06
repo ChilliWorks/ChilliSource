@@ -9,9 +9,9 @@
 #include <ChilliSource/Social/Facebook/FacebookAuthenticationSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookAuthenticationSystem.h>
+#include <CSBackend/Platform/iOS/Social/Facebook/FacebookAuthenticationSystem.h>
 #elif CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthenticationSystem.h>
+#include <CSBackend/Platform/Android/Social/Facebook/FacebookAuthenticationSystem.h>
 #endif
 
 namespace ChilliSource

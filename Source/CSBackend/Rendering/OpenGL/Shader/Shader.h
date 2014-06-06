@@ -30,8 +30,8 @@
 #define _CHILLISOURCE_BACKEND_RENDERING_OPENGL_SHADER_SHADER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
+#include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 
 #include <unordered_map>

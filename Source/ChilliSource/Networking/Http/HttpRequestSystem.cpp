@@ -10,15 +10,15 @@
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequestSystem.h>
+#include <CSBackend/Platform/iOS/Networking/Http/HttpRequestSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestSystem.h>
+#include <CSBackend/Platform/Android/Networking/Http/HttpRequestSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Networking/Http/HttpRequestSystem.h>
+#include <CSBackend/Platform/Windows/Networking/Http/HttpRequestSystem.h>
 #endif
 
 namespace ChilliSource

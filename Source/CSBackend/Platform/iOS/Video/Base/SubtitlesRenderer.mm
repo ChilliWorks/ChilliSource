@@ -8,9 +8,9 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
+#import <CSBackend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Base/Screen.h>
 #import <ChilliSource/Core/String/StringUtils.h>

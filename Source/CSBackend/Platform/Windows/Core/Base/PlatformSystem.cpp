@@ -28,10 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
+#include <CSBackend/Platform/Windows/Core/Base/PlatformSystem.h>
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
+#include <CSBackend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
+#include <CSBackend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #include <ChilliSource/Core/Base/AppConfig.h>
 #include <ChilliSource/Core/Base/Application.h>
 
@@ -39,7 +39,7 @@
 #include <windows.h>
 
 //As the opengl classes need to include glfw.h, they need to be included after windows.h to avoid macro redefinitions.
-#include <ChilliSource/Backend/Platform/Windows/GLFW/Base/GLFWManager.h>
+#include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
 
 namespace ChilliSource 
 {

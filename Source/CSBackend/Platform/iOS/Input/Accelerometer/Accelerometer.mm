@@ -28,7 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#include <ChilliSource/Backend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
+#import <CSBackend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 
 #import <CoreMotion/CoreMotion.h>
 

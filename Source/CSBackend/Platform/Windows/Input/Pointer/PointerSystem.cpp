@@ -28,9 +28,9 @@
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#include <ChilliSource/Backend/Platform/Windows/Input/Pointer/PointerSystem.h>
+#include <CSBackend/Platform/Windows/Input/Pointer/PointerSystem.h>
 
-#include <ChilliSource/Backend/Platform/Windows/GLFW/Base/GLFWManager.h>
+#include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 

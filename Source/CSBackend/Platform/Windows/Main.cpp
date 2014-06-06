@@ -28,7 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
+#include <CSBackend/Platform/Windows/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 #include <Windows.h>

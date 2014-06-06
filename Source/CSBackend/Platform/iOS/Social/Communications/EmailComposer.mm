@@ -28,10 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposer.h>
+#import <CSBackend/Platform/iOS/Social/Communications/EmailComposer.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/String/NSStringUtils.h>
-#import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposerDelegate.h>
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <CSBackend/Platform/iOS/Social/Communications/EmailComposerDelegate.h>
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/File/FileSystem.h>
 #import <ChilliSource/Core/String/StringUtils.h>

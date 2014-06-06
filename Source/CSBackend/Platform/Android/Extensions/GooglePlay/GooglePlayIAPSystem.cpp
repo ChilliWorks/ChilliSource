@@ -10,9 +10,9 @@
 
 #ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
 
-#include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPSystem.h>
+#include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPSystem.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 
 namespace ChilliSource
 {

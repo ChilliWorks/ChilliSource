@@ -30,16 +30,16 @@
 #define _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/ContextRestorer.h>
+#include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
+#include <CSBackend/Rendering/OpenGL/Base/ContextRestorer.h>
 
 #include <unordered_map>
 

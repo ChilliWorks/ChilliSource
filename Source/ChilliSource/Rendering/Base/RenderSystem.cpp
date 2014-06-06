@@ -32,7 +32,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 
 #if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID || defined CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
+#include <CSBackend/Rendering/OpenGL/Base/RenderSystem.h>
 #endif
 
 namespace ChilliSource

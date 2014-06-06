@@ -12,8 +12,8 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_VIDEOPLAYERJAVAINTERFACE_H_
 #define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_VIDEOPLAYERJAVAINTERFACE_H_
 
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 
 #include <jni.h>
 

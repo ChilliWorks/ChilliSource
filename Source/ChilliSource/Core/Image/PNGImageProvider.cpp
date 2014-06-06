@@ -29,15 +29,15 @@
 #include <ChilliSource/Core/Image/PNGImageProvider.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Core/Image/PNGImageProvider.h>
+#include <CSBackend/Platform/iOS/Core/Image/PNGImageProvider.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Core/Image/PNGImageProvider.h>
+#include <CSBackend/Platform/Android/Core/Image/PNGImageProvider.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Core/Image/PNGImageProvider.h>
+#include <CSBackend/Platform/Windows/Core/Image/PNGImageProvider.h>
 #endif
 
 namespace ChilliSource

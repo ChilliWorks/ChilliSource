@@ -11,7 +11,7 @@
 #ifndef _CHILLISOURCE_BACKEND_WINDOWS_CORE_FILE_FILESYSTEM_H_
 #define _CHILLISOURCE_BACKEND_WINDOWS_CORE_FILE_FILESYSTEM_H_
 
-#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
+#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 

@@ -28,10 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Input/Keyboard/Keyboard.h>
+#include <CSBackend/Platform/Android/Input/Keyboard/Keyboard.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Platform/Android/Input/Keyboard/KeyboardJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Input/Keyboard/KeyboardJavaInterface.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>

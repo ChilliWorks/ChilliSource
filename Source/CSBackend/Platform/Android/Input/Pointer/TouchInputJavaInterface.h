@@ -32,8 +32,8 @@
 #define _MOFLO_PLATFORM_ANDROID_TOUCH_INPUT_JAVA_INTERFACE_JAVA_INTERFACE_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/_JavaInterface.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Core/JNI/_JavaInterface.h>
 
 #include <jni.h>
 #include <map>

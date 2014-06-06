@@ -9,11 +9,11 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Core/Base/UDIDManager.h>
+#include <CSBackend/Platform/Android/Core/Base/UDIDManager.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Core/File/SharedPreferencesJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Core/Base/CoreJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/File/SharedPreferencesJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 
 #include <cstdlib>

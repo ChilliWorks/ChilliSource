@@ -8,10 +8,10 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestSystem.h>
+#include <CSBackend/Platform/Android/Networking/Http/HttpRequestSystem.h>
 
-#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequest.h>
-#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
+#include <CSBackend/Platform/Android/Networking/Http/HttpRequest.h>
+#include <CSBackend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
 
 namespace ChilliSource
 {

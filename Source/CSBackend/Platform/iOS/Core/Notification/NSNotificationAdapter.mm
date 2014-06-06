@@ -8,7 +8,7 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
+#import <CSBackend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
 
 #import <GameKit/GameKit.h>
 #import <MediaPlayer/MediaPlayer.h>

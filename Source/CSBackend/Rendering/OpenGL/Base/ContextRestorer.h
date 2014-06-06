@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_BACKEND_RENDERING_OPENGL_BASE_CONTEXTRESTORER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
 #include <vector>
 

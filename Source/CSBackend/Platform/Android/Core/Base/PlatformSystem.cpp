@@ -28,12 +28,12 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <ChilliSource/Backend/Platform/Android/Core/Base/PlatformSystem.h>
+#include <CSBackend/Platform/Android/Core/Base/PlatformSystem.h>
 
-#include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
+#include <CSBackend/Platform/Android/Core/Base/CoreJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
+#include <CSBackend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #include <ChilliSource/Core/Image/ETC1ImageProvider.h>
 
 namespace ChilliSource 

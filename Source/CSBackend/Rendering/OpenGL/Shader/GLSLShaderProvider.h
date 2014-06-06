@@ -29,7 +29,7 @@
 #ifndef _CHILLISOURCE_BACKEND_RENDERING_OPENGL_SHADER_GLSLSHADERPROVIDER_H_
 #define _CHILLISOURCE_BACKEND_RENDERING_OPENGL_SHADER_GLSLSHADERPROVIDER_H_
 
-#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 

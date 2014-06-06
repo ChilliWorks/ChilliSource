@@ -8,9 +8,9 @@
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#include <ChilliSource/Backend/Platform/Windows/Core/File/FileSystem.h>
+#include <CSBackend/Platform/Windows/Core/File/FileSystem.h>
 
-#include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/String/StringUtils.h>
@@ -20,7 +20,7 @@
 #include <stack>
 
 //This includes windows so needs to come last, else it might cause problems with other includes
-#include <ChilliSource/Backend/Platform/Windows/Core/File/WindowsFileUtils.h>
+#include <CSBackend/Platform/Windows/Core/File/WindowsFileUtils.h>
 
 //Undefine the windows file system functions that share names with ours.
 #undef CopyFile

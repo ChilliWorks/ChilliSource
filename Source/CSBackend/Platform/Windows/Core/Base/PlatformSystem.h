@@ -32,7 +32,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_BASE_PLATFORMSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
+#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
 namespace ChilliSource

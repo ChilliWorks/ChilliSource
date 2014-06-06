@@ -13,7 +13,7 @@
 
 #import <ChilliSource/ChilliSource.h>
 #import <ChilliSource/Video/Base/Subtitles.h>
-#import <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayer.h>
+#import <CSBackend/Platform/iOS/Video/Base/VideoPlayer.h>
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>

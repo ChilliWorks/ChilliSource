@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
+#include <CSBackend/Rendering/OpenGL/Base/RenderCapabilities.h>
 
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLError.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLError.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 
 namespace ChilliSource
 {

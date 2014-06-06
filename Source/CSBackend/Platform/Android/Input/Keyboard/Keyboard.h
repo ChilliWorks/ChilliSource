@@ -32,7 +32,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_INPUT_KEYBOARD_KEYBOARD_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 
 namespace ChilliSource

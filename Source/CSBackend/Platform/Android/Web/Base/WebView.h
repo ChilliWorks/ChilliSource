@@ -32,7 +32,7 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_WEB_BASE_WEBVIEW_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Web/Base/WebView.h>
 

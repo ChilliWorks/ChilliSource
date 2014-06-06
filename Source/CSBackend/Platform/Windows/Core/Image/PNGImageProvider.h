@@ -31,7 +31,7 @@
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_IMAGE_PNGIMAGEPROVIDER_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_IMAGE_PNGIMAGEPROVIDER_H_
 
-#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
+#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/PNGImageProvider.h>
 

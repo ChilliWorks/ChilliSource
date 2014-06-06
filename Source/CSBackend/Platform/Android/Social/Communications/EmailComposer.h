@@ -32,8 +32,8 @@
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_SOCIAL_COMMUNICATIONS_EMAILCOMPOSER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailComposerJavaInterface.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Social/Communications/EmailComposerJavaInterface.h>
 #include <ChilliSource/Social/Communications/EmailComposer.h>
 
 namespace ChilliSource

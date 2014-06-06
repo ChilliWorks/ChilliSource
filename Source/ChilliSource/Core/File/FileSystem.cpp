@@ -13,15 +13,15 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
+#include <CSBackend/Platform/iOS/Core/File/FileSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
+#include <CSBackend/Platform/Android/Core/File/FileSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Core/File/FileSystem.h>
+#include <CSBackend/Platform/Windows/Core/File/FileSystem.h>
 #endif
 
 #include <algorithm>

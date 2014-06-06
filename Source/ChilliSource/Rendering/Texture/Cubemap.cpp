@@ -29,7 +29,7 @@
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 
 #if defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_WINDOWS)
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
+#include <CSBackend/Rendering/OpenGL/Texture/Cubemap.h>
 #endif
 
 namespace ChilliSource
