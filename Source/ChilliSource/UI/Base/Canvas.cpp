@@ -30,8 +30,8 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Delegate/ConnectableDelegate.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Event/IConnectableEvent.h>
 
 namespace ChilliSource
 {
@@ -55,12 +55,22 @@ namespace ChilliSource
         void Canvas::OnInit()
         {
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            CS_ASSERT(m_screen != nullptr, "Canvas must have access to screen");
             
             m_canvas = WidgetUPtr(new Widget());
             m_canvas->SetName("Canvas");
             m_canvas->SetAbsoluteSize(GetSize());
             m_canvas->SetCanvas(m_canvas.get());
             m_canvas->SetAbsolutePosition(GetSize() * 0.5f);
+            
+            m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnScreenResolutionChanged));
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void Canvas::OnScreenResolutionChanged(const Core::Vector2& in_resolution)
+        {
+			m_canvas->SetAbsoluteSize(in_resolution);
+			m_canvas->SetAbsolutePosition(in_resolution * 0.5f);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -91,6 +101,7 @@ namespace ChilliSource
         void Canvas::OnDestroy()
         {
             m_canvas.reset();
+            m_screenResizedConnection.reset();
         }
 	}
 }

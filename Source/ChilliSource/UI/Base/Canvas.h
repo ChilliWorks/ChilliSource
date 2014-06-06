@@ -31,6 +31,7 @@
 #define _CHILLISOURCE_UI_BASE_CANVAS_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/System/StateSystem.h>
 #include <ChilliSource/UI/Base/Widget.h>
 
@@ -126,10 +127,19 @@ namespace ChilliSource
             /// @author S Downie
             //-------------------------------------------------------
             void OnDestroy() override;
+            //-----------------------------------------------------------
+			/// Triggered if the screen resizes
+            ///
+            /// @param The new resolution
+			//-----------------------------------------------------------
+			void OnScreenResolutionChanged(const Core::Vector2& in_resolution);
+            
             
         private:
             
             WidgetUPtr m_canvas;
+            Core::EventConnectionUPtr m_screenResizedConnection;
+            
             Core::Screen* m_screen;
 		};
 	}
