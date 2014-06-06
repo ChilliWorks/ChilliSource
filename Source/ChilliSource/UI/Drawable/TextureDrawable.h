@@ -43,7 +43,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        class TextureDrawable : public IDrawable
+        class TextureDrawable final : public IDrawable
         {
         public:
             //----------------------------------------------------------------------------------------
