@@ -751,20 +751,21 @@ namespace ChilliSource
             CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute position of widget without attaching it to the canvas");
             CS_ASSERT(m_parent != nullptr, "Cannot get the absolute position of widget without a parent");
             
+            const Core::Vector2 parentSize(m_parent->GetFinalSize());
+            const Core::Vector2 parentHalfSize(parentSize * 0.5f);
+            
+            //Offset the position by the alignment anchor of the origin
+            Core::Vector2 alignmentOffset;
+            Rendering::Align(m_originAnchor, GetFinalSize() * 0.5f, alignmentOffset);
+            
             if(m_parent->m_layout == nullptr)
             {
                 //Get the anchor point to which the widget is aligned in parent space
-                const Core::Vector2 parentSize(m_parent->GetFinalSize());
-                const Core::Vector2 parentHalfSize(parentSize * 0.5f);
                 Core::Vector2 parentAnchorPos;
                 Rendering::GetAnchorPoint(m_parentalAnchor, parentHalfSize, parentAnchorPos);
                 
                 //Calculate the position relative to the anchor point
                 Core::Vector2 parentSpacePos = parentAnchorPos + (parentSize * m_localPosition.vRelative) + m_localPosition.vAbsolute;
-                
-                //Offset the position by the alignment anchor of the origin
-                Core::Vector2 alignmentOffset;
-                Rendering::Align(m_originAnchor, GetFinalSize() * 0.5f, alignmentOffset);
                 
                 return parentSpacePos + alignmentOffset;
             }
@@ -783,29 +784,7 @@ namespace ChilliSource
                 
                 CS_ASSERT(childIndex >=0, "Cannot find child");
                 
-//                const Core::Vector2 parentSize(m_parent->GetFinalSize());
-//                const Core::Vector2 parentHalfSize(parentSize * 0.5f);
-//                Core::Vector2 parentAnchorPos;
-//                Rendering::GetAnchorPoint(m_parentalAnchor, parentHalfSize, parentAnchorPos);
-//                
-//                Core::Vector2 alignmentOffset;
-//                Rendering::Align(m_originAnchor, GetFinalSize() * 0.5f, alignmentOffset);
-//                
-//                Core::Vector2 cellSize = m_parent->m_layout->GetSizeForIndex((u32)childIndex) * 0.5f;
-//                Core::Vector2 cellAnchorPos;
-//                Rendering::GetAnchorPoint(m_parentalAnchor, cellSize*0.5f, cellAnchorPos);
-//                
-//                Core::Vector2 layoutPos = m_parent->m_layout->GetPositionForIndex((u32)childIndex);
-//                Core::Vector2 pos = layoutPos + alignmentOffset + cellAnchorPos;// - parentAnchorPos;
-//                return pos;
-                
-                
-                
-                
-                
                 //The parental anchor pertains to the cell when using a layout rather than the parent widget
-                const Core::Vector2 parentSize(m_parent->GetFinalSize());
-                const Core::Vector2 parentHalfSize(parentSize * 0.5f);
                 Core::Vector2 parentAnchorPos;
                 Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, parentHalfSize, parentAnchorPos);
                 
@@ -818,10 +797,6 @@ namespace ChilliSource
                 Core::Vector2 parentSpacePos = parentAnchorPos;
                 Core::Vector2 layoutSpacePos = cellAnchorPos + (cellSize * m_localPosition.vRelative) + m_localPosition.vAbsolute + m_parent->m_layout->GetPositionForIndex((u32)childIndex);
                 
-                //Offset the position by the alignment anchor of the origin
-                Core::Vector2 alignmentOffset;
-                Rendering::Align(m_originAnchor, GetFinalSize() * 0.5f, alignmentOffset);
-
                 return parentSpacePos + layoutSpacePos + alignmentOffset;
             }
         }
