@@ -33,6 +33,7 @@
 #include <ChilliSource/ChilliSource.h>
 
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/UI/Layout/GridLayout.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 
 namespace ChilliSource
@@ -50,6 +51,12 @@ namespace ChilliSource
         class VListLayout final : public ILayout
         {
         public:
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            VListLayout();
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -130,19 +137,7 @@ namespace ChilliSource
             
         private:
             
-            Core::Vector2 m_cellSize;
-            
-            Core::Vector2 m_marginSizeTop;
-            Core::Vector2 m_marginSizeBottom;
-            Core::Vector2 m_marginSizeLeft;
-            Core::Vector2 m_marginSizeRight;
-            
-            Core::Vector2 m_spacingSize;
-            f32 m_finalSpacingSize;
-            f32 m_finalMarginLeft;
-            
-            u32 m_numCells = 1;
-            f32 m_firstCellPosY = 0.0f;
+            GridLayout m_gridLayout;
         };
     }
 }
