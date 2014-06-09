@@ -138,7 +138,7 @@ namespace ChilliSource
 			///
 			/// @param a vector.
 			/// @param another vector.
-			/// 
+			///
 			/// @return the cross product of these two vectors
 			//-----------------------------------------------------
 			static GenericVector3<TType> CrossProduct(const GenericVector3<TType>& in_a, const GenericVector3<TType>& in_b);
@@ -148,7 +148,7 @@ namespace ChilliSource
 			/// @param  A vector.
 			/// @param  Another vector.
 			///
-			/// @return The angle between the two vectors in 
+			/// @return The angle between the two vectors in
 			/// radians.
 			//-----------------------------------------------------
 			static TType Angle(const GenericVector3<TType>& in_a, const GenericVector3<TType>& in_b);
@@ -193,7 +193,7 @@ namespace ChilliSource
 			/// Constructor
 			///
 			/// @author I Copland
-			/// 
+			///
 			/// @param the x component.
 			/// @param the y component.
 			/// @param the z component.
@@ -340,6 +340,12 @@ namespace ChilliSource
 			/// subtracted from it.
 			//-----------------------------------------------------
 			GenericVector3<TType>& operator-=(const GenericVector3<TType>& in_b);
+            //-----------------------------------------------------
+            /// @author S Downie
+			///
+			/// @return This vector after it has been negated
+            //-----------------------------------------------------
+            GenericVector3<TType>& operator-();
 			//-----------------------------------------------------
 			/// @author I Copland
 			///
@@ -394,12 +400,12 @@ namespace ChilliSource
 			/// by the given scalar.
 			//-----------------------------------------------------
 			GenericVector3<TType>& operator/=(TType in_b);
-
+            
 			TType x;
 			TType y;
 			TType z;
 		};
-
+        
 		//-----------------------------------------------------
 		/// @author I Copland
 		///
@@ -526,7 +532,7 @@ namespace ChilliSource
 		template <typename TType> const GenericVector3<TType> GenericVector3<TType>::k_unitNegativeY(0, -1, 0);
 		template <typename TType> const GenericVector3<TType> GenericVector3<TType>::k_unitPositiveZ(0, 0, 1);
 		template <typename TType> const GenericVector3<TType> GenericVector3<TType>::k_unitNegativeZ(0, 0, -1);
-
+        
         //-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector3<TType> GenericVector3<TType>::Normalise(GenericVector3<TType> in_a)
@@ -598,12 +604,12 @@ namespace ChilliSource
 		{
 			TType dot = DotProduct(in_a, in_b);
 			TType totalMagnitude = in_a.Length() * in_b.Length();
-
+            
 			if (totalMagnitude == 0)
 			{
 				totalMagnitude = 1;
 			}
-
+            
 			//This just caps the quotient because in practical use, sometimes dot and totalMagnitude yield a very small number above 1.0,
 			//e.g. 1.00003 when angles tend towards 0 degrees
 			f32 ratio = dot / totalMagnitude;
@@ -615,7 +621,7 @@ namespace ChilliSource
 			{
 				ratio = -1;
 			}
-
+            
 			return std::acos(ratio);
 		}
 		//-----------------------------------------------------
@@ -638,19 +644,19 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector3<TType>::GenericVector3()
-			: x(0), y(0), z(0)
+        : x(0), y(0), z(0)
 		{
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector3<TType>::GenericVector3(TType in_x, TType in_y, TType in_z)
-			: x(in_x), y(in_y), z(in_z)
+        : x(in_x), y(in_y), z(in_z)
 		{
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector3<TType>::GenericVector3(const GenericVector2<TType>& in_xy, TType in_z)
-			: x(in_xy.x), y(in_xy.y), z(in_z)
+        : x(in_xy.x), y(in_xy.y), z(in_z)
 		{
 		}
 		//-----------------------------------------------------
@@ -684,7 +690,7 @@ namespace ChilliSource
                 z *= invLength;
             }
 		}
-
+        
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> void GenericVector3<TType>::Inverse()
@@ -693,12 +699,12 @@ namespace ChilliSource
 			{
 				x = 1 / x;
 			}
-
+            
 			if (y != 0)
 			{
 				y = 1 / y;
 			}
-
+            
 			if (z != 0)
 			{
 				z = 1 / z;
@@ -787,6 +793,15 @@ namespace ChilliSource
 			z -= in_b.z;
 			return *this;
 		}
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> GenericVector3<TType>& GenericVector3<TType>::operator-()
+        {
+            x = -x;
+			y = -y;
+			z = -z;
+			return *this;
+        }
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector3<TType>& GenericVector3<TType>::operator*=(const GenericVector3<TType>& in_b)
