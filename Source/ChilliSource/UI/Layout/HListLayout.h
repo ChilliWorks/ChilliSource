@@ -1,7 +1,7 @@
 //
-//  VListLayout.h
+//  HListLayout.h
 //  Chilli Source
-//  Created by Scott Downie on 23/04/2014.
+//  Created by Scott Downie on 09/06/2014.
 //
 //  The MIT License (MIT)
 //
@@ -27,8 +27,8 @@
 //
 
 
-#ifndef _CHILLISOURCE_UI_LAYOUT_VLISTLAYOUT_H_
-#define _CHILLISOURCE_UI_LAYOUT_VLISTLAYOUT_H_
+#ifndef _CHILLISOURCE_UI_LAYOUT_HLISTLAYOUT_H_
+#define _CHILLISOURCE_UI_LAYOUT_HLISTLAYOUT_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -40,14 +40,14 @@ namespace ChilliSource
     namespace UI
     {
         //----------------------------------------------------------------------------------------
-        /// Lays out widgets in a vertical list where each widget has a single row. The rows
+        /// Lays out widgets in a horizontal list where each widget has a single column. The columns
         /// have spacing between them and the entire list has a surrounding margin.
         ///
         /// The list size is fixed and will not expand
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        class VListLayout final : public ILayout
+        class HListLayout final : public ILayout
         {
         public:
             //----------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetAbsoluteSpacing(f32 in_spacing);
             //----------------------------------------------------------------------------------------
-            /// Lays out widgets in a vertical list where each widget has a single row.
+            /// Lays out widgets in a horizontal list where each widget has a single column.
             /// The layout will use the currently set padding and margins
             ///
             /// @author S Downie
@@ -139,10 +139,10 @@ namespace ChilliSource
             
             Core::Vector2 m_spacingSize;
             f32 m_finalSpacingSize;
-            f32 m_finalMarginLeft;
+            f32 m_finalMarginTop;
             
             u32 m_numCells = 1;
-            f32 m_firstCellPosY = 0.0f;
+            f32 m_firstCellPosX = 0.0f;
         };
     }
 }

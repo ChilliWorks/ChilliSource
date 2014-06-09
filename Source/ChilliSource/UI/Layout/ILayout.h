@@ -52,9 +52,30 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Widget performing the layout
             /// @param Widgets to layout
             //----------------------------------------------------------------------------------------
-            virtual void BuildLayout(const std::vector<WidgetSPtr>& in_widgets) const = 0;
+            virtual void BuildLayout(const Widget* in_root, const std::vector<WidgetSPtr>& in_widgets) = 0;
+            //----------------------------------------------------------------------------------------
+            /// Get the final size of the widget that occupies the space at the given index
+            ///
+            /// @author S Downie
+            ///
+            /// @param Space index
+            ///
+            /// @return Final absolute screen size
+            //----------------------------------------------------------------------------------------
+            virtual Core::Vector2 GetSizeForIndex(u32 in_index) const = 0;
+            //----------------------------------------------------------------------------------------
+            /// Get the local position of the widget that occupies the space at the given index
+            ///
+            /// @author S Downie
+            ///
+            /// @param Space index
+            ///
+            /// @return Local position (aligned middle centre of the cell)
+            //----------------------------------------------------------------------------------------
+            virtual Core::Vector2 GetPositionForIndex(u32 in_index) const = 0;
         };
     }
 }

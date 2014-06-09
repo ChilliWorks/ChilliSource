@@ -51,6 +51,7 @@ namespace ChilliSource
         /// Layout
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(ILayout);
+        CS_FORWARDDECLARE_CLASS(HListLayout);
         CS_FORWARDDECLARE_CLASS(VListLayout);
 	}
 }
