@@ -1,6 +1,6 @@
 /* The MIT License
 
-   Copyright (C) 2011 Zilong Tan (tzlloch@gmail.com)
+   Copyright (C) 2011 Zilong Tan (labytan@gmail.com)
 
    Permission is hereby granted, free of charge, to any person obtaining
    a copy of this software and associated documentation files (the
@@ -58,8 +58,8 @@
 #define AES_BLOCK_SIZE 16
 
 struct aes_key_st {
-	uint32_t rd_key[4 *(AES_MAXNR + 1)];
-	int rounds;
+        uint32_t rd_key[4 *(AES_MAXNR + 1)];
+        int rounds;
 };
 
 typedef struct aes_key_st AES_KEY;
@@ -68,22 +68,25 @@ typedef struct aes_key_st AES_KEY;
 extern "C" {
 #endif
 
-	/* bits can be 128, 192 or 256 */
-	int  AES_set_encrypt_key(const unsigned char *userKey, const int bits,
-				AES_KEY *key);
-	int  AES_set_decrypt_key(const unsigned char *userKey, const int bits,
-				AES_KEY *key);
+        /* bits can be 128, 192 or 256 */
+        int  AES_set_encrypt_key(const unsigned char *userKey, const int bits,
+                                AES_KEY *key);
+        int  AES_set_decrypt_key(const unsigned char *userKey, const int bits,
+                                AES_KEY *key);
 
-	void AES_encrypt(const unsigned char *in, unsigned char *out,
-			 const AES_KEY *key);
-	void AES_decrypt(const unsigned char *in, unsigned char *out,
-			 const AES_KEY *key);
+        /* in/out can be the same for ECB encryption/decryption */
+        void AES_encrypt(const unsigned char *in, unsigned char *out,
+                         const AES_KEY *key);
+        void AES_decrypt(const unsigned char *in, unsigned char *out,
+                         const AES_KEY *key);
 
-	void AES_cbc_encrypt(const unsigned char *in, unsigned char *out, unsigned char *ivec,
-			     unsigned long nblock, const AES_KEY *key);
+        /* in/out can be the same */
+        void AES_cbc_encrypt(const unsigned char *in, unsigned char *out, unsigned char *ivec,
+                             unsigned long nblock, const AES_KEY *key);
 
-	void AES_cbc_decrypt(const unsigned char *in, unsigned char *out, unsigned char *ivec,
-			     unsigned long nblock, const AES_KEY *key);
+        /* in/out MUST be DIFFERENT */
+        void AES_cbc_decrypt(const unsigned char *in, unsigned char *out, unsigned char *ivec,
+                             unsigned long nblock, const AES_KEY *key);
 
 
 #ifdef __cplusplus
