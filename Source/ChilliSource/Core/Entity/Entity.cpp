@@ -150,7 +150,7 @@ namespace ChilliSource
 		}
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        const EntitySPtr& Entity::GetChildEntityWithName(const std::string& in_name) const
+        const EntitySPtr& Entity::GetEntityWithName(const std::string& in_name) const
         {
             for(SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
             {
@@ -164,7 +164,7 @@ namespace ChilliSource
         }
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
-		const EntitySPtr& Entity::GetChildEntityWithNameRecursive(const std::string& in_name) const
+		const EntitySPtr& Entity::GetEntityWithNameRecursive(const std::string& in_name) const
 		{
             for (SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
             {
@@ -173,7 +173,7 @@ namespace ChilliSource
                     return (*it);
                 }
                 
-                const EntitySPtr& entity = (*it)->GetChildEntityWithNameRecursive(in_name);
+                const EntitySPtr& entity = (*it)->GetEntityWithNameRecursive(in_name);
                 if (entity != nullptr)
                 {
                     return entity;
