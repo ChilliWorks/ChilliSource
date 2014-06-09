@@ -230,17 +230,8 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::CalculateOrthographicMatrix()
 		{
-			mmatOrthoProj = Core::Matrix4::CreateOrthographicProjectionRH(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
+			mmatProj = Core::Matrix4::CreateOrthographicProjectionRH(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
 			mbProjectionCacheValid = true;
-		}
-		//------------------------------------------------------
-		/// Get Orthographic Projection 
-		///
-		/// @return Orthographic projection matrix
-		//------------------------------------------------------
-		const Core::Matrix4& CameraComponent::GetOrthoProjection() const
-		{
-			return mmatOrthoProj;
 		}
 		//------------------------------------------------------
 		/// Get Projection 
@@ -255,14 +246,10 @@ namespace ChilliSource
 			if(!mbProjectionCacheValid)
 			{
 				//Update our projection matrix
-				//If we are using a perspective matrix we will also
-				//need the orthographic matrix for screen space overlays
-				CalculateOrthographicMatrix();
-                
                 switch(mDesc.m_type)
                 {
                     case CameraType::k_orthographic:
-                        mmatProj = mmatOrthoProj;
+                        CalculateOrthographicMatrix();
                         break;
                     case CameraType::k_perspective:
                         CalculatePerspectiveMatrix();

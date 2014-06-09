@@ -196,12 +196,6 @@ namespace ChilliSource
 			//------------------------------------------------------
 			const Core::Matrix4& GetView();
 			//------------------------------------------------------
-			/// Get Orthographic Projection 
-			///
-			/// @return Orthographic projection matrix
-			//------------------------------------------------------
-			const Core::Matrix4& GetOrthoProjection() const;
-			//------------------------------------------------------
 			/// Unproject
 			///
 			/// Project from a point in screen space to a ray in
@@ -314,7 +308,6 @@ namespace ChilliSource
 			CameraDescription mDesc;
 			Core::Frustum mFrustum;
 			
-			Core::Matrix4 mmatOrthoProj; //Ortho projection matrix;
 			Core::Matrix4 mmatProj;		//Projection matrix depending on whether we are an ortho or perspective camera
 			Core::Matrix4 mmatView;		//View matrix
 			Core::Matrix4 mmatViewProj;	//View projection;
