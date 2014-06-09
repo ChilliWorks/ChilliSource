@@ -9,8 +9,9 @@
 #include <ChilliSource/Core/Cryptographic/OAuth.h>
 
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
-#include <ChilliSource/Core/Cryptographic/HMAC_SHA1.h>
 #include <ChilliSource/Core/String/StringUtils.h>
+
+#include <ThirdParty/SHA1/HMAC_SHA1.h>
 
 #include <algorithm>
 #include <ctime>
@@ -216,8 +217,8 @@ namespace ChilliSource
                     u8 digest[k_bufferSize];
                     memset(digest, 0, k_bufferSize);
                     
-                    HMAC_SHA1 objHMACSHA1;
-                    objHMACSHA1.Generate((u8*)sigBase.c_str(), sigBase.length(), (u8*)secretSigningKey.c_str(), secretSigningKey.length(), (u8*)digest);
+                    CHMAC_SHA1 objHMACSHA1;
+                    objHMACSHA1.HMAC_SHA1((u8*)sigBase.c_str(), sigBase.length(), (u8*)secretSigningKey.c_str(), secretSigningKey.length(), (u8*)digest);
                     
                     //Do a base64 encode of signature - SHA 1 digest is 160 bits
                     std::string base64String = BaseEncoding::Base64Encode((s8*)digest, 20);

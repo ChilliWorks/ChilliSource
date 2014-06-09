@@ -57,9 +57,9 @@ public:
   void update(const unsigned char *buf, size_type length);
   void update(const char *buf, size_type length);
   MD5& finalize();
-  unsigned char* binarydigest() const {return (unsigned char*)digest;} //I Copland, 09/06/2014: added an accessor for the raw digest.
   std::string hexdigest() const;
   friend std::ostream& operator<<(std::ostream&, MD5 md5);
+  std::string binarydigest() const {return std::string(reinterpret_cast<const char*>(digest), 16);} //I Copland, 09/06/2014: added accessor for the raw digest.
     
 private:
   void init();

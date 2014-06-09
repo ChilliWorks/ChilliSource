@@ -31,8 +31,8 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
-#include <ChilliSource/Core/Cryptographic/aes.h>
 #include <ChilliSource/Core/Cryptographic/AESEncrypt.h>
+#include <ChilliSource/Core/Cryptographic/HashSHA1.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
@@ -59,12 +59,8 @@ namespace ChilliSource
                 Device* device = Application::Get()->GetSystem<Device>();
                 
                 //calculate the SHA1 hash.
-                SHA1 hash;
-                hash.Reset();
-                hash.Update((u8*)device->GetUDID().c_str(), device->GetUDID().size());
-                hash.Update((u8*)k_salt.c_str(), k_salt.size());
-                hash.Final();
-                std::string hexHash = hash.GetHash(SHA1::REPORT_HEX_SHORT);
+                std::string hashableString = device->GetUDID() + k_salt;
+                std::string hexHash = HashSHA1::GenerateHexHashCode(hashableString.c_str(), hashableString.length());
                 CS_ASSERT(hexHash.length() == 40, "Something has gone wrong with the SHA1 hash.");
                 
                 //truncate into 128 bits.

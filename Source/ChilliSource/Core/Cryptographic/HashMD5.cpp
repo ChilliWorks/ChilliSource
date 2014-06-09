@@ -63,7 +63,7 @@ namespace ChilliSource
             std::string GenerateBinaryHashCode(const std::string &in_value)
             {
                 MD5 Hash(in_value);
-                return std::string((const s8*)Hash.binarydigest(), 16);
+                return Hash.binarydigest();
             }
             //-------------------------------------------------------------
             //-------------------------------------------------------------
@@ -78,7 +78,7 @@ namespace ChilliSource
                 MD5 Hash;
                 Hash.update(in_value, in_size);
                 Hash.finalize();
-                return std::string((const s8*)Hash.binarydigest(), 16);
+                return Hash.binarydigest();
             }
         }
     }

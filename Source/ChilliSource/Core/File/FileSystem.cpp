@@ -24,6 +24,8 @@
 #include <CSBackend/Platform/Windows/Core/File/FileSystem.h>
 #endif
 
+#include <ThirdParty/MD5/md5.h>
+
 #include <algorithm>
 
 namespace ChilliSource
@@ -198,7 +200,7 @@ namespace ChilliSource
             const u32 k_chunkSize = 256;
             s8 data[k_chunkSize];
             
-            HashMD5::MD5 hash;
+            MD5 hash;
             s32 size = k_chunkSize;
             
             FileStreamUPtr file = CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);

@@ -37,11 +37,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(ParamDictionary);
         template <typename T> class WorkerQueue;
         //---------------------------------------------------------
-        /// Cryptographic
-        //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(HMAC_SHA1);
-        CS_FORWARDDECLARE_CLASS(SHA1);
-        //---------------------------------------------------------
         /// Delegate
         //---------------------------------------------------------
         template <typename TReturnType, typename... TArgTypes> class ConnectableDelegate;
@@ -83,8 +78,8 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Localisation
         //---------------------------------------------------------
-	CS_FORWARDDECLARE_CLASS(LocalisedText);
-	CS_FORWARDDECLARE_CLASS(LocalisedTextProvider);
+        CS_FORWARDDECLARE_CLASS(LocalisedText);
+        CS_FORWARDDECLARE_CLASS(LocalisedTextProvider);
         //---------------------------------------------------------
         /// Math
         //---------------------------------------------------------

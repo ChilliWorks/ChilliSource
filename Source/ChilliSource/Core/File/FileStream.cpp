@@ -8,9 +8,8 @@
 
 #include <ChilliSource/Core/File/FileStream.h>
 
-#include <ChilliSource/Core/Cryptographic/SHA1.h>
-
 #include <ThirdParty/MD5/md5.h>
+#include <ThirdParty/SHA1/sha1.h>
 
 #include <sstream>
 
@@ -45,12 +44,12 @@ namespace ChilliSource
             SeekG(dwCurrentPos);
             
             Hash.finalize();
-            return std::string((const s8*)Hash.binarydigest(), 16);
+            return Hash.binarydigest();
         }
         //--------------------------------------------------------------
         /// Get SHA1 Checksum
         //--------------------------------------------------------------
-        std::string FileStream::GetSHA1Checksum(SHA1::ReportType ineReportType)
+        std::string FileStream::GetSHA1Checksum(CSHA1::REPORT_TYPE ineReportType)
         {
             s32 dwCurrentPos = TellG();
             SeekG(0);
@@ -58,7 +57,7 @@ namespace ChilliSource
             const u32 kudwChunkSize = 256;
             s8 byData[kudwChunkSize];
             
-            SHA1 Hash;
+            CSHA1 Hash;
             Hash.Reset();
             s32 dwSize = kudwChunkSize;
             
@@ -71,7 +70,12 @@ namespace ChilliSource
             SeekG(dwCurrentPos);
             
             Hash.Final();
-            return Hash.GetHash(ineReportType);
+            
+            const u32 kudwMaxSHA1Length = 80;
+            char cHash[kudwMaxSHA1Length];
+            memset(cHash, 0, kudwMaxSHA1Length);
+            Hash.ReportHash(cHash, ineReportType);
+            return std::string(cHash);
         }
         //--------------------------------------------------------------------------------------------------
 		/// Open
