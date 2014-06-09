@@ -6,9 +6,11 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/Cryptographic/HashMD5.h>
-#include <ChilliSource/Core/Cryptographic/SHA1.h>
 #include <ChilliSource/Core/File/FileStream.h>
+
+#include <ChilliSource/Core/Cryptographic/SHA1.h>
+
+#include <ThirdParty/MD5/md5.h>
 
 #include <sstream>
 
@@ -31,7 +33,7 @@ namespace ChilliSource
             const u32 kudwChunkSize = 256;
             s8 byData[kudwChunkSize];
             
-            HashMD5::MD5 Hash;
+            MD5 Hash;
             s32 dwSize = kudwChunkSize;
             
             while(dwSize != 0)
@@ -43,7 +45,7 @@ namespace ChilliSource
             SeekG(dwCurrentPos);
             
             Hash.finalize();
-            return Hash.binarydigest();
+            return std::string((const s8*)Hash.binarydigest(), 16);
         }
         //--------------------------------------------------------------
         /// Get SHA1 Checksum
