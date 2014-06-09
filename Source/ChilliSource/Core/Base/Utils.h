@@ -188,6 +188,25 @@ namespace ChilliSource
             }
             
             Vector2 ScaleMaintainingAspectRatio(const Vector2& invCurrentSize, const Vector2& invTargetSize, bool inbFitInside = false);
+            
+            //-------------------------------------------------------
+            /// Converts a value in the range [0,255] to hex value
+            ///
+            /// @author S Downie
+            ///
+            /// @param Integer value in range [0,255]
+            ///
+            /// @return String hex representation of integer
+            //-------------------------------------------------------
+            std::string CharToHex(u8 in_dec);
+            //------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A single hexidecimal value to convert
+            ///
+            /// @return Base ten representation of hex value or -1
+            //------------------------------------------------------
+            u8 HexToDec(const u8* in_hex);
 		};
 	}
 }

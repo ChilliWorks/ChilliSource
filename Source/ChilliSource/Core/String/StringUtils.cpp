@@ -8,6 +8,7 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
+#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
@@ -681,6 +682,74 @@ namespace ChilliSource
                 
                 //Add the last one without a following comma
                 out_csv += in_values[numVals];
+            }
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            std::string URLEncode(const std::string& instrURL)
+            {
+                std::string strEscaped;
+                
+                u32 dwMax = instrURL.length();
+                for(u32 i = 0; i < dwMax; i++)
+                {
+                    if( (48 <= instrURL[i] && instrURL[i] <= 57) ||			// 0-9
+                       (65 <= instrURL[i] && instrURL[i] <= 90) ||			// ABC...XYZ
+                       (97 <= instrURL[i] && instrURL[i] <= 122) || 		// abc...xyz
+                       (instrURL[i]=='~' || instrURL[i]=='-' || instrURL[i]=='_' || instrURL[i]=='.') )
+                    {
+                        strEscaped.append(&instrURL[i], 1);
+                    }
+                    else
+                    {
+                        strEscaped.append("%");
+                        strEscaped.append(Utils::CharToHex((u8)instrURL[i])); // Converts char 255 to string "FF"
+                    }
+                }
+                
+                return strEscaped;
+            }
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            std::string URLDecode(const std::string& instrSrc)
+            {
+                // Note from RFC1630: "Sequences which start with a percent
+                // sign but are not followed by two hexadecimal characters
+                // (0-9, A-F) are reserved for future extension"
+                
+                const unsigned char* pSrc = (const unsigned char*)instrSrc.c_str();
+                const int udwSourceLength = instrSrc.length();
+                const unsigned char* const pSourceEnd = pSrc + udwSourceLength;
+                // last decodable '%'
+                const unsigned char* const pSourceLastDecode = pSourceEnd - 2;
+                
+                char* const pStart = new char[udwSourceLength];
+                char* pEnd = pStart;
+                
+                while(pSrc < pSourceLastDecode)
+                {
+                    if(*pSrc == '%')
+                    {
+                        char dec1 = static_cast<char>(Utils::HexToDec((pSrc + 1)));
+                        char dec2 = static_cast<char>(Utils::HexToDec((pSrc + 2)));
+                        if(-1 != dec1 && -1 != dec2)
+                        {
+                            *pEnd++ = (dec1 << 4) + dec2;
+                            pSrc += 3;
+                            continue;
+                        }
+                    }
+                    *pEnd++ = *pSrc++;
+                }
+                
+                // the last 2- chars
+                while(pSrc < pSourceEnd)
+                {
+                    *pEnd++ = *pSrc++;
+                }
+                
+                std::string sResult(pStart, pEnd);
+                delete [] pStart;
+                return sResult;
             }
         }
 	}
