@@ -632,6 +632,17 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void OnParentTransformChanged();
             //----------------------------------------------------------------------------------------
+            /// Calculate the final screen space size of the given child based on the widget
+            /// and the layout
+            ///
+            /// @author S Downie
+            ///
+            /// @param Child
+            ///
+            /// @return Screen space size
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 CalculateChildFinalSize(const Widget* in_child);
+            //----------------------------------------------------------------------------------------
             /// Delegate for size policy functions.
             ///
             /// @author S Downie
