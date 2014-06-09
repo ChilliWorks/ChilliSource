@@ -99,7 +99,7 @@ namespace ChilliSource
             Core::StorageLocation eBarTextureAtlasLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BarTextureAtlasLocation", strValue))
             {
-                eBarTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eBarTextureAtlasLocation = CSCore::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("BarTextureAtlas", strValue))
 			{
@@ -110,7 +110,7 @@ namespace ChilliSource
             Core::StorageLocation eSliderTextureAtlasLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SliderTextureAtlasLocation", strValue))
             {
-                eSliderTextureAtlasLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eSliderTextureAtlasLocation = CSCore::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("SliderTextureAtlas", strValue))
 			{

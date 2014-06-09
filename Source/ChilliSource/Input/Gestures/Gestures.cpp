@@ -373,13 +373,13 @@ namespace ChilliSource
             }
 		}
         
-        void PinchGesture::PopulateStartPositions(ChilliSource::Core::Vector2& outvFirstPosition, ChilliSource::Core::Vector2& outvSecondPosition) const
+        void PinchGesture::PopulateStartPositions(CSCore::Vector2& outvFirstPosition, CSCore::Vector2& outvSecondPosition) const
         {
             outvFirstPosition = mvStartPos1;
             outvSecondPosition = mvStartPos2;
         }
         
-        void PinchGesture::PopulateCurrentPositions(ChilliSource::Core::Vector2& outvFirstPosition, ChilliSource::Core::Vector2& outvSecondPosition) const
+        void PinchGesture::PopulateCurrentPositions(CSCore::Vector2& outvFirstPosition, CSCore::Vector2& outvSecondPosition) const
         {
             outvFirstPosition = mvCurrentPos1;
             outvSecondPosition = mvCurrentPos2;

@@ -29,15 +29,15 @@
 #include <ChilliSource/Core/Base/Screen.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Core/Base/Screen.h>
+#include <CSBackend/Platform/Android/Core/Base/Screen.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Core/Base/Screen.h>
+#include <CSBackend/Platform/iOS/Core/Base/Screen.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Core/Base/Screen.h>
+#include <CSBackend/Platform/Windows/Core/Base/Screen.h>
 #endif
 
 namespace ChilliSource
@@ -50,11 +50,11 @@ namespace ChilliSource
         ScreenUPtr Screen::Create()
         {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return ScreenUPtr(new Android::Screen());
+            return ScreenUPtr(new CSBackend::Android::Screen());
 #elif defined CS_TARGETPLATFORM_IOS
-            return ScreenUPtr(new iOS::Screen());
+            return ScreenUPtr(new CSBackend::iOS::Screen());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return ScreenUPtr(new Windows::Screen());
+            return ScreenUPtr(new CSBackend::Windows::Screen());
 #else
             return nullptr;
 #endif

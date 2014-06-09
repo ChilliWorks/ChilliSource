@@ -134,7 +134,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Treats the two vectors as 3D with the z-component
 			/// set to zero to calculate the z component of the
-			/// cross product. 
+			/// cross product.
 			///
 			/// @author I Copland
 			///
@@ -150,7 +150,7 @@ namespace ChilliSource
 			/// @param  A vector.
 			/// @param  Another vector.
 			///
-			/// @return The angle between the two vectors in 
+			/// @return The angle between the two vectors in
 			/// radians.
 			//-----------------------------------------------------
 			static TType Angle(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b);
@@ -183,7 +183,7 @@ namespace ChilliSource
 			/// Constructor
 			///
 			/// @author I Copland
-			/// 
+			///
 			/// @param the x component.
 			/// @param the y component.
 			//-----------------------------------------------------
@@ -306,7 +306,7 @@ namespace ChilliSource
 			///
 			/// @param Another vector.
 			///
-			/// @return This vector after being multiplied by the 
+			/// @return This vector after being multiplied by the
 			/// given vector.
 			//-----------------------------------------------------
 			GenericVector2<TType>& operator*=(const GenericVector2<TType>& in_b);
@@ -315,7 +315,7 @@ namespace ChilliSource
 			///
 			/// @param Another vector.
 			///
-			/// @return This vector after being divided by the 
+			/// @return This vector after being divided by the
 			/// given vector.
 			//-----------------------------------------------------
 			GenericVector2<TType>& operator/=(const GenericVector2<TType>& in_b);
@@ -324,7 +324,7 @@ namespace ChilliSource
 			///
 			/// @param A matrix.
 			///
-			/// @return This vector after being multiplied by the 
+			/// @return This vector after being multiplied by the
 			/// given matrix.
 			//-----------------------------------------------------
 			GenericVector2<TType>& operator*=(const GenericMatrix3<TType>& in_b);
@@ -333,7 +333,7 @@ namespace ChilliSource
 			///
 			/// @param  A scalar.
 			///
-			/// @return This vector after being multiplied by the 
+			/// @return This vector after being multiplied by the
 			/// given scalar.
 			//-----------------------------------------------------
 			GenericVector2<TType>& operator*=(TType in_b);
@@ -342,11 +342,11 @@ namespace ChilliSource
 			///
 			/// @param A scalar.
 			///
-			/// @return This vector after being divided by the 
+			/// @return This vector after being divided by the
 			/// given scalar.
 			//-----------------------------------------------------
 			GenericVector2<TType>& operator/=(TType in_b);
-
+            
 			TType x;
 			TType y;
 		};
@@ -553,13 +553,13 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType>::GenericVector2()
-			: x(0), y(0)
+        : x(0), y(0)
 		{
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType>::GenericVector2(TType in_x, TType in_y)
-			: x(in_x), y(in_y)
+        : x(in_x), y(in_y)
 		{
 		}
 		//-----------------------------------------------------
@@ -594,7 +594,7 @@ namespace ChilliSource
 			{
 				x = 1 / x;
 			}
-
+            
 			if (y != 0)
 			{
 				y = 1 / y;

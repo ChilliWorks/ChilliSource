@@ -29,15 +29,15 @@
 #include <ChilliSource/Core/Image/PNGImageProvider.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Core/Image/PNGImageProvider.h>
+#include <CSBackend/Platform/iOS/Core/Image/PNGImageProvider.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Core/Image/PNGImageProvider.h>
+#include <CSBackend/Platform/Android/Core/Image/PNGImageProvider.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Core/Image/PNGImageProvider.h>
+#include <CSBackend/Platform/Windows/Core/Image/PNGImageProvider.h>
 #endif
 
 namespace ChilliSource
@@ -49,13 +49,13 @@ namespace ChilliSource
         PNGImageProviderUPtr PNGImageProvider::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return PNGImageProviderUPtr(new iOS::PNGImageProvider());
+            return PNGImageProviderUPtr(new CSBackend::iOS::PNGImageProvider());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
-            return PNGImageProviderUPtr(new Android::PNGImageProvider());
+            return PNGImageProviderUPtr(new CSBackend::Android::PNGImageProvider());
 #endif
 #ifdef CS_TARGETPLATFORM_WINDOWS
-            return PNGImageProviderUPtr(new Windows::PNGImageProvider());
+            return PNGImageProviderUPtr(new CSBackend::Windows::PNGImageProvider());
 #endif
         }
     }

@@ -244,25 +244,25 @@ namespace ChilliSource
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-            const ChilliSource::Core::Vector4 & GetUpperLeftCornerPos();
+            const CSCore::Vector4 & GetUpperLeftCornerPos();
             //-----------------------------------------------------------
             /// Get Lower Left Corner Position
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-			const ChilliSource::Core::Vector4 & GetLowerLeftCornerPos();
+			const CSCore::Vector4 & GetLowerLeftCornerPos();
             //-----------------------------------------------------------
             /// Get Upper Right Corner Position
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-			const ChilliSource::Core::Vector4 & GetUpperRightCornerPos();
+			const CSCore::Vector4 & GetUpperRightCornerPos();
             //-----------------------------------------------------------
             /// Get Lower Right Corner Position
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-			const ChilliSource::Core::Vector4 & GetLowerRightCornerPos();
+			const CSCore::Vector4 & GetLowerRightCornerPos();
             //-----------------------------------------------------------
             /// Get Sprite Data
             ///

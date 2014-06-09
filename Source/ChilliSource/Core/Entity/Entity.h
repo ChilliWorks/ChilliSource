@@ -98,14 +98,14 @@ namespace ChilliSource
 			/// @return The first component of type
 			//-------------------------------------------------------------
 			template <typename TComponentType>
-            std::shared_ptr<TComponentType>& GetComponent();
+            std::shared_ptr<TComponentType> GetComponent();
             //-------------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return The first component of type
 			//-------------------------------------------------------------
 			template <typename TComponentType>
-            const std::shared_ptr<const TComponentType>& GetComponent() const;
+            std::shared_ptr<const TComponentType> GetComponent() const;
 			//-------------------------------------------------------------
 			/// Search the list of components and add ones to the list
 			/// that are of given interface type
@@ -182,7 +182,7 @@ namespace ChilliSource
             /// into child entities
 			//-------------------------------------------------------------
 			template <typename TComponentType>
-            std::shared_ptr<TComponentType>& GetComponentRecursive();
+            std::shared_ptr<TComponentType> GetComponentRecursive();
             //-------------------------------------------------------------
 			/// Recursively descend from the entity through its children
             /// searching for components with given interface ID
@@ -193,7 +193,7 @@ namespace ChilliSource
             /// into child entities
 			//-------------------------------------------------------------
 			template <typename TComponentType>
-            const std::shared_ptr<const TComponentType>& GetComponentRecursive() const;
+            std::shared_ptr<const TComponentType> GetComponentRecursive() const;
 			//-------------------------------------------------------------
 			/// Recursively descend from the entity through its children
             /// searching for components with given interface ID
@@ -306,7 +306,7 @@ namespace ChilliSource
 			///
 			/// @return An entity with the specified name or null
 			//------------------------------------------------------------------
-            const EntitySPtr&  GetChildEntityWithName(const std::string& in_name) const;
+            const EntitySPtr& GetEntityWithName(const std::string& in_name) const;
 			//------------------------------------------------------------------
 			/// Recursively search the entity hierarchy in a depth-first manner
 			/// and return a pointer to the first entity it finds with the name matching
@@ -316,7 +316,7 @@ namespace ChilliSource
             ///
 			/// @return An entity with the specified name or null
 			//------------------------------------------------------------------
-			const EntitySPtr& GetChildEntityWithNameRecursive(const std::string& in_name) const;
+			const EntitySPtr& GetEntityWithNameRecursive(const std::string& in_name) const;
             //------------------------------------------------------------------
             /// @author A Mackie
 			///
@@ -438,14 +438,14 @@ namespace ChilliSource
         //-------------------------------------------------------------
         //-------------------------------------------------------------
         template <typename TComponentType>
-        std::shared_ptr<TComponentType>& Entity::GetComponent()
+        std::shared_ptr<TComponentType> Entity::GetComponent()
         {
             return std::static_pointer_cast<TComponentType>(GetComponent(TComponentType::InterfaceID));
         }
         //-------------------------------------------------------------
         //-------------------------------------------------------------
         template <typename TComponentType>
-        const std::shared_ptr<const TComponentType>& Entity::GetComponent() const
+        std::shared_ptr<const TComponentType> Entity::GetComponent() const
         {
             return std::static_pointer_cast<const TComponentType>(GetComponent(TComponentType::InterfaceID));
         }
@@ -554,14 +554,14 @@ namespace ChilliSource
         //-------------------------------------------------------------
         //-------------------------------------------------------------
         template <typename TComponentType>
-        std::shared_ptr<TComponentType>& Entity::GetComponentRecursive()
+        std::shared_ptr<TComponentType> Entity::GetComponentRecursive()
         {
             return std::static_pointer_cast<TComponentType>(GetComponentRecursive(TComponentType::InterfaceID));
         }
         //-------------------------------------------------------------
         //-------------------------------------------------------------
         template <typename TComponentType>
-        const std::shared_ptr<const TComponentType>& Entity::GetComponentRecursive() const
+        std::shared_ptr<const TComponentType> Entity::GetComponentRecursive() const
         {
             return std::static_pointer_cast<const TComponentType>(GetComponentRecursive(TComponentType::InterfaceID));
         }

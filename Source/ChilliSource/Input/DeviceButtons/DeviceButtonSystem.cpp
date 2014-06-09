@@ -29,15 +29,15 @@
 #include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Input/DeviceButtons/DeviceButtonSystem.h>
+#include <CSBackend/Platform/Android/Input/DeviceButtons/DeviceButtonSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS
-#import <ChilliSource/Backend/Platform/iOS/Input/DeviceButtons/DeviceButtonSystem.h>
+#import <CSBackend/Platform/iOS/Input/DeviceButtons/DeviceButtonSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Input/DeviceButtons/DeviceButtonSystem.h>
+#include <CSBackend/Platform/Windows/Input/DeviceButtons/DeviceButtonSystem.h>
 #endif
 
 namespace ChilliSource
@@ -50,11 +50,11 @@ namespace ChilliSource
         DeviceButtonSystemUPtr DeviceButtonSystem::Create()
         {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return DeviceButtonSystemUPtr(new Android::DeviceButtonSystem());
+            return DeviceButtonSystemUPtr(new CSBackend::Android::DeviceButtonSystem());
 #elif defined CS_TARGETPLATFORM_IOS
-            return DeviceButtonSystemUPtr(new iOS::DeviceButtonSystem());
+            return DeviceButtonSystemUPtr(new CSBackend::iOS::DeviceButtonSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return DeviceButtonSystemUPtr(new Windows::DeviceButtonSystem());
+            return DeviceButtonSystemUPtr(new CSBackend::Windows::DeviceButtonSystem());
 #else
             return nullptr;
 #endif

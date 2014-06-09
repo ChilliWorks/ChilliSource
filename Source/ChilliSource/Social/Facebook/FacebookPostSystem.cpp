@@ -9,9 +9,9 @@
 #include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
+#include <CSBackend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
 #elif CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
+#include <CSBackend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
 #endif
 
 namespace ChilliSource
@@ -24,9 +24,9 @@ namespace ChilliSource
         FacebookPostSystemUPtr FacebookPostSystem::Create(FacebookAuthenticationSystem* inpAuthSystem)
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return FacebookPostSystemUPtr(new iOS::FacebookPostSystem(inpAuthSystem));
+            return FacebookPostSystemUPtr(new CSBackend::iOS::FacebookPostSystem(inpAuthSystem));
 #elif CS_TARGETPLATFORM_ANDROID
-            return FacebookPostSystemUPtr(new Android::FacebookPostSystem(inpAuthSystem));
+            return FacebookPostSystemUPtr(new CSBackend::Android::FacebookPostSystem(inpAuthSystem));
 #else
 			return FacebookPostSystemUPtr();
 #endif

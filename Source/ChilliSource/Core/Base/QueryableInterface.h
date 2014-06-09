@@ -34,15 +34,15 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #define CS_DECLARE_NAMEDTYPE(x) \
-    static const ::ChilliSource::Core::InterfaceIDType InterfaceID; \
+    static const ::CSCore::InterfaceIDType InterfaceID; \
     static const ::std::string TypeName; \
-    virtual ::ChilliSource::Core::InterfaceIDType GetInterfaceID() const; \
+    virtual ::CSCore::InterfaceIDType GetInterfaceID() const; \
     virtual const ::std::string& GetInterfaceTypeName() const;
 
 #define CS_DEFINE_NAMEDTYPE(x) \
-    const ::ChilliSource::Core::InterfaceIDType x::InterfaceID = ::ChilliSource::Core::QueryableInterface::InterfaceIDHash(#x); \
-    const ::std::string x::TypeName = ::ChilliSource::Core::StringUtils::StandardiseClassName(#x); \
-    ::ChilliSource::Core::InterfaceIDType x::GetInterfaceID() const \
+    const ::CSCore::InterfaceIDType x::InterfaceID = ::CSCore::QueryableInterface::InterfaceIDHash(#x); \
+    const ::std::string x::TypeName = ::CSCore::StringUtils::StandardiseClassName(#x); \
+    ::CSCore::InterfaceIDType x::GetInterfaceID() const \
     { \
         return InterfaceID; \
     } \

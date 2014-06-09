@@ -114,7 +114,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         void TextureAtlasProvider::LoadFrames(Core::StorageLocation in_location, const std::string& in_filePath, TextureAtlas::Descriptor& out_desc)
         {
-            ChilliSource::Core::FileStreamSPtr frameFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, ChilliSource::Core::FileMode::k_readBinary);
+            CSCore::FileStreamSPtr frameFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, CSCore::FileMode::k_readBinary);
 			
 			if(frameFile->IsOpen() == false)
 			{

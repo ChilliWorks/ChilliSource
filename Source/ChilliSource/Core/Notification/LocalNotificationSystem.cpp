@@ -11,11 +11,11 @@
 #include <ChilliSource/Core/Base/Application.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Core/Notification/LocalNotificationSystem.h>
+#include <CSBackend/Platform/iOS/Core/Notification/LocalNotificationSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Core/Notification/LocalNotificationSystem.h>
+#include <CSBackend/Platform/Android/Core/Notification/LocalNotificationSystem.h>
 #endif
 
 namespace ChilliSource
@@ -28,10 +28,10 @@ namespace ChilliSource
         LocalNotificationSystemUPtr LocalNotificationSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return LocalNotificationSystemUPtr(new iOS::LocalNotificationSystem());
+            return LocalNotificationSystemUPtr(new CSBackend::iOS::LocalNotificationSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
-            return LocalNotificationSystemUPtr(new Android::LocalNotificationSystem());
+            return LocalNotificationSystemUPtr(new CSBackend::Android::LocalNotificationSystem());
 #endif
             return nullptr;
         }

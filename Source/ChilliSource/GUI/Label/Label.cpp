@@ -175,7 +175,7 @@ namespace ChilliSource
             Core::StorageLocation eFontLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("FontLocation", strValue))
             {
-                eFontLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eFontLocation = CSCore::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("Font", strValue))
             {

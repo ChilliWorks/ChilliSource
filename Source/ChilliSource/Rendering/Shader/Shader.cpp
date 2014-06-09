@@ -29,7 +29,7 @@
 #include <ChilliSource/Rendering/Shader/Shader.h>
 
 #if defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_WINDOWS)
-#include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
+#include <CSBackend/Rendering/OpenGL/Shader/Shader.h>
 #endif
 
 namespace ChilliSource
@@ -42,7 +42,7 @@ namespace ChilliSource
         ShaderUPtr Shader::Create()
         {
 #if defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_WINDOWS)
-            return ShaderUPtr(new OpenGL::Shader());
+            return ShaderUPtr(new CSBackend::OpenGL::Shader());
 #else
             return nullptr;
 #endif

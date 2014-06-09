@@ -390,10 +390,10 @@ namespace ChilliSource
             CreateSystem<Rendering::RenderComponentFactory>();
             
             //Particles
-            CreateSystem<CSRendering::ParticleSystem>();
-            CreateSystem<CSRendering::ParticleEmitterFactory>();
-            CreateSystem<CSRendering::ParticleAffectorFactory>();
-            CreateSystem<CSRendering::CSParticleEffectProvider>();
+            CreateSystem<Rendering::ParticleSystem>();
+            CreateSystem<Rendering::ParticleEmitterFactory>();
+            CreateSystem<Rendering::ParticleAffectorFactory>();
+            CreateSystem<Rendering::CSParticleEffectProvider>();
 
             //Create any platform specific default systems
             m_platformSystem->CreateDefaultSystems(this);
@@ -416,8 +416,8 @@ namespace ChilliSource
             m_renderSystem->Init();
             
             //Texture/Cubemap provider is a compound provider and needs to be informed when the other providers are created.
-            GetSystem<CSRendering::TextureProvider>()->PostCreate();
-            GetSystem<CSRendering::CubemapProvider>()->PostCreate();
+            GetSystem<Rendering::TextureProvider>()->PostCreate();
+            GetSystem<Rendering::CubemapProvider>()->PostCreate();
             
             //Load the app config set preferred FPS.
             m_appConfig->Load();

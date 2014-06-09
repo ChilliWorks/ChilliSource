@@ -29,11 +29,11 @@
 #include <ChilliSource/Social/Communications/EmailComposer.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#import <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailComposer.h>
+#import <CSBackend/Platform/iOS/Social/Communications/EmailComposer.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailComposer.h>
+#include <CSBackend/Platform/Android/Social/Communications/EmailComposer.h>
 #endif
 
 namespace ChilliSource
@@ -46,16 +46,16 @@ namespace ChilliSource
         EmailComposerUPtr EmailComposer::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            if (iOS::EmailComposer::IsSupportedByDevice() == true)
+            if (CSBackend::iOS::EmailComposer::IsSupportedByDevice() == true)
             {
-                return EmailComposerUPtr(new iOS::EmailComposer());
+                return EmailComposerUPtr(new CSBackend::iOS::EmailComposer());
             }
             else
             {
                 return nullptr;
             }
 #elif defined CS_TARGETPLATFORM_ANDROID
-            return EmailComposerUPtr(new Android::EmailComposer());
+            return EmailComposerUPtr(new CSBackend::Android::EmailComposer());
 #else
             return nullptr;
 #endif

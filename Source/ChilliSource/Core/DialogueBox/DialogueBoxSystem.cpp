@@ -9,11 +9,15 @@
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#   include <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxSystem.h>
-#elif defined CS_TARGETPLATFORM_ANDROID
-#   include <ChilliSource/Backend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
-#elif defined CS_TARGETPLATFORM_WINDOWS
-#   include <ChilliSource/Backend/Platform/Windows/Core/DialogueBox/DialogueBoxSystem.h>
+#include <CSBackend/Platform/iOS/Core/DialogueBox/DialogueBoxSystem.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_ANDROID
+#include <CSBackend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <CSBackend/Platform/Windows/Core/DialogueBox/DialogueBoxSystem.h>
 #endif
 
 namespace ChilliSource
@@ -26,11 +30,11 @@ namespace ChilliSource
         DialogueBoxSystemUPtr DialogueBoxSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return DialogueBoxSystemUPtr(new iOS::DialogueBoxSystem());
+            return DialogueBoxSystemUPtr(new CSBackend::iOS::DialogueBoxSystem());
 #elif defined CS_TARGETPLATFORM_ANDROID
-            return DialogueBoxSystemUPtr(new Android::DialogueBoxSystem());
+            return DialogueBoxSystemUPtr(new CSBackend::Android::DialogueBoxSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return DialogueBoxSystemUPtr(new Windows::DialogueBoxSystem());
+            return DialogueBoxSystemUPtr(new CSBackend::Windows::DialogueBoxSystem());
 #else
             return nullptr;
 #endif

@@ -244,7 +244,7 @@ namespace ChilliSource
             ///
             /// @param Time since last update (Secs)
 			//-----------------------------------------
-			virtual void OnUpdate(f32){};
+			virtual void OnUpdate(f32 in_deltaTime){};
             //-----------------------------------------
             /// Triggered each update loop at a fixed
             /// interval while the state is the active
@@ -254,7 +254,7 @@ namespace ChilliSource
             ///
             /// @param Fixed time since last update (Secs)
 			//-----------------------------------------
-			virtual void OnFixedUpdate(f32){};
+			virtual void OnFixedUpdate(f32 in_deltaTime){};
             //-----------------------------------------
             /// Triggered when a state is the
             /// active state in the state manager and

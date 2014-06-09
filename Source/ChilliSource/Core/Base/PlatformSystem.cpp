@@ -29,15 +29,15 @@
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Core/Base/PlatformSystem.h>
+#include <CSBackend/Platform/Android/Core/Base/PlatformSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS
-#import <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
+#import <CSBackend/Platform/iOS/Core/Base/PlatformSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
+#include <CSBackend/Platform/Windows/Core/Base/PlatformSystem.h>
 #endif
 
 namespace ChilliSource
@@ -50,11 +50,11 @@ namespace ChilliSource
         PlatformSystemUPtr PlatformSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return PlatformSystemUPtr(new iOS::PlatformSystem());
+            return PlatformSystemUPtr(new CSBackend::iOS::PlatformSystem());
 #elif defined CS_TARGETPLATFORM_ANDROID
-            return PlatformSystemUPtr(new Android::PlatformSystem());
+            return PlatformSystemUPtr(new CSBackend::Android::PlatformSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-			return PlatformSystemUPtr(new Windows::PlatformSystem());
+			return PlatformSystemUPtr(new CSBackend::Windows::PlatformSystem());
 #else
             return nullptr;
 #endif

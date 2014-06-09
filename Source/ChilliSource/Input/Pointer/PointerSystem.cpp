@@ -34,15 +34,15 @@
 #include <algorithm>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#   include <ChilliSource/Backend/Platform/Android/Input/Pointer/PointerSystem.h>
+#include <CSBackend/Platform/Android/Input/Pointer/PointerSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS
-#   include <ChilliSource/Backend/Platform/iOS/Input/Pointer/PointerSystem.h>
+#include <CSBackend/Platform/iOS/Input/Pointer/PointerSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#   include <ChilliSource/Backend/Platform/Windows/Input/Pointer/PointerSystem.h>
+#include <CSBackend/Platform/Windows/Input/Pointer/PointerSystem.h>
 #endif
 
 namespace ChilliSource
@@ -55,11 +55,11 @@ namespace ChilliSource
         PointerSystemUPtr PointerSystem::Create()
         {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return PointerSystemUPtr(new Android::PointerSystem());
+            return PointerSystemUPtr(new CSBackend::Android::PointerSystem());
 #elif defined CS_TARGETPLATFORM_IOS
-            return PointerSystemUPtr(new iOS::PointerSystem());
+            return PointerSystemUPtr(new CSBackend::iOS::PointerSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return PointerSystemUPtr(new Windows::PointerSystem());
+            return PointerSystemUPtr(new CSBackend::Windows::PointerSystem());
 #else
             return nullptr;
 #endif

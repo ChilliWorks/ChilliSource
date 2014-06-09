@@ -9,13 +9,15 @@
 #include <ChilliSource/Core/Notification/RemoteNotificationSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#	include <ChilliSource/Backend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
-#elif defined(CS_TARGETPLATFORM_ANDROID)
-#	ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY
-#		include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
-#	elif defined(MOFLOWSKU_REMOTENOTIFICATIONMETHOD_AMAZON)
-#		include <ChilliSource/Backend/Platform/Android/Amazon/AmazonRemoteNotificationSystem.h>
-#	endif
+#import <CSBackend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_ANDROID
+#ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY
+#include <CSBackend/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
+#elif defined(MOFLOWSKU_REMOTENOTIFICATIONMETHOD_AMAZON)
+#include <CSBackend/Platform/Android/Amazon/AmazonRemoteNotificationSystem.h>
+#endif
 #endif
 
 namespace ChilliSource
@@ -28,12 +30,12 @@ namespace ChilliSource
         RemoteNotificationSystemUPtr RemoteNotificationSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-        	return RemoteNotificationSystemUPtr(new iOS::RemoteNotificationSystem());
+        	return RemoteNotificationSystemUPtr(new CSBackend::iOS::RemoteNotificationSystem());
 #elif defined(CS_TARGETPLATFORM_ANDROID)
 #	ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY
-        	return RemoteNotificationSystemUPtr(new Android::CGooglePlayRemoteNotificationSystem());
+        	return RemoteNotificationSystemUPtr(new CSBackend::Android::CGooglePlayRemoteNotificationSystem());
 #	elif defined(MOFLOWSKU_REMOTENOTIFICATIONMETHOD_AMAZON)
-        	return RemoteNotificationSystemUPtr(new Android::CAmazonRemoteNotificationSystem());
+        	return RemoteNotificationSystemUPtr(new CSBackend::Android::CAmazonRemoteNotificationSystem());
 #	endif
 #endif
         	return nullptr;

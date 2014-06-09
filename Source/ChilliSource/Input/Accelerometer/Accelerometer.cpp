@@ -29,11 +29,11 @@
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#   include <ChilliSource/Backend/Platform/Android/Input/Accelerometer/Accelerometer.h>
+#include <CSBackend/Platform/Android/Input/Accelerometer/Accelerometer.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS
-#   include <ChilliSource/Backend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
+#include <CSBackend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 #endif
 
 namespace ChilliSource
@@ -46,11 +46,11 @@ namespace ChilliSource
         AccelerometerUPtr Accelerometer::Create()
         {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return AccelerometerUPtr(new Android::Accelerometer());
+            return AccelerometerUPtr(new CSBackend::Android::Accelerometer());
 #elif defined CS_TARGETPLATFORM_IOS
-            if (iOS::Accelerometer::IsSupportedByDevice() == true)
+            if (CSBackend::iOS::Accelerometer::IsSupportedByDevice() == true)
             {
-                return AccelerometerUPtr(new iOS::Accelerometer());
+                return AccelerometerUPtr(new CSBackend::iOS::Accelerometer());
             }
             else
             {

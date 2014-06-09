@@ -214,7 +214,7 @@ namespace ChilliSource
 			TType LengthSquared() const;
 			//-----------------------------------------------------
 			/// Normalises the contents of this vector.
-			/// 
+			///
 			/// @author I Copland
 			//-----------------------------------------------------
 			void Normalise();
@@ -340,7 +340,7 @@ namespace ChilliSource
 			/// given scalar.
 			//-----------------------------------------------------
 			GenericVector4<TType>& operator/=(TType in_b);
-
+            
 			TType x;
 			TType y;
 			TType z;
@@ -464,7 +464,7 @@ namespace ChilliSource
 		template <typename TType> const GenericVector4<TType> GenericVector4<TType>::k_unitNegativeZ(0, 0, -1, 0);
 		template <typename TType> const GenericVector4<TType> GenericVector4<TType>::k_unitPositiveW(0, 0, 0, 1);
 		template <typename TType> const GenericVector4<TType> GenericVector4<TType>::k_unitNegativeW(0, 0, 0, -1);
-
+        
         
 		//-----------------------------------------------------
 		//-----------------------------------------------------
@@ -526,31 +526,31 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector4<TType>::GenericVector4()
-			: x(0), y(0), z(0), w(0)
+        : x(0), y(0), z(0), w(0)
 		{
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector4<TType>::GenericVector4(TType in_x, TType in_y, TType in_z, TType in_w)
-			: x(in_x), y(in_y), z(in_z), w(in_w)
+        : x(in_x), y(in_y), z(in_z), w(in_w)
 		{
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector4<TType>::GenericVector4(const GenericVector2<TType>& in_xy, TType in_z, TType in_w)
-			: x(in_xy.x), y(in_xy.y), z(in_z), w(in_w)
+        : x(in_xy.x), y(in_xy.y), z(in_z), w(in_w)
 		{
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector4<TType>::GenericVector4(const GenericVector2<TType>& in_xy, const GenericVector2<TType>& in_zw)
-			: x(in_xy.x), y(in_xy.y), z(in_zw.x), w(in_zw.y)
+        : x(in_xy.x), y(in_xy.y), z(in_zw.x), w(in_zw.y)
 		{
 		}
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector4<TType>::GenericVector4(const GenericVector3<TType>& in_xyz, TType in_w)
-			: x(in_xyz.x), y(in_xyz.y), z(in_xyz.z), w(in_w)
+        : x(in_xyz.x), y(in_xyz.y), z(in_xyz.z), w(in_w)
 		{
 		}
 		//-----------------------------------------------------
@@ -605,17 +605,17 @@ namespace ChilliSource
 			{
 				x = 1 / x;
 			}
-
+            
 			if (y != 0)
 			{
 				y = 1 / y;
 			}
-
+            
 			if (z != 0)
 			{
 				z = 1 / z;
 			}
-
+            
 			if (w != 0)
 			{
 				w = 1 / w;

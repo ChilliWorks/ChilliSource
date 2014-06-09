@@ -9,13 +9,15 @@
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#	include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
-#elif defined(CS_TARGETPLATFORM_ANDROID)
-#	ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
-#		include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPSystem.h>
-#	elif defined(CS_ANDROIDEXTENSION_AMAZON)
-#		include <ChilliSource/Backend/Platform/Android/Extensions/Amazon/AmazonIAPSystem.h>
-#	endif
+#include <CSBackend/Platform/iOS/Networking/IAP/IAPSystem.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_ANDROID
+#ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
+#include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPSystem.h>
+#elif defined(CS_ANDROIDEXTENSION_AMAZON)
+#include <CSBackend/Platform/Android/Extensions/Amazon/AmazonIAPSystem.h>
+#endif
 #endif
 
 namespace ChilliSource
@@ -28,12 +30,12 @@ namespace ChilliSource
         IAPSystemUPtr IAPSystem::Create(const Core::ParamDictionary& inParams)
         {
 #ifdef CS_TARGETPLATFORM_IOS
-        	return IAPSystemUPtr(new iOS::IAPSystem());
+        	return IAPSystemUPtr(new CSBackend::iOS::IAPSystem());
 #elif defined(CS_TARGETPLATFORM_ANDROID)
 #	ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
-        	return IAPSystemUPtr(new Android::GooglePlayIAPSystem(inParams));
+        	return IAPSystemUPtr(new CSBackend::Android::GooglePlayIAPSystem(inParams));
 #	elif defined(CS_ANDROIDEXTENSION_AMAZON)
-        	return IAPSystemUPtr(new Android::AmazonIAPSystem(inParams));
+        	return IAPSystemUPtr(new CSBackend::Android::AmazonIAPSystem(inParams));
 #	endif
 #endif
         	return nullptr;

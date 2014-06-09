@@ -10,15 +10,15 @@
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpRequestSystem.h>
+#include <CSBackend/Platform/iOS/Networking/Http/HttpRequestSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpRequestSystem.h>
+#include <CSBackend/Platform/Android/Networking/Http/HttpRequestSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Networking/Http/HttpRequestSystem.h>
+#include <CSBackend/Platform/Windows/Networking/Http/HttpRequestSystem.h>
 #endif
 
 namespace ChilliSource
@@ -32,13 +32,13 @@ namespace ChilliSource
         HttpRequestSystemUPtr HttpRequestSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return HttpRequestSystemUPtr(new iOS::HttpRequestSystem());
+            return HttpRequestSystemUPtr(new CSBackend::iOS::HttpRequestSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
-            return HttpRequestSystemUPtr(new Android::HttpRequestSystem());
+            return HttpRequestSystemUPtr(new CSBackend::Android::HttpRequestSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_WINDOWS
-            return HttpRequestSystemUPtr(new Windows::HttpRequestSystem());
+            return HttpRequestSystemUPtr(new CSBackend::Windows::HttpRequestSystem());
 #endif
             return nullptr;
         }

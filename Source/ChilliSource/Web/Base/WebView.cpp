@@ -29,11 +29,11 @@
 #include <ChilliSource/Web/Base/WebView.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
-#import <ChilliSource/Backend/Platform/iOS/Web/Base/WebView.h>
+#import <CSBackend/Platform/iOS/Web/Base/WebView.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Web/Base/WebView.h>
+#include <CSBackend/Platform/Android/Web/Base/WebView.h>
 #endif
 
 namespace ChilliSource
@@ -47,10 +47,10 @@ namespace ChilliSource
         WebViewUPtr WebView::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return WebViewUPtr(new iOS::WebView());
+            return WebViewUPtr(new CSBackend::iOS::WebView());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
-            return WebViewUPtr(new Android::WebView());
+            return WebViewUPtr(new CSBackend::Android::WebView());
 #endif
             return nullptr;
         }

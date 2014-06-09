@@ -36,7 +36,7 @@ namespace ChilliSource
 	namespace Core
 	{
 		//-------------------------------------------------------
-		/// A generic quaternion class for respresention 3D 
+		/// A generic quaternion class for respresention 3D
 		/// orientations.
 		///
 		/// @author I Copland
@@ -79,7 +79,7 @@ namespace ChilliSource
 			/// @param The first quaternion.
 			/// @param The second quaternion.
 			///
-			/// @return The dot product of two quaternions. 
+			/// @return The dot product of two quaternions.
 			//--------------------------------------------
 			static TType Dot(const GenericQuaternion<TType>& in_a, const GenericQuaternion<TType>& in_b);
 			//--------------------------------------------
@@ -172,7 +172,7 @@ namespace ChilliSource
 			//-----------------------------------------------
 			/// @author I Copland
 			///
-			/// @return the magnitude of the quaternion 
+			/// @return the magnitude of the quaternion
 			/// squared.
 			//-----------------------------------------------
 			TType MagnitudeSquared() const;
@@ -294,7 +294,7 @@ namespace ChilliSource
 			/// scalar.
 			//-----------------------------------------------------
 			GenericQuaternion<TType>& operator/=(TType in_b);
-
+            
 			TType x;
 			TType y;
 			TType z;
@@ -390,7 +390,7 @@ namespace ChilliSource
 	namespace Core
 	{
 		template <typename TType> const GenericQuaternion<TType> GenericQuaternion<TType>::k_identity(0, 0, 0, 1);
-
+        
 		//-----------------------------------------------
 		//-----------------------------------------------
 		template <typename TType> GenericQuaternion<TType> GenericQuaternion<TType>::Normalise(GenericQuaternion<TType> in_a)
@@ -435,13 +435,13 @@ namespace ChilliSource
 		//-----------------------------------------------
 		//-----------------------------------------------
 		template <typename TType> GenericQuaternion<TType>::GenericQuaternion()
-			: x(0), y(0), z(0), w(1)
+        : x(0), y(0), z(0), w(1)
 		{
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
 		template <typename TType> GenericQuaternion<TType>::GenericQuaternion(TType in_x, TType in_y, TType in_z, TType in_w)
-			: x(in_x), y(in_y), z(in_z), w(in_w)
+        : x(in_x), y(in_y), z(in_z), w(in_w)
 		{
 		}
 		//-----------------------------------------------
@@ -451,7 +451,7 @@ namespace ChilliSource
 			GenericVector3<TType> normalised = GenericVector3<TType>::Normalise(in_axis);
 			TType halfAngle = in_angle / 2;
 			TType sinAngle = (TType)std::sin(halfAngle);
-
+            
 			x = normalised.x * sinAngle;
 			y = normalised.y * sinAngle;
 			z = normalised.z * sinAngle;
@@ -462,34 +462,34 @@ namespace ChilliSource
 		template <typename TType> GenericQuaternion<TType>::GenericQuaternion(const GenericVector3<TType>& in_xAxis, const GenericVector3<TType>& in_yAxis, const GenericVector3<TType>& in_zAxis)
 		{
 			GenericMatrix4<TType> rotation;
-
+            
 			rotation.m[0] = in_xAxis.x;
 			rotation.m[1] = in_xAxis.y;
 			rotation.m[2] = in_xAxis.z;
-
+            
 			rotation.m[4] = in_yAxis.x;
 			rotation.m[5] = in_yAxis.y;
 			rotation.m[6] = in_yAxis.z;
-
+            
 			rotation.m[8] = in_zAxis.x;
 			rotation.m[9] = in_zAxis.y;
 			rotation.m[10] = in_zAxis.z;
-
+            
 			(*this) = Quaternion(rotation);
 		}
 		//-----------------------------------------------
-		// Algorithm in Ken Shoemake's article in 1987 
-		// SIGGRAPH course notes article "Quaternion 
+		// Algorithm in Ken Shoemake's article in 1987
+		// SIGGRAPH course notes article "Quaternion
 		// Calculus and Fast Animation".
 		//-----------------------------------------------
 		template <typename TType> GenericQuaternion<TType>::GenericQuaternion(const GenericMatrix4<TType>& in_rotation)
 		{
 			TType trace = in_rotation.m[0] + in_rotation.m[5] + in_rotation.m[10];
 			TType root = 0;
-
+            
 			if (trace > 0)
 			{
-				root = std::sqrt(trace + 1); 
+				root = std::sqrt(trace + 1);
 				w = (TType)0.5 * root;
 				root = (TType)0.5 / root;
 				x = (in_rotation.m[6] - in_rotation.m[9]) * root;
@@ -510,9 +510,9 @@ namespace ChilliSource
 				}
 				u32 j = s_iNext[i];
 				u32 k = s_iNext[j];
-
+                
 				root = std::sqrt(in_rotation(i, i) - in_rotation(j, j) - in_rotation(k, k) + 1);
-
+                
 				f32* apkQuat[3] = { &x, &y, &z };
 				*apkQuat[i] = (TType)0.5 * root;
 				root = (TType)0.5 / root;
@@ -630,7 +630,7 @@ namespace ChilliSource
 		template <typename TType> void GenericQuaternion<TType>::ToAxisAngle(GenericVector3<TType>& out_axis, TType& out_angle) const
 		{
 			TType sqrLength = (x * x + y * y + z * z);
-
+            
 			if (sqrLength > 0)
 			{
 				TType invLength = 1.0f / std::sqrt(sqrLength);
@@ -648,20 +648,20 @@ namespace ChilliSource
 		template <typename TType> void GenericQuaternion<TType>::ToEulerAxes(GenericVector3<TType>& out_xAxis, GenericVector3<TType>& out_yAxis, GenericVector3<TType>& out_zAxis) const
 		{
 			GenericMatrix4<TType> rotation = Matrix4::CreateRotation(*this);
-
+            
 			out_xAxis.x = rotation(0, 0);
 			out_xAxis.y = rotation(0, 1);
 			out_xAxis.z = rotation(0, 2);
-
+            
 			out_yAxis.x = rotation(1, 0);
 			out_yAxis.y = rotation(1, 1);
 			out_yAxis.z = rotation(1, 2);
-
+            
 			out_zAxis.x = rotation(2, 0);
 			out_zAxis.y = rotation(2, 1);
 			out_zAxis.z = rotation(2, 2);
 		}
-
+        
 		//-----------------------------------------------
 		//-----------------------------------------------
 		template <typename TType> GenericQuaternion<TType>& GenericQuaternion<TType>::operator+=(const GenericQuaternion<TType>& in_b)

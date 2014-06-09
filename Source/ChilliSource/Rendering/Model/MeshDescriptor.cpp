@@ -29,8 +29,8 @@ namespace ChilliSource
 		{
 			mudwNumVertices = 0;
 			mudwNumIndices = 0;
-			mvMinBounds = ChilliSource::Core::Vector3(0.0f, 0.0f, 0.0f);
-			mvMaxBounds = ChilliSource::Core::Vector3(0.0f, 0.0f, 0.0f);
+			mvMinBounds = CSCore::Vector3(0.0f, 0.0f, 0.0f);
+			mvMaxBounds = CSCore::Vector3(0.0f, 0.0f, 0.0f);
 			mpVertexData = nullptr;
 			mpIndexData = nullptr;
             ePrimitiveType = PrimitiveType::k_tri;
