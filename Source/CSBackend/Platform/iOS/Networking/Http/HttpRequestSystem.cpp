@@ -11,11 +11,12 @@
 #include <CSBackend/Platform/iOS/Networking/Http/HttpRequestSystem.h>
 
 #include <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
-#include <CSBackend/Platform/iOS/Networking/Base/CSReachability.h>
 #include <CSBackend/Platform/iOS/Networking/Http/HttpRequest.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 #include <ChilliSource/Core/String/StringUtils.h>
+
+#include <Reachability/CSReachability.h>
 
 #include <CFNetwork/CFNetwork.h>
 
