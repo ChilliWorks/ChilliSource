@@ -190,10 +190,7 @@ namespace FontTool
 
 		private string GetSpriteToolSettings ()
 		{
-			string strExePath = Application.ExecutablePath;
-
-			string strExeFolder = strExePath.Substring(0, strExePath.LastIndexOf('\\') + 1);
-			string strSettingsFile = strExeFolder + "SpriteToolSettings.txt";
+			string strSettingsFile = "FontMaker/SpriteToolSettings.txt";
 
 			string strDefaultArguments = "-padding 2 -maxwidth 4096 -maxheight 4096 -divisibleby 2";
 
@@ -206,7 +203,7 @@ namespace FontTool
 		private void ConvertToScalable (string outputName)
 		{
 			outputName += ".png";
-			string strDistanceFieldCmd  = "-jar ../../Tools/DistanceFieldGen.jar " + outputName + " " + outputName;
+			string strDistanceFieldCmd  = "-jar ../DistanceFieldGen.jar " + outputName + " " + outputName;
 
 			Process p = new Process();
 			p.StartInfo.FileName = "java";
@@ -230,7 +227,7 @@ namespace FontTool
 
 			string jarName = "SpriteTool";
 			string strJavaCommand = "java";
-			string strJarArgument = "-jar ../../Tools/" + jarName + ".jar ";
+			string strJarArgument = "-jar ../" + jarName + ".jar ";
 			string strArgs = "-dir ../Temp/ -mode 1 " + GetSpriteToolSettings() + " -output ";
 
 			string strSpriteOutName = outputName;

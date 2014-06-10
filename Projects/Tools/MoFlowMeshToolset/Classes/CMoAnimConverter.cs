@@ -19,7 +19,7 @@ namespace MoFlowMeshToolset.Classes
     public class CMoAnimConverter
     {
         //constants
-        const String kstrPathToMoAnimTool = "Tools/ColladaToMoAnimConverter/ColladaToMoAnimConverter.jar";
+        const String kstrPathToMoAnimTool = "ColladaToMoAnimConverter.jar";
         const String kstrPathOutput = "Output/Animations/";
 
         //private data

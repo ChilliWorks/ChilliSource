@@ -8,3 +8,8 @@ Projects/Tools/SpriteTool/bin
 Projects/Tools/TextExtractor/bin
 Projects/Tools/TGAToMoImageTool/bin
 Projects/Tools/ToolUtils/bin
+Projects/Tools/FontMaker/source/bin
+Projects/Tools/FontMaker/source/obj
+Projects/Tools/MoFlowMeshToolset/bin
+Projects/Tools/MoFlowMeshToolset/obj
+*.suo

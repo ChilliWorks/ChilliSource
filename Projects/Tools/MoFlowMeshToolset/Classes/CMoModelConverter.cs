@@ -33,7 +33,7 @@ namespace MoFlowMeshToolset.Classes
     public class CMoModelConverter
     {
         //constants
-        const String kstrPathToMoModelTool = "Tools/ColladaToMoModelConverter/ColladaToMoModelConverter.jar";
+        const String kstrPathToMoModelTool = "ColladaToMoModelConverter.jar";
         const String kstrPathOutput = "Output/Models/";
 
         //private data

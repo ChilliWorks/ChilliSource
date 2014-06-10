@@ -377,11 +377,11 @@ public class SCPngPremultiplier
 			String strOS = System.getProperty("os.name");
 			
 			if (strOS.startsWith("Windows") == true)
-				strExecutableName = strPathToHere + "Native/PreMultipliedAlphaPNGToolWindows.exe";
+				strExecutableName = strPathToHere + "PreMultipliedAlphaPNGTool/PreMultipliedAlphaPNGToolWindows.exe";
 			else if (strOS.startsWith("Mac") == true)
-				strExecutableName = strPathToHere + "Native/PreMultipliedAlphaPNGToolOSX";
+				strExecutableName = strPathToHere + "PreMultipliedAlphaPNGTool/PreMultipliedAlphaPNGToolOSX";
 			else if (strOS.startsWith("Linux") == true)
-				strExecutableName = strPathToHere + "Native/PreMultipliedAlphaPNGToolLinux";
+				strExecutableName = strPathToHere + "PreMultipliedAlphaPNGTool/PreMultipliedAlphaPNGToolLinux";
 			else
 				SCLogger.LogFatalError("This platform is not supported!");
 		}

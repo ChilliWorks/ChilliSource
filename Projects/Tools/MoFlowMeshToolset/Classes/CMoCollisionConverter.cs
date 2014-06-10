@@ -20,7 +20,7 @@ namespace MoFlowMeshToolset.Classes
     public class CMoCollisionConverter
     {
         //constants
-        const String kstrPathToMoModelTool = "Tools/ColladaToMoCollisionConverter/ColladaToMoCollisionConverter.jar";
+        const String kstrPathToMoModelTool = "ColladaToMoCollisionConverter.jar";
         const String kstrPathOutput = "Output/CollisionMeshes/";
 
         //private data
