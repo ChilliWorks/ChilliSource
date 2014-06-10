@@ -193,10 +193,10 @@ namespace ChilliSource
             
             Core::Vector2 m_spacingSizeH;
             Core::Vector2 m_spacingSizeV;
-            f32 m_finalSpacingSizeH;
-            f32 m_finalSpacingSizeV;
-            f32 m_firstCellPosX;
-            f32 m_firstCellPosY;
+            f32 m_finalSpacingSizeH = 0.0f;
+            f32 m_finalSpacingSizeV = 0.0f;
+            f32 m_firstCellPosX = 0.0f;
+            f32 m_firstCellPosY = 0.0f;
             
             u32 m_numRows = 1;
             u32 m_numCols = 1;
