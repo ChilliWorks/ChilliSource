@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 
-#include <Base64/base64.h>
+#include <base64/base64.h>
 
 #include <algorithm>
 

@@ -322,15 +322,14 @@ namespace ChilliSource
 			if(m_needsSynchonised == true)
             {
                 // Convert to XML
-                TiXmlDocument xmlDoc;
-                TiXmlElement xmlRootElement("ADS");
-                ParamDictionarySerialiser::ToXml(m_dictionary, &xmlRootElement);
-                xmlDoc.InsertEndChild(xmlRootElement);
+                XMLUtils::DocumentUPtr doc(new XMLUtils::Document());
+                XMLUtils::Node* rootNode = doc->allocate_node(rapidxml::node_type::node_element);
+                rootNode->name("ADS");
+                ParamDictionarySerialiser::ToXml(m_dictionary, rootNode);
+                doc->append_node(rootNode);
                 
                 // Encrypt
-                TiXmlPrinter xmlPrinter;
-                xmlDoc.Accept(&xmlPrinter);
-                std::string strDocToBeEncrypted = xmlPrinter.CStr();
+                std::string strDocToBeEncrypted = XMLUtils::ToString(doc.get());
                 const u8* pudwDocBinary = reinterpret_cast<const u8*>(strDocToBeEncrypted.c_str());
                 u32 udwEncryptedSize = AESEncrypt::CalculateAlignedSize(strDocToBeEncrypted.size());
                 s8* pdwDocEncrypted = new s8[udwEncryptedSize];
@@ -368,15 +367,14 @@ namespace ChilliSource
 					fileStream->Close();
                     
 					s8* decryptedData = new s8[encryptedDataSize];
-					const u8* udwDocBinary = reinterpret_cast<const u8*>(encryptedData);
-					AESEncrypt::Decrypt(udwDocBinary, encryptedDataSize, GenerateEncryptionKey(), reinterpret_cast<u8*>(decryptedData));
+					AESEncrypt::Decrypt(reinterpret_cast<const u8*>(encryptedData), encryptedDataSize, GenerateEncryptionKey(), reinterpret_cast<u8*>(decryptedData));
                     
-                    TiXmlDocument xmlDoc;
-					xmlDoc.Parse(decryptedData, 0, TIXML_DEFAULT_ENCODING);
-                    TiXmlElement* pRoot = xmlDoc.RootElement();
-                    if(nullptr != pRoot)
+                    XMLUtils::DocumentUPtr doc(new XMLUtils::Document());
+                    doc->parse<rapidxml::parse_default>(decryptedData);
+                    XMLUtils::Node* root = doc->first_node();
+                    if(nullptr != root)
                     {
-                        m_dictionary = ParamDictionarySerialiser::FromXml(pRoot);
+                        m_dictionary = ParamDictionarySerialiser::FromXml(root);
                     }
                     
 					CS_SAFEDELETE_ARRAY(encryptedData);

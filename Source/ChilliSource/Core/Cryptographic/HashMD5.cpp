@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 
-#include <MD5/md5.h>
+#include <md5/md5.h>
 
 namespace ChilliSource
 {

@@ -29,8 +29,6 @@
 #include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
 
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/XML/rapidxml_utils.hpp>
-#include <ChilliSource/Core/XML/XMLUtils.h>
 
 namespace ChilliSource
 {
@@ -40,57 +38,29 @@ namespace ChilliSource
         {
             //-----------------------------------------------------------------
             //-----------------------------------------------------------------
-			void ToXml(const ParamDictionary& in_dict, TiXmlElement* out_element)
-            {
-                out_element->SetValue("Params");
-                
-                for(auto it = in_dict.begin(); it != in_dict.end(); ++it)
-                {
-                    TiXmlElement entry("String");
-                    entry.SetAttribute("key", it->first);
-                    entry.SetAttribute("value", it->second);
-                    out_element->InsertEndChild(entry);
-                }
-            }
-            //-----------------------------------------------------------------
-            //-----------------------------------------------------------------
-			ParamDictionary FromXml(TiXmlElement* in_element)
-            {
-                ParamDictionary result;
-                
-                TiXmlElement* entry = XMLUtils::FirstChildElementWithName(in_element, "String");
-                
-                while(entry != nullptr)
-                {
-                    const char* key = entry->Attribute("key");
-                    const char* value = entry->Attribute("value");
-                    
-                    if (key != nullptr && value != nullptr)
-                    {
-                        result.SetValue(key, value);
-                    }
-                    
-                    entry = XMLUtils::NextSiblingElementWithName(entry);
-                }
-                
-                return result;
-            }
-            //-----------------------------------------------------------------
-            //-----------------------------------------------------------------
-            void ToXml(const ParamDictionary& in_dict, rapidxml::xml_node<char>* out_element)
+            void ToXml(const ParamDictionary& in_dict, XMLUtils::Node* out_element)
             {
                 out_element->name("Params");
                 
                 for(auto it = in_dict.begin(); it != in_dict.end(); ++it)
                 {
-                    rapidxml::xml_node<>* param = rapidxml::add_new_child(out_element, "String");
-                    rapidxml::add_new_attribute(param, "key", it->first.c_str());
-                    rapidxml::add_new_attribute(param, "value", it->second.c_str());
+                    XMLUtils::Attribute* keyAttribute = out_element->document()->allocate_attribute();
+                    keyAttribute->name("key");
+                    keyAttribute->value(it->first.c_str());
+                    
+                    XMLUtils::Attribute* valueAttribute = out_element->document()->allocate_attribute();
+                    valueAttribute->name("value");
+                    valueAttribute->value(it->second.c_str());
+
+                    XMLUtils::Node* node = out_element->document()->allocate_node(rapidxml::node_type::node_element);
+                    node->append_attribute(keyAttribute);
+                    node->append_attribute(valueAttribute);
+                    out_element->append_node(node);
                 }
             }
             //-----------------------------------------------------------------
             //-----------------------------------------------------------------
-            ParamDictionary FromXml(const rapidxml::xml_node<char> * in_element)
+            ParamDictionary FromXml(const XMLUtils::Node* in_element)
             {
                 ParamDictionary result;
                 
@@ -100,11 +70,11 @@ namespace ChilliSource
                     const char* value = nullptr;
                     for(auto attrib = param->first_attribute(); attrib != nullptr; attrib = attrib->next_attribute())
                     {
-                        if (attrib->isNamed("key"))
+                        if (XMLUtils::HasName(attrib, "key") == true)
                         {
                             key = attrib->value();
                         }
-                        else if (attrib->isNamed("value"))
+                        else if (XMLUtils::HasName(attrib, "value") == true)
                         {
                             value = attrib->value();
                         }

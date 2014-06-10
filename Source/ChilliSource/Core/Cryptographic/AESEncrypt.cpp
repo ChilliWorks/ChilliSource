@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/Cryptographic/AESEncrypt.h>
 
-#include <AES/aes.h>
+#include <aes/aes.h>
 
 namespace ChilliSource
 {

@@ -8,8 +8,8 @@
 
 #include <ChilliSource/Core/File/FileStream.h>
 
-#include <MD5/md5.h>
-#include <SHA1/sha1.h>
+#include <md5/md5.h>
+#include <SHA1/SHA1.h>
 
 #include <sstream>
 

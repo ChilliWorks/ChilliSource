@@ -258,16 +258,17 @@ namespace ChilliSource
             /// @param Root element
             /// @param [Out] Material to populate
             //----------------------------------------------------------------------------
-            void ParseRenderStates(TiXmlElement* in_rootElement, Material* out_material)
+            void ParseRenderStates(Core::XMLUtils::Node* in_rootElement, Material* out_material)
             {
-                TiXmlElement* renderStatesEl = Core::XMLUtils::FirstChildElementWithName(in_rootElement, "RenderStates");
+                
+                Core::XMLUtils::Node* renderStatesEl = in_rootElement->first_node("RenderStates");
                 if(renderStatesEl)
                 {
                     //---Depth Writing
-                    TiXmlElement* depthWriteStateEl = Core::XMLUtils::FirstChildElementWithName(renderStatesEl, "DepthWrite");
+                    Core::XMLUtils::Node* depthWriteStateEl = in_rootElement->first_node("DepthWrite");
                     if(depthWriteStateEl)
                     {
-                        out_material->SetDepthWriteEnabled(Core::XMLUtils::GetAttributeValueOrDefault<bool>(depthWriteStateEl, "enabled", true));
+                        out_material->SetDepthWriteEnabled(Core::XMLUtils::GetAttribute(depthWriteStateEl, "enabled", true));
                     }
                     //---Depth Testing
                     TiXmlElement* depthTestStateEl = Core::XMLUtils::FirstChildElementWithName(renderStatesEl, "DepthTest");

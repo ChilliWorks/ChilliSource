@@ -145,6 +145,28 @@ namespace ChilliSource
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
+        Matrix3 ParseMatrix3(const std::string& in_string)
+        {
+            u32 udwSize = EnumerateItems(in_string);
+            
+			if (udwSize != 9)
+			{
+				return Matrix3::k_identity;
+			}
+			else
+			{
+                Matrix3 matRet;
+                
+				CS_SSCANF(in_string.c_str(), "%f %f %f %f %f %f %f %f %f",
+                          &matRet.m[0], &matRet.m[1], &matRet.m[2],
+                          &matRet.m[3], &matRet.m[4], &matRet.m[5],
+                          &matRet.m[6], &matRet.m[7], &matRet.m[8]);
+                
+                return matRet;
+			}
+        }
+        //------------------------------------------------------------
+        //------------------------------------------------------------
         Matrix4 ParseMatrix4(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);

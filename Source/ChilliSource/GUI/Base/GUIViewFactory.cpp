@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
 #include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/Core/XML/rapidxml.hpp>
+#include <ChilliSource/Core/XML/XMLUtils.h>
 
 #include <ChilliSource/GUI/Button/HighlightButton.h>
 #include <ChilliSource/GUI/Button/StretchableHighlightButton.h>
@@ -32,6 +32,7 @@
 #include <ChilliSource/GUI/ProgressBar/HorizontalClippingProgressBar.h>
 #include <ChilliSource/GUI/SliderBar/HorizontalSliderBar.h>
 #include <ChilliSource/GUI/SliderBar/VerticalSliderBar.h>
+
 
 namespace ChilliSource
 {
@@ -105,22 +106,11 @@ namespace ChilliSource
 		{
 			GUIViewUPtr pRootView;
 
-            Core::FileStreamSPtr pFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrScriptFile, Core::FileMode::k_read);
-            assert(pFile);
-            
-            std::string strFile;
-            pFile->GetAll(strFile);
-			
-            //Load the script
-            rapidxml::xml_document<> xDoc;
-            xDoc.parse<0>((char*)strFile.c_str());
-            
-			
-            rapidxml::xml_node<> * pDocRoot = xDoc.first_node();
-
-			if(pDocRoot && pDocRoot->isNamed("Layout"))
+            Core::XMLUtils::DocumentUPtr doc = Core::XMLUtils::ReadDocument(ineStorageLocation, instrScriptFile);
+            rapidxml::xml_node<>* pDocRoot = doc->first_node();
+			if(pDocRoot && Core::XMLUtils::HasName(pDocRoot, "Layout") == true)
 			{
-				rapidxml::xml_node<> *  pViewElement = pDocRoot->first_node();
+				rapidxml::xml_node<>* pViewElement = pDocRoot->first_node();
 				if(pViewElement)
 				{
 					pRootView = CreateView(pViewElement);
@@ -149,16 +139,17 @@ namespace ChilliSource
             
             for(rapidxml::xml_attribute<> * pAttr = inpViewElement->first_attribute(); pAttr != nullptr; pAttr = pAttr->next_attribute())
             {
-                if(pAttr->isNamed("Type"))
+                
+                if(Core::XMLUtils::HasName(pAttr, "Type") == true)
                 {
                     strType = pAttr->value();
                 }
-                else if(pAttr->isNamed("Source"))
+                else if(Core::XMLUtils::HasName(pAttr, "Source") == true)
                 {
                     bExtern = true;
                     strSource = pAttr->value();
                 }
-                else if(pAttr->isNamed("StorageLocation"))
+                else if(Core::XMLUtils::HasName(pAttr, "StorageLocation") == true)
                 {
                     bExtern = true;
                     eStorageLoc = Core::ParseStorageLocation(pAttr->value());

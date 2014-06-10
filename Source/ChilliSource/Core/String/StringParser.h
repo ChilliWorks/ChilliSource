@@ -136,6 +136,18 @@ namespace ChilliSource
         ///
         /// @return The matrix value.
         //------------------------------------------------------------
+        Matrix3 ParseMatrix3(const std::string& in_string);
+        //------------------------------------------------------------
+        /// Parse a string to a matrix. The matrix should be provided
+        /// in row major format, space delimited. failure to parse will
+        /// result in an identity matrix.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The string.
+        ///
+        /// @return The matrix value.
+        //------------------------------------------------------------
         Matrix4 ParseMatrix4(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a quaternion. The quaternion must be
