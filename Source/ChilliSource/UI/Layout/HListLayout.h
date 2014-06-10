@@ -42,7 +42,8 @@ namespace ChilliSource
     {
         //----------------------------------------------------------------------------------------
         /// Lays out widgets in a horizontal list where each widget has a single column. The columns
-        /// have spacing between them and the entire list has a surrounding margin.
+        /// have spacing between them and the entire list has a surrounding margin. The list is
+        /// filled left to right.
         ///
         /// The list size is fixed and will not expand
         ///
