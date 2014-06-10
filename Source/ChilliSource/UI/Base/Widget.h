@@ -144,6 +144,16 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetLayout(ILayoutUPtr in_layout);
             //----------------------------------------------------------------------------------------
+            /// Set the layout that handles how to layout the widget's internal subviews. If this is null then the
+            /// subviews will retain their current size and position. Otherwise the size and position may
+            /// be manipulatd by the layout
+            ///
+            /// @author S Downie
+            ///
+            /// @param Layout
+            //----------------------------------------------------------------------------------------
+            void SetInternalLayout(ILayoutUPtr in_layout);
+            //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @param Name of widget
@@ -542,6 +552,14 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void Draw(Rendering::CanvasRenderer* in_renderer);
             //----------------------------------------------------------------------------------------
+            /// Called when the layout changes forcing this to update its children
+            ///
+            /// @author S Downie
+            ///
+            /// @param The layout that changed
+            //----------------------------------------------------------------------------------------
+            void OnLayoutChanged(const ILayout* in_layout);
+            //----------------------------------------------------------------------------------------
             /// Destructor
             ///
             /// @author S Downie
@@ -632,6 +650,14 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void OnParentTransformChanged();
             //----------------------------------------------------------------------------------------
+            /// Called when the child transform changes forcing this to update its layout
+            ///
+            /// @author S Downie
+            ///
+            /// @param The child widget that changed
+            //----------------------------------------------------------------------------------------
+            void OnChildTransformChanged(const Widget* in_child);
+            //----------------------------------------------------------------------------------------
             /// Calculate the final screen space size of the given child based on the widget
             /// and the layout
             ///
@@ -679,6 +705,7 @@ namespace ChilliSource
             
             IDrawableUPtr m_drawable;
             ILayoutUPtr m_layout;
+            ILayoutUPtr m_internalLayout;
             
             Widget* m_parent = nullptr;
             const Widget* m_canvas = nullptr;

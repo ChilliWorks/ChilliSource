@@ -40,6 +40,11 @@ namespace ChilliSource
         {
             CS_ASSERT(in_numRos > 0, "Cannot create a grid with 0 rows");
             m_numRows = in_numRos;
+            
+            if(m_widget != nullptr)
+            {
+                m_widget->OnLayoutChanged(this);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -47,6 +52,11 @@ namespace ChilliSource
         {
             CS_ASSERT(in_numCols > 0, "Cannot create a grid with 0 columns");
             m_numCols = in_numCols;
+            
+            if(m_widget != nullptr)
+            {
+                m_widget->OnLayoutChanged(this);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -56,6 +66,11 @@ namespace ChilliSource
             m_marginSizeRight.x = in_right;
             m_marginSizeBottom.x = in_bottom;
             m_marginSizeLeft.x = in_left;
+            
+            if(m_widget != nullptr)
+            {
+                m_widget->OnLayoutChanged(this);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -65,30 +80,55 @@ namespace ChilliSource
             m_marginSizeRight.y = in_right;
             m_marginSizeBottom.y = in_bottom;
             m_marginSizeLeft.y = in_left;
+            
+            if(m_widget != nullptr)
+            {
+                m_widget->OnLayoutChanged(this);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void GridLayout::SetRelativeHSpacing(f32 in_spacing)
         {
             m_spacingSizeH.x = in_spacing;
+            
+            if(m_widget != nullptr)
+            {
+                m_widget->OnLayoutChanged(this);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void GridLayout::SetAbsoluteHSpacing(f32 in_spacing)
         {
             m_spacingSizeH.y = in_spacing;
+            
+            if(m_widget != nullptr)
+            {
+                m_widget->OnLayoutChanged(this);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void GridLayout::SetRelativeVSpacing(f32 in_spacing)
         {
             m_spacingSizeV.x = in_spacing;
+            
+            if(m_widget != nullptr)
+            {
+                m_widget->OnLayoutChanged(this);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void GridLayout::SetAbsoluteVSpacing(f32 in_spacing)
         {
             m_spacingSizeV.y = in_spacing;
+            
+            if(m_widget != nullptr)
+            {
+                m_widget->OnLayoutChanged(this);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -98,13 +138,13 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void GridLayout::BuildLayout(const Widget* in_root, const std::vector<WidgetSPtr>& in_widgets)
+        void GridLayout::BuildLayout(const std::vector<WidgetSPtr>& in_widgets)
         {
-            CS_ASSERT(in_root != nullptr, "Cannot have null root");
+            CS_ASSERT(m_widget != nullptr, "Cannot have null owning widget");
             
             //The list doesn't care about the widgets as the size and position of each cell
             //is only relative to the number of cells and the root widget size
-            Core::Vector2 rootSize = in_root->GetFinalSize();
+            Core::Vector2 rootSize = m_widget->GetFinalSize();
             
             //The margins and spacing are relative to the root widget size
             m_finalSpacingSizeH = m_spacingSizeH.y + (rootSize.x * m_spacingSizeH.x);
@@ -161,6 +201,12 @@ namespace ChilliSource
             yPos += (m_cellSize.y * 0.5f);
             
             return Core::Vector2(xPos, yPos);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void GridLayout::SetWidget(Widget* in_widget)
+        {
+            m_widget = in_widget;
         }
     }
 }

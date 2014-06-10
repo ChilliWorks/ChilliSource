@@ -74,9 +74,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void HListLayout::BuildLayout(const Widget* in_root, const std::vector<WidgetSPtr>& in_widgets)
+        void HListLayout::BuildLayout(const std::vector<WidgetSPtr>& in_widgets)
         {
-            m_gridLayout.BuildLayout(in_root, in_widgets);
+            m_gridLayout.BuildLayout(in_widgets);
         }
         //----------------------------------------------------------------------------------------
         /// The cell size if fixed and uniform so the index is not required
@@ -90,6 +90,12 @@ namespace ChilliSource
         Core::Vector2 HListLayout::GetPositionForIndex(u32 in_index) const
         {
             return m_gridLayout.GetPositionForIndex(in_index);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void HListLayout::SetWidget(Widget* in_widget)
+        {
+            m_gridLayout.SetWidget(in_widget);
         }
     }
 }

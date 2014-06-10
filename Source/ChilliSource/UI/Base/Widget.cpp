@@ -259,12 +259,34 @@ namespace ChilliSource
         void Widget::SetDrawable(IDrawableUPtr in_drawable)
         {
             m_drawable = std::move(in_drawable);
+            
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::SetLayout(ILayoutUPtr in_layout)
         {
             m_layout = std::move(in_layout);
+            
+            if(m_layout != nullptr)
+            {
+                m_layout->SetWidget(this);
+            }
+            
+            OnLayoutChanged(m_layout.get());
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetInternalLayout(ILayoutUPtr in_layout)
+        {
+            m_internalLayout = std::move(in_layout);
+            
+            if(m_internalLayout != nullptr)
+            {
+                m_internalLayout->SetWidget(this);
+            }
+            
+            OnLayoutChanged(m_internalLayout.get());
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -650,12 +672,6 @@ namespace ChilliSource
                 return;
             }
             
-            //TODO: Cache the layout
-            if(m_layout != nullptr)
-            {
-                m_layout->BuildLayout(this, m_children);
-            }
-            
             Core::Vector2 finalSize(GetFinalSize());
             
             if(m_drawable != nullptr && ShouldCull(GetFinalPosition(), finalSize, m_screen->GetResolution()) == false)
@@ -758,7 +774,33 @@ namespace ChilliSource
             Core::Vector2 alignmentOffset;
             Rendering::Align(m_originAnchor, GetFinalSize() * 0.5f, alignmentOffset);
             
-            if(m_parent->m_layout == nullptr)
+            ILayout* layout = nullptr;
+            s32 childIndex = -1;
+            
+            for(u32 i=0; i<m_parent->m_children.size(); ++i)
+            {
+                if(m_parent->m_children[i].get() == this)
+                {
+                    childIndex = (s32)i;
+                    layout = m_parent->m_layout.get();
+                    break;
+                }
+            }
+            
+            if(layout == nullptr)
+            {
+                for(u32 i=0; i<m_parent->m_internalChildren.size(); ++i)
+                {
+                    if(m_parent->m_internalChildren[i].get() == this)
+                    {
+                        childIndex = (s32)i;
+                        layout = m_parent->m_internalLayout.get();
+                        break;
+                    }
+                }
+            }
+            
+            if(layout == nullptr)
             {
                 //Get the anchor point to which the widget is aligned in parent space
                 Core::Vector2 parentAnchorPos;
@@ -771,31 +813,20 @@ namespace ChilliSource
             }
             else
             {
-                s32 childIndex = -1;
-                
-                for(u32 i=0; i<m_parent->m_children.size(); ++i)
-                {
-                    if(m_parent->m_children[i].get() == this)
-                    {
-                        childIndex = (s32)i;
-                        break;
-                    }
-                }
-                
-                CS_ASSERT(childIndex >=0, "Cannot find child");
+                CS_ASSERT(childIndex >= 0, "Cannot find child");
                 
                 //The parental anchor pertains to the cell when using a layout rather than the parent widget
                 Core::Vector2 parentAnchorPos;
                 Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, parentHalfSize, parentAnchorPos);
                 
-                Core::Vector2 cellSize(m_parent->m_layout->GetSizeForIndex((u32)childIndex));
+                Core::Vector2 cellSize(layout->GetSizeForIndex((u32)childIndex));
                 Core::Vector2 cellHalfSize(cellSize * 0.5f);
                 Core::Vector2 cellAnchorPos;
                 Rendering::GetAnchorPoint(m_parentalAnchor, cellHalfSize, cellAnchorPos);
                 
                 //Transform into parent space then layout/cell space
                 Core::Vector2 parentSpacePos = parentAnchorPos;
-                Core::Vector2 layoutSpacePos = cellAnchorPos + (cellSize * m_localPosition.vRelative) + m_localPosition.vAbsolute + m_parent->m_layout->GetPositionForIndex((u32)childIndex);
+                Core::Vector2 layoutSpacePos = cellAnchorPos + (cellSize * m_localPosition.vRelative) + m_localPosition.vAbsolute + layout->GetPositionForIndex((u32)childIndex);
                 
                 return parentSpacePos + layoutSpacePos + alignmentOffset;
             }
@@ -846,11 +877,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         Core::Vector2 Widget::CalculateChildFinalSize(const Widget* in_child)
         {
-            if(m_layout == nullptr)
-            {
-                return ((GetFinalSize() * in_child->m_localSize.vRelative) + in_child->m_localSize.vAbsolute);
-            }
-            
+            ILayout* layout = nullptr;
             s32 childIndex = -1;
             
             for(u32 i=0; i<m_children.size(); ++i)
@@ -858,13 +885,32 @@ namespace ChilliSource
                 if(m_children[i].get() == in_child)
                 {
                     childIndex = (s32)i;
+                    layout = m_layout.get();
                     break;
                 }
             }
             
-            CS_ASSERT(childIndex >=0, "Cannot find child");
+            if(layout == nullptr)
+            {
+                for(u32 i=0; i<m_internalChildren.size(); ++i)
+                {
+                    if(m_internalChildren[i].get() == in_child)
+                    {
+                        childIndex = (s32)i;
+                        layout = m_internalLayout.get();
+                        break;
+                    }
+                }
+            }
             
-            return ((m_layout->GetSizeForIndex((u32)childIndex) * in_child->m_localSize.vRelative) + in_child->m_localSize.vAbsolute);
+            if(layout == nullptr)
+            {
+                return ((GetFinalSize() * in_child->m_localSize.vRelative) + in_child->m_localSize.vAbsolute);
+            }
+            
+            CS_ASSERT(childIndex >= 0, "Cannot find child");
+            
+            return ((layout->GetSizeForIndex((u32)childIndex) * in_child->m_localSize.vRelative) + in_child->m_localSize.vAbsolute);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -918,6 +964,24 @@ namespace ChilliSource
             m_isLocalTransformCacheValid = false;
             m_isLocalSizeCacheValid = false;
             
+            if(m_canvas != nullptr)
+            {
+                if(m_layout != nullptr)
+                {
+                    m_layout->BuildLayout(m_children);
+                }
+                
+                if(m_internalLayout != nullptr)
+                {
+                    m_internalLayout->BuildLayout(m_internalChildren);
+                }
+            }
+            
+            if(m_parent != nullptr)
+            {
+                m_parent->OnChildTransformChanged(this);
+            }
+            
             for(auto& child : m_internalChildren)
             {
                 child->OnParentTransformChanged();
@@ -936,6 +1000,56 @@ namespace ChilliSource
             m_isParentSizeCacheValid = false;
             
             InvalidateTransformCache();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::OnChildTransformChanged(const Widget* in_child)
+        {
+            if(m_canvas == nullptr)
+                return;
+            
+            if(m_layout != nullptr)
+            {
+                for(auto& child : m_children)
+                {
+                    if(child.get() == in_child)
+                    {
+                        m_layout->BuildLayout(m_children);
+                        return;
+                    }
+                }
+            }
+            
+            if(m_internalLayout != nullptr)
+            {
+                for(auto& child : m_internalChildren)
+                {
+                    if(child.get() == in_child)
+                    {
+                        m_internalLayout->BuildLayout(m_internalChildren);
+                        return;
+                    }
+                }
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::OnLayoutChanged(const ILayout* in_layout)
+        {
+            if(in_layout == m_layout.get())
+            {
+                for(auto& child : m_children)
+                {
+                    child->OnParentTransformChanged();
+                }
+            }
+            else if(in_layout == m_internalLayout.get())
+            {
+                for(auto& child : m_internalChildren)
+                {
+                    child->OnParentTransformChanged();
+                }
+            }
         }
         //----------------------------------------------------------------------------------------
         /// This is a specialisation to handle inserting strings into the blob.
