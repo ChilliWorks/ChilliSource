@@ -29,7 +29,7 @@
 
 #include <ChilliSource/Core/Cryptographic/HashSHA1.h>
 
-#include <ThirdParty/SHA1/SHA1.h>
+#include <SHA1/SHA1.h>
 
 namespace ChilliSource
 {

@@ -24,7 +24,7 @@
 #include <CSBackend/Platform/Windows/Core/File/FileSystem.h>
 #endif
 
-#include <ThirdParty/MD5/md5.h>
+#include <MD5/md5.h>
 
 #include <algorithm>
 

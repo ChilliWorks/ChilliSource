@@ -31,7 +31,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/File/FileStream.h>
-#include <ChilliSource/Core/JSON/forwards.h>
+
+#include <json/forwards.h>
 
 #include <algorithm>
 #include <vector>

@@ -10,9 +10,10 @@
 #define _CHILLISOURCE_VIDEO_BASE_CSSUBTITLESPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
+
+#include <json/json.h>
 
 namespace ChilliSource
 {

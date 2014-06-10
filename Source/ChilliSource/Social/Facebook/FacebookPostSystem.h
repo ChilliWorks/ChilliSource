@@ -11,9 +11,10 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Delegate/ConnectableDelegate.h>
-#include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Social/ForwardDeclarations.h>
+
+#include <json/json.h>
 
 #include <functional>
 

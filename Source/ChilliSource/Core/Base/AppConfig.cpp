@@ -30,10 +30,11 @@
 
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/StorageLocation.h>
-#include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
+
+#include <json/json.h>
 
 namespace ChilliSource
 {

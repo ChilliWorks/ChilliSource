@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-#include <ThirdParty/SHA1/SHA1.h>
+#include <SHA1/SHA1.h>
 
 #include <string>
 #include <cstdio>

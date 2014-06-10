@@ -28,7 +28,8 @@
 
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/JSON/json.h>
+
+#include <json/json.h>
 #include <zlib.h>
 
 namespace ChilliSource
@@ -55,7 +56,7 @@ namespace ChilliSource
                 
                 if(!jReader.parse(strJsonString, *outpJson))
                 {
-					CS_LOG_WARNING("Utils::ReadJson| Json could not be parsed:" + jReader.getFormattedErrorMessages());
+					CS_LOG_WARNING("Utils::ReadJson| Json could not be parsed:" + jReader.getFormatedErrorMessages());
                     return false;
                 }
                 

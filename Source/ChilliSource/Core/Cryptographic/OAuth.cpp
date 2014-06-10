@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
-#include <ThirdParty/SHA1/HMAC_SHA1.h>
+#include <SHA1/HMAC_SHA1.h>
 
 #include <algorithm>
 #include <ctime>

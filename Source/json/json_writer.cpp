@@ -1,12 +1,4 @@
-// Copyright 2007-2010 Baptiste Lepilleur
-// Distributed under MIT license, or public domain if desired and
-// recognized in your jurisdiction.
-// See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
-
-#if !defined(JSON_IS_AMALGAMATION)
-# include <ChilliSource/Core/JSON/writer.h>
-# include "json_tool.h"
-#endif // if !defined(JSON_IS_AMALGAMATION)
+#include <json/writer.h>
 #include <utility>
 #include <assert.h>
 #include <stdio.h>
@@ -21,6 +13,11 @@
 
 namespace Json {
 
+static bool isControlCharacter(char ch)
+{
+   return ch > 0 && ch <= 0x1F;
+}
+
 static bool containsControlCharacter( const char* str )
 {
    while ( *str ) 
@@ -30,16 +27,26 @@ static bool containsControlCharacter( const char* str )
    }
    return false;
 }
-
-
-std::string valueToString( LargestInt value )
+static void uintToString( unsigned int value, 
+                          char *&current )
 {
-   UIntToStringBuffer buffer;
+   *--current = 0;
+   do
+   {
+      *--current = (value % 10) + '0';
+      value /= 10;
+   }
+   while ( value != 0 );
+}
+
+std::string valueToString( Int value )
+{
+   char buffer[32];
    char *current = buffer + sizeof(buffer);
    bool isNegative = value < 0;
    if ( isNegative )
       value = -value;
-   uintToString( LargestUInt(value), current );
+   uintToString( UInt(value), current );
    if ( isNegative )
       *--current = '-';
    assert( current >= buffer );
@@ -47,37 +54,21 @@ std::string valueToString( LargestInt value )
 }
 
 
-std::string valueToString( LargestUInt value )
+std::string valueToString( UInt value )
 {
-   UIntToStringBuffer buffer;
+   char buffer[32];
    char *current = buffer + sizeof(buffer);
    uintToString( value, current );
    assert( current >= buffer );
    return current;
 }
 
-#if defined(JSON_HAS_INT64)
-
-std::string valueToString( Int value )
-{
-   return valueToString( LargestInt(value) );
-}
-
-
-std::string valueToString( UInt value )
-{
-   return valueToString( LargestUInt(value) );
-}
-
-#endif // # if defined(JSON_HAS_INT64)
-
-
 std::string valueToString( double value )
 {
    char buffer[32];
 #if defined(_MSC_VER) && defined(__STDC_SECURE_LIB__) // Use secure version with visual studio 2005 to avoid warning. 
    sprintf_s(buffer, sizeof(buffer), "%#.16g", value); 
-#else 
+#else	
    sprintf(buffer, "%#.16g", value); 
 #endif
    char* ch = buffer + strlen(buffer) - 1;
@@ -125,7 +116,7 @@ std::string valueToQuotedString( const char *value )
    // We have to walk value and escape any special characters.
    // Appending to std::string is not efficient, but this should be rare.
    // (Note: forward slashes are *not* rare, but I am not escaping them.)
-   std::string::size_type maxsize = strlen(value)*2 + 3; // allescaped+quotes+NULL
+   unsigned maxsize = strlen(value)*2 + 3; // allescaped+quotes+NULL
    std::string result;
    result.reserve(maxsize); // to avoid lots of mallocs
    result += "\"";
@@ -222,10 +213,10 @@ FastWriter::writeValue( const Value &value )
       document_ += "null";
       break;
    case intValue:
-      document_ += valueToString( value.asLargestInt() );
+      document_ += valueToString( value.asInt() );
       break;
    case uintValue:
-      document_ += valueToString( value.asLargestUInt() );
+      document_ += valueToString( value.asUInt() );
       break;
    case realValue:
       document_ += valueToString( value.asDouble() );
@@ -305,10 +296,10 @@ StyledWriter::writeValue( const Value &value )
       pushValue( "null" );
       break;
    case intValue:
-      pushValue( valueToString( value.asLargestInt() ) );
+      pushValue( valueToString( value.asInt() ) );
       break;
    case uintValue:
-      pushValue( valueToString( value.asLargestUInt() ) );
+      pushValue( valueToString( value.asUInt() ) );
       break;
    case realValue:
       pushValue( valueToString( value.asDouble() ) );
@@ -332,7 +323,7 @@ StyledWriter::writeValue( const Value &value )
             writeWithIndent( "{" );
             indent();
             Value::Members::iterator it = members.begin();
-            for (;;)
+            while ( true )
             {
                const std::string &name = *it;
                const Value &childValue = value[name];
@@ -372,7 +363,7 @@ StyledWriter::writeArrayValue( const Value &value )
          indent();
          bool hasChildValue = !childValues_.empty();
          unsigned index =0;
-         for (;;)
+         while ( true )
          {
             const Value &childValue = value[index];
             writeCommentBeforeValue( childValue );
@@ -581,10 +572,10 @@ StyledStreamWriter::writeValue( const Value &value )
       pushValue( "null" );
       break;
    case intValue:
-      pushValue( valueToString( value.asLargestInt() ) );
+      pushValue( valueToString( value.asInt() ) );
       break;
    case uintValue:
-      pushValue( valueToString( value.asLargestUInt() ) );
+      pushValue( valueToString( value.asUInt() ) );
       break;
    case realValue:
       pushValue( valueToString( value.asDouble() ) );
@@ -608,7 +599,7 @@ StyledStreamWriter::writeValue( const Value &value )
             writeWithIndent( "{" );
             indent();
             Value::Members::iterator it = members.begin();
-            for (;;)
+            while ( true )
             {
                const std::string &name = *it;
                const Value &childValue = value[name];
@@ -648,7 +639,7 @@ StyledStreamWriter::writeArrayValue( const Value &value )
          indent();
          bool hasChildValue = !childValues_.empty();
          unsigned index =0;
-         for (;;)
+         while ( true )
          {
             const Value &childValue = value[index];
             writeCommentBeforeValue( childValue );
@@ -656,7 +647,7 @@ StyledStreamWriter::writeArrayValue( const Value &value )
                writeWithIndent( childValues_[index] );
             else
             {
-               writeIndent();
+	       writeIndent();
                writeValue( childValue );
             }
             if ( ++index == size )
