@@ -500,7 +500,7 @@ namespace ChilliSource
         {
             const Core::Vector2 kvOverlayDimensions(inpWindow->GetAbsoluteSize());
             const f32 kfOverlayNear = 1.0f;
-            const f32 kfOverlayFar = 100.0f;
+            const f32 kfOverlayFar = 5.0f;
             return Core::Matrix4::CreateOrthographicProjectionLH(0, kvOverlayDimensions.x, 0, kvOverlayDimensions.y, kfOverlayNear, kfOverlayFar);
         }
         //------------------------------------------------
