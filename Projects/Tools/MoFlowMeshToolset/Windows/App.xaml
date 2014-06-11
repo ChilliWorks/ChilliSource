@@ -1,4 +1,4 @@
-﻿<Application x:Class="MoFlowMeshToolset.App"
+﻿<Application x:Class="CSModelExporter.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="Windows/MainWindow.xaml">

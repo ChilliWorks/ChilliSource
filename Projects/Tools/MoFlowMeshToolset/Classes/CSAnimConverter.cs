@@ -2,42 +2,43 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Diagnostics;
-using System.Windows.Threading;
+using System.Threading;
 using System.IO;
 
-namespace MoFlowMeshToolset.Classes
+namespace CSModelExporter.Classes
 {
     /// <summary>
-    /// struct for storing all the options for converting to mocollision
+    /// struct for storing all the options for converting to moanim
     /// </summary>
-    public struct MoCollisionOptions
+    public struct CSAnimOptions
     {
-        public bool mbMirrorInXZPlane;
         public bool mbSwapYAndZ;
+        public bool mbMirrorInXZPlane;
     }
-    public class CMoCollisionConverter
+    public class CSAnimConverter
     {
         //constants
-        const String kstrPathToMoModelTool = "ColladaToMoCollisionConverter.jar";
-        const String kstrPathOutput = "Output/CollisionMeshes/";
+        const String kstrPathToMoAnimTool = "ColladaToMoAnimConverter.jar";
+        const String kstrPathOutput = "Output/Animations/";
 
         //private data
         MainWindow mMainWindow;
         bool mbTaskActive;
+        CSAnimOptions mOptions;
         string[] mastrFilenames;
-        MoCollisionOptions mOptions;
         string mstrCurrentStandardError;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CMoCollisionConverter(MainWindow inParent)
+        public CSAnimConverter(MainWindow inParent)
         {
             mMainWindow = inParent;
             mbTaskActive = false;
         }
+
+
         /// <summary>
         /// Adds a line of text to the output window. This can be called
         /// from any thread.
@@ -47,6 +48,7 @@ namespace MoFlowMeshToolset.Classes
         {
             mMainWindow.GetMainThreadDispatcher().BeginInvoke(new MainWindow.AddTextDelegate(mMainWindow.WriteLineToOutput), instrText);
         }
+
         /// <summary>
         /// Event called when there is new data from the processes std out
         /// </summary>
@@ -56,6 +58,7 @@ namespace MoFlowMeshToolset.Classes
         {
             WriteLineToOutput(e.Data);
         }
+
         /// <summary>
         /// event received when there is new data from the process std error
         /// </summary>
@@ -65,16 +68,15 @@ namespace MoFlowMeshToolset.Classes
         {
             mstrCurrentStandardError += e.Data + "\n";
         }
+
         /// <summary>
-        /// Takes each of the passed in files and runs them through the MoModelToMoCollisionConverter, with the user selected options.
+        /// Takes each of the passed in files and runs them through the ColladaToMoStaticConverter, with the user selected options.
         /// </summary>
         /// <param name="inastrFilenames"></param>
-        public void ConvertToMoCollision(string[] inastrFilenames, MoCollisionOptions inOptions)
+        public void ConvertToCSAnim(string[] inastrFilenames, CSAnimOptions inOptions)
         {
             if (mbTaskActive == false)
             {
-                mOptions = inOptions;
-
                 //start progress bar
                 mMainWindow.StartProgressBar((double)inastrFilenames.Length);
 
@@ -82,18 +84,20 @@ namespace MoFlowMeshToolset.Classes
                 mMainWindow.ClearOutputWindow();
 
                 //take a copy of the data to be used for conversion
+                mOptions = inOptions;
                 mastrFilenames = new string[inastrFilenames.Length];
                 inastrFilenames.CopyTo(mastrFilenames, 0);
 
                 //start the task and flag the background task as running.
                 mbTaskActive = true;
-                ThreadPool.QueueUserWorkItem(this.MoCollisionConversionTask);
+                ThreadPool.QueueUserWorkItem(this.CSAnimConversionTask);
             }
         }
+
         /// <summary>
-        /// Task for loading a mocollision in the background.
+        /// Task for loading a task in the background.
         /// </summary>
-        public void MoCollisionConversionTask(object o)
+        public void CSAnimConversionTask(object o)
         {
             List<KeyValuePair<string, string>> ErrorLog = new List<KeyValuePair<string, string>>();
 
@@ -109,18 +113,17 @@ namespace MoFlowMeshToolset.Classes
                 strOutputName = strOutputName.Replace(".DAE", "");
 
                 //Create the output directory
-                Directory.CreateDirectory(kstrPathOutput);
+                Directory.CreateDirectory(kstrPathOutput + "/");
 
                 //create and start the process
                 Process process = new Process();
                 process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.FileName = "java.exe";
-                process.StartInfo.Arguments = "-jar " + kstrPathToMoModelTool
+                process.StartInfo.Arguments = "-jar " + kstrPathToMoAnimTool
                     + " --input \"" + strFilepath + "\""
-                    + " --output \"" + kstrPathOutput + strOutputName + ".mocollision\""
-                    + " --transforms " + GetTransformsString(mOptions)
-                    + " --logginglevel verbose"
-                    + " --errordisplay whenreceived";
+                    + " --output \"" + kstrPathOutput + strOutputName + ".csanim\""
+                    + " --transforms " + GetModificationsString(mOptions)
+                    + " --logginglevel verbose";
 
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
@@ -176,19 +179,40 @@ namespace MoFlowMeshToolset.Classes
         }
 
         /// <summary>
-        /// Returns the "transforms" string for passing to the MoCollision converter.
+        /// Returns the "features" string  for passing to the MoModel converter.
         /// </summary>
         /// <param name="inOptions"></param>
         /// <returns></returns>
-        private string GetTransformsString(MoCollisionOptions inOptions)
+        private string GetFeaturesString(CSAnimOptions inOptions)
+        {
+            string output = "";
+            
+            //no features yet...
+
+            if (output.Length > 0 && output[output.Length - 1] == ',')
+                output = output.Substring(0, output.Length - 1);
+
+            if (output.Length == 0)
+                output = "none";
+
+            return output;
+        }
+
+
+        /// <summary>
+        /// Returns the "modifications" string for passing to the MoModel converter.
+        /// </summary>
+        /// <param name="inOptions"></param>
+        /// <returns></returns>
+        private string GetModificationsString(CSAnimOptions inOptions)
         {
             string output = "";
 
-            if (inOptions.mbMirrorInXZPlane == true)
-                output += "m";
             if (inOptions.mbSwapYAndZ == true)
                 output += "y";
-            
+            if (inOptions.mbMirrorInXZPlane == true)
+                output += "m";
+
             if (output.Length == 0)
                 output = "0";
 

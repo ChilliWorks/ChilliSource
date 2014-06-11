@@ -8,8 +8,8 @@
     <ProjectGuid>{F6FE3E02-EAC5-4719-B96A-F6A09DEC3EF1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MoFlowMeshToolset</RootNamespace>
-    <AssemblyName>MoFlowMeshToolset</AssemblyName>
+    <RootNamespace>CSModelExporter</RootNamespace>
+    <AssemblyName>CSModelExporter</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -51,7 +51,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>MoFlowMeshToolset.App</StartupObject>
+    <StartupObject>CSModelExporter.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -77,9 +77,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Classes\CMoAnimConverter.cs" />
-    <Compile Include="Classes\CMoModelConverter.cs" />
-    <Compile Include="Classes\CMoCollisionConverter.cs" />
+    <Compile Include="Classes\CSAnimConverter.cs" />
+    <Compile Include="Classes\CSModelConverter.cs" />
     <Compile Include="Windows\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

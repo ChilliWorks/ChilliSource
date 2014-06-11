@@ -2,42 +2,53 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Diagnostics;
 using System.Threading;
+using System.Diagnostics;
+using System.Windows.Threading;
 using System.IO;
 
-namespace MoFlowMeshToolset.Classes
+namespace CSModelExporter.Classes
 {
     /// <summary>
-    /// struct for storing all the options for converting to moanim
+    /// struct for storing all the options for converting to momodel
     /// </summary>
-    public struct MoAnimOptions
+    public struct CSModelOptions
     {
-        public bool mbSwapYAndZ;
+        public bool mbHasAnimationData;
+        public bool mbVertexHasPosition;
+        public bool mbVertexHasNormals;
+        public bool mbVertexHasTextureCoordinates;
+        public bool mbVertexHasVertexColours;
+        public bool mbVertexHasWeights;
+        public bool mbVertexHasJointIndices;
         public bool mbMirrorInXZPlane;
+        public bool mbSwapYAndZ;
+        public bool mbFlipVerticalTexCoords;
+        public bool mbCombineMeshes;
+        public float mfScale;
     }
-    public class CMoAnimConverter
+
+    public class CSModelConverter
     {
         //constants
-        const String kstrPathToMoAnimTool = "ColladaToMoAnimConverter.jar";
-        const String kstrPathOutput = "Output/Animations/";
+        const String kstrPathToMoModelTool = "ColladaToMoModelConverter.jar";
+        const String kstrPathOutput = "Output/Models/";
 
         //private data
         MainWindow mMainWindow;
         bool mbTaskActive;
-        MoAnimOptions mOptions;
+        CSModelOptions mOptions;
         string[] mastrFilenames;
         string mstrCurrentStandardError;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CMoAnimConverter(MainWindow inParent)
+        public CSModelConverter(MainWindow inParent)
         {
             mMainWindow = inParent;
             mbTaskActive = false;
         }
-
 
         /// <summary>
         /// Adds a line of text to the output window. This can be called
@@ -73,7 +84,7 @@ namespace MoFlowMeshToolset.Classes
         /// Takes each of the passed in files and runs them through the ColladaToMoStaticConverter, with the user selected options.
         /// </summary>
         /// <param name="inastrFilenames"></param>
-        public void ConvertToMoAnim(string[] inastrFilenames, MoAnimOptions inOptions)
+        public void ConvertToCSModel(string[] inastrFilenames, CSModelOptions inOptions)
         {
             if (mbTaskActive == false)
             {
@@ -90,14 +101,14 @@ namespace MoFlowMeshToolset.Classes
 
                 //start the task and flag the background task as running.
                 mbTaskActive = true;
-                ThreadPool.QueueUserWorkItem(this.MoAnimConversionTask);
+                ThreadPool.QueueUserWorkItem(this.CSModelConversionTask);
             }
         }
 
         /// <summary>
         /// Task for loading a task in the background.
         /// </summary>
-        public void MoAnimConversionTask(object o)
+        public void CSModelConversionTask(object o)
         {
             List<KeyValuePair<string, string>> ErrorLog = new List<KeyValuePair<string, string>>();
 
@@ -113,17 +124,20 @@ namespace MoFlowMeshToolset.Classes
                 strOutputName = strOutputName.Replace(".DAE", "");
 
                 //Create the output directory
-                Directory.CreateDirectory(kstrPathOutput + "/");
+                Directory.CreateDirectory(kstrPathOutput + strOutputName + "/");
 
                 //create and start the process
                 Process process = new Process();
                 process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.FileName = "java.exe";
-                process.StartInfo.Arguments = "-jar " + kstrPathToMoAnimTool
+                process.StartInfo.Arguments = "-jar " + kstrPathToMoModelTool
                     + " --input \"" + strFilepath + "\""
-                    + " --output \"" + kstrPathOutput + strOutputName + ".moanim\""
-                    + " --transforms " + GetModificationsString(mOptions)
-                    + " --logginglevel verbose";
+                    + " --output \"" + kstrPathOutput + strOutputName + "/" + strOutputName + ".csmodel\""
+                    + " --features " + GetFeaturesString(mOptions)
+                    + " --vertexdeclaration " + GetVertexDeclarationString(mOptions)
+                    + " --transforms " + GetTransformsString(mOptions)
+                    + " --logginglevel verbose"
+                    + " --errordisplay whenrecieved";
 
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
@@ -183,35 +197,64 @@ namespace MoFlowMeshToolset.Classes
         /// </summary>
         /// <param name="inOptions"></param>
         /// <returns></returns>
-        private string GetFeaturesString(MoAnimOptions inOptions)
+        private string GetFeaturesString(CSModelOptions inOptions)
         {
             string output = "";
-            
-            //no features yet...
 
-            if (output.Length > 0 && output[output.Length - 1] == ',')
-                output = output.Substring(0, output.Length - 1);
+            if (inOptions.mbHasAnimationData == true)
+                output += "a";
 
             if (output.Length == 0)
-                output = "none";
+                output = "0";
 
             return output;
         }
 
-
         /// <summary>
-        /// Returns the "modifications" string for passing to the MoModel converter.
+        /// Returns the "vertex declaration" string for passing to the MoModel converter.
         /// </summary>
         /// <param name="inOptions"></param>
         /// <returns></returns>
-        private string GetModificationsString(MoAnimOptions inOptions)
+        private string GetVertexDeclarationString(CSModelOptions inOptions)
         {
             string output = "";
 
-            if (inOptions.mbSwapYAndZ == true)
-                output += "y";
+            if (inOptions.mbVertexHasPosition == true)
+                output += "p";
+            if (inOptions.mbVertexHasTextureCoordinates == true)
+                output += "t";
+            if (inOptions.mbVertexHasNormals == true)
+                output += "n";
+            if (inOptions.mbVertexHasVertexColours == true)
+                output += "c";
+            if (inOptions.mbVertexHasWeights == true)
+                output += "w";
+            if (inOptions.mbVertexHasJointIndices == true)
+                output += "j";
+
+            if (output.Length == 0)
+                output = "0";
+
+            return output;
+        }
+
+        /// <summary>
+        /// Returns the "transforms" string for passing to the MoModel converter.
+        /// </summary>
+        /// <param name="inOptions"></param>
+        /// <returns></returns>
+        private string GetTransformsString(CSModelOptions inOptions)
+        {
+            string output = "";
+
             if (inOptions.mbMirrorInXZPlane == true)
                 output += "m";
+            if (inOptions.mbSwapYAndZ == true)
+                output += "y";
+            if (inOptions.mbFlipVerticalTexCoords == true)
+                output += "f";
+            if (inOptions.mbCombineMeshes == true)
+                output += "c";
 
             if (output.Length == 0)
                 output = "0";

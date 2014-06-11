@@ -14,9 +14,9 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Threading;
 using System.Diagnostics;
-using MoFlowMeshToolset.Classes;
+using CSModelExporter.Classes;
 
-namespace MoFlowMeshToolset
+namespace CSModelExporter
 {
     /// <summary>
     /// Enum stating the output type from the converter
@@ -24,8 +24,8 @@ namespace MoFlowMeshToolset
     enum ConvertType
     {
         NONE,
-        MOMODEL,
-        MOANIM,
+        CSMODEL,
+        CSANIM,
         MOCOLLISION
     };
     /// <summary>
@@ -43,9 +43,8 @@ namespace MoFlowMeshToolset
     {
         //private data
         ConvertType meConvertType;
-        CMoModelConverter mMoModelConverter;
-        CMoAnimConverter mMoAnimConverter;
-        CMoCollisionConverter mMoCollisionConverter;
+        CSModelConverter mCSModelConverter;
+        CSAnimConverter mCSAnimConverter;
         Dispatcher mMainThreadDispatcher;
 
         //delegates
@@ -59,9 +58,8 @@ namespace MoFlowMeshToolset
         {
             mMainThreadDispatcher = Dispatcher.CurrentDispatcher;
             meConvertType = ConvertType.NONE;
-            mMoModelConverter = new CMoModelConverter(this);
-            mMoAnimConverter = new CMoAnimConverter(this);
-            mMoCollisionConverter = new CMoCollisionConverter(this);
+            mCSModelConverter = new CSModelConverter(this);
+            mCSAnimConverter = new CSAnimConverter(this);
             InitializeComponent();
             InitialiseEvents();
         }
@@ -70,114 +68,80 @@ namespace MoFlowMeshToolset
         /// </summary>
         private void InitialiseEvents()
         {
-            CTBMoModel.Checked += OnMoModelChecked;
-            CTBMoAnim.Checked += OnMoAnimChecked;
-            CTBMoCollision.Checked += OnMoCollisionChecked;
+            CTBCSModel.Checked += OnCSModelChecked;
+            CTBCSAnim.Checked += OnCSAnimChecked;
 
-            CTBMoModel.Unchecked += OnMoModelUnchecked;
-            CTBMoAnim.Unchecked += OnMoAnimUnchecked;
-            CTBMoCollision.Unchecked += OnMoCollisionUnchecked;
+            CTBCSModel.Unchecked += OnCSModelUnchecked;
+            CTBCSAnim.Unchecked += OnCSAnimUnchecked;
         }
         /// <summary>
-        /// Events called when the "MoModel" box is checked
+        /// Events called when the "CSModel" box is checked
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnMoModelChecked(object sender, RoutedEventArgs e)
+        private void OnCSModelChecked(object sender, RoutedEventArgs e)
         {
-            SetConvertType(ConvertType.MOMODEL);
+            SetConvertType(ConvertType.CSMODEL);
         }
         /// <summary>
-        /// Events called when the "MoModel" box is unchecked
+        /// Events called when the "CSModel" box is unchecked
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnMoModelUnchecked(object sender, RoutedEventArgs e)
+        private void OnCSModelUnchecked(object sender, RoutedEventArgs e)
         {
-            if (meConvertType == ConvertType.MOMODEL)
+            if (meConvertType == ConvertType.CSMODEL)
                 SetConvertType(ConvertType.NONE);
         }
         /// <summary>
-        /// Event called when the "MoAnim" box is checked
+        /// Event called when the "CSAnim" box is checked
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnMoAnimChecked(object sender, RoutedEventArgs e)
+        private void OnCSAnimChecked(object sender, RoutedEventArgs e)
         {
-            SetConvertType(ConvertType.MOANIM);
+            SetConvertType(ConvertType.CSANIM);
         }
         /// <summary>
-        /// Events called when the "MoAnim" box is unchecked
+        /// Events called when the "CSAnim" box is unchecked
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnMoAnimUnchecked(object sender, RoutedEventArgs e)
+        private void OnCSAnimUnchecked(object sender, RoutedEventArgs e)
         {
-            if (meConvertType == ConvertType.MOANIM)
-                SetConvertType(ConvertType.NONE);
-        }
-        /// <summary>
-        /// Event called when the "MoCollision" box is checked
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnMoCollisionChecked(object sender, RoutedEventArgs e)
-        {
-            SetConvertType(ConvertType.MOCOLLISION);
-        }
-        /// <summary>
-        /// Events called when the "MoCollision" box is unchecked
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnMoCollisionUnchecked(object sender, RoutedEventArgs e)
-        {
-            if (meConvertType == ConvertType.MOCOLLISION)
+            if (meConvertType == ConvertType.CSANIM)
                 SetConvertType(ConvertType.NONE);
         }
         /// <summary>
         /// Returns the option set for a MoStatic conversion
         /// </summary>
         /// <returns></returns>
-        private MoModelOptions GetMoModelOptions()
+        private CSModelOptions GetCSModelOptions()
         {
-            MoModelOptions options = new MoModelOptions();
-            options.mbHasTexture = false;
-            options.mbHasMaterial = (bool)MoModelHasMaterial.IsChecked;
-            options.mbHasAnimationData = (bool)MoModelHasAnimation.IsChecked;
+            CSModelOptions options = new CSModelOptions();
+            options.mbHasAnimationData = (bool)CSModelHasAnimation.IsChecked;
             options.mbVertexHasPosition = true;
-            options.mbVertexHasNormals = (bool)MoModelHasNormals.IsChecked;
-            options.mbVertexHasTextureCoordinates = (bool)MoModelHasUVs.IsChecked;
-            options.mbVertexHasVertexColours = (bool)MoModelHasVertexColours.IsChecked;
-            options.mbVertexHasWeights = (bool)MoModelHasAnimation.IsChecked;
-            options.mbVertexHasJointIndices = (bool)MoModelHasAnimation.IsChecked;
+            options.mbVertexHasNormals = (bool)CSModelHasNormals.IsChecked;
+            options.mbVertexHasTextureCoordinates = (bool)CSModelHasUVs.IsChecked;
+            options.mbVertexHasVertexColours = (bool)CSModelHasVertexColours.IsChecked;
+            options.mbVertexHasWeights = (bool)CSModelHasAnimation.IsChecked;
+            options.mbVertexHasJointIndices = (bool)CSModelHasAnimation.IsChecked;
             options.mfScale = 1.0f;
-            options.mbFlipVerticalTexCoords = (bool)MoModelFlipVerticalTexCoords.IsChecked;
-            options.mbSwapYAndZ = (bool)MoModelSwapYAndZ.IsChecked;
-            options.mbMirrorInXZPlane = (bool)MoModelMirrorInXZPlane.IsChecked;
-            options.mbCombineMeshes = (bool)MoModelCombineMeshes.IsChecked;
+            options.mbFlipVerticalTexCoords = (bool)CSModelFlipVerticalTexCoords.IsChecked;
+            options.mbSwapYAndZ = (bool)CSModelSwapYAndZ.IsChecked;
+            options.mbMirrorInXZPlane = (bool)CSModelMirrorInXZPlane.IsChecked;
+            options.mbCombineMeshes = (bool)CSModelCombineMeshes.IsChecked;
             return options;
         }
         /// <summary>
-        /// Returns the option set for a MoAnim conversion
+        /// Returns the option set for a CSAnim conversion
         /// </summary>
         /// <returns></returns>
-        private MoAnimOptions GetMoAnimOptions()
+        private CSAnimOptions GetCSAnimOptions()
         {
-            MoAnimOptions options = new MoAnimOptions();
-            options.mbMirrorInXZPlane = (bool)MoAnimMirrorInXZPlane.IsChecked;
-            options.mbSwapYAndZ = (bool)MoAnimSwapYAndZ.IsChecked;
-            return options;
-        }
-        /// <summary>
-        /// Returns the option set for a MoCollision conversion
-        /// </summary>
-        /// <returns></returns>
-        private MoCollisionOptions GetMoCollisionOptions()
-        {
-            MoCollisionOptions options = new MoCollisionOptions();
-            options.mbMirrorInXZPlane = (bool)MoCollisionMirrorInXZPlane.IsChecked;
-            options.mbSwapYAndZ = (bool)MoCollisionSwapYAndZ.IsChecked;
+            CSAnimOptions options = new CSAnimOptions();
+            options.mbMirrorInXZPlane = (bool)CSAnimMirrorInXZPlane.IsChecked;
+            options.mbSwapYAndZ = (bool)CSAnimSwapYAndZ.IsChecked;
             return options;
         }
         /// <summary>
@@ -205,14 +169,11 @@ namespace MoFlowMeshToolset
                     case ConvertType.NONE:
                         WriteLineToOutput("No conversion type selected.");
                         break;
-                    case ConvertType.MOMODEL:
-                        mMoModelConverter.ConvertToMoModel(astrPreparedFilenames, GetMoModelOptions());
+                    case ConvertType.CSMODEL:
+                        mCSModelConverter.ConvertToCSModel(astrPreparedFilenames, GetCSModelOptions());
                         break;
-                    case ConvertType.MOANIM:
-                        mMoAnimConverter.ConvertToMoAnim(astrPreparedFilenames, GetMoAnimOptions());
-                        break;
-                    case ConvertType.MOCOLLISION:
-                        mMoCollisionConverter.ConvertToMoCollision(astrPreparedFilenames, GetMoCollisionOptions());
+                    case ConvertType.CSANIM:
+                        mCSAnimConverter.ConvertToCSAnim(astrPreparedFilenames, GetCSAnimOptions());
                         break;
                     default:
                         goto case ConvertType.NONE;
@@ -304,32 +265,25 @@ namespace MoFlowMeshToolset
             meConvertType = ineConvertType;
 
             //uncheck others
-            if (ineConvertType != ConvertType.MOMODEL)
-                CTBMoModel.IsChecked = false;
-            if (ineConvertType != ConvertType.MOANIM)
-                CTBMoAnim.IsChecked = false;
-            if (ineConvertType != ConvertType.MOCOLLISION)
-                CTBMoCollision.IsChecked = false;
+            if (ineConvertType != ConvertType.CSMODEL)
+                CTBCSModel.IsChecked = false;
+            if (ineConvertType != ConvertType.CSANIM)
+                CTBCSAnim.IsChecked = false;
 
             //collapse all
-            MoModelOptionsBar.Visibility = Visibility.Collapsed;
-            MoAnimOptionsBar.Visibility = Visibility.Collapsed;
-            MoCollisionOptionsBar.Visibility = Visibility.Collapsed;
+            CSModelOptionsBar.Visibility = Visibility.Collapsed;
+            CSAnimOptionsBar.Visibility = Visibility.Collapsed;
             SetDragWindowType(DragWindowType.EMPTY);
 
             //open the correct options window
             switch (ineConvertType)
             {
-                case ConvertType.MOMODEL:
-                    MoModelOptionsBar.Visibility = Visibility.Visible;
+                case ConvertType.CSMODEL:
+                    CSModelOptionsBar.Visibility = Visibility.Visible;
                     SetDragWindowType(DragWindowType.DAE);
                     break;
-                case ConvertType.MOANIM:
-                    MoAnimOptionsBar.Visibility = Visibility.Visible;
-                    SetDragWindowType(DragWindowType.DAE);
-                    break;
-                case ConvertType.MOCOLLISION:
-                    MoCollisionOptionsBar.Visibility = Visibility.Visible;
+                case ConvertType.CSANIM:
+                    CSAnimOptionsBar.Visibility = Visibility.Visible;
                     SetDragWindowType(DragWindowType.DAE);
                     break;
                 case ConvertType.NONE:
@@ -338,6 +292,11 @@ namespace MoFlowMeshToolset
                 default:
                     goto case ConvertType.NONE;
             }
+        }
+
+        private void CTBCSModel_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
