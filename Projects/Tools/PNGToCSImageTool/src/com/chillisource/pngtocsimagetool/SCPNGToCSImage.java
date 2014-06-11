@@ -8,7 +8,7 @@
  *
  */
 
-package com.taggames.pngtomoimagetool;
+package com.chillisource.pngtocsimagetool;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,14 +24,14 @@ import com.taggames.toolutils.SCLogger;
 //============================================================================
 /// PNG To MoImage
 ///
-/// Handles all png conversions to the various moimage formats.
+/// Handles all png conversions to the various csimage formats.
 ///
 /// Version History
 ///
 /// 2 - First release version, no comporession @auther SDownie
 /// 3 - Added default zlib comporession @author RHenning
 //============================================================================
-public class SCPNGToMoImage 
+public class SCPNGToCSImage 
 {
 	//------------------------------------------------------------------------
 	/// Constants
@@ -46,7 +46,7 @@ public class SCPNGToMoImage
 	///
 	/// Converts a PNG to MoImage format based upon the given options.
 	//------------------------------------------------------------------------
-	public static void Run(PNGToMoImageOptions inOptions) throws IOException
+	public static void Run(PNGToCSImageOptions inOptions) throws IOException
 	{
 		long ddwCRC = 0;
 		int dwOriginalDataSize = 0;
@@ -81,7 +81,7 @@ public class SCPNGToMoImage
 		
 		//build the image data in the output format
 		SCLogger.LogMessage("Building Image Data...");
-		PNGToMoImageOptions.OUTPUT_FORMAT imageFormat = GetOutputFormat(inOptions, image);
+		PNGToCSImageOptions.OUTPUT_FORMAT imageFormat = GetOutputFormat(inOptions, image);
 		boolean bDithering = inOptions.bDither;
 		byte[] outImageData = ConvertImageToFormat(image, imageFormat, bDithering);
 		if(outImageData == null)
@@ -92,7 +92,7 @@ public class SCPNGToMoImage
 		SCLogger.LogMessage("Building Image Data Complete");
 
 		//Perform compression if required
-		if (inOptions.eCompressionType != PNGToMoImageOptions.COMPRESSION_FORMAT.NONE)
+		if (inOptions.eCompressionType != PNGToCSImageOptions.COMPRESSION_FORMAT.NONE)
 		{
 			CRC32 checksum = new CRC32();
 			checksum.update(outImageData);
@@ -106,15 +106,15 @@ public class SCPNGToMoImage
 		//Create header and output
 		try 
 		{
-			SCLogger.LogMessage("Outputting MoImage...");
+			SCLogger.LogMessage("Outputting CSImage...");
 			String strOutputFile = inOptions.strOutputFilename;
 			SCLogger.LogMessage("Output File: " + strOutputFile);
 			OutputMoImage(outImageData, imageFormat, inOptions.eCompressionType, ddwCRC, dwOriginalDataSize, image.dwWidth, image.dwHeight, strOutputFile);
-			SCLogger.LogMessage("Outputting MoImage Complete");
+			SCLogger.LogMessage("Outputting CSImage Complete");
 		} 
 		catch (IOException e) 
 		{
-			SCLogger.LogMessage("Cannot output moimage file");
+			SCLogger.LogMessage("Cannot output csimage file");
 			e.printStackTrace();
 			return;
 		}
@@ -221,18 +221,18 @@ public class SCPNGToMoImage
 	/// @return the output format, based upon the given params and the type
 	/// of the given image.
 	//------------------------------------------------------------------------
-	private static PNGToMoImageOptions.OUTPUT_FORMAT GetOutputFormat(PNGToMoImageOptions inOptions, ImageContainer inImage)
+	private static PNGToCSImageOptions.OUTPUT_FORMAT GetOutputFormat(PNGToCSImageOptions inOptions, ImageContainer inImage)
 	{
 		//if it has conversion type format, force output to this.
-		if (inOptions.eConversionType != PNGToMoImageOptions.OUTPUT_FORMAT.NONE)
+		if (inOptions.eConversionType != PNGToCSImageOptions.OUTPUT_FORMAT.NONE)
 			return inOptions.eConversionType;
 		
 		//if it has alpha and a alpha image conversion type then use this type.
-		if (inImage.bHasAlpha == true && inOptions.eConversionAlphaType != PNGToMoImageOptions.OUTPUT_FORMAT.NONE)
+		if (inImage.bHasAlpha == true && inOptions.eConversionAlphaType != PNGToCSImageOptions.OUTPUT_FORMAT.NONE)
 			return inOptions.eConversionAlphaType;
 					
 		//if it has no alpha and a no alpha image conversion type then use this type.
-		if (inImage.bHasAlpha == false && inOptions.eConversionNoAlphaType != PNGToMoImageOptions.OUTPUT_FORMAT.NONE)
+		if (inImage.bHasAlpha == false && inOptions.eConversionNoAlphaType != PNGToCSImageOptions.OUTPUT_FORMAT.NONE)
 			return inOptions.eConversionNoAlphaType;
 
 		//otherwise fall back on the type the image already is.
@@ -240,9 +240,9 @@ public class SCPNGToMoImage
 		{
 		case BufferedImage.TYPE_BYTE_GRAY:
 			if (inImage.bHasAlpha == false)
-				return PNGToMoImageOptions.OUTPUT_FORMAT.L8;
+				return PNGToCSImageOptions.OUTPUT_FORMAT.L8;
 			else
-				return PNGToMoImageOptions.OUTPUT_FORMAT.LA88;
+				return PNGToCSImageOptions.OUTPUT_FORMAT.LA88;
 		case BufferedImage.TYPE_BYTE_BINARY:
 		case BufferedImage.TYPE_3BYTE_BGR:
 		case BufferedImage.TYPE_4BYTE_ABGR:
@@ -252,11 +252,11 @@ public class SCPNGToMoImage
 		case BufferedImage.TYPE_INT_BGR:
 		case BufferedImage.TYPE_INT_RGB:
 			if (inImage.bHasAlpha == false)
-				return PNGToMoImageOptions.OUTPUT_FORMAT.RGB888;
+				return PNGToCSImageOptions.OUTPUT_FORMAT.RGB888;
 			else
-				return PNGToMoImageOptions.OUTPUT_FORMAT.RGBA8888;
+				return PNGToCSImageOptions.OUTPUT_FORMAT.RGBA8888;
 		default:
-			return PNGToMoImageOptions.OUTPUT_FORMAT.NONE;	
+			return PNGToCSImageOptions.OUTPUT_FORMAT.NONE;	
 		}
 	}
 	//------------------------------------------------------------------------
@@ -290,7 +290,7 @@ public class SCPNGToMoImage
 	///
 	/// Converts the image to the  requested output format.
 	//------------------------------------------------------------------------
-	private static byte[] ConvertImageToFormat(ImageContainer inImage, PNGToMoImageOptions.OUTPUT_FORMAT inFormatFlag, boolean inbDither)
+	private static byte[] ConvertImageToFormat(ImageContainer inImage, PNGToCSImageOptions.OUTPUT_FORMAT inFormatFlag, boolean inbDither)
 	{
 		switch (inFormatFlag)
 		{
@@ -325,7 +325,7 @@ public class SCPNGToMoImage
 	//------------------------------------------------------------------------
 	/// Convert To RGBA8888
 	///
-	/// Converts to moimage format RGBA8888.
+	/// Converts to csimage format RGBA8888.
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToRGBA8888(ImageContainer inImage)
 	{
@@ -350,7 +350,7 @@ public class SCPNGToMoImage
 	//------------------------------------------------------------------------
 	/// Convert To RGB888
 	///
-	/// Converts to moimage format RGB888.
+	/// Converts to csimage format RGB888.
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToRGB888(ImageContainer inImage)
 	{
@@ -374,7 +374,7 @@ public class SCPNGToMoImage
 	//------------------------------------------------------------------------
 	/// Convert To L8
 	///
-	/// Converts to moimage format L8.
+	/// Converts to csimage format L8.
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToL8(ImageContainer inImage)
 	{
@@ -398,7 +398,7 @@ public class SCPNGToMoImage
 	//------------------------------------------------------------------------
 	/// Convert To LA88
 	///
-	/// Converts to moimage format LA88.
+	/// Converts to csimage format LA88.
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToLA88(ImageContainer inImage)
 	{
@@ -426,7 +426,7 @@ public class SCPNGToMoImage
 	//------------------------------------------------------------------------
 	/// Convert To RGB565
 	///
-	/// Converts to moimage format RGB565.
+	/// Converts to csimage format RGB565.
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToRGB565(ImageContainer inImage, boolean inDither)
 	{
@@ -475,7 +475,7 @@ public class SCPNGToMoImage
 	//------------------------------------------------------------------------
 	/// Convert To RGBA4444
 	///
-	/// Converts to moimage format RGBA4444.
+	/// Converts to csimage format RGBA4444.
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToRGBA4444(ImageContainer inImage, boolean inDither)
 	{
@@ -682,9 +682,9 @@ public class SCPNGToMoImage
 	///
 	/// @return compresses the image with the requested compression algorithm.
 	//------------------------------------------------------------------------
-	private static byte[] CompressImage(PNGToMoImageOptions inOptions, byte[] inImageData) throws IOException
+	private static byte[] CompressImage(PNGToCSImageOptions inOptions, byte[] inImageData) throws IOException
 	{
-		if(inOptions.eCompressionType != PNGToMoImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB)
+		if(inOptions.eCompressionType != PNGToCSImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB)
 		{
 			SCLogger.LogFatalError("Unsupported compression. Image will not be compressed");
 			return inImageData;
@@ -711,11 +711,11 @@ public class SCPNGToMoImage
 	//------------------------------------------------------------------------
 	/// Output MoImage
 	///
-	/// Outputs the generated moimage data to file.
+	/// Outputs the generated csimage data to file.
 	//------------------------------------------------------------------------
 	private static void OutputMoImage(byte[] inImageData,
-									  PNGToMoImageOptions.OUTPUT_FORMAT inFormat,
-									  PNGToMoImageOptions.COMPRESSION_FORMAT inCompression,
+									  PNGToCSImageOptions.OUTPUT_FORMAT inFormat,
+									  PNGToCSImageOptions.COMPRESSION_FORMAT inCompression,
 									  long inddwChecksum, int indwOriginalSize,
 									  int inWidth, int inHeight,
 									  String instrOutputFile) throws IOException
@@ -738,7 +738,7 @@ public class SCPNGToMoImage
 		int byteOrderCheck = 123456;
 		int version = kdwVersion;
 		int compression = 0;
-		if(inCompression == PNGToMoImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB)
+		if(inCompression == PNGToCSImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB)
 			compression = 1;
 		
 		//Write out the data
@@ -769,10 +769,10 @@ public class SCPNGToMoImage
 		if(mbOutputStats)
 		{
 			File imageFile = new File(instrOutputFile);
-			System.out.println("MoImage: " + instrOutputFile);
+			System.out.println("CSImage: " + instrOutputFile);
 			System.out.println("PNG File Size: " + Math.ceil((float)mPNGFileSize / (float)1024) + " KB");
-			System.out.println("MoImage Uncompressed Size: " + Math.ceil((float)indwOriginalSize / (float)1024) + " KB");
-			System.out.println("MoImage File Size: " + Math.ceil((float)imageFile.length() / (float)1024) + " KB");
+			System.out.println("CSImage Uncompressed Size: " + Math.ceil((float)indwOriginalSize / (float)1024) + " KB");
+			System.out.println("CSImage File Size: " + Math.ceil((float)imageFile.length() / (float)1024) + " KB");
 			System.out.println("");
 		}
 	}

@@ -8,9 +8,9 @@
  *
  */
 
-package com.taggames.pngtomoimagetool;
+package com.chillisource.pngtocsimagetool;
 
-public class PNGToMoImageOptions 
+public class PNGToCSImageOptions 
 {
 	//--------------------------------------------------------------
 	/// Image Format

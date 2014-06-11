@@ -8,7 +8,7 @@
  *
  */
 
-package com.taggames.pngtomoimagetool;
+package com.chillisource.pngtocsimagetool;
 
 //========================================================================
 /// ImageContainer
