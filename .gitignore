@@ -1,7 +1,5 @@
 file_system_utils.pyc
 Projects/Tools/ColladaParser/bin
-Projects/Tools/ColladaToMoAnimConverter/bin
-Projects/Tools/ColladaToMoModelConverter/bin
 Projects/Tools/PNGToMoImageTool/bin
 Projects/Tools/PreMultipliedAlphaPNGTool/bin
 Projects/Tools/SpriteTool/bin
@@ -10,6 +8,8 @@ Projects/Tools/TGAToMoImageTool/bin
 Projects/Tools/ToolUtils/bin
 Projects/Tools/FontMaker/source/bin
 Projects/Tools/FontMaker/source/obj
-Projects/Tools/MoFlowMeshToolset/bin
-Projects/Tools/MoFlowMeshToolset/obj
 *.suo
+Projects/Tools/ColladaToCSAnimConverter/bin
+Projects/Tools/ColladaToCSModelConverter/bin
+Projects/Tools/CSModelExporter/bin
+Projects/Tools/CSModelExporter/obj
