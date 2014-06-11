@@ -200,7 +200,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::CalculatePerspectiveMatrix()
 		{
-			mmatProj = Core::Matrix4::CreatePerspectiveProjectionRH(Core::MathUtils::DegToRad(mDesc.fFOV), mDesc.fAspect, mDesc.fNearClipping, mDesc.fFarClipping);
+			mmatProj = Core::Matrix4::CreatePerspectiveProjectionRH(mDesc.fFOV, mDesc.fAspect, mDesc.fNearClipping, mDesc.fFarClipping);
 			mbProjectionCacheValid = true;
 		}
 		//------------------------------------------------------
@@ -290,13 +290,10 @@ namespace ChilliSource
 			outmatBillboarded.m[14] = inmatBillboarded.m[14];
 		}
 		//------------------------------------------------------
-		/// Set Field Of View
-		///
-		/// @param Viewing angle in degrees
 		//------------------------------------------------------
-		void CameraComponent::SetFieldOfView(const f32 infFOVDegress)
+		void CameraComponent::SetFieldOfView(const f32 in_fov)
 		{
-			mDesc.fFOV = infFOVDegress;
+			mDesc.fFOV = in_fov;
 
 			mbProjectionCacheValid = false;
 		}
@@ -334,9 +331,6 @@ namespace ChilliSource
 			mbProjectionCacheValid = false;
 		}
 		//------------------------------------------------------
-		/// Get Field Of View
-		///
-		/// @return Viewing angle in degrees
 		//------------------------------------------------------
 		const f32 CameraComponent::GetFieldOfView() const
 		{

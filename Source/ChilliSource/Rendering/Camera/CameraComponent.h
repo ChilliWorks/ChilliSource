@@ -118,9 +118,9 @@ namespace ChilliSource
 			//------------------------------------------------------
 			/// Set Field Of View
 			///
-			/// @param Viewing angle in degrees
+			/// @param Viewing angle in radians
 			//------------------------------------------------------
-			void SetFieldOfView(const f32 infFOVDegress);
+			void SetFieldOfView(const f32 in_fov);
 			//------------------------------------------------------
 			/// Set Aspect Ratio
 			///
@@ -155,7 +155,7 @@ namespace ChilliSource
 			//------------------------------------------------------
 			/// Get Field Of View
 			///
-			/// @return Viewing angle in degrees
+			/// @return Viewing angle in radians
 			//------------------------------------------------------
 			const f32 GetFieldOfView() const;
 			//------------------------------------------------------

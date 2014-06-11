@@ -163,8 +163,7 @@ namespace ChilliSource
             //------------------------------------------------
             /// @author I Copland
             ///
-            /// @return returns the state that owns this state
-            /// system.
+            /// @param the state that owns this state system.
             //------------------------------------------------
             void SetState(State* in_state);
             

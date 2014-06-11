@@ -119,13 +119,13 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Field of view in degrees
+            /// @param Field of view in radians
             /// @param Distance of near clip plane from the camera
             /// @param Distance of far clip plane from the camera
 			///
 			/// @return Ownership of new camera component
 			//---------------------------------------------------------------------------
-			CameraComponentUPtr CreatePerspectiveCameraComponent(f32 in_FOV, f32 in_near, f32 in_far);
+			CameraComponentUPtr CreatePerspectiveCameraComponent(f32 in_fov, f32 in_near, f32 in_far);
             //---------------------------------------------------------------------------
 			/// Create a camera with an orthographic projection
             ///

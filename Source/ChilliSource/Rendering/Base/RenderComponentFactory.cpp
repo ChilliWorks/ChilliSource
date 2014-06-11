@@ -173,12 +173,12 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
-		CameraComponentUPtr RenderComponentFactory::CreatePerspectiveCameraComponent(f32 in_FOV, f32 in_near, f32 in_far)
+		CameraComponentUPtr RenderComponentFactory::CreatePerspectiveCameraComponent(f32 in_fov, f32 in_near, f32 in_far)
 		{
 			CameraDescription desc;
 			desc.vViewSize = m_screen->GetResolution();
 			desc.fAspect = (desc.vViewSize.x/desc.vViewSize.y);
-			desc.fFOV = in_FOV;
+			desc.fFOV = in_fov;
 			desc.fNearClipping = in_near;
 			desc.fFarClipping = in_far;
 			desc.ClearCol = Core::Colour::k_white;
