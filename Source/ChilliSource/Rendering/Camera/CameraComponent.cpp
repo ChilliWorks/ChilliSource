@@ -200,27 +200,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::CalculatePerspectiveMatrix()
 		{
-			f32 Top = mDesc.fNearClipping * (f32)tanf(mDesc.fFOV * 0.5f * Core::MathUtils::kPI / 360.0f);
-			f32 Bottom = -Top;
-			f32 Left = Bottom * mDesc.fAspect;
-			f32 Right = Top * mDesc.fAspect;	
-			f32 Depth = mDesc.fFarClipping - mDesc.fNearClipping;
-
-			f32 A = (Right + Left)/(Right - Left);
-			f32 B = (Top + Bottom)/(Top - Bottom);
-			f32 C = (mDesc.fFarClipping + mDesc.fNearClipping)/(Depth);
-			f32 D = (2.0f * mDesc.fFarClipping * mDesc.fNearClipping)/(Depth);
-			f32 F = (2.0f * mDesc.fNearClipping)/(Top - Bottom);
-			f32 G = (2.0f * mDesc.fNearClipping)/(Right - Left);
-
-			mmatProj = Core::Matrix4
-				(
-				G, 0, 0, 0, 
-				0, F, 0, 0, 
-				A, B, -C, -1, 
-				0, 0, -D, 0
-				);
-
+			mmatProj = Core::Matrix4::CreatePerspectiveProjectionRH(Core::MathUtils::DegToRad(mDesc.fFOV), mDesc.fAspect, mDesc.fNearClipping, mDesc.fFarClipping);
 			mbProjectionCacheValid = true;
 		}
 		//------------------------------------------------------

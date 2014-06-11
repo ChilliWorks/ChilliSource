@@ -690,7 +690,7 @@ namespace ChilliSource
 			TType b1 = 1 / (TType)std::tan(in_viewAngle * 0.5);
 			TType a0 = b1 / in_aspectRatio;
 			TType c2 = (in_near + in_far) / (in_near - in_far);
-			TType d2 = (2 * in_near * in_far) / (in_far - in_near);
+			TType d2 = (2 * in_near * in_far) /  (in_near - in_far);
 			return GenericMatrix4<TType>(
 				a0, 0, 0, 0, 
 				0, b1, 0, 0,
