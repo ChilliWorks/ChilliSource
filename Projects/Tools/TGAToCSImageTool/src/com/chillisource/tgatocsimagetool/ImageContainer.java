@@ -8,7 +8,7 @@
  *
  */
 
-package com.taggames.tgatomoimagetool;
+package com.chillisource.tgatocsimagetool;
 
 //========================================================================
 /// ImageContainer

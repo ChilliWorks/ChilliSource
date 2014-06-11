@@ -8,7 +8,7 @@
  *
  */
 
-package com.taggames.tgatomoimagetool;
+package com.chillisource.tgatocsimagetool;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -25,14 +25,14 @@ import com.taggames.toolutils.SCLogger;
 //============================================================================
 /// TGA To MoImage
 ///
-/// Handles all tga conversions to the various moimage formats.
+/// Handles all tga conversions to the various csimage formats.
 ///
 /// Version History
 ///
 /// 2 - First release version, no comporession @auther SDownie
 /// 3 - Added default zlib comporession @author RHenning
 //============================================================================
-public class SCTGAToMoImage 
+public class SCTGAToCSImage 
 {
 	//------------------------------------------------------------------------
 	/// Constants
@@ -47,7 +47,7 @@ public class SCTGAToMoImage
 	///
 	/// Converts a TGA to MoImage format based upon the given options.
 	//------------------------------------------------------------------------
-	public static void Run(TGAToMoImageOptions inOptions) throws IOException
+	public static void Run(TGAToCSImageOptions inOptions) throws IOException
 	{
 		IIORegistry registry = IIORegistry.getDefaultInstance();
 		registry.registerServiceProvider(new com.realityinteractive.imageio.tga.TGAImageReaderSpi());
@@ -85,7 +85,7 @@ public class SCTGAToMoImage
 		
 		//build the image data in the output format
 		SCLogger.LogMessage("Building Image Data...");
-		TGAToMoImageOptions.OUTPUT_FORMAT imageFormat = GetOutputFormat(inOptions, image);
+		TGAToCSImageOptions.OUTPUT_FORMAT imageFormat = GetOutputFormat(inOptions, image);
 		boolean bDithering = inOptions.bDither;
 		byte[] outImageData = ConvertImageToFormat(image, imageFormat, bDithering);
 		if(outImageData == null)
@@ -96,7 +96,7 @@ public class SCTGAToMoImage
 		SCLogger.LogMessage("Building Image Data Complete");
 
 		//Perform compression if required
-		if (inOptions.eCompressionType != TGAToMoImageOptions.COMPRESSION_FORMAT.NONE)
+		if (inOptions.eCompressionType != TGAToCSImageOptions.COMPRESSION_FORMAT.NONE)
 		{
 			CRC32 checksum = new CRC32();
 			checksum.update(outImageData);
@@ -225,18 +225,18 @@ public class SCTGAToMoImage
 	/// @return the output format, based upon the given params and the type
 	/// of the given image.
 	//------------------------------------------------------------------------
-	private static TGAToMoImageOptions.OUTPUT_FORMAT GetOutputFormat(TGAToMoImageOptions inOptions, ImageContainer inImage)
+	private static TGAToCSImageOptions.OUTPUT_FORMAT GetOutputFormat(TGAToCSImageOptions inOptions, ImageContainer inImage)
 	{
 		//if it has conversion type format, force output to this.
-		if (inOptions.eConversionType != TGAToMoImageOptions.OUTPUT_FORMAT.NONE)
+		if (inOptions.eConversionType != TGAToCSImageOptions.OUTPUT_FORMAT.NONE)
 			return inOptions.eConversionType;
 		
 		//if it has alpha and a alpha image conversion type then use this type.
-		if (inImage.bHasAlpha == true && inOptions.eConversionAlphaType != TGAToMoImageOptions.OUTPUT_FORMAT.NONE)
+		if (inImage.bHasAlpha == true && inOptions.eConversionAlphaType != TGAToCSImageOptions.OUTPUT_FORMAT.NONE)
 			return inOptions.eConversionAlphaType;
 					
 		//if it has no alpha and a no alpha image conversion type then use this type.
-		if (inImage.bHasAlpha == false && inOptions.eConversionNoAlphaType != TGAToMoImageOptions.OUTPUT_FORMAT.NONE)
+		if (inImage.bHasAlpha == false && inOptions.eConversionNoAlphaType != TGAToCSImageOptions.OUTPUT_FORMAT.NONE)
 			return inOptions.eConversionNoAlphaType;
 
 		//otherwise fall back on the type the image already is.
@@ -244,9 +244,9 @@ public class SCTGAToMoImage
 		{
 		case BufferedImage.TYPE_BYTE_GRAY:
 			if (inImage.bHasAlpha == false)
-				return TGAToMoImageOptions.OUTPUT_FORMAT.L8;
+				return TGAToCSImageOptions.OUTPUT_FORMAT.L8;
 			else
-				return TGAToMoImageOptions.OUTPUT_FORMAT.LA88;
+				return TGAToCSImageOptions.OUTPUT_FORMAT.LA88;
 		case BufferedImage.TYPE_BYTE_BINARY:
 		case BufferedImage.TYPE_3BYTE_BGR:
 		case BufferedImage.TYPE_4BYTE_ABGR:
@@ -256,11 +256,11 @@ public class SCTGAToMoImage
 		case BufferedImage.TYPE_INT_BGR:
 		case BufferedImage.TYPE_INT_RGB:
 			if (inImage.bHasAlpha == false)
-				return TGAToMoImageOptions.OUTPUT_FORMAT.RGB888;
+				return TGAToCSImageOptions.OUTPUT_FORMAT.RGB888;
 			else
-				return TGAToMoImageOptions.OUTPUT_FORMAT.RGBA8888;
+				return TGAToCSImageOptions.OUTPUT_FORMAT.RGBA8888;
 		default:
-			return TGAToMoImageOptions.OUTPUT_FORMAT.NONE;	
+			return TGAToCSImageOptions.OUTPUT_FORMAT.NONE;	
 		}
 	}
 	//------------------------------------------------------------------------
@@ -294,7 +294,7 @@ public class SCTGAToMoImage
 	///
 	/// Converts the image to the  requested output format.
 	//------------------------------------------------------------------------
-	private static byte[] ConvertImageToFormat(ImageContainer inImage, TGAToMoImageOptions.OUTPUT_FORMAT inFormatFlag, boolean inbDither)
+	private static byte[] ConvertImageToFormat(ImageContainer inImage, TGAToCSImageOptions.OUTPUT_FORMAT inFormatFlag, boolean inbDither)
 	{
 		switch (inFormatFlag)
 		{
@@ -329,7 +329,7 @@ public class SCTGAToMoImage
 	//------------------------------------------------------------------------
 	/// Convert To RGBA8888
 	///
-	/// Converts to moimage format RGBA8888.
+	/// Converts to format RGBA8888.
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToRGBA8888(ImageContainer inImage)
 	{
@@ -354,7 +354,7 @@ public class SCTGAToMoImage
 	//------------------------------------------------------------------------
 	/// Convert To RGB888
 	///
-	/// Converts to moimage format RGB888.
+	/// Converts to format RGB888.
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToRGB888(ImageContainer inImage)
 	{
@@ -378,7 +378,7 @@ public class SCTGAToMoImage
 	//------------------------------------------------------------------------
 	/// Convert To L8
 	///
-	/// Converts to moimage format L8.
+	/// Converts to format L8.
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToL8(ImageContainer inImage)
 	{
@@ -402,7 +402,7 @@ public class SCTGAToMoImage
 	//------------------------------------------------------------------------
 	/// Convert To LA88
 	///
-	/// Converts to moimage format LA88.
+	/// Converts to format LA88.
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToLA88(ImageContainer inImage)
 	{
@@ -430,7 +430,7 @@ public class SCTGAToMoImage
 	//------------------------------------------------------------------------
 	/// Convert To RGB565
 	///
-	/// Converts to moimage format RGB565.
+	/// Converts to format RGB565.
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToRGB565(ImageContainer inImage, boolean inDither)
 	{
@@ -479,7 +479,7 @@ public class SCTGAToMoImage
 	//------------------------------------------------------------------------
 	/// Convert To RGBA4444
 	///
-	/// Converts to moimage format RGBA4444.
+	/// Converts to format RGBA4444.
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToRGBA4444(ImageContainer inImage, boolean inDither)
 	{
@@ -686,9 +686,9 @@ public class SCTGAToMoImage
 	///
 	/// @return compresses the image with the requested compression algorithm.
 	//------------------------------------------------------------------------
-	private static byte[] CompressImage(TGAToMoImageOptions inOptions, byte[] inImageData) throws IOException
+	private static byte[] CompressImage(TGAToCSImageOptions inOptions, byte[] inImageData) throws IOException
 	{
-		if(inOptions.eCompressionType != TGAToMoImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB)
+		if(inOptions.eCompressionType != TGAToCSImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB)
 		{
 			SCLogger.LogFatalError("Unsupported compression. Image will not be compressed");
 			return inImageData;
@@ -715,11 +715,11 @@ public class SCTGAToMoImage
 	//------------------------------------------------------------------------
 	/// Output MoImage
 	///
-	/// Outputs the generated moimage data to file.
+	/// Outputs the generated csimage data to file.
 	//------------------------------------------------------------------------
 	private static void OutputMoImage(byte[] inImageData,
-									  TGAToMoImageOptions.OUTPUT_FORMAT inFormat,
-									  TGAToMoImageOptions.COMPRESSION_FORMAT inCompression,
+									  TGAToCSImageOptions.OUTPUT_FORMAT inFormat,
+									  TGAToCSImageOptions.COMPRESSION_FORMAT inCompression,
 									  long inddwChecksum, int indwOriginalSize,
 									  int inWidth, int inHeight,
 									  String instrOutputFile) throws IOException
@@ -742,7 +742,7 @@ public class SCTGAToMoImage
 		int byteOrderCheck = 123456;
 		int version = kdwVersion;
 		int compression = 0;
-		if(inCompression == TGAToMoImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB)
+		if(inCompression == TGAToCSImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB)
 			compression = 1;
 		
 		//Write out the data

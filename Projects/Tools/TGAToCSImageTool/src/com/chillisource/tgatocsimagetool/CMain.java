@@ -8,7 +8,7 @@
  *
  */
 
-package com.taggames.tgatomoimagetool;
+package com.chillisource.tgatocsimagetool;
 
 import com.taggames.toolutils.SCLogger;
 
@@ -36,7 +36,7 @@ public class CMain
 		}
 		
 		//Collect params
-		TGAToMoImageOptions options = new TGAToMoImageOptions();
+		TGAToCSImageOptions options = new TGAToCSImageOptions();
 		for(int i = 0; i < inastrArgs.length; ++i)
 		{
 			//input
@@ -124,7 +124,7 @@ public class CMain
 		if (options.strOutputFilename.equals(""))
 			SCLogger.LogFatalError("No output file provided.");
 		
-		SCTGAToMoImage.Run(options);
+		SCTGAToCSImage.Run(options);
 
 		SCLogger.PrintErrorsAndWarnings();
 	}
@@ -138,12 +138,12 @@ public class CMain
 		SCLogger.SetLoggingLevel(SCLogger.LOGGING_LEVEL_VERBOSE);
 		SCLogger.LogMessage("java -jar TGAToMoImage.jar --input <filename> --output <filename> [--convert <type>] [--compression <type>] [--premultiply] [--dither]");
 		SCLogger.LogMessage("\t'--input'('-i')              The path to the source image TGA.");
-		SCLogger.LogMessage("\t'--output'('-o')             The path to the output image moimage.");
+		SCLogger.LogMessage("\t'--output'('-o')             The path to the output image csimage.");
 		SCLogger.LogMessage("\t'--convert'('-ct')           (Optional) The type to convert to.");
 		SCLogger.LogMessage("\t'--convertalpha'('-cta')     (Optional) The type to convert images with alpha to.");
 		SCLogger.LogMessage("\t'--convertnoalpha'('-ctna')  (Optional) The type to convert images without alpha to.");
 		SCLogger.LogMessage("\t'--compression'('-cn')       (Optional) The compression type.");
-		SCLogger.LogMessage("\t'--premultiply'('-p')        (Optional) Whether or not to premultiply the output moimage.");
+		SCLogger.LogMessage("\t'--premultiply'('-p')        (Optional) Whether or not to premultiply the output csimage.");
 		SCLogger.LogMessage("\t'--dither'('-d')             (Optional) Whether or not to dither if converting to a smaller image format.");
 		SCLogger.LogMessage("\t'--stats'('-s')             (Optional) Whether or not to log out stats.");
 		SCLogger.LogMessage("Conversion Types:");
@@ -163,23 +163,23 @@ public class CMain
 	/// @return the Conversion Format equivalent to the given
 	/// string.
 	//------------------------------------------------------
-	public static TGAToMoImageOptions.OUTPUT_FORMAT ConvertStringToConversionFormat(String instrString)
+	public static TGAToCSImageOptions.OUTPUT_FORMAT ConvertStringToConversionFormat(String instrString)
 	{
 		if (instrString.equalsIgnoreCase("L8") == true)
-			return TGAToMoImageOptions.OUTPUT_FORMAT.L8;
+			return TGAToCSImageOptions.OUTPUT_FORMAT.L8;
 		if (instrString.equalsIgnoreCase("LA88") == true)
-			return TGAToMoImageOptions.OUTPUT_FORMAT.LA88;
+			return TGAToCSImageOptions.OUTPUT_FORMAT.LA88;
 		if (instrString.equalsIgnoreCase("RGB565") == true)
-			return TGAToMoImageOptions.OUTPUT_FORMAT.RGB565;
+			return TGAToCSImageOptions.OUTPUT_FORMAT.RGB565;
 		if (instrString.equalsIgnoreCase("RGBA4444") == true)
-			return TGAToMoImageOptions.OUTPUT_FORMAT.RGBA4444;
+			return TGAToCSImageOptions.OUTPUT_FORMAT.RGBA4444;
 		if (instrString.equalsIgnoreCase("RGB888") == true)
-			return TGAToMoImageOptions.OUTPUT_FORMAT.RGB888;
+			return TGAToCSImageOptions.OUTPUT_FORMAT.RGB888;
 		if (instrString.equalsIgnoreCase("RGBA8888") == true)
-			return TGAToMoImageOptions.OUTPUT_FORMAT.RGBA8888;
+			return TGAToCSImageOptions.OUTPUT_FORMAT.RGBA8888;
 		
 		SCLogger.LogWarning("No valid conversion format found. Will default to the image's format.");
-		return TGAToMoImageOptions.OUTPUT_FORMAT.NONE;
+		return TGAToCSImageOptions.OUTPUT_FORMAT.NONE;
 	}
 	//------------------------------------------------------
 	/// Convert String To Compression Format
@@ -187,12 +187,12 @@ public class CMain
 	/// @return the Conversion Format equivalent to the given
 	/// string.
 	//------------------------------------------------------
-	public static TGAToMoImageOptions.COMPRESSION_FORMAT ConvertStringToCompressionFormat(String instrString)
+	public static TGAToCSImageOptions.COMPRESSION_FORMAT ConvertStringToCompressionFormat(String instrString)
 	{
 		if (instrString.equalsIgnoreCase("Default"))
-			return TGAToMoImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB;
+			return TGAToCSImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB;
 		
 		SCLogger.LogWarning("No valid compression format found. Image will not be compressed.");
-		return TGAToMoImageOptions.COMPRESSION_FORMAT.NONE;
+		return TGAToCSImageOptions.COMPRESSION_FORMAT.NONE;
 	}
 }

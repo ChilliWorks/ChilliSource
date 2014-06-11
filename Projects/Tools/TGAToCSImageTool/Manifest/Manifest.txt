@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: com.taggames.tgatomoimagetool.CMain
+Main-Class: com.chillisource.tgatocsimagetool.CMain
 Class-path: com.realityinteractive.imageio.tga.jar

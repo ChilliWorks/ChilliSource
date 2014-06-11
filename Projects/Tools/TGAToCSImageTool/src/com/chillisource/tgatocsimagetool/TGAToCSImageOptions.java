@@ -8,9 +8,9 @@
  *
  */
 
-package com.taggames.tgatomoimagetool;
+package com.chillisource.tgatocsimagetool;
 
-public class TGAToMoImageOptions 
+public class TGAToCSImageOptions 
 {
 	//--------------------------------------------------------------
 	/// Image Format

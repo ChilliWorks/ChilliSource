@@ -3,7 +3,6 @@ Projects/Tools/ColladaParser/bin
 Projects/Tools/PreMultipliedAlphaPNGTool/bin
 Projects/Tools/SpriteTool/bin
 Projects/Tools/TextExtractor/bin
-Projects/Tools/TGAToMoImageTool/bin
 Projects/Tools/ToolUtils/bin
 Projects/Tools/FontMaker/source/bin
 Projects/Tools/FontMaker/source/obj
@@ -13,3 +12,4 @@ Projects/Tools/ColladaToCSModelConverter/bin
 Projects/Tools/CSModelExporter/bin
 Projects/Tools/CSModelExporter/obj
 Projects/Tools/PNGToCSImageTool/bin
+Projects/Tools/TGAToCSImageTool/bin
