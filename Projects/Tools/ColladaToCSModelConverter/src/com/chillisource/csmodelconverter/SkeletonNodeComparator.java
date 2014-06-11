@@ -6,20 +6,20 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter;
+package com.chillisource.csmodelconverter;
 
 import java.util.Comparator;
 
-import com.taggames.momodelconverter.momodel.MoModelSkeletonNode;
+import com.chillisource.csmodelconverter.csmodel.CSModelSkeletonNode;
 
-public class SkeletonNodeComparator implements Comparator<MoModelSkeletonNode>
+public class SkeletonNodeComparator implements Comparator<CSModelSkeletonNode>
 {
 	//-------------------------------------------------------------------
 	/// Compare
 	///
 	/// Compares two MoModelSkeletonNode
 	//-------------------------------------------------------------------
-	public int compare(MoModelSkeletonNode inJoint1, MoModelSkeletonNode inJoint2)
+	public int compare(CSModelSkeletonNode inJoint1, CSModelSkeletonNode inJoint2)
 	{
 		
 		if (inJoint1.mstrParentId.compareTo(inJoint2.mstrParentId) > 0)

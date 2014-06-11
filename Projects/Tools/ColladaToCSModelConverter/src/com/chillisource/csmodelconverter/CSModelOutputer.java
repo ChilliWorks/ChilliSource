@@ -6,26 +6,23 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter;
+package com.chillisource.csmodelconverter;
 
 import java.util.LinkedList;
 
-import com.taggames.momodelconverter.momodel.*;
+import com.chillisource.csmodelconverter.csmodel.*;
 import com.taggames.toolutils.*;
 
 
-public class CMoModelOutputer 
+public class CSModelOutputer 
 {
 	//-------------------------------------------------------------------
 	/// Constants
 	//-------------------------------------------------------------------
 	private static final int kdwEndiannessCheckValue = 6666;
-	private static final int kdwVersionNumber = 11;
-	private static final String kdwFileExtension = ".momodel";
-	
-	private static final int kdwFeatureHasTexture = 1;
-	private static final int kdwFeatureHasMaterial = 2;
-	private static final int kdwFeatureHasAnimationData = 3;
+	private static final int kdwVersionNumber = 12;
+
+	private static final int kdwFeatureHasAnimationData = 1;
 	
 	private static final int kdwVertexPosition = 1;
 	private static final int kdwVertexNormal = 2;
@@ -46,7 +43,7 @@ public class CMoModelOutputer
 	//-------------------------------------------------------------------
 	/// Constructor
 	//-------------------------------------------------------------------
-	public CMoModelOutputer()
+	public CSModelOutputer()
 	{
 	}
 	//-------------------------------------------------------------------
@@ -54,7 +51,7 @@ public class CMoModelOutputer
 	///
 	/// Outputs the given MoModel data to file.
 	//-------------------------------------------------------------------
-	public boolean Output(MoModelConversionParameters inConversionParams, MoModel inMoModel) throws Exception
+	public boolean Output(CSModelConversionParameters inConversionParams, CSModel inMoModel) throws Exception
 	{
 		boolean bSuccess = true;
 		
@@ -63,11 +60,7 @@ public class CMoModelOutputer
 		//try and open a new file stream. if this fails, throw a fatal error.
 		try
 		{
-			String strOutputFilepath = inConversionParams.mstrOutputFilepath;
-			if (inConversionParams.mstrOutputFilepath.endsWith(kdwFileExtension) == false)
-				strOutputFilepath += kdwFileExtension;
-				
-			mStream = new CLittleEndianOutputStream(strOutputFilepath);
+			mStream = new CLittleEndianOutputStream(inConversionParams.mstrOutputFilepath);
 		}
 		catch (Exception e)
 		{
@@ -86,7 +79,7 @@ public class CMoModelOutputer
 					bSuccess = WriteSkeleton(inConversionParams, inMoModel);
 					if (bSuccess == true)
 					{
-						for (MoModelMesh mesh: inMoModel.mMeshTable.values())
+						for (CSModelMesh mesh: inMoModel.mMeshTable.values())
 						{
 							bSuccess = WriteMeshHeader(inConversionParams, mesh);
 							if (bSuccess == false)
@@ -109,13 +102,6 @@ public class CMoModelOutputer
 		//close the filestream
 		mStream.Close();
 		
-		//output the materials
-		if (inConversionParams.mbHasMaterial == true)
-		{
-			CMoModelMaterialBuilder materialOutputer = new CMoModelMaterialBuilder();
-			materialOutputer.OutputMaterialsForModel(inConversionParams, inMoModel);
-		}
-		
 		return bSuccess;
 	}
 	//-------------------------------------------------------------------
@@ -124,11 +110,11 @@ public class CMoModelOutputer
 	/// Calculates the size of an index. This will try and be of size 2 
 	/// (unsigned short integer), but if its too big it will become 4.
 	//-------------------------------------------------------------------
-	private void CalculateSizeOfIndices(MoModel inMoModel)
+	private void CalculateSizeOfIndices(CSModel inMoModel)
 	{
 		mdwSizeOfIndices = 2;
 		
-		for (MoModelMesh mesh: inMoModel.mMeshTable.values())
+		for (CSModelMesh mesh: inMoModel.mMeshTable.values())
 		{
 			if (mesh.mIndexList.size() >= HIGHEST_UNSIGNED_SHORT || mesh.mVertexList.size() >= HIGHEST_UNSIGNED_SHORT)
 			{
@@ -142,14 +128,10 @@ public class CMoModelOutputer
 	/// Calculates the number of features to be outputed from the 
 	/// conversion parameters
 	//-------------------------------------------------------------------
-	private int GetNumFeatures(MoModelConversionParameters inConversionParams)
+	private int GetNumFeatures(CSModelConversionParameters inConversionParams)
 	{
 		int dwNumFeatures = 0;
 		
-		if (inConversionParams.mbHasTexture == true) 
-			dwNumFeatures++;
-		if (inConversionParams.mbHasMaterial == true) 
-			dwNumFeatures++;
 		if (inConversionParams.mbHasAnimationData == true) 
 			dwNumFeatures++;
 		
@@ -161,7 +143,7 @@ public class CMoModelOutputer
 	/// Calculates the number of vertex elements to be outputed from the 
 	/// conversion parameters
 	//-------------------------------------------------------------------
-	private int GetNumVertexElements(MoModelConversionParameters inConversionParams)
+	private int GetNumVertexElements(CSModelConversionParameters inConversionParams)
 	{
 		int dwNumVertexElements = 0;
 		
@@ -185,7 +167,7 @@ public class CMoModelOutputer
 	///
 	/// Writes the file format header.
 	//-------------------------------------------------------------------
-	private boolean WriteGlobalHeader(MoModelConversionParameters inConversionParams, MoModel inMoModel) throws Exception
+	private boolean WriteGlobalHeader(CSModelConversionParameters inConversionParams, CSModel inMoModel) throws Exception
 	{
 		//write the endianess check value and version number
 		mStream.WriteUnsignedInt(kdwEndiannessCheckValue);
@@ -193,10 +175,6 @@ public class CMoModelOutputer
 		
 		//output the feature declaration
 		mStream.WriteByte((byte)GetNumFeatures(inConversionParams));
-		if (inConversionParams.mbHasTexture == true)
-			mStream.WriteByte((byte)kdwFeatureHasTexture);
-		if (inConversionParams.mbHasMaterial == true) 
-			mStream.WriteByte((byte)kdwFeatureHasMaterial);
 		if (inConversionParams.mbHasAnimationData == true) 
 			mStream.WriteByte((byte)kdwFeatureHasAnimationData);
 		
@@ -242,13 +220,13 @@ public class CMoModelOutputer
 	///
 	/// Writes the skeleton data to file.
 	//-------------------------------------------------------------------
-	private boolean WriteSkeleton(MoModelConversionParameters inConversionParams, MoModel inMoModel) throws Exception
+	private boolean WriteSkeleton(CSModelConversionParameters inConversionParams, CSModel inMoModel) throws Exception
 	{
 		if (inConversionParams.mbHasAnimationData == true)
 		{
 			for (int i = 0; i < inMoModel.mSkeleton.mNodeList.size(); i++)
 			{
-				MoModelSkeletonNode node = inMoModel.mSkeleton.mNodeList.get(i);
+				CSModelSkeletonNode node = inMoModel.mSkeleton.mNodeList.get(i);
 				
 				//write joint name
 				mStream.WriteNullTerminatedAsciiString(node.mstrName);
@@ -278,7 +256,7 @@ public class CMoModelOutputer
 	///
 	/// Writes the mesh header data to file.
 	//-------------------------------------------------------------------
-	private boolean WriteMeshHeader(MoModelConversionParameters inConversionParams, MoModelMesh inMoModelMesh) throws Exception
+	private boolean WriteMeshHeader(CSModelConversionParameters inConversionParams, CSModelMesh inMoModelMesh) throws Exception
 	{
 		//write the mesh name
 		mStream.WriteNullTerminatedAsciiString(inMoModelMesh.mstrName);
@@ -303,37 +281,6 @@ public class CMoModelOutputer
 		mStream.WriteFloat(inMoModelMesh.mvMax.y);
 		mStream.WriteFloat(inMoModelMesh.mvMax.z);
 		
-		//if using a texture, output the texture name
-		if (inConversionParams.mbHasTexture == true)
-		{
-			//if the texture exists, output the tex name
-			if (inMoModelMesh.mstrTextureName.isEmpty() == false)
-			{
-				mStream.WriteNullTerminatedAsciiString(inMoModelMesh.mstrTextureName);
-			}
-			else
-			{
-				SCLogger.LogError("Format specifed as using a texture, but no texture found for mesh: " + inMoModelMesh.mstrName);
-				return false;
-			}
-		}
-		
-		//write the material
-		if (inConversionParams.mbHasMaterial == true)
-		{
-			//output material name
-			String strOutputFullpath = inConversionParams.mstrOutputFilepath.replace("\\", "/");
-			String[] strBrokenUpOut = strOutputFullpath.split("/");
-			String outName;
-			if (strBrokenUpOut.length > 0)
-				outName = strBrokenUpOut[strBrokenUpOut.length - 1];
-			else
-				outName = strOutputFullpath;
-			outName = outName.replace(".momodel", "");
-			mStream.WriteNullTerminatedAsciiString(inMoModelMesh.mMaterial.mstrName + ".momaterial");
-
-		}
-		
 		return true;
 	}
 	//-------------------------------------------------------------------
@@ -341,7 +288,7 @@ public class CMoModelOutputer
 	///
 	/// Writes the mesh body data to file.
 	//-------------------------------------------------------------------
-	private boolean WriteMeshBody(MoModelConversionParameters inConversionParams, MoModelMesh inMoStaticMesh) throws Exception
+	private boolean WriteMeshBody(CSModelConversionParameters inConversionParams, CSModelMesh inMoStaticMesh) throws Exception
 	{
 		boolean bSuccess = true;
 		
@@ -360,7 +307,7 @@ public class CMoModelOutputer
 	///
 	/// Writes the inverse bind matrices if they need to be.
 	//-------------------------------------------------------------------
-	private boolean WriteInverseBindMatrices(MoModelConversionParameters inConversionParams, MoModelMesh inMoStaticMesh) throws Exception
+	private boolean WriteInverseBindMatrices(CSModelConversionParameters inConversionParams, CSModelMesh inMoStaticMesh) throws Exception
 	{
 		if (inConversionParams.mbHasAnimationData == true)
 		{
@@ -383,13 +330,13 @@ public class CMoModelOutputer
 	///
 	/// Writes the vertices to the output stream
 	//-------------------------------------------------------------------
-	private boolean WriteVertices(MoModelConversionParameters inConversionParams, MoModelMesh inMoStaticMesh) throws Exception
+	private boolean WriteVertices(CSModelConversionParameters inConversionParams, CSModelMesh inMoStaticMesh) throws Exception
 	{
-		LinkedList<MoModelVertex> vertexList = inMoStaticMesh.mVertexList;
+		LinkedList<CSModelVertex> vertexList = inMoStaticMesh.mVertexList;
 		
 		for (int i = 0; i < vertexList.size(); i++)
 		{
-			MoModelVertex vertex = vertexList.get(i);
+			CSModelVertex vertex = vertexList.get(i);
 			
 			//write the position data
 			if (inConversionParams.mbVertexHasPosition == true)
@@ -451,7 +398,7 @@ public class CMoModelOutputer
 	///
 	/// Writes the indices to the output stream
 	//-------------------------------------------------------------------
-	private boolean WriteIndices(MoModelConversionParameters inConversionParams, MoModelMesh inMoStaticMesh) throws Exception
+	private boolean WriteIndices(CSModelConversionParameters inConversionParams, CSModelMesh inMoStaticMesh) throws Exception
 	{
 		if (inMoStaticMesh.mIndexList.size() > 0)
 		{

@@ -6,7 +6,7 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter;
+package com.chillisource.csmodelconverter;
 
 import java.util.Hashtable;
 

@@ -6,14 +6,12 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter;
+package com.chillisource.csmodelconverter;
 
-public class MoModelConversionParameters 
+public class CSModelConversionParameters 
 {
 	public String mstrInputFilepath;
 	public String mstrOutputFilepath;
-	public boolean mbHasTexture;
-	public boolean mbHasMaterial;
 	public boolean mbHasAnimationData;
 	public boolean mbVertexHasPosition;
 	public boolean mbVertexHasTexCoords;
@@ -26,12 +24,10 @@ public class MoModelConversionParameters
 	public boolean mbFlipVerticalTexCoords;
 	public boolean mbCombineMeshes;
 	
-	public MoModelConversionParameters()
+	public CSModelConversionParameters()
 	{
 		mstrInputFilepath 		= new String();
 		mstrOutputFilepath 		= new String();
-		mbHasTexture 			= false;
-		mbHasMaterial 			= false;
 		mbHasAnimationData 		= false;
 		mbVertexHasPosition 	= false;
 		mbVertexHasTexCoords 	= false;

@@ -6,7 +6,7 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter.momodel;
+package com.chillisource.csmodelconverter.csmodel;
 
 import com.taggames.toolutils.CIntVector4;
 import com.taggames.toolutils.CVector2;
@@ -14,7 +14,7 @@ import com.taggames.toolutils.CVector3;
 import com.taggames.toolutils.CVector4;
 
 
-public class MoModelVertex 
+public class CSModelVertex 
 {
 	public CVector3 mvPosition;
 	public CVector3 mvNormal;
@@ -23,7 +23,7 @@ public class MoModelVertex
 	public CVector4 mvWeights;
 	public CIntVector4 mvJointIndices;
 	
-	public MoModelVertex()
+	public CSModelVertex()
 	{
 		mvPosition = new CVector3();
 		mvNormal = new CVector3();
@@ -39,12 +39,12 @@ public class MoModelVertex
 	    {
 	    	return true;
 	    }
-	    else if ((inObj instanceof MoModelVertex) == false)
+	    else if ((inObj instanceof CSModelVertex) == false)
 	    {
 	    	return false;
 	    }
 	    
-	    MoModelVertex vertex = (MoModelVertex)inObj;
+	    CSModelVertex vertex = (CSModelVertex)inObj;
 	    if (mvPosition.equals(vertex.mvPosition) && mvNormal.equals(vertex.mvNormal) && mvTextureCoordinate.equals(vertex.mvTextureCoordinate) &&
 			mvVertexColour.equals(vertex.mvVertexColour) && mvWeights.equals(vertex.mvWeights)&& mvJointIndices.equals(vertex.mvJointIndices))
 	    {

@@ -6,19 +6,19 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter;
+package com.chillisource.csmodelconverter;
 
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Stack;
 
-import com.taggames.momodelconverter.momodel.*;
+import com.chillisource.csmodelconverter.csmodel.*;
 import com.taggames.toolutils.*;
 import com.taggames.colladaparser.colladadata.*;
 import com.taggames.colladaparser.colladadata.ColladaGeometry.COLLADA_GEOMETRY_TYPE;
 import com.taggames.toolutils.CMatrix4;
 
-public class CMoModelConverter 
+public class CSModelConverter 
 {
 	//-------------------------------------------------------------------
 	/// Index Type
@@ -37,12 +37,12 @@ public class CMoModelConverter
 	/// Private Member Data
 	//-------------------------------------------------------------------
 	Stack<CMatrix4> mMatrixStack;
-	MoModelConversionParameters mConversionParams;
+	CSModelConversionParameters mConversionParams;
 	SCUserPropertiesParser mPropertiesParser;
 	//-------------------------------------------------------------------
 	/// Constructor
 	//-------------------------------------------------------------------
-	public CMoModelConverter()
+	public CSModelConverter()
 	{
 		mMatrixStack = new Stack<CMatrix4>();
 		mMatrixStack.push(CMatrix4.IDENTITY);
@@ -54,10 +54,10 @@ public class CMoModelConverter
 	/// Converts the input collections of data from the Collada file into 
 	/// something usable for outputting in MoModel format.
 	//-------------------------------------------------------------------
-	public MoModel ConvertToMoModelFormat(LinkedList<String> inNodesToExport, Collada inCollada, MoModelConversionParameters inParams)
+	public CSModel ConvertToMoModelFormat(LinkedList<String> inNodesToExport, Collada inCollada, CSModelConversionParameters inParams)
 	{
 		mConversionParams = inParams;
-		MoModel model = new MoModel();
+		CSModel model = new CSModel();
 		
 		//build the model data
 		for (ColladaNode node : inCollada.mLibraryVisualScenes.get(inCollada.mScene.mInstanceVisualScene.mstrUrl.substring(1)).mRootNodes.values())
@@ -66,7 +66,7 @@ public class CMoModelConverter
 		}
 		
 		//set the model overall hit box
-		for (MoModelMesh mesh: model.mMeshTable.values())
+		for (CSModelMesh mesh: model.mMeshTable.values())
 		{
 			if (mesh.mvMin.x < model.mvMin.x)
 				model.mvMin.x = mesh.mvMin.x;
@@ -90,7 +90,7 @@ public class CMoModelConverter
 	///
 	/// Sets the texture for the MoStatic mesh
 	//-------------------------------------------------------------------
-	private void SetTexture(ColladaMaterial inMaterial, Collada inCollada, MoModelMesh outMesh)
+	private void SetTexture(ColladaMaterial inMaterial, Collada inCollada, CSModelMesh outMesh)
 	{
 		//get the image from the material
 		String effectName = inMaterial.mInstanceEffect.mstrUrl.substring(1);
@@ -158,7 +158,7 @@ public class CMoModelConverter
 	/// Builds the model data for a node if its parent was build, or if its 
 	/// id is in the list of nodes to export.
 	//-------------------------------------------------------------------
-	private void TryBuildModelDataForNode(Collada inCollada, MoModel inModel, ColladaNode inNode,LinkedList<String> inNodesToExport, boolean inbParentExported)
+	private void TryBuildModelDataForNode(Collada inCollada, CSModel inModel, ColladaNode inNode,LinkedList<String> inNodesToExport, boolean inbParentExported)
 	{
 		boolean bShouldExport = inbParentExported;
 		
@@ -256,7 +256,7 @@ public class CMoModelConverter
 	///
 	/// Builds the model data for the MoStatic mesh from the collada meshes.
 	//-------------------------------------------------------------------
-	private void BuildModelData(String instrGeometryName, String instrControllerName, Hashtable<String, String> instrMaterialNameMap, Collada inCollada, MoModel inModel)
+	private void BuildModelData(String instrGeometryName, String instrControllerName, Hashtable<String, String> instrMaterialNameMap, Collada inCollada, CSModel inModel)
 	{
 		ColladaGeometry geometry = null;
 		if (inCollada.mLibraryGeometries.containsKey(instrGeometryName) == true)
@@ -287,7 +287,7 @@ public class CMoModelConverter
 				}
 				
 				//if the "Combine Meshes" transform is being used, then combine all meshes that use the same material.
-				MoModelMesh mesh = null;
+				CSModelMesh mesh = null;
 				if (material != null && mConversionParams.mbCombineMeshes == true)
 				{
 					//get the mesh name
@@ -298,7 +298,7 @@ public class CMoModelConverter
 					
 					if (mesh == null)
 					{
-						mesh = new MoModelMesh();
+						mesh = new CSModelMesh();
 						mesh.mstrName = meshName;
 						inModel.mMeshTable.put(meshName, mesh);
 					}
@@ -318,7 +318,7 @@ public class CMoModelConverter
 						strMeshName += "-" + triangles.mstrMaterial;
 					}
 					
-					mesh = new MoModelMesh();
+					mesh = new CSModelMesh();
 					mesh.mstrName = strMeshName;
 					inModel.mMeshTable.put(mesh.mstrName, mesh);
 					
@@ -344,7 +344,7 @@ public class CMoModelConverter
 	///
 	/// Adds the inverse bind matrix data to the mesh.
 	//-------------------------------------------------------------------
-	private void BuildInverseBindMatrices(MoModel inModel, MoModelMesh inMesh, ColladaController inController)
+	private void BuildInverseBindMatrices(CSModel inModel, CSModelMesh inMesh, ColladaController inController)
 	{
 		//iterate and get the inputs
 		String jointSourceName = new String();
@@ -393,14 +393,14 @@ public class CMoModelConverter
 	///
 	/// Builds the material from the collada data.
 	//-------------------------------------------------------------------
-	private void BuildMaterial(ColladaMaterial inMaterial, Collada inCollada, MoModelMesh inMesh)
+	private void BuildMaterial(ColladaMaterial inMaterial, Collada inCollada, CSModelMesh inMesh)
 	{
 		//get the effect for this geometry
 		String effectName = inMaterial.mInstanceEffect.mstrUrl.substring(1);
 		ColladaEffect effect = inCollada.mLibraryEffects.get(effectName);
 		
 		//get each of the material properties
-		MoModelMaterial newMat = new MoModelMaterial();
+		CSModelMaterial newMat = new CSModelMaterial();
 		
 		//set the name
 		newMat.mstrName = inMaterial.mstrName;
@@ -440,7 +440,7 @@ public class CMoModelConverter
 	///
 	/// Builds the vertex and index data from the collada data.
 	//-------------------------------------------------------------------
-	private void BuildVertices(ColladaGeometry inGeometry, ColladaController inController, ColladaTriangles inTriangles, MoModelMesh inMesh, MoModel inModel)
+	private void BuildVertices(ColladaGeometry inGeometry, ColladaController inController, ColladaTriangles inTriangles, CSModelMesh inMesh, CSModel inModel)
 	{
 		//build the index type array
 		MS_INDEX_TYPE[] eIndexTypeArray = new MS_INDEX_TYPE[inTriangles.mInputList.size()];
@@ -461,7 +461,7 @@ public class CMoModelConverter
 		}
 		
 		//build the weight data
-		MoModelWeightIndexData weightData = BuildWeightIndexData(inController);
+		CSModelWeightIndexData weightData = BuildWeightIndexData(inController);
 		
 		//use this to build the vertices
 		for (int i = 0; i < inTriangles.mP.madwValues.length / inTriangles.mInputList.size(); i++)
@@ -510,7 +510,7 @@ public class CMoModelConverter
 	///
 	/// Builds the weight index data from the collada controller.
 	//-------------------------------------------------------------------
-	private MoModelWeightIndexData BuildWeightIndexData(ColladaController inController)
+	private CSModelWeightIndexData BuildWeightIndexData(ColladaController inController)
 	{
 		if (inController != null)
 		{
@@ -528,7 +528,7 @@ public class CMoModelConverter
 				eIndexTypeArray[inController.mSkin.mVertexWeights.mInputs.get(i).mdwOffset] = eType;
 			}
 			
-			MoModelWeightIndexData weightData = new MoModelWeightIndexData();
+			CSModelWeightIndexData weightData = new CSModelWeightIndexData();
 			weightData.mWeightIndices = new int[inController.mSkin.mVertexWeights.mdwCount][];
 			weightData.mJointIndices = new int[inController.mSkin.mVertexWeights.mdwCount][];
 			int dwCount = 0;
@@ -565,9 +565,9 @@ public class CMoModelConverter
 	///
 	/// Builds a vertex from a collada mesh and collada index data.
 	//-------------------------------------------------------------------
-	private MoModelVertex BuildVertex(ColladaGeometry inGeometry, ColladaController inController, ColladaTriangles inTriangles, MoModel inModel, MoModelWeightIndexData inWeightData, int indwPositionIndex, int indwNormalIndex, int indwTexCoordIndex, int indwColourIndex, int indwWeightDataIndex)
+	private CSModelVertex BuildVertex(ColladaGeometry inGeometry, ColladaController inController, ColladaTriangles inTriangles, CSModel inModel, CSModelWeightIndexData inWeightData, int indwPositionIndex, int indwNormalIndex, int indwTexCoordIndex, int indwColourIndex, int indwWeightDataIndex)
 	{
-		MoModelVertex newVert = new MoModelVertex();
+		CSModelVertex newVert = new CSModelVertex();
 		AddPosition(inGeometry, inController, inTriangles, newVert, indwPositionIndex);
 		AddNormal(inGeometry, inController, inTriangles, newVert, indwNormalIndex);
 		AddTextureCoordinate(inGeometry, inTriangles, newVert, indwTexCoordIndex);
@@ -581,7 +581,7 @@ public class CMoModelConverter
 	///
 	/// Adds the position to a vertex.
 	//-------------------------------------------------------------------
-	private void AddPosition(ColladaGeometry inGeometry, ColladaController inController, ColladaTriangles inTriangles, MoModelVertex inVertex, int indwPositionIndex)
+	private void AddPosition(ColladaGeometry inGeometry, ColladaController inController, ColladaTriangles inTriangles, CSModelVertex inVertex, int indwPositionIndex)
 	{
 		//add the position
 		if (indwPositionIndex != -1)
@@ -622,7 +622,7 @@ public class CMoModelConverter
 	///
 	/// Adds the normal to a vertex.
 	//-------------------------------------------------------------------
-	private void AddNormal(ColladaGeometry inGeometry, ColladaController inController, ColladaTriangles inTriangles, MoModelVertex inVertex, int indwNormalIndex)
+	private void AddNormal(ColladaGeometry inGeometry, ColladaController inController, ColladaTriangles inTriangles, CSModelVertex inVertex, int indwNormalIndex)
 	{
 		if (indwNormalIndex != -1)
 		{
@@ -665,7 +665,7 @@ public class CMoModelConverter
 	///
 	/// Adds the texture coordinates to a vertex.
 	//-------------------------------------------------------------------
-	private void AddTextureCoordinate(ColladaGeometry inGeometry, ColladaTriangles inTriangles, MoModelVertex inVertex, int indwTexCoordIndex)
+	private void AddTextureCoordinate(ColladaGeometry inGeometry, ColladaTriangles inTriangles, CSModelVertex inVertex, int indwTexCoordIndex)
 	{
 		//add the texture coordinates
 		if (indwTexCoordIndex != -1)
@@ -690,7 +690,7 @@ public class CMoModelConverter
 	///
 	/// Adds the colour to a vertex.
 	//-------------------------------------------------------------------
-	private void AddColour(ColladaGeometry inGeometry, ColladaTriangles inTriangles, MoModelVertex inVertex, int indwColourIndex)
+	private void AddColour(ColladaGeometry inGeometry, ColladaTriangles inTriangles, CSModelVertex inVertex, int indwColourIndex)
 	{
 		//add the vertex colours
 		if (indwColourIndex != -1)
@@ -717,7 +717,7 @@ public class CMoModelConverter
 	///
 	/// Adds the vertex weights to a vertex.
 	//-------------------------------------------------------------------
-	private void AddVertexWeights(ColladaGeometry inGeometry, ColladaController inController, MoModelVertex inVertex, MoModelWeightIndexData inWeightData, int indwWeightDataIndex)
+	private void AddVertexWeights(ColladaGeometry inGeometry, ColladaController inController, CSModelVertex inVertex, CSModelWeightIndexData inWeightData, int indwWeightDataIndex)
 	{
 		//add the vertex weights
 		if (indwWeightDataIndex != -1 && inWeightData != null)
@@ -770,7 +770,7 @@ public class CMoModelConverter
 	///
 	/// Adds the joint indices to a vertex.
 	//-------------------------------------------------------------------
-	private void AddJointIndices(ColladaGeometry inGeometry, ColladaController inController, MoModel inModel, MoModelVertex inVertex, MoModelWeightIndexData inWeightData, int indwWeightDataIndex)
+	private void AddJointIndices(ColladaGeometry inGeometry, ColladaController inController, CSModel inModel, CSModelVertex inVertex, CSModelWeightIndexData inWeightData, int indwWeightDataIndex)
 	{
 		//add the joint indices
 		if (indwWeightDataIndex != -1 && inWeightData != null)
@@ -852,7 +852,7 @@ public class CMoModelConverter
 	/// Checks to see if a vertex already exists. If it does then simply 
 	/// add an index to it, if not add it and add a index to the new vertex.
 	//-------------------------------------------------------------------
-	private void AddVertex(MoModelMesh inMesh, MoModelVertex inVertex)
+	private void AddVertex(CSModelMesh inMesh, CSModelVertex inVertex)
 	{
 		//check and see if this vertex already exists
 		int dwIndex = FindVertex(inMesh, inVertex);
@@ -887,10 +887,10 @@ public class CMoModelConverter
 	/// Finds an identical vertex to the one passed in, and returns its
 	/// index in the mesh. if it does not exist -1 is returned.
 	//-------------------------------------------------------------------
-	private int FindVertex(MoModelMesh inMesh, MoModelVertex inVertex)
+	private int FindVertex(CSModelMesh inMesh, CSModelVertex inVertex)
 	{
 		int count = 0;
-		for (MoModelVertex vert: inMesh.mVertexList)
+		for (CSModelVertex vert: inMesh.mVertexList)
 		{
 			if (vert.equals(inVertex) == true)
 				return count;

@@ -6,21 +6,21 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter;
+package com.chillisource.csmodelconverter;
 
 import java.util.LinkedList;
 
-import com.taggames.momodelconverter.momodel.MoModel;
-import com.taggames.momodelconverter.momodel.MoModelMesh;
-import com.taggames.momodelconverter.momodel.MoModelVertex;
+import com.chillisource.csmodelconverter.csmodel.CSModel;
+import com.chillisource.csmodelconverter.csmodel.CSModelMesh;
+import com.chillisource.csmodelconverter.csmodel.CSModelVertex;
 import com.taggames.toolutils.CMatrix4;
 
-public class CMoModelTransformer 
+public class CSModelTransformer 
 {
 	//-------------------------------------------------------------------
 	/// Constructor
 	//-------------------------------------------------------------------
-	public CMoModelTransformer()
+	public CSModelTransformer()
 	{
 	}
 	//-------------------------------------------------------------------
@@ -29,7 +29,7 @@ public class CMoModelTransformer
 	/// This modifies the data in the MoModel to the desired output. For 
 	/// example, changing from Z as up to Y as up.
 	//-------------------------------------------------------------------
-	public void Modify(MoModelConversionParameters inConversionParams, MoModel inMoModel)
+	public void Modify(CSModelConversionParameters inConversionParams, CSModel inMoModel)
 	{
 		boolean bReorderWinding = true;
 		
@@ -53,7 +53,7 @@ public class CMoModelTransformer
 		if (bReorderWinding == true)
 		{
 			//each mesh bounds, positions and normals
-			for (MoModelMesh mesh: inMoModel.mMeshTable.values())
+			for (CSModelMesh mesh: inMoModel.mMeshTable.values())
 			{
 				//indices
 				LinkedList<Integer> newIndices = new LinkedList<Integer>();
@@ -72,7 +72,7 @@ public class CMoModelTransformer
 	///
 	/// Mirrors all the data in the model in the XZ plane.
 	//-------------------------------------------------------------------
-	private void MirrorInXZPlane(MoModel inMoModel)
+	private void MirrorInXZPlane(CSModel inMoModel)
 	{
 		//overall bounds
 		float temp = inMoModel.mvMin.y;
@@ -80,7 +80,7 @@ public class CMoModelTransformer
 		inMoModel.mvMax.y = -temp;
 		
 		//each mesh bounds, positions and normals
-		for (MoModelMesh mesh: inMoModel.mMeshTable.values())
+		for (CSModelMesh mesh: inMoModel.mMeshTable.values())
 		{
 			//bounds
 			temp = mesh.mvMin.y;
@@ -88,7 +88,7 @@ public class CMoModelTransformer
 			mesh.mvMax.y = -temp;
 			
 			//position and normal
-			for (MoModelVertex vert: mesh.mVertexList)
+			for (CSModelVertex vert: mesh.mVertexList)
 			{
 				vert.mvPosition.y = -vert.mvPosition.y;
 				vert.mvNormal.y = -vert.mvNormal.y;
@@ -115,7 +115,7 @@ public class CMoModelTransformer
 	/// Swaps y and z for all data in the model. This is needed to
 	/// convert from 3DS Max space to moFlow space.
 	//-------------------------------------------------------------------
-	private void SwapYAndZ(MoModel inMoModel)
+	private void SwapYAndZ(CSModel inMoModel)
 	{
 		float temp = 0.0f;
 		
@@ -130,7 +130,7 @@ public class CMoModelTransformer
 		
 		
 		//each mesh bounds, positions and normals
-		for (MoModelMesh mesh: inMoModel.mMeshTable.values())
+		for (CSModelMesh mesh: inMoModel.mMeshTable.values())
 		{
 			//bounds
 			temp = mesh.mvMin.z;
@@ -142,7 +142,7 @@ public class CMoModelTransformer
 			mesh.mvMax.y = temp;
 			
 			//position and normal
-			for (MoModelVertex vert: mesh.mVertexList)
+			for (CSModelVertex vert: mesh.mVertexList)
 			{
 				temp = vert.mvPosition.z;
 				vert.mvPosition.z = vert.mvPosition.y;
@@ -170,11 +170,11 @@ public class CMoModelTransformer
 	/// because 3DS Max uses the opposite coordinate system to what
 	/// moFlow uses.
 	//-------------------------------------------------------------------
-	private void FlipVerticalTexCoords(MoModel inMoModel)
+	private void FlipVerticalTexCoords(CSModel inMoModel)
 	{
-		for (MoModelMesh mesh: inMoModel.mMeshTable.values())
+		for (CSModelMesh mesh: inMoModel.mMeshTable.values())
 		{
-			for (MoModelVertex vert: mesh.mVertexList)
+			for (CSModelVertex vert: mesh.mVertexList)
 			{
 				vert.mvTextureCoordinate.y = 1.0f - vert.mvTextureCoordinate.y;
 			}

@@ -23,8 +23,8 @@ namespace ChilliSource
         {
             const std::string k_modelFileExtension("csmodel");
             
-            const u32 k_minVersion = 9;
-            const u32 k_maxVersion = 11;
+            const u32 k_minVersion = 12;
+            const u32 k_maxVersion = 12;
             const u32 k_fileCheckValue = 6666;
             
             //---------------------------------------------
@@ -36,8 +36,6 @@ namespace ChilliSource
             enum class Feature
             {
                 k_none,
-                k_hasTexture, //TODO: Remove this once texture is no longer part of model
-                k_hasMaterial, //TODO: Remove this once material is no longer part of model
                 k_hasAnimation,
             };
             //---------------------------------------------
@@ -334,17 +332,7 @@ namespace ChilliSource
                     switch (Feature(featureType))
                     {
                         case Feature::k_hasAnimation:
-                            //A breaking change was made to animated models in version 11.
-                            CS_ASSERT(versionNum >= 11, "Model contains old format animation data, please update to csmodel version 11: " + in_filePath);
                             out_meshDesc.mFeatures.mbHasAnimationData = true;
-                            break;
-                        case Feature::k_hasMaterial:
-                            out_meshDesc.mFeatures.mbHasMaterial = true;
-                            CS_LOG_WARNING("Material is deprecated in CSModel format: " + in_filePath);
-                            break;
-                        case Feature::k_hasTexture:
-                            out_meshDesc.mFeatures.mbHasTexture = true;
-                            CS_LOG_WARNING("Texture is deprecated in CSModel format: " + in_filePath);
                             break;
                         default:
                             CS_LOG_ERROR("Unknown feature type in csmodel (" + in_filePath + ") feature declaration!");

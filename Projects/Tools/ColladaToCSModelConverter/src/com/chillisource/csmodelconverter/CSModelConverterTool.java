@@ -6,7 +6,7 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter;
+package com.chillisource.csmodelconverter;
 
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
@@ -14,18 +14,18 @@ import java.util.LinkedList;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import com.taggames.momodelconverter.momodel.MoModel;
-import com.taggames.momodelconverter.momodel.MoModelMesh;
+import com.chillisource.csmodelconverter.csmodel.CSModel;
+import com.chillisource.csmodelconverter.csmodel.CSModelMesh;
 import com.taggames.toolutils.*;
 import com.taggames.colladaparser.CColladaParser;
 import com.taggames.colladaparser.colladadata.*;
 
-public class CMoModelConverterTool 
+public class CSModelConverterTool 
 {
 	//-------------------------------------------------------------------
 	/// Constructor
 	//-------------------------------------------------------------------
-	public CMoModelConverterTool()
+	public CSModelConverterTool()
 	{
 	}
 	//-------------------------------------------------------------------
@@ -34,7 +34,7 @@ public class CMoModelConverterTool
 	/// Converts a Collada file to a momodel file based on the given
 	/// parameters.
 	//-------------------------------------------------------------------
-	public void Convert(MoModelConversionParameters inParams) throws Exception
+	public void Convert(CSModelConversionParameters inParams) throws Exception
 	{
 		Collada colladaData = new Collada();
 		try
@@ -66,21 +66,21 @@ public class CMoModelConverterTool
 		}
 		
 		//convert to MoModel Format
-		CMoModelConverter converter = new CMoModelConverter(); 
-		MoModel model = converter.ConvertToMoModelFormat(nodes, colladaData, inParams);
+		CSModelConverter converter = new CSModelConverter(); 
+		CSModel model = converter.ConvertToMoModelFormat(nodes, colladaData, inParams);
 		
 		//Check the momodel for warnings and errors
 		SCModelChecker.CheckModel(model);
 		
 		//Modify the data to the intended output format
-		CMoModelTransformer modifier = new CMoModelTransformer(); 
+		CSModelTransformer modifier = new CSModelTransformer(); 
 		modifier.Modify(inParams, model);
 			
 		//output info on the mo model mesh
 		OutputInfoOnMoModel(model);
 
 		//output MoStatic file
-		CMoModelOutputer outputer = new CMoModelOutputer();
+		CSModelOutputer outputer = new CSModelOutputer();
 		
 		if (outputer.Output(inParams, model) == true)
 		{
@@ -97,7 +97,7 @@ public class CMoModelConverterTool
 	///
 	/// Prints info on the output MoModel mesh.
 	//-------------------------------------------------------------------
-	private void OutputInfoOnMoModel(MoModel inModel)
+	private void OutputInfoOnMoModel(CSModel inModel)
 	{
 		SCLogger.LogMessage("MoModel Model Generated.");
 		SCLogger.LogMessage(" Min Boundary: (" + inModel.mvMin.x + ", " + inModel.mvMin.y + ", " + inModel.mvMin.z + ")");
@@ -106,7 +106,7 @@ public class CMoModelConverterTool
 		SCLogger.LogMessage("  Num Skeleton Nodes: " + inModel.mSkeleton.mNodeList.size());
 		SCLogger.LogMessage("   Number of which are Joints: " + SCSkeletonBuilder.GetNumberOfJoints(inModel));
 		SCLogger.LogMessage(" Number of Meshes: " + inModel.mMeshTable.size());
-		for (MoModelMesh mesh: inModel.mMeshTable.values())
+		for (CSModelMesh mesh: inModel.mMeshTable.values())
 		{
 			SCLogger.LogMessage(" Mesh " + mesh.mstrName);
 			SCLogger.LogMessage("  Number of Vertices: " + mesh.mVertexList.size());
@@ -127,12 +127,10 @@ public class CMoModelConverterTool
 	///
 	/// Output data on the outputted file.
 	//-------------------------------------------------------------------
-	private void OutputInfoOnOutput(MoModelConversionParameters inParams)
+	private void OutputInfoOnOutput(CSModelConversionParameters inParams)
 	{
 		SCLogger.LogMessage("Successfully created " + inParams.mstrOutputFilepath);
 		SCLogger.LogMessage(" Features");
-		SCLogger.LogMessage("  Has Texture: " + Boolean.toString(inParams.mbHasTexture));
-		SCLogger.LogMessage("  Has Material: " + Boolean.toString(inParams.mbHasMaterial));
 		SCLogger.LogMessage("  Has Animation Data: " + Boolean.toString(inParams.mbHasAnimationData));
 		SCLogger.LogMessage(" Vertex Declaration");
 		SCLogger.LogMessage("  Position: " + Boolean.toString(inParams.mbVertexHasPosition));

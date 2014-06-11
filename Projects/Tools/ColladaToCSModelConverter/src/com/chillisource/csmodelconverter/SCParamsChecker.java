@@ -6,7 +6,7 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter;
+package com.chillisource.csmodelconverter;
 
 import com.taggames.toolutils.SCLogger;
 
@@ -20,14 +20,8 @@ public class SCParamsChecker
 	///
 	/// @param the parameters.
 	//----------------------------------------------------
-	static public void CheckParameters(MoModelConversionParameters inParams)
+	static public void CheckParameters(CSModelConversionParameters inParams)
 	{
-		//check for use of the now deprecated textured feature.
-		if (inParams.mbHasTexture == true)
-		{
-			SCLogger.LogWarning("The 'textured' feature is deprecated.");
-		}
-		
 		//check for no positional data
 		if (inParams.mbVertexHasPosition == false)
 		{

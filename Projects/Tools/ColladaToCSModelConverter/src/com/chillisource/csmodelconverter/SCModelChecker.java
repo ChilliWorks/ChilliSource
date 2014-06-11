@@ -6,10 +6,10 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter;
+package com.chillisource.csmodelconverter;
 
-import com.taggames.momodelconverter.momodel.MoModel;
-import com.taggames.momodelconverter.momodel.MoModelMesh;
+import com.chillisource.csmodelconverter.csmodel.CSModel;
+import com.chillisource.csmodelconverter.csmodel.CSModelMesh;
 import com.taggames.toolutils.SCLogger;
 
 public class SCModelChecker 
@@ -24,11 +24,11 @@ public class SCModelChecker
 	///
 	/// @param The model.
 	//----------------------------------------------------
-	static public void CheckModel(MoModel inModel)
+	static public void CheckModel(CSModel inModel)
 	{
 		//Test that the model is not too big for moFlow to render.
 		boolean bContainsLargeMesh = false;
-		for (MoModelMesh mesh : inModel.mMeshTable.values())
+		for (CSModelMesh mesh : inModel.mMeshTable.values())
 		{
 			boolean bFoundLargeIndex = false;
 			for (Integer dwIndex : mesh.mIndexList)

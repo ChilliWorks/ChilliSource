@@ -6,7 +6,7 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter;
+package com.chillisource.csmodelconverter;
 
 import com.taggames.toolutils.*;
 
@@ -27,8 +27,6 @@ public class CMain
 	private static final String PARAM_NAME_VERTEXDECLARATION_SHORT	= "-v";
 	private static final String PARAM_NAME_TRANSFORMS_SHORT			= "-t";
 	private static final String PARAM_NAME_HELP_SHORT				= "-h";
-	private static final char FEATURE_HASTEXTURE					= 't';
-	private static final char FEATURE_HASMATERIAL					= 'm';
 	private static final char FEATURE_HASANIMATIONDATA				= 'a';
 	private static final char VERTEX_ELEMENT_POSITION				= 'p';
 	private static final char VERTEX_ELEMENT_TEXCOORD				= 't';
@@ -58,7 +56,7 @@ public class CMain
 		}
 		
 		//gather up commands
-		MoModelConversionParameters params = new MoModelConversionParameters();
+		CSModelConversionParameters params = new CSModelConversionParameters();
 		for (int i = 0; i < inastrArgs.length; ++i)
 		{
 			//input
@@ -122,7 +120,7 @@ public class CMain
 		//check for weird combinations of parameters
 		SCParamsChecker.CheckParameters(params);
 		
-		CMoModelConverterTool converterTool = new CMoModelConverterTool();
+		CSModelConverterTool converterTool = new CSModelConverterTool();
 		converterTool.Convert(params);
 		
 		SCLogger.PrintErrorsAndWarnings();
@@ -135,14 +133,10 @@ public class CMain
 	/// @param the conversion params.
 	/// @param the string to parse.
 	//-------------------------------------------------------------------
-	static void ParseFeatures(MoModelConversionParameters inParams, String instrFeatures)
+	static void ParseFeatures(CSModelConversionParameters inParams, String instrFeatures)
 	{
 		for (int i = 0; i < instrFeatures.length(); ++i)
 		{
-			if (instrFeatures.charAt(i) == FEATURE_HASTEXTURE)
-				inParams.mbHasTexture = true;
-			if (instrFeatures.charAt(i) == FEATURE_HASMATERIAL)
-				inParams.mbHasMaterial = true;
 			if (instrFeatures.charAt(i) == FEATURE_HASANIMATIONDATA)
 				inParams.mbHasAnimationData = true;
 		}
@@ -155,7 +149,7 @@ public class CMain
 	/// @param the conversion params.
 	/// @param the string to parse.
 	//-------------------------------------------------------------------
-	static void ParseVertexDeclaration(MoModelConversionParameters inParams, String instrVertexDecl)
+	static void ParseVertexDeclaration(CSModelConversionParameters inParams, String instrVertexDecl)
 	{
 		for (int i = 0; i < instrVertexDecl.length(); ++i)
 		{
@@ -181,7 +175,7 @@ public class CMain
 	/// @param the conversion params.
 	/// @param the string to parse.
 	//-------------------------------------------------------------------
-	static void ParseModifications(MoModelConversionParameters inParams, String instrModifications)
+	static void ParseModifications(CSModelConversionParameters inParams, String instrModifications)
 	{
 		for (int i = 0; i < instrModifications.length(); ++i)
 		{
@@ -212,8 +206,6 @@ public class CMain
 		SCLogger.LogMessage(" '--errordisplay'('-e') -> when to display errors.");
 		SCLogger.LogMessage(" '" + PARAM_NAME_HELP + "'('" + PARAM_NAME_HELP_SHORT + "') -> Display this help message.");
 		SCLogger.LogMessage("Features:");
-		SCLogger.LogMessage(" '" + FEATURE_HASTEXTURE + "' -> The model will be outputed containing a texture.");
-		SCLogger.LogMessage(" '" + FEATURE_HASMATERIAL + "' -> The model will be outputed containing a material.");
 		SCLogger.LogMessage(" '" + FEATURE_HASANIMATIONDATA+ "' -> The model will be outputed containing animation data.");
 		SCLogger.LogMessage("Vertex Elements:");
 		SCLogger.LogMessage(" '" + VERTEX_ELEMENT_POSITION + "' -> A vertex will contain a position.");

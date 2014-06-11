@@ -6,9 +6,9 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter.momodel;
+package com.chillisource.csmodelconverter.csmodel;
 
-public class MoModelSkeletonNode
+public class CSModelSkeletonNode
 {
 	enum SKELETON_NODE_TYPE
 	{
@@ -26,7 +26,7 @@ public class MoModelSkeletonNode
 	public String mstrSId;
 	public int mdwJointIndex; 
 	
-	public MoModelSkeletonNode()
+	public CSModelSkeletonNode()
 	{
 		mstrId = new String();
 		mstrParentId = new String();

@@ -6,18 +6,18 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter.momodel;
+package com.chillisource.csmodelconverter.csmodel;
 
 import java.util.LinkedList;
 
-public class MoModelSkeleton 
+public class CSModelSkeleton 
 {
-	public LinkedList<MoModelSkeletonNode> mNodeList;
+	public LinkedList<CSModelSkeletonNode> mNodeList;
 	public boolean mbLocked;
 	
-	public MoModelSkeleton()
+	public CSModelSkeleton()
 	{
-		mNodeList = new LinkedList<MoModelSkeletonNode>();
+		mNodeList = new LinkedList<CSModelSkeletonNode>();
 		mbLocked = false;
 	}
 }

@@ -6,11 +6,11 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter.momodel;
+package com.chillisource.csmodelconverter.csmodel;
 
 import com.taggames.toolutils.CVector4;
 
-public class MoModelMaterial 
+public class CSModelMaterial 
 {
 	public CVector4 mvEmissive;
 	public CVector4 mvAmbient;
@@ -19,7 +19,7 @@ public class MoModelMaterial
 	public float mfShininess;
 	public String mstrName;
 	
-	public MoModelMaterial()
+	public CSModelMaterial()
 	{
 		mvEmissive = new CVector4();
 		mvAmbient = new CVector4();

@@ -6,9 +6,9 @@
 // Copyright 2012 Tag Games. All rights reserved.
 //
 
-package com.taggames.momodelconverter;
+package com.chillisource.csmodelconverter;
 
-public class MoModelWeightIndexData 
+public class CSModelWeightIndexData 
 {
 	int[][] mWeightIndices;
 	int[][] mJointIndices;
