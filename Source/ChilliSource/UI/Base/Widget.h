@@ -650,14 +650,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void OnParentTransformChanged();
             //----------------------------------------------------------------------------------------
-            /// Called when the child transform changes forcing this to update its layout
-            ///
-            /// @author S Downie
-            ///
-            /// @param The child widget that changed
-            //----------------------------------------------------------------------------------------
-            void OnChildTransformChanged(const Widget* in_child);
-            //----------------------------------------------------------------------------------------
             /// Calculate the final screen space size of the given child based on the widget
             /// and the layout
             ///

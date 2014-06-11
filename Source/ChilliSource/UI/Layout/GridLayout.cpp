@@ -138,7 +138,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void GridLayout::BuildLayout(const std::vector<WidgetSPtr>& in_widgets)
+        void GridLayout::BuildLayout()
         {
             CS_ASSERT(m_widget != nullptr, "Cannot have null owning widget");
             

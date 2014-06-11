@@ -968,18 +968,13 @@ namespace ChilliSource
             {
                 if(m_layout != nullptr)
                 {
-                    m_layout->BuildLayout(m_children);
+                    m_layout->BuildLayout();
                 }
                 
                 if(m_internalLayout != nullptr)
                 {
-                    m_internalLayout->BuildLayout(m_internalChildren);
+                    m_internalLayout->BuildLayout();
                 }
-            }
-            
-            if(m_parent != nullptr)
-            {
-                m_parent->OnChildTransformChanged(this);
             }
             
             for(auto& child : m_internalChildren)
@@ -1000,37 +995,6 @@ namespace ChilliSource
             m_isParentSizeCacheValid = false;
             
             InvalidateTransformCache();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::OnChildTransformChanged(const Widget* in_child)
-        {
-            if(m_canvas == nullptr)
-                return;
-            
-            if(m_layout != nullptr)
-            {
-                for(auto& child : m_children)
-                {
-                    if(child.get() == in_child)
-                    {
-                        m_layout->BuildLayout(m_children);
-                        return;
-                    }
-                }
-            }
-            
-            if(m_internalLayout != nullptr)
-            {
-                for(auto& child : m_internalChildren)
-                {
-                    if(child.get() == in_child)
-                    {
-                        m_internalLayout->BuildLayout(m_internalChildren);
-                        return;
-                    }
-                }
-            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

@@ -74,9 +74,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void HListLayout::BuildLayout(const std::vector<WidgetSPtr>& in_widgets)
+        void HListLayout::BuildLayout()
         {
-            m_gridLayout.BuildLayout(in_widgets);
+            m_gridLayout.BuildLayout();
         }
         //----------------------------------------------------------------------------------------
         /// The cell size if fixed and uniform so the index is not required

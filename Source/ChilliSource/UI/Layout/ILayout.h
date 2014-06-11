@@ -47,14 +47,14 @@ namespace ChilliSource
         {
         public:
             //----------------------------------------------------------------------------------------
-            /// Create the layout based on the given widgets. This should allow subsequent calls to
-            /// get the position, size, etc for a widget to retrieve the correct data
+            /// Create the layout sizes and positions based on the current layout properties and the
+            /// owning widget.
             ///
             /// @author S Downie
             ///
             /// @param Widgets to layout
             //----------------------------------------------------------------------------------------
-            virtual void BuildLayout(const std::vector<WidgetSPtr>& in_widgets) = 0;
+            virtual void BuildLayout() = 0;
             //----------------------------------------------------------------------------------------
             /// Get the final size of the widget that occupies the space at the given index
             ///

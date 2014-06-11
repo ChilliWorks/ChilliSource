@@ -106,14 +106,14 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetAbsoluteSpacing(f32 in_spacing);
             //----------------------------------------------------------------------------------------
-            /// Lays out widgets in a horizontal list where each widget has a single column.
-            /// The layout will use the currently set padding and margins
+            /// Create the list layout sizes and positions based on the current layout properties and the
+            /// owning widget.
             ///
             /// @author S Downie
             ///
             /// @param Widgets to layout
             //----------------------------------------------------------------------------------------
-            void BuildLayout(const std::vector<WidgetSPtr>& in_widgets) override;
+            void BuildLayout() override;
             //----------------------------------------------------------------------------------------
             /// Get the final size of the widget that occupies the space at the given index
             ///
