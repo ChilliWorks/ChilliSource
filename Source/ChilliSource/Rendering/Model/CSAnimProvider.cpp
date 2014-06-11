@@ -20,7 +20,7 @@ namespace ChilliSource
 	{
         namespace
         {
-            const std::string k_fileExtension("moanim");
+            const std::string k_fileExtension("csanim");
             
             const u32 k_minVersion = 4;
             const u32 k_maxVersion = 4;

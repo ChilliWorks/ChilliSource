@@ -21,7 +21,7 @@ namespace ChilliSource
 	{
         namespace
         {
-            const std::string k_modelFileExtension("momodel");
+            const std::string k_modelFileExtension("csmodel");
             
             const u32 k_minVersion = 9;
             const u32 k_maxVersion = 11;
@@ -309,14 +309,14 @@ namespace ChilliSource
                 u32 fileCheckValue = ReadValue<u32>(in_meshStream);
                 if(fileCheckValue != k_fileCheckValue)
                 {
-                    CS_LOG_ERROR("MoModel file has corruption(incorrect File Check Value): " + in_filePath);
+                    CS_LOG_ERROR("csmodel file has corruption(incorrect File Check Value): " + in_filePath);
                     return false;
                 }
                 
                 u32 versionNum = ReadValue<u32>(in_meshStream);
                 if (versionNum < k_minVersion || versionNum > k_maxVersion)
                 {
-                    CS_LOG_ERROR("Unsupported MoModel version: " + in_filePath);
+                    CS_LOG_ERROR("Unsupported csmodel version: " + in_filePath);
                     return false;
                 }
                 
@@ -335,7 +335,7 @@ namespace ChilliSource
                     {
                         case Feature::k_hasAnimation:
                             //A breaking change was made to animated models in version 11.
-                            CS_ASSERT(versionNum >= 11, "Model contains old format animation data, please update to momodel version 11: " + in_filePath);
+                            CS_ASSERT(versionNum >= 11, "Model contains old format animation data, please update to csmodel version 11: " + in_filePath);
                             out_meshDesc.mFeatures.mbHasAnimationData = true;
                             break;
                         case Feature::k_hasMaterial:
@@ -347,7 +347,7 @@ namespace ChilliSource
                             CS_LOG_WARNING("Texture is deprecated in CSModel format: " + in_filePath);
                             break;
                         default:
-                            CS_LOG_ERROR("Unknown feature type in MoModel (" + in_filePath + ") feature declaration!");
+                            CS_LOG_ERROR("Unknown feature type in csmodel (" + in_filePath + ") feature declaration!");
                             break;
                     }
                 }
@@ -398,7 +398,7 @@ namespace ChilliSource
                 //Check file for corruption
                 if(nullptr == meshStream || true == meshStream->IsBad())
                 {
-                    CS_LOG_ERROR("Cannot open MoModel file: " + in_filePath);
+                    CS_LOG_ERROR("Cannot open csmodel file: " + in_filePath);
                     return false;
                 }
                 
