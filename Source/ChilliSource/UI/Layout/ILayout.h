@@ -46,6 +46,8 @@ namespace ChilliSource
         class ILayout
         {
         public:
+            CS_DECLARE_NOCOPY(ILayout);
+            
             //----------------------------------------------------------------------------------------
             /// Create the layout sizes and positions based on the current layout properties and the
             /// owning widget.
@@ -79,6 +81,12 @@ namespace ChilliSource
             /// @param The widget that owns and uses this layout
             //----------------------------------------------------------------------------------------
             virtual void SetWidget(Widget* in_widget) = 0;
+            //----------------------------------------------------------------------------------------
+            /// Virtual destructor
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            virtual ~ILayout(){}
         };
     }
 }

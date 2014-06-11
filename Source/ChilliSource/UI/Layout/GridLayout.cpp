@@ -135,6 +135,11 @@ namespace ChilliSource
         void GridLayout::SetCellOrder(CellOrder in_order)
         {
             m_cellOrder = in_order;
+            
+            if(m_widget != nullptr)
+            {
+                m_widget->OnLayoutChanged(this);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
