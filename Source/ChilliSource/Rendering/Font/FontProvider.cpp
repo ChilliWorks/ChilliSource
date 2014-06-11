@@ -45,7 +45,7 @@ namespace ChilliSource
             const std::string k_charFileExtension("alphabet");
             const std::string k_kerningFileExtension("kerninginfo");
             const std::string k_textureAtlasFileExtension("bin");
-            const std::string k_textureFileExtension("moimage");
+            const std::string k_textureFileExtension("csimage");
             
             //----------------------------------------------------------------------------
             /// Load the font kerning information from the external file
