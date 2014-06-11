@@ -14,7 +14,6 @@ namespace CSModelExporter.Classes
     public struct CSAnimOptions
     {
         public bool mbSwapYAndZ;
-        public bool mbMirrorInXZPlane;
     }
     public class CSAnimConverter
     {
@@ -204,8 +203,6 @@ namespace CSModelExporter.Classes
 
             if (inOptions.mbSwapYAndZ == true)
                 output += "y";
-            if (inOptions.mbMirrorInXZPlane == true)
-                output += "m";
 
             if (output.Length == 0)
                 output = "0";

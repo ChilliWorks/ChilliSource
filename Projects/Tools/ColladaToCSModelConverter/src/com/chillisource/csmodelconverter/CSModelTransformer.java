@@ -8,12 +8,9 @@
 
 package com.chillisource.csmodelconverter;
 
-import java.util.LinkedList;
-
 import com.chillisource.csmodelconverter.csmodel.CSModel;
 import com.chillisource.csmodelconverter.csmodel.CSModelMesh;
 import com.chillisource.csmodelconverter.csmodel.CSModelVertex;
-import com.taggames.toolutils.CMatrix4;
 
 public class CSModelTransformer 
 {
@@ -31,82 +28,14 @@ public class CSModelTransformer
 	//-------------------------------------------------------------------
 	public void Modify(CSModelConversionParameters inConversionParams, CSModel inMoModel)
 	{
-		boolean bReorderWinding = true;
-		
-		if (inConversionParams.mbMirrorInXZPlane == true)
-		{
-			MirrorInXZPlane(inMoModel);
-			bReorderWinding = !bReorderWinding;
-		}
-		
 		if (inConversionParams.mbSwapYAndZ == true)
 		{
 			SwapYAndZ(inMoModel);
-			bReorderWinding = !bReorderWinding;
 		}
 		
 		if (inConversionParams.mbFlipVerticalTexCoords == true)
 		{
 			FlipVerticalTexCoords(inMoModel);
-		}
-		
-		if (bReorderWinding == true)
-		{
-			//each mesh bounds, positions and normals
-			for (CSModelMesh mesh: inMoModel.mMeshTable.values())
-			{
-				//indices
-				LinkedList<Integer> newIndices = new LinkedList<Integer>();
-				for (int i = 0; i < mesh.mIndexList.size() / 3; i++)
-				{
-					newIndices.add(mesh.mIndexList.get(i * 3 + 0));
-					newIndices.add(mesh.mIndexList.get(i * 3 + 2));
-					newIndices.add(mesh.mIndexList.get(i * 3 + 1));
-				}
-				mesh.mIndexList = newIndices;
-			}
-		}
-	}
-	//-------------------------------------------------------------------
-	/// Mirror In XZ Plane
-	///
-	/// Mirrors all the data in the model in the XZ plane.
-	//-------------------------------------------------------------------
-	private void MirrorInXZPlane(CSModel inMoModel)
-	{
-		//overall bounds
-		float temp = inMoModel.mvMin.y;
-		inMoModel.mvMin.y = -inMoModel.mvMax.y;
-		inMoModel.mvMax.y = -temp;
-		
-		//each mesh bounds, positions and normals
-		for (CSModelMesh mesh: inMoModel.mMeshTable.values())
-		{
-			//bounds
-			temp = mesh.mvMin.y;
-			mesh.mvMin.y = -mesh.mvMax.y;
-			mesh.mvMax.y = -temp;
-			
-			//position and normal
-			for (CSModelVertex vert: mesh.mVertexList)
-			{
-				vert.mvPosition.y = -vert.mvPosition.y;
-				vert.mvNormal.y = -vert.mvNormal.y;
-			}
-			
-			//Mirror inverse bind matrices
-			if (mesh.maInverseBindMatrices != null)
-			{
-				for (int i = 0; i < mesh.maInverseBindMatrices.length; i++)
-				{
-					CMatrix4 invertY = new CMatrix4(
-							1.0f, 0.0f, 0.0f, 0.0f,
-							0.0f,-1.0f, 0.0f, 0.0f,
-							0.0f, 0.0f, 1.0f, 0.0f,
-							0.0f, 0.0f, 0.0f, 1.0f);
-					mesh.maInverseBindMatrices[i] = CMatrix4.Multiply(CMatrix4.Multiply(invertY.Inverse(), mesh.maInverseBindMatrices[i]), invertY);
-				}
-			}
 		}
 	}
 	//-------------------------------------------------------------------

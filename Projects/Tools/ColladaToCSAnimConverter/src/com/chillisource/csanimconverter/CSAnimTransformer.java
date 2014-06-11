@@ -22,37 +22,9 @@ public class CSAnimTransformer
 	 */
 	public void Modify(CSAnimConversionParameters inConversionParams, CSAnim inMoModel)
 	{
-		if (inConversionParams.mbMirrorInXZPlane == true)
-		{
-			MirrorInXZPlane(inMoModel);
-		}
-		
 		if (inConversionParams.mbSwapYAndZ == true)
 		{
 			SwapYAndZ(inMoModel);
-		}
-	}
-	
-	/**
-	 * Mirrors the transform arround the X axis.
-	 * @param inAnim
-	 */
-	private void MirrorInXZPlane(CSAnim inAnim)
-	{
-		for (int i = 0; i < inAnim.mFrames.size(); i++)
-		{
-			CSAnimFrame frame = inAnim.mFrames.get(i);
-			
-			for (int j = 0; j < frame.mNodeTranslations.size(); j++)
-			{
-				CVector3 translation = frame.mNodeTranslations.get(j);
-				CQuaternion orientation = frame.mNodeOrienations.get(j);
-				
-				translation.y = -translation.y;
-				
-				orientation.y = -orientation.y;
-				orientation.w = -orientation.w;
-			}
 		}
 	}
 	

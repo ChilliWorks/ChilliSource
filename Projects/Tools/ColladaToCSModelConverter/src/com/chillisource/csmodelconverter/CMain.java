@@ -35,7 +35,6 @@ public class CMain
 	private static final char VERTEX_ELEMENT_WEIGHTS				= 'w';
 	private static final char VERTEX_ELEMENT_JOINT_INDICES			= 'j';
 	private static final char MODIFICATION_SWAPYANDZ				= 'y';
-	private static final char MODIFICATION_MIRRORINXZPLANE			= 'm';
 	private static final char MODIFICATION_FLIPYTEXCOORDS			= 'f';
 	private static final char MODIFICATION_COMBINEMESHES			= 'c';
 	//-------------------------------------------------------------------
@@ -181,8 +180,6 @@ public class CMain
 		{
 			if (instrModifications.charAt(i) == MODIFICATION_SWAPYANDZ)
 				inParams.mbSwapYAndZ = true;
-			if (instrModifications.charAt(i) == MODIFICATION_MIRRORINXZPLANE)
-				inParams.mbMirrorInXZPlane = true;
 			if (instrModifications.charAt(i) == MODIFICATION_FLIPYTEXCOORDS)
 				inParams.mbFlipVerticalTexCoords = true;
 			if (instrModifications.charAt(i) == MODIFICATION_COMBINEMESHES)
@@ -216,7 +213,6 @@ public class CMain
 		SCLogger.LogMessage(" '" + VERTEX_ELEMENT_JOINT_INDICES + "' -> A vertex will contain joint indices.");
 		SCLogger.LogMessage("Transforms:");
 		SCLogger.LogMessage(" '" + MODIFICATION_SWAPYANDZ + "' -> Z and Y coordinates of output data will be swapped.");
-		SCLogger.LogMessage(" '" + MODIFICATION_MIRRORINXZPLANE + "' -> The output data will be mirrored in the XY plane.");
 		SCLogger.LogMessage(" '" + MODIFICATION_FLIPYTEXCOORDS + "' -> Texture coordinates will be flipped in the y axis.");
 		SCLogger.LogMessage(" '" + MODIFICATION_COMBINEMESHES + "' -> Combines all meshes that use the same material into 1 mesh. Note: This doesn't work for animated models.");
 		SCLogger.LogMessage("Logging Levels:");

@@ -54,10 +54,9 @@
             <CheckBox Name="CSModelHasNormals" Grid.Row ="1" Grid.Column ="1" Margin="3 3 0 3" IsChecked="False">Has normals</CheckBox>
             <CheckBox Name="CSModelHasVertexColours" Grid.Row ="1" Grid.Column ="2" Margin="3 3 0 3" IsChecked="False">Has vertex colours</CheckBox>
             <CheckBox Name="CSModelHasAnimation" Grid.Row ="1" Grid.Column ="3" Margin="3 3 0 3" IsChecked="False">Is animated</CheckBox>
-            <CheckBox Name="CSModelMirrorInXZPlane" Grid.Row ="2" Grid.Column ="0" Margin="3 3 0 3" IsChecked="True">Mirror in the XZ plane</CheckBox>
-            <CheckBox Name="CSModelSwapYAndZ" Grid.Row ="2" Grid.Column ="1" Margin="3 3 0 3" IsChecked="True">Swap Y and Z</CheckBox>
-            <CheckBox Name="CSModelFlipVerticalTexCoords" Grid.Row ="2" Grid.Column ="2" Margin="3 3 0 3" IsChecked="True">Flip vertical texture coordinates</CheckBox>
-            <CheckBox Name="CSModelCombineMeshes" Grid.Row ="2" Grid.Column ="3" Margin="3 3 0 3" IsChecked="False">Merge meshes with shared materials</CheckBox>
+            <CheckBox Name="CSModelSwapYAndZ" Grid.Row ="2" Grid.Column ="0" Margin="3 3 0 3" IsChecked="True">Z-up to Y-up</CheckBox>
+            <CheckBox Name="CSModelFlipVerticalTexCoords" Grid.Row ="2" Grid.Column ="1" Margin="3 3 0 3" IsChecked="True">Flip vertical texture coordinates</CheckBox>
+            <CheckBox Name="CSModelCombineMeshes" Grid.Row ="2" Grid.Column ="2" Margin="3 3 0 3" IsChecked="False">Merge meshes with shared materials</CheckBox>
         </Grid>
 
         <!-- CSAnim Options Bar -->
@@ -73,8 +72,7 @@
 
             <Rectangle Grid.Row ="0" Grid.ColumnSpan="3" Fill="#FF6600"/>
             <Label Grid.Row ="0" TextBlock.Foreground="White">Animation Options</Label>
-            <CheckBox Name="CSAnimMirrorInXZPlane" Grid.Row ="1" Grid.Column ="0" Margin="3 3 0 3" IsChecked="True">Mirror in the XZ plane</CheckBox>
-            <CheckBox Name="CSAnimSwapYAndZ" Grid.Row ="1" Grid.Column ="1" Margin="3 3 0 3" IsChecked="True">Swap Y and Z</CheckBox>
+            <CheckBox Name="CSAnimSwapYAndZ" Grid.Row ="1" Grid.Column ="0" Margin="3 3 0 3" IsChecked="True">Z-up to Y-up</CheckBox>
         </Grid>
 
         <!-- Empty Drag Window -->

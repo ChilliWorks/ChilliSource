@@ -141,7 +141,6 @@ public class CSModelConverterTool
 		SCLogger.LogMessage("  Joint Indices: " + Boolean.toString(inParams.mbVertexHasJointIndices));
 		SCLogger.LogMessage(" Transforms");
 		SCLogger.LogMessage("  Flip vertical texture coordinates: " + Boolean.toString(inParams.mbFlipVerticalTexCoords));
-		SCLogger.LogMessage("  Mirror in the XZ Plane: " + Boolean.toString(inParams.mbMirrorInXZPlane));
 		SCLogger.LogMessage("  Swap Y and Z: " + Boolean.toString(inParams.mbSwapYAndZ));
 		SCLogger.LogMessage(" ");
 	}

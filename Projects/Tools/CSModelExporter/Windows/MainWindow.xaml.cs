@@ -129,7 +129,6 @@ namespace CSModelExporter
             options.mfScale = 1.0f;
             options.mbFlipVerticalTexCoords = (bool)CSModelFlipVerticalTexCoords.IsChecked;
             options.mbSwapYAndZ = (bool)CSModelSwapYAndZ.IsChecked;
-            options.mbMirrorInXZPlane = (bool)CSModelMirrorInXZPlane.IsChecked;
             options.mbCombineMeshes = (bool)CSModelCombineMeshes.IsChecked;
             return options;
         }
@@ -140,7 +139,6 @@ namespace CSModelExporter
         private CSAnimOptions GetCSAnimOptions()
         {
             CSAnimOptions options = new CSAnimOptions();
-            options.mbMirrorInXZPlane = (bool)CSAnimMirrorInXZPlane.IsChecked;
             options.mbSwapYAndZ = (bool)CSAnimSwapYAndZ.IsChecked;
             return options;
         }

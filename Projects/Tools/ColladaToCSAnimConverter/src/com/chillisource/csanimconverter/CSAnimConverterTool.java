@@ -104,7 +104,6 @@ public class CSAnimConverterTool
 	{
 		SCLogger.LogMessage("Successfully created " + inParams.mstrOutputFilepath);
 		SCLogger.LogMessage(" Transforms");
-		SCLogger.LogMessage("  Mirror in the XZ plane: " + Boolean.toString(inParams.mbMirrorInXZPlane));
 		SCLogger.LogMessage("  Swap Y and Z: " + Boolean.toString(inParams.mbSwapYAndZ));
 		SCLogger.LogMessage(" ");
 	}

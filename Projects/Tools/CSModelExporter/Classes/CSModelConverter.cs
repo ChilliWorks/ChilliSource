@@ -21,7 +21,6 @@ namespace CSModelExporter.Classes
         public bool mbVertexHasVertexColours;
         public bool mbVertexHasWeights;
         public bool mbVertexHasJointIndices;
-        public bool mbMirrorInXZPlane;
         public bool mbSwapYAndZ;
         public bool mbFlipVerticalTexCoords;
         public bool mbCombineMeshes;
@@ -241,8 +240,6 @@ namespace CSModelExporter.Classes
         {
             string output = "";
 
-            if (inOptions.mbMirrorInXZPlane == true)
-                output += "m";
             if (inOptions.mbSwapYAndZ == true)
                 output += "y";
             if (inOptions.mbFlipVerticalTexCoords == true)

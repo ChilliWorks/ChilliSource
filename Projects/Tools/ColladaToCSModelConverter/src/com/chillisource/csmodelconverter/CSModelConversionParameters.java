@@ -19,7 +19,6 @@ public class CSModelConversionParameters
 	public boolean mbVertexHasColour;
 	public boolean mbVertexHasWeights;
 	public boolean mbVertexHasJointIndices;
-	public boolean mbMirrorInXZPlane;
 	public boolean mbSwapYAndZ;
 	public boolean mbFlipVerticalTexCoords;
 	public boolean mbCombineMeshes;
@@ -35,7 +34,6 @@ public class CSModelConversionParameters
 		mbVertexHasColour 		= false;
 		mbVertexHasWeights 		= false;
 		mbVertexHasJointIndices = false;
-		mbMirrorInXZPlane 		= false;
 		mbSwapYAndZ 			= false;
 		mbFlipVerticalTexCoords = false;
 		mbCombineMeshes			= false;

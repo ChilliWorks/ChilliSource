@@ -16,7 +16,6 @@ public class CMain
 	private static final String PARAM_NAME_OUTPUT_SHORT 			= "-o";
 	private static final String PARAM_NAME_TRANSFORMS_SHORT			= "-t";
 	private static final String PARAM_NAME_HELP_SHORT				= "-h";
-	private static final char TRANSFORM_MIRRORINXZPLANE				= 'm';
 	private static final char TRANSFORM_SWAPYANDZ					= 'y';
 	
 	/**
@@ -100,8 +99,6 @@ public class CMain
 		{
 			if (instrModifications.charAt(i) == TRANSFORM_SWAPYANDZ)
 				inParams.mbSwapYAndZ = true;
-			if (instrModifications.charAt(i) == TRANSFORM_MIRRORINXZPLANE)
-				inParams.mbMirrorInXZPlane = true;
 		}
 	}
 //-------------------------------------------------------------------
@@ -119,7 +116,6 @@ public static void PrintHelpText()
 	SCLogger.LogMessage(" '--errordisplay'('-e') -> when to display errors.");
 	SCLogger.LogMessage(" '" + PARAM_NAME_HELP + "'('" + PARAM_NAME_HELP_SHORT + "') -> Display this help message.");
 	SCLogger.LogMessage("Transforms:");
-	SCLogger.LogMessage(" '" + TRANSFORM_MIRRORINXZPLANE + "' -> The output data will be mirrored in the XZ plane.");
 	SCLogger.LogMessage(" '" + TRANSFORM_SWAPYANDZ + "' -> Z and Y coordinates of output data will be swapped.");
 	SCLogger.LogMessage("Logging Levels:");
 	SCLogger.LogMessage(" 'none' -> No logging.");
