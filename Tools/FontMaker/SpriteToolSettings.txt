@@ -1,0 +1,1 @@
+-padding 2 -validheights 64:128:256:1024:2048:4096 -validwidths 64:128:256:1024:2048:4096 -kerning true -binversion 2

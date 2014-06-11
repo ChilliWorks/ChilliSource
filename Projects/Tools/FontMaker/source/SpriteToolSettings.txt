@@ -1,0 +1,1 @@
+ -padding 2 -maxwidth 4096 -maxheight 4096 -divisibleby 2
