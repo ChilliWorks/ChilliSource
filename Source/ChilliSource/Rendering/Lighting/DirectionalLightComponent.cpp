@@ -61,7 +61,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void DirectionalLightComponent::SetShadowVolume(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar)
         {
-			mmatProj = Core::Matrix4::CreateOrthographicProjectionRH(infWidth, infHeight, infNear, infFar);
+			mmatProj = Core::Matrix4::CreateOrthographicProjectionLH(infWidth, infHeight, infNear, infFar);
             
             mbCacheValid = false;
         }
@@ -72,11 +72,11 @@ namespace ChilliSource
         {
             if(GetEntity() != nullptr)
             {
-				return Core::Vector3::Rotate(Core::Vector3::k_unitNegativeZ, GetEntity()->GetTransform().GetWorldOrientation());
+				return Core::Vector3::Rotate(Core::Vector3::k_unitPositiveZ, GetEntity()->GetTransform().GetWorldOrientation());
             }
             else
             {
-				return Core::Vector3::k_unitNegativeZ;
+				return Core::Vector3::k_unitPositiveZ;
             }
         }
         //----------------------------------------------------------

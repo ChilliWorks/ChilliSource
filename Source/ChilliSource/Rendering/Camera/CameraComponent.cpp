@@ -200,7 +200,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::CalculatePerspectiveMatrix()
 		{
-			mmatProj = Core::Matrix4::CreatePerspectiveProjectionRH(mDesc.fFOV, mDesc.fAspect, mDesc.fNearClipping, mDesc.fFarClipping);
+			mmatProj = Core::Matrix4::CreatePerspectiveProjectionLH(mDesc.fFOV, mDesc.fAspect, mDesc.fNearClipping, mDesc.fFarClipping);
 			mbProjectionCacheValid = true;
 		}
 		//------------------------------------------------------
@@ -210,7 +210,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::CalculateOrthographicMatrix()
 		{
-			mmatProj = Core::Matrix4::CreateOrthographicProjectionRH(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
+			mmatProj = Core::Matrix4::CreateOrthographicProjectionLH(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
 			mbProjectionCacheValid = true;
 		}
 		//------------------------------------------------------

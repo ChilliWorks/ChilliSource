@@ -26,7 +26,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		//------------------------------------------------
 		Material::Material() 
-        : m_srcBlendMode(BlendMode::k_one), m_dstBlendMode(BlendMode::k_oneMinusSourceAlpha), m_cullFace(CullFace::k_front)
+        : m_srcBlendMode(BlendMode::k_one), m_dstBlendMode(BlendMode::k_oneMinusSourceAlpha), m_cullFace(CullFace::k_back)
 		{
 
 		}

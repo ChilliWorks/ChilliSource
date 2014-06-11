@@ -25,10 +25,10 @@ namespace ChilliSource
         const u32 kudwVertsPerSprite = 4;
         const u32 kudwIndicesPerSprite = 6;
         
-        //CCW winding order
-		//const u16 kauwLocalIndices[] = {0,1,2,1,3,2};
-		//CW winding order - We use this for the time being as the model format is CW
-		const u16 kauwLocalIndices[] = {0,2,1,1,2,3};
+        //CCW winding order (back face cull)
+		const u16 kauwLocalIndices[] = {0,1,2,1,3,2};
+		//CW winding order (front face cull)
+		//const u16 kauwLocalIndices[] = {0,2,1,1,2,3};
         
 		//===============================================================
 		/// Description:

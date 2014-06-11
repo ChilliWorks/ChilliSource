@@ -57,8 +57,8 @@ namespace ChilliSource
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
             material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/GUI.csshader"));
             material->SetTransparencyEnabled(true);
-            material->SetCullFace(CullFace::k_front);
-            material->SetFaceCullingEnabled(false);
+            material->SetCullFace(CullFace::k_back);
+            material->SetFaceCullingEnabled(true);
             
 			return material;
         }
@@ -71,7 +71,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/Sprite.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(false);
 			return material;
         }
@@ -84,7 +84,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/Static.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
 			return material;
         }
@@ -97,7 +97,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/StaticAmbient.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
 			return material;
         }
@@ -112,7 +112,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/StaticBlinnPoint.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
 			return material;
         }
@@ -132,7 +132,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/StaticBlinnPoint.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
 			return material;
         }
@@ -147,7 +147,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/StaticBlinnPerVertexPoint.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
 			return material;
         }
@@ -167,7 +167,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/StaticBlinnPerVertexPoint.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
 			return material;
         }
@@ -179,7 +179,7 @@ namespace ChilliSource
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
             material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/StaticDirectionalShadowMap.csshader"));
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
             
 #ifdef CS_ENABLE_DEBUGSHADOW
@@ -199,7 +199,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/Animated.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
 			return material;
         }
@@ -212,7 +212,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/AnimatedAmbient.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
 			return material;
         }
@@ -227,7 +227,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/AnimatedBlinnPoint.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
 			return material;
         }
@@ -247,7 +247,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/AnimatedBlinnPoint.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
 			return material;
         }
@@ -262,7 +262,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/AnimatedBlinnPerVertexPoint.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
 			return material;
         }
@@ -282,7 +282,7 @@ namespace ChilliSource
             material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/AnimatedBlinnPerVertexPoint.csshader"));
             material->AddTexture(in_texture);
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
 			return material;
         }
@@ -294,7 +294,7 @@ namespace ChilliSource
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
             material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_package, "Shaders/Core/AnimatedDirectionalShadowMap.csshader"));
             material->SetTransparencyEnabled(false);
-            material->SetCullFace(CullFace::k_front);
+            material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
             
 #ifdef CS_ENABLE_DEBUGSHADOW

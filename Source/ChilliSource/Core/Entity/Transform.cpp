@@ -35,7 +35,7 @@ namespace ChilliSource
 		{
             Core::Vector3 vUp(invUp);
             
-            Core::Vector3 vForward(invPos - invTarget);
+            Core::Vector3 vForward(invTarget - invPos);
             vForward.Normalise();
             
             Core::Vector3 vRight(Vector3::CrossProduct(vUp, vForward));
