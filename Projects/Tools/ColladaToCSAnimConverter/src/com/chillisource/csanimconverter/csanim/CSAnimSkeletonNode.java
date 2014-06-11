@@ -1,8 +1,8 @@
-package com.taggames.moanimconverter.moanim;
+package com.chillisource.csanimconverter.csanim;
 
 import com.taggames.toolutils.CMatrix4;
 
-public class MoAnimSkeletonNode 
+public class CSAnimSkeletonNode 
 {
 	public String mstrId;
 	public String mstrName;
@@ -10,7 +10,7 @@ public class MoAnimSkeletonNode
 	public int mdwParentNodeIndex;
 	public CMatrix4 mInitialPoseMatrix;
 	
-	public MoAnimSkeletonNode()
+	public CSAnimSkeletonNode()
 	{
 		mstrId = new String();
 		mstrName = new String();

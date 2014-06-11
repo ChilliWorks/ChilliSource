@@ -1,16 +1,16 @@
-package com.taggames.moanimconverter;
+package com.chillisource.csanimconverter;
 
-import com.taggames.moanimconverter.moanim.*;
+import com.chillisource.csanimconverter.csanim.*;
 import com.taggames.toolutils.CQuaternion;
 import com.taggames.toolutils.CVector3;
 
-public class CMoAnimTransformer 
+public class CSAnimTransformer 
 {
 	
 	/**
 	 * Constructor
 	 */
-	public CMoAnimTransformer()
+	public CSAnimTransformer()
 	{
 		
 	}
@@ -20,7 +20,7 @@ public class CMoAnimTransformer
 	 * @param inConversionParams
 	 * @param inMoModel
 	 */
-	public void Modify(MoAnimConversionParameters inConversionParams, MoAnim inMoModel)
+	public void Modify(CSAnimConversionParameters inConversionParams, CSAnim inMoModel)
 	{
 		if (inConversionParams.mbMirrorInXZPlane == true)
 		{
@@ -37,11 +37,11 @@ public class CMoAnimTransformer
 	 * Mirrors the transform arround the X axis.
 	 * @param inAnim
 	 */
-	private void MirrorInXZPlane(MoAnim inAnim)
+	private void MirrorInXZPlane(CSAnim inAnim)
 	{
 		for (int i = 0; i < inAnim.mFrames.size(); i++)
 		{
-			MoAnimFrame frame = inAnim.mFrames.get(i);
+			CSAnimFrame frame = inAnim.mFrames.get(i);
 			
 			for (int j = 0; j < frame.mNodeTranslations.size(); j++)
 			{
@@ -60,11 +60,11 @@ public class CMoAnimTransformer
 	 * Switches the x and y in the transform, such that Y is now the up axis.
 	 * @param inMoModel
 	 */
-	private void SwapYAndZ(MoAnim inAnim)
+	private void SwapYAndZ(CSAnim inAnim)
 	{
 		for (int i = 0; i < inAnim.mFrames.size(); i++)
 		{
-			MoAnimFrame frame = inAnim.mFrames.get(i);
+			CSAnimFrame frame = inAnim.mFrames.get(i);
 			
 			for (int j = 0; j < frame.mNodeTranslations.size(); j++)
 			{

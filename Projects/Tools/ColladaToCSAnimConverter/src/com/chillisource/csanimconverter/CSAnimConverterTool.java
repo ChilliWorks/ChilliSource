@@ -1,4 +1,4 @@
-package com.taggames.moanimconverter;
+package com.chillisource.csanimconverter;
 
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
@@ -6,19 +6,19 @@ import java.util.LinkedList;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import com.chillisource.csanimconverter.csanim.*;
 import com.taggames.colladaparser.CColladaParser;
 import com.taggames.colladaparser.colladadata.*;
-import com.taggames.moanimconverter.moanim.*;
 import com.taggames.toolutils.SCLogger;
 
-public class CMoAnimConverterTool 
+public class CSAnimConverterTool 
 {
-	public CMoAnimConverterTool()
+	public CSAnimConverterTool()
 	{
 		
 	}
 	
-	public void Convert(MoAnimConversionParameters inParams) throws Exception
+	public void Convert(CSAnimConversionParameters inParams) throws Exception
 	{
 		Collada colladaData = new Collada();
 		try
@@ -53,24 +53,24 @@ public class CMoAnimConverterTool
 		}
 		
 		//create the new animation file
-		MoAnim anim = new MoAnim();
+		CSAnim anim = new CSAnim();
 		
 		//build the skeleton for reference
 		SCSkeletonBuilder.BuildSkeleton(nodes, colladaData, anim);
 		
 		//build the animation data
-		CMoAnimConverter converter = new CMoAnimConverter(); 
+		CSAnimConverter converter = new CSAnimConverter(); 
 		converter.ConvertToMoAnimFormat(nodes, colladaData, anim);
 		
 		//Modify the data to the intended output format
-		CMoAnimTransformer modifier = new CMoAnimTransformer(); 
+		CSAnimTransformer modifier = new CSAnimTransformer(); 
 		modifier.Modify(inParams, anim);
 			
 		//output info on the MoAnim
 		OutputInfoOnMoAnim(anim);
 
 		//output MoStatic file
-		CMoAnimOutputer outputer = new CMoAnimOutputer();
+		CSAnimOutputer outputer = new CSAnimOutputer();
 		
 		if (outputer.Output(inParams, anim) == true)
 		{
@@ -87,7 +87,7 @@ public class CMoAnimConverterTool
 	 * Prints info on the output MoStatic mesh.
 	 * @param inMeshList
 	 */
-	private void OutputInfoOnMoAnim(MoAnim inModel)
+	private void OutputInfoOnMoAnim(CSAnim inModel)
 	{
 		SCLogger.LogMessage("MoAnim Data Generated");
 		SCLogger.LogMessage(" Frame rate: " + inModel.mfFrameRate);
@@ -100,7 +100,7 @@ public class CMoAnimConverterTool
 	 * output data on the outputted file
 	 * @param inParams
 	 */
-	private void OutputInfoOnOutput(MoAnimConversionParameters inParams)
+	private void OutputInfoOnOutput(CSAnimConversionParameters inParams)
 	{
 		SCLogger.LogMessage("Successfully created " + inParams.mstrOutputFilepath);
 		SCLogger.LogMessage(" Transforms");

@@ -1,6 +1,6 @@
-package com.taggames.moanimconverter;
+package com.chillisource.csanimconverter;
 
-public class MoAnimConversionParameters 
+public class CSAnimConversionParameters 
 {
 	public String mstrInputFilepath;
 	public String mstrOutputFilepath;
@@ -8,7 +8,7 @@ public class MoAnimConversionParameters
 	public boolean mbFlipVerticalTexCoords;
 	public boolean mbMirrorInXZPlane;
 	
-	public MoAnimConversionParameters()
+	public CSAnimConversionParameters()
 	{
 		mstrInputFilepath 		= new String();
 		mstrOutputFilepath 		= new String();

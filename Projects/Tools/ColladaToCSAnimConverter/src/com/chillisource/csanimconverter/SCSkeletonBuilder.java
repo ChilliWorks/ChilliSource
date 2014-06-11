@@ -1,11 +1,11 @@
-package com.taggames.moanimconverter;
+package com.chillisource.csanimconverter;
 
 import java.util.Collections;
 import java.util.LinkedList;
 
+import com.chillisource.csanimconverter.csanim.*;
 import com.taggames.colladaparser.colladadata.*;
 import com.taggames.colladaparser.colladadata.ColladaNode.COLLADA_NODE_TYPE;
-import com.taggames.moanimconverter.moanim.*;
 import com.taggames.toolutils.CMatrix4;
 import com.taggames.toolutils.SCLogger;
 
@@ -17,7 +17,7 @@ public class SCSkeletonBuilder
 	/// Converts the input collections of data from the collada file into
 	/// something useable for outputing in MoAnim format.
 	//-------------------------------------------------------------------
-	static public void BuildSkeleton(LinkedList<String> inNodesToExport, Collada inCollada, MoAnim inMoAnim)
+	static public void BuildSkeleton(LinkedList<String> inNodesToExport, Collada inCollada, CSAnim inMoAnim)
 	{
 		//build the skeleton
 		for (ColladaNode node : inCollada.mLibraryVisualScenes.get(inCollada.mScene.mInstanceVisualScene.mstrUrl.substring(1)).mRootNodes.values())
@@ -31,7 +31,7 @@ public class SCSkeletonBuilder
 	/// Builds the model data for a node if its parent was build, or if 
 	/// its id is in the list of nodes to export.
 	//-------------------------------------------------------------------
-	static private void TryBuildSkeletonForNode(Collada inCollada, MoAnim inAnim, ColladaNode inNode,LinkedList<String> inNodesToExport, boolean inbParentExported)
+	static private void TryBuildSkeletonForNode(Collada inCollada, CSAnim inAnim, ColladaNode inNode,LinkedList<String> inNodesToExport, boolean inbParentExported)
 	{
 		boolean bShouldExport = inbParentExported;
 		
@@ -76,7 +76,7 @@ public class SCSkeletonBuilder
 	/// If it has already been built, this then confirms that it is using 
 	/// the same skeleton.
 	//-------------------------------------------------------------------
-	static public void TryBuildSkeleton(LinkedList<ColladaNode> inNodes, String instrSkeletonName, MoAnim inModel)
+	static public void TryBuildSkeleton(LinkedList<ColladaNode> inNodes, String instrSkeletonName, CSAnim inModel)
 	{
 		if (inModel.mSkeleton.mbLocked == false)
 		{
@@ -86,7 +86,7 @@ public class SCSkeletonBuilder
 		}
 		else
 		{
-			MoAnim testModel = new MoAnim();
+			CSAnim testModel = new CSAnim();
 			BuildSkeleton(inNodes, instrSkeletonName, testModel);
 			OrderSkeleton(testModel);
 			
@@ -107,7 +107,7 @@ public class SCSkeletonBuilder
 	/// Compares the two skeletons to see if all relevent data in them 
 	/// is the same.
 	//-------------------------------------------------------------------
-	static private boolean CompareSkeletons(MoAnimSkeleton inSkeleton1, MoAnimSkeleton inSkeleton2)
+	static private boolean CompareSkeletons(CSAnimSkeleton inSkeleton1, CSAnimSkeleton inSkeleton2)
 	{
 		//check the list counts are the same
 		if (inSkeleton1.mNodeList.size() != inSkeleton2.mNodeList.size())
@@ -116,8 +116,8 @@ public class SCSkeletonBuilder
 		//check all the skeleton nodes
 		for (int i = 0; i < inSkeleton1.mNodeList.size(); i++)
 		{
-			MoAnimSkeletonNode node1 = inSkeleton1.mNodeList.get(i);
-			MoAnimSkeletonNode node2 = inSkeleton2.mNodeList.get(i);
+			CSAnimSkeletonNode node1 = inSkeleton1.mNodeList.get(i);
+			CSAnimSkeletonNode node2 = inSkeleton2.mNodeList.get(i);
 			
 			if (node1.mstrName.equals(node2.mstrName) == false)
 				return false;
@@ -132,7 +132,7 @@ public class SCSkeletonBuilder
 	///
 	/// builds to the skeleton.
 	//-------------------------------------------------------------------
-	static private boolean BuildSkeleton(LinkedList<ColladaNode> inNodes, String instrSkeletonName, MoAnim inModel)
+	static private boolean BuildSkeleton(LinkedList<ColladaNode> inNodes, String instrSkeletonName, CSAnim inModel)
 	{
 		//find the "root" node that we are using
 		for (ColladaNode node : inNodes)
@@ -159,7 +159,7 @@ public class SCSkeletonBuilder
 	///
 	/// Adds a node tree to the skeleton.
 	//-------------------------------------------------------------------
-	static private void AddToSkeleton(ColladaNode inNode, ColladaNode inParent, MoAnim inModel)
+	static private void AddToSkeleton(ColladaNode inNode, ColladaNode inParent, CSAnim inModel)
 	{
 		//if its a skeleton node, then add it to the skeleton node list
 		if (inNode.meType == COLLADA_NODE_TYPE.JOINT || inNode.meType == COLLADA_NODE_TYPE.BASE)
@@ -176,12 +176,12 @@ public class SCSkeletonBuilder
 	///
 	/// Tries to add a joint to the skeleton.
 	//-------------------------------------------------------------------
-	static private void TryAddSkeletonNode(ColladaNode inNode, ColladaNode inParent, MoAnim inModel)
+	static private void TryAddSkeletonNode(ColladaNode inNode, ColladaNode inParent, CSAnim inModel)
 	{
 		//check and see if this node already exists
 		for (int i = 0; i < inModel.mSkeleton.mNodeList.size(); i++)
 		{
-			MoAnimSkeletonNode node = inModel.mSkeleton.mNodeList.get(i);
+			CSAnimSkeletonNode node = inModel.mSkeleton.mNodeList.get(i);
 			if (node.mstrId.equalsIgnoreCase(inNode.mstrId))
 			{
 				//if the node does already exist, then make sure the parent is correct
@@ -194,7 +194,7 @@ public class SCSkeletonBuilder
 		}
 		
 		//create a new skeleton node
-		MoAnimSkeletonNode newSkeletonNode = new MoAnimSkeletonNode();
+		CSAnimSkeletonNode newSkeletonNode = new CSAnimSkeletonNode();
 		newSkeletonNode.mstrName = inNode.mstrName;
 		newSkeletonNode.mstrId = inNode.mstrId;
 		if (inParent != null)
@@ -212,12 +212,12 @@ public class SCSkeletonBuilder
 	///
 	/// Orders the skeleton based on the the id.
 	//-------------------------------------------------------------------
-	static private void OrderSkeleton(MoAnim inModel)
+	static private void OrderSkeleton(CSAnim inModel)
 	{
 		Collections.sort(inModel.mSkeleton.mNodeList, new SkeletonNodeComparator());
 		
 		//iterator the list and get the parent indices
-		for (MoAnimSkeletonNode node : inModel.mSkeleton.mNodeList)
+		for (CSAnimSkeletonNode node : inModel.mSkeleton.mNodeList)
 		{
 			if(node.mstrParentId.length() > 0)
 			{
@@ -234,11 +234,11 @@ public class SCSkeletonBuilder
 	///
 	/// @return The index of the skeleton node with the passed in id.
 	//-------------------------------------------------------------------
-	static public int GetIndexOfSkeletonNodeById(MoAnim inModel, String instrId)
+	static public int GetIndexOfSkeletonNodeById(CSAnim inModel, String instrId)
 	{
 		for (int i = 0; i < inModel.mSkeleton.mNodeList.size(); i++)
 		{
-			MoAnimSkeletonNode node = inModel.mSkeleton.mNodeList.get(i);
+			CSAnimSkeletonNode node = inModel.mSkeleton.mNodeList.get(i);
 			if (node.mstrId.equalsIgnoreCase(instrId))
 			{
 				return i;

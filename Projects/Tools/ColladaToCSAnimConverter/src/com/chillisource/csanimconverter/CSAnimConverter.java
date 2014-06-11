@@ -1,16 +1,15 @@
-package com.taggames.moanimconverter;
+package com.chillisource.csanimconverter;
 
 import java.util.LinkedList;
 
-
+import com.chillisource.csanimconverter.csanim.*;
 import com.taggames.colladaparser.colladadata.*;
-import com.taggames.moanimconverter.moanim.*;
 import com.taggames.toolutils.CMatrix4;
 import com.taggames.toolutils.CQuaternion;
 import com.taggames.toolutils.CVector3;
 import com.taggames.toolutils.SCLogger;
 
-public class CMoAnimConverter 
+public class CSAnimConverter 
 {
 	/**
 	 * private data
@@ -20,7 +19,7 @@ public class CMoAnimConverter
 	/**
 	 * Constructor
 	 */
-	public CMoAnimConverter()
+	public CSAnimConverter()
 	{
 		
 	}
@@ -30,7 +29,7 @@ public class CMoAnimConverter
 	 * @param inMeshList
 	 * @param inTextureList
 	 */
-	public void ConvertToMoAnimFormat(LinkedList<String> inNodesToExport, Collada inCollada, MoAnim inMoAnim)
+	public void ConvertToMoAnimFormat(LinkedList<String> inNodesToExport, Collada inCollada, CSAnim inMoAnim)
 	{
 		mAnimations = new Animation[inMoAnim.mSkeleton.mNodeList.size()];
 		
@@ -97,7 +96,7 @@ public class CMoAnimConverter
 	 * @param inAllowedNodes
 	 * @param inChannel
 	 */
-	private void TryAddChannel(Collada inCollada, MoAnim inMoAnim, LinkedList<String> inAllowedNodes, ColladaChannel inChannel)
+	private void TryAddChannel(Collada inCollada, CSAnim inMoAnim, LinkedList<String> inAllowedNodes, ColladaChannel inChannel)
 	{
 		//get the targeted node name.
 		String[] strSplitTarget = inChannel.mstrTarget.split("/");
@@ -135,7 +134,7 @@ public class CMoAnimConverter
 	 * @param inTransformSource
 	 * @param inInterpolationSource
 	 */
-	public void AddAnimation(MoAnim inMoAnim, ColladaSource inTimelineSource, ColladaSource inTransformSource, ColladaSource inInterpolationSource, String instrSkeletonNodeId)
+	public void AddAnimation(CSAnim inMoAnim, ColladaSource inTimelineSource, ColladaSource inTransformSource, ColladaSource inInterpolationSource, String instrSkeletonNodeId)
 	{
 		Animation anim = new Animation();
 		
@@ -205,7 +204,7 @@ public class CMoAnimConverter
 	 * Convert the Animation data into frame data that can be used for outputting in MoAnim
 	 * @param inAnim
 	 */
-	private void ConvertAnimationsToFrames(MoAnim inAnim)
+	private void ConvertAnimationsToFrames(CSAnim inAnim)
 	{
 		if (mAnimations.length > 0 && mAnimations.length == inAnim.mSkeleton.mNodeList.size())
 		{
@@ -233,7 +232,7 @@ public class CMoAnimConverter
 			//iterate through each frame
 			for (int i = 0; i < dwNumFrames; i++)
 			{
-				MoAnimFrame frame = new MoAnimFrame();
+				CSAnimFrame frame = new CSAnimFrame();
 				
 				for (int j = 0; j < mAnimations.length; j++)
 				{

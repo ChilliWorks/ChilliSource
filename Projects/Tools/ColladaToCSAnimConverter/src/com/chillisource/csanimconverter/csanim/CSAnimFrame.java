@@ -1,17 +1,17 @@
-package com.taggames.moanimconverter.moanim;
+package com.chillisource.csanimconverter.csanim;
 
 import java.util.LinkedList;
 
 import com.taggames.toolutils.CQuaternion;
 import com.taggames.toolutils.CVector3;
 
-public class MoAnimFrame 
+public class CSAnimFrame 
 {
 	public LinkedList<CVector3> mNodeTranslations;
 	public LinkedList<CQuaternion> mNodeOrienations;
 	public LinkedList<CVector3> mNodeScalings;
 	
-	public MoAnimFrame()
+	public CSAnimFrame()
 	{
 		mNodeOrienations = new LinkedList<CQuaternion>();
 		mNodeTranslations = new LinkedList<CVector3>();

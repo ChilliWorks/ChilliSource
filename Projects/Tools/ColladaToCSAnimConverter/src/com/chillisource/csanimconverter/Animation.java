@@ -1,4 +1,4 @@
-package com.taggames.moanimconverter;
+package com.chillisource.csanimconverter;
 
 import java.util.LinkedList;
 

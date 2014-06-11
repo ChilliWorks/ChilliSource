@@ -1,4 +1,4 @@
-package com.taggames.moanimconverter;
+package com.chillisource.csanimconverter;
 
 import com.taggames.toolutils.SCLogger;
 import com.taggames.toolutils.SCStringUtils;
@@ -39,7 +39,7 @@ public class CMain
 		}
 		
 		//gather up commands
-		MoAnimConversionParameters params = new MoAnimConversionParameters();
+		CSAnimConversionParameters params = new CSAnimConversionParameters();
 		for (int i = 0; i < inastrArgs.length; ++i)
 		{
 			//input
@@ -81,7 +81,7 @@ public class CMain
 		}
 		
 		
-		CMoAnimConverterTool converterTool = new CMoAnimConverterTool();
+		CSAnimConverterTool converterTool = new CSAnimConverterTool();
 		converterTool.Convert(params);
 		
 		SCLogger.PrintErrorsAndWarnings();
@@ -94,7 +94,7 @@ public class CMain
 	/// @param the conversion params.
 	/// @param the string to parse.
 	//-------------------------------------------------------------------
-	static void ParseTransforms(MoAnimConversionParameters inParams, String instrModifications)
+	static void ParseTransforms(CSAnimConversionParameters inParams, String instrModifications)
 	{
 		for (int i = 0; i < instrModifications.length(); ++i)
 		{
