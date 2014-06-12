@@ -18,7 +18,8 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/JSON/json.h>
+
+#include <json/json.h>
 
 #include <jni.h>
 

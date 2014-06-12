@@ -11,9 +11,10 @@
 #include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
 
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
-#include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
+
+#include <json/json.h>
 
 #include <fstream>
 

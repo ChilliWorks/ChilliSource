@@ -48,7 +48,7 @@ namespace ChilliSource
                 hash.Update(reinterpret_cast<const u8*>(in_data), in_size);
                 hash.Final();
                 
-                char cHash[k_sha1Length];
+                s8 cHash[k_sha1Length];
                 memset(cHash, 0, k_sha1Length);
                 hash.ReportHash(cHash, CSHA1::REPORT_HEX_SHORT);
                 return std::string(cHash);

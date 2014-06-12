@@ -15,8 +15,9 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Utils.h>
-#include <ChilliSource/Core/Minizip/unzip.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
+
+#include <minizip/unzip.h>
 
 namespace CSBackend
 {
@@ -371,7 +372,7 @@ namespace CSBackend
 				Unzip(m_javaInterface->GetExpansionPath(i), jManifest);
 			}
 
-			CSCore::Application::Get()->GetFileSystem()->WriteFile(CSCore::StorageLocation::k_cache, "AndroidExpansion.manifest", (s8*)jManifest.toUnformattedString().data(), jManifest.toUnformattedString().size());
+			CSCore::Application::Get()->GetFileSystem()->WriteFile(CSCore::StorageLocation::k_cache, "AndroidExpansion.manifest", (s8*)jManifest.toStyledString().data(), jManifest.toStyledString().size());
 
 			CachePackageDescriptions();
 
@@ -495,7 +496,7 @@ namespace CSBackend
 				jDesc.append(jExpansion);
 			}
 
-			CSCore::Application::Get()->GetFileSystem()->WriteFile(CSCore::StorageLocation::k_cache, "GoogleExpansionDownloader.cache", (s8*)jDesc.toUnformattedString().data(), jDesc.toUnformattedString().size());
+			CSCore::Application::Get()->GetFileSystem()->WriteFile(CSCore::StorageLocation::k_cache, "GoogleExpansionDownloader.cache", (s8*)jDesc.toStyledString().data(), jDesc.toStyledString().size());
         }
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------

@@ -14,8 +14,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
-#include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+
+#include <json/json.h>
 
 namespace CSBackend
 {

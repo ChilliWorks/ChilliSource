@@ -329,9 +329,8 @@ namespace ChilliSource
                 
                 // Encrypt
                 std::string strDocToBeEncrypted = XMLUtils::ToString(&doc);
-                
                 AESEncrypt::Data encryptedData = AESEncrypt::EncryptString(strDocToBeEncrypted, GenerateEncryptionKey());
-                
+
                 // Write to disk
                 FileSystem* pFileSystem = Application::Get()->GetFileSystem();
                 FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_writeBinary);

@@ -14,7 +14,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Minizip/unzip.h>
+
+#include <minizip/unzip.h>
 
 #include <mutex>
 #include <string>
