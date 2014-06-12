@@ -502,7 +502,9 @@ namespace CSBackend
 			switch (in_storageLocation)
 			{
 			case CSCore::StorageLocation::k_package:
-				return m_packagePath;
+				return m_packagePath + "AppResources/";
+			case CSCore::StorageLocation::k_chilliSource:
+				return m_packagePath + "CSResources/";
 			case CSCore::StorageLocation::k_saveData:
 				return m_documentsPath + k_saveDataPath;
 			case CSCore::StorageLocation::k_cache:

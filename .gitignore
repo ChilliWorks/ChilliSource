@@ -13,3 +13,4 @@ Projects/Tools/CSModelExporter/bin
 Projects/Tools/CSModelExporter/obj
 Projects/Tools/PNGToCSImageTool/bin
 Projects/Tools/TGAToCSImageTool/bin
+*.pyc

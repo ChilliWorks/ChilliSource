@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-#  copy_android_resources.py
+#  copy_windows_resources.py
 #  Chilli Source
 #  Created by Scott Downie on 12/06/2014.
 #
@@ -30,14 +30,13 @@
 import sys
 import file_system_utils
 import subprocess
+import shutil
 
 #----------------------------------------------------------------------
-# Copies the resource from PlatformResources and AppResources
-# into res and assets directories that are required by Android.
+# Copies the resources from AppResources and CSResources
+# into windows target directories
 #
-# Copies the jars into libs as required by Android.
-#
-# Premulitplies all the PNGs in assets
+# Premulitplies all the PNGs
 #
 # @author S Downie
 #----------------------------------------------------------------------
@@ -45,40 +44,41 @@ import subprocess
 
 #----------------------------------------------------------------------
 # Copies the resource from PlatformResources and AppResources
-# into res and assets directories that are required by Android.
+# into target directory.
 #
 # @author S Downie
 #
 # @param Project directory path
+# @param Target directory path
 #----------------------------------------------------------------------
-def copy_resources(project_dir):
-    file_system_utils.delete_directory(project_dir+"assets/")
-    file_system_utils.delete_directory(project_dir+"res/")
+def copy_resources(project_dir, target_dir):
+    assetsDir = target_dir+"assets/"
+
+    file_system_utils.delete_directory(assetsDir)
 
     app_src_path = project_dir+"AppResources/"
     cs_src_path = project_dir+"ChilliSource/CSResources/"
-    platform_src_path = project_dir+"PlatformResources/Android/"
 
-    app_dst_path = project_dir+"assets/AppResources/"
-    cs_dst_path = project_dir+"assets/CSResources/"
-    platform_dst_path = project_dir+"res/"
+    app_dst_path = assetsDir+"AppResources/"
+    cs_dst_path = assetsDir+"CSResources/"
 
     file_system_utils.overwrite_directory(app_src_path, app_dst_path)
     file_system_utils.overwrite_directory(cs_src_path, cs_dst_path)
-    file_system_utils.overwrite_directory(platform_src_path, platform_dst_path)
 
 #----------------------------------------------------------------------
-# Copies the jars into libs as required by Android.
+# Copies the libs/dlls into target directory.
 #
 # @author S Downie
 #
 # @param Project directory path
+# @param Target directory path
 #----------------------------------------------------------------------
-def copy_jars(project_dir):
-    jars_src_path = project_dir+"ChilliSource/Libraries/Core/Libs/Android/jars/"
-    jars_dst_path = project_dir+"libs/"
+def copy_libs(project_dir, target_dir):
+    libs_src_path = project_dir+"ChilliSource/Libraries/Core/Libs/Windows/"
+    dll_files = file_system_utils.get_file_paths_with_extensions(libs_src_path, ["dll"])
 
-    file_system_utils.copy_directory(jars_src_path, jars_dst_path)
+    for dll_file in dll_files:
+        shutil.copy(dll_file, target_dir)
 
 #----------------------------------------------------------------------
 # Premulitplies all the PNGs in assets
@@ -86,10 +86,13 @@ def copy_jars(project_dir):
 # @author S Downie
 #
 # @param Project directory path
+# @param Target directory path
 #----------------------------------------------------------------------
-def premultiply_pngs(project_dir):
+def premultiply_pngs(project_dir, target_dir):
+    assetsDir = target_dir+"assets/"
+
     jarFile = project_dir+"ChilliSource/Tools/PreMultipliedAlphaPNGTool.jar"
-    png_files = file_system_utils.get_file_paths_with_extensions(project_dir+"assets/", ["png"])
+    png_files = file_system_utils.get_file_paths_with_extensions(assetsDir, ["png"])
 
     for png_file in png_files:
         subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", png_file, "--output", png_file]);
@@ -102,14 +105,16 @@ def premultiply_pngs(project_dir):
 # @param The list of arguments.
 #----------------------------------------------------------------------
 def main(args):
-    if not len(args) is 2:
-        print("ERROR: Missing project path")
+    if not len(args) is 3:
+        print("ERROR: Missing project path or target path")
         return
 
     project_dir = args[1]
-    copy_resources(project_dir)
-    copy_jars(project_dir)
-    premultiply_pngs(project_dir)
+    target_dir = args[2]
+
+    copy_resources(project_dir, target_dir)
+    copy_libs(project_dir, target_dir)
+    premultiply_pngs(project_dir, target_dir)
    
 if __name__ == "__main__":
     main(sys.argv)
