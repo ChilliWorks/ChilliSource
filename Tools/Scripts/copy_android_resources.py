@@ -32,7 +32,9 @@ import file_system_utils
 
 #----------------------------------------------------------------------
 # Copies the resource from PlatformResources and AppResources
-# into res and assets directories that are required by Android
+# into res and assets directories that are required by Android.
+#
+# Copies the jars into libs as required by Android.
 #
 # @author S Downie
 #----------------------------------------------------------------------
@@ -52,15 +54,17 @@ def main(args):
     app_src_path = "../../../AppResources/"
     cs_src_path = "../../CSResources/"
     platform_src_path = "../../../PlatformResources/Android/"
+    jars_src_path = "../../Libraries/Core/Libs/Android/jars/"
 
-    #Dest dirs
     app_dst_path = "../../../assets/AppResources/"
     cs_dst_path = "../../../assets/CSResources/"
     platform_dst_path = "../../../res/"
+    jars_dst_path = "../../../libs/"
 
     file_system_utils.overwrite_directory(app_src_path, app_dst_path)
     file_system_utils.overwrite_directory(cs_src_path, cs_dst_path)
     file_system_utils.overwrite_directory(platform_src_path, platform_dst_path)
+    file_system_utils.copy_directory(jars_src_path, jars_dst_path)
 
 if __name__ == "__main__":
     main(sys.argv)

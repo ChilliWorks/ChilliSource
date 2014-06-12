@@ -66,6 +66,26 @@ def overwrite_directory(src_path, dst_path):
             print('Directory not copied. Error: %s' % e)
 
 #----------------------------------------
+# Copy the given dst directory or create
+# it if it doesn't exist with the contents
+# of the src directory. This will overwrite
+# exisiting files of the same name in the dst
+# directory
+#
+# @author S Downie
+#----------------------------------------        
+def copy_directory(src_path, dst_path):
+    if os.path.exists(dst_path) == False:
+        os.mkdirs(dst_path)
+
+    for item in os.listdir(src_path):
+        src = os.path.join(src_path, item)
+        dst = os.path.join(dst_path, item)
+        if os.path.isdir(src):
+            shutil.copytree(src, dst, False, None)
+        else:
+            shutil.copy2(src, dst)
+#----------------------------------------
 # Deletes a directory if it exists. Does
 # not return an error if trying to delete
 # a directory that doesn't exist.
