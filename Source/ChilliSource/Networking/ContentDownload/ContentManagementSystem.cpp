@@ -15,8 +15,9 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
-#include <ChilliSource/Core/Minizip/unzip.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
+
+#include <minizip/unzip.h>
 
 namespace ChilliSource
 {
@@ -134,17 +135,22 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void ContentManagementSystem::LoadLocalManifest(TiXmlDocument* in_currentManifest)
+        Core::XMLUPtr ContentManagementSystem::LoadLocalManifest()
         {
             //The manifest lives in the documents directory
-            in_currentManifest->LoadFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
-            
-            //If there is no DLC we should check to see if there ever was any
-            Core::AppDataStore* ads = Core::Application::Get()->GetSystem<Core::AppDataStore>();
-            if(!in_currentManifest->RootElement() && ads->Contains(k_adsKeyHasCached) == true)
+            Core::XMLUPtr xml = Core::XMLUtils::ReadDocument(Core::StorageLocation::k_DLC, "ContentManifest.moman");
+            if (xml != nullptr && xml->GetDocument() != nullptr)
             {
-                m_dlcCachePurged = true;
+                Core::XML::Node* rootNode = Core::XMLUtils::GetFirstChildElement(xml->GetDocument());
+                
+                //If there is no DLC we should check to see if there ever was any
+                Core::AppDataStore* ads = Core::Application::Get()->GetSystem<Core::AppDataStore>();
+                if(rootNode == nullptr && ads->Contains(k_adsKeyHasCached) == true)
+                {
+                    m_dlcCachePurged = true;
+                }
             }
+            return xml;
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -166,7 +172,7 @@ namespace ChilliSource
         void ContentManagementSystem::ClearDownloadData()
         {
         	//Clear the old crap
-            CS_SAFEDELETE(m_serverManifest);
+            m_serverManifest.reset();
             m_removePackageIds.clear();
             m_packageDetails.clear();
         }
@@ -253,7 +259,7 @@ namespace ChilliSource
 				}
                 
                 //Save the new content manifest
-                m_serverManifest->SaveFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
+                CSCore::XMLUtils::WriteDocument(m_serverManifest->GetDocument(), Core::StorageLocation::k_DLC, "ContentManifest.moman");
                 
                 m_dlcCachePurged = false;
                 
@@ -345,10 +351,10 @@ namespace ChilliSource
         void ContentManagementSystem::BuildDownloadList(const std::string& in_serverManifest)
         {
 			//Validate the server manifest
-            m_serverManifest = new TiXmlDocument();
-            m_serverManifest->Parse(in_serverManifest.c_str(), 0, TIXML_ENCODING_UTF8);
+            m_serverManifest = Core::XMLUtils::ParseDocument(in_serverManifest);
             
-            if(!m_serverManifest->RootElement())
+            Core::XML::Node* serverManifestRootNode = CSCore::XMLUtils::GetFirstChildElement(m_serverManifest->GetDocument());
+            if(serverManifestRootNode == nullptr)
             {
                 CS_LOG_ERROR("CMS: Server content manifest is invalid");
                 if(m_dlcCachePurged)
@@ -364,28 +370,29 @@ namespace ChilliSource
             }
             
             //Check if DLC is enabled
-            if(!Core::XMLUtils::GetAttributeValueOrDefault<bool>(m_serverManifest->RootElement(), "DLCEnabled", false))
+            if(!Core::XMLUtils::GetAttributeValue<bool>(serverManifestRootNode, "DLCEnabled", false))
             {
 				m_onUpdateCheckCompleteDelegate(CheckForUpdatesResult::k_notAvailable);
                 return;
             }
             
-            TiXmlDocument* pCurrentManifest = new TiXmlDocument();
-            LoadLocalManifest(pCurrentManifest);
+            Core::XMLUPtr currentManifest = LoadLocalManifest();
             
 			//If we have not successfully loaded a manifest from file we need to check if any of the assets 
             //are in the bundle and pull down the others
-			if(!pCurrentManifest || !pCurrentManifest->RootElement())
+			if(currentManifest == nullptr || Core::XMLUtils::GetFirstChildElement(currentManifest->GetDocument()) == nullptr)
 			{
                 //Grab all the URL's from the new manifest
-                TiXmlElement* pPackageEl = Core::XMLUtils::FirstChildElementWithName(m_serverManifest->RootElement(), "Package");
-                while(pPackageEl)
+                
+                Core::XML::Node* serverPackageEl = Core::XMLUtils::GetFirstChildElement(serverManifestRootNode, "Package");
+                
+                while(serverPackageEl)
                 {
                     //If the package is not in the bundle it will download
-                    AddToDownloadListIfNotInBundle(pPackageEl);
+                    AddToDownloadListIfNotInBundle(serverPackageEl);
                     
                     //On to the next package
-                    pPackageEl = Core::XMLUtils::NextSiblingElementWithName(pPackageEl);
+                    serverPackageEl = Core::XMLUtils::GetNextSiblingElement(serverPackageEl, "Package");
                 }
 			}
             //Lets find out what we need already have in the manifest
@@ -394,31 +401,32 @@ namespace ChilliSource
                 std::unordered_map<std::string, std::string> mapPackageIDToChecksum;
                 
                 //Store the data from the local manifest to make a comparison with the server manifest
-                if(pCurrentManifest->RootElement())
+                Core::XML::Node* currentRoot = Core::XMLUtils::GetFirstChildElement(currentManifest->GetDocument());
+                if(currentRoot != nullptr)
                 {
                     //Loop round 
-                    TiXmlElement* pLocalPackageEl = Core::XMLUtils::FirstChildElementWithName(pCurrentManifest->RootElement(), "Package");
+                    Core::XML::Node* pLocalPackageEl = Core::XMLUtils::GetFirstChildElement(currentRoot, "Package");
                     while(pLocalPackageEl)
                     {
                         //Store the local ID's and checksums for comparison later
-                        std::string strLocalPackageID = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pLocalPackageEl, "ID", "");
-                        std::string strLocalPackageChecksum = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pLocalPackageEl, "Checksum", "");
+                        std::string strLocalPackageID = Core::XMLUtils::GetAttributeValue<std::string>(pLocalPackageEl, "ID", "");
+                        std::string strLocalPackageChecksum = Core::XMLUtils::GetAttributeValue<std::string>(pLocalPackageEl, "Checksum", "");
                         
                         mapPackageIDToChecksum.insert(std::make_pair(strLocalPackageID, strLocalPackageChecksum));
                         
                         //On to the next package
-                        pLocalPackageEl = Core::XMLUtils::NextSiblingElementWithName(pLocalPackageEl);
+                        pLocalPackageEl = Core::XMLUtils::GetNextSiblingElement(pLocalPackageEl, "Package");
                     }
                 }
 				
                 //Now process the server manifest and see whats different between the two
-                TiXmlElement* pServerPackageEl = Core::XMLUtils::FirstChildElementWithName(m_serverManifest->RootElement(), "Package");
+                Core::XML::Node* pServerPackageEl = Core::XMLUtils::GetFirstChildElement(serverManifestRootNode, "Package");
                 while(pServerPackageEl)
                 {
                     //Store the local ID's and checksums for comparison later
-                    std::string strServerPackageID = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pServerPackageEl, "ID", "");
-                    std::string strServerPackageChecksum = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pServerPackageEl, "Checksum", "");
-					std::string strMinVersionForPackage = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pServerPackageEl, "MinVersion", "");
+                    std::string strServerPackageID = Core::XMLUtils::GetAttributeValue<std::string>(pServerPackageEl, "ID", "");
+                    std::string strServerPackageChecksum = Core::XMLUtils::GetAttributeValue<std::string>(pServerPackageEl, "Checksum", "");
+					std::string strMinVersionForPackage = Core::XMLUtils::GetAttributeValue<std::string>(pServerPackageEl, "MinVersion", "");
                     
                     std::unordered_map<std::string, std::string>::iterator it = mapPackageIDToChecksum.find(strServerPackageID);
 				
@@ -438,22 +446,22 @@ namespace ChilliSource
                             //server but the file may have been altered locally
                             //Check if the files within are corrupt
                             //Check all the file names
-                            TiXmlElement* pFileEl = Core::XMLUtils::FirstChildElementWithName(pServerPackageEl, "File");
+                            Core::XML::Node* pFileEl = Core::XMLUtils::GetFirstChildElement(pServerPackageEl, "File");
                             while(pFileEl)
                             {
-                                std::string strFullPath = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pFileEl, "Location", "");
-                                std::string strChecksum = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pFileEl, "Checksum", "");
+                                std::string strFullPath = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Location", "");
+                                std::string strChecksum = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Checksum", "");
                                 
                                 if(strFullPath.empty()) //Maintain backwards compatability with old versions
                                 {
-                                    std::string strFileName = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pFileEl, "Name", "");
+                                    std::string strFileName = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Name", "");
                                     strFullPath = strServerPackageID + "/" + strFileName;
                                 }
                                 
                                 if(!DoesFileExist(strFullPath, strChecksum, false))
                                 {
-                                    std::string strPackageUrl = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pServerPackageEl, "URL", "");
-                                    u32 udwPackageSize = Core::XMLUtils::GetAttributeValueOrDefault<u32>(pServerPackageEl, "Size", 0);
+                                    std::string strPackageUrl = Core::XMLUtils::GetAttributeValue<std::string>(pServerPackageEl, "URL", "");
+                                    u32 udwPackageSize = Core::XMLUtils::GetAttributeValue<u32>(pServerPackageEl, "Size", 0);
                                     m_runningToDownloadTotal += udwPackageSize;
 
                                     PackageDetails packageDetails;
@@ -465,7 +473,7 @@ namespace ChilliSource
                                     break;
                                 }
                                 
-                                pFileEl = Core::XMLUtils::NextSiblingElementWithName(pFileEl);
+                                pFileEl = Core::XMLUtils::GetNextSiblingElement(pFileEl, "File");
                             }
                         }
                         
@@ -479,7 +487,7 @@ namespace ChilliSource
                     }
                     
                     //On to the next package
-                    pServerPackageEl = Core::XMLUtils::NextSiblingElementWithName(pServerPackageEl);
+                    pServerPackageEl = Core::XMLUtils::GetNextSiblingElement(pServerPackageEl, "Package");
                 }
                
                 //Any packages left in the local manifest need to be removed
@@ -504,28 +512,26 @@ namespace ChilliSource
             {
                 m_onUpdateCheckCompleteDelegate(CheckForUpdatesResult::k_notAvailable);
             }
-            
-            CS_SAFEDELETE(pCurrentManifest);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void ContentManagementSystem::AddToDownloadListIfNotInBundle(TiXmlElement* in_packageEl)
+        void ContentManagementSystem::AddToDownloadListIfNotInBundle(Core::XML::Node* in_packageEl)
         {
             //Check all the file names
-            TiXmlElement* pFileEl = Core::XMLUtils::FirstChildElementWithName(in_packageEl, "File");
+            Core::XML::Node* pFileEl = Core::XMLUtils::GetFirstChildElement(in_packageEl, "File");
             while(pFileEl)
             {
-                std::string strFileName = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pFileEl, "Name", "");
-                std::string strChecksum = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pFileEl, "Checksum", "");
-                std::string strPackageID = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(in_packageEl, "ID", "");
+                std::string strFileName = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Name", "");
+                std::string strChecksum = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Checksum", "");
+                std::string strPackageID = Core::XMLUtils::GetAttributeValue<std::string>(in_packageEl, "ID", "");
                 
                 if(!DoesFileExist(strPackageID + "/" + strFileName, strChecksum, true))
                 {
                     //It doesn't exist in the bundle either!
-                    std::string strPackageUrl = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(in_packageEl, "URL", "");
-                    std::string strPackageChecksum = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(in_packageEl, "Checksum", "");
+                    std::string strPackageUrl = Core::XMLUtils::GetAttributeValue<std::string>(in_packageEl, "URL", "");
+                    std::string strPackageChecksum = Core::XMLUtils::GetAttributeValue<std::string>(in_packageEl, "Checksum", "");
                     
-                    u32 udwPackageSize = Core::XMLUtils::GetAttributeValueOrDefault<u32>(in_packageEl, "Size", 0);
+                    u32 udwPackageSize = Core::XMLUtils::GetAttributeValue<u32>(in_packageEl, "Size", 0);
 					m_runningToDownloadTotal += udwPackageSize;
                     
                     PackageDetails packageDetails;
@@ -544,7 +550,7 @@ namespace ChilliSource
                     Core::Application::Get()->GetFileSystem()->DeleteFile(Core::StorageLocation::k_DLC, strPackageID + "/" + strFileName);
                     
                     //On to the next file
-                    pFileEl = Core::XMLUtils::NextSiblingElementWithName(pFileEl);
+                    pFileEl = Core::XMLUtils::GetNextSiblingElement(pFileEl, "File");
                 }
             }
         }

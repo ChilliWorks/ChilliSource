@@ -106,11 +106,11 @@ namespace ChilliSource
 		{
 			GUIViewUPtr pRootView;
 
-            Core::XMLUtils::DocumentUPtr doc = Core::XMLUtils::ReadDocument(ineStorageLocation, instrScriptFile);
-            rapidxml::xml_node<>* pDocRoot = doc->first_node();
-			if(pDocRoot && Core::XMLUtils::HasName(pDocRoot, "Layout") == true)
+            Core::XMLUPtr xml = Core::XMLUtils::ReadDocument(ineStorageLocation, instrScriptFile);
+            Core::XML::Node* pDocRoot = Core::XMLUtils::GetFirstChildElement(xml->GetDocument());
+			if(pDocRoot && Core::XMLUtils::GetName(pDocRoot) == "Layout")
 			{
-				rapidxml::xml_node<>* pViewElement = pDocRoot->first_node();
+				Core::XML::Node* pViewElement = Core::XMLUtils::GetFirstChildElement(pDocRoot);
 				if(pViewElement)
 				{
 					pRootView = CreateView(pViewElement);
@@ -127,7 +127,7 @@ namespace ChilliSource
 		/// @param View XML element
 		/// @return Created view
 		//--------------------------------------------------------
-		GUIViewUPtr GUIViewFactory::CreateView(rapidxml::xml_node<>* inpViewElement)
+		GUIViewUPtr GUIViewFactory::CreateView(Core::XML::Node* inpViewElement)
 		{
 			//Get the view type
 			//Get the param dictionary config values
@@ -137,22 +137,22 @@ namespace ChilliSource
             bool bExtern = false;
             Core::StorageLocation eStorageLoc = Core::StorageLocation::k_none;
             
-            for(rapidxml::xml_attribute<> * pAttr = inpViewElement->first_attribute(); pAttr != nullptr; pAttr = pAttr->next_attribute())
+            for(Core::XML::Attribute* pAttr = Core::XMLUtils::GetFirstAttribute(inpViewElement); pAttr != nullptr; pAttr = Core::XMLUtils::GetNextAttribute(pAttr))
             {
                 
-                if(Core::XMLUtils::HasName(pAttr, "Type") == true)
+                if(Core::XMLUtils::GetName(pAttr) == "Type")
                 {
-                    strType = pAttr->value();
+                    strType = Core::XMLUtils::GetValue(pAttr);
                 }
-                else if(Core::XMLUtils::HasName(pAttr, "Source") == true)
+                else if(Core::XMLUtils::GetName(pAttr) == "Source")
                 {
                     bExtern = true;
-                    strSource = pAttr->value();
+                    strSource = Core::XMLUtils::GetValue(pAttr);
                 }
-                else if(Core::XMLUtils::HasName(pAttr, "StorageLocation") == true)
+                else if(Core::XMLUtils::GetName(pAttr) == "StorageLocation")
                 {
                     bExtern = true;
-                    eStorageLoc = Core::ParseStorageLocation(pAttr->value());
+                    eStorageLoc = Core::ParseStorageLocation(Core::XMLUtils::GetValue(pAttr));
                 }
             }
             
@@ -171,12 +171,9 @@ namespace ChilliSource
                 }
                 
 				//Now we need to do some recursion and load any subviews
-                for(rapidxml::xml_node<> * pNode = inpViewElement->first_node(); pNode != nullptr; pNode = pNode->next_sibling())
+                for(Core::XML::Node* pNode = Core::XMLUtils::GetFirstChildElement(inpViewElement); pNode != nullptr; pNode = Core::XMLUtils::GetNextSiblingElement(pNode))
 				{
-                    if(pNode->type() == rapidxml::node_element)
-                    {
-                        pView->AddSubview(CreateView(pNode));
-                    }
+                    pView->AddSubview(CreateView(pNode));
 				}
 
 				return pView;

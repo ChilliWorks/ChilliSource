@@ -32,8 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 
 #include <ChilliSource/Core/String/StringParser.h>
-
-#include <rapidxml/rapidxml.hpp>
+#include <ChilliSource/Core/XML/XML.h>
 
 namespace ChilliSource
 {
@@ -50,17 +49,6 @@ namespace ChilliSource
         namespace XMLUtils
         {
             //--------------------------------------------------
-            /// Convenience typedefs for all of the main rapid xml
-            /// types.
-            ///
-            /// @author I Copland
-            //--------------------------------------------------
-            using Base = rapidxml::xml_base<>;
-            using Node = rapidxml::xml_node<>;
-            using Attribute = rapidxml::xml_attribute<>;
-            using Document = rapidxml::xml_document<>;
-            using DocumentUPtr = std::unique_ptr<rapidxml::xml_document<>>;
-            //--------------------------------------------------
             /// Reads an xml document from file.
             ///
             /// @author I Copland
@@ -68,21 +56,118 @@ namespace ChilliSource
             /// @param The storage location of the file.
             /// @param The file path.
             ///
-            /// @return the new document.
+            /// @return the new document stored in an xml container.
             //--------------------------------------------------
-            DocumentUPtr ReadDocument(StorageLocation in_storageLocation, const std::string& in_filePath);
+            XMLUPtr ReadDocument(StorageLocation in_storageLocation, const std::string& in_filePath);
             //--------------------------------------------------
-            /// Returns whether or not the given node has the
-            /// given name.
+            /// Parses an xml document from string.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The xml string.
+            ///
+            /// @return the new document stored in an xml container.
+            //--------------------------------------------------
+            XMLUPtr ParseDocument(const std::string& in_xmlString);
+            //--------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @param The node.
+            ///
+            /// @return The name of the given node.
+            //--------------------------------------------------
+            std::string GetName(const XML::Base* in_base);
+            //--------------------------------------------------
+            /// Returns the value of the given node. What the
+            /// value is is determined by the type of node.
             ///
             /// @author I Copland
             ///
             /// @param The node.
-            /// @param The name.
             ///
-            /// @return Whether or not it has the name.
+            /// @return The value as a string.
             //--------------------------------------------------
-            bool HasName(const Base* in_base, const std::string& in_name);
+            std::string GetValue(const XML::Base* in_base);
+            //--------------------------------------------------
+            /// Returns the first child with the given name. If
+            /// the name is empty, the first child regardless
+            /// of name will be returned. If there is no child with
+            /// a matching name, null will be returned.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The node.
+            /// @param [optional] The name.
+            ///
+            /// @return The child node or null.
+            //--------------------------------------------------
+            XML::Node* GetFirstChildNode(const XML::Node* in_node, const std::string& in_name = "");
+            //--------------------------------------------------
+            /// Returns the next sibling with the given name. If
+            /// the name is empty the next sibling regardless of
+            /// name will be returned. If there is no child with
+            /// a matching name, null will be returned.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The node.
+            /// @param [Optional] The name.
+            ///
+            /// @return The sibling node or null.
+            //--------------------------------------------------
+            XML::Node* GetNextSiblingNode(const XML::Node* in_node, const std::string& in_name = "");
+            //--------------------------------------------------
+            /// Returns the first child with the given name which
+            /// is of element type. If the name is empty, the
+            /// first child regardless of name will be returned.
+            /// If there is no child with a matching name, null
+            /// will be returned.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The node.
+            /// @param [optional] The name.
+            ///
+            /// @return The child node or null.
+            //--------------------------------------------------
+            XML::Node* GetFirstChildElement(const XML::Node* in_node, const std::string& in_name = "");
+            //--------------------------------------------------
+            /// Returns the next sibling with the given name which
+            /// is of element type. If the name is empty the next
+            /// sibling regardless of name will be returned. If
+            /// there is no child with a matching name, null will
+            /// be returned.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The node.
+            /// @param [Optional] The name.
+            ///
+            /// @return The sibling node or null.
+            //--------------------------------------------------
+            XML::Node* GetNextSiblingElement(const XML::Node* in_node, const std::string& in_name = "");
+            //--------------------------------------------------
+            /// Returns the first attribute in the node. Will
+            /// return null if there is no attributes.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The node.
+            ///
+            /// @return The first attribute in the node or null.
+            //--------------------------------------------------
+            XML::Attribute* GetFirstAttribute(const XML::Node* in_node);
+            //--------------------------------------------------
+            /// Returns the next attribute in the parent node
+            /// if there is one, otherwise returns null.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The current attribute.
+            ///
+            /// @return The next attribute or null.
+            //--------------------------------------------------
+            XML::Attribute* GetNextAttribute(const XML::Attribute* in_attribute);
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.
             /// If the attribute doesn't exist the default value
@@ -96,7 +181,7 @@ namespace ChilliSource
             ///
             /// @return The attribute value as a string.
             //--------------------------------------------------
-            template <typename TType> TType GetAttribute(const Node* in_node, const std::string& in_attributeName, const TType& in_defaultValue)
+            template <typename TType> TType GetAttributeValue(const XML::Node* in_node, const std::string& in_attributeName, const TType& in_defaultValue)
             {
                 CS_LOG_FATAL("XMLUtils: Unknown attribute type.");
             }
@@ -113,7 +198,7 @@ namespace ChilliSource
             ///
             /// @return The attribute value as a string.
             //--------------------------------------------------
-            template <> std::string GetAttribute(const Node* in_node, const std::string& in_attributeName, const std::string& in_defaultValue);
+            template <> std::string GetAttributeValue<std::string>(const XML::Node* in_node, const std::string& in_attributeName, const std::string& in_defaultValue);
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.
             /// If the attribute doesn't exist the default value
@@ -127,7 +212,7 @@ namespace ChilliSource
             ///
             /// @return The attribute value as a boolean.
             //--------------------------------------------------
-            bool GetAttribute(const Node* in_node, const std::string& in_attributeName, bool in_defaultValue);
+            template <> bool GetAttributeValue<bool>(const XML::Node* in_node, const std::string& in_attributeName, const bool& in_defaultValue);
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.
             /// If the attribute doesn't exist the default value
@@ -141,7 +226,7 @@ namespace ChilliSource
             ///
             /// @return The attribute value as a float.
             //--------------------------------------------------
-            f32 GetAttribute(const Node* in_node, const std::string& in_attributeName, f32 in_defaultValue);
+            template <> f32 GetAttributeValue<f32>(const XML::Node* in_node, const std::string& in_attributeName, const f32& in_defaultValue);
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.
             /// If the attribute doesn't exist the default value
@@ -156,7 +241,7 @@ namespace ChilliSource
             /// @return The attribute value as a signed 32-bit
             /// integer.
             //--------------------------------------------------
-            s32 GetAttribute(const Node* in_node, const std::string& in_attributeName, s32 in_defaultValue);
+            template <> s32 GetAttributeValue<s32>(const XML::Node* in_node, const std::string& in_attributeName, const s32& in_defaultValue);
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.
             /// If the attribute doesn't exist the default value
@@ -171,7 +256,37 @@ namespace ChilliSource
             /// @return The attribute value as a signed 64-bit
             /// integer.
             //--------------------------------------------------
-            s64 GetAttribute(const Node* in_node, const std::string& in_attributeName, s64 in_defaultValue);
+            template <> s64 GetAttributeValue<s64>(const XML::Node* in_node, const std::string& in_attributeName, const s64& in_defaultValue);
+            //--------------------------------------------------
+            /// Returns the value for the requested attribute name.
+            /// If the attribute doesn't exist the default value
+            /// will be returned instead.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The node.
+            /// @param The attribute name.
+            /// @param The default value.
+            ///
+            /// @return The attribute value as an unsigned 32-bit
+            /// integer.
+            //--------------------------------------------------
+            template <> u32 GetAttributeValue<u32>(const XML::Node* in_node, const std::string& in_attributeName, const u32& in_defaultValue);
+            //--------------------------------------------------
+            /// Returns the value for the requested attribute name.
+            /// If the attribute doesn't exist the default value
+            /// will be returned instead.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The node.
+            /// @param The attribute name.
+            /// @param The default value.
+            ///
+            /// @return The attribute value as an unsigned 64-bit
+            /// integer.
+            //--------------------------------------------------
+            template <> u64 GetAttributeValue<u64>(const XML::Node* in_node, const std::string& in_attributeName, const u64& in_defaultValue);
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.
             /// If the attribute doesn't exist the default value
@@ -185,7 +300,7 @@ namespace ChilliSource
             ///
             /// @return The attribute value as a Vector2.
             //--------------------------------------------------
-            Vector2 GetAttribute(const Node* in_node, const std::string& in_attributeName, const Vector2& in_defaultValue);
+            template <> Vector2 GetAttributeValue<Vector2>(const XML::Node* in_node, const std::string& in_attributeName, const Vector2& in_defaultValue);
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.
             /// If the attribute doesn't exist the default value
@@ -199,7 +314,7 @@ namespace ChilliSource
             ///
             /// @return The attribute value as a Vector3.
             //--------------------------------------------------
-            Vector3 GetAttribute(const Node* in_node, const std::string& in_attributeName, const Vector3& in_defaultValue);
+            template <> Vector3 GetAttributeValue<Vector3>(const XML::Node* in_node, const std::string& in_attributeName, const Vector3& in_defaultValue);
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.
             /// If the attribute doesn't exist the default value
@@ -213,7 +328,7 @@ namespace ChilliSource
             ///
             /// @return The attribute value as a Vector4.
             //--------------------------------------------------
-            Vector4 GetAttribute(const Node* in_node, const std::string& in_attributeName, const Vector4& in_defaultValue);
+            template <> Vector4 GetAttributeValue<Vector4>(const XML::Node* in_node, const std::string& in_attributeName, const Vector4& in_defaultValue);
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.
             /// If the attribute doesn't exist the default value
@@ -227,7 +342,7 @@ namespace ChilliSource
             ///
             /// @return The attribute value as a Matrix3.
             //--------------------------------------------------
-            Matrix3 GetAttribute(const Node* in_node, const std::string& in_attributeName, const Matrix3& in_defaultValue);
+            template <> Matrix3 GetAttributeValue<Matrix3>(const XML::Node* in_node, const std::string& in_attributeName, const Matrix3& in_defaultValue);
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.
             /// If the attribute doesn't exist the default value
@@ -241,7 +356,7 @@ namespace ChilliSource
             ///
             /// @return The attribute value as a Matrix4.
             //--------------------------------------------------
-            Matrix4 GetAttribute(const Node* in_node, const std::string& in_attributeName, const Matrix4& in_defaultValue);
+            template <> Matrix4 GetAttributeValue<Matrix4>(const XML::Node* in_node, const std::string& in_attributeName, const Matrix4& in_defaultValue);
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.
             /// If the attribute doesn't exist the default value
@@ -255,7 +370,7 @@ namespace ChilliSource
             ///
             /// @return The attribute value as a Quaternion.
             //--------------------------------------------------
-            Quaternion GetAttribute(const Node* in_node, const std::string& in_attributeName, const Quaternion& in_defaultValue);
+            template <> Quaternion GetAttributeValue<Quaternion>(const XML::Node* in_node, const std::string& in_attributeName, const Quaternion& in_defaultValue);
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.
             /// If the attribute doesn't exist the default value
@@ -269,7 +384,7 @@ namespace ChilliSource
             ///
             /// @return The attribute value as a Colour.
             //--------------------------------------------------
-            Colour GetAttribute(const Node* in_node, const std::string& in_attributeName, const Colour& in_defaultValue);
+            template <> Colour GetAttributeValue<Colour>(const XML::Node* in_node, const std::string& in_attributeName, const Colour& in_defaultValue);
             //--------------------------------------------------
             /// @author I Copland
             ///
@@ -277,19 +392,19 @@ namespace ChilliSource
             ///
             /// @return The node in string form.
             //--------------------------------------------------
-            std::string ToString(const Node* in_base);
+            std::string ToString(const XML::Node* in_base);
             //--------------------------------------------------
             /// Reads an xml document from file.
             ///
             /// @author I Copland
             ///
+            /// @param The document to write to file.
             /// @param The storage location of the file.
             /// @param The file path.
-            /// @param The document to write to file.
             ///
             /// @return Whether or not the write succeeded.
             //--------------------------------------------------
-            bool WriteDocument(StorageLocation in_storageLocation, const std::string& in_filePath, Document* in_document);
+            bool WriteDocument(XML::Document* in_document, StorageLocation in_storageLocation, const std::string& in_filePath);
         }
     }
 }

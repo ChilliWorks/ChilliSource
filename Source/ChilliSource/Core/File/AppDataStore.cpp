@@ -322,29 +322,25 @@ namespace ChilliSource
 			if(m_needsSynchonised == true)
             {
                 // Convert to XML
-                XMLUtils::DocumentUPtr doc(new XMLUtils::Document());
-                XMLUtils::Node* rootNode = doc->allocate_node(rapidxml::node_type::node_element);
-                rootNode->name("ADS");
+                XML::Document doc;
+                XML::Node* rootNode = doc.allocate_node(rapidxml::node_type::node_element);
+                doc.append_node(rootNode);
                 ParamDictionarySerialiser::ToXml(m_dictionary, rootNode);
-                doc->append_node(rootNode);
                 
                 // Encrypt
-                std::string strDocToBeEncrypted = XMLUtils::ToString(doc.get());
-                const u8* pudwDocBinary = reinterpret_cast<const u8*>(strDocToBeEncrypted.c_str());
-                u32 udwEncryptedSize = AESEncrypt::CalculateAlignedSize(strDocToBeEncrypted.size());
-                s8* pdwDocEncrypted = new s8[udwEncryptedSize];
-                AESEncrypt::Encrypt(pudwDocBinary, udwEncryptedSize, GenerateEncryptionKey(), reinterpret_cast<u8*>(pdwDocEncrypted));
+                std::string strDocToBeEncrypted = XMLUtils::ToString(&doc);
+                
+                AESEncrypt::Data encryptedData = AESEncrypt::EncryptString(strDocToBeEncrypted, GenerateEncryptionKey());
                 
                 // Write to disk
                 FileSystem* pFileSystem = Application::Get()->GetFileSystem();
                 FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_writeBinary);
                 if(pFileStream->IsOpen() && !pFileStream->IsBad())
                 {
-                    pFileStream->Write(pdwDocEncrypted, udwEncryptedSize);
+                    pFileStream->Write(reinterpret_cast<const s8*>(encryptedData.m_data.get()), encryptedData.m_size);
                     pFileStream->Close();
                 }
                 
-                CS_SAFEDELETE_ARRAY(pdwDocEncrypted)
                 m_needsSynchonised = false;
             }
 		}
@@ -362,23 +358,18 @@ namespace ChilliSource
 					u32 encryptedDataSize = fileStream->TellG();
 					fileStream->SeekG(0, SeekDir::k_beginning);
                     
-					s8* encryptedData = new s8[encryptedDataSize];
-					fileStream->Read(encryptedData, encryptedDataSize);
+                    std::unique_ptr<s8[]> encryptedData(new s8[encryptedDataSize]);
+					fileStream->Read(encryptedData.get(), encryptedDataSize);
 					fileStream->Close();
                     
-					s8* decryptedData = new s8[encryptedDataSize];
-					AESEncrypt::Decrypt(reinterpret_cast<const u8*>(encryptedData), encryptedDataSize, GenerateEncryptionKey(), reinterpret_cast<u8*>(decryptedData));
-                    
-                    XMLUtils::DocumentUPtr doc(new XMLUtils::Document());
-                    doc->parse<rapidxml::parse_default>(decryptedData);
-                    XMLUtils::Node* root = doc->first_node();
+                    std::string decrypted = AESEncrypt::DecryptString(reinterpret_cast<const u8*>(encryptedData.get()), encryptedDataSize, GenerateEncryptionKey());
+
+                    XMLUPtr xml = XMLUtils::ParseDocument(decrypted);
+                    XML::Node* root = XMLUtils::GetFirstChildElement(xml->GetDocument());
                     if(nullptr != root)
                     {
                         m_dictionary = ParamDictionarySerialiser::FromXml(root);
                     }
-                    
-					CS_SAFEDELETE_ARRAY(encryptedData);
-					CS_SAFEDELETE_ARRAY(decryptedData);
                 }
             }
             

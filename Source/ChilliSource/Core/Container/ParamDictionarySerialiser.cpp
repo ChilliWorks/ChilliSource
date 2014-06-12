@@ -38,21 +38,24 @@ namespace ChilliSource
         {
             //-----------------------------------------------------------------
             //-----------------------------------------------------------------
-            void ToXml(const ParamDictionary& in_dict, XMLUtils::Node* out_element)
+            void ToXml(const ParamDictionary& in_dict, XML::Node* out_element)
             {
-                out_element->name("Params");
+                XML::Document* doc = out_element->document();
+                
+                out_element->name(doc->allocate_string("Params"));
                 
                 for(auto it = in_dict.begin(); it != in_dict.end(); ++it)
                 {
-                    XMLUtils::Attribute* keyAttribute = out_element->document()->allocate_attribute();
-                    keyAttribute->name("key");
-                    keyAttribute->value(it->first.c_str());
+                    XML::Attribute* keyAttribute = out_element->document()->allocate_attribute();
+                    keyAttribute->name(out_element->document()->allocate_string("key"));
+                    keyAttribute->value(out_element->document()->allocate_string(it->first.c_str()));
                     
-                    XMLUtils::Attribute* valueAttribute = out_element->document()->allocate_attribute();
-                    valueAttribute->name("value");
-                    valueAttribute->value(it->second.c_str());
+                    XML::Attribute* valueAttribute = out_element->document()->allocate_attribute();
+                    valueAttribute->name(out_element->document()->allocate_string("value"));
+                    valueAttribute->value(out_element->document()->allocate_string(it->second.c_str()));
 
-                    XMLUtils::Node* node = out_element->document()->allocate_node(rapidxml::node_type::node_element);
+                    XML::Node* node = out_element->document()->allocate_node(rapidxml::node_type::node_element);
+                    node->name(doc->allocate_string("Param"));
                     node->append_attribute(keyAttribute);
                     node->append_attribute(valueAttribute);
                     out_element->append_node(node);
@@ -60,27 +63,27 @@ namespace ChilliSource
             }
             //-----------------------------------------------------------------
             //-----------------------------------------------------------------
-            ParamDictionary FromXml(const XMLUtils::Node* in_element)
+            ParamDictionary FromXml(const XML::Node* in_element)
             {
                 ParamDictionary result;
                 
-                for(auto param = in_element->first_node(); param != nullptr; param = param->next_sibling())
+                for(auto param = Core::XMLUtils::GetFirstChildElement(in_element); param != nullptr; param = Core::XMLUtils::GetNextSiblingElement(param))
                 {
-                    const char* key = nullptr;
-                    const char* value = nullptr;
-                    for(auto attrib = param->first_attribute(); attrib != nullptr; attrib = attrib->next_attribute())
+                    std::string key;
+                    std::string value;
+                    for(auto attrib = Core::XMLUtils::GetFirstAttribute(param); attrib != nullptr; attrib = Core::XMLUtils::GetNextAttribute(attrib))
                     {
-                        if (XMLUtils::HasName(attrib, "key") == true)
+                        if (XMLUtils::GetName(attrib) == "key")
                         {
-                            key = attrib->value();
+                            key = Core::XMLUtils::GetValue(attrib);
                         }
-                        else if (XMLUtils::HasName(attrib, "value") == true)
+                        else if (XMLUtils::GetName(attrib) == "value")
                         {
                             value = attrib->value();
                         }
                     }
                     
-                    if(key != nullptr && value != nullptr)
+                    if(key.length() > 0 && value.length() > 0)
                     {
                         result.SetValue(key, value);
                     }

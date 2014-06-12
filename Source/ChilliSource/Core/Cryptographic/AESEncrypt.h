@@ -45,6 +45,17 @@ namespace ChilliSource
         namespace AESEncrypt
         {
             //---------------------------------------------------
+            /// A container for output data, providing the data
+            /// size.
+            ///
+            /// @author S Downie
+            //---------------------------------------------------
+            struct Data
+            {
+                std::unique_ptr<u8[]> m_data;
+                u32 m_size;
+            };
+            //---------------------------------------------------
             /// @author S Downie
             ///
             /// @param The data size.
@@ -55,29 +66,57 @@ namespace ChilliSource
             //---------------------------------------------------
             u32 CalculateAlignedSize(u32 in_dataSize);
             //---------------------------------------------------
-            /// Encrypts the data with the given private key.
+            /// Encrypts binary data with the given private key.
             ///
             /// @author S Downie
             ///
             /// @param The data.
-            /// @param The data size. Data size must by 16 byte
+            /// @param The data size. Data size must be 16 byte
             /// aligned to be encrypted.
             /// @param The private key.
-            /// @param The output encrypted data.
+            ///
+            /// @return The output encrypted data. This will be
+            /// 16-byte aligned.
             //---------------------------------------------------
-            void Encrypt(const u8* in_data, u32 in_dataLength, const std::string& in_privateKey, u8* out_data);
+            Data EncryptBinary(const u8* in_data, u32 in_dataLength, const std::string& in_privateKey);
             //---------------------------------------------------
-            /// Decrypts the data with the given private key.
+            /// Decrypts binary data with the given private key.
             ///
             /// @author S Downie
             ///
             /// @param The encrypted data.
-            /// @param The data size. Data size must by 16 byte
+            /// @param The data size. Data size must be 16 byte
             /// aligned to be decrypted.
             /// @param The private key.
-            /// @param The output decrypted data.
+            ///
+            /// @return The output decrypted data.
             //---------------------------------------------------
-            void Decrypt(const u8* in_data, u32 in_dataLength, const std::string& in_privateKey, u8* out_data);
+            Data DecryptBinary(const u8* in_data, u32 in_dataLength, const std::string& in_privateKey);
+            //---------------------------------------------------
+            /// Encrypts the string with the given private key.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The string to encrypt.
+            /// @param The private key.
+            ///
+            /// @return The output encrypted data. This will be
+            /// 16-byte aligned.
+            //---------------------------------------------------
+            Data EncryptString(const std::string& in_string, const std::string& in_privateKey);
+            //---------------------------------------------------
+            /// Decrypts the string with the given private key.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The encrypted data.
+            /// @param The encrpyted data size. Data size must be
+            /// 16 byte aligned to be decrypted.
+            /// @param The private key.
+            ///
+            /// @return The output decrypted string.
+            //---------------------------------------------------
+            std::string DecryptString(const u8* in_data, u32 in_dataLength, const std::string& in_privateKey);
         };
     }
 }

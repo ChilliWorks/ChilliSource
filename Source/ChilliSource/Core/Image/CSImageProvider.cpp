@@ -33,8 +33,9 @@
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
-#include <ChilliSource/Core/Minizip/unzip.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
+
+#include <minizip/unzip.h>
 
 namespace ChilliSource
 {

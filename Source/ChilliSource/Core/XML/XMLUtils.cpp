@@ -33,6 +33,8 @@
 
 #include <rapidxml/rapidxml_print.hpp>
 
+#include <cstring>
+
 namespace ChilliSource
 {
     namespace Core
@@ -41,7 +43,7 @@ namespace ChilliSource
         {
             //--------------------------------------------------
             //--------------------------------------------------
-            DocumentUPtr ReadDocument(StorageLocation in_storageLocation, const std::string& in_filePath)
+            XMLUPtr ReadDocument(StorageLocation in_storageLocation, const std::string& in_filePath)
             {
                 Core::FileStreamSPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_read);
                 if (stream != nullptr && stream->IsOpen() == true && stream->IsBad() == false)
@@ -49,30 +51,130 @@ namespace ChilliSource
                     std::string contents;
                     stream->GetAll(contents);
                     
-                    //Load the script
-                    DocumentUPtr document(new rapidxml::xml_document<>());
-                    document->parse<rapidxml::parse_default>(const_cast<s8*>(contents.c_str()));
-                    
+                    XMLUPtr document = ParseDocument(contents);
                     return document;
                 }
                 
-                return DocumentUPtr();
+                return XMLUPtr();
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            bool HasName(const Base* in_base, const std::string& in_name)
+            XMLUPtr ParseDocument(const std::string& in_xmlString)
             {
-                return (std::string(in_base->name()) == in_name);
+                std::unique_ptr<s8[]> data(new s8[in_xmlString.length() + 1]);
+                memcpy(data.get(), in_xmlString.c_str(), in_xmlString.length());
+                data[in_xmlString.length()] = '\0';
+                
+                std::unique_ptr<XML::Document> document(new XML::Document());
+                document->parse<rapidxml::parse_default>(data.get());
+                return XMLUPtr(new XML(std::move(document), std::move(data)));
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            std::string GetAttribute(const Node* in_node, const std::string& in_attributeName, const std::string& in_defaultValue)
+            std::string GetName(const XML::Base* in_base)
             {
-                for(rapidxml::xml_attribute<> * attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                return std::string(in_base->name(), in_base->name_size());
+            }
+            //--------------------------------------------------
+            //--------------------------------------------------
+            std::string GetValue(const XML::Base* in_base)
+            {
+                return std::string(in_base->value(), in_base->value_size());
+            }
+            //--------------------------------------------------
+            //--------------------------------------------------
+            XML::Node* GetFirstChildNode(const XML::Node* in_node, const std::string& in_name)
+            {
+                const s8* nameData = nullptr;
+                u32 nameSize = in_name.length();
+                if (nameSize > 0)
                 {
-                    if (HasName(attribute, in_attributeName) == true)
+                    nameData = in_name.c_str();
+                }
+                
+                return in_node->first_node(nameData, nameSize);
+            }
+            //--------------------------------------------------
+            //--------------------------------------------------
+            XML::Node* GetNextSiblingNode(const XML::Node* in_node, const std::string& in_name)
+            {
+                const s8* nameData = nullptr;
+                u32 nameSize = in_name.length();
+                if (nameSize > 0)
+                {
+                    nameData = in_name.c_str();
+                }
+                
+                return in_node->next_sibling(nameData, nameSize);
+            }
+            //--------------------------------------------------
+            //--------------------------------------------------
+            XML::Node* GetFirstChildElement(const XML::Node* in_node, const std::string& in_name)
+            {
+                const s8* nameData = nullptr;
+                u32 nameSize = in_name.length();
+                if (nameSize > 0)
+                {
+                    nameData = in_name.c_str();
+                }
+                
+                XML::Node* child = in_node->first_node(nameData, nameSize);
+                if (child != nullptr && child->type() == rapidxml::node_type::node_element)
+                {
+                    return child;
+                }
+                else if (child != nullptr)
+                {
+                    XML::Node* sibling = child;
+                    do
                     {
-                        return attribute->value();
+                        sibling = sibling->next_sibling(nameData, nameSize);
+                    }
+                    while(sibling != nullptr && sibling->type() != rapidxml::node_type::node_element);
+                    return sibling;
+                }
+                
+                return nullptr;
+            }
+            //--------------------------------------------------
+            //--------------------------------------------------
+            XML::Node* GetNextSiblingElement(const XML::Node* in_node, const std::string& in_name)
+            {
+                const s8* nameData = nullptr;
+                u32 nameSize = in_name.length();
+                if (nameSize > 0)
+                {
+                    nameData = in_name.c_str();
+                }
+                
+                XML::Node* sibling = in_node->next_sibling(nameData, nameSize);
+                while (sibling != nullptr && sibling->type() != rapidxml::node_type::node_element)
+                {
+                    sibling = sibling->next_sibling(nameData, nameSize);
+                }
+                return sibling;
+            }
+            //--------------------------------------------------
+            //--------------------------------------------------
+            XML::Attribute* GetFirstAttribute(const XML::Node* in_node)
+            {
+                return in_node->first_attribute();
+            }
+            //--------------------------------------------------
+            //--------------------------------------------------
+            XML::Attribute* GetNextAttribute(const XML::Attribute* in_attribute)
+            {
+                return in_attribute->next_attribute();
+            }
+            //--------------------------------------------------
+            //--------------------------------------------------
+            template <> std::string GetAttributeValue<std::string>(const XML::Node* in_node, const std::string& in_attributeName, const std::string& in_defaultValue)
+            {
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                {
+                    if (GetName(attribute) == in_attributeName)
+                    {
+                        return GetValue(attribute);
                     }
                 }
                 
@@ -80,13 +182,13 @@ namespace ChilliSource
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            bool GetAttribute(const Node* in_node, const std::string& in_attributeName, bool in_defaultValue)
+            template <> bool GetAttributeValue<bool>(const XML::Node* in_node, const std::string& in_attributeName, const bool& in_defaultValue)
             {
-                for(rapidxml::xml_attribute<> * attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
                 {
-                    if (HasName(attribute, in_attributeName) == true)
+                    if (GetName(attribute) == in_attributeName)
                     {
-                        return ParseBool(attribute->value());
+                        return ParseBool(GetValue(attribute));
                     }
                 }
                 
@@ -94,13 +196,13 @@ namespace ChilliSource
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            f32 GetAttribute(const Node* in_node, const std::string& in_attributeName, f32 in_defaultValue)
+            template <> f32 GetAttributeValue<f32>(const XML::Node* in_node, const std::string& in_attributeName, const f32& in_defaultValue)
             {
-                for(rapidxml::xml_attribute<> * attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
                 {
-                    if (HasName(attribute, in_attributeName) == true)
+                    if (GetName(attribute) == in_attributeName)
                     {
-                        return ParseF32(attribute->value());
+                        return ParseF32(GetValue(attribute));
                     }
                 }
                 
@@ -108,13 +210,13 @@ namespace ChilliSource
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            s32 GetAttribute(const Node* in_node, const std::string& in_attributeName, s32 in_defaultValue)
+            template <> s32 GetAttributeValue<s32>(const XML::Node* in_node, const std::string& in_attributeName, const s32& in_defaultValue)
             {
-                for(rapidxml::xml_attribute<> * attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
                 {
-                    if (HasName(attribute, in_attributeName) == true)
+                    if (GetName(attribute) == in_attributeName)
                     {
-                        return ParseS32(attribute->value());
+                        return ParseS32(GetValue(attribute));
                     }
                 }
                 
@@ -122,13 +224,13 @@ namespace ChilliSource
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            s64 GetAttribute(const Node* in_node, const std::string& in_attributeName, s64 in_defaultValue)
+            template <> s64 GetAttributeValue<s64>(const XML::Node* in_node, const std::string& in_attributeName, const s64& in_defaultValue)
             {
-                for(rapidxml::xml_attribute<> * attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
                 {
-                    if (HasName(attribute, in_attributeName) == true)
+                    if (GetName(attribute) == in_attributeName)
                     {
-                        return ParseS64(attribute->value());
+                        return ParseS64(GetValue(attribute));
                     }
                 }
                 
@@ -136,13 +238,13 @@ namespace ChilliSource
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            Vector2 GetAttribute(const Node* in_node, const std::string& in_attributeName, const Vector2& in_defaultValue)
+            template <> u32 GetAttributeValue<u32>(const XML::Node* in_node, const std::string& in_attributeName, const u32& in_defaultValue)
             {
-                for(rapidxml::xml_attribute<> * attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
                 {
-                    if (HasName(attribute, in_attributeName) == true)
+                    if (GetName(attribute) == in_attributeName)
                     {
-                        return ParseVector2(attribute->value());
+                        return ParseU32(GetValue(attribute));
                     }
                 }
                 
@@ -150,13 +252,13 @@ namespace ChilliSource
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            Vector3 GetAttribute(const Node* in_node, const std::string& in_attributeName, const Vector3& in_defaultValue)
+            template <> u64 GetAttributeValue<u64>(const XML::Node* in_node, const std::string& in_attributeName, const u64& in_defaultValue)
             {
-                for(rapidxml::xml_attribute<> * attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
                 {
-                    if (HasName(attribute, in_attributeName) == true)
+                    if (GetName(attribute) == in_attributeName)
                     {
-                        return ParseVector3(attribute->value());
+                        return ParseU64(GetValue(attribute));
                     }
                 }
                 
@@ -164,13 +266,13 @@ namespace ChilliSource
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            Vector4 GetAttribute(const Node* in_node, const std::string& in_attributeName, const Vector4& in_defaultValue)
+            template <> Vector2 GetAttributeValue<Vector2>(const XML::Node* in_node, const std::string& in_attributeName, const Vector2& in_defaultValue)
             {
-                for(rapidxml::xml_attribute<> * attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
                 {
-                    if (HasName(attribute, in_attributeName) == true)
+                    if (GetName(attribute) == in_attributeName)
                     {
-                        return ParseVector4(attribute->value());
+                        return ParseVector2(GetValue(attribute));
                     }
                 }
                 
@@ -178,13 +280,13 @@ namespace ChilliSource
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            Matrix3 GetAttribute(const Node* in_node, const std::string& in_attributeName, const Matrix3& in_defaultValue)
+            template <> Vector3 GetAttributeValue<Vector3>(const XML::Node* in_node, const std::string& in_attributeName, const Vector3& in_defaultValue)
             {
-                for(rapidxml::xml_attribute<> * attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
                 {
-                    if (HasName(attribute, in_attributeName) == true)
+                    if (GetName(attribute) == in_attributeName)
                     {
-                        return ParseMatrix3(attribute->value());
+                        return ParseVector3(GetValue(attribute));
                     }
                 }
                 
@@ -192,13 +294,13 @@ namespace ChilliSource
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            Matrix4 GetAttribute(const Node* in_node, const std::string& in_attributeName, const Matrix4& in_defaultValue)
+            template <> Vector4 GetAttributeValue<Vector4>(const XML::Node* in_node, const std::string& in_attributeName, const Vector4& in_defaultValue)
             {
-                for(rapidxml::xml_attribute<> * attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
                 {
-                    if (HasName(attribute, in_attributeName) == true)
+                    if (GetName(attribute) == in_attributeName)
                     {
-                        return ParseMatrix4(attribute->value());
+                        return ParseVector4(GetValue(attribute));
                     }
                 }
                 
@@ -206,13 +308,13 @@ namespace ChilliSource
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            Quaternion GetAttribute(const Node* in_node, const std::string& in_attributeName, const Quaternion& in_defaultValue)
+            template <> Matrix3 GetAttributeValue<Matrix3>(const XML::Node* in_node, const std::string& in_attributeName, const Matrix3& in_defaultValue)
             {
-                for(rapidxml::xml_attribute<> * attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
                 {
-                    if (HasName(attribute, in_attributeName) == true)
+                    if (GetName(attribute) == in_attributeName)
                     {
-                        return ParseQuaternion(attribute->value());
+                        return ParseMatrix3(GetValue(attribute));
                     }
                 }
                 
@@ -220,13 +322,13 @@ namespace ChilliSource
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            Colour GetAttribute(const Node* in_node, const std::string& in_attributeName, const Colour& in_defaultValue)
+            template <> Matrix4 GetAttributeValue<Matrix4>(const XML::Node* in_node, const std::string& in_attributeName, const Matrix4& in_defaultValue)
             {
-                for(rapidxml::xml_attribute<> * attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
                 {
-                    if (HasName(attribute, in_attributeName) == true)
+                    if (GetName(attribute) == in_attributeName)
                     {
-                        return ParseColour(attribute->value());
+                        return ParseMatrix4(GetValue(attribute));
                     }
                 }
                 
@@ -234,17 +336,53 @@ namespace ChilliSource
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            std::string ToString(const Node* in_base)
+            template <> Quaternion GetAttributeValue<Quaternion>(const XML::Node* in_node, const std::string& in_attributeName, const Quaternion& in_defaultValue)
             {
-                std::stringstream stream;
-                stream << in_base;
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                {
+                    if (GetName(attribute) == in_attributeName)
+                    {
+                        return ParseQuaternion(GetValue(attribute));
+                    }
+                }
+                
+                return in_defaultValue;
+            }
+            //--------------------------------------------------
+            //--------------------------------------------------
+            template <> Colour GetAttributeValue<Colour>(const XML::Node* in_node, const std::string& in_attributeName, const Colour& in_defaultValue)
+            {
+                for(rapidxml::xml_attribute<>* attribute = in_node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                {
+                    if (GetName(attribute) == in_attributeName)
+                    {
+                        return ParseColour(GetValue(attribute));
+                    }
+                }
+                
+                return in_defaultValue;
+            }
+            //--------------------------------------------------
+            //--------------------------------------------------
+            std::string ToString(const XML::Node* in_base)
+            {
+                std::ostringstream stream;
+                stream << *in_base;
                 return stream.str();
             }
             //--------------------------------------------------
             //--------------------------------------------------
-            bool WriteDocument(StorageLocation in_storageLocation, const std::string& in_filePath, Document* in_document)
+            bool WriteDocument(XML::Document* in_document, StorageLocation in_storageLocation, const std::string& in_filePath)
             {
-                //TODO:
+                Core::FileStreamSPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_write);
+                if (stream != nullptr && stream->IsOpen() == true && stream->IsBad() == false)
+                {
+                    std::string contents = XMLUtils::ToString(in_document);
+                    stream->Write(contents);
+                    stream->Close();
+                    return true;
+                }
+                
                 return false;
             }
         }

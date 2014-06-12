@@ -28,6 +28,50 @@ namespace rapidxml
     //! \cond internal
     namespace internal
     {
+        ///////////////////////////////////////////////////////////////////////////
+        // Function declarations
+        
+        template<class OutIt, class Ch>
+        inline OutIt copy_chars(const Ch *begin, const Ch *end, OutIt out);
+        
+        template<class OutIt, class Ch>
+        inline OutIt copy_and_expand_chars(const Ch *begin, const Ch *end, Ch noexpand, OutIt out);
+        
+        template<class OutIt, class Ch>
+        inline OutIt fill_chars(OutIt out, int n, Ch ch);
+        
+        template<class Ch, Ch ch>
+        inline bool find_char(const Ch *begin, const Ch *end);
+        
+        template<class OutIt, class Ch>
+        inline OutIt print_node(OutIt out, const xml_node<Ch> *node, int flags, int indent);
+        
+        template<class OutIt, class Ch>
+        inline OutIt print_children(OutIt out, const xml_node<Ch> *node, int flags, int indent);
+        
+        template<class OutIt, class Ch>
+        inline OutIt print_attributes(OutIt out, const xml_node<Ch> *node, int flags);
+        
+        template<class OutIt, class Ch>
+        inline OutIt print_data_node(OutIt out, const xml_node<Ch> *node, int flags, int indent);
+        
+        template<class OutIt, class Ch>
+        inline OutIt print_cdata_node(OutIt out, const xml_node<Ch> *node, int flags, int indent);
+        
+        template<class OutIt, class Ch>
+        inline OutIt print_element_node(OutIt out, const xml_node<Ch> *node, int flags, int indent);
+        
+        template<class OutIt, class Ch>
+        inline OutIt print_declaration_node(OutIt out, const xml_node<Ch> *node, int flags, int indent);
+        
+        template<class OutIt, class Ch>
+        inline OutIt print_comment_node(OutIt out, const xml_node<Ch> *node, int flags, int indent);
+        
+        template<class OutIt, class Ch>
+        inline OutIt print_doctype_node(OutIt out, const xml_node<Ch> *node, int flags, int indent);
+        
+        template<class OutIt, class Ch>
+        inline OutIt print_pi_node(OutIt out, const xml_node<Ch> *node, int flags, int indent);
         
         ///////////////////////////////////////////////////////////////////////////
         // Internal character operations

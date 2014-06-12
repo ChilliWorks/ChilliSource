@@ -32,8 +32,6 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
 
-class TiXmlElement;
-
 namespace ChilliSource
 {
 	namespace Core 
@@ -57,7 +55,7 @@ namespace ChilliSource
             /// @param Param dictionary to serialise
             /// @param [Out] Rapid XML element
             //-----------------------------------------------------------------
-            void ToXml(const ParamDictionary& in_dict, XMLUtils::Node* out_element);
+            void ToXml(const ParamDictionary& in_dict, XML::Node* out_element);
             //-----------------------------------------------------------------
             /// Convert the Rapid XML to a param dictionary of key/values
             ///
@@ -69,7 +67,7 @@ namespace ChilliSource
             ///
             /// @return Param dictionary
             //-----------------------------------------------------------------
-            ParamDictionary FromXml(const XMLUtils::Node* in_element);
+            ParamDictionary FromXml(const XML::Node* in_element);
             //-----------------------------------------------------------------
             /// Convert the param dictionary to a string config representation
             ///
