@@ -283,12 +283,13 @@ namespace CSBackend
 	        ///
             /// @author I Copland
             ///
+	        /// @param The package or CS storage location
             /// @param The path to loop up.
 	        /// @param [Out] The manifest item if successful.
 	        ///
             /// @return Whether or not the look up was successful.
             //--------------------------------------------------------------
-            bool TryGetManifestItem(const std::string& in_path, APKManifestItem& out_manifestItem) const;
+            bool TryGetManifestItem(CSCore::StorageLocation in_location, const std::string& in_path, APKManifestItem& out_manifestItem) const;
 			//--------------------------------------------------------------
 			/// Creates a file stream to a file within the APK (zip) file.
 			/// This provides a uniform api for handling files within
@@ -296,25 +297,27 @@ namespace CSBackend
             ///
             /// @author I Copland
 			///
+            /// @param The package or CS storage location
 			/// @param The file path of in the APK.
 			/// @param the file mode.
             ///
 			/// @return the APK filestream.
 			//--------------------------------------------------------------
-			CSCore::FileStreamUPtr CreateFileStreamInAPK(const std::string& in_filePath, CSCore::FileMode in_fileMode) const;
+			CSCore::FileStreamUPtr CreateFileStreamInAPK(CSCore::StorageLocation in_location, const std::string& in_filePath, CSCore::FileMode in_fileMode) const;
 			//--------------------------------------------------------------
 			/// Copies a file from the APK to one of the writable storage
 			/// locations.
 			///
 			/// @author I Copland
 			///
+			/// @param The package or CS storage location of the source
 			/// @param the source file path in the APK.
 			/// @param the destination storage location
 			/// @param the destination file.
 			///
 			/// @return whether or not this has succeeded.
 			//--------------------------------------------------------------
-			bool CopyFileFromAPK(const std::string& in_sourcefilePath, CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilepath) const;
+			bool CopyFileFromAPK(CSCore::StorageLocation in_srcLocation, const std::string& in_sourcefilePath, CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilepath) const;
 			//--------------------------------------------------------------
 			/// returns all files and directories in a directory of the APK.
 			/// Note: Unlike other similar methods, empty directories will
@@ -322,21 +325,23 @@ namespace CSBackend
 			///
 			/// @author I Copland
 			///
+			/// @param The package or CS storage location
 			/// @param the directory.
 			/// @param whether or not to recurse
 			/// @param out parameter containing all the found items.
 			//--------------------------------------------------------------
-			std::vector<std::string> GetPathsInAPK(const std::string& in_directoryPath, bool in_recursive) const;
+			std::vector<std::string> GetPathsInAPK(CSCore::StorageLocation in_location, const std::string& in_directoryPath, bool in_recursive) const;
 			//--------------------------------------------------------------
 			/// returns whether or not a file exists in the APK.
 			///
 			/// @author S Downie
 			///
+			/// @param The package or CS storage location
 			/// @param the file path.
 			///
 			/// @return whether or not it exists.
 			//--------------------------------------------------------------
-			bool DoesFileExistInAPK(const std::string& in_filePath) const;
+			bool DoesFileExistInAPK(CSCore::StorageLocation in_location, const std::string& in_filePath) const;
 			//--------------------------------------------------------------
 			/// returns whether or not a directory exists in the APK.
 			/// Note: Unlike other similar methods, empty directories will not
@@ -344,11 +349,12 @@ namespace CSBackend
 			///
 			/// @author I Copland
 			///
+			/// @param The package or CS storage location
 			/// @param the directory path.
 			///
 			/// @return whether or not it exists.
 			//--------------------------------------------------------------
-			bool DoesDirectoryExistInAPK(const std::string& in_directoryPath) const;
+			bool DoesDirectoryExistInAPK(CSCore::StorageLocation in_location, const std::string& in_directoryPath) const;
 			//--------------------------------------------------------------
 			/// returns all files and directories in a directory.
 			///
@@ -383,12 +389,24 @@ namespace CSBackend
 	        /// @return Content file names
 	        //------------------------------------------------------------
 			std::vector<std::string> GetDirectoryContents(const std::vector<PathInfo>& in_directoryInfos, bool in_recursive) const;
+			//--------------------------------------------------------------
+			/// Add the item at the given filepath to the manifest
+			///
+			/// @author S Downie
+			///
+			/// @param Location in package or cs
+			/// @param File path
+			/// @param Zip file pos
+			/// @param [In/Out] Manifest to add them to
+			//--------------------------------------------------------------
+			void AddItemToManifest(CSCore::StorageLocation in_location, const std::string& in_filePath, unz_file_pos in_zipPos, std::vector<APKManifestItem>& inout_items);
 
 			mutable std::mutex m_minizipMutex;
 
 			std::string m_apkPath;
 			std::string m_storagePath;
-			std::vector<APKManifestItem> m_apkManifestItems;
+			std::vector<APKManifestItem> m_apkAppManifestItems;
+			std::vector<APKManifestItem> m_apkCSManifestItems;
 		};
 	}
 }
