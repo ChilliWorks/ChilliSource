@@ -560,7 +560,7 @@ namespace CSBackend
                 const std::string* resourceDirectories = GetResourceDirectories();
                 for (u32 i = 0; i < 3; ++i)
                 {
-                    if(CSBackend::iOS::DoesDirectoryExist(m_bundlePath + resourceDirectories[i] + in_directoryPath))
+                    if(CSBackend::iOS::DoesDirectoryExist(GetAbsolutePathToStorageLocation(in_storageLocation) + resourceDirectories[i] + in_directoryPath))
                     {
                         return true;
                     }
