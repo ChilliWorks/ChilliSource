@@ -13,6 +13,10 @@
 
 #include <sstream>
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#endif
+
 namespace ChilliSource
 {
     namespace Core
@@ -72,10 +76,18 @@ namespace ChilliSource
             Hash.Final();
             
             const u32 kudwMaxSHA1Length = 80;
-            char cHash[kudwMaxSHA1Length];
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
+            TCHAR cHash[kudwMaxSHA1Length];
             memset(cHash, 0, kudwMaxSHA1Length);
             Hash.ReportHash(cHash, ineReportType);
-            return std::string(cHash);
+            return CSBackend::Windows::WindowsStringUtils::UTF16ToUTF8(std::wstring(cHash));
+#else
+			char cHash[kudwMaxSHA1Length];
+			memset(cHash, 0, kudwMaxSHA1Length);
+			Hash.ReportHash(cHash, ineReportType);
+			return std::string(cHash);
+#endif
         }
         //--------------------------------------------------------------------------------------------------
 		/// Open

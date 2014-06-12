@@ -58,15 +58,15 @@ namespace ChilliSource
             using Node = rapidxml::xml_node<>;
             using Attribute = rapidxml::xml_attribute<>;
             using Document = rapidxml::xml_document<>;
-            //---------------------------------------------------------
-            /// Constructor.
-            ///
-            /// @author I Copland
-            ///
-            /// @param The rapid xml document.
-            /// @param The parsed xml data.
-            //---------------------------------------------------------
-            XML(std::unique_ptr<Document> in_document, std::unique_ptr<s8[]> in_data);
+			//---------------------------------------------------------
+			/// Constructor.
+			///
+			/// @author I Copland
+			///
+			/// @param The rapid xml document.
+			/// @param The parsed xml data.
+			//---------------------------------------------------------
+			XML(std::unique_ptr<Document> in_document, std::unique_ptr<s8[]> in_data);
             //---------------------------------------------------------
             /// @author I Copland
             ///

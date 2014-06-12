@@ -31,6 +31,10 @@
 
 #include <SHA1/SHA1.h>
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#endif
+
 namespace ChilliSource
 {
     namespace Core
@@ -41,17 +45,24 @@ namespace ChilliSource
             //------------------------------------------------
             std::string GenerateHexHashCode(const s8* in_data, u32 in_size)
             {
-                const u32 k_sha1Length = 40;
+                const u32 k_sha1Length = 80;
                 
                 CSHA1 hash;
                 hash.Reset();
                 hash.Update(reinterpret_cast<const u8*>(in_data), in_size);
                 hash.Final();
                 
-                s8 cHash[k_sha1Length];
+#ifdef CS_TARGETPLATFORM_WINDOWS
+                TCHAR cHash[k_sha1Length];
                 memset(cHash, 0, k_sha1Length);
                 hash.ReportHash(cHash, CSHA1::REPORT_HEX_SHORT);
-                return std::string(cHash);
+				return CSBackend::Windows::WindowsStringUtils::UTF16ToUTF8(std::wstring(cHash));
+#else
+				s8 cHash[k_sha1Length];
+				memset(cHash, 0, k_sha1Length);
+				hash.ReportHash(cHash, CSHA1::REPORT_HEX_SHORT);
+				return std::string(cHash);
+#endif
             }
         }
     }

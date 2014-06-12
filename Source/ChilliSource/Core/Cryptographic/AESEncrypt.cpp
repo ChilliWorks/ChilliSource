@@ -41,6 +41,20 @@ namespace ChilliSource
                 const u32 k_aesBlockSize = 16;
             }
             
+			//---------------------------------------------------------
+			//---------------------------------------------------------
+			Data::Data(Data&& in_moveable)
+				: m_data(std::move(in_moveable.m_data)), m_size(in_moveable.m_size)
+			{
+			}
+			//---------------------------------------------------------
+			//---------------------------------------------------------
+			Data& Data::operator=(Data&& in_moveable)
+			{
+				m_data = std::move(in_moveable.m_data);
+				m_size = in_moveable.m_size;
+				return *this;
+			}
             //---------------------------------------------------
             //---------------------------------------------------
             u32 CalculateAlignedSize(u32 in_dataSize)
@@ -74,7 +88,7 @@ namespace ChilliSource
                 
                 s32 dwBytesRemaining = (s32)in_dataLength;
                 const u8* pReadData = in_data;
-                u8* pWriteData =  output.m_data.get();
+                u8* pWriteData = output.m_data.get();
                 
                 while(dwBytesRemaining > 0)
                 {

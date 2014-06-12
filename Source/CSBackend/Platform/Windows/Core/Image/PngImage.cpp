@@ -11,7 +11,7 @@
 
 #include <CSBackend/Platform/Windows/Core/Image/PngImage.h>
 
-#include <CSBackend/Platform/Windows/Core/Image/LibPng/png.h>
+#include <png/png.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 

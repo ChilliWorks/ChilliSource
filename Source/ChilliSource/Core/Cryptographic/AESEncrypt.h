@@ -52,6 +52,34 @@ namespace ChilliSource
             //---------------------------------------------------
             struct Data
             {
+				//---------------------------------------------------------
+				/// Default constructor. This needs to explicitly declared on
+				/// windows.
+				///
+				/// @author I Copland
+				//---------------------------------------------------------
+				Data() = default;
+				//---------------------------------------------------------
+				/// Move constructor. This needs to explicitly declared on
+				/// windows.
+				///
+				/// @author I Copland
+				///
+				/// @param The object to move.
+				//---------------------------------------------------------
+				Data(Data&& in_moveable);
+				//---------------------------------------------------------
+				/// Move assignment operator. This needs to explicitly 
+				/// declared on  windows.
+				///
+				/// @author I Copland
+				///
+				/// @param The object to move.
+				///
+				/// @return a reference to this.
+				//---------------------------------------------------------
+				Data& operator=(Data&& in_moveable);
+
                 std::unique_ptr<u8[]> m_data;
                 u32 m_size;
             };

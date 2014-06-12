@@ -350,7 +350,7 @@ namespace ChilliSource
             FileSystem* pFileSystem = Application::Get()->GetFileSystem();
             if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, k_filename) == true)
             {
-				FileStreamSPtr fileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_read);
+				FileStreamSPtr fileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_readBinary);
 				if (fileStream->IsOpen() == true && fileStream->IsBad() == false)
                 {
 					fileStream->SeekG(0, SeekDir::k_end);

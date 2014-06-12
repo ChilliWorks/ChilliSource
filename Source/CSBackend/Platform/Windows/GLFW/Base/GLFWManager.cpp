@@ -60,7 +60,7 @@ namespace CSBackend
 					Json::Value root;
 					if (!jReader.parse(contents, root))
 					{
-						CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormattedErrorMessages());
+						CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormatedErrorMessages());
 					}
 
 					formatString = root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
