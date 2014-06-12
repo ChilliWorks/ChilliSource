@@ -1,0 +1,89 @@
+//
+//  StaticAmbient.csshader
+//  Chilli Source
+//  Created by I Copland on 29/01/2014.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+GLSL
+{
+	VertexShader
+	{
+		#ifndef GL_ES
+		#define lowp
+		#define mediump
+		#define highp
+		#endif
+
+		//attribute
+		attribute highp vec4 a_position;
+		attribute mediump vec2 a_texCoord;
+
+		//uniforms
+		uniform highp mat4 u_wvpMat;
+		uniform lowp vec4 u_emissive;
+		uniform lowp vec4 u_ambient;
+		uniform lowp vec4 u_lightCol;
+
+		//varyings
+		varying mediump vec2 vvTexCoord;
+		varying lowp vec4 vvColour;
+
+		void main()
+		{
+		    //Convert the vertex from world space to projection
+		    gl_Position = u_wvpMat * a_position;
+		    
+		    //Apply the texture matrix to the texture coordinates
+		    vvTexCoord = a_texCoord;
+		    
+		    //calulate the lighting colour
+		    vvColour = (u_emissive + (u_ambient * u_lightCol));
+		}
+	}
+	
+	FragmentShader
+	{
+		#ifndef GL_ES
+		#define lowp
+		#define mediump
+		#define highp
+		#else
+		precision lowp float;
+		#endif
+
+		//uniforms
+		uniform lowp sampler2D u_texture0;
+
+		//varyings
+		varying mediump vec2 vvTexCoord;
+		varying lowp vec4 vvColour;
+
+		void main()
+		{
+			gl_FragColor = vvColour * texture2D(u_texture0, vvTexCoord);
+		}
+	}
+}
+

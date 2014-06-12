@@ -229,6 +229,10 @@ namespace ChilliSource
             {
                 return StorageLocation::k_root;
             }
+            else if(lowerCase == "chillisource")
+            {
+                return StorageLocation::k_chilliSource;
+            }
 			
 			CS_LOG_ERROR("String Parser: Invalid storage location.");
 			return StorageLocation::k_package;

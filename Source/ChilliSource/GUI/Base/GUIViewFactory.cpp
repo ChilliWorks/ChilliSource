@@ -106,7 +106,7 @@ namespace ChilliSource
 			GUIViewUPtr pRootView;
 
             Core::FileStreamSPtr pFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrScriptFile, Core::FileMode::k_read);
-            assert(pFile);
+            CS_ASSERT(pFile->IsOpen() == true, "Cannot open GUI file: " + instrScriptFile);
             
             std::string strFile;
             pFile->GetAll(strFile);

@@ -1,0 +1,137 @@
+//
+//  AnimatedAmbient.csshader
+//  Chilli Source
+//  Created by I Copland on 29/01/2014.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+GLSL
+{
+	VertexShader
+	{
+		#ifndef GL_ES
+		#define lowp
+		#define mediump
+		#define highp
+		#endif
+
+
+		//attributes
+		attribute highp vec4 a_position;
+		attribute mediump vec2 a_texCoord;
+		attribute mediump vec4 a_weights;
+		attribute highp vec4 a_jointIndices;
+
+		//uniforms
+		uniform highp mat4 u_wvpMat;
+		uniform highp vec4 u_joints[180];
+		uniform lowp vec4 u_emissive;
+		uniform lowp vec4 u_ambient;
+		uniform lowp vec4 u_lightCol;
+
+		//varyings
+		varying mediump vec2 vvTexCoord;
+		varying lowp vec4 vvColour;
+
+		void main()
+		{
+		    //Apply the first joint to the animation transforms
+			int jointIndex = int(a_jointIndices.x + 0.5);
+		    vec4 jointVector0 = u_joints[jointIndex * 3 + 0];
+		    vec4 jointVector1 = u_joints[jointIndex * 3 + 1];
+		    vec4 jointVector2 = u_joints[jointIndex * 3 + 2];
+			mat4 jointMatrix = mat4(jointVector0.x, jointVector1.x, jointVector2.x, 0.0,
+		                            jointVector0.y, jointVector1.y, jointVector2.y, 0.0,
+		                            jointVector0.z, jointVector1.z, jointVector2.z, 0.0,
+		                            jointVector0.w, jointVector1.w, jointVector2.w, 1.0);
+		    mat4 animationTransform = (jointMatrix * a_weights.x);
+		    
+		    //apply the second joint to the animation transforms
+		    jointIndex = int(a_jointIndices.y + 0.5);
+		    jointVector0 = u_joints[jointIndex * 3 + 0];
+		    jointVector1 = u_joints[jointIndex * 3 + 1];
+		    jointVector2 = u_joints[jointIndex * 3 + 2];
+			jointMatrix[0][0] = jointVector0.x; jointMatrix[0][1] = jointVector1.x; jointMatrix[0][2] = jointVector2.x; jointMatrix[0][3] = 0.0;
+			jointMatrix[1][0] = jointVector0.y; jointMatrix[1][1] = jointVector1.y; jointMatrix[1][2] = jointVector2.y; jointMatrix[1][3] = 0.0;
+			jointMatrix[2][0] = jointVector0.z; jointMatrix[2][1] = jointVector1.z; jointMatrix[2][2] = jointVector2.z; jointMatrix[2][3] = 0.0;
+			jointMatrix[3][0] = jointVector0.w; jointMatrix[3][1] = jointVector1.w; jointMatrix[3][2] = jointVector2.w; jointMatrix[3][3] = 1.0;
+		    animationTransform += (jointMatrix * a_weights.y);
+		    
+		    //apply the third joint to the animation transforms
+		    jointIndex = int(a_jointIndices.z + 0.5);
+		    jointVector0 = u_joints[jointIndex * 3 + 0];
+		    jointVector1 = u_joints[jointIndex * 3 + 1];
+		    jointVector2 = u_joints[jointIndex * 3 + 2];
+			jointMatrix[0][0] = jointVector0.x; jointMatrix[0][1] = jointVector1.x; jointMatrix[0][2] = jointVector2.x; jointMatrix[0][3] = 0.0;
+			jointMatrix[1][0] = jointVector0.y; jointMatrix[1][1] = jointVector1.y; jointMatrix[1][2] = jointVector2.y; jointMatrix[1][3] = 0.0;
+			jointMatrix[2][0] = jointVector0.z; jointMatrix[2][1] = jointVector1.z; jointMatrix[2][2] = jointVector2.z; jointMatrix[2][3] = 0.0;
+			jointMatrix[3][0] = jointVector0.w; jointMatrix[3][1] = jointVector1.w; jointMatrix[3][2] = jointVector2.w; jointMatrix[3][3] = 1.0;
+		    animationTransform += (jointMatrix * a_weights.z);
+		    
+		    //apply the fourth joint to the animation transforms
+		    jointIndex = int(a_jointIndices.w + 0.5);
+		    jointVector0 = u_joints[jointIndex * 3 + 0];
+		    jointVector1 = u_joints[jointIndex * 3 + 1];
+		    jointVector2 = u_joints[jointIndex * 3 + 2];
+			jointMatrix[0][0] = jointVector0.x; jointMatrix[0][1] = jointVector1.x; jointMatrix[0][2] = jointVector2.x; jointMatrix[0][3] = 0.0;
+			jointMatrix[1][0] = jointVector0.y; jointMatrix[1][1] = jointVector1.y; jointMatrix[1][2] = jointVector2.y; jointMatrix[1][3] = 0.0;
+			jointMatrix[2][0] = jointVector0.z; jointMatrix[2][1] = jointVector1.z; jointMatrix[2][2] = jointVector2.z; jointMatrix[2][3] = 0.0;
+			jointMatrix[3][0] = jointVector0.w; jointMatrix[3][1] = jointVector1.w; jointMatrix[3][2] = jointVector2.w; jointMatrix[3][3] = 1.0;
+		    animationTransform += (jointMatrix * (1.0 - a_weights.x - a_weights.y - a_weights.z));
+
+		    //Convert the vertex from local space to projection and world space.
+			vec4 localPosition = animationTransform * a_position;
+		    gl_Position = u_wvpMat * localPosition;
+
+			//get the tex coord
+			vvTexCoord = a_texCoord;
+		    
+		    //calculate the lighting colour
+		    vvColour = (u_emissive + (u_ambient * u_lightCol));
+		}
+	}
+	
+	FragmentShader
+	{
+		#ifndef GL_ES
+		#define lowp
+		#define mediump
+		#define highp
+		#else
+		precision lowp float;
+		#endif
+
+		//uniforms
+		uniform lowp sampler2D u_texture0;
+
+		//varyings
+		varying mediump vec2 vvTexCoord;
+		varying lowp vec4 vvColour;
+
+		void main()
+		{
+			gl_FragColor = vvColour * texture2D(u_texture0, vvTexCoord);
+		}
+	}
+}

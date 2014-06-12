@@ -595,7 +595,10 @@ namespace CSBackend
             switch (in_storageLocation)
             {
                 case CSCore::StorageLocation::k_package:
-                    strStorageLocationPath = m_bundlePath;
+                    strStorageLocationPath = m_bundlePath + "AppResources/";
+                    break;
+                case CSCore::StorageLocation::k_chilliSource:
+                    strStorageLocationPath = m_bundlePath + "CSResources/";
                     break;
                 case CSCore::StorageLocation::k_saveData:
                     strStorageLocationPath = m_documentsPath + k_saveDataPath;
@@ -706,7 +709,7 @@ namespace CSBackend
             @autoreleasepool
             {
                 NSMutableArray* contents = [NSMutableArray array];
-                NSString* directory = [NSStringUtils newNSStringWithUTF8String:m_bundlePath];
+                NSString* directory = [NSStringUtils newNSStringWithUTF8String:m_bundlePath + "AppResources/"];
                 
                 NSError* error = nil;
                 [contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:directory error:&error]];

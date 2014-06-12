@@ -26,7 +26,8 @@ namespace ChilliSource
             k_package,
             k_saveData,
             k_cache,
-            k_DLC
+            k_DLC,
+            k_chilliSource
         };
     }
 }

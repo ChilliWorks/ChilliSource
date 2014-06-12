@@ -125,118 +125,118 @@ namespace ChilliSource
             {
                 if(in_materialType == "Sprite")
                 {
-                    out_shaders.push_back({"Shaders/Core/Sprite.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/Sprite.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
                     return;
                 }
                 if(in_materialType == "Static")
                 {
-                    out_shaders.push_back({"Shaders/Core/Static.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/Static.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
                     return;
                 }
                 if(in_materialType == "StaticAmbient")
                 {
-                    out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/StaticAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
                     return;
                 }
                 if(in_materialType == "StaticBlinn")
                 {
-                    out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Shaders/Core/StaticBlinnDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                    out_shaders.push_back({"Shaders/Core/StaticBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                    out_shaders.push_back({"Shaders/StaticAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/StaticBlinnDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
+                    out_shaders.push_back({"Shaders/StaticBlinnPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     return;
                 }
                 if(in_materialType == "StaticBlinnShadowed")
                 {
                     if (in_renderCapabilities->IsShadowMappingSupported() == true)
                     {
-                        out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Shaders/Core/StaticBlinnShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Shaders/Core/StaticBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/StaticAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/StaticBlinnShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/StaticBlinnPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     }
                     else
                     {
-                        out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Shaders/Core/StaticBlinnDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Shaders/Core/StaticBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/StaticAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/StaticBlinnDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/StaticBlinnPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     }
                     return;
                 }
                 if(in_materialType == "StaticBlinnPerVertex")
                 {
-                    out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Shaders/Core/StaticBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                    out_shaders.push_back({"Shaders/Core/StaticBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                    out_shaders.push_back({"Shaders/StaticAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/StaticBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
+                    out_shaders.push_back({"Shaders/StaticBlinnPerVertexPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     return;
                 }
                 if(in_materialType == "StaticBlinnPerVertexShadowed")
                 {
                     if (in_renderCapabilities->IsShadowMappingSupported() == true)
                     {
-                        out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Shaders/Core/StaticBlinnPerVertexShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Shaders/Core/StaticBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/StaticAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/StaticBlinnPerVertexShadowedDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/StaticBlinnPerVertexPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     }
                     else
                     {
-                        out_shaders.push_back({"Shaders/Core/StaticAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Shaders/Core/StaticBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Shaders/Core/StaticBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/StaticAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/StaticBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/StaticBlinnPerVertexPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     }
                     return;
                 }
                 if(in_materialType == "Animated")
                 {
-                    out_shaders.push_back({"Shaders/Core/Animated.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/Animated.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
                     return;
                 }
                 if(in_materialType == "AnimatedAmbient")
                 {
-                    out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
                     return;
                 }
                 if(in_materialType == "AnimatedBlinn")
                 {
-                    out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Shaders/Core/AnimatedBlinnDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                    out_shaders.push_back({"Shaders/Core/AnimatedBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                    out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/AnimatedBlinnDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
+                    out_shaders.push_back({"Shaders/AnimatedBlinnPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     return;
                 }
                 if(in_materialType == "AnimatedBlinnShadowed")
                 {
                     if (in_renderCapabilities->IsShadowMappingSupported() == true)
                     {
-                        out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/AnimatedBlinnShadowedDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/AnimatedBlinnPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     }
                     else
                     {
-                        out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/AnimatedBlinnDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/AnimatedBlinnPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     }
                     return;
                 }
                 if(in_materialType == "AnimatedBlinnPerVertex")
                 {
-                    out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Shaders/Core/AnimatedBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                    out_shaders.push_back({"Shaders/Core/AnimatedBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                    out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
+                    out_shaders.push_back({"Shaders/AnimatedBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
+                    out_shaders.push_back({"Shaders/AnimatedBlinnPerVertexPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     return;
                 }
                 if(in_materialType == "AnimatedBlinnPerVertexShadowed")
                 {
                     if (in_renderCapabilities->IsShadowMappingSupported() == true)
                     {
-                        out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnPerVertexShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/AnimatedBlinnPerVertexShadowedDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/AnimatedBlinnPerVertexPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     }
                     else
                     {
-                        out_shaders.push_back({"Shaders/Core/AnimatedAmbient.csshader", Core::StorageLocation::k_package, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
-                        out_shaders.push_back({"Shaders/Core/AnimatedBlinnPerVertexPoint.csshader", Core::StorageLocation::k_package, ShaderPass::k_point});
+                        out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
+                        out_shaders.push_back({"Shaders/AnimatedBlinnPerVertexDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/AnimatedBlinnPerVertexPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     }
                     return;
                 }
