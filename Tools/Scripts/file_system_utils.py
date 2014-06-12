@@ -76,7 +76,7 @@ def overwrite_directory(src_path, dst_path):
 #----------------------------------------        
 def copy_directory(src_path, dst_path):
     if os.path.exists(dst_path) == False:
-        os.mkdirs(dst_path)
+        os.makedirs(dst_path)
 
     for item in os.listdir(src_path):
         src = os.path.join(src_path, item)
