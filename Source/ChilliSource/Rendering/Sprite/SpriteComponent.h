@@ -36,7 +36,7 @@ namespace ChilliSource
 		/// A sprite component. This defines a 2D object that can
 		/// be manipulated, textured and animated.
 		//===============================================================
-		class SpriteComponent : public RenderComponent
+		class SpriteComponent final : public RenderComponent
 		{
 		public: 
 			
@@ -314,7 +314,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			void OnRemovedFromScene() override;
             
-		protected:	
+		private:
             //------------------------------------------------------------
             /// On Transform Changed
             ///
@@ -329,33 +329,7 @@ namespace ChilliSource
             /// the corner positions from the new world transform
             //-----------------------------------------------------------
 			void CalculateCornerPositions();
-			//-----------------------------------------------------------
-			/// Set Colour With Opacity
-			///
-			/// Set the RGBA colour of the sprite
-            /// taking the parent entity's opacity into consideration
-			///
-			/// @param Colour containing RGBA
-			//-----------------------------------------------------------
-			void SetColourWithOpacity(const Core::Colour &inCol);
-			//-----------------------------------------------------------
-			/// Set Colour With Opacity
-			///
-			/// Set the RGBA colour of the sprite
-            /// taking the parent entity's opacity into consideration
-			///
-			/// @param Red
-			/// @param Green
-			/// @param Blue
-			/// @param Alpha
-			//-----------------------------------------------------------
-			void SetColourWithOpacity(const f32 infR, const f32 infG, const f32 infB, const f32 infA);
-			//-----------------------------------------------------------
-			/// Get Colour With Opacity
-			///
-			/// @return Sprite colour
-			//-----------------------------------------------------------
-			const Core::Colour& GetColourWithOpacity() const;
+
 		private:
             
             Core::EventConnectionUPtr m_transformChangedConnection;
@@ -372,11 +346,8 @@ namespace ChilliSource
 			Core::Rectangle mTransformedUVs;
             
             Core::Colour mColour;
-            
-            Core::Colour mColourWithOpacity;
-            Core::ByteColour mByteColourWithOpacity;
 			
-            AlignmentAnchor     meAlignment;
+            AlignmentAnchor meAlignment;
             
 			bool mbFlippedHorizontal;
 			bool mbFlippedVertical;

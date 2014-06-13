@@ -30,10 +30,7 @@ namespace ChilliSource
 		SpriteComponent::SpriteComponent() : mUVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), mbFlippedVertical(false), mbFlippedHorizontal(false), 
         mbCornerPosCacheValid(false), meAlignment(AlignmentAnchor::k_middleCentre), mbUVCacheValid(false), mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
 		{
-            mByteColourWithOpacity.r = 255;
-            mByteColourWithOpacity.g = 255;
-            mByteColourWithOpacity.b = 255;
-            mByteColourWithOpacity.a = 255;
+
 		}
 		//----------------------------------------------------------
 		/// Is A
@@ -179,7 +176,6 @@ namespace ChilliSource
 		void SpriteComponent::SetColour(const Core::Colour &inCol)
 		{
 			mColour = inCol;
-            SetColourWithOpacity(mColour);
 		}
 		//-----------------------------------------------------------
 		/// Set Colour
@@ -187,7 +183,6 @@ namespace ChilliSource
 		void SpriteComponent::SetColour(const f32 infR, const f32 infG, const f32 infB, const f32 infA)
 		{
 			mColour = Core::Colour(infR, infG, infB, infA);
-            SetColourWithOpacity(mColour);
 		}
 		//-----------------------------------------------------------
 		/// Get Colour
@@ -299,10 +294,12 @@ namespace ChilliSource
             //Update our vertex colours
             mSpriteData.pMaterial = mpMaterial;
             
-            mSpriteData.sVerts[(u32)Verts::k_topLeft].Col = mByteColourWithOpacity;
-            mSpriteData.sVerts[(u32)Verts::k_bottomLeft].Col = mByteColourWithOpacity;
-            mSpriteData.sVerts[(u32)Verts::k_topRight].Col = mByteColourWithOpacity;
-            mSpriteData.sVerts[(u32)Verts::k_bottomRight].Col = mByteColourWithOpacity;
+            Core::ByteColour byteCol = Core::ColourUtils::ColourToByteColour(mColour);
+            
+            mSpriteData.sVerts[(u32)Verts::k_topLeft].Col = byteCol;
+            mSpriteData.sVerts[(u32)Verts::k_bottomLeft].Col = byteCol;
+            mSpriteData.sVerts[(u32)Verts::k_topRight].Col = byteCol;
+            mSpriteData.sVerts[(u32)Verts::k_bottomRight].Col = byteCol;
             
             //Update our texture co-ordinates
             if(!mbUVCacheValid)
@@ -439,39 +436,6 @@ namespace ChilliSource
 			mavVertexPos[(u32)Verts::k_bottomRight] = vTemp * mmatTransformCache;
             
 			mbCornerPosCacheValid = true;
-            
-            Core::Colour pCurrentColour = GetColour();
-            
-            f32 fOpacity = GetEntity()->GetTransform().GetWorldOpacity();
-            
-            SetColourWithOpacity(Core::Colour(pCurrentColour.r * fOpacity,
-                                               pCurrentColour.g * fOpacity,
-                                               pCurrentColour.b * fOpacity,
-                                               pCurrentColour.a * fOpacity));
-            
 		}
-        //-----------------------------------------------------------
-        /// Set Colour With Opacity
-        //-----------------------------------------------------------
-        void SpriteComponent::SetColourWithOpacity(const Core::Colour &inCol)
-        {
-            mColourWithOpacity = inCol;
-            mByteColourWithOpacity = Core::ColourUtils::ColourToByteColour(mColourWithOpacity);
-        }
-        //-----------------------------------------------------------
-        /// Set Colour With Opacity
-        //-----------------------------------------------------------
-        void SpriteComponent::SetColourWithOpacity(const f32 infR, const f32 infG, const f32 infB, const f32 infA)
-        {
-			mColourWithOpacity = Core::Colour(infR, infG, infB, infA);
-            mByteColourWithOpacity = Core::ColourUtils::ColourToByteColour(mColourWithOpacity);
-        }
-        //-----------------------------------------------------------
-        /// Get Colour With Opacity
-        //-----------------------------------------------------------
-        const Core::Colour& SpriteComponent::GetColourWithOpacity() const
-        {
-            return mColourWithOpacity;
-        }
 	}
 }

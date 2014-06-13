@@ -250,41 +250,6 @@ namespace ChilliSource
 			/// @return The relative scale of object
 			//----------------------------------------------------------------
 			const Vector3& GetWorldScale() const;
-            
-            
-            //----------------------------------------------------------------
-			/// Fade By
-			///
-			/// Change of the opacity of the object
-			///
-			/// @param inFade The amount to fade by
-			//----------------------------------------------------------------
-            void FadeBy(f32 inFade);
-			//----------------------------------------------------------------
-			/// Scale To
-			///
-			/// Fade uniformly to the given amount
-			///
-			/// @param Fade factor
-			//----------------------------------------------------------------
-			void FadeTo(f32 inFade);
-
-			//----------------------------------------------------------------
-			/// Get the opacity
-			///
-			/// @return The opacity of object
-			//----------------------------------------------------------------
-			const f32 GetLocalOpacity() const;
-            
-            //----------------------------------------------------------------
-			/// Get World opacity
-			///
-			/// @return The relative opacity of object
-			//----------------------------------------------------------------
-			const f32 GetWorldOpacity() const;
-            
-            
-            
             //----------------------------------------------------------------
 			/// Get Local Transform
 			///
@@ -402,8 +367,6 @@ namespace ChilliSource
             Vector3 mvPosition;
 			Vector3 mvScale;
 			Quaternion mqOrientation;
-            
-            f32 mfOpacity;
             
             mutable Vector3 mvWorldPosition;
 			mutable Vector3 mvWorldScale;

@@ -39,7 +39,7 @@ namespace ChilliSource
         ///
         /// Default
 		//----------------------------------------------------------------
-        Transform::Transform() : mbIsTransformCacheValid(false), mbIsParentTransformCacheValid(false), mvScale(1,1,1), mpParentTransform(nullptr), mfOpacity(1.0f)
+        Transform::Transform() : mbIsTransformCacheValid(false), mbIsParentTransformCacheValid(false), mvScale(1,1,1), mpParentTransform(nullptr)
         {
         
         }
@@ -418,63 +418,6 @@ namespace ChilliSource
 			
 			OnTransformChanged();
 		}
-        
-        //----------------------------------------------------------------
-        /// Fade By
-        ///
-        /// Change of the opacity of the object
-        ///
-        /// @param inFade The amount to fade by
-        //----------------------------------------------------------------
-        void Transform::FadeBy(f32 inFade)
-        {
-            mfOpacity -= inFade;
-            mfOpacity = std::min(std::max(mfOpacity, 0.0f), 1.0f);
-            
-            OnTransformChanged();
-
-        }
-        //----------------------------------------------------------------
-        /// Scale To
-        ///
-        /// Fade uniformly to the given amount
-        ///
-        /// @param Fade factor
-        //----------------------------------------------------------------
-        void Transform::FadeTo(f32 inFade)
-        {
-            if(mfOpacity == inFade)
-                return;
-            
-            mfOpacity = inFade;
-            mfOpacity = std::min(std::max(mfOpacity, 0.0f), 1.0f);
-            
-            OnTransformChanged();
-        }
-        
-        //----------------------------------------------------------------
-        /// Get the opacity
-        ///
-        /// @return The opacity of object
-        //----------------------------------------------------------------
-        const f32 Transform::GetLocalOpacity() const
-        {
-            return mfOpacity;
-        }
-        
-        //----------------------------------------------------------------
-        /// Get World opacity
-        ///
-        /// @return The relative opacity of object
-        //----------------------------------------------------------------
-        const f32 Transform::GetWorldOpacity() const
-        {
-            f32 fParentOpacity = 1.0f;
-            if(mpParentTransform)
-                fParentOpacity = mpParentTransform->GetWorldOpacity();
-            return mfOpacity*fParentOpacity;
-        }
-        
         //----------------------------------------------------------------
         /// Get Local Transform
         ///
@@ -692,7 +635,6 @@ namespace ChilliSource
             mvScale = Vector3::k_one;
             mqWorldOrientation = Quaternion::k_identity;
             mpParentTransform = nullptr;
-            mfOpacity = 1.0f;
             mChildTransforms.clear();
             mTransformChangedEvent.CloseAllConnections();
         }
