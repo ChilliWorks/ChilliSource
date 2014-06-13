@@ -97,6 +97,7 @@ namespace ChilliSource
         Vector2 ParseVector2(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
+            CS_ASSERT((udwSize == 2), "Invalid number of elements for Vector2.");
             
 			if (udwSize != 2)
 			{
@@ -114,6 +115,7 @@ namespace ChilliSource
         Vector3 ParseVector3(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
+            CS_ASSERT((udwSize == 3), "Invalid number of elements for Vector3.");
             
 			if (udwSize != 3)
 			{
@@ -131,7 +133,8 @@ namespace ChilliSource
         Vector4 ParseVector4(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
-			
+            CS_ASSERT((udwSize == 4), "Invalid number of elements for Vector4.");
+            
 			if (udwSize != 4)
 			{
 				return Vector4::k_zero;
@@ -145,9 +148,33 @@ namespace ChilliSource
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
+        Matrix3 ParseMatrix3(const std::string& in_string)
+        {
+            u32 udwSize = EnumerateItems(in_string);
+            CS_ASSERT((udwSize == 9), "Invalid number of elements for Matrix3.");
+            
+			if (udwSize != 9)
+			{
+				return Matrix3::k_identity;
+			}
+			else
+			{
+                Matrix3 matRet;
+                
+				CS_SSCANF(in_string.c_str(), "%f %f %f %f %f %f %f %f %f",
+                          &matRet.m[0], &matRet.m[1], &matRet.m[2],
+                          &matRet.m[3], &matRet.m[4], &matRet.m[5],
+                          &matRet.m[6], &matRet.m[7], &matRet.m[8]);
+                
+                return matRet;
+			}
+        }
+        //------------------------------------------------------------
+        //------------------------------------------------------------
         Matrix4 ParseMatrix4(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
+            CS_ASSERT((udwSize == 16), "Invalid number of elements for Matrix4.");
             
 			if (udwSize != 16)
 			{
@@ -172,6 +199,7 @@ namespace ChilliSource
         Quaternion ParseQuaternion(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
+            CS_ASSERT((udwSize == 4), "Invalid number of elements for Quaternion.");
             
 			if (udwSize != 4)
 			{
@@ -189,6 +217,7 @@ namespace ChilliSource
         Colour ParseColour(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
+            CS_ASSERT((udwSize == 3 || udwSize == 4), "Invalid number of elements for Colour.");
             
 			Colour cRet(Colour::k_black);
             
@@ -234,6 +263,7 @@ namespace ChilliSource
                 return StorageLocation::k_chilliSource;
             }
 			
+            CS_ASSERT(false, "Invalid storage location.");
 			CS_LOG_ERROR("String Parser: Invalid storage location.");
 			return StorageLocation::k_package;
         }
@@ -261,6 +291,7 @@ namespace ChilliSource
                 return Rendering::SurfaceFormat::k_rgb888_depth32;
             }
             
+            CS_ASSERT(false, "Invalid surface format.");
             CS_LOG_ERROR("String Parser: Invalid surface format.");
             return Rendering::SurfaceFormat::k_rgb565_depth24;
         }

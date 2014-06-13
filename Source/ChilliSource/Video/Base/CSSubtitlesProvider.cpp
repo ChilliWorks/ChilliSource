@@ -11,12 +11,13 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileStream.h>
-#include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
+
+#include <json/json.h>
 
 namespace ChilliSource
 {

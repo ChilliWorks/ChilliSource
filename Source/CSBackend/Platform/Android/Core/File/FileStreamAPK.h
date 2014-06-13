@@ -13,7 +13,8 @@
 #define _MOFLO_PLATFORM_ANDROID_FILEIO_FILE_STREAM_ANDROID_APK_
 
 #include <ChilliSource/Core/File/FileStream.h>
-#include <ChilliSource/Core/Minizip/unzip.h>
+
+#include <minizip/unzip.h>
 
 #include <fstream>
 #include <ios>

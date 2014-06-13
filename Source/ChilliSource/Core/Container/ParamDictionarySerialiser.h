@@ -30,9 +30,7 @@
 #define _CHILLISOURCE_CORE_CONTAINER_PARAMDICTIONARYSERIALISER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/XML/rapidxml_forward.h>
-
-class TiXmlElement;
+#include <ChilliSource/Core/XML/XMLUtils.h>
 
 namespace ChilliSource
 {
@@ -48,52 +46,28 @@ namespace ChilliSource
         {
             //-----------------------------------------------------------------
             /// Convert the param dictionary to XML and store it in the given
-            /// Tiny XML element.
-            ///
-            /// Format: <Params><String key = "key" value = "value"/></Params>
-            ///
-            /// @author S McGaw
-            ///
-            /// @param Param dictionary to serialise
-            /// @param [Out] Tiny XML element
-            //-----------------------------------------------------------------
-			void ToXml(const ParamDictionary& in_dict, TiXmlElement* out_element);
-            //-----------------------------------------------------------------
-            /// Convert the Tiny XML to a param dictionary of key/values
-            ///
-            /// Format: <Params><String key = "key" value = "value"/></Params>
-            ///
-            /// @author S McGaw
-            ///
-            /// @param Tiny XML element
-            ///
-            /// @return Param dictionary
-            //-----------------------------------------------------------------
-			ParamDictionary FromXml(TiXmlElement* in_element);
-            //-----------------------------------------------------------------
-            /// Convert the param dictionary to XML and store it in the given
-            /// Rapid XML element.
+            /// XML element.
             ///
             /// Format: <Params><String key = "key" value = "value"/></Params>
             ///
             /// @author A Glass
             ///
             /// @param Param dictionary to serialise
-            /// @param [Out] Rapid XML element
+            /// @param [Out] XML element
             //-----------------------------------------------------------------
-            void ToXml(const ParamDictionary& in_dict, rapidxml::xml_node<char>* out_element);
+            void ToXml(const ParamDictionary& in_dict, XML::Node* out_element);
             //-----------------------------------------------------------------
-            /// Convert the Rapid XML to a param dictionary of key/values
+            /// Convert the XML to a param dictionary of key/values
             ///
             /// Format: <Params><String key = "key" value = "value"/></Params>
             ///
             /// @author A Glass
             ///
-            /// @param Rapid XML element
+            /// @param XML element
             ///
             /// @return Param dictionary
             //-----------------------------------------------------------------
-            ParamDictionary FromXml(const rapidxml::xml_node<char> * in_element);
+            ParamDictionary FromXml(const XML::Node* in_element);
             //-----------------------------------------------------------------
             /// Convert the param dictionary to a string config representation
             ///

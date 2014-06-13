@@ -11,9 +11,10 @@
 
 #include <CSBackend/Platform/Android/Core/Image/PngImage.h>
 
-#include <CSBackend/Platform/Android/Core/Image/LibPng/png.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
+
+#include <png/png.h>
 
 namespace CSBackend
 {

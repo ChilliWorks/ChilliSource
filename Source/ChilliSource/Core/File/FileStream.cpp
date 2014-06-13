@@ -6,11 +6,16 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/Cryptographic/HashMD5.h>
-#include <ChilliSource/Core/Cryptographic/SHA1.h>
 #include <ChilliSource/Core/File/FileStream.h>
 
+#include <md5/md5.h>
+#include <SHA1/SHA1.h>
+
 #include <sstream>
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#endif
 
 namespace ChilliSource
 {
@@ -31,7 +36,7 @@ namespace ChilliSource
             const u32 kudwChunkSize = 256;
             s8 byData[kudwChunkSize];
             
-            HashMD5::MD5 Hash;
+            MD5 Hash;
             s32 dwSize = kudwChunkSize;
             
             while(dwSize != 0)
@@ -48,7 +53,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Get SHA1 Checksum
         //--------------------------------------------------------------
-        std::string FileStream::GetSHA1Checksum(SHA1::ReportType ineReportType)
+        std::string FileStream::GetSHA1Checksum(CSHA1::REPORT_TYPE ineReportType)
         {
             s32 dwCurrentPos = TellG();
             SeekG(0);
@@ -56,7 +61,7 @@ namespace ChilliSource
             const u32 kudwChunkSize = 256;
             s8 byData[kudwChunkSize];
             
-            SHA1 Hash;
+            CSHA1 Hash;
             Hash.Reset();
             s32 dwSize = kudwChunkSize;
             
@@ -69,7 +74,20 @@ namespace ChilliSource
             SeekG(dwCurrentPos);
             
             Hash.Final();
-            return Hash.GetHash(ineReportType);
+            
+            const u32 kudwMaxSHA1Length = 80;
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
+            TCHAR cHash[kudwMaxSHA1Length];
+            memset(cHash, 0, kudwMaxSHA1Length);
+            Hash.ReportHash(cHash, ineReportType);
+            return CSBackend::Windows::WindowsStringUtils::UTF16ToUTF8(std::wstring(cHash));
+#else
+			char cHash[kudwMaxSHA1Length];
+			memset(cHash, 0, kudwMaxSHA1Length);
+			Hash.ReportHash(cHash, ineReportType);
+			return std::string(cHash);
+#endif
         }
         //--------------------------------------------------------------------------------------------------
 		/// Open

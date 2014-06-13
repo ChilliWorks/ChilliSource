@@ -208,9 +208,9 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param TiXmlDocument
+            /// @return The xml document.
             //-----------------------------------------------------------
-            void LoadLocalManifest(TiXmlDocument* in_currentManifest);
+            Core::XMLUPtr LoadLocalManifest();
             //-----------------------------------------------------------
             /// The manifest file has downloaded we can now compare
             /// and contrast to check for outdated files
@@ -249,7 +249,7 @@ namespace ChilliSource
             ///
             /// @param Package element
             //-----------------------------------------------------------
-            void AddToDownloadListIfNotInBundle(TiXmlElement* in_packageEl);
+            void AddToDownloadListIfNotInBundle(Core::XML::Node* in_packageEl);
             //-----------------------------------------------------------
             /// Save the zip file to documents directory
             ///
@@ -317,7 +317,7 @@ namespace ChilliSource
 			u32	m_runningToDownloadTotal;
 			u32 m_runningDownloadedTotal;
             
-            TiXmlDocument* m_serverManifest;
+            Core::XMLUPtr m_serverManifest;
             
             IContentDownloader* m_contentDownloader;
             

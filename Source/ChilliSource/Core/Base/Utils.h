@@ -31,7 +31,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/File/FileStream.h>
-#include <ChilliSource/Core/JSON/forwards.h>
+
+#include <json/forwards.h>
 
 #include <algorithm>
 #include <vector>
@@ -188,6 +189,15 @@ namespace ChilliSource
             }
             
             Vector2 ScaleMaintainingAspectRatio(const Vector2& invCurrentSize, const Vector2& invTargetSize, bool inbFitInside = false);
+            
+            //------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A single hexidecimal value to convert
+            ///
+            /// @return Base ten representation of hex value or -1
+            //------------------------------------------------------
+            u8 HexToDec(const u8* in_hex);
 		};
 	}
 }

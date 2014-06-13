@@ -196,6 +196,30 @@ namespace ChilliSource
             /// @param [Out] CSV string
             //----------------------------------------------------
             void ToCSV(const std::vector<std::string>& in_values, std::string& out_csv);
+            //-------------------------------------------------------
+            /// Encodes a URL to use correct escape values
+            ///
+            /// @param String to URL encode
+            ///
+            /// @return URL encoded string
+            //------------------------------------------------------
+            std::string URLEncode(const std::string& in_url);
+            //------------------------------------------------------
+            /// @param String to URL decode
+            ///
+            /// @return decoded string
+            //------------------------------------------------------
+            std::string URLDecode(const std::string& in_src);
+            //-------------------------------------------------------
+            /// Converts a value in the range [0,255] to hex value
+            ///
+            /// @author S Downie
+            ///
+            /// @param Integer value in range [0,255]
+            ///
+            /// @return String hex representation of integer
+            //-------------------------------------------------------
+            std::string CharToHex(u8 in_dec);
 		};
 	}
 }

@@ -12,7 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/XML/rapidxml_forward.h>
+#include <ChilliSource/Core/XML/XMLUtils.h>
 
 #include <functional>
 
@@ -97,7 +97,7 @@ namespace ChilliSource
             /// @param View XML element
             /// @return Created view
             //--------------------------------------------------------
-            static GUIViewUPtr CreateView(rapidxml::xml_node<char> * ipViewElement);
+            static GUIViewUPtr CreateView(Core::XML::Node* ipViewElement);
             
         private:
             

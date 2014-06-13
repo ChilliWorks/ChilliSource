@@ -258,34 +258,35 @@ namespace ChilliSource
             /// @param Root element
             /// @param [Out] Material to populate
             //----------------------------------------------------------------------------
-            void ParseRenderStates(TiXmlElement* in_rootElement, Material* out_material)
+            void ParseRenderStates(Core::XML::Node* in_rootElement, Material* out_material)
             {
-                TiXmlElement* renderStatesEl = Core::XMLUtils::FirstChildElementWithName(in_rootElement, "RenderStates");
+                
+                Core::XML::Node* renderStatesEl = Core::XMLUtils::GetFirstChildElement(in_rootElement, "RenderStates");
                 if(renderStatesEl)
                 {
                     //---Depth Writing
-                    TiXmlElement* depthWriteStateEl = Core::XMLUtils::FirstChildElementWithName(renderStatesEl, "DepthWrite");
+                    Core::XML::Node* depthWriteStateEl =  Core::XMLUtils::GetFirstChildElement(renderStatesEl, "DepthWrite");
                     if(depthWriteStateEl)
                     {
-                        out_material->SetDepthWriteEnabled(Core::XMLUtils::GetAttributeValueOrDefault<bool>(depthWriteStateEl, "enabled", true));
+                        out_material->SetDepthWriteEnabled(Core::XMLUtils::GetAttributeValue(depthWriteStateEl, "enabled", true));
                     }
                     //---Depth Testing
-                    TiXmlElement* depthTestStateEl = Core::XMLUtils::FirstChildElementWithName(renderStatesEl, "DepthTest");
+                    Core::XML::Node* depthTestStateEl = Core::XMLUtils::GetFirstChildElement(renderStatesEl, "DepthTest");
                     if(depthTestStateEl)
                     {
-                        out_material->SetDepthTestEnabled(Core::XMLUtils::GetAttributeValueOrDefault<bool>(depthTestStateEl, "enabled", true));
+                        out_material->SetDepthTestEnabled(Core::XMLUtils::GetAttributeValue<bool>(depthTestStateEl, "enabled", true));
                     }
                     //---Transparency
-                    TiXmlElement* transparentStateEl = Core::XMLUtils::FirstChildElementWithName(renderStatesEl, "Transparency");
+                    Core::XML::Node* transparentStateEl = Core::XMLUtils::GetFirstChildElement(renderStatesEl, "Transparency");
                     if(transparentStateEl)
                     {
-                        out_material->SetTransparencyEnabled(Core::XMLUtils::GetAttributeValueOrDefault<bool>(transparentStateEl, "enabled", false));
+                        out_material->SetTransparencyEnabled(Core::XMLUtils::GetAttributeValue<bool>(transparentStateEl, "enabled", false));
                     }
                     //---Culling
-                    TiXmlElement* cullingStateEl = Core::XMLUtils::FirstChildElementWithName(renderStatesEl, "Culling");
+                    Core::XML::Node* cullingStateEl = Core::XMLUtils::GetFirstChildElement(renderStatesEl, "Culling");
                     if(cullingStateEl)
                     {
-                        out_material->SetFaceCullingEnabled(Core::XMLUtils::GetAttributeValueOrDefault<bool>(cullingStateEl, "enabled", true));
+                        out_material->SetFaceCullingEnabled(Core::XMLUtils::GetAttributeValue<bool>(cullingStateEl, "enabled", true));
                     }
                 }
             }
@@ -297,15 +298,15 @@ namespace ChilliSource
             /// @param Root element
             /// @param [Out] Material to populate
             //----------------------------------------------------------------------------
-            void ParseAlphaBlendFunction(TiXmlElement* in_rootElement, Material* out_material)
+            void ParseAlphaBlendFunction(Core::XML::Node* in_rootElement, Material* out_material)
             {
-                TiXmlElement* blendFuncEl = Core::XMLUtils::FirstChildElementWithName(in_rootElement, "BlendFunc");
+                Core::XML::Node* blendFuncEl = Core::XMLUtils::GetFirstChildElement(in_rootElement, "BlendFunc");
                 if(blendFuncEl)
                 {
-                    const std::string srcFuncString = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(blendFuncEl, "src", "One");
+                    const std::string srcFuncString = Core::XMLUtils::GetAttributeValue<std::string>(blendFuncEl, "src", "One");
                     BlendMode srcFunc = ConvertStringToBlendMode(srcFuncString);
                     
-                    const std::string dstFuncString = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(blendFuncEl, "dst", "One");
+                    const std::string dstFuncString = Core::XMLUtils::GetAttributeValue<std::string>(blendFuncEl, "dst", "One");
                     BlendMode dstFunc = ConvertStringToBlendMode(dstFuncString);
                     
                     out_material->SetBlendModes(srcFunc, dstFunc);
@@ -319,12 +320,12 @@ namespace ChilliSource
             /// @param Root element
             /// @param [Out] Material to populate
             //----------------------------------------------------------------------------
-            void ParseCullFunction(TiXmlElement* in_rootElement, Material* out_material)
+            void ParseCullFunction(Core::XML::Node* in_rootElement, Material* out_material)
             {
-                TiXmlElement* cullFaceEl = Core::XMLUtils::FirstChildElementWithName(in_rootElement, "Culling");
+                Core::XML::Node* cullFaceEl = Core::XMLUtils::GetFirstChildElement(in_rootElement, "Culling");
                 if(cullFaceEl)
                 {
-                    const std::string& cullFaceString = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(cullFaceEl, "face", "Front");
+                    const std::string& cullFaceString = Core::XMLUtils::GetAttributeValue<std::string>(cullFaceEl, "face", "Front");
                     CullFace cullFace = ConvertStringToCullFace(cullFaceString);
                     out_material->SetCullFace(cullFace);
                 }
@@ -338,42 +339,42 @@ namespace ChilliSource
             /// @param Root element
             /// @param [Out] Material to populate
             //----------------------------------------------------------------------------
-            void ParseSurface(TiXmlElement* in_rootElement, Material* out_material)
+            void ParseSurface(Core::XML::Node* in_rootElement, Material* out_material)
             {
-                TiXmlElement* lightingEl = Core::XMLUtils::FirstChildElementWithName(in_rootElement, "Lighting");
+                Core::XML::Node* lightingEl = Core::XMLUtils::GetFirstChildElement(in_rootElement, "Lighting");
                 if(lightingEl)
                 {
                     //---Emissive
-                    TiXmlElement* emissiveEl = Core::XMLUtils::FirstChildElementWithName(lightingEl, "Emissive");
+                    Core::XML::Node* emissiveEl = Core::XMLUtils::GetFirstChildElement(lightingEl, "Emissive");
                     if(emissiveEl)
                     {
-                        out_material->SetEmissive(Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(emissiveEl, "value", Core::Colour::k_white));
+                        out_material->SetEmissive(Core::XMLUtils::GetAttributeValue<Core::Colour>(emissiveEl, "value", Core::Colour::k_white));
                     }
                     //---Ambient Lighting
-                    TiXmlElement* ambientEl = Core::XMLUtils::FirstChildElementWithName(lightingEl, "Ambient");
+                    Core::XML::Node* ambientEl = Core::XMLUtils::GetFirstChildElement(lightingEl, "Ambient");
                     if(ambientEl)
                     {
-                        out_material->SetAmbient(Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(ambientEl, "value", Core::Colour::k_white));
+                        out_material->SetAmbient(Core::XMLUtils::GetAttributeValue<Core::Colour>(ambientEl, "value", Core::Colour::k_white));
                     }
                     //---Diffuse Lighting
-                    TiXmlElement* diffuseEl = Core::XMLUtils::FirstChildElementWithName(lightingEl, "Diffuse");
+                    Core::XML::Node* diffuseEl = Core::XMLUtils::GetFirstChildElement(lightingEl, "Diffuse");
                     if(diffuseEl)
                     {
-                        out_material->SetDiffuse(Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(diffuseEl, "value", Core::Colour::k_white));
+                        out_material->SetDiffuse(Core::XMLUtils::GetAttributeValue<Core::Colour>(diffuseEl, "value", Core::Colour::k_white));
                     }
                     //---Specular Lighting
                     Core::Colour specular(1.0f, 1.0f, 1.0f, 0.0f);
-                    TiXmlElement* specularEl = Core::XMLUtils::FirstChildElementWithName(lightingEl, "Specular");
+                    Core::XML::Node* specularEl = Core::XMLUtils::GetFirstChildElement(lightingEl, "Specular");
                     if(specularEl)
                     {
-                        specular = Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(specularEl, "value", Core::Colour::k_white);
+                        specular = Core::XMLUtils::GetAttributeValue<Core::Colour>(specularEl, "value", Core::Colour::k_white);
                     }
                     
                     //---Intensity
-                    TiXmlElement* shininessEl = Core::XMLUtils::FirstChildElementWithName(lightingEl, "Shininess");
+                    Core::XML::Node* shininessEl = Core::XMLUtils::GetFirstChildElement(lightingEl, "Shininess");
                     if(shininessEl)
                     {
-                        specular.a = Core::XMLUtils::GetAttributeValueOrDefault<f32>(shininessEl, "value", 0.0f);
+                        specular.a = Core::XMLUtils::GetAttributeValue<f32>(shininessEl, "value", 0.0f);
                     }
                     
                     out_material->SetSpecular(specular);
@@ -388,7 +389,7 @@ namespace ChilliSource
             /// @param [Out] Shader files to populate
             /// @param [Out] Material to populate
             //----------------------------------------------------------------------------
-            void ParseShaders(TiXmlElement* in_rootElement, std::vector<MaterialProvider::ShaderDesc>& out_shaderFiles, Material* out_material)
+            void ParseShaders(Core::XML::Node* in_rootElement, std::vector<MaterialProvider::ShaderDesc>& out_shaderFiles, Material* out_material)
             {
                 const u32 numShaderNodes = 3;
                 const std::pair<std::string, ShaderPass> shaderNodes[numShaderNodes] =
@@ -398,21 +399,21 @@ namespace ChilliSource
                     std::make_pair("PointLightPass", ShaderPass::k_point)
                 };
                 
-                TiXmlElement* shadersEl = Core::XMLUtils::FirstChildElementWithName(in_rootElement, "Shaders");
+                Core::XML::Node* shadersEl = Core::XMLUtils::GetFirstChildElement(in_rootElement, "Shaders");
                 if(shadersEl)
                 {
                     for(u32 i=0; i<numShaderNodes; ++i)
                     {
                         //Overwrite any of the default files for this material type with specified custom ones
-                        TiXmlElement* shaderEl = Core::XMLUtils::FirstChildElementWithName(shadersEl, shaderNodes[i].first);
+                        Core::XML::Node* shaderEl = Core::XMLUtils::GetFirstChildElement(shadersEl, shaderNodes[i].first);
                         if(shaderEl)
                         {
                             for(u32 udwShaderFilesIndex = 0; udwShaderFilesIndex<out_shaderFiles.size(); ++udwShaderFilesIndex)
                             {
                                 if(out_shaderFiles[udwShaderFilesIndex].m_pass == shaderNodes[i].second)
                                 {
-                                    out_shaderFiles[udwShaderFilesIndex].m_location = Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(shaderEl, "location", "Package"));
-                                    out_shaderFiles[udwShaderFilesIndex].m_filePath = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(shaderEl, "file-name", "");
+                                    out_shaderFiles[udwShaderFilesIndex].m_location = Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValue<std::string>(shaderEl, "location", "Package"));
+                                    out_shaderFiles[udwShaderFilesIndex].m_filePath = Core::XMLUtils::GetAttributeValue<std::string>(shaderEl, "file-name", "");
                                     break;
                                 }
                             }
@@ -420,40 +421,40 @@ namespace ChilliSource
                     }
                     
                     //---Get the shader variables
-                    TiXmlElement* shaderVarEl = Core::XMLUtils::FirstChildElementWithName(shadersEl, "Var");
+                    Core::XML::Node* shaderVarEl = Core::XMLUtils::GetFirstChildElement(shadersEl, "Var");
                     while(shaderVarEl)
                     {
                         //Get the variable type
-                        std::string strType = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(shaderVarEl, "type", "");
+                        std::string strType = Core::XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "type", "");
                         //Get the variable name
-                        std::string strName = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(shaderVarEl, "name", "");
+                        std::string strName = Core::XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "name", "");
                         //Add the variable to the material
                         if(strType == "Float")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<f32>(shaderVarEl, "value", 0.0f));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValue<f32>(shaderVarEl, "value", 0.0f));
                         }
                         else if(strType == "Vec2")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector2>(shaderVarEl, "value", Core::Vector2::k_zero));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValue<Core::Vector2>(shaderVarEl, "value", Core::Vector2::k_zero));
                         }
                         else if(strType == "Vec3")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector3>(shaderVarEl, "value", Core::Vector3::k_zero));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValue<Core::Vector3>(shaderVarEl, "value", Core::Vector3::k_zero));
                         }
                         else if(strType == "Vec4")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector4>(shaderVarEl, "value", Core::Vector4::k_zero));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValue<Core::Vector4>(shaderVarEl, "value", Core::Vector4::k_zero));
                         }
                         else if(strType == "Colour")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(shaderVarEl, "value", Core::Colour::k_white));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValue<Core::Colour>(shaderVarEl, "value", Core::Colour::k_white));
                         }
                         else if(strType == "Matrix")
                         {
-                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Matrix4>(shaderVarEl, "value", Core::Matrix4::k_identity));
+                            out_material->SetShaderVar(strName, Core::XMLUtils::GetAttributeValue<Core::Matrix4>(shaderVarEl, "value", Core::Matrix4::k_identity));
                         }
                         //Move on to the next variable
-                        shaderVarEl =  Core::XMLUtils::NextSiblingElementWithName(shaderVarEl);
+                        shaderVarEl =  Core::XMLUtils::GetNextSiblingElement(shaderVarEl, "Var");
                     }
                 }
             }
@@ -465,22 +466,22 @@ namespace ChilliSource
             /// @param Root element
             /// @param [Out] Texture files to populate
             //----------------------------------------------------------------------------
-            void ParseTextures(TiXmlElement* in_rootElement, std::vector<MaterialProvider::TextureDesc>& out_textureFiles)
+            void ParseTextures(Core::XML::Node* in_rootElement, std::vector<MaterialProvider::TextureDesc>& out_textureFiles)
             {
-                TiXmlElement* texturesEl = Core::XMLUtils::FirstChildElementWithName(in_rootElement, "Textures");
+                Core::XML::Node* texturesEl = Core::XMLUtils::GetFirstChildElement(in_rootElement, "Textures");
                 if(texturesEl)
                 {
                     //---Texture
-                    TiXmlElement* textureEl = Core::XMLUtils::FirstChildElementWithName(texturesEl, "Texture");
+                    Core::XML::Node* textureEl = Core::XMLUtils::GetFirstChildElement(texturesEl, "Texture");
                     while(textureEl)
                     {
                         MaterialProvider::TextureDesc desc;
-                        desc.m_location = Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(textureEl, "location", "Package"));
-                        desc.m_filePath = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(textureEl, "image-name", "");
-                        desc.m_shouldMipMap = Core::XMLUtils::GetAttributeValueOrDefault<bool>(textureEl, "mipmapped", false);
+                        desc.m_location = Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValue<std::string>(textureEl, "location", "Package"));
+                        desc.m_filePath = Core::XMLUtils::GetAttributeValue<std::string>(textureEl, "image-name", "");
+                        desc.m_shouldMipMap = Core::XMLUtils::GetAttributeValue<bool>(textureEl, "mipmapped", false);
                         out_textureFiles.push_back(desc);
                         
-                        textureEl =  Core::XMLUtils::NextSiblingElementWithName(textureEl);
+                        textureEl =  Core::XMLUtils::GetNextSiblingElement(textureEl, "Texture");
                     }
                 }
             }
@@ -492,15 +493,15 @@ namespace ChilliSource
             /// @param Root element
             /// @param [Out] Cubemap files to populate
             //----------------------------------------------------------------------------
-            void ParseCubemaps(TiXmlElement* in_rootElement, std::vector<MaterialProvider::TextureDesc>& out_cubemapFiles)
+            void ParseCubemaps(Core::XML::Node* in_rootElement, std::vector<MaterialProvider::TextureDesc>& out_cubemapFiles)
             {
-                TiXmlElement* cubemapEl = Core::XMLUtils::FirstChildElementWithName(in_rootElement, "Cubemap");
+                Core::XML::Node* cubemapEl = Core::XMLUtils::GetFirstChildElement(in_rootElement, "Cubemap");
                 if(cubemapEl)
                 {
                     MaterialProvider::TextureDesc desc;
-                    desc.m_location = Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(cubemapEl, "location", "Package"));
-                    desc.m_filePath = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(cubemapEl, "base-name", "");
-                    desc.m_shouldMipMap = Core::XMLUtils::GetAttributeValueOrDefault<bool>(cubemapEl, "mipmapped", false);
+                    desc.m_location = Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValue<std::string>(cubemapEl, "location", "Package"));
+                    desc.m_filePath = Core::XMLUtils::GetAttributeValue<std::string>(cubemapEl, "base-name", "");
+                    desc.m_shouldMipMap = Core::XMLUtils::GetAttributeValue<bool>(cubemapEl, "mipmapped", false);
                     out_cubemapFiles.push_back(desc);
                 }
             }
@@ -785,17 +786,15 @@ namespace ChilliSource
                                                     Material* out_material)
 		{
 			//Load the XML file
-			TiXmlDocument document(in_filePath);
-			document.LoadFile(in_location);
-			
-			TiXmlElement* rootElement = document.RootElement();
+            Core::XMLUPtr xml = Core::XMLUtils::ReadDocument(in_location, in_filePath);
+            Core::XML::Node* rootElement = Core::XMLUtils::GetFirstChildElement(xml->GetDocument());
             
-            if(rootElement == nullptr || rootElement->ValueStr() != "Material")
+            if(rootElement == nullptr || Core::XMLUtils::GetName(rootElement) != "Material")
             {
                 return false;
             }
 			
-            std::string materialType = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(rootElement, "type", "Static");
+            std::string materialType = Core::XMLUtils::GetAttributeValue<std::string>(rootElement, "type", "Static");
             GetShaderFilesForMaterialType(materialType, m_renderCapabilities, out_shaderFiles);
 
             ParseRenderStates(rootElement, out_material);

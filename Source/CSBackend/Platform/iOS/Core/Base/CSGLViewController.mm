@@ -36,9 +36,10 @@
 #import <ChilliSource/Core/Base/AppConfig.h>
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Base/Utils.h>
-#import <ChilliSource/Core/JSON/json.h>
 #import <ChilliSource/Core/String/StringParser.h>
 #import <ChilliSource/Rendering/Base/SurfaceFormat.h>
+
+#import <json/json.h>
 
 @implementation CSGLViewController
 
@@ -121,7 +122,7 @@
     Json::Value root;
     if(!jReader.parse(jsonString, root))
     {
-        CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormattedErrorMessages());
+        CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormatedErrorMessages());
     }
    
     return CSCore::ParseSurfaceFormat(root.get("PreferredSurfaceFormat", "rgb565_depth24").asString());

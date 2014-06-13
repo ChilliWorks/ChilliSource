@@ -11,7 +11,8 @@
 #define _MOFLO_CORE_FILEIO_FILE_STREAM_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Cryptographic/SHA1.h>
+
+#include <SHA1/SHA1.h>
 
 #include <string>
 #include <cstdio>
@@ -337,7 +338,7 @@ namespace ChilliSource
             /// @param Type of checksum to report
             /// @return SHA1 checksum
             //--------------------------------------------------------------
-            std::string GetSHA1Checksum(CSCore::SHA1::ReportType ineReportType);
+            std::string GetSHA1Checksum(CSHA1::REPORT_TYPE ineReportType);
             //--------------------------------------------------------------------------------------------------
 			/// Open
 			///

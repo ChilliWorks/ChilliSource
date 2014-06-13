@@ -18,8 +18,9 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
+
+#include <json/json.h>
 
 #include <jni.h>
 
@@ -144,7 +145,7 @@ namespace CSBackend
 				Json::Value jData;
 				CSCore::Utils::ReadJson(CSCore::StorageLocation::k_cache, k_pendingCacheFile, &jData);
 				jData[in_transactionId] = 0;
-				CSCore::Utils::StringToFile(CSCore::StorageLocation::k_cache, k_pendingCacheFile, jData.toUnformattedString());
+				CSCore::Utils::StringToFile(CSCore::StorageLocation::k_cache, k_pendingCacheFile, jData.toStyledString());
 			}
 			//---------------------------------------------------------------
 			/// Removes the given transaction ID from the "pending transaction"
@@ -161,7 +162,7 @@ namespace CSBackend
 				if(CSCore::Utils::ReadJson(CSCore::StorageLocation::k_cache, k_pendingCacheFile, &jData))
 				{
 					jData.removeMember(in_transactionId);
-					CSCore::Utils::StringToFile(CSCore::StorageLocation::k_cache, k_pendingCacheFile, jData.toUnformattedString());
+					CSCore::Utils::StringToFile(CSCore::StorageLocation::k_cache, k_pendingCacheFile, jData.toStyledString());
 				}
 			}
 		}

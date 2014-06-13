@@ -9,7 +9,9 @@
 #include <ChilliSource/Core/Cryptographic/OAuth.h>
 
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
-#include <ChilliSource/Core/Cryptographic/HMAC_SHA1.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+
+#include <SHA1/HMAC_SHA1.h>
 
 #include <algorithm>
 #include <ctime>
@@ -205,7 +207,7 @@ namespace ChilliSource
                         return "";
                     }
                     
-                    sigBase += BaseEncoding::URLEncode(in_rawUrl) + "&" + BaseEncoding::URLEncode(rawParams);
+                    sigBase += StringUtils::URLEncode(in_rawUrl) + "&" + StringUtils::URLEncode(rawParams);
                     
                     //Signing key is composed of consumer_secret&token_secret
                     std::string secretSigningKey = in_consumerSecret + "&" + in_oauthTokenSecret;
@@ -215,14 +217,14 @@ namespace ChilliSource
                     u8 digest[k_bufferSize];
                     memset(digest, 0, k_bufferSize);
                     
-                    HMAC_SHA1 objHMACSHA1;
-                    objHMACSHA1.Generate((u8*)sigBase.c_str(), sigBase.length(), (u8*)secretSigningKey.c_str(), secretSigningKey.length(), (u8*)digest);
+                    CHMAC_SHA1 objHMACSHA1;
+                    objHMACSHA1.HMAC_SHA1((u8*)sigBase.c_str(), sigBase.length(), (u8*)secretSigningKey.c_str(), secretSigningKey.length(), (u8*)digest);
                     
                     //Do a base64 encode of signature - SHA 1 digest is 160 bits
                     std::string base64String = BaseEncoding::Base64Encode((s8*)digest, 20);
                     
                     //Do an url encode
-                    return BaseEncoding::URLEncode(base64String);
+                    return StringUtils::URLEncode(base64String);
                 }
             }
             //-----------------------------------------------------------
@@ -262,7 +264,7 @@ namespace ChilliSource
                             dataVal = dataKeyVal.substr(position2 + 1);
                             
                             //Put this key=value pair in map
-                            urlParams[dataKey] = BaseEncoding::URLEncode(dataVal);
+                            urlParams[dataKey] = StringUtils::URLEncode(dataVal);
                         }
                         dataPart = dataPart.substr(sep + 1);
                     }
@@ -278,7 +280,7 @@ namespace ChilliSource
                         dataVal = dataKeyVal.substr(position2 + 1);
                         
                         //Put this key=value pair in map
-                        urlParams[dataKey] = BaseEncoding::URLEncode(dataVal);
+                        urlParams[dataKey] = StringUtils::URLEncode(dataVal);
                     }
                 }
                 
