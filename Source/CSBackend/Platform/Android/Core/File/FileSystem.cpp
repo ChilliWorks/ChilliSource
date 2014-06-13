@@ -402,8 +402,6 @@ namespace CSBackend
 					case CSCore::StorageLocation::k_chilliSource:
 					{
 						std::string absoluteFilePath = GetAbsolutePathToFile(in_storageLocation, in_filePath);
-						CS_LOG_VERBOSE("------------" + in_filePath);
-						CS_LOG_VERBOSE("++++++++++++" + absoluteFilePath);
 						return CreateFileStreamInAPK(in_storageLocation, absoluteFilePath, in_fileMode);
 					}
 					case CSCore::StorageLocation::k_DLC:
@@ -622,7 +620,6 @@ namespace CSBackend
 				}
 				case CSCore::StorageLocation::k_chilliSource:
 				{
-					CS_LOG_VERBOSE("||||||||||||" + GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath);
 					return DoesFileExistInAPK(in_storageLocation, GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath);
 				}
 				case CSCore::StorageLocation::k_DLC:
@@ -818,7 +815,6 @@ namespace CSBackend
 				inout_items.push_back(item);
 			}
 
-			CS_LOG_VERBOSE("$$$$$$$$$$$$" + in_filePath);
 			APKManifestItem item;
 			item.m_path = in_filePath;
 			item.m_pathHash = CSCore::HashCRC32::GenerateHashCode(item.m_path);
@@ -896,7 +892,6 @@ namespace CSBackend
 			}
 			else
 			{
-				CS_LOG_VERBOSE("^^^^^^^^^^^^^^^^^^^" + in_path);
 				auto it = std::lower_bound(m_apkCSManifestItems.begin(), m_apkCSManifestItems.end(), searchItem, APKManifestSortPredicate);
 				if(it !=  m_apkCSManifestItems.end() && it->m_pathHash == searchItem.m_pathHash)
 				{
