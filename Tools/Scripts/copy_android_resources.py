@@ -33,7 +33,7 @@ import subprocess
 import os
 
 #----------------------------------------------------------------------
-# Copies the resource from PlatformResources and AppResources
+# Copies the resource from ProjectResources and AppResources
 # into res and assets directories that are required by Android.
 #
 # Copies the jars into libs as required by Android.
@@ -45,7 +45,7 @@ import os
 
 
 #----------------------------------------------------------------------
-# Copies the resource from PlatformResources and AppResources
+# Copies the resource from ProjectResources and AppResources
 # into res and assets directories that are required by Android.
 #
 # @author S Downie
@@ -58,7 +58,7 @@ def copy_resources(project_dir):
 
     app_src_path = os.path.join(project_dir, "AppResources")
     cs_src_path = os.path.join(project_dir, "ChilliSource", "CSResources")
-    platform_src_path = os.path.join(project_dir, "PlatformResources", "Android")
+    platform_src_path = os.path.join(project_dir, "ProjectResources", "Android")
 
     app_dst_path = os.path.join(project_dir, "assets", "AppResources")
     cs_dst_path = os.path.join(project_dir, "assets", "CSResources")
