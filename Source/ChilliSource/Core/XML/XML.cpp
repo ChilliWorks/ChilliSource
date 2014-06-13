@@ -1,5 +1,5 @@
 //
-//  XML.h
+//  XML.cpp
 //  Chilli Source
 //  Created by Ian Copland on 12/06/2014.
 //

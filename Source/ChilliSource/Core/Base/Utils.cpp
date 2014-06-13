@@ -172,24 +172,6 @@ namespace ChilliSource
                 
                 return vResult;
             }
-            
-            //---------------------------------------------------------
-            //---------------------------------------------------------
-            std::string CharToHex(u8 inubyDec)
-            {
-                u8 ubyDig1 = (inubyDec&0xF0) >> 4;
-                u8 ubyDig2 = (inubyDec&0x0F);
-                if ( 0 <= ubyDig1 && ubyDig1 <= 9) ubyDig1 += 48;    		// 0,48 in ASCII
-                if (10 <= ubyDig1 && ubyDig1 <=15) ubyDig1 += 65 - 10; 		// A,65 in ASCII
-                if ( 0 <= ubyDig2 && ubyDig2 <= 9) ubyDig2 += 48;
-                if (10 <= ubyDig2 && ubyDig2 <=15) ubyDig2 += 65 - 10;
-                
-                std::string strResult;
-                strResult.append((char*)&ubyDig1, 1);
-                strResult.append((char*)&ubyDig2, 1);
-                
-                return strResult;
-            }
             //---------------------------------------------------------
             //---------------------------------------------------------
             u8 HexToDec(const u8* inpHex)

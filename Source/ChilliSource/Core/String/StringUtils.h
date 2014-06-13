@@ -210,6 +210,16 @@ namespace ChilliSource
             /// @return decoded string
             //------------------------------------------------------
             std::string URLDecode(const std::string& in_src);
+            //-------------------------------------------------------
+            /// Converts a value in the range [0,255] to hex value
+            ///
+            /// @author S Downie
+            ///
+            /// @param Integer value in range [0,255]
+            ///
+            /// @return String hex representation of integer
+            //-------------------------------------------------------
+            std::string CharToHex(u8 in_dec);
 		};
 	}
 }

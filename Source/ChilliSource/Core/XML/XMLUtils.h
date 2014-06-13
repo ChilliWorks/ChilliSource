@@ -34,6 +34,8 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/XML/XML.h>
 
+#include <type_traits>
+
 namespace ChilliSource
 {
     namespace Core
@@ -183,7 +185,7 @@ namespace ChilliSource
             //--------------------------------------------------
             template <typename TType> TType GetAttributeValue(const XML::Node* in_node, const std::string& in_attributeName, const TType& in_defaultValue)
             {
-                CS_LOG_FATAL("XMLUtils: Unknown attribute type.");
+                static_assert(std::is_void<TType>() && std::is_void<TType>() == false, "No implementation for the given template type.");
             }
             //--------------------------------------------------
             /// Returns the value for the requested attribute name.

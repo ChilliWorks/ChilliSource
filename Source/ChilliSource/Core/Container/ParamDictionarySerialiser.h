@@ -46,24 +46,24 @@ namespace ChilliSource
         {
             //-----------------------------------------------------------------
             /// Convert the param dictionary to XML and store it in the given
-            /// Rapid XML element.
+            /// XML element.
             ///
             /// Format: <Params><String key = "key" value = "value"/></Params>
             ///
             /// @author A Glass
             ///
             /// @param Param dictionary to serialise
-            /// @param [Out] Rapid XML element
+            /// @param [Out] XML element
             //-----------------------------------------------------------------
             void ToXml(const ParamDictionary& in_dict, XML::Node* out_element);
             //-----------------------------------------------------------------
-            /// Convert the Rapid XML to a param dictionary of key/values
+            /// Convert the XML to a param dictionary of key/values
             ///
             /// Format: <Params><String key = "key" value = "value"/></Params>
             ///
             /// @author A Glass
             ///
-            /// @param Rapid XML element
+            /// @param XML element
             ///
             /// @return Param dictionary
             //-----------------------------------------------------------------
