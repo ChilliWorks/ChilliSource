@@ -141,7 +141,7 @@ namespace ChilliSource
                 in_stream->Read((s8*)&sHeader.m_compressedDataSize, sizeof(u32));
                 
                 u32 udwSize = 0;
-                ImageFormat eFormat;
+                ImageFormat eFormat = ImageFormat::k_RGBA8888;
                 bool bFoundFormat = GetFormatInfo(sHeader.m_imageFormat, sHeader.m_width, sHeader.m_height, eFormat, udwSize);
                 CS_ASSERT(bFoundFormat, "Invalid CSImage Format.");
                 
