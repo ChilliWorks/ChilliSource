@@ -82,7 +82,7 @@ def copy_directory(src_path, dst_path):
         src = os.path.join(src_path, item)
         dst = os.path.join(dst_path, item)
         if os.path.isdir(src):
-            shutil.copytree(src, dst, False, None)
+            copy_directory(src, dst)
         else:
             shutil.copy2(src, dst)
 #----------------------------------------

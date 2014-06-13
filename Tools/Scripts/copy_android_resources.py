@@ -30,6 +30,7 @@
 import sys
 import file_system_utils
 import subprocess
+import os
 
 #----------------------------------------------------------------------
 # Copies the resource from PlatformResources and AppResources
@@ -52,16 +53,16 @@ import subprocess
 # @param Project directory path
 #----------------------------------------------------------------------
 def copy_resources(project_dir):
-    file_system_utils.delete_directory(project_dir+"assets/")
-    file_system_utils.delete_directory(project_dir+"res/")
+    file_system_utils.delete_directory(os.path.join(project_dir, "assets"))
+    file_system_utils.delete_directory(os.path.join(project_dir, "res"))
 
-    app_src_path = project_dir+"AppResources/"
-    cs_src_path = project_dir+"ChilliSource/CSResources/"
-    platform_src_path = project_dir+"PlatformResources/Android/"
+    app_src_path = os.path.join(project_dir, "AppResources")
+    cs_src_path = os.path.join(project_dir, "ChilliSource", "CSResources")
+    platform_src_path = os.path.join(project_dir, "PlatformResources", "Android")
 
-    app_dst_path = project_dir+"assets/AppResources/"
-    cs_dst_path = project_dir+"assets/CSResources/"
-    platform_dst_path = project_dir+"res/"
+    app_dst_path = os.path.join(project_dir, "assets", "AppResources")
+    cs_dst_path = os.path.join(project_dir, "assets", "CSResources")
+    platform_dst_path = os.path.join(project_dir, "res")
 
     file_system_utils.overwrite_directory(app_src_path, app_dst_path)
     file_system_utils.overwrite_directory(cs_src_path, cs_dst_path)
@@ -75,8 +76,8 @@ def copy_resources(project_dir):
 # @param Project directory path
 #----------------------------------------------------------------------
 def copy_jars(project_dir):
-    jars_src_path = project_dir+"ChilliSource/Libraries/Core/Libs/Android/jars/"
-    jars_dst_path = project_dir+"libs/"
+    jars_src_path = os.path.join(project_dir, "ChilliSource", "Libraries", "Core", "Libs", "Android", "jars")
+    jars_dst_path = os.path.join(project_dir, "libs")
 
     file_system_utils.copy_directory(jars_src_path, jars_dst_path)
 
@@ -88,8 +89,8 @@ def copy_jars(project_dir):
 # @param Project directory path
 #----------------------------------------------------------------------
 def premultiply_pngs(project_dir):
-    jarFile = project_dir+"ChilliSource/Tools/PreMultipliedAlphaPNGTool.jar"
-    png_files = file_system_utils.get_file_paths_with_extensions(project_dir+"assets/", ["png"])
+    jarFile = os.path.join(project_dir, "ChilliSource", "Tools", "PreMultipliedAlphaPNGTool.jar")
+    png_files = file_system_utils.get_file_paths_with_extensions(os.path.join(project_dir, "assets"), ["png"])
 
     for png_file in png_files:
         subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", png_file, "--output", png_file]);

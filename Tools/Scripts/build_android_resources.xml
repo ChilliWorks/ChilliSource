@@ -27,32 +27,15 @@ THE SOFTWARE.
 -->
 
 <project name="build_android_resources" default="build_android_resources" basedir=".">
-	<!-- ======================================================== -->												  
-	<!-- Sets up everything required by the script.				  -->
-	<!--														  -->
-	<!-- @author I Copland										  -->
-	<!-- ======================================================== -->
-   	<target name="initialise">
-   		<property environment="env"/>
-		<echo message="+++ Resource Preperation Step +++"/>
-		<echo message="ant.file=${ant.file}"/>
-		<echo message="basedir=${basedir}"/>
-		<path id="basedir.path">
-    		<pathelement path="${basedir}" />
-		</path>
-		<pathconvert targetos="unix" property="basedir.unix" refid="basedir.path"/>
-		<echo message="${basedir.unix}" />
- 	</target>
-	<!-- ======================================================== -->												
-	<!-- Calls everything required to prepare the resources	      -->
-	<!-- 														  -->
-	<!-- @author S Downie										  -->
-	<!-- ======================================================== -->
-	<target name="build_android_resources" depends="initialise">
+	<!--											
+	Calls the python script that copies and pre-multiplies the Android resources.
+	 						
+	@author S Downie
+	--> 
+	<target name="build_android_resources">
 		<exec executable="python">
 			<arg value="${basedir}/ChilliSource/Tools/Scripts/copy_android_resources.py"/>
-			<arg value="${basedir}/"/>
+			<arg value="${basedir}"/>
 		</exec>
 	</target>
-
 </project>

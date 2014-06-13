@@ -59,7 +59,7 @@ namespace ChilliSource
             material->SetTransparencyEnabled(true);
             material->SetCullFace(CullFace::k_back);
             material->SetFaceCullingEnabled(true);
-            
+            material->SetDepthTestEnabled(false);
 			return material;
         }
         //---------------------------------------------------

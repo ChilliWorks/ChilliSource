@@ -31,6 +31,7 @@ import sys
 import file_system_utils
 import subprocess
 import shutil
+import os
 
 #----------------------------------------------------------------------
 # Copies the resources from AppResources and CSResources
@@ -56,11 +57,11 @@ def copy_resources(project_dir, target_dir):
 
     file_system_utils.delete_directory(assetsDir)
 
-    app_src_path = project_dir+"AppResources/"
-    cs_src_path = project_dir+"ChilliSource/CSResources/"
+    app_src_path = os.path.join(project_dir, "AppResources")
+    cs_src_path = os.path.join(project_dir, "ChilliSource", "CSResources")
 
-    app_dst_path = assetsDir+"AppResources/"
-    cs_dst_path = assetsDir+"CSResources/"
+    app_dst_path = os.path.join(assetsDir, "AppResources")
+    cs_dst_path = os.path.join(assetsDir, "CSResources")
 
     file_system_utils.overwrite_directory(app_src_path, app_dst_path)
     file_system_utils.overwrite_directory(cs_src_path, cs_dst_path)
@@ -74,7 +75,7 @@ def copy_resources(project_dir, target_dir):
 # @param Target directory path
 #----------------------------------------------------------------------
 def copy_libs(project_dir, target_dir):
-    libs_src_path = project_dir+"ChilliSource/Libraries/Core/Libs/Windows/"
+    libs_src_path = os.path.join(project_dir, "ChilliSource", "Libraries", "Core", "Libs", "Windows")
     dll_files = file_system_utils.get_file_paths_with_extensions(libs_src_path, ["dll"])
 
     for dll_file in dll_files:
@@ -89,9 +90,9 @@ def copy_libs(project_dir, target_dir):
 # @param Target directory path
 #----------------------------------------------------------------------
 def premultiply_pngs(project_dir, target_dir):
-    assetsDir = target_dir+"assets/"
+    assetsDir = os.path.join(target_dir, "assets")
 
-    jarFile = project_dir+"ChilliSource/Tools/PreMultipliedAlphaPNGTool.jar"
+    jarFile = os.path.join(project_dir, "ChilliSource", "Tools", "PreMultipliedAlphaPNGTool.jar")
     png_files = file_system_utils.get_file_paths_with_extensions(assetsDir, ["png"])
 
     for png_file in png_files:
