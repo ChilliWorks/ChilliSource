@@ -14,3 +14,5 @@ Projects/Tools/CSModelExporter/obj
 Projects/Tools/PNGToCSImageTool/bin
 Projects/Tools/TGAToCSImageTool/bin
 *.pyc
+Projects/Libraries/CSBase/CSBase.xcodeproj/project.xcworkspace
+Projects/Libraries/CSBase/CSBase.xcodeproj/xcuserdata
