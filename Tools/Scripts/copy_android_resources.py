@@ -76,7 +76,7 @@ def copy_resources(project_dir):
 # @param Project directory path
 #----------------------------------------------------------------------
 def copy_jars(project_dir):
-    jars_src_path = os.path.join(project_dir, "ChilliSource", "Libraries", "Core", "Libs", "Android", "jars")
+    jars_src_path = os.path.join(project_dir, "ChilliSource", "Libraries", "Core", "Android", "Libs", "jars")
     jars_dst_path = os.path.join(project_dir, "libs")
 
     file_system_utils.copy_directory(jars_src_path, jars_dst_path)
@@ -97,7 +97,7 @@ def premultiply_pngs(project_dir):
 
 #----------------------------------------------------------------------
 # The entry point into the script.
-# 
+#
 # @author S Downie
 #
 # @param The list of arguments.
@@ -111,6 +111,6 @@ def main(args):
     copy_resources(project_dir)
     copy_jars(project_dir)
     premultiply_pngs(project_dir)
-   
+
 if __name__ == "__main__":
     main(sys.argv)
