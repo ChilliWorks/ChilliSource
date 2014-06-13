@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		81C80B96194B46D2009576BE /* UniversalLib */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 81C80B99194B46D2009576BE /* Build configuration list for PBXAggregateTarget "UniversalLib" */;
+			buildPhases = (
+				81C80B9A194B46E7009576BE /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = UniversalLib;
+			productName = UniversalLib;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		81C809E9194B2A41009576BE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C809E8194B2A41009576BE /* Foundation.framework */; };
 		81C80B3D194B3D9E009576BE /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = 81C80AF4194B3D9E009576BE /* aes.c */; };
@@ -312,7 +326,6 @@
 				81C809E1194B2A41009576BE /* Sources */,
 				81C809E2194B2A41009576BE /* Frameworks */,
 				81C809E3194B2A41009576BE /* CopyFiles */,
-				81C80A8A194B34B3009576BE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -345,12 +358,13 @@
 			projectRoot = "";
 			targets = (
 				81C809E4194B2A41009576BE /* CSBase */,
+				81C80B96194B46D2009576BE /* UniversalLib */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		81C80A8A194B34B3009576BE /* ShellScript */ = {
+		81C80B9A194B46E7009576BE /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -361,7 +375,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "python ../../../Tools/Scripts/package_library.py -h \"Source/\" -l \"$TARGET_BUILD_DIR/lib$TARGET_NAME.a\" -o \"Output/\"";
+			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target CSBase ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target CSBase -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nUNIVERSAL_OUTOUT_FILE_PATH=\"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\"\nlipo -create -output \"${UNIVERSAL_OUTOUT_FILE_PATH}\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\n#copy to output directory\npython ../../../Tools/Scripts/package_library.py -h \"Source/\" -l \"${UNIVERSAL_OUTOUT_FILE_PATH}\" -o \"Output/\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -517,6 +531,20 @@
 			};
 			name = Release;
 		};
+		81C80B97194B46D2009576BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		81C80B98194B46D2009576BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -534,6 +562,15 @@
 			buildConfigurations = (
 				81C80A09194B2A41009576BE /* Debug */,
 				81C80A0A194B2A41009576BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		81C80B99194B46D2009576BE /* Build configuration list for PBXAggregateTarget "UniversalLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81C80B97194B46D2009576BE /* Debug */,
+				81C80B98194B46D2009576BE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
