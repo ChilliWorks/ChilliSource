@@ -274,9 +274,6 @@ namespace ChilliSource
             //Split the lights
             for(u32 i=0; i<aLightComponentCache.size(); ++i)
             {
-                if(aLightComponentCache[i]->GetEntity()->IsVisible() == false)
-                    continue;
-                
                 if(aLightComponentCache[i]->IsA(DirectionalLightComponent::InterfaceID))
                 {
                     outaDirectionalLightComponentCache.push_back((DirectionalLightComponent*)aLightComponentCache[i]);

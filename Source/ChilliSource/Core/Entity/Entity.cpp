@@ -48,15 +48,6 @@ namespace ChilliSource
 		{
 			return EntityUPtr(new Entity());
 		}
-        
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		Entity::Entity()
-        : m_isVisible(true)
-        , m_parent(nullptr)
-        , m_scene(nullptr)
-		{
-		}
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------
 		void Entity::AddEntity(const EntitySPtr& in_child)
@@ -374,18 +365,6 @@ namespace ChilliSource
         {
             return m_transform;
         }
-        //-------------------------------------------------------------
-        //-------------------------------------------------------------
-        void Entity::SetVisible(bool in_isVisible)
-        {
-            m_isVisible = in_isVisible;
-        }
-        //-------------------------------------------------------------
-        //-------------------------------------------------------------
-        bool Entity::IsVisible() const
-        {
-            return m_parent ? m_isVisible && m_parent->IsVisible() : m_isVisible;
-        }
         //----------------------------------------------------
         //----------------------------------------------------
         void Entity::OnUpdate(f32 in_timeSinceLastUpdate)
@@ -424,8 +403,6 @@ namespace ChilliSource
             
             m_name = std::string();
             m_transform.Reset();
-            
-            m_isVisible = true;
         }
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------

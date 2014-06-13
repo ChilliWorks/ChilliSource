@@ -87,18 +87,6 @@ namespace ChilliSource
             /// @return Transform object to allow for spatial manipulation
             //----------------------------------------------------------------
             const Transform& GetTransform() const;
-            //-------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Whether any renderable components should be shown
-            //-------------------------------------------------------------
-            void SetVisible(bool in_isVisible);
-            //-------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Whether any renderable components should be shown
-            //-------------------------------------------------------------
-            bool IsVisible() const;
 			//-------------------------------------------------------------
 			/// Get Scene
 			///
@@ -371,7 +359,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //----------------------------------------------------------------
-			Entity();
+			Entity() = default;
             //----------------------------------------------------
             /// @author S Downie
             ///
@@ -442,10 +430,8 @@ namespace ChilliSource
 			
 			std::string m_name;
 			
-			Entity* m_parent;
-			Scene* m_scene;
-            
-            bool m_isVisible;
+			Entity* m_parent = nullptr;
+			Scene* m_scene = nullptr;
 		};
         
         //-------------------------------------------------------------

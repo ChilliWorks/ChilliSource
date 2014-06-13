@@ -46,7 +46,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		bool RenderComponent::IsVisible() const
 		{
-            return GetEntity() ? mbVisible && GetEntity()->IsVisible() : mbVisible;
+            return mbVisible;
 		}
         //----------------------------------------------------
         /// Should Cull
