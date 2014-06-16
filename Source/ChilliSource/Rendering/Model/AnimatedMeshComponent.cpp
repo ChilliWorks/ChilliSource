@@ -173,7 +173,7 @@ namespace ChilliSource
                 const Core::AABB& sAABB = GetAABB();
                 Core::Vector3 vSize = sAABB.GetSize();
 				mBoundingSphere.vOrigin = sAABB.GetOrigin();
-				mBoundingSphere.fRadius = std::max(vSize.x, vSize.y) * 0.5f;
+                mBoundingSphere.fRadius = (sAABB.BackTopRight() - sAABB.FrontBottomLeft()).Length() * 0.5f;
 			}
 			return mBoundingSphere;
 		}
