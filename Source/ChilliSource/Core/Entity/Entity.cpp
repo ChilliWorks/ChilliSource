@@ -129,28 +129,28 @@ namespace ChilliSource
 		//-------------------------------------------------------------
 		void Entity::OnAddedToScene()
 		{
-            for(ComponentList::iterator it = m_components.begin(); it != m_components.end(); ++it)
+            for (u32 i = 0; i < m_components.size(); ++i)
             {
-                (*it)->OnAddedToScene();
+                m_components[i]->OnAddedToScene();
             }
             
-			for(SharedEntityList::iterator it = m_children.begin(); it != m_children.end(); ++it)
-			{
-				m_scene->Add(*it);
-			}
+            for (u32 i = 0; i < m_children.size(); ++i)
+            {
+                m_scene->Add(m_children[i]);
+            }
 		}
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------
 		void Entity::OnRemovedFromScene()
 		{
-            for(SharedEntityList::iterator it = m_children.begin(); it != m_children.end(); ++it)
-			{
-				m_scene->Remove(it->get());
-			}
-            
-            for(ComponentList::iterator it = m_components.begin(); it != m_components.end(); ++it)
+            for (s32 i = m_children.size() - 1; i >= 0; --i)
             {
-                (*it)->OnRemovedFromScene();
+                m_scene->Remove(m_children[i].get());
+            }
+            
+            for (s32 i = m_children.size() - 1; i >= 0; --i)
+            {
+                m_components[i]->OnRemovedFromScene();
             }
 		}
 		//------------------------------------------------------------------
