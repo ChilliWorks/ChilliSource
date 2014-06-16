@@ -12,6 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
@@ -101,7 +102,7 @@ namespace ChilliSource
             ///
 			/// @return Rect containing UV coords for the given frame
 			//---------------------------------------------------------------------
-			Core::Rectangle GetFrameUVs(const std::string& in_textureId) const;
+			Rendering::UVs GetFrameUVs(const std::string& in_textureId) const;
 			//---------------------------------------------------------------------
 			/// @author S Downie
 			///

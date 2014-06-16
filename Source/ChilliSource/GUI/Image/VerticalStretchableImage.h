@@ -12,6 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 //=============================================================
 /// GUI - Stretchable Image 
@@ -31,9 +32,9 @@ namespace ChilliSource
 
             struct PanelDesc
             {
-                Core::Rectangle m_topUVs;
-                Core::Rectangle m_middleUVs;
-                Core::Rectangle m_bottomUVs;
+                Rendering::UVs m_topUVs;
+                Rendering::UVs m_middleUVs;
+                Rendering::UVs m_bottomUVs;
                 
                 Core::Vector2 m_topSize;
                 Core::Vector2 m_middleSize;

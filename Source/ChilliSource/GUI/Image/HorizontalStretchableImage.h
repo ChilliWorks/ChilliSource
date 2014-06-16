@@ -13,6 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
@@ -24,9 +25,9 @@ namespace ChilliSource
 
             struct PanelDesc
             {
-                Core::Rectangle m_leftUVs;
-                Core::Rectangle m_centreUVs;
-                Core::Rectangle m_rightUVs;
+                Rendering::UVs m_leftUVs;
+                Rendering::UVs m_centreUVs;
+                Rendering::UVs m_rightUVs;
                 
                 Core::Vector2 m_leftSize;
                 Core::Vector2 m_centreSize;

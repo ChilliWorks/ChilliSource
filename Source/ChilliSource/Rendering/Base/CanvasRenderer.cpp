@@ -345,7 +345,7 @@ namespace ChilliSource
             /// @param Alignment
             /// @param [Out] Sprite
             //-----------------------------------------------------
-            void UpdateSpriteData(const Core::Matrix4& in_transform, const Core::Vector2& in_size, const Core::Rectangle& in_UVs, const Core::Colour& in_colour, AlignmentAnchor in_alignment,
+            void UpdateSpriteData(const Core::Matrix4& in_transform, const Core::Vector2& in_size, const Rendering::UVs& in_UVs, const Core::Colour& in_colour, AlignmentAnchor in_alignment,
                                   SpriteComponent::SpriteData& out_sprite)
             {
                 const f32 k_nearClipDistance = 2.0f;
@@ -357,10 +357,14 @@ namespace ChilliSource
                 out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].Col = Col;
                 out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].Col = Col;
                 
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex = in_UVs.TopLeft();
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex = in_UVs.BottomLeft();
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex = in_UVs.TopRight();
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex = in_UVs.BottomRight();
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex.x = in_UVs.m_u;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex.y = in_UVs.m_v;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex.x = in_UVs.m_u;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex.y = in_UVs.m_v + in_UVs.m_t;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex.x = in_UVs.m_u + in_UVs.m_s;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex.y = in_UVs.m_v;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex.x = in_UVs.m_u + in_UVs.m_s;
+                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex.y = in_UVs.m_v + in_UVs.m_t;
                 
                 Core::Vector2 vHalfSize(in_size.x * 0.5f, in_size.y * 0.5f);
                 Core::Vector2 vAlignedPos;
@@ -536,7 +540,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void CanvasRenderer::DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Core::Rectangle& in_UVs,
+        void CanvasRenderer::DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Rendering::UVs& in_UVs,
                                      const Core::Colour& in_colour, AlignmentAnchor in_anchor)
         {
             m_canvasSprite.pMaterial = GetGUIMaterialForTexture(in_texture);

@@ -31,11 +31,11 @@ namespace ChilliSource
                 f32 t2 = std::numeric_limits<f32>::infinity();
                 f32 t1 = -t2;
                 
-                Core::Vector3 vRayOrigin = inRay.vOrigin;
-                Core::Vector3 vRayDir = inRay.vDirection * inRay.fLength;
+                Vector3 vRayOrigin = inRay.vOrigin;
+                Vector3 vRayDir = inRay.vDirection * inRay.fLength;
                 
-                Core::Vector3 vAABBMin = inAABB.GetMin();
-                Core::Vector3 vAABBMax = inAABB.GetMax();
+                Vector3 vAABBMin = inAABB.GetMin();
+                Vector3 vAABBMax = inAABB.GetMax();
                 
                 //----X Slab 
                 if(!RaySlabIntersect(vRayOrigin.x, vRayDir.x, vAABBMin.x, vAABBMax.x, t1, t2)) return false;
@@ -58,8 +58,8 @@ namespace ChilliSource
             //----------------------------------------------------------------
             bool Intersects(const AABB& inAABB, const Vector3& invPoint)
             {
-                Core::Vector3 vOrigin = inAABB.GetOrigin();
-                Core::Vector3 vHalfSize = inAABB.GetHalfSize();
+                Vector3 vOrigin = inAABB.GetOrigin();
+                Vector3 vHalfSize = inAABB.GetHalfSize();
                 
                 return	(invPoint.x >= (vOrigin.x - vHalfSize.x)) && (invPoint.x <= (vOrigin.x + vHalfSize.x)) &&
                         (invPoint.y >= (vOrigin.y - vHalfSize.y)) && (invPoint.y <= (vOrigin.y + vHalfSize.y)) &&
@@ -79,7 +79,7 @@ namespace ChilliSource
             //----------------------------------------------------------------
             bool Intersects(const Sphere& inSphere, const Ray& inRay)
             {
-                Core::Vector3 vDelta = inRay.vOrigin - inSphere.vOrigin;
+                Vector3 vDelta = inRay.vOrigin - inSphere.vOrigin;
 				f32 A = Vector3::DotProduct(inRay.vDirection, inRay.vDirection);
 				f32 B = 2.0f * Vector3::DotProduct(vDelta, inRay.vDirection);
 				f32 C = Vector3::DotProduct(vDelta, vDelta)-inSphere.fRadius * inSphere.fRadius;
@@ -141,11 +141,11 @@ namespace ChilliSource
             //----------------------------------------------------------------
             bool Intersects(const Rectangle& inRectLHS, const Rectangle& inRectRHS)
             {
-                Core::Vector2 vMinLS(inRectLHS.vOrigin);
-                Core::Vector2 vMaxLS(inRectLHS.vOrigin.x + inRectLHS.vSize.x, inRectLHS.vOrigin.y + inRectLHS.vSize.y);
+                Vector2 vMinLS(inRectLHS.BottomLeft());
+                Vector2 vMaxLS(inRectLHS.TopRight());
                 
-                Core::Vector2 vMinRS(inRectRHS.vOrigin);
-                Core::Vector2 vMaxRS(inRectRHS.vOrigin.x + inRectRHS.vSize.x, inRectRHS.vOrigin.y + inRectRHS.vSize.y);
+                Vector2 vMinRS(inRectRHS.BottomLeft());
+                Vector2 vMaxRS(inRectRHS.TopRight());
                 
                 return	(vMaxLS.x > vMinRS.x && vMinLS.x < vMaxRS.x) &&
                         (vMaxLS.y > vMinRS.y && vMinLS.y < vMaxRS.y);
@@ -155,7 +155,10 @@ namespace ChilliSource
             //----------------------------------------------------------------
             bool Intersects(const Rectangle& inRect, const Vector2& invPoint)
             {
-                return (invPoint.x >= inRect.vOrigin.x) && (invPoint.y >= inRect.vOrigin.y) && (inRect.vOrigin.x + inRect.vSize.x >= invPoint.x) && (inRect.vOrigin.y + inRect.vSize.y >= invPoint.y);
+                Vector2 bottLeft = inRect.BottomLeft();
+                Vector2 topRight = inRect.TopRight();
+                
+                return invPoint.x >= bottLeft.x && invPoint.y >= bottLeft.y && invPoint.x <= topRight.x && invPoint.y <= topRight.y;
             }
             //----------------------------------------------------------------
             /// Plane vs Plane

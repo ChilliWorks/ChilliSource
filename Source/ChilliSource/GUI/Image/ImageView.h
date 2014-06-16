@@ -13,6 +13,7 @@
 #include <ChilliSource/GUI/Base/GUIView.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
@@ -89,28 +90,13 @@ namespace ChilliSource
             ///
             /// @param Rect containing u, v, s, & t
             //--------------------------------------------------------
-            void SetUVs(const Core::Rectangle& insUVs);
+            void SetUVs(const Rendering::UVs& insUVs);
 			//--------------------------------------------------------
 			/// Get UVs
 			///
 			/// @return Rect containing u, v, s, & t
 			//--------------------------------------------------------
-			const Core::Rectangle& GetUVs() const;
-			//--------------------------------------------------------
-            /// Set UV Offsets
-            ///
-            /// Set the offsets to the UV so that on a sprite sheet the image
-            /// can be treated as if it were a single texture
-			///
-            /// @param Rect containing u, v, s, & t
-            //--------------------------------------------------------
-            void SetUVOffsets(const Core::Rectangle& insUVOffsets);
-			//--------------------------------------------------------
-			/// Get UV Offsets
-			///
-			/// @return Rect containing u, v, s, & t offsets 
-			//--------------------------------------------------------
-			const Core::Rectangle& GetUVOffsets() const;
+			const Rendering::UVs& GetUVs() const;
             //--------------------------------------------------------
             /// Enable Size From Image
             ///
@@ -344,8 +330,7 @@ namespace ChilliSource
             DECLARE_PROPERTY_A(Rendering::TextureCSPtr, Texture, SetTexture, GetTexture);
             DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
 
-            DECLARE_PROPERTY_A(Core::Rectangle, UVs, SetUVs, GetUVs);
-			DECLARE_PROPERTY_A(Core::Rectangle, UVOffsets, SetUVOffsets, GetUVOffsets);
+            DECLARE_PROPERTY_A(Rendering::UVs, UVs, SetUVs, GetUVs);
             
 			DECLARE_PROPERTY_A(std::string, TextureAtlasID, SetTextureAtlasID, GetTextureAtlasID);
 

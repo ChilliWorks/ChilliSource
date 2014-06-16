@@ -111,10 +111,10 @@ namespace ChilliSource
 				
 				const TextureAtlas::Frame& frame = in_charData->GetFrame(frameIdx);
 							
-				info.m_UVs.vOrigin.x = (f32)(frame.m_texCoordU - 0.5f) / textureAtlasWidth;
-				info.m_UVs.vOrigin.y = (f32)(frame.m_texCoordV - 0.5f) / textureAtlasHeight;
-				info.m_UVs.vSize.x = (f32)(frame.m_width + 1.0f) / textureAtlasWidth;
-				info.m_UVs.vSize.y = (f32)(frame.m_height + 1.0f) / textureAtlasHeight;
+				info.m_UVs.m_u = (f32)(frame.m_texCoordU - 0.5f) / textureAtlasWidth;
+				info.m_UVs.m_v = (f32)(frame.m_texCoordV - 0.5f) / textureAtlasHeight;
+				info.m_UVs.m_s = (f32)(frame.m_width + 1.0f) / textureAtlasWidth;
+				info.m_UVs.m_t = (f32)(frame.m_height + 1.0f) / textureAtlasHeight;
 				
 				info.m_size.x = frame.m_width;
                 info.m_size.y = frame.m_height;
@@ -138,7 +138,7 @@ namespace ChilliSource
                 CS_LOG_ERROR("Cannot find similar space character in font: " + GetFilePath());
                 info.m_size.x = 1.0f;
                 info.m_offset = Core::Vector2::k_zero;
-                info.m_UVs = Core::Rectangle();
+                info.m_UVs = Rendering::UVs();
             }
             
             //Space

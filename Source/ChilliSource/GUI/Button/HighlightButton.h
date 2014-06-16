@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Button/Button.h>
-#include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
@@ -67,7 +67,7 @@ namespace ChilliSource
             ///
             /// @param Rectangle for the UVs
             //-----------------------------------------------------------
-            void SetDefaultUVs(Core::Rectangle insUVs);
+            void SetDefaultUVs(Rendering::UVs insUVs);
             //-----------------------------------------------------------
             /// Set Highlight UVs
             ///
@@ -75,7 +75,7 @@ namespace ChilliSource
             ///
             /// @param Rectangle for the UVs
             //-----------------------------------------------------------
-            void SetHighlightUVs(Core::Rectangle insUVs);
+            void SetHighlightUVs(Rendering::UVs insUVs);
             //-----------------------------------------------------------
             /// Set Normal Sprite Sheet
             ///
@@ -388,8 +388,8 @@ namespace ChilliSource
             Core::EventConnectionUPtr m_movedWithinConnection;
             Core::EventConnectionUPtr m_movedOutsideConnection;
 			
-            Core::Rectangle msDefaultUVs;
-            Core::Rectangle msHighlightUVs;
+            Rendering::UVs msDefaultUVs;
+            Rendering::UVs msHighlightUVs;
             
             Core::Vector2 mvSelectedPos;
             

@@ -1639,7 +1639,7 @@ namespace ChilliSource
         //----------------------------------------------------
         bool GUIView::Contains(const Core::Vector2& invPoint) const
         {
-            Core::Rectangle sAbsoluteAABB(GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft), GetAbsoluteSize());
+            Core::Rectangle sAbsoluteAABB(GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_middleCentre), GetAbsoluteSize());
             return sAbsoluteAABB.Contains(invPoint);
         }
         //-----------------------------------------------------------

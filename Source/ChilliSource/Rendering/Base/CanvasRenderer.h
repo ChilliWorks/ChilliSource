@@ -59,7 +59,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             struct DisplayCharacterInfo
             {
-                Core::Rectangle m_UVs;
+                Rendering::UVs m_UVs;
                 Core::Vector2 m_size;
                 Core::Vector2 m_position;
             };
@@ -119,7 +119,7 @@ namespace ChilliSource
             /// @param Colour
             /// @param Origin anchor
             //----------------------------------------------------------------------------
-			void DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Core::Rectangle& in_UVs,
+			void DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Rendering::UVs& in_UVs,
                          const Core::Colour& in_colour, AlignmentAnchor in_anchor);
             //----------------------------------------------------------------------------
             /// Build the descriptions for all characters. The descriptions can then be

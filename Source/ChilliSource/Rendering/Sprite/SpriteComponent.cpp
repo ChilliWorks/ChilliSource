@@ -27,7 +27,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
-		SpriteComponent::SpriteComponent() : mUVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), mbFlippedVertical(false), mbFlippedHorizontal(false), 
+		SpriteComponent::SpriteComponent() : mUVs(0.0f, 0.0f, 1.0f, 1.0f), mbFlippedVertical(false), mbFlippedHorizontal(false),
         mbCornerPosCacheValid(false), meAlignment(AlignmentAnchor::k_middleCentre), mbUVCacheValid(false), mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
 		{
 
@@ -97,7 +97,7 @@ namespace ChilliSource
                 Align(meAlignment, vHalfSize, vAlignedPos);
                 
 				mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition() + Core::Vector3(vAlignedPos, 0.0f);
-				mBoundingSphere.fRadius = std::max(mvDimensions.x, mvDimensions.y) * 0.5f;
+				mBoundingSphere.fRadius = std::sqrt((mvDimensions.x * mvDimensions.x) + (mvDimensions.y * mvDimensions.y)) * 0.5f;
 			}
 			return mBoundingSphere;
 		}
@@ -145,7 +145,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set UV's
 		//-----------------------------------------------------------
-		void SpriteComponent::SetUVs(const Core::Rectangle &inUVs)
+		void SpriteComponent::SetUVs(const Rendering::UVs &inUVs)
 		{
 			mUVs = inUVs;
             
@@ -156,17 +156,17 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void SpriteComponent::SetUVs(const f32 infUStart, const f32 infUWidth, const f32 infVStart, const f32 infVHeight)
 		{
-			mUVs.vOrigin.x = infUStart;
-			mUVs.vSize.x = infUWidth;
-			mUVs.vOrigin.y = infVStart;
-			mUVs.vSize.y = infVHeight;
+			mUVs.m_u = infUStart;
+			mUVs.m_s = infUWidth;
+			mUVs.m_v = infVStart;
+			mUVs.m_t = infVHeight;
             
             mbUVCacheValid = false;
 		}
 		//-----------------------------------------------------------
 		/// Get UVs
 		//-----------------------------------------------------------
-		const Core::Rectangle& SpriteComponent::GetUVs() const
+		const Rendering::UVs& SpriteComponent::GetUVs() const
 		{
 			return mUVs;
 		}
@@ -194,28 +194,26 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Current Frame
 		//-----------------------------------------------------------
-		const Core::Rectangle& SpriteComponent::GetCurrentFrame()
+		const Rendering::UVs& SpriteComponent::GetCurrentFrame()
 		{
 			if (mbFlippedHorizontal) 
 			{
-				mTransformedUVs.vOrigin.x = mUVs.vOrigin.x + mUVs.vSize.x;
-				mTransformedUVs.vSize.x = - mUVs.vSize.x;
+				mTransformedUVs = UVs::FlipHorizontally(mUVs);
 			} 
 			else 
 			{
-				mTransformedUVs.vOrigin.x = mUVs.vOrigin.x;
-				mTransformedUVs.vSize.x = mUVs.vSize.x;
+				mTransformedUVs.m_u = mUVs.m_u;
+				mTransformedUVs.m_s = mUVs.m_s;
 			}
 
 			if (mbFlippedVertical) 
 			{
-				mTransformedUVs.vOrigin.y = mUVs.vOrigin.y + mUVs.vSize.y;
-				mTransformedUVs.vSize.y = - mUVs.vSize.y;
+                mTransformedUVs = UVs::FlipVertically(mUVs);
 			} 
 			else 
 			{
-				mTransformedUVs.vOrigin.y = mUVs.vOrigin.y;
-				mTransformedUVs.vSize.y = mUVs.vSize.y;
+				mTransformedUVs.m_v = mUVs.m_v;
+				mTransformedUVs.m_t = mUVs.m_t;
 			}
 
 			return mTransformedUVs;
@@ -306,12 +304,19 @@ namespace ChilliSource
             {
                 mbUVCacheValid = true;
                 
-                Core::Rectangle TexCoords = GetCurrentFrame();
+                Rendering::UVs TexCoords = GetCurrentFrame();
                 
-                mSpriteData.sVerts[(u32)Verts::k_topLeft].vTex = TexCoords.TopLeft();
-                mSpriteData.sVerts[(u32)Verts::k_bottomLeft].vTex = TexCoords.BottomLeft();
-                mSpriteData.sVerts[(u32)Verts::k_topRight].vTex = TexCoords.TopRight();
-                mSpriteData.sVerts[(u32)Verts::k_bottomRight].vTex = TexCoords.BottomRight();
+                mSpriteData.sVerts[(u32)Verts::k_topLeft].vTex.x = TexCoords.m_u;
+                mSpriteData.sVerts[(u32)Verts::k_topLeft].vTex.y = TexCoords.m_v;
+                
+                mSpriteData.sVerts[(u32)Verts::k_bottomLeft].vTex.x = TexCoords.m_u;
+                mSpriteData.sVerts[(u32)Verts::k_bottomLeft].vTex.y = TexCoords.m_v + TexCoords.m_t;
+                
+                mSpriteData.sVerts[(u32)Verts::k_topRight].vTex.x = TexCoords.m_u + TexCoords.m_s;
+                mSpriteData.sVerts[(u32)Verts::k_topRight].vTex.y = TexCoords.m_v;
+                
+                mSpriteData.sVerts[(u32)Verts::k_bottomRight].vTex.x = TexCoords.m_u + TexCoords.m_s;
+                mSpriteData.sVerts[(u32)Verts::k_bottomRight].vTex.y = TexCoords.m_v + TexCoords.m_t;
             }
         }
         //-----------------------------------------------------------
