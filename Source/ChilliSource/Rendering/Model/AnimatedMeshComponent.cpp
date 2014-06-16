@@ -171,7 +171,6 @@ namespace ChilliSource
 			if(GetEntity())
 			{
                 const Core::AABB& sAABB = GetAABB();
-                Core::Vector3 vSize = sAABB.GetSize();
 				mBoundingSphere.vOrigin = sAABB.GetOrigin();
                 mBoundingSphere.fRadius = (sAABB.BackTopRight() - sAABB.FrontBottomLeft()).Length() * 0.5f;
 			}
