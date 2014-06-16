@@ -44,8 +44,8 @@ namespace ChilliSource
         //-----------------------------------------------------------
         ToggleButton::ToggleButton() 
         : mpBackgroundImage(new ImageView()),
-        msOnUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
-        msOffUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
+        msOnUVs(0.0f, 0.0f, 1.0f, 1.0f),
+        msOffUVs(0.0f, 0.0f, 1.0f, 1.0f),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
         {
             mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
@@ -65,7 +65,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         ToggleButton::ToggleButton(const Core::ParamDictionary& insParams) 
         : Button(insParams), mpBackgroundImage(new ImageView()),
-        msOnUVs(Core::Vector2::k_zero, Core::Vector2::k_one), msOffUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
+        msOnUVs(0.0f, 0.0f, 1.0f, 1.0f), msOffUVs(0.0f, 0.0f, 1.0f, 1.0f),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
         {
             std::string strValue;
@@ -233,7 +233,7 @@ namespace ChilliSource
         ///
         /// @param Rectangle for the UVs
         //-----------------------------------------------------------
-        void ToggleButton::SetOnUVs(Core::Rectangle insUVs)
+        void ToggleButton::SetOnUVs(const Rendering::UVs& insUVs)
         {
             msOnUVs = insUVs;
             
@@ -247,7 +247,7 @@ namespace ChilliSource
         ///
         /// @param Rectangle for the UVs
         //-----------------------------------------------------------
-        void ToggleButton::SetOffUVs(Core::Rectangle insUVs)
+        void ToggleButton::SetOffUVs(const Rendering::UVs& insUVs)
         {
             msOffUVs = insUVs;
             

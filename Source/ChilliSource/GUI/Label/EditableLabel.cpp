@@ -318,7 +318,7 @@ namespace ChilliSource
             //Draw ourself
             if(Background)
             {
-                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::k_zero, Core::Vector2::k_zero), AbsCol, Rendering::AlignmentAnchor::k_middleCentre);
+                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f), AbsCol, Rendering::AlignmentAnchor::k_middleCentre);
             }
         
             if(Text.length() > 0)

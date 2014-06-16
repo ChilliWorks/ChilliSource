@@ -80,19 +80,19 @@ namespace ChilliSource
         }	
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
-		Core::Rectangle TextureAtlas::GetFrameUVs(const std::string& in_textureId) const
+		Rendering::UVs TextureAtlas::GetFrameUVs(const std::string& in_textureId) const
         {
-			Core::Rectangle result;
+			Rendering::UVs result;
     
             const Frame& frame = GetFrame(in_textureId);
 			
             f32 inverseWidth = 1.0f / m_desc.m_textureAtlasWidth;
             f32 inverseHeight = 1.0f / m_desc.m_textureAtlasHeight;
             
-			result.vOrigin.x = (f32)(frame.m_texCoordU + k_halfTexelOffset) * inverseWidth;
-			result.vOrigin.y = (f32)(frame.m_texCoordV + k_halfTexelOffset) * inverseHeight;
-			result.vSize.x = (f32)(frame.m_width - k_texelOffset) * inverseWidth;
-			result.vSize.y = (f32)(frame.m_height - k_texelOffset) * inverseHeight;
+			result.m_u = (f32)(frame.m_texCoordU + k_halfTexelOffset) * inverseWidth;
+			result.m_v = (f32)(frame.m_texCoordV + k_halfTexelOffset) * inverseHeight;
+			result.m_s = (f32)(frame.m_width - k_texelOffset) * inverseWidth;
+			result.m_t = (f32)(frame.m_height - k_texelOffset) * inverseHeight;
             
             return result;
 		}

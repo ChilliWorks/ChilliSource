@@ -28,6 +28,35 @@ namespace ChilliSource
 		DEFINE_PROPERTY(BackgroundTextureAtlasID);
 		DEFINE_PROPERTY(ProgressTextureAtlasID);
 		DEFINE_PROPERTY(HeightFromImage);
+        
+        namespace
+        {
+            //--------------------------------------------------------
+            /// Calculate UVs based on the current progress and UVs
+            ///
+            /// @param UVs
+            /// @param UV offsets
+            /// @param Out: UVs
+            //--------------------------------------------------------
+            void CalculateUVs(const Rendering::UVs& insUVs, const Rendering::UVs& insOffsets, Rendering::UVs& outsUVs)
+            {
+                f32 leftUV = insUVs.m_u;
+                f32 rightUV = insUVs.m_u + insUVs.m_s;
+                f32 topUV = insUVs.m_v;
+                f32 bottomUV = insUVs.m_v + insUVs.m_t;
+                
+                f32 leftOffset = insOffsets.m_u;
+                f32 rightOffset = insOffsets.m_u + insOffsets.m_s;
+                f32 topOffset = insOffsets.m_v;
+                f32 bottomOffset = insOffsets.m_v + insOffsets.m_t;
+                
+                f32 fWidthOfArea = rightUV - leftUV;
+                f32 fHeightOfArea = bottomUV - topUV;
+                Core::Vector2 vTopLeft = Core::Vector2((fWidthOfArea*leftOffset)+leftUV, (fHeightOfArea*topOffset)+topUV);
+                Core::Vector2 vBottomRight = Core::Vector2((fWidthOfArea*rightOffset), (fHeightOfArea*bottomOffset));
+                outsUVs = Rendering::UVs(vTopLeft.x, vTopLeft.y, vBottomRight.x, vBottomRight.y);
+            }
+        }
 
         //------------------------------------------------------
         /// Constructor
@@ -35,7 +64,7 @@ namespace ChilliSource
         /// Create the subviews that make up the container
         //------------------------------------------------------
         HorizontalClippingProgressBar::HorizontalClippingProgressBar() 
-			: mpBackgroundImage(new ImageView()), mpProgressImage(new ImageView()), mdwSegments(0), HeightFromImage(false)
+			: mpBackgroundImage(new ImageView()), mpProgressImage(new ImageView()), mdwSegments(0), HeightFromImage(false), m_progressUVs(0.0f, 0.0f, 1.0f, 1.0f)
         {
 			SetSize(0.8f, 0.1f, 0.0f, 0.0f);
 
@@ -55,7 +84,7 @@ namespace ChilliSource
         /// From param dictionary
         //------------------------------------------------------
         HorizontalClippingProgressBar::HorizontalClippingProgressBar(const Core::ParamDictionary& insParams) 
-			: ProgressBar(insParams), mpBackgroundImage(new ImageView()), mpProgressImage(new ImageView()), mdwSegments(0), HeightFromImage(false)
+			: ProgressBar(insParams), mpBackgroundImage(new ImageView()), mpProgressImage(new ImageView()), mdwSegments(0), HeightFromImage(false), m_progressUVs(0.0f, 0.0f, 1.0f, 1.0f)
         {
             mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
             mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::Vector2(0.5f, 0.5f), Core::Vector2(0, 0)));
@@ -207,6 +236,7 @@ namespace ChilliSource
 			CS_ASSERT(ProgressTextureAtlas, "Cannot set sprite sheet index without sprite sheet");
 			ProgressTextureAtlasID = instrID;
             mpProgressImage->SetTextureAtlasID(instrID);
+            m_progressUVs = mpProgressImage->GetUVs();
 		}
 		//--------------------------------------------------------
 		/// Get Background Sprite Sheet Index ID
@@ -323,12 +353,15 @@ namespace ChilliSource
                 
                 if(mfVisibleProgress > 0.0f)
                 {
-                    Core::Rectangle rectProgress;
-                    rectProgress.vOrigin.x = 0.0f;
-                    rectProgress.vOrigin.y = 0.0f;
-                    rectProgress.vSize.x = mfVisibleProgress;
-                    rectProgress.vSize.y = 1.0f;
-                    mpProgressImage->SetUVOffsets(rectProgress);
+                    Rendering::UVs rectProgress;
+                    rectProgress.m_u = 0.0f;
+                    rectProgress.m_v = 0.0f;
+                    rectProgress.m_s = mfVisibleProgress;
+                    rectProgress.m_t = 1.0f;
+                    
+                    Rendering::UVs progressUVs;
+                    CalculateUVs(m_progressUVs, rectProgress, progressUVs);
+                    mpProgressImage->SetUVs(progressUVs);
                 }
                 mpProgressImage->SetSize(mfVisibleProgress, fHeightProgressRel, 0, fHeightProgressAbs);
                 

@@ -139,6 +139,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(TextureAtlasProvider);
         CS_FORWARDDECLARE_CLASS(TextureProvider);
         CS_FORWARDDECLARE_CLASS(CubemapProvider);
+        CS_FORWARDDECLARE_CLASS(UVs);
 	}
 }
 

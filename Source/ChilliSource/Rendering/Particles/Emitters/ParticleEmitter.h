@@ -12,6 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
@@ -150,7 +151,7 @@ namespace ChilliSource
 			//-------------------------------------------------
             /// Sets the UVs used for a particle
             //-------------------------------------------------
-            void SetParticleUVs(const Core::Rectangle & insUVs);
+            void SetParticleUVs(const Rendering::UVs & insUVs);
             //-------------------------------------------------
             /// @author S Downie
             ///
@@ -215,7 +216,7 @@ namespace ChilliSource
             Core::Colour mInitialColour;
             Core::Vector3 mvLastEmissionPos;
             
-			Core::Rectangle msParticleUVs;
+			Rendering::UVs msParticleUVs;
 			
             MaterialCSPtr mpMaterial;
             TextureAtlasCSPtr m_atlas;

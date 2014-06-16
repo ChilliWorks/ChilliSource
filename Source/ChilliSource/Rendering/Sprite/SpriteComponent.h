@@ -17,6 +17,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
@@ -144,7 +145,7 @@ namespace ChilliSource
 			///
 			/// @param Rect containing uv, st
 			//-----------------------------------------------------------
-			void SetUVs(const Core::Rectangle &inUVs);
+			void SetUVs(const Rendering::UVs &inUVs);
 			//-----------------------------------------------------------
 			/// Set UV's
 			///
@@ -161,7 +162,7 @@ namespace ChilliSource
 			///
 			/// @return Rect with UV and ST
 			//-----------------------------------------------------------
-			const Core::Rectangle& GetUVs() const;
+			const Rendering::UVs& GetUVs() const;
 			//-----------------------------------------------------------
 			/// Set Colour
 			///
@@ -196,7 +197,7 @@ namespace ChilliSource
 			///
 			/// @param Rect containing the UV and ST
 			//-----------------------------------------------------------
-			const Core::Rectangle& GetCurrentFrame();
+			const Rendering::UVs& GetCurrentFrame();
 			//-----------------------------------------------------------
 			/// Set Flipped Horizontal
 			///
@@ -342,8 +343,8 @@ namespace ChilliSource
 
 			Core::Vector2 mvDimensions;
 			
-			Core::Rectangle mUVs;
-			Core::Rectangle mTransformedUVs;
+			Rendering::UVs mUVs;
+			Rendering::UVs mTransformedUVs;
             
             Core::Colour mColour;
 			

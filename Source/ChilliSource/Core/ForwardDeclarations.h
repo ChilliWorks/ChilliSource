@@ -85,7 +85,6 @@ namespace ChilliSource
         //---------------------------------------------------------
         template <typename T> class CatmullRomSpline;
         template <typename T> class MultiLineSegment;
-        CS_FORWARDDECLARE_CLASS(UVRect);
         CS_FORWARDDECLARE_CLASS(Rectangle);
         CS_FORWARDDECLARE_CLASS(Circle);
         CS_FORWARDDECLARE_CLASS(Sphere);

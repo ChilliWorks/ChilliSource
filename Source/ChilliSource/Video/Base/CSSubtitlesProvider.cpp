@@ -283,7 +283,7 @@ namespace ChilliSource
         	f32 fLeft = (f32)in_boundsJSON.get(k_tagStyleBoundsLeft, k_defaultLeft).asDouble();
         	f32 fRight = (f32)in_boundsJSON.get(k_tagStyleBoundsRight, k_defaultRight).asDouble();
             
-            return Core::Rectangle(CSCore::Vector2(fLeft, fTop), CSCore::Vector2(fRight - fLeft, fBottom - fTop));
+            return Core::Rectangle(CSCore::Vector2(fLeft + (fRight - fLeft) * 0.5f, fBottom + (fTop - fBottom) * 0.5f), CSCore::Vector2(fRight - fLeft, fBottom - fTop));
         }
         //-------------------------------------------------------------------------
         //-------------------------------------------------------------------------

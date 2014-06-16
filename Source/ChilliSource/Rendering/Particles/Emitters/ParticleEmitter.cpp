@@ -30,7 +30,7 @@ namespace ChilliSource
         //-------------------------------------------------------------
         ParticleEmitter::ParticleEmitter(const Core::ParamDictionary& inParams, const MaterialCSPtr &inpMaterial, ParticleComponent* inpComponent)
         : mudwMaxNumParticles(100), mudwMaxNumParticlesPerEmission(1), mfEmissionFreq(0.5f), mfCurrentTime(0.0f), mfLastEmissionTime(0.0f), mfTimeToLive(1.0f), mvInitialScale(1.0f, 1.0f), mbShouldLoop(true)
-        ,mfEnergyLoss(1.0f/mfTimeToLive), mpOwningComponent(inpComponent), mbIsEmitting(true), mudwNumUsed(0), mpMaterial(inpMaterial),msParticleUVs(Core::Vector2::k_zero, Core::Vector2(1.0f,1.0f))
+        ,mfEnergyLoss(1.0f/mfTimeToLive), mpOwningComponent(inpComponent), mbIsEmitting(true), mudwNumUsed(0), mpMaterial(inpMaterial),msParticleUVs(0.0f, 0.0f, 1.0f, 1.0f)
 		,mudwBurstCounter(0), mbIsEmittingFinished(false)
         ,mbIsGlobalSpace(true)
         {
@@ -421,7 +421,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		/// Sets the UVs used for a particle
 		//-------------------------------------------------
-		void ParticleEmitter::SetParticleUVs(const Core::Rectangle & insUVs)
+		void ParticleEmitter::SetParticleUVs(const Rendering::UVs & insUVs)
         {
 			msParticleUVs = insUVs;
 		}
@@ -485,10 +485,14 @@ namespace ChilliSource
             outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].Col = Col;
             outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].Col = Col;
 			
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex = msParticleUVs.TopLeft();
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex = msParticleUVs.BottomLeft();
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex = msParticleUVs.TopRight();
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex = msParticleUVs.BottomRight();
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex.x = msParticleUVs.m_u;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex.y = msParticleUVs.m_v;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex.x = msParticleUVs.m_u;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex.y = msParticleUVs.m_v + msParticleUVs.m_t;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex.x = msParticleUVs.m_u + msParticleUVs.m_s;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex.y = msParticleUVs.m_v;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex.x = msParticleUVs.m_u + msParticleUVs.m_s;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex.y = msParticleUVs.m_v + msParticleUVs.m_t;
 			
 			outsData.pMaterial = mpMaterial;
 			

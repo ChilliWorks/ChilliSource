@@ -12,6 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Button/Button.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
@@ -67,7 +68,7 @@ namespace ChilliSource
             ///
             /// @param Rectangle for the UVs
             //-----------------------------------------------------------
-            void SetOnUVs(Core::Rectangle insUVs);
+            void SetOnUVs(const Rendering::UVs& insUVs);
             //-----------------------------------------------------------
             /// Set Off UVs
             ///
@@ -75,7 +76,7 @@ namespace ChilliSource
             ///
             /// @param Rectangle for the UVs
             //-----------------------------------------------------------
-            void SetOffUVs(Core::Rectangle insUVs);
+            void SetOffUVs(const Rendering::UVs& insUVs);
             //-----------------------------------------------------------
             /// Set On Sprite Sheet
             ///
@@ -309,8 +310,8 @@ namespace ChilliSource
             Core::EventConnectionUPtr m_movedWithinConnection;
             Core::EventConnectionUPtr m_movedOutsideConnection;
 			
-            Core::Rectangle msOnUVs;
-            Core::Rectangle msOffUVs;
+            Rendering::UVs msOnUVs;
+            Rendering::UVs msOffUVs;
             
             Core::Vector2 mvSelectedPos;
             

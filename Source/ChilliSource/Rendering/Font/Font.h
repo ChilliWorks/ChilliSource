@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 #include <unordered_map>
 
@@ -68,7 +69,7 @@ namespace ChilliSource
             //---------------------------------------------------------------------
 			struct CharacterInfo
 			{
-				Core::Rectangle m_UVs;
+				Rendering::UVs m_UVs;
                 Core::Vector2 m_size;
                 Core::Vector2 m_offset;
 			};

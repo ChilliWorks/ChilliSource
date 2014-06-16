@@ -12,6 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 //=============================================================
 /// GUI - Stretchable Image 
@@ -31,17 +32,17 @@ namespace ChilliSource
 
             struct PanelDesc
             {
-                Core::Rectangle m_topLeftUVs;
-                Core::Rectangle m_topCentreUVs;
-                Core::Rectangle m_topRightUVs;
+                Rendering::UVs m_topLeftUVs;
+                Rendering::UVs m_topCentreUVs;
+                Rendering::UVs m_topRightUVs;
                 
-                Core::Rectangle m_bottomLeftUVs;
-                Core::Rectangle m_bottomCentreUVs;
-                Core::Rectangle m_bottomRightUVs;
+                Rendering::UVs m_bottomLeftUVs;
+                Rendering::UVs m_bottomCentreUVs;
+                Rendering::UVs m_bottomRightUVs;
                 
-                Core::Rectangle m_leftCentreUVs;
-                Core::Rectangle m_middleCentreUVs;
-                Core::Rectangle m_rightCentreUVs;
+                Rendering::UVs m_leftCentreUVs;
+                Rendering::UVs m_middleCentreUVs;
+                Rendering::UVs m_rightCentreUVs;
                 
                 Core::Vector2 m_topLeftSize;
                 Core::Vector2 m_topCentreSize;
@@ -173,45 +174,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             bool IsHeightMaintainingAspectEnabled() const;
 			
-            //--------------------------------------------------------
-            /// Enable Centre Touch Consumption
-            ///
-            /// Enables the touch to go through the middle part of the image
-            ///
-            /// @param boolean to disable or enable
-            //--------------------------------------------------------
-            void EnableCentreTouchConsumption(bool inbEnabled);
-			//--------------------------------------------------------
-            /// Is Centre Touch Consumption Enabled
-            ///
-            /// @return whether the touch though the middle is enabled or not
-            //--------------------------------------------------------
-            bool IsCentreTouchConsumptionEnabled() const;
-			
 			//---Touch Delegates
-			//-----------------------------------------------------------
-			/// Called when the window receives cursor/touch input
-			///
-            /// @author S Downie
-            ///
-			/// @param The pointer.
-            /// @param The timestamp
-            /// @param The press type.
-            ///
-			/// @return Whether touch has been consumed
-			//-----------------------------------------------------------
-			virtual bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType) override;
-			//-----------------------------------------------------------
-			/// Called when the window receives cursor/touch input
-			///
-            /// @author S Downie
-			///
-			/// @param The pointer.
-            /// @param The timestamp
-            ///
-			/// @return Whether touch has been consumed
-			//-----------------------------------------------------------
-			virtual bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp) override;
             
             struct PatchSize
             {
@@ -237,7 +200,6 @@ namespace ChilliSource
 
 			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
-			DECLARE_PROPERTY_A(bool, CentreTouchConsumption, EnableCentreTouchConsumption, IsCentreTouchConsumptionEnabled);
 			
             PanelDesc m_panels;
         };
