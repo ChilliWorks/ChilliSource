@@ -148,7 +148,7 @@ namespace ChilliSource
                 m_scene->Remove(m_children[i].get());
             }
             
-            for (s32 i = m_children.size() - 1; i >= 0; --i)
+            for (s32 i = m_components.size() - 1; i >= 0; --i)
             {
                 m_components[i]->OnRemovedFromScene();
             }
