@@ -97,7 +97,7 @@ namespace ChilliSource
                 Align(meAlignment, vHalfSize, vAlignedPos);
                 
 				mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition() + Core::Vector3(vAlignedPos, 0.0f);
-				mBoundingSphere.fRadius = std::max(mvDimensions.x, mvDimensions.y) * 0.5f;
+				mBoundingSphere.fRadius = std::sqrt((mvDimensions.x * mvDimensions.x) + (mvDimensions.y * mvDimensions.y)) * 0.5f;
 			}
 			return mBoundingSphere;
 		}

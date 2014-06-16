@@ -719,29 +719,22 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		bool Frustum::SphereCullTest(const Sphere& inBoundingSphere) const
 		{
-            Sphere BoundingSphere = inBoundingSphere;
-            
-            //This padding value is the sqrt(2). The value has been chosen to counter act the inaccuracy of the
-            //bounding sphere approx calculation in the render components; which uses the max axis rather than
-            //the diagonal
-            BoundingSphere.fRadius *= 1.412f;
-            
-			if(ShapeIntersection::Intersects(BoundingSphere, mLeftClipPlane) == ShapeIntersection::Result::k_outside)
+			if(ShapeIntersection::Intersects(inBoundingSphere, mLeftClipPlane) == ShapeIntersection::Result::k_outside)
                 return false;
 
-			if(ShapeIntersection::Intersects(BoundingSphere, mRightClipPlane) == ShapeIntersection::Result::k_outside)
+			if(ShapeIntersection::Intersects(inBoundingSphere, mRightClipPlane) == ShapeIntersection::Result::k_outside)
                 return false;
 
-			if(ShapeIntersection::Intersects(BoundingSphere, mTopClipPlane) == ShapeIntersection::Result::k_outside)
+			if(ShapeIntersection::Intersects(inBoundingSphere, mTopClipPlane) == ShapeIntersection::Result::k_outside)
                 return false;
 
-			if(ShapeIntersection::Intersects(BoundingSphere, mBottomClipPlane) == ShapeIntersection::Result::k_outside)
+			if(ShapeIntersection::Intersects(inBoundingSphere, mBottomClipPlane) == ShapeIntersection::Result::k_outside)
                 return false;
         
-            if(ShapeIntersection::Intersects(BoundingSphere, mNearClipPlane) == ShapeIntersection::Result::k_outside)
+            if(ShapeIntersection::Intersects(inBoundingSphere, mNearClipPlane) == ShapeIntersection::Result::k_outside)
                 return false;
     
-			if(ShapeIntersection::Intersects(BoundingSphere, mFarClipPlane) == ShapeIntersection::Result::k_outside)
+			if(ShapeIntersection::Intersects(inBoundingSphere, mFarClipPlane) == ShapeIntersection::Result::k_outside)
                 return false;
 
 			return true;
