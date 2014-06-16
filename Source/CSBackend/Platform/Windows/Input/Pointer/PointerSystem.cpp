@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 
 //This needs to be included after windows.h
-#include <Platform/Windows/glfw3.h>
+#include <glfw3.h>
 
 namespace CSBackend
 {

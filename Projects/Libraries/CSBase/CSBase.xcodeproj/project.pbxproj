@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		81571E65194F5646002D97AF /* CSReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 81571E64194F5646002D97AF /* CSReachability.m */; };
 		81C809E9194B2A41009576BE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C809E8194B2A41009576BE /* Foundation.framework */; };
 		81C80B3D194B3D9E009576BE /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = 81C80AF4194B3D9E009576BE /* aes.c */; };
 		81C80B3E194B3D9E009576BE /* base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C80AF7194B3D9E009576BE /* base64.cpp */; };
@@ -48,7 +49,6 @@
 		81C80B54194B3D9E009576BE /* pngwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 81C80B2D194B3D9E009576BE /* pngwrite.c */; };
 		81C80B55194B3D9E009576BE /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 81C80B2E194B3D9E009576BE /* pngwtran.c */; };
 		81C80B56194B3D9E009576BE /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 81C80B2F194B3D9E009576BE /* pngwutil.c */; };
-		81C80B57194B3D9E009576BE /* CSReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 81C80B37194B3D9E009576BE /* CSReachability.m */; };
 		81C80B58194B3D9E009576BE /* HMAC_SHA1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C80B39194B3D9E009576BE /* HMAC_SHA1.cpp */; };
 		81C80B59194B3D9E009576BE /* SHA1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C80B3B194B3D9E009576BE /* SHA1.cpp */; };
 /* End PBXBuildFile section */
@@ -66,6 +66,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		81571E63194F5646002D97AF /* CSReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSReachability.h; sourceTree = "<group>"; };
+		81571E64194F5646002D97AF /* CSReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSReachability.m; sourceTree = "<group>"; };
 		81C809E5194B2A41009576BE /* libCSBase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCSBase.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81C809E8194B2A41009576BE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		81C80AF4194B3D9E009576BE /* aes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aes.c; sourceTree = "<group>"; };
@@ -127,8 +129,6 @@
 		81C80B32194B3D9E009576BE /* rapidxml_iterators.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rapidxml_iterators.hpp; sourceTree = "<group>"; };
 		81C80B33194B3D9E009576BE /* rapidxml_print.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rapidxml_print.hpp; sourceTree = "<group>"; };
 		81C80B34194B3D9E009576BE /* rapidxml_utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rapidxml_utils.hpp; sourceTree = "<group>"; };
-		81C80B36194B3D9E009576BE /* CSReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSReachability.h; sourceTree = "<group>"; };
-		81C80B37194B3D9E009576BE /* CSReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSReachability.m; sourceTree = "<group>"; };
 		81C80B39194B3D9E009576BE /* HMAC_SHA1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HMAC_SHA1.cpp; sourceTree = "<group>"; };
 		81C80B3A194B3D9E009576BE /* HMAC_SHA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAC_SHA1.h; sourceTree = "<group>"; };
 		81C80B3B194B3D9E009576BE /* SHA1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SHA1.cpp; sourceTree = "<group>"; };
@@ -147,9 +147,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		81571E61194F5646002D97AF /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				81571E62194F5646002D97AF /* Reachability */,
+			);
+			name = iOS;
+			path = PlatformSource/iOS;
+			sourceTree = "<group>";
+		};
+		81571E62194F5646002D97AF /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				81571E63194F5646002D97AF /* CSReachability.h */,
+				81571E64194F5646002D97AF /* CSReachability.m */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
+		81571E66194F564D002D97AF /* PlatformSource */ = {
+			isa = PBXGroup;
+			children = (
+				81571E61194F5646002D97AF /* iOS */,
+			);
+			name = PlatformSource;
+			sourceTree = "<group>";
+		};
 		81C809DC194B2A41009576BE = {
 			isa = PBXGroup;
 			children = (
+				81571E66194F564D002D97AF /* PlatformSource */,
 				81C80A8B194B3983009576BE /* Source */,
 				81C809E7194B2A41009576BE /* Frameworks */,
 				81C809E6194B2A41009576BE /* Products */,
@@ -182,7 +209,6 @@
 				81C80B0C194B3D9E009576BE /* minizip */,
 				81C80B18194B3D9E009576BE /* png */,
 				81C80B30194B3D9E009576BE /* rapidxml */,
-				81C80B35194B3D9E009576BE /* Reachability */,
 				81C80B38194B3D9E009576BE /* SHA1 */,
 			);
 			path = Source;
@@ -296,15 +322,6 @@
 			path = rapidxml;
 			sourceTree = "<group>";
 		};
-		81C80B35194B3D9E009576BE /* Reachability */ = {
-			isa = PBXGroup;
-			children = (
-				81C80B36194B3D9E009576BE /* CSReachability.h */,
-				81C80B37194B3D9E009576BE /* CSReachability.m */,
-			);
-			path = Reachability;
-			sourceTree = "<group>";
-		};
 		81C80B38194B3D9E009576BE /* SHA1 */ = {
 			isa = PBXGroup;
 			children = (
@@ -375,7 +392,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target CSBase ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target CSBase -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nUNIVERSAL_OUTOUT_FILE_PATH=\"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\"\nlipo -create -output \"${UNIVERSAL_OUTOUT_FILE_PATH}\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\n#copy to output directory\npython ../../../Tools/Scripts/package_library.py -h \"Source/\" -l \"${UNIVERSAL_OUTOUT_FILE_PATH}\" -o \"Output/\"";
+			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target CSBase ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target CSBase -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nUNIVERSAL_OUTOUT_FILE_PATH=\"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\"\nlipo -create -output \"${UNIVERSAL_OUTOUT_FILE_PATH}\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\n#copy headers\npython ../../../Tools/Scripts/extract_headers.py -i \"Source/\" -o \"${UNIVERSAL_OUTPUTFOLDER}/Headers/\"\npython ../../../Tools/Scripts/extract_headers.py -i \"PlatformSource/iOS/\" -o \"${UNIVERSAL_OUTPUTFOLDER}/iOSHeaders/\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -402,7 +419,6 @@
 				81C80B45194B3D9E009576BE /* unzip.cpp in Sources */,
 				81C80B41194B3D9E009576BE /* json_writer.cpp in Sources */,
 				81C80B4C194B3D9E009576BE /* pngread.c in Sources */,
-				81C80B57194B3D9E009576BE /* CSReachability.m in Sources */,
 				81C80B59194B3D9E009576BE /* SHA1.cpp in Sources */,
 				81C80B55194B3D9E009576BE /* pngwtran.c in Sources */,
 				81C80B50194B3D9E009576BE /* pngset.c in Sources */,
@@ -413,6 +429,7 @@
 				81C80B4B194B3D9E009576BE /* pngpread.c in Sources */,
 				81C80B49194B3D9E009576BE /* pngget.c in Sources */,
 				81C80B58194B3D9E009576BE /* HMAC_SHA1.cpp in Sources */,
+				81571E65194F5646002D97AF /* CSReachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -505,8 +522,8 @@
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/Source",
+					"$(SRCROOT)/Platform/Source",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -522,8 +539,8 @@
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/Source",
+					"$(SRCROOT)/Platform/Source",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

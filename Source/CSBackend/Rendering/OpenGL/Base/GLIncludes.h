@@ -13,7 +13,7 @@ typedef char GLchar;
 #include <OpenGLES/EAGL.h>
 #include <OpenGLES/EAGLDrawable.h>
 #elif defined CS_TARGETPLATFORM_WINDOWS
-#include <Platform/Windows/glew.h>
+#include <glew.h>
 #include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
 #else
 #include <GLES2/gl2.h>
