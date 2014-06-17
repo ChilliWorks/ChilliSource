@@ -39,8 +39,8 @@ namespace ChilliSource
 	{
         namespace
         {
-            const std::string k_framesFileExtension("bin");
-            const std::string k_keysFileExtension("mospriteid");
+            const std::string k_framesFileExtension("csatlas");
+            const std::string k_keysFileExtension("csatlasid");
             
             const u32 k_numElementsPerFrame = 8;
         }
@@ -129,7 +129,7 @@ namespace ChilliSource
 			frameFile->Read(reinterpret_cast<s8*>(&binVersion), sizeof(s16));
             binVersion = Core::Utils::Endian2ByteSwap(&binVersion);
             
-            CS_ASSERT(binVersion >= 2, "TextureAtlas minimum version supported is 2.0");
+            CS_ASSERT(binVersion >= 3, "TextureAtlas minimum version supported is 2.0");
             
             s16 textureAtlasWidth = 0;
             frameFile->Read(reinterpret_cast<s8*>(&textureAtlasWidth), sizeof(s16));
