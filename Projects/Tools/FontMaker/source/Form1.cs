@@ -15,6 +15,8 @@ namespace FontTool
 {
     public partial class Form1 : Form
     {
+        String m_tempPath = "";
+
         public Form1()
         {
             InitializeComponent();
@@ -38,6 +40,8 @@ namespace FontTool
 			this.CharactersToIncludeBox.Text = defaultCharacters;
 
             SetupColour();
+
+            m_tempPath = Path.Combine(Application.StartupPath, "FontMakerTemp/");
         }
 
         private void OnSelectFontPressed(object sender, EventArgs e)
@@ -114,7 +118,7 @@ namespace FontTool
 
             foreach (FileInfo file in dir.GetFiles())
             {
-                file.CopyTo("Temp/" + file.Name);
+                file.CopyTo(m_tempPath + file.Name);
             }
 
             DialogResult result = this.saveFileDialog1.ShowDialog();
@@ -129,9 +133,9 @@ namespace FontTool
 
         private void CreateEmptyTempFolder()
         {
-            if (Directory.Exists("Temp"))
+            if (Directory.Exists(m_tempPath))
             {
-                DirectoryInfo dir = new DirectoryInfo("Temp");
+                DirectoryInfo dir = new DirectoryInfo(m_tempPath);
 
                 foreach (FileInfo file in dir.GetFiles())
                 {
@@ -140,15 +144,15 @@ namespace FontTool
             }
             else
             {
-                Directory.CreateDirectory("Temp");
+                Directory.CreateDirectory(m_tempPath);
             }
         }
 
         private void DeleteTempFolder()
         {
-            if (Directory.Exists("Temp"))
+            if (Directory.Exists(m_tempPath))
             {
-                DirectoryInfo dir = new DirectoryInfo("Temp");
+                DirectoryInfo dir = new DirectoryInfo(m_tempPath);
 
                 foreach (FileInfo file in dir.GetFiles())
                 {
@@ -157,7 +161,7 @@ namespace FontTool
 
                 try
                 {
-                    Directory.Delete("Temp");
+                    Directory.Delete(m_tempPath);
                 }
                 catch (Exception e)
                 {
@@ -188,7 +192,7 @@ namespace FontTool
             for (int nChar = 0; nChar < CharsToOutput.Length; nChar++)
             {
                 string name = string.Format("{0:x4}", (int)CharsToOutput[nChar]).ToUpperInvariant();
-                using (FileStream imageFile = File.Create("Temp/" + name.ToString() + ".png"))
+                using (FileStream imageFile = File.Create(m_tempPath + name.ToString() + ".png"))
                 {
                     glyphs[nChar].Save(imageFile, System.Drawing.Imaging.ImageFormat.Png);
                 }
@@ -202,12 +206,12 @@ namespace FontTool
 			//Invoke Java font tool
 			string strJavaCommand = "java";
 			string strJarArgument = "-jar FontTool.jar ";
-            string strArgs = "--input Temp/ --padding 2 --divisibleby 4 --maxwidth " + this.maxSizeTextBox.Text + " --maxheight " + this.maxSizeTextBox.Text + " --output " + outputName + " --lineHeight " + this.fontDialog1.Font.Height + " --premultiply 1";
+            string strArgs = "--input " + m_tempPath + " --padding 2 --divisibleby 4 --maxwidth " + this.maxSizeTextBox.Text + " --maxheight " + this.maxSizeTextBox.Text + " --output " + outputName + " --lineHeight " + this.fontDialog1.Font.Height + " --premultiply 1";
 
             Process p = new Process();
             p.StartInfo.FileName = strJavaCommand;
             p.StartInfo.Arguments = strJarArgument + strArgs;
-            p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
+            p.StartInfo.WorkingDirectory = Application.StartupPath;
             p.Start();
 			p.WaitForExit();
 
