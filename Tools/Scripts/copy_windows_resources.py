@@ -75,7 +75,7 @@ def copy_resources(project_dir, target_dir):
 # @param Target directory path
 #----------------------------------------------------------------------
 def copy_libs(project_dir, target_dir):
-    libs_src_path = os.path.join(project_dir, "ChilliSource", "Libraries", "Core", "Libs", "Windows")
+    libs_src_path = os.path.join(project_dir, "ChilliSource", "Libraries", "Core", "Windows", "Libs")
     dll_files = file_system_utils.get_file_paths_with_extensions(libs_src_path, ["dll"])
 
     for dll_file in dll_files:
@@ -100,7 +100,7 @@ def premultiply_pngs(project_dir, target_dir):
 
 #----------------------------------------------------------------------
 # The entry point into the script.
-# 
+#
 # @author S Downie
 #
 # @param The list of arguments.
@@ -116,6 +116,6 @@ def main(args):
     copy_resources(project_dir, target_dir)
     copy_libs(project_dir, target_dir)
     premultiply_pngs(project_dir, target_dir)
-   
+
 if __name__ == "__main__":
     main(sys.argv)

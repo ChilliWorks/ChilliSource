@@ -18,3 +18,5 @@ Projects/Tools/TextureAtlasTool/bin
 Projects/Tools/FontTool/bin
 *.userprefs
 *.pidb
+*.xcworkspace
+*xcuserdata
