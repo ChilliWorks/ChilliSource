@@ -194,7 +194,6 @@ namespace ChilliSource
                 {
                     out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 }
-                return;
             }
             else
             {

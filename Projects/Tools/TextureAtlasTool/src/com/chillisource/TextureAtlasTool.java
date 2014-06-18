@@ -472,13 +472,17 @@ public class TextureAtlasTool
 		}
 		if(options.containsKey("--dither"))
 		{
-			commands.add("--dither");
-			commands.add(options.get("--dither"));
+			if(options.get("--dither") == "1")
+			{
+				commands.add("--dither");
+			}
 		}
 		if(options.containsKey("--premultiply"))
 		{
-			commands.add("--premultiply");
-			commands.add(options.get("--premultiply"));
+			if(options.get("--premultiply") == "1")
+			{
+				commands.add("--premultiply");
+			}
 		}
 		if(options.containsKey("--convertalpha"))
 		{

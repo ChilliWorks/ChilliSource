@@ -51,7 +51,7 @@ public class FontTool
 	}
 
 	boolean verboseOutput = false;
-	int numPixelsPadding = 0;
+	int numPixelsPadding = 2;
 
 	Character CR = null;
 	Character LF = null;
@@ -70,8 +70,6 @@ public class FontTool
 	int minAreaWidth = -1;
 	int minAreaHeight = -1;
 	int divisibleBy = -1;
-	int innerPadding = 0;
-	int extrude = 0;
 	short lineHeight = 0;
 	PlacementHeuristic eBestPlacement = PlacementHeuristic.BOTTOMRIGHT;
 	
@@ -119,17 +117,7 @@ public class FontTool
 		{
 			throw new Exception("Error: no output filepath!");
 		}
-
-		if (options.containsKey("--padding"))
-		{
-			String pad = options.get("--padding");
-			numPixelsPadding = Integer.parseInt(pad);
-			if (verboseOutput)
-			{
-				System.out.println("Padding set to:" + numPixelsPadding);
-			}
-		}
-
+		
 		if (options.containsKey("--width"))
 		{
 			fixedWidth = Integer.decode(options.get("--width"));
@@ -222,16 +210,6 @@ public class FontTool
 			}
 		}
 		
-		if(options.containsKey("--innerPadding"))
-		{
-			innerPadding = Integer.decode(options.get("--innerPadding"));
-		}
-		
-		if(options.containsKey("--extrude"))
-		{
-			extrude = Integer.decode(options.get("--extrude"));
-		}
-		
 		if(options.containsKey("--lineHeight"))
 		{
 			lineHeight = Short.decode(options.get("--lineHeight"));
@@ -276,8 +254,6 @@ public class FontTool
 		System.out.println("\t\t-divisibleby value \t\t\t<Dimensions of image must be divisible by this value>");
 		System.out.println("\t\t-verbose \t\t\t<Additional processing information>");
 		System.out.println("\t\t-heuristic \t\t\tPacking heuristic (current choice of TOPLEFT or BOTTOMRIGHT)");
-		System.out.println("\t\t-innerPadding value \t\t\tOptional amount of pixels to leave untrimmed/cropped from the sprite");
-		System.out.println("\t\t-extrude [true/false] \t\t\tExtrudes the border of the image. Default is 0.");
 		System.out.println("\t\t--convert' \t\t\tThe type to convert to.");
 		System.out.println("\t\t--convertalpha' \t\t\tThe type to convert images with alpha to.");
 		System.out.println("\t\t--convertnoalpha' \t\t\tThe type to convert images without alpha to.");
@@ -321,7 +297,7 @@ public class FontTool
 		TexturePacker packer = new TexturePacker();
 		packer
 		.setDivisibleBy(divisibleBy)
-		.setExtrusion(extrude)
+		.setExtrusion(0)
 		.setFixedHeight(fixedHeight)
 		.setFixedWidth(fixedWidth)
 		.setMaxHeight(maxHeight)
@@ -329,7 +305,7 @@ public class FontTool
 		.setValidHeights(validHeights)
 		.setValidWidths(validWidths)
 		.setHeuristic(eBestPlacement)
-		.setInnerPadding(innerPadding)
+		.setInnerPadding(0)
 		.setOuterPadding(numPixelsPadding)
 		.enableCropping(true)
 		.enableVerboseOutput(verboseOutput);
@@ -377,13 +353,17 @@ public class FontTool
 		}
 		if(options.containsKey("--dither"))
 		{
-			commands.add("--dither");
-			commands.add(options.get("--dither"));
+			if(options.get("--dither") == "1")
+			{
+				commands.add("--dither");
+			}
 		}
 		if(options.containsKey("--premultiply"))
 		{
-			commands.add("--premultiply");
-			commands.add(options.get("--premultiply"));
+			if(options.get("--premultiply") == "1")
+			{
+				commands.add("--premultiply");
+			}
 		}
 		if(options.containsKey("--convertalpha"))
 		{
