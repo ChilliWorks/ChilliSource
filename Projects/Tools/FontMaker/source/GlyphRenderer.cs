@@ -62,11 +62,8 @@ namespace FontTool
                                             Font font)
         {
             StringFormat format = new StringFormat();
-            RectangleF rect = new RectangleF(0, 0,
-                                                                           1000, 1000);
-            CharacterRange[] ranges = 
-                                       { new System.Drawing.CharacterRange(0, 
-                                                               text.Length) };
+            RectangleF rect = new RectangleF(0, 0, 1000, 1000);
+            CharacterRange[] ranges = { new System.Drawing.CharacterRange(0, text.Length) };
             Region[] regions = new System.Drawing.Region[1];
 
             format.SetMeasurableCharacterRanges(ranges);
@@ -97,7 +94,7 @@ namespace FontTool
 
                 SizeF glyphSize = measurer.MeasureString(c.ToString(), Font);
                 int glyphWidth = MeasureDisplayStringWidth(measurer, c.ToString(), Font);
-                int glyphHeight = Font.Height + 2; // Use the line height for the original size and add padding
+                int glyphHeight = Font.Height;
 
                 if (DrawShadow)
                 {

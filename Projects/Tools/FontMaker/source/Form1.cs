@@ -15,8 +15,6 @@ namespace FontTool
 {
     public partial class Form1 : Form
     {
-		bool mbExportScalable = false;
-
         public Form1()
         {
             InitializeComponent();
@@ -35,14 +33,11 @@ namespace FontTool
 			string strAlphabet = "abcdefghijklmnopqrstuvwxyz";
 			string strSymbols = "+-*/=.,_?!\"'£$%^&*()@#:;~";
 
-			string defaultCharacters = strNumbers + strAlphabet + strAlphabet.ToUpper()+ strSymbols;
+			string defaultCharacters = strNumbers + strAlphabet + strAlphabet.ToUpper() + strSymbols;
 
 			this.CharactersToIncludeBox.Text = defaultCharacters;
 
             SetupColour();
-
-            Directory.CreateDirectory("Output");
-            Directory.SetCurrentDirectory("Output");
         }
 
         private void OnSelectFontPressed(object sender, EventArgs e)
@@ -51,6 +46,7 @@ namespace FontTool
             this.richTextBox1.Font = this.fontDialog1.Font;
             this.fontNameBox.Text = this.fontDialog1.Font.Name + "-" + this.fontDialog1.Font.SizeInPoints.ToString();
         }
+
         private void OnPickColour(object sender, EventArgs e)
         {
             PresentFontColour();
@@ -62,20 +58,7 @@ namespace FontTool
             fontColourDialog.ShowDialog();
             SetupColour();
         }
-		private void OnChangeExportScalable (object sender, EventArgs e)
-		{
-			mbExportScalable = this.ExportScalableFont.Checked;
 
-			// we need to disable features not supported by scalable fonts
-			this.enableDropshadows.Enabled = !mbExportScalable;
-			this.enableOutline.Enabled = !mbExportScalable;
-			this.button3.Enabled = !mbExportScalable;
-
-			this.fontColourDialog.Color = Color.White;
-			this.richTextBox1.ForeColor = Color.White;
-			this.richTextBox1.BackColor = PreviewBGColourForFontColour(Color.White);
-
-		}
         private void SetupColour()
         {
             Color textColour = fontColourDialog.Color;
@@ -104,7 +87,6 @@ namespace FontTool
 
         string GetCharactersToOutput()
         {
-
             List<char> uniqueChars = new List<char>();
 
             foreach (char c in CharactersToIncludeBox.Text)
@@ -116,35 +98,36 @@ namespace FontTool
             return new string(uniqueChars.ToArray());
         }
 
-
         private void OnExportPreviousPressed(object sender, EventArgs e)
         {
-
-            string outputName = outputNameBox.Text;
-
-
             CreateEmptyTempFolder();
 
             FolderBrowserDialog fb = new FolderBrowserDialog();
-            fb.RootFolder = Environment.SpecialFolder.MyComputer;
-            fb.SelectedPath = Directory.GetCurrentDirectory();
+            fb.Description = "Choose the directory of the individual images";
 
-            if (fb.ShowDialog() == DialogResult.OK)
+            if (fb.ShowDialog() != DialogResult.OK)
             {
-
-                DirectoryInfo dir = new DirectoryInfo(fb.SelectedPath);
-
-                foreach (FileInfo file in dir.GetFiles())
-                {
-                    file.CopyTo("Temp/" + file.Name);
-                }
-
+                return;
             }
 
-            BuildTempContents(outputName);
+            DirectoryInfo dir = new DirectoryInfo(fb.SelectedPath);
+
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                file.CopyTo("Temp/" + file.Name);
+            }
+
+            DialogResult result = this.saveFileDialog1.ShowDialog();
+
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
+            BuildTempContents(this.saveFileDialog1.FileName);
         }
 
-        private static void CreateEmptyTempFolder()
+        private void CreateEmptyTempFolder()
         {
             if (Directory.Exists("Temp"))
             {
@@ -161,6 +144,28 @@ namespace FontTool
             }
         }
 
+        private void DeleteTempFolder()
+        {
+            if (Directory.Exists("Temp"))
+            {
+                DirectoryInfo dir = new DirectoryInfo("Temp");
+
+                foreach (FileInfo file in dir.GetFiles())
+                {
+                    File.Delete(file.FullName);
+                }
+
+                try
+                {
+                    Directory.Delete("Temp");
+                }
+                catch (Exception e)
+                {
+                    //When testing on Mac the thumb.db is in use causing this to fail
+                }
+            }
+        }
+
         private void OnExportPressed(object sender, EventArgs e)
         {
             string CharsToOutput = GetCharactersToOutput();
@@ -168,8 +173,12 @@ namespace FontTool
             if (string.IsNullOrEmpty(CharsToOutput))
                 return;
 
-            string outputName = outputNameBox.Text;
+            DialogResult result = this.saveFileDialog1.ShowDialog();
 
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
 
             CreateEmptyTempFolder();
 
@@ -185,106 +194,59 @@ namespace FontTool
                 }
             }
 
-            BuildTempContents(outputName);
+            BuildTempContents(this.saveFileDialog1.FileName);
         }
-
-		private string GetSpriteToolSettings ()
-		{
-			string strSettingsFile = "FontMaker/SpriteToolSettings.txt";
-
-			string strDefaultArguments = "-padding 2 -maxwidth 4096 -maxheight 4096 -divisibleby 2";
-
-			if(!File.Exists(strSettingsFile))
-				return strDefaultArguments;
-
-			return File.ReadAllText(strSettingsFile);
-		}
-
-		private void ConvertToScalable (string outputName)
-		{
-			outputName += ".png";
-			string strDistanceFieldCmd  = "-jar ../DistanceFieldGen.jar " + outputName + " " + outputName;
-
-			Process p = new Process();
-			p.StartInfo.FileName = "java";
-			p.StartInfo.Arguments = strDistanceFieldCmd;
-			p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
-			p.StartInfo.UseShellExecute = false;
-			p.Start();
-			p.WaitForExit();
-
-		}
 
         private void BuildTempContents (string outputName)
 		{
 			//Invoke Java font tool
-
-			if (!Directory.Exists ("Export")) {
-				Directory.CreateDirectory ("Export");
-			}
-
-			Directory.SetCurrentDirectory ("Export");
-
-			string jarName = "SpriteTool";
 			string strJavaCommand = "java";
-			string strJarArgument = "-jar ../" + jarName + ".jar ";
-			string strArgs = "-dir ../Temp/ -mode 1 " + GetSpriteToolSettings() + " -output ";
-
-			string strSpriteOutName = outputName;
+			string strJarArgument = "-jar FontTool.jar ";
+            string strArgs = "--input Temp/ --padding 2 --divisibleby 4 --maxwidth " + this.maxSizeTextBox.Text + " --maxheight " + this.maxSizeTextBox.Text + " --output " + outputName + " --fontHeight " + this.fontDialog1.Font.Height + " --premultiply 1";
 
             Process p = new Process();
             p.StartInfo.FileName = strJavaCommand;
-            p.StartInfo.Arguments = strJarArgument + strArgs + strSpriteOutName;
-            //p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.Arguments = strJarArgument + strArgs;
             p.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
             p.Start();
 			p.WaitForExit();
 
-			if(mbExportScalable)
-				ConvertToScalable(outputName);
-
-            Directory.SetCurrentDirectory("../");
+            DeleteTempFolder();
         }
+
         private void OnSavePressed(object sender, EventArgs e)
         {
-
             string CharsToOutput = GetCharactersToOutput();
 
             if (string.IsNullOrEmpty(CharsToOutput))
                 return;
 
-            string outputName = outputNameBox.Text;
+            FolderBrowserDialog fb = new FolderBrowserDialog();
+            fb.Description = "Choose a directory in which to save the individual images";
 
-            Directory.CreateDirectory(outputName);
+            if (fb.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            Directory.CreateDirectory(fb.SelectedPath);
 
             //Render and pack glyphs
-
             List<Bitmap> glyphs = RenderGlyphs(CharsToOutput);
 
             //Save individual glyph files
             for (int nChar = 0; nChar < CharsToOutput.Length; nChar++)
             {
                 string name = string.Format("{0:x4}", (int)CharsToOutput[nChar]).ToUpperInvariant();
-                using (FileStream imageFile = File.Create(outputName + "/" + name.ToString() + ".png"))
+                using (FileStream imageFile = File.Create(fb.SelectedPath + "/" + name.ToString() + ".png"))
                 {
                     glyphs[nChar].Save(imageFile, System.Drawing.Imaging.ImageFormat.Png);
                 }
             }
-
-            //Write filelist
-            using (StreamWriter writer = new StreamWriter(File.Create(outputName +"/FileList.txt")))
-            {
-                foreach (char c in GetCharactersToOutput())
-                {
-                    string name = string.Format("{0:x4}", (int)c).ToUpperInvariant() + ".png";
-                    writer.WriteLine(name);                   
-                }
-            }
         }
 
-
-        List<Bitmap> RenderGlyphs(string str) {
-
+        List<Bitmap> RenderGlyphs(string str) 
+        {
             GlyphRenderer glyphRenderer = new GlyphRenderer();
             glyphRenderer.HighQualityRendering = enableAntialiasing.Checked;
 
@@ -304,28 +266,20 @@ namespace FontTool
             if (glyphRenderer.DrawOutline)
             {
                 glyphRenderer.OutlineColour = outlineColourSample.BackColor;
-                //int thickness;
-                //if (!int.TryParse(outlineThicknessText.Text, out thickness))
-                //{
-                //    thickness = 0;
-                //}
                 glyphRenderer.OutlineThickness = 1; 
             }
 
             return glyphRenderer.RenderGlyphs(str);
         }
 
-   
         private void TextColorSample_Click(object sender, EventArgs e)
         {
             PresentFontColour();
         }
 
-
         #region AutoPreview UI
         private void AutoPreviewColour_CheckedChanged(object sender, EventArgs e)
         {
-
             PreviewBGButton.Enabled = !AutoPreviewBackColour.Checked;
             PreviewBGColour.Enabled = !AutoPreviewBackColour.Checked;
 
@@ -338,6 +292,7 @@ namespace FontTool
                 this.richTextBox1.BackColor = PreviewBGColour.BackColor;
             }
         }
+
         private void PresentPreviewBGColour(object sender, EventArgs e)
         {
             fontColourDialog.Color = PreviewBGColour.BackColor;
@@ -372,6 +327,7 @@ namespace FontTool
             }
             XShadowOffset = result;
         }
+
         private void ShadowYOffsetText_TextChanged(object sender, EventArgs e)
         {
             int result;
@@ -382,6 +338,7 @@ namespace FontTool
 
             YShadowOffset = result;
         }
+
         int XShadowOffset = 1;
         int YShadowOffset = 1;
 
@@ -393,8 +350,6 @@ namespace FontTool
         }
 
         #endregion
-
-
 
         private void EnableOutline_CheckedChanged(object sender, EventArgs e)
         {
@@ -418,7 +373,32 @@ namespace FontTool
             outlineColourSample.BackColor = fontColourDialog.Color;
         }
 
+        private void label2_Click(object sender, EventArgs e)
+        {
 
+        }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void maxSizeTextBox_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int maxSize = Convert.ToInt32(this.maxSizeTextBox.Text);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Error!", "String must be a number");
+                this.maxSizeTextBox.Text = "4096";
+            }
+            catch (OverflowException)
+            {
+                MessageBox.Show("Error!", "String must a number less than 2,147,483,647");
+                this.maxSizeTextBox.Text = "4096";
+            }
+        }
     }
 }

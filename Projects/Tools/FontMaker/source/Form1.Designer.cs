@@ -33,8 +33,6 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
-            this.outputNameBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.fontColourDialog = new System.Windows.Forms.ColorDialog();
             this.enableAntialiasing = new System.Windows.Forms.CheckBox();
@@ -55,15 +53,16 @@
             this.shadowXOffsetText = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.button5 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.outlineThicknessText = new System.Windows.Forms.TextBox();
             this.enableOutline = new System.Windows.Forms.CheckBox();
             this.outlineColourButton = new System.Windows.Forms.Button();
             this.outlineThicknessLabel = new System.Windows.Forms.Label();
             this.outlineColourSample = new System.Windows.Forms.PictureBox();
-			this.ExportScalableFont	= new System.Windows.Forms.CheckBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.button5 = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.maxSizeTextBox = new System.Windows.Forms.TextBox();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FontColourSample)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -72,16 +71,15 @@
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.outlineColourSample)).BeginInit();
-            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(8, 12);
+            this.button1.Location = new System.Drawing.Point(8, 10);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(86, 23);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Pick Font";
+            this.button1.Text = "Choose Font";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.OnSelectFontPressed);
             // 
@@ -98,9 +96,10 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(9, 90);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(58, 13);
+            this.label2.Size = new System.Drawing.Size(102, 13);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Characters";
+            this.label2.Text = "Characters to export";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // richTextBox1
             // 
@@ -122,39 +121,22 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(523, 20);
+            this.button2.Location = new System.Drawing.Point(523, 12);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(171, 23);
             this.button2.TabIndex = 6;
-            this.button2.Text = "Save Individual Images";
+            this.button2.Text = "Save individual images";
             this.toolTip1.SetToolTip(this.button2, "Export each character as an individual png");
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.OnSavePressed);
-            // 
-            // outputNameBox
-            // 
-            this.outputNameBox.Location = new System.Drawing.Point(336, 20);
-            this.outputNameBox.Name = "outputNameBox";
-            this.outputNameBox.Size = new System.Drawing.Size(146, 20);
-            this.outputNameBox.TabIndex = 7;
-            this.outputNameBox.Text = "MyFont";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(333, 5);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(70, 13);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Output Name";
             // 
             // button3
             // 
             this.button3.Location = new System.Drawing.Point(8, 41);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(86, 23);
             this.button3.TabIndex = 9;
-            this.button3.Text = "Pick Colour";
+            this.button3.Text = "Choose Colour";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.OnPickColour);
             // 
@@ -173,10 +155,12 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.maxSizeTextBox);
             this.groupBox1.Controls.Add(this.enableAntialiasing);
             this.groupBox1.Location = new System.Drawing.Point(488, 100);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(206, 50);
+            this.groupBox1.Size = new System.Drawing.Size(206, 75);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
@@ -185,9 +169,9 @@
             // 
             this.FontColourSample.BackColor = System.Drawing.Color.White;
             this.FontColourSample.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.FontColourSample.Location = new System.Drawing.Point(89, 41);
+            this.FontColourSample.Location = new System.Drawing.Point(100, 41);
             this.FontColourSample.Name = "FontColourSample";
-            this.FontColourSample.Size = new System.Drawing.Size(75, 32);
+            this.FontColourSample.Size = new System.Drawing.Size(75, 23);
             this.FontColourSample.TabIndex = 12;
             this.FontColourSample.TabStop = false;
             this.FontColourSample.Click += new System.EventHandler(this.TextColorSample_Click);
@@ -242,7 +226,7 @@
             // 
             // fontNameBox
             // 
-            this.fontNameBox.Location = new System.Drawing.Point(89, 12);
+            this.fontNameBox.Location = new System.Drawing.Point(100, 12);
             this.fontNameBox.Name = "fontNameBox";
             this.fontNameBox.ReadOnly = true;
             this.fontNameBox.Size = new System.Drawing.Size(169, 20);
@@ -311,7 +295,7 @@
             this.groupBox3.Controls.Add(this.shadowColourButton);
             this.groupBox3.Controls.Add(this.shadowXOffsetLabel);
             this.groupBox3.Controls.Add(this.shadowColourSample);
-            this.groupBox3.Location = new System.Drawing.Point(488, 156);
+            this.groupBox3.Location = new System.Drawing.Point(488, 181);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(206, 154);
             this.groupBox3.TabIndex = 15;
@@ -340,14 +324,25 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(523, 78);
+            this.button4.Location = new System.Drawing.Point(523, 71);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(171, 23);
             this.button4.TabIndex = 16;
-            this.button4.Text = "Export Current to moFlow";
+            this.button4.Text = "Export from font";
             this.toolTip1.SetToolTip(this.button4, "Uses the SpriteTool to export into moFlow format");
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.OnExportPressed);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(523, 41);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(171, 23);
+            this.button5.TabIndex = 19;
+            this.button5.Text = "Export from saved images";
+            this.toolTip1.SetToolTip(this.button5, "Uses the SpriteTool to export into moFlow format");
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.OnExportPreviousPressed);
             // 
             // groupBox4
             // 
@@ -356,7 +351,7 @@
             this.groupBox4.Controls.Add(this.outlineColourButton);
             this.groupBox4.Controls.Add(this.outlineThicknessLabel);
             this.groupBox4.Controls.Add(this.outlineColourSample);
-            this.groupBox4.Location = new System.Drawing.Point(488, 316);
+            this.groupBox4.Location = new System.Drawing.Point(488, 341);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(206, 81);
             this.groupBox4.TabIndex = 17;
@@ -417,41 +412,28 @@
             this.outlineColourSample.TabIndex = 17;
             this.outlineColourSample.TabStop = false;
             this.outlineColourSample.Click += new System.EventHandler(this.PresentOutlineColour);
-			// 
-			// ExportScalableFont
-			// 
-			this.ExportScalableFont.AutoSize = true;
-			this.ExportScalableFont.Checked = false;
-			this.ExportScalableFont.CheckState = System.Windows.Forms.CheckState.Unchecked;
-			this.ExportScalableFont.Location = new System.Drawing.Point(6, 19);
-			this.ExportScalableFont.Name = "exportScalableFont";
-			this.ExportScalableFont.Size = new System.Drawing.Size(101, 17);
-			this.ExportScalableFont.TabIndex = 10;
-			this.ExportScalableFont.Text = "Export Scalable Font";
-			this.toolTip1.SetToolTip(this.ExportScalableFont, "Converts font to a format that can be scaled");
-			this.ExportScalableFont.UseVisualStyleBackColor = true;
-			this.ExportScalableFont.CheckedChanged += new System.EventHandler(this.OnChangeExportScalable);
             // 
-            // groupBox5
+            // label4
             // 
-			this.groupBox5.Controls.Add(this.ExportScalableFont);
-            this.groupBox5.Location = new System.Drawing.Point(251, 322);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(231, 106);
-            this.groupBox5.TabIndex = 18;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Export Options";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 44);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(56, 13);
+            this.label4.TabIndex = 20;
+            this.label4.Text = "Max. Size:";
             // 
-            // button5
+            // maxSizeTextBox
             // 
-            this.button5.Location = new System.Drawing.Point(523, 49);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(171, 23);
-            this.button5.TabIndex = 19;
-            this.button5.Text = "Export from Saved Images";
-            this.toolTip1.SetToolTip(this.button5, "Uses the SpriteTool to export into moFlow format");
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.OnExportPreviousPressed);
+            this.maxSizeTextBox.Location = new System.Drawing.Point(58, 41);
+            this.maxSizeTextBox.Name = "maxSizeTextBox";
+            this.maxSizeTextBox.Size = new System.Drawing.Size(41, 20);
+            this.maxSizeTextBox.TabIndex = 21;
+            this.maxSizeTextBox.Text = "2048";
+            this.maxSizeTextBox.TextChanged += new System.EventHandler(this.maxSizeTextBox_TextChanged);
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.Filter = "csfont files (*.csfont)|*.csfont|All files (*.*)|*.*\"";
             // 
             // Form1
             // 
@@ -459,7 +441,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(700, 435);
             this.Controls.Add(this.button5);
-            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.groupBox3);
@@ -468,8 +449,6 @@
             this.Controls.Add(this.FontColourSample);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.outputNameBox);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox1);
@@ -477,7 +456,8 @@
             this.Controls.Add(this.CharactersToIncludeBox);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
-            this.Text = "Font Maker";
+            this.Text = "CS Font Maker";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FontColourSample)).EndInit();
@@ -490,8 +470,6 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.outlineColourSample)).EndInit();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -506,8 +484,6 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox outputNameBox;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ColorDialog fontColourDialog;
         private System.Windows.Forms.CheckBox enableAntialiasing;
@@ -534,9 +510,10 @@
         private System.Windows.Forms.PictureBox outlineColourSample;
         private System.Windows.Forms.TextBox outlineThicknessText;
         private System.Windows.Forms.Label outlineThicknessLabel;
-		private System.Windows.Forms.CheckBox ExportScalableFont;
-        private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox maxSizeTextBox;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 
