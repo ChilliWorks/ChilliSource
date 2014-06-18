@@ -29,7 +29,14 @@
 package com.chillisource;
 
 import java.io.*;
+
 import javax.imageio.*;
+
+import com.taggames.toolutils.CExternalProcess;
+import com.taggames.toolutils.CLittleEndianOutputStream;
+import com.taggames.toolutils.SCFileSystemUtils;
+import com.taggames.toolutils.SCStringUtils;
+
 import java.util.*;
  
 /*
@@ -94,6 +101,8 @@ public class TextureAtlasTool
 	// the above
 	String orderingFileName = null;
 	String outputName = null; // This forms the root for any output files'
+	
+	Hashtable<String, String> options = new Hashtable<String, String>();
 
 	private void addImageFilesInDirectory(File dir, boolean recursiveDirectorySearch, ArrayList<File> files)
 	{
@@ -160,16 +169,14 @@ public class TextureAtlasTool
 
 	private void processCommandLineArgs(String[] args) throws NumberFormatException, Exception
 	{
-		Hashtable<String, String> options = new Hashtable<String, String>();
-
 		for (int i = 0; i < args.length; i++)
 		{
-			if (args[i].equalsIgnoreCase("-verbose"))
+			if (args[i].equalsIgnoreCase("--verbose"))
 			{
 				verboseOutput = true;
 			}
 			else
-			if (args[i].equalsIgnoreCase("-help"))
+			if (args[i].equalsIgnoreCase("--help"))
 			{
 				Usage();
 			}
@@ -180,9 +187,9 @@ public class TextureAtlasTool
 			}
 		}
 
-		if (options.containsKey("-crop"))
+		if (options.containsKey("--crop"))
 		{
-			String crop = options.get("-crop");
+			String crop = options.get("--crop");
 			int tmp = Integer.parseInt(crop);
 			if (tmp == 1)
 			{
@@ -196,27 +203,28 @@ public class TextureAtlasTool
 			}
 		}
 		
-		if (options.containsKey("-input"))
+		if (options.containsKey("--input"))
 		{
-			inputDirectoryName = options.get("-input");
+			inputDirectoryName = options.get("--input");
 		}
 		else
 		{
 			throw new Exception("Error: no source directory!");
 		}
 
-		if (options.containsKey("-output"))
+		if (options.containsKey("--output"))
 		{
-			outputName = options.get("-output");
+			outputName = options.get("--output");
+			outputName = SCStringUtils.RemoveExtension(outputName);
 		}
 		else
 		{
 			throw new Exception("Error: no output filepath!");
 		}
 
-		if (options.containsKey("-padding"))
+		if (options.containsKey("--padding"))
 		{
-			String pad = options.get("-padding");
+			String pad = options.get("--padding");
 			numPixelsPadding = Integer.parseInt(pad);
 			if (verboseOutput)
 			{
@@ -224,26 +232,26 @@ public class TextureAtlasTool
 			}
 		}
 
-		if (options.containsKey("-filelist"))
+		if (options.containsKey("--filelist"))
 		{
-			orderingFileName = options.get("-filelist");
+			orderingFileName = options.get("--filelist");
 		}
 
-		if (options.containsKey("-width"))
+		if (options.containsKey("--width"))
 		{
-			fixedWidth = Integer.decode(options.get("-width"));
+			fixedWidth = Integer.decode(options.get("--width"));
 		}
 
-		if (options.containsKey("-height"))
+		if (options.containsKey("--height"))
 		{
-			fixedHeight = Integer.decode(options.get("-height"));
+			fixedHeight = Integer.decode(options.get("--height"));
 		}
 
-		if (options.containsKey("-validwidths"))
+		if (options.containsKey("--validwidths"))
 		{
 			int tempValidWidths[] = new int[256];
 			
-			String s = options.get("-validwidths");
+			String s = options.get("--validwidths");
 			int numValidW = 0;
 			int index = s.indexOf(':');
 			while (index > 0)
@@ -266,11 +274,11 @@ public class TextureAtlasTool
 			}
 		}
 
-		if (options.containsKey("-validheights"))
+		if (options.containsKey("--validheights"))
 		{
 			int tempValidHeights[] = new int[256];
 			
-			String s = options.get("-validheights");
+			String s = options.get("--validheights");
 			int numValidH = 0;
 			int index = s.indexOf(':');
 			while (index > 0)
@@ -293,41 +301,41 @@ public class TextureAtlasTool
 			}
 		}
 		
-		if (options.containsKey("-maxwidth"))
+		if (options.containsKey("--maxwidth"))
 		{
-			maxWidth = Integer.decode(options.get("-maxwidth"));
+			maxWidth = Integer.decode(options.get("--maxwidth"));
 		}
 		
-		if (options.containsKey("-maxheight"))
+		if (options.containsKey("--maxheight"))
 		{
-			maxHeight = Integer.decode(options.get("-maxheight"));
+			maxHeight = Integer.decode(options.get("--maxheight"));
 		}
 		
-		if (options.containsKey("-divisibleby"))
+		if (options.containsKey("--divisibleby"))
 		{
-			divisibleBy = Integer.decode(options.get("-divisibleby"));
+			divisibleBy = Integer.decode(options.get("--divisibleby"));
 		}
 
-		if(options.containsKey("-heuristic"))
+		if(options.containsKey("--heuristic"))
 		{
 			try
 			{
-				eBestPlacement = TexturePacker.PlacementHeuristic.valueOf(options.get("-heuristic").toUpperCase());
+				eBestPlacement = TexturePacker.PlacementHeuristic.valueOf(options.get("--heuristic").toUpperCase());
 			}
 			catch(Exception e)
 			{
-				System.out.println(options.get("-heuristic").toUpperCase() + " is not a valid heuristic");
+				System.out.println(options.get("--heuristic").toUpperCase() + " is not a valid heuristic");
 			}
 		}
 		
-		if(options.containsKey("-innerPadding"))
+		if(options.containsKey("--innerPadding"))
 		{
 			innerPadding = Integer.decode(options.get("-innerPadding"));
 		}
 		
-		if(options.containsKey("-extrude"))
+		if(options.containsKey("--extrude"))
 		{
-			extrude = Integer.decode(options.get("-extrude"));
+			extrude = Integer.decode(options.get("--extrude"));
 		}
 	}
 
@@ -337,22 +345,38 @@ public class TextureAtlasTool
 		System.out.println("Example TextureAtlas creation:");
 		System.out.println("java -jar TextureAtlasTool.jar -mode 0 -padding PADDING -input INPUT_DIR -validwidths VALID_WIDTH_LIST -validheight VALID_HEIGHT_LIST -output OUTPUT_DIR");
 		System.out.println("\tCommands:");
-		System.out.println("\t\t-padding value \t\t\t<Spacing (in pixels) between items on spritesheet>");
-		System.out.println("\t\t-input \t\t<Directory to process. By default will process all contained PNGs");
-		System.out.println("\t\t-output filename \t\t<Output PNG filename>");
-		System.out.println("\t\t-filelist listfile \t\t<listfile contains list of .PNG files to include>");
-		System.out.println("\t\t-width value \t\t\t<Force output width to be value>");
-		System.out.println("\t\t-height value \t\t\t<Force output height to be value>");
-		System.out.println("\t\t-validwidths v1:v2:v3:... \t<Choose best match final width from list>");
-		System.out.println("\t\t-validheights v1:v2:v3:... \t<Choose best match final height from list>");
-		System.out.println("\t\t-maxwidth value \t\t\t<Set a max width value, final image may be <= this value>");
-		System.out.println("\t\t-maxheight value \t\t\t<Set a max height value, final image may be <= this value>");
-		System.out.println("\t\t-divisibleby value \t\t\t<Dimensions of image must be divisible by this value>");
-		System.out.println("\t\t-verbose \t\t\t<Additional processing information>");
-		System.out.println("\t\t-crop \t\t\tChoose from DO CROP (1) or DO NOT CROP (0). Default is DO CROP.");
-		System.out.println("\t\t-heuristic \t\t\tPacking heuristic (current choice of TOPLEFT or BOTTOMRIGHT)");
-		System.out.println("\t\t-innerPadding value \t\t\tOptional amount of pixels to leave untrimmed/cropped from the sprite");
-		System.out.println("\t\t-extrude [true/false] \t\t\tExtrudes the border of the image. Default is 0.");
+		System.out.println("\t\t--padding value \t\t\t<Spacing (in pixels) between items on spritesheet>");
+		System.out.println("\t\t--input \t\t<Directory to process. By default will process all contained PNGs");
+		System.out.println("\t\t--output filename \t\t<Output PNG filename>");
+		System.out.println("\t\t--filelist listfile \t\t<listfile contains list of .PNG files to include>");
+		System.out.println("\t\t--width value \t\t\t<Force output width to be value>");
+		System.out.println("\t\t--height value \t\t\t<Force output height to be value>");
+		System.out.println("\t\t--validwidths v1:v2:v3:... \t<Choose best match final width from list>");
+		System.out.println("\t\t--validheights v1:v2:v3:... \t<Choose best match final height from list>");
+		System.out.println("\t\t--maxwidth value \t\t\t<Set a max width value, final image may be <= this value>");
+		System.out.println("\t\t--maxheight value \t\t\t<Set a max height value, final image may be <= this value>");
+		System.out.println("\t\t--divisibleby value \t\t\t<Dimensions of image must be divisible by this value>");
+		System.out.println("\t\t--verbose \t\t\t<Additional processing information>");
+		System.out.println("\t\t--crop \t\t\tChoose from DO CROP (1) or DO NOT CROP (0). Default is DO CROP.");
+		System.out.println("\t\t--heuristic \t\t\tPacking heuristic (current choice of TOPLEFT or BOTTOMRIGHT)");
+		System.out.println("\t\t--innerPadding value \t\t\tOptional amount of pixels to leave untrimmed/cropped from the sprite");
+		System.out.println("\t\t--extrude [true/false] \t\t\tExtrudes the border of the image. Default is 0.");
+		System.out.println("\t\t--convert' \t\t\tThe type to convert to.");
+		System.out.println("\t\t--convertalpha' \t\t\tThe type to convert images with alpha to.");
+		System.out.println("\t\t--convertnoalpha' \t\t\tThe type to convert images without alpha to.");
+		System.out.println("\t\t--compression' \t\t\tThe compression type.");
+		System.out.println("\t\t--premultiply [true/false (1/0)]' \t\t\tWhether or not to premultiply the output csimage.");
+		System.out.println("\t\t--dither [true/false (1/0)]' \t\t\tWhether or not to dither if converting to a smaller image format.");
+		System.out.println("Conversion Types:");
+		System.out.println("\t\t\tL8");
+		System.out.println("\t\t\tLA88");
+		System.out.println("\t\t\tRGB565");
+		System.out.println("\t\t\tRGBA4444");
+		System.out.println("\t\t\tRGB888");
+		System.out.println("\t\t\tRGBA8888");
+		System.out.println("Compression Types:");
+		System.out.println("\t\t\tNone");
+		System.out.println("\t\t\tDefault");
 	}
 	
 	private boolean Run(String[] args) throws Exception
@@ -416,23 +440,79 @@ public class TextureAtlasTool
 
 		writeBinaryFile(result);
 		writeStringIDs(result);
+		convertToCSImage();
 
 		System.out.printf("Goodbye!\n");
 
 		return true;
 	}
+	
+	private void convertToCSImage()
+	{
+		System.out.println("Converting to CSImage");
+		
+		LinkedList<String> commands = new LinkedList<String>();
+		commands.add("java");
+		commands.add("-Djava.awt.headless=true");
+		commands.add("-jar");
+		commands.add(SCFileSystemUtils.GetPathToHere() + "PNGToCSImage.jar");
+		commands.add("--input");
+		commands.add(outputName + ".png");
+		commands.add("--output");
+		commands.add(outputName + ".csimage");
+		if(options.containsKey("--compression"))
+		{
+			commands.add("--compression");
+			commands.add(options.get("--compression"));
+		}
+		if(options.containsKey("--convert"))
+		{
+			commands.add("--convert");
+			commands.add(options.get("--convert"));
+		}
+		if(options.containsKey("--dither"))
+		{
+			commands.add("--dither");
+			commands.add(options.get("--dither"));
+		}
+		if(options.containsKey("--premultiply"))
+		{
+			commands.add("--premultiply");
+			commands.add(options.get("--premultiply"));
+		}
+		if(options.containsKey("--convertalpha"))
+		{
+			commands.add("--convertalpha");
+			commands.add(options.get("--convertalpha"));
+		}
+		if(options.containsKey("--convertnoalpha"))
+		{
+			commands.add("--convertnoalpha");
+			commands.add(options.get("--convertnoalpha"));
+		}
+		
+		CExternalProcess csImageConversion = new CExternalProcess();
+		csImageConversion.Run(commands);
+		
+		SCFileSystemUtils.DeleteFile(outputName + ".png");
+		
+		if(verboseOutput)
+			System.out.println(csImageConversion.GetMessages());
+		
+		System.out.println(csImageConversion.GetWarnings());
+		System.out.println(csImageConversion.GetErrors());
+	}
 
-	private void writeBinaryFile(PackedTexture in_packedTexture) throws FileNotFoundException, IOException
+	private void writeBinaryFile(PackedTexture in_packedTexture) throws FileNotFoundException, IOException, Exception
 	{
 		int numImages = in_packedTexture.getNumImages();
-		FileOutputStream outBinary = new FileOutputStream(outputName + ".csatlas");
-		DataOutputStream dosBinary = new DataOutputStream(outBinary);
-		dosBinary.writeShort(numImages);
-		dosBinary.writeShort(k_versionNum); // file format revision
+		CLittleEndianOutputStream dosBinary = new CLittleEndianOutputStream(outputName + ".csatlas");
+		dosBinary.WriteShort((short) numImages);
+		dosBinary.WriteShort(k_versionNum); // file format revision
 
 		//Write out spritesheet size
-		dosBinary.writeShort(in_packedTexture.getPackedWidth());
-		dosBinary.writeShort(in_packedTexture.getPackedHeight());
+		dosBinary.WriteShort((short) in_packedTexture.getPackedWidth());
+		dosBinary.WriteShort((short) in_packedTexture.getPackedHeight());
 		
 		System.out.println("Output Image size::" + in_packedTexture.getPackedWidth() + " x " + in_packedTexture.getPackedHeight());
 		
@@ -454,17 +534,17 @@ public class TextureAtlasTool
 				System.out.println("Image:" + i + " position:" + ox + "," + oy + ":" + width + "," + height);
 			}
 
-			dosBinary.writeShort(ox);
-			dosBinary.writeShort(oy);
-			dosBinary.writeShort(width);
-			dosBinary.writeShort(height);
-			dosBinary.writeShort(ix);
-			dosBinary.writeShort(iy);
-			dosBinary.writeShort(orig_width);
-			dosBinary.writeShort(orig_height);
+			dosBinary.WriteShort((short) ox);
+			dosBinary.WriteShort((short) oy);
+			dosBinary.WriteShort((short) width);
+			dosBinary.WriteShort((short) height);
+			dosBinary.WriteShort((short) ix);
+			dosBinary.WriteShort((short) iy);
+			dosBinary.WriteShort((short) orig_width);
+			dosBinary.WriteShort((short) orig_height);
 		}
 
-		dosBinary.close();
+		dosBinary.Close();
 	}
 	
 	private void writeStringIDs(PackedTexture in_packedTexture) throws IOException 
