@@ -61,7 +61,6 @@ namespace ChilliSource
 		void Font::Build(const Descriptor& in_desc)
 		{
             CS_ASSERT(in_desc.m_supportedCharacters.size() > 0, "Font: Cannot build characters with empty character set");
-            CS_ASSERT(in_desc.m_supportedCharacters.size() == in_desc.m_frames.size(), "Font: Num of supported chars and num frames must match");
             
             m_characterInfos.clear();
             m_characters = in_desc.m_supportedCharacters;
@@ -101,7 +100,7 @@ namespace ChilliSource
             
             if(in_desc.m_lineHeight > 0)
             {
-                m_lineHeight = in_desc.m_lineHeight;
+                m_lineHeight = (f32)in_desc.m_lineHeight;
             }
 			
 			//Just assign the width of a whitespaces based on the similar space character in the

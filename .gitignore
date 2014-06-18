@@ -16,3 +16,5 @@ Projects/Tools/TGAToCSImageTool/bin
 Projects/Tools/TexturePacker/bin
 Projects/Tools/TextureAtlasTool/bin
 Projects/Tools/FontTool/bin
+*.userprefs
+*.pidb

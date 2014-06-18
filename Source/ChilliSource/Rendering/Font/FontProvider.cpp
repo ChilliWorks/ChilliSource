@@ -80,11 +80,13 @@ namespace ChilliSource
                 in_fileStream->Read(reinterpret_cast<s8*>(buffer), numElements * sizeof(s16));
                 
                 //Read the supported characters which are UTF-8 encoded
-                for(u32 i=0; i<numFrames; ++i)
+				s8 character;
+				in_fileStream->Read(&character, sizeof(s8));
+
+				while (character != '\0')
                 {
-                    s8 character;
+					out_desc.m_supportedCharacters += character;
                     in_fileStream->Read(&character, sizeof(s8));
-                    out_desc.m_supportedCharacters += character;
                 }
                 
                 in_fileStream->Close();
@@ -96,7 +98,7 @@ namespace ChilliSource
                 out_desc.m_frames.reserve(numFrames);
                 
                 s16* framePtr = buffer;
-                for(u32 i=0; i<(u32)numFrames; ++i)
+                for(s16 i=0; i<numFrames; ++i)
                 {
                     Font::Frame frame;
                     
@@ -160,7 +162,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		void FontProvider::LoadFont(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
-			Core::FileStreamSPtr fontStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_read);
+			Core::FileStreamSPtr fontStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_readBinary);
             if(fontStream == nullptr || fontStream->IsBad())
             {
                 CS_LOG_ERROR("Failed to open font file: " + in_filePath);

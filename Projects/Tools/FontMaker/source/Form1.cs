@@ -206,7 +206,7 @@ namespace FontTool
 			//Invoke Java font tool
 			string strJavaCommand = "java";
 			string strJarArgument = "-jar FontTool.jar ";
-            string strArgs = "--input " + m_tempPath + " --padding 2 --divisibleby 4 --maxwidth " + this.maxSizeTextBox.Text + " --maxheight " + this.maxSizeTextBox.Text + " --output " + outputName + " --lineHeight " + this.fontDialog1.Font.Height + " --premultiply 1";
+            string strArgs = "--input " + m_tempPath + " --padding 2 --divisibleby 2 --maxwidth " + this.maxSizeTextBox.Text + " --maxheight " + this.maxSizeTextBox.Text + " --output " + outputName + " --lineHeight " + this.fontDialog1.Font.Height + " --premultiply 1";
 
             Process p = new Process();
             p.StartInfo.FileName = strJavaCommand;
