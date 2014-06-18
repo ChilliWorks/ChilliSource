@@ -172,9 +172,6 @@ namespace ChilliSource
                 return;
             }
             
-            Font::Descriptor desc;
-            LoadFrames(fontStream, desc);
-            
             std::string fileName, fileExtension;
             Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
             
@@ -182,9 +179,11 @@ namespace ChilliSource
             
             if(in_delegate == nullptr)
             {
+                Font::Descriptor desc;
                 desc.m_texture = Core::Application::Get()->GetResourcePool()->LoadResource<Texture>(in_location, textureFilePath);
                 if(desc.m_texture != nullptr)
                 {
+                    LoadFrames(fontStream, desc);
                     Font* font = (Font*)(out_resource.get());
                     font->Build(desc);
                     out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
@@ -197,21 +196,27 @@ namespace ChilliSource
             }
             else
             {
-                Core::Application::Get()->GetResourcePool()->LoadResourceAsync<Texture>(in_location, textureFilePath, [out_resource, in_delegate, desc](const TextureCSPtr& in_texture)
+                Core::Application::Get()->GetResourcePool()->LoadResourceAsync<Texture>(in_location, textureFilePath, [out_resource, in_delegate, fontStream](const TextureCSPtr& in_texture)
                 {
                     if(in_texture != nullptr)
                     {
-                        //desc.m_texture = in_texture;
-                        Font* font = (Font*)(out_resource.get());
-                        font->Build(desc);
-                        out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+                        Core::Application::Get()->GetTaskScheduler()->ScheduleTask([out_resource, in_delegate, fontStream, in_texture]()
+                        {
+                            Font::Descriptor desc;
+                            LoadFrames(fontStream, desc);
+                            desc.m_texture = in_texture;
+                            Font* font = (Font*)(out_resource.get());
+                            font->Build(desc);
+                            out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+                            Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                        });
                     }
                     else
                     {
+                        //Already on main thread
                         out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                        in_delegate(out_resource);
                     }
-
-                    Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 });
             }
         }
