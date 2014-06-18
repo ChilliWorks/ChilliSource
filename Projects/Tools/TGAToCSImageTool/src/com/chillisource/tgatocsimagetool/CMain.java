@@ -102,19 +102,64 @@ public class CMain
 			//premultiply
 			if(inastrArgs[i].equalsIgnoreCase("-p") == true || inastrArgs[i].equalsIgnoreCase("--premultiply") == true)
 			{
-				options.bPremultiply = true;
+				if (i + 1 < inastrArgs.length)
+				{
+					if(inastrArgs[i + 1] == "0")
+					{
+						options.bPremultiply = false;
+					}
+					else
+					{
+						options.bPremultiply = true;
+					}
+				}
+				else
+				{
+					SCLogger.LogFatalError("No premultiply enable provided!");
+				}
+				i++;
 			}
 			
 			//dither
 			if(inastrArgs[i].equalsIgnoreCase("-d") == true || inastrArgs[i].equalsIgnoreCase("--dither") == true)
 			{
-				options.bDither = true;
+				if (i + 1 < inastrArgs.length)
+				{
+					if(inastrArgs[i + 1] == "0")
+					{
+						options.bDither = false;
+					}
+					else
+					{
+						options.bDither = true;
+					}
+				}
+				else
+				{
+					SCLogger.LogFatalError("No dither enable provided!");
+				}
+				i++;
 			}
 			
 			//stats
 			if(inastrArgs[i].equalsIgnoreCase("-s") == true || inastrArgs[i].equalsIgnoreCase("--stats") == true)
 			{
-				options.bStats = true;
+				if (i + 1 < inastrArgs.length)
+				{
+					if(inastrArgs[i + 1] == "0")
+					{
+						options.bStats = false;
+					}
+					else
+					{
+						options.bStats = true;
+					}
+				}
+				else
+				{
+					SCLogger.LogFatalError("No stats enable provided!");
+				}
+				i++;
 			}
 		}
 		
