@@ -55,7 +55,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //---------------------------------------------------------------------
-		class Font : public Core::Resource
+		class Font final : public Core::Resource
 		{
 		public:
             
@@ -74,74 +74,37 @@ namespace ChilliSource
                 Core::Vector2 m_offset;
 			};
             //---------------------------------------------------------------------
-            /// TODO: Find out how the kerning works and actually document it
+            /// Holds the description of a single character frame packed into
+            /// the font. This includes the size, UVs, etc
             ///
-            /// @author R Henning
+            /// @author S Downie
             //---------------------------------------------------------------------
-            struct KernLookup
+			struct Frame
 			{
-                //---------------------------------------------------------------------
-                /// Constructor
-                ///
-                /// @author R Henning
-                ///
-                /// @param TODO
-                /// @param TODO
-                //---------------------------------------------------------------------
-				KernLookup(s16 in_character, u16 in_start)
-				: m_character(in_character), m_start(in_start), m_length(0)
-				{
-				}
-				//---------------------------------------------------------------------
-                /// @author R Henning
-                ///
-                /// @param Lookup value
-                ///
-                /// @return Whether this value is less than the one given
-                //---------------------------------------------------------------------
-				bool operator < (const KernLookup& in_lookup) const
-				{
-                    return m_character < in_lookup.m_character;
-                }
-                    
-                s16 m_character;
-                u16 m_start;
-                u16 m_length;
-            };
+				s16 m_texCoordU;
+				s16 m_texCoordV;
+				s16 m_width;
+				s16 m_height;
+				s16 m_offsetX;
+				s16 m_offsetY;
+                s16 m_originalWidth;
+                s16 m_originalHeight;
+			};
             //---------------------------------------------------------------------
-            /// TODO: Find out how the kerning works and actually document it
+            /// Holds the description of a font. Used to build the resource
             ///
-            /// @author R Henning
+            /// @author S Downie
             //---------------------------------------------------------------------
-            struct KernPair
+            struct Descriptor
             {
-                //---------------------------------------------------------------------
-                /// Constructor
-                ///
-                /// @author R Henning
-                ///
-                /// @param TODO
-                /// @param TODO
-                //---------------------------------------------------------------------
-                KernPair(s16 in_character, f32 in_spacing)
-                : m_character(in_character)
-                , m_spacing(in_spacing)
-                {
-                }
-                //---------------------------------------------------------------------
-                /// @author R Henning
-                ///
-                /// @param Pair value
-                ///
-                /// @return Whether this value is less than the one given
-                //---------------------------------------------------------------------
-                bool operator < (const KernPair& in_pair) const
-                {
-                    return m_character < in_pair.m_character;
-                }
+                std::vector<Frame> m_frames;
+                std::string m_supportedCharacters;
                 
-                f32 m_spacing;
-                s16 m_character;
+                TextureCSPtr m_texture;
+                
+                u32 m_textureAtlasWidth = 0;
+                u32 m_textureAtlasHeight = 0;
+                u32 m_lineHeight = 0;
             };
 			
 			CS_DECLARE_NAMEDTYPE(Font);
@@ -154,26 +117,19 @@ namespace ChilliSource
 			//---------------------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------------------
+			/// Build the font from the given description
+            ///
             /// @author S Downie
 			///
-			/// @param Font texture
-            //---------------------------------------------------------------------
-            void SetTexture(const TextureCSPtr& in_texture);
+			/// @param Description containing texture, UVs and supported characters
+			//---------------------------------------------------------------------
+			void Build(const Descriptor& in_desc);
 			//---------------------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return Font texture 
 			//---------------------------------------------------------------------
 			const TextureCSPtr& GetTexture() const;
-			//---------------------------------------------------------------------
-			/// Each character is a sprite in a TextureAtlas. The TextureAtlas
-            /// also holds the texture
-            ///
-            /// @author S Downie
-			///
-			/// @param Sprite data containing UV's, size, etc
-			//---------------------------------------------------------------------
-			void SetCharacterData(const TextureAtlasCSPtr& in_characterData);
 			//---------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -195,43 +151,6 @@ namespace ChilliSource
 			/// @return Whether the character exists in the font
 			//---------------------------------------------------------------------
 			bool TryGetCharacterInfo(Core::UTF8Char in_char, CharacterInfo& out_info) const;
-			//---------------------------------------------------------------------
-            /// @author S Downie
-            ///
-			/// @param The list of characters that are supported by this font
-			//---------------------------------------------------------------------
-			void SetCharacterSet(const CharacterSet& in_charSet);
-            //---------------------------------------------------------------------
-            /// Returns the amount that the glyph represented
-            /// by inChar2 can be moved towards inChar1 without
-            /// overlapping.
-            /// This data is generated by the SpriteTool
-            ///
-            /// @author R Henning
-            ///
-            /// @param First character to test
-            /// @param Second character to test
-            ///
-            /// @return Spacing between characters
-            //---------------------------------------------------------------------
-            f32 GetKerningBetweenCharacters(Core::UTF8Char in_char1, Core::UTF8Char in_char2) const;
-            //---------------------------------------------------------------------
-            /// Sets a value that will be used to offset all kerning values
-            ///
-            /// @author R Henning
-            ///
-            /// @param Offset
-            //---------------------------------------------------------------------
-            static void SetGlobalKerningOffset(f32 in_offset);
-            //---------------------------------------------------------------------
-            /// Sets kerning lookup and pair info
-            ///
-            /// @author R Henning
-            ///
-            /// @param Kerning lookup array
-            /// @param Kerning pair array
-            //---------------------------------------------------------------------
-            void SetKerningInfo(const std::vector<KernLookup>& in_lookups, const std::vector<KernPair>& in_pairs);
 		
         private:
             
@@ -254,12 +173,8 @@ namespace ChilliSource
             
 			std::unordered_map<Core::UTF8Char, CharacterInfo> m_characterInfos;
 			CharacterSet m_characters;
-			
-            std::vector<KernLookup> m_kerningLookups;
-            std::vector<KernPair> m_kerningPairs;
             
             TextureCSPtr m_texture;
-			TextureAtlasCSPtr m_textureAtlas;
             
             f32 m_lineHeight = 0.0f;
             

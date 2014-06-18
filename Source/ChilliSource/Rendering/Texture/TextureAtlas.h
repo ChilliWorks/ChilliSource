@@ -14,6 +14,8 @@
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
+#include <unordered_map>
+
 namespace ChilliSource
 {
 	namespace Rendering
@@ -152,24 +154,12 @@ namespace ChilliSource
             //---------------------------------------------------------------------
             TextureAtlas() = default;
             
-            friend class Font;
-            //---------------------------------------------------------------------
-            /// Currently the font resource and texture atlas are tighlty
-            /// coupled in that the font relies on the atlas having a linear
-            /// frame structure. This dependency will be broken soon and this function
-            /// removed
-            ///
-            /// @author S Downie
-            ///
-			/// @param Index
-            ///
-			/// @return Frame data
-			//---------------------------------------------------------------------
-			const Frame& GetFrame(u32 in_index) const;
-            
 		private:
             
-            Descriptor m_desc;
+            std::unordered_map<u32, Frame> m_frames;
+            
+            u32 m_textureAtlasWidth = 0;
+            u32 m_textureAtlasHeight = 0;
 		};
 	}
 }
