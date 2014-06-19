@@ -34,13 +34,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.view.Surface;
 import android.view.WindowManager;
 
 import com.chillisource.core.CSApplication;
 import com.chillisource.core.InterfaceIDType;
 import com.chillisource.core.INativeInterface;
-import com.chillisource.core.Logging;
 
 //=============================================================
 /// Video Player Native Interface
@@ -78,7 +76,6 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 	/// Member data
 	//-----------------------------------------------------
 	public static InterfaceIDType InterfaceID = new InterfaceIDType("CAccelerometerNativeInterface");
-	final AxisSwap mAxisSwap;
 	boolean mbListening = false;
 	boolean mbHasAccelerometer = false;
 	//-----------------------------------------------------
@@ -88,19 +85,6 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 	{
 		PackageManager manager = CSApplication.get().getActivityContext().getPackageManager();
 		mbHasAccelerometer = manager.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER);
-		
-		//calculate the axis swap
-		final AxisSwap[] adwAxisSwapPossibilities = 
-		{
-			new AxisSwap( 1,-1, 0, 1),		// ROTATION_0
-			new AxisSwap(-1,-1, 1, 0), 		// ROTATION_90
-			new AxisSwap(-1, 1, 0, 1), 		// ROTATION_180
-			new AxisSwap( 1, 1, 1, 0) 		// ROTATION_270
-		}; 
-		
-		WindowManager windowManager = (WindowManager)CSApplication.get().getActivityContext().getSystemService(Activity.WINDOW_SERVICE);
-		int rotationIndex = windowManager.getDefaultDisplay().getRotation();
-		mAxisSwap = adwAxisSwapPossibilities[rotationIndex];
 	}
 	//-----------------------------------------------------
 	/// Is A
@@ -174,55 +158,32 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 			//The values provided from the accelerometer are always relative to the default screen orientation which can change
 			//from device to device. To alleviate this we are converting into "screen" coordinates. This has been taken from
 			//the nvidia accelerometer white paper which can be found at : http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
-			float fScreenX = ((float)mAxisSwap.mdwNegateX) * event.values[mAxisSwap.mdwSourceX];
-			float fScreenY = ((float)mAxisSwap.mdwNegateY) * event.values[mAxisSwap.mdwSourceY];
+			final AxisSwap[] adwAxisSwapPossibilities = 
+			{
+				new AxisSwap( 1,-1, 0, 1),		// ROTATION_0
+				new AxisSwap(-1,-1, 1, 0), 		// ROTATION_90
+				new AxisSwap(-1, 1, 0, 1), 		// ROTATION_180
+				new AxisSwap( 1, 1, 1, 0) 		// ROTATION_270
+			}; 
+			
+			Activity activity = CSApplication.get().getActivity();
+			WindowManager windowManager = (WindowManager)activity.getSystemService(Activity.WINDOW_SERVICE);
+			int rotationIndex = windowManager.getDefaultDisplay().getRotation();
+			AxisSwap axisSwap = adwAxisSwapPossibilities[rotationIndex];
+			
+			float fScreenX = ((float)axisSwap.mdwNegateX) * event.values[axisSwap.mdwSourceX];
+			float fScreenY = ((float)axisSwap.mdwNegateY) * event.values[axisSwap.mdwSourceY];
 			float fScreenZ = event.values[2];
 
 			//the values provided by android are in ms^-2. Accelerometer values are more typically given in
 			//terms of "g"'s so we are converting here. We are also converting from a x, y and z positive in the
 			//left, up and backward directions respectively to right, up and forward directions to be more consistent with iOS.
 			final float k_gravity = 9.80665f;
-			float accelerationX = -fScreenX / k_gravity;
-			float accelerationY = fScreenY / k_gravity;
-			float accelerationZ = -fScreenZ / k_gravity;
-			
-			//Now rotate this into screen space.
-			Activity activity = CSApplication.get().getActivity();
-			if (activity != null)
-			{
-				WindowManager windowManager = (WindowManager)activity.getSystemService(Activity.WINDOW_SERVICE);
-				if (windowManager != null)
-				{
-					float rotation = 0.0f;
-					switch (windowManager.getDefaultDisplay().getRotation())
-					{
-					case Surface.ROTATION_0:
-						rotation = 0.0f;
-						break;
-					case Surface.ROTATION_90:
-						rotation = (float)(Math.PI * 0.5);
-						break;
-					case Surface.ROTATION_180:
-						rotation = (float)(Math.PI);
-						break;
-					case Surface.ROTATION_270:
-						rotation = (float)(Math.PI * 1.5);
-						break;
-					default:
-						Logging.logError("AccelerationNativeInterface: Invalid orientation!");
-					}
-					
-					float rotatedAccelerationX = (float)(accelerationX * Math.cos(rotation) - accelerationY * Math.sin(rotation));
-					float rotatedAccelerationY = (float)(accelerationX * Math.sin(rotation) + accelerationY * Math.cos(rotation));
-					accelerationX = rotatedAccelerationX;
-					accelerationY = rotatedAccelerationY;
-				}
-			}
+			final float k_accelerationX = -fScreenX / k_gravity;
+			final float k_accelerationY = fScreenY / k_gravity;
+			final float k_accelerationZ = -fScreenZ / k_gravity;
 			
 			//update acceleration on main thread.
-			final float k_accelerationX = accelerationX;
-			final float k_accelerationY = accelerationY;
-			final float k_accelerationZ = accelerationZ;
 			Runnable task = new Runnable()
 			{ 
 				@Override public void run() 
