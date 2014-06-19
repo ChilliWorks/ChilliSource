@@ -1,7 +1,7 @@
 //
-//  Notification.h
+//  PropAccess.h
 //  Chilli Source
-//  Created by Ian Copland on 10/03/2014.
+//  Created by Ian Copland on 19/06/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,40 +26,22 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_NOTIFICATIONS_NOTIFICATION_H_
-#define _CHILLISOURCE_CORE_NOTIFICATIONS_NOTIFICATION_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Core/Container/ParamDictionary.h>
+#ifndef _CHILLISOURCE_CORE_REFLECTION_PROPACCESS_H_
+#define _CHILLISOURCE_CORE_REFLECTION_PROPACCESS_H_
 
 namespace ChilliSource
 {
     namespace Core
     {
-        //------------------------------------------------------------
-        /// A notification that can be used by any of the notification
-        /// systems.
-        //------------------------------------------------------------
-        struct Notification
+        namespace Reflect
         {
-            //----------------------------------------------------
-            /// An enum describing the priority of a notification.
-            //----------------------------------------------------
-            enum class Priority
+            enum class PropAccess
             {
-                k_standard,
-                k_high
+                k_readOnly,
+                k_writeOnly,
+                k_readWrite
             };
-            //----------------------------------------------------
-            /// Typedefs
-            //----------------------------------------------------
-            typedef u32 ID;
-
-            ID m_id;
-            ParamDictionary m_params;
-            Priority m_priority;
-        };
+        }
     }
 }
 
