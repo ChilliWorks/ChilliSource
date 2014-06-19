@@ -58,7 +58,7 @@
         }
         
         //load the JSON app.config string from file.
-        NSString* relativePath = [NSStringUtils newNSStringWithUTF8String:"AppResources/Shared/App"];
+        NSString* relativePath = [NSStringUtils newNSStringWithUTF8String:"AppResources/App"];
         NSString* fullPath = [[NSBundle mainBundle] pathForResource:relativePath ofType:@"config"];
         [relativePath release];
         NSString* content = [NSString stringWithContentsOfFile:fullPath encoding:NSUTF8StringEncoding error:nil];

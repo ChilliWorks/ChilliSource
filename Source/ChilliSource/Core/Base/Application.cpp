@@ -354,9 +354,6 @@ namespace ChilliSource
             CreateSystem<Device>();
             CreateSystem<Screen>();
             
-            //TODO: This should be moved to a separate system.
-            DetermineResourceDirectories();
-            
 			m_taskScheduler = CreateSystem<TaskScheduler>();
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
@@ -423,47 +420,6 @@ namespace ChilliSource
             m_appConfig->Load();
             m_platformSystem->SetPreferredFPS(m_appConfig->GetPreferredFPS());
 		}
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void Application::DetermineResourceDirectories()
-        {
-            //TODO: This should be moved to a separate system.
-            
-            //Get a list of the resource directories and determine which one this device should be
-            //loading from based on it's screen
-            std::vector<ResourceDirectoryInfo> aDirectoryInfos;
-            std::string strDefaultDir, strDeviceDir, strDefaultDeviceDir;
-            SetResourceDirectories(aDirectoryInfos, strDefaultDeviceDir, strDefaultDir);
-            
-            //Sort the info by resolution low to high
-            std::sort(aDirectoryInfos.begin(), aDirectoryInfos.end(), [] (const ResourceDirectoryInfo& in_lhs, const ResourceDirectoryInfo& in_rhs)
-            {
-                return (in_lhs.m_maxRes < in_rhs.m_maxRes);
-            });
-            
-            Screen* screen = GetSystem<Screen>();
-            u32 udwCurrentRes = (u32)(screen->GetResolution().x * screen->GetResolution().y);
-            f32 fCurrenctDensity = screen->GetDensityScale();
-            f32 fAssetDensity = 1.0f;
-            for(std::vector<ResourceDirectoryInfo>::const_iterator it = aDirectoryInfos.begin(); it != aDirectoryInfos.end(); ++it)
-            {
-                //The density and the resolution must both be under the maximum for the directory to be selected.
-                if(udwCurrentRes <= it->m_maxRes && fCurrenctDensity <= it->m_maxDensity)
-                {
-                    strDeviceDir = it->m_directory;
-                    fAssetDensity = it->m_resourcesDensity;
-                    break;
-                }
-            }
-            
-            if(strDeviceDir.empty())
-            {
-                CS_LOG_WARNING("No resource folder can be found for this device switching to default directory");
-                strDeviceDir = strDefaultDeviceDir;
-            }
-            
-            FileSystem::SetResourceDirectories(strDeviceDir, strDefaultDeviceDir, strDefaultDir, fAssetDensity);
-        }
         //----------------------------------------------------
         //----------------------------------------------------
 		void Application::OnUpdate(f32 in_deltaTime)

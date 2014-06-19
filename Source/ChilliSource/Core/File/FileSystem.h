@@ -53,39 +53,7 @@ namespace ChilliSource
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(FileSystem);
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Directory to load device dependent assets from
-            //----------------------------------------------------------
-            static const std::string& GetDeviceResourceDirectory();
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Directory to load device dependent assets from
-            //----------------------------------------------------------
-            static const std::string& GetDefaultDeviceResourceDirectory();
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Directory to load shared assets from
-            //----------------------------------------------------------
-            static const std::string& GetDefaultResourceDirectory();
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Density of assets in device dependent folder
-            //----------------------------------------------------------
-            static f32 GetDeviceResourcesDensity();
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Directory to load device dependent assets from
-            /// @param Fallback to load device depenedent assets from
-            /// @param Directory to load shared assets from
-            /// @param Density of assets in the device dependent folder
-            //----------------------------------------------------------
-            static void SetResourceDirectories(const std::string& in_deviceDirectory, const std::string& in_defaultDeviceDirectory, const std::string& in_defaultDirectory, f32 in_assetsDensity);
+
             //----------------------------------------------------------
             /// Create the platform dependent backend
             ///
@@ -460,20 +428,12 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// @author I Copland
             ///
-            /// @return The resource directories.
-            //--------------------------------------------------------------
-            const std::string* GetResourceDirectories() const;
-            //--------------------------------------------------------------
-            /// @author I Copland
-            ///
             /// @return whether or not the given file mode is a write mode
             //--------------------------------------------------------------
             bool IsWriteMode(Core::FileMode in_fileMode) const;
         private:
-            std::string m_packageDLCPath;
             
-            static f32 s_assetsDensity;
-            static std::string s_resourceDirectory[3];
+            std::string m_packageDLCPath;
 		};
 	}
 		

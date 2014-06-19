@@ -378,20 +378,6 @@ namespace ChilliSource
 			//------------------------------------------------------
 			virtual void PushInitialState() = 0;
             //------------------------------------------------------
-            /// Give the engine the available resource directories
-            /// and the info required to decide which directory the
-            /// current device should use.
-            ///
-            /// @author S Downie
-            ///
-            /// @param [Out] Vector of directory info
-            /// @param [Out] The name of the directory to fall back
-            /// on for resolution dependant assets
-            /// @param [Out] The name of the directory to use as the
-            /// default (i.e. for shared assets)
-            //------------------------------------------------------
-            virtual void SetResourceDirectories(std::vector<ResourceDirectoryInfo>& out_resDependantDirectoryInfos, std::string& out_resDefaultDirectory, std::string& out_defaultDirectory) = 0;
-            //------------------------------------------------------
 			/// Destuction method called just before all systems
             /// and states are released. Application destruction
             /// code should be in here.
@@ -414,13 +400,6 @@ namespace ChilliSource
             /// @author S Downie
 			//------------------------------------------------------
 			void PostCreateSystems();
-            //------------------------------------------------------
-            /// Depedending on the device decide which folders
-            /// resources should be loaded from.
-            ///
-            /// @author S Downie
-            //------------------------------------------------------
-            void DetermineResourceDirectories();
             //------------------------------------------------------
             /// A single update cycle that updates all updateables,
             /// timers and the active state This can be called multiple

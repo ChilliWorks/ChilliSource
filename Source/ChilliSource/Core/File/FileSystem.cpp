@@ -58,49 +58,6 @@ namespace ChilliSource
         }
         CS_DEFINE_NAMEDTYPE(FileSystem);
         
-        std::string FileSystem::s_resourceDirectory[3];
-        f32 FileSystem::s_assetsDensity = 1.0f;
-        
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        const std::string& FileSystem::GetDeviceResourceDirectory()
-        {
-            return s_resourceDirectory[0];
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        const std::string& FileSystem::GetDefaultDeviceResourceDirectory()
-        {
-            return s_resourceDirectory[1];
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        const std::string& FileSystem::GetDefaultResourceDirectory()
-        {
-            return s_resourceDirectory[2];
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void FileSystem::SetResourceDirectories(const std::string& in_deviceDirectory, const std::string& in_defaultDeviceDirectory, const std::string& in_defaultDirectory, f32 in_assetsDensity)
-        {
-            s_resourceDirectory[0] = in_deviceDirectory;
-            if (!in_deviceDirectory.empty())
-                s_resourceDirectory[0] += "/";
-            s_resourceDirectory[1] = in_defaultDeviceDirectory;
-            if (!in_defaultDeviceDirectory.empty())
-                s_resourceDirectory[1] += "/";
-            s_resourceDirectory[2] = in_defaultDirectory;
-            if (!in_defaultDirectory.empty())
-                s_resourceDirectory[2] += "/";
-            
-            s_assetsDensity = in_assetsDensity;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        f32 FileSystem::GetDeviceResourcesDensity()
-        {
-            return s_assetsDensity;
-        }
         //-------------------------------------------------------
         //-------------------------------------------------------
         FileSystemUPtr FileSystem::Create()
@@ -376,12 +333,6 @@ namespace ChilliSource
                 default:
                     return false;
             }
-        }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        const std::string* FileSystem::GetResourceDirectories() const
-        {
-            return s_resourceDirectory;
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
