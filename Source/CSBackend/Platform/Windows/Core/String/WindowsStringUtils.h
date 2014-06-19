@@ -58,14 +58,23 @@ namespace CSBackend
 			//------------------------------------------------------------
 			std::wstring ConvertStandardPathToWindows(const std::string& in_standardPath);
 			//------------------------------------------------------------
-			/// Converts the given path to windows format.
+			/// Converts the given directory path to windows format.
 			///
 			/// @author I Copland
 			///
 			/// @param The windows format wide string.
 			/// @return The same path standardised in a string.
 			//------------------------------------------------------------
-			std::string ConvertWindowsPathToStandard(const std::wstring& in_windowsPath);
+			std::string ConvertWindowsDirectoryPathToStandard(const std::wstring& in_windowsPath);
+			//------------------------------------------------------------
+			/// Converts the given file path to windows format.
+			///
+			/// @author I Copland
+			///
+			/// @param The windows format wide string.
+			/// @return The same path standardised in a string.
+			//------------------------------------------------------------
+			std::string ConvertWindowsFilePathToStandard(const std::wstring& in_windowsPath);
 		}
 	}
 }

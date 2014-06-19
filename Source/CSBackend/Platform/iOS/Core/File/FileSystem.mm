@@ -219,7 +219,7 @@ namespace CSBackend
                     {
                         if (DoesDirectoryExist(*it) == true)
                         {
-                            std::string path = CSCore::StringUtils::StandardisePath(*it);
+                            std::string path = CSCore::StringUtils::StandardiseDirectoryPath(*it);
                             NSString* Dir = [NSString stringWithCString:path.c_str() encoding:NSASCIIStringEncoding];
                             NSError* error = nil;
                             
@@ -385,8 +385,8 @@ namespace CSBackend
             else
             {
                 //copy each of these files individually
-                std::string sourcePath = CSCore::StringUtils::StandardisePath(in_sourceDirectoryPath);
-                std::string destPath = CSCore::StringUtils::StandardisePath(in_destinationDirectoryPath);
+                std::string sourcePath = CSCore::StringUtils::StandardiseDirectoryPath(in_sourceDirectoryPath);
+                std::string destPath = CSCore::StringUtils::StandardiseDirectoryPath(in_destinationDirectoryPath);
                 for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
                 {
                     if (CopyFile(in_sourceStorageLocation, sourcePath + *it, in_destinationStorageLocation, destPath + *it) == false)
@@ -417,7 +417,7 @@ namespace CSBackend
                 
                 if (error != nil)
                 {
-                    CS_LOG_ERROR("File System: Error copying file '" + in_filePath + "' - " + GetErrorString(error));
+                    CS_LOG_ERROR("File System: Error deleting file '" + in_filePath + "' - " + GetErrorString(error));
                     return false;
                 }
             }
@@ -443,7 +443,7 @@ namespace CSBackend
                 
                 if (error != nil)
                 {
-                    CS_LOG_ERROR("File System: Error copying file '" + in_directoryPath + "' - " + GetErrorString(error));
+                    CS_LOG_ERROR("File System: Error deleting file '" + in_directoryPath + "' - " + GetErrorString(error));
                     return false;
                 }
             }
@@ -533,7 +533,7 @@ namespace CSBackend
             }
             
             //return whether or not the file exists
-			return CSBackend::iOS::DoesFileExist(CSCore::StringUtils::StandardisePath(path));
+			return CSBackend::iOS::DoesFileExist(CSCore::StringUtils::StandardiseFilePath(path));
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
@@ -576,7 +576,7 @@ namespace CSBackend
             }
             
             //return whether or not the dir exists
-			return CSBackend::iOS::DoesDirectoryExist(CSCore::StringUtils::StandardisePath(path));
+			return CSBackend::iOS::DoesDirectoryExist(CSCore::StringUtils::StandardiseDirectoryPath(path));
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
@@ -618,7 +618,7 @@ namespace CSBackend
                 {
                     case CSCore::StorageLocation::k_DLC:
                     {
-                        std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
+                        std::string filePath = CSCore::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
                         if(CSBackend::iOS::DoesFileExist(filePath) == true)
                         {
                             return filePath;
@@ -645,7 +645,7 @@ namespace CSBackend
                 {
                     case CSCore::StorageLocation::k_DLC:
                     {
-                        std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
+                        std::string filePath = CSCore::StringUtils::StandardiseDirectoryPath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
                         if(CSBackend::iOS::DoesDirectoryExist(filePath) == true)
                         {
                             return filePath;
@@ -688,7 +688,14 @@ namespace CSBackend
                     {
                         std::string path([nsPath UTF8String]);
                         PackageManifestItem item;
-                        item.m_pathHash = CSCore::HashCRC32::GenerateHashCode(CSCore::StringUtils::StandardisePath(path));
+                        if(isDirectory == NO)
+                        {
+                            item.m_pathHash = CSCore::HashCRC32::GenerateHashCode(CSCore::StringUtils::StandardiseFilePath(path));
+                        }
+                        else
+                        {
+                            item.m_pathHash = CSCore::HashCRC32::GenerateHashCode(CSCore::StringUtils::StandardiseDirectoryPath(path));
+                        }
                         item.m_isFile = (isDirectory == NO);
                         m_packageManifestItems.push_back(item);
                     }
@@ -707,7 +714,7 @@ namespace CSBackend
         bool FileSystem::TryGetPackageManifestItem(const std::string& in_path, PackageManifestItem& out_manifestItem) const
         {
             PackageManifestItem searchItem;
-			searchItem.m_pathHash = CSCore::HashCRC32::GenerateHashCode(CSCore::StringUtils::StandardisePath(in_path));
+			searchItem.m_pathHash = CSCore::HashCRC32::GenerateHashCode(in_path);
             
 			auto it = std::lower_bound(m_packageManifestItems.begin(), m_packageManifestItems.end(), searchItem, [](const FileSystem::PackageManifestItem& in_lhs, const FileSystem::PackageManifestItem& in_rhs)
             {
@@ -727,7 +734,7 @@ namespace CSBackend
         bool FileSystem::DoesFileExistInPackage(const std::string& in_filePath) const
         {
             PackageManifestItem item;
-            if (TryGetPackageManifestItem(in_filePath, item) == true)
+            if (TryGetPackageManifestItem(CSCore::StringUtils::StandardiseFilePath(in_filePath), item) == true)
             {
                 if (item.m_isFile == true)
                 {
@@ -742,7 +749,7 @@ namespace CSBackend
         bool FileSystem::DoesDirectoryExistInPackage(const std::string& in_directoryPath) const
         {
             PackageManifestItem item;
-            if (TryGetPackageManifestItem(in_directoryPath, item) == true)
+            if (TryGetPackageManifestItem(CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), item) == true)
             {
                 if (item.m_isFile == false)
                 {
@@ -758,11 +765,11 @@ namespace CSBackend
         {
             if(in_isDirectory == true)
             {
-                return CSBackend::iOS::DoesDirectoryExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path));
+                return CSBackend::iOS::DoesDirectoryExist(CSCore::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path));
             }
             else
             {
-                return CSBackend::iOS::DoesFileExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path));
+                return CSBackend::iOS::DoesFileExist(CSCore::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path));
             }
         }
         //--------------------------------------------------------------

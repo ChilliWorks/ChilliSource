@@ -51,9 +51,15 @@ namespace CSBackend
 			}
 			//------------------------------------------------------------
 			//------------------------------------------------------------
-			std::string ConvertWindowsPathToStandard(const std::wstring& in_windowsPath)
+			std::string ConvertWindowsDirectoryPathToStandard(const std::wstring& in_windowsPath)
 			{
-				return CSCore::StringUtils::StandardisePath(UTF16ToUTF8(in_windowsPath));
+				return CSCore::StringUtils::StandardiseDirectoryPath(UTF16ToUTF8(in_windowsPath));
+			}
+			//------------------------------------------------------------
+			//------------------------------------------------------------
+			std::string ConvertWindowsFilePathToStandard(const std::wstring& in_windowsPath)
+			{
+				return CSCore::StringUtils::StandardiseFilePath(UTF16ToUTF8(in_windowsPath));
 			}
 		}
 	}
