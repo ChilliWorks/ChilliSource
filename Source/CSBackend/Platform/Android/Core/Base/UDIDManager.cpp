@@ -24,7 +24,7 @@ namespace CSBackend
 	namespace Android
 	{
 		const std::string kstrUDIDStorageKey = "UDID";
-		const std::string kstrSharedPrefsDocName = "MoFlowPreferences";
+		const std::string kstrSharedPrefsDocName = "CSPreferences";
 		//-----------------------------------------
 		/// Constructor
 		//-----------------------------------------

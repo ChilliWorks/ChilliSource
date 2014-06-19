@@ -283,7 +283,7 @@ public class AmazonIAPNativeInterface extends INativeInterface
 	///
 	/// Starts listening for purchase transactions. This
 	/// means that purchase transactions will be passed down 
-	/// to the native side of moFlow when received. This
+	/// to the native side of the engine when received. This
 	/// will also send any transactions currently in the
 	/// purchase transaction cache.
 	//-----------------------------------------------------
@@ -303,7 +303,7 @@ public class AmazonIAPNativeInterface extends INativeInterface
 	///
 	/// Stops listening for purchase transactions. All
 	/// purchase transactions received will no longer be
-	/// passed down to the native side of moFlow and will
+	/// passed down to the native side of the engine and will
 	/// instead simply be added to the purchase transactions
 	/// cache.
 	//-----------------------------------------------------
@@ -566,7 +566,7 @@ public class AmazonIAPNativeInterface extends INativeInterface
 	/// Process Pending Transactions
 	///
 	/// Sends all pending transactions down to the native
-	/// side of moFlow.
+	/// side of the engine.
 	//-----------------------------------------------------
 	private void ProcessPendingTransactions()
 	{

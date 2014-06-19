@@ -89,7 +89,7 @@
 //--------------------------------------------------------
 /// Text Alignment From Anchor
 ///
-/// Converts from a moFlow alignment anchor to NSText
+/// Converts from a Chilli Source alignment anchor to NSText
 /// alignment.
 ///
 /// @param The alignment achor.

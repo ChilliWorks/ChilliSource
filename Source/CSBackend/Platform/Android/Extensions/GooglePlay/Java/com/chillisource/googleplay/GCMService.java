@@ -88,7 +88,7 @@ public class GCMService extends GCMBaseIntentService
 	/// On Message
     ///
     /// This is called when a notification is received. This
-    /// is processed and passed on to moFlow.
+    /// is processed and passed on to the engine.
     ///
     /// @param The context.
     /// @param The intent.
@@ -158,7 +158,7 @@ public class GCMService extends GCMBaseIntentService
     			dwCount++;
             }
     		
-    		// Send this to moFlow
+    		// Send this to the native side of the engine.
     		mNativeInterface.OnRemoteNotificationReceived(astrKeys, astrValues);
         }
         // Otherwise display a notification.

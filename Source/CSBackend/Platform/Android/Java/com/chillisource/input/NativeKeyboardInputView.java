@@ -85,8 +85,8 @@ public class NativeKeyboardInputView extends View
 	//------------------------------------------------------
 	/// Constructor
 	///
-	/// @param The moflow activity.
-	/// @param The moflow surface.
+	/// @param The chilli source activity.
+	/// @param The chilli source surface.
 	//------------------------------------------------------
 	public NativeKeyboardInputView(KeyboardNativeInterface inKeyboardNativeInterface, KeyboardType ineKeyboardType, KeyboardCapitalisation ineKeyboardCapitalisation) 
 	{

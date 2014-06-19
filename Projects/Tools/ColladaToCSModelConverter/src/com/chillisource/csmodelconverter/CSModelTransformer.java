@@ -42,7 +42,7 @@ public class CSModelTransformer
 	/// Swap Y And Z
 	///
 	/// Swaps y and z for all data in the model. This is needed to
-	/// convert from 3DS Max space to moFlow space.
+	/// convert from 3DS Max space to chilli source space.
 	//-------------------------------------------------------------------
 	private void SwapYAndZ(CSModel inMoModel)
 	{
@@ -97,7 +97,7 @@ public class CSModelTransformer
 	///
 	/// Inverts the y component of the texture coordinates. This is
 	/// because 3DS Max uses the opposite coordinate system to what
-	/// moFlow uses.
+	/// chilli source uses.
 	//-------------------------------------------------------------------
 	private void FlipVerticalTexCoords(CSModel inMoModel)
 	{

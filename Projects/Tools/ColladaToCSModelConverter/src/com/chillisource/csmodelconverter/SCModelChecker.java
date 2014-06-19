@@ -19,14 +19,14 @@ public class SCModelChecker
 	/// Check Model
 	///
 	/// Checks whether the model will be able to be
-	/// loaded into moFlow. This checks things like
+	/// loaded into chilli source. This checks things like
 	/// triangle count and number of mesh influencing joints.
 	///
 	/// @param The model.
 	//----------------------------------------------------
 	static public void CheckModel(CSModel inModel)
 	{
-		//Test that the model is not too big for moFlow to render.
+		//Test that the model is not too big for chilli source to render.
 		boolean bContainsLargeMesh = false;
 		for (CSModelMesh mesh : inModel.mMeshTable.values())
 		{
@@ -47,7 +47,7 @@ public class SCModelChecker
 		}
 		if (bContainsLargeMesh == true)
 		{
-			SCLogger.LogWarning("Mesh is too large! This model will require integer indices to render which moFlow currently does not support!");
+			SCLogger.LogWarning("Mesh is too large! This model will require integer indices to render which chilli source currently does not support!");
 		}
 		
 		//test the amount of skeleton nodes

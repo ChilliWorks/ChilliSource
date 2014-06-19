@@ -56,7 +56,7 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------
 			/// @author I Copland
 			///
-			/// @return returns the global instance of the MoFlow application.
+			/// @return returns the global instance of the Chilli Source application.
 			//--------------------------------------------------------------------------------------
 			CSCore::Application* GetApplication();
 			//-----------------------------------------

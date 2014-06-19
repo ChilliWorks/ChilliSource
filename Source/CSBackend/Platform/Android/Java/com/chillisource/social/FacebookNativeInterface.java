@@ -1,6 +1,6 @@
 /*
  *  CFacebookNativeInterface.java
- *  moFlow Android
+ *  moFlow
  *
  *  Created by Robert Henning on 01/05/2012.
  *  Copyright 2012 Tag Games. All rights reserved.

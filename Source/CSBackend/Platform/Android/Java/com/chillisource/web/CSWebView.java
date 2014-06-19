@@ -1,5 +1,5 @@
 //
-//  CMoFlowActivity.java
+//  CSWebView.java
 //  moFlow
 //
 //  Created by Ian Copland on 16/09/2013.
@@ -17,9 +17,9 @@ import android.view.ViewGroup;
 //============================================================
 /// Web View
 ///
-/// The moFlow implementation of a Web View. This differs from
-/// a standard webview by allowing the back button to close
-/// the webview.
+/// The Chilli Source implementation of a Web View. This differs 
+/// from a standard webview by allowing the back button to close 
+/// ∂the webview.
 //============================================================
 public class CSWebView extends android.webkit.WebView
 {

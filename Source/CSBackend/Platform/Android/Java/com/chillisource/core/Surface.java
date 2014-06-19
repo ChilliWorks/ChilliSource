@@ -155,7 +155,7 @@ public class Surface extends GLSurfaceView
 		final float touchY = yPos;
 
 		Runnable task = null;
-		//pass the touch events on to MoFlow
+		//pass the touch events on to the native side of the engine
 		switch (actionEvent)
 		{
 		case MotionEvent.ACTION_POINTER_DOWN:
