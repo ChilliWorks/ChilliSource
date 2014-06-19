@@ -74,12 +74,12 @@
             [errors release];
         }
         
-        //TODO: Expose colour and depth format
         GLKView* view = [[GLKView alloc] initWithFrame:[[UIScreen mainScreen] bounds] context:context];
         [self applySurfaceFormat:view fromConfig:root];
         [self applyMultisampleFormat:view fromConfig:root];
         view.userInteractionEnabled = YES;
         view.enableSetNeedsDisplay = NO;
+        view.multipleTouchEnabled = YES;
         view.delegate = in_delegate;
         
         self.view = view;
