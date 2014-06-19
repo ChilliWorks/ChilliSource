@@ -13,8 +13,8 @@
 /// container view for subviews. Houses the main UI functionality.
 //===============================================================================================
 
-#ifndef _MO_FLO_GUI_GUI_VIEW_H_
-#define _MO_FLO_GUI_GUI_VIEW_H_
+#ifndef _CHILLISOURCE_GUI_GUI_VIEW_H_
+#define _CHILLISOURCE_GUI_GUI_VIEW_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/InputEvents.h>

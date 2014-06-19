@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MO_FLO_CORE_TRANSFORM_H_
-#define _MO_FLO_CORE_TRANSFORM_H_
+#ifndef _CHILLISOURCE_CORE_TRANSFORM_H_
+#define _CHILLISOURCE_CORE_TRANSFORM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>

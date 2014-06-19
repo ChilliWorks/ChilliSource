@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#ifndef _MOFLOW_CORE_PERFORMANCE_TIMER_H_
-#define _MOFLOW_CORE_PERFORMANCE_TIMER_H_
+#ifndef _CHILLISOURCE_CORE_PERFORMANCE_TIMER_H_
+#define _CHILLISOURCE_CORE_PERFORMANCE_TIMER_H_
 
 #include <ChilliSource/ChilliSource.h>
 

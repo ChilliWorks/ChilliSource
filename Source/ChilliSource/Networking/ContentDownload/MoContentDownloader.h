@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MOFLOW_NETWORKING_MO_CONTENT_DOWNLOADER_H_
-#define _MOFLOW_NETWORKING_MO_CONTENT_DOWNLOADER_H_
+#ifndef _CHILLISOURCE_NETWORKING_MO_CONTENT_DOWNLOADER_H_
+#define _CHILLISOURCE_NETWORKING_MO_CONTENT_DOWNLOADER_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Networking/ContentDownload/IContentDownloader.h>

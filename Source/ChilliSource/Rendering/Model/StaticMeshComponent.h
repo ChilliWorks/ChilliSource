@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MO_FLO_RENDERING_STATIC_MESH_COMPONENT_H_
-#define _MO_FLO_RENDERING_STATIC_MESH_COMPONENT_H_
+#ifndef _CHILLISOURCE_RENDERING_STATIC_MESH_COMPONENT_H_
+#define _CHILLISOURCE_RENDERING_STATIC_MESH_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>

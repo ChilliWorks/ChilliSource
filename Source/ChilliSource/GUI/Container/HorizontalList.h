@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#ifndef _MOFLOW_GUI_HORIZONTAL_LIST_H_
-#define _MOFLOW_GUI_HORIZONTAL_LIST_H_
+#ifndef _CHILLISOURCE_GUI_HORIZONTAL_LIST_H_
+#define _CHILLISOURCE_GUI_HORIZONTAL_LIST_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/GUIView.h>

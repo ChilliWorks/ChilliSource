@@ -6,8 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#ifndef _MO_FLO_GUI_INPUT_EVENTS_H_
-#define _MO_FLO_GUI_INPUT_EVENTS_H_
+#ifndef _CHILLISOURCE_GUI_INPUT_EVENTS_H_
+#define _CHILLISOURCE_GUI_INPUT_EVENTS_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>

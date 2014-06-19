@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MO_FLO_RENDERING_CAMERA_COMPONENT_H_
-#define _MO_FLO_RENDERING_CAMERA_COMPONENT_H_
+#ifndef _CHILLISOURCE_RENDERING_CAMERA_COMPONENT_H_
+#define _CHILLISOURCE_RENDERING_CAMERA_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Entity/Component.h>

@@ -6,8 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#ifndef _MO_FLO_GUI_GUI_EDITABLE_LABEL
-#define _MO_FLO_GUI_GUI_EDITABLE_LABEL
+#ifndef _CHILLISOURCE_GUI_GUI_EDITABLE_LABEL
+#define _CHILLISOURCE_GUI_GUI_EDITABLE_LABEL
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>

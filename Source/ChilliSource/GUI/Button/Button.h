@@ -6,8 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#ifndef _MOFLO_GUI_BUTTON_H_
-#define _MOFLO_GUI_BUTTON_H_
+#ifndef _CHILLISOURCE_GUI_BUTTON_H_
+#define _CHILLISOURCE_GUI_BUTTON_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/GUIView.h>

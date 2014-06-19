@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MOFLO_CORE_MATH_CURVES_H_
-#define _MOFLO_CORE_MATH_CURVES_H_
+#ifndef _CHILLISOURCE_CORE_MATH_CURVES_H_
+#define _CHILLISOURCE_CORE_MATH_CURVES_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/MathUtils.h>

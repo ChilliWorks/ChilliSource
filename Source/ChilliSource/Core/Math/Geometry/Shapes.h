@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MOFLO_CORE_MATHS_SHAPES_H_
-#define _MOFLO_CORE_MATHS_SHAPES_H_
+#ifndef _CHILLISOURCE_CORE_MATHS_SHAPES_H_
+#define _CHILLISOURCE_CORE_MATHS_SHAPES_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
@@ -551,4 +551,4 @@ namespace ChilliSource
 	}
 }
 
-#endif //_MOFLO_CORE_MATHS_SHAPES_H_
+#endif //_CHILLISOURCE_CORE_MATHS_SHAPES_H_

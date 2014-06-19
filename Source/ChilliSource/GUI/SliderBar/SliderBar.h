@@ -7,8 +7,8 @@
 //
 
 
-#ifndef _MO_FLO_GUI_SLIDER_BAR_H_
-#define _MO_FLO_GUI_SLIDER_BAR_H_
+#ifndef _CHILLISOURCE_GUI_SLIDER_BAR_H_
+#define _CHILLISOURCE_GUI_SLIDER_BAR_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/GUIView.h>

@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MOFLO_RENDERING_IRENDERSYSTEM_H
-#define _MOFLO_RENDERING_IRENDERSYSTEM_H
+#ifndef _CHILLISOURCE_RENDERING_IRENDERSYSTEM_H
+#define _CHILLISOURCE_RENDERING_IRENDERSYSTEM_H
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>

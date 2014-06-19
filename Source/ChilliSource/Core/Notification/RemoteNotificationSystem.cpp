@@ -33,10 +33,8 @@
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY
-#include <CSBackend/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
-#elif defined(MOFLOWSKU_REMOTENOTIFICATIONMETHOD_AMAZON)
-#include <CSBackend/Platform/Android/Amazon/AmazonRemoteNotificationSystem.h>
+#ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
+#include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayRemoteNotificationSystem.h>
 #endif
 #endif
 
@@ -52,11 +50,9 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_IOS
         	return RemoteNotificationSystemUPtr(new CSBackend::iOS::RemoteNotificationSystem());
 #elif defined(CS_TARGETPLATFORM_ANDROID)
-#	ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY
-        	return RemoteNotificationSystemUPtr(new CSBackend::Android::CGooglePlayRemoteNotificationSystem());
-#	elif defined(MOFLOWSKU_REMOTENOTIFICATIONMETHOD_AMAZON)
-        	return RemoteNotificationSystemUPtr(new CSBackend::Android::CAmazonRemoteNotificationSystem());
-#	endif
+#ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
+        	return RemoteNotificationSystemUPtr(new CSBackend::Android::GooglePlayRemoteNotificationSystem());
+#endif
 #endif
         	return nullptr;
         }

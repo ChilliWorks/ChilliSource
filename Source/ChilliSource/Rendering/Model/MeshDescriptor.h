@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MOFLOW_RENDERING_MESHDESCRIPTOR_H_
-#define _MOFLOW_RENDERING_MESHDESCRIPTOR_H_
+#ifndef _CHILLISOURCE_RENDERING_MESHDESCRIPTOR_H_
+#define _CHILLISOURCE_RENDERING_MESHDESCRIPTOR_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>

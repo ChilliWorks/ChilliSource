@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef _MOFLOW_OPENGL_RENDERTARGET_H_
-#define _MOFLOW_OPENGL_RENDERTARGET_H_
+#ifndef _CHILLISOURCE_OPENGL_RENDERTARGET_H_
+#define _CHILLISOURCE_OPENGL_RENDERTARGET_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>

@@ -13,8 +13,8 @@
 /// feeding it to subviews.
 //===============================================================================================
 
-#ifndef _MOFLO_GUIWINDOW_H_
-#define _MOFLO_GUIWINDOW_H_
+#ifndef _CHILLISOURCE_GUIWINDOW_H_
+#define _CHILLISOURCE_GUIWINDOW_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/GUIView.h>

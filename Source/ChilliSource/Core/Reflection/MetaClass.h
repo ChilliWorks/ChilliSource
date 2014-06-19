@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef MO_FLOW_CORE_REFLECTION_META_CLASS_HPP_
-#define MO_FLOW_CORE_REFLECTION_META_CLASS_HPP_
+#ifndef _CHILLISOURCE_CORE_REFLECTION_META_CLASS_HPP_
+#define _CHILLISOURCE_CORE_REFLECTION_META_CLASS_HPP_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Reflection/Instance.h>
