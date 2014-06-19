@@ -54,7 +54,7 @@
         
         if(context == nil || isContextSet == NO)
         {
-            CS_LOG_FATAL("Cannot Create OpenGL ES 2.0 Context");
+            NSLog(@"Could Create OpenGL ES 2.0 Context");
         }
         
         //load the JSON app.config string from file.
@@ -69,7 +69,9 @@
         Json::Value root;
         if(!jReader.parse(jsonString, root))
         {
-            CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormatedErrorMessages());
+            NSString* errors = [NSStringUtils newNSStringWithUTF8String:jReader.getFormatedErrorMessages()];
+            NSLog(@"Could not parse App.config: %@", errors);
+            [errors release];
         }
         
         //TODO: Expose colour and depth format

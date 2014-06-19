@@ -39,8 +39,8 @@ namespace ChilliSource
 	{
         namespace
         {
-            const std::string k_framesFileExtension("bin");
-            const std::string k_keysFileExtension("mospriteid");
+            const std::string k_framesFileExtension("csatlas");
+            const std::string k_keysFileExtension("csatlasid");
             
             const u32 k_numElementsPerFrame = 8;
         }
@@ -94,8 +94,7 @@ namespace ChilliSource
             LoadFrames(in_location, in_filePath, desc);
             LoadMap(in_location, in_filePath, desc);
             
-            //TODO: We cannot add the guarantee that the map file is loaded as fonts use this path and don't require a map file. This will change.
-            if(desc.m_frames.size() > 0 /*&& desc.m_keys.size() > 0*/)
+            if(desc.m_frames.size() > 0 && desc.m_keys.size() > 0)
             {
                 spriteResource->SetLoadState(Core::Resource::LoadState::k_loaded);
                 spriteResource->Build(desc);
@@ -123,21 +122,17 @@ namespace ChilliSource
 			
 			s16 numFrames = 0;
 			frameFile->Read(reinterpret_cast<s8*>(&numFrames), sizeof(s16));
-			numFrames = Core::Utils::Endian2ByteSwap(&numFrames);
 			
 			s16 binVersion = 0;
 			frameFile->Read(reinterpret_cast<s8*>(&binVersion), sizeof(s16));
-            binVersion = Core::Utils::Endian2ByteSwap(&binVersion);
             
-            CS_ASSERT(binVersion >= 2, "TextureAtlas minimum version supported is 2.0");
+            CS_ASSERT(binVersion >= 3, "TextureAtlas minimum version supported is 2.0");
             
             s16 textureAtlasWidth = 0;
             frameFile->Read(reinterpret_cast<s8*>(&textureAtlasWidth), sizeof(s16));
-            textureAtlasWidth = Core::Utils::Endian2ByteSwap(&textureAtlasWidth);
             
             s16 textureAtlasHeight = 0;
             frameFile->Read(reinterpret_cast<s8*>(&textureAtlasHeight), sizeof(s16));
-            textureAtlasHeight = Core::Utils::Endian2ByteSwap(&textureAtlasHeight);
 			
 			//Temporary buffer to hold our unformatted data
 			const u32 numElements = numFrames * k_numElementsPerFrame;
@@ -146,12 +141,6 @@ namespace ChilliSource
 			//Fetch the binary data in one read.
 			frameFile->Read(reinterpret_cast<s8*>(buffer), numElements * sizeof(s16));
 			frameFile->Close();
-			
-			//Swap for endianess as the tool does it backwards!
-			for(u32 i=0; i<numElements; ++i)
-			{
-				buffer[i] = Core::Utils::Endian2ByteSwap(&buffer[i]);
-			}
 			
 			//Now copy the data into our sprite data buffer as it is now in the correct format
             out_desc.m_textureAtlasWidth = (u32)textureAtlasWidth;
@@ -187,7 +176,7 @@ namespace ChilliSource
             std::string fileExtension;
             
             Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
-            Core::FileStreamSPtr mapFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, fileName + ".mospriteid", Core::FileMode::k_read);
+            Core::FileStreamSPtr mapFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, fileName + ".csatlasid", Core::FileMode::k_read);
             
 			if(mapFile->IsOpen())
 			{

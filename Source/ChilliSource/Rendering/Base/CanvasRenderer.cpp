@@ -247,14 +247,10 @@ namespace ChilliSource
                 Font::CharacterInfo info;
                 if(in_font->TryGetCharacterInfo(in_character, info) == true)
                 {
-                    //TODO: The font maker seems to add a 2 unit padding to the font. We need to
-                    //remove this or at least find out its purpose.
-                    const f32 k_hackToolCorrection = 2.0f;
-                    
                     result.m_UVs = info.m_UVs;
                     result.m_size = info.m_size * in_textScale;
                     result.m_position.x = in_cursorX;
-                    result.m_position.y = in_cursorY - ((info.m_offset.y - k_hackToolCorrection) * in_textScale);
+                    result.m_position.y = in_cursorY - (info.m_offset.y * in_textScale);
                 }
                 else
                 {
