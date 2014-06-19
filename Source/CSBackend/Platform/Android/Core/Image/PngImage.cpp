@@ -24,8 +24,8 @@ namespace CSBackend
 		/// Read Png Data
 		///
 		/// A replacement for the default libPng file reading function. This is needed so
-		/// the c style file io functions can be replaced with moFlo functions, enabling
-		/// loading from the package.
+		/// the c style file io functions can be replaced with Chilli Source functions,
+		/// enabling loading from the package.
 		///
 		/// @param The currently open Png decorder
 		/// @param The output data.

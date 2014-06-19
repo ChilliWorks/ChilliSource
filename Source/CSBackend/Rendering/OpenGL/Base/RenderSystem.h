@@ -364,9 +364,9 @@ namespace CSBackend
 			//------------------------------------------------------------
 			/// Get Primitive Type
 			///
-			/// Convert fro moFlo primitive type to GL primitive type
+			/// Convert from CS primitive type to GL primitive type
 			///
-			/// @param moFlo primitive type
+			/// @param CS primitive type
 			//------------------------------------------------------------
 			s32 GetPrimitiveType(CSRendering::PrimitiveType inType);
             //----------------------------------------------------------
