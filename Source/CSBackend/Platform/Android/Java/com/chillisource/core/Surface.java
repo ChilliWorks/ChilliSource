@@ -91,7 +91,7 @@ public class Surface extends GLSurfaceView
 	 */
 	private String readSurfaceFormat(Activity in_activity)
 	{
-		final String k_configFilePath = "AppResources/Shared/App.config";
+		final String k_configFilePath = "AppResources/App.config";
 		
 		String output = "rgb565_depth24";
 		if (FileUtils.doesFileExistAPK(in_activity, k_configFilePath))

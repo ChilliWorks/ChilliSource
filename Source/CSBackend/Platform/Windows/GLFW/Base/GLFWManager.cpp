@@ -48,7 +48,7 @@ namespace CSBackend
 				std::string workingDir = CSCore::StringUtils::StandardisePath(path.substr(0, pos));
 
 				//open the file
-				std::ifstream file(workingDir + "assets/AppResources/Shared/App.config");
+				std::ifstream file(workingDir + "assets/AppResources/App.config");
 
 				std::string formatString = k_defaultFormat;
 				if (file.good() == true)
