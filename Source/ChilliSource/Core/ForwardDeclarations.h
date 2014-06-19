@@ -144,6 +144,17 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(LocalNotificationSystem);
         CS_FORWARDDECLARE_CLASS(RemoteNotificationSystem);
         //---------------------------------------------------------
+        /// Reflection
+        //---------------------------------------------------------
+        namespace Reflect
+        {
+            CS_FORWARDDECLARE_CLASS(CInstance);
+            CS_FORWARDDECLARE_CLASS(CMetaClass);
+            CS_FORWARDDECLARE_CLASS(CProperty);
+            template <typename T, typename ReturnType = void> class CMethod;
+            enum class PropAccess;
+        }
+        //---------------------------------------------------------
         /// Resource
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Resource);
