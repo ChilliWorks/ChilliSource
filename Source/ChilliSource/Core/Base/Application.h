@@ -237,7 +237,7 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the path resolver
 			//-----------------------------------------------------
-			inline TaggedFilenameResolver* GetTaggedPathResolver() const
+			inline TaggedPathResolver* GetTaggedPathResolver() const
             {
                 return m_taggedPathResolver;
             }
@@ -449,7 +449,7 @@ namespace ChilliSource
             Rendering::RenderSystem* m_renderSystem = nullptr;
             PlatformSystem* m_platformSystem = nullptr;
             FileSystem* m_fileSystem = nullptr;
-            TaggedFilenameResolver* m_taggedPathResolver = nullptr;
+            TaggedPathResolver* m_taggedPathResolver = nullptr;
             Input::PointerSystem* m_pointerSystem = nullptr;
             AppConfig* m_appConfig = nullptr;
             

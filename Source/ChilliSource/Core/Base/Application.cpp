@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
-#include <ChilliSource/Core/File/TaggedFilenameResolver.h>
+#include <ChilliSource/Core/File/TaggedPathResolver.h>
 #include <ChilliSource/Core/Image/CSImageProvider.h>
 #include <ChilliSource/Core/Image/PNGImageProvider.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
@@ -359,7 +359,7 @@ namespace ChilliSource
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
             m_resourcePool = CreateSystem<ResourcePool>();
-            m_taggedPathResolver = CreateSystem<TaggedFilenameResolver>();
+            m_taggedPathResolver = CreateSystem<TaggedPathResolver>();
             CreateSystem<AppDataStore>();
             CreateSystem<CSImageProvider>();
             CreateSystem<PNGImageProvider>();

@@ -1,5 +1,5 @@
 //
-//  TaggedFilenameResolver.h
+//  TaggedPathResolver.h
 //  Chilli Source
 //  Created by Scott Downie on 19/06/2014.
 //
@@ -26,10 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_FILE_TAGGEDFILENAMERESOLVER_H_
-#define _CHILLISOURCE_CORE_FILE_TAGGEDFILENAMERESOLVER_H_
+#ifndef _CHILLISOURCE_CORE_FILE_TAGGEDPATHRESOLVER_H_
+#define _CHILLISOURCE_CORE_FILE_TAGGEDPATHRESOLVER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 namespace ChilliSource
@@ -62,22 +63,50 @@ namespace ChilliSource
         ///
         /// @author S Downie
 		//-----------------------------------------------------------------
-		class TaggedFilenameResolver : public AppSystem
+		class TaggedPathResolver : public AppSystem
 		{
 		public:
-            CS_DECLARE_NAMEDTYPE(TaggedFilenameResolver);
+            CS_DECLARE_NAMEDTYPE(TaggedPathResolver);
             
             //--------------------------------------------------------------
             /// The list of supported groups by which assets can be loaded
             ///
             /// @author S Downie
             //--------------------------------------------------------------
-            enum class TagGroups
+            enum class TagGroup
             {
-                k_language,
                 k_platform,
                 k_resolution,
-                k_aspectRatio
+                k_aspectRatio,
+                k_language,
+                k_total
+            };
+            //--------------------------------------------------------------
+            /// Holds the information for a range rule. A range rule
+            /// holds true for any value between the min (excl.) and max (incl.)
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------
+            struct RangeRule
+            {
+                //--------------------------------------------------------------
+                /// Constructor
+                ///
+                /// @author S Downie
+                ///
+                /// @param Tag name
+                /// @param Min exclusive
+                /// @param Max exclusive
+                //--------------------------------------------------------------
+                RangeRule(const std::string& in_name, u32 in_minExclusive, u32 in_maxInclusive)
+                : m_name(in_name), m_minExclusive(in_minExclusive), m_maxInclusive(in_maxInclusive)
+                {
+                    
+                }
+                std::string m_name;
+                
+                u32 m_minExclusive = 0;
+                u32 m_maxInclusive = 0;
             };
             //--------------------------------------------------------------
             /// @author S Downie
@@ -88,40 +117,22 @@ namespace ChilliSource
             //--------------------------------------------------------------
             bool IsA(InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------------------
-            /// Add a new resolution tag and the rule for when to apply it
-            /// based on the current device resolution.
+            /// Add the tags and the rules for when to apply them
+            /// based on the current device resolution, platform, language
+            /// and aspect ratio.
             ///
-            /// NOTE: Resolution rules should be mutually exclusive otherwise
-            /// conflicts will occur (no overlaps).
-            ///
-            /// @author S Downie
-            ///
-            /// @param Tag name
-            /// @param Minimum inclusive resolution (i.e. 960*640)
-            /// @param Maximum exclusive resolution (i.e. 2048*1536)
-            //--------------------------------------------------------------
-            void AddResolutionTag(const std::string& in_name, u32 in_minResIncl, u32 in_maxResExcl);
-            //--------------------------------------------------------------
-            /// Add a new aspect ratio tag and the rule for when to apply it
-            /// based on the current device aspect ratio.
-            ///
-            /// NOTE: Aspect ratio rules should be mutually exclusive otherwise
-            /// conflicts will occur (no overlaps).
+            /// NOTE: Resolution and aspect rules should be mutually exclusive otherwise
+            /// conflicts will occur (i.e. no overlaps).
             ///
             /// @author S Downie
             ///
-            /// @param Tag name
-            /// @param Minimum inclusive ratio (i.e. 3.0/2.0)
-            /// @param Maximum exclusive resolution (i.e. 16.0/9.0)
+            /// @param List of supported language codes i.e. {"en", "fr", "de"}
+            /// @param List of supported resolutions i.e. {"low", 0*0, 480*320}, {"medium", 480*320, 960*640}
+            /// @param List of supported aspect ratios i.e. {"std", 1/1, 3/2}, {"wide", 16/9, 25/9}
             //--------------------------------------------------------------
-            void AddAspectRatioTag(const std::string& in_name, u32 in_minRatioIncl, u32 in_maxRatioExcl);
-            //--------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Delimitter that is used to separate tags in file name
-            /// (default is '.')
-            //--------------------------------------------------------------
-            void SetDelimitter(const std::string& in_delimitter);
+            void SetTags(const std::vector<std::string>& in_supportedLanguages,
+                         const std::vector<RangeRule>& in_supportedResolutions,
+                         const std::vector<RangeRule>& in_supportedAspectRatios);
             //--------------------------------------------------------------
             /// Set the priority in which the tag groups are applied. This
             /// is used to manage conflicts between shared assets.
@@ -133,8 +144,15 @@ namespace ChilliSource
             /// The priority governs which is loaded on a wide and high device.
             ///
             /// Default is: Platform, Res, Ratio, Language
+            ///
+            /// @author S Downie
+            ///
+            /// @param Highest priority
+            /// @param 2nd highest
+            /// @param 3rd highest
+            /// @param Lowest
             //--------------------------------------------------------------
-            void SetPriority();
+            void SetPriority(TagGroup in_high, TagGroup in_2, TagGroup in_3, TagGroup in_low);
             //--------------------------------------------------------------
             /// @author S Downie
             ///
@@ -156,27 +174,42 @@ namespace ChilliSource
             ///
             /// @return New backend instance
             //--------------------------------------------------------------
-            static TaggedFilenameResolverUPtr Create();
+            static TaggedPathResolverUPtr Create();
             //--------------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             //--------------------------------------------------------------
-            TaggedFilenameResolver() = default;
+            TaggedPathResolver() = default;
             //--------------------------------------------------------------
             /// Called when the system is created
             ///
             /// @author S Downie
             //--------------------------------------------------------------
             void OnInit() override;
+            //--------------------------------------------------------------
+            /// Called when the screen resizes
+            ///
+            /// @author S Downie
+            ///
+            /// @param New screen size
+            //--------------------------------------------------------------
+            void OnScreenResized(const Vector2& in_size);
             
         private:
             
-            std::string m_delimitter = ".";
-            
             FileSystem* m_fileSystem = nullptr;
             Screen* m_screen = nullptr;
-            Device* m_device = nullptr;
+            
+            std::vector<RangeRule> m_resolutionRules;
+            std::vector<RangeRule> m_aspectRatioRules;
+            
+            std::vector<std::string> m_groupTags[(u32)TagGroup::k_total];
+            std::string m_activeTags[(u32)TagGroup::k_total];
+            
+            u32 m_priorityIndices[(u32)TagGroup::k_total];
+            
+            EventConnectionUPtr m_screenResizeConnection;
 		};
 	}
 		
