@@ -1,7 +1,7 @@
 //
 //  StateSystem.cpp
 //  Chilli Source
-//  Created by I Copland on 11/06/2014.
+//  Created by Ian Copland on 11/06/2014.
 //
 //  The MIT License (MIT)
 //
