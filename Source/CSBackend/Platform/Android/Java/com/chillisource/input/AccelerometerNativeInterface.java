@@ -57,28 +57,28 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 	//-----------------------------------------------------
 	class AxisSwap
 	{
-		int mdwNegateX;
-		int mdwNegateY;
-		int mdwSourceX;
-		int mdwSourceY;
+		final int m_negateX;
+		final int m_negateY;
+		final int m_sourceX;
+		final int m_sourceY;
 		//-----------------------------------------------------
 		/// Constructor
 		//-----------------------------------------------------
-		AxisSwap(int indwNegateX, int indwNegateY, int indwSourceX, int indwSourceY)
+		AxisSwap(int in_negateX, int in_negateY, int in_sourceX, int in_sourceY)
 		{
-			mdwNegateX = indwNegateX;
-			mdwNegateY = indwNegateY;
-			mdwSourceX = indwSourceX;
-			mdwSourceY = indwSourceY;
+			m_negateX = in_negateX;
+			m_negateY = in_negateY;
+			m_sourceX = in_sourceX;
+			m_sourceY = in_sourceY;
 		}
 	};
 	//-----------------------------------------------------
 	/// Member data
 	//-----------------------------------------------------
 	public static InterfaceIDType InterfaceID = new InterfaceIDType("CAccelerometerNativeInterface");
-	final AxisSwap mAxisSwap;
 	boolean mbListening = false;
 	boolean mbHasAccelerometer = false;
+	AxisSwap[] m_axisSwapForRotation = null;
 	//-----------------------------------------------------
 	/// Constructor
 	//-----------------------------------------------------
@@ -87,18 +87,13 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 		PackageManager manager = CSApplication.get().getActivityContext().getPackageManager();
 		mbHasAccelerometer = manager.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER);
 		
-		//calculate the axis swap
-		final AxisSwap[] adwAxisSwapPossibilities = 
+		m_axisSwapForRotation = new AxisSwap[]
 		{
 			new AxisSwap( 1,-1, 0, 1),		// ROTATION_0
 			new AxisSwap(-1,-1, 1, 0), 		// ROTATION_90
 			new AxisSwap(-1, 1, 0, 1), 		// ROTATION_180
 			new AxisSwap( 1, 1, 1, 0) 		// ROTATION_270
 		}; 
-		
-		WindowManager windowManager = (WindowManager)CSApplication.get().getActivityContext().getSystemService(Activity.WINDOW_SERVICE);
-		int rotationIndex = windowManager.getDefaultDisplay().getRotation();
-		mAxisSwap = adwAxisSwapPossibilities[rotationIndex];
 	}
 	//-----------------------------------------------------
 	/// Is A
@@ -172,28 +167,33 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 			//The values provided from the accelerometer are always relative to the default screen orientation which can change
 			//from device to device. To alleviate this we are converting into "screen" coordinates. This has been taken from
 			//the nvidia accelerometer white paper which can be found at : http://developer.download.nvidia.com/tegra/docs/tegra_android_accelerometer_v5f.pdf
-			float fScreenX = ((float)mAxisSwap.mdwNegateX) * event.values[mAxisSwap.mdwSourceX];
-			float fScreenY = ((float)mAxisSwap.mdwNegateY) * event.values[mAxisSwap.mdwSourceY];
+			Activity activity = CSApplication.get().getActivity();
+			WindowManager windowManager = (WindowManager)activity.getSystemService(Activity.WINDOW_SERVICE);
+			int rotationIndex = windowManager.getDefaultDisplay().getRotation();
+			AxisSwap axisSwap = m_axisSwapForRotation[rotationIndex];
+			float fScreenX = ((float)axisSwap.m_negateX) * event.values[axisSwap.m_sourceX];
+			float fScreenY = ((float)axisSwap.m_negateY) * event.values[axisSwap.m_sourceY];
 			float fScreenZ = event.values[2];
 
 			//the values provided by android are in ms^-2. Accelerometer values are more typically given in
 			//terms of "g"'s so we are converting here. We are also converting from a x, y and z positive in the
 			//left, up and backward directions respectively to right, up and forward directions to be more consistent with iOS.
-			final float kGravity = 9.80665f;
-			final float kX = -fScreenX / kGravity;
-			final float kY = fScreenY / kGravity;
-			final float kZ = -fScreenZ / kGravity;
+			final float k_gravity = 9.80665f;
+			final float k_accelerationX = -fScreenX / k_gravity;
+			final float k_accelerationY = fScreenY / k_gravity;
+			final float k_accelerationZ = -fScreenZ / k_gravity;
+			
+			//update acceleration on main thread.
 			Runnable task = new Runnable()
 			{ 
 				@Override public void run() 
 				{
 					if (true == mbHasAccelerometer && true == mbListening)
 					{
-			            UpdateAcceleration(kX, kY, kZ);
+			            UpdateAcceleration(k_accelerationX, k_accelerationY, k_accelerationZ);
 			        }
 				}
 			};
-			
 			CSApplication.get().scheduleMainThreadTask(task);
 		}
 	}
