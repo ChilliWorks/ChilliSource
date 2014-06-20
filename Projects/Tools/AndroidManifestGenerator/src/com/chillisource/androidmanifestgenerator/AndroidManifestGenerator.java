@@ -73,7 +73,7 @@ public final class AndroidManifestGenerator
 	 * 
 	 * @param The file path to the user manifest.
 	 * 
-	 * return A container for all information in the user manifest.
+	 * @return A container for all information in the user manifest.
 	 */
 	private static UserManifestData readUserManifest(String in_filePath)
 	{
