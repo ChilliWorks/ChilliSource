@@ -229,6 +229,18 @@ namespace ChilliSource
             {
                 return m_fileSystem;
             }
+            //-----------------------------------------------------
+			/// Returns a pointer to the system that resolves path
+            /// based on the device config
+            ///
+            /// @author S Downie
+			///
+			/// @return Pointer to the path resolver
+			//-----------------------------------------------------
+			inline TaggedFilenameResolver* GetTaggedPathResolver() const
+            {
+                return m_taggedPathResolver;
+            }
 			//-----------------------------------------------------
 			/// Returns a pointer to the task scheduler.
 			///
@@ -437,6 +449,7 @@ namespace ChilliSource
             Rendering::RenderSystem* m_renderSystem = nullptr;
             PlatformSystem* m_platformSystem = nullptr;
             FileSystem* m_fileSystem = nullptr;
+            TaggedFilenameResolver* m_taggedPathResolver = nullptr;
             Input::PointerSystem* m_pointerSystem = nullptr;
             AppConfig* m_appConfig = nullptr;
             
