@@ -54,7 +54,7 @@ public final class GCMRegistrar {
     public static final long DEFAULT_ON_SERVER_LIFESPAN_MS =
             1000 * 3600 * 24 * 7;
 
-    private static final String TAG = "MoFlow";
+    private static final String TAG = "Chilli Source";
     private static final String BACKOFF_MS = "backoff_ms";
     private static final String GSF_PACKAGE = "com.google.android.gsf";
     private static final String PREFERENCES = "com.google.android.gcm";

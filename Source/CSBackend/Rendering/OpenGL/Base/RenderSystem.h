@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
-#define _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
+#ifndef _CHILLISOURCE_OPENGL_ES2_RENDER_SYSTEM_H_
+#define _CHILLISOURCE_OPENGL_ES2_RENDER_SYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
@@ -364,9 +364,9 @@ namespace CSBackend
 			//------------------------------------------------------------
 			/// Get Primitive Type
 			///
-			/// Convert fro moFlo primitive type to GL primitive type
+			/// Convert from CS primitive type to GL primitive type
 			///
-			/// @param moFlo primitive type
+			/// @param CS primitive type
 			//------------------------------------------------------------
 			s32 GetPrimitiveType(CSRendering::PrimitiveType inType);
             //----------------------------------------------------------

@@ -19,8 +19,8 @@
 /// Read Png Data
 ///
 /// A replacement for the default libPng file reading function. This is needed so
-/// the c style file io functions can be replaced with moFlo functions, enabling
-/// loading from the package.
+/// the c style file io functions can be replaced with Chilli source functions,
+/// enabling loading from the package.
 /// @param png_structp png_ptr - The currently open Png decorder
 /// @param png_bytep data - The output data.
 /// @param png_size_t length - The length of the data.

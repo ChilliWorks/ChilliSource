@@ -421,18 +421,6 @@ namespace CSBackend
 		{
 			switch (in_storageLocation)
 			{
-				case CSCore::StorageLocation::k_package:
-				{
-					const std::string* resourceDirectories = GetResourceDirectories();
-					for (u32 i = 0; i < 3; ++i)
-					{
-						if (CSBackend::Windows::DoesFileExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_filePath) == true)
-						{
-							return true;
-						}
-					}
-					return false;
-				}
 				case CSCore::StorageLocation::k_DLC:
 				{
 					if (DoesItemExistInDLCCache(in_filePath, false) == true)
@@ -455,18 +443,6 @@ namespace CSBackend
 		{
 			switch (in_storageLocation)
 			{
-				case CSCore::StorageLocation::k_package:
-				{
-					const std::string* resourceDirectories = GetResourceDirectories();
-					for (u32 i = 0; i < 3; ++i)
-					{
-						if (CSBackend::Windows::DoesDirectoryExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_directoryPath) == true)
-						{
-							return true;
-						}
-					}
-					return false;
-				}
 				case CSCore::StorageLocation::k_DLC:
 				{
 					if (DoesItemExistInDLCCache(in_directoryPath, true) == true)
@@ -527,21 +503,6 @@ namespace CSBackend
 			{
 				switch (in_storageLocation)
 				{
-					case CSCore::StorageLocation::k_package:
-					{
-						const std::string* resourceDirectories = GetResourceDirectories();
-						std::string absoluteFilePath;
-						for (u32 i = 0; i < 3; ++i)
-						{
-							absoluteFilePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_filePath);
-							if (CSBackend::Windows::DoesFileExist(absoluteFilePath) == true)
-							{
-								break;
-							}
-						}
-
-						return absoluteFilePath;
-					}
 					case CSCore::StorageLocation::k_DLC:
 					{
 						std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
@@ -569,21 +530,6 @@ namespace CSBackend
 			{
 				switch (in_storageLocation)
 				{
-					case CSCore::StorageLocation::k_package:
-					{
-						const std::string* resourceDirectories = GetResourceDirectories();
-						std::string absoluteDirectoryPath;
-						for (u32 i = 0; i < 3; ++i)
-						{
-							absoluteDirectoryPath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_directoryPath);
-							if (CSBackend::Windows::DoesDirectoryExist(absoluteDirectoryPath) == true)
-							{
-								break;
-							}
-						}
-
-						return absoluteDirectoryPath;
-					}
 					case CSCore::StorageLocation::k_DLC:
 					{
 						std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
@@ -625,22 +571,9 @@ namespace CSBackend
 
 			switch (in_storageLocation)
 			{
-				case CSCore::StorageLocation::k_package:
-				{
-					const std::string* resourceDirectories = GetResourceDirectories();
-					for (u32 i = 0; i < 3; ++i)
-					{
-						output.push_back(GetAbsolutePathToStorageLocation(in_storageLocation) + resourceDirectories[i] + in_path);
-					}
-					break;
-				}
 				case CSCore::StorageLocation::k_DLC:
 				{
-					const std::string* resourceDirectories = GetResourceDirectories();
-					for (u32 i = 0; i < 3; ++i)
-					{
-						output.push_back(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + GetPackageDLCPath() + in_path);
-					}
+					output.push_back(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + GetPackageDLCPath() + in_path);
 					output.push_back(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path);
 					break;
 				}

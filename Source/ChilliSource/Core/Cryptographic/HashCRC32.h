@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MO_FLO_HASH_CRC_32_H_
-#define _MO_FLO_HASH_CRC_32_H_
+#ifndef _CHILLISOURCE_HASH_CRC_32_H_
+#define _CHILLISOURCE_HASH_CRC_32_H_
 
 #include <ChilliSource/ChilliSource.h>
 

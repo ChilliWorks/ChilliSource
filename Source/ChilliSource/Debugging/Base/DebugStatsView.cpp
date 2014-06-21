@@ -45,7 +45,7 @@ namespace ChilliSource
 	{
         namespace
         {
-            const std::string k_defaultFont = "Fonts/ArialMed.alphabet";
+            const std::string k_defaultFont = "Fonts/SystemMed.csfont";
             
             //--------------------------------------------------
             /// Creates the GUI background texture if it does
@@ -120,9 +120,9 @@ namespace ChilliSource
             {
                 CleanupGUIStats();
                 
-                Rendering::FontCSPtr font = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Font>(Core::StorageLocation::k_package, k_defaultFont);
+                Rendering::FontCSPtr font = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Font>(Core::StorageLocation::k_chilliSource, k_defaultFont);
                 
-                const f32 k_bestFitTextSize = 15.0f;
+                const f32 k_bestFitTextSize = 20.0f;
                 const f32 currentLetterHeight = font->GetLineHeight();
                 const f32 textScale = k_bestFitTextSize / currentLetterHeight;
                 
@@ -145,6 +145,9 @@ namespace ChilliSource
                     guiStat.m_nameLabel->EnableTouchConsumption(false);
                     guiStat.m_nameLabel->EnableBackground(false);
                     guiStat.m_nameLabel->SetTextColour(Core::Colour::k_white);
+                    guiStat.m_nameLabel->SetColour(Core::Colour::k_white);
+                    guiStat.m_nameLabel->EnableInheritedColour(false);
+                    guiStat.m_nameLabel->EnableInheritedOpacity(false);
                     AddSubview(guiStat.m_nameLabel);
                     
                     guiStat.m_valueLabel = GUI::LabelSPtr(new GUI::Label());
@@ -160,6 +163,9 @@ namespace ChilliSource
                     guiStat.m_valueLabel->EnableTouchConsumption(false);
                     guiStat.m_valueLabel->EnableBackground(false);
                     guiStat.m_valueLabel->SetTextColour(Core::Colour::k_white);
+                    guiStat.m_valueLabel->SetColour(Core::Colour::k_white);
+                    guiStat.m_valueLabel->EnableInheritedColour(false);
+                    guiStat.m_valueLabel->EnableInheritedOpacity(false);
                     guiStat.m_nameLabel->AddSubview(guiStat.m_valueLabel);
                     
                     m_guiStats.emplace(stat.first, guiStat);

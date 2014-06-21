@@ -96,6 +96,20 @@ def premultiply_pngs(project_dir):
         subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", png_file, "--output", png_file]);
 
 #----------------------------------------------------------------------
+# Builds the android manifest.
+#
+# @author I Copland
+#
+# @param Project directory path
+#----------------------------------------------------------------------
+def build_manifest(project_dir):
+    jarFile = os.path.join(project_dir, "ChilliSource", "Tools", "AndroidManifestGenerator.jar")
+    userManifest = os.path.join(project_dir, "CSAndroidManifest.xml")
+    templateManifest = os.path.join(project_dir, "ChilliSource", "Tools", "Scripts", "AndroidManifestTemplate.xml")
+    outputManifest = os.path.join(project_dir, "AndroidManifest.xml")
+    subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", userManifest, "--template", templateManifest, "--output", outputManifest]);
+
+#----------------------------------------------------------------------
 # The entry point into the script.
 #
 # @author S Downie
@@ -111,6 +125,7 @@ def main(args):
     copy_resources(project_dir)
     copy_jars(project_dir)
     premultiply_pngs(project_dir)
+    build_manifest(project_dir)
 
 if __name__ == "__main__":
     main(sys.argv)

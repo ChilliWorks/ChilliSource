@@ -54,11 +54,11 @@
         
         if(context == nil || isContextSet == NO)
         {
-            CS_LOG_FATAL("Cannot Create OpenGL ES 2.0 Context");
+            NSLog(@"Could Create OpenGL ES 2.0 Context");
         }
         
         //load the JSON app.config string from file.
-        NSString* relativePath = [NSStringUtils newNSStringWithUTF8String:"AppResources/Shared/App"];
+        NSString* relativePath = [NSStringUtils newNSStringWithUTF8String:"AppResources/App"];
         NSString* fullPath = [[NSBundle mainBundle] pathForResource:relativePath ofType:@"config"];
         [relativePath release];
         NSString* content = [NSString stringWithContentsOfFile:fullPath encoding:NSUTF8StringEncoding error:nil];
@@ -69,15 +69,17 @@
         Json::Value root;
         if(!jReader.parse(jsonString, root))
         {
-            CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormatedErrorMessages());
+            NSString* errors = [NSStringUtils newNSStringWithUTF8String:jReader.getFormatedErrorMessages()];
+            NSLog(@"Could not parse App.config: %@", errors);
+            [errors release];
         }
         
-        //TODO: Expose colour and depth format
         GLKView* view = [[GLKView alloc] initWithFrame:[[UIScreen mainScreen] bounds] context:context];
         [self applySurfaceFormat:view fromConfig:root];
         [self applyMultisampleFormat:view fromConfig:root];
         view.userInteractionEnabled = YES;
         view.enableSetNeedsDisplay = NO;
+        view.multipleTouchEnabled = YES;
         view.delegate = in_delegate;
         
         self.view = view;

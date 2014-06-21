@@ -30,7 +30,11 @@
 
 #import <CSBackend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 
+#import <ChilliSource/Core/Math/MathUtils.h>
+
 #import <CoreMotion/CoreMotion.h>
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 namespace CSBackend
 {
@@ -83,7 +87,30 @@ namespace CSBackend
         //----------------------------------------------------
         CSCore::Vector3 Accelerometer::GetAcceleration() const
         {
-            return CSCore::Vector3(m_motionManager.accelerometerData.acceleration.x, m_motionManager.accelerometerData.acceleration.y, m_motionManager.accelerometerData.acceleration.z);
+            CSCore::Matrix4 orientationTransform;
+            switch ([UIApplication sharedApplication].keyWindow.rootViewController.interfaceOrientation)
+            {
+                case UIInterfaceOrientationPortrait:
+                    orientationTransform = CSCore::Matrix4::k_identity;
+                    break;
+                case UIInterfaceOrientationLandscapeLeft:
+                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::kPI * 1.5f);
+                    break;
+                case UIInterfaceOrientationLandscapeRight:
+                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::kPI * 0.5f);
+                    break;
+                case UIInterfaceOrientationPortraitUpsideDown:
+                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::kPI);
+                    break;
+                default:
+                    CS_LOG_ERROR("Unknown orientation!");
+                    orientationTransform = CSCore::Matrix4::k_identity;
+                    break;
+            }
+            
+            CSCore::Vector3 deviceSpaceAcceleration(m_motionManager.accelerometerData.acceleration.x, m_motionManager.accelerometerData.acceleration.y, m_motionManager.accelerometerData.acceleration.z);
+            deviceSpaceAcceleration.Transform3x4(orientationTransform);
+            return deviceSpaceAcceleration;
         }
         //----------------------------------------------------
         //----------------------------------------------------

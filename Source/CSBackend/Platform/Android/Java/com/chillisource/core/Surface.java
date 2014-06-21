@@ -91,7 +91,7 @@ public class Surface extends GLSurfaceView
 	 */
 	private String readSurfaceFormat(Activity in_activity)
 	{
-		final String k_configFilePath = "AppResources/Shared/App.config";
+		final String k_configFilePath = "AppResources/App.config";
 		
 		String output = "rgb565_depth24";
 		if (FileUtils.doesFileExistAPK(in_activity, k_configFilePath))
@@ -155,7 +155,7 @@ public class Surface extends GLSurfaceView
 		final float touchY = yPos;
 
 		Runnable task = null;
-		//pass the touch events on to MoFlow
+		//pass the touch events on to the native side of the engine
 		switch (actionEvent)
 		{
 		case MotionEvent.ACTION_POINTER_DOWN:

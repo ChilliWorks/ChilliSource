@@ -8,6 +8,8 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
+#ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
+
 #include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayExpansionJavaInterface.h>
 
 #include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayExpansionSystem.h>
@@ -172,5 +174,7 @@ namespace CSBackend
 		}
 	}
 }
+
+#endif
 
 #endif

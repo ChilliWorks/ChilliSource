@@ -1,9 +1,29 @@
 //
 //  FileSystem.cpp
 //  Chilli Source
-//
 //  Created by Scott Downie on 07/07/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/Core/File/FileSystem.h>
@@ -38,49 +58,6 @@ namespace ChilliSource
         }
         CS_DEFINE_NAMEDTYPE(FileSystem);
         
-        std::string FileSystem::s_resourceDirectory[3];
-        f32 FileSystem::s_assetsDensity = 1.0f;
-        
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        const std::string& FileSystem::GetDeviceResourceDirectory()
-        {
-            return s_resourceDirectory[0];
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        const std::string& FileSystem::GetDefaultDeviceResourceDirectory()
-        {
-            return s_resourceDirectory[1];
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        const std::string& FileSystem::GetDefaultResourceDirectory()
-        {
-            return s_resourceDirectory[2];
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void FileSystem::SetResourceDirectories(const std::string& in_deviceDirectory, const std::string& in_defaultDeviceDirectory, const std::string& in_defaultDirectory, f32 in_assetsDensity)
-        {
-            s_resourceDirectory[0] = in_deviceDirectory;
-            if (!in_deviceDirectory.empty())
-                s_resourceDirectory[0] += "/";
-            s_resourceDirectory[1] = in_defaultDeviceDirectory;
-            if (!in_defaultDeviceDirectory.empty())
-                s_resourceDirectory[1] += "/";
-            s_resourceDirectory[2] = in_defaultDirectory;
-            if (!in_defaultDirectory.empty())
-                s_resourceDirectory[2] += "/";
-            
-            s_assetsDensity = in_assetsDensity;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        f32 FileSystem::GetDeviceResourcesDensity()
-        {
-            return s_assetsDensity;
-        }
         //-------------------------------------------------------
         //-------------------------------------------------------
         FileSystemUPtr FileSystem::Create()
@@ -356,12 +333,6 @@ namespace ChilliSource
                 default:
                     return false;
             }
-        }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        const std::string* FileSystem::GetResourceDirectories() const
-        {
-            return s_resourceDirectory;
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------

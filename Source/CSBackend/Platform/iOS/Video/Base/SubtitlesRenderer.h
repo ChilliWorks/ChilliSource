@@ -8,8 +8,8 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#ifndef _MOFLOW_PLATFORM_IOS_VIDEO_SUBTITLESRENDERER_H_
-#define _MOFLOW_PLATFORM_IOS_VIDEO_SUBTITLESRENDERER_H_
+#ifndef _CHILLISOURCE_PLATFORM_IOS_VIDEO_SUBTITLESRENDERER_H_
+#define _CHILLISOURCE_PLATFORM_IOS_VIDEO_SUBTITLESRENDERER_H_
 
 #import <ChilliSource/ChilliSource.h>
 #import <ChilliSource/Video/Base/Subtitles.h>
@@ -89,7 +89,7 @@
 //--------------------------------------------------------
 /// Text Alignment From Anchor
 ///
-/// Converts from a moFlow alignment anchor to NSText
+/// Converts from a Chilli Source alignment anchor to NSText
 /// alignment.
 ///
 /// @param The alignment achor.

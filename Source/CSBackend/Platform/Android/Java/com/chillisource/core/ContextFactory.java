@@ -1,5 +1,5 @@
 /*
- *  CMoFlowContextFactory.java
+ *  ContextFactory.java
  *  moFlow
  *
  *  Created by Ian Copland on 14/08/2012.
