@@ -83,7 +83,7 @@ namespace ChilliSource
             };
             //--------------------------------------------------------------
             /// Holds the information for a range rule. A range rule
-            /// holds true for any value between the min (excl.) and max (incl.)
+            /// holds true for any value between greater than the minimum
             ///
             /// @author S Downie
             //--------------------------------------------------------------
@@ -96,17 +96,14 @@ namespace ChilliSource
                 ///
                 /// @param Tag name
                 /// @param Min exclusive
-                /// @param Max exclusive
                 //--------------------------------------------------------------
-                RangeRule(const std::string& in_name, f32 in_minExclusive, f32 in_maxInclusive)
-                : m_name(in_name), m_minExclusive(in_minExclusive), m_maxInclusive(in_maxInclusive)
+                RangeRule(const std::string& in_name, f32 in_minExclusive)
+                : m_name(in_name), m_minExclusive(in_minExclusive)
                 {
                     
                 }
                 std::string m_name;
-                
                 f32 m_minExclusive = 0;
-                f32 m_maxInclusive = 0;
             };
             //--------------------------------------------------------------
             /// @author S Downie

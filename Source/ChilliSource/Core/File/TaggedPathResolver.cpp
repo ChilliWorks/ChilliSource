@@ -173,6 +173,11 @@ namespace ChilliSource
             
             //---Resolution
             m_resolutionRules = in_supportedResolutions;
+            std::sort(std::begin(m_resolutionRules), std::end(m_resolutionRules), [](const RangeRule& in_a, const RangeRule& in_b)
+            {
+                return in_a.m_minExclusive > in_b.m_minExclusive;
+            });
+            
             for(const auto& rule : in_supportedResolutions)
             {
                 m_groupTags[(u32)TagGroup::k_resolution].push_back("." + rule.m_name);
@@ -180,6 +185,11 @@ namespace ChilliSource
             
             //---Aspect Ratio
             m_aspectRatioRules = in_supportedAspectRatios;
+            std::sort(std::begin(m_aspectRatioRules), std::end(m_aspectRatioRules), [](const RangeRule& in_a, const RangeRule& in_b)
+            {
+                return in_a.m_minExclusive > in_b.m_minExclusive;
+            });
+            
             for(const auto& rule : in_supportedAspectRatios)
             {
                 m_groupTags[(u32)TagGroup::k_aspectRatio].push_back("." + rule.m_name);
@@ -219,9 +229,10 @@ namespace ChilliSource
             f32 resolution = in_size.x * in_size.y;
             for(const auto& rule : m_resolutionRules)
             {
-                if(resolution > rule.m_minExclusive && resolution <= rule.m_maxInclusive)
+                if(resolution > rule.m_minExclusive)
                 {
                     m_activeTags[(u32)TagGroup::k_resolution] = "." + rule.m_name;
+                    break;
                 }
             }
             
@@ -229,9 +240,10 @@ namespace ChilliSource
             f32 aspectRatio = in_size.x / in_size.y;
             for(const auto& rule : m_aspectRatioRules)
             {
-                if(aspectRatio > rule.m_minExclusive && aspectRatio <= rule.m_maxInclusive)
+                if(aspectRatio > rule.m_minExclusive)
                 {
                     m_activeTags[(u32)TagGroup::k_aspectRatio] = "." + rule.m_name;
+                    break;
                 }
             }
         }
