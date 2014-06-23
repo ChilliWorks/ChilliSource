@@ -31,6 +31,7 @@ import sys
 import file_system_utils
 import subprocess
 import os
+import shutil
 
 #----------------------------------------------------------------------
 # Copies the resource from ProjectResources and AppResources
@@ -43,9 +44,35 @@ import os
 # @author S Downie
 #----------------------------------------------------------------------
 
+#----------------------------------------------------------------------
+# Copies the files from src directory to dst directory but excludes
+# those that are tagged ".ios" or ".windows"
+#
+# @author S Downie
+#
+# @param Source path
+# @param Destination path
+#----------------------------------------------------------------------
+def copy_file_tree(src_path, dst_path):
+    excludes = [".ios", ".windows", ".DS_Store"]
+    includes = [".android"]
+
+    filter_func = lambda name: any(include in name for include in includes) or not any(exclude in name for exclude in excludes)
+
+    if os.path.exists(dst_path) == False:
+        os.makedirs(dst_path)
+
+    for item in os.listdir(src_path):
+        src = os.path.join(src_path, item)
+        dst = os.path.join(dst_path, item)
+        if os.path.isdir(src):
+            copy_file_tree(src, dst)
+        else:
+            if filter_func(item):
+                shutil.copy2(src, dst)
 
 #----------------------------------------------------------------------
-# Copies the resource from ProjectResources and AppResources
+# Copies the resource from ProjectResources, CSResources and AppResources
 # into res and assets directories that are required by Android.
 #
 # @author S Downie
@@ -64,9 +91,9 @@ def copy_resources(project_dir):
     cs_dst_path = os.path.join(project_dir, "assets", "CSResources")
     platform_dst_path = os.path.join(project_dir, "res")
 
-    file_system_utils.overwrite_directory(app_src_path, app_dst_path)
-    file_system_utils.overwrite_directory(cs_src_path, cs_dst_path)
-    file_system_utils.overwrite_directory(platform_src_path, platform_dst_path)
+    copy_file_tree(app_src_path, app_dst_path)
+    copy_file_tree(cs_src_path, cs_dst_path)
+    copy_file_tree(platform_src_path, platform_dst_path)
 
 #----------------------------------------------------------------------
 # Copies the jars into libs as required by Android.
