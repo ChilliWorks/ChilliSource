@@ -913,7 +913,7 @@ namespace ChilliSource
             
 		protected:
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @return The screen.
 			//-----------------------------------------------------

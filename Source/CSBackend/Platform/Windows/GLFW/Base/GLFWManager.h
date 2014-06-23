@@ -148,7 +148,7 @@ namespace CSBackend
 			//---------------------------------------------------
 			/// Sets the title of the window.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The new window title.
 			//---------------------------------------------------

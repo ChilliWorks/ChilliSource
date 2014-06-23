@@ -43,7 +43,7 @@ namespace ChilliSource
         /// texture size. This should not be used prior to the render
         /// system being initialised.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //---------------------------------------------------------------
         class RenderCapabilities : public Core::AppSystem
         {
@@ -59,32 +59,32 @@ namespace ChilliSource
             //-------------------------------------------------------
             static RenderCapabilitiesUPtr Create();
             //-------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Whether or not shadow mapping is supported.
             //-------------------------------------------------------
             virtual bool IsShadowMappingSupported() const = 0;
             //-------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Whether or not depth textures are supported.
             //-------------------------------------------------------
             virtual bool IsDepthTextureSupported() const = 0;
             //-------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Whether or not map buffer is supported
             //-------------------------------------------------
             virtual bool IsMapBufferSupported() const = 0;
             //-------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The maximum texture size available on this
             /// device.
             //-------------------------------------------------------
             virtual u32 GetMaxTextureSize() const = 0;
             //-------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The number of texture units supported by this
             /// device.
@@ -93,7 +93,7 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// Destructor
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------
             virtual ~RenderCapabilities(){};
             

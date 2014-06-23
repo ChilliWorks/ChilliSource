@@ -69,7 +69,7 @@ namespace ChilliSource
             //----------------------------------------------------------
 			/// Called after system suspend
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------------
 			virtual void Suspend() = 0;
             //----------------------------------------------------------

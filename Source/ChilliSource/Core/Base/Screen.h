@@ -55,7 +55,7 @@ namespace ChilliSource
             /// a desktop app or when the orientation changes in a mobile
             /// app.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The new screen resolution.
 			//-----------------------------------------------------------
@@ -89,7 +89,7 @@ namespace ChilliSource
             //-----------------------------------------------------------
             virtual f32 GetInverseDensityScale() const = 0;
             //-----------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @return An event that is called when the screen resolution
             /// changes.
@@ -98,7 +98,7 @@ namespace ChilliSource
             //-----------------------------------------------------------
             /// Destructor
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------------------
 			virtual ~Screen() {};
 		protected:
@@ -107,7 +107,7 @@ namespace ChilliSource
             /// Factory creation method called by Application's Create
             /// System method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The new instance of the system.
             //-----------------------------------------------------------

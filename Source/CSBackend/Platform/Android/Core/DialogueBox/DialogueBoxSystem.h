@@ -37,7 +37,7 @@ namespace CSBackend
             //-----------------------------------------------------
             /// Display a system dialog with the given ID and delegate
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param ID
             /// @param SystemConfirmDialogDelegate
@@ -50,7 +50,7 @@ namespace CSBackend
             /// Display a system confirmation dialog with the given
             /// ID and delegate.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param ID
             /// @param SystemConfirmDialogDelegate
@@ -63,7 +63,7 @@ namespace CSBackend
             //-----------------------------------------------------
             /// Display a toast notification with the given text
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The text to display (UTF-8).
             //-----------------------------------------------------
@@ -71,7 +71,7 @@ namespace CSBackend
             //------------------------------------------------------
             /// Triggered from a system dialog confirmation event
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param ID
             /// @param Result
@@ -80,7 +80,7 @@ namespace CSBackend
             //----------------------------------------------------
 			/// Destructor.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
             ~DialogueBoxSystem();
 
@@ -89,7 +89,7 @@ namespace CSBackend
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------
             DialogueBoxSystem();
 

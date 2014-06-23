@@ -44,7 +44,7 @@ namespace CSBackend
         /// The Android backend for the screen. This provides information on
         /// the include device's screen such as resolution and density scale.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //----------------------------------------------------------------
 		class Screen final : public CSCore::Screen
 		{
@@ -54,14 +54,14 @@ namespace CSBackend
 			/// Queries whether or not this system implements the
             /// interface with the given Id.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//-------------------------------------------------------
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//-----------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return Vector containing the width and height of screen
             /// space available to the application. For a desktop app
@@ -77,19 +77,19 @@ namespace CSBackend
             /// screen is considered, low, medium, high or extra high
             /// density.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The density scale factor of the screen
             //-----------------------------------------------------------
             f32 GetDensityScale() const override;
             //-----------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The inverse of density scale factor of the screen
             //-----------------------------------------------------------
             f32 GetInverseDensityScale() const override;
             //-----------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @return An event that is called when the screen resolution
             /// changes.
@@ -101,7 +101,7 @@ namespace CSBackend
             /// has changed. This is for internal use and should not be
             /// called manually.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param The new resolution.
 			//------------------------------------------------------------
@@ -112,7 +112,7 @@ namespace CSBackend
 			/// Private constructor to force the use of the Create()
             /// factory method.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
 			//-------------------------------------------------------
 			Screen();
             

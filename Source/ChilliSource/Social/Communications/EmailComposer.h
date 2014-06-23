@@ -64,7 +64,7 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// Describes the format of the email contents.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------
 			enum class ContentFormat
             {
@@ -75,7 +75,7 @@ namespace ChilliSource
             /// A container for information describing a single
             /// attachment file.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------
             struct Attachment
             {
@@ -111,7 +111,7 @@ namespace ChilliSource
             /// subject and contents, and adds a list of attachments
             /// to the email.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param A list of recipients (UTF8).
             /// @param The subject (UTF8).
@@ -139,7 +139,7 @@ namespace ChilliSource
             /// Creates a new instance of the email composition
             /// activity.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return the new activity instance.
             //-------------------------------------------------------
@@ -148,7 +148,7 @@ namespace ChilliSource
 			/// Protected constructor to force use of the factory
             /// method.
             ///
-            /// @author I Copland.
+            /// @author Ian Copland.
 			//-------------------------------------------------------
             EmailComposer() = default;
 		};

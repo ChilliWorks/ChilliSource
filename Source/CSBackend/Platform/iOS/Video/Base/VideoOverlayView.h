@@ -1,7 +1,7 @@
 //
 //  VideoOverlayView.h
 //  Chilli Source
-//  Created by I Copland on 11/04/2014.
+//  Created by Ian Copland on 11/04/2014.
 //
 //  The MIT License (MIT)
 //
@@ -37,7 +37,7 @@
 /// touches so the EAGLView doesn't receive them during
 /// video playback.
 ///
-/// @author I Copland
+/// @author Ian Copland
 //---------------------------------------------------
 @interface VideoOverlayView : UIView
 {
@@ -46,7 +46,7 @@
 //---------------------------------------------------
 /// Constructor
 ///
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @param The frame.
 //---------------------------------------------------
@@ -54,7 +54,7 @@
 //---------------------------------------------------
 /// Called when a touch begins over this view.
 ///
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @param The touches.
 /// @param The event.
@@ -63,7 +63,7 @@
 //---------------------------------------------------
 /// Called when a touch moves over this view.
 ///
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @param The touches.
 /// @param The event.
@@ -72,7 +72,7 @@
 //---------------------------------------------------
 /// Called when a touch ends over this view.
 ///
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @param The touches.
 /// @param The event.
@@ -81,7 +81,7 @@
 //---------------------------------------------------
 /// Called when a touch is cancelled over this view.
 ///
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @param The touches.
 /// @param The event.

@@ -2,7 +2,7 @@
 //  FileSystem.cpp
 //  Chilli Source
 //
-//  Created by I Copland on 25/03/2011.
+//  Created by Ian Copland on 25/03/2011.
 //  Copyright 2011 Tag Games Ltd. All rights reserved.
 //
 
@@ -41,7 +41,7 @@ namespace CSBackend
             //--------------------------------------------------------------
             /// Returns the error from errno() in string form.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The error number.
 			///
@@ -70,7 +70,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Creates a new directory at the given directory path.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The directory path.
             ///
@@ -94,7 +94,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// returns whether or not a file exists
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the filepath.
 			///
@@ -116,7 +116,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// returns whether or not a directory exists
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the directory path.
 			///
@@ -136,7 +136,7 @@ namespace CSBackend
     			return false;
     		}
             //--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The path to check.
 			///
@@ -147,7 +147,7 @@ namespace CSBackend
 				return (CSCore::StringUtils::Match(in_path, "*.*") == true);
 			}
             //--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The path to check.
 			///
@@ -177,7 +177,7 @@ namespace CSBackend
     			return output;
             }
             //--------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The unfiltered list of file paths.
             ///
@@ -213,7 +213,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Copies a file from one location to another.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The source directory.
 			/// @param The destination directory.
@@ -271,7 +271,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Deletes a directory and all its contents.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The directory path.
 			///

@@ -95,7 +95,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             /// Creates a new instance of this system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The content downloader that should be used.
             ///
@@ -210,7 +210,7 @@ namespace ChilliSource
             /// have been created. System initialisation occurs in the order
             /// they were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-----------------------------------------------------------
             void OnInit() override;
             //-----------------------------------------------------------

@@ -55,7 +55,7 @@ namespace CSBackend
             /// device. This should be called prior to allocating
             /// the system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Whether or not the accelerometer is supported
             /// on this device.
@@ -73,7 +73,7 @@ namespace CSBackend
 			//----------------------------------------------------
             bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @return whether or not the accelerometer is
             /// currently updating.
@@ -82,17 +82,17 @@ namespace CSBackend
 			//----------------------------------------------------
 			/// Start listening for accelerometer changes.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
 			void StartUpdating() override;
 			//----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
 			/// @return The acceleration in Gs.
 			//----------------------------------------------------
             CSCore::Vector3 GetAcceleration() const override;
             //----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return An event that is invoked every time the
 			/// acceleration is updated. The acceleration will not
@@ -102,7 +102,7 @@ namespace CSBackend
 			//----------------------------------------------------
 			/// Stop listening for accelerometer changes.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
 			void StopUpdating() override;
 		private:
@@ -119,11 +119,11 @@ namespace CSBackend
 			/// Initialises the system. This is called at a time
             /// when all systems have already been added.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
             void OnInit() override;
             //----------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Time since last update
             //----------------------------------------------------
@@ -132,7 +132,7 @@ namespace CSBackend
 			/// Destroys the system immediately before systems
             /// are removed from the application.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
             void OnDestroy() override;
             

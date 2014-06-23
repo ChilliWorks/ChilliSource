@@ -31,7 +31,7 @@ extern "C"
 /// called when a system dialog has it's confirm
 /// option pressed.
 ///
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @param The jni environment.
 /// @param The java object calling the function
@@ -50,7 +50,7 @@ void Java_com_chillisource_core_DialogueBoxNativeInterface_onDialogueConfirmPres
 /// called when a system dialog has it's cancel
 /// option pressed
 ///
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @param The jni environment.
 /// @param The java object calling the function

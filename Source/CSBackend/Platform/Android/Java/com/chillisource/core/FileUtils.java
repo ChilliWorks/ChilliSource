@@ -48,7 +48,7 @@ import android.os.Environment;
  * A collection of convenience methods for working with 
  * File input and output.
  * 
- * @author I Copland
+ * @author Ian Copland
  */
 public final class FileUtils
 {
@@ -57,7 +57,7 @@ public final class FileUtils
 	 * is not the same as Storage Location in the native side of the engine. This refers to 
 	 * specific storage media such as internal or external storage.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
 	public enum StorageLocation
 	{
@@ -67,7 +67,7 @@ public final class FileUtils
 		k_apk
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return the "external storage" directory.
 	 */
@@ -86,7 +86,7 @@ public final class FileUtils
 	 * with the given package name. This directory will be:
 	 *  	Android/data/<PackageName>/files/
 	 *  
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The package name.
 	 * 
@@ -100,7 +100,7 @@ public final class FileUtils
 	 * Returns whether or not the given file exists in the given 
 	 * storage location.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The storage location. If APK, the CSApplication and CSActivity
 	 * must exist.
@@ -129,7 +129,7 @@ public final class FileUtils
 	 * Reads the entire contents of a binary file in the given 
 	 * storage location. The contents are read as a byte array.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The storage location. If APK, the CSApplication and CSActivity
 	 * must exist.
@@ -157,7 +157,7 @@ public final class FileUtils
 	/**
 	 * Writes a byte array to file in the given storage location.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The storage location.
 	 * @param The filename.
@@ -188,7 +188,7 @@ public final class FileUtils
 	 * doesn't exist this will still return success. it will only return 
 	 * an error if the file still exists after this has been called.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The storage location.
 	 * @param The filename.
@@ -214,7 +214,7 @@ public final class FileUtils
 		}
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The activiy.
 	 * @param The file path inside the APK.
@@ -247,7 +247,7 @@ public final class FileUtils
 	 * Reads the entire contents of a binary file from the APK. 
 	 * The contents are returned as a byte array. 
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The activity
 	 * @param The filename.
@@ -300,7 +300,7 @@ public final class FileUtils
 		return dynamicByteBuffer.toByteArray();
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The file path.
 	 * 
@@ -318,7 +318,7 @@ public final class FileUtils
 	/**
 	 * Reads the entire contents of a binary file to a byte array.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The filename.
 	 * 
@@ -371,7 +371,7 @@ public final class FileUtils
 	/**
 	 * Writes a byte array to file.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The filename.
 	 * @param The data to be written to file.
@@ -415,7 +415,7 @@ public final class FileUtils
 	 * only return an error if the file still exists after this 
 	 * has been called.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The filename.
 	 * 
@@ -434,7 +434,7 @@ public final class FileUtils
 	 * Note: This method requires the Chilli Source activity to have 
 	 * been created to work.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The file path.
 	 * 
@@ -455,7 +455,7 @@ public final class FileUtils
 	 * The contents are returned as a byte array. Note: This method 
 	 * requires the Chilli Source activity to have been created to work.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The filename.
 	 * @return The file contents.
@@ -509,7 +509,7 @@ public final class FileUtils
 	 * Note: This method requires the Chilli Source activity to 
 	 * have been created to work.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The filename.
 	 * @param The data to be written to file.
@@ -552,7 +552,7 @@ public final class FileUtils
 	 * Note: This method requires the Chilli Source activity to have 
 	 * been created to work.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The filename
 	 * @return Whether or not this was successful

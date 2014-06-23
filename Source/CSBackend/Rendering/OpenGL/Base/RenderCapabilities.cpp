@@ -20,7 +20,7 @@ namespace CSBackend
             //----------------------------------------------------------
             /// Check for OpenGL Extension support
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Extension ID
             ///

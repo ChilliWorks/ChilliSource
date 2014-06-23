@@ -48,11 +48,11 @@ namespace ChilliSource
             //-------------------------------------------------------------------------
             /// Factory method for creating provider
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------------------------
             static CSModelProviderUPtr Create();
 			//-------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Interface to compare
             ///
@@ -66,7 +66,7 @@ namespace ChilliSource
             //----------------------------------------------------
             Core::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Extension to compare
             ///
@@ -85,7 +85,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			/// Create mesh resource from model file
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path
@@ -96,7 +96,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			/// Create mesh resource from model file on a background thread
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The storage location to load from
 			/// @param File path
@@ -106,7 +106,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
 			//----------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path
@@ -117,7 +117,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			/// Constructs the mesh buffer from the mesh description
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param Delegate to callback on completion either success or failure
 			/// @param [Out] The MeshDescriptor used to build the mesh

@@ -49,7 +49,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             /// Read value of the given type and size from the binary file stream
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param File stream
 			/// @return Value of type TType
@@ -63,7 +63,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             /// Reads all of the data for the animation into the SkinnedAnimation resource
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The file stream.
             /// @param The number of frames.
@@ -112,7 +112,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
 			/// Parses the header of the anim file.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param The file stream.
 			/// @param the Skeletal Animation that this data is being loaded into.

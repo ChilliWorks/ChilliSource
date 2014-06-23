@@ -42,7 +42,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         /// Factory loader for creating subtitle resources from file.
         ///
-        /// @param I Copland
+        /// @param Ian Copland
         //-------------------------------------------------------------------------
 		class CSSubtitlesProvider final : public Core::ResourceProvider
 		{
@@ -51,7 +51,7 @@ namespace ChilliSource
             CS_DECLARE_NAMEDTYPE(CSSubtitlesProvider);
             
 			//-------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Interface to compare
             ///
@@ -65,7 +65,7 @@ namespace ChilliSource
             //----------------------------------------------------
             Core::InterfaceIDType GetResourceType() const override;
 			//-------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Type to compare
 			/// @param Extension to compare
@@ -78,7 +78,7 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// Creates a new instance of the subtitle provider.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The new instance.
             //-------------------------------------------------------
@@ -86,14 +86,14 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------
             CSSubtitlesProvider() = default;
 			//-------------------------------------------------------------------------
             /// Load the subtitles resource from the given file location. Check
             /// the resource load state for success
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path
@@ -106,7 +106,7 @@ namespace ChilliSource
             /// file location. Calls the completion delegate on completion. Check
             /// the resource load state for success.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path
@@ -116,7 +116,7 @@ namespace ChilliSource
 			//-------------------------------------------------------------------------
 			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
             //-------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path
@@ -125,7 +125,7 @@ namespace ChilliSource
 			//-------------------------------------------------------------------------
 			void LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const SubtitlesSPtr& out_resource) const;
             //-------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param The style JSON object.
             ///
@@ -133,7 +133,7 @@ namespace ChilliSource
 			//-------------------------------------------------------------------------
 			Subtitles::StyleCUPtr LoadStyle(const Json::Value& in_styleJSON) const;
             //-------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param The subtitle JSON object.
             ///
@@ -141,7 +141,7 @@ namespace ChilliSource
 			//-------------------------------------------------------------------------
 			Subtitles::SubtitleCUPtr LoadSubtitle(const Json::Value& in_subtitleJSON) const;
             //-------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param The bounds JSON object.
             ///
@@ -153,7 +153,7 @@ namespace ChilliSource
             /// Parses a time string in the format Hours:Minutes:Seconds:Milliseconds.
             /// For example 01:05:34:123.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The string time.
             ///

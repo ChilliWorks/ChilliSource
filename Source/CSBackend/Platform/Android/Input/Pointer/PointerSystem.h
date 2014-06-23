@@ -45,7 +45,7 @@ namespace CSBackend
         /// The Android backend for the pointer system. This provides
         /// access to touch events.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //------------------------------------------------------------
         class PointerSystem final : public CSInput::PointerSystem
         {
@@ -55,7 +55,7 @@ namespace CSBackend
 			/// Queries whether or not this system implements the
             /// interface with the given ID.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The interface Id.
             ///
@@ -65,7 +65,7 @@ namespace CSBackend
             //----------------------------------------------------
 			/// Called when a touch down event is received.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The system Id of the touch.
             /// @param The touch location.
@@ -74,7 +74,7 @@ namespace CSBackend
             //----------------------------------------------------
 			/// Called when a touch moved event is received.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The system Id of the touch.
             /// @param The touch location.
@@ -83,7 +83,7 @@ namespace CSBackend
             //----------------------------------------------------
 			/// Called when a touch up event is received.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The system Id of the touch.
 			//----------------------------------------------------
@@ -95,7 +95,7 @@ namespace CSBackend
             /// Default constructor. Declared private to force
             /// the use of the factory method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             PointerSystem() = default;
             //------------------------------------------------
@@ -104,7 +104,7 @@ namespace CSBackend
             /// initialisation occurs in the order they were
             /// created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             void OnInit() override;
             //------------------------------------------------
@@ -114,7 +114,7 @@ namespace CSBackend
             /// occurs in the reverse order to which they
             /// were created
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             void OnDestroy() override;
 

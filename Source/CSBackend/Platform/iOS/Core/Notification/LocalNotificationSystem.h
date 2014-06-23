@@ -1,9 +1,29 @@
 //
 //  LocalNotifcationSystem.h
 //  Chilli Source
-//
 //  Created by Scott Downie on 01/07/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifdef CS_TARGETPLATFORM_IOS
@@ -28,7 +48,7 @@ namespace CSBackend
         public:
             CS_DECLARE_NAMEDTYPE(LocalNotificationSystem);
             //--------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The interface ID to check against.
             /// @return Whether this implements the passed in interface
@@ -40,7 +60,7 @@ namespace CSBackend
             /// All existing notifications will be cancelled
             /// when this is disabled. This is enabled by default.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Whether or not to enable the scheduling
             /// of app notifications.
@@ -53,7 +73,7 @@ namespace CSBackend
             /// be received even if it was scheduled during a
             /// previous instance of the application.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The notification id
             /// @param The notification params.
@@ -66,7 +86,7 @@ namespace CSBackend
             /// Builds a list of all notifications currently scheduled
             /// within the given time period.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param [Out] The list of notifications.
             /// @param [Optional] The start time.
@@ -88,7 +108,7 @@ namespace CSBackend
             //--------------------------------------------------------
             void CancelAll() override;
             //--------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return An event that can be used to listen for
             /// new notifications being recieved.
@@ -141,19 +161,19 @@ namespace CSBackend
             //--------------------------------------------------------
             /// Initalises the local notification system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------
             void OnInit() override;
             //--------------------------------------------------------
             /// Called when a notification is received.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------
             void OnNotificationRecieved(const CSCore::NotificationSPtr& in_notification);
             //--------------------------------------------------------
             /// destroys the local notification system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------
             void OnDestroy() override;
             

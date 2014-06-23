@@ -50,19 +50,19 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(Device);
             //---------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The device model name.
             //---------------------------------------------------
             virtual const std::string& GetModel() const = 0;
             //---------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The name of the device model type.
             //---------------------------------------------------
             virtual const std::string& GetModelType() const = 0;
             //---------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The name of the device manufacturer.
             //---------------------------------------------------
@@ -103,7 +103,7 @@ namespace ChilliSource
             //---------------------------------------------------
             /// Destructor
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			//---------------------------------------------------
 			virtual ~Device() {};
         protected:
@@ -112,7 +112,7 @@ namespace ChilliSource
             /// Creates a new platform specific backend for the
             /// system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The new instance.
             //---------------------------------------------------

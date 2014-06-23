@@ -70,7 +70,7 @@ namespace ChilliSource
             ///	   of each sentence.
             ///  - All: will capitalise every letter.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------
             enum class Capitalisation
             {
@@ -99,7 +99,7 @@ namespace ChilliSource
             /// Factory method from creating a new platform specific
             /// instance of the keyboard system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The new instance of the system.
             //-------------------------------------------------------
@@ -138,7 +138,7 @@ namespace ChilliSource
             /// and the virtual keyboard implementation may choose to
             /// ignore it.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The keyboard type
             //-------------------------------------------------------
@@ -146,7 +146,7 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// Sets capitalisation method to be used for text input.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The capitalisation method.
             //-------------------------------------------------------

@@ -86,7 +86,7 @@ namespace ChilliSource
             /// Creates a new instance of the facebook
             /// authentication system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The new instance of the system.
             //------------------------------------------------

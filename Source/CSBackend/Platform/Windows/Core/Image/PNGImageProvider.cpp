@@ -1,7 +1,7 @@
 //
 //  PNGImageProvider.cpp
 //  Chilli Source
-//  Created by I Copland on 05/02/2011.
+//  Created by Ian Copland on 05/02/2011.
 //
 //  The MIT License (MIT)
 //
@@ -49,7 +49,7 @@ namespace CSBackend
 			//-----------------------------------------------------------
 			/// Performs the heavy lifting for the 2 create methods
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The storage location.
 			/// @param The filepath.

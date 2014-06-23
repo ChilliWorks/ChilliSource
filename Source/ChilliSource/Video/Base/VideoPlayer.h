@@ -75,7 +75,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The storage location of the video.
             /// @param The video file name.

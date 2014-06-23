@@ -43,7 +43,7 @@ namespace CSBackend
 		/// The Android backend to the keyboard system. This provides access
 		/// to the Android virtual keyboard functionality.
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//----------------------------------------------------------------
 		class Keyboard final : public CSInput::Keyboard
 		{
@@ -53,7 +53,7 @@ namespace CSBackend
 			/// Query whether the object implements an interface
 			/// that has the given ID
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Interface ID
 			///
@@ -66,24 +66,24 @@ namespace CSBackend
 			/// enabled or disabled. If the keyboard is virtual, it
 			/// will be shown or hidden when enabled or disabled.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-------------------------------------------------------
 			void SetTextInputEnabled(bool in_enabled) override;
 			//-------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return Whether or not text input is currently
 			/// enabled.
 			//-------------------------------------------------------
 			bool IsTextInputEnabled() const override;
 			//-------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The current text input buffer (UTF-8).
 			//-------------------------------------------------------
 			const std::string& GetText() const override;
 			//-------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The new text input buffer (UTF-8).
 			//-------------------------------------------------------
@@ -95,7 +95,7 @@ namespace CSBackend
 			/// and the virtual keyboard implementation may choose to
 			/// ignore it.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The keyboard type
 			//-------------------------------------------------------
@@ -103,27 +103,27 @@ namespace CSBackend
 			//-------------------------------------------------------
 			/// Sets capitalisation method to be used for text input.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The capitalisation method.
 			//-------------------------------------------------------
 			void SetCapitalisation(Capitalisation in_capitalisation) override;
 			//-------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param An event that is called when text input is
 			/// enabled.
 			//-------------------------------------------------------
 			CSCore::IConnectableEvent<KeyboardEventDelegate>& GetTextInputEnabledEvent() override;
 			//-------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param An event that is called when text input is
 			/// received.
 			//-------------------------------------------------------
 			CSCore::IConnectableEvent<TextInputEventDelegate>& GetTextInputReceivedEvent() override;
 			//-------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param An event that is called when text input is
 			/// disabled.
@@ -136,7 +136,7 @@ namespace CSBackend
 			/// Constructor. Declared private to force the use of the
 			/// factory method.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-------------------------------------------------------
 			Keyboard();
 			//-------------------------------------------------------
@@ -145,14 +145,14 @@ namespace CSBackend
 			/// initialisation occurs in the order they were
 			/// created.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-------------------------------------------------------
 			void OnInit() override;
 			//-------------------------------------------------------
 			/// Called when new keyboard text has been received. This
 			/// will try to append it to the current keyboard text.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The new text.
 			//-------------------------------------------------------
@@ -160,13 +160,13 @@ namespace CSBackend
 			//-------------------------------------------------------
 			/// Called when the text is deleted.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-------------------------------------------------------
 			void OnTextDeleted();
 			//-------------------------------------------------------
 			/// Called when the keyboard is dismissed.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-------------------------------------------------------
 			void OnKeyboardDismissed();
 			//-------------------------------------------------------
@@ -176,7 +176,7 @@ namespace CSBackend
 			/// occurs in the reverse order to which they
 			/// were created
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-------------------------------------------------------
 			void OnDestroy() override;
 

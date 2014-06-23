@@ -1,7 +1,7 @@
 //
 //  ETC1ImageProvider.h
 //  Chilli Source
-//  Created by I Copland on 09/11/2012.
+//  Created by Ian Copland on 09/11/2012.
 //
 //  The MIT License (MIT)
 //
@@ -41,7 +41,7 @@ namespace ChilliSource
         /// available on all platforms and you should be sure it is supported
         /// if using it.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //--------------------------------------------------------------------
         class ETC1ImageProvider final : public Core::ResourceProvider
         {

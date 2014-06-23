@@ -44,7 +44,7 @@ extern "C"
 	/// device button event is received. This is potentially
 	/// called on the UI thread.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param The jni environment.
 	/// @param The java object calling the function.

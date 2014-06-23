@@ -153,7 +153,7 @@ namespace CSBackend
             /// Private constructor to force the use of the
             /// factory method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             FacebookAuthenticationSystem() = default;
             //----------------------------------------------------

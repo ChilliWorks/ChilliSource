@@ -51,6 +51,18 @@
         return TypeName; \
     }
 
+#define CS_DEFINE_TEMPLATE_NAMEDTYPE(x) \
+    template <> const ::CSCore::InterfaceIDType x::InterfaceID = ::CSCore::QueryableInterface::InterfaceIDHash(#x); \
+    template <> const ::std::string x::TypeName = ::CSCore::StringUtils::StandardiseClassName(#x); \
+    template <> ::CSCore::InterfaceIDType x::GetInterfaceID() const \
+    { \
+    return InterfaceID; \
+    } \
+    template <> const ::std::string& x::GetInterfaceTypeName() const \
+    { \
+    return TypeName; \
+    }
+
 namespace ChilliSource
 {
 	namespace Core

@@ -1,7 +1,7 @@
 //
 //  ETC1ImageProvider.cpp
 //  Chilli Source
-//  Created by I Copland on 09/11/2012.
+//  Created by Ian Copland on 09/11/2012.
 //
 //  The MIT License (MIT)
 //
@@ -46,7 +46,7 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// A container for the ETC1 Header.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------
             struct ETC1Header
             {

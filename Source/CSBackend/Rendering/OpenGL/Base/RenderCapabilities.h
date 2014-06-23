@@ -21,7 +21,7 @@ namespace CSBackend
         /// Describes the opengl rendering capabilities available
         /// on the running device.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //---------------------------------------------------------
         class RenderCapabilities final : public CSRendering::RenderCapabilities
         {
@@ -31,7 +31,7 @@ namespace CSBackend
             //-------------------------------------------------
 			/// Query the interface type
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param The interface to compare
             ///
@@ -45,38 +45,38 @@ namespace CSBackend
             /// to be called after the render system has been
             /// initialised.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//-------------------------------------------------
 			void DetermineCapabilities();
             //-------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Whether or not shadow mapping is
             /// supported.
             //-------------------------------------------------
             bool IsShadowMappingSupported() const override;
             //-------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Whether or not depth textures are
             /// supported.
             //-------------------------------------------------
             bool IsDepthTextureSupported() const override;
             //-------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Whether or not map buffer is supported
             //-------------------------------------------------
             bool IsMapBufferSupported() const override;
             //-------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The maximum texture size available on
             /// this device.
             //-------------------------------------------------
             u32 GetMaxTextureSize() const override;
             //-------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The number of texture units supported
             /// by this device.
@@ -90,7 +90,7 @@ namespace CSBackend
 			/// Private constructor to enforce use of the
             /// factory method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//-------------------------------------------------
 			RenderCapabilities();
             

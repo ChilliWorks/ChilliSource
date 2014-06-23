@@ -78,7 +78,7 @@ namespace CSBackend
             /// subject and contents, and adds a list of attachments
             /// to the email.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param A list of recipients (UTF-8).
             /// @param The subject (UTF-8).
@@ -100,7 +100,7 @@ namespace CSBackend
             /// composition view controller. This is for internal
             /// use and should not be called manually by the user.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------
 			void OnResult(MFMailComposeViewController* in_viewController, MFMailComposeResult in_result);
 		private:
@@ -118,26 +118,26 @@ namespace CSBackend
             /// Private constructor to force the use of the
             /// factory method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             EmailComposer();
             //------------------------------------------------------
             /// Called when the the owning state is initialised.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------------
             void OnInit() override;
             //----------------------------------------------------
             /// Cleans up the email composer and sets it back to
             /// a state where it is ready to be presented again.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             void Cleanup();
             //------------------------------------------------------
             /// Called when the the owning state is destroyed.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------------
             void OnDestroy() override;
             

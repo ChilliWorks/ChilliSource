@@ -20,14 +20,14 @@ import android.view.MotionEvent;
  * A surface is composited into the android view hierarchy and manages
  * Open GL and input events.
  *
- * @author I Copland
+ * @author Ian Copland
  */
 public class Surface extends GLSurfaceView 
 {
 	/**
 	 * Constructor
 	 *
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param Activity
 	 */
@@ -48,7 +48,7 @@ public class Surface extends GLSurfaceView
 	 * Creates a new config chooser with the params as defined in
 	 * the App.config file.
 	 *
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The activity.
 	 * 
@@ -83,7 +83,7 @@ public class Surface extends GLSurfaceView
 	/**
 	 * Reads the surface format from the App.config file.
 	 *
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The activity
 	 * 
@@ -122,7 +122,7 @@ public class Surface extends GLSurfaceView
 	/**
 	 * Triggered when the surface receives a touch input event
 	 *
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param Input event
 	 * 

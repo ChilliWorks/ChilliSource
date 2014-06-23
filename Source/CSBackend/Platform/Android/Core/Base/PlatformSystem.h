@@ -43,7 +43,7 @@ namespace CSBackend
 		/// The Android backend for the platform system. This creates the
 		/// Android specfic default systems and sets up the updater.
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//---------------------------------------------------------------
 		class PlatformSystem final : public CSCore::PlatformSystem
 		{
@@ -53,7 +53,7 @@ namespace CSBackend
 			/// Queries whether or not this system implements the
             /// interface with the given Id.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param The interface Id.
 			/// @param Whether system is of given type.

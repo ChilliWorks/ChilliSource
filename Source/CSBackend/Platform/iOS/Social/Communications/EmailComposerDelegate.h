@@ -47,7 +47,7 @@
 //-------------------------------------------------------
 /// Constructor
 ///
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @param The email composition system.
 ///

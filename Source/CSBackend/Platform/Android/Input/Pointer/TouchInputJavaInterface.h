@@ -59,13 +59,13 @@ namespace CSBackend
 			/// null is passed to this, no pointer system will
 			/// be used.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The pointer system.
 			//---------------------------------------------------
 			static void SetPointerSystem(PointerSystem* in_pointerSystem);
 			//---------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The pointer system.
 			//---------------------------------------------------

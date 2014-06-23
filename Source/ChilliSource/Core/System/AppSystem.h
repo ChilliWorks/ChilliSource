@@ -48,7 +48,7 @@ namespace ChilliSource
             //------------------------------------------------
             /// Destructor
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual ~AppSystem() {};
         protected:
@@ -57,7 +57,7 @@ namespace ChilliSource
             //------------------------------------------------
             /// Default constructor.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             AppSystem() = default;
             //------------------------------------------------
@@ -66,7 +66,7 @@ namespace ChilliSource
             /// initialisation occurs in the order they were
             /// created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnInit() {};
             //------------------------------------------------
@@ -76,7 +76,7 @@ namespace ChilliSource
             /// System resume is called in the order that
             /// the systems were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnResume() {};
             //------------------------------------------------
@@ -86,7 +86,7 @@ namespace ChilliSource
             /// foregrounded is called in the order the systems
             /// were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnForeground() {};
             //------------------------------------------------
@@ -94,7 +94,7 @@ namespace ChilliSource
             /// update frame. Systems update is called in the
             /// order the systems where created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The delta time.
             //------------------------------------------------
@@ -105,7 +105,7 @@ namespace ChilliSource
             /// Application. System update is called in the
             /// order the systems where created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The delta time.
             //------------------------------------------------
@@ -118,7 +118,7 @@ namespace ChilliSource
             /// System backgrounded is called in the reverse
             /// order to which they were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnBackground() {};
             //------------------------------------------------
@@ -128,7 +128,7 @@ namespace ChilliSource
             /// suspend is called in the reverse order to
             /// which they were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnSuspend() {};
             //------------------------------------------------
@@ -138,7 +138,7 @@ namespace ChilliSource
             /// occurs in the reverse order to which they
             /// were created
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnDestroy() {};
             //------------------------------------------------
@@ -146,7 +146,7 @@ namespace ChilliSource
             /// warning. This should be used to clean up any
             /// non-essensial memory.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnMemoryWarning() {};
         };

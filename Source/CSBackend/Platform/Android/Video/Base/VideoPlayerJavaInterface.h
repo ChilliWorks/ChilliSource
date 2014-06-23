@@ -74,7 +74,7 @@ namespace CSBackend
 			/// Called when the video completes. This is for internal use
 			/// and should not be called by the user of the interface.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//--------------------------------------------------------------
 			void OnVideoComplete();
 			//--------------------------------------------------------------

@@ -28,11 +28,11 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------
 			/// Constructor
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//--------------------------------------------------------------------------------------
 			CoreJavaInterface();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Interface ID
 			///
@@ -42,7 +42,7 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------
 			/// Sets the Chilli Source Application pointer.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the application pointer.
 			//--------------------------------------------------------------------------------------
@@ -50,17 +50,17 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------
 			/// Deletes the Chilli Source Application pointer.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//--------------------------------------------------------------------------------------
 			void DestroyApplication();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the global instance of the Chilli Source application.
 			//--------------------------------------------------------------------------------------
 			CSCore::Application* GetApplication();
 			//-----------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The maximum frames per second
 			/// to clamp to. This should be in multiples
@@ -68,105 +68,105 @@ namespace CSBackend
 			//-----------------------------------------
 			void SetPreferredFPS(u32 in_maxFPS);
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the External Storage Directory as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetExternalStorageDirectory();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the Application name as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetApplicationName();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the Application version code as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			u32 GetApplicationVersionCode();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the Application version name as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetApplicationVersionName();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the package name as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetPackageName();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the APK directory as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetAPKDirectory();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the screen width as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			s32 GetScreenWidth();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the screen height as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			s32 GetScreenHeight();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the default locale code as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetDefaultLocaleCode();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the device model as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetDeviceModel();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the device model type as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetDeviceModelType();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the device manufacturer as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			std::string GetDeviceManufacturer();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the os version number as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			s32 GetOSVersionCode();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the number of cores as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			s32 GetNumberOfCores();
 			//--------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return returns the screen density as acquired from the CoreNativeInterface
 			/// Java class.
@@ -182,7 +182,7 @@ namespace CSBackend
 			/// Should not change on factory reset of a device, but it may
 			/// change if the sim card is changed.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return the telephony device ID or an empty string.
 			//--------------------------------------------------------------
@@ -194,7 +194,7 @@ namespace CSBackend
 			/// This may not be available on some devices while wifi is turned
 			/// off. This should not change on factory reset of a device.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return the Mac Address or an empty string.
 			//--------------------------------------------------------------
@@ -210,19 +210,19 @@ namespace CSBackend
 			/// will be returned. This value may change if the device is
 			/// factory reset.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return the unique Android ID or an empty string.
 			//--------------------------------------------------------------
 			std::string GetAndroidID();
             //-----------------------------------------------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// Kill the application process
             //-----------------------------------------------------------------------------------------------------
             void ForceQuit();
             //-----------------------------------------------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return the system time in milliseconds.
             //-----------------------------------------------------------------------------------------------------

@@ -129,19 +129,19 @@ namespace CSBackend
             //---------------------------------------------------------
             /// Called when the the owning state is initialised.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------
 			void OnInit() override;
             //---------------------------------------------------------
             /// Called when the webview is dismissed.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------
             void OnWebViewDismissed();
             //---------------------------------------------------------
             /// Called when the the owning state is destroyed.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------
 			void OnDestroy() override;
 		private:

@@ -47,7 +47,7 @@ namespace CSBackend
 			const std::string k_defaultLanguage = "en";
 
             //----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The device model name.
             //----------------------------------------------
@@ -56,7 +56,7 @@ namespace CSBackend
 				return "Windows";
             }
 			//----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The device model type name.
 			//----------------------------------------------
@@ -65,7 +65,7 @@ namespace CSBackend
 				return "PC";
             }
 			//----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The device manufacturer name.
 			//----------------------------------------------
@@ -74,7 +74,7 @@ namespace CSBackend
 				return "Microsoft";
             }
 			//----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The OS version number string.
 			//----------------------------------------------
@@ -86,7 +86,7 @@ namespace CSBackend
 				return std::string(CSCore::ToString((u32)osvi.dwMajorVersion) + "." + CSCore::ToString((u32)osvi.dwMinorVersion));
             }
 			//----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The current locale.
 			//----------------------------------------------
@@ -107,7 +107,7 @@ namespace CSBackend
 			//----------------------------------------------------
 			/// Returns the language portion of a locale code.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The locale code.
 			///
@@ -127,7 +127,7 @@ namespace CSBackend
 				}
 			}
 			//----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The UDID.
 			//----------------------------------------------
@@ -137,7 +137,7 @@ namespace CSBackend
 				return "FAKE ID";
             }
 			//----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The number of cores.
 			//----------------------------------------------

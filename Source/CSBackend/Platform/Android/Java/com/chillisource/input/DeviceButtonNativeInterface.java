@@ -36,7 +36,7 @@ import com.chillisource.core.InterfaceIDType;
  * down to the native side of the engine. For example this passes on
  * back button events.
  * 
- * @author I Copland
+ * @author Ian Copland
  */
 public final class DeviceButtonNativeInterface extends INativeInterface
 {
@@ -47,7 +47,7 @@ public final class DeviceButtonNativeInterface extends INativeInterface
 	 * should have a direct 1 to 1 mapping with the equivalent in the
 	 * DeviceButtonSystem.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
 	public enum DeviceButton
 	{
@@ -57,7 +57,7 @@ public final class DeviceButtonNativeInterface extends INativeInterface
 	 * Allows querying of whether or not this implements the interface
 	 * with the given Id.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The interface Id.
 	 * 
@@ -70,7 +70,7 @@ public final class DeviceButtonNativeInterface extends INativeInterface
 	/**
 	 * Called when a device button triggered event is received.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The button the event was received for.
 	 */
@@ -81,7 +81,7 @@ public final class DeviceButtonNativeInterface extends INativeInterface
 	/**
 	 * Called when a device button triggered event is triggered.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param An integer representing the button.
 	 */

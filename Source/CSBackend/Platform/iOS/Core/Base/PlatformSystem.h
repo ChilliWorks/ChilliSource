@@ -50,7 +50,7 @@ namespace CSBackend
 			/// Queries whether or not this system implements the
             /// interface with the given Id.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param The interface Id.
 			/// @param Whether system is of given type.

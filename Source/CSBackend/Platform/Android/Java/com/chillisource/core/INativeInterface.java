@@ -26,7 +26,7 @@ public abstract class INativeInterface extends IQueryableInterface
 	 * Constructor registers the system with the Application.
 	 * TODO: Changes this to an external explicit registration method
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
 	public INativeInterface()
 	{

@@ -59,7 +59,7 @@ public:
   MD5& finalize();
   std::string hexdigest() const;
   friend std::ostream& operator<<(std::ostream&, MD5 md5);
-  std::string binarydigest() const {return std::string(reinterpret_cast<const char*>(digest), 16);} //I Copland, 09/06/2014: added accessor for the raw digest.
+  std::string binarydigest() const {return std::string(reinterpret_cast<const char*>(digest), 16);} //Ian Copland, 09/06/2014: added accessor for the raw digest.
     
 private:
   void init();

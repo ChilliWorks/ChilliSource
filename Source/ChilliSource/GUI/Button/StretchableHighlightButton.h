@@ -212,7 +212,7 @@ namespace ChilliSource
             /// Triggered when a button event happens that should
             /// cause the button to highlight
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Button that triggered event
             /// @param The pointer.
@@ -222,7 +222,7 @@ namespace ChilliSource
             /// Triggered when a button event happens that should
             /// cause the button to fire
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Button that triggered event
             /// @param The pointer.
@@ -232,7 +232,7 @@ namespace ChilliSource
             /// Triggered when a button event happens that should
             /// cause the button to return to normal
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Button that triggered event
             /// @param The pointer.
@@ -242,7 +242,7 @@ namespace ChilliSource
             /// Triggered when a button event happens that should
             /// cause the button to return to normal
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Button that triggered event
             /// @param The pointer.

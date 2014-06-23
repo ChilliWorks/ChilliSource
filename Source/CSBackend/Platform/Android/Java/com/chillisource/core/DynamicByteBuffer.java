@@ -34,7 +34,7 @@ import java.util.Arrays;
  * A byte array buffer that will resize when it no longer has space to add
  * more data.
  * 
- * @author I Copland
+ * @author Ian Copland
  *
  */
 public class DynamicByteBuffer 
@@ -45,7 +45,7 @@ public class DynamicByteBuffer
 	/**
 	 * Constructor
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
 	public DynamicByteBuffer()
 	{
@@ -56,7 +56,7 @@ public class DynamicByteBuffer
 	/**
 	 * Constructor
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param the default capacity for the buffer.
 	 */
@@ -67,7 +67,7 @@ public class DynamicByteBuffer
 		m_size = 0;
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return The internal byte array buffer. Note that this will contain
 	 * additional data beyond the end of the added bytes. Use getSize() to
@@ -78,7 +78,7 @@ public class DynamicByteBuffer
 		return Arrays.copyOfRange(m_data, 0, m_size);
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return The internal byte array buffer. Note that this will contain
 	 * additional data beyond the end of the added bytes. Use getSize() to
@@ -89,7 +89,7 @@ public class DynamicByteBuffer
 		return m_data;
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return The number of bytes added to the buffer.
 	 */
@@ -101,7 +101,7 @@ public class DynamicByteBuffer
 	 * Add new bytes to the the buffer. If this has gone over the internal buffer
 	 * size it will be resized to fit the new data.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The data.
 	 * @param The data count.
