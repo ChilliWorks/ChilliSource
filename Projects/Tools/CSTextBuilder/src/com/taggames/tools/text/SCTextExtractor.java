@@ -16,6 +16,7 @@ import java.io.File;
 import com.chillisource.toolutils.LittleEndianOutputStream;
 import com.chillisource.toolutils.FileUtils;
 import com.chillisource.toolutils.Logging;
+import com.chillisource.toolutils.Logging.LoggingLevel;
 import com.chillisource.toolutils.StringUtils;
 
 import jxl.Cell;
@@ -51,7 +52,7 @@ public class SCTextExtractor
 
         Logging.logVerbose("Opening workbook...");
         WorkbookSettings ws = new WorkbookSettings();
-        if (Logging.getLoggingLevel() != Logging.LOGGING_LEVEL_VERBOSE && Logging.getLoggingLevel() != Logging.LOGGING_LEVEL_WARNING)
+        if (Logging.getLoggingLevel() != LoggingLevel.k_warning)
         {
         	ws.setSuppressWarnings(true);
         }
@@ -336,8 +337,7 @@ public class SCTextExtractor
 		finally
 		{
 			CloseExcelFile();
-			if(!Logging.IsError())
-				Logging.logVerbose("\\o/ Text extraction complete. Have a nice day. \\o/");
+			Logging.logVerbose("\\o/ Text extraction complete. Have a nice day. \\o/");
 		}
 	}
 	

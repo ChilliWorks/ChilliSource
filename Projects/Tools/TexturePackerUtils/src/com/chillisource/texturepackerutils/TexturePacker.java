@@ -117,61 +117,61 @@ public class TexturePacker
 	boolean verboseOutput = false;
 	PlacementHeuristic eBestPlacement = PlacementHeuristic.BOTTOMRIGHT;
 	
-	TexturePacker setOuterPadding(int in_padding)
+	public TexturePacker setOuterPadding(int in_padding)
 	{
 		numPixelsPadding = in_padding;
 		return this;
 	}
 	
-	TexturePacker setInnerPadding(int in_padding)
+	public TexturePacker setInnerPadding(int in_padding)
 	{
 		innerPadding = in_padding;
 		return this;
 	}
 	
-	TexturePacker setExtrusion(int in_extrusion)
+	public TexturePacker setExtrusion(int in_extrusion)
 	{
 		extrude = in_extrusion;
 		return this;
 	}
 	
-	TexturePacker enableCropping(boolean in_enable)
+	public TexturePacker enableCropping(boolean in_enable)
 	{
 		cropImages = in_enable;
 		return this;
 	}
 	
-	TexturePacker setHeuristic(PlacementHeuristic in_heuristic)
+	public TexturePacker setHeuristic(PlacementHeuristic in_heuristic)
 	{
 		eBestPlacement = in_heuristic;
 		return this;
 	}
 	
-	TexturePacker setMaxWidth(int in_maxWidth)
+	public TexturePacker setMaxWidth(int in_maxWidth)
 	{
 		maxWidth = in_maxWidth;
 		return this;
 	}
 	
-	TexturePacker setMaxHeight(int in_maxHeight)
+	public TexturePacker setMaxHeight(int in_maxHeight)
 	{
 		maxHeight = in_maxHeight;
 		return this;
 	}
 	
-	TexturePacker setFixedWidth(int in_width)
+	public TexturePacker setFixedWidth(int in_width)
 	{
 		fixedWidth = in_width;
 		return this;
 	}
 	
-	TexturePacker setFixedHeight(int in_height)
+	public TexturePacker setFixedHeight(int in_height)
 	{
 		fixedHeight = in_height;
 		return this;
 	}
 	
-	TexturePacker setValidWidths(int[] in_widths)
+	public TexturePacker setValidWidths(int[] in_widths)
 	{
 		if(in_widths != null)
 		{
@@ -181,7 +181,7 @@ public class TexturePacker
 		return this;
 	}
 	
-	TexturePacker setValidHeights(int[] in_heights)
+	public TexturePacker setValidHeights(int[] in_heights)
 	{
 		if(in_heights != null)
 		{
@@ -191,13 +191,13 @@ public class TexturePacker
 		return this;
 	}
 	
-	TexturePacker setDivisibleBy(int in_divBy)
+	public TexturePacker setDivisibleBy(int in_divBy)
 	{
 		divisibleBy = in_divBy;
 		return this;
 	}
 	
-	TexturePacker enableVerboseOutput(boolean in_enable)
+	public TexturePacker enableVerboseOutput(boolean in_enable)
 	{
 		verboseOutput = in_enable;
 		return this;

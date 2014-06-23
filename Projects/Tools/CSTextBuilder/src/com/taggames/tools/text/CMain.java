@@ -16,6 +16,7 @@ package com.taggames.tools.text;
 import java.util.Hashtable;
 
 import com.chillisource.toolutils.Logging;
+import com.chillisource.toolutils.Logging.LoggingLevel;
 
 public class CMain
 {
@@ -111,7 +112,7 @@ public class CMain
 	//------------------------------------------------------
 	private static void PrintHelpText()
 	{
-		Logging.setLoggingLevel(Logging.LOGGING_LEVEL_VERBOSE);
+		Logging.setLoggingLevel(LoggingLevel.k_verbose);
 		Logging.logVerbose("java -jar TextExtractor.jar" +
 				"[--logginglevel or -l <level>]" +
 				"[--errordisplay or -e <errordisplay>]" +

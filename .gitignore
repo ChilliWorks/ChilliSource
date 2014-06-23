@@ -21,3 +21,4 @@ Projects/Tools/FontTool/bin
 *.xcworkspace
 *xcuserdata
 Projects/Tools/AndroidManifestGenerator/bin
+*.class

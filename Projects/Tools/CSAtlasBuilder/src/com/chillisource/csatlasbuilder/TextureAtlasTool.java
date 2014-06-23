@@ -26,7 +26,7 @@
 *  THE SOFTWARE.
 */
 
-package com.chillisource;
+package com.chillisource.csatlasbuilder;
 
 import java.io.*;
 
