@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import org.xml.sax.Attributes;
 
-public class CColladaUtils
+public class ColladaUtils
 {
 	//--------------------------------------------------------------
 	/// Split On Whitespace

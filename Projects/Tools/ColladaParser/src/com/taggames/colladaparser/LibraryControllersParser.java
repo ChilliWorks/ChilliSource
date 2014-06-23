@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
 
-public class CLibraryControllersParser 
+public class LibraryControllersParser 
 {
 	//--------------------------------------------------------------
 	/// Private Member Data
@@ -33,7 +33,7 @@ public class CLibraryControllersParser
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
-	public CLibraryControllersParser(Collada inColladaData)
+	public LibraryControllersParser(Collada inColladaData)
 	{
 		mCollada = inColladaData;
 		mdwIgnoreStack = 0;
@@ -193,7 +193,7 @@ public class CLibraryControllersParser
 	{
 		if (mdwIgnoreStack > 0 ) return;
 		
-		String[] astrSplitBuffer = CColladaUtils.SplitOnWhitespace(inData);
+		String[] astrSplitBuffer = ColladaUtils.SplitOnWhitespace(inData);
 		
 		mCurrentBindShapeMatrix.maafValues = new float[4][4];
 		
@@ -272,7 +272,7 @@ public class CLibraryControllersParser
 		if (mdwIgnoreStack > 0 ) return;
 		
 		//convert to a list of float strings
-		String[] astrSplitBuffer = CColladaUtils.SplitOnWhitespace(inData);
+		String[] astrSplitBuffer = ColladaUtils.SplitOnWhitespace(inData);
 		
 		if (astrSplitBuffer.length == mCurrentFloatArray.mdwCount)
 		{
@@ -322,7 +322,7 @@ public class CLibraryControllersParser
 		if (mdwIgnoreStack > 0 ) return;
 		
 		//convert to a list of float strings
-		String[] astrSplitBuffer = CColladaUtils.SplitOnWhitespace(inData);
+		String[] astrSplitBuffer = ColladaUtils.SplitOnWhitespace(inData);
 		
 		if (astrSplitBuffer.length == mCurrentNameArray.mdwCount)
 		{
@@ -380,8 +380,8 @@ public class CLibraryControllersParser
 		ColladaInput input = new ColladaInput();
 		input.mstrSemantic = inAttributes.getValue("semantic");
 		input.mstrSource = inAttributes.getValue("source");
-		input.mdwOffset = CColladaUtils.GetIntAttributeOrZero(inAttributes, "offset");
-		input.mdwSet = CColladaUtils.GetIntAttributeOrZero(inAttributes, "set");
+		input.mdwOffset = ColladaUtils.GetIntAttributeOrZero(inAttributes, "offset");
+		input.mdwSet = ColladaUtils.GetIntAttributeOrZero(inAttributes, "set");
 		
 		//try and add to parent
 		if (mCurrentJoints != null)
@@ -466,7 +466,7 @@ public class CLibraryControllersParser
 		if (mdwIgnoreStack > 0 ) return;
 		
 		//convert to a list of int strings
-		String[] astrSplitBuffer = CColladaUtils.SplitOnWhitespace(inData);
+		String[] astrSplitBuffer = ColladaUtils.SplitOnWhitespace(inData);
 		
 		if (astrSplitBuffer.length > 0)
 		{
@@ -510,7 +510,7 @@ public class CLibraryControllersParser
 		if (mdwIgnoreStack > 0 ) return;
 		
 		//convert to a list of int strings
-		String[] astrSplitBuffer = CColladaUtils.SplitOnWhitespace(inData);
+		String[] astrSplitBuffer = ColladaUtils.SplitOnWhitespace(inData);
 		
 		if (astrSplitBuffer.length > 0)
 		{

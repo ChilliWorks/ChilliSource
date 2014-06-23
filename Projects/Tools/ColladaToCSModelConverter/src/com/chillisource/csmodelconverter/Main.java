@@ -10,7 +10,7 @@ package com.chillisource.csmodelconverter;
 
 import com.chillisource.toolutils.*;
 
-public class CMain 
+public class Main 
 {
 	//-------------------------------------------------------------------
 	/// Constants
@@ -45,10 +45,10 @@ public class CMain
 	public static void main(String[] inastrArgs) throws Exception 
 	{
 		//setup the logger.
-		Logging.start(inastrArgs);
+		String[] arguments = Logging.start(inastrArgs);
 		
 		//check the number of arguments make sense.
-		if (inastrArgs.length == 0)
+		if (arguments.length == 0)
 		{
 			PrintHelpText();
 			return;
@@ -56,68 +56,74 @@ public class CMain
 		
 		//gather up commands
 		CSModelConversionParameters params = new CSModelConversionParameters();
-		for (int i = 0; i < inastrArgs.length; ++i)
+		for (int i = 0; i < arguments.length; ++i)
 		{
 			//input
-			if (inastrArgs[i].equalsIgnoreCase(PARAM_NAME_INPUT) == true || inastrArgs[i].equalsIgnoreCase(PARAM_NAME_INPUT_SHORT) == true)
+			if (arguments[i].equalsIgnoreCase(PARAM_NAME_INPUT) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_INPUT_SHORT) == true)
 			{
-				if (i+1 < inastrArgs.length)
-					params.mstrInputFilepath = StringUtils.standardiseFilepath(inastrArgs[i+1]);
+				if (i+1 < arguments.length)
+					params.mstrInputFilepath = StringUtils.standardiseFilepath(arguments[i+1]);
 				else
 					Logging.logFatal("No input file provided!");
 				i++;
 			}
 			
 			//output
-			else if (inastrArgs[i].equalsIgnoreCase(PARAM_NAME_OUTPUT) == true || inastrArgs[i].equalsIgnoreCase(PARAM_NAME_OUTPUT_SHORT) == true)
+			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_OUTPUT) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_OUTPUT_SHORT) == true)
 			{
-				if (i+1 < inastrArgs.length)
-					params.mstrOutputFilepath = StringUtils.standardiseFilepath(inastrArgs[i+1]);
+				if (i+1 < arguments.length)
+					params.mstrOutputFilepath = StringUtils.standardiseFilepath(arguments[i+1]);
 				else
 					Logging.logFatal("No output file provided!");
 				i++;
 			}
 			
 			//features
-			else if (inastrArgs[i].equalsIgnoreCase(PARAM_NAME_FEATURES) == true || inastrArgs[i].equalsIgnoreCase(PARAM_NAME_FEATURES_SHORT) == true)
+			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_FEATURES) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_FEATURES_SHORT) == true)
 			{
-				if (i+1 < inastrArgs.length)
-					ParseFeatures(params, inastrArgs[i+1]);
+				if (i+1 < arguments.length)
+					ParseFeatures(params, arguments[i+1]);
 				else
 					Logging.logFatal("No features provided!");
 				i++;
 			}
 			
 			//vertex declaration
-			else if (inastrArgs[i].equalsIgnoreCase(PARAM_NAME_VERTEXDECLARATION) == true || inastrArgs[i].equalsIgnoreCase(PARAM_NAME_VERTEXDECLARATION_SHORT) == true)
+			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_VERTEXDECLARATION) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_VERTEXDECLARATION_SHORT) == true)
 			{
-				if (i+1 < inastrArgs.length)
-					ParseVertexDeclaration(params, inastrArgs[i+1]);
+				if (i+1 < arguments.length)
+					ParseVertexDeclaration(params, arguments[i+1]);
 				else
 					Logging.logFatal("No vertex declaration provided!");
 				i++;
 			}
 			
 			//modifications
-			else if (inastrArgs[i].equalsIgnoreCase(PARAM_NAME_TRANSFORMS) == true || inastrArgs[i].equalsIgnoreCase(PARAM_NAME_TRANSFORMS_SHORT) == true)
+			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_TRANSFORMS) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_TRANSFORMS_SHORT) == true)
 			{
-				if (i+1 < inastrArgs.length)
-					ParseModifications(params, inastrArgs[i+1]);
+				if (i+1 < arguments.length)
+					ParseModifications(params, arguments[i+1]);
 				else
 					Logging.logFatal("No modifications provided!");
 				i++;
 			}
 			
 			//help
-			else if (inastrArgs[i].equalsIgnoreCase(PARAM_NAME_HELP) == true || inastrArgs[i].equalsIgnoreCase(PARAM_NAME_HELP_SHORT) == true)
+			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_HELP) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_HELP_SHORT) == true)
 			{
 				PrintHelpText();
 				return;
 			}
+			
+			//failure
+			else
+			{
+				Logging.logFatal("Invalid argument found: " + arguments[i]);
+			}
 		}
 		
 		//check for weird combinations of parameters
-		SCParamsChecker.CheckParameters(params);
+		ParamsChecker.CheckParameters(params);
 		
 		CSModelConverterTool converterTool = new CSModelConverterTool();
 		converterTool.Convert(params);
@@ -199,8 +205,7 @@ public class CMain
 		Logging.logVerbose(" '" + PARAM_NAME_FEATURES + "'('" + PARAM_NAME_FEATURES_SHORT + "') -> A list of features that the output model will have.");
 		Logging.logVerbose(" '" + PARAM_NAME_VERTEXDECLARATION + "'('" + PARAM_NAME_VERTEXDECLARATION_SHORT + "') -> A list of elements that a vertex in this model will contain.");
 		Logging.logVerbose(" '" + PARAM_NAME_TRANSFORMS + "'('" + PARAM_NAME_TRANSFORMS_SHORT + "') -> A list of alterations to the output data.");
-		Logging.logVerbose(" '--logginglevel'('-l') -> the level of messages to log.");
-		Logging.logVerbose(" '--errordisplay'('-e') -> when to display errors.");
+		Logging.logVerbose(" '" + Logging.k_paramLoggingLevel + "'('" + Logging.k_paramLoggingLevelShort + "') -> the level of messages to log.");
 		Logging.logVerbose(" '" + PARAM_NAME_HELP + "'('" + PARAM_NAME_HELP_SHORT + "') -> Display this help message.");
 		Logging.logVerbose("Features:");
 		Logging.logVerbose(" '" + FEATURE_HASANIMATIONDATA+ "' -> The model will be outputed containing animation data.");
@@ -216,14 +221,10 @@ public class CMain
 		Logging.logVerbose(" '" + MODIFICATION_FLIPYTEXCOORDS + "' -> Texture coordinates will be flipped in the y axis.");
 		Logging.logVerbose(" '" + MODIFICATION_COMBINEMESHES + "' -> Combines all meshes that use the same material into 1 mesh. Note: This doesn't work for animated models.");
 		Logging.logVerbose("Logging Levels:");
-		Logging.logVerbose(" 'none' -> No logging.");
-		Logging.logVerbose(" 'fatal' -> Only log fatal errors.");
-		Logging.logVerbose(" 'error' -> Only log errors.");
-		Logging.logVerbose(" 'warning' -> Log errors and warnings.");
-		Logging.logVerbose(" 'verbose' -> Log all messages.");
-		Logging.logVerbose("Error Display Options:");
-		Logging.logVerbose(" 'never' -> Never display.");
-		Logging.logVerbose(" 'atend' -> Log all errors at the end.");
-		Logging.logVerbose(" 'whenreceived' -> Log all errors when received.");
+		Logging.logVerbose(" '" + Logging.k_loggingLevelNone + "' -> No logging.");
+		Logging.logVerbose(" '" + Logging.k_loggingLevelFatal + "' -> Only log fatal errors.");
+		Logging.logVerbose(" '" + Logging.k_loggingLevelError + "' -> Only log errors.");
+		Logging.logVerbose(" '" + Logging.k_loggingLevelWarning + "' -> Log errors and warnings.");
+		Logging.logVerbose(" '" + Logging.k_loggingLevelVerbose + "' -> Log all messages.");
 	}
 }

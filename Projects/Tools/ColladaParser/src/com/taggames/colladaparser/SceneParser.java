@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
 
-public class CSceneParser 
+public class SceneParser 
 {
 	//--------------------------------------------------------------
 	/// Private Member Data
@@ -23,7 +23,7 @@ public class CSceneParser
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
-	public CSceneParser(Collada inColladaData)
+	public SceneParser(Collada inColladaData)
 	{
 		mCollada = inColladaData;
 	}

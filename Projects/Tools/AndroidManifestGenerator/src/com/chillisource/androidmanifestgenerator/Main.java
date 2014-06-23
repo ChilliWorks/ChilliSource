@@ -58,9 +58,9 @@ public final class Main
 	 */
 	public static void main(String[] in_arguments) throws Exception 
 	{
-		Logging.start(in_arguments);
+		String[] arguments = Logging.start(in_arguments);
 		
-		if (in_arguments.length == 0)
+		if (arguments.length == 0)
 		{
 			printHelpText();
 			return;
@@ -69,43 +69,49 @@ public final class Main
 		String input = "";
 		String template = "";
 		String output = "";
-		for (int i = 0; i < in_arguments.length; ++i)
+		for (int i = 0; i < arguments.length; ++i)
 		{
 			//input
-			if (in_arguments[i].equalsIgnoreCase(k_paramInput) == true || in_arguments[i].equalsIgnoreCase(k_paramInputShort) == true)
+			if (arguments[i].equalsIgnoreCase(k_paramInput) == true || arguments[i].equalsIgnoreCase(k_paramInputShort) == true)
 			{
-				if (i+1 < in_arguments.length)
-					input = StringUtils.standardiseFilepath(in_arguments[i+1]);
+				if (i+1 < arguments.length)
+					input = StringUtils.standardiseFilepath(arguments[i+1]);
 				else
 					Logging.logFatal("No input file path provided!");
 				i++;
 			}
 			
 			//template
-			else if (in_arguments[i].equalsIgnoreCase(k_paramTemplate) == true || in_arguments[i].equalsIgnoreCase(k_paramTemplateShort) == true)
+			else if (arguments[i].equalsIgnoreCase(k_paramTemplate) == true || arguments[i].equalsIgnoreCase(k_paramTemplateShort) == true)
 			{
-				if (i+1 < in_arguments.length)
-					template = StringUtils.standardiseFilepath(in_arguments[i+1]);
+				if (i+1 < arguments.length)
+					template = StringUtils.standardiseFilepath(arguments[i+1]);
 				else
 					Logging.logFatal("No template file path provided!");
 				i++;
 			}
 			
 			//output
-			else if (in_arguments[i].equalsIgnoreCase(k_paramOutput) == true || in_arguments[i].equalsIgnoreCase(k_paramOutputShort) == true)
+			else if (arguments[i].equalsIgnoreCase(k_paramOutput) == true || arguments[i].equalsIgnoreCase(k_paramOutputShort) == true)
 			{
-				if (i+1 < in_arguments.length)
-					output = StringUtils.standardiseFilepath(in_arguments[i+1]);
+				if (i+1 < arguments.length)
+					output = StringUtils.standardiseFilepath(arguments[i+1]);
 				else
 					Logging.logFatal("No output file path provided!");
 				i++;
 			}
 			
 			//help
-			else if (in_arguments[i].equalsIgnoreCase(k_paramHelp) == true || in_arguments[i].equalsIgnoreCase(k_paramHelpShort) == true)
+			else if (arguments[i].equalsIgnoreCase(k_paramHelp) == true || arguments[i].equalsIgnoreCase(k_paramHelpShort) == true)
 			{
 				printHelpText();
 				return;
+			}
+			
+			//failure
+			else
+			{
+				Logging.logFatal("Invalid parameter found: " + arguments[i]);
 			}
 		}
 		

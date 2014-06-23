@@ -37,7 +37,7 @@ public class CSModelConverter
 	//-------------------------------------------------------------------
 	Stack<Matrix4> mMatrixStack;
 	CSModelConversionParameters mConversionParams;
-	SCUserPropertiesParser mPropertiesParser;
+	UserPropertiesParser mPropertiesParser;
 	//-------------------------------------------------------------------
 	/// Constructor
 	//-------------------------------------------------------------------
@@ -45,7 +45,7 @@ public class CSModelConverter
 	{
 		mMatrixStack = new Stack<Matrix4>();
 		mMatrixStack.push(Matrix4.IDENTITY);
-		mPropertiesParser = new SCUserPropertiesParser();
+		mPropertiesParser = new UserPropertiesParser();
 	}
 	//-------------------------------------------------------------------
 	/// Convert To MoModel Format
@@ -232,7 +232,7 @@ public class CSModelConverter
 				//if there is a skeleton, build it!
 				if (skeletonName.length() > 0)
 				{
-					SCSkeletonBuilder.TryBuildSkeleton(new LinkedList<ColladaNode>(inCollada.mLibraryVisualScenes.get(inCollada.mScene.mInstanceVisualScene.mstrUrl.substring(1)).mRootNodes.values()),
+					SkeletonBuilder.TryBuildSkeleton(new LinkedList<ColladaNode>(inCollada.mLibraryVisualScenes.get(inCollada.mScene.mInstanceVisualScene.mstrUrl.substring(1)).mRootNodes.values()),
 							skeletonName, inModel);
 				}
 				
@@ -364,7 +364,7 @@ public class CSModelConverter
 		ColladaSource jointSource = inController.mSkin.mSourceTable.get(jointSourceName);
 		ColladaSource ibpSource = inController.mSkin.mSourceTable.get(ibpSourceName);
 		
-		if (jointSource.mNameArray.mdwCount != ibpSource.mFloatArray.mdwCount / 16 || jointSource.mNameArray.mdwCount != SCSkeletonBuilder.GetNumberOfJoints(inModel))
+		if (jointSource.mNameArray.mdwCount != ibpSource.mFloatArray.mdwCount / 16 || jointSource.mNameArray.mdwCount != SkeletonBuilder.GetNumberOfJoints(inModel))
 		{
 			Logging.logFatal("The number of joints in the controller does not match the number of joints in the Skeleton! This is most likely becuase there is something in the skeleton hierarchy that the tool cannot handle, for example geometry.");
 		}
@@ -382,7 +382,7 @@ public class CSModelConverter
 					newMat.mafData[j + 4 * k] = ibpSource.mFloatArray.mafData[i * 16 + (j * 4 + k)];
 			
 			//get the index for this joint
-			int jointIndex = SCSkeletonBuilder.GetIndexOfJointBySId(inModel, jointName);
+			int jointIndex = SkeletonBuilder.GetIndexOfJointBySId(inModel, jointName);
 			
 			inMesh.maInverseBindMatrices[jointIndex] = newMat;
 		}
@@ -784,28 +784,28 @@ public class CSModelConverter
 			if (inWeightData.mJointIndices[indwWeightDataIndex].length > 0)
 			{
 				int index = inWeightData.mJointIndices[indwWeightDataIndex][0];
-				inVertex.mvJointIndices.x = SCSkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
+				inVertex.mvJointIndices.x = SkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
 			}
 			
 			//weight 1
 			if (inWeightData.mJointIndices[indwWeightDataIndex].length > 1)
 			{
 				int index = inWeightData.mJointIndices[indwWeightDataIndex][1];
-				inVertex.mvJointIndices.y = SCSkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
+				inVertex.mvJointIndices.y = SkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
 			}
 			
 			//weight 2
 			if (inWeightData.mJointIndices[indwWeightDataIndex].length > 2)
 			{
 				int index = inWeightData.mJointIndices[indwWeightDataIndex][2];
-				inVertex.mvJointIndices.z = SCSkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
+				inVertex.mvJointIndices.z = SkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
 			}
 			
 			//weight 3
 			if (inWeightData.mJointIndices[indwWeightDataIndex].length > 3)
 			{
 				int index = inWeightData.mJointIndices[indwWeightDataIndex][3];
-				inVertex.mvJointIndices.w = SCSkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
+				inVertex.mvJointIndices.w = SkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
 			}
 		}
 	}

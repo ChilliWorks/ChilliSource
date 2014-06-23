@@ -1,5 +1,8 @@
 package com.chillisource.toolutils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A convenience class for logging messages and errors. All logging
  * should occur between calling start() and finish().
@@ -42,9 +45,13 @@ public class Logging
 	 * @author Ian Copland
 	 * 
 	 * @param The list of parameters into the application.
+	 * 
+	 * @return The parameter array with the logging params stripped out.
 	 */
-	public static void start(String[] in_args)
+	public static String[] start(String[] in_args)
 	{
+		List<String> remainingArgs = new ArrayList<String>();
+		
 		if (m_active == false)
 		{
 			m_active = true;
@@ -75,8 +82,14 @@ public class Logging
 					}
 					i++;
 				}
+				else
+				{
+					remainingArgs.add(in_args[i]);
+				}
 			}
 		}
+		
+		return remainingArgs.toArray(new String[0]);
 	}
 	/**
 	 * Sets the current logging level. Note that this should normally

@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
 
-public class CLibraryAnimationsParser 
+public class LibraryAnimationsParser 
 {
 	//--------------------------------------------------------------
 	/// Private Member Data
@@ -29,7 +29,7 @@ public class CLibraryAnimationsParser
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
-	public CLibraryAnimationsParser(Collada inColladaData)
+	public LibraryAnimationsParser(Collada inColladaData)
 	{
 		mCollada = inColladaData;
 		mdwIgnoreStack = 0;
@@ -181,7 +181,7 @@ public class CLibraryAnimationsParser
 		if (mdwIgnoreStack > 0 ) return;
 		
 		//convert to a list of float strings
-		String[] astrSplitBuffer = CColladaUtils.SplitOnWhitespace(inData);
+		String[] astrSplitBuffer = ColladaUtils.SplitOnWhitespace(inData);
 		
 		if (astrSplitBuffer.length == mCurrentFloatArray.mdwCount)
 		{
@@ -231,7 +231,7 @@ public class CLibraryAnimationsParser
 		if (mdwIgnoreStack > 0 ) return;
 		
 		//convert to a list of float strings
-		String[] astrSplitBuffer = CColladaUtils.SplitOnWhitespace(inData);
+		String[] astrSplitBuffer = ColladaUtils.SplitOnWhitespace(inData);
 		
 		if (astrSplitBuffer.length == mCurrentNameArray.mdwCount)
 		{
@@ -293,8 +293,8 @@ public class CLibraryAnimationsParser
 		ColladaInput input = new ColladaInput();
 		input.mstrSemantic = inAttributes.getValue("semantic");
 		input.mstrSource = inAttributes.getValue("source");
-		input.mdwOffset = CColladaUtils.GetIntAttributeOrZero(inAttributes, "offset");
-		input.mdwSet = CColladaUtils.GetIntAttributeOrZero(inAttributes, "set");
+		input.mdwOffset = ColladaUtils.GetIntAttributeOrZero(inAttributes, "offset");
+		input.mdwSet = ColladaUtils.GetIntAttributeOrZero(inAttributes, "set");
 		
 		//try and add to parent
 		if (mCurrentSampler != null)

@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
 
-public class CLibraryEffectsParser 
+public class LibraryEffectsParser 
 {
 	//--------------------------------------------------------------
 	/// Private Member Data
@@ -33,7 +33,7 @@ public class CLibraryEffectsParser
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
-	public CLibraryEffectsParser(Collada inColladaData)
+	public LibraryEffectsParser(Collada inColladaData)
 	{
 		mCollada = inColladaData;
 		mdwIgnoreStack = 0;
@@ -529,7 +529,7 @@ public class CLibraryEffectsParser
 	private void PopColour(String inData)
 	{
 		if (mdwIgnoreStack > 0 ) return;
-		String[] splitColourString = CColladaUtils.SplitOnWhitespace(inData);
+		String[] splitColourString = ColladaUtils.SplitOnWhitespace(inData);
 		
 		if (splitColourString.length != 4)
 		{

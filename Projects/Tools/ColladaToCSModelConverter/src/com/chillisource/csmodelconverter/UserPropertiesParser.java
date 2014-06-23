@@ -10,7 +10,7 @@ package com.chillisource.csmodelconverter;
 
 import java.util.Hashtable;
 
-public class SCUserPropertiesParser 
+public class UserPropertiesParser 
 {
 	//-------------------------------------------------------
 	/// Parse

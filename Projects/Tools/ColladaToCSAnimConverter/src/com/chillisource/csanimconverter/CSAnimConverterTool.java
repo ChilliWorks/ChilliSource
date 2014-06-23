@@ -8,7 +8,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import com.chillisource.csanimconverter.csanim.*;
 import com.chillisource.toolutils.Logging;
-import com.taggames.colladaparser.CColladaParser;
+import com.taggames.colladaparser.ColladaParser;
 import com.taggames.colladaparser.colladadata.*;
 
 public class CSAnimConverterTool 
@@ -24,7 +24,7 @@ public class CSAnimConverterTool
 		try
 		{
 			//create the handler
-			CColladaParser handler = new CColladaParser(colladaData);
+			ColladaParser handler = new ColladaParser(colladaData);
 			
 			//create the parser
 			SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -56,7 +56,7 @@ public class CSAnimConverterTool
 		CSAnim anim = new CSAnim();
 		
 		//build the skeleton for reference
-		SCSkeletonBuilder.BuildSkeleton(nodes, colladaData, anim);
+		SkeletonBuilder.BuildSkeleton(nodes, colladaData, anim);
 		
 		//build the animation data
 		CSAnimConverter converter = new CSAnimConverter(); 

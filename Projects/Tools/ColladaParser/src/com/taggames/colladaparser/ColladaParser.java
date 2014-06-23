@@ -13,7 +13,7 @@ import org.xml.sax.SAXException;
 
 import com.taggames.colladaparser.colladadata.*;
 
-public class CColladaParser extends org.xml.sax.helpers.DefaultHandler
+public class ColladaParser extends org.xml.sax.helpers.DefaultHandler
 {
 	//--------------------------------------------------------------
 	/// Parser State
@@ -37,32 +37,32 @@ public class CColladaParser extends org.xml.sax.helpers.DefaultHandler
 	private boolean mbReadCharacters;
 	private StringBuffer mstrCurrentCharacterBuffer;
 	private Collada mCollada;
-	private CAssetParser mAssetParser;
-	private CLibraryEffectsParser mEffectsParser;
-	private CLibraryMaterialsParser mMaterialsParser;
-	private CLibraryGeometriesParser mGeometriesParser;
-	private CLibraryVisualScenesParser mVisualScenesParser;
-	private CLibraryImagesParser mImagesParser;
-	private CLibraryControllersParser mControllersParser;
-	private CLibraryAnimationsParser mAnimationsParser;
-	private CSceneParser mSceneParser;
+	private AssetParser mAssetParser;
+	private LibraryEffectsParser mEffectsParser;
+	private LibraryMaterialsParser mMaterialsParser;
+	private LibraryGeometriesParser mGeometriesParser;
+	private LibraryVisualScenesParser mVisualScenesParser;
+	private LibraryImagesParser mImagesParser;
+	private LibraryControllersParser mControllersParser;
+	private LibraryAnimationsParser mAnimationsParser;
+	private SceneParser mSceneParser;
 	private PARSER_STATE meState;
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
-	public CColladaParser(Collada inColladaData)
+	public ColladaParser(Collada inColladaData)
 	{
 		mCollada = inColladaData;
 		
-		mAssetParser = new CAssetParser(inColladaData);
-		mEffectsParser = new CLibraryEffectsParser(mCollada);
-		mMaterialsParser = new CLibraryMaterialsParser(mCollada);
-		mGeometriesParser = new CLibraryGeometriesParser(mCollada);
-		mImagesParser = new CLibraryImagesParser(mCollada);
-		mVisualScenesParser = new CLibraryVisualScenesParser(mCollada);
-		mControllersParser = new CLibraryControllersParser(mCollada);
-		mAnimationsParser = new CLibraryAnimationsParser(mCollada);
-		mSceneParser = new CSceneParser(mCollada);
+		mAssetParser = new AssetParser(inColladaData);
+		mEffectsParser = new LibraryEffectsParser(mCollada);
+		mMaterialsParser = new LibraryMaterialsParser(mCollada);
+		mGeometriesParser = new LibraryGeometriesParser(mCollada);
+		mImagesParser = new LibraryImagesParser(mCollada);
+		mVisualScenesParser = new LibraryVisualScenesParser(mCollada);
+		mControllersParser = new LibraryControllersParser(mCollada);
+		mAnimationsParser = new LibraryAnimationsParser(mCollada);
+		mSceneParser = new SceneParser(mCollada);
 		
 		mstrCurrentCharacterBuffer = null;
 		mbReadCharacters = false;

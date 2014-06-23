@@ -16,7 +16,7 @@ import com.taggames.colladaparser.colladadata.Collada;
 import com.taggames.colladaparser.colladadata.ColladaImage;
 import com.taggames.colladaparser.colladadata.ColladaInitFrom;
 
-public class CLibraryImagesParser 
+public class LibraryImagesParser 
 {
 	//-------------------------------------------------------------
 	/// Private Member Data
@@ -27,7 +27,7 @@ public class CLibraryImagesParser
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
-	public CLibraryImagesParser(Collada inColladaData)
+	public LibraryImagesParser(Collada inColladaData)
 	{
 		mCollada = inColladaData;
 	}

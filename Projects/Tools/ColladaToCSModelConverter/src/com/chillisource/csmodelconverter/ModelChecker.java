@@ -12,7 +12,7 @@ import com.chillisource.csmodelconverter.csmodel.CSModel;
 import com.chillisource.csmodelconverter.csmodel.CSModelMesh;
 import com.chillisource.toolutils.Logging;
 
-public class SCModelChecker 
+public class ModelChecker 
 {
 	static final int kdwMaxUnsignedShort = 65536;
 	//----------------------------------------------------
@@ -57,7 +57,7 @@ public class SCModelChecker
 		}
 		
 		//test the amount of joints
-		if (SCSkeletonBuilder.GetNumberOfJoints(inModel) > 60)
+		if (SkeletonBuilder.GetNumberOfJoints(inModel) > 60)
 		{
 			Logging.logWarning("The skeleton contains a huge number of joints! Over 60 nodes is probably too many.");
 		}

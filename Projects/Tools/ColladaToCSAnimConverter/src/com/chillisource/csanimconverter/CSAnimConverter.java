@@ -154,7 +154,7 @@ public class CSAnimConverter
 		}
 		
 		//get the index of the skeleton node this is paired with.
-		int index = SCSkeletonBuilder.GetIndexOfSkeletonNodeById(inMoAnim, instrSkeletonNodeId);
+		int index = SkeletonBuilder.GetIndexOfSkeletonNodeById(inMoAnim, instrSkeletonNodeId);
 		
 		if(index == -1)
 			return;

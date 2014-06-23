@@ -17,7 +17,7 @@ import javax.xml.parsers.SAXParserFactory;
 import com.chillisource.csmodelconverter.csmodel.CSModel;
 import com.chillisource.csmodelconverter.csmodel.CSModelMesh;
 import com.chillisource.toolutils.*;
-import com.taggames.colladaparser.CColladaParser;
+import com.taggames.colladaparser.ColladaParser;
 import com.taggames.colladaparser.colladadata.*;
 
 public class CSModelConverterTool 
@@ -40,7 +40,7 @@ public class CSModelConverterTool
 		try
 		{
 			//create the handler
-			CColladaParser handler = new CColladaParser(colladaData);
+			ColladaParser handler = new ColladaParser(colladaData);
 			
 			//create the parser
 			SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -70,7 +70,7 @@ public class CSModelConverterTool
 		CSModel model = converter.ConvertToMoModelFormat(nodes, colladaData, inParams);
 		
 		//Check the momodel for warnings and errors
-		SCModelChecker.CheckModel(model);
+		ModelChecker.CheckModel(model);
 		
 		//Modify the data to the intended output format
 		CSModelTransformer modifier = new CSModelTransformer(); 
@@ -104,7 +104,7 @@ public class CSModelConverterTool
 		Logging.logVerbose(" Max Boundary: (" + inModel.mvMax.x + ", " + inModel.mvMax.y + ", " + inModel.mvMax.z + ")");
 		Logging.logVerbose(" Skeleton");
 		Logging.logVerbose("  Num Skeleton Nodes: " + inModel.mSkeleton.mNodeList.size());
-		Logging.logVerbose("   Number of which are Joints: " + SCSkeletonBuilder.GetNumberOfJoints(inModel));
+		Logging.logVerbose("   Number of which are Joints: " + SkeletonBuilder.GetNumberOfJoints(inModel));
 		Logging.logVerbose(" Number of Meshes: " + inModel.mMeshTable.size());
 		for (CSModelMesh mesh: inModel.mMeshTable.values())
 		{

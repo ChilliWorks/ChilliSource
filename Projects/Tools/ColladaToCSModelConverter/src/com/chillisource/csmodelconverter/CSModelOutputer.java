@@ -210,7 +210,7 @@ public class CSModelOutputer
 		if (inConversionParams.mbHasAnimationData == true)
 		{
 			mStream.writeShort((short)inMoModel.mSkeleton.mNodeList.size());
-			mStream.writeByte((byte)SCSkeletonBuilder.GetNumberOfJoints(inMoModel));
+			mStream.writeByte((byte)SkeletonBuilder.GetNumberOfJoints(inMoModel));
 		}
 		
 		return true;

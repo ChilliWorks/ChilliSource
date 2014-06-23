@@ -15,7 +15,7 @@ import com.taggames.colladaparser.colladadata.Collada;
 import com.taggames.colladaparser.colladadata.ColladaAuthoringTool;
 import com.taggames.colladaparser.colladadata.ColladaContributor;
 
-public class CAssetParser 
+public class AssetParser 
 {
 	//--------------------------------------------------------------
 	/// Private Member Data
@@ -26,7 +26,7 @@ public class CAssetParser
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
-	public CAssetParser(Collada inColladaData)
+	public AssetParser(Collada inColladaData)
 	{
 		mCollada = inColladaData;
 	}

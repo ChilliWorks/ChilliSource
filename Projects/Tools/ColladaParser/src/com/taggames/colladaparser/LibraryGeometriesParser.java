@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
 
-public class CLibraryGeometriesParser 
+public class LibraryGeometriesParser 
 {
 	//--------------------------------------------------------------
 	/// Private Member Data
@@ -31,7 +31,7 @@ public class CLibraryGeometriesParser
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
-	public CLibraryGeometriesParser(Collada inColladaData)
+	public LibraryGeometriesParser(Collada inColladaData)
 	{
 		mCollada = inColladaData;
 		mdwIgnoreStack = 0;
@@ -279,7 +279,7 @@ public class CLibraryGeometriesParser
 		if (mdwIgnoreStack > 0 ) return;
 		
 		//convert to a list of float strings
-		String[] astrSplitBuffer = CColladaUtils.SplitOnWhitespace(inData);
+		String[] astrSplitBuffer = ColladaUtils.SplitOnWhitespace(inData);
 		
 		if (astrSplitBuffer.length == mCurrentFloatArray.mdwCount)
 		{
@@ -372,8 +372,8 @@ public class CLibraryGeometriesParser
 		ColladaInput input = new ColladaInput();
 		input.mstrSemantic = inAttributes.getValue("semantic");
 		input.mstrSource = inAttributes.getValue("source");
-		input.mdwOffset = CColladaUtils.GetIntAttributeOrZero(inAttributes, "offset");
-		input.mdwSet = CColladaUtils.GetIntAttributeOrZero(inAttributes, "set");
+		input.mdwOffset = ColladaUtils.GetIntAttributeOrZero(inAttributes, "offset");
+		input.mdwSet = ColladaUtils.GetIntAttributeOrZero(inAttributes, "set");
 		
 		//try and add to parent
 		if (mCurrentVertices != null)
@@ -426,7 +426,7 @@ public class CLibraryGeometriesParser
 		if (mdwIgnoreStack > 0 ) return;
 		
 		//convert to a list of int strings
-		String[] astrSplitBuffer = CColladaUtils.SplitOnWhitespace(inData);
+		String[] astrSplitBuffer = ColladaUtils.SplitOnWhitespace(inData);
 		
 		if (astrSplitBuffer.length > 0)
 		{

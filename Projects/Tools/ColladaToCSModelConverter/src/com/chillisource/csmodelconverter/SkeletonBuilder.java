@@ -18,7 +18,7 @@ import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.ColladaNode;
 import com.taggames.colladaparser.colladadata.ColladaNode.COLLADA_NODE_TYPE;
 
-public class SCSkeletonBuilder 
+public class SkeletonBuilder 
 {
 	//-------------------------------------------------------------------
 	/// Try Build Skeleton

@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
 
-public class CLibraryMaterialsParser 
+public class LibraryMaterialsParser 
 {
 	//--------------------------------------------------------------
 	/// Private Memeber Data
@@ -24,7 +24,7 @@ public class CLibraryMaterialsParser
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
-	public CLibraryMaterialsParser(Collada inColladaData)
+	public LibraryMaterialsParser(Collada inColladaData)
 	{
 		mCollada = inColladaData;
 	}

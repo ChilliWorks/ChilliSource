@@ -10,7 +10,7 @@ package com.chillisource.csmodelconverter;
 
 import com.chillisource.toolutils.Logging;
 
-public class SCParamsChecker 
+public class ParamsChecker 
 {
 	//----------------------------------------------------
 	/// Check Parameters

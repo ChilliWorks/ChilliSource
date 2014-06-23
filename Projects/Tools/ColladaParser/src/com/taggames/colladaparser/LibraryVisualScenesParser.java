@@ -16,7 +16,7 @@ import org.xml.sax.SAXException;
 import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
 
-public class CLibraryVisualScenesParser 
+public class LibraryVisualScenesParser 
 {
 	//--------------------------------------------------------------
 	/// Private Member Data
@@ -35,7 +35,7 @@ public class CLibraryVisualScenesParser
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
-	public CLibraryVisualScenesParser(Collada inColladaData)
+	public LibraryVisualScenesParser(Collada inColladaData)
 	{
 		mCollada = inColladaData;
 		mNodeStack = new Stack<ColladaNode>();
@@ -157,9 +157,9 @@ public class CLibraryVisualScenesParser
 	{
 		ColladaNode newNode = new ColladaNode();
 		newNode.mstrName = inAttributes.getValue("name");
-		newNode.mstrId = CColladaUtils.GetStringAttributeOrEmpty(inAttributes, "id");
-		newNode.mstrSId = CColladaUtils.GetStringAttributeOrEmpty(inAttributes, "sid");
-		newNode.mstrType = CColladaUtils.GetStringAttributeOrEmpty(inAttributes, "type");
+		newNode.mstrId = ColladaUtils.GetStringAttributeOrEmpty(inAttributes, "id");
+		newNode.mstrSId = ColladaUtils.GetStringAttributeOrEmpty(inAttributes, "sid");
+		newNode.mstrType = ColladaUtils.GetStringAttributeOrEmpty(inAttributes, "type");
 		
 		//if there is no id, set the id to the name so the id can still be used as the key.
 		if (newNode.mstrId.equalsIgnoreCase("") == true)
@@ -234,7 +234,7 @@ public class CLibraryVisualScenesParser
 	private boolean PushMatrix(Attributes inAttributes)
 	{
 		mCurrentMatrix= new ColladaMatrix();
-		mCurrentMatrix.mstrSId = CColladaUtils.GetStringAttributeOrEmpty(inAttributes, "sid");
+		mCurrentMatrix.mstrSId = ColladaUtils.GetStringAttributeOrEmpty(inAttributes, "sid");
 		
 		if (mNodeStack.size() > 0)
 			mNodeStack.peek().mMatrix = mCurrentMatrix;
@@ -250,7 +250,7 @@ public class CLibraryVisualScenesParser
 	//--------------------------------------------------------------
 	private void PopMatrix(String inData)
 	{
-		String[] astrSplitBuffer = CColladaUtils.SplitOnWhitespace(inData);
+		String[] astrSplitBuffer = ColladaUtils.SplitOnWhitespace(inData);
 		
 		mCurrentMatrix.maafValues = new float[4][4];
 		for (int i = 0; i < 4; i++)
@@ -271,7 +271,7 @@ public class CLibraryVisualScenesParser
 	private boolean PushInstanceController(Attributes inAttributes)
 	{
 		mCurrentInstanceController = new ColladaInstanceController();
-		mCurrentInstanceController.mstrUrl = CColladaUtils.GetStringAttributeOrEmpty(inAttributes, "url");
+		mCurrentInstanceController.mstrUrl = ColladaUtils.GetStringAttributeOrEmpty(inAttributes, "url");
 		
 		if (mNodeStack.size() > 0)
 		{
@@ -435,7 +435,7 @@ public class CLibraryVisualScenesParser
 	private boolean PushInstanceGeometry(Attributes inAttributes)
 	{
 		mCurrentInstanceGeometry = new ColladaInstanceGeometry();
-		mCurrentInstanceGeometry.mstrUrl = CColladaUtils.GetStringAttributeOrEmpty(inAttributes, "url");
+		mCurrentInstanceGeometry.mstrUrl = ColladaUtils.GetStringAttributeOrEmpty(inAttributes, "url");
 		
 		if (mNodeStack.size() > 0)
 		{
