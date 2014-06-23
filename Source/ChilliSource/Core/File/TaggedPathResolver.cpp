@@ -36,6 +36,8 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
+#include <algorithm>
+
 namespace ChilliSource
 {
     namespace Core
