@@ -33,6 +33,8 @@
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
+#include <json/json.h>
+
 namespace ChilliSource
 {
 	namespace Core
@@ -116,10 +118,17 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// Add the tags and the rules for when to apply them
             /// based on the current device resolution, platform, language
-            /// and aspect ratio.
+            /// and aspect ratio. Set the priority.
             ///
-            /// NOTE: Resolution and aspect rules should be mutually exclusive otherwise
-            /// conflicts will occur (i.e. no overlaps).
+            /// @author S Downie
+            ///
+            /// @param Json object
+            //--------------------------------------------------------------
+            void SetFromJson(const Json::Value& in_json);
+            //--------------------------------------------------------------
+            /// Add the tags and the rules for when to apply them
+            /// based on the current device resolution, platform, language
+            /// and aspect ratio.
             ///
             /// @author S Downie
             ///

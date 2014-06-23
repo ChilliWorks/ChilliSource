@@ -34,8 +34,7 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Event/IConnectableEvent.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-
-#include <array>
+#include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
 {
@@ -114,6 +113,41 @@ namespace ChilliSource
                 
                 return result;
             }
+            //--------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Case insensitive string representing tag group
+            ///
+            /// @return Tag group enum
+            //--------------------------------------------------------------
+            TaggedPathResolver::TagGroup ParseGroup(const std::string& in_group)
+            {
+                std::string lowercaseGroup = in_group;
+                StringUtils::ToLowerCase(lowercaseGroup);
+                
+                if(lowercaseGroup == "language")
+                {
+                    return TaggedPathResolver::TagGroup::k_language;
+                }
+                
+                if(lowercaseGroup == "platform")
+                {
+                    return TaggedPathResolver::TagGroup::k_platform;
+                }
+                
+                if(lowercaseGroup == "resolution")
+                {
+                    return TaggedPathResolver::TagGroup::k_resolution;
+                }
+                
+                if(lowercaseGroup == "aspectratio")
+                {
+                    return TaggedPathResolver::TagGroup::k_aspectRatio;
+                }
+                
+                CS_LOG_FATAL("TaggedPathResolver: No such group: " + in_group);
+                return TaggedPathResolver::TagGroup::k_platform;
+            }
         }
         
         CS_DEFINE_NAMEDTYPE(TaggedPathResolver);
@@ -145,12 +179,66 @@ namespace ChilliSource
             {
                 m_priorityIndices[i] = i;
             }
+            
+            OnScreenResized(m_screen->GetResolution());
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        void TaggedPathResolver::SetFromJson(const Json::Value& in_json)
+        {
+            std::vector<std::string> supportedLanguages;
+            const Json::Value& languages = in_json["Languages"];
+            if(languages.isNull() == false)
+            {
+                for(u32 i=0; i<languages.size(); ++i)
+                {
+                    supportedLanguages.push_back(languages[i].asString());
+                }
+            }
+            
+            std::vector<RangeRule> supportedResolutions;
+            const Json::Value& resolutions = in_json["Resolutions"];
+            if(resolutions.isNull() == false)
+            {
+                for(auto it = resolutions.begin(); it != resolutions.end(); ++it)
+                {
+                    Vector2 res = ParseVector2((*it).asString());
+                    RangeRule rule(it.memberName(), res.x * res.y);
+                    supportedResolutions.push_back(rule);
+                }
+            }
+            
+            std::vector<RangeRule> supportedAspectRatios;
+            const Json::Value& aspects = in_json["AspectRatios"];
+            if(aspects.isNull() == false)
+            {
+                for(auto it = aspects.begin(); it != aspects.end(); ++it)
+                {
+                    RangeRule rule(it.memberName(), (f32)(*it).asDouble());
+                    supportedAspectRatios.push_back(rule);
+                }
+            }
+            
+            SetTags(supportedLanguages, supportedResolutions, supportedAspectRatios);
+            
+            TagGroup priorityIndices[(u32)TagGroup::k_total];
+            const Json::Value& priorities = in_json["Priorities"];
+            if(priorities.isNull() == false)
+            {
+                CS_ASSERT(priorities.size() == (u32)TagGroup::k_total, "TaggedPathResolver: Need to specify all groups when setting priorities");
+                for(u32 i=0; i<priorities.size(); ++i)
+                {
+                    priorityIndices[i] = ParseGroup(priorities[i].asString());
+                }
+            }
+            
+            SetPriority(priorityIndices[0], priorityIndices[1], priorityIndices[2], priorityIndices[3]);
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         void TaggedPathResolver::SetTags(const std::vector<std::string>& in_supportedLanguages,
-                                             const std::vector<RangeRule>& in_supportedResolutions,
-                                             const std::vector<RangeRule>& in_supportedAspectRatios)
+                                         const std::vector<RangeRule>& in_supportedResolutions,
+                                         const std::vector<RangeRule>& in_supportedAspectRatios)
         {
             //---Languages
             auto device = Application::Get()->GetSystem<Device>();
@@ -195,7 +283,10 @@ namespace ChilliSource
                 m_groupTags[(u32)TagGroup::k_aspectRatio].push_back("." + rule.m_name);
             }
             
-            OnScreenResized(m_screen->GetResolution());
+            if(m_screen != nullptr)
+            {
+                OnScreenResized(m_screen->GetResolution());
+            }
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
