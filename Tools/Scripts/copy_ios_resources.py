@@ -1,8 +1,8 @@
 #!/usr/bin/python
 #
-#  copy_android_resources.py
+#  copy_ios_resources.py
 #  Chilli Source
-#  Created by Scott Downie on 12/06/2014.
+#  Created by Scott Downie on 23/06/2014.
 #
 #  The MIT License (MIT)
 #
@@ -29,17 +29,12 @@
 
 import sys
 import file_system_utils
-import subprocess
 import os
 import shutil
 
 #----------------------------------------------------------------------
-# Copies the resource from ProjectResources, CSResources and AppResources
-# into res and assets directories that are required by Android.
-#
-# Copies the jars into libs as required by Android.
-#
-# Premulitplies all the PNGs in assets
+# Copies the resource from CSResources and AppResources
+# into a single directory linked to by XCode.
 #
 # @author S Downie
 #----------------------------------------------------------------------
@@ -54,8 +49,8 @@ import shutil
 # @param Destination path
 #----------------------------------------------------------------------
 def copy_file_tree(src_path, dst_path):
-    excludes = [".ios", ".windows", ".DS_Store"]
-    includes = [".android"]
+    excludes = [".android", ".windows", ".DS_Store"]
+    includes = [".ios"]
 
     filter_func = lambda name: any(include in name for include in includes) or not any(exclude in name for exclude in excludes)
 
@@ -72,55 +67,23 @@ def copy_file_tree(src_path, dst_path):
                 shutil.copy2(src, dst)
 
 #----------------------------------------------------------------------
-# Copies the resource from ProjectResources, CSResources and AppResources
-# into res and assets directories that are required by Android.
+# Copies the resource from CSResources and AppResources
 #
 # @author S Downie
 #
 # @param Project directory path
 #----------------------------------------------------------------------
 def copy_resources(project_dir):
-    file_system_utils.delete_directory(os.path.join(project_dir, "assets"))
-    file_system_utils.delete_directory(os.path.join(project_dir, "res"))
+    file_system_utils.delete_directory(os.path.join(project_dir, "XcodeBuiltAssets"))
 
     app_src_path = os.path.join(project_dir, "AppResources")
     cs_src_path = os.path.join(project_dir, "ChilliSource", "CSResources")
-    platform_src_path = os.path.join(project_dir, "ProjectResources", "Android")
 
-    app_dst_path = os.path.join(project_dir, "assets", "AppResources")
-    cs_dst_path = os.path.join(project_dir, "assets", "CSResources")
-    platform_dst_path = os.path.join(project_dir, "res")
+    app_dst_path = os.path.join(project_dir, "XcodeBuiltAssets", "AppResources")
+    cs_dst_path = os.path.join(project_dir, "XcodeBuiltAssets", "CSResources")
 
     copy_file_tree(app_src_path, app_dst_path)
     copy_file_tree(cs_src_path, cs_dst_path)
-    copy_file_tree(platform_src_path, platform_dst_path)
-
-#----------------------------------------------------------------------
-# Copies the jars into libs as required by Android.
-#
-# @author S Downie
-#
-# @param Project directory path
-#----------------------------------------------------------------------
-def copy_jars(project_dir):
-    jars_src_path = os.path.join(project_dir, "ChilliSource", "Libraries", "Core", "Android", "Libs", "jars")
-    jars_dst_path = os.path.join(project_dir, "libs")
-
-    file_system_utils.copy_directory(jars_src_path, jars_dst_path)
-
-#----------------------------------------------------------------------
-# Premulitplies all the PNGs in assets
-#
-# @author S Downie
-#
-# @param Project directory path
-#----------------------------------------------------------------------
-def premultiply_pngs(project_dir):
-    jarFile = os.path.join(project_dir, "ChilliSource", "Tools", "PreMultipliedAlphaPNGTool.jar")
-    png_files = file_system_utils.get_file_paths_with_extensions(os.path.join(project_dir, "assets"), ["png"])
-
-    for png_file in png_files:
-        subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", png_file, "--output", png_file]);
 
 #----------------------------------------------------------------------
 # The entry point into the script.
@@ -136,8 +99,6 @@ def main(args):
 
     project_dir = args[1]
     copy_resources(project_dir)
-    copy_jars(project_dir)
-    premultiply_pngs(project_dir)
 
 if __name__ == "__main__":
     main(sys.argv)
