@@ -166,7 +166,7 @@ namespace CSBackend
             /// Called when the application sends the destroy lifecycle
             /// event.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------------
             void OnDestroy() override;
             //-------------------------------------------------------------

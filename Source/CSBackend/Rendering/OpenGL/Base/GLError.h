@@ -46,7 +46,7 @@ namespace CSBackend
         /// A small collection of utility functions for error
         /// checking in OpenGl.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //---------------------------------------------------------
         namespace GLError
         {
@@ -54,7 +54,7 @@ namespace CSBackend
             /// When debug mode is enabled (CS_ENABLE_DEBUG) this
             /// prints any Open GL errors that have occurred.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------
             void Print();
             //---------------------------------------------------
@@ -62,7 +62,7 @@ namespace CSBackend
             /// will assert if a GL error has occurred, printing
             /// the given message.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The message to print if an error has
             /// occurred.

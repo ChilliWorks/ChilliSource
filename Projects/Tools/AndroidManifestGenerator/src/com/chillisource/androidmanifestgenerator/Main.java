@@ -35,7 +35,7 @@ import com.taggames.toolutils.SCStringUtils;
  * Handles the entry point into the application. This manages the parsing of the input parameters and
  * passes them on to the rest of the tool.
  * 
- * @author I Copland
+ * @author Ian Copland
  */
 public final class Main
 {
@@ -51,7 +51,7 @@ public final class Main
 	/**
 	 * The entry point into the application
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The input arguments.
 	 */
@@ -121,7 +121,7 @@ public final class Main
 	 * Outputs help test for this tool. This will be displayed regardless of 
 	 * the current logging level.
 	 *
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
 	public static void printHelpText()
 	{

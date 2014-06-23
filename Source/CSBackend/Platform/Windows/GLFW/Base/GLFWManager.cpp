@@ -32,7 +32,7 @@ namespace CSBackend
 			//-------------------------------------------------------------
 			/// Reads the surface format from the App.config file.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The surface format.
 			//-------------------------------------------------------------
@@ -72,7 +72,7 @@ namespace CSBackend
 			/// Applies the surface format described in the App.config file
 			/// to the glfw window.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-------------------------------------------------------------
 			void ApplySurfaceFormat()
 			{

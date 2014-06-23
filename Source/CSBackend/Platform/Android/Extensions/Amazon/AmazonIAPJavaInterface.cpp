@@ -28,7 +28,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when product descriptions request completes
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNI Environment
 	/// @param Pointer to the calling object
@@ -41,7 +41,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when a transaction status changes
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNI Environment
 	/// @param Pointer to the calling object
@@ -54,7 +54,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when a transaction complete request completes
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNI Environment
 	/// @param Pointer to the calling function

@@ -29,7 +29,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java that forces creation of the core interface
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -38,7 +38,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is launched.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -47,7 +47,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is resumed.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -76,7 +76,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is suspended
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -85,7 +85,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is destroyed
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -94,7 +94,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is updated
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -106,7 +106,7 @@ extern "C"
 	/// Interface function called from java. This is called when the application is almost
 	/// Out of memory.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -115,7 +115,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the resolution changes.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param The jni environment.
 	/// @param the java object calling the function

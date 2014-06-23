@@ -39,7 +39,7 @@ extern "C"
 	/// Interface function called from java. This is called
 	/// when a touch is first registered.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param The jni environment.
 	/// @param the java object calling the function
@@ -52,7 +52,7 @@ extern "C"
 	/// Interface function called from java. This is called
 	/// when a touch has moved.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param The jni environment.
 	/// @param the java object calling the function
@@ -65,7 +65,7 @@ extern "C"
 	/// Interface function called from java. This is called
 	/// when a touch has finished.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param The jni environment.
 	/// @param the java object calling the function

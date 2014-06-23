@@ -37,7 +37,7 @@ import android.opengl.GLSurfaceView;
  * A custom config builder for generating configs with a preferred depth size, but
  * able to fall back on a minimum.
  * 
- * @author I Copland
+ * @author Ian Copland
  */
 public final class ConfigChooser implements GLSurfaceView.EGLConfigChooser 
 {
@@ -62,7 +62,7 @@ public final class ConfigChooser implements GLSurfaceView.EGLConfigChooser
     /**
      * Constructor.
      * 
-     * @author I Copland
+     * @author Ian Copland
      * 
      * @param Size of the red channel.
      * @param Size of the green channel.
@@ -85,7 +85,7 @@ public final class ConfigChooser implements GLSurfaceView.EGLConfigChooser
     /**
      * Chooses the best config for the given parameters.
      * 
-     * @author I Copland
+     * @author Ian Copland
      * 
      * @param The gl context.
      * @param The display.
@@ -114,7 +114,7 @@ public final class ConfigChooser implements GLSurfaceView.EGLConfigChooser
     /**
      * Chooses the best config for the given parameters.
      * 
-     * @author I Copland
+     * @author Ian Copland
      * 
      * @param The gl context
      * @param The display
@@ -156,7 +156,7 @@ public final class ConfigChooser implements GLSurfaceView.EGLConfigChooser
     /**
      * Get the value for a single attribute within the config.
      * 
-     * @author I Copland
+     * @author Ian Copland
      * 
      * @param The gl context
      * @param The display

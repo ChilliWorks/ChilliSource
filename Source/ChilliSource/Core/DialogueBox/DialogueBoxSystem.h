@@ -42,7 +42,7 @@ namespace ChilliSource
 		/// A system used to display platform specific system
         /// dialogue boxes.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
 		//-----------------------------------------------------------
 		class DialogueBoxSystem : public AppSystem
 		{
@@ -52,7 +52,7 @@ namespace ChilliSource
 			/// An enum describing the possible results from a
             /// dialogue box.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
             enum class DialogueResult
             {
@@ -63,7 +63,7 @@ namespace ChilliSource
 			/// A delegate called when a dialogue box has been
             /// dismissed.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The Id of the dialogue box.
             /// @param The result.
@@ -72,7 +72,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Display a system dialog with the given ID and delegate
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param ID
             /// @param SystemConfirmDialogDelegate
@@ -85,7 +85,7 @@ namespace ChilliSource
             /// Display a system confirmation dialog with the given
             /// ID and delegate.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param ID
             /// @param SystemConfirmDialogDelegate
@@ -98,7 +98,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Display a toast notification with the given text
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The text to display (UTF-8).
             //-----------------------------------------------------
@@ -106,7 +106,7 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// Destructor.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
             virtual ~DialogueBoxSystem();
             
@@ -116,7 +116,7 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// Creates a new instance of this system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The new instance.
 			//----------------------------------------------------

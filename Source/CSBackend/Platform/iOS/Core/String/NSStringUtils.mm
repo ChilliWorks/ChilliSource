@@ -1,7 +1,7 @@
 //
 //  NSStringUtils.cpp
 //  Chilli Source
-//  Created by I Copland on 04/04/2014.
+//  Created by Ian Copland on 04/04/2014.
 //
 //  The MIT License (MIT)
 //

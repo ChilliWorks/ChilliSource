@@ -46,14 +46,14 @@ namespace ChilliSource
         /// functions as well as functions for working within the
         /// Chilli Source file system.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //--------------------------------------------------------
         namespace XMLUtils
         {
             //--------------------------------------------------
             /// Reads an xml document from file.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The storage location of the file.
             /// @param The file path.
@@ -64,7 +64,7 @@ namespace ChilliSource
             //--------------------------------------------------
             /// Parses an xml document from string.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The xml string.
             ///
@@ -72,7 +72,7 @@ namespace ChilliSource
             //--------------------------------------------------
             XMLUPtr ParseDocument(const std::string& in_xmlString);
             //--------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             ///
@@ -83,7 +83,7 @@ namespace ChilliSource
             /// Returns the value of the given node. What the
             /// value is is determined by the type of node.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             ///
@@ -96,7 +96,7 @@ namespace ChilliSource
             /// of name will be returned. If there is no child with
             /// a matching name, null will be returned.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param [optional] The name.
@@ -110,7 +110,7 @@ namespace ChilliSource
             /// name will be returned. If there is no child with
             /// a matching name, null will be returned.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param [Optional] The name.
@@ -125,7 +125,7 @@ namespace ChilliSource
             /// If there is no child with a matching name, null
             /// will be returned.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param [optional] The name.
@@ -140,7 +140,7 @@ namespace ChilliSource
             /// there is no child with a matching name, null will
             /// be returned.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param [Optional] The name.
@@ -152,7 +152,7 @@ namespace ChilliSource
             /// Returns the first attribute in the node. Will
             /// return null if there is no attributes.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             ///
@@ -163,7 +163,7 @@ namespace ChilliSource
             /// Returns the next attribute in the parent node
             /// if there is one, otherwise returns null.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The current attribute.
             ///
@@ -175,7 +175,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -192,7 +192,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -206,7 +206,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -220,7 +220,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -234,7 +234,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -249,7 +249,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -264,7 +264,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -279,7 +279,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -294,7 +294,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -308,7 +308,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -322,7 +322,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -336,7 +336,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -350,7 +350,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -364,7 +364,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -378,7 +378,7 @@ namespace ChilliSource
             /// If the attribute doesn't exist the default value
             /// will be returned instead.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             /// @param The attribute name.
@@ -388,7 +388,7 @@ namespace ChilliSource
             //--------------------------------------------------
             template <> Colour GetAttributeValue<Colour>(const XML::Node* in_node, const std::string& in_attributeName, const Colour& in_defaultValue);
             //--------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The node.
             ///
@@ -398,7 +398,7 @@ namespace ChilliSource
             //--------------------------------------------------
             /// Reads an xml document from file.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The document to write to file.
             /// @param The storage location of the file.

@@ -98,7 +98,7 @@ namespace ChilliSource
             //---------------------------------------------------------
             virtual void Dismiss() = 0;
             //---------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Whether or not the web view is currently
             /// presented.

@@ -56,7 +56,7 @@ namespace CSBackend
             /// If no chunk can be found an empty string
             /// will be returned.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The chunk tag
             /// @param The string data to search in.

@@ -37,7 +37,7 @@ namespace ChilliSource
         /// An enum describing the different possible locations for
         /// files to be located.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //-----------------------------------------------------------------
         enum class StorageLocation
         {

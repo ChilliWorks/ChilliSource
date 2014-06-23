@@ -39,7 +39,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
         /// Loads CS Anim files into a SkinnedAnimation resource
         ///
-        /// @author I Copland
+        /// @author Ian Copland
 		//-------------------------------------------------------------------------
 		class CSAnimProvider final : public Core::ResourceProvider
 		{
@@ -50,11 +50,11 @@ namespace ChilliSource
             //-------------------------------------------------------------------------
             /// Factory method for creating new anim loader
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------------------------
             static CSAnimProviderUPtr Create();
 			//-------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Interface to compare
             ///
@@ -68,7 +68,7 @@ namespace ChilliSource
             //----------------------------------------------------
             Core::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Extension to compare
             ///
@@ -81,7 +81,7 @@ namespace ChilliSource
 			/// Load a skinned animation from the given CSAnim file. Check the load state of the
             /// resource for success or failure.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path
@@ -94,7 +94,7 @@ namespace ChilliSource
             /// thread. Delegate is called on completion. Check the load state of the
             /// resource for success or failure
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path
@@ -106,7 +106,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			/// Loads an anim file into a SkinnedAnimation.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path

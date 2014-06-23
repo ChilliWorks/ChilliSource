@@ -46,7 +46,7 @@ namespace CSBackend
 			//---------------------------------------------------------
 			/// Breaks the given url path into the file path and anchor.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The URL.
 			/// @param [Out] The file path.

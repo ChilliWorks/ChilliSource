@@ -44,7 +44,7 @@ namespace CSBackend
 			/// Converts from the integer received from java
 			/// to the button enum.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param An integer representing the button.
 			///

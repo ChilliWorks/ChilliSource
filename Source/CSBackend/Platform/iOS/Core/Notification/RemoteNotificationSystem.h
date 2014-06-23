@@ -74,7 +74,7 @@ namespace CSBackend
             /// All existing notifications will be cancelled
             /// when this is disabled. This is enabled by default.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Whether or not to enable the scheduling
             /// of app notifications.
@@ -95,7 +95,7 @@ namespace CSBackend
             //---------------------------------------------------
             const std::string& GetProviderID() const override;
             //--------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return An event that can be used to listen for
             /// new notifications being recieved.

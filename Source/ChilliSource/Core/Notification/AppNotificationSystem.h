@@ -56,13 +56,13 @@ namespace ChilliSource
             //--------------------------------------------------
             /// Creates a new instance of the system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The new instance.
             //--------------------------------------------------
             static AppNotificationSystemUPtr Create();
             //--------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The interface ID to check against.
             /// @return Whether this implements the passed in
@@ -74,7 +74,7 @@ namespace ChilliSource
             /// All existing notifications will be cancelled
             /// when this is disabled. This is enabled by default.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Whether or not to enable the scheduling
             /// of app notifications.
@@ -85,7 +85,7 @@ namespace ChilliSource
             /// be inserted into the queue. Upon reaching the head
             /// of the queue it will trigger.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The notification id
             /// @param The notification params.
@@ -98,7 +98,7 @@ namespace ChilliSource
             /// Builds a list of all notifications currently scheduled
             /// within the given time period.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param [Out] The list of notifications.
             /// @param [Optional] The start time.
@@ -109,7 +109,7 @@ namespace ChilliSource
             /// Prevent any notifications with given ID type from
             /// firing.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param ID type
             //--------------------------------------------------------
@@ -117,11 +117,11 @@ namespace ChilliSource
             //--------------------------------------------------------
             /// Terminate all currently scheduled notifications.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------
             void CancelAll();
             //--------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return An event that can be used to listen for
             /// new notifications being recieved.
@@ -143,14 +143,14 @@ namespace ChilliSource
             /// Private constructor to force the use of the
             /// factory method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------
             AppNotificationSystem();
             //--------------------------------------------------
             /// Processes the notifications, triggering any that
             /// are queued.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The delta time.
             //--------------------------------------------------

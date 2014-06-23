@@ -42,7 +42,7 @@ namespace ChilliSource
         /// parsed data have a greater lifetime than the document, so this
         /// holds on to and cleans up both.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //----------------------------------------------------------------
         class XML final
         {
@@ -52,7 +52,7 @@ namespace ChilliSource
             /// Convenience typedefs for all of the main rapid xml
             /// types.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------
             using Base = rapidxml::xml_base<>;
             using Node = rapidxml::xml_node<>;
@@ -61,14 +61,14 @@ namespace ChilliSource
 			//---------------------------------------------------------
 			/// Constructor.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The rapid xml document.
 			/// @param The parsed xml data.
 			//---------------------------------------------------------
 			XML(std::unique_ptr<Document> in_document, std::unique_ptr<s8[]> in_data);
             //---------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The xml document pointer.
             //---------------------------------------------------------

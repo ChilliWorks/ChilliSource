@@ -48,7 +48,7 @@ namespace CSBackend
         public:
             CS_DECLARE_NAMEDTYPE(LocalNotificationSystem);
             //--------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The interface ID to check against.
             /// @return Whether this implements the passed in interface
@@ -60,7 +60,7 @@ namespace CSBackend
             /// All existing notifications will be cancelled
             /// when this is disabled. This is enabled by default.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Whether or not to enable the scheduling
             /// of app notifications.
@@ -73,7 +73,7 @@ namespace CSBackend
             /// be received even if it was scheduled during a
             /// previous instance of the application.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The notification id
             /// @param The notification params.
@@ -86,7 +86,7 @@ namespace CSBackend
             /// Builds a list of all notifications currently scheduled
             /// within the given time period.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param [Out] The list of notifications.
             /// @param [Optional] The start time.
@@ -108,7 +108,7 @@ namespace CSBackend
             //--------------------------------------------------------
             void CancelAll() override;
             //--------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return An event that can be used to listen for
             /// new notifications being recieved.
@@ -161,19 +161,19 @@ namespace CSBackend
             //--------------------------------------------------------
             /// Initalises the local notification system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------
             void OnInit() override;
             //--------------------------------------------------------
             /// Called when a notification is received.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------
             void OnNotificationRecieved(const CSCore::NotificationSPtr& in_notification);
             //--------------------------------------------------------
             /// destroys the local notification system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------
             void OnDestroy() override;
             

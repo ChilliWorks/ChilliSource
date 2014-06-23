@@ -114,7 +114,7 @@ namespace ChilliSource
             //---------------------------------------------------
             /// Creates a new instance of the facebook post system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The facebook authentication system.
             ///
@@ -153,7 +153,7 @@ namespace ChilliSource
             //---------------------------------------------------
             /// Destructor
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------
             virtual ~FacebookPostSystem(){};
 		};

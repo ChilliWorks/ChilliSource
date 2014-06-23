@@ -295,7 +295,7 @@ namespace ChilliSource
 			/// Called when the resolution changes and resize with
 			/// screen is enabled.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			//------------------------------------------------------
 			void OnResolutionChanged(const Core::Vector2& in_resolution);
 

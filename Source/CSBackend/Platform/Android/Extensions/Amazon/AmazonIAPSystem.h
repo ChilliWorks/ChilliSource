@@ -30,7 +30,7 @@ namespace CSBackend
 		///
 		/// Note: The CS pre-processor flag CS_ANDROIDEXTENSION_AMAZON should be set for this to be used.
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//----------------------------------------------------------------------------------
 		class AmazonIAPSystem final : public CSNetworking::IAPSystem
 		{
@@ -39,7 +39,7 @@ namespace CSBackend
 			CS_DECLARE_NAMEDTYPE(AmazonIAPSystem);
 
             //---------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Interface ID to compare
             ///
@@ -50,19 +50,19 @@ namespace CSBackend
             /// Inform the system of which products are available for
             /// purchase and whether they are managed or unmanaged
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param List of products
             //---------------------------------------------------------------
             void RegisterProducts(const std::vector<ProductRegInfo>& in_productInfos) override;
             //---------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The ID off the IAP provider as a string.
             //---------------------------------------------------------------
 			std::string GetProviderID() const override;
             //---------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return Whether the purchasing is allowed by the device/OS
             //---------------------------------------------------------------
@@ -73,7 +73,7 @@ namespace CSBackend
             /// in response to a user action it may be previously outstanding
             /// transactions.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Delegate
             //---------------------------------------------------------------
@@ -81,14 +81,14 @@ namespace CSBackend
             //---------------------------------------------------------------
             /// Prevent any more transaction uppdates from being triggered.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------------
             void StopListeningForTransactionUpdates() override;
             //---------------------------------------------------------------
             /// Starts a request to the store for details of the products.
             /// These details are name, description and price
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param List of product IDs to request descriptions for
             /// @param Delegate to invoke when the request completes
@@ -98,7 +98,7 @@ namespace CSBackend
             /// Starts a request to the store for details of all registered
             /// products. These details are name, description and price
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Delegate to invoke when the request completes
             //---------------------------------------------------------------
@@ -108,14 +108,14 @@ namespace CSBackend
             /// any pending product description requests and attempt to
             /// cancel the request to the store.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------------
             void CancelProductDescriptionsRequest() override;
             //---------------------------------------------------------------
 			/// Make a request to the store to purchase the item.
             /// This will trigger a call to the transaction listener delegate
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Product ID
             //---------------------------------------------------------------
@@ -125,7 +125,7 @@ namespace CSBackend
             /// NOTE: This should only be called after the goods have been
             /// awarded.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Transaction to close
             /// @param Delegate to call when closed (either with success or failure)
@@ -135,7 +135,7 @@ namespace CSBackend
             /// Request that the store trigger new purchase requests for
             /// owned non-consumable items
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------------
             void RestoreManagedPurchases() override;
 
@@ -145,7 +145,7 @@ namespace CSBackend
             //---------------------------------------------------------------
             /// Private constructor to enforce use of factory method
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param A dictionary of platform specific parameters. The
 			/// parameters that relate to the Amazon IAP System are as

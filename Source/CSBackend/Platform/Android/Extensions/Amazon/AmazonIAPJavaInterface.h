@@ -24,7 +24,7 @@ namespace CSBackend
 		/// Interface class that allows communication between the
 		/// Amazon IAP system and the Java Amazon billing SDK
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//--------------------------------------------------------------
 		class AmazonIAPJavaInterface final : public IJavaInterface
 		{
@@ -33,14 +33,14 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Constructor
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The private key.
 			/// @param The UDID
 			//--------------------------------------------------------------
 			AmazonIAPJavaInterface(const std::string& in_privateKey, const std::string& in_udid);
 			//--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Interface ID
 			///
@@ -48,7 +48,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return Whether the purchasing is allowed by the device/OS
             //---------------------------------------------------------------
@@ -59,7 +59,7 @@ namespace CSBackend
             /// in response to a user action it may be previously outstanding
             /// transactions.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Delegate
             //---------------------------------------------------------------
@@ -67,14 +67,14 @@ namespace CSBackend
             //---------------------------------------------------------------
             /// Prevent any more transaction updates from being triggered.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------------
             void StopListeningForTransactionUpdates();
             //---------------------------------------------------------------
             /// Starts a request to the store for details of the products.
             /// These details are name, description and price
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param List of product IDs to request descriptions for
             /// @param Delegate to invoke when the request completes
@@ -85,14 +85,14 @@ namespace CSBackend
             /// any pending product description requests and attempt to
             /// cancel the request to the store.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------------
             void CancelProductDescriptionsRequest();
             //---------------------------------------------------------------
 			/// Make a request to the store to purchase the item.
             /// This will trigger a call to the transaction listener delegate
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Product ID
             //---------------------------------------------------------------
@@ -102,7 +102,7 @@ namespace CSBackend
             /// NOTE: This should only be called after the goods have been
             /// awarded.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Product ID
             /// @param Transaction ID
@@ -113,7 +113,7 @@ namespace CSBackend
             /// Request that the store trigger new purchase requests for
             /// owned non-consumable items
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------------
             void RestoreManagedPurchases();
 
@@ -121,7 +121,7 @@ namespace CSBackend
             //---------------------------------------------------------------
     		/// Called when product descriptions request completes
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param List of product descriptions
             //---------------------------------------------------------------
@@ -129,7 +129,7 @@ namespace CSBackend
             //---------------------------------------------------------------
     		/// Called when transaction status changes
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Status ID
             /// @param Transaction description
@@ -138,7 +138,7 @@ namespace CSBackend
             //---------------------------------------------------------------
     		/// Called when transaction close request completes
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Product ID
             /// @param Transaction ID

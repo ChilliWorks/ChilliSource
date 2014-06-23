@@ -2,7 +2,7 @@
 //  FileSystem.h
 //  Chilli Source
 //
-//  Created by I Copland on 25/03/2011.
+//  Created by Ian Copland on 25/03/2011.
 //  Copyright 2011 Tag Games Ltd. All rights reserved.
 //
 
@@ -27,7 +27,7 @@ namespace CSBackend
 		//------------------------------------------------------------------
 		/// The Android implementation of the file system.
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//------------------------------------------------------------------
 		class FileSystem final : public CSCore::FileSystem
 		{
@@ -49,7 +49,7 @@ namespace CSBackend
 			/// Queries whether or not this system implements the
 			/// interface with the given Id.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The interface Id.
 			///
@@ -60,7 +60,7 @@ namespace CSBackend
 			/// Creates a new file stream to the given file in the given
 			/// storage location.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The storage location.
 			/// @param The file path.
@@ -73,7 +73,7 @@ namespace CSBackend
 			/// Creates the given directory. The full directory hierarchy will
 			/// be created.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The Storage Location
 			/// @param The directory path.
@@ -86,7 +86,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Copies a file from one location to another.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The source storage location.
 			/// @param The source directory.
@@ -101,7 +101,7 @@ namespace CSBackend
 			/// Copies a directory from one location to another. If the
 			/// destination directory does not exist, it will be created.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The source storage location.
 			/// @param The source directory.
@@ -115,7 +115,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Deletes the specified file.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The storage location.
 			/// @param The filepath.
@@ -126,7 +126,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Deletes a directory and all its contents.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The storage location.
 			/// @param The directory.
@@ -139,7 +139,7 @@ namespace CSBackend
 			/// in the given directory. File paths will be relative to the
 			/// input directory.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The Storage Location
 			/// @param The directory
@@ -154,7 +154,7 @@ namespace CSBackend
 			/// in the given directory. Directory paths will be relative to
 			/// the input directory.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The Storage Location
 			/// @param The directory
@@ -166,7 +166,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// returns whether or not the given file exists.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The Storage Location
 			/// @param The file path
@@ -178,7 +178,7 @@ namespace CSBackend
 			/// Returns whether or not the file exists in the Cached DLC
 			/// directory.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The file path.
 			///
@@ -189,7 +189,7 @@ namespace CSBackend
 			/// Returns whether or not the file exists in the package DLC
 			/// directory.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The file path.
 			///
@@ -199,7 +199,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Returns whether or not the given directory exists.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The Storage Location
 			/// @param The directory path
@@ -212,7 +212,7 @@ namespace CSBackend
 			/// value this returns is platform specific and use of this
 			/// should be kept to a minimum in cross platform projects.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The source storage location.
 			///
@@ -282,7 +282,7 @@ namespace CSBackend
             //--------------------------------------------------------------
 	        /// Tries to get the manifest item for the given path.
 	        ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 	        /// @param The package or CS storage location
             /// @param The path to loop up.
@@ -296,7 +296,7 @@ namespace CSBackend
 			/// This provides a uniform api for handling files within
 			/// the apk and normal filestreams.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
             /// @param The package or CS storage location
 			/// @param The file path of in the APK.
@@ -309,7 +309,7 @@ namespace CSBackend
 			/// Copies a file from the APK to one of the writable storage
 			/// locations.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The package or CS storage location of the source
 			/// @param the source file path in the APK.
@@ -324,7 +324,7 @@ namespace CSBackend
 			/// Note: Unlike other similar methods, empty directories will
 			/// not be listed.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The package or CS storage location
 			/// @param the directory.
@@ -348,7 +348,7 @@ namespace CSBackend
 			/// Note: Unlike other similar methods, empty directories will not
 			/// be considered.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The package or CS storage location
 			/// @param the directory path.
@@ -359,7 +359,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// returns all files and directories in a directory.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the directory.
 			/// @param Whether or not to recurse into sub directories.

@@ -46,7 +46,7 @@ namespace ChilliSource
         /// sets of hard buttons meaning there is no guarantee that
         /// an event for that button will ever be received.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
 		//------------------------------------------------------------
 		class DeviceButtonSystem : public Core::AppSystem
 		{
@@ -55,7 +55,7 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// An enum descibing the possible Device Buttons.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
             enum class DeviceButton
             {
@@ -65,13 +65,13 @@ namespace ChilliSource
 			/// A delegate which will be called when a device
             /// button pressed event is received.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The recieved button.
 			//----------------------------------------------------
             using TriggeredDelegate = std::function<void(DeviceButton)>;
             //----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @return An event that will be called whenever a
             /// device button is triggered.
@@ -80,7 +80,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			/// Destructor
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
 			virtual ~DeviceButtonSystem(){}
         protected:
@@ -90,7 +90,7 @@ namespace ChilliSource
             /// Creates a new platfrom specific instance of pointer
             /// system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The new system instance.
             //----------------------------------------------------
@@ -99,7 +99,7 @@ namespace ChilliSource
             /// Constructor. Declared protected to force the
             /// use of the factory creation method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             DeviceButtonSystem() = default;
 		};

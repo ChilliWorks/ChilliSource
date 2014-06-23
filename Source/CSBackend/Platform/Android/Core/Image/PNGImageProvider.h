@@ -1,7 +1,7 @@
 //
 //  PNGImageProvider.h
 //  Chilli Source
-//  Created by I Copland on 05/02/2011.
+//  Created by Ian Copland on 05/02/2011.
 //
 //  The MIT License (MIT)
 //
@@ -51,7 +51,7 @@ namespace CSBackend
 			//----------------------------------------------------------
 			/// Is the object of the given interface type
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param Interface type to query
             ///
@@ -59,7 +59,7 @@ namespace CSBackend
 			//----------------------------------------------------------
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The resource type this provider can load
             //-------------------------------------------------------
@@ -68,7 +68,7 @@ namespace CSBackend
 			/// Whether or not the provider can create resources from
             /// files with the given extension.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
             ///
 			/// @param Extension to compare against
             ///
@@ -80,7 +80,7 @@ namespace CSBackend
 			/// Creates a new image resource from file. Check the
             /// resource load state for success or failure
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The storage location to load from
 			/// @param File path to resource
@@ -93,7 +93,7 @@ namespace CSBackend
             /// Completion delegate is called when load is finished.
             /// Check the resource load state for success or failure
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The storage location.
             /// @param The filepath.
@@ -107,7 +107,7 @@ namespace CSBackend
             //-----------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-----------------------------------------------------------
             PNGImageProvider() = default;
 		};

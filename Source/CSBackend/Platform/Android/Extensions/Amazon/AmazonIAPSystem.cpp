@@ -25,7 +25,7 @@ namespace CSBackend
 			const std::string k_amazonPrivateKeyKey("AmazonPrivateKey");
 
             //---------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param List of product registrations
             /// @param Product Id to find

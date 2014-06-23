@@ -44,7 +44,7 @@
 //------------------------------------------------------------
 /// Constructor
 ///
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @param The dialogue box system.
 //------------------------------------------------------------
@@ -52,7 +52,7 @@
 //------------------------------------------------------------
 /// Listens for callbacks from alert views.
 ///
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @param The alert view.
 /// @param The button index.
@@ -61,7 +61,7 @@
 //------------------------------------------------------------
 /// Destructor
 ///
-/// @author I Copland
+/// @author Ian Copland
 //------------------------------------------------------------
 -(void) dealloc;
 

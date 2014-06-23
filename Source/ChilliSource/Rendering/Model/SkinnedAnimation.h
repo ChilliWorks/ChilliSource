@@ -43,7 +43,7 @@ namespace ChilliSource
 		/// A resource that holds data for a single skinned animation.
         /// This largely consists of the transformations for each key frame.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
 		//---------------------------------------------------------------------
 		class SkinnedAnimation final : public Core::Resource
 		{
@@ -52,7 +52,7 @@ namespace ChilliSource
             //---------------------------------------------------------------------
             /// Contains all relevant data for a single frame of animation.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------------------
             struct Frame
             {
@@ -68,7 +68,7 @@ namespace ChilliSource
 			CS_DECLARE_NAMEDTYPE(SkinnedAnimation);
 			
 			//---------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param Interface ID type
             ///
@@ -76,20 +76,20 @@ namespace ChilliSource
 			//---------------------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//---------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the index to the frame
 			/// @return the AnimationFramePtr at the given index
 			//---------------------------------------------------------------------
 			const SkinnedAnimation::Frame* GetFrameAtIndex(u32 in_index) const;
 			//---------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return the time between frames in seconds
 			//---------------------------------------------------------------------
 			f32 GetFrameTime() const;
 			//---------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return the number of frames in the animation.
 			//---------------------------------------------------------------------
@@ -97,7 +97,7 @@ namespace ChilliSource
             //---------------------------------------------------------------------
 			/// Adds a new frame to the end of the animation.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param The new frame which is no owned by the resource
 			//---------------------------------------------------------------------
@@ -107,7 +107,7 @@ namespace ChilliSource
 			/// the speed of an animation. Instead changing the speed through
 			/// the animated component.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param The time between frames in seconds
 			//---------------------------------------------------------------------
@@ -129,7 +129,7 @@ namespace ChilliSource
 			/// Declared private so that this can only be created via the create
             /// method
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//---------------------------------------------------------------------
 			SkinnedAnimation();
             

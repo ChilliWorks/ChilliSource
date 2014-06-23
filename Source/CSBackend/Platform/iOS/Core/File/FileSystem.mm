@@ -52,7 +52,7 @@ namespace CSBackend
             //--------------------------------------------------------------
             /// Returns a string containing the error in the given NSError.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The error string.
             //--------------------------------------------------------------
@@ -138,7 +138,7 @@ namespace CSBackend
                 return Filtered;
             }
             //--------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Unfiltered names
             /// @return Filtered names

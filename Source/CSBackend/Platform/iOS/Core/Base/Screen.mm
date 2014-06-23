@@ -40,7 +40,7 @@ namespace CSBackend
         namespace
         {
             //----------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The orientation of the application.
             ///

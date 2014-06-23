@@ -47,7 +47,7 @@ namespace ChilliSource
         /// pointer devices. Pointers include touches on a touch
         /// screen and the mouse on a PC.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //--------------------------------------------------------
         class PointerSystem : public Core::AppSystem
         {
@@ -61,7 +61,7 @@ namespace ChilliSource
             /// An enum describing the different types of pointer
             /// press.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             enum class InputType
             {
@@ -81,7 +81,7 @@ namespace ChilliSource
             /// two active pointers existing at creation, it will be
             /// have an index of 2.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             struct Pointer
             {
@@ -100,7 +100,7 @@ namespace ChilliSource
             /// @param The timestamp of the event.
             /// @param The press type.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             using PointerDownDelegate = std::function<void(const Pointer&, f64, InputType)>;
             //----------------------------------------------------
@@ -111,7 +111,7 @@ namespace ChilliSource
             /// @param The pointer
             /// @param The timestamp of the event.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             using PointerMovedDelegate = std::function<void(const Pointer&, f64)>;
             //----------------------------------------------------
@@ -123,14 +123,14 @@ namespace ChilliSource
             /// @param The timestamp of the event.
             /// @param The press type.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             using PointerUpDelegate = std::function<void(const Pointer&, f64, InputType)>;
             //----------------------------------------------------
             /// Creates a new platfrom specific instance of pointer
             /// system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The new system instance.
             //----------------------------------------------------
@@ -141,25 +141,25 @@ namespace ChilliSource
             /// direct use of the press type to make cross platform
             /// development easier.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return the default press type.
             //----------------------------------------------------
             static InputType GetDefaultInputType();
             //----------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The pointer down event.
             //----------------------------------------------------
             Core::IConnectableEvent<PointerDownDelegate>& GetPointerDownEvent();
             //----------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The pointer moved event.
             //----------------------------------------------------
             Core::IConnectableEvent<PointerMovedDelegate>& GetPointerMovedEvent();
             //----------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The pointer up event.
             //----------------------------------------------------
@@ -167,7 +167,7 @@ namespace ChilliSource
             //----------------------------------------------------
             /// Tries to get the pointer with the given unique Id.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The unique Id of the pointer.
             /// @param [Out] The output pointer if there was one
@@ -180,7 +180,7 @@ namespace ChilliSource
             //----------------------------------------------------
             /// Tries to get the pointer with the given index.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The pointer with the given unique Id.
             //----------------------------------------------------
@@ -188,7 +188,7 @@ namespace ChilliSource
             //----------------------------------------------------
             /// Returns the list of currently active pointers.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The pointer up event.
             //----------------------------------------------------
@@ -197,13 +197,13 @@ namespace ChilliSource
             /// Process all input events that have been received
             /// from the OS.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             void ProcessQueuedInput();
             //----------------------------------------------------
             /// Destructor
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             virtual ~PointerSystem() {};
         protected:
@@ -211,14 +211,14 @@ namespace ChilliSource
             /// Constructor. Declared protected to force the use
             /// of the factory method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             PointerSystem();
             //----------------------------------------------------
             /// Adds a new Create Pointer event. This method is
             /// thread safe and can be called on any thread.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The position to create the pointer at.
             ///
@@ -229,7 +229,7 @@ namespace ChilliSource
             /// Adds a new pointer down event. This method is thread
             /// safe and can be called on any thread.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The unique Id of the pointer.
             /// @param The press type.
@@ -239,7 +239,7 @@ namespace ChilliSource
             /// Adds a new pointer moved event. This method is
             /// threadsafe and can be called on any thread.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The unique Id of the pointer.
             /// @param The position it has moved to.
@@ -249,7 +249,7 @@ namespace ChilliSource
             /// Adds a new pointer up event. This method is thread
             /// safe and can be called on any thread.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The unique Id of the pointer.
             /// @param The press type.
@@ -259,7 +259,7 @@ namespace ChilliSource
             /// Adds a new remove pointer event. This method is thread
             /// safe and can be called on any thread.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The unique Id of the pointer that should be
             /// removed.
@@ -269,7 +269,7 @@ namespace ChilliSource
             /// Removes all existing pointers. This must be called
             /// from the main thread.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-----------------------------------------------------
             void RemoveAllPointers();
         private:
@@ -277,7 +277,7 @@ namespace ChilliSource
             /// An enum describing the different types of pointer
             /// event.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             enum class PointerEventType
             {
@@ -291,7 +291,7 @@ namespace ChilliSource
             /// A container for information on a single pointer
             /// event.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             struct PointerEvent
             {
@@ -304,7 +304,7 @@ namespace ChilliSource
             //----------------------------------------------------
             /// Creates and adds a new pointer to the list.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The unique pointer Id.
             /// @param The initial position.
@@ -314,7 +314,7 @@ namespace ChilliSource
             /// Notifies listeners that the pointer with the given
             /// unique id is down.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The unique pointer Id.
             /// @param The timestamp.
@@ -325,7 +325,7 @@ namespace ChilliSource
             /// Updates the pointer with the given unique id and
             /// notifies listeners that it has moved.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The unique pointer Id.
             /// @param The timestamp.
@@ -336,7 +336,7 @@ namespace ChilliSource
             /// Notifies listeners that the pointer with the given
             /// unique id is up.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The unique pointer Id.
             /// @param The timestamp.
@@ -346,7 +346,7 @@ namespace ChilliSource
             //----------------------------------------------------
             /// Removes the pointer with the given Id.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The unique pointer Id.
             //-----------------------------------------------------

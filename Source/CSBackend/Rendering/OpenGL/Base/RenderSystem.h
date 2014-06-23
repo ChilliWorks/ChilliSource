@@ -90,7 +90,7 @@ namespace CSBackend
 			/// Called when the app suspends. Android stores the assets that
             /// require recreation when the context is reacreate on resume.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------------
 			void Suspend() override;
             //----------------------------------------------------------
@@ -420,7 +420,7 @@ namespace CSBackend
             /// Called when the resolution of the screen changes. This
             /// then updates the size of the frame buffer.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The new screen resolution.
             //----------------------------------------------------------

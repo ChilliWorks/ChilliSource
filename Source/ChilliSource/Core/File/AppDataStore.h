@@ -64,7 +64,7 @@ namespace ChilliSource
             /// Allows querying of whether or not this system implements
             /// a given interface.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Interface Id
 			///
@@ -322,7 +322,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// Clears the Local Data Store, removing all contents.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------------
             void Clear();
 			//--------------------------------------------------------------
@@ -338,7 +338,7 @@ namespace ChilliSource
 			/// Factory create method called by application to create a new
             /// instance of the system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @return Creates a new instance of the system.
 			//--------------------------------------------------------------
@@ -361,7 +361,7 @@ namespace ChilliSource
             /// Destroy. System suspend is called in the reverse order to
             /// which they were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------------
             void OnSuspend() override;
 			

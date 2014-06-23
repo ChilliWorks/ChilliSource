@@ -46,7 +46,7 @@ namespace ChilliSource
             //------------------------------------------------------
 			/// performs a bitmask set on a with b.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The bitmask to set.
             /// @param The bitmask to apply.
@@ -58,7 +58,7 @@ namespace ChilliSource
             //------------------------------------------------------
 			/// performs a bitmask clear on a with b.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The bitmask to set.
             /// @param The bitmask to apply.
@@ -70,7 +70,7 @@ namespace ChilliSource
             //------------------------------------------------------
 			/// performs a bitmask flip on a with b.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The bitmask to set.
             /// @param The bitmask to apply.
@@ -82,7 +82,7 @@ namespace ChilliSource
             //------------------------------------------------------
 			/// performs a bitmask check on a with b.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The bitmask to set.
             /// @param The bitmask to apply.

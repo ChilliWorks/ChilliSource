@@ -51,7 +51,7 @@ namespace ChilliSource
             /// Features implemented by the model resource.
             /// Models can opt in and out of features.
             ///
-            /// @author I Copland.
+            /// @author Ian Copland.
             //---------------------------------------------
             enum class Feature
             {
@@ -63,7 +63,7 @@ namespace ChilliSource
             /// formats described by mixing and matching the
             /// following.
             ///
-            /// @author I Copland.
+            /// @author Ian Copland.
             //---------------------------------------------
             enum class VertexAttribute
             {
@@ -89,7 +89,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
 			/// Read value in for given type
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param File stream
             ///
@@ -104,7 +104,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
 			/// Read block of data in for given type
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param File stream
             /// @param Num to read
@@ -118,7 +118,7 @@ namespace ChilliSource
             /// Read the vertex declaration from the mesh filestream. The declaration
             /// is variable
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Mesh stream
             /// @param [Out] Mesh description
@@ -171,7 +171,7 @@ namespace ChilliSource
             //-----------------------------------------------------------------------------
 			/// Read the mesh section of the file
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param File stream
 			/// @param Mesh description
@@ -201,7 +201,7 @@ namespace ChilliSource
             //-----------------------------------------------------------------------------
 			/// Reads the sub-mesh header section of the file
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param File stream
             /// @param Mesh description
@@ -263,7 +263,7 @@ namespace ChilliSource
             //-----------------------------------------------------------------------------
 			/// Reads the skeleton section of the file
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param File stream
             /// @param Container holding the num of meshes, joints and bones
@@ -313,7 +313,7 @@ namespace ChilliSource
             //-----------------------------------------------------------------------------
 			/// Reads the header of the file
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param File stream
 			/// @param the file path
@@ -391,7 +391,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
 			/// Read the mesh data from file and creates a mesh descriptor.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path

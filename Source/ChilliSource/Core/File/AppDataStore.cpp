@@ -51,7 +51,7 @@ namespace ChilliSource
             /// of the information used to generate the hash is truely
             /// private.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------
             std::string GenerateEncryptionKey()
             {

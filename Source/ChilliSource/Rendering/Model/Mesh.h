@@ -63,7 +63,7 @@ namespace ChilliSource
             /// Build the mesh from the given description. This will build the mesh buffers
             /// and sub meshes
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Mesh descriptor
             //----------------------------------------------------------------------------
@@ -75,31 +75,31 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			const Core::AABB& GetAABB() const;
             //-----------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Number of verts in this meshes sub-meshes.
             //-----------------------------------------------------------------
             u32 GetNumVerts() const;
             //-----------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Number of indices in this this meshes sub-meshes.
             //-----------------------------------------------------------------
             u32 GetNumIndices() const;
 			//-----------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The skeleton
 			//-----------------------------------------------------------------
 			const Skeleton* GetSkeleton() const;
 			//-----------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Number of sub meshes.
             //-----------------------------------------------------------------
             u32 GetNumSubMeshes() const;
 			//-----------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Index
             ///
@@ -107,7 +107,7 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			const SubMesh* GetSubMeshAtIndex(u32 in_index) const;
 			//-----------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Index
             //
@@ -115,7 +115,7 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			const SubMesh* GetSubMeshByName(const std::string& in_name) const;
             //-----------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param name
             ///
@@ -156,7 +156,7 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			/// Creates a new sub mesh with the given name.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param the name of the mesh.
 			/// @return The newly created sub-mesh.
@@ -166,7 +166,7 @@ namespace ChilliSource
 			/// Creates the AABB for this mesh from minimum and maximum bounds
 			/// vectors
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param the minimum bounds
 			/// @param the maximum bounds.
@@ -176,7 +176,7 @@ namespace ChilliSource
 			/// Calculates the internal vertex and index counts. This should be
 			/// called after filling all of the submeshes with data.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//-----------------------------------------------------------------
 			void CalcVertexAndIndexCounts();
 			

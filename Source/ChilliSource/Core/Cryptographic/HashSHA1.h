@@ -39,7 +39,7 @@ namespace ChilliSource
         /// A collection of methods for working with the SHA1
         /// hashing algorithm.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //------------------------------------------------------
         namespace HashSHA1
         {
@@ -47,7 +47,7 @@ namespace ChilliSource
             /// Hashes the given data using SHA1. The output is
             /// returned as a hex string.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The input data.
             /// @param The input data size.

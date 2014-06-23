@@ -46,7 +46,7 @@ namespace ChilliSource
         /// subtitles over videos played using the video player
         /// activity.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
 		//----------------------------------------------------------
 		class Subtitles final : public Core::Resource
 		{
@@ -56,7 +56,7 @@ namespace ChilliSource
 			/// Holds the style of the subtitles such as colour,
             /// font, etc.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------------
             struct Style
             {
@@ -73,7 +73,7 @@ namespace ChilliSource
             //----------------------------------------------------------
 			/// Holds the information about a single subtitle instance
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------------
             struct Subtitle
             {
@@ -85,7 +85,7 @@ namespace ChilliSource
             typedef std::unique_ptr<const Subtitle> SubtitleCUPtr;
             typedef std::unique_ptr<Subtitle> SubtitleUPtr;
 			//----------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Comparison Type
             ///
@@ -93,13 +93,13 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param The Style to add to the available styles
 			//----------------------------------------------------------
             void AddStyle(StyleCUPtr in_style);
             //----------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
 			/// @param The subtitle to add to the current list of subtitles
 			//----------------------------------------------------------
@@ -107,7 +107,7 @@ namespace ChilliSource
             //----------------------------------------------------------
 			/// Returns all the active subtitles at the given time.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param Time in MS from the start if the subtitle sequence.
             ///
@@ -115,7 +115,7 @@ namespace ChilliSource
 			//----------------------------------------------------------
             std::vector<const Subtitles::Subtitle*> GetSubtitlesAtTime(TimeIntervalMs in_timeMS) const;
             //----------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param Style name
             ///

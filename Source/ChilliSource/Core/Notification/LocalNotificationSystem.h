@@ -67,7 +67,7 @@ namespace ChilliSource
             /// All existing notifications will be cancelled
             /// when this is disabled. This is enabled by default.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Whether or not to enable the scheduling
             /// of app notifications.
@@ -80,7 +80,7 @@ namespace ChilliSource
             /// be received even if it was scheduled during a
             /// previous instance of the application.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The notification id
             /// @param The notification params.
@@ -93,7 +93,7 @@ namespace ChilliSource
             /// Builds a list of all notifications currently scheduled
             /// within the given time period.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param [Out] The list of notifications.
             /// @param [Optional] The start time.
@@ -115,7 +115,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             virtual void CancelAll() = 0;
             //--------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return An event that can be used to listen for
             /// new notifications being recieved.

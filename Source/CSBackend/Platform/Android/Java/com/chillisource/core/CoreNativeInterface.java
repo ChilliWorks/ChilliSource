@@ -27,7 +27,7 @@ import android.util.DisplayMetrics;
 * Native interface for communicating core os features to native.
 * Also responsible for funneling lifecycle events to application
 * 
-* @author I Copland
+* @author Ian Copland
 */
 public class CoreNativeInterface extends INativeInterface
 {	
@@ -76,7 +76,7 @@ public class CoreNativeInterface extends INativeInterface
 	/**
 	 * Updates the native application
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param Time in seconds since last update
 	 * @param Total elapsed time of app
@@ -111,13 +111,13 @@ public class CoreNativeInterface extends INativeInterface
 	 * Triggered when the app is low on memory to tell native
 	 * to clean itself up
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
 	public native void memoryWarning();
 	/**
 	 * Triggered when the screen resolution changes
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The new width.
 	 * @param The new height.
@@ -126,14 +126,14 @@ public class CoreNativeInterface extends INativeInterface
 	/**
 	 * Constructor
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
 	public CoreNativeInterface() throws NameNotFoundException
 	{
 		m_packageInfo = CSApplication.get().getAppContext().getPackageManager().getPackageInfo(CSApplication.get().getActivityContext().getPackageName(), PackageManager.GET_ACTIVITIES);
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param Java system interface ID
 	 * 
@@ -144,7 +144,7 @@ public class CoreNativeInterface extends INativeInterface
 		return (in_interfaceType.Equals(InterfaceID));
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Path to external storage
 	 */
@@ -153,7 +153,7 @@ public class CoreNativeInterface extends INativeInterface
 		return FileUtils.getExternalStorageDirectory();
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Application name as specified by the project
 	 */
@@ -169,7 +169,7 @@ public class CoreNativeInterface extends INativeInterface
 		}
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Application version code as specified by the manifest
 	 */
@@ -185,7 +185,7 @@ public class CoreNativeInterface extends INativeInterface
 		}
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Application version name as specified by the manifest
 	 */
@@ -201,7 +201,7 @@ public class CoreNativeInterface extends INativeInterface
 		}
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Application package name
 	 */
@@ -210,7 +210,7 @@ public class CoreNativeInterface extends INativeInterface
 		return CSApplication.get().getActivityContext().getPackageName();
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Path to APK directory
 	 */
@@ -219,7 +219,7 @@ public class CoreNativeInterface extends INativeInterface
 		return m_packageInfo.applicationInfo.sourceDir;
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Screen width in pixels
 	 */
@@ -229,7 +229,7 @@ public class CoreNativeInterface extends INativeInterface
 		return CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getWidth();
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Screen height in pixels
 	 */
@@ -239,7 +239,7 @@ public class CoreNativeInterface extends INativeInterface
 		return CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getHeight();
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Locale code of device as a string
 	 */
@@ -248,7 +248,7 @@ public class CoreNativeInterface extends INativeInterface
 		return Locale.getDefault().toString();
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Mode of device as a string
 	 */
@@ -257,7 +257,7 @@ public class CoreNativeInterface extends INativeInterface
 		return Build.MODEL.toString();
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Manufacturer of device as a string
 	 */
@@ -266,7 +266,7 @@ public class CoreNativeInterface extends INativeInterface
 		return Build.MANUFACTURER.toString();
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Type of device as a string
 	 */
@@ -275,7 +275,7 @@ public class CoreNativeInterface extends INativeInterface
 		return Build.DEVICE.toString();
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return OS version as number
 	 */
@@ -284,7 +284,7 @@ public class CoreNativeInterface extends INativeInterface
 		return Build.VERSION.SDK_INT;
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Num of CPU cores available
 	 */
@@ -293,7 +293,7 @@ public class CoreNativeInterface extends INativeInterface
 		return Runtime.getRuntime().availableProcessors();
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Density of screen in dpi
 	 */
@@ -312,7 +312,7 @@ public class CoreNativeInterface extends INativeInterface
 	 * Should not change on factory reset of a device, but it may
 	 * change if the sim card is changed.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 *
 	 * @return the telephony device ID or an empty string.
 	*/
@@ -330,7 +330,7 @@ public class CoreNativeInterface extends INativeInterface
 	 * on some devices while wifi is turned off. This should not change
 	 * on factory reset of a device.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 *
 	 * @return mac address or an empty string.
 	*/
@@ -352,7 +352,7 @@ public class CoreNativeInterface extends INativeInterface
 	 * will be returned. This value may change if the device is
 	 * factory reset.
 	 *
-	 * @author I Copland
+	 * @author Ian Copland
 	 *
 	 * @return the unique Android ID or an empty string.
 	*/
@@ -377,7 +377,7 @@ public class CoreNativeInterface extends INativeInterface
 	/**
 	 * Terminate the activity and the app
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
     public void forceQuit()
     {

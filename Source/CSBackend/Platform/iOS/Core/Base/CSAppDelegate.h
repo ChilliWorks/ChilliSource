@@ -54,7 +54,7 @@
     NSMutableArray* subdelegates;
 }
 //--------------------------------------------------------------------
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @return The view controller instance.
 //--------------------------------------------------------------------

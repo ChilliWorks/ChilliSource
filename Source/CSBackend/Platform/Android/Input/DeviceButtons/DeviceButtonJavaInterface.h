@@ -44,7 +44,7 @@ namespace CSBackend
 		/// Provides access to information about Device Buttons on the
 		/// java side of the engine.
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//----------------------------------------------------------------
 		class DeviceButtonJavaInterface : public IJavaInterface
 		{
@@ -54,7 +54,7 @@ namespace CSBackend
 			/// A delegate called when the java side of the
 			/// engine receives a device button pressed event.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param An integer representing the button
 			/// pressed.
@@ -63,14 +63,14 @@ namespace CSBackend
 			//-----------------------------------------------
 			/// Constructor
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------
 			DeviceButtonJavaInterface();
             //----------------------------------------------------
 			/// Queries whether or not this implements the interface
 			/// with the given ID.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The interface Id.
             ///
@@ -78,7 +78,7 @@ namespace CSBackend
 			//----------------------------------------------------
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const;
 			//-----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The delegate that will be called when
 			/// a device button triggered event is received.
@@ -89,7 +89,7 @@ namespace CSBackend
 			/// is received. This is for internal use and
 			/// should not be called manually by the user.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param An integer representing the button
 			/// triggered.

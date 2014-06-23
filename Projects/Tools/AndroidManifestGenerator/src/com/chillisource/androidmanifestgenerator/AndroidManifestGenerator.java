@@ -45,7 +45,7 @@ import com.taggames.toolutils.SCLogger;
  * for building Chilli Source as well as the extra settings requested
  * by the user.
  * 
- * @author I Copland
+ * @author Ian Copland
  */
 public final class AndroidManifestGenerator
 {
@@ -53,7 +53,7 @@ public final class AndroidManifestGenerator
 	 * Generates the android manifest from the Chilli Source template
 	 * and the applications CS manifest.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The user manifest file path.
 	 * @param The template manifest file path.
@@ -69,7 +69,7 @@ public final class AndroidManifestGenerator
 	/**
 	 * Reads the user manifest from file.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The file path to the user manifest.
 	 * 
@@ -149,7 +149,7 @@ public final class AndroidManifestGenerator
 	/**
 	 * Reads the template from file.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The template file path.
 	 * 
@@ -169,7 +169,7 @@ public final class AndroidManifestGenerator
 	/**
 	 * Applies the user data to the template file.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The user data.
 	 * @param The template.
@@ -194,7 +194,7 @@ public final class AndroidManifestGenerator
 	/**
 	 * Writes the output data to disk.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The output file path.
 	 * @param The output data.
@@ -212,7 +212,7 @@ public final class AndroidManifestGenerator
 	 * Searches through an xml string for the given xml tag and returns it's
 	 * content, including other tags, as a string.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The xml string.
 	 * @param The element name.

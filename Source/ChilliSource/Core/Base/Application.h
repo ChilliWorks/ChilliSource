@@ -67,7 +67,7 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// Returns the global application instance.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The application instance pointer.
 			//----------------------------------------------------
@@ -82,7 +82,7 @@ namespace ChilliSource
             /// Creates a new instance of the given system and
             /// adds it to the application.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The arguments to the system constructor.
             ///
@@ -93,7 +93,7 @@ namespace ChilliSource
 			/// Looks for a system that implements the queryable
             /// interface provided as a template parameter.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @return The first system found that implements
             /// the named interface.
@@ -103,7 +103,7 @@ namespace ChilliSource
 			/// Looks for a all systems that implement the given
             /// queryable interface provided as a template parameter.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param [Out] The list of systems that implement the
             /// queryable interface.
@@ -174,7 +174,7 @@ namespace ChilliSource
 			/// Sets a multiplier for slowing or speeding up the
             /// delta time passed to each system and state.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param Scaler to speed up or slow down update time.
 			//-----------------------------------------------------
@@ -221,7 +221,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Returns a pointer to the file system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @return Pointer to the file system
 			//-----------------------------------------------------
@@ -252,7 +252,7 @@ namespace ChilliSource
                 return m_resourcePool;
             }
             //-----------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @return A pointer to the App Config.
 			//-----------------------------------------------------
@@ -261,7 +261,7 @@ namespace ChilliSource
                 return m_appConfig;
             }
             //-----------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @return A pointer to the screen.
 			//-----------------------------------------------------
@@ -275,7 +275,7 @@ namespace ChilliSource
             /// is only available when the debug stats proprocessor
             /// flag CS_ENABLE_DEBUGSTATS is defined.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @return Pointer to the debug stats system.
 			//-----------------------------------------------------
@@ -288,7 +288,7 @@ namespace ChilliSource
 			/// Initialises the application and kicks off the update
             /// loop. This should not be called by a users application.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
 			void Init();
             //----------------------------------------------------
@@ -354,7 +354,7 @@ namespace ChilliSource
             /// application. This should not be called by a users
             /// application.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
 			void Destroy();
             //------------------------------------------------------
@@ -375,7 +375,7 @@ namespace ChilliSource
             /// been set up and before the first state is pushed.
             /// Application initialisation code should be in here.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//------------------------------------------------------
 			virtual void OnInit() = 0;
             //------------------------------------------------------
@@ -391,7 +391,7 @@ namespace ChilliSource
             /// and states are released. Application destruction
             /// code should be in here.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//------------------------------------------------------
 			virtual void OnDestroy() = 0;
         private:

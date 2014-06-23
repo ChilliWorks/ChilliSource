@@ -43,7 +43,7 @@ namespace ChilliSource
 		/// would not be used directly instead the f32 typedef Matrix3 
 		/// should be used.
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//---------------------------------------------------------------
 		template <typename TType> class GenericMatrix3 final
 		{
@@ -55,7 +55,7 @@ namespace ChilliSource
 			//------------------------------------------------------
 			/// Creates a translation matrix.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the translation.
 			///
@@ -65,7 +65,7 @@ namespace ChilliSource
             //------------------------------------------------------
 			/// Creates a translation matrix.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the x translation.
             /// @param the y translation.
@@ -76,7 +76,7 @@ namespace ChilliSource
 			//------------------------------------------------------
 			/// Creates a scale matrix.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the scale.
 			///
@@ -86,7 +86,7 @@ namespace ChilliSource
             //------------------------------------------------------
 			/// Creates a scale matrix.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the x scale.
 			/// @param the y scale.
@@ -97,7 +97,7 @@ namespace ChilliSource
 			//------------------------------------------------------
 			/// Creates a rotation matrix.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the rotation.
 			///
@@ -118,7 +118,7 @@ namespace ChilliSource
 			//------------------------------------------------------
 			static GenericMatrix3<TType> CreateTransform(const GenericVector2<TType>& in_translation, const GenericVector2<TType>& in_scale, TType in_angle);
 			//------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param A matrix.
 			///
@@ -126,7 +126,7 @@ namespace ChilliSource
 			//------------------------------------------------------
 			static GenericMatrix3<TType> Transpose(const GenericMatrix3<TType>& in_matrix);
 			//------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param A matrix.
 			///
@@ -134,7 +134,7 @@ namespace ChilliSource
 			//------------------------------------------------------
 			static GenericMatrix3<TType> Inverse(const GenericMatrix3<TType>& in_matrix);
             //-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param A matrix.
             /// @param A translation vector.
@@ -144,7 +144,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static GenericMatrix3<TType> Translate(const GenericMatrix3<TType>& in_matrix, const GenericVector2<TType>& in_translation);
             //-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param A matrix.
             /// @param The x translation.
@@ -155,7 +155,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static GenericMatrix3<TType> Translate(const GenericMatrix3<TType>& in_matrix, TType in_x, TType in_y);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param A matrix.
             /// @param A scale vector.
@@ -165,7 +165,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static GenericMatrix3<TType> Scale(const GenericMatrix3<TType>& in_matrix, const GenericVector2<TType>& in_scale);
             //-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param A matrix.
             /// @param The x scale.
@@ -176,7 +176,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static GenericMatrix3<TType> Scale(const GenericMatrix3<TType>& in_matrix, TType in_x, TType in_y);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param A matrix.
             /// @param A rotation.
@@ -189,19 +189,19 @@ namespace ChilliSource
 			/// Constructor. Sets the contents to the identity
 			/// matrix.
 			///
-			/// @author I Copland.
+			/// @author Ian Copland.
 			//-----------------------------------------------------
 			GenericMatrix3();
 			//-----------------------------------------------------
 			/// Constructor
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The matrix elements in row major format.
 			//-----------------------------------------------------
 			GenericMatrix3(TType in_a0, TType in_a1, TType in_a2, TType in_b0, TType in_b1, TType in_b2, TType in_c0, TType in_c1, TType in_c2);
 			//------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The determinant of this matrix.
 			//------------------------------------------------------
@@ -215,25 +215,25 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Sets this matrix to the identity matrix.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------------
 			void Identity();
 			//-----------------------------------------------------
 			/// Sets this matrix to its transpose.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------------
 			void Transpose();
 			//------------------------------------------------------
 			/// Sets this matrix to its inverse.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//------------------------------------------------------
 			void Inverse();
 			//-----------------------------------------------------
 			/// Translates this matrix.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the translation vector.
 			//-----------------------------------------------------
@@ -241,7 +241,7 @@ namespace ChilliSource
             //-----------------------------------------------------
 			/// Translates this matrix.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the x translation.
 			/// @param the y translation.
@@ -250,7 +250,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Scales this matrix.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the scale vector.
 			//-----------------------------------------------------
@@ -258,7 +258,7 @@ namespace ChilliSource
             //-----------------------------------------------------
 			/// Scales this matrix.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the x scale.
 			/// @param the y scale.
@@ -267,13 +267,13 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Rotates the matrix.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the rotation.
 			//-----------------------------------------------------
 			void Rotate(TType in_angle);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The row index.
 			/// @param The column index.
@@ -284,7 +284,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			TType& operator()(u32 in_row, u32 in_column);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The row index.
 			/// @param The column index.
@@ -295,7 +295,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			TType operator()(u32 in_row, u32 in_column) const;
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Another matrix.
 			///
@@ -304,7 +304,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			GenericMatrix3<TType>& operator+=(const GenericMatrix3<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Another matrix.
 			///
@@ -313,7 +313,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			GenericMatrix3<TType>& operator-=(const GenericMatrix3<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Another matrix.
 			///
@@ -322,7 +322,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			GenericMatrix3<TType>& operator*=(const GenericMatrix3<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param A scalar
 			///
@@ -331,7 +331,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			GenericMatrix3<TType>& operator*=(TType in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param A scalar
 			///
@@ -343,7 +343,7 @@ namespace ChilliSource
 			TType m[9];
 		};
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Matrix A
 		/// @param Matrix B
@@ -353,7 +353,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericMatrix3<TType> operator+(GenericMatrix3<TType> in_a, const GenericMatrix3<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Matrix A
 		/// @param Matrix B
@@ -363,7 +363,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericMatrix3<TType> operator-(GenericMatrix3<TType> in_a, const GenericMatrix3<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Matrix A
 		/// @param Matrix B
@@ -372,7 +372,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericMatrix3<TType> operator*(const GenericMatrix3<TType>& in_a, const GenericMatrix3<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Matrix A
 		/// @param Scalar B
@@ -381,7 +381,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericMatrix3<TType> operator*(GenericMatrix3<TType> in_a, TType in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Scalar A
 		/// @param Matrix B
@@ -390,7 +390,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericMatrix3<TType> operator*(TType in_a, GenericMatrix3<TType> in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Matrix A
 		/// @param Scalar B
@@ -399,7 +399,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericMatrix3<TType> operator/(GenericMatrix3<TType> in_a, TType in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Matrix A
 		/// @param Matrix B
@@ -408,7 +408,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> bool operator==(const GenericMatrix3<TType>& in_a, const GenericMatrix3<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Matrix A
 		/// @param Matrix B

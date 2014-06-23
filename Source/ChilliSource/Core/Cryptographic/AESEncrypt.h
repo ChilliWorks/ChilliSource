@@ -56,14 +56,14 @@ namespace ChilliSource
 				/// Default constructor. This needs to explicitly declared on
 				/// windows.
 				///
-				/// @author I Copland
+				/// @author Ian Copland
 				//---------------------------------------------------------
 				Data() = default;
 				//---------------------------------------------------------
 				/// Move constructor. This needs to explicitly declared on
 				/// windows.
 				///
-				/// @author I Copland
+				/// @author Ian Copland
 				///
 				/// @param The object to move.
 				//---------------------------------------------------------
@@ -72,7 +72,7 @@ namespace ChilliSource
 				/// Move assignment operator. This needs to explicitly 
 				/// declared on  windows.
 				///
-				/// @author I Copland
+				/// @author Ian Copland
 				///
 				/// @param The object to move.
 				///
@@ -123,7 +123,7 @@ namespace ChilliSource
             //---------------------------------------------------
             /// Encrypts the string with the given private key.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The string to encrypt.
             /// @param The private key.
@@ -135,7 +135,7 @@ namespace ChilliSource
             //---------------------------------------------------
             /// Decrypts the string with the given private key.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The encrypted data.
             /// @param The encrpyted data size. Data size must be

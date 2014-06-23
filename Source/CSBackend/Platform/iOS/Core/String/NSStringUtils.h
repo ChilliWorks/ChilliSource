@@ -1,7 +1,7 @@
 //
 //  NSStringUtils.h
 //  Chilli Source
-//  Created by I Copland on 04/04/2014.
+//  Created by Ian Copland on 04/04/2014.
 //
 //  The MIT License (MIT)
 //
@@ -40,7 +40,7 @@
 /// A collection of functions for working with NSStrings on iOS,
 /// for example functions for converting to and from std::string.
 ///
-/// @author I Copland
+/// @author Ian Copland
 //------------------------------------------------------------------
 @interface NSStringUtils : NSObject 
 {

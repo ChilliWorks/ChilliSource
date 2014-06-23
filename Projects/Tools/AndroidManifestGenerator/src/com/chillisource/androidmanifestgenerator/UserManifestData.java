@@ -31,7 +31,7 @@ package com.chillisource.androidmanifestgenerator;
 /**
  * A container for the data in the user manifest.
  * 
- * @author I Copland
+ * @author Ian Copland
  */
 public final class UserManifestData
 {

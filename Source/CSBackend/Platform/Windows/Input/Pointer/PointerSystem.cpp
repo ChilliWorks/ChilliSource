@@ -46,7 +46,7 @@ namespace CSBackend
 			PointerSystem* g_pointerSystem = nullptr;
 
 			//------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The current mouse position.
 			//------------------------------------------------
@@ -60,7 +60,7 @@ namespace CSBackend
 				return CSCore::Vector2((f32)x, (f32)y);
 			}
 			//------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The button ID.
 			///

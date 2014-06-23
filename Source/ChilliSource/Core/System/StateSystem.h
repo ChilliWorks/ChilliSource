@@ -41,7 +41,7 @@ namespace ChilliSource
         /// at the same time as the state that owns it and lives
         /// for the same length of time.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //-------------------------------------------------------
         class StateSystem : public QueryableInterface
         {
@@ -50,7 +50,7 @@ namespace ChilliSource
             //------------------------------------------------
             /// Destructor
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual ~StateSystem() {};
         protected:
@@ -59,7 +59,7 @@ namespace ChilliSource
             //------------------------------------------------
             /// Default constructor.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             StateSystem() = default;
             //------------------------------------------------
@@ -68,7 +68,7 @@ namespace ChilliSource
             /// initialisation occurs in the order they were
             /// created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnInit() {};
             //------------------------------------------------
@@ -78,7 +78,7 @@ namespace ChilliSource
             /// On Start(). System resume is called in the
             /// order that the systems were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnResume() {};
             //------------------------------------------------
@@ -88,7 +88,7 @@ namespace ChilliSource
             /// On Resume. System foregrounded is called in the
             /// order the systems were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnForeground() {};
             //------------------------------------------------
@@ -97,7 +97,7 @@ namespace ChilliSource
             /// Systems update is called in the order the
             /// systems where created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The delta time.
             //------------------------------------------------
@@ -109,7 +109,7 @@ namespace ChilliSource
             /// update is called in the order the systems where
             /// created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnFixedUpdate(f32 in_deltaTime) {};
             //------------------------------------------------
@@ -120,7 +120,7 @@ namespace ChilliSource
             /// backgrounded is called in the reverse order
             /// to which they were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnBackground() {};
             //------------------------------------------------
@@ -130,7 +130,7 @@ namespace ChilliSource
             /// suspend is called in the reverse order to
             /// which they were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnSuspend() {};
             //------------------------------------------------
@@ -140,7 +140,7 @@ namespace ChilliSource
             /// occurs in the reverse order to which they
             /// were created
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnDestroy() {};
             //------------------------------------------------
@@ -149,11 +149,11 @@ namespace ChilliSource
             /// should be used to clean up any non-essensial
             /// memory.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnMemoryWarning() {};
             //------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return returns the state that owns this state
             /// system.
@@ -161,7 +161,7 @@ namespace ChilliSource
             State* GetState() const;
         private:
             //------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param the state that owns this state system.
             //------------------------------------------------

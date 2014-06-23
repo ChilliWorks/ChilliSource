@@ -79,13 +79,13 @@ public class VideoPlayerNativeInterface extends INativeInterface
 	//--------------------------------------------------------------
 	/// Called when the video is complete.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	//--------------------------------------------------------------
 	public native void OnVideoComplete();
 	//--------------------------------------------------------------
 	/// Called every frame in a video that has subtitles.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	//--------------------------------------------------------------
 	public native void OnUpdateSubtitles();
 	//--------------------------------------------------------------

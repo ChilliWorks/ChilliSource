@@ -67,7 +67,7 @@ namespace CSBackend
 			/// Converts the integer result returned from java to the
 			/// Result enum.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The result integer.
 			///

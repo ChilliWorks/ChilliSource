@@ -2,7 +2,7 @@
 //  GooglePlayExpansionSystem.h
 //  Chilli Source
 //
-//  Created by I Copland on 09/04/2014.
+//  Created by Ian Copland on 09/04/2014.
 //  Copyright (c) 2014 Tag Games. All rights reserved.
 //
 

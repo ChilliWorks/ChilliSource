@@ -48,7 +48,7 @@ namespace CSBackend
 			/// An enum describing the possible results from presenting the
 			/// email composer.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//--------------------------------------------------------------
 			enum class Result
 			{

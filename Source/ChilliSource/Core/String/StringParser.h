@@ -223,7 +223,7 @@ namespace ChilliSource
         ///
         /// Note that the format strings are not case sensitive.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         ///
         /// @param The string.
         ///

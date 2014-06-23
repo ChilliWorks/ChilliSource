@@ -122,7 +122,7 @@
 /// Applies the surface format described in the App.config file
 /// to the given view.
 ///
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @param The view to apply the format to.
 /// @param App config JSON

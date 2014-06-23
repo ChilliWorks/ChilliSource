@@ -42,7 +42,7 @@ namespace ChilliSource
         /// directory. Settings include things like the displayable name
         /// of the project and the preferred FPS.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //---------------------------------------------------------------
         class AppConfig final : public AppSystem
         {
@@ -52,7 +52,7 @@ namespace ChilliSource
             /// Allows querying of whether or not the system implements
             /// the interface with the associated interface Id.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The interface Id.
             ///
@@ -60,7 +60,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             bool IsA(InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The displayable name of the application. This
             /// is not necessarily the name of the app displayed when
@@ -68,13 +68,13 @@ namespace ChilliSource
             //--------------------------------------------------------
             const std::string& GetDisplayableName() const;
             //---------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The preferred FPS.
             //--------------------------------------------------------
             u32 GetPreferredFPS() const;
             //---------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The preferred surface format.
             //--------------------------------------------------------
@@ -85,7 +85,7 @@ namespace ChilliSource
             /// Factory method for creating a new instance of the class.
             /// This will be called by CreateSystem() in Application.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return New instance of the system.
             //---------------------------------------------------------
@@ -94,13 +94,13 @@ namespace ChilliSource
             /// Constructor. Declared private to force the use of the
             /// factory method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------
             AppConfig();
             //---------------------------------------------------------
             /// Reads the contents of the app config from file.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------
             void Load();
             

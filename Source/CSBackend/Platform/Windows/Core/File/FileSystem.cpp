@@ -2,7 +2,7 @@
 //  FileSystem.cpp
 //  Chilli Source
 //
-//  Created by I Copland on 25/03/2011.
+//  Created by Ian Copland on 25/03/2011.
 //  Copyright 2011 Tag Games Ltd. All rights reserved.
 //
 
@@ -37,7 +37,7 @@ namespace CSBackend
 			const std::string k_dlcPath = "DLC/";
 
 			//--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return whether or not the given file mode is a write mode
 			//--------------------------------------------------------------
@@ -60,7 +60,7 @@ namespace CSBackend
 				}
 			}
 			//--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The file path.
 			///
@@ -73,7 +73,7 @@ namespace CSBackend
 				return (attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY));
 			}
 			//--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The directory path.
 			///
@@ -86,7 +86,7 @@ namespace CSBackend
 				return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
 			}
 			//--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The directory path.
 			///
@@ -147,7 +147,7 @@ namespace CSBackend
 			/// Lists all files and sub-directories inside the given directory.
 			/// All paths will be relative to the given directory.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The directory.
 			/// @param Whether or not to recurse into sub directories.

@@ -79,7 +79,7 @@ namespace CSBackend
             //--------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The storage location of the video.
             /// @param The video file name.
@@ -99,7 +99,7 @@ namespace CSBackend
 			//-------------------------------------------------------
 			f32 GetCurrentTime() const;
             //-------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return the actual dimensions of the playing video.
             //-------------------------------------------------------
@@ -116,20 +116,20 @@ namespace CSBackend
             //--------------------------------------------------------
             /// Called when the owning state is initialised.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------
             void OnInit() override;
             //--------------------------------------------------------
             /// Called when the application is resumed. if a video was
             /// playing when suspend was called, it will be resumed.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------
             void OnResume() override;
             //--------------------------------------------------------
             /// Called when the video is tapped.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------
             void OnTapped();
             //--------------------------------------------------------
@@ -180,7 +180,7 @@ namespace CSBackend
             /// Deregister with the notification centre for the relevant
             /// MPMoviePlayer notifications for starting and stopping
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------
             void StopListeningForMoviePlayerNotifications();
             //--------------------------------------------------------
@@ -200,7 +200,7 @@ namespace CSBackend
             //--------------------------------------------------------
             /// Called when the owning state is destroyed.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------
             void OnDestroy() override;
             

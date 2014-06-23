@@ -25,7 +25,7 @@ namespace CSBackend
 		/// urls and managing the lifetime of the requests and the connections. Uses the Java
 		/// HttpUrlConnection library
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//--------------------------------------------------------------------------------------------------
 		class HttpRequestSystem final : public CSNetworking::HttpRequestSystem
 		{
@@ -34,7 +34,7 @@ namespace CSBackend
 			CS_DECLARE_NAMEDTYPE(HttpRequestSystem);
 
 			//--------------------------------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Interface ID
             ///
@@ -51,7 +51,7 @@ namespace CSBackend
             //--------------------------------------------------------------------------------------------------
             /// Causes the system to issue a request with the given details.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param A descriptor detailing the request params
 			/// @param A function to call when the request is completed. Note that the request can be completed with failure as well as success.
@@ -62,13 +62,13 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------------------
             /// Equivalent to calling cancel on every incomplete request in progress.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------------------------------------------------
             void CancelAllRequests() override;
             //--------------------------------------------------------------------------------------------------
             /// Checks if the device is internet ready
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Success if net available
             //--------------------------------------------------------------------------------------------------
@@ -79,13 +79,13 @@ namespace CSBackend
             //--------------------------------------------------------------------------------------------------
             /// Private constructor to fore use of factory method
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------------------------------------------------
             HttpRequestSystem() = default;
 			//--------------------------------------------------------------------------------------------------
             /// Poll the connection on active requests
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param Time since last update in seconds
 			//--------------------------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ namespace CSBackend
             //--------------------------------------------------------------------------------------------------
             /// Called when the system is destroyed. Cancels all pending requests
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//--------------------------------------------------------------------------------------------------
             void OnDestroy() override;
 

@@ -31,11 +31,11 @@ namespace CSBackend
 			//-----------------------------------------------
 			/// Constructor
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------
 			DialogueBoxJavaInterface();
 			//-----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return whether or not this object implements
 			/// the given interface.
@@ -44,7 +44,7 @@ namespace CSBackend
             //-----------------------------------------------
             /// Display the systems confirmation dialog
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param ID that is returned in pressed delegate
             /// @param Title text (UTF-8)
@@ -56,7 +56,7 @@ namespace CSBackend
             //-----------------------------------------------
             /// Display the systems confirmation dialog
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param ID that is returned in pressed delegate
             /// @param Title text (UTF-8)
@@ -67,7 +67,7 @@ namespace CSBackend
             //-----------------------------------------------
             /// Display a toast notification with the given text
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Text (UTF-8)
             //-----------------------------------------------
