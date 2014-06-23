@@ -26,7 +26,7 @@ public class Logging
 	}
 
 	public static String k_paramLoggingLevel = "--logginglevel";
-	public static String k_paramLoggingLevelShort = "--ll";
+	public static String k_paramLoggingLevelShort = "-ll";
 	public static String k_loggingLevelNone = "none";
 	public static String k_loggingLevelFatal = "fatal";
 	public static String k_loggingLevelError = "error";
