@@ -98,15 +98,15 @@ namespace ChilliSource
                 /// @param Min exclusive
                 /// @param Max exclusive
                 //--------------------------------------------------------------
-                RangeRule(const std::string& in_name, u32 in_minExclusive, u32 in_maxInclusive)
+                RangeRule(const std::string& in_name, f32 in_minExclusive, f32 in_maxInclusive)
                 : m_name(in_name), m_minExclusive(in_minExclusive), m_maxInclusive(in_maxInclusive)
                 {
                     
                 }
                 std::string m_name;
                 
-                u32 m_minExclusive = 0;
-                u32 m_maxInclusive = 0;
+                f32 m_minExclusive = 0;
+                f32 m_maxInclusive = 0;
             };
             //--------------------------------------------------------------
             /// @author S Downie
