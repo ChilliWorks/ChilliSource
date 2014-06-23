@@ -66,6 +66,8 @@ public class FileUtils
 	/**
 	 * Write a byte array to file.
 	 * 
+	 * @author Ian Copland
+	 * 
 	 * @param The filename.
 	 * @param The data to be written to file.
 	 * @return Whether or not the file was successfully written.
@@ -104,8 +106,11 @@ public class FileUtils
 	/**
 	 * Copies a file from one location to another.
 	 * 
+	 * @author Ian Copland
+	 * 
 	 * @param the input filename.
 	 * @param the output filename.
+	 * 
 	 * @return whether or not this was successful.
 	 */
 	public static boolean copyFile(String instrInputFilepath, String instrOutputFilepath)
@@ -133,16 +138,17 @@ public class FileUtils
 		
 		return true;
 	}
-	//----------------------------------------------------------------
-	/// Copy Directory
-	///
-	/// Copies a directory from one location to another
-	///
-	/// @param the input directory.
-	/// @param the output directory.
-	/// @param whether or not to ignore dot directories and files.
-	/// @return whether or not this was successful.
-	//----------------------------------------------------------------
+	/**
+	 * Copies a directory from one location to another.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param the input directory.
+	 * @param the output directory.
+	 * @param whether or not to ignore dot directories and files.
+	 * 
+	 * @return whether or not this was successful.
+	 */
 	public static boolean copyDirectory(String instrInputDirectory, String instrOutputDirectory, LinkedList<String> inastrIgnores)
 	{
 		try
@@ -194,31 +200,29 @@ public class FileUtils
 		
 		return true;
 	}
-	//----------------------------------------------------------------
-	/// Delete File
-	///
-	/// Deletes a file
-	///
-	/// @param the filename.
-	/// @return whether or not this was successful.
-	//----------------------------------------------------------------
+	/**
+	 * Deletes a file.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param the filename.
+	 * 
+	 * @return whether or not this was successful.
+	 */
 	public static boolean deleteFile(String instrFilePath)
 	{
-		File f = new File(instrFilePath);
-		
-		if(!f.exists() || !f.isFile())
-			return false;
-		
-		return f.delete();
+		File file = new File(instrFilePath);
+		return deleteFile(file);
 	}
-	//----------------------------------------------------------------
-	/// Delete File
-	///
-	/// Deletes a file
-	///
-	/// @param the file to delete.
-	/// @return whether or not this was successful.
-	//----------------------------------------------------------------
+	/**
+	 * Deletes a file.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param the file.
+	 * 
+	 * @return whether or not this was successful.
+	 */
 	public static boolean deleteFile(File inFile)
 	{
 		if(!inFile.exists() || !inFile.isFile())
@@ -226,16 +230,16 @@ public class FileUtils
 		
 		return inFile.delete();
 	}
-	//----------------------------------------------------------------
-	/// Create Directory
-	///
-	/// Recursively creates directories.
-	///
-	/// @param The directory to create
-	/// @return Whether or not this was successful. Failure to create
-	///			the directory because it already exists counts as
-	///			success.
-	//----------------------------------------------------------------
+	/**
+	 * Recursively creates directories.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param The directory to create
+	 * 
+	 * @return Whether or not this was successful. Failure to create the directory 
+	 * because it already exists counts as success.
+	 */
 	public static boolean createDirectory(String instrDirectory)
 	{
 		//break the path onto sections.
@@ -260,16 +264,14 @@ public class FileUtils
 		
 		return true;
 	}
-	//----------------------------------------------------------------
-	/// Delete Directory
-	///
-	/// Deletes a directory and all its contents.
-	///
-	/// @param The directory to delete.
-	/// @return Whether or not this was successful. Failure to delete
-	///			the directory because it does not exist counts as
-	///			success.
-	//----------------------------------------------------------------
+	/**
+	 * Deletes a directory and all its contents.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param The directory to delete.
+	 * @return Whether or not this was successful. Failure to delete the directory because it does not exist counts as success.
+	 */
 	public static boolean deleteDirectory(String instrDirectory)
 	{
 		File directory = new File(instrDirectory);
@@ -299,128 +301,52 @@ public class FileUtils
 		}
 		return directory.delete();
 	}
-	//----------------------------------------------------------------
-	/// Get Filenames In Directory
-	///
-	/// returns all the filenames in the given directory.
-	///
-	/// @param the directory name.
-	/// @param the list of files.
-	//----------------------------------------------------------------
-	static public String[] getFilenamesInDirectory(String instrDirectory)
+	/**
+	 * Returns all the file paths in the given directory.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param the directory path.
+	 * 
+	 * @return the list of file paths.
+	 */
+	static public String[] getFilePaths(String instrDirectory)
 	{
 		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
-		String[] astrFilenames = getFullFilenamesInDirectory(strDirectory);
+		String[] astrFilenames = getFullFilePaths(strDirectory);
 		
 		for (int i = 0; i < astrFilenames.length; ++i)
 			astrFilenames[i] = astrFilenames[i].substring(strDirectory.length());
 		
 		return astrFilenames;
 	}
-	//----------------------------------------------------------------
-	/// Get Full Filenames In Directory
-	///
-	/// returns all the filenames in the given directory. Files names
-	/// include the input directory.
-	///
-	/// @param the directory name.
-	/// @param the list of files.
-	//----------------------------------------------------------------
-	static public String[] getFullFilenamesInDirectory(String instrDirectory)
-	{
-		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
-		ArrayList<String> astrFilenames = new ArrayList<String>();
-		
-		File directory = new File(strDirectory);
-		if (!directory.exists() || !directory.isDirectory())
-			return new String[0];
-		
-		String[] astrList = directory.list();
-		if (astrList != null) 
-		{
-			for (int i = 0; i < astrList.length; i++) 
-			{
-				File entry = new File(directory, astrList[i]);
-				if (entry.isDirectory())
-				{
-					String[] astrMoreFilenames = getFullFilenamesInDirectory(entry.getPath());
-					astrFilenames.addAll(Arrays.asList(astrMoreFilenames));
-				}
-				else
-				{
-					astrFilenames.add(entry.getPath());
-				}
-			}
-		}
-		
-		String[] astrOutput = new String[astrFilenames.size()];
-		astrFilenames.toArray(astrOutput);
-		return astrOutput;
-	}
-	//----------------------------------------------------------------
-	/// Get Directories In Directory
-	///
-	/// returns all the directories in the given directory.
-	///
-	/// @param the directory name.
-	/// @param the list of directories.
-	//----------------------------------------------------------------
+	/**
+	 * Returns all the directory paths in the given directory.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param the directory path.
+	 * 
+	 * @return the list of directory paths.
+	 */
 	static public String[] getDirectoriesInDirectory(String instrDirectory)
 	{
 		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
-		String[] astrDirectories = getFullDirectoriesInDirectory(strDirectory);
+		String[] astrDirectories = getFullDirectoryPaths(strDirectory);
 		
 		for (int i = 0; i < astrDirectories.length; ++i)
 			astrDirectories[i] = astrDirectories[i].substring(strDirectory.length());
 		
 		return astrDirectories;
 	}
-	//----------------------------------------------------------------
-	/// Get Full Directories In Directory
-	///
-	/// returns all the directories in the given directory. directory names
-	/// include the input directory.
-	///
-	/// @param the directory name.
-	/// @param the list of files.
-	//----------------------------------------------------------------
-	static public String[] getFullDirectoriesInDirectory(String instrDirectory)
-	{
-		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
-		ArrayList<String> astrDirectories = new ArrayList<String>();
-		
-		File directory = new File(strDirectory);
-		if (!directory.exists() || !directory.isDirectory())
-			return new String[0];
-		
-		String[] astrList = directory.list();
-		if (astrList != null) 
-		{
-			for (int i = 0; i < astrList.length; i++) 
-			{
-				File entry = new File(directory, astrList[i]);
-				if (entry.isDirectory())
-				{
-					astrDirectories.add(entry.getPath());
-					String[] astrMoreDirectories = getFullDirectoriesInDirectory(entry.getPath());
-					astrDirectories.addAll(Arrays.asList(astrMoreDirectories));
-				}
-			}
-		}
-		
-		String[] astrOutput = new String[astrDirectories.size()];
-		astrDirectories.toArray(astrOutput);
-		return astrOutput;
-	}
-	//----------------------------------------------------------------
-	/// Calculate File Checksum
-	///
-	/// calculates the checksum for the file at the given path.
-	///
-	/// @param the filename.
-	/// @return the checksum.
-	//----------------------------------------------------------------
-	static public String calculateFileChecksum(String instrFilename)
+	/**
+	 * Calculates the MD5 checksum for the file at the given path.
+	 * 
+	 * @param The filename.
+	 * 
+	 * @return The MD5 Checksum.
+	 */
+	static public String calculateFileChecksumMD5(String instrFilename)
 	{
 		String strChecksum = "";
 		
@@ -457,11 +383,11 @@ public class FileUtils
 		
 		return strChecksum;
 	}
-	//----------------------------------------------------------------
-	/// Get Path To Here
-	///
-	/// @return the full path to the jar files location.
-	//----------------------------------------------------------------
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return the full path to the jar files location.
+	 */
 	static public String getPathToHere()
 	{
 		String strPathToHere = "";
@@ -477,5 +403,84 @@ public class FileUtils
 			Logging.logError("Failed to get path to here.");
 		}
 		return strPathToHere;
+	}
+	/**
+	 * Returns all the filenames in the given directory. Files names include 
+	 * the input directory.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param the directory path.
+	 * 
+	 * @return the list of file paths.
+	 */
+	private static String[] getFullFilePaths(String instrDirectory)
+	{
+		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
+		ArrayList<String> astrFilenames = new ArrayList<String>();
+		
+		File directory = new File(strDirectory);
+		if (!directory.exists() || !directory.isDirectory())
+			return new String[0];
+		
+		String[] astrList = directory.list();
+		if (astrList != null) 
+		{
+			for (int i = 0; i < astrList.length; i++) 
+			{
+				File entry = new File(directory, astrList[i]);
+				if (entry.isDirectory())
+				{
+					String[] astrMoreFilenames = getFullFilePaths(entry.getPath());
+					astrFilenames.addAll(Arrays.asList(astrMoreFilenames));
+				}
+				else
+				{
+					astrFilenames.add(entry.getPath());
+				}
+			}
+		}
+		
+		String[] astrOutput = new String[astrFilenames.size()];
+		astrFilenames.toArray(astrOutput);
+		return astrOutput;
+	}
+	/**
+	 * Returns all the directory paths in the given directory. directory paths
+	 * include the input directory.
+	 * 
+	 * @author I Copland
+	 * 
+	 * @param the directory path.
+	 * 
+	 * @return the list of directory paths.
+	 */
+	private static String[] getFullDirectoryPaths(String instrDirectory)
+	{
+		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
+		ArrayList<String> astrDirectories = new ArrayList<String>();
+		
+		File directory = new File(strDirectory);
+		if (!directory.exists() || !directory.isDirectory())
+			return new String[0];
+		
+		String[] astrList = directory.list();
+		if (astrList != null) 
+		{
+			for (int i = 0; i < astrList.length; i++) 
+			{
+				File entry = new File(directory, astrList[i]);
+				if (entry.isDirectory())
+				{
+					astrDirectories.add(entry.getPath());
+					String[] astrMoreDirectories = getFullDirectoryPaths(entry.getPath());
+					astrDirectories.addAll(Arrays.asList(astrMoreDirectories));
+				}
+			}
+		}
+		
+		String[] astrOutput = new String[astrDirectories.size()];
+		astrDirectories.toArray(astrOutput);
+		return astrOutput;
 	}
 }
