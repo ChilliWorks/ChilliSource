@@ -11,8 +11,8 @@ package com.taggames.colladaparser;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
-import com.taggames.toolutils.SCLogger;
 
 public class CLibraryControllersParser 
 {
@@ -123,7 +123,7 @@ public class CLibraryControllersParser
 		if (mCollada.mLibraryControllers != null)
 			mCollada.mLibraryControllers.put(mCurrentController.mstrId, mCurrentController);
 		else
-			SCLogger.LogFatalError("mLibraryControllers is null!");
+			Logging.logFatal("mLibraryControllers is null!");
 		
 		return false;
 	}
@@ -153,7 +153,7 @@ public class CLibraryControllersParser
 		if (mCurrentController != null)
 			mCurrentController.mSkin = newSkin;
 		else
-			SCLogger.LogFatalError("mCurrentController is null!");
+			Logging.logFatal("mCurrentController is null!");
 		
 		return false;
 	}
@@ -180,7 +180,7 @@ public class CLibraryControllersParser
 		if (mCurrentController != null && mCurrentController.mSkin != null)
 			mCurrentController.mSkin.mBindShapeMatrix = mCurrentBindShapeMatrix;
 		else
-			SCLogger.LogFatalError("mBindShapeMatrix is null!");
+			Logging.logFatal("mBindShapeMatrix is null!");
 		
 		return true;
 	}
@@ -224,7 +224,7 @@ public class CLibraryControllersParser
 		if (mCurrentController != null && mCurrentController.mSkin != null)
 			mCurrentController.mSkin.mSourceTable.put(mCurrentSource.mstrId, mCurrentSource);
 		else
-			SCLogger.LogFatalError("mCurrentController.mSkin is null!");
+			Logging.logFatal("mCurrentController.mSkin is null!");
 		
 		return false;
 	}
@@ -258,7 +258,7 @@ public class CLibraryControllersParser
 		if (mCurrentSource != null)
 			mCurrentSource.mFloatArray = mCurrentFloatArray;
 		else
-			SCLogger.LogFatalError("No available parent for float array!");
+			Logging.logFatal("No available parent for float array!");
 		
 		return true;
 	}
@@ -284,7 +284,7 @@ public class CLibraryControllersParser
 		}
 		else
 		{
-			SCLogger.LogFatalError("Incorrect number of values for 'float array'!");
+			Logging.logFatal("Incorrect number of values for 'float array'!");
 		}
 		
 		mCurrentFloatArray = null;
@@ -308,7 +308,7 @@ public class CLibraryControllersParser
 		if (mCurrentSource != null)
 			mCurrentSource.mNameArray = mCurrentNameArray;
 		else
-			SCLogger.LogFatalError("No available parent for name array!");
+			Logging.logFatal("No available parent for name array!");
 		
 		return true;
 	}
@@ -334,7 +334,7 @@ public class CLibraryControllersParser
 		}
 		else
 		{
-			SCLogger.LogFatalError("Incorrect number of values for 'name array'!");
+			Logging.logFatal("Incorrect number of values for 'name array'!");
 		}
 		
 		mCurrentNameArray = null;
@@ -352,7 +352,7 @@ public class CLibraryControllersParser
 		if (mCurrentController != null && mCurrentController.mSkin != null)
 			mCurrentController.mSkin.mJoints = mCurrentJoints;
 		else
-			SCLogger.LogFatalError("mCurrentController.mSkin is null!");
+			Logging.logFatal("mCurrentController.mSkin is null!");
 		
 		return true;
 	}
@@ -389,7 +389,7 @@ public class CLibraryControllersParser
 		else if (mCurrentVertexWeights != null)
 			mCurrentVertexWeights.mInputs.add(input);
 		else
-			SCLogger.LogFatalError("No available parent for 'input'!");
+			Logging.logFatal("No available parent for 'input'!");
 		
 		return false;
 
@@ -420,7 +420,7 @@ public class CLibraryControllersParser
 		if (mCurrentController != null && mCurrentController.mSkin != null)
 			mCurrentController.mSkin.mVertexWeights = mCurrentVertexWeights;
 		else
-			SCLogger.LogFatalError("mCurrentController.mSkin is null!");
+			Logging.logFatal("mCurrentController.mSkin is null!");
 		
 		return false;
 
@@ -452,7 +452,7 @@ public class CLibraryControllersParser
 		{
 			mCurrentVertexWeights.mVCount = mCurrentVCount;
 		}else
-			SCLogger.LogFatalError("No available parent for 'vcount'!");
+			Logging.logFatal("No available parent for 'vcount'!");
 		
 		return true;
 	}
@@ -496,7 +496,7 @@ public class CLibraryControllersParser
 		{
 			mCurrentVertexWeights.mV = mCurrentV;
 		}else
-			SCLogger.LogFatalError("No available parent for 'v'!");
+			Logging.logFatal("No available parent for 'v'!");
 		
 		return true;
 	}

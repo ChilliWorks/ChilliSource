@@ -1,12 +1,12 @@
 //
-//	CExternalProcess.java
-//	Toolchain Manager (Clash of Heroes)
+//	ExternalProcess.java
+//	Toolchain Manager
 //
 //	Created by Ian Copland on 07/09/2012
 //	Copyright (c) 2012 Tag Games Ltd. All rights reserved.
 //
 
-package com.taggames.toolutils;
+package com.chillisource.toolutils;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -18,7 +18,7 @@ import java.util.LinkedList;
 ///
 /// Runs external processes.
 //==================================================
-public class CExternalProcess 
+public class ExternalProcess 
 {
 	//------------------------------------------------------
 	/// Private member data
@@ -29,15 +29,15 @@ public class CExternalProcess
 	//----------------------------------------------
 	/// Constructor
 	//----------------------------------------------
-	public CExternalProcess()
+	public ExternalProcess()
 	{
 	}
 	//----------------------------------------------
 	/// Constructor
 	//----------------------------------------------
-	public CExternalProcess(LinkedList<String> inastrCommands)
+	public ExternalProcess(LinkedList<String> inastrCommands)
 	{
-		Run(inastrCommands);
+		run(inastrCommands);
 	}
 	//------------------------------------------------------
 	/// Run External Process
@@ -46,7 +46,7 @@ public class CExternalProcess
 	///
 	/// @param the process that owns the input stream.
 	//------------------------------------------------------
-	public void Run(LinkedList<String> inastrCommands)
+	public void run(LinkedList<String> inastrCommands)
 	{
 		try
 		{
@@ -56,14 +56,14 @@ public class CExternalProcess
 			{
 				@Override public void run() 
 				{
-					ReadInputStream(process);
+					readInputStream(process);
 				}
 			};
 			Runnable errorRunnable = new Runnable()
 			{
 				@Override public void run() 
 				{
-					ReadErrorStream(process);
+					readErrorStream(process);
 				}
 			};
 			Thread inputThread = new Thread(inputRunnable);
@@ -77,7 +77,7 @@ public class CExternalProcess
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogFatalError("Exception occurred while running external process: \n" + e.getStackTrace());
+			Logging.logFatal("Exception occurred while running external process: \n" + e.getStackTrace());
 		}
 	}
 	//------------------------------------------------------
@@ -85,7 +85,7 @@ public class CExternalProcess
 	///
 	/// @return all messages from the run application.
 	//------------------------------------------------------
-	public LinkedList<String> GetMessages()
+	public LinkedList<String> getMessages()
 	{
 		return mstrMessages;
 	}
@@ -94,7 +94,7 @@ public class CExternalProcess
 	///
 	/// @return all warnings from the run application.
 	//------------------------------------------------------
-	public LinkedList<String> GetWarnings()
+	public LinkedList<String> getWarnings()
 	{
 		return mstrWarnings;
 	}
@@ -103,7 +103,7 @@ public class CExternalProcess
 	///
 	/// @return all errors from the run application.
 	//------------------------------------------------------
-	public LinkedList<String> GetErrors()
+	public LinkedList<String> getErrors()
 	{
 		return mstrErrors;
 	}
@@ -114,7 +114,7 @@ public class CExternalProcess
 	///
 	/// @param the process that owns the input stream.
 	//------------------------------------------------------
-	private void ReadInputStream(Process inProcess)
+	private void readInputStream(Process inProcess)
 	{
 		try
 		{
@@ -135,7 +135,7 @@ public class CExternalProcess
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogFatalError("Something has gone wrong while reading the input stream!\n" + e.getStackTrace().toString());
+			Logging.logFatal("Something has gone wrong while reading the input stream!\n" + e.getStackTrace().toString());
 		}
 	}
 	//------------------------------------------------------
@@ -145,7 +145,7 @@ public class CExternalProcess
 	///
 	/// @param the process that owns the error stream.
 	//------------------------------------------------------
-	private void ReadErrorStream(Process inProcess)
+	private void readErrorStream(Process inProcess)
 	{
 		try
 		{
@@ -187,7 +187,7 @@ public class CExternalProcess
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogFatalError("Something has gone wrong while reading the error stream!\n" + e.getStackTrace().toString());
+			Logging.logFatal("Something has gone wrong while reading the error stream!\n" + e.getStackTrace().toString());
 		}
 	}
 }

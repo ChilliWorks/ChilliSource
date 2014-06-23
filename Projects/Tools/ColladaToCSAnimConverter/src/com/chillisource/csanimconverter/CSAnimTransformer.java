@@ -1,8 +1,8 @@
 package com.chillisource.csanimconverter;
 
 import com.chillisource.csanimconverter.csanim.*;
-import com.taggames.toolutils.CQuaternion;
-import com.taggames.toolutils.CVector3;
+import com.chillisource.toolutils.Quaternion;
+import com.chillisource.toolutils.Vector3;
 
 public class CSAnimTransformer 
 {
@@ -40,22 +40,22 @@ public class CSAnimTransformer
 			
 			for (int j = 0; j < frame.mNodeTranslations.size(); j++)
 			{
-				CVector3 translation = frame.mNodeTranslations.get(j);
-				CQuaternion orientation = frame.mNodeOrienations.get(j);
-				CVector3 scale = frame.mNodeScalings.get(j);
+				Vector3 translation = frame.mNodeTranslations.get(j);
+				Quaternion orientation = frame.mNodeOrienations.get(j);
+				Vector3 scale = frame.mNodeScalings.get(j);
 				
 				float temp = translation.y;
 				translation.y = translation.z;
 				translation.z = temp;
 				
-				CVector3 vAxis = orientation.GetAxis();
-				float fAngle = orientation.GetAngle();
+				Vector3 vAxis = orientation.getAxis();
+				float fAngle = orientation.getAngle();
 				temp = vAxis.y;
 				vAxis.y = vAxis.z;
 				vAxis.z = temp;
 				fAngle = -fAngle;
-				CQuaternion newOrientation = CQuaternion.CreateFromAxisAngle(vAxis, fAngle);
-				orientation.Set(newOrientation);
+				Quaternion newOrientation = Quaternion.createFromAxisAngle(vAxis, fAngle);
+				orientation.set(newOrientation);
 				
 				temp = scale.y;
 				scale.y = scale.z;

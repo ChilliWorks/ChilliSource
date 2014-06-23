@@ -1,6 +1,6 @@
-package com.taggames.toolutils;
+package com.chillisource.toolutils;
 
-public class CVector4 
+public class Vector4 
 {
 	//------------------------------------------------------------
 	/// public member data.
@@ -12,14 +12,14 @@ public class CVector4
 	//------------------------------------------------------------
 	/// Constructor
 	//------------------------------------------------------------
-	public CVector4()
+	public Vector4()
 	{
 		x = y = z = w = 0.0f;
 	}
 	//------------------------------------------------------------
 	/// Constructor
 	//------------------------------------------------------------
-	public CVector4(float infX, float infY, float infZ, float infW)
+	public Vector4(float infX, float infY, float infZ, float infW)
 	{
 		x = infX;
 		y = infY;
@@ -31,9 +31,9 @@ public class CVector4
 	///
 	/// @return a copy of this vector.
 	//------------------------------------------------------------
-	public CVector4 Copy()
+	public Vector4 copy()
 	{
-		return new CVector4(z, y, z, w);
+		return new Vector4(z, y, z, w);
 	}
 	//------------------------------------------------------------
 	/// Equals
@@ -45,9 +45,9 @@ public class CVector4
 	{
 	    if ( this == inObj ) 
 	    	return true;
-	    if ((inObj instanceof CVector4) == false) 
+	    if ((inObj instanceof Vector4) == false) 
 	    	return false;
-	    CVector4 vec = (CVector4)inObj;
+	    Vector4 vec = (Vector4)inObj;
 	    if (Float.floatToIntBits(x) == Float.floatToIntBits(vec.x) && Float.floatToIntBits(y) == Float.floatToIntBits(vec.y)  && Float.floatToIntBits(z) == Float.floatToIntBits(vec.z) && Float.floatToIntBits(w) == Float.floatToIntBits(vec.w))
 	    	return true;
 	    return false;

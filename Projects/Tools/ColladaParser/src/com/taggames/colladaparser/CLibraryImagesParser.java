@@ -11,10 +11,10 @@ package com.taggames.colladaparser;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.Collada;
 import com.taggames.colladaparser.colladadata.ColladaImage;
 import com.taggames.colladaparser.colladadata.ColladaInitFrom;
-import com.taggames.toolutils.SCLogger;
 
 public class CLibraryImagesParser 
 {
@@ -72,7 +72,7 @@ public class CLibraryImagesParser
 		if (mCollada.mLibraryImages != null)
 			mCollada.mLibraryImages.put(mCurrentImage.mstrId, mCurrentImage);
 		else
-			SCLogger.LogFatalError("mLibraryImages is null!");
+			Logging.logFatal("mLibraryImages is null!");
 		
 		return false;
 	}
@@ -97,7 +97,7 @@ public class CLibraryImagesParser
 		if (mCurrentImage != null)
 			mCurrentImage.mInitFrom = mCurrentInitFrom;
 		else
-			SCLogger.LogFatalError("no parent for 'init from'!");
+			Logging.logFatal("no parent for 'init from'!");
 		
 		return true;
 	}

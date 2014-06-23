@@ -11,8 +11,8 @@ package com.taggames.colladaparser;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
-import com.taggames.toolutils.SCLogger;
 
 public class CSceneParser 
 {
@@ -66,7 +66,7 @@ public class CSceneParser
 		if (mCollada.mScene != null)
 			mCollada.mScene.mInstanceVisualScene = newIVS;
 		else
-			SCLogger.LogFatalError("mScene is null!");
+			Logging.logFatal("mScene is null!");
 		
 		return false;
 	}

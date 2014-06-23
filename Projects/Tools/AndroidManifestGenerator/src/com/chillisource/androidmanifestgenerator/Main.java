@@ -28,8 +28,8 @@
 
 package com.chillisource.androidmanifestgenerator;
 
-import com.taggames.toolutils.SCLogger;
-import com.taggames.toolutils.SCStringUtils;
+import com.chillisource.toolutils.Logging;
+import com.chillisource.toolutils.StringUtils;
 
 /**
  * Handles the entry point into the application. This manages the parsing of the input parameters and
@@ -57,7 +57,7 @@ public final class Main
 	 */
 	public static void main(String[] in_arguments) throws Exception 
 	{
-		SCLogger.Initialise(in_arguments);
+		Logging.start(in_arguments);
 		
 		if (in_arguments.length == 0)
 		{
@@ -74,9 +74,9 @@ public final class Main
 			if (in_arguments[i].equalsIgnoreCase(k_paramInput) == true || in_arguments[i].equalsIgnoreCase(k_paramInputShort) == true)
 			{
 				if (i+1 < in_arguments.length)
-					input = SCStringUtils.StandardiseFilepath(in_arguments[i+1]);
+					input = StringUtils.standardiseFilepath(in_arguments[i+1]);
 				else
-					SCLogger.LogFatalError("No input file path provided!");
+					Logging.logFatal("No input file path provided!");
 				i++;
 			}
 			
@@ -84,9 +84,9 @@ public final class Main
 			else if (in_arguments[i].equalsIgnoreCase(k_paramTemplate) == true || in_arguments[i].equalsIgnoreCase(k_paramTemplateShort) == true)
 			{
 				if (i+1 < in_arguments.length)
-					template = SCStringUtils.StandardiseFilepath(in_arguments[i+1]);
+					template = StringUtils.standardiseFilepath(in_arguments[i+1]);
 				else
-					SCLogger.LogFatalError("No template file path provided!");
+					Logging.logFatal("No template file path provided!");
 				i++;
 			}
 			
@@ -94,9 +94,9 @@ public final class Main
 			else if (in_arguments[i].equalsIgnoreCase(k_paramOutput) == true || in_arguments[i].equalsIgnoreCase(k_paramOutputShort) == true)
 			{
 				if (i+1 < in_arguments.length)
-					output = SCStringUtils.StandardiseFilepath(in_arguments[i+1]);
+					output = StringUtils.standardiseFilepath(in_arguments[i+1]);
 				else
-					SCLogger.LogFatalError("No output file path provided!");
+					Logging.logFatal("No output file path provided!");
 				i++;
 			}
 			
@@ -110,12 +110,12 @@ public final class Main
 		
 		if (input.length() == 0 || template.length() ==0 || output.length() == 0)
 		{
-			SCLogger.LogFatalError("Must provide input, template and output file paths.");
+			Logging.logFatal("Must provide input, template and output file paths.");
 		}
 		
 		AndroidManifestGenerator.generate(input, template, output);
 		
-		SCLogger.PrintErrorsAndWarnings();
+		Logging.finish();
 	}
 	/**
 	 * Outputs help test for this tool. This will be displayed regardless of 
@@ -125,23 +125,23 @@ public final class Main
 	 */
 	public static void printHelpText()
 	{
-		SCLogger.SetLoggingLevel(SCLogger.LOGGING_LEVEL_VERBOSE);
-		SCLogger.LogMessage("Parameters:");
-		SCLogger.LogMessage(" '" + k_paramInput + "'('" + k_paramInputShort + "') -> The file path to the user manifest.");
-		SCLogger.LogMessage(" '" + k_paramTemplate + "'('" + k_paramTemplateShort + "') -> The file path to the template manifest.");
-		SCLogger.LogMessage(" '" + k_paramOutput + "'('" + k_paramOutputShort + "') -> The file path to the output AndroidManifest.xml.");
-		SCLogger.LogMessage(" '--logginglevel'('-l') -> the level of messages to log.");
-		SCLogger.LogMessage(" '--errordisplay'('-e') -> when to display errors.");
-		SCLogger.LogMessage(" '" + k_paramHelp + "'('" + k_paramHelpShort + "') -> Display this help message.");
-		SCLogger.LogMessage("Logging Levels:");
-		SCLogger.LogMessage(" 'none' -> No logging.");
-		SCLogger.LogMessage(" 'fatal' -> Only log fatal errors.");
-		SCLogger.LogMessage(" 'error' -> Only log errors.");
-		SCLogger.LogMessage(" 'warning' -> Log errors and warnings.");
-		SCLogger.LogMessage(" 'verbose' -> Log all messages.");
-		SCLogger.LogMessage("Error Display Options:");
-		SCLogger.LogMessage(" 'never' -> Never display.");
-		SCLogger.LogMessage(" 'atend' -> Log all errors at the end.");
-		SCLogger.LogMessage(" 'whenreceived' -> Log all errors when received.");
+		Logging.setLoggingLevel(Logging.LOGGING_LEVEL_VERBOSE);
+		Logging.logVerbose("Parameters:");
+		Logging.logVerbose(" '" + k_paramInput + "'('" + k_paramInputShort + "') -> The file path to the user manifest.");
+		Logging.logVerbose(" '" + k_paramTemplate + "'('" + k_paramTemplateShort + "') -> The file path to the template manifest.");
+		Logging.logVerbose(" '" + k_paramOutput + "'('" + k_paramOutputShort + "') -> The file path to the output AndroidManifest.xml.");
+		Logging.logVerbose(" '--logginglevel'('-l') -> the level of messages to log.");
+		Logging.logVerbose(" '--errordisplay'('-e') -> when to display errors.");
+		Logging.logVerbose(" '" + k_paramHelp + "'('" + k_paramHelpShort + "') -> Display this help message.");
+		Logging.logVerbose("Logging Levels:");
+		Logging.logVerbose(" 'none' -> No logging.");
+		Logging.logVerbose(" 'fatal' -> Only log fatal errors.");
+		Logging.logVerbose(" 'error' -> Only log errors.");
+		Logging.logVerbose(" 'warning' -> Log errors and warnings.");
+		Logging.logVerbose(" 'verbose' -> Log all messages.");
+		Logging.logVerbose("Error Display Options:");
+		Logging.logVerbose(" 'never' -> Never display.");
+		Logging.logVerbose(" 'atend' -> Log all errors at the end.");
+		Logging.logVerbose(" 'whenreceived' -> Log all errors when received.");
 	}
 }

@@ -11,8 +11,8 @@ package com.taggames.colladaparser;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
-import com.taggames.toolutils.SCLogger;
 
 public class CLibraryAnimationsParser 
 {
@@ -101,7 +101,7 @@ public class CLibraryAnimationsParser
 		if (mCollada.mAnimation != null)
 			mCollada.mAnimation = mCurrentAnimation;
 		else
-			SCLogger.LogFatalError("mCurrentAnimation is null!");
+			Logging.logFatal("mCurrentAnimation is null!");
 		
 		return false;
 	}
@@ -133,7 +133,7 @@ public class CLibraryAnimationsParser
 		if (mCurrentAnimation != null)
 			mCurrentAnimation.mSourceTable.put(mCurrentSource.mstrId, mCurrentSource);
 		else
-			SCLogger.LogFatalError("mCurrentController.mSkin is null!");
+			Logging.logFatal("mCurrentController.mSkin is null!");
 		
 		return false;
 	}
@@ -167,7 +167,7 @@ public class CLibraryAnimationsParser
 		if (mCurrentSource != null)
 			mCurrentSource.mFloatArray = mCurrentFloatArray;
 		else
-			SCLogger.LogFatalError("No available parent for float array!");
+			Logging.logFatal("No available parent for float array!");
 		
 		return true;
 	}
@@ -193,7 +193,7 @@ public class CLibraryAnimationsParser
 		}
 		else
 		{
-			SCLogger.LogFatalError("Incorrect number of values for 'float array'!");
+			Logging.logFatal("Incorrect number of values for 'float array'!");
 		}
 		
 		mCurrentFloatArray = null;
@@ -217,7 +217,7 @@ public class CLibraryAnimationsParser
 		if (mCurrentSource != null)
 			mCurrentSource.mNameArray = mCurrentNameArray;
 		else
-			SCLogger.LogFatalError("No available parent for name array!");
+			Logging.logFatal("No available parent for name array!");
 		
 		return true;
 	}
@@ -243,7 +243,7 @@ public class CLibraryAnimationsParser
 		}
 		else
 		{
-			SCLogger.LogFatalError("Incorrect number of values for 'name array'!");
+			Logging.logFatal("Incorrect number of values for 'name array'!");
 		}
 		
 		mCurrentNameArray = null;
@@ -265,7 +265,7 @@ public class CLibraryAnimationsParser
 		if (mCurrentAnimation != null)
 			mCurrentAnimation.mSamplerTable.put(mCurrentSampler.mstrId, mCurrentSampler);
 		else
-			SCLogger.LogFatalError("mCurrentAnimation is null!");
+			Logging.logFatal("mCurrentAnimation is null!");
 		
 		return false;
 	}
@@ -300,7 +300,7 @@ public class CLibraryAnimationsParser
 		if (mCurrentSampler != null)
 			mCurrentSampler.mInputTable.put(input.mstrSemantic, input);
 		else
-			SCLogger.LogFatalError("No available parent for 'input'!");
+			Logging.logFatal("No available parent for 'input'!");
 		
 		return false;
 
@@ -332,7 +332,7 @@ public class CLibraryAnimationsParser
 		if (mCurrentAnimation != null)
 			mCurrentAnimation.mChannelList.add(channel);
 		else
-			SCLogger.LogFatalError("mCurrentAnimation is null!");
+			Logging.logFatal("mCurrentAnimation is null!");
 		
 		return false;
 

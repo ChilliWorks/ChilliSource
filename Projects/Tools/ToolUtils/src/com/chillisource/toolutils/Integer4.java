@@ -1,35 +1,39 @@
-package com.taggames.toolutils;
+package com.chillisource.toolutils;
 
-public class CVector2 
+public class Integer4 
 {
 	//------------------------------------------------------------
-	/// public memeber data
+	/// public member data.
 	//------------------------------------------------------------
-	public float x;
-	public float y;
+	public int x;
+	public int y;
+	public int z;
+	public int w;
 	//------------------------------------------------------------
 	/// Constructor
 	//------------------------------------------------------------
-	public CVector2()
+	public Integer4()
 	{
-		x = y = 0.0f;
+		x = y = z = w = 0;
 	}
 	//------------------------------------------------------------
 	/// Constructor
 	//------------------------------------------------------------
-	public CVector2(float infX, float infY)
+	public Integer4(int indwX, int indwY, int indwZ, int indwW)
 	{
-		x = infX;
-		y = infY;
+		x = indwX;
+		y = indwY;
+		z = indwZ;
+		w = indwW;
 	}
 	//------------------------------------------------------------
 	/// Copy
 	///
 	/// @return a copy of this vector.
 	//------------------------------------------------------------
-	public CVector2 Copy()
+	public Integer4 copy()
 	{
-		return new CVector2(x, y);
+		return new Integer4(z, y, z, w);
 	}
 	//------------------------------------------------------------
 	/// Equals
@@ -41,10 +45,10 @@ public class CVector2
 	{
 	    if ( this == inObj ) 
 	    	return true;
-	    if ((inObj instanceof CVector2) == false) 
+	    if ((inObj instanceof Integer4) == false) 
 	    	return false;
-	    CVector2 vec = (CVector2)inObj;
-	    if (Float.floatToIntBits(x) == Float.floatToIntBits(vec.x) && Float.floatToIntBits(y) == Float.floatToIntBits(vec.y))
+	    Integer4 vec = (Integer4)inObj;
+	    if (x == vec.x && y == vec.y  && z == vec.z && w == vec.w)
 	    	return true;
 	    return false;
 	}
@@ -55,6 +59,6 @@ public class CVector2
 	//------------------------------------------------------------
 	public String toString()
 	{
-		return "(" + x + ", " + y + ")";
+		return "(" + x + ", " + y + ", " + z + "," + w + ")";
 	}
 }

@@ -10,7 +10,7 @@
 
 package com.chillisource.tgatocsimagetool;
 
-import com.taggames.toolutils.SCLogger;
+import com.chillisource.toolutils.Logging;
 
 public class CMain 
 {
@@ -26,7 +26,7 @@ public class CMain
 	public static void main(String inastrArgs[]) throws Exception 
 	{	
 		//setup the logger.
-		SCLogger.Initialise(inastrArgs);
+		Logging.start(inastrArgs);
 		
 		//check the number of arguments make sense.
 		if(inastrArgs.length < 2)
@@ -45,7 +45,7 @@ public class CMain
 				if (i + 1 < inastrArgs.length)
 					options.strInputFilename = inastrArgs[i + 1];
 				else
-					SCLogger.LogFatalError("No input path provided!");
+					Logging.logFatal("No input path provided!");
 				i++;
 			}
 			
@@ -55,7 +55,7 @@ public class CMain
 				if (i + 1 < inastrArgs.length)
 					options.strOutputFilename = inastrArgs[i + 1];
 				else
-					SCLogger.LogFatalError("No output file provided!");
+					Logging.logFatal("No output file provided!");
 				i++;
 			}
 			
@@ -65,7 +65,7 @@ public class CMain
 				if (i + 1 < inastrArgs.length)
 					options.eConversionType = ConvertStringToConversionFormat(inastrArgs[i + 1]);
 				else
-					SCLogger.LogFatalError("No conversion type provided!");
+					Logging.logFatal("No conversion type provided!");
 				i++;
 			}
 			
@@ -75,7 +75,7 @@ public class CMain
 				if (i + 1 < inastrArgs.length)
 					options.eConversionAlphaType = ConvertStringToConversionFormat(inastrArgs[i + 1]);
 				else
-					SCLogger.LogFatalError("No conversion type provided!");
+					Logging.logFatal("No conversion type provided!");
 				i++;
 			}
 			
@@ -85,7 +85,7 @@ public class CMain
 				if (i + 1 < inastrArgs.length)
 					options.eConversionNoAlphaType = ConvertStringToConversionFormat(inastrArgs[i + 1]);
 				else
-					SCLogger.LogFatalError("No conversion type provided!");
+					Logging.logFatal("No conversion type provided!");
 				i++;
 			}
 			
@@ -95,7 +95,7 @@ public class CMain
 				if (i + 1 < inastrArgs.length)
 					options.eCompressionType = ConvertStringToCompressionFormat(inastrArgs[i + 1]);
 				else
-					SCLogger.LogFatalError("No compression type provided!");
+					Logging.logFatal("No compression type provided!");
 				i++;
 			}
 			
@@ -120,13 +120,13 @@ public class CMain
 		
 		// Confirm that the paramaters are valid.
 		if(options.strInputFilename.equals(""))
-			SCLogger.LogFatalError("No input path provided.");
+			Logging.logFatal("No input path provided.");
 		if (options.strOutputFilename.equals(""))
-			SCLogger.LogFatalError("No output file provided.");
+			Logging.logFatal("No output file provided.");
 		
 		SCTGAToCSImage.Run(options);
 
-		SCLogger.PrintErrorsAndWarnings();
+		Logging.finish();
 	}
 	//------------------------------------------------------
 	/// Print Help Text
@@ -135,27 +135,27 @@ public class CMain
 	//------------------------------------------------------
 	private static void PrintHelpText()
 	{
-		SCLogger.SetLoggingLevel(SCLogger.LOGGING_LEVEL_VERBOSE);
-		SCLogger.LogMessage("java -jar TGAToMoImage.jar --input <filename> --output <filename> [--convert <type>] [--compression <type>] [--premultiply] [--dither]");
-		SCLogger.LogMessage("\t'--input'('-i')              The path to the source image TGA.");
-		SCLogger.LogMessage("\t'--output'('-o')             The path to the output image csimage.");
-		SCLogger.LogMessage("\t'--convert'('-ct')           (Optional) The type to convert to.");
-		SCLogger.LogMessage("\t'--convertalpha'('-cta')     (Optional) The type to convert images with alpha to.");
-		SCLogger.LogMessage("\t'--convertnoalpha'('-ctna')  (Optional) The type to convert images without alpha to.");
-		SCLogger.LogMessage("\t'--compression'('-cn')       (Optional) The compression type.");
-		SCLogger.LogMessage("\t'--premultiply'('-p')        (Optional) Whether or not to premultiply the output csimage.");
-		SCLogger.LogMessage("\t'--dither'('-d')             (Optional) Whether or not to dither if converting to a smaller image format.");
-		SCLogger.LogMessage("\t'--stats'('-s')             (Optional) Whether or not to log out stats.");
-		SCLogger.LogMessage("Conversion Types:");
-		SCLogger.LogMessage("\tL8");
-		SCLogger.LogMessage("\tLA88");
-		SCLogger.LogMessage("\tRGB565");
-		SCLogger.LogMessage("\tRGBA4444");
-		SCLogger.LogMessage("\tRGB888");
-		SCLogger.LogMessage("\tRGBA8888");
-		SCLogger.LogMessage("Compression Types:");
-		SCLogger.LogMessage("\tNone");
-		SCLogger.LogMessage("\tDefault");
+		Logging.setLoggingLevel(Logging.LOGGING_LEVEL_VERBOSE);
+		Logging.logVerbose("java -jar TGAToMoImage.jar --input <filename> --output <filename> [--convert <type>] [--compression <type>] [--premultiply] [--dither]");
+		Logging.logVerbose("\t'--input'('-i')              The path to the source image TGA.");
+		Logging.logVerbose("\t'--output'('-o')             The path to the output image csimage.");
+		Logging.logVerbose("\t'--convert'('-ct')           (Optional) The type to convert to.");
+		Logging.logVerbose("\t'--convertalpha'('-cta')     (Optional) The type to convert images with alpha to.");
+		Logging.logVerbose("\t'--convertnoalpha'('-ctna')  (Optional) The type to convert images without alpha to.");
+		Logging.logVerbose("\t'--compression'('-cn')       (Optional) The compression type.");
+		Logging.logVerbose("\t'--premultiply'('-p')        (Optional) Whether or not to premultiply the output csimage.");
+		Logging.logVerbose("\t'--dither'('-d')             (Optional) Whether or not to dither if converting to a smaller image format.");
+		Logging.logVerbose("\t'--stats'('-s')             (Optional) Whether or not to log out stats.");
+		Logging.logVerbose("Conversion Types:");
+		Logging.logVerbose("\tL8");
+		Logging.logVerbose("\tLA88");
+		Logging.logVerbose("\tRGB565");
+		Logging.logVerbose("\tRGBA4444");
+		Logging.logVerbose("\tRGB888");
+		Logging.logVerbose("\tRGBA8888");
+		Logging.logVerbose("Compression Types:");
+		Logging.logVerbose("\tNone");
+		Logging.logVerbose("\tDefault");
 	}
 	//------------------------------------------------------
 	/// Convert String To Conversion Format
@@ -178,7 +178,7 @@ public class CMain
 		if (instrString.equalsIgnoreCase("RGBA8888") == true)
 			return TGAToCSImageOptions.OUTPUT_FORMAT.RGBA8888;
 		
-		SCLogger.LogWarning("No valid conversion format found. Will default to the image's format.");
+		Logging.logWarning("No valid conversion format found. Will default to the image's format.");
 		return TGAToCSImageOptions.OUTPUT_FORMAT.NONE;
 	}
 	//------------------------------------------------------
@@ -192,7 +192,7 @@ public class CMain
 		if (instrString.equalsIgnoreCase("Default"))
 			return TGAToCSImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB;
 		
-		SCLogger.LogWarning("No valid compression format found. Image will not be compressed.");
+		Logging.logWarning("No valid compression format found. Image will not be compressed.");
 		return TGAToCSImageOptions.COMPRESSION_FORMAT.NONE;
 	}
 }

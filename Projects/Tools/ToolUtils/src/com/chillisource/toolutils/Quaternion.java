@@ -1,6 +1,6 @@
-package com.taggames.toolutils;
+package com.chillisource.toolutils;
 
-public class CQuaternion 
+public class Quaternion 
 {
 	//------------------------------------------------------------
 	/// Public member data
@@ -12,7 +12,7 @@ public class CQuaternion
 	//------------------------------------------------------------
 	/// Constructor
 	//------------------------------------------------------------
-	public CQuaternion()
+	public Quaternion()
 	{
 		x = y = z = w = 0.0f;
 	}
@@ -23,7 +23,7 @@ public class CQuaternion
 	///
 	/// @param the quaternion to copy.
 	//------------------------------------------------------------
-	public void Set(CQuaternion inQuat)
+	public void set(Quaternion inQuat)
 	{
 		x = inQuat.x;
 		y = inQuat.y;
@@ -35,7 +35,7 @@ public class CQuaternion
 	///
 	/// @return the matrix equivalent of this quaternion.
 	//------------------------------------------------------------
-	public CMatrix4 ToMatrix()
+	public Matrix4 toMatrix()
 	{
 		float x2 = x * x;
 		float y2 = y * y;
@@ -47,7 +47,7 @@ public class CQuaternion
 		float wy = w * y;
 		float wz = w * z;
 		
-		CMatrix4 output = new CMatrix4();
+		Matrix4 output = new Matrix4();
 		output.mafData[0] = 1.0f - 2.0f * (y2 + z2);	output.mafData[1] = 2.0f * (xy + wz);			output.mafData[2] = 2.0f * (xz - wy);			output.mafData[3] = 0.0f;
 		output.mafData[4] = 2.0f * (xy - wz);			output.mafData[5] = 1.0f - 2.0f * (x2 + z2);	output.mafData[6] = 2.0f * (yz + wx);			output.mafData[7] = 0.0f;
 		output.mafData[8] = 2.0f * (xz + wy);			output.mafData[9] = 2.0f * (yz - wx);			output.mafData[10] = 1.0f - 2.0f * (x2 + y2);	output.mafData[11] = 0.0f;
@@ -60,24 +60,24 @@ public class CQuaternion
 	///
 	/// @return the axis
 	//------------------------------------------------------------
-	public CVector3 GetAxis()
+	public Vector3 getAxis()
 	{
 		float fSqrLength = (x * x + y * y + z * z);
 
 		if (fSqrLength > 0.0f)
 		{
 			float fInvLength = 1.0f / (float)Math.sqrt(fSqrLength);
-			return new CVector3(x * fInvLength, y * fInvLength, z * fInvLength);
+			return new Vector3(x * fInvLength, y * fInvLength, z * fInvLength);
 		}
 
-		return new CVector3(1.0f, 0.0f, 0.0f);
+		return new Vector3(1.0f, 0.0f, 0.0f);
 	}
 	//------------------------------------------------------------
 	/// Get Angle
 	///
 	/// @return the angle.
 	//------------------------------------------------------------
-	public float GetAngle()
+	public float getAngle()
 	{
 		float fSqrLength = (x * x + y * y + z * z);
 
@@ -93,9 +93,9 @@ public class CQuaternion
 	///
 	/// @return a normalised version of this quaternion
 	//------------------------------------------------------------
-	public CQuaternion Normalise()
+	public Quaternion normalise()
 	{
-		CQuaternion output = new CQuaternion();
+		Quaternion output = new Quaternion();
 		float s = 1.0f / (float)Math.sqrt(w * w + x * x + y * y + z * z);
 		output.w = w * s;
 		output.x = x * s;
@@ -112,12 +112,12 @@ public class CQuaternion
 	/// @param the rotation matrix.
 	/// @return the quaterion.
 	//------------------------------------------------------------
-	public static CQuaternion CreateFromMatrix(CMatrix4 inMat)
+	public static Quaternion createFromMatrix(Matrix4 inMat)
 	{
 		// Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
 		// article "Quaternion Calculus and Fast Animation".
 		
-		CQuaternion newQuat = new CQuaternion();
+		Quaternion newQuat = new Quaternion();
 		
 		float fTrace = inMat.mafData[0]+inMat.mafData[5]+inMat.mafData[10] + 1.0f;
 		float fRoot = 0.0f;
@@ -139,19 +139,19 @@ public class CQuaternion
 			int i = 0;
 			if ( inMat.mafData[5] > inMat.mafData[0] )
 				i = 1;
-			if ( inMat.mafData[10] > inMat.Get(i,i) )
+			if ( inMat.mafData[10] > inMat.get(i,i) )
 				i = 2;
 			int j = s_iNext[i];
 			int k = s_iNext[j];
 			
-			fRoot = (float)Math.sqrt(inMat.Get(i,i)-inMat.Get(j,j)-inMat.Get(k,k) + 1.0f);
+			fRoot = (float)Math.sqrt(inMat.get(i,i)-inMat.get(j,j)-inMat.get(k,k) + 1.0f);
 			
 			float[] apkQuat = {0.0f, 0.0f, 0.0f};
 			apkQuat[i] = 0.5f*fRoot;
 			fRoot = 0.5f/fRoot;
-			newQuat.w = (inMat.Get(k,j)-inMat.Get(j,k))*fRoot;
-			apkQuat[j] = (inMat.Get(j,i)+inMat.Get(i,j))*fRoot;
-			apkQuat[k] = (inMat.Get(k,i)+inMat.Get(i,k))*fRoot;
+			newQuat.w = (inMat.get(k,j)-inMat.get(j,k))*fRoot;
+			apkQuat[j] = (inMat.get(j,i)+inMat.get(i,j))*fRoot;
+			apkQuat[k] = (inMat.get(k,i)+inMat.get(i,k))*fRoot;
 			
 			newQuat.x = apkQuat[0];
 			newQuat.y = apkQuat[1];
@@ -169,10 +169,10 @@ public class CQuaternion
 	/// @param the angle.
 	/// @return the quaterion.
 	//------------------------------------------------------------
-	public static CQuaternion CreateFromAxisAngle(CVector3 invAxis, float infAngle)
+	public static Quaternion createFromAxisAngle(Vector3 invAxis, float infAngle)
 	{
-		CQuaternion output = new CQuaternion();
-		CVector3 Vnorm = invAxis.Normalise();
+		Quaternion output = new Quaternion();
+		Vector3 Vnorm = invAxis.normalise();
 
 		float fHalfAngle = infAngle / 2.0f;
 		float fSinAngle = (float)Math.sin(fHalfAngle);

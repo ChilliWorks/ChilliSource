@@ -32,10 +32,10 @@ import java.io.*;
 
 import javax.imageio.*;
 
-import com.taggames.toolutils.CExternalProcess;
-import com.taggames.toolutils.CLittleEndianOutputStream;
-import com.taggames.toolutils.SCFileSystemUtils;
-import com.taggames.toolutils.SCStringUtils;
+import com.chillisource.toolutils.ExternalProcess;
+import com.chillisource.toolutils.LittleEndianOutputStream;
+import com.chillisource.toolutils.FileUtils;
+import com.chillisource.toolutils.StringUtils;
 
 import java.util.*;
  
@@ -215,7 +215,7 @@ public class TextureAtlasTool
 		if (options.containsKey("--output"))
 		{
 			outputName = options.get("--output");
-			outputName = SCStringUtils.RemoveExtension(outputName);
+			outputName = StringUtils.removeExtension(outputName);
 		}
 		else
 		{
@@ -455,7 +455,7 @@ public class TextureAtlasTool
 		commands.add("java");
 		commands.add("-Djava.awt.headless=true");
 		commands.add("-jar");
-		commands.add(SCFileSystemUtils.GetPathToHere() + "PNGToCSImage.jar");
+		commands.add(FileUtils.getPathToHere() + "PNGToCSImage.jar");
 		commands.add("--input");
 		commands.add(outputName + ".png");
 		commands.add("--output");
@@ -495,28 +495,28 @@ public class TextureAtlasTool
 			commands.add(options.get("--convertnoalpha"));
 		}
 		
-		CExternalProcess csImageConversion = new CExternalProcess();
-		csImageConversion.Run(commands);
+		ExternalProcess csImageConversion = new ExternalProcess();
+		csImageConversion.run(commands);
 		
-		SCFileSystemUtils.DeleteFile(outputName + ".png");
+		FileUtils.deleteFile(outputName + ".png");
 		
 		if(verboseOutput)
-			System.out.println(csImageConversion.GetMessages());
+			System.out.println(csImageConversion.getMessages());
 		
-		System.out.println(csImageConversion.GetWarnings());
-		System.out.println(csImageConversion.GetErrors());
+		System.out.println(csImageConversion.getWarnings());
+		System.out.println(csImageConversion.getErrors());
 	}
 
 	private void writeBinaryFile(PackedTexture in_packedTexture) throws FileNotFoundException, IOException, Exception
 	{
 		int numImages = in_packedTexture.getNumImages();
-		CLittleEndianOutputStream dosBinary = new CLittleEndianOutputStream(outputName + ".csatlas");
-		dosBinary.WriteShort((short) numImages);
-		dosBinary.WriteShort(k_versionNum); // file format revision
+		LittleEndianOutputStream dosBinary = new LittleEndianOutputStream(outputName + ".csatlas");
+		dosBinary.writeShort((short) numImages);
+		dosBinary.writeShort(k_versionNum); // file format revision
 
 		//Write out spritesheet size
-		dosBinary.WriteShort((short) in_packedTexture.getPackedWidth());
-		dosBinary.WriteShort((short) in_packedTexture.getPackedHeight());
+		dosBinary.writeShort((short) in_packedTexture.getPackedWidth());
+		dosBinary.writeShort((short) in_packedTexture.getPackedHeight());
 		
 		System.out.println("Output Image size::" + in_packedTexture.getPackedWidth() + " x " + in_packedTexture.getPackedHeight());
 		
@@ -538,17 +538,17 @@ public class TextureAtlasTool
 				System.out.println("Image:" + i + " position:" + ox + "," + oy + ":" + width + "," + height);
 			}
 
-			dosBinary.WriteShort((short) ox);
-			dosBinary.WriteShort((short) oy);
-			dosBinary.WriteShort((short) width);
-			dosBinary.WriteShort((short) height);
-			dosBinary.WriteShort((short) ix);
-			dosBinary.WriteShort((short) iy);
-			dosBinary.WriteShort((short) orig_width);
-			dosBinary.WriteShort((short) orig_height);
+			dosBinary.writeShort((short) ox);
+			dosBinary.writeShort((short) oy);
+			dosBinary.writeShort((short) width);
+			dosBinary.writeShort((short) height);
+			dosBinary.writeShort((short) ix);
+			dosBinary.writeShort((short) iy);
+			dosBinary.writeShort((short) orig_width);
+			dosBinary.writeShort((short) orig_height);
 		}
 
-		dosBinary.Close();
+		dosBinary.close();
 	}
 	
 	private void writeStringIDs(PackedTexture in_packedTexture) throws IOException 

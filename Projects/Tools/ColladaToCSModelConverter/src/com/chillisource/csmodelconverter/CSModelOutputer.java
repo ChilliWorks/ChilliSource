@@ -11,7 +11,7 @@ package com.chillisource.csmodelconverter;
 import java.util.LinkedList;
 
 import com.chillisource.csmodelconverter.csmodel.*;
-import com.taggames.toolutils.*;
+import com.chillisource.toolutils.*;
 
 
 public class CSModelOutputer 
@@ -38,7 +38,7 @@ public class CSModelOutputer
 	//-------------------------------------------------------------------
 	/// Private Member Data
 	//-------------------------------------------------------------------
-	CLittleEndianOutputStream mStream;
+	LittleEndianOutputStream mStream;
 	int mdwSizeOfIndices;
 	//-------------------------------------------------------------------
 	/// Constructor
@@ -60,12 +60,12 @@ public class CSModelOutputer
 		//try and open a new file stream. if this fails, throw a fatal error.
 		try
 		{
-			mStream = new CLittleEndianOutputStream(inConversionParams.mstrOutputFilepath);
+			mStream = new LittleEndianOutputStream(inConversionParams.mstrOutputFilepath);
 		}
 		catch (Exception e)
 		{
-			mStream.Close();
-			SCLogger.LogFatalError("Failed to open output file: " + inConversionParams.mstrOutputFilepath);
+			mStream.close();
+			Logging.logFatal("Failed to open output file: " + inConversionParams.mstrOutputFilepath);
 		}
 		
 		//output the file
@@ -95,12 +95,12 @@ public class CSModelOutputer
 		}
 		catch (Exception e)
 		{
-			mStream.Close();
-			SCLogger.LogFatalError("Failed to write to file: " + inConversionParams.mstrOutputFilepath);
+			mStream.close();
+			Logging.logFatal("Failed to write to file: " + inConversionParams.mstrOutputFilepath);
 		}
 		
 		//close the filestream
-		mStream.Close();
+		mStream.close();
 		
 		return bSuccess;
 	}
@@ -170,47 +170,47 @@ public class CSModelOutputer
 	private boolean WriteGlobalHeader(CSModelConversionParameters inConversionParams, CSModel inMoModel) throws Exception
 	{
 		//write the endianess check value and version number
-		mStream.WriteUnsignedInt(kdwEndiannessCheckValue);
-		mStream.WriteUnsignedInt(kdwVersionNumber);
+		mStream.writeUnsignedInt(kdwEndiannessCheckValue);
+		mStream.writeUnsignedInt(kdwVersionNumber);
 		
 		//output the feature declaration
-		mStream.WriteByte((byte)GetNumFeatures(inConversionParams));
+		mStream.writeByte((byte)GetNumFeatures(inConversionParams));
 		if (inConversionParams.mbHasAnimationData == true) 
-			mStream.WriteByte((byte)kdwFeatureHasAnimationData);
+			mStream.writeByte((byte)kdwFeatureHasAnimationData);
 		
 		//output the Vertex Description
-		mStream.WriteByte((byte)GetNumVertexElements(inConversionParams));
+		mStream.writeByte((byte)GetNumVertexElements(inConversionParams));
 		if (inConversionParams.mbVertexHasPosition == true)
-			mStream.WriteByte((byte)kdwVertexPosition);
+			mStream.writeByte((byte)kdwVertexPosition);
 		if (inConversionParams.mbVertexHasNormal == true)
-			mStream.WriteByte((byte)kdwVertexNormal);
+			mStream.writeByte((byte)kdwVertexNormal);
 		if (inConversionParams.mbVertexHasTexCoords == true) 
-			mStream.WriteByte((byte)kdwVertexTexCoord);
+			mStream.writeByte((byte)kdwVertexTexCoord);
 		if (inConversionParams.mbVertexHasColour == true) 
-			mStream.WriteByte((byte)kdwVertexColour);
+			mStream.writeByte((byte)kdwVertexColour);
 		if (inConversionParams.mbVertexHasWeights == true) 
-			mStream.WriteByte((byte)kdwVertexWeight);
+			mStream.writeByte((byte)kdwVertexWeight);
 		if (inConversionParams.mbVertexHasJointIndices == true) 
-			mStream.WriteByte((byte)kdwVertexJointIndex);
+			mStream.writeByte((byte)kdwVertexJointIndex);
 		
 		//index declaration
-		mStream.WriteByte((byte)mdwSizeOfIndices);
+		mStream.writeByte((byte)mdwSizeOfIndices);
 		
 		//output the bounding box data
-		mStream.WriteFloat(inMoModel.mvMin.x);
-		mStream.WriteFloat(inMoModel.mvMin.y);
-		mStream.WriteFloat(inMoModel.mvMin.z);
-		mStream.WriteFloat(inMoModel.mvMax.x);
-		mStream.WriteFloat(inMoModel.mvMax.y);
-		mStream.WriteFloat(inMoModel.mvMax.z);
+		mStream.writeFloat(inMoModel.mvMin.x);
+		mStream.writeFloat(inMoModel.mvMin.y);
+		mStream.writeFloat(inMoModel.mvMin.z);
+		mStream.writeFloat(inMoModel.mvMax.x);
+		mStream.writeFloat(inMoModel.mvMax.y);
+		mStream.writeFloat(inMoModel.mvMax.z);
 		
 		//output meshes!
-		mStream.WriteUnsignedShort(inMoModel.mMeshTable.size());
+		mStream.writeUnsignedShort(inMoModel.mMeshTable.size());
 		
 		if (inConversionParams.mbHasAnimationData == true)
 		{
-			mStream.WriteShort((short)inMoModel.mSkeleton.mNodeList.size());
-			mStream.WriteByte((byte)SCSkeletonBuilder.GetNumberOfJoints(inMoModel));
+			mStream.writeShort((short)inMoModel.mSkeleton.mNodeList.size());
+			mStream.writeByte((byte)SCSkeletonBuilder.GetNumberOfJoints(inMoModel));
 		}
 		
 		return true;
@@ -229,22 +229,22 @@ public class CSModelOutputer
 				CSModelSkeletonNode node = inMoModel.mSkeleton.mNodeList.get(i);
 				
 				//write joint name
-				mStream.WriteNullTerminatedAsciiString(node.mstrName);
+				mStream.writeNullTerminatedAsciiString(node.mstrName);
 				
 				//write parent index
-				mStream.WriteShort((short)node.mdwParentNodeIndex);
+				mStream.writeShort((short)node.mdwParentNodeIndex);
 				
 				//write the note type
 				if (node.mbIsJoint == false)
 				{
-					mStream.WriteByte((byte)kdwSkeletonNodeTypeStandard);
+					mStream.writeByte((byte)kdwSkeletonNodeTypeStandard);
 				}
 				else
 				{
-					mStream.WriteByte((byte)kdwSkeletonNodeTypeJoint);
+					mStream.writeByte((byte)kdwSkeletonNodeTypeJoint);
 					
 					//Also write the joint index.
-					mStream.WriteByte((byte)node.mdwJointIndex);
+					mStream.writeByte((byte)node.mdwJointIndex);
 				}
 			}
 		}
@@ -259,27 +259,27 @@ public class CSModelOutputer
 	private boolean WriteMeshHeader(CSModelConversionParameters inConversionParams, CSModelMesh inMoModelMesh) throws Exception
 	{
 		//write the mesh name
-		mStream.WriteNullTerminatedAsciiString(inMoModelMesh.mstrName);
+		mStream.writeNullTerminatedAsciiString(inMoModelMesh.mstrName);
 		
 		//write the number of verts and indices
 		if (mdwSizeOfIndices == 2)
 		{
-			mStream.WriteUnsignedShort(inMoModelMesh.mVertexList.size());
-			mStream.WriteUnsignedShort(inMoModelMesh.mIndexList.size() / 3);
+			mStream.writeUnsignedShort(inMoModelMesh.mVertexList.size());
+			mStream.writeUnsignedShort(inMoModelMesh.mIndexList.size() / 3);
 		}
 		else
 		{
-			mStream.WriteUnsignedInt((long)inMoModelMesh.mVertexList.size());
-			mStream.WriteUnsignedInt((long)inMoModelMesh.mIndexList.size() / 3);
+			mStream.writeUnsignedInt((long)inMoModelMesh.mVertexList.size());
+			mStream.writeUnsignedInt((long)inMoModelMesh.mIndexList.size() / 3);
 		}
 		
 		//write the bounds
-		mStream.WriteFloat(inMoModelMesh.mvMin.x);
-		mStream.WriteFloat(inMoModelMesh.mvMin.y);
-		mStream.WriteFloat(inMoModelMesh.mvMin.z);
-		mStream.WriteFloat(inMoModelMesh.mvMax.x);
-		mStream.WriteFloat(inMoModelMesh.mvMax.y);
-		mStream.WriteFloat(inMoModelMesh.mvMax.z);
+		mStream.writeFloat(inMoModelMesh.mvMin.x);
+		mStream.writeFloat(inMoModelMesh.mvMin.y);
+		mStream.writeFloat(inMoModelMesh.mvMin.z);
+		mStream.writeFloat(inMoModelMesh.mvMax.x);
+		mStream.writeFloat(inMoModelMesh.mvMax.y);
+		mStream.writeFloat(inMoModelMesh.mvMax.z);
 		
 		return true;
 	}
@@ -317,7 +317,7 @@ public class CSModelOutputer
 				{
 					for (int j = 0; j < 16; j++)
 					{
-						mStream.WriteFloat(inMoStaticMesh.maInverseBindMatrices[i].mafData[j]);
+						mStream.writeFloat(inMoStaticMesh.maInverseBindMatrices[i].mafData[j]);
 					}
 				}
 			}
@@ -341,53 +341,53 @@ public class CSModelOutputer
 			//write the position data
 			if (inConversionParams.mbVertexHasPosition == true)
 			{
-				mStream.WriteFloat(vertex.mvPosition.x);
-				mStream.WriteFloat(vertex.mvPosition.y);
-				mStream.WriteFloat(vertex.mvPosition.z);
-				mStream.WriteFloat(1.0f);
+				mStream.writeFloat(vertex.mvPosition.x);
+				mStream.writeFloat(vertex.mvPosition.y);
+				mStream.writeFloat(vertex.mvPosition.z);
+				mStream.writeFloat(1.0f);
 			}
 			
 			
 			//write the normal data if its in the format
 			if (inConversionParams.mbVertexHasNormal == true)
 			{
-				mStream.WriteFloat(vertex.mvNormal.x);
-				mStream.WriteFloat(vertex.mvNormal.y);
-				mStream.WriteFloat(vertex.mvNormal.z);
+				mStream.writeFloat(vertex.mvNormal.x);
+				mStream.writeFloat(vertex.mvNormal.y);
+				mStream.writeFloat(vertex.mvNormal.z);
 			}
 			
 			//write the tex coord data if its in the format
 			if (inConversionParams.mbVertexHasTexCoords == true)
 			{
-				mStream.WriteFloat(vertex.mvTextureCoordinate.x);
-				mStream.WriteFloat(vertex.mvTextureCoordinate.y);
+				mStream.writeFloat(vertex.mvTextureCoordinate.x);
+				mStream.writeFloat(vertex.mvTextureCoordinate.y);
 			}
 			
 			//write the colour data if its in the format
 			if (inConversionParams.mbVertexHasColour == true)
 			{
-				mStream.WriteByte((byte)vertex.mvVertexColour.x);
-				mStream.WriteByte((byte)vertex.mvVertexColour.y);
-				mStream.WriteByte((byte)vertex.mvVertexColour.z);
-				mStream.WriteByte((byte)vertex.mvVertexColour.w);
+				mStream.writeByte((byte)vertex.mvVertexColour.x);
+				mStream.writeByte((byte)vertex.mvVertexColour.y);
+				mStream.writeByte((byte)vertex.mvVertexColour.z);
+				mStream.writeByte((byte)vertex.mvVertexColour.w);
 			}
 			
 			//write the vertex weight if its in the format
 			if (inConversionParams.mbVertexHasWeights == true)
 			{
-				mStream.WriteFloat(vertex.mvWeights.x);
-				mStream.WriteFloat(vertex.mvWeights.y);
-				mStream.WriteFloat(vertex.mvWeights.z);
-				mStream.WriteFloat(vertex.mvWeights.w);
+				mStream.writeFloat(vertex.mvWeights.x);
+				mStream.writeFloat(vertex.mvWeights.y);
+				mStream.writeFloat(vertex.mvWeights.z);
+				mStream.writeFloat(vertex.mvWeights.w);
 			}
 			
 			//write the joint indices if its in the format
 			if (inConversionParams.mbVertexHasJointIndices == true)
 			{
-				mStream.WriteByte((byte)vertex.mvJointIndices.x);
-				mStream.WriteByte((byte)vertex.mvJointIndices.y);
-				mStream.WriteByte((byte)vertex.mvJointIndices.z);
-				mStream.WriteByte((byte)vertex.mvJointIndices.w);
+				mStream.writeByte((byte)vertex.mvJointIndices.x);
+				mStream.writeByte((byte)vertex.mvJointIndices.y);
+				mStream.writeByte((byte)vertex.mvJointIndices.z);
+				mStream.writeByte((byte)vertex.mvJointIndices.w);
 			}
 		}
 		
@@ -408,18 +408,18 @@ public class CSModelOutputer
 			{
 				for (int i = 0; i < indexList.size() / 3; i++)
 				{
-					mStream.WriteUnsignedShort(indexList.get(i * 3 + 0));
-					mStream.WriteUnsignedShort(indexList.get(i * 3 + 1));
-					mStream.WriteUnsignedShort(indexList.get(i * 3 + 2));
+					mStream.writeUnsignedShort(indexList.get(i * 3 + 0));
+					mStream.writeUnsignedShort(indexList.get(i * 3 + 1));
+					mStream.writeUnsignedShort(indexList.get(i * 3 + 2));
 				}
 			}
 			else
 			{
 				for (int i = 0; i < indexList.size() / 3; i++)
 				{
-					mStream.WriteUnsignedInt((long)indexList.get(i * 3 + 0));
-					mStream.WriteUnsignedInt((long)indexList.get(i * 3 + 1));
-					mStream.WriteUnsignedInt((long)indexList.get(i * 3 + 2));
+					mStream.writeUnsignedInt((long)indexList.get(i * 3 + 0));
+					mStream.writeUnsignedInt((long)indexList.get(i * 3 + 1));
+					mStream.writeUnsignedInt((long)indexList.get(i * 3 + 2));
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 package com.taggames.premultipliedalphapngtool;
 
-import com.taggames.toolutils.SCLogger;
+import com.chillisource.toolutils.Logging;
 
 public class CMain 
 {
@@ -16,7 +16,7 @@ public class CMain
 	public static void main(String[] inastrArgs) throws Exception 
 	{	
 		//setup the logger.
-		SCLogger.Initialise(inastrArgs);
+		Logging.start(inastrArgs);
 		
 		//check the number of arguments make sense.
 		if (inastrArgs.length == 0)
@@ -35,7 +35,7 @@ public class CMain
 				if (i+1 < inastrArgs.length)
 					options.strInputFilename = inastrArgs[i+1];
 				else
-					SCLogger.LogFatalError("No input file provided!");
+					Logging.logFatal("No input file provided!");
 				i++;
 			}
 			
@@ -45,7 +45,7 @@ public class CMain
 				if (i+1 < inastrArgs.length)
 					options.strOutputFilename = inastrArgs[i+1];
 				else
-					SCLogger.LogFatalError("No output file provided!");
+					Logging.logFatal("No output file provided!");
 				i++;
 			}
 			
@@ -59,14 +59,14 @@ public class CMain
 		
 		//confirm that the params are valid.
 		if (options.strInputFilename == "")
-			SCLogger.LogFatalError("No input filename provided.");
+			Logging.logFatal("No input filename provided.");
 		if (options.strOutputFilename == "")
-			SCLogger.LogFatalError("No output filename provided.");
+			Logging.logFatal("No output filename provided.");
 		
 		//now that the options have been gathered, perform the png pre-multiplying!
 		SCPngPremultiplier.Premultiply(options);
 
-		SCLogger.PrintErrorsAndWarnings();
+		Logging.finish();
 	}
 	//------------------------------------------------------
 	/// Print Help Text
@@ -75,12 +75,12 @@ public class CMain
 	//------------------------------------------------------
 	private static void PrintHelpText()
 	{
-		SCLogger.SetLoggingLevel(SCLogger.LOGGING_LEVEL_VERBOSE);
-		SCLogger.LogMessage("java -jar PremultipliedAlphaPNGTool.jar --input <filepath> --output <filepath> [--logginglevel <level>] [--displayerrors <errordisplay>] [--help]");
-		SCLogger.LogMessage("\t--input(-i) \t-> The input filepath.");
-		SCLogger.LogMessage("\t--output(-o) \t-> The output filepath.");
-		SCLogger.LogMessage("\t--logginglevel(-l) \t-> Sets the logging level. Possible values are: 'none', 'fatal', 'error', 'warning', and 'verbose'. The default is value is 'warning'");
-		SCLogger.LogMessage("\t--errordisplay(-e) \t-> Sets when errors should be displayed. Possible values are: 'never', 'atend', and 'whenreceived'. The default value is 'atend'");
-		SCLogger.LogMessage("\t--help(-h) \t-> Displays this help message.");
+		Logging.setLoggingLevel(Logging.LOGGING_LEVEL_VERBOSE);
+		Logging.logVerbose("java -jar PremultipliedAlphaPNGTool.jar --input <filepath> --output <filepath> [--logginglevel <level>] [--displayerrors <errordisplay>] [--help]");
+		Logging.logVerbose("\t--input(-i) \t-> The input filepath.");
+		Logging.logVerbose("\t--output(-o) \t-> The output filepath.");
+		Logging.logVerbose("\t--logginglevel(-l) \t-> Sets the logging level. Possible values are: 'none', 'fatal', 'error', 'warning', and 'verbose'. The default is value is 'warning'");
+		Logging.logVerbose("\t--errordisplay(-e) \t-> Sets when errors should be displayed. Possible values are: 'never', 'atend', and 'whenreceived'. The default value is 'atend'");
+		Logging.logVerbose("\t--help(-h) \t-> Displays this help message.");
 	}
 }

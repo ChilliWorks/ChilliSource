@@ -2,16 +2,16 @@ package com.chillisource.csanimconverter;
 
 import java.util.LinkedList;
 
-import com.taggames.toolutils.CMatrix4;
+import com.chillisource.toolutils.Matrix4;
 
 public class Animation 
 {
 	public float mfFrameRate;
-	public LinkedList<CMatrix4> mTransformList;
+	public LinkedList<Matrix4> mTransformList;
 	
 	public Animation()
 	{
 		mfFrameRate = 0.0f;
-		mTransformList = new LinkedList<CMatrix4>();
+		mTransformList = new LinkedList<Matrix4>();
 	}
 }

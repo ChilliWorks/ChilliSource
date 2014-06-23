@@ -1,39 +1,35 @@
-package com.taggames.toolutils;
+package com.chillisource.toolutils;
 
-public class CIntVector4 
+public class Vector2 
 {
 	//------------------------------------------------------------
-	/// public member data.
+	/// public memeber data
 	//------------------------------------------------------------
-	public int x;
-	public int y;
-	public int z;
-	public int w;
+	public float x;
+	public float y;
 	//------------------------------------------------------------
 	/// Constructor
 	//------------------------------------------------------------
-	public CIntVector4()
+	public Vector2()
 	{
-		x = y = z = w = 0;
+		x = y = 0.0f;
 	}
 	//------------------------------------------------------------
 	/// Constructor
 	//------------------------------------------------------------
-	public CIntVector4(int indwX, int indwY, int indwZ, int indwW)
+	public Vector2(float infX, float infY)
 	{
-		x = indwX;
-		y = indwY;
-		z = indwZ;
-		w = indwW;
+		x = infX;
+		y = infY;
 	}
 	//------------------------------------------------------------
 	/// Copy
 	///
 	/// @return a copy of this vector.
 	//------------------------------------------------------------
-	public CIntVector4 Copy()
+	public Vector2 copy()
 	{
-		return new CIntVector4(z, y, z, w);
+		return new Vector2(x, y);
 	}
 	//------------------------------------------------------------
 	/// Equals
@@ -45,10 +41,10 @@ public class CIntVector4
 	{
 	    if ( this == inObj ) 
 	    	return true;
-	    if ((inObj instanceof CIntVector4) == false) 
+	    if ((inObj instanceof Vector2) == false) 
 	    	return false;
-	    CIntVector4 vec = (CIntVector4)inObj;
-	    if (x == vec.x && y == vec.y  && z == vec.z && w == vec.w)
+	    Vector2 vec = (Vector2)inObj;
+	    if (Float.floatToIntBits(x) == Float.floatToIntBits(vec.x) && Float.floatToIntBits(y) == Float.floatToIntBits(vec.y))
 	    	return true;
 	    return false;
 	}
@@ -59,6 +55,6 @@ public class CIntVector4
 	//------------------------------------------------------------
 	public String toString()
 	{
-		return "(" + x + ", " + y + ", " + z + "," + w + ")";
+		return "(" + x + ", " + y + ")";
 	}
 }

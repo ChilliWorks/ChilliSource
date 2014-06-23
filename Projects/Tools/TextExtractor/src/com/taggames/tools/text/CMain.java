@@ -15,7 +15,7 @@ package com.taggames.tools.text;
 
 import java.util.Hashtable;
 
-import com.taggames.toolutils.SCLogger;
+import com.chillisource.toolutils.Logging;
 
 public class CMain
 {
@@ -23,8 +23,8 @@ public class CMain
     
     public static void main(String inastrArgs[]) throws Exception 
 	{
-    	SCLogger.LogMessage("Text Extractor; Version 1.3.");
-		SCLogger.Initialise(inastrArgs);
+    	Logging.logVerbose("Text Extractor; Version 1.3.");
+		Logging.start(inastrArgs);
 		
 		try
 		{
@@ -32,10 +32,10 @@ public class CMain
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogFatalError("An exception has occurred: \n" + e.getStackTrace());
+			Logging.logFatal("An exception has occurred: \n" + e.getStackTrace());
 		}
 		
-		SCLogger.PrintErrorsAndWarnings();
+		Logging.finish();
 	}
     
 	//------------------------------------------------------
@@ -97,7 +97,7 @@ public class CMain
         
         if(!Options.IsValid())
         {
-        	SCLogger.LogError("Arguments are invalid. Cannot continue.");
+        	Logging.logError("Arguments are invalid. Cannot continue.");
         	PrintHelpText();
         	return;
         }
@@ -111,8 +111,8 @@ public class CMain
 	//------------------------------------------------------
 	private static void PrintHelpText()
 	{
-		SCLogger.SetLoggingLevel(SCLogger.LOGGING_LEVEL_VERBOSE);
-		SCLogger.LogMessage("java -jar TextExtractor.jar" +
+		Logging.setLoggingLevel(Logging.LOGGING_LEVEL_VERBOSE);
+		Logging.logVerbose("java -jar TextExtractor.jar" +
 				"[--logginglevel or -l <level>]" +
 				"[--errordisplay or -e <errordisplay>]" +
 				"[--inputfile <.xls file>]" +
@@ -121,13 +121,13 @@ public class CMain
 				"[--languages <lang1,lang2,lang3]" +
 				"[--outputfilename <filename>]" +
 				"[--outputfileextension <extension>]");
-		SCLogger.LogMessage("\t--logginglevel(-l) \t-> Sets the logging level. Possible values are: 'none', 'fatal', 'error', 'warning', and 'verbose'. The default is value is 'warning'");
-		SCLogger.LogMessage("\t--errordisplay(-e) \t-> Sets when errors should be displayed. Possible values are: 'never', 'atend', and 'whenreceived'. The default value is 'atend'");
-		SCLogger.LogMessage("\t--inputfile \t\t-> Source .xls file to extract text from");
-		SCLogger.LogMessage("\t--outputdirectory \t-> Path when output will be written to");
-		SCLogger.LogMessage("\t--language \t\t-> Name of language column in source .xls to extract text from (cannot use with --languages)");
-		SCLogger.LogMessage("\t--languages \t\t-> Comma separated list of language columns in source .xls to extract text from  (cannot use with --language)");
-		SCLogger.LogMessage("\t--outputfilename \t-> [optional] if you want to specify an filename for extracted text (defaults to language, cannot be used with --languages)");
-		SCLogger.LogMessage("\t--outputfileextension \t-> [optional] if you want to specify a file extension (defaults to mofloloca)");
+		Logging.logVerbose("\t--logginglevel(-l) \t-> Sets the logging level. Possible values are: 'none', 'fatal', 'error', 'warning', and 'verbose'. The default is value is 'warning'");
+		Logging.logVerbose("\t--errordisplay(-e) \t-> Sets when errors should be displayed. Possible values are: 'never', 'atend', and 'whenreceived'. The default value is 'atend'");
+		Logging.logVerbose("\t--inputfile \t\t-> Source .xls file to extract text from");
+		Logging.logVerbose("\t--outputdirectory \t-> Path when output will be written to");
+		Logging.logVerbose("\t--language \t\t-> Name of language column in source .xls to extract text from (cannot use with --languages)");
+		Logging.logVerbose("\t--languages \t\t-> Comma separated list of language columns in source .xls to extract text from  (cannot use with --language)");
+		Logging.logVerbose("\t--outputfilename \t-> [optional] if you want to specify an filename for extracted text (defaults to language, cannot be used with --languages)");
+		Logging.logVerbose("\t--outputfileextension \t-> [optional] if you want to specify a file extension (defaults to mofloloca)");
 	}
 }

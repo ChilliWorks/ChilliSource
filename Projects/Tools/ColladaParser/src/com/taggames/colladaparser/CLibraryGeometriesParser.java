@@ -11,8 +11,8 @@ package com.taggames.colladaparser;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
-import com.taggames.toolutils.SCLogger;
 
 public class CLibraryGeometriesParser 
 {
@@ -119,7 +119,7 @@ public class CLibraryGeometriesParser
 		if (mCollada.mLibraryGeometries != null)
 			mCollada.mLibraryGeometries.put(mCurrentGeometry.mstrId, mCurrentGeometry);
 		else
-			SCLogger.LogFatalError("mLibraryGeometries is null!");
+			Logging.logFatal("mLibraryGeometries is null!");
 		
 		return false;
 	}
@@ -145,7 +145,7 @@ public class CLibraryGeometriesParser
 		
 		//check geometry exists
 		if (mCurrentGeometry == null)
-			SCLogger.LogFatalError("mCurrentGeometry is null!");
+			Logging.logFatal("mCurrentGeometry is null!");
 		
 		mCurrentGeometry.meType = ColladaGeometry.COLLADA_GEOMETRY_TYPE.MESH;
 		
@@ -177,7 +177,7 @@ public class CLibraryGeometriesParser
 		if (mCurrentGeometry != null && mCurrentGeometry.mMesh != null)
 			mCurrentGeometry.mMesh.mSources.put(mCurrentSource.mstrId, mCurrentSource);
 		else
-			SCLogger.LogFatalError("mCurrentGeometry.mMesh is null!");
+			Logging.logFatal("mCurrentGeometry.mMesh is null!");
 		
 		return false;
 	}
@@ -265,7 +265,7 @@ public class CLibraryGeometriesParser
 		if (mCurrentSource != null)
 			mCurrentSource.mFloatArray = mCurrentFloatArray;
 		else
-			SCLogger.LogFatalError("No available parent for float array!");
+			Logging.logFatal("No available parent for float array!");
 		
 		return true;
 	}
@@ -291,7 +291,7 @@ public class CLibraryGeometriesParser
 		}
 		else
 		{
-			SCLogger.LogFatalError("Incorrect number of values for 'float array'!");
+			Logging.logFatal("Incorrect number of values for 'float array'!");
 		}
 		
 		mCurrentFloatArray = null;
@@ -311,7 +311,7 @@ public class CLibraryGeometriesParser
 		if (mCurrentGeometry != null && mCurrentGeometry.mMesh != null)
 			mCurrentGeometry.mMesh.mVertices = mCurrentVertices;
 		else
-			SCLogger.LogFatalError("No available parent for 'vertices'!");
+			Logging.logFatal("No available parent for 'vertices'!");
 		
 		return false;
 	}
@@ -344,7 +344,7 @@ public class CLibraryGeometriesParser
 		if (mCurrentGeometry != null && mCurrentGeometry.mMesh != null)
 			mCurrentGeometry.mMesh.mTrianglesList.add(mCurrentTriangles);
 		else
-			SCLogger.LogFatalError("No available mesh for triangles!");
+			Logging.logFatal("No available mesh for triangles!");
 		
 		return false;
 	}
@@ -381,7 +381,7 @@ public class CLibraryGeometriesParser
 		else if (mCurrentTriangles != null)
 			mCurrentTriangles.mInputList.add(input);
 		else
-			SCLogger.LogFatalError("No available parent for 'input'!");
+			Logging.logFatal("No available parent for 'input'!");
 		
 		return false;
 
@@ -412,7 +412,7 @@ public class CLibraryGeometriesParser
 			mCurrentTriangles.mP = mCurrentP;
 			mCurrentTriangles.mP.madwValues = new int[mCurrentTriangles.mdwCount * 3 * mCurrentTriangles.mInputList.size()];
 		}else
-			SCLogger.LogFatalError("No available parent for 'P'!");
+			Logging.logFatal("No available parent for 'P'!");
 		
 		return true;
 	}
@@ -439,7 +439,7 @@ public class CLibraryGeometriesParser
 			}
 			else
 			{
-				SCLogger.LogFatalError("Incorrect number of values for 'P'");
+				Logging.logFatal("Incorrect number of values for 'P'");
 			}
 		}
 		

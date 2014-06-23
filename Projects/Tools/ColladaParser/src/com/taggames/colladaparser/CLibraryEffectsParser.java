@@ -11,8 +11,8 @@ package com.taggames.colladaparser;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
-import com.taggames.toolutils.SCLogger;
 
 public class CLibraryEffectsParser 
 {
@@ -150,7 +150,7 @@ public class CLibraryEffectsParser
 		if (mCollada.mLibraryEffects != null)
 			mCollada.mLibraryEffects.put(mCurrentEffect.mstrId, mCurrentEffect);
 		else
-			SCLogger.LogFatalError("mLibraryEffects is null!");
+			Logging.logFatal("mLibraryEffects is null!");
 		
 		return false;
 	}
@@ -177,7 +177,7 @@ public class CLibraryEffectsParser
 		if (mCurrentEffect != null)
 			mCurrentEffect.mProfileCommon = profileCommon;
 		else
-			SCLogger.LogFatalError("mCurrentEffect is null!");
+			Logging.logFatal("mCurrentEffect is null!");
 		
 		return false;
 	}
@@ -205,7 +205,7 @@ public class CLibraryEffectsParser
 		if (mCurrentEffect != null && mCurrentEffect.mProfileCommon != null)
 			mCurrentEffect.mProfileCommon.mNewParams.put(mCurrentNewParam.mstrSId, mCurrentNewParam);
 		else
-			SCLogger.LogFatalError("mCurrentEffect is null!");
+			Logging.logFatal("mCurrentEffect is null!");
 		
 		return false;
 	}
@@ -234,7 +234,7 @@ public class CLibraryEffectsParser
 		if (mCurrentNewParam != null)
 			mCurrentNewParam.mSurface = newSurface;
 		else
-			SCLogger.LogFatalError("mCurrentNewParam is null!");
+			Logging.logFatal("mCurrentNewParam is null!");
 		
 		return false;
 	}
@@ -261,7 +261,7 @@ public class CLibraryEffectsParser
 		if (mCurrentNewParam != null)
 			mCurrentNewParam.mSampler2D = newSampler2D;
 		else
-			SCLogger.LogFatalError("mCurrentNewParam is null!");
+			Logging.logFatal("mCurrentNewParam is null!");
 		
 		return false;
 	}
@@ -289,7 +289,7 @@ public class CLibraryEffectsParser
 		if (mCurrentEffect != null && mCurrentEffect.mProfileCommon != null)
 			mCurrentEffect.mProfileCommon.mTechnique = mCurrentTechnique;
 		else
-			SCLogger.LogFatalError("mCurrentEffect is null!");
+			Logging.logFatal("mCurrentEffect is null!");
 		
 		return false;
 	}
@@ -317,7 +317,7 @@ public class CLibraryEffectsParser
 		if (mCurrentTechnique != null)
 			mCurrentTechnique.mBlinnAndPhong = newBlinnAndPhong;
 		else
-			SCLogger.LogFatalError("mCurrentTechnique is null!");
+			Logging.logFatal("mCurrentTechnique is null!");
 		
 		return false;
 	}
@@ -344,7 +344,7 @@ public class CLibraryEffectsParser
 		if (mCurrentTechnique != null)
 			mCurrentTechnique.mBlinnAndPhong = newBlinnAndPhong;
 		else
-			SCLogger.LogFatalError("mCurrentTechnique is null!");
+			Logging.logFatal("mCurrentTechnique is null!");
 		
 		return false;
 	}
@@ -374,7 +374,7 @@ public class CLibraryEffectsParser
 		if (mCurrentTechnique != null && mCurrentTechnique.mBlinnAndPhong != null)
 			mCurrentTechnique.mBlinnAndPhong.mEmissive = mCurrentMaterialColour;
 		else
-			SCLogger.LogFatalError("mBlinnAndPhong is null!");
+			Logging.logFatal("mBlinnAndPhong is null!");
 		
 		return false;
 	}
@@ -402,7 +402,7 @@ public class CLibraryEffectsParser
 		if (mCurrentTechnique != null && mCurrentTechnique.mBlinnAndPhong != null)
 			mCurrentTechnique.mBlinnAndPhong.mAmbient = mCurrentMaterialColour;
 		else
-			SCLogger.LogFatalError("mBlinnAndPhong is null!");
+			Logging.logFatal("mBlinnAndPhong is null!");
 		
 		return false;
 	}
@@ -433,7 +433,7 @@ public class CLibraryEffectsParser
 		if (mCurrentTechnique != null && mCurrentTechnique.mBlinnAndPhong != null)
 			mCurrentTechnique.mBlinnAndPhong.mDiffuse = mCurrentMaterialColour;
 		else
-			SCLogger.LogFatalError("mBlinnAndPhong is null!");
+			Logging.logFatal("mBlinnAndPhong is null!");
 		
 		return false;
 	}
@@ -461,7 +461,7 @@ public class CLibraryEffectsParser
 		if (mCurrentTechnique != null && mCurrentTechnique.mBlinnAndPhong != null)
 			mCurrentTechnique.mBlinnAndPhong.mSpecular = mCurrentMaterialColour;
 		else
-			SCLogger.LogFatalError("mBlinnAndPhong is null!");
+			Logging.logFatal("mBlinnAndPhong is null!");
 		
 		return false;
 	}
@@ -489,7 +489,7 @@ public class CLibraryEffectsParser
 		if (mCurrentTechnique != null && mCurrentTechnique.mBlinnAndPhong != null)
 			mCurrentTechnique.mBlinnAndPhong.mShininess = mCurrentShininess;
 		else
-			SCLogger.LogFatalError("mBlinnAndPhong is null!");
+			Logging.logFatal("mBlinnAndPhong is null!");
 		
 		return false;
 	}
@@ -517,7 +517,7 @@ public class CLibraryEffectsParser
 		if (mCurrentMaterialColour != null)
 			mCurrentMaterialColour.mColour = mCurrentColour;
 		else
-			SCLogger.LogFatalError("mBlinnAndPhong is null!");
+			Logging.logFatal("mBlinnAndPhong is null!");
 
 		return true;
 	}
@@ -533,7 +533,7 @@ public class CLibraryEffectsParser
 		
 		if (splitColourString.length != 4)
 		{
-			SCLogger.LogFatalError("ColladaColour does not contain 4 values!");
+			Logging.logFatal("ColladaColour does not contain 4 values!");
 		}
 		
 		mCurrentColour.mfR = Float.parseFloat(splitColourString[0]);
@@ -559,7 +559,7 @@ public class CLibraryEffectsParser
 		if (mCurrentMaterialColour != null)
 			mCurrentMaterialColour.mTexture = texture;
 		else
-			SCLogger.LogFatalError("mCurrentMaterialColour is null!");
+			Logging.logFatal("mCurrentMaterialColour is null!");
 		
 		return false;
 	}
@@ -586,7 +586,7 @@ public class CLibraryEffectsParser
 		if (mCurrentShininess != null)
 			mCurrentShininess.mFloat = mCurrentFloat;
 		else
-			SCLogger.LogFatalError("mCurrentShininess is null!");
+			Logging.logFatal("mCurrentShininess is null!");
 		
 		return true;
 	}
@@ -616,7 +616,7 @@ public class CLibraryEffectsParser
 		if (mCurrentNewParam != null && mCurrentNewParam.mSampler2D != null)
 			mCurrentNewParam.mSampler2D.mSource = mCurrentSource;
 		else
-			SCLogger.LogFatalError("mSampler2D is null!");
+			Logging.logFatal("mSampler2D is null!");
 		
 		return true;
 	}
@@ -647,7 +647,7 @@ public class CLibraryEffectsParser
 		if (mCurrentNewParam != null && mCurrentNewParam.mSurface != null)
 			mCurrentNewParam.mSurface.mInitFrom = mCurrentInitFrom;
 		else
-			SCLogger.LogFatalError("mSurface is null!");
+			Logging.logFatal("mSurface is null!");
 		
 		return true;
 	}

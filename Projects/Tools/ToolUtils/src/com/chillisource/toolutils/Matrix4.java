@@ -1,11 +1,11 @@
-package com.taggames.toolutils;
+package com.chillisource.toolutils;
 
-public class CMatrix4 
+public class Matrix4 
 {
 	//-----------------------------------------------------
 	/// Constants
 	//-----------------------------------------------------
-	public static final CMatrix4 IDENTITY = new CMatrix4();
+	public static final Matrix4 IDENTITY = new Matrix4();
 	//-----------------------------------------------------
 	/// Public member data
 	//-----------------------------------------------------
@@ -13,7 +13,7 @@ public class CMatrix4
 	//-----------------------------------------------------
 	/// Constructor
 	//-----------------------------------------------------
-	public CMatrix4()
+	public Matrix4()
 	{
 		mafData = new float[16];
 		mafData[0] = 1.0f; 	mafData[1] = 0.0f; 	mafData[2] = 0.0f; 	mafData[3] = 0.0f;
@@ -24,7 +24,7 @@ public class CMatrix4
 	//-----------------------------------------------------
 	/// Constructor
 	//-----------------------------------------------------
-	public CMatrix4(float infA, float infB, float infC, float infD,
+	public Matrix4(float infA, float infB, float infC, float infD,
 					float infE,	float infF,	float infG, float infH,
 					float infI, float infJ, float infK, float infL,
 					float infM, float infN, float infO, float infP)
@@ -42,9 +42,9 @@ public class CMatrix4
 	///
 	/// @return the copy.
 	//-----------------------------------------------------
-	public CMatrix4 Copy()
+	public Matrix4 copy()
 	{
-		CMatrix4 newMat = new CMatrix4();
+		Matrix4 newMat = new Matrix4();
 
 		for (int i = 0; i < 16; i++)
 		{
@@ -60,7 +60,7 @@ public class CMatrix4
 	///
 	/// @param the matrix to copy.
 	//-----------------------------------------------------
-	public void Set(CMatrix4 inMat)
+	public void set(Matrix4 inMat)
 	{
 		for (int i = 0; i < 16; i++)
 		{
@@ -76,7 +76,7 @@ public class CMatrix4
 	/// @param the y index.
 	/// @return the value at this index.
 	//-----------------------------------------------------
-	public float Get(int indwX, int indwY)
+	public float get(int indwX, int indwY)
 	{
 		return mafData[indwX + indwY * 4];
 	}
@@ -89,9 +89,9 @@ public class CMatrix4
 	/// @param the angle to rotate through.
 	/// @return the rotation matrix.
 	//-----------------------------------------------------
-	public static CMatrix4 CreateRotateX(float infAngleRads)
+	public static Matrix4 createRotateX(float infAngleRads)
 	{
-		CMatrix4 newMat = new CMatrix4();
+		Matrix4 newMat = new Matrix4();
 
 		float c = (float)Math.cos(infAngleRads);
 		float s = (float)Math.sin(infAngleRads);
@@ -112,9 +112,9 @@ public class CMatrix4
 	/// @param the angle to rotate through.
 	/// @return the rotation matrix.
 	//-----------------------------------------------------
-	public static CMatrix4 CreateRotateY(float infAngleRads)
+	public static Matrix4 createRotateY(float infAngleRads)
 	{
-		CMatrix4 newMat = new CMatrix4();
+		Matrix4 newMat = new Matrix4();
 
 		float c = (float)Math.cos(infAngleRads);
 		float s = (float)Math.sin(infAngleRads);
@@ -135,9 +135,9 @@ public class CMatrix4
 	/// @param the angle to rotate through.
 	/// @return the rotation matrix.
 	//-----------------------------------------------------
-	public static CMatrix4 CreateRotateZ(float infAngleRads)
+	public static Matrix4 createRotateZ(float infAngleRads)
 	{
-		CMatrix4 newMat = new CMatrix4();
+		Matrix4 newMat = new Matrix4();
 
 		float c = (float)Math.cos(infAngleRads);
 		float s = (float)Math.sin(infAngleRads);
@@ -157,9 +157,9 @@ public class CMatrix4
 	/// @param the translation
 	/// @return the translation matrix.
 	//-----------------------------------------------------
-	public static CMatrix4 CreateTranslation(CVector3 inTranslation)
+	public static Matrix4 createTranslation(Vector3 inTranslation)
 	{
-		CMatrix4 newMat = new CMatrix4();
+		Matrix4 newMat = new Matrix4();
 
 		newMat.mafData[12] = inTranslation.x;
 		newMat.mafData[13] = inTranslation.y;
@@ -175,9 +175,9 @@ public class CMatrix4
 	/// @param the scale
 	/// @return the scale matrix.
 	//-----------------------------------------------------
-	public static CMatrix4 CreateScale(CVector3 inScale)
+	public static Matrix4 createScale(Vector3 inScale)
 	{
-		CMatrix4 newMat = new CMatrix4();
+		Matrix4 newMat = new Matrix4();
 
 		newMat.mafData[0] = inScale.x;
 		newMat.mafData[5] = inScale.y;
@@ -193,9 +193,9 @@ public class CMatrix4
 	/// @param the rotation
 	/// @return the rotation matrix.
 	//-----------------------------------------------------
-	public static CMatrix4 CreateRotation(CQuaternion inRot)
+	public static Matrix4 createRotation(Quaternion inRot)
 	{
-		CMatrix4 newMat = new CMatrix4();
+		Matrix4 newMat = new Matrix4();
 
 		float c = (float)Math.cos(inRot.w);
 		float s = (float)Math.sin(inRot.w);
@@ -215,9 +215,9 @@ public class CMatrix4
 	/// @param the other matrix.
 	/// @return the multiplied matrix.
 	//-----------------------------------------------------
-	public void Multiply(CMatrix4 inB)
+	public void multiply(Matrix4 inB)
 	{
-		CMatrix4 copy = this.Copy();
+		Matrix4 copy = this.copy();
 		
 		mafData[0] = copy.mafData[0] * inB.mafData[0] + copy.mafData[1] * inB.mafData[4] + copy.mafData[2] * inB.mafData[8] + copy.mafData[3] * inB.mafData[12];
 		mafData[1] = copy.mafData[0] * inB.mafData[1] + copy.mafData[1] * inB.mafData[5] + copy.mafData[2] * inB.mafData[9] + copy.mafData[3] * inB.mafData[13];
@@ -239,9 +239,6 @@ public class CMatrix4
 		mafData[14] = copy.mafData[12] * inB.mafData[2] + copy.mafData[13] * inB.mafData[6] + copy.mafData[14] * inB.mafData[10] + copy.mafData[15] * inB.mafData[14];
 		mafData[15] = copy.mafData[12] * inB.mafData[3] + copy.mafData[13] * inB.mafData[7] + copy.mafData[14] * inB.mafData[11] + copy.mafData[15] * inB.mafData[15];
 	}
-	
-	
-	
 	//-----------------------------------------------------
 	/// Returns the rotation as euler angles.
 	///
@@ -273,9 +270,9 @@ public class CMatrix4
 	///
 	/// @return the euler angles.
 	//-----------------------------------------------------
-	public CVector3 GetEulerAngles()
+	public Vector3 getEulerAngles()
 	{
-		CVector3 out = new CVector3();
+		Vector3 out = new Vector3();
 		if (mafData[8] != 1.0f && mafData[8] != -1.0f)
 		{
 			//only take one set of angles.
@@ -305,22 +302,22 @@ public class CMatrix4
 	///
 	/// @return whether or not this contains scaling.
 	//-----------------------------------------------------
-	public boolean ContainsScale()
+	public boolean containsScale()
 	{
 		float fTolerance = 0.00001f;
-		CMatrix4 theCopy = this.Copy();
+		Matrix4 theCopy = this.copy();
 		
 		theCopy.mafData[12] = 0.0f;
 		theCopy.mafData[13] = 0.0f;
 		theCopy.mafData[14] = 0.0f;
 		
-		CVector3 upRotated = CMatrix4.Multiply(new CVector3(0.0f ,1.0f, 0.0f), theCopy);
-		CVector3 rightRotated = CMatrix4.Multiply(new CVector3(1.0f ,0.0f, 0.0f), theCopy);
-		CVector3 forwardRotated = CMatrix4.Multiply(new CVector3(0.0f ,0.0f, 1.0f), theCopy);
+		Vector3 upRotated = Matrix4.multiply(new Vector3(0.0f ,1.0f, 0.0f), theCopy);
+		Vector3 rightRotated = Matrix4.multiply(new Vector3(1.0f ,0.0f, 0.0f), theCopy);
+		Vector3 forwardRotated = Matrix4.multiply(new Vector3(0.0f ,0.0f, 1.0f), theCopy);
 		
-		if (upRotated.Length() < 1.0f - fTolerance || upRotated.Length() > 1.0f + fTolerance ||
-			rightRotated.Length() < 1.0f - fTolerance || rightRotated.Length() > 1.0f + fTolerance ||
-			forwardRotated.Length() < 1.0f - fTolerance || forwardRotated.Length() > 1.0f + fTolerance)
+		if (upRotated.length() < 1.0f - fTolerance || upRotated.length() > 1.0f + fTolerance ||
+			rightRotated.length() < 1.0f - fTolerance || rightRotated.length() > 1.0f + fTolerance ||
+			forwardRotated.length() < 1.0f - fTolerance || forwardRotated.length() > 1.0f + fTolerance)
 		{
 			return true;
 		}
@@ -332,9 +329,9 @@ public class CMatrix4
 	///
 	/// @return the translation component of this matrix.
 	//-----------------------------------------------------
-	public CVector3 GetTranslation()
+	public Vector3 getTranslation()
 	{
-		CVector3 translation = new CVector3();
+		Vector3 translation = new Vector3();
 		
 		translation.x = mafData[12];
 		translation.y = mafData[13];
@@ -348,9 +345,9 @@ public class CMatrix4
 	/// @param a 2D float array.
 	/// @return a new matrix.
 	//-----------------------------------------------------
-	public static CMatrix4 CreateFrom2DArray(float[][] inafData)
+	public static Matrix4 createFrom2DArray(float[][] inafData)
 	{
-		CMatrix4 m = new CMatrix4();
+		Matrix4 m = new Matrix4();
 		
 		m.mafData[0] = inafData[0][0]; 	m.mafData[1] = inafData[1][0]; 	m.mafData[2] = inafData[2][0]; 	m.mafData[3] = inafData[3][0];
 		m.mafData[4] = inafData[0][1]; 	m.mafData[5] = inafData[1][1]; 	m.mafData[6] = inafData[2][1]; 	m.mafData[7] = inafData[3][1];
@@ -366,9 +363,9 @@ public class CMatrix4
 	/// @param matrix.
 	/// @return the transformed vector
 	//-----------------------------------------------------
-	public static CVector3 Multiply(CVector3 inVector, CMatrix4 inMatrix)
+	public static Vector3 multiply(Vector3 inVector, Matrix4 inMatrix)
 	{
-		CVector3 out = new CVector3();
+		Vector3 out = new Vector3();
 		out.x = inVector.x * inMatrix.mafData[0] + inVector.y * inMatrix.mafData[4] + inVector.z * inMatrix.mafData[8] + inMatrix.mafData[12];
 		out.y = inVector.x * inMatrix.mafData[1] + inVector.y * inMatrix.mafData[5] + inVector.z * inMatrix.mafData[9] + inMatrix.mafData[13];
 		out.z = inVector.x * inMatrix.mafData[2] + inVector.y * inMatrix.mafData[6] + inVector.z * inMatrix.mafData[10] + inMatrix.mafData[14];
@@ -381,9 +378,9 @@ public class CMatrix4
 	/// @param matrix
 	/// @return the transformed matrix.
 	//-----------------------------------------------------
-	public static CMatrix4 Multiply(CMatrix4 inA, CMatrix4 inB)
+	public static Matrix4 multiply(Matrix4 inA, Matrix4 inB)
 	{
-		CMatrix4 out = new CMatrix4();
+		Matrix4 out = new Matrix4();
 		
 		out.mafData[0] = inA.mafData[0] * inB.mafData[0] + inA.mafData[1] * inB.mafData[4] + inA.mafData[2] * inB.mafData[8] + inA.mafData[3] * inB.mafData[12];
 		out.mafData[1] = inA.mafData[0] * inB.mafData[1] + inA.mafData[1] * inB.mafData[5] + inA.mafData[2] * inB.mafData[9] + inA.mafData[3] * inB.mafData[13];
@@ -426,9 +423,9 @@ public class CMatrix4
 	///
 	/// @return the matrix in string form.
 	//-----------------------------------------------------
-	public CMatrix4 SwapYandZ()
+	public Matrix4 swapYandZ()
 	{
-		CMatrix4 output = new CMatrix4();
+		Matrix4 output = new Matrix4();
 		
 		output.mafData[0] = mafData[0]; output.mafData[1] = mafData[2]; output.mafData[2] = mafData[1]; output.mafData[3] = mafData[3];
 		output.mafData[4] = mafData[8]; output.mafData[5] = mafData[10];output.mafData[6] = mafData[9]; output.mafData[7] = mafData[11];
@@ -445,10 +442,10 @@ public class CMatrix4
 	/// @param the orientation.
 	/// @return the transform.
 	//-----------------------------------------------------
-	public static CMatrix4 ComposeTransforms(CVector3 inTranslate, CVector3 inScale, CQuaternion inOrientation)
+	public static Matrix4 composeTransforms(Vector3 inTranslate, Vector3 inScale, Quaternion inOrientation)
 	{
-		CMatrix4 o = new CMatrix4();
-		CMatrix4 rot = inOrientation.ToMatrix();
+		Matrix4 o = new Matrix4();
+		Matrix4 rot = inOrientation.toMatrix();
 		
 		// Set up final matrix with scale, rotation and translation
 		o.mafData[0] = inScale.x * rot.mafData[0]; 				o.mafData[1] = inScale.x * rot.mafData[1]; 		o.mafData[2] = inScale.x * rot.mafData[2];	 	o.mafData[3] = 0;
@@ -463,7 +460,7 @@ public class CMatrix4
 	///
 	/// @return the inverse of this matrix.
 	//-----------------------------------------------------
-	public CMatrix4 Inverse()
+	public Matrix4 inverse()
 	{
 		float m00 = mafData[0],  m01 = mafData[1],  m02 = mafData[2],  m03 = mafData[3];
 		float m10 = mafData[4],  m11 = mafData[5],  m12 = mafData[6],  m13 = mafData[7];
@@ -518,7 +515,7 @@ public class CMatrix4
 		float d23 = - (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
 		float d33 = + (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
 		
-		return new CMatrix4(
+		return new Matrix4(
 					   d00, d01, d02, d03,
 					   d10, d11, d12, d13,
 					   d20, d21, d22, d23,
@@ -535,9 +532,9 @@ public class CMatrix4
 	/// @param OUT: The scale.
 	/// @param OUT: The orientation.
 	//-----------------------------------------------------
-	public void DecomposeTransforms(CVector3 outTranslate, CVector3 outScale, CQuaternion outOrientation)
+	public void decomposeTransforms(Vector3 outTranslate, Vector3 outScale, Quaternion outOrientation)
     {
-		CMatrix4 mat3x3 = new CMatrix4();
+		Matrix4 mat3x3 = new Matrix4();
 		mat3x3.mafData[0] = mafData[0]; 	mat3x3.mafData[1] = mafData[1]; 	mat3x3.mafData[2] = mafData[2]; 	mat3x3.mafData[3] = 0;
 		mat3x3.mafData[4] = mafData[4]; 	mat3x3.mafData[5] = mafData[5]; 	mat3x3.mafData[6] = mafData[6]; 	mat3x3.mafData[7] = 0;
 		mat3x3.mafData[8] = mafData[8]; 	mat3x3.mafData[9] = mafData[9]; 	mat3x3.mafData[10] = mafData[10]; 	mat3x3.mafData[11] = 0;
@@ -547,7 +544,7 @@ public class CMatrix4
 		outTranslate.y = mafData[13]; 
 		outTranslate.z = mafData[14];
 		
-		CMatrix4 kQ = new CMatrix4();
+		Matrix4 kQ = new Matrix4();
 						  
 		// Factor M = QR = QDU where Q is orthogonal, D is diagonal,
 		// and U is upper triangular with ones on its diagonal.  Algorithm uses
@@ -616,7 +613,7 @@ public class CMatrix4
 		}
 		
 		// build "right" matrix R
-		CMatrix4 kR = new CMatrix4();
+		Matrix4 kR = new Matrix4();
 		kR.mafData[0] = kQ.mafData[0]*mafData[0] + kQ.mafData[1]*mafData[1] + kQ.mafData[2]*mafData[2];
 		kR.mafData[4] = kQ.mafData[0]*mafData[4] + kQ.mafData[1]*mafData[5] + kQ.mafData[2]*mafData[6];
 		kR.mafData[5] = kQ.mafData[4]*mafData[4] + kQ.mafData[5]*mafData[5] + kQ.mafData[6]*mafData[6];
@@ -635,6 +632,6 @@ public class CMatrix4
 		//outShear.y = kR.mafData[8]*fInvScaleX;
 		//outShear.z = kR.mafData[9]/outScale.y;
 		
-		outOrientation.Set(CQuaternion.CreateFromMatrix(kQ));
+		outOrientation.set(Quaternion.createFromMatrix(kQ));
 	}
 }

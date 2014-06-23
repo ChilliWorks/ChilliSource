@@ -13,8 +13,8 @@ import java.util.Stack;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
-import com.taggames.toolutils.SCLogger;
 
 public class CLibraryVisualScenesParser 
 {
@@ -135,7 +135,7 @@ public class CLibraryVisualScenesParser
 		if (mCollada.mLibraryVisualScenes != null)
 			mCollada.mLibraryVisualScenes.put(mCurrentVisualScene.mstrId, mCurrentVisualScene);
 		else
-			SCLogger.LogFatalError("mLibraryVisualScenes is null!");
+			Logging.logFatal("mLibraryVisualScenes is null!");
 		
 		return false;
 	}
@@ -178,7 +178,7 @@ public class CLibraryVisualScenesParser
 		else if (mNodeStack.size() > 0)
 			mNodeStack.peek().mChildNodes.put(newNode.mstrId, newNode);
 		else
-			SCLogger.LogFatalError("mCurrentVisualScene is null!");
+			Logging.logFatal("mCurrentVisualScene is null!");
 		
 		//add to node stack
 		mNodeStack.push(newNode);
@@ -213,7 +213,7 @@ public class CLibraryVisualScenesParser
 			}
 		}
 		else
-			SCLogger.LogFatalError("mCurrentVisualScene is null!");
+			Logging.logFatal("mCurrentVisualScene is null!");
 		
 		return false;
 	}
@@ -239,7 +239,7 @@ public class CLibraryVisualScenesParser
 		if (mNodeStack.size() > 0)
 			mNodeStack.peek().mMatrix = mCurrentMatrix;
 		else
-			SCLogger.LogFatalError("mNodeStack is empty!");
+			Logging.logFatal("mNodeStack is empty!");
 		
 		return true;
 	}
@@ -282,7 +282,7 @@ public class CLibraryVisualScenesParser
 			}
 		}
 		else
-			SCLogger.LogFatalError("mNodeStack is empty!");
+			Logging.logFatal("mNodeStack is empty!");
 		
 		return false;
 	}
@@ -307,7 +307,7 @@ public class CLibraryVisualScenesParser
 		if (mCurrentInstanceController != null)
 			mCurrentInstanceController.mSkeleton = mCurrentSkeleton;
 		else
-			SCLogger.LogFatalError("mCurrentInstanceController is null!");
+			Logging.logFatal("mCurrentInstanceController is null!");
 		
 		return true;
 	}
@@ -335,7 +335,7 @@ public class CLibraryVisualScenesParser
 		else if (mCurrentInstanceGeometry != null)
 			mCurrentInstanceGeometry.mBindMaterial = mCurrentBindMaterial;
 		else
-			SCLogger.LogFatalError("mCurrentInstanceController is null!");
+			Logging.logFatal("mCurrentInstanceController is null!");
 		
 		return false;
 	}
@@ -360,7 +360,7 @@ public class CLibraryVisualScenesParser
 		if (mCurrentBindMaterial != null)
 			mCurrentBindMaterial.mTechniqueCommon = mCurrentTechniqueCommon;
 		else
-			SCLogger.LogFatalError("mCurrentBindMaterial is null!");
+			Logging.logFatal("mCurrentBindMaterial is null!");
 		
 		return false;
 	}
@@ -387,7 +387,7 @@ public class CLibraryVisualScenesParser
 		if (mCurrentTechniqueCommon != null)
 			mCurrentTechniqueCommon.mInstanceMaterialList.add(mCurrentInstanceMaterial);
 		else
-			SCLogger.LogFatalError("mCurrentTechniqueCommon is null!");
+			Logging.logFatal("mCurrentTechniqueCommon is null!");
 		
 		return false;
 	}
@@ -415,7 +415,7 @@ public class CLibraryVisualScenesParser
 		if (mCurrentInstanceMaterial != null)
 			mCurrentInstanceMaterial.mBindVertexInput = newBindvBindVertexInput;
 		else
-			SCLogger.LogFatalError("mCurrentInstanceMaterial is null!");
+			Logging.logFatal("mCurrentInstanceMaterial is null!");
 		
 		return false;
 	}
@@ -446,7 +446,7 @@ public class CLibraryVisualScenesParser
 			}
 		}
 		else
-			SCLogger.LogFatalError("mNodeStack is empty!");
+			Logging.logFatal("mNodeStack is empty!");
 		
 		return false;
 	}
@@ -478,7 +478,7 @@ public class CLibraryVisualScenesParser
 			}
 		}
 		else
-			SCLogger.LogFatalError("mNodeStack is empty!");
+			Logging.logFatal("mNodeStack is empty!");
 		
 		return false;
 	}

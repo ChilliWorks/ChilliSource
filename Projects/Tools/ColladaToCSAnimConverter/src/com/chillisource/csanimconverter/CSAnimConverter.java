@@ -3,11 +3,11 @@ package com.chillisource.csanimconverter;
 import java.util.LinkedList;
 
 import com.chillisource.csanimconverter.csanim.*;
+import com.chillisource.toolutils.Matrix4;
+import com.chillisource.toolutils.Quaternion;
+import com.chillisource.toolutils.Vector3;
+import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
-import com.taggames.toolutils.CMatrix4;
-import com.taggames.toolutils.CQuaternion;
-import com.taggames.toolutils.CVector3;
-import com.taggames.toolutils.SCLogger;
 
 public class CSAnimConverter 
 {
@@ -143,7 +143,7 @@ public class CSAnimConverter
 		{
 			if (interpType.equals("LINEAR") == false)
 			{
-				SCLogger.LogFatalError("Unsupported Interpolation type: " + interpType);
+				Logging.logFatal("Unsupported Interpolation type: " + interpType);
 			}
 		}
 		
@@ -164,7 +164,7 @@ public class CSAnimConverter
 		for (int i = 0; i < inTransformSource.mFloatArray.mdwCount / 16; i++)
 		{
 			//create new matrix from the float array
-			CMatrix4 mat = new CMatrix4();
+			Matrix4 mat = new Matrix4();
 			mat.mafData[0] = m[i*16 + 0];		mat.mafData[1] = m[i*16 + 4];		mat.mafData[2] = m[i*16 + 8];		mat.mafData[3] = m[i*16 + 12];
 			mat.mafData[4] = m[i*16 + 1];		mat.mafData[5] = m[i*16 + 5];		mat.mafData[6] = m[i*16 + 9];		mat.mafData[7] = m[i*16 + 13];
 			mat.mafData[8] = m[i*16 + 2];		mat.mafData[9] = m[i*16 + 6];		mat.mafData[10] = m[i*16 + 10];		mat.mafData[11] = m[i*16 + 14];
@@ -236,20 +236,20 @@ public class CSAnimConverter
 				
 				for (int j = 0; j < mAnimations.length; j++)
 				{
-					CMatrix4 transform = new CMatrix4();
+					Matrix4 transform = new Matrix4();
 					if (mAnimations[j].mTransformList.size() > 0)
 						transform = mAnimations[j].mTransformList.get(i);
 					else
 						transform = inAnim.mSkeleton.mNodeList.get(j).mInitialPoseMatrix;
 					
-					CVector3 translation = new CVector3();
-					CVector3 scale = new CVector3();
-					CQuaternion rot = new CQuaternion();
+					Vector3 translation = new Vector3();
+					Vector3 scale = new Vector3();
+					Quaternion rot = new Quaternion();
 					
-					transform.DecomposeTransforms(translation, scale, rot);
+					transform.decomposeTransforms(translation, scale, rot);
 					
 					frame.mNodeTranslations.add(translation);
-					frame.mNodeOrienations.add(rot.Normalise());
+					frame.mNodeOrienations.add(rot.normalise());
 					frame.mNodeScalings.add(scale);
 				}
 				
@@ -258,7 +258,7 @@ public class CSAnimConverter
 		}
 		else
 		{
-			SCLogger.LogFatalError("Animation and skeleton node counts do not match!");
+			Logging.logFatal("Animation and skeleton node counts do not match!");
 		}
 	}
 }

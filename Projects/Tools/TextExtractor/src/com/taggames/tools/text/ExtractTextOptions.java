@@ -10,7 +10,7 @@
 
 package com.taggames.tools.text;
 
-import com.taggames.toolutils.SCLogger;
+import com.chillisource.toolutils.Logging;
 
 public class ExtractTextOptions
 {
@@ -47,20 +47,20 @@ public class ExtractTextOptions
 			if(((strLanguage.length()  > 0) && (strLanguages.length()  > 0))
 			 ||((strLanguage.length() == 0) && (strLanguages.length() == 0)))
 			{
-				SCLogger.LogError("Cannot provide --language and --languages options. You must pick one.");
+				Logging.logError("Cannot provide --language and --languages options. You must pick one.");
 				return false;
 			}
 			
 			if((strLanguages.length() > 0) && (strOutputFilename.length() > 0))
 			{
-				SCLogger.LogError("Cannot provide --languages and --outputfilename options. Use --language instead.");
+				Logging.logError("Cannot provide --languages and --outputfilename options. Use --language instead.");
 				return false;
 			}
 			
 			return true;
 		}
 		
-		SCLogger.LogError("Missing params. You must provide --inputfile and --outputdirectory");
+		Logging.logError("Missing params. You must provide --inputfile and --outputdirectory");
 		return false;
 	}
 }

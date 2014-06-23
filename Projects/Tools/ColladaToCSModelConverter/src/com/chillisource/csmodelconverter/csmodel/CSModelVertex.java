@@ -8,29 +8,29 @@
 
 package com.chillisource.csmodelconverter.csmodel;
 
-import com.taggames.toolutils.CIntVector4;
-import com.taggames.toolutils.CVector2;
-import com.taggames.toolutils.CVector3;
-import com.taggames.toolutils.CVector4;
+import com.chillisource.toolutils.Integer4;
+import com.chillisource.toolutils.Vector2;
+import com.chillisource.toolutils.Vector3;
+import com.chillisource.toolutils.Vector4;
 
 
 public class CSModelVertex 
 {
-	public CVector3 mvPosition;
-	public CVector3 mvNormal;
-	public CVector2 mvTextureCoordinate;
-	public CVector4 mvVertexColour;
-	public CVector4 mvWeights;
-	public CIntVector4 mvJointIndices;
+	public Vector3 mvPosition;
+	public Vector3 mvNormal;
+	public Vector2 mvTextureCoordinate;
+	public Vector4 mvVertexColour;
+	public Vector4 mvWeights;
+	public Integer4 mvJointIndices;
 	
 	public CSModelVertex()
 	{
-		mvPosition = new CVector3();
-		mvNormal = new CVector3();
-		mvTextureCoordinate = new CVector2();
-		mvVertexColour = new CVector4();
-		mvWeights = new CVector4();
-		mvJointIndices = new CIntVector4();
+		mvPosition = new Vector3();
+		mvNormal = new Vector3();
+		mvTextureCoordinate = new Vector2();
+		mvVertexColour = new Vector4();
+		mvWeights = new Vector4();
+		mvJointIndices = new Integer4();
 	}
 
 	public boolean equals(Object inObj)

@@ -1,7 +1,7 @@
 package com.chillisource.csanimconverter;
 
-import com.taggames.toolutils.SCLogger;
-import com.taggames.toolutils.SCStringUtils;
+import com.chillisource.toolutils.Logging;
+import com.chillisource.toolutils.StringUtils;
 
 public class CMain 
 {
@@ -28,7 +28,7 @@ public class CMain
 	public static void main(String[] inastrArgs) throws Exception 
 	{
 		//setup the logger.
-		SCLogger.Initialise(inastrArgs);
+		Logging.start(inastrArgs);
 		
 		//check the number of arguments make sense.
 		if (inastrArgs.length == 0)
@@ -45,9 +45,9 @@ public class CMain
 			if (inastrArgs[i].equalsIgnoreCase(PARAM_NAME_INPUT) == true || inastrArgs[i].equalsIgnoreCase(PARAM_NAME_INPUT_SHORT) == true)
 			{
 				if (i+1 < inastrArgs.length)
-					params.mstrInputFilepath = SCStringUtils.StandardiseFilepath(inastrArgs[i+1]);
+					params.mstrInputFilepath = StringUtils.standardiseFilepath(inastrArgs[i+1]);
 				else
-					SCLogger.LogFatalError("No input file provided!");
+					Logging.logFatal("No input file provided!");
 				i++;
 			}
 			
@@ -55,9 +55,9 @@ public class CMain
 			else if (inastrArgs[i].equalsIgnoreCase(PARAM_NAME_OUTPUT) == true || inastrArgs[i].equalsIgnoreCase(PARAM_NAME_OUTPUT_SHORT) == true)
 			{
 				if (i+1 < inastrArgs.length)
-					params.mstrOutputFilepath = SCStringUtils.StandardiseFilepath(inastrArgs[i+1]);
+					params.mstrOutputFilepath = StringUtils.standardiseFilepath(inastrArgs[i+1]);
 				else
-					SCLogger.LogFatalError("No output file provided!");
+					Logging.logFatal("No output file provided!");
 				i++;
 			}
 			
@@ -67,7 +67,7 @@ public class CMain
 				if (i+1 < inastrArgs.length)
 					ParseTransforms(params, inastrArgs[i+1]);
 				else
-					SCLogger.LogFatalError("No transforms provided!");
+					Logging.logFatal("No transforms provided!");
 				i++;
 			}
 			
@@ -83,7 +83,7 @@ public class CMain
 		CSAnimConverterTool converterTool = new CSAnimConverterTool();
 		converterTool.Convert(params);
 		
-		SCLogger.PrintErrorsAndWarnings();
+		Logging.finish();
 	}
 	//-------------------------------------------------------------------
 	/// Parse Transforms
@@ -108,24 +108,24 @@ public class CMain
 //-------------------------------------------------------------------
 public static void PrintHelpText()
 {
-	SCLogger.LogMessage("Parameters:");
-	SCLogger.LogMessage(" '" + PARAM_NAME_INPUT + "'('" + PARAM_NAME_INPUT_SHORT + "') -> The input filename.");
-	SCLogger.LogMessage(" '" + PARAM_NAME_OUTPUT + "'('" + PARAM_NAME_OUTPUT_SHORT + "') -> The output filename.");
-	SCLogger.LogMessage(" '" + PARAM_NAME_TRANSFORMS + "'('" + PARAM_NAME_TRANSFORMS_SHORT + "') -> A list of alterations to the output data.");
-	SCLogger.LogMessage(" '--logginglevel'('-l') -> the level of messages to log.");
-	SCLogger.LogMessage(" '--errordisplay'('-e') -> when to display errors.");
-	SCLogger.LogMessage(" '" + PARAM_NAME_HELP + "'('" + PARAM_NAME_HELP_SHORT + "') -> Display this help message.");
-	SCLogger.LogMessage("Transforms:");
-	SCLogger.LogMessage(" '" + TRANSFORM_SWAPYANDZ + "' -> Z and Y coordinates of output data will be swapped.");
-	SCLogger.LogMessage("Logging Levels:");
-	SCLogger.LogMessage(" 'none' -> No logging.");
-	SCLogger.LogMessage(" 'fatal' -> Only log fatal errors.");
-	SCLogger.LogMessage(" 'error' -> Only log errors.");
-	SCLogger.LogMessage(" 'warning' -> Log errors and warnings.");
-	SCLogger.LogMessage(" 'verbose' -> Log all messages.");
-	SCLogger.LogMessage("Error Display Options:");
-	SCLogger.LogMessage(" 'never' -> Never display.");
-	SCLogger.LogMessage(" 'atend' -> Log all errors at the end.");
-	SCLogger.LogMessage(" 'whenreceived' -> Log all errors when received.");
+	Logging.logVerbose("Parameters:");
+	Logging.logVerbose(" '" + PARAM_NAME_INPUT + "'('" + PARAM_NAME_INPUT_SHORT + "') -> The input filename.");
+	Logging.logVerbose(" '" + PARAM_NAME_OUTPUT + "'('" + PARAM_NAME_OUTPUT_SHORT + "') -> The output filename.");
+	Logging.logVerbose(" '" + PARAM_NAME_TRANSFORMS + "'('" + PARAM_NAME_TRANSFORMS_SHORT + "') -> A list of alterations to the output data.");
+	Logging.logVerbose(" '--logginglevel'('-l') -> the level of messages to log.");
+	Logging.logVerbose(" '--errordisplay'('-e') -> when to display errors.");
+	Logging.logVerbose(" '" + PARAM_NAME_HELP + "'('" + PARAM_NAME_HELP_SHORT + "') -> Display this help message.");
+	Logging.logVerbose("Transforms:");
+	Logging.logVerbose(" '" + TRANSFORM_SWAPYANDZ + "' -> Z and Y coordinates of output data will be swapped.");
+	Logging.logVerbose("Logging Levels:");
+	Logging.logVerbose(" 'none' -> No logging.");
+	Logging.logVerbose(" 'fatal' -> Only log fatal errors.");
+	Logging.logVerbose(" 'error' -> Only log errors.");
+	Logging.logVerbose(" 'warning' -> Log errors and warnings.");
+	Logging.logVerbose(" 'verbose' -> Log all messages.");
+	Logging.logVerbose("Error Display Options:");
+	Logging.logVerbose(" 'never' -> Never display.");
+	Logging.logVerbose(" 'atend' -> Log all errors at the end.");
+	Logging.logVerbose(" 'whenreceived' -> Log all errors when received.");
 }
 }

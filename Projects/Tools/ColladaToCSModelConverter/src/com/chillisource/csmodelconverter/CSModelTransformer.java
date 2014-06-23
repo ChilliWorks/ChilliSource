@@ -87,7 +87,7 @@ public class CSModelTransformer
 			{
 				for (int i = 0; i < mesh.maInverseBindMatrices.length; i++)
 				{	
-					mesh.maInverseBindMatrices[i] = mesh.maInverseBindMatrices[i].SwapYandZ();
+					mesh.maInverseBindMatrices[i] = mesh.maInverseBindMatrices[i].swapYandZ();
 				}
 			}
 		}

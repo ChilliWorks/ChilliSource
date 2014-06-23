@@ -35,10 +35,10 @@ import javax.imageio.*;
 import java.util.*;
 
 import com.chillisource.TexturePacker.PlacementHeuristic;
-import com.taggames.toolutils.CExternalProcess;
-import com.taggames.toolutils.CLittleEndianOutputStream;
-import com.taggames.toolutils.SCFileSystemUtils;
-import com.taggames.toolutils.SCStringUtils;
+import com.chillisource.toolutils.ExternalProcess;
+import com.chillisource.toolutils.LittleEndianOutputStream;
+import com.chillisource.toolutils.FileUtils;
+import com.chillisource.toolutils.StringUtils;
  
 public class FontTool
 {
@@ -111,7 +111,7 @@ public class FontTool
 		if (options.containsKey("--output"))
 		{
 			outputName = options.get("--output");
-			outputName = SCStringUtils.RemoveExtension(outputName);
+			outputName = StringUtils.removeExtension(outputName);
 		}
 		else
 		{
@@ -376,16 +376,16 @@ public class FontTool
 			commands.add(options.get("--convertnoalpha"));
 		}
 		
-		CExternalProcess csImageConversion = new CExternalProcess();
-		csImageConversion.Run(commands);
+		ExternalProcess csImageConversion = new ExternalProcess();
+		csImageConversion.run(commands);
 		
-		SCFileSystemUtils.DeleteFile(outputName + ".png");
+		FileUtils.deleteFile(outputName + ".png");
 		
 		if(verboseOutput)
-			System.out.println(csImageConversion.GetMessages());
+			System.out.println(csImageConversion.getMessages());
 		
-		System.out.println(csImageConversion.GetWarnings());
-		System.out.println(csImageConversion.GetErrors());
+		System.out.println(csImageConversion.getWarnings());
+		System.out.println(csImageConversion.getErrors());
 	}
 	
 	private void buildAlphabet(PackedTexture in_packedTexture)
@@ -451,14 +451,14 @@ public class FontTool
 	private void writeBinaryFile(PackedTexture in_packedTexture) throws FileNotFoundException, IOException, Exception
 	{
 		int numImages = in_packedTexture.getNumImages();
-		CLittleEndianOutputStream dosBinary = new CLittleEndianOutputStream(outputName + ".csfont");
-		dosBinary.WriteShort((short) numImages);
-		dosBinary.WriteShort(k_version); // file format revision
+		LittleEndianOutputStream dosBinary = new LittleEndianOutputStream(outputName + ".csfont");
+		dosBinary.writeShort((short) numImages);
+		dosBinary.writeShort(k_version); // file format revision
 
 		//Write out spritesheet size
-		dosBinary.WriteShort((short) in_packedTexture.getPackedWidth());
-		dosBinary.WriteShort((short) in_packedTexture.getPackedHeight());
-		dosBinary.WriteShort(lineHeight);
+		dosBinary.writeShort((short) in_packedTexture.getPackedWidth());
+		dosBinary.writeShort((short) in_packedTexture.getPackedHeight());
+		dosBinary.writeShort(lineHeight);
 		
 		System.out.println("Output Image size::" + in_packedTexture.getPackedWidth() + " x " + in_packedTexture.getPackedHeight());
 		
@@ -480,18 +480,18 @@ public class FontTool
 				System.out.println("Image:" + i + " position:" + ox + "," + oy + ":" + width + "," + height);
 			}
 
-			dosBinary.WriteShort((short) ox);
-			dosBinary.WriteShort((short) oy);
-			dosBinary.WriteShort((short) width);
-			dosBinary.WriteShort((short) height);
-			dosBinary.WriteShort((short) ix);
-			dosBinary.WriteShort((short) iy);
-			dosBinary.WriteShort((short) orig_width);
-			dosBinary.WriteShort((short) orig_height);
+			dosBinary.writeShort((short) ox);
+			dosBinary.writeShort((short) oy);
+			dosBinary.writeShort((short) width);
+			dosBinary.writeShort((short) height);
+			dosBinary.writeShort((short) ix);
+			dosBinary.writeShort((short) iy);
+			dosBinary.writeShort((short) orig_width);
+			dosBinary.writeShort((short) orig_height);
 		}
 		
-		dosBinary.WriteNullTerminatedUtf8String(fontAlphabet.toString());
+		dosBinary.writeNullTerminatedUtf8String(fontAlphabet.toString());
 
-		dosBinary.Close();
+		dosBinary.close();
 	}
 }

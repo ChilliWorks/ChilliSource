@@ -1,4 +1,4 @@
-package com.taggames.toolutils;
+package com.chillisource.toolutils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class SCFileSystemUtils 
+public class FileUtils 
 {
 	/**
 	 * Reads the entire contents of a file into a string.
+	 * 
+	 * @author Ian Copland
 	 * 
 	 * @param The file path.
 	 * 
@@ -42,6 +44,8 @@ public class SCFileSystemUtils
 	/**
 	 * Writes the contents of a string to file.
 	 * 
+	 * @author Ian Copland
+	 * 
 	 * @param The output file path.
 	 * @param The string to write.
 	 * 
@@ -59,17 +63,14 @@ public class SCFileSystemUtils
 			return false;
 		}
 	}
-	//-----------------------------------------------
-	/// Write File
-	///
-	/// Writes a byte array to file.
-	///
-	/// @param The filename.
-	/// @param The data to be written to file.
-	/// @param Whether or not the file was successfully
-	/// written.
-	//-----------------------------------------------
-	public static boolean WriteFile(final String instrFilename, final byte[] instrFileContents)
+	/**
+	 * Write a byte array to file.
+	 * 
+	 * @param The filename.
+	 * @param The data to be written to file.
+	 * @return Whether or not the file was successfully written.
+	 */
+	public static boolean writeFile(final String instrFilename, final byte[] instrFileContents)
 	{
 		boolean bSuccess = false;
 		try
@@ -96,20 +97,18 @@ public class SCFileSystemUtils
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogError(SCStringUtils.ConvertExceptionToString(e));
+			Logging.logError(StringUtils.convertExceptionToString(e));
 		}
 		return bSuccess;
 	}
-	//----------------------------------------------------------------
-	/// Copy File
-	///
-	/// Copies a file from one location to another
-	///
-	/// @param the input filename.
-	/// @param the output filename.
-	/// @return whether or not this was successful.
-	//----------------------------------------------------------------
-	public static boolean CopyFile(String instrInputFilepath, String instrOutputFilepath)
+	/**
+	 * Copies a file from one location to another.
+	 * 
+	 * @param the input filename.
+	 * @param the output filename.
+	 * @return whether or not this was successful.
+	 */
+	public static boolean copyFile(String instrInputFilepath, String instrOutputFilepath)
 	{
 		try
 		{
@@ -128,7 +127,7 @@ public class SCFileSystemUtils
 		}
 		catch(Exception e)
 		{
-			SCLogger.LogError("Failed to copy file '" + instrInputFilepath + "' to '" + instrOutputFilepath + "'");
+			Logging.logError("Failed to copy file '" + instrInputFilepath + "' to '" + instrOutputFilepath + "'");
 			return false;
 		}
 		
@@ -144,7 +143,7 @@ public class SCFileSystemUtils
 	/// @param whether or not to ignore dot directories and files.
 	/// @return whether or not this was successful.
 	//----------------------------------------------------------------
-	public static boolean CopyDirectory(String instrInputDirectory, String instrOutputDirectory, LinkedList<String> inastrIgnores)
+	public static boolean copyDirectory(String instrInputDirectory, String instrOutputDirectory, LinkedList<String> inastrIgnores)
 	{
 		try
 		{
@@ -176,20 +175,20 @@ public class SCFileSystemUtils
 					File entry = new File(sourceDir, astrList[i]);
 					if (entry.isDirectory())
 					{
-						CopyDirectory(SCStringUtils.StandardiseFilepath(instrInputDirectory) + SCStringUtils.StandardiseFilepath(astrList[i]),
-								SCStringUtils.StandardiseFilepath(instrOutputDirectory) + SCStringUtils.StandardiseFilepath(astrList[i]), inastrIgnores);
+						copyDirectory(StringUtils.standardiseFilepath(instrInputDirectory) + StringUtils.standardiseFilepath(astrList[i]),
+								StringUtils.standardiseFilepath(instrOutputDirectory) + StringUtils.standardiseFilepath(astrList[i]), inastrIgnores);
 					}
 					else
 					{
-						CopyFile(SCStringUtils.StandardiseFilepath(instrInputDirectory) + SCStringUtils.StandardiseFilepath(astrList[i]),
-								SCStringUtils.StandardiseFilepath(instrOutputDirectory) + SCStringUtils.StandardiseFilepath(astrList[i]));
+						copyFile(StringUtils.standardiseFilepath(instrInputDirectory) + StringUtils.standardiseFilepath(astrList[i]),
+								StringUtils.standardiseFilepath(instrOutputDirectory) + StringUtils.standardiseFilepath(astrList[i]));
 					}
 				}
 			}
 		}
 		catch(Exception e)
 		{
-			SCLogger.LogError("Failed to copy directory '" + instrInputDirectory + "' to '" + instrOutputDirectory + "'");
+			Logging.logError("Failed to copy directory '" + instrInputDirectory + "' to '" + instrOutputDirectory + "'");
 			return false;
 		}
 		
@@ -203,7 +202,7 @@ public class SCFileSystemUtils
 	/// @param the filename.
 	/// @return whether or not this was successful.
 	//----------------------------------------------------------------
-	public static boolean DeleteFile(String instrFilePath)
+	public static boolean deleteFile(String instrFilePath)
 	{
 		File f = new File(instrFilePath);
 		
@@ -220,7 +219,7 @@ public class SCFileSystemUtils
 	/// @param the file to delete.
 	/// @return whether or not this was successful.
 	//----------------------------------------------------------------
-	public static boolean DeleteFile(File inFile)
+	public static boolean deleteFile(File inFile)
 	{
 		if(!inFile.exists() || !inFile.isFile())
 			return false;
@@ -237,10 +236,10 @@ public class SCFileSystemUtils
 	///			the directory because it already exists counts as
 	///			success.
 	//----------------------------------------------------------------
-	public static boolean CreateDirectory(String instrDirectory)
+	public static boolean createDirectory(String instrDirectory)
 	{
 		//break the path onto sections.
-		String strDirectory = SCStringUtils.StandardiseFilepath(instrDirectory);
+		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
 		String[] strPathSections = strDirectory.split("/");
 		
 		String strPathSoFar = "";
@@ -253,7 +252,7 @@ public class SCFileSystemUtils
 			{
 				if (newDir.mkdir() == false)
 				{
-					SCLogger.LogError("Failed to create directory: " + strPathSoFar);
+					Logging.logError("Failed to create directory: " + strPathSoFar);
 					return false;
 				}
 			}
@@ -271,7 +270,7 @@ public class SCFileSystemUtils
 	///			the directory because it does not exist counts as
 	///			success.
 	//----------------------------------------------------------------
-	public static boolean DeleteDirectory(String instrDirectory)
+	public static boolean deleteDirectory(String instrDirectory)
 	{
 		File directory = new File(instrDirectory);
 
@@ -288,7 +287,7 @@ public class SCFileSystemUtils
 				File entry = new File(directory, astrList[i]);
 				if (entry.isDirectory())
 				{
-					if (!DeleteDirectory(entry.getAbsolutePath()))
+					if (!deleteDirectory(entry.getAbsolutePath()))
 						return false;
 				}
 				else
@@ -308,10 +307,10 @@ public class SCFileSystemUtils
 	/// @param the directory name.
 	/// @param the list of files.
 	//----------------------------------------------------------------
-	static public String[] GetFilenamesInDirectory(String instrDirectory)
+	static public String[] getFilenamesInDirectory(String instrDirectory)
 	{
-		String strDirectory = SCStringUtils.StandardiseFilepath(instrDirectory);
-		String[] astrFilenames = GetFullFilenamesInDirectory(strDirectory);
+		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
+		String[] astrFilenames = getFullFilenamesInDirectory(strDirectory);
 		
 		for (int i = 0; i < astrFilenames.length; ++i)
 			astrFilenames[i] = astrFilenames[i].substring(strDirectory.length());
@@ -327,9 +326,9 @@ public class SCFileSystemUtils
 	/// @param the directory name.
 	/// @param the list of files.
 	//----------------------------------------------------------------
-	static public String[] GetFullFilenamesInDirectory(String instrDirectory)
+	static public String[] getFullFilenamesInDirectory(String instrDirectory)
 	{
-		String strDirectory = SCStringUtils.StandardiseFilepath(instrDirectory);
+		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
 		ArrayList<String> astrFilenames = new ArrayList<String>();
 		
 		File directory = new File(strDirectory);
@@ -344,7 +343,7 @@ public class SCFileSystemUtils
 				File entry = new File(directory, astrList[i]);
 				if (entry.isDirectory())
 				{
-					String[] astrMoreFilenames = GetFullFilenamesInDirectory(entry.getPath());
+					String[] astrMoreFilenames = getFullFilenamesInDirectory(entry.getPath());
 					astrFilenames.addAll(Arrays.asList(astrMoreFilenames));
 				}
 				else
@@ -366,10 +365,10 @@ public class SCFileSystemUtils
 	/// @param the directory name.
 	/// @param the list of directories.
 	//----------------------------------------------------------------
-	static public String[] GetDirectoriesInDirectory(String instrDirectory)
+	static public String[] getDirectoriesInDirectory(String instrDirectory)
 	{
-		String strDirectory = SCStringUtils.StandardiseFilepath(instrDirectory);
-		String[] astrDirectories = GetFullDirectoriesInDirectory(strDirectory);
+		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
+		String[] astrDirectories = getFullDirectoriesInDirectory(strDirectory);
 		
 		for (int i = 0; i < astrDirectories.length; ++i)
 			astrDirectories[i] = astrDirectories[i].substring(strDirectory.length());
@@ -385,9 +384,9 @@ public class SCFileSystemUtils
 	/// @param the directory name.
 	/// @param the list of files.
 	//----------------------------------------------------------------
-	static public String[] GetFullDirectoriesInDirectory(String instrDirectory)
+	static public String[] getFullDirectoriesInDirectory(String instrDirectory)
 	{
-		String strDirectory = SCStringUtils.StandardiseFilepath(instrDirectory);
+		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
 		ArrayList<String> astrDirectories = new ArrayList<String>();
 		
 		File directory = new File(strDirectory);
@@ -403,7 +402,7 @@ public class SCFileSystemUtils
 				if (entry.isDirectory())
 				{
 					astrDirectories.add(entry.getPath());
-					String[] astrMoreDirectories = GetFullDirectoriesInDirectory(entry.getPath());
+					String[] astrMoreDirectories = getFullDirectoriesInDirectory(entry.getPath());
 					astrDirectories.addAll(Arrays.asList(astrMoreDirectories));
 				}
 			}
@@ -421,7 +420,7 @@ public class SCFileSystemUtils
 	/// @param the filename.
 	/// @return the checksum.
 	//----------------------------------------------------------------
-	static public String CalculateFileChecksum(String instrFilename)
+	static public String calculateFileChecksum(String instrFilename)
 	{
 		String strChecksum = "";
 		
@@ -453,7 +452,7 @@ public class SCFileSystemUtils
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogError("Could not calculate checksum for file: " + instrFilename);
+			Logging.logError("Could not calculate checksum for file: " + instrFilename);
 		}
 		
 		return strChecksum;
@@ -463,19 +462,19 @@ public class SCFileSystemUtils
 	///
 	/// @return the full path to the jar files location.
 	//----------------------------------------------------------------
-	static public String GetPathToHere()
+	static public String getPathToHere()
 	{
 		String strPathToHere = "";
 		try
 		{
-			CodeSource codeSource = SCFileSystemUtils.class.getProtectionDomain().getCodeSource();
+			CodeSource codeSource = FileUtils.class.getProtectionDomain().getCodeSource();
 			File jarFile = new File(codeSource.getLocation().toURI().getPath());
 			strPathToHere = jarFile.getParentFile().getPath();
-			strPathToHere = SCStringUtils.StandardiseFilepath(strPathToHere);
+			strPathToHere = StringUtils.standardiseFilepath(strPathToHere);
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogError("Failed to get path to here.");
+			Logging.logError("Failed to get path to here.");
 		}
 		return strPathToHere;
 	}

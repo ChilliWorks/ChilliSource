@@ -37,8 +37,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
-import com.taggames.toolutils.SCFileSystemUtils;
-import com.taggames.toolutils.SCLogger;
+import com.chillisource.toolutils.FileUtils;
+import com.chillisource.toolutils.Logging;
 
 /**
  * Generates the android manifest containing all the required settings
@@ -77,16 +77,16 @@ public final class AndroidManifestGenerator
 	 */
 	private static UserManifestData readUserManifest(String in_filePath)
 	{
-		SCLogger.LogMessage("Reading user manifest data from '" + in_filePath + "'");
+		Logging.logVerbose("Reading user manifest data from '" + in_filePath + "'");
 		
 		UserManifestData output = new UserManifestData();
 		
 		try
 		{
-			String xmlString = SCFileSystemUtils.readFile(in_filePath);
+			String xmlString = FileUtils.readFile(in_filePath);
 			if (xmlString == null)
 			{
-				SCLogger.LogFatalError("Could not read user manifest file from '" + in_filePath + "'");
+				Logging.logFatal("Could not read user manifest file from '" + in_filePath + "'");
 			}
 			
 			InputSource inputSource = new InputSource();
@@ -141,7 +141,7 @@ public final class AndroidManifestGenerator
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogFatalError("Failed to read user manifest xml '" + in_filePath + "'");
+			Logging.logFatal("Failed to read user manifest xml '" + in_filePath + "'");
 		}
 		
 		return output;
@@ -157,12 +157,12 @@ public final class AndroidManifestGenerator
 	 */
 	private static String readTemplate(String in_filePath)
 	{
-		SCLogger.LogMessage("Reading manifest template from '" + in_filePath + "'");
+		Logging.logVerbose("Reading manifest template from '" + in_filePath + "'");
 		
-		String templateData = SCFileSystemUtils.readFile(in_filePath);
+		String templateData = FileUtils.readFile(in_filePath);
 		if (templateData.length() == 0)
 		{
-			SCLogger.LogFatalError("Could not read template data");
+			Logging.logFatal("Could not read template data");
 		}
 		return templateData;
 	}
@@ -201,11 +201,11 @@ public final class AndroidManifestGenerator
 	 */
 	private static void writeOutput(String in_filePath, String in_outputData)
 	{
-		SCLogger.LogMessage("Writing output file to '" + in_filePath + "'");
+		Logging.logVerbose("Writing output file to '" + in_filePath + "'");
 		
-		if (SCFileSystemUtils.writeFile(in_filePath, in_outputData) == false)
+		if (FileUtils.writeFile(in_filePath, in_outputData) == false)
 		{
-			SCLogger.LogFatalError("Failed to write file '" + in_filePath + "'");
+			Logging.logFatal("Failed to write file '" + in_filePath + "'");
 		}
 	}
 	/**

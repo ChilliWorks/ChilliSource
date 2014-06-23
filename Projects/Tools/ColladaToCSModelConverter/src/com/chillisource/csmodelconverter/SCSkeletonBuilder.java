@@ -14,9 +14,9 @@ import java.util.LinkedList;
 import com.chillisource.csmodelconverter.csmodel.CSModel;
 import com.chillisource.csmodelconverter.csmodel.CSModelSkeleton;
 import com.chillisource.csmodelconverter.csmodel.CSModelSkeletonNode;
+import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.ColladaNode;
 import com.taggames.colladaparser.colladadata.ColladaNode.COLLADA_NODE_TYPE;
-import com.taggames.toolutils.SCLogger;
 
 public class SCSkeletonBuilder 
 {
@@ -48,7 +48,7 @@ public class SCSkeletonBuilder
 					strRootNode1 = inModel.mSkeleton.mNodeList.get(0).mstrName;
 				if (testModel.mSkeleton.mNodeList.size() > 0)
 					strRootNode2 = testModel.mSkeleton.mNodeList.get(0).mstrName;
-				SCLogger.LogFatalError("A second skeleton has been found. All meshes must be attached to the same skeleton. Attaching a mesh to a subset of the skeleton counts as a different skeleton. The two different skeleton root nodes are: '" + strRootNode1 + "' and '" + strRootNode2 + "'");
+				Logging.logFatal("A second skeleton has been found. All meshes must be attached to the same skeleton. Attaching a mesh to a subset of the skeleton counts as a different skeleton. The two different skeleton root nodes are: '" + strRootNode1 + "' and '" + strRootNode2 + "'");
 			}
 		}
 	}

@@ -7,9 +7,9 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import com.chillisource.csanimconverter.csanim.*;
+import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.CColladaParser;
 import com.taggames.colladaparser.colladadata.*;
-import com.taggames.toolutils.SCLogger;
 
 public class CSAnimConverterTool 
 {
@@ -35,14 +35,14 @@ public class CSAnimConverterTool
 		}
 		catch (FileNotFoundException e)
 		{
-			SCLogger.LogFatalError("Could not find file: " + inParams.mstrInputFilepath);
+			Logging.logFatal("Could not find file: " + inParams.mstrInputFilepath);
 		}
 		catch (Exception e)
 		{
 			String strFullStackTrace = new String();
 			for (StackTraceElement stackTrace: e.getStackTrace())
 				strFullStackTrace += stackTrace.toString() + "\n";
-			SCLogger.LogFatalError("Exception occurred while parsing the collada file. The following is the exception error message:\n-\n " + strFullStackTrace + "-");
+			Logging.logFatal("Exception occurred while parsing the collada file. The following is the exception error message:\n-\n " + strFullStackTrace + "-");
 		}
 		
 		//get the nodes to be exported
@@ -79,7 +79,7 @@ public class CSAnimConverterTool
 		}
 		else
 		{
-			SCLogger.LogError("Output failed!");
+			Logging.logError("Output failed!");
 		}
 	}
 	
@@ -89,11 +89,11 @@ public class CSAnimConverterTool
 	 */
 	private void OutputInfoOnMoAnim(CSAnim inModel)
 	{
-		SCLogger.LogMessage("MoAnim Data Generated");
-		SCLogger.LogMessage(" Frame rate: " + inModel.mfFrameRate);
-		SCLogger.LogMessage(" Number of frames: " + inModel.mFrames.size());
-		SCLogger.LogMessage(" Skeleton");
-		SCLogger.LogMessage("  Skeleton Nodes: " + inModel.mSkeleton.mNodeList.size());
+		Logging.logVerbose("MoAnim Data Generated");
+		Logging.logVerbose(" Frame rate: " + inModel.mfFrameRate);
+		Logging.logVerbose(" Number of frames: " + inModel.mFrames.size());
+		Logging.logVerbose(" Skeleton");
+		Logging.logVerbose("  Skeleton Nodes: " + inModel.mSkeleton.mNodeList.size());
 	}
 	
 	/**
@@ -102,9 +102,9 @@ public class CSAnimConverterTool
 	 */
 	private void OutputInfoOnOutput(CSAnimConversionParameters inParams)
 	{
-		SCLogger.LogMessage("Successfully created " + inParams.mstrOutputFilepath);
-		SCLogger.LogMessage(" Transforms");
-		SCLogger.LogMessage("  Swap Y and Z: " + Boolean.toString(inParams.mbSwapYAndZ));
-		SCLogger.LogMessage(" ");
+		Logging.logVerbose("Successfully created " + inParams.mstrOutputFilepath);
+		Logging.logVerbose(" Transforms");
+		Logging.logVerbose("  Swap Y and Z: " + Boolean.toString(inParams.mbSwapYAndZ));
+		Logging.logVerbose(" ");
 	}
 }

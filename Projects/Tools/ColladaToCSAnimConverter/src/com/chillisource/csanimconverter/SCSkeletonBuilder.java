@@ -4,10 +4,10 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 import com.chillisource.csanimconverter.csanim.*;
+import com.chillisource.toolutils.Matrix4;
+import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
 import com.taggames.colladaparser.colladadata.ColladaNode.COLLADA_NODE_TYPE;
-import com.taggames.toolutils.CMatrix4;
-import com.taggames.toolutils.SCLogger;
 
 public class SCSkeletonBuilder 
 {
@@ -97,7 +97,7 @@ public class SCSkeletonBuilder
 					strRootNode1 = inModel.mSkeleton.mNodeList.get(0).mstrName;
 				if (testModel.mSkeleton.mNodeList.size() > 0)
 					strRootNode2 = testModel.mSkeleton.mNodeList.get(0).mstrName;
-				SCLogger.LogFatalError("A second skeleton has been found. All meshes must be attached to the same skeleton. Attaching a mesh to a subset of the skeleton counts as a different skeleton. The two different skeleton root nodes are: '" + strRootNode1 + "' and '" + strRootNode2 + "'");
+				Logging.logFatal("A second skeleton has been found. All meshes must be attached to the same skeleton. Attaching a mesh to a subset of the skeleton counts as a different skeleton. The two different skeleton root nodes are: '" + strRootNode1 + "' and '" + strRootNode2 + "'");
 			}
 		}
 	}
@@ -202,7 +202,7 @@ public class SCSkeletonBuilder
 			newSkeletonNode.mstrParentId = inParent.mstrId;
 		}
 		
-		newSkeletonNode.mInitialPoseMatrix = CMatrix4.CreateFrom2DArray(inNode.mMatrix.maafValues);
+		newSkeletonNode.mInitialPoseMatrix = Matrix4.createFrom2DArray(inNode.mMatrix.maafValues);
 		
 		//add the joint
 		inModel.mSkeleton.mNodeList.add(newSkeletonNode);
@@ -245,7 +245,7 @@ public class SCSkeletonBuilder
 			}
 		}
 		
-		SCLogger.LogError("Cannot find skeleton node with ID: " + instrId);
+		Logging.logError("Cannot find skeleton node with ID: " + instrId);
 		return -1;
 	}
 }

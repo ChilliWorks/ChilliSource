@@ -13,10 +13,10 @@ package com.taggames.tools.text;
 
 import java.io.File;
 
-import com.taggames.toolutils.CLittleEndianOutputStream;
-import com.taggames.toolutils.SCFileSystemUtils;
-import com.taggames.toolutils.SCLogger;
-import com.taggames.toolutils.SCStringUtils;
+import com.chillisource.toolutils.LittleEndianOutputStream;
+import com.chillisource.toolutils.FileUtils;
+import com.chillisource.toolutils.Logging;
+import com.chillisource.toolutils.StringUtils;
 
 import jxl.Cell;
 import jxl.CellType;
@@ -32,26 +32,26 @@ public class SCTextExtractor
 	private static void OpenExcelFile(ExtractTextOptions inOptions) throws Exception
 	{
 		File f = new File(inOptions.strInputFile);
-		SCLogger.LogMessage("Input file path is \""+f.getCanonicalPath()+"\"");
+		Logging.logVerbose("Input file path is \""+f.getCanonicalPath()+"\"");
         
         if(!f.exists())
         {
-        	SCLogger.LogFatalError("Input file \""+inOptions.strInputFile+"\" does not exist.");
+        	Logging.logFatal("Input file \""+inOptions.strInputFile+"\" does not exist.");
         }
 
         if(!f.isFile())
         {
-        	SCLogger.LogFatalError("Input file \""+inOptions.strInputFile+"\" is not a valid file.");
+        	Logging.logFatal("Input file \""+inOptions.strInputFile+"\" is not a valid file.");
         }
 
         if(!f.canRead())
         {
-        	SCLogger.LogFatalError("Input file \""+inOptions.strInputFile+"\" cannot be read.");
+        	Logging.logFatal("Input file \""+inOptions.strInputFile+"\" cannot be read.");
         }
 
-        SCLogger.LogMessage("Opening workbook...");
+        Logging.logVerbose("Opening workbook...");
         WorkbookSettings ws = new WorkbookSettings();
-        if (SCLogger.GetLoggingLevel() != SCLogger.LOGGING_LEVEL_VERBOSE && SCLogger.GetLoggingLevel() != SCLogger.LOGGING_LEVEL_WARNING)
+        if (Logging.getLoggingLevel() != Logging.LOGGING_LEVEL_VERBOSE && Logging.getLoggingLevel() != Logging.LOGGING_LEVEL_WARNING)
         {
         	ws.setSuppressWarnings(true);
         }
@@ -65,14 +65,14 @@ public class SCTextExtractor
 		{
 			if(mWorkbook != null)
 	        {
-				SCLogger.LogMessage("Closing workbook...");
+				Logging.logVerbose("Closing workbook...");
 	            mWorkbook.close();
 	            mWorkbook = null;
 	        }
 		}
 		catch(Exception e)
 		{
-			SCLogger.LogFatalError("Exception closing file. "+e.getMessage());
+			Logging.logFatal("Exception closing file. "+e.getMessage());
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class SCTextExtractor
 					dwEndIndex = (strLanguages.length());
 				
 				strNextLanguage = strLanguages.substring(dwStartIndex, dwEndIndex);
-				SCLogger.LogMessage("Adding language \""+strNextLanguage+"\"");
+				Logging.logVerbose("Adding language \""+strNextLanguage+"\"");
 				
 				if(astrLanguages != null)
 				{
@@ -128,12 +128,12 @@ public class SCTextExtractor
 		
 		try
         {
-            SCLogger.LogMessage("Opening sheet "+indwSheet);
+            Logging.logVerbose("Opening sheet "+indwSheet);
             CurrentSheet = mWorkbook.getSheet(indwSheet);
         }
         catch(IndexOutOfBoundsException ioobe)
         {
-            SCLogger.LogFatalError("Exception trying to open sheet "+indwSheet+". "+ioobe.getMessage());
+            Logging.logFatal("Exception trying to open sheet "+indwSheet+". "+ioobe.getMessage());
         }
 		
 		return CurrentSheet;
@@ -146,7 +146,7 @@ public class SCTextExtractor
     	
     	if((inSheet == null) || (instrHeading == null))
     	{
-    		SCLogger.LogFatalError("Unable to get column with heading \""+instrHeading+"\"");
+    		Logging.logFatal("Unable to get column with heading \""+instrHeading+"\"");
     	}
 
     	if((instrHeading != null) && (instrHeading != ""))
@@ -157,9 +157,9 @@ public class SCTextExtractor
     	}
     	
     	if(dwColumn != -1)
-    		SCLogger.LogMessage("Found heading \""+instrHeading+"\" at column "+dwColumn);
+    		Logging.logVerbose("Found heading \""+instrHeading+"\" at column "+dwColumn);
     	else
-    		SCLogger.LogMessage("Unable to find heading \""+instrHeading+"\"");
+    		Logging.logVerbose("Unable to find heading \""+instrHeading+"\"");
     	
     	return dwColumn;
     }
@@ -169,7 +169,7 @@ public class SCTextExtractor
 		if(-1 == indwColumn)
 		{
 			if(inbLogError)
-				SCLogger.LogError("Missing mandatory column heading \""+strHeading+"\"");
+				Logging.logError("Missing mandatory column heading \""+strHeading+"\"");
 			return false;
 		}
 		
@@ -187,7 +187,7 @@ public class SCTextExtractor
 				dwTextColumn = GetColumn(inSheet, instrLanguage.toUpperCase());
 				if(!ValidateMandatoryColumn(dwTextColumn, instrLanguage, false))
 				{
-					SCLogger.LogFatalError("Unable to get language column for \""+instrLanguage+"\"");
+					Logging.logFatal("Unable to get language column for \""+instrLanguage+"\"");
 				}
 			}
 		}
@@ -231,11 +231,11 @@ public class SCTextExtractor
 		if(inOptions.strOutputFilename.length() > 0)
 			strFilename = inOptions.strOutputFilename;
 		
-		SCLogger.LogMessage("Outputting UTF8...");
-		String strOutputPath = SCStringUtils.StandardiseFilepath(inOptions.strOutputDirectory+"/"+strFilename+"."+inOptions.strOutputFileExtension);
-		SCFileSystemUtils.DeleteFile(strOutputPath);
+		Logging.logVerbose("Outputting UTF8...");
+		String strOutputPath = StringUtils.standardiseFilepath(inOptions.strOutputDirectory+"/"+strFilename+"."+inOptions.strOutputFileExtension);
+		FileUtils.deleteFile(strOutputPath);
 
-		CLittleEndianOutputStream stream = new CLittleEndianOutputStream(strOutputPath);
+		LittleEndianOutputStream stream = new LittleEndianOutputStream(strOutputPath);
 		
 		String strStringsLeft = inStrings.toString();
 		int udwBuferLimit = 16 * 1024;
@@ -243,15 +243,15 @@ public class SCTextExtractor
 		{
 			// Write the strings by chunk of 16K
 			int udwLength = Math.min(strStringsLeft.length(), udwBuferLimit);
-			stream.WriteUtf8String(strStringsLeft.substring(0, udwLength));
+			stream.writeUtf8String(strStringsLeft.substring(0, udwLength));
 			String strTemp = strStringsLeft.substring(udwLength, strStringsLeft.length());
 			strStringsLeft = strTemp;
 		}
 		
-		stream.Close();
+		stream.close();
 		stream = null;
 		
-		SCLogger.LogMessage("Finished writing file: \""+strOutputPath+"\"");
+		Logging.logVerbose("Finished writing file: \""+strOutputPath+"\"");
 	}
 	
 	private static StringBuffer ExtractTextIds(Sheet inSheet, int indwConstantColumn, int indwExcludeColumn, int indwDeviceColumn)
@@ -287,15 +287,15 @@ public class SCTextExtractor
 	
 	private static void WriteTextIds(StringBuffer inStringIds, ExtractTextOptions inOptions) throws Exception
 	{
-		SCLogger.LogMessage("Writing text ids...");
+		Logging.logVerbose("Writing text ids...");
 		
 		String strFilename = "TagText";
-		String strOutputPath = SCStringUtils.StandardiseFilepath(inOptions.strOutputDirectory+"/"+strFilename+".id");
+		String strOutputPath = StringUtils.standardiseFilepath(inOptions.strOutputDirectory+"/"+strFilename+".id");
 		
-		SCFileSystemUtils.DeleteFile(strOutputPath);
-		SCFileSystemUtils.WriteFile(strOutputPath, SCStringUtils.StringToUTF8Bytes(inStringIds.toString()));
+		FileUtils.deleteFile(strOutputPath);
+		FileUtils.writeFile(strOutputPath, StringUtils.stringToUTF8Bytes(inStringIds.toString()));
 		
-		SCLogger.LogMessage("Finished writing file: \""+strOutputPath+"\"");
+		Logging.logVerbose("Finished writing file: \""+strOutputPath+"\"");
 	}
 	
 	public static void Start(ExtractTextOptions inOptions)
@@ -331,13 +331,13 @@ public class SCTextExtractor
 		}
 		catch(Exception e)
 		{
-			SCLogger.LogFatalError("Exception occured. "+e.getMessage());
+			Logging.logFatal("Exception occured. "+e.getMessage());
 		}
 		finally
 		{
 			CloseExcelFile();
-			if(!SCLogger.IsError())
-				SCLogger.LogMessage("\\o/ Text extraction complete. Have a nice day. \\o/");
+			if(!Logging.IsError())
+				Logging.logVerbose("\\o/ Text extraction complete. Have a nice day. \\o/");
 		}
 	}
 	

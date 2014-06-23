@@ -11,8 +11,8 @@ package com.taggames.colladaparser;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import com.chillisource.toolutils.Logging;
 import com.taggames.colladaparser.colladadata.*;
-import com.taggames.toolutils.SCLogger;
 
 public class CLibraryMaterialsParser 
 {
@@ -73,7 +73,7 @@ public class CLibraryMaterialsParser
 		{
 			mCollada.mLibraryMaterials.put(mCurrentMaterial.mstrId, mCurrentMaterial);
 		}else
-			SCLogger.LogFatalError("mLibraryMaterials is null!");
+			Logging.logFatal("mLibraryMaterials is null!");
 		
 		return false;
 	}
@@ -99,7 +99,7 @@ public class CLibraryMaterialsParser
 		if (mCurrentMaterial != null)
 			mCurrentMaterial.mInstanceEffect = instanceEffect;
 		else
-			SCLogger.LogFatalError("mCurrentMaterial is null!");
+			Logging.logFatal("mCurrentMaterial is null!");
 
 		return false;
 	}

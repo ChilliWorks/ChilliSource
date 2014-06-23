@@ -1,8 +1,8 @@
-package com.taggames.toolutils;
+package com.chillisource.toolutils;
 
 import java.nio.charset.Charset;
 
-public class SCStringUtils 
+public class StringUtils 
 {
 	//-------------------------------------------------------
 	/// Constants
@@ -16,7 +16,7 @@ public class SCStringUtils
 	/// @param The string to convert.
 	/// @return The output byte array in UTF-8 format.
 	//-------------------------------------------------------
-	public static byte[] StringToUTF8Bytes(final String instrString)
+	public static byte[] stringToUTF8Bytes(final String instrString)
 	{
 		return instrString.getBytes(kUTF8Charset);
 	}
@@ -28,7 +28,7 @@ public class SCStringUtils
 	/// @param The byte array to convert.
 	/// @return The output string.
 	//-------------------------------------------------------
-	public static String UTF8BytesToString(final byte[] inabyUTF8)
+	public static String utf8BytesToString(final byte[] inabyUTF8)
 	{
 		return new String(inabyUTF8, kUTF8Charset);
 	}
@@ -40,7 +40,7 @@ public class SCStringUtils
 	/// @param the directory
 	/// @output the standardised path.
 	//-------------------------------------------------
-	public static String StandardiseFilepath(String instrFilepath)
+	public static String standardiseFilepath(String instrFilepath)
 	{
 		String strStandardisedPath = new String(instrFilepath.replace("\\", "/"));
 		if (strStandardisedPath.endsWith("/") == false && strStandardisedPath.contains(".") == false)
@@ -55,7 +55,7 @@ public class SCStringUtils
 	/// @param the directory
 	/// @output the standardised path.
 	//-------------------------------------------------
-	public static String GetExtension(String instrFilepath)
+	public static String getExtension(String instrFilepath)
 	{
 		int dwIndex = instrFilepath.lastIndexOf(".");
 		if (dwIndex != -1)
@@ -70,7 +70,7 @@ public class SCStringUtils
 	/// @param the directory
 	/// @output the standardised path.
 	//-------------------------------------------------
-	public static String RemoveExtension(String instrFilepath)
+	public static String removeExtension(String instrFilepath)
 	{
 		int dwIndex = instrFilepath.lastIndexOf(".");
 		if (dwIndex != -1)
@@ -85,9 +85,9 @@ public class SCStringUtils
 	/// @param the filepath
 	/// @output the standardised directory path.
 	//-------------------------------------------------
-	public static String GetDirectory(String instrFilepath)
+	public static String getDirectory(String instrFilepath)
 	{
-		String strStandardisedFilepath = SCStringUtils.StandardiseFilepath(instrFilepath);
+		String strStandardisedFilepath = StringUtils.standardiseFilepath(instrFilepath);
 		int dwIndex = strStandardisedFilepath.lastIndexOf("/");
 		if (dwIndex != -1)
 			return strStandardisedFilepath.substring(0, dwIndex + 1);
@@ -102,7 +102,7 @@ public class SCStringUtils
 	/// @param the string
 	/// @output the string with no whitespace
 	//-------------------------------------------------
-	public static String RemoveWhitespace(String instrFilepath)
+	public static String removeWhitespace(String instrFilepath)
 	{
 		String strOutput = new String(instrFilepath);
 		strOutput = strOutput.replace(" ", "");
@@ -119,7 +119,7 @@ public class SCStringUtils
 	/// @param the exception
 	/// @output the string.
 	//-------------------------------------------------
-	public static String ConvertExceptionToString(Exception inException)
+	public static String convertExceptionToString(Exception inException)
 	{
 		String strOutput = inException.getLocalizedMessage();
 		for (StackTraceElement element: inException.getStackTrace())
@@ -128,43 +128,5 @@ public class SCStringUtils
 		}
 		
 		return strOutput;
-	}
-	//-------------------------------------------------
-	/// Compare String
-	///
-	/// Compares two Strings
-	///
-	/// @param the source string
-	/// @param the string to compare
-	/// @param true = ignore case
-	/// @output true is Strings match, false otherwise.
-	//-------------------------------------------------
-	public static boolean CompareStrings(String instrSource, String instrCompare, boolean inbIgnoreCase)
-	{
-		if((instrSource == null) || (instrCompare == null))
-			return false;
-		
-		if(!inbIgnoreCase)
-			return instrSource.equals(instrCompare);
-		else
-			return instrSource.equalsIgnoreCase(instrCompare);
-	}
-	
-	//-------------------------------------------------
-	/// Compare String
-	///
-	/// Compares a String against two other strings.
-	/// A positive result is returned if either comparing
-	/// strings match the source string
-	///
-	/// @param the source string
-	/// @param the first string to compare
-	/// @param the second string to compare
-	/// @param true = ignore case
-	/// @output true is Strings match, false otherwise.
-	//-------------------------------------------------
-	public static boolean CompareStrings(String instrSource, String instrCompare1, String instrCompare2, boolean inbIgnoreCase)
-	{
-		return (CompareStrings(instrSource, instrCompare1, inbIgnoreCase) || CompareStrings(instrSource, instrCompare2, inbIgnoreCase));
 	}
 }

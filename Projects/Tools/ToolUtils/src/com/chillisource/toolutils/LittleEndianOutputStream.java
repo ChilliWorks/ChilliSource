@@ -1,9 +1,9 @@
-package com.taggames.toolutils;
+package com.chillisource.toolutils;
 
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 
-public class CLittleEndianOutputStream 
+public class LittleEndianOutputStream 
 {
 	//-------------------------------------------------------
 	/// Member Data
@@ -12,7 +12,7 @@ public class CLittleEndianOutputStream
 	//-------------------------------------------------------
 	/// Constructor
 	//-------------------------------------------------------
-	public CLittleEndianOutputStream(final String inFilename) throws Exception
+	public LittleEndianOutputStream(final String inFilename) throws Exception
 	{
 		mStream = new DataOutputStream(new FileOutputStream(inFilename));
 	}
@@ -21,7 +21,7 @@ public class CLittleEndianOutputStream
 	///
 	/// Closes the stream.
 	//-------------------------------------------------------
-	public void Close() throws Exception
+	public void close() throws Exception
 	{
 		mStream.close();
 	}
@@ -32,10 +32,10 @@ public class CLittleEndianOutputStream
 	///
 	/// @param the char.
 	//-------------------------------------------------------
-	public void WriteChar(char in_data) throws Exception
+	public void writeChar(char in_data) throws Exception
 	{
-		WriteByte((byte)(in_data 			& 0xFF));
-		WriteByte((byte)(in_data >>> 8 		& 0xFF));
+		writeByte((byte)(in_data 			& 0xFF));
+		writeByte((byte)(in_data >>> 8 		& 0xFF));
 	}
 	//-------------------------------------------------------
 	/// Write Byte
@@ -44,7 +44,7 @@ public class CLittleEndianOutputStream
 	///
 	/// @param the byte.
 	//-------------------------------------------------------
-	public void WriteByte(byte inbyData) throws Exception
+	public void writeByte(byte inbyData) throws Exception
 	{
 		mStream.writeByte(inbyData);
 	}
@@ -55,7 +55,7 @@ public class CLittleEndianOutputStream
 	///
 	/// @param the byte array
 	//-------------------------------------------------------
-	public void WriteBytes(byte[] inabyData) throws Exception
+	public void writeBytes(byte[] inabyData) throws Exception
 	{
 		for (byte byByte : inabyData)
 		{
@@ -69,26 +69,26 @@ public class CLittleEndianOutputStream
 	///
 	/// @param the boolean.
 	//-------------------------------------------------------
-	public void WriteBoolean(boolean inbData) throws Exception
+	public void writeBoolean(boolean inbData) throws Exception
 	{
 		if (inbData == true)
-			WriteByte((byte)1);
+			writeByte((byte)1);
 		else
-			WriteByte((byte)0);
+			writeByte((byte)0);
 	}
 	//-------------------------------------------------------
-	/// Write Byte
+	/// Write Int
 	///
 	/// Writes a single Integer to the output stream.
 	///
 	/// @param the integer.
 	//-------------------------------------------------------
-	public void WriteInt(int indwData) throws Exception
+	public void writeInt(int indwData) throws Exception
 	{
-		WriteByte((byte)(indwData 			& 0xFF));
-		WriteByte((byte)(indwData >>> 8 	& 0xFF));
-		WriteByte((byte)(indwData >>> 16 	& 0xFF));
-		WriteByte((byte)(indwData >>> 24	& 0xFF));
+		writeByte((byte)(indwData 			& 0xFF));
+		writeByte((byte)(indwData >>> 8 	& 0xFF));
+		writeByte((byte)(indwData >>> 16 	& 0xFF));
+		writeByte((byte)(indwData >>> 24	& 0xFF));
 	}
 	//-------------------------------------------------------
 	/// Write Unsigned Int
@@ -100,12 +100,12 @@ public class CLittleEndianOutputStream
 	///
 	/// @param a long representing the unsigned it.
 	//-------------------------------------------------------
-	public void WriteUnsignedInt(long indwData) throws Exception
+	public void writeUnsignedInt(long indwData) throws Exception
 	{
-		WriteByte((byte)(indwData 			& 0xFF));
-		WriteByte((byte)(indwData >>> 8 	& 0xFF));
-		WriteByte((byte)(indwData >>> 16 	& 0xFF));
-		WriteByte((byte)(indwData >>> 24	& 0xFF));
+		writeByte((byte)(indwData 			& 0xFF));
+		writeByte((byte)(indwData >>> 8 	& 0xFF));
+		writeByte((byte)(indwData >>> 16 	& 0xFF));
+		writeByte((byte)(indwData >>> 24	& 0xFF));
 	}
 	//-------------------------------------------------------
 	/// Write Short
@@ -114,10 +114,10 @@ public class CLittleEndianOutputStream
 	///
 	/// @param the short.
 	//-------------------------------------------------------
-	public void WriteShort(short inwData) throws Exception
+	public void writeShort(short inwData) throws Exception
 	{
-		WriteByte((byte)(inwData 			& 0xFF));
-		WriteByte((byte)(inwData >>> 8 		& 0xFF));
+		writeByte((byte)(inwData 			& 0xFF));
+		writeByte((byte)(inwData >>> 8 		& 0xFF));
 	}
 	//-------------------------------------------------------
 	/// Write Unsigned Short
@@ -129,10 +129,10 @@ public class CLittleEndianOutputStream
 	///
 	/// @param an int representing the unsigned it.
 	//-------------------------------------------------------
-	public void WriteUnsignedShort(int indwData) throws Exception
+	public void writeUnsignedShort(int indwData) throws Exception
 	{
-		WriteByte((byte)(indwData 			& 0xFF));
-		WriteByte((byte)(indwData >>> 8 	& 0xFF));
+		writeByte((byte)(indwData 			& 0xFF));
+		writeByte((byte)(indwData >>> 8 	& 0xFF));
 	}
 	//-------------------------------------------------------
 	/// Write Float
@@ -141,9 +141,9 @@ public class CLittleEndianOutputStream
 	///
 	/// @param the float.
 	//-------------------------------------------------------
-	public void WriteFloat(float infData) throws Exception
+	public void writeFloat(float infData) throws Exception
 	{
-		WriteInt(Float.floatToIntBits(infData));
+		writeInt(Float.floatToIntBits(infData));
 	}
 	//-------------------------------------------------------
 	/// Write Ascii String
@@ -155,11 +155,11 @@ public class CLittleEndianOutputStream
 	///
 	/// @param the string.
 	//-------------------------------------------------------
-	public void WriteAsciiString(final String instrData) throws Exception
+	public void writeAsciiString(final String instrData) throws Exception
 	{
 		for (int i = 0; i < instrData.length(); i++)
 		{
-			WriteByte((byte)instrData.charAt(i));
+			writeByte((byte)instrData.charAt(i));
 		}
 	}
 	//-------------------------------------------------------
@@ -173,10 +173,10 @@ public class CLittleEndianOutputStream
 	///
 	/// @param the string.
 	//-------------------------------------------------------
-	public void WriteNullTerminatedAsciiString(final String instrData) throws Exception
+	public void writeNullTerminatedAsciiString(final String instrData) throws Exception
 	{
-		WriteAsciiString(instrData);
-		WriteByte((byte)0);
+		writeAsciiString(instrData);
+		writeByte((byte)0);
 	}
 	//-------------------------------------------------------
 	/// Write Utf8 String
@@ -186,10 +186,10 @@ public class CLittleEndianOutputStream
 	///
 	/// @param the string.
 	//-------------------------------------------------------
-	public void WriteUtf8String(final String instrData) throws Exception
+	public void writeUtf8String(final String instrData) throws Exception
 	{
-		byte[] abyUtf8 = SCStringUtils.StringToUTF8Bytes(instrData);
-		WriteBytes(abyUtf8);
+		byte[] abyUtf8 = StringUtils.stringToUTF8Bytes(instrData);
+		writeBytes(abyUtf8);
 	}
 	//-------------------------------------------------------
 	/// Write Null Terminated Utf8 String
@@ -200,9 +200,9 @@ public class CLittleEndianOutputStream
 	///
 	/// @param the string.
 	//-------------------------------------------------------
-	public void WriteNullTerminatedUtf8String(final String instrData) throws Exception
+	public void writeNullTerminatedUtf8String(final String instrData) throws Exception
 	{
-		WriteUtf8String(instrData);
-		WriteByte((byte)0);
+		writeUtf8String(instrData);
+		writeByte((byte)0);
 	}
 }

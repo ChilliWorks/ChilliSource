@@ -1,6 +1,6 @@
 package com.chillisource.csanimconverter.csanim;
 
-import com.taggames.toolutils.CMatrix4;
+import com.chillisource.toolutils.Matrix4;
 
 public class CSAnimSkeletonNode 
 {
@@ -8,7 +8,7 @@ public class CSAnimSkeletonNode
 	public String mstrName;
 	public String mstrParentId;
 	public int mdwParentNodeIndex;
-	public CMatrix4 mInitialPoseMatrix;
+	public Matrix4 mInitialPoseMatrix;
 	
 	public CSAnimSkeletonNode()
 	{
@@ -16,6 +16,6 @@ public class CSAnimSkeletonNode
 		mstrName = new String();
 		mstrParentId = new String();
 		mdwParentNodeIndex = -1; 
-		mInitialPoseMatrix = new CMatrix4();
+		mInitialPoseMatrix = new Matrix4();
 	}
 }

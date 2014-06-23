@@ -1,6 +1,6 @@
-package com.taggames.toolutils;
+package com.chillisource.toolutils;
 
-public class CVector3 
+public class Vector3 
 {
 	//------------------------------------------------------------
 	/// Public Member data
@@ -11,14 +11,14 @@ public class CVector3
 	//------------------------------------------------------------
 	/// Constructor
 	//------------------------------------------------------------
-	public CVector3()
+	public Vector3()
 	{
 		x = y = z = 0.0f;
 	}
 	//------------------------------------------------------------
 	/// Constructor
 	//------------------------------------------------------------
-	public CVector3(float infX, float infY, float infZ)
+	public Vector3(float infX, float infY, float infZ)
 	{
 		x = infX;
 		y = infY;
@@ -29,16 +29,16 @@ public class CVector3
 	///
 	/// @returns a copy of this vector.
 	//------------------------------------------------------------
-	public CVector3 Copy()
+	public Vector3 copy()
 	{
-		return new CVector3(x, y, z);
+		return new Vector3(x, y, z);
 	}
 	//------------------------------------------------------------
 	/// Length
 	///
 	/// @return the length of this vector.
 	//------------------------------------------------------------
-	public float Length()
+	public float length()
 	{
 		return (float)Math.sqrt((double)(x*x + y*y + z*z));
 	}
@@ -47,9 +47,9 @@ public class CVector3
 	///
 	/// @return the normalised version of this vector.
 	//------------------------------------------------------------
-	public CVector3 Normalise()
+	public Vector3 normalise()
 	{
-		CVector3 newVec = new CVector3();
+		Vector3 newVec = new Vector3();
 		
 		if (!(x == 0.0f && y == 0.0f && z ==0.0f))
 		{
@@ -71,9 +71,9 @@ public class CVector3
 	{
 	    if ( this == inObj ) 
 	    	return true;
-	    if ((inObj instanceof CVector3) == false) 
+	    if ((inObj instanceof Vector3) == false) 
 	    	return false;
-	    CVector3 vec = (CVector3)inObj;
+	    Vector3 vec = (Vector3)inObj;
 	    if (Float.floatToIntBits(x) == Float.floatToIntBits(vec.x) && Float.floatToIntBits(y) == Float.floatToIntBits(vec.y)  && Float.floatToIntBits(z) == Float.floatToIntBits(vec.z))
 	    	return true;
 	    return false;

@@ -19,7 +19,7 @@ import java.util.zip.Deflater;
 
 import javax.imageio.ImageIO;
 
-import com.taggames.toolutils.SCLogger;
+import com.chillisource.toolutils.Logging;
 
 //============================================================================
 /// PNG To MoImage
@@ -57,15 +57,15 @@ public class SCPNGToCSImage
 		ImageContainer image = null;
 		try 
 		{
-			SCLogger.LogMessage("Loading PNG...");
+			Logging.logVerbose("Loading PNG...");
 			String strInputFile = inOptions.strInputFilename;
-			SCLogger.LogMessage("Input File: " + strInputFile);
+			Logging.logVerbose("Input File: " + strInputFile);
 			image = LoadPNG(strInputFile);
-			SCLogger.LogMessage("Loading PNG Complete");
+			Logging.logVerbose("Loading PNG Complete");
 		} 
 		catch (IOException e) 
 		{
-			SCLogger.LogMessage("Cannot load PNG file");
+			Logging.logVerbose("Cannot load PNG file");
 			e.printStackTrace();
 			return;
 		}
@@ -74,13 +74,13 @@ public class SCPNGToCSImage
 		boolean bPreMultiply = inOptions.bPremultiply;
 		if(image.bHasAlpha && bPreMultiply == true)
 		{
-			SCLogger.LogMessage("Premultiplying Alpha...");
+			Logging.logVerbose("Premultiplying Alpha...");
 			PreMultiplyImage(image);
-			SCLogger.LogMessage("Premultiplying Alpha Complete");
+			Logging.logVerbose("Premultiplying Alpha Complete");
 		}
 		
 		//build the image data in the output format
-		SCLogger.LogMessage("Building Image Data...");
+		Logging.logVerbose("Building Image Data...");
 		PNGToCSImageOptions.OUTPUT_FORMAT imageFormat = GetOutputFormat(inOptions, image);
 		boolean bDithering = inOptions.bDither;
 		byte[] outImageData = ConvertImageToFormat(image, imageFormat, bDithering);
@@ -89,7 +89,7 @@ public class SCPNGToCSImage
 			return;
 		}
 		dwOriginalDataSize = outImageData.length;
-		SCLogger.LogMessage("Building Image Data Complete");
+		Logging.logVerbose("Building Image Data Complete");
 
 		//Perform compression if required
 		if (inOptions.eCompressionType != PNGToCSImageOptions.COMPRESSION_FORMAT.NONE)
@@ -98,23 +98,23 @@ public class SCPNGToCSImage
 			checksum.update(outImageData);
 			ddwCRC = checksum.getValue();
 			
-			SCLogger.LogMessage("Compressing Image...");
+			Logging.logVerbose("Compressing Image...");
 			outImageData = CompressImage(inOptions, outImageData);
-			SCLogger.LogMessage("Compressing Image Complete");
+			Logging.logVerbose("Compressing Image Complete");
 		}
 		
 		//Create header and output
 		try 
 		{
-			SCLogger.LogMessage("Outputting CSImage...");
+			Logging.logVerbose("Outputting CSImage...");
 			String strOutputFile = inOptions.strOutputFilename;
-			SCLogger.LogMessage("Output File: " + strOutputFile);
+			Logging.logVerbose("Output File: " + strOutputFile);
 			OutputMoImage(outImageData, imageFormat, inOptions.eCompressionType, ddwCRC, dwOriginalDataSize, image.dwWidth, image.dwHeight, strOutputFile);
-			SCLogger.LogMessage("Outputting CSImage Complete");
+			Logging.logVerbose("Outputting CSImage Complete");
 		} 
 		catch (IOException e) 
 		{
-			SCLogger.LogMessage("Cannot output csimage file");
+			Logging.logVerbose("Cannot output csimage file");
 			e.printStackTrace();
 			return;
 		}
@@ -301,14 +301,14 @@ public class SCPNGToCSImage
 		case RGB565:
 			if(inImage.dwWidth % 2 > 0)
 			{
-				SCLogger.LogError("Cannot convert an image that is not divisible by 2 to RGB565 Format.");
+				Logging.logError("Cannot convert an image that is not divisible by 2 to RGB565 Format.");
 				return null;
 			}
 			return ConvertToRGB565(inImage, inbDither);
 		case RGBA4444:
 			if(inImage.dwWidth % 2 > 0)
 			{
-				SCLogger.LogError("Cannot convert an image that is not divisible by 2 to RGBA4444 Format.");
+				Logging.logError("Cannot convert an image that is not divisible by 2 to RGBA4444 Format.");
 				return null;
 			}
 			return ConvertToRGBA4444(inImage, inbDither);
@@ -318,7 +318,7 @@ public class SCPNGToCSImage
 			return ConvertToRGBA8888(inImage);
 		case NONE:
 		default:
-			SCLogger.LogError("Invalid output format.");
+			Logging.logError("Invalid output format.");
 			return null;
 		}
 	}
@@ -329,7 +329,7 @@ public class SCPNGToCSImage
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToRGBA8888(ImageContainer inImage)
 	{
-		SCLogger.LogMessage("Converting to RGBA8888");
+		Logging.logVerbose("Converting to RGBA8888");
 
 		int area = inImage.dwHeight * inImage.dwWidth;
 		byte[] outByteData = new byte[area * 4];
@@ -354,7 +354,7 @@ public class SCPNGToCSImage
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToRGB888(ImageContainer inImage)
 	{
-		SCLogger.LogMessage("Converting to RGB888");
+		Logging.logVerbose("Converting to RGB888");
 
 		int area = inImage.dwHeight * inImage.dwWidth;
 		byte[] outByteData = new byte[area * 3];
@@ -378,7 +378,7 @@ public class SCPNGToCSImage
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToL8(ImageContainer inImage)
 	{
-		SCLogger.LogMessage("Converting to L8");
+		Logging.logVerbose("Converting to L8");
 		int area = inImage.dwHeight * inImage.dwWidth;
 		byte[] outByteData = new byte[area];
 
@@ -402,7 +402,7 @@ public class SCPNGToCSImage
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToLA88(ImageContainer inImage)
 	{
-		SCLogger.LogMessage("Converting to LA88");
+		Logging.logVerbose("Converting to LA88");
 
 		int area = inImage.dwHeight * inImage.dwWidth;
 		byte[] outByteData = new byte[area * 2];
@@ -430,11 +430,11 @@ public class SCPNGToCSImage
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToRGB565(ImageContainer inImage, boolean inDither)
 	{
-		SCLogger.LogMessage("Converting to RGB565");
+		Logging.logVerbose("Converting to RGB565");
 		
 		if(inDither)
 		{
-			SCLogger.LogMessage("Dithering...");
+			Logging.logVerbose("Dithering...");
 		}
 
 		int area = inImage.dwHeight * inImage.dwWidth;
@@ -479,11 +479,11 @@ public class SCPNGToCSImage
 	//------------------------------------------------------------------------
 	private static byte[] ConvertToRGBA4444(ImageContainer inImage, boolean inDither)
 	{
-		SCLogger.LogMessage("Converting to RGBA4444");
+		Logging.logVerbose("Converting to RGBA4444");
 		
 		if(inDither)
 		{
-			SCLogger.LogMessage("Dithering...");
+			Logging.logVerbose("Dithering...");
 		}
 
 		final int area = inImage.dwHeight * inImage.dwWidth;
@@ -686,7 +686,7 @@ public class SCPNGToCSImage
 	{
 		if(inOptions.eCompressionType != PNGToCSImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB)
 		{
-			SCLogger.LogFatalError("Unsupported compression. Image will not be compressed");
+			Logging.logFatal("Unsupported compression. Image will not be compressed");
 			return inImageData;
 		}
 		
@@ -753,7 +753,7 @@ public class SCPNGToCSImage
 		WriteInt(fileStream, indwOriginalSize);
 		WriteInt(fileStream, inImageData.length);
 		
-		SCLogger.LogMessage("Completed writting file with header:\n\tOrderCheck:"+byteOrderCheck
+		Logging.logVerbose("Completed writting file with header:\n\tOrderCheck:"+byteOrderCheck
 																+"\n\tVersion:"+version
 																+"\n\tWidth:"+inWidth
 																+"\n\tHeight:"+inHeight

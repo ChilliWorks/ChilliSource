@@ -13,10 +13,9 @@ import java.util.LinkedList;
 import java.util.Stack;
 
 import com.chillisource.csmodelconverter.csmodel.*;
-import com.taggames.toolutils.*;
+import com.chillisource.toolutils.*;
 import com.taggames.colladaparser.colladadata.*;
 import com.taggames.colladaparser.colladadata.ColladaGeometry.COLLADA_GEOMETRY_TYPE;
-import com.taggames.toolutils.CMatrix4;
 
 public class CSModelConverter 
 {
@@ -36,7 +35,7 @@ public class CSModelConverter
 	//-------------------------------------------------------------------
 	/// Private Member Data
 	//-------------------------------------------------------------------
-	Stack<CMatrix4> mMatrixStack;
+	Stack<Matrix4> mMatrixStack;
 	CSModelConversionParameters mConversionParams;
 	SCUserPropertiesParser mPropertiesParser;
 	//-------------------------------------------------------------------
@@ -44,8 +43,8 @@ public class CSModelConverter
 	//-------------------------------------------------------------------
 	public CSModelConverter()
 	{
-		mMatrixStack = new Stack<CMatrix4>();
-		mMatrixStack.push(CMatrix4.IDENTITY);
+		mMatrixStack = new Stack<Matrix4>();
+		mMatrixStack.push(Matrix4.IDENTITY);
 		mPropertiesParser = new SCUserPropertiesParser();
 	}
 	//-------------------------------------------------------------------
@@ -163,10 +162,10 @@ public class CSModelConverter
 		boolean bShouldExport = inbParentExported;
 		
 		//calculate the world position of this node.
-		CMatrix4 localMat = CMatrix4.IDENTITY;
+		Matrix4 localMat = Matrix4.IDENTITY;
 		if (inNode.mMatrix != null && inNode.mMatrix.maafValues != null && inNode.mMatrix.maafValues != null)
-			localMat = CMatrix4.CreateFrom2DArray(inNode.mMatrix.maafValues);
-		CMatrix4 worldMat = CMatrix4.Multiply(localMat, mMatrixStack.peek());
+			localMat = Matrix4.createFrom2DArray(inNode.mMatrix.maafValues);
+		Matrix4 worldMat = Matrix4.multiply(localMat, mMatrixStack.peek());
 		mMatrixStack.push(worldMat);
 		
 		//if the parent was not exported, check and see if this node should be
@@ -312,7 +311,7 @@ public class CSModelConverter
 					{
 						if (material == null)
 						{
-							SCLogger.LogFatalError("Cannot have multiple meshes in one geometry if they do not have materials.");
+							Logging.logFatal("Cannot have multiple meshes in one geometry if they do not have materials.");
 						}
 						
 						strMeshName += "-" + triangles.mstrMaterial;
@@ -359,7 +358,7 @@ public class CSModelConverter
 		}
 		
 		if (jointSourceName.length() == 0 || ibpSourceName.length() == 0)
-			SCLogger.LogFatalError("Could not get the source names for the Inverse Bind Pose data.");
+			Logging.logFatal("Could not get the source names for the Inverse Bind Pose data.");
 		
 		//get the sources
 		ColladaSource jointSource = inController.mSkin.mSourceTable.get(jointSourceName);
@@ -367,17 +366,17 @@ public class CSModelConverter
 		
 		if (jointSource.mNameArray.mdwCount != ibpSource.mFloatArray.mdwCount / 16 || jointSource.mNameArray.mdwCount != SCSkeletonBuilder.GetNumberOfJoints(inModel))
 		{
-			SCLogger.LogFatalError("The number of joints in the controller does not match the number of joints in the Skeleton! This is most likely becuase there is something in the skeleton hierarchy that the tool cannot handle, for example geometry.");
+			Logging.logFatal("The number of joints in the controller does not match the number of joints in the Skeleton! This is most likely becuase there is something in the skeleton hierarchy that the tool cannot handle, for example geometry.");
 		}
 		
 		//iterate through the joints
-		inMesh.maInverseBindMatrices = new CMatrix4[jointSource.mNameArray.mdwCount];
+		inMesh.maInverseBindMatrices = new Matrix4[jointSource.mNameArray.mdwCount];
 		for (int i = 0; i < jointSource.mNameArray.mdwCount; i++)
 		{
 			//get the joint sid and matrix
 			String jointName = jointSource.mNameArray.mstrData[i];
 			
-			CMatrix4 newMat = new CMatrix4();
+			Matrix4 newMat = new Matrix4();
 			for (int j = 0; j < 4; j++)
 				for (int k = 0; k < 4; k++)
 					newMat.mafData[j + 4 * k] = ibpSource.mFloatArray.mafData[i * 16 + (j * 4 + k)];
@@ -495,7 +494,7 @@ public class CSModelConverter
 					dwTexCoordIndex = inTriangles.mP.madwValues[i * inTriangles.mInputList.size() + j];
 					break;
 				case NONE:
-					SCLogger.LogError("Found unknown index type in mesh: " + inGeometry.mstrId);
+					Logging.logError("Found unknown index type in mesh: " + inGeometry.mstrId);
 					break;
 				default:
 					break;
@@ -590,7 +589,7 @@ public class CSModelConverter
 			ColladaInput input = GetInputFromGeometry(inGeometry, inTriangles, "VERTEX");
 			if (inGeometry.mMesh.mVertices.mstrId.equals(input.mstrSource.substring(1)) == false || inGeometry.mMesh.mVertices.mInput.mstrSemantic.equals("POSITION") == false)
 			{
-				SCLogger.LogFatalError("'Vertices' with id '" + inGeometry.mMesh.mVertices.mstrId + "' and semantic '"+ inGeometry.mMesh.mVertices.mInput.mstrSemantic +"' is not supported.");
+				Logging.logFatal("'Vertices' with id '" + inGeometry.mMesh.mVertices.mstrId + "' and semantic '"+ inGeometry.mMesh.mVertices.mInput.mstrSemantic +"' is not supported.");
 			}
 			
 			//get the source and stride
@@ -598,7 +597,7 @@ public class CSModelConverter
 			int dwStride = source.mTechniqueCommon.mAccessor.mdwStride;
 			if (dwStride < 3)
 			{
-				SCLogger.LogFatalError("A stride of less than 3 is not supported for POSITION sources.");
+				Logging.logFatal("A stride of less than 3 is not supported for POSITION sources.");
 			}
 			
 			//get the vertex data
@@ -610,11 +609,11 @@ public class CSModelConverter
 			if (inController != null)
 			{
 				//convert the bind shape matrix to something we can use.
-				CMatrix4 bindShapeMatrix = CMatrix4.CreateFrom2DArray(inController.mSkin.mBindShapeMatrix.maafValues);
-				inVertex.mvPosition = CMatrix4.Multiply(inVertex.mvPosition, bindShapeMatrix);
+				Matrix4 bindShapeMatrix = Matrix4.createFrom2DArray(inController.mSkin.mBindShapeMatrix.maafValues);
+				inVertex.mvPosition = Matrix4.multiply(inVertex.mvPosition, bindShapeMatrix);
 			}
 			
-			inVertex.mvPosition = CMatrix4.Multiply(inVertex.mvPosition, mMatrixStack.peek());
+			inVertex.mvPosition = Matrix4.multiply(inVertex.mvPosition, mMatrixStack.peek());
 		}
 	}
 	//-------------------------------------------------------------------
@@ -634,7 +633,7 @@ public class CSModelConverter
 			int dwStride = source.mTechniqueCommon.mAccessor.mdwStride;
 			if (dwStride < 3)
 			{
-				SCLogger.LogFatalError("A stride of less than 3 is not supported for NORMAL sources.");
+				Logging.logFatal("A stride of less than 3 is not supported for NORMAL sources.");
 			}
 			
 			inVertex.mvNormal.x = source.mFloatArray.mafData[indwNormalIndex * dwStride + 0];
@@ -644,20 +643,20 @@ public class CSModelConverter
 			//if there is a controller, apply its bind shape matrix
 			if (inController != null)
 			{
-				CMatrix4 bindShapeMatrix = CMatrix4.CreateFrom2DArray(inController.mSkin.mBindShapeMatrix.maafValues);
+				Matrix4 bindShapeMatrix = Matrix4.createFrom2DArray(inController.mSkin.mBindShapeMatrix.maafValues);
 				bindShapeMatrix.mafData[12] = 0.0f;
 				bindShapeMatrix.mafData[13] = 0.0f;
 				bindShapeMatrix.mafData[14] = 0.0f;
 				
-				inVertex.mvNormal = CMatrix4.Multiply(inVertex.mvNormal, bindShapeMatrix);
+				inVertex.mvNormal = Matrix4.multiply(inVertex.mvNormal, bindShapeMatrix);
 			}
-			CMatrix4 normalWorldMatrix = mMatrixStack.peek().Copy();
+			Matrix4 normalWorldMatrix = mMatrixStack.peek().copy();
 			normalWorldMatrix.mafData[12] = 0.0f;
 			normalWorldMatrix.mafData[13] = 0.0f;
 			normalWorldMatrix.mafData[14] = 0.0f;
 
-			inVertex.mvNormal = CMatrix4.Multiply(inVertex.mvNormal, normalWorldMatrix);
-			inVertex.mvNormal = inVertex.mvNormal.Normalise();
+			inVertex.mvNormal = Matrix4.multiply(inVertex.mvNormal, normalWorldMatrix);
+			inVertex.mvNormal = inVertex.mvNormal.normalise();
 		}
 	}
 	//-------------------------------------------------------------------
@@ -678,7 +677,7 @@ public class CSModelConverter
 			int dwStride = source.mTechniqueCommon.mAccessor.mdwStride;
 			if (dwStride < 2)
 			{
-				SCLogger.LogFatalError("A stride of less than 2 is not supported for TEXCOORD sources.");
+				Logging.logFatal("A stride of less than 2 is not supported for TEXCOORD sources.");
 			}
 			
 			inVertex.mvTextureCoordinate.x = source.mFloatArray.mafData[indwTexCoordIndex * dwStride + 0]; 
@@ -703,7 +702,7 @@ public class CSModelConverter
 			int dwStride = source.mTechniqueCommon.mAccessor.mdwStride;
 			if (dwStride < 3)
 			{
-				SCLogger.LogFatalError("A stride of less than 2 is not supported for COLOR sources.");
+				Logging.logFatal("A stride of less than 2 is not supported for COLOR sources.");
 			}
 			
 			inVertex.mvVertexColour.x = source.mFloatArray.mafData[indwColourIndex * dwStride + 0] * 255.0f; 
@@ -761,7 +760,7 @@ public class CSModelConverter
 			float fTotal = inVertex.mvWeights.x +inVertex.mvWeights.y + inVertex.mvWeights.z + inVertex.mvWeights.w;
 			if (fTotal < 1.0f - kfTolerance || fTotal > 1.0f + kfTolerance)
 			{
-				SCLogger.LogWarning("Vertex weights do not add up to 1.0.");
+				Logging.logWarning("Vertex weights do not add up to 1.0.");
 			}
 		}
 	}
@@ -825,7 +824,7 @@ public class CSModelConverter
 			}
 		}
 		
-		SCLogger.LogFatalError("Geometry '" + inGeometry.mstrName + "' doesn't contain semantic '" + instrSemantic + "'");
+		Logging.logFatal("Geometry '" + inGeometry.mstrName + "' doesn't contain semantic '" + instrSemantic + "'");
 		return null;
 	}
 	//-------------------------------------------------------------------
@@ -843,7 +842,7 @@ public class CSModelConverter
 			}
 		}
 		
-		SCLogger.LogFatalError("Controller '" + inController.mstrId + "' doesn't contain semantic '" + instrSemantic + "'");
+		Logging.logFatal("Controller '" + inController.mstrId + "' doesn't contain semantic '" + instrSemantic + "'");
 		return null;
 	}
 	//-------------------------------------------------------------------

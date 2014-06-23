@@ -16,7 +16,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import com.chillisource.csmodelconverter.csmodel.CSModel;
 import com.chillisource.csmodelconverter.csmodel.CSModelMesh;
-import com.taggames.toolutils.*;
+import com.chillisource.toolutils.*;
 import com.taggames.colladaparser.CColladaParser;
 import com.taggames.colladaparser.colladadata.*;
 
@@ -51,11 +51,11 @@ public class CSModelConverterTool
 		}
 		catch (FileNotFoundException e)
 		{
-			SCLogger.LogFatalError("Could not find file: " + inParams.mstrInputFilepath);
+			Logging.logFatal("Could not find file: " + inParams.mstrInputFilepath);
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogFatalError("Exception occurred while parsing the collada file. The following is the exception error message:\n-\n " + SCStringUtils.ConvertExceptionToString(e) + "-");
+			Logging.logFatal("Exception occurred while parsing the collada file. The following is the exception error message:\n-\n " + StringUtils.convertExceptionToString(e) + "-");
 		}
 		
 		//get the meshes to be exported
@@ -89,7 +89,7 @@ public class CSModelConverterTool
 		}
 		else
 		{
-			SCLogger.LogError("Output failed!");
+			Logging.logError("Output failed!");
 		}
 	}
 	//-------------------------------------------------------------------
@@ -99,27 +99,27 @@ public class CSModelConverterTool
 	//-------------------------------------------------------------------
 	private void OutputInfoOnMoModel(CSModel inModel)
 	{
-		SCLogger.LogMessage("MoModel Model Generated.");
-		SCLogger.LogMessage(" Min Boundary: (" + inModel.mvMin.x + ", " + inModel.mvMin.y + ", " + inModel.mvMin.z + ")");
-		SCLogger.LogMessage(" Max Boundary: (" + inModel.mvMax.x + ", " + inModel.mvMax.y + ", " + inModel.mvMax.z + ")");
-		SCLogger.LogMessage(" Skeleton");
-		SCLogger.LogMessage("  Num Skeleton Nodes: " + inModel.mSkeleton.mNodeList.size());
-		SCLogger.LogMessage("   Number of which are Joints: " + SCSkeletonBuilder.GetNumberOfJoints(inModel));
-		SCLogger.LogMessage(" Number of Meshes: " + inModel.mMeshTable.size());
+		Logging.logVerbose("MoModel Model Generated.");
+		Logging.logVerbose(" Min Boundary: (" + inModel.mvMin.x + ", " + inModel.mvMin.y + ", " + inModel.mvMin.z + ")");
+		Logging.logVerbose(" Max Boundary: (" + inModel.mvMax.x + ", " + inModel.mvMax.y + ", " + inModel.mvMax.z + ")");
+		Logging.logVerbose(" Skeleton");
+		Logging.logVerbose("  Num Skeleton Nodes: " + inModel.mSkeleton.mNodeList.size());
+		Logging.logVerbose("   Number of which are Joints: " + SCSkeletonBuilder.GetNumberOfJoints(inModel));
+		Logging.logVerbose(" Number of Meshes: " + inModel.mMeshTable.size());
 		for (CSModelMesh mesh: inModel.mMeshTable.values())
 		{
-			SCLogger.LogMessage(" Mesh " + mesh.mstrName);
-			SCLogger.LogMessage("  Number of Vertices: " + mesh.mVertexList.size());
-			SCLogger.LogMessage("  Number of Indices: " + mesh.mIndexList.size());
-			SCLogger.LogMessage("  Texture: " + mesh.mstrTextureName);
-			SCLogger.LogMessage("  Min Boundary: (" + mesh.mvMin.x + ", " + mesh.mvMin.y + ", " + mesh.mvMin.z + ")");
-			SCLogger.LogMessage("  Max Boundary: (" + mesh.mvMax.x + ", " + mesh.mvMax.y + ", " + mesh.mvMax.z + ")");
-			SCLogger.LogMessage("  Material");
-			SCLogger.LogMessage("   Emissive: (" + mesh.mMaterial.mvEmissive.x + ", " + mesh.mMaterial.mvEmissive.y + ", " + mesh.mMaterial.mvEmissive.z + ", " + mesh.mMaterial.mvEmissive.w + ")");
-			SCLogger.LogMessage("   Ambient: (" + mesh.mMaterial.mvAmbient.x + ", " + mesh.mMaterial.mvAmbient.y + ", " + mesh.mMaterial.mvAmbient.z + ", " + mesh.mMaterial.mvAmbient.w + ")");
-			SCLogger.LogMessage("   Diffuse: (" + mesh.mMaterial.mvDiffuse.x + ", " + mesh.mMaterial.mvDiffuse.y + ", " + mesh.mMaterial.mvDiffuse.z + ", " + mesh.mMaterial.mvDiffuse.w + ")");
-			SCLogger.LogMessage("   Specular: (" + mesh.mMaterial.mvSpecular.x + ", " + mesh.mMaterial.mvSpecular.y + ", " + mesh.mMaterial.mvSpecular.z + ", " + mesh.mMaterial.mvSpecular.w + ")");
-			SCLogger.LogMessage("   Shininess: " + mesh.mMaterial.mfShininess);
+			Logging.logVerbose(" Mesh " + mesh.mstrName);
+			Logging.logVerbose("  Number of Vertices: " + mesh.mVertexList.size());
+			Logging.logVerbose("  Number of Indices: " + mesh.mIndexList.size());
+			Logging.logVerbose("  Texture: " + mesh.mstrTextureName);
+			Logging.logVerbose("  Min Boundary: (" + mesh.mvMin.x + ", " + mesh.mvMin.y + ", " + mesh.mvMin.z + ")");
+			Logging.logVerbose("  Max Boundary: (" + mesh.mvMax.x + ", " + mesh.mvMax.y + ", " + mesh.mvMax.z + ")");
+			Logging.logVerbose("  Material");
+			Logging.logVerbose("   Emissive: (" + mesh.mMaterial.mvEmissive.x + ", " + mesh.mMaterial.mvEmissive.y + ", " + mesh.mMaterial.mvEmissive.z + ", " + mesh.mMaterial.mvEmissive.w + ")");
+			Logging.logVerbose("   Ambient: (" + mesh.mMaterial.mvAmbient.x + ", " + mesh.mMaterial.mvAmbient.y + ", " + mesh.mMaterial.mvAmbient.z + ", " + mesh.mMaterial.mvAmbient.w + ")");
+			Logging.logVerbose("   Diffuse: (" + mesh.mMaterial.mvDiffuse.x + ", " + mesh.mMaterial.mvDiffuse.y + ", " + mesh.mMaterial.mvDiffuse.z + ", " + mesh.mMaterial.mvDiffuse.w + ")");
+			Logging.logVerbose("   Specular: (" + mesh.mMaterial.mvSpecular.x + ", " + mesh.mMaterial.mvSpecular.y + ", " + mesh.mMaterial.mvSpecular.z + ", " + mesh.mMaterial.mvSpecular.w + ")");
+			Logging.logVerbose("   Shininess: " + mesh.mMaterial.mfShininess);
 		}
 	}
 	//-------------------------------------------------------------------
@@ -129,19 +129,19 @@ public class CSModelConverterTool
 	//-------------------------------------------------------------------
 	private void OutputInfoOnOutput(CSModelConversionParameters inParams)
 	{
-		SCLogger.LogMessage("Successfully created " + inParams.mstrOutputFilepath);
-		SCLogger.LogMessage(" Features");
-		SCLogger.LogMessage("  Has Animation Data: " + Boolean.toString(inParams.mbHasAnimationData));
-		SCLogger.LogMessage(" Vertex Declaration");
-		SCLogger.LogMessage("  Position: " + Boolean.toString(inParams.mbVertexHasPosition));
-		SCLogger.LogMessage("  Normal: " + Boolean.toString(inParams.mbVertexHasNormal));
-		SCLogger.LogMessage("  Texture Coordinates: " + Boolean.toString(inParams.mbVertexHasTexCoords));
-		SCLogger.LogMessage("  Colour: " + Boolean.toString(inParams.mbVertexHasColour));
-		SCLogger.LogMessage("  Weights: " + Boolean.toString(inParams.mbVertexHasWeights));
-		SCLogger.LogMessage("  Joint Indices: " + Boolean.toString(inParams.mbVertexHasJointIndices));
-		SCLogger.LogMessage(" Transforms");
-		SCLogger.LogMessage("  Flip vertical texture coordinates: " + Boolean.toString(inParams.mbFlipVerticalTexCoords));
-		SCLogger.LogMessage("  Swap Y and Z: " + Boolean.toString(inParams.mbSwapYAndZ));
-		SCLogger.LogMessage(" ");
+		Logging.logVerbose("Successfully created " + inParams.mstrOutputFilepath);
+		Logging.logVerbose(" Features");
+		Logging.logVerbose("  Has Animation Data: " + Boolean.toString(inParams.mbHasAnimationData));
+		Logging.logVerbose(" Vertex Declaration");
+		Logging.logVerbose("  Position: " + Boolean.toString(inParams.mbVertexHasPosition));
+		Logging.logVerbose("  Normal: " + Boolean.toString(inParams.mbVertexHasNormal));
+		Logging.logVerbose("  Texture Coordinates: " + Boolean.toString(inParams.mbVertexHasTexCoords));
+		Logging.logVerbose("  Colour: " + Boolean.toString(inParams.mbVertexHasColour));
+		Logging.logVerbose("  Weights: " + Boolean.toString(inParams.mbVertexHasWeights));
+		Logging.logVerbose("  Joint Indices: " + Boolean.toString(inParams.mbVertexHasJointIndices));
+		Logging.logVerbose(" Transforms");
+		Logging.logVerbose("  Flip vertical texture coordinates: " + Boolean.toString(inParams.mbFlipVerticalTexCoords));
+		Logging.logVerbose("  Swap Y and Z: " + Boolean.toString(inParams.mbSwapYAndZ));
+		Logging.logVerbose(" ");
 	}
 }

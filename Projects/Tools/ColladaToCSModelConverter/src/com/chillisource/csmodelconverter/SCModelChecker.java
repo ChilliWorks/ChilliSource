@@ -10,7 +10,7 @@ package com.chillisource.csmodelconverter;
 
 import com.chillisource.csmodelconverter.csmodel.CSModel;
 import com.chillisource.csmodelconverter.csmodel.CSModelMesh;
-import com.taggames.toolutils.SCLogger;
+import com.chillisource.toolutils.Logging;
 
 public class SCModelChecker 
 {
@@ -47,19 +47,19 @@ public class SCModelChecker
 		}
 		if (bContainsLargeMesh == true)
 		{
-			SCLogger.LogWarning("Mesh is too large! This model will require integer indices to render which chilli source currently does not support!");
+			Logging.logWarning("Mesh is too large! This model will require integer indices to render which chilli source currently does not support!");
 		}
 		
 		//test the amount of skeleton nodes
 		if (inModel.mSkeleton.mNodeList.size() > 256)
 		{
-			SCLogger.LogWarning("The skeleton contains a huge number of nodes! Over 256 nodes is probably too many.");
+			Logging.logWarning("The skeleton contains a huge number of nodes! Over 256 nodes is probably too many.");
 		}
 		
 		//test the amount of joints
 		if (SCSkeletonBuilder.GetNumberOfJoints(inModel) > 60)
 		{
-			SCLogger.LogWarning("The skeleton contains a huge number of joints! Over 60 nodes is probably too many.");
+			Logging.logWarning("The skeleton contains a huge number of joints! Over 60 nodes is probably too many.");
 		}
 	}
 }

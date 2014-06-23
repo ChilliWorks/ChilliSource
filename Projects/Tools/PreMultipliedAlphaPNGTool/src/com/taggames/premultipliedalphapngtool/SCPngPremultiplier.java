@@ -6,8 +6,8 @@ import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.util.LinkedList;
 
-import com.taggames.toolutils.SCLogger;
-import com.taggames.toolutils.SCStringUtils;
+import com.chillisource.toolutils.Logging;
+import com.chillisource.toolutils.StringUtils;
 
 public class SCPngPremultiplier 
 {
@@ -23,8 +23,8 @@ public class SCPngPremultiplier
 	{
 		try
 		{	
-			String strInput = SCStringUtils.StandardiseFilepath(insOptions.strInputFilename);
-			String strOutput = SCStringUtils.StandardiseFilepath(insOptions.strOutputFilename);
+			String strInput = StringUtils.standardiseFilepath(insOptions.strInputFilename);
+			String strOutput = StringUtils.standardiseFilepath(insOptions.strOutputFilename);
 			
 			//build the command list
 			LinkedList<String> astrCommands = new LinkedList<String>();
@@ -35,48 +35,48 @@ public class SCPngPremultiplier
 			astrCommands.add(strOutput);
 			
 			//add the logging level to the command list
-			switch (SCLogger.GetLoggingLevel())
+			switch (Logging.getLoggingLevel())
 			{
-			case SCLogger.LOGGING_LEVEL_NONE:
+			case Logging.LOGGING_LEVEL_NONE:
 				astrCommands.add("--logginglevel");
 				astrCommands.add("none");
 				break;
-			case SCLogger.LOGGING_LEVEL_FATAL:
+			case Logging.LOGGING_LEVEL_FATAL:
 				astrCommands.add("--logginglevel");
 				astrCommands.add("fatal");
 				break;
-			case SCLogger.LOGGING_LEVEL_ERROR:
+			case Logging.LOGGING_LEVEL_ERROR:
 				astrCommands.add("--logginglevel");
 				astrCommands.add("error");
 				break;
-			case SCLogger.LOGGING_LEVEL_WARNING:
+			case Logging.LOGGING_LEVEL_WARNING:
 				astrCommands.add("--logginglevel");
 				astrCommands.add("warning");
 				break;
-			case SCLogger.LOGGING_LEVEL_VERBOSE:
+			case Logging.LOGGING_LEVEL_VERBOSE:
 				astrCommands.add("--logginglevel");
 				astrCommands.add("verbose");
 				break;
 			}
 			
 			//add when to display error messages to the command list.
-			switch (SCLogger.GetWhenToDisplayErrors())
+			switch (Logging.GetWhenToDisplayErrors())
 			{
-			case SCLogger.DISPLAY_ERRORS_NEVER:
+			case Logging.DISPLAY_ERRORS_NEVER:
 				astrCommands.add("--errordisplay");
 				astrCommands.add("never");
 				break;
-			case SCLogger.DISPLAY_ERRORS_AT_END:
+			case Logging.DISPLAY_ERRORS_AT_END:
 				astrCommands.add("--errordisplay");
 				astrCommands.add("atend");
 				break;
-			case SCLogger.DISPLAY_ERRORS_WHEN_RECIEVED:
+			case Logging.DISPLAY_ERRORS_WHEN_RECIEVED:
 				astrCommands.add("--errordisplay");
 				astrCommands.add("whenrecieved");
 				break;
 			}
 			
-			SCLogger.LogMessage("Premultiplying " + strInput);
+			Logging.logVerbose("Premultiplying " + strInput);
 			
 			//run the application
 			final Process process = new ProcessBuilder(astrCommands).start();
@@ -112,7 +112,7 @@ public class SCPngPremultiplier
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogFatalError("Exception occurred in Premultiply(): \n" + e.getStackTrace());
+			Logging.logFatal("Exception occurred in Premultiply(): \n" + e.getStackTrace());
 		}
 	}
 	//------------------------------------------------------
@@ -131,7 +131,7 @@ public class SCPngPremultiplier
 			String strUndecodedPathToHere = CMain.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 			String strPathToHere = URLDecoder.decode(strUndecodedPathToHere, "UTF-8");
 			strPathToHere = strPathToHere.substring(0, strPathToHere.lastIndexOf("/") + 1);
-			SCStringUtils.StandardiseFilepath(strPathToHere);
+			StringUtils.standardiseFilepath(strPathToHere);
 			
 			//get which version of the executable should be used.
 			String strOS = System.getProperty("os.name");
@@ -143,11 +143,11 @@ public class SCPngPremultiplier
 			else if (strOS.startsWith("Linux") == true)
 				strExecutableName = strPathToHere + "PreMultipliedAlphaPNGTool/PreMultipliedAlphaPNGToolLinux";
 			else
-				SCLogger.LogFatalError("This platform is not supported!");
+				Logging.logFatal("This platform is not supported!");
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogFatalError("Exception occurred in GetExecutableName(): \n" + e.getStackTrace());
+			Logging.logFatal("Exception occurred in GetExecutableName(): \n" + e.getStackTrace());
 		}
 		
 		return strExecutableName;
@@ -173,14 +173,14 @@ public class SCPngPremultiplier
 				inputLine = bufferedInputReader.readLine();
 				if (inputLine != null)
 				{	
-					SCLogger.LogMessage("  " + inputLine);
+					Logging.logVerbose("  " + inputLine);
 				}
 			}
 			while (inputLine != null);
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogFatalError("Something has gone wrong while reading the error stream!\n" + e.getStackTrace().toString());
+			Logging.logFatal("Something has gone wrong while reading the error stream!\n" + e.getStackTrace().toString());
 		}
 	}
 	//------------------------------------------------------
@@ -204,17 +204,17 @@ public class SCPngPremultiplier
 				errorLine = bufferedErrorReader.readLine();
 				if (errorLine != null)
 				{
-					if (SCLogger.GetLoggingLevel() == SCLogger.LOGGING_LEVEL_VERBOSE)
-						SCLogger.LogMessage("  " + errorLine);
+					if (Logging.getLoggingLevel() == Logging.LOGGING_LEVEL_VERBOSE)
+						Logging.logVerbose("  " + errorLine);
 					
-					if (SCLogger.GetWhenToDisplayErrors() == SCLogger.DISPLAY_ERRORS_AT_END)
+					if (Logging.GetWhenToDisplayErrors() == Logging.DISPLAY_ERRORS_AT_END)
 					{
 						if (errorLine.startsWith("FATAL") == true)
-							SCLogger.LogFatalError(errorLine.substring(7));
+							Logging.logFatal(errorLine.substring(7));
 						else if (errorLine.startsWith("ERROR") == true)
-							SCLogger.LogError(errorLine.substring(7));
+							Logging.logError(errorLine.substring(7));
 						else if (errorLine.startsWith("WARNING") == true)
-							SCLogger.LogWarning(errorLine.substring(9));
+							Logging.logWarning(errorLine.substring(9));
 					}
 				}
 			}
@@ -222,7 +222,7 @@ public class SCPngPremultiplier
 		}
 		catch (Exception e)
 		{
-			SCLogger.LogFatalError("Something has gone wrong while reading the error stream!\n" + e.getStackTrace().toString());
+			Logging.logFatal("Something has gone wrong while reading the error stream!\n" + e.getStackTrace().toString());
 		}
 	}
 }

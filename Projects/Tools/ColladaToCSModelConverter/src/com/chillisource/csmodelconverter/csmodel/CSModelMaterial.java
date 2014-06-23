@@ -8,23 +8,23 @@
 
 package com.chillisource.csmodelconverter.csmodel;
 
-import com.taggames.toolutils.CVector4;
+import com.chillisource.toolutils.Vector4;
 
 public class CSModelMaterial 
 {
-	public CVector4 mvEmissive;
-	public CVector4 mvAmbient;
-	public CVector4 mvDiffuse;
-	public CVector4 mvSpecular;
+	public Vector4 mvEmissive;
+	public Vector4 mvAmbient;
+	public Vector4 mvDiffuse;
+	public Vector4 mvSpecular;
 	public float mfShininess;
 	public String mstrName;
 	
 	public CSModelMaterial()
 	{
-		mvEmissive = new CVector4();
-		mvAmbient = new CVector4();
-		mvDiffuse = new CVector4();
-		mvSpecular = new CVector4();
+		mvEmissive = new Vector4();
+		mvAmbient = new Vector4();
+		mvDiffuse = new Vector4();
+		mvSpecular = new Vector4();
 		mfShininess = 0.0f;
 		mstrName = new String();
 	}
