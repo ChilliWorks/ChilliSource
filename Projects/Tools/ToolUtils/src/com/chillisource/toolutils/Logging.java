@@ -22,6 +22,14 @@ public class Logging
 		k_verbose
 	}
 
+	public static String k_paramLoggingLevel = "--logginglevel";
+	public static String k_paramLoggingLevelShort = "--ll";
+	public static String k_loggingLevelNone = "none";
+	public static String k_loggingLevelFatal = "fatal";
+	public static String k_loggingLevelError = "error";
+	public static String k_loggingLevelWarning = "warning";
+	public static String k_loggingLevelVerbose = "verbose";
+
 	private static LoggingLevel m_loggingLevel = LoggingLevel.k_warning;
 	private static int m_numWarnings = 0;
 	private static int m_numErrors = 0;
@@ -43,21 +51,20 @@ public class Logging
 			
 			for (int i = 0; i < in_args.length; ++i)
 			{
-				if (in_args[i].equalsIgnoreCase("-ll") == true || in_args[i].equalsIgnoreCase("--logginglevel") == true)
+				if (in_args[i].equalsIgnoreCase(k_paramLoggingLevel) == true || in_args[i].equalsIgnoreCase(k_paramLoggingLevelShort) == true)
 				{
-					
 					if (i+1 < in_args.length)
 					{
 						String strLoggingLevel = in_args[i+1];
-						if (strLoggingLevel.equalsIgnoreCase("none") == true) 			
+						if (strLoggingLevel.equalsIgnoreCase(k_loggingLevelNone) == true) 			
 							Logging.setLoggingLevel(LoggingLevel.k_none);
-						else if (strLoggingLevel.equalsIgnoreCase("fatal") == true) 	
+						else if (strLoggingLevel.equalsIgnoreCase(k_loggingLevelFatal) == true) 	
 							Logging.setLoggingLevel(LoggingLevel.k_fatal); 
-						else if (strLoggingLevel.equalsIgnoreCase("error") == true) 	
+						else if (strLoggingLevel.equalsIgnoreCase(k_loggingLevelError) == true) 	
 							Logging.setLoggingLevel(LoggingLevel.k_error); 
-						else if (strLoggingLevel.equalsIgnoreCase("warning") == true) 	
+						else if (strLoggingLevel.equalsIgnoreCase(k_loggingLevelWarning) == true) 	
 							Logging.setLoggingLevel(LoggingLevel.k_warning); 
-						else if (strLoggingLevel.equalsIgnoreCase("verbose") == true) 	
+						else if (strLoggingLevel.equalsIgnoreCase(k_loggingLevelVerbose) == true) 	
 							Logging.setLoggingLevel(LoggingLevel.k_verbose);
 						else
 							Logging.logFatal("Invalid Logging Level parameter provided.");

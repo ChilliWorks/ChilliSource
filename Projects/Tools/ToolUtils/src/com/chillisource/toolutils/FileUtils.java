@@ -72,7 +72,7 @@ public class FileUtils
 	 * @param The data to be written to file.
 	 * @return Whether or not the file was successfully written.
 	 */
-	public static boolean writeFile(final String instrFilename, final byte[] instrFileContents)
+	public static boolean writeFile(final String in_filePath, final byte[] in_contents)
 	{
 		boolean bSuccess = false;
 		try
@@ -80,9 +80,9 @@ public class FileUtils
 			OutputStream stream = null;
 			try
 			{
-				File file = new File(instrFilename);
+				File file = new File(in_filePath);
 				stream = new BufferedOutputStream(new FileOutputStream(file));
-				stream.write(instrFileContents);
+				stream.write(in_contents);
 				bSuccess = true;
 			}
 	        catch (Exception e)
@@ -113,12 +113,12 @@ public class FileUtils
 	 * 
 	 * @return whether or not this was successful.
 	 */
-	public static boolean copyFile(String instrInputFilepath, String instrOutputFilepath)
+	public static boolean copyFile(String in_inputFilePath, String in_outputFilePath)
 	{
 		try
 		{
-			InputStream reader = new FileInputStream(instrInputFilepath);
-			OutputStream writer = new FileOutputStream(instrOutputFilepath);
+			InputStream reader = new FileInputStream(in_inputFilePath);
+			OutputStream writer = new FileOutputStream(in_outputFilePath);
 			
 			byte[] abyBuffer = new byte[1024];
 			int dwLength;
@@ -132,7 +132,7 @@ public class FileUtils
 		}
 		catch(Exception e)
 		{
-			Logging.logError("Failed to copy file '" + instrInputFilepath + "' to '" + instrOutputFilepath + "'");
+			Logging.logError("Failed to copy file '" + in_inputFilePath + "' to '" + in_outputFilePath + "'");
 			return false;
 		}
 		
@@ -149,14 +149,14 @@ public class FileUtils
 	 * 
 	 * @return whether or not this was successful.
 	 */
-	public static boolean copyDirectory(String instrInputDirectory, String instrOutputDirectory, LinkedList<String> inastrIgnores)
+	public static boolean copyDirectory(String in_inputDirectoryPath, String in_outputDirectoryPath, LinkedList<String> in_directoryPathsToIgnore)
 	{
 		try
 		{
 			//ignore some dirs.
-			for (String strIgnore : inastrIgnores)
+			for (String strIgnore : in_directoryPathsToIgnore)
 			{
-				if (instrInputDirectory.contains(strIgnore) == true)
+				if (in_inputDirectoryPath.contains(strIgnore) == true)
 				{
 					//This doesn't count as failure as we are choosing to ignore these dirs.
 					return true;
@@ -164,7 +164,7 @@ public class FileUtils
 			}
 			
 			//if the directory doesn't exist, then create it!
-			File destinationDir = new File(instrOutputDirectory);
+			File destinationDir = new File(in_outputDirectoryPath);
 			if (destinationDir.exists() == false)
 			{
 				destinationDir.mkdir();
@@ -172,7 +172,7 @@ public class FileUtils
 			
 			
 			//navigate the directory
-			File sourceDir = new File(instrInputDirectory);
+			File sourceDir = new File(in_inputDirectoryPath);
 			String[] astrList = sourceDir.list();
 			if (astrList != null) 
 			{
@@ -181,20 +181,20 @@ public class FileUtils
 					File entry = new File(sourceDir, astrList[i]);
 					if (entry.isDirectory())
 					{
-						copyDirectory(StringUtils.standardiseFilepath(instrInputDirectory) + StringUtils.standardiseFilepath(astrList[i]),
-								StringUtils.standardiseFilepath(instrOutputDirectory) + StringUtils.standardiseFilepath(astrList[i]), inastrIgnores);
+						copyDirectory(StringUtils.standardiseFilepath(in_inputDirectoryPath) + StringUtils.standardiseFilepath(astrList[i]),
+								StringUtils.standardiseFilepath(in_outputDirectoryPath) + StringUtils.standardiseFilepath(astrList[i]), in_directoryPathsToIgnore);
 					}
 					else
 					{
-						copyFile(StringUtils.standardiseFilepath(instrInputDirectory) + StringUtils.standardiseFilepath(astrList[i]),
-								StringUtils.standardiseFilepath(instrOutputDirectory) + StringUtils.standardiseFilepath(astrList[i]));
+						copyFile(StringUtils.standardiseFilepath(in_inputDirectoryPath) + StringUtils.standardiseFilepath(astrList[i]),
+								StringUtils.standardiseFilepath(in_outputDirectoryPath) + StringUtils.standardiseFilepath(astrList[i]));
 					}
 				}
 			}
 		}
 		catch(Exception e)
 		{
-			Logging.logError("Failed to copy directory '" + instrInputDirectory + "' to '" + instrOutputDirectory + "'");
+			Logging.logError("Failed to copy directory '" + in_inputDirectoryPath + "' to '" + in_outputDirectoryPath + "'");
 			return false;
 		}
 		
@@ -209,9 +209,9 @@ public class FileUtils
 	 * 
 	 * @return whether or not this was successful.
 	 */
-	public static boolean deleteFile(String instrFilePath)
+	public static boolean deleteFile(String in_filePath)
 	{
-		File file = new File(instrFilePath);
+		File file = new File(in_filePath);
 		return deleteFile(file);
 	}
 	/**
@@ -223,12 +223,12 @@ public class FileUtils
 	 * 
 	 * @return whether or not this was successful.
 	 */
-	public static boolean deleteFile(File inFile)
+	public static boolean deleteFile(File in_file)
 	{
-		if(!inFile.exists() || !inFile.isFile())
+		if(!in_file.exists() || !in_file.isFile())
 			return false;
 		
-		return inFile.delete();
+		return in_file.delete();
 	}
 	/**
 	 * Recursively creates directories.
@@ -240,10 +240,10 @@ public class FileUtils
 	 * @return Whether or not this was successful. Failure to create the directory 
 	 * because it already exists counts as success.
 	 */
-	public static boolean createDirectory(String instrDirectory)
+	public static boolean createDirectory(String in_directoryPath)
 	{
 		//break the path onto sections.
-		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
+		String strDirectory = StringUtils.standardiseFilepath(in_directoryPath);
 		String[] strPathSections = strDirectory.split("/");
 		
 		String strPathSoFar = "";
@@ -272,9 +272,9 @@ public class FileUtils
 	 * @param The directory to delete.
 	 * @return Whether or not this was successful. Failure to delete the directory because it does not exist counts as success.
 	 */
-	public static boolean deleteDirectory(String instrDirectory)
+	public static boolean deleteDirectory(String in_directoryPath)
 	{
-		File directory = new File(instrDirectory);
+		File directory = new File(in_directoryPath);
 
 		if (!directory.exists())
 			return true;
@@ -310,9 +310,9 @@ public class FileUtils
 	 * 
 	 * @return the list of file paths.
 	 */
-	static public String[] getFilePaths(String instrDirectory)
+	static public String[] getFilePaths(String in_directoryPath)
 	{
-		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
+		String strDirectory = StringUtils.standardiseFilepath(in_directoryPath);
 		String[] astrFilenames = getFullFilePaths(strDirectory);
 		
 		for (int i = 0; i < astrFilenames.length; ++i)
@@ -329,9 +329,9 @@ public class FileUtils
 	 * 
 	 * @return the list of directory paths.
 	 */
-	static public String[] getDirectoriesInDirectory(String instrDirectory)
+	static public String[] getDirectoriesInDirectory(String in_directoryPath)
 	{
-		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
+		String strDirectory = StringUtils.standardiseFilepath(in_directoryPath);
 		String[] astrDirectories = getFullDirectoryPaths(strDirectory);
 		
 		for (int i = 0; i < astrDirectories.length; ++i)
@@ -342,17 +342,17 @@ public class FileUtils
 	/**
 	 * Calculates the MD5 checksum for the file at the given path.
 	 * 
-	 * @param The filename.
+	 * @param The file path.
 	 * 
 	 * @return The MD5 Checksum.
 	 */
-	static public String calculateFileChecksumMD5(String instrFilename)
+	static public String calculateFileChecksumMD5(String in_filePath)
 	{
 		String strChecksum = "";
 		
 		try
 		{
-			InputStream fis =  new FileInputStream(instrFilename);
+			InputStream fis =  new FileInputStream(in_filePath);
 	
 			byte[] buffer = new byte[1024];
 			MessageDigest complete = MessageDigest.getInstance("MD5");
@@ -378,7 +378,7 @@ public class FileUtils
 		}
 		catch (Exception e)
 		{
-			Logging.logError("Could not calculate checksum for file: " + instrFilename);
+			Logging.logError("Could not calculate checksum for file: " + in_filePath);
 		}
 		
 		return strChecksum;
@@ -414,9 +414,9 @@ public class FileUtils
 	 * 
 	 * @return the list of file paths.
 	 */
-	private static String[] getFullFilePaths(String instrDirectory)
+	private static String[] getFullFilePaths(String in_directoryPath)
 	{
-		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
+		String strDirectory = StringUtils.standardiseFilepath(in_directoryPath);
 		ArrayList<String> astrFilenames = new ArrayList<String>();
 		
 		File directory = new File(strDirectory);
@@ -455,9 +455,9 @@ public class FileUtils
 	 * 
 	 * @return the list of directory paths.
 	 */
-	private static String[] getFullDirectoryPaths(String instrDirectory)
+	private static String[] getFullDirectoryPaths(String in_directoryPath)
 	{
-		String strDirectory = StringUtils.standardiseFilepath(instrDirectory);
+		String strDirectory = StringUtils.standardiseFilepath(in_directoryPath);
 		ArrayList<String> astrDirectories = new ArrayList<String>();
 		
 		File directory = new File(strDirectory);

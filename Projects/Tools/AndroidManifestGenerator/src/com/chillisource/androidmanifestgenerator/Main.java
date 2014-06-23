@@ -29,6 +29,7 @@
 package com.chillisource.androidmanifestgenerator;
 
 import com.chillisource.toolutils.Logging;
+import com.chillisource.toolutils.Logging.LoggingLevel;
 import com.chillisource.toolutils.StringUtils;
 
 /**
@@ -125,23 +126,18 @@ public final class Main
 	 */
 	public static void printHelpText()
 	{
-		Logging.setLoggingLevel(Logging.LOGGING_LEVEL_VERBOSE);
+		Logging.setLoggingLevel(LoggingLevel.k_verbose);
 		Logging.logVerbose("Parameters:");
 		Logging.logVerbose(" '" + k_paramInput + "'('" + k_paramInputShort + "') -> The file path to the user manifest.");
 		Logging.logVerbose(" '" + k_paramTemplate + "'('" + k_paramTemplateShort + "') -> The file path to the template manifest.");
 		Logging.logVerbose(" '" + k_paramOutput + "'('" + k_paramOutputShort + "') -> The file path to the output AndroidManifest.xml.");
-		Logging.logVerbose(" '--logginglevel'('-l') -> the level of messages to log.");
-		Logging.logVerbose(" '--errordisplay'('-e') -> when to display errors.");
+		Logging.logVerbose(" '" + Logging.k_paramLoggingLevel + "'('" + Logging.k_paramLoggingLevelShort + "') -> the level of messages to log.");
 		Logging.logVerbose(" '" + k_paramHelp + "'('" + k_paramHelpShort + "') -> Display this help message.");
 		Logging.logVerbose("Logging Levels:");
-		Logging.logVerbose(" 'none' -> No logging.");
-		Logging.logVerbose(" 'fatal' -> Only log fatal errors.");
-		Logging.logVerbose(" 'error' -> Only log errors.");
-		Logging.logVerbose(" 'warning' -> Log errors and warnings.");
-		Logging.logVerbose(" 'verbose' -> Log all messages.");
-		Logging.logVerbose("Error Display Options:");
-		Logging.logVerbose(" 'never' -> Never display.");
-		Logging.logVerbose(" 'atend' -> Log all errors at the end.");
-		Logging.logVerbose(" 'whenreceived' -> Log all errors when received.");
+		Logging.logVerbose(" '" + Logging.k_loggingLevelNone + "' -> No logging.");
+		Logging.logVerbose(" '" + Logging.k_loggingLevelFatal + "' -> Only log fatal errors.");
+		Logging.logVerbose(" '" + Logging.k_loggingLevelError + "' -> Only log errors.");
+		Logging.logVerbose(" '" + Logging.k_loggingLevelWarning + "' -> Log errors and warnings.");
+		Logging.logVerbose(" '" + Logging.k_loggingLevelVerbose + "' -> Log all messages.");
 	}
 }
