@@ -56,7 +56,7 @@ namespace ChilliSource
             /// Constructor
             ///
             /// A constructor for creating the GUI Element from a param
-            /// dictionary. This is used mostly for loading from mogui
+            /// dictionary. This is used mostly for loading from csgui
             /// files.
             ///
             /// @param The param dictionary.
