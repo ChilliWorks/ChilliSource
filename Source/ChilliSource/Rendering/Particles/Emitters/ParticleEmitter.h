@@ -222,7 +222,7 @@ namespace ChilliSource
 			///
 			/// Rebuild the sprite data
 			//-----------------------------------------------------
-			void UpdateSpriteData(const Core::Vector3& invPos, const Core::Colour & insTintColour, SpriteComponent::SpriteData& outsData,
+			void UpdateSpriteData(const Core::Vector3& invPos, const Core::Colour & insTintColour, SpriteBatch::SpriteData& outsData,
                                   const Core::Vector3& invRight, const Core::Vector3& invUp, const Core::Vector3& invScale);
             
         protected:

@@ -26,276 +26,230 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_SPRITE_COMPONENT_H_
-#define _CHILLISOURCE_RENDERING_SPRITE_COMPONENT_H_
+#ifndef _CHILLISOURCE_RENDERING_SPRITE_SPRITECOMPONENT_H_
+#define _CHILLISOURCE_RENDERING_SPRITE_SPRITECOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/RenderComponent.h>
-#include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Base/ByteColour.h>
 #include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
+#include <ChilliSource/Rendering/Base/RenderComponent.h>
+#include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-        const u32 kudwVertsPerSprite = 4;
-        const u32 kudwIndicesPerSprite = 6;
-        
-        //CCW winding order (back face cull)
-		const u16 kauwLocalIndices[] = {0,1,2,1,3,2};
-		//CW winding order (front face cull)
-		//const u16 kauwLocalIndices[] = {0,2,1,1,2,3};
-        
-		//===============================================================
-		/// Description:
-		///
-		/// A sprite component. This defines a 2D object that can
-		/// be manipulated, textured and animated.
-		//===============================================================
+		//---------------------------------------------------------------
+        /// A render component that draws a 2D textured quad. Sprites
+        /// are rendered using a "Sprite" material and can be coloured,
+        /// aligned and have thier UVs changed manually or via a texture
+        /// atlas.
+        ///
+        /// @author S Downie
+		//---------------------------------------------------------------
 		class SpriteComponent final : public RenderComponent
 		{
 		public: 
 			
-            enum class Verts
-            {
-                k_topLeft,
-                k_bottomLeft,
-                k_topRight,
-                k_bottomRight
-            };
-            
-            struct SpriteVertex
-            {
-                Core::Vector4 vPos;
-                Core::Vector2 vTex;
-                Core::ByteColour Col;
-            };
-            
-            struct SpriteData
-            {
-                SpriteVertex sVerts[kudwVertsPerSprite];
-                
-                MaterialCSPtr pMaterial;
-            };
-			
 			CS_DECLARE_NAMEDTYPE(SpriteComponent);
+            //----------------------------------------------------------------------------------------
+            /// Identifiers for functions that maintain the aspect ratio of the sprite based on
+            /// current size and preferred image size
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            enum class SizePolicy
+            {
+                k_none,
+                k_usePreferredSize,
+                k_useWidthMaintainingAspect,
+                k_useHeightMaintainingAspect,
+                k_fitMaintainingAspect,
+                k_fillMaintainingAspect,
+                k_totalNum
+            };
+            //----------------------------------------------------------------------------------------
+            /// Delegate for size policy functions.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Original size
+            /// @param Preferred size
+            ///
+            /// @return New size with function applied
+            //----------------------------------------------------------------------------------------
+            using SizePolicyDelegate = std::function<Core::Vector2(const Core::Vector2&, const Core::Vector2&)>;
+            //----------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
 			SpriteComponent();
 			//----------------------------------------------------------
-			/// Is A
-			///
-			/// Returns if it is of the type given
+			/// @author S Downie
+            ///
 			/// @param Comparison Type
+            ///
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------
-			/// Get Axis Aligned Bounding Box
-			///
-			/// All render components have a box used for culling
-			/// and coarse intersections. This is cached and 
-			/// recomputed when required.
-			/// @return Axis aligned bounding box
+            /// The axis aligned bounding box is positioned in
+            /// world space but the orientation is aligned to
+            /// the x-y plane. This is cached and recomputed when
+            /// tranform is changed.
+            ///
+            /// @author S Downie
+            ///
+			/// @return AABB in world space
 			//----------------------------------------------------
-			virtual const Core::AABB& GetAABB() override;
+            const Core::AABB& GetAABB() override;
 			//----------------------------------------------------
-			/// Get Object Oriented Bounding Box
-			///
-			/// All render objects have an OOBB for
-			/// picking. This is cached and 
-			/// recomputed when required.
-			/// @return OOBB
+            /// The object oriented bounding box complete with transform to
+            /// transform from local space to world space. This is cached
+            /// and recomputed when tranform is changed.
+            ///
+            /// @author S Downie
+            ///
+			/// @return OOBB in local space with world transform
 			//----------------------------------------------------
 			const Core::OOBB& GetOOBB() override;
 			//----------------------------------------------------
-			/// Get Bounding Sphere
-			///
 			/// All render objects have an bounding sphere for
-			/// culling. This is cached and 
-			/// recomputed when required.
-			/// @return bounding sphere
+			/// culling. This is cached and recomputed when tranform
+            /// is changed. The bounding sphere encompasses
+            /// the diagonal axis of the sprite
+            ///
+            /// @author S Downie
+            ///
+			/// @return world space bounding sphere
 			//----------------------------------------------------
 			const Core::Sphere& GetBoundingSphere() override;
 			//-----------------------------------------------------------
-			/// Set Dimensions
+			/// @author S Downie
 			///
-			/// @param Vector containing width and height
+			/// @param Vector containing width and height of sprite in
+            /// local space
 			//-----------------------------------------------------------
-			void SetDimensions(const Core::Vector2 &invDims);
+			void SetSize(const Core::Vector2& in_size);
 			//-----------------------------------------------------------
-			/// Set Dimensions
+			/// @author S Downie
 			///
-			/// @param Width
-			/// @param Height
+			/// @param Width in local space
+			/// @param Height in local space
 			//-----------------------------------------------------------
-			void SetDimensions(const f32 infWidth, const f32 infHeight);
+			void SetSize(f32 in_width, f32 in_height);
+            //-----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Size policy that governs how the set size and
+            /// the image size are accommodated. Usually by maintaining
+            /// the aspect ratio of the image.
+            //-----------------------------------------------------------
+            void SetSizePolicy(SizePolicy in_sizePolicy);
 			//-----------------------------------------------------------
-			/// Set Width Unfactored
+			/// @author S Downie
 			///
-			/// @param Width
+			/// @return Size after the size policy has been applied
 			//-----------------------------------------------------------
-			void SetWidth(const f32 infWidth);
+			const Core::Vector2& GetSize() const;
 			//-----------------------------------------------------------
-			/// Set Height Unfactored
-			///
-			/// @param Height
-			//-----------------------------------------------------------
-			void SetHeight(const f32 infHeight);
-			//-----------------------------------------------------------
-			/// Get Dimensions
-			///
-			/// @return Vector containing width and height
-			//-----------------------------------------------------------
-			const Core::Vector2& GetDimensions() const;
-			//-----------------------------------------------------------
-			/// Get Dimensions Unfactored
-			///
-			/// @return Vector containing width and height, without applying
-			/// the screen factor
-			//-----------------------------------------------------------
-			const Core::Vector2& GetDimensionsUnfactored() const;
-			//-----------------------------------------------------------
-			/// Set UV's
-			///
 			/// Set the texture co-ordinates
+            ///
+            /// @author S Downie
 			///
 			/// @param Rect containing uv, st
 			//-----------------------------------------------------------
-			void SetUVs(const Rendering::UVs &inUVs);
+			void SetUVs(const Rendering::UVs& in_uvs);
 			//-----------------------------------------------------------
-			/// Set UV's
-			///
 			/// Set the UV texture coordinates
+            ///
+            /// @author S Downie
 			///
 			/// @param U
-			/// @param S
 			/// @param V
+			/// @param S
 			/// @param T
 			//-----------------------------------------------------------
-			void SetUVs(const f32 infUStart, const f32 infUWidth, const f32 infVStart, const f32 infVHeight);
+			void SetUVs(f32 in_u, f32 in_v, f32 in_s, f32 in_t);
 			//-----------------------------------------------------------
-			/// Get UVs (Un-transformed)
-			///
-			/// @return Rect with UV and ST
-			//-----------------------------------------------------------
-			const Rendering::UVs& GetUVs() const;
-			//-----------------------------------------------------------
-			/// Set Colour
-			///
-			/// Set the RGBA colour
+			/// Set the RGBA colour of the sprite. This is independent
+            /// of the material colour and is applied on a per sprite
+            /// basis
+            ///
+            /// @author S Downie
 			///
 			/// @param Colour containing RGBA
 			//-----------------------------------------------------------
-			void SetColour(const Core::Colour &inCol);
+			void SetColour(const Core::Colour& in_colour);
 			//-----------------------------------------------------------
-			/// Set Colour
-			///
-			/// Set the RGBA colour
+			/// Set the RGBA colour of the sprite. This is independent
+            /// of the material colour and is applied on a per sprite
+            /// basis
+            ///
+            /// @author S Downie
 			///
 			/// @param Red
 			/// @param Green
 			/// @param Blue
 			/// @param Alpha
 			//-----------------------------------------------------------
-			void SetColour(const f32 infR, const f32 infG, const f32 infB, const f32 infA);
+			void SetColour(f32 in_r, f32 in_g, f32 in_b, f32 in_a);
 			//-----------------------------------------------------------
 			/// Get Colour
 			///
 			/// @return Sprite colour
 			//-----------------------------------------------------------
 			const Core::Colour& GetColour() const;
-
 			//-----------------------------------------------------------
-			/// Get Current Frame
-			///
-			/// Build the UV's based on the current frame and sprite
-			/// manipulations
-			///
-			/// @param Rect containing the UV and ST
-			//-----------------------------------------------------------
-			const Rendering::UVs& GetCurrentFrame();
-			//-----------------------------------------------------------
-			/// Set Flipped Horizontal
-			///
-			/// Flip the sprite about it's local x-axis
-			///
-			/// @param Whether to flip or not
-			//-----------------------------------------------------------
-			void SetFlippedHorizontal(bool inbValue);
-			//-----------------------------------------------------------
-			/// Get Flipped Horizontal
-			///
-			/// @param Whether sprite is flipped about it's local x-axis
-			//-----------------------------------------------------------
-			bool GetFlippedHorizontal() const;
-			//-----------------------------------------------------------
-			/// Set Flipped Vertical
-			///
-			/// Flip the sprite about it's local y-axis
-			///
-			/// @param Whether to flip or not
-			//-----------------------------------------------------------
-			void SetFlippedVertical(bool inbValue);
-			//-----------------------------------------------------------
-			/// Get Flipped Vertical
-			///
-			/// @param Whether sprite is flipped about it's local y-axis
-			//-----------------------------------------------------------
-			bool GetFlippedVertical() const;
-			//-----------------------------------------------------------
-            /// Set Origin Alignment
+			/// Flip the sprite UVs about it's local x-axis
             ///
-			/// Controls where in the sprite it's origin is assumed to be
+            /// @author S Downie
 			///
-			/// @param Alignment to set origin to be (AlignmentAnchor::k_middleCentre) by default
+			/// @param Whether to flip or not
 			//-----------------------------------------------------------
-			void SetOriginAlignment(AlignmentAnchor ineAlignment);
+			void SetFlippedHorizontally(bool in_flip);
 			//-----------------------------------------------------------
-            /// Get Origin Alignment 
+			/// @author S Downie
+			///
+			/// @return Whether sprite is flipped about it's local x-axis
+			//-----------------------------------------------------------
+			bool IsFlippedHorizontally() const;
+			//-----------------------------------------------------------
+			/// Flip the sprite UVs about it's local y-axis
+            ///
+            /// @author S Downie
+			///
+			/// @param Whether to flip or not
+			//-----------------------------------------------------------
+			void SetFlippedVertically(bool in_flip);
+			//-----------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return Whether sprite is flipped about it's local y-axis
+			//-----------------------------------------------------------
+			bool IsFlippedVertically() const;
+			//-----------------------------------------------------------
+            /// Controls the origin of the sprite relative to its position.
+            /// An origin of middle centre will draw the sprite with its
+            /// centre at its world position. An origin of bottom centre
+            /// will draw the sprite with its base at its world position
+            ///
+            /// @author S Downie
+			///
+			/// @param Alignment (middle-centre by default)
+			//-----------------------------------------------------------
+			void SetOriginAlignment(AlignmentAnchor in_alignment);
+			//-----------------------------------------------------------
+            /// @author S Downie
             ///
 			/// @return Returns alignment of this sprite's origin
 			//-----------------------------------------------------------
-			AlignmentAnchor  GetOriginAlignment() const;
-            //-----------------------------------------------------------
-            /// Get Upper Left Corner Position
-            ///
-            /// @return Position of corner after transform
-            //-----------------------------------------------------------
-            const CSCore::Vector4 & GetUpperLeftCornerPos();
-            //-----------------------------------------------------------
-            /// Get Lower Left Corner Position
-            ///
-            /// @return Position of corner after transform
-            //-----------------------------------------------------------
-			const CSCore::Vector4 & GetLowerLeftCornerPos();
-            //-----------------------------------------------------------
-            /// Get Upper Right Corner Position
-            ///
-            /// @return Position of corner after transform
-            //-----------------------------------------------------------
-			const CSCore::Vector4 & GetUpperRightCornerPos();
-            //-----------------------------------------------------------
-            /// Get Lower Right Corner Position
-            ///
-            /// @return Position of corner after transform
-            //-----------------------------------------------------------
-			const CSCore::Vector4 & GetLowerRightCornerPos();
-            //-----------------------------------------------------------
-            /// Get Sprite Data
-            ///
-            /// @return Struct containing minimal sprite data for rendering
-            //-----------------------------------------------------------
-            const SpriteData& GetSpriteData();
-            //-----------------------------------------------------------
-            /// Calculate Sprite Data
-            ///
-            /// If the transform, UV or colour cache is invalid
-            /// we will recalculate the sprite vertex data
-            //-----------------------------------------------------------
-            void CalculateSpriteData();
+			AlignmentAnchor GetOriginAlignment() const;
+            
+		private:
             //-----------------------------------------------------------
             /// Render
             ///
@@ -319,7 +273,7 @@ namespace ChilliSource
             /// @param Material to render skinned shadows with
             //-----------------------------------------------------
             void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap) override {};
-			//----------------------------------------------------
+            //----------------------------------------------------
 			/// Triggered when the component is attached to
 			/// an entity on the scene
             ///
@@ -333,8 +287,6 @@ namespace ChilliSource
             /// @author S Downie
 			//----------------------------------------------------
 			void OnRemovedFromScene() override;
-            
-		private:
             //------------------------------------------------------------
             /// On Transform Changed
             ///
@@ -343,40 +295,45 @@ namespace ChilliSource
             //------------------------------------------------------------
             void OnTransformChanged();
             //-----------------------------------------------------------
-            /// Calculate Corner Positions
-            ///
             /// If the transform cache is invalid we must calculate
             /// the corner positions from the new world transform
+            ///
+            /// @author S Downie
             //-----------------------------------------------------------
-			void CalculateCornerPositions();
+			void UpdateVertexPositions();
+            //-----------------------------------------------------------
+            /// If the UVs change cache is invalid we must update the
+            /// sprite data vertices
+            ///
+            /// @author S Downie
+            //-----------------------------------------------------------
+            void UpdateVertexUVs();
 
 		private:
-            
+        
             Core::EventConnectionUPtr m_transformChangedConnection;
             
-			SpriteData mSpriteData;
+            SizePolicyDelegate m_sizePolicyDelegate;
             
-            Core::Matrix4 mmatTransformCache;
+            SpriteBatch::SpriteData m_spriteData;
             
-            Core::Vector4 mavVertexPos[kudwVertsPerSprite];
-
-			Core::Vector2 mvDimensions;
+			Core::Vector2 m_originalSize;
+            Core::Vector2 m_transformedSize;
 			
-			Rendering::UVs mUVs;
-			Rendering::UVs mTransformedUVs;
+			Rendering::UVs m_originalUVs;
+			Rendering::UVs m_transformedUVs;
             
-            Core::Colour mColour;
+            Core::Colour m_colour;
 			
-            AlignmentAnchor meAlignment;
+            AlignmentAnchor m_originAlignment = AlignmentAnchor::k_middleCentre;
             
-			bool mbFlippedHorizontal;
-			bool mbFlippedVertical;
-            bool mbCornerPosCacheValid;
-            bool mbUVCacheValid;
+			bool m_flippedHorizontally = false;
+			bool m_flippedVertically = false;
+            bool m_vertexPositionsValid = false;
             
-            bool mbBoundingSphereValid;
-            bool mbAABBValid;
-            bool mbOOBBValid;
+            bool m_isBSValid = false;
+            bool m_isAABBValid = false;
+            bool m_isOOBBValid = false;
 		};
 	}
 }

@@ -31,6 +31,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Material/Material.h>
 
 #ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
@@ -67,7 +68,7 @@ namespace ChilliSource
         ///
         /// @param Sprite data to batch
         //-------------------------------------------------------
-		void DynamicSpriteBatch::Render(const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4 * inpTransform)
+		void DynamicSpriteBatch::Render(const SpriteBatch::SpriteData& inpSprite, const Core::Matrix4 * inpTransform)
 		{
             //If we exceed the capacity of the buffer then we will be forced to flush it
             if(maSpriteCache.size() >= kudwMaxSpritesInDynamicBatch)
@@ -86,7 +87,7 @@ namespace ChilliSource
             maSpriteCache.push_back(inpSprite);
             if(inpTransform)
             {
-                for(u32 i = 0; i < kudwVertsPerSprite; i++)
+                for(u32 i = 0; i < k_numSpriteVerts; i++)
 					maSpriteCache.back().sVerts[i].vPos = inpSprite.sVerts[i].vPos * *inpTransform;
             }
             mpLastMaterial = inpSprite.pMaterial;
@@ -129,9 +130,9 @@ namespace ChilliSource
                 sLastCommand.m_type = CommandType::k_draw;
                 sLastCommand.m_material = mpLastMaterial;
                 //The offset of the indices for this batch
-                sLastCommand.m_offset = ((maSpriteCache.size() - mudwSpriteCommandCounter) * kudwIndicesPerSprite) * sizeof(s16);
+                sLastCommand.m_offset = ((maSpriteCache.size() - mudwSpriteCommandCounter) * k_numSpriteIndices) * sizeof(s16);
                 //The number of indices in this batch
-                sLastCommand.m_stride = mudwSpriteCommandCounter * kudwIndicesPerSprite;
+                sLastCommand.m_stride = mudwSpriteCommandCounter * k_numSpriteIndices;
                 
                 mudwSpriteCommandCounter = 0;
             }

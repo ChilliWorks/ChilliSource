@@ -193,7 +193,7 @@ namespace ChilliSource
             
 		private:
 			
-			SpriteComponent::SpriteData m_canvasSprite;
+			SpriteBatch::SpriteData m_canvasSprite;
 
             DynamicSpriteBatchUPtr m_overlayBatcher;
             

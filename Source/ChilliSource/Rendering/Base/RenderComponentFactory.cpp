@@ -51,7 +51,6 @@
 #include <ChilliSource/Rendering/Particles/Affectors/ParticleAffectorFactory.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
-#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
@@ -129,31 +128,23 @@ namespace ChilliSource
 		}
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2& in_size, const MaterialCSPtr& in_material)
+        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2& in_size, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy)
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
-            pSprite->SetDimensions(in_size);
             pSprite->SetMaterial(in_material);
+            pSprite->SetSizePolicy(in_sizePolicy);
+            pSprite->SetSize(in_size);
             return pSprite;
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteSizePolicy in_sizePolicy)
+        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2& in_size, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy)
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(in_material);
             pSprite->SetUVs(in_textureAtlas->GetFrameUVs(in_textureId));
-            
-            switch(in_sizePolicy)
-            {
-                case SpriteSizePolicy::k_useImageSize:
-                    pSprite->SetDimensions(in_textureAtlas->GetFrameSize(in_textureId));
-                    break;
-                case SpriteSizePolicy::k_normaliseMaintainingAspect:
-                    Core::Vector2 frameSize(in_textureAtlas->GetFrameSize(in_textureId));
-                    pSprite->SetDimensions(CalculateNormalisedSizeMaintainingAspect(frameSize));
-                    break;
-            }
+            pSprite->SetSizePolicy(in_sizePolicy);
+            pSprite->SetSize(in_size);
             
             return pSprite;
         }

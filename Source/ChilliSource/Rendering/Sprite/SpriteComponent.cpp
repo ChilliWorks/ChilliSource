@@ -26,15 +26,17 @@
 //  THE SOFTWARE.
 //
 
+#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
+
+#include <ChilliSource/Core/Base/ByteColour.h>
 #include <ChilliSource/Core/Base/ColourUtils.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
-#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
-#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
-#include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
 #include <algorithm>
 
@@ -42,375 +44,277 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
+        namespace
+        {
+            //----------------------------------------------------------
+            /// Aspect ratio maintaing function that returns the original
+            /// size. This is used despite the fact it doesn't do much to
+            /// prevent multiple code paths when calculating size.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Original size
+            /// @param Preferred size
+            ///
+            /// @return Original size
+            //----------------------------------------------------------
+            Core::Vector2 UseOriginalSize(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            {
+                return in_originalSize;
+            }
+            //----------------------------------------------------------
+            /// Aspect ratio maintaing function that returns the preferred
+            /// size. This is used despite the fact it doesn't do much to
+            /// prevent multiple code paths when calculating size.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Original size
+            /// @param Preferred size
+            ///
+            /// @return Preferred size
+            //----------------------------------------------------------
+            Core::Vector2 UsePreferredSize(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            {
+                return in_preferredSize;
+            }
+            
+            const SpriteComponent::SizePolicyDelegate k_sizeDelegates[(u32)SpriteComponent::SizePolicy::k_totalNum] =
+            {
+                UseOriginalSize,
+                UsePreferredSize,
+                AspectRatioUtils::KeepOriginalWidthAdaptHeight,
+                AspectRatioUtils::KeepOriginalHeightAdaptWidth,
+                AspectRatioUtils::FitOriginal,
+                AspectRatioUtils::FillOriginal
+            };
+        }
+        
         CS_DEFINE_NAMEDTYPE(SpriteComponent);
 		//----------------------------------------------------------
-		/// Constructor
 		//----------------------------------------------------------
-		SpriteComponent::SpriteComponent() : mUVs(0.0f, 0.0f, 1.0f, 1.0f), mbFlippedVertical(false), mbFlippedHorizontal(false),
-        mbCornerPosCacheValid(false), meAlignment(AlignmentAnchor::k_middleCentre), mbUVCacheValid(false), mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
+		SpriteComponent::SpriteComponent()
+        : m_originalUVs(0.0f, 0.0f, 1.0f, 1.0f), m_transformedUVs(m_originalUVs)
 		{
-
+            m_sizePolicyDelegate = k_sizeDelegates[(u32)SizePolicy::k_none];
 		}
 		//----------------------------------------------------------
-		/// Is A
 		//----------------------------------------------------------
-		bool SpriteComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
+		bool SpriteComponent::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return  (inInterfaceID == SpriteComponent::InterfaceID) || 
-                    (inInterfaceID == RenderComponent::InterfaceID) ||
-                    (inInterfaceID == VolumeComponent::InterfaceID);
+			return  (in_interfaceId == SpriteComponent::InterfaceID) ||
+                    (in_interfaceId == RenderComponent::InterfaceID) ||
+                    (in_interfaceId == VolumeComponent::InterfaceID);
 		}
 		//----------------------------------------------------
-		/// Get Axis Aligned Bounding Box
 		//----------------------------------------------------
 		const Core::AABB& SpriteComponent::GetAABB()
 		{
-			if(GetEntity() && !mbAABBValid)
+			if(GetEntity() && !m_isAABBValid)
 			{
-                mbAABBValid = true;
+                m_isAABBValid = true;
                 
                 // Realign the origin
-                Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+                Core::Vector2 vHalfSize(m_transformedSize.x * 0.5f, m_transformedSize.y * 0.5f);
                 Core::Vector2 vAlignedPos;
-                Align(meAlignment, vHalfSize, vAlignedPos);
+                Align(m_originAlignment, vHalfSize, vAlignedPos);
                 
 				// Rebuild the box
-				mBoundingBox.SetSize(Core::Vector3(mvDimensions, 0.0f));
+				mBoundingBox.SetSize(Core::Vector3(m_transformedSize, 0.0f));
 				mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition() + Core::Vector3(vAlignedPos, 0.0f));
 			}
 			return mBoundingBox;
 		}
 		//----------------------------------------------------
-		/// Get Object Oriented Bounding Box
 		//----------------------------------------------------
 		const Core::OOBB& SpriteComponent::GetOOBB()
 		{
-			if(GetEntity() && !mbOOBBValid)
+			if(GetEntity() && !m_isOOBBValid)
 			{
-                mbOOBBValid = true;
+                m_isOOBBValid = true;
                 
                 // Realign the origin
-                Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+                Core::Vector2 vHalfSize(m_transformedSize.x * 0.5f, m_transformedSize.y * 0.5f);
                 Core::Vector2 vAlignedPos;
-                Align(meAlignment, vHalfSize, vAlignedPos);
+                Align(m_originAlignment, vHalfSize, vAlignedPos);
                 
 				// Rebuild the box
                 mOBBoundingBox.SetOrigin(Core::Vector3(vAlignedPos, 0.0f));
-				mOBBoundingBox.SetSize(Core::Vector3(mvDimensions, 0.0f));
+				mOBBoundingBox.SetSize(Core::Vector3(m_transformedSize, 0.0f));
 				mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
 			}
 			return mOBBoundingBox;
 		}
 		//----------------------------------------------------
-		/// Get Bounding Sphere
 		//----------------------------------------------------
 		const Core::Sphere& SpriteComponent::GetBoundingSphere()
 		{
-			if(GetEntity() && !mbBoundingSphereValid)
+			if(GetEntity() && !m_isBSValid)
 			{
-                mbBoundingSphereValid = true;
+                m_isBSValid = true;
                 
                 // Realign the origin
-                Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+                Core::Vector2 vHalfSize(m_transformedSize.x * 0.5f, m_transformedSize.y * 0.5f);
                 Core::Vector2 vAlignedPos;
-                Align(meAlignment, vHalfSize, vAlignedPos);
+                Align(m_originAlignment, vHalfSize, vAlignedPos);
                 
 				mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition() + Core::Vector3(vAlignedPos, 0.0f);
-				mBoundingSphere.fRadius = std::sqrt((mvDimensions.x * mvDimensions.x) + (mvDimensions.y * mvDimensions.y)) * 0.5f;
+				mBoundingSphere.fRadius = std::sqrt((m_transformedSize.x * m_transformedSize.x) + (m_transformedSize.y * m_transformedSize.y)) * 0.5f;
 			}
 			return mBoundingSphere;
 		}
 		//-----------------------------------------------------------
-		/// Set Dimensions Unfactored
 		//-----------------------------------------------------------
-		void SpriteComponent::SetDimensions(const Core::Vector2 &invDims)
+		void SpriteComponent::SetSize(const Core::Vector2& in_size)
 		{
-			SetDimensions(invDims.x, invDims.y);
-		}
-		//-----------------------------------------------------------
-		/// Set Dimensions Unfactored
-		//-----------------------------------------------------------
-		void SpriteComponent::SetDimensions(const f32 infWidth, const f32 infHeight)
-		{
-			mbCornerPosCacheValid = false;
+            m_vertexPositionsValid = false;
 			
-			mvDimensions = Core::Vector2(infWidth, infHeight);
-		}
-		//-----------------------------------------------------------
-		/// Set Width Unfactored
-		//-----------------------------------------------------------
-		void SpriteComponent::SetWidth(const f32 infWidth)
-		{
-			mbCornerPosCacheValid = false;
-			
-			mvDimensions.x = infWidth;
-		}
-		//-----------------------------------------------------------
-		/// Set Height Unfactored
-		//-----------------------------------------------------------
-		void SpriteComponent::SetHeight(const f32 infHeight)
-		{
-			mbCornerPosCacheValid = false;
-			
-			mvDimensions.y = infHeight;
-		}
-		//-----------------------------------------------------------
-		/// Get Dimensions
-		//-----------------------------------------------------------
-		const Core::Vector2& SpriteComponent::GetDimensions() const
-		{
-			return mvDimensions;
-		}
-		//-----------------------------------------------------------
-		/// Set UV's
-		//-----------------------------------------------------------
-		void SpriteComponent::SetUVs(const Rendering::UVs &inUVs)
-		{
-			mUVs = inUVs;
+			m_originalSize = in_size;
             
-            mbUVCacheValid = false;
+            //TODO: What happens if the texture isn't set or changes
+            auto texture = mpMaterial->GetTexture();
+            m_transformedSize = m_sizePolicyDelegate(m_originalSize, Core::Vector2(texture->GetWidth(), texture->GetHeight()));
 		}
 		//-----------------------------------------------------------
-		/// Set UV's
 		//-----------------------------------------------------------
-		void SpriteComponent::SetUVs(const f32 infUStart, const f32 infUWidth, const f32 infVStart, const f32 infVHeight)
+		void SpriteComponent::SetSize(f32 in_width, f32 in_height)
 		{
-			mUVs.m_u = infUStart;
-			mUVs.m_s = infUWidth;
-			mUVs.m_v = infVStart;
-			mUVs.m_t = infVHeight;
+			SetSize(Core::Vector2(in_width, in_height));
+		}
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        void SpriteComponent::SetSizePolicy(SizePolicy in_sizePolicy)
+        {
+            m_vertexPositionsValid = false;
+            m_sizePolicyDelegate = k_sizeDelegates[(u32)in_sizePolicy];
             
-            mbUVCacheValid = false;
-		}
+            //TODO: What happens if the texture isn't set or changes
+            auto texture = mpMaterial->GetTexture();
+            m_transformedSize = m_sizePolicyDelegate(m_originalSize, Core::Vector2(texture->GetWidth(), texture->GetHeight()));
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        const Core::Vector2& SpriteComponent::GetSize() const
+        {
+            return m_transformedSize;
+        }
 		//-----------------------------------------------------------
-		/// Get UVs
 		//-----------------------------------------------------------
-		const Rendering::UVs& SpriteComponent::GetUVs() const
+		void SpriteComponent::SetUVs(const Rendering::UVs& in_uvs)
 		{
-			return mUVs;
+			m_originalUVs = in_uvs;
+            m_transformedUVs = in_uvs;
+            
+            UpdateVertexUVs();
 		}
 		//-----------------------------------------------------------
-		/// Set Colour
 		//-----------------------------------------------------------
-		void SpriteComponent::SetColour(const Core::Colour &inCol)
+		void SpriteComponent::SetUVs(f32 in_u, f32 in_v, f32 in_s, f32 in_t)
 		{
-			mColour = inCol;
+			m_originalUVs.m_u = in_u;
+			m_originalUVs.m_s = in_s;
+			m_originalUVs.m_v = in_v;
+			m_originalUVs.m_t = in_t;
+            
+            m_transformedUVs = m_originalUVs;
+            
+            UpdateVertexUVs();
 		}
 		//-----------------------------------------------------------
-		/// Set Colour
 		//-----------------------------------------------------------
-		void SpriteComponent::SetColour(const f32 infR, const f32 infG, const f32 infB, const f32 infA)
+		void SpriteComponent::SetColour(const Core::Colour& in_colour)
 		{
-			mColour = Core::Colour(infR, infG, infB, infA);
+			m_colour = in_colour;
+            
+            Core::ByteColour byteCol = Core::ColourUtils::ColourToByteColour(m_colour);
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].Col = byteCol;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].Col = byteCol;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].Col = byteCol;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].Col = byteCol;
 		}
 		//-----------------------------------------------------------
-		/// Get Colour
+		//-----------------------------------------------------------
+		void SpriteComponent::SetColour(f32 in_r, f32 in_g, f32 in_b, f32 in_a)
+		{
+			SetColour(Core::Colour(in_r, in_g, in_b, in_a));
+		}
+		//-----------------------------------------------------------
 		//-----------------------------------------------------------
 		const Core::Colour& SpriteComponent::GetColour() const
 		{
-			return mColour;
+			return m_colour;
 		}
 		//-----------------------------------------------------------
-		/// Get Current Frame
 		//-----------------------------------------------------------
-		const Rendering::UVs& SpriteComponent::GetCurrentFrame()
+		void SpriteComponent::SetFlippedHorizontally(bool in_flip)
 		{
-			if (mbFlippedHorizontal) 
-			{
-				mTransformedUVs = UVs::FlipHorizontally(mUVs);
-			} 
-			else 
-			{
-				mTransformedUVs.m_u = mUVs.m_u;
-				mTransformedUVs.m_s = mUVs.m_s;
-			}
-
-			if (mbFlippedVertical) 
-			{
-                mTransformedUVs = UVs::FlipVertically(mUVs);
-			} 
-			else 
-			{
-				mTransformedUVs.m_v = mUVs.m_v;
-				mTransformedUVs.m_t = mUVs.m_t;
-			}
-
-			return mTransformedUVs;
+            m_flippedHorizontally = in_flip;
+            
+            UpdateVertexUVs();
 		}
 		//-----------------------------------------------------------
-		/// Set Flipped Horizontal
 		//-----------------------------------------------------------
-		void SpriteComponent::SetFlippedHorizontal(bool inbValue)
+		bool SpriteComponent::IsFlippedHorizontally() const
 		{
-			mbFlippedHorizontal = inbValue;
-            mbUVCacheValid = false;
+			return m_flippedHorizontally;
 		}
 		//-----------------------------------------------------------
-		/// Get Flipped Horizontal
 		//-----------------------------------------------------------
-		bool SpriteComponent::GetFlippedHorizontal() const
+		void SpriteComponent::SetFlippedVertically(bool in_flip)
 		{
-			return mbFlippedHorizontal;
+            m_flippedVertically = in_flip;
+            
+            UpdateVertexUVs();
 		}
 		//-----------------------------------------------------------
-		/// Set Flipped Vertical
 		//-----------------------------------------------------------
-		void SpriteComponent::SetFlippedVertical(bool inbValue)
+		bool SpriteComponent::IsFlippedVertically() const
 		{
-			mbFlippedVertical = inbValue;
-            mbUVCacheValid = false;
+			return m_flippedVertically;
 		}
 		//-----------------------------------------------------------
-		/// Get Flipped Vertical
 		//-----------------------------------------------------------
-		bool SpriteComponent::GetFlippedVertical() const
-		{
-			return mbFlippedVertical;
-		}
-		//-----------------------------------------------------------
-		/// Set Origin Alignment
-		//-----------------------------------------------------------
-		void SpriteComponent::SetOriginAlignment(AlignmentAnchor ineAlignment)
+		void SpriteComponent::SetOriginAlignment(AlignmentAnchor in_alignment)
         {
-			meAlignment = ineAlignment;
-			mbCornerPosCacheValid = false;
+			m_originAlignment = in_alignment;
+			m_vertexPositionsValid = false;
 		}
 		//-----------------------------------------------------------
-		/// Get Origin Alignment
 		//-----------------------------------------------------------
 		AlignmentAnchor SpriteComponent::GetOriginAlignment() const
         {
-			return meAlignment;
+			return m_originAlignment;
 		}
         //-----------------------------------------------------------
-        /// Get Sprite Data
-        //-----------------------------------------------------------
-        const SpriteComponent::SpriteData& SpriteComponent::GetSpriteData()
-        {
-            CalculateSpriteData();
-            
-            return mSpriteData;
-        }
-        //-----------------------------------------------------------
-        /// Calculate Sprite Data
-        //-----------------------------------------------------------
-        void SpriteComponent::CalculateSpriteData()
-        {
-            //Update the vertex positions
-            if(!mbCornerPosCacheValid) 
-            {
-                //We have been transformed so we need to recalculate our vertices
-                CalculateCornerPositions();
-                
-                mSpriteData.sVerts[(u32)Verts::k_topLeft].vPos = mavVertexPos[(u32)Verts::k_topLeft];
-                mSpriteData.sVerts[(u32)Verts::k_bottomLeft].vPos = mavVertexPos[(u32)Verts::k_bottomLeft];
-                mSpriteData.sVerts[(u32)Verts::k_topRight].vPos = mavVertexPos[(u32)Verts::k_topRight];
-                mSpriteData.sVerts[(u32)Verts::k_bottomRight].vPos = mavVertexPos[(u32)Verts::k_bottomRight];
-            }
-            
-            //Update our vertex colours
-            mSpriteData.pMaterial = mpMaterial;
-            
-            Core::ByteColour byteCol = Core::ColourUtils::ColourToByteColour(mColour);
-            
-            mSpriteData.sVerts[(u32)Verts::k_topLeft].Col = byteCol;
-            mSpriteData.sVerts[(u32)Verts::k_bottomLeft].Col = byteCol;
-            mSpriteData.sVerts[(u32)Verts::k_topRight].Col = byteCol;
-            mSpriteData.sVerts[(u32)Verts::k_bottomRight].Col = byteCol;
-            
-            //Update our texture co-ordinates
-            if(!mbUVCacheValid)
-            {
-                mbUVCacheValid = true;
-                
-                Rendering::UVs TexCoords = GetCurrentFrame();
-                
-                mSpriteData.sVerts[(u32)Verts::k_topLeft].vTex.x = TexCoords.m_u;
-                mSpriteData.sVerts[(u32)Verts::k_topLeft].vTex.y = TexCoords.m_v;
-                
-                mSpriteData.sVerts[(u32)Verts::k_bottomLeft].vTex.x = TexCoords.m_u;
-                mSpriteData.sVerts[(u32)Verts::k_bottomLeft].vTex.y = TexCoords.m_v + TexCoords.m_t;
-                
-                mSpriteData.sVerts[(u32)Verts::k_topRight].vTex.x = TexCoords.m_u + TexCoords.m_s;
-                mSpriteData.sVerts[(u32)Verts::k_topRight].vTex.y = TexCoords.m_v;
-                
-                mSpriteData.sVerts[(u32)Verts::k_bottomRight].vTex.x = TexCoords.m_u + TexCoords.m_s;
-                mSpriteData.sVerts[(u32)Verts::k_bottomRight].vTex.y = TexCoords.m_v + TexCoords.m_t;
-            }
-        }
-        //-----------------------------------------------------------
-        /// Render
         //-----------------------------------------------------------
         void SpriteComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
         {
             if (ineShaderPass == ShaderPass::k_ambient)
             {
-                CalculateSpriteData();
+                if(m_vertexPositionsValid == false)
+                {
+                    //We have been transformed so we need to recalculate our vertices
+                    UpdateVertexPositions();
+                    m_vertexPositionsValid = true;
+                }
+                
+                m_spriteData.pMaterial = mpMaterial;
                 
                 //Add us to the render systems dynamic batch
                 //If we force a batch flush here then the previous sprites
                 //will be rendered.
-                inpRenderSystem->GetDynamicSpriteBatchPtr()->Render(mSpriteData);
+                inpRenderSystem->GetDynamicSpriteBatchPtr()->Render(m_spriteData);
             }
         }
         //------------------------------------------------------------
-        /// On Transform Changed
         //------------------------------------------------------------
         void SpriteComponent::OnTransformChanged()
         {
-            mbCornerPosCacheValid = false;
-            mbBoundingSphereValid = false;
-            mbAABBValid = false;
-            mbOOBBValid = false;
+            m_vertexPositionsValid = false;
+            m_isBSValid = false;
+            m_isAABBValid = false;
+            m_isOOBBValid = false;
         }
-        //-----------------------------------------------------------
-        /// Get Upper Left Corner Position
-        //-----------------------------------------------------------
-		const CSCore::Vector4 & SpriteComponent::GetUpperLeftCornerPos()
-        {
-			if (!mbCornerPosCacheValid)
-            {
-				CalculateCornerPositions();
-			}
-			
-			return mavVertexPos[(u32)Verts::k_topLeft];
-		}
-        //-----------------------------------------------------------
-        /// Get Lower Left Corner Position
-        //-----------------------------------------------------------
-		const CSCore::Vector4 & SpriteComponent::GetLowerLeftCornerPos()
-        {
-			if (!mbCornerPosCacheValid) 
-            {
-				CalculateCornerPositions();
-			}
-			
-			return mavVertexPos[(u32)Verts::k_bottomLeft];
-		}
-        //-----------------------------------------------------------
-        /// Get Upper Right Corner Position
-        //-----------------------------------------------------------
-		const CSCore::Vector4 & SpriteComponent::GetUpperRightCornerPos()
-        {
-			if (!mbCornerPosCacheValid) 
-            {
-				CalculateCornerPositions();
-			}
-            
-			return mavVertexPos[(u32)Verts::k_topRight];
-		}
-        //-----------------------------------------------------------
-        /// Get Lower Right Corner Position
-        //-----------------------------------------------------------
-		const CSCore::Vector4 & SpriteComponent::GetLowerRightCornerPos()
-        {
-			if (!mbCornerPosCacheValid) 
-            {
-				CalculateCornerPositions();
-			}
-            
-			return mavVertexPos[(u32)Verts::k_bottomRight];
-		}
 		//----------------------------------------------------
 		//----------------------------------------------------
 		void SpriteComponent::OnAddedToScene()
@@ -426,40 +330,70 @@ namespace ChilliSource
             m_transformChangedConnection = nullptr;
 		}
         //-----------------------------------------------------------
-        /// Calculate Corner Positions
         //-----------------------------------------------------------
-		void SpriteComponent::CalculateCornerPositions()
+		void SpriteComponent::UpdateVertexPositions()
         {
-            mmatTransformCache = GetEntity()->GetTransform().GetWorldTransform();
+            const Core::Matrix4& worldTransform = GetEntity()->GetTransform().GetWorldTransform();
             
-			Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+			Core::Vector2 vHalfSize(m_transformedSize.x * 0.5f, m_transformedSize.y * 0.5f);
 			Core::Vector2 vAlignedPos;
-            Align(meAlignment, vHalfSize, vAlignedPos);
+            Align(m_originAlignment, vHalfSize, vAlignedPos);
             
             Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
             Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
 			vTemp += vCentrePos;
-			mavVertexPos[(u32)Verts::k_topLeft] = vTemp * mmatTransformCache;
+			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = vTemp * worldTransform;
             
             vTemp.x = vHalfSize.x;
             vTemp.y = vHalfSize.y;
 
 			vTemp += vCentrePos;
-			mavVertexPos[(u32)Verts::k_topRight] = vTemp * mmatTransformCache;
+			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos = vTemp * worldTransform;
             
             vTemp.x = -vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-			mavVertexPos[(u32)Verts::k_bottomLeft] = vTemp * mmatTransformCache;
+			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos = vTemp * worldTransform;
             
             vTemp.x = vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-			mavVertexPos[(u32)Verts::k_bottomRight] = vTemp * mmatTransformCache;
-            
-			mbCornerPosCacheValid = true;
+			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos = vTemp * worldTransform;
 		}
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+		void SpriteComponent::UpdateVertexUVs()
+        {
+            if(m_flippedHorizontally == true)
+            {
+                m_transformedUVs = UVs::FlipHorizontally(m_transformedUVs);
+            }
+            else if(m_flippedHorizontally == false)
+            {
+                m_transformedUVs.m_u = m_originalUVs.m_u;
+                m_transformedUVs.m_s = m_originalUVs.m_s;
+            }
+            
+            if(m_flippedVertically == true)
+            {
+                m_transformedUVs = UVs::FlipVertically(m_transformedUVs);
+            }
+            else if(m_flippedVertically == false)
+            {
+                m_transformedUVs.m_v = m_originalUVs.m_v;
+                m_transformedUVs.m_t = m_originalUVs.m_t;
+            }
+            
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.x = m_transformedUVs.m_u;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.y = m_transformedUVs.m_v;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.x = m_transformedUVs.m_u;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.y = m_transformedUVs.m_v + m_transformedUVs.m_t;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.x = m_transformedUVs.m_u + m_transformedUVs.m_s;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.y = m_transformedUVs.m_v;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.x = m_transformedUVs.m_u + m_transformedUVs.m_s;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.y = m_transformedUVs.m_v + m_transformedUVs.m_t;
+        }
 	}
 }
