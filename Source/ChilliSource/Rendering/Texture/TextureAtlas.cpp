@@ -63,7 +63,22 @@ namespace ChilliSource
             
             for(u32 i=0; i<in_desc.m_keys.size(); ++i)
             {
-                m_frames.insert(std::make_pair(in_desc.m_keys[i], in_desc.m_frames[i]));
+                Frame frame;
+                const FrameRaw& frameRaw = in_desc.m_frames[i];
+                
+                //Calculate normalise UVs
+                f32 inverseWidth = 1.0f / m_textureAtlasWidth;
+                f32 inverseHeight = 1.0f / m_textureAtlasHeight;
+                frame.m_uvs.m_u = (f32)(frameRaw.m_texCoordU + k_halfTexelOffset) * inverseWidth;
+                frame.m_uvs.m_v = (f32)(frameRaw.m_texCoordV + k_halfTexelOffset) * inverseHeight;
+                frame.m_uvs.m_s = (f32)(frameRaw.m_width - k_texelOffset) * inverseWidth;
+                frame.m_uvs.m_t = (f32)(frameRaw.m_height - k_texelOffset) * inverseHeight;
+                
+                frame.m_originalSize = Core::Vector2(frameRaw.m_originalWidth, frameRaw.m_originalHeight);
+                frame.m_size = Core::Vector2(frameRaw.m_width, frameRaw.m_height);
+                frame.m_offset = Core::Vector2(frameRaw.m_offsetX, frameRaw.m_offsetY);
+                
+                m_frames.insert(std::make_pair(in_desc.m_keys[i], frame));
             }
         }
 		//---------------------------------------------------------------------
@@ -84,41 +99,67 @@ namespace ChilliSource
         {
             u32 hashedId = Core::HashCRC32::GenerateHashCode(in_textureId);
             
-            auto it = m_frames.find(hashedId);
-            return (it != m_frames.end());
+            return HasFrameWithId(hashedId);
         }	
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
 		Rendering::UVs TextureAtlas::GetFrameUVs(const std::string& in_textureId) const
         {
-			Rendering::UVs result;
-    
             const Frame& frame = GetFrame(in_textureId);
-			
-            f32 inverseWidth = 1.0f / m_textureAtlasWidth;
-            f32 inverseHeight = 1.0f / m_textureAtlasHeight;
-            
-			result.m_u = (f32)(frame.m_texCoordU + k_halfTexelOffset) * inverseWidth;
-			result.m_v = (f32)(frame.m_texCoordV + k_halfTexelOffset) * inverseHeight;
-			result.m_s = (f32)(frame.m_width - k_texelOffset) * inverseWidth;
-			result.m_t = (f32)(frame.m_height - k_texelOffset) * inverseHeight;
-            
-            return result;
+            return frame.m_uvs;
 		}
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
 		Core::Vector2 TextureAtlas::GetFrameSize(const std::string& in_textureId) const
         {
             const Frame& frame = GetFrame(in_textureId);
-			return Core::Vector2(frame.m_width, frame.m_height);
+			return frame.m_size;
 		}
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
 		Core::Vector2 TextureAtlas::GetFrameOffset(const std::string& in_textureId) const
         {
             const Frame& frame = GetFrame(in_textureId);
-            return Core::Vector2(frame.m_offsetX, frame.m_offsetY);
+            return frame.m_offset;
 		}
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        const TextureAtlas::Frame& TextureAtlas::GetFrame(u32 in_hashedTextureId) const
+        {
+            auto it = m_frames.find(in_hashedTextureId);
+            
+            CS_ASSERT(it != m_frames.end(), "Texture in atlas not found for hashed key: " + Core::ToString(in_hashedTextureId));
+            
+            return it->second;
+        }
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        bool TextureAtlas::HasFrameWithId(u32 in_hashedTextureId) const
+        {
+            auto it = m_frames.find(in_hashedTextureId);
+            return (it != m_frames.end());
+        }
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        Rendering::UVs TextureAtlas::GetFrameUVs(u32 in_hashedTextureId) const
+        {
+            const Frame& frame = GetFrame(in_hashedTextureId);
+            return frame.m_uvs;
+        }
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        Core::Vector2 TextureAtlas::GetFrameSize(u32 in_hashedTextureId) const
+        {
+            const Frame& frame = GetFrame(in_hashedTextureId);
+			return frame.m_size;
+        }
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        Core::Vector2 TextureAtlas::GetFrameOffset(u32 in_hashedTextureId) const
+        {
+            const Frame& frame = GetFrame(in_hashedTextureId);
+            return frame.m_offset;
+        }
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
         u32 TextureAtlas::GetWidth() const

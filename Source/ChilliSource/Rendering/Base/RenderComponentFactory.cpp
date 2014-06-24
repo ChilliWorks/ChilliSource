@@ -142,7 +142,8 @@ namespace ChilliSource
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(in_material);
-            pSprite->SetUVs(in_textureAtlas->GetFrameUVs(in_textureId));
+            pSprite->SetTextureAtlas(in_textureAtlas);
+            pSprite->SetTextureAtlasId(in_textureId);
             pSprite->SetSizePolicy(in_sizePolicy);
             pSprite->SetSize(in_size);
             

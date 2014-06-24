@@ -37,6 +37,7 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 #include <algorithm>
 
@@ -94,7 +95,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		//----------------------------------------------------------
 		SpriteComponent::SpriteComponent()
-        : m_originalUVs(0.0f, 0.0f, 1.0f, 1.0f), m_transformedUVs(m_originalUVs)
+        : m_uvs(0.0f, 0.0f, 1.0f, 1.0f)
 		{
             m_sizePolicyDelegate = k_sizeDelegates[(u32)SizePolicy::k_none];
 		}
@@ -114,13 +115,15 @@ namespace ChilliSource
 			{
                 m_isAABBValid = true;
                 
+                Core::Vector2 transformedSize = GetSize();
+                
                 // Realign the origin
-                Core::Vector2 vHalfSize(m_transformedSize.x * 0.5f, m_transformedSize.y * 0.5f);
+                Core::Vector2 vHalfSize(transformedSize.x * 0.5f, transformedSize.y * 0.5f);
                 Core::Vector2 vAlignedPos;
                 Align(m_originAlignment, vHalfSize, vAlignedPos);
                 
 				// Rebuild the box
-				mBoundingBox.SetSize(Core::Vector3(m_transformedSize, 0.0f));
+				mBoundingBox.SetSize(Core::Vector3(transformedSize, 0.0f));
 				mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition() + Core::Vector3(vAlignedPos, 0.0f));
 			}
 			return mBoundingBox;
@@ -133,14 +136,16 @@ namespace ChilliSource
 			{
                 m_isOOBBValid = true;
                 
+                Core::Vector2 transformedSize = GetSize();
+                
                 // Realign the origin
-                Core::Vector2 vHalfSize(m_transformedSize.x * 0.5f, m_transformedSize.y * 0.5f);
+                Core::Vector2 vHalfSize(transformedSize.x * 0.5f, transformedSize.y * 0.5f);
                 Core::Vector2 vAlignedPos;
                 Align(m_originAlignment, vHalfSize, vAlignedPos);
                 
 				// Rebuild the box
                 mOBBoundingBox.SetOrigin(Core::Vector3(vAlignedPos, 0.0f));
-				mOBBoundingBox.SetSize(Core::Vector3(m_transformedSize, 0.0f));
+				mOBBoundingBox.SetSize(Core::Vector3(transformedSize, 0.0f));
 				mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
 			}
 			return mOBBoundingBox;
@@ -153,27 +158,42 @@ namespace ChilliSource
 			{
                 m_isBSValid = true;
                 
+                Core::Vector2 transformedSize = GetSize();
+                
                 // Realign the origin
-                Core::Vector2 vHalfSize(m_transformedSize.x * 0.5f, m_transformedSize.y * 0.5f);
+                Core::Vector2 vHalfSize(transformedSize.x * 0.5f, transformedSize.y * 0.5f);
                 Core::Vector2 vAlignedPos;
                 Align(m_originAlignment, vHalfSize, vAlignedPos);
                 
 				mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition() + Core::Vector3(vAlignedPos, 0.0f);
-				mBoundingSphere.fRadius = std::sqrt((m_transformedSize.x * m_transformedSize.x) + (m_transformedSize.y * m_transformedSize.y)) * 0.5f;
+				mBoundingSphere.fRadius = std::sqrt((transformedSize.x * transformedSize.x) + (transformedSize.y * transformedSize.y)) * 0.5f;
 			}
 			return mBoundingSphere;
 		}
+        //-----------------------------------------------------------
+        /// The texture atlas has the priority, then the texture
+        //-----------------------------------------------------------
+        Core::Vector2 SpriteComponent::GetPreferredSize() const
+        {
+            if(m_textureAtlas != nullptr && m_hashedTextureAtlasId > 0)
+            {
+                return m_textureAtlas->GetFrameSize(m_hashedTextureAtlasId);
+            }
+            else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
+            {
+                auto texture = mpMaterial->GetTexture();
+                return Core::Vector2(texture->GetWidth(), texture->GetHeight());
+            }
+            
+            return Core::Vector2::k_one;
+        }
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
 		void SpriteComponent::SetSize(const Core::Vector2& in_size)
 		{
-            m_vertexPositionsValid = false;
-			
-			m_originalSize = in_size;
+            OnTransformChanged();
             
-            //TODO: What happens if the texture isn't set or changes
-            auto texture = mpMaterial->GetTexture();
-            m_transformedSize = m_sizePolicyDelegate(m_originalSize, Core::Vector2(texture->GetWidth(), texture->GetHeight()));
+			m_originalSize = in_size;
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
@@ -185,40 +205,51 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void SpriteComponent::SetSizePolicy(SizePolicy in_sizePolicy)
         {
-            m_vertexPositionsValid = false;
-            m_sizePolicyDelegate = k_sizeDelegates[(u32)in_sizePolicy];
+            OnTransformChanged();
             
-            //TODO: What happens if the texture isn't set or changes
-            auto texture = mpMaterial->GetTexture();
-            m_transformedSize = m_sizePolicyDelegate(m_originalSize, Core::Vector2(texture->GetWidth(), texture->GetHeight()));
+            m_sizePolicyDelegate = k_sizeDelegates[(u32)in_sizePolicy];
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        const Core::Vector2& SpriteComponent::GetSize() const
+        Core::Vector2 SpriteComponent::GetSize() const
         {
-            return m_transformedSize;
+            Core::Vector2 preferredSize = GetPreferredSize();
+            return m_sizePolicyDelegate(m_originalSize, preferredSize);
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        void SpriteComponent::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
+        {
+            OnTransformChanged();
+            
+            m_textureAtlas = in_atlas;
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        void SpriteComponent::SetTextureAtlasId(const std::string& in_atlasId)
+        {
+            CS_ASSERT(m_textureAtlas != nullptr, "SpriteComponent: Cannot set texture atlas id until atlas has been set");
+            
+            OnTransformChanged();
+            
+            m_hashedTextureAtlasId = Core::HashCRC32::GenerateHashCode(in_atlasId);
+            m_uvs = m_textureAtlas->GetFrameUVs(m_hashedTextureAtlasId);
+            
+            UpdateVertexUVs(m_uvs);
         }
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
 		void SpriteComponent::SetUVs(const Rendering::UVs& in_uvs)
 		{
-			m_originalUVs = in_uvs;
-            m_transformedUVs = in_uvs;
-            
-            UpdateVertexUVs();
+            m_uvs = in_uvs;
+            UpdateVertexUVs(in_uvs);
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
 		void SpriteComponent::SetUVs(f32 in_u, f32 in_v, f32 in_s, f32 in_t)
 		{
-			m_originalUVs.m_u = in_u;
-			m_originalUVs.m_s = in_s;
-			m_originalUVs.m_v = in_v;
-			m_originalUVs.m_t = in_t;
-            
-            m_transformedUVs = m_originalUVs;
-            
-            UpdateVertexUVs();
+            m_uvs = UVs(in_u, in_v, in_s, in_t);
+            UpdateVertexUVs(m_uvs);
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
@@ -250,7 +281,7 @@ namespace ChilliSource
 		{
             m_flippedHorizontally = in_flip;
             
-            UpdateVertexUVs();
+            UpdateVertexUVs(m_uvs);
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
@@ -264,7 +295,7 @@ namespace ChilliSource
 		{
             m_flippedVertically = in_flip;
             
-            UpdateVertexUVs();
+            UpdateVertexUVs(m_uvs);
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
@@ -335,7 +366,9 @@ namespace ChilliSource
         {
             const Core::Matrix4& worldTransform = GetEntity()->GetTransform().GetWorldTransform();
             
-			Core::Vector2 vHalfSize(m_transformedSize.x * 0.5f, m_transformedSize.y * 0.5f);
+            Core::Vector2 transformedSize = GetSize();
+            
+			Core::Vector2 vHalfSize(transformedSize.x * 0.5f, transformedSize.y * 0.5f);
 			Core::Vector2 vAlignedPos;
             Align(m_originAlignment, vHalfSize, vAlignedPos);
             
@@ -364,36 +397,31 @@ namespace ChilliSource
 		}
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-		void SpriteComponent::UpdateVertexUVs()
+		void SpriteComponent::UpdateVertexUVs(const UVs& in_uvs)
         {
-            if(m_flippedHorizontally == true)
+            UVs transformedUVs = in_uvs;
+            
+            if(m_flippedHorizontally == true && m_flippedVertically == true)
             {
-                m_transformedUVs = UVs::FlipHorizontally(m_transformedUVs);
+                transformedUVs = UVs::FlipDiagonally(in_uvs);
             }
-            else if(m_flippedHorizontally == false)
+            else if(m_flippedHorizontally == true)
             {
-                m_transformedUVs.m_u = m_originalUVs.m_u;
-                m_transformedUVs.m_s = m_originalUVs.m_s;
+                transformedUVs = UVs::FlipHorizontally(in_uvs);
+            }
+            else if(m_flippedVertically == true)
+            {
+                transformedUVs = UVs::FlipVertically(in_uvs);
             }
             
-            if(m_flippedVertically == true)
-            {
-                m_transformedUVs = UVs::FlipVertically(m_transformedUVs);
-            }
-            else if(m_flippedVertically == false)
-            {
-                m_transformedUVs.m_v = m_originalUVs.m_v;
-                m_transformedUVs.m_t = m_originalUVs.m_t;
-            }
-            
-            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.x = m_transformedUVs.m_u;
-            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.y = m_transformedUVs.m_v;
-            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.x = m_transformedUVs.m_u;
-            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.y = m_transformedUVs.m_v + m_transformedUVs.m_t;
-            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.x = m_transformedUVs.m_u + m_transformedUVs.m_s;
-            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.y = m_transformedUVs.m_v;
-            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.x = m_transformedUVs.m_u + m_transformedUVs.m_s;
-            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.y = m_transformedUVs.m_v + m_transformedUVs.m_t;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.x = transformedUVs.m_u;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.y = transformedUVs.m_v;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.x = transformedUVs.m_u;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.y = transformedUVs.m_v + transformedUVs.m_t;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.x = transformedUVs.m_u + transformedUVs.m_s;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.y = transformedUVs.m_v;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.x = transformedUVs.m_u + transformedUVs.m_s;
+            m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.y = transformedUVs.m_v + transformedUVs.m_t;
         }
 	}
 }

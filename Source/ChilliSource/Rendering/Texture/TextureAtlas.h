@@ -53,11 +53,12 @@ namespace ChilliSource
 			
             //---------------------------------------------------------------------
             /// Holds the description of a single frame (or texture) packed into
-            /// the atlas. This includes the size, UVs, etc
+            /// the atlas. This includes the size, UVs, etc. The UVs are
+            /// in texels
             ///
             /// @author S Downie
             //---------------------------------------------------------------------
-			struct Frame
+			struct FrameRaw
 			{
 				s16 m_texCoordU;
 				s16 m_texCoordV;
@@ -69,13 +70,26 @@ namespace ChilliSource
                 s16 m_originalHeight;
 			};
             //---------------------------------------------------------------------
+            /// Holds the description of a single frame (or texture) packed into
+            /// the atlas. This includes the size, UVs, etc. The UVs are normalised
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------------------
+			struct Frame
+			{
+                Rendering::UVs m_uvs;
+                Core::Vector2 m_size;
+                Core::Vector2 m_originalSize;
+                Core::Vector2 m_offset;
+			};
+            //---------------------------------------------------------------------
             /// Holds the description of a texture atlas. Used to build the resource
             ///
             /// @author S Downie
             //---------------------------------------------------------------------
             struct Descriptor
             {
-                std::vector<Frame> m_frames;
+                std::vector<FrameRaw> m_frames;
                 std::vector<u32> m_keys;
                 
                 u32 m_textureAtlasWidth = 0;
@@ -142,6 +156,47 @@ namespace ChilliSource
             /// sprite.
 			//---------------------------------------------------------------------
 			Core::Vector2 GetFrameOffset(const std::string& in_textureId) const;
+            //---------------------------------------------------------------------
+            /// @author S Downie
+            ///
+			/// @param Hashed texture id from tool name
+            ///
+			/// @return Frame data
+			//---------------------------------------------------------------------
+			const Frame& GetFrame(u32 in_hashedTextureId) const;
+            //---------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Hashed texture id from tool name
+            ///
+            /// @return Whether frame exists with given Id
+            //---------------------------------------------------------------------
+            bool HasFrameWithId(u32 in_hashedTextureId) const;
+			//---------------------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @param Hashed texture id from tool name
+            ///
+			/// @return Rect containing UV coords for the given frame
+			//---------------------------------------------------------------------
+			Rendering::UVs GetFrameUVs(u32 in_hashedTextureId) const;
+			//---------------------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @param Hashed texture id from tool name
+            ///
+			/// @return Size of the given frame in pixels
+			//---------------------------------------------------------------------
+			Core::Vector2 GetFrameSize(u32 in_hashedTextureId) const;
+			//---------------------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @param Hashed texture id from tool name
+			///
+            /// @return The value in pixels of the X, Y crop offset from the original
+            /// sprite.
+			//---------------------------------------------------------------------
+			Core::Vector2 GetFrameOffset(u32 in_hashedTextureId) const;
 			//---------------------------------------------------------------------
             /// @author S Downie
 			///

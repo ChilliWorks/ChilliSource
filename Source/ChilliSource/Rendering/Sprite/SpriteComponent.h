@@ -154,7 +154,23 @@ namespace ChilliSource
 			///
 			/// @return Size after the size policy has been applied
 			//-----------------------------------------------------------
-			const Core::Vector2& GetSize() const;
+            Core::Vector2 GetSize() const;
+            //-----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Texture atlas
+            //-----------------------------------------------------------
+            void SetTextureAtlas(const TextureAtlasCSPtr& in_atlas);
+            //-----------------------------------------------------------
+            /// Set the id of the frame that will be used to texture
+            /// the sprite. This will supercede and UVs that have been
+            /// set on the sprite
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture atlas id
+            //-----------------------------------------------------------
+            void SetTextureAtlasId(const std::string& in_atlasId);
 			//-----------------------------------------------------------
 			/// Set the texture co-ordinates
             ///
@@ -306,22 +322,31 @@ namespace ChilliSource
             /// sprite data vertices
             ///
             /// @author S Downie
+            ///
+            /// @param UVs
             //-----------------------------------------------------------
-            void UpdateVertexUVs();
+            void UpdateVertexUVs(const UVs& in_uvs);
+            //-----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Preferred size based on the current atlas, id or texture
+            //-----------------------------------------------------------
+            Core::Vector2 GetPreferredSize() const;
 
 		private:
         
             Core::EventConnectionUPtr m_transformChangedConnection;
-            
+        
+            TextureAtlasCSPtr m_textureAtlas;
+            u32 m_hashedTextureAtlasId = 0;
+        
             SizePolicyDelegate m_sizePolicyDelegate;
             
             SpriteBatch::SpriteData m_spriteData;
             
 			Core::Vector2 m_originalSize;
-            Core::Vector2 m_transformedSize;
 			
-			Rendering::UVs m_originalUVs;
-			Rendering::UVs m_transformedUVs;
+			UVs m_uvs;
             
             Core::Colour m_colour;
 			
