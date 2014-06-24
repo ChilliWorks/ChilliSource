@@ -1,4 +1,4 @@
-package com.taggames.pngalphapremultiplier;
+package com.chillisource.pngalphapremultiplier;
 
 import com.chillisource.toolutils.Logging;
 import com.chillisource.toolutils.Logging.LoggingLevel;
@@ -20,7 +20,7 @@ public class Main
 		String[] arguments = Logging.start(inastrArgs);
 		
 		//check the number of arguments make sense.
-		if (inastrArgs.length == 0)
+		if (arguments.length == 0)
 		{
 			PrintHelpText();
 			return;

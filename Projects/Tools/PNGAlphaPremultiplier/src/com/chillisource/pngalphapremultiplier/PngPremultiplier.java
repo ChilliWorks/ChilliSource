@@ -1,4 +1,4 @@
-package com.taggames.pngalphapremultiplier;
+package com.chillisource.pngalphapremultiplier;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -124,11 +124,11 @@ public class PngPremultiplier
 			String strOS = System.getProperty("os.name");
 			
 			if (strOS.startsWith("Windows") == true)
-				strExecutableName = strPathToHere + "PreMultipliedAlphaPNGTool/PreMultipliedAlphaPNGToolWindows.exe";
+				strExecutableName = strPathToHere + "PNGAlphaPremultiplier/PreMultipliedAlphaPNGToolWindows.exe";
 			else if (strOS.startsWith("Mac") == true)
-				strExecutableName = strPathToHere + "PreMultipliedAlphaPNGTool/PreMultipliedAlphaPNGToolOSX";
+				strExecutableName = strPathToHere + "PNGAlphaPremultiplier/PreMultipliedAlphaPNGToolOSX";
 			else if (strOS.startsWith("Linux") == true)
-				strExecutableName = strPathToHere + "PreMultipliedAlphaPNGTool/PreMultipliedAlphaPNGToolLinux";
+				strExecutableName = strPathToHere + "PNGAlphaPremultiplier/PreMultipliedAlphaPNGToolLinux";
 			else
 				Logging.logFatal("This platform is not supported!");
 		}

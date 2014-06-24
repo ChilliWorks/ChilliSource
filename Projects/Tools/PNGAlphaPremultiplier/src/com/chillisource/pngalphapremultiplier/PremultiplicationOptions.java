@@ -1,4 +1,4 @@
-package com.taggames.pngalphapremultiplier;
+package com.chillisource.pngalphapremultiplier;
 
 public class PremultiplicationOptions 
 {

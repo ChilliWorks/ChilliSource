@@ -9,7 +9,7 @@
  *
  */
 
-package com.taggames.tools.text;
+package com.chillisource.cstextbuilder;
 
 import java.io.File;
 
@@ -25,29 +25,29 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 
-public class SCTextExtractor
+public class TextExtractor
 {
 	private static final String	kstrConstantColumnHeading = "Constant";
 	private static final String kstrExcludeColumnHeading = "Exclude";
 	
 	private static void OpenExcelFile(ExtractTextOptions inOptions) throws Exception
 	{
-		File f = new File(inOptions.strInputFile);
+		File f = new File(inOptions.m_inputFilePath);
 		Logging.logVerbose("Input file path is \""+f.getCanonicalPath()+"\"");
         
         if(!f.exists())
         {
-        	Logging.logFatal("Input file \""+inOptions.strInputFile+"\" does not exist.");
+        	Logging.logFatal("Input file \""+inOptions.m_inputFilePath+"\" does not exist.");
         }
 
         if(!f.isFile())
         {
-        	Logging.logFatal("Input file \""+inOptions.strInputFile+"\" is not a valid file.");
+        	Logging.logFatal("Input file \""+inOptions.m_inputFilePath+"\" is not a valid file.");
         }
 
         if(!f.canRead())
         {
-        	Logging.logFatal("Input file \""+inOptions.strInputFile+"\" cannot be read.");
+        	Logging.logFatal("Input file \""+inOptions.m_inputFilePath+"\" cannot be read.");
         }
 
         Logging.logVerbose("Opening workbook...");
@@ -75,52 +75,6 @@ public class SCTextExtractor
 		{
 			Logging.logFatal("Exception closing file. "+e.getMessage());
 		}
-	}
-	
-	private static String[] GetLanguages(ExtractTextOptions inOptions)
-	{
-		String astrLanguages[] = null;
-		
-		if(inOptions.strLanguage.length() > 0)
-		{
-			astrLanguages = new String[1];
-			astrLanguages[0] = inOptions.strLanguage;
-		}
-		else
-		{
-			String strLanguages = inOptions.strLanguages;
-			String strNextLanguage = null;
-			int dwIndex = 0, dwStartIndex = 0, dwEndIndex = 0;
-			
-			while(dwIndex != -1)
-			{
-				dwIndex = strLanguages.indexOf(',', dwStartIndex);
-				if(dwIndex != -1)
-					dwEndIndex = dwIndex;
-				else
-					dwEndIndex = (strLanguages.length());
-				
-				strNextLanguage = strLanguages.substring(dwStartIndex, dwEndIndex);
-				Logging.logVerbose("Adding language \""+strNextLanguage+"\"");
-				
-				if(astrLanguages != null)
-				{
-					String astrTmp[] = new String[astrLanguages.length + 1];
-					System.arraycopy(astrLanguages, 0, astrTmp, 0, astrLanguages.length);
-					astrTmp[astrLanguages.length] = strNextLanguage;
-					astrLanguages = astrTmp;
-				}
-				else
-				{
-					astrLanguages = new String[1];
-					astrLanguages[0] = strNextLanguage;
-				}
-				
-				dwStartIndex = dwEndIndex + 1;
-			}
-		}
-		
-		return astrLanguages;
 	}
 	
 	private static Sheet OpenSheet(int indwSheet)
@@ -196,7 +150,7 @@ public class SCTextExtractor
 		return dwTextColumn;
 	}
 	
-	private static StringBuffer ExtractLanguage(Sheet inSheet, int indwTextColumn, int indwExcludeColumn, int indwDeviceColumn) throws Exception
+	private static StringBuffer ExtractLanguage(Sheet inSheet, int indwTextColumn, int indwExcludeColumn) throws Exception
 	{
 		StringBuffer BufferedText = new StringBuffer("");
 		
@@ -206,13 +160,6 @@ public class SCTextExtractor
 			Cell CurrentCell = inSheet.getCell(indwExcludeColumn, dwRow);
     		if(CurrentCell.getType() != CellType.EMPTY)
     			continue;
-    		
-    		if(indwDeviceColumn != -1)
-    		{
-        		CurrentCell = inSheet.getCell(indwDeviceColumn, dwRow);
-        		if (CurrentCell.getType() != CellType.EMPTY)
-        			continue;
-    		}
     		
     		CurrentCell = inSheet.getCell(indwTextColumn, dwRow);
 			String strTextString = CurrentCell.getContents();
@@ -228,12 +175,8 @@ public class SCTextExtractor
 	
 	private static void WriteText(String instrLanguage, StringBuffer inStrings, ExtractTextOptions inOptions) throws Exception
 	{
-		String strFilename = instrLanguage;
-		if(inOptions.strOutputFilename.length() > 0)
-			strFilename = inOptions.strOutputFilename;
-		
 		Logging.logVerbose("Outputting UTF8...");
-		String strOutputPath = StringUtils.standardiseFilepath(inOptions.strOutputDirectory+"/"+strFilename+"."+inOptions.strOutputFileExtension);
+		String strOutputPath = StringUtils.standardiseFilepath(inOptions.m_outputFilePath);
 		FileUtils.deleteFile(strOutputPath);
 
 		LittleEndianOutputStream stream = new LittleEndianOutputStream(strOutputPath);
@@ -255,7 +198,7 @@ public class SCTextExtractor
 		Logging.logVerbose("Finished writing file: \""+strOutputPath+"\"");
 	}
 	
-	private static StringBuffer ExtractTextIds(Sheet inSheet, int indwConstantColumn, int indwExcludeColumn, int indwDeviceColumn)
+	private static StringBuffer ExtractTextIds(Sheet inSheet, int indwConstantColumn, int indwExcludeColumn)
 	{
 		StringBuffer BufferedTextIds = new StringBuffer("");
 		
@@ -265,13 +208,6 @@ public class SCTextExtractor
 			Cell CurrentCell = inSheet.getCell(indwExcludeColumn, dwRow);
     		if(CurrentCell.getType() != CellType.EMPTY)
     			continue;
-    		
-    		if(indwDeviceColumn != -1)
-    		{
-        		CurrentCell = inSheet.getCell(indwDeviceColumn, dwRow);
-        		if (CurrentCell.getType() != CellType.EMPTY)
-        			continue;
-    		}
     		
     		CurrentCell = inSheet.getCell(indwConstantColumn, dwRow);
 			String strTextIdString = CurrentCell.getContents().trim();
@@ -290,8 +226,7 @@ public class SCTextExtractor
 	{
 		Logging.logVerbose("Writing text ids...");
 		
-		String strFilename = "TagText";
-		String strOutputPath = StringUtils.standardiseFilepath(inOptions.strOutputDirectory+"/"+strFilename+".id");
+		String strOutputPath = StringUtils.standardiseFilepath(inOptions.m_outputFilePath + "id");
 		
 		FileUtils.deleteFile(strOutputPath);
 		FileUtils.writeFile(strOutputPath, StringUtils.stringToUTF8Bytes(inStringIds.toString()));
@@ -315,19 +250,11 @@ public class SCTextExtractor
 			if(!ValidateMandatoryColumn(dwExcludeColumn, kstrExcludeColumnHeading, true))
 				return;
 			
-			int dwDeviceColumn = -1;
-			if(inOptions.strDevice.length() > 0)
-				dwDeviceColumn = GetColumn(CurrentSheet, inOptions.strDevice);
+			int dwTextColumn = GetTextColumnForLanguage(CurrentSheet, inOptions.m_language);
+			StringBuffer LanguageStrings = ExtractLanguage(CurrentSheet, dwTextColumn, dwExcludeColumn);
+			WriteText(inOptions.m_language, LanguageStrings, inOptions);
 			
-			String astrLanguages[] = GetLanguages(inOptions);
-			for(String strLanguage : astrLanguages)
-			{
-				int dwTextColumn = GetTextColumnForLanguage(CurrentSheet, strLanguage);
-				StringBuffer LanguageStrings = ExtractLanguage(CurrentSheet, dwTextColumn, dwExcludeColumn, dwDeviceColumn);
-				WriteText(strLanguage, LanguageStrings, inOptions);
-			}
-			
-			StringBuffer TextIdStrings = ExtractTextIds(CurrentSheet, dwConstantColumn, dwExcludeColumn, dwDeviceColumn);
+			StringBuffer TextIdStrings = ExtractTextIds(CurrentSheet, dwConstantColumn, dwExcludeColumn);
 			WriteTextIds(TextIdStrings, inOptions);
 		}
 		catch(Exception e)

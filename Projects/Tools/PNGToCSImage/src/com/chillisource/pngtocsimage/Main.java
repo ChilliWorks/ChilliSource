@@ -112,6 +112,13 @@ public class Main
 				options.bDither = true;
 			}
 			
+			//help
+			else if(arguments[i].equalsIgnoreCase("-h") == true || arguments[i].equalsIgnoreCase("--help") == true)
+			{
+				PrintHelpText();
+				return;
+			}
+			
 			//failure
 			else
 			{

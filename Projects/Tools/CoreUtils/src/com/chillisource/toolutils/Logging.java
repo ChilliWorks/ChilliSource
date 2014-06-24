@@ -193,8 +193,8 @@ public class Logging
 		{
 			if (m_numWarnings > 0 || m_numErrors > 0 || m_loggingLevel.ordinal() >= LoggingLevel.k_verbose.ordinal())
 			{
-				printStandard(Integer.toString(m_numWarnings) + " Errors found.");
-				printStandard(Integer.toString(m_numErrors) + " Warnings found.");
+				printStandard(Integer.toString(m_numWarnings) + " Warnings found.");
+				printStandard(Integer.toString(m_numErrors) + " Errors found.");
 			}
 		}
 	}
