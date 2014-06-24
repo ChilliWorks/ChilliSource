@@ -199,11 +199,15 @@ namespace ChilliSource
             {
                 Rendering::UVs sNewUVs = UVs;
 
-				if(IsHorizontalFlipEnabled())
+                if(IsHorizontalFlipEnabled() && IsVerticalFlipEnabled())
+				{
+                    sNewUVs = Rendering::UVs::FlipDiagonally(UVs);
+                }
+				else if(IsHorizontalFlipEnabled())
 				{
                     sNewUVs = Rendering::UVs::FlipHorizontally(UVs);
 				}
-				if(IsVerticalFlipEnabled())
+				else if(IsVerticalFlipEnabled())
 				{
                     sNewUVs = Rendering::UVs::FlipVertically(UVs);
 				}
