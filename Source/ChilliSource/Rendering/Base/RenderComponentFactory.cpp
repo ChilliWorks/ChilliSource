@@ -175,22 +175,22 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
-		CameraComponentUPtr RenderComponentFactory::CreatePerspectiveCameraComponent(f32 in_fov, f32 in_near, f32 in_far)
+		PerspectiveCameraComponentUPtr RenderComponentFactory::CreatePerspectiveCameraComponent(f32 in_fov, f32 in_near, f32 in_far)
 		{
 			auto screenSize = m_screen->GetResolution();
-			CameraComponentUPtr pCamera(new PerspectiveCameraComponent(screenSize.x/screenSize.y, in_fov, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
+			PerspectiveCameraComponentUPtr pCamera(new PerspectiveCameraComponent(screenSize.x / screenSize.y, in_fov, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
 			return pCamera;
 		}
         //---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
-		CameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far)
+		OrthographicCameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far)
 		{
-			CameraComponentUPtr pCamera(new OrthographicCameraComponent(in_viewportSize, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
+			OrthographicCameraComponentUPtr pCamera(new OrthographicCameraComponent(in_viewportSize, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
 			return pCamera;
 		}
         //---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
-		CameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(f32 in_near, f32 in_far)
+		OrthographicCameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(f32 in_near, f32 in_far)
 		{
             return CreateOrthographicCameraComponent(m_screen->GetResolution(), in_near, in_far);
 		}

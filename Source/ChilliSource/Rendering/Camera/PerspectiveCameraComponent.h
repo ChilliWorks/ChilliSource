@@ -73,10 +73,22 @@ namespace ChilliSource
 			void SetFieldOfView(f32 in_fov);
 			//------------------------------------------------------
 			/// @author S Downie
-            ///
+			///
 			/// @param Aspect Ratio (Viewport width/viewport height)
 			//------------------------------------------------------
 			void SetAspectRatio(f32 in_aspectRatio);
+			//------------------------------------------------------
+			/// @author Ian Copland
+			///
+			/// @return The full vertical viewing angle in radians.
+			//------------------------------------------------------
+			f32 GetFieldOfView() const;
+			//------------------------------------------------------
+			/// @author Ian Copland
+			///
+			/// @return Aspect Ratio (Viewport width/viewport height)
+			//------------------------------------------------------
+			f32 GetAspectRatio() const;
             
 		private:
 			//------------------------------------------------------

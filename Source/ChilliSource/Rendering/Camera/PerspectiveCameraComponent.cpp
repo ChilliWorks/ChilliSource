@@ -75,6 +75,18 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
+		f32 PerspectiveCameraComponent::GetFieldOfView() const
+		{
+			return m_fov;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		f32 PerspectiveCameraComponent::GetAspectRatio() const
+		{
+			return m_aspectRatio;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
         Core::Matrix4 PerspectiveCameraComponent::CalculateProjectionMatrix()
 		{
 			return Core::Matrix4::CreatePerspectiveProjectionLH(m_fov, m_aspectRatio, m_nearClip, m_farClip);
