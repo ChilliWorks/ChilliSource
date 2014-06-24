@@ -37,6 +37,8 @@
 
 #include <FacebookSDK/FacebookSDK.h>
 
+@class FacebookAppDelegate;
+
 namespace CSBackend
 {
 	namespace iOS
@@ -125,13 +127,6 @@ namespace CSBackend
             /// @author S Downie
             //------------------------------------------------
             void SignOut() override;
-            //----------------------------------------------------
-            /// Called when the system is destroyed. This
-            /// will close any open sessions
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            void OnDestroy() override;
 			
 		private:
             
@@ -143,6 +138,19 @@ namespace CSBackend
             /// @author Ian Copland
             //----------------------------------------------------
             FacebookAuthenticationSystem() = default;
+            //----------------------------------------------------
+            /// Called when the system is initialised
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void OnInit() override;
+            //----------------------------------------------------
+            /// Called when the system is destroyed. This
+            /// will close any open sessions
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void OnDestroy() override;
             //----------------------------------------------------
             /// @author S Downie
             ///
@@ -205,6 +213,8 @@ namespace CSBackend
             AuthenticationCompleteDelegate::Connection m_authoriseWriteDelegateConnection;
             
             std::vector<std::string> m_currentRequestedWritePermissions;
+            
+            FacebookAppDelegate* m_fbAppDelegate;
 		};
 	}
 }

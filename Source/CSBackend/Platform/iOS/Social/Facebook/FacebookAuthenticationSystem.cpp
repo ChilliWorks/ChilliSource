@@ -30,6 +30,8 @@
 
 #include <CSBackend/Platform/iOS/Social/Facebook/FacebookAuthenticationSystem.h>
 
+#include <CSBackend/Platform/iOS/Social/Facebook/FacebookAppDelegate.h>
+#include <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
 #include <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 
 #ifdef __IPHONE_6_0
@@ -72,6 +74,13 @@ namespace CSBackend
 		{
 			return (in_interfaceId == FacebookAuthenticationSystem::InterfaceID) || (in_interfaceId == CSSocial::FacebookAuthenticationSystem::InterfaceID);
 		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void FacebookAuthenticationSystem::OnInit()
+        {
+            m_fbAppDelegate = [[FacebookAppDelegate alloc] init];
+            [[CSAppDelegate sharedInstance] addAppDelegateListener:m_fbAppDelegate];
+        }
 		//----------------------------------------------------
         //----------------------------------------------------
 		void FacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection)
@@ -113,6 +122,9 @@ namespace CSBackend
         //----------------------------------------------------
         bool FacebookAuthenticationSystem::TryResumeExisitingSession(const std::vector<std::string>& in_readPermissions)
         {
+            if(FBSession.activeSession.state != FBSessionStateCreatedTokenLoaded)
+                return false;
+            
             return OpenSession(in_readPermissions, false);
         }
         //----------------------------------------------------
@@ -340,6 +352,8 @@ namespace CSBackend
         void FacebookAuthenticationSystem::OnDestroy()
         {
             [FBSession.activeSession close];
+            [[CSAppDelegate sharedInstance] removeAppDelegateListener:m_fbAppDelegate];
+            [m_fbAppDelegate release];
         }
 	}
 }
