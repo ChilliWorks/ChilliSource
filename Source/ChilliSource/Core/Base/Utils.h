@@ -187,9 +187,6 @@ namespace ChilliSource
                 inaElements.resize(uCurrent);
                 return uRemoved;
             }
-            
-            Vector2 ScaleMaintainingAspectRatio(const Vector2& invCurrentSize, const Vector2& invTargetSize, bool inbFitInside = false);
-            
             //------------------------------------------------------
             /// @author S Downie
             ///
