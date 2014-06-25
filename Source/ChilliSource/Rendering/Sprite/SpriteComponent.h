@@ -334,6 +334,20 @@ namespace ChilliSource
             /// @return Preferred size based on the current atlas, id or texture
             //-----------------------------------------------------------
             Core::Vector2 GetPreferredSize() const;
+            //-----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Whether the texture has changed in a manner to
+            /// invalidate the size cache
+            //-----------------------------------------------------------
+            bool IsTextureSizeCacheValid() const;
+            //-----------------------------------------------------------
+            /// Once the sprite has adjusted to the new texture size
+            /// it can flag it as no longer dirty
+            ///
+            /// @author S Downie
+            //-----------------------------------------------------------
+            void SetTextureSizeCacheValid();
 
 		private:
         
@@ -345,7 +359,8 @@ namespace ChilliSource
             SizePolicyDelegate m_sizePolicyDelegate;
             
             SpriteBatch::SpriteData m_spriteData;
-            
+        
+            Core::Vector2 m_cachedTextureSize;
 			Core::Vector2 m_originalSize;
 			
 			UVs m_uvs;

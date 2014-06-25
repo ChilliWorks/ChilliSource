@@ -111,7 +111,13 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::AABB& SpriteComponent::GetAABB()
 		{
-			if(GetEntity() && !m_isAABBValid)
+            if(IsTextureSizeCacheValid() == false)
+            {
+                OnTransformChanged();
+                SetTextureSizeCacheValid();
+            }
+            
+			if(GetEntity() && m_isAABBValid == false)
 			{
                 m_isAABBValid = true;
                 
@@ -132,7 +138,13 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::OOBB& SpriteComponent::GetOOBB()
 		{
-			if(GetEntity() && !m_isOOBBValid)
+            if(IsTextureSizeCacheValid() == false)
+            {
+                OnTransformChanged();
+                SetTextureSizeCacheValid();
+            }
+            
+			if(GetEntity() && m_isOOBBValid == false)
 			{
                 m_isOOBBValid = true;
                 
@@ -154,7 +166,13 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::Sphere& SpriteComponent::GetBoundingSphere()
 		{
-			if(GetEntity() && !m_isBSValid)
+            if(IsTextureSizeCacheValid() == false)
+            {
+                OnTransformChanged();
+                SetTextureSizeCacheValid();
+            }
+            
+			if(GetEntity() && m_isBSValid == false)
 			{
                 m_isBSValid = true;
                 
@@ -322,6 +340,12 @@ namespace ChilliSource
         {
             if (ineShaderPass == ShaderPass::k_ambient)
             {
+                if(IsTextureSizeCacheValid() == false)
+                {
+                    OnTransformChanged();
+                    SetTextureSizeCacheValid();
+                }
+                
                 if(m_vertexPositionsValid == false)
                 {
                     //We have been transformed so we need to recalculate our vertices
@@ -345,6 +369,34 @@ namespace ChilliSource
             m_isBSValid = false;
             m_isAABBValid = false;
             m_isOOBBValid = false;
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        bool SpriteComponent::IsTextureSizeCacheValid() const
+        {
+            if(m_textureAtlas == nullptr || m_hashedTextureAtlasId == 0)
+            {
+                if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
+                {
+                    auto texture = mpMaterial->GetTexture().get();
+                    Core::Vector2 texSize((f32)texture->GetWidth(), (f32)texture->GetHeight());
+                    
+                    return texSize == m_cachedTextureSize;
+                }
+            }
+            
+            return true;
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        void SpriteComponent::SetTextureSizeCacheValid()
+        {
+            if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
+            {
+                auto texture = mpMaterial->GetTexture().get();
+                Core::Vector2 texSize((f32)texture->GetWidth(), (f32)texture->GetHeight());
+                m_cachedTextureSize = texSize;
+            }
         }
 		//----------------------------------------------------
 		//----------------------------------------------------
