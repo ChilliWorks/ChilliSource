@@ -112,9 +112,9 @@ THE SOFTWARE.
         </receiver>
 
         <!-- Amazon iap -->
-	    <receiver android:name = "com.amazon.inapp.purchasing.ResponseReceiver" >
+	    <receiver android:name= "com.amazon.inapp.purchasing.ResponseReceiver">
 			<intent-filter>
-				<action android:name = "com.amazon.inapp.purchasing.NOTIFY" android:permission = "com.amazon.inapp.purchasing.Permission.NOTIFY" />
+				<action android:name= "com.amazon.inapp.purchasing.NOTIFY" android:permission= "com.amazon.inapp.purchasing.Permission.NOTIFY" />
 			</intent-filter>
 		</receiver>
 
