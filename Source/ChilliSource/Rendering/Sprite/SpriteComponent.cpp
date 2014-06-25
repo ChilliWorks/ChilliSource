@@ -420,15 +420,22 @@ namespace ChilliSource
         //-----------------------------------------------------------
 		void SpriteComponent::UpdateVertexPositions()
         {
-            Core::Vector2 offsetTL;
-            Core::Vector2 offsetBR;
+            Core::Vector4 offsetTL;
             Core::Vector2 transformedSize;
             if(m_textureAtlas != nullptr && m_hashedTextureAtlasId > 0)
             {
                 const auto& frame = m_textureAtlas->GetFrame(m_hashedTextureAtlasId);
-                offsetTL = frame.m_offset;
-                offsetBR = frame.m_originalSize - offsetTL;
-                transformedSize = m_sizePolicyDelegate(m_originalSize, frame.m_size);
+                transformedSize = m_sizePolicyDelegate(m_originalSize, frame.m_originalSize);
+                
+                Core::Vector2 offsetTL2;
+                offsetTL2.x = (-frame.m_originalSize.x * 0.5f) + (frame.m_size.x * 0.5f) + frame.m_offset.x;
+                offsetTL2.y = (frame.m_originalSize.y * 0.5f) - (frame.m_size.y * 0.5f) - frame.m_offset.y;
+                
+                //Convert offset from texel space to local sprite space
+                offsetTL2 = transformedSize/frame.m_originalSize * offsetTL2;
+                transformedSize = transformedSize/frame.m_originalSize * frame.m_size;
+                
+                offsetTL = Core::Vector4(offsetTL2.x, offsetTL2.y, 0.0f, 0.0f);
             }
             else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
             {
@@ -444,25 +451,25 @@ namespace ChilliSource
             
             Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
             Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
-			vTemp += vCentrePos;
+			vTemp += (vCentrePos + offsetTL);
 			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = vTemp * worldTransform;
             
             vTemp.x = vHalfSize.x;
             vTemp.y = vHalfSize.y;
 
-			vTemp += vCentrePos;
+			vTemp += (vCentrePos + offsetTL);
 			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos = vTemp * worldTransform;
             
             vTemp.x = -vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
-			vTemp += vCentrePos;
+            vTemp += (vCentrePos + offsetTL);
 			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos = vTemp * worldTransform;
             
             vTemp.x = vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
-			vTemp += vCentrePos;
+			vTemp += (vCentrePos + offsetTL);
 			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos = vTemp * worldTransform;
 		}
         //-----------------------------------------------------------
