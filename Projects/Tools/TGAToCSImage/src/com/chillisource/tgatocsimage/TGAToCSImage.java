@@ -255,6 +255,7 @@ public class TGAToCSImage
 		case BufferedImage.TYPE_INT_ARGB_PRE:
 		case BufferedImage.TYPE_INT_BGR:
 		case BufferedImage.TYPE_INT_RGB:
+		case BufferedImage.TYPE_CUSTOM:
 			if (inImage.bHasAlpha == false)
 				return TGAToCSImageOptions.OUTPUT_FORMAT.RGB888;
 			else
