@@ -28,8 +28,10 @@
 
 #include <ChilliSource/Core/Base/AppConfig.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/StorageLocation.h>
+#include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
@@ -88,6 +90,13 @@ namespace ChilliSource
             {
                 m_displayableName = root.get("DisplayableName", k_defaultDisplayableName).asString();
                 m_preferredFPS = root.get("PreferredFPS", k_defaultPreferredFPS).asUInt();
+                
+                const Json::Value& fileTags = root["FileTags"];
+                
+                if(fileTags.isNull() == false)
+                {
+                    Application::Get()->GetTaggedFilePathResolver()->SetFromJson(fileTags);
+                }
             }
         }
     }
