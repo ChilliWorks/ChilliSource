@@ -37,6 +37,8 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
+#include <ChilliSource/Rendering/Camera/OrthographicCameraComponent.h>
+#include <ChilliSource/Rendering/Camera/PerspectiveCameraComponent.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
@@ -173,37 +175,24 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
-		CameraComponentUPtr RenderComponentFactory::CreatePerspectiveCameraComponent(f32 in_FOV, f32 in_near, f32 in_far)
+		PerspectiveCameraComponentUPtr RenderComponentFactory::CreatePerspectiveCameraComponent(f32 in_fov, f32 in_near, f32 in_far)
 		{
-			CameraDescription desc;
-			desc.vViewSize = m_screen->GetResolution();
-			desc.fAspect = (desc.vViewSize.x/desc.vViewSize.y);
-			desc.fFOV = in_FOV;
-			desc.fNearClipping = in_near;
-			desc.fFarClipping = in_far;
-			desc.ClearCol = Core::Colour::k_white;
-			desc.m_type = CameraType::k_perspective;
-			desc.bShouldResizeToScreen = true;
-			
-			CameraComponentUPtr pCamera(new CameraComponent(desc));
+			auto screenSize = m_screen->GetResolution();
+			PerspectiveCameraComponentUPtr pCamera(new PerspectiveCameraComponent(screenSize.x / screenSize.y, in_fov, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
 			return pCamera;
 		}
         //---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
-		CameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far)
+		OrthographicCameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far)
 		{
-			CameraDescription desc;
-			desc.vViewSize = in_viewportSize;
-			desc.fAspect = (desc.vViewSize.x/desc.vViewSize.y);
-			desc.fFOV = 60.0f;
-			desc.fNearClipping = in_near;
-			desc.fFarClipping = in_far;
-			desc.ClearCol = Core::Colour::k_white;
-			desc.m_type = CameraType::k_orthographic;
-			desc.bShouldResizeToScreen = true;
-			
-			CameraComponentUPtr pCamera(new CameraComponent(desc));
+			OrthographicCameraComponentUPtr pCamera(new OrthographicCameraComponent(in_viewportSize, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
 			return pCamera;
+		}
+        //---------------------------------------------------------------------------
+		//---------------------------------------------------------------------------
+		OrthographicCameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(f32 in_near, f32 in_far)
+		{
+            return CreateOrthographicCameraComponent(m_screen->GetResolution(), in_near, in_far);
 		}
         //---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------

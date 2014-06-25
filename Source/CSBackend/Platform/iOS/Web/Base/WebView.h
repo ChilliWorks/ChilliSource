@@ -103,7 +103,7 @@ namespace CSBackend
             //---------------------------------------------------------
             void Dismiss() override;
             //---------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Whether or not the web view is currently
             /// presented.
@@ -114,7 +114,7 @@ namespace CSBackend
             /// that the webview has finished loading. This should not
             /// be called manually by the user.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------
             void OnViewDidFinishLoad();
             
@@ -129,7 +129,7 @@ namespace CSBackend
             //---------------------------------------------------------
             /// Called when the the owning state is initialised.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------
             void OnInit() override;
             //---------------------------------------------------------
@@ -170,7 +170,7 @@ namespace CSBackend
             //---------------------------------------------------------
             /// Called when the the owning state is destroyed.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------
             void OnDestroy() override;
 		private:

@@ -57,7 +57,7 @@ namespace CSBackend
             /// Query whether the object implements an interface
             /// that has the given ID
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Interface ID
             ///
@@ -99,7 +99,7 @@ namespace CSBackend
             /// and the virtual keyboard implementation may choose to
             /// ignore it.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The keyboard type
             //-------------------------------------------------------
@@ -107,27 +107,27 @@ namespace CSBackend
             //-------------------------------------------------------
             /// Sets capitalisation method to be used for text input.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The capitalisation method.
             //-------------------------------------------------------
             void SetCapitalisation(Capitalisation in_capitalisation) override;
             //-------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param An event that is called when text input is
             /// enabled.
             //-------------------------------------------------------
 			CSCore::IConnectableEvent<KeyboardEventDelegate>& GetTextInputEnabledEvent() override;
             //-------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param An event that is called when text input is
             /// received.
             //-------------------------------------------------------
 			CSCore::IConnectableEvent<TextInputEventDelegate>& GetTextInputReceivedEvent() override;
             //-------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param An event that is called when text input is
             /// disabled.
@@ -163,7 +163,7 @@ namespace CSBackend
             /// initialisation occurs in the order they were
             /// created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------
             void OnInit() override;
             //-------------------------------------------------------
@@ -173,7 +173,7 @@ namespace CSBackend
             /// occurs in the reverse order to which they
             /// were created
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------
             void OnDestroy() override;
             

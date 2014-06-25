@@ -55,7 +55,7 @@ namespace ChilliSource
             /// Allows querying of whether or not this system implements
             /// a given interface.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Interface Id
 			///
@@ -120,7 +120,7 @@ namespace ChilliSource
             //------------------------------------------------------------
             /// Draws the current stored stats to the screen.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The canvas renderer.
             /// @param The window.
@@ -138,7 +138,7 @@ namespace ChilliSource
 			/// Factory create method called by application to create a new
             /// instance of the system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @return Creates a new instance of the system.
 			//------------------------------------------------------------
@@ -146,7 +146,7 @@ namespace ChilliSource
 			//------------------------------------------------------------
 			/// Private constructor to enforce use of the factory method.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//------------------------------------------------------------
 			DebugStats();
             //------------------------------------------------------------
@@ -154,7 +154,7 @@ namespace ChilliSource
             /// have been created. System initialisation occurs in the
             /// order they were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------------------
             void OnInit() override;
             //------------------------------------------------------------
@@ -163,7 +163,7 @@ namespace ChilliSource
             /// System destruction occurs in the reverse order to which
             /// they were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------------------
             void OnDestroy() override;
 

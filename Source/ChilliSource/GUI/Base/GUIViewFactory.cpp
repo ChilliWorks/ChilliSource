@@ -1,9 +1,29 @@
 //
 //  GUIViewFactory.cpp
-//  moFlo
-//
+//  Chilli Source
 //  Created by Scott Downie on 21/04/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/GUI/Base/GUIViewFactory.h>
@@ -11,7 +31,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
 #include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/Core/XML/rapidxml.hpp>
+#include <ChilliSource/Core/XML/XMLUtils.h>
 
 #include <ChilliSource/GUI/Button/HighlightButton.h>
 #include <ChilliSource/GUI/Button/StretchableHighlightButton.h>
@@ -32,6 +52,7 @@
 #include <ChilliSource/GUI/ProgressBar/HorizontalClippingProgressBar.h>
 #include <ChilliSource/GUI/SliderBar/HorizontalSliderBar.h>
 #include <ChilliSource/GUI/SliderBar/VerticalSliderBar.h>
+
 
 namespace ChilliSource
 {
@@ -105,22 +126,13 @@ namespace ChilliSource
 		{
 			GUIViewUPtr pRootView;
 
-            Core::FileStreamSPtr pFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrScriptFile, Core::FileMode::k_read);
-            assert(pFile);
+            Core::XMLUPtr xml = Core::XMLUtils::ReadDocument(ineStorageLocation, instrScriptFile);
+             CS_ASSERT(xml != nullptr, "Cannot open GUI file: " + instrScriptFile);
             
-            std::string strFile;
-            pFile->GetAll(strFile);
-			
-            //Load the script
-            rapidxml::xml_document<> xDoc;
-            xDoc.parse<0>((char*)strFile.c_str());
-            
-			
-            rapidxml::xml_node<> * pDocRoot = xDoc.first_node();
-
-			if(pDocRoot && pDocRoot->isNamed("Layout"))
+            Core::XML::Node* pDocRoot = Core::XMLUtils::GetFirstChildElement(xml->GetDocument());
+			if(pDocRoot && Core::XMLUtils::GetName(pDocRoot) == "Layout")
 			{
-				rapidxml::xml_node<> *  pViewElement = pDocRoot->first_node();
+				Core::XML::Node* pViewElement = Core::XMLUtils::GetFirstChildElement(pDocRoot);
 				if(pViewElement)
 				{
 					pRootView = CreateView(pViewElement);
@@ -137,7 +149,7 @@ namespace ChilliSource
 		/// @param View XML element
 		/// @return Created view
 		//--------------------------------------------------------
-		GUIViewUPtr GUIViewFactory::CreateView(rapidxml::xml_node<>* inpViewElement)
+		GUIViewUPtr GUIViewFactory::CreateView(Core::XML::Node* inpViewElement)
 		{
 			//Get the view type
 			//Get the param dictionary config values
@@ -147,21 +159,22 @@ namespace ChilliSource
             bool bExtern = false;
             Core::StorageLocation eStorageLoc = Core::StorageLocation::k_none;
             
-            for(rapidxml::xml_attribute<> * pAttr = inpViewElement->first_attribute(); pAttr != nullptr; pAttr = pAttr->next_attribute())
+            for(Core::XML::Attribute* pAttr = Core::XMLUtils::GetFirstAttribute(inpViewElement); pAttr != nullptr; pAttr = Core::XMLUtils::GetNextAttribute(pAttr))
             {
-                if(pAttr->isNamed("Type"))
+                
+                if(Core::XMLUtils::GetName(pAttr) == "Type")
                 {
-                    strType = pAttr->value();
+                    strType = Core::XMLUtils::GetValue(pAttr);
                 }
-                else if(pAttr->isNamed("Source"))
+                else if(Core::XMLUtils::GetName(pAttr) == "Source")
                 {
                     bExtern = true;
-                    strSource = pAttr->value();
+                    strSource = Core::XMLUtils::GetValue(pAttr);
                 }
-                else if(pAttr->isNamed("StorageLocation"))
+                else if(Core::XMLUtils::GetName(pAttr) == "StorageLocation")
                 {
                     bExtern = true;
-                    eStorageLoc = Core::ParseStorageLocation(pAttr->value());
+                    eStorageLoc = Core::ParseStorageLocation(Core::XMLUtils::GetValue(pAttr));
                 }
             }
             
@@ -180,12 +193,9 @@ namespace ChilliSource
                 }
                 
 				//Now we need to do some recursion and load any subviews
-                for(rapidxml::xml_node<> * pNode = inpViewElement->first_node(); pNode != nullptr; pNode = pNode->next_sibling())
+                for(Core::XML::Node* pNode = Core::XMLUtils::GetFirstChildElement(inpViewElement); pNode != nullptr; pNode = Core::XMLUtils::GetNextSiblingElement(pNode))
 				{
-                    if(pNode->type() == rapidxml::node_element)
-                    {
-                        pView->AddSubview(CreateView(pNode));
-                    }
+                    pView->AddSubview(CreateView(pNode));
 				}
 
 				return pView;

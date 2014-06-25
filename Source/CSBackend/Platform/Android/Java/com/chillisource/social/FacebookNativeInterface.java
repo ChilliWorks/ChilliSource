@@ -1,6 +1,6 @@
 /*
  *  CFacebookNativeInterface.java
- *  moFlow Android
+ *  moFlow
  *
  *  Created by Robert Henning on 01/05/2012.
  *  Copyright 2012 Tag Games. All rights reserved.
@@ -91,9 +91,12 @@ public class FacebookNativeInterface extends INativeInterface
 			@Override 
 			public void run() 
 			{
-				List<String> aPermissions = new ArrayList<String>(Arrays.asList(inastrReadPermissions));
-				CreateNewSession(aPermissions);
-		        
+				if(TryResumeExistingSession() == false)
+				{
+					List<String> aPermissions = new ArrayList<String>(Arrays.asList(inastrReadPermissions));
+					CreateNewSession(aPermissions);
+				}
+		       
 		        synchronized(this)
 		        {
 		        	notifyAll();
@@ -177,7 +180,7 @@ public class FacebookNativeInterface extends INativeInterface
 			OnSessionStateChanged(existingSession, existingSession.getState(), null);
 		}
 		
-		return (existingSession != null);
+		return (existingSession != null && existingSession.getState() != SessionState.CREATED_TOKEN_LOADED);
     }
 	//--------------------------------------------------------------------------------------
 	/// Is Signed In

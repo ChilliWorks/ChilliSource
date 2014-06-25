@@ -1,7 +1,7 @@
 //
 //  Vector2.h
 //  Chilli Source
-//  Created by I Copland on 20/04/2014.
+//  Created by Ian Copland on 20/04/2014.
 //
 //  The MIT License (MIT)
 //
@@ -43,7 +43,7 @@ namespace ChilliSource
 		///		Float2 -> GenericVector2<f32>
 		///		Integer2 -> GenericVector2<s32>
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//-----------------------------------------------------------
 		template <typename TType> class GenericVector2 final
 		{
@@ -58,7 +58,7 @@ namespace ChilliSource
 			static const GenericVector2<TType> k_unitPositiveY;
 			static const GenericVector2<TType> k_unitNegativeY;
             //-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param A vector.
             ///
@@ -66,7 +66,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static GenericVector2<TType> Normalise(GenericVector2<TType> in_a);
             //-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param A vector.
 			///
@@ -74,7 +74,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static GenericVector2<TType> Inverse(GenericVector2<TType> in_a);
             //-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param A vector.
 			///
@@ -82,7 +82,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static GenericVector2<TType> Abs(GenericVector2<TType> in_a);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param a vector.
 			/// @param another vector.
@@ -92,7 +92,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static GenericVector2<TType> Min(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param a vector.
 			/// @param another vector.
@@ -102,7 +102,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static GenericVector2<TType> Max(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param A vector.
 			/// @param The minimum vector.
@@ -113,7 +113,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static GenericVector2<TType> Clamp(GenericVector2<TType> in_value, const GenericVector2<TType>& in_min, const GenericVector2<TType>& in_max);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param a vector.
 			/// @param another vector.
@@ -123,7 +123,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static GenericVector2<TType> Lerp(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b, f32 in_t);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param a vector.
 			/// @param another vector.
@@ -136,7 +136,7 @@ namespace ChilliSource
 			/// set to zero to calculate the z component of the
 			/// cross product.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param  A vector.
 			/// @param  Another vector.
@@ -167,7 +167,7 @@ namespace ChilliSource
             ///
             /// This is the case for all non-projective transforms.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The vector.
 			/// @param The transform matrix.
@@ -176,26 +176,26 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Constructor
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------------
 			GenericVector2();
 			//-----------------------------------------------------
 			/// Constructor
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the x component.
 			/// @param the y component.
 			//-----------------------------------------------------
 			explicit GenericVector2(TType in_x, TType in_y);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return the length of the vector.
 			//-----------------------------------------------------
 			TType Length() const;
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return the length of the vector squared
 			//-----------------------------------------------------
@@ -203,19 +203,19 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Normalises the contents of this vector.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------------
 			void Normalise();
 			//-----------------------------------------------------
 			/// Sets this contents of this vector to its inverse.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------------
 			void Inverse();
 			//-----------------------------------------------------
 			/// Sets this vector to it's absolute value.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------------
 			void Abs();
             //-----------------------------------------------------
@@ -223,7 +223,7 @@ namespace ChilliSource
             /// smaller, itself or the equivelent in the given
             /// vector.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The other vector.
 			//-----------------------------------------------------
@@ -233,7 +233,7 @@ namespace ChilliSource
             /// greater, itself or the equivelent in the given
             /// vector.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The other vector.
 			//-----------------------------------------------------
@@ -242,7 +242,7 @@ namespace ChilliSource
             /// Clamps each component in this vector between the
             /// values described by the min and max vectors.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The minimum vector.
 			/// @param The maximum vector.
@@ -253,7 +253,7 @@ namespace ChilliSource
             /// interpolating between this and the given vector
             /// with the given interpolation factor.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The other vector.
 			/// @param The interpolation factor.
@@ -272,13 +272,13 @@ namespace ChilliSource
             ///
             /// This is the case for all non-projective transforms.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The transform matrix.
 			//-----------------------------------------------------
 			void Transform2x3(const GenericMatrix3<TType>& in_transform);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Another vector.
 			///
@@ -287,7 +287,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			GenericVector2<TType>& operator+=(const GenericVector2<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Another vector.
 			///
@@ -302,7 +302,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             GenericVector2<TType>& operator-();
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Another vector.
 			///
@@ -311,7 +311,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			GenericVector2<TType>& operator*=(const GenericVector2<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Another vector.
 			///
@@ -320,7 +320,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			GenericVector2<TType>& operator/=(const GenericVector2<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param A matrix.
 			///
@@ -329,7 +329,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			GenericVector2<TType>& operator*=(const GenericMatrix3<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param  A scalar.
 			///
@@ -338,7 +338,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			GenericVector2<TType>& operator*=(TType in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param A scalar.
 			///
@@ -363,7 +363,7 @@ namespace ChilliSource
             return GenericVector2<TType>(0.0f, 0.0f);
         }
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Vector A
 		/// @param Vector B
@@ -372,7 +372,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType> operator+(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Vector A
 		/// @param Vector B
@@ -381,7 +381,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType> operator-(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Vector A
 		/// @param Vector B
@@ -390,7 +390,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType> operator*(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Vector A
 		/// @param Vector B
@@ -399,7 +399,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType> operator/(GenericVector2<TType> in_a, const GenericVector2<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Vector A
 		/// @param Matrix B
@@ -408,7 +408,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType> operator*(const GenericVector2<TType>& in_a, const GenericMatrix3<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Vector A
 		/// @param Scalar B
@@ -417,7 +417,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType> operator*(GenericVector2<TType> in_a, TType in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Scalar A
 		/// @param Vector B
@@ -426,7 +426,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType> operator*(TType in_a, GenericVector2<TType> in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Vector A
 		/// @param Scalar B
@@ -435,7 +435,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType> operator/(GenericVector2<TType> in_a, TType in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Vector A
 		/// @param Vector B
@@ -444,7 +444,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> bool operator==(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param Vector A
 		/// @param Vector B

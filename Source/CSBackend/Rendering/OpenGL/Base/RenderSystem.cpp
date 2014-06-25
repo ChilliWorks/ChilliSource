@@ -90,7 +90,7 @@ namespace CSBackend
                 return "";
             }
             //----------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The blend mode enum in the engine.
             ///

@@ -36,9 +36,10 @@
 #import <ChilliSource/Core/Base/AppConfig.h>
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Base/Utils.h>
-#import <ChilliSource/Core/JSON/json.h>
 #import <ChilliSource/Core/String/StringParser.h>
 #import <ChilliSource/Rendering/Base/SurfaceFormat.h>
+
+#import <json/json.h>
 
 @implementation CSGLViewController
 
@@ -53,15 +54,32 @@
         
         if(context == nil || isContextSet == NO)
         {
-            CS_LOG_FATAL("Cannot Create OpenGL ES 2.0 Context");
+            NSLog(@"Could Create OpenGL ES 2.0 Context");
         }
         
-        //TODO: Expose colour and depth format
+        //load the JSON app.config string from file.
+        NSString* relativePath = [NSStringUtils newNSStringWithUTF8String:"AppResources/App"];
+        NSString* fullPath = [[NSBundle mainBundle] pathForResource:relativePath ofType:@"config"];
+        [relativePath release];
+        NSString* content = [NSString stringWithContentsOfFile:fullPath encoding:NSUTF8StringEncoding error:nil];
+        std::string jsonString = [NSStringUtils newUTF8StringWithNSString:content];
+        
+        //parse the json
+        Json::Reader jReader;
+        Json::Value root;
+        if(!jReader.parse(jsonString, root))
+        {
+            NSString* errors = [NSStringUtils newNSStringWithUTF8String:jReader.getFormatedErrorMessages()];
+            NSLog(@"Could not parse App.config: %@", errors);
+            [errors release];
+        }
+        
         GLKView* view = [[GLKView alloc] initWithFrame:[[UIScreen mainScreen] bounds] context:context];
-        [self applySurfaceFormat:view];
-        view.drawableMultisample = GLKViewDrawableMultisampleNone;
+        [self applySurfaceFormat:view fromConfig:root];
+        [self applyMultisampleFormat:view fromConfig:root];
         view.userInteractionEnabled = YES;
         view.enableSetNeedsDisplay = NO;
+        view.multipleTouchEnabled = YES;
         view.delegate = in_delegate;
         
         self.view = view;
@@ -101,42 +119,17 @@
     return nil;
 }
 //-------------------------------------------------------------
-/// Reads the surface format from the App.config file.
-///
-/// @author I Copland
-///
-/// @return The surface format.
-//-------------------------------------------------------------
- - (CSRendering::SurfaceFormat)readSurfaceFormat
-{
-    //load the JSON string from file.
-    NSString* relativePath = [NSStringUtils newNSStringWithUTF8String:"Shared/App"];
-    NSString* fullPath = [[NSBundle mainBundle] pathForResource:relativePath ofType:@"config"];
-    [relativePath release];
-    NSString* content = [NSString stringWithContentsOfFile:fullPath encoding:NSUTF8StringEncoding error:nil];
-    std::string jsonString = [NSStringUtils newUTF8StringWithNSString:content];
-    
-    //parse the json
-    Json::Reader jReader;
-    Json::Value root;
-    if(!jReader.parse(jsonString, root))
-    {
-        CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormattedErrorMessages());
-    }
-   
-    return CSCore::ParseSurfaceFormat(root.get("PreferredSurfaceFormat", "rgb565_depth24").asString());
-}
-//-------------------------------------------------------------
 /// Applies the surface format described in the App.config file
 /// to the given view.
 ///
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @param The view to apply the format to.
+/// @param App config JSON
 //-------------------------------------------------------------
-- (void)applySurfaceFormat:(GLKView*)in_view
+- (void)applySurfaceFormat:(GLKView*)in_view fromConfig:(const Json::Value&)in_configRoot
 {
-    CSRendering::SurfaceFormat preferredFormat = [self readSurfaceFormat];
+    CSRendering::SurfaceFormat preferredFormat = CSCore::ParseSurfaceFormat(in_configRoot.get("PreferredSurfaceFormat", "rgb565_depth24").asString());
     
     //apply format
     switch (preferredFormat)
@@ -163,6 +156,42 @@
             in_view.drawableStencilFormat = GLKViewDrawableStencilFormatNone;
             break;
     }
+}
+//-------------------------------------------------------------
+/// Applies the MSAA format described in the App.config file
+/// to the given view.
+///
+/// @author S Downie
+///
+/// @param The view to apply the format to.
+/// @param App config JSON
+//-------------------------------------------------------------
+- (void)applyMultisampleFormat:(GLKView*)in_view fromConfig:(const Json::Value&)in_configRoot
+{
+    GLKViewDrawableMultisample format = GLKViewDrawableMultisampleNone;
+    
+    const Json::Value& iOS = in_configRoot["iOS"];
+    
+    if(iOS.isNull() == false)
+    {
+        std::string stringFormat = iOS.get("Multisample", "None").asString();
+        CSCore::StringUtils::ToLowerCase(stringFormat);
+        
+        if(stringFormat == "none")
+        {
+            format = GLKViewDrawableMultisampleNone;
+        }
+        else if(stringFormat == "4x")
+        {
+            format = GLKViewDrawableMultisample4X;
+        }
+        else
+        {
+            CS_LOG_FATAL("Unknown multisample format: " + stringFormat + ". Options are None or 4x");
+        }
+    }
+    
+    in_view.drawableMultisample = format;
 }
 //-------------------------------------------------------------
 /// Called by the OS to query whether the view should be

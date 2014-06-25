@@ -31,7 +31,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/File/FileStream.h>
-#include <ChilliSource/Core/JSON/forwards.h>
+
+#include <json/forwards.h>
 
 #include <algorithm>
 #include <vector>
@@ -45,7 +46,7 @@ namespace ChilliSource
             //------------------------------------------------------
 			/// performs a bitmask set on a with b.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The bitmask to set.
             /// @param The bitmask to apply.
@@ -57,7 +58,7 @@ namespace ChilliSource
             //------------------------------------------------------
 			/// performs a bitmask clear on a with b.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The bitmask to set.
             /// @param The bitmask to apply.
@@ -69,7 +70,7 @@ namespace ChilliSource
             //------------------------------------------------------
 			/// performs a bitmask flip on a with b.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The bitmask to set.
             /// @param The bitmask to apply.
@@ -81,7 +82,7 @@ namespace ChilliSource
             //------------------------------------------------------
 			/// performs a bitmask check on a with b.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The bitmask to set.
             /// @param The bitmask to apply.
@@ -188,6 +189,15 @@ namespace ChilliSource
             }
             
             Vector2 ScaleMaintainingAspectRatio(const Vector2& invCurrentSize, const Vector2& invTargetSize, bool inbFitInside = false);
+            
+            //------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A single hexidecimal value to convert
+            ///
+            /// @return Base ten representation of hex value or -1
+            //------------------------------------------------------
+            u8 HexToDec(const u8* in_hex);
 		};
 	}
 }

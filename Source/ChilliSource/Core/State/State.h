@@ -308,6 +308,7 @@ namespace ChilliSource
 			TSystem* output = newSystem.get();
 			if (newSystem != nullptr)
 			{
+                newSystem->SetState(this);
 				m_systems.push_back(std::move(newSystem));
 			}
             return output;

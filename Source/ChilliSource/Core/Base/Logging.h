@@ -54,7 +54,7 @@ namespace ChilliSource
         public:
             CS_DECLARE_NOCOPY(Logging);
             //-----------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The singleton instance of the Logger.
             //-----------------------------------------------------
@@ -116,7 +116,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// An enum describing the various logging levels.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-----------------------------------------------------
             enum class LogLevel
             {
@@ -127,7 +127,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Creates the singleton instance of the Logger.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The message to log.
             //-----------------------------------------------------
@@ -135,20 +135,20 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Destroys the Logger.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-----------------------------------------------------
             static void Destroy();
             //-----------------------------------------------------
             /// Constructor.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-----------------------------------------------------
             Logging();
             //-----------------------------------------------------
             /// Logs the given message to file. How this is logged
             /// is dependant on platform.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The logging level.
             /// @param The message to log.
@@ -158,13 +158,13 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Creates a new Log file.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-----------------------------------------------------
             void CreateLogFile();
             //-----------------------------------------------------
             /// Adds the message to to the log file.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The message to log.
             //-----------------------------------------------------

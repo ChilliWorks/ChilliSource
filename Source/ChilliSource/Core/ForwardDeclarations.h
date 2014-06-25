@@ -1,9 +1,29 @@
 //
 //  ForwardDeclarations.h
 //  Chilli Source
-//
 //  Created by Ian Copland on 27/02/2014.
-//  Copyright 2011 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifndef _CHILLISOURCE_CORE_FORWARDDECLARATIONS_H_
@@ -36,11 +56,6 @@ namespace ChilliSource
         template <typename TType> class ObjectPool;
         CS_FORWARDDECLARE_CLASS(ParamDictionary);
         template <typename T> class WorkerQueue;
-        //---------------------------------------------------------
-        /// Cryptographic
-        //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(HMAC_SHA1);
-        CS_FORWARDDECLARE_CLASS(SHA1);
         //---------------------------------------------------------
         /// Delegate
         //---------------------------------------------------------
@@ -83,14 +98,13 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Localisation
         //---------------------------------------------------------
-	CS_FORWARDDECLARE_CLASS(LocalisedText);
-	CS_FORWARDDECLARE_CLASS(LocalisedTextProvider);
+        CS_FORWARDDECLARE_CLASS(LocalisedText);
+        CS_FORWARDDECLARE_CLASS(LocalisedTextProvider);
         //---------------------------------------------------------
         /// Math
         //---------------------------------------------------------
         template <typename T> class CatmullRomSpline;
         template <typename T> class MultiLineSegment;
-        CS_FORWARDDECLARE_CLASS(UVRect);
         CS_FORWARDDECLARE_CLASS(Rectangle);
         CS_FORWARDDECLARE_CLASS(Circle);
         CS_FORWARDDECLARE_CLASS(Sphere);
@@ -129,6 +143,17 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(AppNotificationSystem);
         CS_FORWARDDECLARE_CLASS(LocalNotificationSystem);
         CS_FORWARDDECLARE_CLASS(RemoteNotificationSystem);
+        //---------------------------------------------------------
+        /// Reflection
+        //---------------------------------------------------------
+        namespace Reflect
+        {
+            CS_FORWARDDECLARE_CLASS(CInstance);
+            CS_FORWARDDECLARE_CLASS(CMetaClass);
+            CS_FORWARDDECLARE_CLASS(CProperty);
+            template <typename T, typename ReturnType = void> class CMethod;
+            enum class PropAccess;
+        }
         //---------------------------------------------------------
         /// Resource
         //---------------------------------------------------------
@@ -174,6 +199,10 @@ namespace ChilliSource
         /// Volume
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(VolumeComponent);
+        //---------------------------------------------------------
+        /// XML
+        //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(XML);
 	}
 }
 

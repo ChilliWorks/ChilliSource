@@ -1,9 +1,29 @@
 //
 //  FileSystem.cpp
 //  Chilli Source
+//  Created by Ian Copland on 25/03/2011.
 //
-//  Created by I Copland on 25/03/2011.
-//  Copyright 2011 Tag Games Ltd. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
@@ -37,7 +57,7 @@ namespace CSBackend
 			const std::string k_dlcPath = "DLC/";
 
 			//--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return whether or not the given file mode is a write mode
 			//--------------------------------------------------------------
@@ -60,7 +80,7 @@ namespace CSBackend
 				}
 			}
 			//--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The file path.
 			///
@@ -73,7 +93,7 @@ namespace CSBackend
 				return (attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY));
 			}
 			//--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The directory path.
 			///
@@ -86,7 +106,7 @@ namespace CSBackend
 				return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
 			}
 			//--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The directory path.
 			///
@@ -147,7 +167,7 @@ namespace CSBackend
 			/// Lists all files and sub-directories inside the given directory.
 			/// All paths will be relative to the given directory.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The directory.
 			/// @param Whether or not to recurse into sub directories.
@@ -421,18 +441,6 @@ namespace CSBackend
 		{
 			switch (in_storageLocation)
 			{
-				case CSCore::StorageLocation::k_package:
-				{
-					const std::string* resourceDirectories = GetResourceDirectories();
-					for (u32 i = 0; i < 3; ++i)
-					{
-						if (CSBackend::Windows::DoesFileExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_filePath) == true)
-						{
-							return true;
-						}
-					}
-					return false;
-				}
 				case CSCore::StorageLocation::k_DLC:
 				{
 					if (DoesItemExistInDLCCache(in_filePath, false) == true)
@@ -455,18 +463,6 @@ namespace CSBackend
 		{
 			switch (in_storageLocation)
 			{
-				case CSCore::StorageLocation::k_package:
-				{
-					const std::string* resourceDirectories = GetResourceDirectories();
-					for (u32 i = 0; i < 3; ++i)
-					{
-						if (CSBackend::Windows::DoesDirectoryExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_directoryPath) == true)
-						{
-							return true;
-						}
-					}
-					return false;
-				}
 				case CSCore::StorageLocation::k_DLC:
 				{
 					if (DoesItemExistInDLCCache(in_directoryPath, true) == true)
@@ -502,7 +498,9 @@ namespace CSBackend
 			switch (in_storageLocation)
 			{
 			case CSCore::StorageLocation::k_package:
-				return m_packagePath;
+				return m_packagePath + "AppResources/";
+			case CSCore::StorageLocation::k_chilliSource:
+				return m_packagePath + "CSResources/";
 			case CSCore::StorageLocation::k_saveData:
 				return m_documentsPath + k_saveDataPath;
 			case CSCore::StorageLocation::k_cache:
@@ -525,21 +523,6 @@ namespace CSBackend
 			{
 				switch (in_storageLocation)
 				{
-					case CSCore::StorageLocation::k_package:
-					{
-						const std::string* resourceDirectories = GetResourceDirectories();
-						std::string absoluteFilePath;
-						for (u32 i = 0; i < 3; ++i)
-						{
-							absoluteFilePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_filePath);
-							if (CSBackend::Windows::DoesFileExist(absoluteFilePath) == true)
-							{
-								break;
-							}
-						}
-
-						return absoluteFilePath;
-					}
 					case CSCore::StorageLocation::k_DLC:
 					{
 						std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
@@ -567,21 +550,6 @@ namespace CSBackend
 			{
 				switch (in_storageLocation)
 				{
-					case CSCore::StorageLocation::k_package:
-					{
-						const std::string* resourceDirectories = GetResourceDirectories();
-						std::string absoluteDirectoryPath;
-						for (u32 i = 0; i < 3; ++i)
-						{
-							absoluteDirectoryPath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + in_directoryPath);
-							if (CSBackend::Windows::DoesDirectoryExist(absoluteDirectoryPath) == true)
-							{
-								break;
-							}
-						}
-
-						return absoluteDirectoryPath;
-					}
 					case CSCore::StorageLocation::k_DLC:
 					{
 						std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
@@ -623,22 +591,9 @@ namespace CSBackend
 
 			switch (in_storageLocation)
 			{
-				case CSCore::StorageLocation::k_package:
-				{
-					const std::string* resourceDirectories = GetResourceDirectories();
-					for (u32 i = 0; i < 3; ++i)
-					{
-						output.push_back(GetAbsolutePathToStorageLocation(in_storageLocation) + resourceDirectories[i] + in_path);
-					}
-					break;
-				}
 				case CSCore::StorageLocation::k_DLC:
 				{
-					const std::string* resourceDirectories = GetResourceDirectories();
-					for (u32 i = 0; i < 3; ++i)
-					{
-						output.push_back(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + GetPackageDLCPath() + in_path);
-					}
+					output.push_back(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + GetPackageDLCPath() + in_path);
 					output.push_back(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path);
 					break;
 				}

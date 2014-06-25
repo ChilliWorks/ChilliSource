@@ -1,14 +1,33 @@
-/*
- *  Shapes.h
- *  moFloTest
- *
- *  Created by Scott Downie on 04/10/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Shapes.h
+//  Chilli Source
+//  Created by Scott Downie on 04/10/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
-#ifndef _MOFLO_CORE_MATHS_SHAPES_H_
-#define _MOFLO_CORE_MATHS_SHAPES_H_
+#ifndef _CHILLISOURCE_CORE_MATHS_SHAPES_H_
+#define _CHILLISOURCE_CORE_MATHS_SHAPES_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
@@ -23,33 +42,27 @@ namespace ChilliSource
 		const f32 kDefaultRayLength = 5000.0f;
 		
 		//================================================
-		/// UV-Rect
-		///
-		/// Container for a rectangle with it's origin 
-		/// at top left and using shorts instead of floats
-		//================================================
-		class UVRect
-		{
-		public:	
-			UVRect();
-			UVRect(s16 wOx, s16 wOy, s16 wWidth, s16 wHeight);
-
-			///Top Left
-			s16 mwOriginX, mwOriginY;
-			///Width and height
-			s16 mwWidth, mwHeight;
-		};
-		//================================================
 		/// Rect
 		///
 		/// Container for a rectangle with it's origin 
-		/// at top left
+		/// at the centre and Y-up
 		//================================================
 		class Rectangle
 		{
 		public:	
-			Rectangle(){}
+			Rectangle() = default;
 			Rectangle(const Vector2 &invOrigin, const Vector2 &invSize);
+            //-----------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
+            ///
+            /// @param Left
+            /// @param Top
+            /// @param Right
+            /// @param Bottom
+            //-----------------------------------------------
+            Rectangle(f32 in_left, f32 in_top, f32 in_right, f32 in_bottom);
 			
 			//-----------------------------------------------
 			/// Left
@@ -80,31 +93,31 @@ namespace ChilliSource
 			///
 			/// @return Top left co-ordinate
 			//-----------------------------------------------
-			const Vector2& TopLeft() const;
+            Vector2 TopLeft() const;
 			//-----------------------------------------------
 			/// Top Right
 			///
 			/// @return Top right co-ordinate
 			//-----------------------------------------------
-			const Vector2 TopRight() const;
+            Vector2 TopRight() const;
 			//-----------------------------------------------
 			/// Bottom Left
 			///
 			/// @return Bottom left co-ordinate
 			//-----------------------------------------------
-			const Vector2 BottomLeft() const;
+            Vector2 BottomLeft() const;
 			//-----------------------------------------------
 			/// Bottom Right
 			///
 			/// @return Bottom right co-ordinate
 			//-----------------------------------------------
-			const Vector2 BottomRight() const;
+            Vector2 BottomRight() const;
 			//-----------------------------------------------
 			/// Centre
 			///
 			/// @return Centre point
 			//-----------------------------------------------
-			const Vector2 Centre() const;
+            Vector2 Centre() const;
 			//-----------------------------------------------
 			/// Contains (Point)
 			///
@@ -119,21 +132,6 @@ namespace ChilliSource
 			/// @return Whether rect intersects the rect
 			//-----------------------------------------------
 			bool Contains(const Rectangle& inRect) const;
-			
-			
-			//-----------------------------------------------
-			/// Normalised
-			///
-			/// @return A copy of this rect which will have no negative components in its size
-			//-----------------------------------------------
-			Rectangle Normalised() const;
-			//-----------------------------------------------
-			/// Union
-			///
-            /// @param Rectangle to union with this
-			/// @return Unions two rectangles together find the composite size.
-			//-----------------------------------------------
-			Rectangle Union(const Rectangle& inRect);
             
 			///Top Left
 			Vector2 vOrigin;
@@ -527,7 +525,7 @@ namespace ChilliSource
 			///
 			/// @param View projection matrix
 			//----------------------------------------------------------
-			void CalculateClippingPlanes(const Core::Matrix4& inmatViewProj);
+			void CalculateClippingPlanes(const Matrix4& inmatViewProj);
 			//----------------------------------------------------------
 			/// Sphere Cull Test
 			///
@@ -537,20 +535,20 @@ namespace ChilliSource
 			/// @param Sphere
 			/// @return Whether it lies within the bounds
 			//-----------------------------------------------------------
-			bool SphereCullTest(const Core::Sphere& inBoundingSphere) const;
+			bool SphereCullTest(const Sphere& inBoundingSphere) const;
 
 		public:
 
-			Core::Plane mLeftClipPlane;
-			Core::Plane mRightClipPlane;
+			Plane mLeftClipPlane;
+			Plane mRightClipPlane;
 
-			Core::Plane mTopClipPlane;
-			Core::Plane mBottomClipPlane;
+			Plane mTopClipPlane;
+			Plane mBottomClipPlane;
 
-			Core::Plane mNearClipPlane;
-			Core::Plane mFarClipPlane;
+			Plane mNearClipPlane;
+			Plane mFarClipPlane;
 		};
 	}
 }
 
-#endif //_MOFLO_CORE_MATHS_SHAPES_H_
+#endif //_CHILLISOURCE_CORE_MATHS_SHAPES_H_

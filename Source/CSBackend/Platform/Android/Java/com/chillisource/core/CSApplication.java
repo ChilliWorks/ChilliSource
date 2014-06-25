@@ -592,7 +592,7 @@ public class CSApplication
 	 * and the application. Application libs are provided
 	 * in the AdditionalSharedLibraries application meta-data
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param Task
 	 */

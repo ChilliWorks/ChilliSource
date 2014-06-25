@@ -23,7 +23,7 @@ namespace CSBackend
 		/// Concrete implementation of Android http request using the Java HttpConnection library. Requests
 		/// are performed on a background thread.
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//----------------------------------------------------------------------------------------
 		class HttpRequest final : public CSNetworking::HttpRequest
 		{
@@ -31,7 +31,7 @@ namespace CSBackend
 			//----------------------------------------------------------------------------------------
 			/// Constructor
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
             /// @param Request description
             /// @param Max buffer size before flush required
@@ -41,29 +41,29 @@ namespace CSBackend
             //----------------------------------------------------------------------------------------
             /// Close the request. Note: The completion delegate is not invoked
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------------------------------------------
             void Cancel() override;
             //----------------------------------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The original request details (i.e. whether it is post/get the body and header)
             //----------------------------------------------------------------------------------------
             const Desc& GetDescription() const override;
             //----------------------------------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The contents of the response as a string. This could be binary data
             //----------------------------------------------------------------------------------------
             const std::string& GetResponse() const override;
             //----------------------------------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return HTTP response code (i.e. 200 = OK, 400 = Error)
             //----------------------------------------------------------------------------------------
             u32 GetResponseCode() const override;
             //----------------------------------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Number of bytes read til now
             //----------------------------------------------------------------------------------------
@@ -73,11 +73,11 @@ namespace CSBackend
             /// and reads this into a buffer. Once all the data is read
             /// the request will call the complete delegate
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------------------------------------------
             void Update();
             //----------------------------------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Whether the request has completed - regardless of success or failure
             //----------------------------------------------------------------------------------------

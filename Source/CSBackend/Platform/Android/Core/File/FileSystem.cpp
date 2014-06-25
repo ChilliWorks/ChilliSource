@@ -1,9 +1,29 @@
 //
 //  FileSystem.cpp
 //  Chilli Source
+//  Created by Ian Copland on 25/03/2011.
 //
-//  Created by I Copland on 25/03/2011.
-//  Copyright 2011 Tag Games Ltd. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifdef CS_TARGETPLATFORM_ANDROID
@@ -41,7 +61,7 @@ namespace CSBackend
             //--------------------------------------------------------------
             /// Returns the error from errno() in string form.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The error number.
 			///
@@ -70,7 +90,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Creates a new directory at the given directory path.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The directory path.
             ///
@@ -94,7 +114,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// returns whether or not a file exists
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the filepath.
 			///
@@ -116,7 +136,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// returns whether or not a directory exists
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the directory path.
 			///
@@ -136,7 +156,7 @@ namespace CSBackend
     			return false;
     		}
             //--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The path to check.
 			///
@@ -147,7 +167,7 @@ namespace CSBackend
 				return (CSCore::StringUtils::Match(in_path, "*.*") == true);
 			}
             //--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The path to check.
 			///
@@ -177,7 +197,7 @@ namespace CSBackend
     			return output;
             }
             //--------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The unfiltered list of file paths.
             ///
@@ -213,7 +233,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Copies a file from one location to another.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The source directory.
 			/// @param The destination directory.
@@ -271,7 +291,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Deletes a directory and all its contents.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The directory path.
 			///
@@ -396,22 +416,29 @@ namespace CSBackend
 			else
 			{
 				//if trying to read from the package or from DLC when the file is not in the cache DLC, open a APK file stream. Otherwise open a standard file stream.
-				if (in_storageLocation == CSCore::StorageLocation::k_package)
+				switch(in_storageLocation)
 				{
-					std::string absoluteFilePath = GetAbsolutePathToFile(CSCore::StorageLocation::k_package, in_filePath);
-					return CreateFileStreamInAPK(absoluteFilePath, in_fileMode);
-				}
-				else if (in_storageLocation == CSCore::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false)
-				{
-					std::string absoluteFilePath = GetAbsolutePathToFile(CSCore::StorageLocation::k_DLC, in_filePath);
-					return CreateFileStreamInAPK(absoluteFilePath, in_fileMode);
-				}
-				else
-				{
-					std::string filePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
-					CSCore::FileStreamUPtr fileStream = CSCore::FileStreamUPtr(new CSCore::FileStream());
-					fileStream->Open(filePath, in_fileMode);
-					return fileStream;
+					case CSCore::StorageLocation::k_package:
+					case CSCore::StorageLocation::k_chilliSource:
+					{
+						std::string absoluteFilePath = GetAbsolutePathToFile(in_storageLocation, in_filePath);
+						return CreateFileStreamInAPK(in_storageLocation, absoluteFilePath, in_fileMode);
+					}
+					case CSCore::StorageLocation::k_DLC:
+					{
+						if(DoesFileExistInCachedDLC(in_filePath) == false)
+						{
+							std::string absoluteFilePath = GetAbsolutePathToFile(CSCore::StorageLocation::k_DLC, in_filePath);
+							return CreateFileStreamInAPK(CSCore::StorageLocation::k_package, absoluteFilePath, in_fileMode);
+						}
+					}
+					default:
+					{
+						std::string filePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+						CSCore::FileStreamUPtr fileStream = CSCore::FileStreamUPtr(new CSCore::FileStream());
+						fileStream->Open(filePath, in_fileMode);
+						return fileStream;
+					}
 				}
 			}
 		}
@@ -457,7 +484,7 @@ namespace CSBackend
 					return false;
 				}
 
-				return CopyFileFromAPK(filePath, in_destinationStorageLocation, in_destinationFilePath);
+				return CopyFileFromAPK(in_sourceStorageLocation, filePath, in_destinationStorageLocation, in_destinationFilePath);
 			}
 			else if (in_sourceStorageLocation == CSCore::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_sourceFilePath) == false)
 			{
@@ -468,7 +495,7 @@ namespace CSBackend
 					return false;
 				}
 
-				return CopyFileFromAPK(filePath, in_destinationStorageLocation, in_destinationFilePath);
+				return CopyFileFromAPK(CSCore::StorageLocation::k_package, filePath, in_destinationStorageLocation, in_destinationFilePath);
 			}
 			else
 			{
@@ -596,32 +623,27 @@ namespace CSBackend
 		//--------------------------------------------------------------
 		bool FileSystem::DoesFileExist(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath) const
 		{
-            if(in_storageLocation == CSCore::StorageLocation::k_package)
-            {
-            	const std::string* resourceDirectories = GetResourceDirectories();
-                for(u32 i = 0; i < 3; ++i)
-                {
-                	if(DoesFileExistInAPK(resourceDirectories[i] + in_filePath) == true)
-                	{
-                		return true;
-                	}
-                }
-                
-                return false;
-            }
-            else if (in_storageLocation == CSCore::StorageLocation::k_DLC)
+			switch(in_storageLocation)
 			{
-				if (DoesFileExistInCachedDLC(in_filePath) == true)
+				case CSCore::StorageLocation::k_package:
+				case CSCore::StorageLocation::k_chilliSource:
 				{
-					return true;
+					return DoesFileExistInAPK(in_storageLocation, GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath);
 				}
+				case CSCore::StorageLocation::k_DLC:
+				{
+					if (DoesFileExistInCachedDLC(in_filePath) == true)
+					{
+						return true;
+					}
 
-				return DoesFileExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+					return DoesFileExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+				}
+				default:
+				{
+					return CSBackend::Android::DoesFileExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath));
+				}
 			}
-            else
-            {
-				return CSBackend::Android::DoesFileExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath));
-            }
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
@@ -639,18 +661,9 @@ namespace CSBackend
 		//--------------------------------------------------------------
 		bool FileSystem::DoesDirectoryExist(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
 		{
-            if (in_storageLocation == CSCore::StorageLocation::k_package)
+            if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_chilliSource)
             {
-            	const std::string* resourceDirectories = GetResourceDirectories();
-                for(u32 i = 0; i < 3; ++i)
-                {
-                    if(DoesDirectoryExistInAPK(resourceDirectories[i] + in_directoryPath) == true)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
+            	return DoesDirectoryExistInAPK(in_storageLocation, in_directoryPath);
             }
             else if (in_storageLocation == CSCore::StorageLocation::k_DLC)
 			{
@@ -675,6 +688,9 @@ namespace CSBackend
 			switch (in_storageLocation)
 			{
 				case CSCore::StorageLocation::k_package:
+					storageLocationPath = "";
+					break;
+				case CSCore::StorageLocation::k_chilliSource:
 					storageLocationPath = "";
 					break;
 				case CSCore::StorageLocation::k_saveData:
@@ -704,21 +720,6 @@ namespace CSBackend
 			{
 				switch (in_storageLocation)
 				{
-					case CSCore::StorageLocation::k_package:
-					{
-						std::string filePath;
-						for(u32 i = 0; i < 3; ++i)
-						{
-							const std::string* resourceDirectories = GetResourceDirectories();
-							filePath = CSCore::StringUtils::StandardisePath(resourceDirectories[i] + in_filePath);
-							if(DoesFileExistInAPK(filePath) == true)
-							{
-								break;
-							}
-						}
-
-						return filePath;
-					}
 					case CSCore::StorageLocation::k_DLC:
 					{
 						std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
@@ -736,6 +737,7 @@ namespace CSBackend
 				}
 			}
 
+			CS_LOG_WARNING("File does not exist: " + in_filePath);
 			return "";
 		}
 		//--------------------------------------------------------------
@@ -746,21 +748,6 @@ namespace CSBackend
 			{
 				switch (in_storageLocation)
 				{
-					case CSCore::StorageLocation::k_package:
-					{
-						std::string directoryPath;
-						for(u32 i = 0; i < 3; ++i)
-						{
-							const std::string* resourceDirectories = GetResourceDirectories();
-							directoryPath = CSCore::StringUtils::StandardisePath(resourceDirectories[i] + in_directoryPath);
-							if(DoesDirectoryExistInAPK(directoryPath) == true)
-							{
-								break;
-							}
-						}
-
-						return directoryPath;
-					}
 					case CSCore::StorageLocation::k_DLC:
 					{
 						std::string directoryPath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
@@ -780,6 +767,30 @@ namespace CSBackend
 
 			return "";
 		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		void FileSystem::AddItemToManifest(CSCore::StorageLocation in_location, const std::string& in_filePath, unz_file_pos in_zipPos, std::vector<APKManifestItem>& inout_items)
+		{
+			std::string directoryPath = CSCore::StringUtils::StandardisePath(in_filePath.substr(0, in_filePath.rfind("/") + 1));
+
+			//check to see if this directory has previously been seen. If it has not, add it.
+			if (directoryPath.size() != 0 && DoesDirectoryExistInAPK(in_location, directoryPath) == false)
+			{
+				APKManifestItem item;
+				item.m_path = directoryPath;
+				item.m_pathHash = CSCore::HashCRC32::GenerateHashCode(item.m_path);
+				item.m_isFile = false;
+				item.m_apkPosition = in_zipPos;
+				inout_items.push_back(item);
+			}
+
+			APKManifestItem item;
+			item.m_path = in_filePath;
+			item.m_pathHash = CSCore::HashCRC32::GenerateHashCode(item.m_path);
+			item.m_isFile = true;
+			item.m_apkPosition = in_zipPos;
+			inout_items.push_back(item);
+		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         void FileSystem::CreateAPKManifest()
@@ -791,6 +802,9 @@ namespace CSBackend
 			{
 				CS_LOG_FATAL("File System: Failed to open APK.");
 			}
+
+			std::string appAssetsPath = k_assetsPath + "AppResources/";
+			std::string csAssetsPath = k_assetsPath + "CSResources/";
 
 			s32 status = unzGoToFirstFile(unzipper);
 			while (status == UNZ_OK)
@@ -805,59 +819,66 @@ namespace CSBackend
 				std::string filePath = CSCore::StringUtils::StandardisePath(filePathBytes);
 
 				//if this file is at the same path as requested, then add it to the output
-				if (CSCore::StringUtils::StartsWith(filePath, k_assetsPath, false) == true)
+				if (CSCore::StringUtils::StartsWith(filePath, appAssetsPath, false) == true)
 				{
-					filePath = filePath.erase(0, k_assetsPath.size());
-					std::string directoryPath = CSCore::StringUtils::StandardisePath(filePath.substr(0, filePath.rfind("/") + 1));
-
-					//check to see if this directory has previously been seen. If it has not, add it.
-					if (directoryPath.size() != 0 && DoesDirectoryExistInAPK(directoryPath) == false)
-					{
-						APKManifestItem item;
-						item.m_path = directoryPath;
-						item.m_pathHash = CSCore::HashCRC32::GenerateHashCode(item.m_path);
-						item.m_isFile = false;
-						unzGetFilePos(unzipper, &(item.m_apkPosition));
-						m_apkManifestItems.push_back(item);
-					}
-
-					APKManifestItem item;
-					item.m_path = filePath;
-					item.m_pathHash = CSCore::HashCRC32::GenerateHashCode(item.m_path);
-					item.m_isFile = true;
-					unzGetFilePos(unzipper, &(item.m_apkPosition));
-					m_apkManifestItems.push_back(item);
+					filePath = filePath.erase(0, appAssetsPath.size());
+					unz_file_pos filePos;
+					unzGetFilePos(unzipper, &filePos);
+					AddItemToManifest(CSCore::StorageLocation::k_package, filePath, filePos, m_apkAppManifestItems);
 				}
+				else if(CSCore::StringUtils::StartsWith(filePath, csAssetsPath, false) == true)
+				{
+					filePath = filePath.erase(0, csAssetsPath.size());
+					unz_file_pos filePos;
+					unzGetFilePos(unzipper, &filePos);
+					AddItemToManifest(CSCore::StorageLocation::k_chilliSource, filePath, filePos, m_apkCSManifestItems);
+				}
+
 				status = unzGoToNextFile(unzipper);
 			}
 			unzClose(unzipper);
 
-			std::sort(m_apkManifestItems.begin(), m_apkManifestItems.end(), APKManifestSortPredicate);
+			std::sort(m_apkAppManifestItems.begin(), m_apkAppManifestItems.end(), APKManifestSortPredicate);
+			std::sort(m_apkCSManifestItems.begin(), m_apkCSManifestItems.end(), APKManifestSortPredicate);
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool FileSystem::TryGetManifestItem(const std::string& in_path, APKManifestItem& out_manifestItem) const
+        bool FileSystem::TryGetManifestItem(CSCore::StorageLocation in_location, const std::string& in_path, APKManifestItem& out_manifestItem) const
         {
+        	CS_ASSERT(in_location == CSCore::StorageLocation::k_package || in_location == CSCore::StorageLocation::k_chilliSource, "APK only covers package and cs locations");
+
 			APKManifestItem searchItem;
 			searchItem.m_pathHash = CSCore::HashCRC32::GenerateHashCode(CSCore::StringUtils::StandardisePath(in_path));
 
-			auto it = std::lower_bound(m_apkManifestItems.begin(), m_apkManifestItems.end(), searchItem, APKManifestSortPredicate);
-			if(it !=  m_apkManifestItems.end() && it->m_pathHash == searchItem.m_pathHash)
+			if(in_location == CSCore::StorageLocation::k_package)
 			{
-				out_manifestItem = *it;
-				return true;
+				auto it = std::lower_bound(m_apkAppManifestItems.begin(), m_apkAppManifestItems.end(), searchItem, APKManifestSortPredicate);
+				if(it !=  m_apkAppManifestItems.end() && it->m_pathHash == searchItem.m_pathHash)
+				{
+					out_manifestItem = *it;
+					return true;
+				}
+			}
+			else
+			{
+				auto it = std::lower_bound(m_apkCSManifestItems.begin(), m_apkCSManifestItems.end(), searchItem, APKManifestSortPredicate);
+				if(it !=  m_apkCSManifestItems.end() && it->m_pathHash == searchItem.m_pathHash)
+				{
+					out_manifestItem = *it;
+					return true;
+				}
 			}
 
 			return false;
         }
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		CSCore::FileStreamUPtr FileSystem::CreateFileStreamInAPK(const std::string& in_filePath, CSCore::FileMode in_fileMode) const
+		CSCore::FileStreamUPtr FileSystem::CreateFileStreamInAPK(CSCore::StorageLocation in_location, const std::string& in_filePath, CSCore::FileMode in_fileMode) const
 		{
 			CSCore::FileStreamUPtr fileStream = CSCore::FileStreamUPtr(new FileStreamAPK(&m_minizipMutex));
 
 			APKManifestItem manifestItem;
-			if (TryGetManifestItem(in_filePath, manifestItem) == true)
+			if (TryGetManifestItem(in_location, in_filePath, manifestItem) == true)
 			{
 				if (manifestItem.m_isFile == true)
 				{
@@ -870,14 +891,14 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::CopyFileFromAPK(const std::string& in_filePath, CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const
+		bool FileSystem::CopyFileFromAPK(CSCore::StorageLocation in_srcLocation, const std::string& in_filePath, CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const
 		{
 			std::unique_lock<std::mutex> lock(m_minizipMutex);
 
 			bool isSuccess = false;
 
 			APKManifestItem manifestItem;
-			if (TryGetManifestItem(in_filePath, manifestItem) == true)
+			if (TryGetManifestItem(in_srcLocation, in_filePath, manifestItem) == true)
 			{
 				if (manifestItem.m_isFile == true)
 				{
@@ -927,20 +948,40 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		std::vector<std::string> FileSystem::GetPathsInAPK(const std::string& in_directoryPath, bool in_recursive) const
+		std::vector<std::string> FileSystem::GetPathsInAPK(CSCore::StorageLocation in_location, const std::string& in_directoryPath, bool in_recursive) const
 		{
+			CS_ASSERT(in_location == CSCore::StorageLocation::k_package || in_location == CSCore::StorageLocation::k_chilliSource, "APK only covers package and cs locations");
+
 			std::vector<std::string> output;
 
 			std::string directoryPath = CSCore::StringUtils::StandardisePath(in_directoryPath);
-			for (const APKManifestItem& item : m_apkManifestItems)
-			{
-				std::string itemFileName;
-				std::string itemDirectoryPath;
-				CSCore::StringUtils::SplitFilename(item.m_path, itemFileName, itemDirectoryPath);
 
-				if ((in_recursive == true && CSCore::StringUtils::Match(item.m_path, directoryPath + "*") == true) || (in_recursive == false && directoryPath == itemDirectoryPath))
+			if(in_location == CSCore::StorageLocation::k_package)
+			{
+				for (const APKManifestItem& item : m_apkAppManifestItems)
 				{
-					output.push_back(item.m_path.substr(directoryPath.length()));
+					std::string itemFileName;
+					std::string itemDirectoryPath;
+					CSCore::StringUtils::SplitFilename(item.m_path, itemFileName, itemDirectoryPath);
+
+					if ((in_recursive == true && CSCore::StringUtils::Match(item.m_path, directoryPath + "*") == true) || (in_recursive == false && directoryPath == itemDirectoryPath))
+					{
+						output.push_back(item.m_path.substr(directoryPath.length()));
+					}
+				}
+			}
+			else
+			{
+				for (const APKManifestItem& item : m_apkCSManifestItems)
+				{
+					std::string itemFileName;
+					std::string itemDirectoryPath;
+					CSCore::StringUtils::SplitFilename(item.m_path, itemFileName, itemDirectoryPath);
+
+					if ((in_recursive == true && CSCore::StringUtils::Match(item.m_path, directoryPath + "*") == true) || (in_recursive == false && directoryPath == itemDirectoryPath))
+					{
+						output.push_back(item.m_path.substr(directoryPath.length()));
+					}
 				}
 			}
 
@@ -948,10 +989,10 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInAPK(const std::string& in_filePath) const
+		bool FileSystem::DoesFileExistInAPK(CSCore::StorageLocation in_location, const std::string& in_filePath) const
 		{
 			APKManifestItem manifestItem;
-			if (TryGetManifestItem(in_filePath, manifestItem) == true)
+			if (TryGetManifestItem(in_location, in_filePath, manifestItem) == true)
 			{
 				if (manifestItem.m_isFile == true)
 				{
@@ -963,10 +1004,10 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::DoesDirectoryExistInAPK(const std::string& in_directoryPath) const
+		bool FileSystem::DoesDirectoryExistInAPK(CSCore::StorageLocation in_location, const std::string& in_directoryPath) const
 		{
 			APKManifestItem manifestItem;
-			if (TryGetManifestItem(in_directoryPath, manifestItem) == true)
+			if (TryGetManifestItem(in_location, in_directoryPath, manifestItem) == true)
 			{
 				if (manifestItem.m_isFile == false)
 				{
@@ -1053,33 +1094,29 @@ namespace CSBackend
 			std::vector<PathInfo> output;
 			switch(in_storageLocation)
 			{
+				case CSCore::StorageLocation::k_chilliSource:
 				case CSCore::StorageLocation::k_package:
 				{
-					const std::string* resourceDirectories = GetResourceDirectories();
-					for(u32 i = 0; i < 3; ++i)
-					{
-						PathInfo info;
-						info.m_path = CSCore::StringUtils::StandardisePath(resourceDirectories[i] + in_directoryPath);
-						info.m_storageLocation = CSCore::StorageLocation::k_package;
-						output.push_back(info);
-					}
+					PathInfo info;
+					info.m_path = in_directoryPath;
+					info.m_storageLocation = in_storageLocation;
+					output.push_back(info);
 					break;
 				}
 				case CSCore::StorageLocation::k_DLC:
 				{
-					const std::string* resourceDirectories = GetResourceDirectories();
-					for(u32 i = 0; i < 3; ++i)
 					{
 						PathInfo info;
-						info.m_path = CSCore::StringUtils::StandardisePath(resourceDirectories[i] + GetPackageDLCPath() + in_directoryPath);
+						info.m_path = CSCore::StringUtils::StandardisePath(GetPackageDLCPath() + in_directoryPath);
 						info.m_storageLocation = CSCore::StorageLocation::k_package;
 						output.push_back(info);
 					}
-
-					PathInfo info;
-					info.m_path = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath;
-					info.m_storageLocation = CSCore::StorageLocation::k_DLC;
-					output.push_back(info);
+					{
+						PathInfo info;
+						info.m_path = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath;
+						info.m_storageLocation = CSCore::StorageLocation::k_DLC;
+						output.push_back(info);
+					}
 					break;
 				}
 				default:
@@ -1102,9 +1139,9 @@ namespace CSBackend
             {
                 std::string path = CSCore::StringUtils::StandardisePath(directoryInfo.m_path);
 
-                if(directoryInfo.m_storageLocation == CSCore::StorageLocation::k_package)
+                if(directoryInfo.m_storageLocation == CSCore::StorageLocation::k_package || directoryInfo.m_storageLocation == CSCore::StorageLocation::k_chilliSource)
                 {
-                	std::vector<std::string> paths = GetPathsInAPK(path, in_recursive);
+                	std::vector<std::string> paths = GetPathsInAPK(directoryInfo.m_storageLocation, path, in_recursive);
                 	output.insert(output.end(), paths.begin(), paths.end());
                 }
                 else

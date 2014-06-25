@@ -1,9 +1,29 @@
 //
 //  ImageView.cpp
-//  moFlo
+//  Chilli Source
+//  Created by Scott Downie on 22/04/2011
 //
-//  Created by Scott Downie on 22/04/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/GUI/Image/ImageView.h>
@@ -41,7 +61,7 @@ namespace ChilliSource
         ///
         /// Default
         //--------------------------------------------------------
-        ImageView::ImageView() : UVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), UVOffsets(Core::Vector2(0, 0), Core::Vector2(1, 1)), SizeFromImage(false),
+        ImageView::ImageView() : UVs(0.0f, 0.0f, 1.0f, 1.0f), SizeFromImage(false),
         HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), ActAsSpacer(false), FlipHorizontal(false), FlipVertical(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             
@@ -54,7 +74,7 @@ namespace ChilliSource
         /// @param Param dictionary
         //------------------------------------------------------
         ImageView::ImageView(const Core::ParamDictionary& insParams)
-        : GUIView(insParams), UVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), UVOffsets(Core::Vector2(0, 0), Core::Vector2(1, 1)),
+        : GUIView(insParams), UVs(0.0f, 0.0f, 1.0f, 1.0f),
         SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), ActAsSpacer(false), FlipHorizontal(false), FlipVertical(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             std::string strValue;
@@ -138,19 +158,10 @@ namespace ChilliSource
             if(insParams.TryGetValue("UVs", strValue))
             {
                 Core::Vector4 vRaw = Core::ParseVector4(strValue);
-                UVs.vOrigin.x = vRaw.x;
-                UVs.vOrigin.y = vRaw.y;
-                UVs.vSize.x = vRaw.z;
-                UVs.vSize.y = vRaw.w;
-            }
-            //---UV Offsets
-            if(insParams.TryGetValue("UVOffsets", strValue))
-            {
-                Core::Vector4 vRaw = Core::ParseVector4(strValue);
-                UVOffsets.vOrigin.x = vRaw.x;
-                UVOffsets.vOrigin.y = vRaw.y;
-                UVOffsets.vSize.x = vRaw.z;
-                UVOffsets.vSize.y = vRaw.w;
+                UVs.m_u = vRaw.x;
+                UVs.m_v = vRaw.y;
+                UVs.m_s = vRaw.z;
+                UVs.m_t = vRaw.w;
             }
             //---Act as spacer
             if(insParams.TryGetValue("ActAsSpacer", strValue))
@@ -167,23 +178,6 @@ namespace ChilliSource
             {
                 FlipVertical = true;
             }
-        }
-        //--------------------------------------------------------
-        /// Calculate UVs
-        ///
-        /// @param UVs
-        /// @param UV offsets
-        /// @param Out: UVs
-		/// @param FlippedX
-		/// @param FlippedY
-        //--------------------------------------------------------
-        void CalculateUVs(const Core::Rectangle& insUVs, const Core::Rectangle& insOffsets, Core::Rectangle& outsUVs)
-        {
-            f32 fWidthOfArea = insUVs.Right() - insUVs.Left();
-            f32 fHeightOfArea = insUVs.Bottom() - insUVs.Top();
-            Core::Vector2 vTopLeft = Core::Vector2((fWidthOfArea*insOffsets.Left())+insUVs.Left(), (fHeightOfArea*insOffsets.Top())+insUVs.Top());
-            Core::Vector2 vBottomRight = Core::Vector2((fWidthOfArea*insOffsets.Right()), (fHeightOfArea*insOffsets.Bottom()));
-            outsUVs = Core::Rectangle(vTopLeft, vBottomRight);
         }
         //--------------------------------------------------------
         /// Draw
@@ -203,18 +197,15 @@ namespace ChilliSource
             
             if(ActAsSpacer == false)
             {
-                Core::Rectangle sNewUVs;
-                CalculateUVs(UVs, UVOffsets, sNewUVs);
-				
+                Rendering::UVs sNewUVs = UVs;
+
 				if(IsHorizontalFlipEnabled())
 				{
-					sNewUVs.vOrigin.x += sNewUVs.vSize.x;
-					sNewUVs.vSize.x *= -1;
+                    sNewUVs = Rendering::UVs::FlipHorizontally(UVs);
 				}
 				if(IsVerticalFlipEnabled())
 				{
-					sNewUVs.vOrigin.y += sNewUVs.vSize.y;
-					sNewUVs.vSize.y *= -1;
+                    sNewUVs = Rendering::UVs::FlipVertically(UVs);
 				}
                 
                 inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), Texture, sNewUVs, GetAbsoluteColour(), Rendering::AlignmentAnchor::k_middleCentre);
@@ -313,7 +304,7 @@ namespace ChilliSource
         ///
         /// @param Rect containing u, v, s, & t
         //--------------------------------------------------------
-        void ImageView::SetUVs(const Core::Rectangle& insUVs)
+        void ImageView::SetUVs(const Rendering::UVs& insUVs)
         {
             UVs = insUVs;
         }
@@ -322,31 +313,10 @@ namespace ChilliSource
         ///
         /// @return Rect containing u, v, s, & t
         //--------------------------------------------------------
-        const Core::Rectangle& ImageView::GetUVs() const
+        const Rendering::UVs& ImageView::GetUVs() const
         {
             return UVs;
         }
-        //--------------------------------------------------------
-        /// Set UV Offsets
-        ///
-        /// Set the offsets to the UV so that on a sprite sheet the image
-        /// can be treated as if it were a single texture
-        ///
-        /// @param Rect containing u, v, s, & t
-        //--------------------------------------------------------
-        void ImageView::SetUVOffsets(const Core::Rectangle& insUVOffsets)
-        {
-            UVOffsets = insUVOffsets;
-        }
-        //--------------------------------------------------------
-        /// Get UV Offsets
-        ///
-        /// @return Rect containing u, v, s, & t offsets
-        //--------------------------------------------------------
-        const Core::Rectangle& ImageView::GetUVOffsets() const
-        {
-            return UVOffsets;
-		}
         //--------------------------------------------------------
         /// Enable Size From Image
         ///

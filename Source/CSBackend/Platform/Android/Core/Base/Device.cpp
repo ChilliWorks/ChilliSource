@@ -45,7 +45,7 @@ namespace CSBackend
 			//----------------------------------------------------
 			/// Returns the language portion of a locale code.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The locale code.
 			///

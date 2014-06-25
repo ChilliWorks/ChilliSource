@@ -1,9 +1,29 @@
 //
 //  Transform.cpp
-//  moFloTest
-//
+//  Chilli Source
 //  Created by Scott Downie on 24/03/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/Core/Entity/Transform.h>
@@ -19,7 +39,7 @@ namespace ChilliSource
         ///
         /// Default
 		//----------------------------------------------------------------
-        Transform::Transform() : mbIsTransformCacheValid(false), mbIsParentTransformCacheValid(false), mvScale(1,1,1), mpParentTransform(nullptr), mfOpacity(1.0f)
+        Transform::Transform() : mbIsTransformCacheValid(false), mbIsParentTransformCacheValid(false), mvScale(1,1,1), mpParentTransform(nullptr)
         {
         
         }
@@ -35,7 +55,7 @@ namespace ChilliSource
 		{
             Core::Vector3 vUp(invUp);
             
-            Core::Vector3 vForward(invPos - invTarget);
+            Core::Vector3 vForward(invTarget - invPos);
             vForward.Normalise();
             
             Core::Vector3 vRight(Vector3::CrossProduct(vUp, vForward));
@@ -398,63 +418,6 @@ namespace ChilliSource
 			
 			OnTransformChanged();
 		}
-        
-        //----------------------------------------------------------------
-        /// Fade By
-        ///
-        /// Change of the opacity of the object
-        ///
-        /// @param inFade The amount to fade by
-        //----------------------------------------------------------------
-        void Transform::FadeBy(f32 inFade)
-        {
-            mfOpacity -= inFade;
-            mfOpacity = std::min(std::max(mfOpacity, 0.0f), 1.0f);
-            
-            OnTransformChanged();
-
-        }
-        //----------------------------------------------------------------
-        /// Scale To
-        ///
-        /// Fade uniformly to the given amount
-        ///
-        /// @param Fade factor
-        //----------------------------------------------------------------
-        void Transform::FadeTo(f32 inFade)
-        {
-            if(mfOpacity == inFade)
-                return;
-            
-            mfOpacity = inFade;
-            mfOpacity = std::min(std::max(mfOpacity, 0.0f), 1.0f);
-            
-            OnTransformChanged();
-        }
-        
-        //----------------------------------------------------------------
-        /// Get the opacity
-        ///
-        /// @return The opacity of object
-        //----------------------------------------------------------------
-        const f32 Transform::GetLocalOpacity() const
-        {
-            return mfOpacity;
-        }
-        
-        //----------------------------------------------------------------
-        /// Get World opacity
-        ///
-        /// @return The relative opacity of object
-        //----------------------------------------------------------------
-        const f32 Transform::GetWorldOpacity() const
-        {
-            f32 fParentOpacity = 1.0f;
-            if(mpParentTransform)
-                fParentOpacity = mpParentTransform->GetWorldOpacity();
-            return mfOpacity*fParentOpacity;
-        }
-        
         //----------------------------------------------------------------
         /// Get Local Transform
         ///
@@ -672,7 +635,6 @@ namespace ChilliSource
             mvScale = Vector3::k_one;
             mqWorldOrientation = Quaternion::k_identity;
             mpParentTransform = nullptr;
-            mfOpacity = 1.0f;
             mChildTransforms.clear();
             mTransformChangedEvent.CloseAllConnections();
         }

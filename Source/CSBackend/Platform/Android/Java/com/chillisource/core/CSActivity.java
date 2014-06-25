@@ -26,7 +26,7 @@ import com.chillisource.core.CSPowerManager;
  * The main activity for Chilli Source apps.
  * This feeds Android lifecycle events to the application
  *
- * @author I Copland
+ * @author Ian Copland
  */
 public class CSActivity extends Activity 
 {
@@ -35,7 +35,7 @@ public class CSActivity extends Activity
 	/**
 	 * Triggered when the activity is first created (i.e. on app launch).
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param Saved instance state (Not used)
 	 */
@@ -69,7 +69,7 @@ public class CSActivity extends Activity
 	/**
 	 * Triggered when the activity becomes visible
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
     @Override protected void onResume() 
     {
@@ -86,7 +86,7 @@ public class CSActivity extends Activity
 	 * longer the top of the view stack or becomes the top of the view stack).
 	 * The order of this in relation to resume and stop is not defined
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param Whether the window has focus or not
 	 */
@@ -106,7 +106,7 @@ public class CSActivity extends Activity
 	/**
 	 * Triggered when the activity is no longer wholly visible.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
     @Override public void onPause() 
     {
@@ -120,7 +120,7 @@ public class CSActivity extends Activity
 	/**
 	 * Triggered when the activity is no longer visible.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
     @Override public void onStop()
     {
@@ -129,7 +129,7 @@ public class CSActivity extends Activity
 	/**
 	 * Triggered when the activity is no active. This is the end of the app
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
     @Override public void onDestroy()
     {
@@ -140,7 +140,7 @@ public class CSActivity extends Activity
 	 * Triggered when the activity receives a new intent either on launch
 	 * or by having it passed by another activity
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param Intent
 	 */
@@ -153,7 +153,7 @@ public class CSActivity extends Activity
 	/**
 	 * Triggered when the activity exits.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param Request code that it started with
 	 * @param Result code it returned
@@ -168,7 +168,7 @@ public class CSActivity extends Activity
 	 * Triggered when the activity config changes such as orientation,
 	 * hardware keyboards, etc.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param New config
 	 */
@@ -181,7 +181,7 @@ public class CSActivity extends Activity
 	 * Triggered when the activity receives an event from the hard-key back button.
 	 * This then forwards the event to the application
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
     @Override public void onBackPressed() 
     {
@@ -189,7 +189,7 @@ public class CSActivity extends Activity
     	nativeInterface.onTriggered(DeviceButton.k_backButton);
     }
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Activity surface
 	 */

@@ -28,8 +28,8 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_EMAILCOMPOSITION_H
-#define MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_EMAILCOMPOSITION_H
+#ifndef _CHILLISOURCE_PLATFORM_ANDROID_JAVAINTERFACE_EMAILCOMPOSITION_H
+#define _CHILLISOURCE_PLATFORM_ANDROID_JAVAINTERFACE_EMAILCOMPOSITION_H
 
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
 
@@ -48,7 +48,7 @@ namespace CSBackend
 			/// An enum describing the possible results from presenting the
 			/// email composer.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//--------------------------------------------------------------
 			enum class Result
 			{

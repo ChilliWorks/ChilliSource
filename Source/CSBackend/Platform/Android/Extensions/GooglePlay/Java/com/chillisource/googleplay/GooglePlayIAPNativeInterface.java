@@ -495,7 +495,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 	//---------------------------------------------------------------------
 	/// On Destroy
 	///
-	/// Called when the moFlow activity is destroyed.
+	/// Called when the Chilli Source activity is destroyed.
 	//---------------------------------------------------------------------
 	@Override public void onActivityDestroy() 
 	{
@@ -508,7 +508,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 	//---------------------------------------------------------------------
 	/// On Activity Result
 	///
-	/// Called when the moFlow activity is "onActivityResult" is called.
+	/// Called when the Chilli Source activity is "onActivityResult" is called.
 	//---------------------------------------------------------------------
 	@Override public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{

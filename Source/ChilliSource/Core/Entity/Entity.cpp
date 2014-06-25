@@ -1,9 +1,29 @@
 //
 //  Entity.cpp
-//  ChilliSource
-//
+//  Chilli Source
 //  Created by Scott Downie on 21/09/2010.
-//  Copyright 2010 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/Core/Entity/Entity.h>
@@ -27,15 +47,6 @@ namespace ChilliSource
 		EntityUPtr Entity::Create()
 		{
 			return EntityUPtr(new Entity());
-		}
-        
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		Entity::Entity()
-        : m_isVisible(true)
-        , m_parent(nullptr)
-        , m_scene(nullptr)
-		{
 		}
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------
@@ -118,28 +129,28 @@ namespace ChilliSource
 		//-------------------------------------------------------------
 		void Entity::OnAddedToScene()
 		{
-            for(ComponentList::iterator it = m_components.begin(); it != m_components.end(); ++it)
+            for (u32 i = 0; i < m_components.size(); ++i)
             {
-                (*it)->OnAddedToScene();
+                m_components[i]->OnAddedToScene();
             }
             
-			for(SharedEntityList::iterator it = m_children.begin(); it != m_children.end(); ++it)
-			{
-				m_scene->Add(*it);
-			}
+            for (u32 i = 0; i < m_children.size(); ++i)
+            {
+                m_scene->Add(m_children[i]);
+            }
 		}
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------
 		void Entity::OnRemovedFromScene()
 		{
-            for(SharedEntityList::iterator it = m_children.begin(); it != m_children.end(); ++it)
-			{
-				m_scene->Remove(it->get());
-			}
-            
-            for(ComponentList::iterator it = m_components.begin(); it != m_components.end(); ++it)
+            for (s32 i = m_children.size() - 1; i >= 0; --i)
             {
-                (*it)->OnRemovedFromScene();
+                m_scene->Remove(m_children[i].get());
+            }
+            
+            for (s32 i = m_components.size() - 1; i >= 0; --i)
+            {
+                m_components[i]->OnRemovedFromScene();
             }
 		}
 		//------------------------------------------------------------------
@@ -354,18 +365,6 @@ namespace ChilliSource
         {
             return m_transform;
         }
-        //-------------------------------------------------------------
-        //-------------------------------------------------------------
-        void Entity::SetVisible(bool in_isVisible)
-        {
-            m_isVisible = in_isVisible;
-        }
-        //-------------------------------------------------------------
-        //-------------------------------------------------------------
-        bool Entity::IsVisible() const
-        {
-            return m_parent ? m_isVisible && m_parent->IsVisible() : m_isVisible;
-        }
         //----------------------------------------------------
         //----------------------------------------------------
         void Entity::OnUpdate(f32 in_timeSinceLastUpdate)
@@ -404,8 +403,6 @@ namespace ChilliSource
             
             m_name = std::string();
             m_transform.Reset();
-            
-            m_isVisible = true;
         }
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------

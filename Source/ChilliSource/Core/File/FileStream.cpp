@@ -1,16 +1,41 @@
 //
 //  FileStream.cpp
-//  MoshiMonsters
-//
+//  Chilli Source
 //  Created by Scott Downie on 16/05/2012.
-//  Copyright (c) 2012 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2012 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/Cryptographic/HashMD5.h>
-#include <ChilliSource/Core/Cryptographic/SHA1.h>
 #include <ChilliSource/Core/File/FileStream.h>
 
+#include <md5/md5.h>
+#include <SHA1/SHA1.h>
+
 #include <sstream>
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#endif
 
 namespace ChilliSource
 {
@@ -31,7 +56,7 @@ namespace ChilliSource
             const u32 kudwChunkSize = 256;
             s8 byData[kudwChunkSize];
             
-            HashMD5::MD5 Hash;
+            MD5 Hash;
             s32 dwSize = kudwChunkSize;
             
             while(dwSize != 0)
@@ -48,7 +73,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Get SHA1 Checksum
         //--------------------------------------------------------------
-        std::string FileStream::GetSHA1Checksum(SHA1::ReportType ineReportType)
+        std::string FileStream::GetSHA1Checksum(CSHA1::REPORT_TYPE ineReportType)
         {
             s32 dwCurrentPos = TellG();
             SeekG(0);
@@ -56,7 +81,7 @@ namespace ChilliSource
             const u32 kudwChunkSize = 256;
             s8 byData[kudwChunkSize];
             
-            SHA1 Hash;
+            CSHA1 Hash;
             Hash.Reset();
             s32 dwSize = kudwChunkSize;
             
@@ -69,7 +94,20 @@ namespace ChilliSource
             SeekG(dwCurrentPos);
             
             Hash.Final();
-            return Hash.GetHash(ineReportType);
+            
+            const u32 kudwMaxSHA1Length = 80;
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
+            TCHAR cHash[kudwMaxSHA1Length];
+            memset(cHash, 0, kudwMaxSHA1Length);
+            Hash.ReportHash(cHash, ineReportType);
+            return CSBackend::Windows::WindowsStringUtils::UTF16ToUTF8(std::wstring(cHash));
+#else
+			char cHash[kudwMaxSHA1Length];
+			memset(cHash, 0, kudwMaxSHA1Length);
+			Hash.ReportHash(cHash, ineReportType);
+			return std::string(cHash);
+#endif
         }
         //--------------------------------------------------------------------------------------------------
 		/// Open

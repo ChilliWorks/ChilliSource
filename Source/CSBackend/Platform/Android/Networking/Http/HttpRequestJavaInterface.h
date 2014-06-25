@@ -24,7 +24,7 @@ namespace CSBackend
 		/// Java interface for communication between the Http Request system and the Java
 		/// HttpURLConnection library
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//--------------------------------------------------------------------------------------
 		class HttpRequestJavaInterface final : public _IJavaInterface
 		{
@@ -33,7 +33,7 @@ namespace CSBackend
 			/// An enum for the different response codes from the android
 			/// HttpRequest.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//--------------------------------------------------------------------------------------
 			enum class RequestResultCode
 			{
@@ -46,7 +46,7 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------
 			/// An enum for the types of http request
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//--------------------------------------------------------------------------------------
 			enum class RequestType
 			{
@@ -57,7 +57,7 @@ namespace CSBackend
 			/// Sets up the java interface: stores the Virtual Machine, and initialises any java
 			/// methods callable from native.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param a pointer to the virtual machine
 			//--------------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ namespace CSBackend
 			/// Sends a HTTP request using java "HttpURLConnection" system. This handles persistent
 			/// connections and SSL.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The url
 			/// @param The request type
@@ -92,7 +92,7 @@ namespace CSBackend
 			/// Calls into java to find whether or not the device is currently connected to the
 			/// internet
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return whether or not it's connected.
 			//--------------------------------------------------------------------------------------

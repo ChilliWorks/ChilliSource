@@ -1,9 +1,29 @@
 //
 //  CoreJavaInterface.cpp
 //  Chilli Source
-//
 //  Created by Ian Copland on 17/03/2011.
-//  Copyright 2012 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifdef CS_TARGETPLATFORM_ANDROID
@@ -29,7 +49,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java that forces creation of the core interface
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -38,7 +58,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is launched.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -47,7 +67,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is resumed.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -76,7 +96,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is suspended
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -85,7 +105,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is destroyed
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -94,7 +114,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is updated
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -106,7 +126,7 @@ extern "C"
 	/// Interface function called from java. This is called when the application is almost
 	/// Out of memory.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
@@ -115,7 +135,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the resolution changes.
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param The jni environment.
 	/// @param the java object calling the function

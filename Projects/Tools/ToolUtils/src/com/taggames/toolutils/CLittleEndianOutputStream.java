@@ -26,6 +26,18 @@ public class CLittleEndianOutputStream
 		mStream.close();
 	}
 	//-------------------------------------------------------
+	/// Write Char
+	///
+	/// Writes a single char to the output stream.
+	///
+	/// @param the char.
+	//-------------------------------------------------------
+	public void WriteChar(char in_data) throws Exception
+	{
+		WriteByte((byte)(in_data 			& 0xFF));
+		WriteByte((byte)(in_data >>> 8 		& 0xFF));
+	}
+	//-------------------------------------------------------
 	/// Write Byte
 	///
 	/// Writes a single byte to the output stream.

@@ -55,6 +55,12 @@ CSAppDelegate* singletonInstance = nil;
 }
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
+- (void) removeAppDelegateListener:(id<UIApplicationDelegate>)in_delegate
+{
+    [subdelegates removeObject:in_delegate];
+}
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
 - (void) setPreferredFPS:(NSUInteger)in_fps
 {
     viewControllerInternal.preferredFramesPerSecond = in_fps;
@@ -99,12 +105,40 @@ CSAppDelegate* singletonInstance = nil;
     
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
-        [delegate application:in_application didFinishLaunchingWithOptions:in_launchingOptions];
+        if([delegate respondsToSelector:@selector(application:didFinishLaunchingWithOptions:)])
+        {
+            [delegate application:in_application didFinishLaunchingWithOptions:in_launchingOptions];
+        }
     }
     
     CSBackend::iOS::LocalNotificationSystem::ApplicationDidFinishLaunchingWithOptions(in_application, in_launchingOptions);
     
 	return YES;
+}
+//-------------------------------------------------------------
+/// Called when the app is forwarded a URL.
+///
+/// @author S Downie
+///
+/// @param Application
+/// @param URL
+/// @param Application that send URL
+/// @param Annotation
+//-------------------------------------------------------------
+- (BOOL) application:(UIApplication*)in_application openURL:(NSURL*)in_url sourceApplication:(NSString*)in_sourceApplication annotation:(id)in_annotation
+{
+    for(id<UIApplicationDelegate> delegate in subdelegates)
+    {
+        if([delegate respondsToSelector:@selector(application:openURL:sourceApplication:annotation:)])
+        {
+            if([delegate application:in_application openURL:in_url sourceApplication:in_sourceApplication annotation:in_annotation] == YES)
+            {
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
 }
 //-------------------------------------------------------------
 /// Called when the app is suspended. This can occur
@@ -121,7 +155,10 @@ CSAppDelegate* singletonInstance = nil;
 {
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
-        [delegate applicationWillResignActive:in_application];
+        if([delegate respondsToSelector:@selector(applicationWillResignActive:)])
+        {
+            [delegate applicationWillResignActive:in_application];
+        }
     }
     
     UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
@@ -144,7 +181,10 @@ CSAppDelegate* singletonInstance = nil;
 {
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
-        [delegate applicationDidEnterBackground:in_application];
+        if([delegate respondsToSelector:@selector(applicationDidEnterBackground:)])
+        {
+            [delegate applicationDidEnterBackground:in_application];
+        }
     }
     
     UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
@@ -176,7 +216,10 @@ CSAppDelegate* singletonInstance = nil;
     
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
-        [delegate applicationWillEnterForeground:in_application];
+        if([delegate respondsToSelector:@selector(applicationWillEnterForeground:)])
+        {
+            [delegate applicationWillEnterForeground:in_application];
+        }
     }
 }
 //-------------------------------------------------------------
@@ -207,7 +250,10 @@ CSAppDelegate* singletonInstance = nil;
     
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
-        [delegate applicationDidBecomeActive:in_application];
+        if([delegate respondsToSelector:@selector(applicationDidBecomeActive:)])
+        {
+            [delegate applicationDidBecomeActive:in_application];
+        }
     }
 }
 //-------------------------------------------------------------
@@ -222,7 +268,10 @@ CSAppDelegate* singletonInstance = nil;
 {
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
-        [delegate applicationWillTerminate:in_application];
+        if([delegate respondsToSelector:@selector(applicationWillTerminate:)])
+        {
+            [delegate applicationWillTerminate:in_application];
+        }
     }
     
     UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
@@ -281,7 +330,10 @@ CSAppDelegate* singletonInstance = nil;
 {
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
-        [delegate applicationDidReceiveMemoryWarning:in_application];
+        if([delegate respondsToSelector:@selector(applicationDidReceiveMemoryWarning:)])
+        {
+            [delegate applicationDidReceiveMemoryWarning:in_application];
+        }
     }
     
     csApplication->ApplicationMemoryWarning();
@@ -303,7 +355,10 @@ CSAppDelegate* singletonInstance = nil;
 {
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
-        [delegate application:in_application didReceiveLocalNotification:in_notification];
+        if([delegate respondsToSelector:@selector(application:didReceiveLocalNotification:)])
+        {
+            [delegate application:in_application didReceiveLocalNotification:in_notification];
+        }
     }
     
     CSBackend::iOS::LocalNotificationSystem::ApplicationDidReceiveLocalNotification(in_application, in_notification);
@@ -325,7 +380,10 @@ CSAppDelegate* singletonInstance = nil;
 {
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
-        [delegate application:in_application didRegisterForRemoteNotificationsWithDeviceToken:in_deviceToken];
+        if([delegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)])
+        {
+            [delegate application:in_application didRegisterForRemoteNotificationsWithDeviceToken:in_deviceToken];
+        }
     }
     
 	CSBackend::iOS::RemoteNotificationSystem* remoteNotificationSystem = CSCore::Application::Get()->GetSystem<CSBackend::iOS::RemoteNotificationSystem>();
@@ -354,7 +412,10 @@ CSAppDelegate* singletonInstance = nil;
     
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
-        [delegate application:in_application didFailToRegisterForRemoteNotificationsWithError:in_error];
+        if([delegate respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)])
+        {
+            [delegate application:in_application didFailToRegisterForRemoteNotificationsWithError:in_error];
+        }
     }
 }
 //-------------------------------------------------------------
@@ -382,7 +443,10 @@ CSAppDelegate* singletonInstance = nil;
     
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
-        [delegate application:in_application didReceiveRemoteNotification:in_userInfo];
+        if([delegate respondsToSelector:@selector(application:didReceiveRemoteNotification:)])
+        {
+            [delegate application:in_application didReceiveRemoteNotification:in_userInfo];
+        }
     }
 }
 //-------------------------------------------------------------

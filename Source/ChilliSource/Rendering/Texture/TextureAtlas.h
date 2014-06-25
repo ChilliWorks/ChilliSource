@@ -1,9 +1,29 @@
 //
 //  TextureAtlas.h
 //  Chilli Source
-//
 //  Created by Scott Downie on 22/10/2010.
-//  Copyright 2010 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifndef _CHILLISOURCE_RENDERING_TEXTURE_TEXTUREATLAS_H_
@@ -12,6 +32,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
+
+#include <unordered_map>
 
 namespace ChilliSource
 {
@@ -101,7 +124,7 @@ namespace ChilliSource
             ///
 			/// @return Rect containing UV coords for the given frame
 			//---------------------------------------------------------------------
-			Core::Rectangle GetFrameUVs(const std::string& in_textureId) const;
+			Rendering::UVs GetFrameUVs(const std::string& in_textureId) const;
 			//---------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -151,24 +174,12 @@ namespace ChilliSource
             //---------------------------------------------------------------------
             TextureAtlas() = default;
             
-            friend class Font;
-            //---------------------------------------------------------------------
-            /// Currently the font resource and texture atlas are tighlty
-            /// coupled in that the font relies on the atlas having a linear
-            /// frame structure. This dependency will be broken soon and this function
-            /// removed
-            ///
-            /// @author S Downie
-            ///
-			/// @param Index
-            ///
-			/// @return Frame data
-			//---------------------------------------------------------------------
-			const Frame& GetFrame(u32 in_index) const;
-            
 		private:
             
-            Descriptor m_desc;
+            std::unordered_map<u32, Frame> m_frames;
+            
+            u32 m_textureAtlasWidth = 0;
+            u32 m_textureAtlasHeight = 0;
 		};
 	}
 }

@@ -75,7 +75,7 @@ public class SCStringUtils
 		int dwIndex = instrFilepath.lastIndexOf(".");
 		if (dwIndex != -1)
 			return instrFilepath.substring(0, dwIndex);
-		return "";
+		return instrFilepath;
 	}
 	//-------------------------------------------------
 	/// Get Directory

@@ -31,8 +31,8 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
-#include <ChilliSource/Core/Cryptographic/aes.h>
 #include <ChilliSource/Core/Cryptographic/AESEncrypt.h>
+#include <ChilliSource/Core/Cryptographic/HashSHA1.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
@@ -51,7 +51,7 @@ namespace ChilliSource
             /// of the information used to generate the hash is truely
             /// private.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //---------------------------------------------------------
             std::string GenerateEncryptionKey()
             {
@@ -59,12 +59,8 @@ namespace ChilliSource
                 Device* device = Application::Get()->GetSystem<Device>();
                 
                 //calculate the SHA1 hash.
-                SHA1 hash;
-                hash.Reset();
-                hash.Update((u8*)device->GetUDID().c_str(), device->GetUDID().size());
-                hash.Update((u8*)k_salt.c_str(), k_salt.size());
-                hash.Final();
-                std::string hexHash = hash.GetHash(SHA1::REPORT_HEX_SHORT);
+                std::string hashableString = device->GetUDID() + k_salt;
+                std::string hexHash = HashSHA1::GenerateHexHashCode(hashableString.c_str(), hashableString.length());
                 CS_ASSERT(hexHash.length() == 40, "Something has gone wrong with the SHA1 hash.");
                 
                 //truncate into 128 bits.
@@ -326,30 +322,24 @@ namespace ChilliSource
 			if(m_needsSynchonised == true)
             {
                 // Convert to XML
-                TiXmlDocument xmlDoc;
-                TiXmlElement xmlRootElement("ADS");
-                ParamDictionarySerialiser::ToXml(m_dictionary, &xmlRootElement);
-                xmlDoc.InsertEndChild(xmlRootElement);
+                XML::Document doc;
+                XML::Node* rootNode = doc.allocate_node(rapidxml::node_type::node_element);
+                doc.append_node(rootNode);
+                ParamDictionarySerialiser::ToXml(m_dictionary, rootNode);
                 
                 // Encrypt
-                TiXmlPrinter xmlPrinter;
-                xmlDoc.Accept(&xmlPrinter);
-                std::string strDocToBeEncrypted = xmlPrinter.CStr();
-                const u8* pudwDocBinary = reinterpret_cast<const u8*>(strDocToBeEncrypted.c_str());
-                u32 udwEncryptedSize = AESEncrypt::CalculateAlignedSize(strDocToBeEncrypted.size());
-                s8* pdwDocEncrypted = new s8[udwEncryptedSize];
-                AESEncrypt::Encrypt(pudwDocBinary, udwEncryptedSize, GenerateEncryptionKey(), reinterpret_cast<u8*>(pdwDocEncrypted));
-                
+                std::string strDocToBeEncrypted = XMLUtils::ToString(&doc);
+                AESEncrypt::Data encryptedData = AESEncrypt::EncryptString(strDocToBeEncrypted, GenerateEncryptionKey());
+
                 // Write to disk
                 FileSystem* pFileSystem = Application::Get()->GetFileSystem();
                 FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_writeBinary);
                 if(pFileStream->IsOpen() && !pFileStream->IsBad())
                 {
-                    pFileStream->Write(pdwDocEncrypted, udwEncryptedSize);
+                    pFileStream->Write(reinterpret_cast<const s8*>(encryptedData.m_data.get()), encryptedData.m_size);
                     pFileStream->Close();
                 }
                 
-                CS_SAFEDELETE_ARRAY(pdwDocEncrypted)
                 m_needsSynchonised = false;
             }
 		}
@@ -360,31 +350,25 @@ namespace ChilliSource
             FileSystem* pFileSystem = Application::Get()->GetFileSystem();
             if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, k_filename) == true)
             {
-				FileStreamSPtr fileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_read);
+				FileStreamSPtr fileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_readBinary);
 				if (fileStream->IsOpen() == true && fileStream->IsBad() == false)
                 {
 					fileStream->SeekG(0, SeekDir::k_end);
 					u32 encryptedDataSize = fileStream->TellG();
 					fileStream->SeekG(0, SeekDir::k_beginning);
                     
-					s8* encryptedData = new s8[encryptedDataSize];
-					fileStream->Read(encryptedData, encryptedDataSize);
+                    std::unique_ptr<s8[]> encryptedData(new s8[encryptedDataSize]);
+					fileStream->Read(encryptedData.get(), encryptedDataSize);
 					fileStream->Close();
                     
-					s8* decryptedData = new s8[encryptedDataSize];
-					const u8* udwDocBinary = reinterpret_cast<const u8*>(encryptedData);
-					AESEncrypt::Decrypt(udwDocBinary, encryptedDataSize, GenerateEncryptionKey(), reinterpret_cast<u8*>(decryptedData));
-                    
-                    TiXmlDocument xmlDoc;
-					xmlDoc.Parse(decryptedData, 0, TIXML_DEFAULT_ENCODING);
-                    TiXmlElement* pRoot = xmlDoc.RootElement();
-                    if(nullptr != pRoot)
+                    std::string decrypted = AESEncrypt::DecryptString(reinterpret_cast<const u8*>(encryptedData.get()), encryptedDataSize, GenerateEncryptionKey());
+
+                    XMLUPtr xml = XMLUtils::ParseDocument(decrypted);
+                    XML::Node* root = XMLUtils::GetFirstChildElement(xml->GetDocument());
+                    if(nullptr != root)
                     {
-                        m_dictionary = ParamDictionarySerialiser::FromXml(pRoot);
+                        m_dictionary = ParamDictionarySerialiser::FromXml(root);
                     }
-                    
-					CS_SAFEDELETE_ARRAY(encryptedData);
-					CS_SAFEDELETE_ARRAY(decryptedData);
                 }
             }
             

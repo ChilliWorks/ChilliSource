@@ -28,7 +28,8 @@
 
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/JSON/json.h>
+
+#include <json/json.h>
 #include <zlib.h>
 
 namespace ChilliSource
@@ -55,7 +56,7 @@ namespace ChilliSource
                 
                 if(!jReader.parse(strJsonString, *outpJson))
                 {
-					CS_LOG_WARNING("Utils::ReadJson| Json could not be parsed:" + jReader.getFormattedErrorMessages());
+					CS_LOG_WARNING("Utils::ReadJson| Json could not be parsed:" + jReader.getFormatedErrorMessages());
                     return false;
                 }
                 
@@ -170,6 +171,26 @@ namespace ChilliSource
                 }
                 
                 return vResult;
+            }
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            u8 HexToDec(const u8* inpHex)
+            {
+                if(*inpHex >= '0' && *inpHex <= '9')
+                {
+                    return *inpHex - '0';
+                }
+                else
+                    if(*inpHex >= 'A' && *inpHex <= 'F')
+                    {
+                        return 10 + (*inpHex - 'A');
+                    }
+                    else
+                    {
+                        CS_LOG_ERROR("Invalid hex value of \""+ToString(*inpHex)+"\"");
+                    }
+                
+                return -1;
             }
         }
     }

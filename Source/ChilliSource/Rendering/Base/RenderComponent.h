@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MO_FLO_RENDERING_RENDER_COMPONENT_H_
-#define _MO_FLO_RENDERING_RENDER_COMPONENT_H_
+#ifndef _CHILLISOURCE_RENDERING_RENDER_COMPONENT_H_
+#define _CHILLISOURCE_RENDERING_RENDER_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Volume/VolumeComponent.h>

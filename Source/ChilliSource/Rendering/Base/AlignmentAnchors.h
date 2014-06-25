@@ -27,8 +27,8 @@
 //
 
 
-#ifndef _MO_FLO_CORE_ALIGNMENT_ANCHORS_H_
-#define _MO_FLO_CORE_ALIGNMENT_ANCHORS_H_
+#ifndef _CHILLISOURCE_CORE_ALIGNMENT_ANCHORS_H_
+#define _CHILLISOURCE_CORE_ALIGNMENT_ANCHORS_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>

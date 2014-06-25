@@ -39,7 +39,7 @@ namespace CSBackend
         //------------------------------------------------------------
         /// The iOS backend implementation of the Device Button System.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //------------------------------------------------------------
 		class DeviceButtonSystem final : public CSInput::DeviceButtonSystem
 		{
@@ -49,7 +49,7 @@ namespace CSBackend
 			/// Queries whether or not this system implements the
             /// interface with the given ID.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The interface Id.
             ///
@@ -57,7 +57,7 @@ namespace CSBackend
 			//----------------------------------------------------
             bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @return An event that will be called whenever a
             /// device button is triggered.
@@ -70,7 +70,7 @@ namespace CSBackend
 			/// Constructor. Declared private to force the use of
             /// the factory method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
 			DeviceButtonSystem() = default;
 

@@ -31,6 +31,7 @@ import sys
 import os
 import shutil
 import zipfile
+import errno
 from zipfile import ZipFile, ZIP_DEFLATED
 import fnmatch
 
@@ -46,6 +47,44 @@ import fnmatch
 #----------------------------------------
 def get_path_from_here(path):
     return os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), instrPath));
+#----------------------------------------
+# Overwrite the given dst directory or create
+# it if it doesn't exist with the contents
+# of the src directory
+#
+# @author S Downie
+#----------------------------------------
+def overwrite_directory(src_path, dst_path):
+    delete_directory(dst_path)
+    try:
+        shutil.copytree(src_path, dst_path)
+    except OSError as e:
+        # If the error was caused because the source wasn't a directory
+        if e.errno == errno.ENOTDIR:
+            shutil.copy(src_path, dst_path)
+        else:
+            print('Directory not copied. Error: %s' % e)
+
+#----------------------------------------
+# Copy the given dst directory or create
+# it if it doesn't exist with the contents
+# of the src directory. This will overwrite
+# exisiting files of the same name in the dst
+# directory
+#
+# @author S Downie
+#----------------------------------------        
+def copy_directory(src_path, dst_path):
+    if os.path.exists(dst_path) == False:
+        os.makedirs(dst_path)
+
+    for item in os.listdir(src_path):
+        src = os.path.join(src_path, item)
+        dst = os.path.join(dst_path, item)
+        if os.path.isdir(src):
+            copy_directory(src, dst)
+        else:
+            shutil.copy2(src, dst)
 #----------------------------------------
 # Deletes a directory if it exists. Does
 # not return an error if trying to delete

@@ -1,9 +1,29 @@
 //
 //  FileSystem.h
 //  Chilli Source
+//  Created by Ian Copland on 25/03/2011.
 //
-//  Created by I Copland on 25/03/2011.
-//  Copyright 2011 Tag Games Ltd. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifndef _CHILLISOURCE_CORE_FILE_FILESYSTEM_H_
@@ -27,45 +47,13 @@ namespace ChilliSource
         /// data. It is safe to use the File System during the OnInit
 		/// and OnDestroy lifecycle events.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
 		//-----------------------------------------------------------------
 		class FileSystem : public AppSystem
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(FileSystem);
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Directory to load device dependent assets from
-            //----------------------------------------------------------
-            static const std::string& GetDeviceResourceDirectory();
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Directory to load device dependent assets from
-            //----------------------------------------------------------
-            static const std::string& GetDefaultDeviceResourceDirectory();
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Directory to load shared assets from
-            //----------------------------------------------------------
-            static const std::string& GetDefaultResourceDirectory();
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Density of assets in device dependent folder
-            //----------------------------------------------------------
-            static f32 GetDeviceResourcesDensity();
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Directory to load device dependent assets from
-            /// @param Fallback to load device depenedent assets from
-            /// @param Directory to load shared assets from
-            /// @param Density of assets in the device dependent folder
-            //----------------------------------------------------------
-            static void SetResourceDirectories(const std::string& in_deviceDirectory, const std::string& in_defaultDeviceDirectory, const std::string& in_defaultDirectory, f32 in_assetsDensity);
+
             //----------------------------------------------------------
             /// Create the platform dependent backend
             ///
@@ -77,7 +65,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// Reads the contents of a file from disc if the file exists.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The Storage Location.
             /// @param The file path.
@@ -89,7 +77,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// Write a file to disc with the given data.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The Storage Location.
             /// @param The file path.
@@ -115,7 +103,7 @@ namespace ChilliSource
             /// Creates a new file stream to the given file in the given
             /// storage location.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The storage location.
             /// @param The file path.
@@ -128,7 +116,7 @@ namespace ChilliSource
             /// Creates the given directory. The full directory hierarchy will
             /// be created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The Storage Location
             /// @param The directory path.
@@ -141,7 +129,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// Copies a file from one location to another.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The source storage location.
             /// @param The source directory.
@@ -156,7 +144,7 @@ namespace ChilliSource
             /// Copies a directory from one location to another. If the 
             /// destination directory does not exist, it will be created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The source storage location.
             /// @param The source directory.
@@ -170,7 +158,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// Deletes the specified file.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The storage location.
             /// @param The filepath.
@@ -181,7 +169,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// Deletes a directory and all its contents.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The storage location.
             /// @param The directory.
@@ -194,7 +182,7 @@ namespace ChilliSource
             /// in the given directory. File paths will be relative to the
             /// input directory.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The Storage Location
             /// @param The directory
@@ -241,7 +229,7 @@ namespace ChilliSource
             /// in the given directory. Directory paths will be relative to
             /// the input directory.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The Storage Location
             /// @param The directory
@@ -252,7 +240,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// returns whether or not the given file exists.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             /// 
             /// @param The Storage Location
             /// @param The file path
@@ -264,7 +252,7 @@ namespace ChilliSource
 			/// Returns whether or not the file exists in the Cached DLC
             /// directory.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param The file path.
             ///
@@ -275,7 +263,7 @@ namespace ChilliSource
 			/// Returns whether or not the file exists in the package DLC
             /// directory.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param The file path.
             ///
@@ -285,7 +273,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// Returns whether or not the given directory exists.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             /// 
             /// @param The Storage Location
             /// @param The directory path
@@ -328,7 +316,7 @@ namespace ChilliSource
             /// so care should be taken when using this in cross platform
             /// projects.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
             /// @param The storage location for the directory.
             /// @param The directory path relative to the storage location.
@@ -394,7 +382,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			u32 GetDirectoryChecksumCRC32(StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
 	        //--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param The storage location.
 			/// @param the file path.
@@ -403,7 +391,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			u32 GetFileSize(StorageLocation in_storageLocation, const std::string& in_filePath) const;
 	        //--------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param The storage location.
 			/// @param the Directory path.
@@ -416,7 +404,7 @@ namespace ChilliSource
 			/// Returns whether or not the given storage location can be
             /// written to.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
             /// @param The storage location.
             ///
@@ -426,7 +414,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// Destructor
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------------------
             virtual ~FileSystem() {}
         protected:
@@ -438,22 +426,14 @@ namespace ChilliSource
             //--------------------------------------------------------------
             FileSystem();
             //--------------------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return The resource directories.
-            //--------------------------------------------------------------
-            const std::string* GetResourceDirectories() const;
-            //--------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return whether or not the given file mode is a write mode
             //--------------------------------------------------------------
             bool IsWriteMode(Core::FileMode in_fileMode) const;
         private:
-            std::string m_packageDLCPath;
             
-            static f32 s_assetsDensity;
-            static std::string s_resourceDirectory[3];
+            std::string m_packageDLCPath;
 		};
 	}
 		

@@ -46,7 +46,7 @@ namespace CSBackend
     	//--------------------------------------------------------------------
     	/// The Android specific backend for the Video Player.
     	///
-    	/// @author I Copland
+    	/// @author Ian Copland
     	//--------------------------------------------------------------------
         class VideoPlayer final : public CSVideo::VideoPlayer
         {
@@ -56,7 +56,7 @@ namespace CSBackend
 			/// Queries whether or not this system implements the
             /// interface with the given Id.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
@@ -65,7 +65,7 @@ namespace CSBackend
             //-------------------------------------------------------
             /// Begin streaming the video from file
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The storage location of the video.
             /// @param The video file name.
@@ -80,7 +80,7 @@ namespace CSBackend
             //--------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The storage location of the video.
             /// @param The video file name.
@@ -104,26 +104,26 @@ namespace CSBackend
             //-------------------------------------------------------
             /// Called when the owning state is initialised.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------
             void OnInit() override;
             //-------------------------------------------------------
 			/// Called from java when the video finishes.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//-------------------------------------------------------
 			void OnVideoComplete();
 			//-------------------------------------------------------
 			/// Updates the subtitles. Note that this is called from
 			/// the Android UI thread rather than the main thread.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//-------------------------------------------------------
 			void OnUpdateSubtitles();
 			//-------------------------------------------------------
 			/// Updates a single subtitle.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The subtitle
 			/// @param The subtitle Id
@@ -133,7 +133,7 @@ namespace CSBackend
             //-------------------------------------------------------
             /// Called when the owning state is destroyed.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------
             void OnDestroy() override;
 

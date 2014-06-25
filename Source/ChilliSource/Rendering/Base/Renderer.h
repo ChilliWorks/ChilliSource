@@ -51,7 +51,7 @@ namespace ChilliSource
             /// Allows querying of whether or not this system implements
             /// a given interface.
             ///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Interface Id
 			///
@@ -297,7 +297,7 @@ namespace ChilliSource
             /// occurs in the reverse order to which they
             /// were created
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             void OnDestroy() override;
         private:

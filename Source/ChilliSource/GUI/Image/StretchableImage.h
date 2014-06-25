@@ -1,17 +1,38 @@
 //
 //  StretchableImage.h
-//  moFlo
+//  Chilli Source
+//  Created by Scott Downie on 28/04/2011
 //
-//  Created by Scott Downie on 28/04/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
-#ifndef _MOFLO_GUI_STRETCHABLEIMAGEVIEW_H_
-#define _MOFLO_GUI_STRETCHABLEIMAGEVIEW_H_
+#ifndef _CHILLISOURCE_GUI_STRETCHABLEIMAGEVIEW_H_
+#define _CHILLISOURCE_GUI_STRETCHABLEIMAGEVIEW_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 //=============================================================
 /// GUI - Stretchable Image 
@@ -31,17 +52,17 @@ namespace ChilliSource
 
             struct PanelDesc
             {
-                Core::Rectangle m_topLeftUVs;
-                Core::Rectangle m_topCentreUVs;
-                Core::Rectangle m_topRightUVs;
+                Rendering::UVs m_topLeftUVs;
+                Rendering::UVs m_topCentreUVs;
+                Rendering::UVs m_topRightUVs;
                 
-                Core::Rectangle m_bottomLeftUVs;
-                Core::Rectangle m_bottomCentreUVs;
-                Core::Rectangle m_bottomRightUVs;
+                Rendering::UVs m_bottomLeftUVs;
+                Rendering::UVs m_bottomCentreUVs;
+                Rendering::UVs m_bottomRightUVs;
                 
-                Core::Rectangle m_leftCentreUVs;
-                Core::Rectangle m_middleCentreUVs;
-                Core::Rectangle m_rightCentreUVs;
+                Rendering::UVs m_leftCentreUVs;
+                Rendering::UVs m_middleCentreUVs;
+                Rendering::UVs m_rightCentreUVs;
                 
                 Core::Vector2 m_topLeftSize;
                 Core::Vector2 m_topCentreSize;
@@ -173,45 +194,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             bool IsHeightMaintainingAspectEnabled() const;
 			
-            //--------------------------------------------------------
-            /// Enable Centre Touch Consumption
-            ///
-            /// Enables the touch to go through the middle part of the image
-            ///
-            /// @param boolean to disable or enable
-            //--------------------------------------------------------
-            void EnableCentreTouchConsumption(bool inbEnabled);
-			//--------------------------------------------------------
-            /// Is Centre Touch Consumption Enabled
-            ///
-            /// @return whether the touch though the middle is enabled or not
-            //--------------------------------------------------------
-            bool IsCentreTouchConsumptionEnabled() const;
-			
 			//---Touch Delegates
-			//-----------------------------------------------------------
-			/// Called when the window receives cursor/touch input
-			///
-            /// @author S Downie
-            ///
-			/// @param The pointer.
-            /// @param The timestamp
-            /// @param The press type.
-            ///
-			/// @return Whether touch has been consumed
-			//-----------------------------------------------------------
-			virtual bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType) override;
-			//-----------------------------------------------------------
-			/// Called when the window receives cursor/touch input
-			///
-            /// @author S Downie
-			///
-			/// @param The pointer.
-            /// @param The timestamp
-            ///
-			/// @return Whether touch has been consumed
-			//-----------------------------------------------------------
-			virtual bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp) override;
             
             struct PatchSize
             {
@@ -237,7 +220,6 @@ namespace ChilliSource
 
 			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
-			DECLARE_PROPERTY_A(bool, CentreTouchConsumption, EnableCentreTouchConsumption, IsCentreTouchConsumptionEnabled);
 			
             PanelDesc m_panels;
         };

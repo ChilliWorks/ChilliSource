@@ -1,13 +1,33 @@
 //
 //  StringUtils.h
-//  moFlow
-//
+//  Chilli Source
 //  Created by Stuart McGaw on 25/10/2010.
-//  Copyright 2011 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
-#ifndef _MOFLO_CORE_STRINGUTILITIES_H_
-#define _MOFLO_CORE_STRINGUTILITIES_H_
+#ifndef _CHILLISOURCE_CORE_STRINGUTILITIES_H_
+#define _CHILLISOURCE_CORE_STRINGUTILITIES_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -196,6 +216,30 @@ namespace ChilliSource
             /// @param [Out] CSV string
             //----------------------------------------------------
             void ToCSV(const std::vector<std::string>& in_values, std::string& out_csv);
+            //-------------------------------------------------------
+            /// Encodes a URL to use correct escape values
+            ///
+            /// @param String to URL encode
+            ///
+            /// @return URL encoded string
+            //------------------------------------------------------
+            std::string URLEncode(const std::string& in_url);
+            //------------------------------------------------------
+            /// @param String to URL decode
+            ///
+            /// @return decoded string
+            //------------------------------------------------------
+            std::string URLDecode(const std::string& in_src);
+            //-------------------------------------------------------
+            /// Converts a value in the range [0,255] to hex value
+            ///
+            /// @author S Downie
+            ///
+            /// @param Integer value in range [0,255]
+            ///
+            /// @return String hex representation of integer
+            //-------------------------------------------------------
+            std::string CharToHex(u8 in_dec);
 		};
 	}
 }

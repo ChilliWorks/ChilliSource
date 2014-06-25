@@ -1,9 +1,29 @@
 //
 //  CSModelProvider.cpp
 //  Chilli Source
-//
 //  Created by Ian Copland on 25/08/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/Rendering/Model/CSModelProvider.h>
@@ -21,23 +41,21 @@ namespace ChilliSource
 	{
         namespace
         {
-            const std::string k_modelFileExtension("momodel");
+            const std::string k_modelFileExtension("csmodel");
             
-            const u32 k_minVersion = 9;
-            const u32 k_maxVersion = 11;
+            const u32 k_minVersion = 12;
+            const u32 k_maxVersion = 12;
             const u32 k_fileCheckValue = 6666;
             
             //---------------------------------------------
             /// Features implemented by the model resource.
             /// Models can opt in and out of features.
             ///
-            /// @author I Copland.
+            /// @author Ian Copland.
             //---------------------------------------------
             enum class Feature
             {
                 k_none,
-                k_hasTexture, //TODO: Remove this once texture is no longer part of model
-                k_hasMaterial, //TODO: Remove this once material is no longer part of model
                 k_hasAnimation,
             };
             //---------------------------------------------
@@ -45,7 +63,7 @@ namespace ChilliSource
             /// formats described by mixing and matching the
             /// following.
             ///
-            /// @author I Copland.
+            /// @author Ian Copland.
             //---------------------------------------------
             enum class VertexAttribute
             {
@@ -71,7 +89,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
 			/// Read value in for given type
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param File stream
             ///
@@ -86,7 +104,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
 			/// Read block of data in for given type
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param File stream
             /// @param Num to read
@@ -100,7 +118,7 @@ namespace ChilliSource
             /// Read the vertex declaration from the mesh filestream. The declaration
             /// is variable
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Mesh stream
             /// @param [Out] Mesh description
@@ -153,7 +171,7 @@ namespace ChilliSource
             //-----------------------------------------------------------------------------
 			/// Read the mesh section of the file
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param File stream
 			/// @param Mesh description
@@ -183,7 +201,7 @@ namespace ChilliSource
             //-----------------------------------------------------------------------------
 			/// Reads the sub-mesh header section of the file
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param File stream
             /// @param Mesh description
@@ -245,7 +263,7 @@ namespace ChilliSource
             //-----------------------------------------------------------------------------
 			/// Reads the skeleton section of the file
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param File stream
             /// @param Container holding the num of meshes, joints and bones
@@ -295,7 +313,7 @@ namespace ChilliSource
             //-----------------------------------------------------------------------------
 			/// Reads the header of the file
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param File stream
 			/// @param the file path
@@ -309,14 +327,14 @@ namespace ChilliSource
                 u32 fileCheckValue = ReadValue<u32>(in_meshStream);
                 if(fileCheckValue != k_fileCheckValue)
                 {
-                    CS_LOG_ERROR("MoModel file has corruption(incorrect File Check Value): " + in_filePath);
+                    CS_LOG_ERROR("csmodel file has corruption(incorrect File Check Value): " + in_filePath);
                     return false;
                 }
                 
                 u32 versionNum = ReadValue<u32>(in_meshStream);
                 if (versionNum < k_minVersion || versionNum > k_maxVersion)
                 {
-                    CS_LOG_ERROR("Unsupported MoModel version: " + in_filePath);
+                    CS_LOG_ERROR("Unsupported csmodel version: " + in_filePath);
                     return false;
                 }
                 
@@ -334,20 +352,10 @@ namespace ChilliSource
                     switch (Feature(featureType))
                     {
                         case Feature::k_hasAnimation:
-                            //A breaking change was made to animated models in version 11.
-                            CS_ASSERT(versionNum >= 11, "Model contains old format animation data, please update to momodel version 11: " + in_filePath);
                             out_meshDesc.mFeatures.mbHasAnimationData = true;
                             break;
-                        case Feature::k_hasMaterial:
-                            out_meshDesc.mFeatures.mbHasMaterial = true;
-                            CS_LOG_WARNING("Material is deprecated in CSModel format: " + in_filePath);
-                            break;
-                        case Feature::k_hasTexture:
-                            out_meshDesc.mFeatures.mbHasTexture = true;
-                            CS_LOG_WARNING("Texture is deprecated in CSModel format: " + in_filePath);
-                            break;
                         default:
-                            CS_LOG_ERROR("Unknown feature type in MoModel (" + in_filePath + ") feature declaration!");
+                            CS_LOG_ERROR("Unknown feature type in csmodel (" + in_filePath + ") feature declaration!");
                             break;
                     }
                 }
@@ -383,7 +391,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
 			/// Read the mesh data from file and creates a mesh descriptor.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path
@@ -398,7 +406,7 @@ namespace ChilliSource
                 //Check file for corruption
                 if(nullptr == meshStream || true == meshStream->IsBad())
                 {
-                    CS_LOG_ERROR("Cannot open MoModel file: " + in_filePath);
+                    CS_LOG_ERROR("Cannot open csmodel file: " + in_filePath);
                     return false;
                 }
                 

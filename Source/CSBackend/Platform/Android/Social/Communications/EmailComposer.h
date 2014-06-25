@@ -77,7 +77,7 @@ namespace CSBackend
 			/// subject and contents, and adds a list of attachments
 			/// to the email.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param A list of recipients (UTF-8).
 			/// @param The subject (UTF-8).
@@ -100,19 +100,19 @@ namespace CSBackend
             /// Private constructor to force the use of the
             /// factory method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
 			EmailComposer();
             //------------------------------------------------------
             /// Called when the the owning state is initialised.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------------
             void OnInit() override;
             //-------------------------------------------------------
             /// Called when the email activity returns with a result.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @param The result.
             //-------------------------------------------------------
@@ -120,7 +120,7 @@ namespace CSBackend
             //------------------------------------------------------
             /// Called when the the owning state is destroyed.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------------
             void OnDestroy() override;
 

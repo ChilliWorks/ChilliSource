@@ -1,9 +1,29 @@
 //
 //  FileSystem.cpp
 //  Chilli Source
+//  Created by Ian Copland on 25/03/2011.
 //
-//  Created by I Copland on 25/03/2011.
-//  Copyright 2011 Tag Games Ltd. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifdef CS_TARGETPLATFORM_IOS
@@ -32,7 +52,7 @@ namespace CSBackend
             //--------------------------------------------------------------
             /// Returns a string containing the error in the given NSError.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The error string.
             //--------------------------------------------------------------
@@ -118,7 +138,7 @@ namespace CSBackend
                 return Filtered;
             }
             //--------------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param Unfiltered names
             /// @return Filtered names
@@ -510,13 +530,9 @@ namespace CSBackend
         {
             if(in_storageLocation == CSCore::StorageLocation::k_package)
             {
-                const std::string* resourceDirectories = GetResourceDirectories();
-                for(u32 i = 0; i < 3; ++i)
+                if(DoesFileExistInPackage(in_filePath))
                 {
-                    if(DoesFileExistInPackage(resourceDirectories[i] + in_filePath))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
                 
                 return false;
@@ -557,13 +573,9 @@ namespace CSBackend
         {
             if(in_storageLocation == CSCore::StorageLocation::k_package)
             {
-                const std::string* resourceDirectories = GetResourceDirectories();
-                for (u32 i = 0; i < 3; ++i)
+                if(DoesDirectoryExistInPackage(in_directoryPath))
                 {
-                    if(CSBackend::iOS::DoesDirectoryExist(m_bundlePath + resourceDirectories[i] + in_directoryPath))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
                 
                 return false;
@@ -595,7 +607,10 @@ namespace CSBackend
             switch (in_storageLocation)
             {
                 case CSCore::StorageLocation::k_package:
-                    strStorageLocationPath = m_bundlePath;
+                    strStorageLocationPath = m_bundlePath + "AppResources/";
+                    break;
+                case CSCore::StorageLocation::k_chilliSource:
+                    strStorageLocationPath = m_bundlePath + "CSResources/";
                     break;
                 case CSCore::StorageLocation::k_saveData:
                     strStorageLocationPath = m_documentsPath + k_saveDataPath;
@@ -621,22 +636,6 @@ namespace CSBackend
             {
                 switch (in_storageLocation)
                 {
-                    case CSCore::StorageLocation::k_package:
-                    {
-                        std::string absoluteFilePath;
-                        for(u32 i = 0; i < 3; ++i)
-                        {
-                            const std::string* resourceDirectories = GetResourceDirectories();
-                            std::string filePath = CSCore::StringUtils::StandardisePath(resourceDirectories[i] + in_filePath);
-                            if(DoesFileExistInPackage(filePath) == true)
-                            {
-                                absoluteFilePath = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + filePath;
-                                break;
-                            }
-                        }
-                        
-                        return absoluteFilePath;
-                    }
                     case CSCore::StorageLocation::k_DLC:
                     {
                         std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
@@ -664,22 +663,6 @@ namespace CSBackend
             {
                 switch (in_storageLocation)
                 {
-                    case CSCore::StorageLocation::k_package:
-                    {
-                        std::string absoluteDirectoryPath;
-                        for(u32 i = 0; i < 3; ++i)
-                        {
-                            const std::string* resourceDirectories = GetResourceDirectories();
-                            std::string directoryPath = CSCore::StringUtils::StandardisePath(resourceDirectories[i] + in_directoryPath);
-                            if(DoesDirectoryExistInPackage(directoryPath) == true)
-                            {
-                                absoluteDirectoryPath = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + directoryPath;
-                                break;
-                            }
-                        }
-                        
-                        return absoluteDirectoryPath;
-                    }
                     case CSCore::StorageLocation::k_DLC:
                     {
                         std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
@@ -706,7 +689,7 @@ namespace CSBackend
             @autoreleasepool
             {
                 NSMutableArray* contents = [NSMutableArray array];
-                NSString* directory = [NSStringUtils newNSStringWithUTF8String:m_bundlePath];
+                NSString* directory = [NSStringUtils newNSStringWithUTF8String:m_bundlePath + "AppResources/"];
                 
                 NSError* error = nil;
                 [contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:directory error:&error]];
@@ -811,20 +794,12 @@ namespace CSBackend
             {
                 case CSCore::StorageLocation::k_package:
                 {
-                    const std::string* resourceDirectories = GetResourceDirectories();
-                    for(u32 i = 0; i < 3; ++i)
-                    {
-                        output.push_back(GetAbsolutePathToStorageLocation(in_storageLocation) + resourceDirectories[i] + in_directoryPath);
-                    }
+                    output.push_back(GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath);
                     break;
                 }
                 case CSCore::StorageLocation::k_DLC:
                 {
-                    const std::string* resourceDirectories = GetResourceDirectories();
-                    for(u32 i = 0; i < 3; ++i)
-                    {
-                        output.push_back(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + resourceDirectories[i] + GetPackageDLCPath() + in_directoryPath);
-                    }
+                    output.push_back(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + GetPackageDLCPath() + in_directoryPath);
                     output.push_back(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
                     break;
                 }

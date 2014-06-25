@@ -1,9 +1,29 @@
 //
 //  StretchableImage.cpp
-//  moFlo
+//  Chilli Source
+//  Created by Scott Downie on 28/04/2011
 //
-//  Created by Scott Downie on 28/04/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/GUI/Image/StretchableImage.h>
@@ -34,7 +54,7 @@ namespace ChilliSource
         /// Empty
         //---------------------------------------------------------
         StretchableImage::StretchableImage()
-		: HeightMaintain(false), WidthMaintain(false), CentreTouchConsumption(false)
+		: HeightMaintain(false), WidthMaintain(false)
         {
             
         }
@@ -44,10 +64,8 @@ namespace ChilliSource
         /// From param dictionary
         //---------------------------------------------------------
         StretchableImage::StretchableImage(const Core::ParamDictionary& insParams) 
-		: GUIView(insParams), HeightMaintain(false), WidthMaintain(false), CentreTouchConsumption(false)
+		: GUIView(insParams), HeightMaintain(false), WidthMaintain(false)
         {
-			CentreTouchConsumption = IsTouchConsumptionEnabled();
-			
             std::string strValue;
             
             //---Texture
@@ -99,11 +117,6 @@ namespace ChilliSource
 			{
 				Core::Vector2 vSize = Core::ParseVector2(strValue);
 				SetWidthMaintainingAspect(vSize.x, vSize.y);
-			}
-			//---Centre Touch Consumption
-			if(insParams.TryGetValue("CentreTouchConsumption", strValue))
-			{
-				CentreTouchConsumption = Core::ParseBool(strValue);
 			}
         }
         //---------------------------------------------------------
@@ -515,118 +528,6 @@ namespace ChilliSource
 			// Calculate the centre
 			outPatchSize.vSizeMiddleCentre.x = vPanelSize.x - (outPatchSize.vSizeLeftCentre.x + outPatchSize.vSizeRightCentre.x);
 			outPatchSize.vSizeMiddleCentre.y = vPanelSize.y - (outPatchSize.vSizeTopCentre.y + outPatchSize.vSizeBottomCentre.y);
-		}
-		
-		//--------------------------------------------------------
-		/// Enable Centre Touch Consumption
-		///
-		/// Enables the touch to go through the middle part of the image
-		///
-		/// @param boolean to disable or enable
-		//--------------------------------------------------------
-		void StretchableImage::EnableCentreTouchConsumption(bool inbEnabled)
-		{
-			CentreTouchConsumption = inbEnabled;
-		}
-		
-		//--------------------------------------------------------
-		/// Is Centre Touch Consumption Enabled
-		///
-		/// @return whether the touch though the middle is enabled or not
-		//--------------------------------------------------------
-		bool StretchableImage::IsCentreTouchConsumptionEnabled() const
-		{
-			return CentreTouchConsumption;
-		}
-        //--------------------------------------------------------
-		//--------------------------------------------------------
-		bool StretchableImage::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
-		{
-			bool bConsumed = GUIView::OnPointerDown(in_pointer, in_timestamp, in_inputType);
-			
-			if (!CentreTouchConsumption && bConsumed && IsTouchConsumptionEnabled(TouchType::k_began))
-			{
-				// If the patch contains the touch
-				if(Contains(in_pointer.m_location))
-				{
-					// Retrieve the patch sizes
-					PatchSize sPatchSize;
-					CalculatePatchSize(sPatchSize);
-					
-					// Get the AABB of the centre
-					Core::Rectangle sMiddleAABB(GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft) + sPatchSize.vSizeBottomLeft, sPatchSize.vSizeMiddleCentre);
-					
-					// If the touch is not located in the centre, we consume it
-					bool bContainsMiddle = sMiddleAABB.Contains(in_pointer.m_location);
-					
-					bConsumed = !bContainsMiddle;
-				}
-			}
-			
-			return bConsumed;
-		}
-		
-        //--------------------------------------------------------
-		//--------------------------------------------------------
-		bool StretchableImage::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
-		{
-			// Special treatment if the middle image has to let the touch through
-			if (!CentreTouchConsumption && IsTouchConsumptionEnabled(TouchType::k_moved))
-			{
-				if(UserInteraction)
-				{
-					if(mbIsBeingDragged)
-					{
-						if(!AlignedWithParent)
-						{
-							SetPosition(Core::UnifiedVector2(Core::Vector2::k_zero, in_pointer.m_location));
-						}
-						else
-						{
-							SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::k_zero, in_pointer.m_location));
-						}
-					}
-					
-					mSubviewsCopy = mSubviews;
-					
-					for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
-					{
-						if((*it)->OnPointerMoved(in_pointer, in_timestamp))
-						{
-							mSubviewsCopy.clear();
-							return true;
-						}
-					}
-					
-					//Check for input events
-					//If we contain this touch we can consume it
-					if(mInputEvents.OnPointerMoved(this, in_pointer) && IsTouchConsumptionEnabled(TouchType::k_moved))
-					{
-						// Retrieve the patch sizes
-						PatchSize sPatchSize;
-						CalculatePatchSize(sPatchSize);
-						
-						// Get the AABB of the centre
-						Core::Rectangle sMiddleAABB(GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft) + sPatchSize.vSizeBottomLeft, sPatchSize.vSizeMiddleCentre);
-						
-						// If the touch is not located in the centre, we consume it
-						bool bContainsMiddle = sMiddleAABB.Contains(in_pointer.m_location);
-						
-						if (bContainsMiddle)
-						{
-							mSubviewsCopy.clear();
-						}
-						
-						return !bContainsMiddle;
-					}
-				}
-				
-				//We have no user interaction enabled
-				mSubviewsCopy.clear();
-				return false;
-			}
-			
-			return GUIView::OnPointerMoved(in_pointer, in_timestamp);
 		}
     }
 }

@@ -4,7 +4,6 @@ public class PremultiplicationOptions
 {
 	public String strInputFilename;
 	public String strOutputFilename;
-	public boolean bShouldCache;
 	
 	//---------------------------------------------
 	/// Constructor
@@ -13,6 +12,5 @@ public class PremultiplicationOptions
 	{
 		strInputFilename = new String();
 		strOutputFilename = new String();
-		bShouldCache = false;
 	}
 }

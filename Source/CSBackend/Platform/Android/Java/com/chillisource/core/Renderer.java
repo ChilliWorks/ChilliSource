@@ -19,7 +19,7 @@ import android.opengl.GLSurfaceView;
  *  This actually pumps the main application update loop
  *  as the ChilliSource render thread is the main thread.
  *  
- *  @author I Copland
+ *  @author Ian Copland
  */
 public class Renderer implements GLSurfaceView.Renderer 
 {
@@ -39,7 +39,7 @@ public class Renderer implements GLSurfaceView.Renderer
 	 * Triggered every frame by the surface in order to render the GL context.
 	 * This actually runs the application update and render loop
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param GL Context
 	 */
@@ -65,7 +65,7 @@ public class Renderer implements GLSurfaceView.Renderer
 	/**
 	 * Triggered when the surface changes (i.e. on resize, etc)
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param GL Context
 	 * @param Surface width
@@ -82,7 +82,7 @@ public class Renderer implements GLSurfaceView.Renderer
 	/**
 	 * Triggered when the surface is created and ready for rendering
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param GL Context
 	 * @param Configuration

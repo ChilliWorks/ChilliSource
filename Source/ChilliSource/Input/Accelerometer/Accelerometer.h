@@ -54,7 +54,7 @@ namespace ChilliSource
 			/// A delegate for receiving acceleratation updates
             /// from the accerometer.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The new acceleration. This wont neccessarily
             /// have changed since the last update.
@@ -64,11 +64,11 @@ namespace ChilliSource
 			/// Creates a new platform specific instance of the
             /// system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
 			static AccelerometerUPtr Create();
 			//----------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
 			///
 			/// @return whether or not the accelerometer is
             /// currently updating.
@@ -77,18 +77,18 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// Start listening for accelerometer changes.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
 			virtual void StartUpdating() = 0;
 			//----------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @return The acceleration applied to the device
 			/// measured in "G"s.
 			//----------------------------------------------------
 			virtual Core::Vector3 GetAcceleration() const = 0;
 			//----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return An event that is invoked every time the
 			/// acceleration is updated. The acceleration will not
@@ -98,13 +98,13 @@ namespace ChilliSource
 			//----------------------------------------------------
 			/// Stop listening for accelerometer changes.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
 			virtual void StopUpdating() = 0;
 			//----------------------------------------------------
 			/// Destructor
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
 			virtual ~Accelerometer() {}
 		};

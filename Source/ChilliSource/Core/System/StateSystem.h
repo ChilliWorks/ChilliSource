@@ -1,9 +1,29 @@
 //
 //  StateSystem.h
 //  Chilli Source
+//  Created by Ian Copland on 07/03/2014.
 //
-//  Created by I Copland on 07/03/2014.
-//  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifndef _CHILLISOURCE_CORE_SYSTEM_STATESYSTEM_H_
@@ -20,6 +40,8 @@ namespace ChilliSource
         /// A state level system. A state system is created
         /// at the same time as the state that owns it and lives
         /// for the same length of time.
+        ///
+        /// @author Ian Copland
         //-------------------------------------------------------
         class StateSystem : public QueryableInterface
         {
@@ -28,7 +50,7 @@ namespace ChilliSource
             //------------------------------------------------
             /// Destructor
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual ~StateSystem() {};
         protected:
@@ -37,7 +59,7 @@ namespace ChilliSource
             //------------------------------------------------
             /// Default constructor.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             StateSystem() = default;
             //------------------------------------------------
@@ -46,7 +68,7 @@ namespace ChilliSource
             /// initialisation occurs in the order they were
             /// created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnInit() {};
             //------------------------------------------------
@@ -56,7 +78,7 @@ namespace ChilliSource
             /// On Start(). System resume is called in the
             /// order that the systems were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnResume() {};
             //------------------------------------------------
@@ -66,7 +88,7 @@ namespace ChilliSource
             /// On Resume. System foregrounded is called in the
             /// order the systems were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnForeground() {};
             //------------------------------------------------
@@ -75,7 +97,7 @@ namespace ChilliSource
             /// Systems update is called in the order the
             /// systems where created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The delta time.
             //------------------------------------------------
@@ -87,7 +109,7 @@ namespace ChilliSource
             /// update is called in the order the systems where
             /// created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnFixedUpdate(f32 in_deltaTime) {};
             //------------------------------------------------
@@ -98,7 +120,7 @@ namespace ChilliSource
             /// backgrounded is called in the reverse order
             /// to which they were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnBackground() {};
             //------------------------------------------------
@@ -108,7 +130,7 @@ namespace ChilliSource
             /// suspend is called in the reverse order to
             /// which they were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnSuspend() {};
             //------------------------------------------------
@@ -118,7 +140,7 @@ namespace ChilliSource
             /// occurs in the reverse order to which they
             /// were created
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnDestroy() {};
             //------------------------------------------------
@@ -127,9 +149,25 @@ namespace ChilliSource
             /// should be used to clean up any non-essensial
             /// memory.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //------------------------------------------------
             virtual void OnMemoryWarning() {};
+            //------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return returns the state that owns this state
+            /// system.
+            //------------------------------------------------
+            State* GetState() const;
+        private:
+            //------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param the state that owns this state system.
+            //------------------------------------------------
+            void SetState(State* in_state);
+            
+            State* m_state;
         };
     }
 }

@@ -158,6 +158,8 @@ namespace ChilliSource
                 //----------------------------------------------------------------------------------------
                 /// Size policy function that uses the preferred size and aspect
                 ///
+                /// NOTE: This doesn't do much but prevents multiple code paths for size policy
+                ///
                 /// @author S Downie
                 ///
                 /// @param Absolute size of widget based on current unified size settings
@@ -168,6 +170,22 @@ namespace ChilliSource
                 Core::Vector2 UsePreferred(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
                 {
                     return in_preferredSize;
+                }
+                //----------------------------------------------------------------------------------------
+                /// Size policy function that uses the widget size and aspect
+                ///
+                /// NOTE: This doesn't do much but prevents multiple code paths for size policy
+                ///
+                /// @author S Downie
+                ///
+                /// @param Absolute size of widget based on current unified size settings
+                /// @param Target aspect ration size in absolute coordinates
+                ///
+                /// @return New absolute size with function applied
+                //----------------------------------------------------------------------------------------
+                Core::Vector2 UseWidget(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
+                {
+                    return in_absSize;
                 }
                 //----------------------------------------------------------------------------------------
                 /// Aspect ratio maintaining function that maintains the given target aspect ratio
@@ -219,6 +237,16 @@ namespace ChilliSource
                         return KeepHeightAdaptWidth(in_absSize, in_preferredSize);
                     }
                 }
+                
+                const Widget::SizePolicyDelegate k_sizePolicyFuncs[(u32)Widget::SizePolicy::k_totalNum] =
+                {
+                    SizePolicyFuncs::UseWidget,
+                    SizePolicyFuncs::UsePreferred,
+                    SizePolicyFuncs::KeepWidthAdaptHeight,
+                    SizePolicyFuncs::KeepHeightAdaptWidth,
+                    SizePolicyFuncs::FillOriginal,
+                    SizePolicyFuncs::FitOriginal
+                };
             }
         }
         //----------------------------------------------------------------------------------------
@@ -246,11 +274,7 @@ namespace ChilliSource
                 m_propertyBlob = new u8[currentOffset];
             }
             
-            m_sizePolicyFuncs[(u32)SizePolicy::k_usePreferredSize] = SizePolicyFuncs::UsePreferred;
-            m_sizePolicyFuncs[(u32)SizePolicy::k_useWidthMaintainingAspect] = SizePolicyFuncs::KeepWidthAdaptHeight;
-            m_sizePolicyFuncs[(u32)SizePolicy::k_useHeightMaintainingAspect] = SizePolicyFuncs::KeepHeightAdaptWidth;
-            m_sizePolicyFuncs[(u32)SizePolicy::k_fillMaintainingAspect] = SizePolicyFuncs::FillOriginal;
-            m_sizePolicyFuncs[(u32)SizePolicy::k_fitMaintainingAspect] = SizePolicyFuncs::FitOriginal;
+
             
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
         }
@@ -350,13 +374,7 @@ namespace ChilliSource
             
             InvalidateTransformCache();
             
-            if(in_policy == SizePolicy::k_none)
-            {
-                m_sizePolicyDelegate = nullptr;
-                return;
-            }
-            
-            m_sizePolicyDelegate = m_sizePolicyFuncs[(u32)in_policy];
+            m_sizePolicyDelegate = SizePolicyFuncs::k_sizePolicyFuncs[(u32)in_policy];
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -857,12 +875,7 @@ namespace ChilliSource
                 finalSize = m_localSize.vAbsolute;
             }
             
-            if(m_sizePolicyDelegate != nullptr)
-            {
-                finalSize = m_sizePolicyDelegate(finalSize, GetPreferredSize());
-            }
-            
-            finalSize *= m_localScale;
+            finalSize = m_sizePolicyDelegate(finalSize, GetPreferredSize()) * m_localScale;
             
             std::unique_lock<std::mutex> lock(m_sizeMutex);
             m_cachedFinalSize = finalSize;

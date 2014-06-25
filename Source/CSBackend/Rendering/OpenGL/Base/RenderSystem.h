@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
-#define _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
+#ifndef _CHILLISOURCE_OPENGL_ES2_RENDER_SYSTEM_H_
+#define _CHILLISOURCE_OPENGL_ES2_RENDER_SYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
@@ -90,7 +90,7 @@ namespace CSBackend
 			/// Called when the app suspends. Android stores the assets that
             /// require recreation when the context is reacreate on resume.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------------
 			void Suspend() override;
             //----------------------------------------------------------
@@ -364,9 +364,9 @@ namespace CSBackend
 			//------------------------------------------------------------
 			/// Get Primitive Type
 			///
-			/// Convert fro moFlo primitive type to GL primitive type
+			/// Convert from CS primitive type to GL primitive type
 			///
-			/// @param moFlo primitive type
+			/// @param CS primitive type
 			//------------------------------------------------------------
 			s32 GetPrimitiveType(CSRendering::PrimitiveType inType);
             //----------------------------------------------------------
@@ -420,7 +420,7 @@ namespace CSBackend
             /// Called when the resolution of the screen changes. This
             /// then updates the size of the frame buffer.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The new screen resolution.
             //----------------------------------------------------------

@@ -1,15 +1,37 @@
 //
 //  OAuth.cpp
 //  Chilli Source
+//  Created by Ian Copland on 08/04/2014.
 //
-//  Created by I Copland on 08/04/2014.
-//  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/Core/Cryptographic/OAuth.h>
 
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
-#include <ChilliSource/Core/Cryptographic/HMAC_SHA1.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+
+#include <SHA1/HMAC_SHA1.h>
 
 #include <algorithm>
 #include <ctime>
@@ -205,7 +227,7 @@ namespace ChilliSource
                         return "";
                     }
                     
-                    sigBase += BaseEncoding::URLEncode(in_rawUrl) + "&" + BaseEncoding::URLEncode(rawParams);
+                    sigBase += StringUtils::URLEncode(in_rawUrl) + "&" + StringUtils::URLEncode(rawParams);
                     
                     //Signing key is composed of consumer_secret&token_secret
                     std::string secretSigningKey = in_consumerSecret + "&" + in_oauthTokenSecret;
@@ -215,14 +237,14 @@ namespace ChilliSource
                     u8 digest[k_bufferSize];
                     memset(digest, 0, k_bufferSize);
                     
-                    HMAC_SHA1 objHMACSHA1;
-                    objHMACSHA1.Generate((u8*)sigBase.c_str(), sigBase.length(), (u8*)secretSigningKey.c_str(), secretSigningKey.length(), (u8*)digest);
+                    CHMAC_SHA1 objHMACSHA1;
+                    objHMACSHA1.HMAC_SHA1((u8*)sigBase.c_str(), sigBase.length(), (u8*)secretSigningKey.c_str(), secretSigningKey.length(), (u8*)digest);
                     
                     //Do a base64 encode of signature - SHA 1 digest is 160 bits
                     std::string base64String = BaseEncoding::Base64Encode((s8*)digest, 20);
                     
                     //Do an url encode
-                    return BaseEncoding::URLEncode(base64String);
+                    return StringUtils::URLEncode(base64String);
                 }
             }
             //-----------------------------------------------------------
@@ -262,7 +284,7 @@ namespace ChilliSource
                             dataVal = dataKeyVal.substr(position2 + 1);
                             
                             //Put this key=value pair in map
-                            urlParams[dataKey] = BaseEncoding::URLEncode(dataVal);
+                            urlParams[dataKey] = StringUtils::URLEncode(dataVal);
                         }
                         dataPart = dataPart.substr(sep + 1);
                     }
@@ -278,7 +300,7 @@ namespace ChilliSource
                         dataVal = dataKeyVal.substr(position2 + 1);
                         
                         //Put this key=value pair in map
-                        urlParams[dataKey] = BaseEncoding::URLEncode(dataVal);
+                        urlParams[dataKey] = StringUtils::URLEncode(dataVal);
                     }
                 }
                 

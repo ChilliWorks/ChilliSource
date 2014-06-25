@@ -54,7 +54,7 @@
     NSMutableArray* subdelegates;
 }
 //--------------------------------------------------------------------
-/// @author I Copland
+/// @author Ian Copland
 ///
 /// @return The view controller instance.
 //--------------------------------------------------------------------
@@ -75,6 +75,14 @@
 /// @param UIApplicationDelegate
 //--------------------------------------------------------------------
 - (void) addAppDelegateListener:(id<UIApplicationDelegate>)in_delegate;
+//--------------------------------------------------------------------
+/// Remove another UIApplication as a listener of AppDelegate events.
+///
+/// @author S Downie
+///
+/// @param UIApplicationDelegate
+//--------------------------------------------------------------------
+- (void) removeAppDelegateListener:(id<UIApplicationDelegate>)in_delegate;
 //--------------------------------------------------------------------
 /// Set the target frame rate in frames per second
 ///

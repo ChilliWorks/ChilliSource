@@ -39,7 +39,7 @@ namespace ChilliSource
         /// An enum describing the different possible surface
         /// formats.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //---------------------------------------------------------
         enum class SurfaceFormat
         {

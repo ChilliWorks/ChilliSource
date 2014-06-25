@@ -25,13 +25,13 @@ public class DialogueBoxNativeInterface extends INativeInterface
 	/**
 	 * Constructor
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
 	public DialogueBoxNativeInterface()
 	{
 	}
 	/**
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @return Whether or not this implements the given interface.
 	 */
@@ -42,7 +42,7 @@ public class DialogueBoxNativeInterface extends INativeInterface
 	/**
 	 * Display a toast notification with the given text
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The text to display.
 	 */
@@ -59,7 +59,7 @@ public class DialogueBoxNativeInterface extends INativeInterface
     /**
      * Display the systems confirmation dialog.
      * 
-     * @author I Copland
+     * @author Ian Copland
      * 
      * @param ID that is returned in pressed delegate 
      * @param Title text
@@ -99,7 +99,7 @@ public class DialogueBoxNativeInterface extends INativeInterface
     /**
      * Display the systems dialog 
      * 
-     * @author I Copland
+     * @author Ian Copland
      * 
      * @param ID that is returned in pressed delegate 
      * @param Title text
@@ -132,7 +132,7 @@ public class DialogueBoxNativeInterface extends INativeInterface
 	 * Calls back down to native on a dialog confirm button
 	 * press.
 	 * 
-	 * @author I Copland 
+	 * @author Ian Copland 
 	 * 
 	 * @param The ID of the dialogue box.
 	 */
@@ -141,7 +141,7 @@ public class DialogueBoxNativeInterface extends INativeInterface
 	 * Calls back down to native on a dialogue cancel button
 	 * press.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The ID of the dialogue box.
 	 */

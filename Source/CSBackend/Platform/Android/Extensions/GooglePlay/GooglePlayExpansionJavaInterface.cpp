@@ -2,11 +2,13 @@
 //  GooglePlayExpansionSystem.cpp
 //  Chilli Source
 //
-//  Created by I Copland on 09/04/2014.
+//  Created by Ian Copland on 09/04/2014.
 //  Copyright (c) 2014 Tag Games. All rights reserved.
 //
 
 #ifdef CS_TARGETPLATFORM_ANDROID
+
+#ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
 
 #include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayExpansionJavaInterface.h>
 
@@ -172,5 +174,7 @@ namespace CSBackend
 		}
 	}
 }
+
+#endif
 
 #endif

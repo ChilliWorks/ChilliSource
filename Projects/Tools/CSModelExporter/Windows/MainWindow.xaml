@@ -1,0 +1,116 @@
+﻿<Window x:Class="CSModelExporter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Chilli Source Model Exporter" Height="768" Width="1024"
+        Name="window"
+        >
+
+    <!-- Master Grid -->
+    <Grid Name="MasterGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Conversion Type Bar -->
+            <RowDefinition Height="Auto"/> <!-- Options Bar -->
+            <RowDefinition Height="*"/><!-- "Drag" Window -->
+            <RowDefinition Height="Auto"/> <!-- Progress Indicator -->
+            <RowDefinition Height="Auto"/> <!-- Output Window -->
+        </Grid.RowDefinitions>
+
+        <!-- Conversion Type Bar -->
+        <Grid Name="ConversionTypeBar" Grid.Row="0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Rectangle Grid.Row ="0" Grid.ColumnSpan="4" Fill="#FF6600"/>
+            <Label Grid.Row ="0" TextBlock.Foreground="White">Conversion Type</Label>
+            <CheckBox Name="CTBCSModel" Grid.Row ="1" Grid.Column ="0" Margin="3 3 0 3" Checked="CTBCSModel_Checked">CSModel</CheckBox>
+            <CheckBox Name="CTBCSAnim" Grid.Row ="1" Grid.Column ="1" Margin="3 3 0 3">CSAnimation</CheckBox>
+        </Grid>
+
+        <!-- CSModel Options Bar -->
+        <Grid Name="CSModelOptionsBar" Grid.Row="1" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Rectangle Grid.Row ="0" Grid.ColumnSpan="5" Fill="#FF6600"/>
+            <Label Grid.Row ="0" TextBlock.Foreground="White">Model Options</Label>
+            <CheckBox Name="CSModelHasUVs" Grid.Row ="1" Grid.Column ="0" Margin="3 3 0 3" IsChecked="False">Has UVs</CheckBox>
+            <CheckBox Name="CSModelHasNormals" Grid.Row ="1" Grid.Column ="1" Margin="3 3 0 3" IsChecked="False">Has normals</CheckBox>
+            <CheckBox Name="CSModelHasVertexColours" Grid.Row ="1" Grid.Column ="2" Margin="3 3 0 3" IsChecked="False">Has vertex colours</CheckBox>
+            <CheckBox Name="CSModelHasAnimation" Grid.Row ="1" Grid.Column ="3" Margin="3 3 0 3" IsChecked="False">Is animated</CheckBox>
+            <CheckBox Name="CSModelSwapYAndZ" Grid.Row ="2" Grid.Column ="0" Margin="3 3 0 3" IsChecked="True">Z-up to Y-up</CheckBox>
+            <CheckBox Name="CSModelFlipVerticalTexCoords" Grid.Row ="2" Grid.Column ="1" Margin="3 3 0 3" IsChecked="True">Flip vertical texture coordinates</CheckBox>
+            <CheckBox Name="CSModelCombineMeshes" Grid.Row ="2" Grid.Column ="2" Margin="3 3 0 3" IsChecked="False">Merge meshes with shared materials</CheckBox>
+        </Grid>
+
+        <!-- CSAnim Options Bar -->
+        <Grid Name="CSAnimOptionsBar" Grid.Row="1" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Rectangle Grid.Row ="0" Grid.ColumnSpan="3" Fill="#FF6600"/>
+            <Label Grid.Row ="0" TextBlock.Foreground="White">Animation Options</Label>
+            <CheckBox Name="CSAnimSwapYAndZ" Grid.Row ="1" Grid.Column ="0" Margin="3 3 0 3" IsChecked="True">Z-up to Y-up</CheckBox>
+        </Grid>
+
+        <!-- Empty Drag Window -->
+        <Grid Name="EmptyDragWindow" Grid.Row="2" Margin="3 3 3 3">
+            <Rectangle Fill="Transparent" Stroke="#FF4400" StrokeThickness="1"/>
+        </Grid>
+        
+        <!-- Drag DAE Window -->
+        <Grid Name="DragDAEWindow" Grid.Row="2" AllowDrop="True" Drop="OnFilesDropped" Margin="3 3 3 3" Visibility="Collapsed">
+            <Rectangle Fill="Transparent" Stroke="#FF4400" StrokeThickness="1"/>
+            <Label TextBlock.FontSize="28" TextBlock.Foreground="#FF6600" HorizontalAlignment="Center" VerticalAlignment="Center">Drag DAE files here</Label>
+        </Grid>
+
+        <!-- Progress Indicator -->
+        <Grid Name="ProgressIndicator" Grid.Row="3" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Rectangle Grid.ColumnSpan ="1" Grid.RowSpan="2" Stroke="#FF4400" StrokeThickness="2"/>
+            <Label Background="#FF6600" TextBlock.Foreground="White" Grid.Row="0">Progress</Label>
+            <ProgressBar Grid.Row="1" Height="20"  Name="ProgressBar" VerticalAlignment="Center" />
+        </Grid>
+
+        <!-- Output Window -->
+        <Grid Name="Output" Grid.Row="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Rectangle Grid.ColumnSpan ="1" Grid.RowSpan="2" Stroke="#FF4400" StrokeThickness="2"/>
+            <Label Background="#FF6600" TextBlock.Foreground="White">Output</Label>
+            <ScrollViewer Name="OutputScrollWindow" Grid.Row ="1" Height="180" Margin="3 3 3 3">
+                <TextBlock Name="OutputTextWindow" Height="Auto" FontFamily="Courier New"/>
+            </ScrollViewer>
+        </Grid>
+        
+    </Grid>
+
+</Window>

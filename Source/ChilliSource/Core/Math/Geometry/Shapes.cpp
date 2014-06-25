@@ -1,15 +1,30 @@
-/*
- * File: Shapes.cpp
- * Date: 21/10/2010 2010 
- * Description: 
- */
-
-/*
- * Author: Scott Downie
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
-
+//
+//  Shapes.cpp
+//  Chilli Source
+//  Created by Scott Downie on 21/10/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
@@ -23,103 +38,103 @@ namespace ChilliSource
 	namespace Core 
 	{
 		//================================================
-		/// UV-Rect
-		///
-		/// Container for a rectangle with it's origin 
-		/// at top left and using shorts instead of floats
 		//================================================
-		UVRect::UVRect() : mwOriginX(0), mwOriginY(0), mwWidth(0), mwHeight(0)
+		Rectangle::Rectangle(const Vector2 &invOrigin, const Vector2 &invSize)
+        : vOrigin(invOrigin), vSize(invSize)
 		{
 		}
-		UVRect::UVRect(s16 wOx, s16 wOy, s16 wWidth, s16 wHeight) : mwOriginX(wOx), mwOriginY(wOy), mwWidth(wWidth), mwHeight(wHeight)
-		{
-		}
-		//================================================
-		/// Rect
-		///
-		/// Container for a rectangle with it's origin 
-		/// at top left
-		//================================================
-		Rectangle::Rectangle(const Vector2 &invOrigin, const Vector2 &invSize) : vOrigin(invOrigin), vSize(invSize)
-		{
-		}
+        //-----------------------------------------------
+        //-----------------------------------------------
+        Rectangle::Rectangle(f32 in_left, f32 in_top, f32 in_right, f32 in_bottom)
+        {
+            CS_ASSERT(in_right >= in_left && in_top >= in_bottom, "Cannot create inverted rect");
+            
+            vSize.x = in_right - in_left;
+            vSize.y = in_top - in_bottom;
+            
+            vOrigin.x = in_left + (vSize.x * 0.5f);
+            vOrigin.y = in_bottom + (vSize.y * 0.5f);
+        }
 		//-----------------------------------------------
 		/// Left
 		///
 		/// @return Left side of rectangle
 		//-----------------------------------------------
-		f32 Rectangle::Left() const{
-			return vOrigin.x;
+		f32 Rectangle::Left() const
+        {
+			return vOrigin.x - (vSize.x * 0.5f);
 		}
 		//-----------------------------------------------
 		/// Right
 		///
 		/// @return Right side of rectangle
 		//-----------------------------------------------
-		f32 Rectangle::Right() const{
-			return vOrigin.x + vSize.x;
+		f32 Rectangle::Right() const
+        {
+			return vOrigin.x + (vSize.x * 0.5f);
 		}
 		//-----------------------------------------------
 		/// Top
 		///
 		/// @return Top side of rectangle
 		//-----------------------------------------------
-		f32 Rectangle::Top() const{
-			return vOrigin.y;
+		f32 Rectangle::Top() const
+        {
+			return vOrigin.y + (vSize.y * 0.5f);
 		}
 		//-----------------------------------------------
 		/// Bottom
 		///
 		/// @return Bottom side of rectangle
 		//-----------------------------------------------
-		f32 Rectangle::Bottom() const{
-			return vOrigin.y + vSize.y;
+		f32 Rectangle::Bottom() const
+        {
+			return vOrigin.y - (vSize.y * 0.5f);
 		}
-		
 		//-----------------------------------------------
 		/// Top Left
 		///
 		/// @return Top left co-ordinate
 		//-----------------------------------------------
-		const Core::Vector2& Rectangle::TopLeft() const
+        Vector2 Rectangle::TopLeft() const
 		{
-			return vOrigin;
+			return Vector2(Left(), Top());
 		}
 		//-----------------------------------------------
 		/// Top Right
 		///
 		/// @return Top right co-ordinate
 		//-----------------------------------------------
-		const Core::Vector2 Rectangle::TopRight() const
+        Vector2 Rectangle::TopRight() const
 		{
-			return Vector2(vOrigin.x + vSize.x, vOrigin.y); 
+			return Vector2(Right(), Top());
 		}
 		//-----------------------------------------------
 		/// Bottom Left
 		///
 		/// @return Bottom left co-ordinate
 		//-----------------------------------------------
-		const Core::Vector2 Rectangle::BottomLeft() const
+        Vector2 Rectangle::BottomLeft() const
 		{
-			return Vector2(vOrigin.x, vOrigin.y + vSize.y);
+            return Vector2(Left(), Bottom());
 		}
 		//-----------------------------------------------
 		/// Bottom Right
 		///
 		/// @return Bottom right co-ordinate
 		//-----------------------------------------------
-		const Core::Vector2 Rectangle::BottomRight() const
+        Vector2 Rectangle::BottomRight() const
 		{
-			return Vector2(vOrigin.x + vSize.x, vOrigin.y + vSize.y);
+            return Vector2(Right(), Bottom());
 		}
 		//-----------------------------------------------
 		/// Centre
 		///
 		/// @return Centre point
 		//-----------------------------------------------
-		const Core::Vector2 Rectangle::Centre() const
+		Vector2 Rectangle::Centre() const
 		{
-			return vOrigin + (vSize * 0.5f);
+			return vOrigin;
 		}
 		//-----------------------------------------------
 		/// Contains (Point)
@@ -141,78 +156,6 @@ namespace ChilliSource
 		{
 			return ShapeIntersection::Intersects(*this, inRect);
 		}
-		//-----------------------------------------------
-		/// Normalised
-		///
-		/// @return A copy of this rect which will have no negative components in its size
-		//-----------------------------------------------
-		Rectangle Rectangle::Normalised() const 
-        {
-			if (vSize.x < 0.0f || vSize.y < 0.0f)
-            {
-				Vector2 vFixedOrigin = vOrigin;
-				Vector2 vFixedSize = vSize;
-				
-				if (vSize.x < 0.0f )
-                {
-					vFixedOrigin.x += vSize.x;
-					vFixedSize.x *= -1.0f;
-				}
-				
-				if (vSize.y < 0.0f) 
-                {
-					vFixedOrigin.y += vSize.y;
-					vFixedSize.y *= -1.0f;
-				}
-				return Rectangle(vFixedOrigin, vFixedSize);
-			} 
-            else 
-            {
-				return *this;
-			}
-		}
-		//-----------------------------------------------
-		/// Union
-		///
-        /// Determines the bounding box for this merged with inRect
-        /// @param Rectangle to union with this
-        /// @return Unions two rectangles together find the composite size.
-		//-----------------------------------------------
-		Rectangle Rectangle::Union(const Rectangle& inRect)
-        {
-            Rectangle cUnion;
-            
-            // Determine rectangle extremities
-            Vector2 vTopLeft1 = TopLeft();
-            Vector2 vTopLeft2 = inRect.TopLeft();
-            Vector2 vBottomRight1 = BottomRight();
-            Vector2 vBottomRight2 = inRect.BottomRight();
-            
-            // Adjust origin
-            if (vTopLeft2.x < vTopLeft1.x)
-                cUnion.vOrigin.x = vTopLeft2.x;
-            else
-                cUnion.vOrigin.x = vOrigin.x;
-            
-            if (vTopLeft2.y < vTopLeft1.y)
-                cUnion.vOrigin.y = vTopLeft2.y;
-            else
-                cUnion.vOrigin.y = vOrigin.y;
-            
-            // Adjust size
-            if (vBottomRight2.x > vBottomRight1.x)
-                cUnion.vSize.x = vBottomRight2.x - vOrigin.x;
-            else
-                cUnion.vSize.x = vSize.x;
-            
-            if (vBottomRight2.y > vBottomRight1.y)
-                cUnion.vSize.y = vBottomRight2.y - vOrigin.y;
-            else
-                cUnion.vSize.y = vSize.y;
-            
-            return cUnion;
-        }
-        
 		//================================================
 		/// Circle
 		///
@@ -287,7 +230,7 @@ namespace ChilliSource
 		/// Container for a axis-aligned bounding box 
 		/// with it's origin at centre
 		//================================================
-		AABB::AABB(const Core::Vector3 &invOrigin, const Core::Vector3 &invSize) : mvOrigin(invOrigin), mvSize(invSize), mvHalfSize(invSize*0.5f)
+		AABB::AABB(const Vector3 &invOrigin, const Vector3 &invSize) : mvOrigin(invOrigin), mvSize(invSize), mvHalfSize(invSize*0.5f)
 		{
 			CalculateMinandMax();
 		}
@@ -311,7 +254,7 @@ namespace ChilliSource
 		///
 		/// @param Centre point of AABB
 		//-----------------------------------------------
-		void AABB::SetOrigin(const Core::Vector3 &invOrigin)
+		void AABB::SetOrigin(const Vector3 &invOrigin)
 		{
 			mvOrigin = invOrigin;
 			
@@ -322,7 +265,7 @@ namespace ChilliSource
 		///
 		/// @param Dimensions of AABB
 		//-----------------------------------------------
-		void AABB::SetSize(const Core::Vector3 &invSize)
+		void AABB::SetSize(const Vector3 &invSize)
 		{
 			mvSize = invSize;
             mvSize.x = fabsf(mvSize.x);
@@ -338,79 +281,79 @@ namespace ChilliSource
 		///
 		/// @return Top left co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3 AABB::FrontTopLeft() const
+		const Vector3 AABB::FrontTopLeft() const
 		{
-			return Core::Vector3(mvMin.x, mvMax.y, mvMin.z);
+			return Vector3(mvMin.x, mvMax.y, mvMin.z);
 		}
 		//-----------------------------------------------
 		/// Front Top Right
 		///
 		/// @return Top right co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3 AABB::FrontTopRight() const
+		const Vector3 AABB::FrontTopRight() const
 		{
-			return Core::Vector3(mvMax.x, mvMax.y, mvMin.z);
+			return Vector3(mvMax.x, mvMax.y, mvMin.z);
 		}
 		//-----------------------------------------------
 		/// Front Bottom Left
 		///
 		/// @return Lower left co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3 AABB::FrontBottomLeft() const
+		const Vector3 AABB::FrontBottomLeft() const
 		{
-			return Core::Vector3(mvMin.x, mvMin.y, mvMin.z);
+			return Vector3(mvMin.x, mvMin.y, mvMin.z);
 		}
 		//-----------------------------------------------
 		/// Front Bottom Right
 		///
 		/// @return Lower right co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3 AABB::FrontBottomRight() const
+		const Vector3 AABB::FrontBottomRight() const
 		{
-			return Core::Vector3(mvMax.x, mvMin.y, mvMin.z);
+			return Vector3(mvMax.x, mvMin.y, mvMin.z);
 		}
 		//-----------------------------------------------
 		/// Back Top Left
 		///
 		/// @return Top left co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3 AABB::BackTopLeft() const
+		const Vector3 AABB::BackTopLeft() const
 		{
-			return Core::Vector3(mvMin.x, mvMax.y, mvMax.z);
+			return Vector3(mvMin.x, mvMax.y, mvMax.z);
 		}
 		//-----------------------------------------------
 		/// Back Top Right
 		///
 		/// @return Top right co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3 AABB::BackTopRight() const
+		const Vector3 AABB::BackTopRight() const
 		{
-			return Core::Vector3(mvMax.x, mvMax.y, mvMax.z);
+			return Vector3(mvMax.x, mvMax.y, mvMax.z);
 		}
 		//-----------------------------------------------
 		/// Back Bottom Left
 		///
 		/// @return Lower left co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3 AABB::BackBottomLeft() const
+		const Vector3 AABB::BackBottomLeft() const
 		{
-			return Core::Vector3(mvMin.x, mvMin.y, mvMax.z);
+			return Vector3(mvMin.x, mvMin.y, mvMax.z);
 		}
 		//-----------------------------------------------
 		/// Back Bottom Right
 		///
 		/// @return Lower right co-ordinate
 		//-----------------------------------------------
-		const Core::Vector3 AABB::BackBottomRight() const
+		const Vector3 AABB::BackBottomRight() const
 		{
-			return Core::Vector3(mvMax.x, mvMin.y, mvMax.z);
+			return Vector3(mvMax.x, mvMin.y, mvMax.z);
 		}
 		//-----------------------------------------------
 		/// Centre
 		///
 		/// @return Centre point
 		//-----------------------------------------------
-		const Core::Vector3& AABB::Centre() const
+		const Vector3& AABB::Centre() const
 		{
 			return mvOrigin;
 		}
@@ -478,7 +421,7 @@ namespace ChilliSource
 		OOBB::OOBB() :  mHitBox(Vector3(1,1,1), Vector3::k_zero), mmatLocal(Matrix4::k_identity)
 		{
 		}
-		OOBB::OOBB(const Core::Vector3 &invOrigin, const Core::Vector3 &invSize) : mHitBox(invOrigin, invSize), mmatLocal(Matrix4::k_identity)
+		OOBB::OOBB(const Vector3 &invOrigin, const Vector3 &invSize) : mHitBox(invOrigin, invSize), mmatLocal(Matrix4::k_identity)
 		{
 		}
 		//-----------------------------------------------
@@ -595,7 +538,7 @@ namespace ChilliSource
 		///
 		/// Container for a ray
 		//===============================================
-		Ray::Ray(const Core::Vector3 &invOrigin, const Core::Vector3 &invDirection, const f32 infLength) : vOrigin(invOrigin), vDirection(invDirection), fLength(infLength)
+		Ray::Ray(const Vector3 &invOrigin, const Vector3 &invDirection, const f32 infLength) : vOrigin(invOrigin), vDirection(invDirection), fLength(infLength)
 		{
 		}
 		//----------------------------------------------- 
@@ -606,11 +549,11 @@ namespace ChilliSource
 		/// @param A value t along parametric ray
 		/// @return Point on ray
 		//-----------------------------------------------
-		Core::Vector3 Ray::GetPoint(f32 t) const 
+		Vector3 Ray::GetPoint(f32 t) const 
 		{ 
-			return Core::Vector3(vOrigin + (vDirection * t) * fLength);
+			return Vector3(vOrigin + (vDirection * t) * fLength);
 		}
-		f32 Ray::DistanceFromPoint(const Core::Vector3 &invPoint) const
+		f32 Ray::DistanceFromPoint(const Vector3 &invPoint) const
         {
 			return Vector3::CrossProduct(vDirection, invPoint).Length();
 		}
@@ -620,7 +563,7 @@ namespace ChilliSource
 		///
 		/// Container for a plane
 		//===============================================
-		Plane::Plane(const Core::Vector3& invOrigin, const Core::Vector3& invNormal)
+		Plane::Plane(const Vector3& invOrigin, const Vector3& invNormal)
 		:mvNormal(invNormal)
 		{
 			mfD = -Vector3::DotProduct(invNormal, invOrigin);
@@ -630,12 +573,12 @@ namespace ChilliSource
 		{
 
 		}
-		Plane::Plane(const Core::Vector3& incNormal, f32 d)
+		Plane::Plane(const Vector3& incNormal, f32 d)
 		:mvNormal(incNormal), mfD(d)
 		{
 			
 		}
-		f32 Plane::DistanceFromPoint(const Core::Vector3& invPoint) const{			
+		f32 Plane::DistanceFromPoint(const Vector3& invPoint) const{			
 			return Vector3::DotProduct(mvNormal, invPoint) + mfD;
 		}
 		
@@ -664,7 +607,7 @@ namespace ChilliSource
 		/// @param A value t along parametric ray
 		/// @return Point on ray
 		//-----------------------------------------------
-		bool Plane::GetIsRayIntersecting(const Ray& incRay, Core::Vector3& outcIntersect) const
+		bool Plane::GetIsRayIntersecting(const Ray& incRay, Vector3& outcIntersect) const
 		{
 			
 			f32 denom = Vector3::DotProduct(mvNormal, incRay.vDirection);
@@ -704,7 +647,7 @@ namespace ChilliSource
 		///
 		/// @param View projection matrix
 		//----------------------------------------------------------
-		void Frustum::CalculateClippingPlanes(const Core::Matrix4& inmatViewProj)
+		void Frustum::CalculateClippingPlanes(const Matrix4& inmatViewProj)
 		{
 			f32 t = 0.0f;
 
@@ -789,31 +732,24 @@ namespace ChilliSource
 		/// @param Sphere
 		/// @return Whether it lies within the bounds
 		//-----------------------------------------------------------
-		bool Frustum::SphereCullTest(const Core::Sphere& inBoundingSphere) const
+		bool Frustum::SphereCullTest(const Sphere& inBoundingSphere) const
 		{
-            Core::Sphere BoundingSphere = inBoundingSphere;
-            
-            //This padding value is the sqrt(2). The value has been chosen to counter act the inaccuracy of the
-            //bounding sphere approx calculation in the render components; which uses the max axis rather than
-            //the diagonal
-            BoundingSphere.fRadius *= 1.412f;
-            
-			if(Core::ShapeIntersection::Intersects(BoundingSphere, mLeftClipPlane) == Core::ShapeIntersection::Result::k_outside)
+			if(ShapeIntersection::Intersects(inBoundingSphere, mLeftClipPlane) == ShapeIntersection::Result::k_outside)
                 return false;
 
-			if(Core::ShapeIntersection::Intersects(BoundingSphere, mRightClipPlane) == Core::ShapeIntersection::Result::k_outside)
+			if(ShapeIntersection::Intersects(inBoundingSphere, mRightClipPlane) == ShapeIntersection::Result::k_outside)
                 return false;
 
-			if(Core::ShapeIntersection::Intersects(BoundingSphere, mTopClipPlane) == Core::ShapeIntersection::Result::k_outside)
+			if(ShapeIntersection::Intersects(inBoundingSphere, mTopClipPlane) == ShapeIntersection::Result::k_outside)
                 return false;
 
-			if(Core::ShapeIntersection::Intersects(BoundingSphere, mBottomClipPlane) == Core::ShapeIntersection::Result::k_outside)
+			if(ShapeIntersection::Intersects(inBoundingSphere, mBottomClipPlane) == ShapeIntersection::Result::k_outside)
                 return false;
         
-            if(Core::ShapeIntersection::Intersects(BoundingSphere, mNearClipPlane) == Core::ShapeIntersection::Result::k_outside)
+            if(ShapeIntersection::Intersects(inBoundingSphere, mNearClipPlane) == ShapeIntersection::Result::k_outside)
                 return false;
     
-			if(Core::ShapeIntersection::Intersects(BoundingSphere, mFarClipPlane) == Core::ShapeIntersection::Result::k_outside)
+			if(ShapeIntersection::Intersects(inBoundingSphere, mFarClipPlane) == ShapeIntersection::Result::k_outside)
                 return false;
 
 			return true;

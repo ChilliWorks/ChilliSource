@@ -59,7 +59,7 @@ namespace ChilliSource
             /// system. If the view heirachy has changed then it
             /// will be rebuilt.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The map of stats.
             //--------------------------------------------------
@@ -69,7 +69,7 @@ namespace ChilliSource
             /// A container for the group of UI and information
             /// needed for displaying a single stat.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------
             struct GUIStat
             {
@@ -80,7 +80,7 @@ namespace ChilliSource
             /// Tries to built the GUI heirarchy if the
             /// given stats map contains different stats.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The stat map.
             //--------------------------------------------------
@@ -90,7 +90,7 @@ namespace ChilliSource
             /// and the map of statistics are refering to the
             /// same set of stats.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The stat map.
             ///
@@ -100,7 +100,7 @@ namespace ChilliSource
             //--------------------------------------------------
             /// Removes and destroys all GUI Stats.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //--------------------------------------------------
             void CleanupGUIStats();
             

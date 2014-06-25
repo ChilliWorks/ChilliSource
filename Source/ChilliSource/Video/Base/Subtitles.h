@@ -1,9 +1,29 @@
 //
 //  Subtitles.h
 //  Chilli Source
-//
 //  Created by Ian Copland 21/02/2013.
-//  Copyright 2013 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2013 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifndef _CHILLISOURCE_VIDEO_BASE_SUBTITLES_H_
@@ -26,7 +46,7 @@ namespace ChilliSource
         /// subtitles over videos played using the video player
         /// activity.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
 		//----------------------------------------------------------
 		class Subtitles final : public Core::Resource
 		{
@@ -36,7 +56,7 @@ namespace ChilliSource
 			/// Holds the style of the subtitles such as colour,
             /// font, etc.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------------
             struct Style
             {
@@ -53,7 +73,7 @@ namespace ChilliSource
             //----------------------------------------------------------
 			/// Holds the information about a single subtitle instance
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------------
             struct Subtitle
             {
@@ -65,7 +85,7 @@ namespace ChilliSource
             typedef std::unique_ptr<const Subtitle> SubtitleCUPtr;
             typedef std::unique_ptr<Subtitle> SubtitleUPtr;
 			//----------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Comparison Type
             ///
@@ -73,13 +93,13 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param The Style to add to the available styles
 			//----------------------------------------------------------
             void AddStyle(StyleCUPtr in_style);
             //----------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
 			/// @param The subtitle to add to the current list of subtitles
 			//----------------------------------------------------------
@@ -87,7 +107,7 @@ namespace ChilliSource
             //----------------------------------------------------------
 			/// Returns all the active subtitles at the given time.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param Time in MS from the start if the subtitle sequence.
             ///
@@ -95,7 +115,7 @@ namespace ChilliSource
 			//----------------------------------------------------------
             std::vector<const Subtitles::Subtitle*> GetSubtitlesAtTime(TimeIntervalMs in_timeMS) const;
             //----------------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param Style name
             ///

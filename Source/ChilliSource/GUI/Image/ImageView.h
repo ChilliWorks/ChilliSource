@@ -1,18 +1,39 @@
 //
 //  ImageView.h
-//  moFlo
+//  Chilli Source
+//  Created by Scott Downie on 22/04/2011
 //
-//  Created by Scott Downie on 22/04/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
-#ifndef _MOFLO_GUI_IMAGEVIEW_H_
-#define _MOFLO_GUI_IMAGEVIEW_H_
+#ifndef _CHILLISOURCE_GUI_IMAGEVIEW_H_
+#define _CHILLISOURCE_GUI_IMAGEVIEW_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
@@ -89,28 +110,13 @@ namespace ChilliSource
             ///
             /// @param Rect containing u, v, s, & t
             //--------------------------------------------------------
-            void SetUVs(const Core::Rectangle& insUVs);
+            void SetUVs(const Rendering::UVs& insUVs);
 			//--------------------------------------------------------
 			/// Get UVs
 			///
 			/// @return Rect containing u, v, s, & t
 			//--------------------------------------------------------
-			const Core::Rectangle& GetUVs() const;
-			//--------------------------------------------------------
-            /// Set UV Offsets
-            ///
-            /// Set the offsets to the UV so that on a sprite sheet the image
-            /// can be treated as if it were a single texture
-			///
-            /// @param Rect containing u, v, s, & t
-            //--------------------------------------------------------
-            void SetUVOffsets(const Core::Rectangle& insUVOffsets);
-			//--------------------------------------------------------
-			/// Get UV Offsets
-			///
-			/// @return Rect containing u, v, s, & t offsets 
-			//--------------------------------------------------------
-			const Core::Rectangle& GetUVOffsets() const;
+			const Rendering::UVs& GetUVs() const;
             //--------------------------------------------------------
             /// Enable Size From Image
             ///
@@ -344,8 +350,7 @@ namespace ChilliSource
             DECLARE_PROPERTY_A(Rendering::TextureCSPtr, Texture, SetTexture, GetTexture);
             DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
 
-            DECLARE_PROPERTY_A(Core::Rectangle, UVs, SetUVs, GetUVs);
-			DECLARE_PROPERTY_A(Core::Rectangle, UVOffsets, SetUVOffsets, GetUVOffsets);
+            DECLARE_PROPERTY_A(Rendering::UVs, UVs, SetUVs, GetUVs);
             
 			DECLARE_PROPERTY_A(std::string, TextureAtlasID, SetTextureAtlasID, GetTextureAtlasID);
 

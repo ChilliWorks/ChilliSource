@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 
 //This needs to be included after windows.h
-#include <Platform/Windows/glfw3.h>
+#include <glfw3.h>
 
 namespace CSBackend
 {
@@ -46,7 +46,7 @@ namespace CSBackend
 			PointerSystem* g_pointerSystem = nullptr;
 
 			//------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The current mouse position.
 			//------------------------------------------------
@@ -60,7 +60,7 @@ namespace CSBackend
 				return CSCore::Vector2((f32)x, (f32)y);
 			}
 			//------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The button ID.
 			///

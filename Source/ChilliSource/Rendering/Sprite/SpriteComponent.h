@@ -1,14 +1,33 @@
-/*
- *  SpriteComponent.h
- *  moFlo
- *
- *  Created by Scott Downie on 29/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  SpriteComponent.h
+//  Chilli Source
+//  Created by Scott Downie on 29/09/2010.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2010 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
-#ifndef _MO_FLO_RENDERING_SPRITE_COMPONENT_H_
-#define _MO_FLO_RENDERING_SPRITE_COMPONENT_H_
+#ifndef _CHILLISOURCE_RENDERING_SPRITE_COMPONENT_H_
+#define _CHILLISOURCE_RENDERING_SPRITE_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
@@ -17,6 +36,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
@@ -25,10 +45,10 @@ namespace ChilliSource
         const u32 kudwVertsPerSprite = 4;
         const u32 kudwIndicesPerSprite = 6;
         
-        //CCW winding order
-		//const u16 kauwLocalIndices[] = {0,1,2,1,3,2};
-		//CW winding order - We use this for the time being as the model format is CW
-		const u16 kauwLocalIndices[] = {0,2,1,1,2,3};
+        //CCW winding order (back face cull)
+		const u16 kauwLocalIndices[] = {0,1,2,1,3,2};
+		//CW winding order (front face cull)
+		//const u16 kauwLocalIndices[] = {0,2,1,1,2,3};
         
 		//===============================================================
 		/// Description:
@@ -36,7 +56,7 @@ namespace ChilliSource
 		/// A sprite component. This defines a 2D object that can
 		/// be manipulated, textured and animated.
 		//===============================================================
-		class SpriteComponent : public RenderComponent
+		class SpriteComponent final : public RenderComponent
 		{
 		public: 
 			
@@ -144,7 +164,7 @@ namespace ChilliSource
 			///
 			/// @param Rect containing uv, st
 			//-----------------------------------------------------------
-			void SetUVs(const Core::Rectangle &inUVs);
+			void SetUVs(const Rendering::UVs &inUVs);
 			//-----------------------------------------------------------
 			/// Set UV's
 			///
@@ -161,7 +181,7 @@ namespace ChilliSource
 			///
 			/// @return Rect with UV and ST
 			//-----------------------------------------------------------
-			const Core::Rectangle& GetUVs() const;
+			const Rendering::UVs& GetUVs() const;
 			//-----------------------------------------------------------
 			/// Set Colour
 			///
@@ -196,7 +216,7 @@ namespace ChilliSource
 			///
 			/// @param Rect containing the UV and ST
 			//-----------------------------------------------------------
-			const Core::Rectangle& GetCurrentFrame();
+			const Rendering::UVs& GetCurrentFrame();
 			//-----------------------------------------------------------
 			/// Set Flipped Horizontal
 			///
@@ -314,7 +334,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			void OnRemovedFromScene() override;
             
-		protected:	
+		private:
             //------------------------------------------------------------
             /// On Transform Changed
             ///
@@ -329,33 +349,7 @@ namespace ChilliSource
             /// the corner positions from the new world transform
             //-----------------------------------------------------------
 			void CalculateCornerPositions();
-			//-----------------------------------------------------------
-			/// Set Colour With Opacity
-			///
-			/// Set the RGBA colour of the sprite
-            /// taking the parent entity's opacity into consideration
-			///
-			/// @param Colour containing RGBA
-			//-----------------------------------------------------------
-			void SetColourWithOpacity(const Core::Colour &inCol);
-			//-----------------------------------------------------------
-			/// Set Colour With Opacity
-			///
-			/// Set the RGBA colour of the sprite
-            /// taking the parent entity's opacity into consideration
-			///
-			/// @param Red
-			/// @param Green
-			/// @param Blue
-			/// @param Alpha
-			//-----------------------------------------------------------
-			void SetColourWithOpacity(const f32 infR, const f32 infG, const f32 infB, const f32 infA);
-			//-----------------------------------------------------------
-			/// Get Colour With Opacity
-			///
-			/// @return Sprite colour
-			//-----------------------------------------------------------
-			const Core::Colour& GetColourWithOpacity() const;
+
 		private:
             
             Core::EventConnectionUPtr m_transformChangedConnection;
@@ -368,15 +362,12 @@ namespace ChilliSource
 
 			Core::Vector2 mvDimensions;
 			
-			Core::Rectangle mUVs;
-			Core::Rectangle mTransformedUVs;
+			Rendering::UVs mUVs;
+			Rendering::UVs mTransformedUVs;
             
             Core::Colour mColour;
-            
-            Core::Colour mColourWithOpacity;
-            Core::ByteColour mByteColourWithOpacity;
 			
-            AlignmentAnchor     meAlignment;
+            AlignmentAnchor meAlignment;
             
 			bool mbFlippedHorizontal;
 			bool mbFlippedVertical;

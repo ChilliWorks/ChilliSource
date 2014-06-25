@@ -178,7 +178,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	/**
 	 * Called when a new notification intent is received.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
 	public void onNotificationReceived(final Intent in_intent)
 	{
@@ -274,7 +274,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 * Passes a received notification down to the native
 	 * side of the engine.
 	 * 
-	 * @author I Copland
+	 * @author Ian Copland
 	 */
 	native private void nativeOnNotificationReceived(int in_id, String[] in_keys, String[] in_values, int in_priority);
 }

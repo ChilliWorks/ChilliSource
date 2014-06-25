@@ -1,17 +1,38 @@
 //
-//  StretchableImage.h
-//  moFlo
+//  VerticalStretchableImage.h
+//  Chilli Source
+//  Created by Nicolas Tanda on 22/06/2012
 //
-//  Created by Scott Downie on 28/04/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2012 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
-#ifndef _MOFLO_GUI_VerticalStretchableImageVIEW_H_
-#define _MOFLO_GUI_VerticalStretchableImageVIEW_H_
+#ifndef _CHILLISOURCE_GUI_VerticalStretchableImageVIEW_H_
+#define _CHILLISOURCE_GUI_VerticalStretchableImageVIEW_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 //=============================================================
 /// GUI - Stretchable Image 
@@ -31,9 +52,9 @@ namespace ChilliSource
 
             struct PanelDesc
             {
-                Core::Rectangle m_topUVs;
-                Core::Rectangle m_middleUVs;
-                Core::Rectangle m_bottomUVs;
+                Rendering::UVs m_topUVs;
+                Rendering::UVs m_middleUVs;
+                Rendering::UVs m_bottomUVs;
                 
                 Core::Vector2 m_topSize;
                 Core::Vector2 m_middleSize;

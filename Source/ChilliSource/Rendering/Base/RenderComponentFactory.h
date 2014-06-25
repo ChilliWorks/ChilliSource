@@ -119,13 +119,13 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Field of view in degrees
+            /// @param Field of view in radians
             /// @param Distance of near clip plane from the camera
             /// @param Distance of far clip plane from the camera
 			///
 			/// @return Ownership of new camera component
 			//---------------------------------------------------------------------------
-			CameraComponentUPtr CreatePerspectiveCameraComponent(f32 in_FOV, f32 in_near, f32 in_far);
+			PerspectiveCameraComponentUPtr CreatePerspectiveCameraComponent(f32 in_fov, f32 in_near, f32 in_far);
             //---------------------------------------------------------------------------
 			/// Create a camera with an orthographic projection
             ///
@@ -137,7 +137,19 @@ namespace ChilliSource
 			///
 			/// @return Ownership of new camera component
 			//---------------------------------------------------------------------------
-            CameraComponentUPtr CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far);
+            OrthographicCameraComponentUPtr CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far);
+            //---------------------------------------------------------------------------
+			/// Create a camera with an orthographic projection. The viewport of
+            /// the camera is set to the screen resolution
+            ///
+            /// @author S Downie
+            ///
+            /// @param Distance of near clip plane from the camera
+            /// @param Distance of far clip plane from the camera
+			///
+			/// @return Ownership of new camera component
+			//---------------------------------------------------------------------------
+			OrthographicCameraComponentUPtr CreateOrthographicCameraComponent(f32 in_near, f32 in_far);
 			//---------------------------------------------------------------------------
 			/// Create a new light component that is applied in the ambient render pass.
             /// This light simulates global light scattering as a base colour

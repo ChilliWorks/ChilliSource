@@ -1,9 +1,29 @@
 //
 //  FileSystem.h
 //  Chilli Source
+//  Created by Ian Copland on 25/03/2011.
 //
-//  Created by I Copland on 25/03/2011.
-//  Copyright 2011 Tag Games Ltd. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifdef CS_TARGETPLATFORM_ANDROID
@@ -14,7 +34,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Minizip/unzip.h>
+
+#include <minizip/unzip.h>
 
 #include <mutex>
 #include <string>
@@ -26,7 +47,7 @@ namespace CSBackend
 		//------------------------------------------------------------------
 		/// The Android implementation of the file system.
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//------------------------------------------------------------------
 		class FileSystem final : public CSCore::FileSystem
 		{
@@ -48,7 +69,7 @@ namespace CSBackend
 			/// Queries whether or not this system implements the
 			/// interface with the given Id.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The interface Id.
 			///
@@ -59,7 +80,7 @@ namespace CSBackend
 			/// Creates a new file stream to the given file in the given
 			/// storage location.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The storage location.
 			/// @param The file path.
@@ -72,7 +93,7 @@ namespace CSBackend
 			/// Creates the given directory. The full directory hierarchy will
 			/// be created.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The Storage Location
 			/// @param The directory path.
@@ -85,7 +106,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Copies a file from one location to another.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The source storage location.
 			/// @param The source directory.
@@ -100,7 +121,7 @@ namespace CSBackend
 			/// Copies a directory from one location to another. If the
 			/// destination directory does not exist, it will be created.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The source storage location.
 			/// @param The source directory.
@@ -114,7 +135,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Deletes the specified file.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The storage location.
 			/// @param The filepath.
@@ -125,7 +146,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Deletes a directory and all its contents.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The storage location.
 			/// @param The directory.
@@ -138,7 +159,7 @@ namespace CSBackend
 			/// in the given directory. File paths will be relative to the
 			/// input directory.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The Storage Location
 			/// @param The directory
@@ -153,7 +174,7 @@ namespace CSBackend
 			/// in the given directory. Directory paths will be relative to
 			/// the input directory.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The Storage Location
 			/// @param The directory
@@ -165,7 +186,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// returns whether or not the given file exists.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The Storage Location
 			/// @param The file path
@@ -177,7 +198,7 @@ namespace CSBackend
 			/// Returns whether or not the file exists in the Cached DLC
 			/// directory.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The file path.
 			///
@@ -188,7 +209,7 @@ namespace CSBackend
 			/// Returns whether or not the file exists in the package DLC
 			/// directory.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The file path.
 			///
@@ -198,7 +219,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			/// Returns whether or not the given directory exists.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The Storage Location
 			/// @param The directory path
@@ -211,7 +232,7 @@ namespace CSBackend
 			/// value this returns is platform specific and use of this
 			/// should be kept to a minimum in cross platform projects.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The source storage location.
 			///
@@ -281,78 +302,84 @@ namespace CSBackend
             //--------------------------------------------------------------
 	        /// Tries to get the manifest item for the given path.
 	        ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
+	        /// @param The package or CS storage location
             /// @param The path to loop up.
 	        /// @param [Out] The manifest item if successful.
 	        ///
             /// @return Whether or not the look up was successful.
             //--------------------------------------------------------------
-            bool TryGetManifestItem(const std::string& in_path, APKManifestItem& out_manifestItem) const;
+            bool TryGetManifestItem(CSCore::StorageLocation in_location, const std::string& in_path, APKManifestItem& out_manifestItem) const;
 			//--------------------------------------------------------------
 			/// Creates a file stream to a file within the APK (zip) file.
 			/// This provides a uniform api for handling files within
 			/// the apk and normal filestreams.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
+            /// @param The package or CS storage location
 			/// @param The file path of in the APK.
 			/// @param the file mode.
             ///
 			/// @return the APK filestream.
 			//--------------------------------------------------------------
-			CSCore::FileStreamUPtr CreateFileStreamInAPK(const std::string& in_filePath, CSCore::FileMode in_fileMode) const;
+			CSCore::FileStreamUPtr CreateFileStreamInAPK(CSCore::StorageLocation in_location, const std::string& in_filePath, CSCore::FileMode in_fileMode) const;
 			//--------------------------------------------------------------
 			/// Copies a file from the APK to one of the writable storage
 			/// locations.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
+			/// @param The package or CS storage location of the source
 			/// @param the source file path in the APK.
 			/// @param the destination storage location
 			/// @param the destination file.
 			///
 			/// @return whether or not this has succeeded.
 			//--------------------------------------------------------------
-			bool CopyFileFromAPK(const std::string& in_sourcefilePath, CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilepath) const;
+			bool CopyFileFromAPK(CSCore::StorageLocation in_srcLocation, const std::string& in_sourcefilePath, CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilepath) const;
 			//--------------------------------------------------------------
 			/// returns all files and directories in a directory of the APK.
 			/// Note: Unlike other similar methods, empty directories will
 			/// not be listed.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
+			/// @param The package or CS storage location
 			/// @param the directory.
 			/// @param whether or not to recurse
 			/// @param out parameter containing all the found items.
 			//--------------------------------------------------------------
-			std::vector<std::string> GetPathsInAPK(const std::string& in_directoryPath, bool in_recursive) const;
+			std::vector<std::string> GetPathsInAPK(CSCore::StorageLocation in_location, const std::string& in_directoryPath, bool in_recursive) const;
 			//--------------------------------------------------------------
 			/// returns whether or not a file exists in the APK.
 			///
 			/// @author S Downie
 			///
+			/// @param The package or CS storage location
 			/// @param the file path.
 			///
 			/// @return whether or not it exists.
 			//--------------------------------------------------------------
-			bool DoesFileExistInAPK(const std::string& in_filePath) const;
+			bool DoesFileExistInAPK(CSCore::StorageLocation in_location, const std::string& in_filePath) const;
 			//--------------------------------------------------------------
 			/// returns whether or not a directory exists in the APK.
 			/// Note: Unlike other similar methods, empty directories will not
 			/// be considered.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
+			/// @param The package or CS storage location
 			/// @param the directory path.
 			///
 			/// @return whether or not it exists.
 			//--------------------------------------------------------------
-			bool DoesDirectoryExistInAPK(const std::string& in_directoryPath) const;
+			bool DoesDirectoryExistInAPK(CSCore::StorageLocation in_location, const std::string& in_directoryPath) const;
 			//--------------------------------------------------------------
 			/// returns all files and directories in a directory.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param the directory.
 			/// @param Whether or not to recurse into sub directories.
@@ -383,12 +410,24 @@ namespace CSBackend
 	        /// @return Content file names
 	        //------------------------------------------------------------
 			std::vector<std::string> GetDirectoryContents(const std::vector<PathInfo>& in_directoryInfos, bool in_recursive) const;
+			//--------------------------------------------------------------
+			/// Add the item at the given filepath to the manifest
+			///
+			/// @author S Downie
+			///
+			/// @param Location in package or cs
+			/// @param File path
+			/// @param Zip file pos
+			/// @param [In/Out] Manifest to add them to
+			//--------------------------------------------------------------
+			void AddItemToManifest(CSCore::StorageLocation in_location, const std::string& in_filePath, unz_file_pos in_zipPos, std::vector<APKManifestItem>& inout_items);
 
 			mutable std::mutex m_minizipMutex;
 
 			std::string m_apkPath;
 			std::string m_storagePath;
-			std::vector<APKManifestItem> m_apkManifestItems;
+			std::vector<APKManifestItem> m_apkAppManifestItems;
+			std::vector<APKManifestItem> m_apkCSManifestItems;
 		};
 	}
 }

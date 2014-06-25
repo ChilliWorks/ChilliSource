@@ -1,17 +1,38 @@
 //
-//	ToggleButton.h
-//  moFlo
-//
+//  ToggleButton.h
+//  Chilli Source
 //  Created by Scott Downie on 14/12/2012.
-//  Copyright 2011 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2012 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
-#ifndef _MOFLO_GUI_DEFAULTS_TOGGLEBUTTON_H_
-#define _MOFLO_GUI_DEFAULTS_TOGGLEBUTTON_H_
+#ifndef _CHILLISOURCE_GUI_DEFAULTS_TOGGLEBUTTON_H_
+#define _CHILLISOURCE_GUI_DEFAULTS_TOGGLEBUTTON_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Button/Button.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
@@ -67,7 +88,7 @@ namespace ChilliSource
             ///
             /// @param Rectangle for the UVs
             //-----------------------------------------------------------
-            void SetOnUVs(Core::Rectangle insUVs);
+            void SetOnUVs(const Rendering::UVs& insUVs);
             //-----------------------------------------------------------
             /// Set Off UVs
             ///
@@ -75,7 +96,7 @@ namespace ChilliSource
             ///
             /// @param Rectangle for the UVs
             //-----------------------------------------------------------
-            void SetOffUVs(Core::Rectangle insUVs);
+            void SetOffUVs(const Rendering::UVs& insUVs);
             //-----------------------------------------------------------
             /// Set On Sprite Sheet
             ///
@@ -309,8 +330,8 @@ namespace ChilliSource
             Core::EventConnectionUPtr m_movedWithinConnection;
             Core::EventConnectionUPtr m_movedOutsideConnection;
 			
-            Core::Rectangle msOnUVs;
-            Core::Rectangle msOffUVs;
+            Rendering::UVs msOnUVs;
+            Rendering::UVs msOffUVs;
             
             Core::Vector2 mvSelectedPos;
             

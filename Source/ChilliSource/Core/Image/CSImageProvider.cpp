@@ -33,8 +33,9 @@
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
-#include <ChilliSource/Core/Minizip/unzip.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
+
+#include <minizip/unzip.h>
 
 namespace ChilliSource
 {
@@ -42,11 +43,11 @@ namespace ChilliSource
     {
         namespace
         {
-            const std::string k_csImageExtension("moimage");
+            const std::string k_csImageExtension("csimage");
             
             //------------------------------------------------------
             /// A container for the imformation provided in the
-            /// moimage header version 2.
+            /// csimage header version 2.
             ///
             /// @author S Downie
             //------------------------------------------------------
@@ -60,7 +61,7 @@ namespace ChilliSource
             };
             //------------------------------------------------------
             /// A container for the imformation provided in the
-            /// moimage header version 3.
+            /// csimage header version 3.
             ///
             /// @author S Downie
             //------------------------------------------------------
@@ -120,46 +121,7 @@ namespace ChilliSource
                 return false;
             }
             //-------------------------------------------------------
-            /// Reads a version 2 formatted .moimage file
-            ///
-            /// @author S Downie
-            ///
-            /// @param Pointer to image data file
-            /// @param Pointer to resource destination
-            //-------------------------------------------------------
-			void ReadFileVersion2(const FileStreamSPtr& in_stream, const ResourceSPtr& out_resource)
-            {
-                //Read the header
-                ImageHeaderVersion2 sHeader;
-                in_stream->Read((s8*)&sHeader.m_width, sizeof(u32));
-                in_stream->Read((s8*)&sHeader.m_height, sizeof(u32));
-                in_stream->Read((s8*)&sHeader.m_imageFormat, sizeof(u32));
-                in_stream->Read((s8*)&sHeader.m_compression, sizeof(u32));
-                in_stream->Read((s8*)&sHeader.m_dataSize, sizeof(u32));
-                
-                u32 udwSize = 0;
-                ImageFormat eFormat;
-                bool bFoundFormat = GetFormatInfo(sHeader.m_imageFormat, sHeader.m_width, sHeader.m_height, eFormat, udwSize);
-                CS_ASSERT(bFoundFormat, "Invalid CSImage Format.");
-                
-                // Allocated memory needed for the bitmap context
-                u8* pubyBitmapData = new u8[udwSize];
-                in_stream->Read((s8*)pubyBitmapData, udwSize);
-                in_stream->Close();
-                Image::ImageDataUPtr imageData(pubyBitmapData);
-                
-                Image::Descriptor desc;
-                desc.m_format = eFormat;
-                desc.m_compression = ImageCompression::k_none;
-                desc.m_width = sHeader.m_width;
-                desc.m_height = sHeader.m_height;
-                desc.m_dataSize = udwSize;
-                
-                Image* outpImage = (Image*)out_resource.get();
-                outpImage->Build(desc, std::move(imageData));
-            }
-            //-------------------------------------------------------
-            /// Reads a version 3 formatted .moimage file
+            /// Reads a version 3 formatted .csimage file
             ///
             /// @author S Downie
             ///
@@ -179,7 +141,7 @@ namespace ChilliSource
                 in_stream->Read((s8*)&sHeader.m_compressedDataSize, sizeof(u32));
                 
                 u32 udwSize = 0;
-                ImageFormat eFormat;
+                ImageFormat eFormat = ImageFormat::k_RGBA8888;
                 bool bFoundFormat = GetFormatInfo(sHeader.m_imageFormat, sHeader.m_width, sHeader.m_height, eFormat, udwSize);
                 CS_ASSERT(bFoundFormat, "Invalid CSImage Format.");
                 
@@ -269,17 +231,9 @@ namespace ChilliSource
                 //Read the version
                 u32 udwVersion = 0;
                 pImageFile->Read((s8*)&udwVersion, sizeof(u32));
-                CS_ASSERT(udwVersion >= 2 && udwVersion <= 3, "Only versions 2 and 3 supported");
-                
-                if(3 == udwVersion)
-                {
-                    ReadFileVersion3(pImageFile, out_resource);
-                }
-                else if (2 == udwVersion)
-                {
-                    CS_LOG_WARNING("File \"" + in_filepath + "\" moimage version 2 is deprecated. Please use version 3 which is supported from revision 86 in the tool repository.");
-                    ReadFileVersion2(pImageFile, out_resource);
-                }
+                CS_ASSERT(udwVersion >= 3, "Only version 3 and above supported");
+   
+                ReadFileVersion3(pImageFile, out_resource);
                 
                 out_resource->SetLoadState(Resource::LoadState::k_loaded);
                 if(in_delegate != nullptr)

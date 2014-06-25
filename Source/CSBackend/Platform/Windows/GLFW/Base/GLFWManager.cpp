@@ -1,9 +1,29 @@
 //
 //  GLFWManager.cpp
 //  Chilli Source
-//
 //  Created by Scott Downie on 11/03/2014.
-//  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
@@ -11,16 +31,17 @@
 #include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
 
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
-#include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
+
+#include <json/json.h>
 
 #include <fstream>
 
 #include <windows.h>
 
 //This needs to be included after windows.h
-#include <Platform/Windows/glfw3.h>
+#include <glfw3.h>
 
 namespace CSBackend
 {
@@ -31,7 +52,7 @@ namespace CSBackend
 			//-------------------------------------------------------------
 			/// Reads the surface format from the App.config file.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The surface format.
 			//-------------------------------------------------------------
@@ -47,7 +68,7 @@ namespace CSBackend
 				std::string workingDir = CSCore::StringUtils::StandardisePath(path.substr(0, pos));
 
 				//open the file
-				std::ifstream file(workingDir + "assets/Shared/App.config");
+				std::ifstream file(workingDir + "assets/AppResources/App.config");
 
 				std::string formatString = k_defaultFormat;
 				if (file.good() == true)
@@ -59,7 +80,7 @@ namespace CSBackend
 					Json::Value root;
 					if (!jReader.parse(contents, root))
 					{
-						CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormattedErrorMessages());
+						CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormatedErrorMessages());
 					}
 
 					formatString = root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
@@ -71,7 +92,7 @@ namespace CSBackend
 			/// Applies the surface format described in the App.config file
 			/// to the glfw window.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-------------------------------------------------------------
 			void ApplySurfaceFormat()
 			{

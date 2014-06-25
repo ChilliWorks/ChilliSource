@@ -39,7 +39,7 @@ namespace ChilliSource
 		/// A generic quaternion class for respresention 3D
 		/// orientations.
 		///
-		/// @author I Copland
+		/// @author Ian Copland
 		//-------------------------------------------------------
 		template <typename TType> class GenericQuaternion final
 		{
@@ -50,7 +50,7 @@ namespace ChilliSource
 			static const GenericQuaternion<TType> k_identity;
             
 			//-----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param A quaternion
 			///
@@ -58,7 +58,7 @@ namespace ChilliSource
 			//-----------------------------------------------
 			static GenericQuaternion<TType> Normalise(GenericQuaternion<TType> in_a);
 			//-----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param A quaternion
 			///
@@ -66,7 +66,7 @@ namespace ChilliSource
 			//-----------------------------------------------
 			static GenericQuaternion<TType> Conjugate(GenericQuaternion<TType> in_a);
 			//-----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
             ///
             /// @param A quaternion
 			///
@@ -74,7 +74,7 @@ namespace ChilliSource
 			//-----------------------------------------------
 			static GenericQuaternion<TType> Inverse(GenericQuaternion<TType> in_a);
 			//--------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The first quaternion.
 			/// @param The second quaternion.
@@ -86,7 +86,7 @@ namespace ChilliSource
 			/// Spherical Linear Interpolation on two
 			/// quaternions.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The first quaternion.
 			/// @param The second quaternion.
@@ -101,7 +101,7 @@ namespace ChilliSource
 			/// Normalised Linear Interpolation on two
 			/// quaternions.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The first quaternion.
 			/// @param The second quaternion.
@@ -116,13 +116,13 @@ namespace ChilliSource
 			/// Constructor. Sets the contents to the
 			/// Identity quaternion.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------
 			GenericQuaternion();
 			//-----------------------------------------------
 			/// Constructor.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param x
 			/// @param y
@@ -135,7 +135,7 @@ namespace ChilliSource
 			/// represent the rotation described by the given
 			/// axis and angle.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param An axis.
 			/// @param An angle.
@@ -164,13 +164,13 @@ namespace ChilliSource
 			//-----------------------------------------------
 			explicit GenericQuaternion(const GenericMatrix4<TType>& in_rotation);
 			//-----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return the magnitude of the quaternion.
 			//-----------------------------------------------
 			TType Magnitude() const;
 			//-----------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return the magnitude of the quaternion
 			/// squared.
@@ -179,19 +179,19 @@ namespace ChilliSource
 			//-----------------------------------------------
 			/// Normalises this quaternion.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------
 			void Normalise();
 			//-----------------------------------------------
 			/// Sets this quaternion to its conjugate.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------
 			void Conjugate();
 			//-----------------------------------------------
 			/// Sets this quaternion to its inverse.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//-----------------------------------------------
 			void Inverse();
             //--------------------------------------------
@@ -200,7 +200,7 @@ namespace ChilliSource
             /// quaternion with the given interpolation
             /// factor.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The other quaternion.
 			/// @param The step between the two values. This
@@ -214,7 +214,7 @@ namespace ChilliSource
             /// quaternion with the given interpolation
             /// factor.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The other quaternion.
 			/// @param The step between the two values. This
@@ -244,7 +244,7 @@ namespace ChilliSource
 			//-----------------------------------------------
 			void ToEulerAxes(GenericVector3<TType>& out_xAxis, GenericVector3<TType>& out_yAxis, GenericVector3<TType>& out_zAxis) const;
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Another quaternion.
 			///
@@ -253,7 +253,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			GenericQuaternion<TType>& operator+=(const GenericQuaternion<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Another quaternion.
 			///
@@ -268,7 +268,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             GenericQuaternion<TType>& operator-();
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Another quaternion.
 			///
@@ -277,7 +277,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			GenericQuaternion<TType>& operator*=(const GenericQuaternion<TType>& in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param A scalar.
 			///
@@ -286,7 +286,7 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			GenericQuaternion<TType>& operator*=(TType in_b);
 			//-----------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param A scalar.
 			///
@@ -301,7 +301,7 @@ namespace ChilliSource
 			TType w;
 		};
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param The quaternion A.
 		/// @param The quaternion B.
@@ -310,7 +310,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericQuaternion<TType> operator+(GenericQuaternion<TType> in_a, const GenericQuaternion<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param The quaternion A.
 		/// @param The quaternion B.
@@ -319,7 +319,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericQuaternion<TType> operator-(GenericQuaternion<TType> in_a, const GenericQuaternion<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param The quaternion A.
 		/// @param The quaternion B.
@@ -328,7 +328,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericQuaternion<TType> operator*(GenericQuaternion<TType> in_a, const GenericQuaternion<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param The quaternion A.
 		/// @param The scalar B.
@@ -337,7 +337,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericQuaternion<TType> operator*(GenericQuaternion<TType> in_a, TType in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param The scalar A.
 		/// @param The quaternion B.
@@ -346,7 +346,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericQuaternion<TType> operator*(TType in_a, GenericQuaternion<TType> in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param The quaternion A.
 		/// @param The scalar B.
@@ -355,7 +355,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> GenericQuaternion<TType> operator/(GenericQuaternion<TType> in_a, TType in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param The quaternion A.
 		/// @param The quaternion B.
@@ -364,7 +364,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> bool operator==(const GenericQuaternion<TType>& in_a, const GenericQuaternion<TType>& in_b);
 		//-----------------------------------------------------
-		/// @author I Copland
+		/// @author Ian Copland
 		///
 		/// @param The quaternion A.
 		/// @param The quaternion B.

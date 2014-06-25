@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MO_FLO_RENDERING_MESH_BUFFER
-#define _MO_FLO_RENDERING_MESH_BUFFER
+#ifndef _CHILLISOURCE_RENDERING_MESH_BUFFER
+#define _CHILLISOURCE_RENDERING_MESH_BUFFER
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>

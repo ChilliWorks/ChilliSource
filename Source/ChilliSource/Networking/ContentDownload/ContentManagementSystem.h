@@ -1,9 +1,29 @@
 //
 //  ContentManagementSystem.h
 //  Chilli Source
+//  Created by Scott Downie on 04/07/2011.
 //
-//  Created by S Downie on 04/07/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifndef _CHILLISOURCE_NETWORKING_CONTENTDOWNLOAD_CONTENTMANAGEMENTSYSTEM_H_
@@ -75,7 +95,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             /// Creates a new instance of this system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The content downloader that should be used.
             ///
@@ -190,7 +210,7 @@ namespace ChilliSource
             /// have been created. System initialisation occurs in the order
             /// they were created.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-----------------------------------------------------------
             void OnInit() override;
             //-----------------------------------------------------------
@@ -208,9 +228,9 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param TiXmlDocument
+            /// @return The xml document.
             //-----------------------------------------------------------
-            void LoadLocalManifest(TiXmlDocument* in_currentManifest);
+            Core::XMLUPtr LoadLocalManifest();
             //-----------------------------------------------------------
             /// The manifest file has downloaded we can now compare
             /// and contrast to check for outdated files
@@ -249,7 +269,7 @@ namespace ChilliSource
             ///
             /// @param Package element
             //-----------------------------------------------------------
-            void AddToDownloadListIfNotInBundle(TiXmlElement* in_packageEl);
+            void AddToDownloadListIfNotInBundle(Core::XML::Node* in_packageEl);
             //-----------------------------------------------------------
             /// Save the zip file to documents directory
             ///
@@ -317,7 +337,7 @@ namespace ChilliSource
 			u32	m_runningToDownloadTotal;
 			u32 m_runningDownloadedTotal;
             
-            TiXmlDocument* m_serverManifest;
+            Core::XMLUPtr m_serverManifest;
             
             IContentDownloader* m_contentDownloader;
             

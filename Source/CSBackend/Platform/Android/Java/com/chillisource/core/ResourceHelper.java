@@ -1,5 +1,5 @@
 /*
- *  CMoFlowResourceHelper.java
+ *  ResourceHelper.java
  *  moFlow
  *
  *  Created by Hugh McLaughlin on 04/07/2012.
@@ -14,10 +14,10 @@ import java.lang.reflect.Field;
 import android.content.Context;
 
 //===============================================================================
-/// MoFlow Resource Helper
+/// Resource Helper
 ///
 /// Helper class that allows you to access resource files in different packages 
-/// than the one your in, can be useful for referencing resources in moFlow 
+/// than the one your in, can be useful for referencing resources in engine 
 /// that are provided on a per project basis
 //===============================================================================
 public class ResourceHelper 
@@ -67,7 +67,7 @@ public class ResourceHelper
   	///
   	/// Gets a resource ID from this applications resources
     /// folder. This can be useful for referencing project
-    /// resources from moFlow.
+    /// resources from the engine.
     ///
     /// @param ineResourceSubClass - the sub resource that we want from this class e.g. string
     /// @param inField - the string ID of the field we want

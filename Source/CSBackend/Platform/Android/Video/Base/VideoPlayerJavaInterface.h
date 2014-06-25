@@ -9,8 +9,8 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_VIDEOPLAYERJAVAINTERFACE_H_
-#define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_VIDEOPLAYERJAVAINTERFACE_H_
+#ifndef _CHILLISOURCE_PLATFORM_ANDROID_JAVAINTERFACE_VIDEOPLAYERJAVAINTERFACE_H_
+#define _CHILLISOURCE_PLATFORM_ANDROID_JAVAINTERFACE_VIDEOPLAYERJAVAINTERFACE_H_
 
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
@@ -74,7 +74,7 @@ namespace CSBackend
 			/// Called when the video completes. This is for internal use
 			/// and should not be called by the user of the interface.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			//--------------------------------------------------------------
 			void OnVideoComplete();
 			//--------------------------------------------------------------

@@ -37,7 +37,6 @@
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 
-#include <array>
 #include <functional>
 #include <mutex>
 #include <unordered_map>
@@ -109,6 +108,17 @@ namespace ChilliSource
                 k_fillMaintainingAspect,
                 k_totalNum
             };
+            //----------------------------------------------------------------------------------------
+            /// Delegate for size policy functions.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget absolute size
+            /// @param Widget absolute preferred size
+            ///
+            /// @return New size with function applied
+            //----------------------------------------------------------------------------------------
+            using SizePolicyDelegate = std::function<Core::Vector2(const Core::Vector2&, const Core::Vector2&)>;
             //----------------------------------------------------------------------------------------
             /// Constructor
             ///
@@ -660,17 +670,6 @@ namespace ChilliSource
             /// @return Screen space size
             //----------------------------------------------------------------------------------------
             Core::Vector2 CalculateChildFinalSize(const Widget* in_child);
-            //----------------------------------------------------------------------------------------
-            /// Delegate for size policy functions.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Widget absolute size
-            /// @param Widget absolute preferred size
-            ///
-            /// @return New size with function applied
-            //----------------------------------------------------------------------------------------
-            using SizePolicyDelegate = std::function<Core::Vector2(const Core::Vector2&, const Core::Vector2&)>;
         private:
             
             Core::UnifiedVector2 m_localPosition;
@@ -684,7 +683,6 @@ namespace ChilliSource
             mutable Core::Matrix3 m_cachedFinalTransform;
             mutable Core::Vector2 m_cachedFinalSize;
             
-            std::array<SizePolicyDelegate, (u32)SizePolicy::k_totalNum> m_sizePolicyFuncs;
             SizePolicyDelegate m_sizePolicyDelegate;
             
             std::vector<WidgetSPtr> m_internalChildren;

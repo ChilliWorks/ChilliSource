@@ -40,7 +40,7 @@ namespace CSBackend
         /// The iOS backend for the device system. This provides
         /// information on the specific iOS device.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
         //---------------------------------------------------------
         class Device final : public CSCore::Device
         {
@@ -50,58 +50,58 @@ namespace CSBackend
 			/// Queries whether or not this system implements the
             /// interface with the given Id.
 			///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//-------------------------------------------------------
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The device model name.
             //---------------------------------------------------
             const std::string& GetModel() const override;
             //---------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The name of the device model type.
             //---------------------------------------------------
             const std::string& GetModelType() const override;
             //---------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The name of the device manufacturer.
             //---------------------------------------------------
             const std::string& GetManufacturer() const override;
             //---------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The locale code registered with the
             /// device.
             //---------------------------------------------------
             const std::string& GetLocale() const override;
             //---------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The language the device is set to.
             //---------------------------------------------------
             const std::string& GetLanguage() const override;
             //---------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The version of the operating system.
             //---------------------------------------------------
             const std::string& GetOSVersion() const override;
             //---------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return An identifier that can be used to uniquely
             /// identify the device.
             //---------------------------------------------------
             const std::string& GetUDID() const override;
 			//---------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The number of CPU cores available on the
             /// device.
@@ -113,7 +113,7 @@ namespace CSBackend
 			/// Constructor. Declared private to force the use of
             /// the factory method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
 			Device();
             

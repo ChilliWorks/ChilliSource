@@ -26,13 +26,11 @@
 //  THE SOFTWARE.
 //
 
-
 #include <ChilliSource/Core/State/State.h>
 
 #include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/UI/Base/Canvas.h>
 
 namespace ChilliSource
 {
@@ -41,7 +39,8 @@ namespace ChilliSource
 		//-----------------------------------------
 		//-----------------------------------------
 		State::State()
-        : m_canAddSystems(false), m_scene(nullptr), m_canvas(nullptr)
+        : m_canAddSystems(false)
+        , m_scene(nullptr)
 		{
 
 		}
@@ -50,9 +49,8 @@ namespace ChilliSource
         void State::Init()
         {
             m_canAddSystems = true;
-            //States will always have a scene and canvas by default
+            //States will always have a scene by default
             m_scene = CreateSystem<Scene>();
-            m_canvas = CreateSystem<UI::Canvas>();
             CreateSystems();
             m_canAddSystems = false;
             
@@ -140,6 +138,8 @@ namespace ChilliSource
         //-----------------------------------------
         void State::Destroy()
         {
+            m_scene->RemoveAllEntities();
+            
             OnDestroy();
             
             s32 numSystems = m_systems.size();
@@ -164,12 +164,6 @@ namespace ChilliSource
 		{
 			return m_scene;
 		}
-        //------------------------------------------
-        //------------------------------------------
-        UI::Canvas* State::GetUICanvas()
-        {
-            return m_canvas;
-        }
         //------------------------------------------
         //------------------------------------------
 		bool State::IsActiveState() const 

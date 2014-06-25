@@ -1,9 +1,29 @@
 //
 //  FacebookAuthenticationSystem.h
 //  Chilli Source
-//
 //  Created by Scott Downie on 01/06/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifdef CS_TARGETPLATFORM_IOS
@@ -16,6 +36,8 @@
 #include <ChilliSource/Social/Facebook/FacebookAuthenticationSystem.h>
 
 #include <FacebookSDK/FacebookSDK.h>
+
+@class FacebookAppDelegate;
 
 namespace CSBackend
 {
@@ -105,13 +127,6 @@ namespace CSBackend
             /// @author S Downie
             //------------------------------------------------
             void SignOut() override;
-            //----------------------------------------------------
-            /// Called when the system is destroyed. This
-            /// will close any open sessions
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            void OnDestroy() override;
 			
 		private:
             
@@ -120,9 +135,22 @@ namespace CSBackend
             /// Private constructor to force the use of the
             /// factory method.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //----------------------------------------------------
             FacebookAuthenticationSystem() = default;
+            //----------------------------------------------------
+            /// Called when the system is initialised
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void OnInit() override;
+            //----------------------------------------------------
+            /// Called when the system is destroyed. This
+            /// will close any open sessions
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void OnDestroy() override;
             //----------------------------------------------------
             /// @author S Downie
             ///
@@ -185,6 +213,8 @@ namespace CSBackend
             AuthenticationCompleteDelegate::Connection m_authoriseWriteDelegateConnection;
             
             std::vector<std::string> m_currentRequestedWritePermissions;
+            
+            FacebookAppDelegate* m_fbAppDelegate;
 		};
 	}
 }

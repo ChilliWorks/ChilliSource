@@ -93,7 +93,7 @@ namespace CSBackend
             /// Completion delegate is called when load is finished.
             /// Check the resource load state for success or failure
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The storage location.
             /// @param The filepath.

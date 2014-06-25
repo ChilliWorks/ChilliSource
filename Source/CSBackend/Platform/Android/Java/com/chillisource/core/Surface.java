@@ -20,14 +20,14 @@ import android.view.MotionEvent;
  * A surface is composited into the android view hierarchy and manages
  * Open GL and input events.
  *
- * @author I Copland
+ * @author Ian Copland
  */
 public class Surface extends GLSurfaceView 
 {
 	/**
 	 * Constructor
 	 *
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param Activity
 	 */
@@ -48,7 +48,7 @@ public class Surface extends GLSurfaceView
 	 * Creates a new config chooser with the params as defined in
 	 * the App.config file.
 	 *
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The activity.
 	 * 
@@ -83,7 +83,7 @@ public class Surface extends GLSurfaceView
 	/**
 	 * Reads the surface format from the App.config file.
 	 *
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param The activity
 	 * 
@@ -91,7 +91,7 @@ public class Surface extends GLSurfaceView
 	 */
 	private String readSurfaceFormat(Activity in_activity)
 	{
-		final String k_configFilePath = "Shared/App.config";
+		final String k_configFilePath = "AppResources/App.config";
 		
 		String output = "rgb565_depth24";
 		if (FileUtils.doesFileExistAPK(in_activity, k_configFilePath))
@@ -122,7 +122,7 @@ public class Surface extends GLSurfaceView
 	/**
 	 * Triggered when the surface receives a touch input event
 	 *
-	 * @author I Copland
+	 * @author Ian Copland
 	 * 
 	 * @param Input event
 	 * 
@@ -155,7 +155,7 @@ public class Surface extends GLSurfaceView
 		final float touchY = yPos;
 
 		Runnable task = null;
-		//pass the touch events on to MoFlow
+		//pass the touch events on to the native side of the engine
 		switch (actionEvent)
 		{
 		case MotionEvent.ACTION_POINTER_DOWN:

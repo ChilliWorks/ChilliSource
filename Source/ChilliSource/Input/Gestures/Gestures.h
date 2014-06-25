@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MO_FLO_INPUT_GESTURES_H_
-#define _MO_FLO_INPUT_GESTURES_H_
+#ifndef _CHILLISOURCE_INPUT_GESTURES_H_
+#define _CHILLISOURCE_INPUT_GESTURES_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>

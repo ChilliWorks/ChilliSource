@@ -57,17 +57,17 @@ namespace ChilliSource
             ///
             /// @return Pair <Atlas, Id>
             //-------------------------------------------------------
-            std::pair<TextureAtlasCSPtr, std::string> LoadTextureAtlas(TiXmlElement* in_root)
+            std::pair<TextureAtlasCSPtr, std::string> LoadTextureAtlas(Core::XML::Node* in_root)
             {
                 std::pair<TextureAtlasCSPtr, std::string> result;
                 
                 Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
                 
-                TiXmlElement* atlasEl = Core::XMLUtils::FirstChildElementWithName(in_root, "atlas");
+                Core::XML::Node* atlasEl = Core::XMLUtils::GetFirstChildElement(in_root, "atlas");
                 if(atlasEl != nullptr)
                 {
-                    result.first = resourcePool->LoadResource<TextureAtlas>(Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(atlasEl, "location", "Package")), Core::XMLUtils::GetAttributeValueOrDefault<std::string>(atlasEl, "filename", ""));
-                    result.second = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(atlasEl, "id", "");
+                    result.first = resourcePool->LoadResource<TextureAtlas>(Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValue<std::string>(atlasEl, "location", "Package")), Core::XMLUtils::GetAttributeValue<std::string>(atlasEl, "filename", ""));
+                    result.second = Core::XMLUtils::GetAttributeValue<std::string>(atlasEl, "id", "");
                 }
                 
                 return result;
@@ -82,25 +82,25 @@ namespace ChilliSource
             ///
             /// @return List of emitter descs
             //-------------------------------------------------------
-            std::vector<Core::ParamDictionary> LoadEmitterDescs(TiXmlElement* in_root)
+            std::vector<Core::ParamDictionary> LoadEmitterDescs(Core::XML::Node* in_root)
             {
                 std::vector<Core::ParamDictionary> emitterDescs;
                 
-                TiXmlElement* emittersEl = Core::XMLUtils::FirstChildElementWithName(in_root, "emitters");
+                Core::XML::Node* emittersEl = Core::XMLUtils::GetFirstChildElement(in_root, "emitters");
                 if(emittersEl == nullptr)
                 {
                     return emitterDescs;
                 }
                 
-                TiXmlElement* emitterEl = Core::XMLUtils::FirstChildElementWithName(emittersEl, "emitter");
+                Core::XML::Node* emitterEl = Core::XMLUtils::GetFirstChildElement(emittersEl, "emitter");
                 while(emitterEl)
                 {
                     //Get the param dictionary config values
-                    Core::ParamDictionary params = Core::ParamDictionarySerialiser::FromString(emitterEl->GetText());
+                    Core::ParamDictionary params = Core::ParamDictionarySerialiser::FromString(Core::XMLUtils::GetValue(emitterEl));
                     
                     emitterDescs.push_back(std::move(params));
                     
-                    emitterEl = Core::XMLUtils::NextSiblingElementWithName(emitterEl);
+                    emitterEl = Core::XMLUtils::GetNextSiblingElement(emitterEl, "emitter");
                 }
                 
                 return emitterDescs;
@@ -115,21 +115,21 @@ namespace ChilliSource
             ///
             /// @return List of affector descs
             //-------------------------------------------------------
-            std::vector<Core::ParamDictionary> LoadAffectorDescs(TiXmlElement* in_root)
+            std::vector<Core::ParamDictionary> LoadAffectorDescs(Core::XML::Node* in_root)
             {
                 std::vector<Core::ParamDictionary> affectorDescs;
-                TiXmlElement* affectorsEl = Core::XMLUtils::FirstChildElementWithName(in_root, "affectors");
+                Core::XML::Node* affectorsEl = Core::XMLUtils::GetFirstChildElement(in_root, "affectors");
                 if(affectorsEl)
                 {
-                    TiXmlElement* affectorEl = Core::XMLUtils::FirstChildElementWithName(affectorsEl, "affector");
+                    Core::XML::Node* affectorEl = Core::XMLUtils::GetFirstChildElement(affectorsEl, "affector");
                     while(affectorEl)
                     {
                         //Get the param dictionary config values
-                        Core::ParamDictionary params = Core::ParamDictionarySerialiser::FromString(affectorEl->GetText());
+                        Core::ParamDictionary params = Core::ParamDictionarySerialiser::FromString(Core::XMLUtils::GetValue(affectorEl));
                         
                         affectorDescs.push_back(params);
                         
-                        affectorEl = Core::XMLUtils::NextSiblingElementWithName(affectorEl);
+                        affectorEl = Core::XMLUtils::GetNextSiblingElement(affectorEl, "affector");
                     }
                 }
                 
@@ -167,10 +167,9 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		void CSParticleEffectProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
 		{
-            TiXmlDocument doc(in_filePath);
-			doc.LoadFile(in_location);
+            Core::XMLUPtr xml = Core::XMLUtils::ReadDocument(in_location, in_filePath);
 			
-			TiXmlElement* root = doc.RootElement();
+			Core::XML::Node* root = Core::XMLUtils::GetFirstChildElement(xml->GetDocument());
 			
             if(root == nullptr)
             {
@@ -178,7 +177,7 @@ namespace ChilliSource
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 return;
             }
-            else if(root->ValueStr() != "effect")
+            else if(Core::XMLUtils::GetName(root) != "effect")
             {
                 CS_LOG_ERROR("Failed to load particle effect due to incorrect file format " + in_filePath);
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
@@ -186,7 +185,7 @@ namespace ChilliSource
             }
             
             //---Load the material
-            TiXmlElement* materialEl = Core::XMLUtils::FirstChildElementWithName(root, "material");
+            Core::XML::Node* materialEl = Core::XMLUtils::GetFirstChildElement(root, "material");
             if(materialEl == nullptr)
             {
                 CS_LOG_ERROR("Failed to load particle effect due to missing material " + in_filePath);
@@ -195,8 +194,8 @@ namespace ChilliSource
             }
             
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-            MaterialCSPtr material = resourcePool->LoadResource<Material>(Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(materialEl, "location", "Package")),
-                                                                          Core::XMLUtils::GetAttributeValueOrDefault<std::string>(materialEl, "filename", ""));
+            MaterialCSPtr material = resourcePool->LoadResource<Material>(Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValue<std::string>(materialEl, "location", "Package")),
+                                                                          Core::XMLUtils::GetAttributeValue<std::string>(materialEl, "filename", ""));
 
             if(material == nullptr || material->GetLoadState() == Core::Resource::LoadState::k_failed)
             {
@@ -240,24 +239,23 @@ namespace ChilliSource
             };
             
             //We need to create the document on the heap as it is required by other async functions
-            std::shared_ptr<TiXmlDocument> doc(new TiXmlDocument(in_filePath));
-			doc->LoadFile(in_location);
+            Core::XMLSPtr xml = Core::XMLUtils::ReadDocument(in_location, in_filePath);
 			
-			TiXmlElement* root = doc->RootElement();
+			Core::XML::Node* root = Core::XMLUtils::GetFirstChildElement(xml->GetDocument());
 			
             if(root == nullptr)
             {
                 LoadingError("Failed to open particle effect file");
                 return;
             }
-            else if(root->ValueStr() != "effect")
+            else if(Core::XMLUtils::GetName(root) != "effect")
             {
                 LoadingError("Failed to load particle effect due to incorrect file format");
                 return;
             }
             
             //---Load the material
-            TiXmlElement* materialEl = Core::XMLUtils::FirstChildElementWithName(root, "material");
+            Core::XML::Node* materialEl = Core::XMLUtils::GetFirstChildElement(root, "material");
             if(materialEl == nullptr)
             {
                 LoadingError("Failed to load particle effect due to missing material");
@@ -265,9 +263,9 @@ namespace ChilliSource
             }
             
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-            resourcePool->LoadResourceAsync<Material>(Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(materialEl, "location", "Package")),
-                                                      Core::XMLUtils::GetAttributeValueOrDefault<std::string>(materialEl, "filename", ""),
-            [doc, root, in_delegate, out_resource](const MaterialCSPtr& in_material)
+            resourcePool->LoadResourceAsync<Material>(Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValue<std::string>(materialEl, "location", "Package")),
+                                                      Core::XMLUtils::GetAttributeValue<std::string>(materialEl, "filename", ""),
+            [xml, root, in_delegate, out_resource](const MaterialCSPtr& in_material)
             {
                 //This lambda is executed on the main thread so we don't need to explicitly kick off a main thread task
                 if(in_material == nullptr || in_material->GetLoadState() == Core::Resource::LoadState::k_failed)
@@ -280,7 +278,7 @@ namespace ChilliSource
                 }
                 
                 //We now need to kick off another async task to load the rest of the effect
-                Core::Application::Get()->GetTaskScheduler()->ScheduleTask([doc, root, in_delegate, in_material, out_resource]()
+                Core::Application::Get()->GetTaskScheduler()->ScheduleTask([xml, root, in_delegate, in_material, out_resource]()
                 {
                     auto emitterDescs = LoadEmitterDescs(root);
                     if(emitterDescs.empty() == true)

@@ -39,6 +39,7 @@
 #include <ChilliSource/Rendering/Base/RendererSortPredicates.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
+#include <ChilliSource/Rendering/Camera/OrthographicCameraComponent.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
@@ -279,9 +280,6 @@ namespace ChilliSource
             //Split the lights
             for(u32 i=0; i<aLightComponentCache.size(); ++i)
             {
-                if(aLightComponentCache[i]->GetEntity()->IsVisible() == false)
-                    continue;
-
                 if(aLightComponentCache[i]->IsA(DirectionalLightComponent::InterfaceID))
                 {
                     outaDirectionalLightComponentCache.push_back((DirectionalLightComponent*)aLightComponentCache[i]);
@@ -308,7 +306,7 @@ namespace ChilliSource
                 return pCullPredicate;
             }
 
-            if(inpActiveCamera->GetType() == CameraType::k_orthographic)
+            if(inpActiveCamera->IsA(OrthographicCameraComponent::InterfaceID) == true)
             {
                 return mpOrthoCullPredicate;
             }
@@ -436,8 +434,6 @@ namespace ChilliSource
 
             outaRenderCache.reserve(inaRenderCache.size());
 
-            inpCamera->UpdateFrustum();
-
 			for(std::vector<RenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
 			{
 				RenderComponent* pRenderable = (*it);
@@ -512,9 +508,9 @@ namespace ChilliSource
         Core::Matrix4 Renderer::CreateOverlayProjection(const Core::Vector2& in_size) const
         {
             const f32 kfOverlayNear = 1.0f;
-            const f32 kfOverlayFar = 100.0f;
+            const f32 kfOverlayFar = 5.0f;
 
-            return Core::Matrix4::CreateOrthographicProjectionRH(0, in_size.x, 0, in_size.y, kfOverlayNear, kfOverlayFar);
+            return Core::Matrix4::CreateOrthographicProjectionLH(0, in_size.x, 0, in_size.y, kfOverlayNear, kfOverlayFar);
         }
         //------------------------------------------------
         //------------------------------------------------

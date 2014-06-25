@@ -1,11 +1,30 @@
 //
 //  CSAnimProvider.h
 //  Chilli Source
-//
 //  Created by Ian Copland on 17/10/2011.
-//  Copyright 2011 Tag Games Ltd. All rights reserved.
 //
-
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #ifndef _CHILLISOURCE_RENDERING_MODEL_CSANIMPROVIDER_H_
 #define _CHILLISOURCE_RENDERING_MODEL_CSANIMPROVIDER_H_
@@ -20,7 +39,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
         /// Loads CS Anim files into a SkinnedAnimation resource
         ///
-        /// @author I Copland
+        /// @author Ian Copland
 		//-------------------------------------------------------------------------
 		class CSAnimProvider final : public Core::ResourceProvider
 		{
@@ -31,11 +50,11 @@ namespace ChilliSource
             //-------------------------------------------------------------------------
             /// Factory method for creating new anim loader
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             //-------------------------------------------------------------------------
             static CSAnimProviderUPtr Create();
 			//-------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Interface to compare
             ///
@@ -49,7 +68,7 @@ namespace ChilliSource
             //----------------------------------------------------
             Core::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param Extension to compare
             ///
@@ -62,7 +81,7 @@ namespace ChilliSource
 			/// Load a skinned animation from the given CSAnim file. Check the load state of the
             /// resource for success or failure.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path
@@ -75,7 +94,7 @@ namespace ChilliSource
             /// thread. Delegate is called on completion. Check the load state of the
             /// resource for success or failure
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path
@@ -87,7 +106,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			/// Loads an anim file into a SkinnedAnimation.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			///
             /// @param The storage location to load from
 			/// @param File path

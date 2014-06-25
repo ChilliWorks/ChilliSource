@@ -28,8 +28,8 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef _MOFLO_PLATFORM_ANDROID_TOUCH_INPUT_JAVA_INTERFACE_JAVA_INTERFACE_
-#define _MOFLO_PLATFORM_ANDROID_TOUCH_INPUT_JAVA_INTERFACE_JAVA_INTERFACE_
+#ifndef _CHILLISOURCE_PLATFORM_ANDROID_TOUCH_INPUT_JAVA_INTERFACE_JAVA_INTERFACE_
+#define _CHILLISOURCE_PLATFORM_ANDROID_TOUCH_INPUT_JAVA_INTERFACE_JAVA_INTERFACE_
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
@@ -59,13 +59,13 @@ namespace CSBackend
 			/// null is passed to this, no pointer system will
 			/// be used.
 			///
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @param The pointer system.
 			//---------------------------------------------------
 			static void SetPointerSystem(PointerSystem* in_pointerSystem);
 			//---------------------------------------------------
-			/// @author I Copland
+			/// @author Ian Copland
 			///
 			/// @return The pointer system.
 			//---------------------------------------------------

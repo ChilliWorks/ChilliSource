@@ -1,9 +1,29 @@
 //
 //  HighlightButton.cpp
-//  moFlo
-//
+//  Chilli Source
 //  Created by Scott Downie on 26/04/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/GUI/Button/HighlightButton.h>
@@ -46,8 +66,8 @@ namespace ChilliSource
         //-----------------------------------------------------------
         HighlightButton::HighlightButton() 
         : mpBackgroundImage(new ImageView()), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
-        msDefaultUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
-        msHighlightUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
+        msDefaultUVs(0.0f, 0.0f, 1.0f, 1.0f),
+        msHighlightUVs(0.0f, 0.0f, 1.0f, 1.0f),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
@@ -67,8 +87,8 @@ namespace ChilliSource
         //------------------------------------------------------------
         HighlightButton::HighlightButton(const Core::ParamDictionary& insParams) 
         : Button(insParams), mpBackgroundImage(new ImageView()),
-        msDefaultUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
-        msHighlightUVs(Core::Vector2::k_zero, Core::Vector2::k_one),
+        msDefaultUVs(0.0f, 0.0f, 1.0f, 1.0f),
+        msHighlightUVs(0.0f, 0.0f, 1.0f, 1.0f),
         mbSelected(false), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
 		SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
         {
@@ -264,7 +284,7 @@ namespace ChilliSource
         ///
         /// @param Rectangle for the UVs
         //-----------------------------------------------------------
-        void HighlightButton::SetDefaultUVs(Core::Rectangle insUVs)
+        void HighlightButton::SetDefaultUVs(Rendering::UVs insUVs)
         {
             msDefaultUVs = insUVs;
             
@@ -278,7 +298,7 @@ namespace ChilliSource
         ///
         /// @param Rectangle for the UVs
         //-----------------------------------------------------------
-        void HighlightButton::SetHighlightUVs(Core::Rectangle insUVs)
+        void HighlightButton::SetHighlightUVs(Rendering::UVs insUVs)
         {
             msHighlightUVs = insUVs;
             

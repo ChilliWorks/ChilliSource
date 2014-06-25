@@ -1,17 +1,36 @@
-/*
-*  PngLoader.h
-*  iOSTemplate
-*
-*  Created by Ian Copland on 06/04/2011.
-*  Copyright 2011 Tag Games Ltd. All rights reserved.
-*
-*/
+//
+//  PngLoader.cpp
+//  Chilli Source
+//  Created by Ian Copland on 06/04/2011.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
 #include <CSBackend/Platform/Windows/Core/Image/PngImage.h>
 
-#include <CSBackend/Platform/Windows/Core/Image/LibPng/png.h>
+#include <png/png.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 
@@ -19,8 +38,8 @@
 /// Read Png Data
 ///
 /// A replacement for the default libPng file reading function. This is needed so
-/// the c style file io functions can be replaced with moFlo functions, enabling
-/// loading from the package.
+/// the c style file io functions can be replaced with Chilli source functions,
+/// enabling loading from the package.
 /// @param png_structp png_ptr - The currently open Png decorder
 /// @param png_bytep data - The output data.
 /// @param png_size_t length - The length of the data.

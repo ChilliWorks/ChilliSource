@@ -1,9 +1,29 @@
 //
 //  DialogueBoxSystem.h
 //  Chilli Source
+//  Created by Ian Copland on 04/03/2014.
 //
-//  Created by I Copland on 04/03/2014
-//  Copyright 2014 Tag Games. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifndef _CHILLISOURCE_CORE_DIALOGUE_DIALOGUESYSTEM_H_
@@ -22,7 +42,7 @@ namespace ChilliSource
 		/// A system used to display platform specific system
         /// dialogue boxes.
         ///
-        /// @author I Copland
+        /// @author Ian Copland
 		//-----------------------------------------------------------
 		class DialogueBoxSystem : public AppSystem
 		{
@@ -32,7 +52,7 @@ namespace ChilliSource
 			/// An enum describing the possible results from a
             /// dialogue box.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
             enum class DialogueResult
             {
@@ -43,7 +63,7 @@ namespace ChilliSource
 			/// A delegate called when a dialogue box has been
             /// dismissed.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The Id of the dialogue box.
             /// @param The result.
@@ -52,7 +72,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Display a system dialog with the given ID and delegate
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param ID
             /// @param SystemConfirmDialogDelegate
@@ -65,7 +85,7 @@ namespace ChilliSource
             /// Display a system confirmation dialog with the given
             /// ID and delegate.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param ID
             /// @param SystemConfirmDialogDelegate
@@ -78,7 +98,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Display a toast notification with the given text
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @param The text to display (UTF-8).
             //-----------------------------------------------------
@@ -86,7 +106,7 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// Destructor.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
 			//----------------------------------------------------
             virtual ~DialogueBoxSystem();
             
@@ -96,7 +116,7 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// Creates a new instance of this system.
             ///
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The new instance.
 			//----------------------------------------------------

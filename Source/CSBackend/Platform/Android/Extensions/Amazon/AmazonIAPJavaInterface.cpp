@@ -18,7 +18,8 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/JSON/json.h>
+
+#include <json/json.h>
 
 #include <jni.h>
 
@@ -27,7 +28,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when product descriptions request completes
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNI Environment
 	/// @param Pointer to the calling object
@@ -40,7 +41,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when a transaction status changes
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNI Environment
 	/// @param Pointer to the calling object
@@ -53,7 +54,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when a transaction complete request completes
 	///
-	/// @author I Copland
+	/// @author Ian Copland
 	///
 	/// @param JNI Environment
 	/// @param Pointer to the calling function

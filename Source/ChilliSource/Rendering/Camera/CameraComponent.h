@@ -26,300 +26,214 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _MO_FLO_RENDERING_CAMERA_COMPONENT_H_
-#define _MO_FLO_RENDERING_CAMERA_COMPONENT_H_
+#ifndef _CHILLISOURCE_RENDERING_CAMERA_CAMERACOMPONENT_H_
+#define _CHILLISOURCE_RENDERING_CAMERA_CAMERACOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Entity/Component.h>
+#include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-        enum class CameraType
-        {
-            k_orthographic,
-            k_perspective
-        };
-        
-		struct CameraDescription
-		{
-			f32 fFOV;
-			f32 fAspect;
-			f32 fNearClipping;
-			f32 fFarClipping;
-			
-			CameraType m_type;
-			bool bShouldResizeToScreen;
-			
-			Core::Colour ClearCol; 
-			Core::Vector2 vViewSize;
-		};
-		
+        //-----------------------------------------------------------
+        /// Base class for camera components. The camera is added
+        /// to the scene and provides the renderer with the view
+        /// and projection matrices required to draw the scene correctly
+        ///
+        /// @author S Downie
+        //-----------------------------------------------------------
 		class CameraComponent : public Core::Component
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(CameraComponent);
-			CameraComponent(const CameraDescription &inCamDesc);
-			~CameraComponent();
-			//----------------------------------------------------------
-			/// Is A
-			///
-			/// Returns if it is of the type given
-			/// @param Comparison Type
-			/// @return Whether the class matches the comparison type
-			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
-			//----------------------------------------------------------
-			/// Set Look At
-			///
-			/// Set the camera orientation, target and position
-			/// @param Position
-			/// @param Look target
-			/// @param Up direction
-			//----------------------------------------------------------
-			void SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp);
-			//----------------------------------------------------------
-            /// Toggle between ortho and persp camera
+            //-----------------------------------------------------------
+            /// Governs how the viewport updates with screen resize
             ///
-			/// @author S Downie
-			///
-            /// @param Camera type
-			//----------------------------------------------------------
-			void SetType(CameraType in_type);
+            /// @author S Downie
+            //-----------------------------------------------------------
+            enum class ViewportResizePolicy
+            {
+                k_none,
+                k_scaleWithScreen
+            };
             //----------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
+            ///
+            /// @param Near plane
+            /// @param Far plane
+            //----------------------------------------------------------
+            CameraComponent(f32 in_nearClip, f32 in_farClip);
+            //----------------------------------------------------------
+            /// Virtual Destructor
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+            virtual ~CameraComponent(){}
+			//------------------------------------------------------
 			/// @author S Downie
 			///
-			/// @return Camera type
-			//----------------------------------------------------------
-			CameraType GetType() const;
-			//----------------------------------------------------------
-			/// Set Viewport Size
-			///
-			/// @param Vector containing width and height
-			//----------------------------------------------------------
-			void SetViewportSize(const Core::Vector2 &invSize);
-			//----------------------------------------------------------
-			/// Set Viewport Size
-			///
-			/// @param Width 
-			/// @param Height
-			//----------------------------------------------------------
-			void SetViewportSize(u32 inudwWidth, u32 inudwHeight);
-			//----------------------------------------------------------
-			/// Get Viewport Size
-			///
-			/// @param Vector containing width and height
-			//----------------------------------------------------------
-			const Core::Vector2& GetViewportSize();			
+			/// @param Screen clear colour
 			//------------------------------------------------------
-			/// Set Field Of View
+			void SetClearColour(const Core::Colour& in_colour);
+			//------------------------------------------------------
+			/// @author S Downie
 			///
-			/// @param Viewing angle in degrees
+			/// @return Screen clear colour
 			//------------------------------------------------------
-			void SetFieldOfView(const f32 infFOVDegress);
+			const Core::Colour& GetClearColour() const;
 			//------------------------------------------------------
-			/// Set Aspect Ratio
-			///
-			/// @param Aspect Ratio (Viewport width/viewport height)
-			//------------------------------------------------------
-			void SetAspectRatio(const f32 infAspectRatio);
-			//------------------------------------------------------
-			/// Set Near Clipping
+			/// @author S Downie
 			///
 			/// @param Near Z clipping distance in view space
 			//------------------------------------------------------
-			void SetNearClipping(const f32 infNear);
+			void SetNearClipping(f32 in_near);
 			//------------------------------------------------------
-			/// Set Far Clipping
+			/// @author S Downie
 			///
 			/// @param Far Z clipping distance in view space
 			//------------------------------------------------------
-			void SetFarClipping(const f32 infFar);
+			void SetFarClipping(f32 in_far);
 			//------------------------------------------------------
-			/// Set Clear Colour
-			///
-			/// @param Render buffer clear colour
-			//------------------------------------------------------
-			void SetClearColour(const Core::Colour &inCol);
-			//------------------------------------------------------
-			/// Enable Viewport Resize with Screen
-			///
-			/// @param Whether the viewport should resize when
-			/// the screen resizes
-			//-----------------------------------------------------
-			void EnableViewportResizeWithScreen(bool inbEnable);
-			//------------------------------------------------------
-			/// Get Field Of View
-			///
-			/// @return Viewing angle in degrees
-			//------------------------------------------------------
-			const f32 GetFieldOfView() const;
-			//------------------------------------------------------
-			/// Get Aspect Ratio
-			///
-			/// @return Aspect Ratio (Viewport width/viewport height)
-			//------------------------------------------------------
-			const f32 GetAspectRatio() const;
-			//------------------------------------------------------
-			/// Get Near Clipping
-			///
-			/// @return Near Z clipping distance in view space
-			//------------------------------------------------------
-			const f32 GetNearClipping() const;
-			//------------------------------------------------------
-			/// Get Far Clipping
-			///
-			/// @return Far Z clipping distance in view space
-			//------------------------------------------------------
-			const f32 GetFarClipping() const;
-			//------------------------------------------------------
-			/// Get Clear Colour
-			///
-			/// @return Render buffer clear colour
-			//------------------------------------------------------
-			const Core::Colour& GetClearColour() const;
-			
-			//------------------------------------------------------
-			/// Get Projection 
+			/// @author S Downie
 			///
 			/// @return Projection matrix
 			//------------------------------------------------------
 			const Core::Matrix4& GetProjection();
 			//------------------------------------------------------
-			/// Get View 
+			/// @author S Downie
 			///
 			/// @return View matrix
 			//------------------------------------------------------
 			const Core::Matrix4& GetView();
 			//------------------------------------------------------
-			/// Unproject
-			///
-			/// Project from a point in screen space to a ray in
+			/// Unproject from a point in screen space to a ray in
 			/// world space
+            ///
 			/// @param Point in screen space
+            ///
 			/// @return Ray in world space with camera view direction
 			//------------------------------------------------------
-			virtual Core::Ray Unproject(const Core::Vector2 &invScreenPos);
+            Core::Ray Unproject(const Core::Vector2& in_screenPos);
 			//------------------------------------------------------
-			/// Project
-			///
 			/// Convert from a point in world space to a point in
 			/// screen space
+            ///
+            /// @param World space pos
+            ///
+            /// @return Screen space pos
 			//------------------------------------------------------
-			virtual Core::Vector2 Project(const Core::Vector3 &invWorldPos);
-			
+            Core::Vector2 Project(const Core::Vector3& in_worldPos);
 			//------------------------------------------------------
-			/// Get Frustum Pointer
+			/// @author S Downie
 			///
-			/// @return Pointer to camera frustum
+			/// @return Camera frustum
 			//------------------------------------------------------
-			const Core::Frustum* GetFrustumPtr() const;
-            //------------------------------------------------------
-            /// Update Frustum
-            ///
-            /// Recalculate frustum planes
-            //------------------------------------------------------
-            void UpdateFrustum();
+			const Core::Frustum& GetFrustum();
 			//------------------------------------------------------
-            /// Billboard
-            ///
             /// Orientate the given matrix to face the cameras
             /// view vector
+            ///
+            /// @author S Downie
+            ///
+            /// @param Matrix to billboard
+            ///
+            /// @return Billboarded matrix
             //------------------------------------------------------
-            void Billboard(const Core::Matrix4& inmatBillboarded, Core::Matrix4& outmatBillboarded);
-
-			CameraDescription& GetDescription() { return mDesc; }
-            
+            Core::Matrix4 Billboard(const Core::Matrix4& in_toBillboard);
             //--------------------------------------------------------------------------------------------------
-            /// Get Opaque Sort Predicate
+            /// @author S Downie
             ///
             /// @return Gets the currently set opaque sort predicate for this camera
             //--------------------------------------------------------------------------------------------------
-            RendererSortPredicateSPtr GetOpaqueSortPredicate() const;
+            const RendererSortPredicateSPtr& GetOpaqueSortPredicate() const;
             //--------------------------------------------------------------------------------------------------
-            /// Get Transparent Sort Predicate
+            /// @author S Downie
             ///
             /// @return Gets the currently set opaque sort predicate for this camera
             //--------------------------------------------------------------------------------------------------
-            RendererSortPredicateSPtr GetTransparentSortPredicate() const;
+            const RendererSortPredicateSPtr& GetTransparentSortPredicate() const;
             //--------------------------------------------------------------------------------------------------
-            /// Set Opaque Sort Predicate
+            /// @author S Downie
             ///
             /// @return Opaque sort predicate to use for this camera
             //--------------------------------------------------------------------------------------------------
-            void SetOpaqueSortPredicate(const RendererSortPredicateSPtr & inpPredicate);
+            void SetOpaqueSortPredicate(const RendererSortPredicateSPtr& in_predicate);
             //--------------------------------------------------------------------------------------------------
-            /// Set Transparent Sort Predicate
+            /// @author S Downie
             ///
             /// @param Transparent sort predicate to use for this camera
             //--------------------------------------------------------------------------------------------------
-            void SetTransparentSortPredicate(const RendererSortPredicateSPtr & inpPredicate);
-			         
+            void SetTransparentSortPredicate(const RendererSortPredicateSPtr& in_predicate);
             //--------------------------------------------------------------------------------------------------
-            /// Get Culling Predicate
+            /// @author S Downie
             ///
-            /// @param Culling predicate to use for this camera
+            /// @return Culling predicate to use for this camera
             //--------------------------------------------------------------------------------------------------
-            ICullingPredicateSPtr GetCullingPredicate() const;
+            const ICullingPredicateSPtr& GetCullingPredicate() const;
             //--------------------------------------------------------------------------------------------------
-            /// Get Perspective Culling Predicate
+            /// @author S Downie
             ///
-            /// @param Culling predicate to use for this camera in perpective mode
+            /// @param Culling predicate to use for this camera.
             //--------------------------------------------------------------------------------------------------
-            void SetPerspectiveCullingPredicate(const ICullingPredicateSPtr & inpPredicate);
-            //--------------------------------------------------------------------------------------------------
-            /// Get orthographic Culling Predicate
-            ///
-            /// @param Culling predicate to use for this camera in orthographic mode
-            //--------------------------------------------------------------------------------------------------
-            void SetOrthographicCullingPredicate(const ICullingPredicateSPtr & inpPredicate);
+            void SetCullingPredicate(const ICullingPredicateSPtr& in_predicate);
             
 		private:
 			//------------------------------------------------------
-			/// Calculate Perspective Matrix (Normalized)
+			/// Delegates the calculation of the projection matrix
+            /// to the concrete camera types.
 			///
-			/// 
-			//------------------------------------------------------
-			void CalculatePerspectiveMatrix();
-			//------------------------------------------------------
-			/// Calculate Orthographic Matrix
-			///
-			///
-			//------------------------------------------------------
-			void CalculateOrthographicMatrix();
-            //------------------------------------------------------
-			/// Called when the resolution changes and resize with
-			/// screen is enabled.
+			/// @author S Downie
             ///
-			/// @author I Copland
+            /// @return Projection matrix
 			//------------------------------------------------------
-			void OnResolutionChanged(const Core::Vector2& in_resolution);
+			virtual Core::Matrix4 CalculateProjectionMatrix() = 0;
+            //------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// Recalculate frustum planes
+            //------------------------------------------------------
+            virtual void UpdateFrustum() = 0;
+            //------------------------------------------------------
+            /// Called when the component is added to an entity
+            ///
+            /// @author S Downie
+            //------------------------------------------------------
+            void OnAddedToEntity();
+            //------------------------------------------------------
+            /// Called when the entity transform changes
+            ///
+            /// @author S Downie
+            //------------------------------------------------------
+            void OnTransformChanged();
+            
+        protected:
+            
+            Core::Frustum m_frustum;
+            f32 m_nearClip;
+            f32 m_farClip;
+            bool m_isProjCacheValid = false;
+            bool m_isFrustumCacheValid = false;
+            Core::Screen* m_screen = nullptr;
 
 		private:
 			
-            Core::Screen* m_screen;
+            Core::Matrix4 m_projMat;
+			Core::Matrix4 m_viewMat;
             
-			bool mbProjectionCacheValid;
+            Core::Colour m_clearCol;
 			
-			CameraDescription mDesc;
-			Core::Frustum mFrustum;
-			
-			Core::Matrix4 mmatProj;		//Projection matrix depending on whether we are an ortho or perspective camera
-			Core::Matrix4 mmatView;		//View matrix
-			Core::Matrix4 mmatViewProj;	//View projection;
+            RendererSortPredicateSPtr m_opaqueSortPredicate;
+            RendererSortPredicateSPtr m_transparentSortPredicate;
             
-            Core::EventConnectionUPtr m_screenOrientationChangedConnection;
-            Core::EventConnectionUPtr m_screenResizedConnection;
+            ICullingPredicateSPtr m_cullPredicate;
             
-            RendererSortPredicateSPtr mpOpaqueSortPredicate;
-            RendererSortPredicateSPtr mpTransparentSortPredicate;
-            
-            ICullingPredicateSPtr      mpOrthographicCulling;
-            ICullingPredicateSPtr      mpPerspectiveCulling;
+            Core::EventConnectionUPtr m_transformChangedConnection;
 		};
 	}
 }

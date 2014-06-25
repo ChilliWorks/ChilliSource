@@ -109,14 +109,14 @@ namespace CSBackend
 			//--------------------------------------------------
 			GLuint GetTextureHandle() const;
             //--------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return Whether or not this was told to use
             ///			mip maps
             //--------------------------------------------------
             bool HasMipMaps() const;
             //--------------------------------------------------
-            /// @author I Copland
+            /// @author Ian Copland
             ///
             /// @return The format of the image used to create
             ///			the texture.

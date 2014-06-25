@@ -6,6 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -14,6 +17,48 @@ import java.util.LinkedList;
 
 public class SCFileSystemUtils 
 {
+	/**
+	 * Reads the entire contents of a file into a string.
+	 * 
+	 * @param The file path.
+	 * 
+	 * @return The contents of the file. Failure will return an
+	 * empty string.
+	 */
+	public static String readFile(String in_filePath)
+	{	
+		String output = "";
+		try
+		{
+			byte[] encoded = Files.readAllBytes(Paths.get(in_filePath));
+			output = new String(encoded, StandardCharsets.UTF_8);
+		}
+		catch (Exception e)
+		{
+		}
+		
+		return output;
+	}
+	/**
+	 * Writes the contents of a string to file.
+	 * 
+	 * @param The output file path.
+	 * @param The string to write.
+	 * 
+	 * @return Whether or not the write was successful.
+	 */
+	public static boolean writeFile(String in_filePath, String in_contents)
+	{
+		try
+		{
+			Files.write(Paths.get(in_filePath), in_contents.getBytes());
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
 	//-----------------------------------------------
 	/// Write File
 	///
