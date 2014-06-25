@@ -177,11 +177,11 @@ namespace ChilliSource
         {
             if(m_textureAtlas != nullptr && m_hashedTextureAtlasId > 0)
             {
-                return m_textureAtlas->GetFrameSize(m_hashedTextureAtlasId);
+                return m_textureAtlas->GetOriginalFrameSize(m_hashedTextureAtlasId);
             }
             else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
             {
-                auto texture = mpMaterial->GetTexture();
+                auto texture = mpMaterial->GetTexture().get();
                 return Core::Vector2(texture->GetWidth(), texture->GetHeight());
             }
             
@@ -361,12 +361,30 @@ namespace ChilliSource
             m_transformChangedConnection = nullptr;
 		}
         //-----------------------------------------------------------
+        /// The image from the texture atlas will have potentially
+        /// been cropped by the tool. This will affect the sprites
+        /// position within the uncropped image and we need to
+        /// account for that when positioning the corners
         //-----------------------------------------------------------
 		void SpriteComponent::UpdateVertexPositions()
         {
-            const Core::Matrix4& worldTransform = GetEntity()->GetTransform().GetWorldTransform();
+            Core::Vector2 offsetTL;
+            Core::Vector2 offsetBR;
+            Core::Vector2 transformedSize;
+            if(m_textureAtlas != nullptr && m_hashedTextureAtlasId > 0)
+            {
+                const auto& frame = m_textureAtlas->GetFrame(m_hashedTextureAtlasId);
+                offsetTL = frame.m_offset;
+                offsetBR = frame.m_originalSize - offsetTL;
+                transformedSize = m_sizePolicyDelegate(m_originalSize, frame.m_size);
+            }
+            else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
+            {
+                auto texture = mpMaterial->GetTexture().get();
+                transformedSize = m_sizePolicyDelegate(m_originalSize, Core::Vector2(texture->GetWidth(), texture->GetHeight()));
+            }
             
-            Core::Vector2 transformedSize = GetSize();
+            const Core::Matrix4& worldTransform = GetEntity()->GetTransform().GetWorldTransform();
             
 			Core::Vector2 vHalfSize(transformedSize.x * 0.5f, transformedSize.y * 0.5f);
 			Core::Vector2 vAlignedPos;
