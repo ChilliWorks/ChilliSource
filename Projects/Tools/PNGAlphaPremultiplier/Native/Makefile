@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------
 # Makefile
-# PreMultipliedAlphaPNGTool
+# Chilli Source
 #
 # Created by Ian Copland on 14/03/2012
 # Copyright 2012 Tag Games. All rights reserved.
@@ -11,9 +11,9 @@ include Config.mk
 #-------------------------------------------------------------------
 CC				= gcc
 CCXX			= g++
-CFLAGS			= -Wall -O3 -DUSE_MMAP $(PROJECT_INCLUDE_PATHS)
-CXXFLAGS		= -Wall -O3 -DUSE_MMAP $(PROJECT_INCLUDE_PATHS)
-LDFLAGS			= 
+CFLAGS			= -std=c89 -m32 -Wall -O3 -DUSE_MMAP $(PROJECT_INCLUDE_PATHS)
+CXXFLAGS		= -std=c++11 -m32 -Wall -O3 -DUSE_MMAP $(PROJECT_INCLUDE_PATHS)
+LDFLAGS			= -m32
 EXECUTABLE		= $(PROJECT_NAME)
 CSOURCES		= $(PROJECT_C_SOURCE_FILES)
 CXXSOURCES		= $(PROJECT_CPP_SOURCE_FILES)

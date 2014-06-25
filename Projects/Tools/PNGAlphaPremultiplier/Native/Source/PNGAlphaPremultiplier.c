@@ -10,8 +10,9 @@
  */
 
 /*
- Further modified by Ian Copland on behalf of Tag Games ltd
- on 03/02/2012 -> Added premultiplication of palettised pngs
+ Modified for use in the Chilli Source engine.
+ 03/02/2012, Ian Copland: Added premultiplication of palettised pngs
+ 25/06/2014, Ian Copland: Minor tidy up changes.
  */
  
 /*
@@ -31,14 +32,13 @@
 /*
  Includes
 */
-#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
-#include <png.h>
-#include "PreMultipliedAlphaPNGTool.h"
-#include "Main.h"
+#include "LibPng/png.h"
+#include "PNGAlphaPremultiplier.h"
+#include "CLogging.h"
 /*
  Global vars
 */
@@ -72,7 +72,7 @@ void abort_(const char * s, ...)
   va_start(args, s);
   char abyMessage[1024];
   vsprintf(abyMessage, s, args);
-  PrintFatalError(abyMessage);
+  LogFatal(abyMessage);
   va_end(args);
 }
 
@@ -86,7 +86,7 @@ void print_message(const char * s, ...)
   va_start(args, s);
   char abyMessage[1024];
   vsprintf(abyMessage, s, args);
-  PrintMessage(abyMessage);
+  LogVerbose(abyMessage);
   va_end(args);
 }
 
@@ -100,7 +100,7 @@ void print_warning(const char * s, ...)
   va_start(args, s);
   char abyMessage[1024];
   vsprintf(abyMessage, s, args);
-  PrintWarning(abyMessage);
+  LogWarning(abyMessage);
   va_end(args);
 }
 
@@ -110,7 +110,7 @@ void print_warning(const char * s, ...)
 */
 void read_png_file(const char* file_name) 
 {
-  char header[8];    // 8 is the maximum size that can be checked
+  char header[8];    /*8 is the maximum size that can be checked*/
 
   /* open file and test for it being a png */
   FILE *fp = fopen(file_name, "rb");
@@ -378,7 +378,6 @@ void convert_file_palettised()
 int read_palette()
 {
 	png_bytep alpha_ptr;
-	int num_alpha;
 	png_colorp palette;
 	
 	/*Create the palette date*/
@@ -447,7 +446,6 @@ void convert(const char* input, const char* output)
   			write_png_file(output);
   			break;
 		case PNG_COLOR_TYPE_RGB:
-			print_warning("%s does not have an alpha channel. Output will be identical to input.", in_filename);
 			write_png_file(output);
 			break;
 		case PNG_COLOR_TYPE_PALETTE:

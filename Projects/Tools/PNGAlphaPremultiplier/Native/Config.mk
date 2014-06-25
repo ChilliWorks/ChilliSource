@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------
 # Config.mk
-# PreMultipliedAlphaPNGTool
+# Chilli Source
 #
 # Created by Ian Copland on 15/03/2012
 # Copyright 2012 Tag Games. All rights reserved.
@@ -11,20 +11,20 @@
 # The name of the project. This will be used as the output
 # exectable name.
 #-------------------------------------------------------------------
-PROJECT_NAME = PreMultipliedAlphaPNGTool
+PROJECT_NAME = PNGAlphaPremultiplier
 #-------------------------------------------------------------------
 # PROJECT_INCLUDE_PATHS
 #
 # A list of all the include paths used. This should be in the format
 # -I<relativepath>
 #-------------------------------------------------------------------
-PROJECT_INCLUDE_PATHS = -ISource/ -ISource/LibPng -ISource/ZLib
+PROJECT_INCLUDE_PATHS = -ISource/
 #-------------------------------------------------------------------
 # PROJECT_C_SOURCE_FILES
 #
 # A list of all the c sources to be built in the project.
 #-------------------------------------------------------------------
-PROJECT_C_SOURCE_FILES = Source/PreMultipliedAlphaPNGTool.c \
+PROJECT_C_SOURCE_FILES = Source/PNGAlphaPremultiplier.c \
 	Source/LibPng/png.c \
 	Source/LibPng/pngerror.c \
 	Source/LibPng/pngget.c \
@@ -61,5 +61,6 @@ PROJECT_C_SOURCE_FILES = Source/PreMultipliedAlphaPNGTool.c \
 # A list of all the c++ sources to be built in the project.
 #-------------------------------------------------------------------
 PROJECT_CPP_SOURCE_FILES = Source/Main.cpp \
-	Source/ToolUtils/Logger.cpp \
-	Source/ToolUtils/StringUtils.cpp
+	Source/Logging.cpp \
+	Source/CLogging.cpp \
+	Source/StringUtils.cpp
