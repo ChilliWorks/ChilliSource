@@ -182,7 +182,7 @@ namespace ChilliSource
             else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
             {
                 auto texture = mpMaterial->GetTexture().get();
-                return Core::Vector2(texture->GetWidth(), texture->GetHeight());
+				return Core::Vector2((f32)texture->GetWidth(), (f32)texture->GetHeight());
             }
             
             return Core::Vector2::k_one;
@@ -381,7 +381,7 @@ namespace ChilliSource
             else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
             {
                 auto texture = mpMaterial->GetTexture().get();
-                transformedSize = m_sizePolicyDelegate(m_originalSize, Core::Vector2(texture->GetWidth(), texture->GetHeight()));
+                transformedSize = m_sizePolicyDelegate(m_originalSize, Core::Vector2((f32)texture->GetWidth(), (f32)texture->GetHeight()));
             }
             
             const Core::Matrix4& worldTransform = GetEntity()->GetTransform().GetWorldTransform();
