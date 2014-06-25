@@ -37,6 +37,8 @@
 #include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
+#include <functional>
+
 namespace ChilliSource
 {
 	namespace Rendering
