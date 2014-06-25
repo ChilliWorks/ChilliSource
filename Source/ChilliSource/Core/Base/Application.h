@@ -192,10 +192,7 @@ namespace ChilliSource
 			///
 			/// @return Handle to application state manager
 			//-----------------------------------------------------
-			inline StateManager* GetStateManager()
-            {
-                return m_stateManager;
-            }
+            StateManager* GetStateManager() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the renderer.
             ///
@@ -203,10 +200,7 @@ namespace ChilliSource
 			///
 			/// @return Handle application renderer
 			//-----------------------------------------------------
-			inline Rendering::Renderer* GetRenderer()
-            {
-                return m_renderer;
-            }
+            Rendering::Renderer* GetRenderer() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the render system.
             ///
@@ -214,10 +208,7 @@ namespace ChilliSource
 			///
 			/// @return Handle to platfrom specific render system
 			//-----------------------------------------------------
-			inline Rendering::RenderSystem* GetRenderSystem()
-            {
-                return m_renderSystem;
-            }
+            Rendering::RenderSystem* GetRenderSystem() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the file system.
             ///
@@ -225,10 +216,7 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the file system
 			//-----------------------------------------------------
-			inline FileSystem* GetFileSystem()
-            {
-                return m_fileSystem;
-            }
+            FileSystem* GetFileSystem() const;
             //-----------------------------------------------------
 			/// Returns a pointer to the system that resolves path
             /// based on the device config
@@ -237,10 +225,7 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the path resolver
 			//-----------------------------------------------------
-			inline TaggedPathResolver* GetTaggedPathResolver() const
-            {
-                return m_taggedPathResolver;
-            }
+            TaggedFilePathResolver* GetTaggedFilePathResolver() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the task scheduler.
 			///
@@ -248,10 +233,7 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the task scheduler
 			//-----------------------------------------------------
-			inline TaskScheduler* GetTaskScheduler()
-			{
-				return m_taskScheduler;
-			}
+            TaskScheduler* GetTaskScheduler() const;
             //-----------------------------------------------------
 			/// Returns a pointer to the resource pool system.
             ///
@@ -259,19 +241,13 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the resource pool
 			//-----------------------------------------------------
-			inline ResourcePool* GetResourcePool()
-            {
-                return m_resourcePool;
-            }
+            ResourcePool* GetResourcePool() const;
             //-----------------------------------------------------
             /// @author I Copland
 			///
 			/// @return A pointer to the App Config.
 			//-----------------------------------------------------
-			inline AppConfig* GetAppConfig()
-            {
-                return m_appConfig;
-            }
+            AppConfig* GetAppConfig() const;
 #ifdef CS_ENABLE_DEBUGSTATS
             //-----------------------------------------------------
 			/// Returns a pointer to the debug stats system. This
@@ -282,10 +258,7 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the debug stats system.
 			//-----------------------------------------------------
-			inline Debugging::DebugStats* GetDebugStats()
-            {
-                return m_debugStats;
-            }
+            Debugging::DebugStats* GetDebugStats() const;
 #endif
             //----------------------------------------------------
 			/// Initialises the application and kicks off the update
@@ -449,7 +422,7 @@ namespace ChilliSource
             Rendering::RenderSystem* m_renderSystem = nullptr;
             PlatformSystem* m_platformSystem = nullptr;
             FileSystem* m_fileSystem = nullptr;
-            TaggedPathResolver* m_taggedPathResolver = nullptr;
+            TaggedFilePathResolver* m_taggedPathResolver = nullptr;
             Input::PointerSystem* m_pointerSystem = nullptr;
             AppConfig* m_appConfig = nullptr;
             

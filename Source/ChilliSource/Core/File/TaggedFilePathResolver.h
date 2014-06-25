@@ -1,5 +1,5 @@
 //
-//  TaggedPathResolver.h
+//  TaggedFilePathResolver.h
 //  Chilli Source
 //  Created by Scott Downie on 19/06/2014.
 //
@@ -26,11 +26,10 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_FILE_TAGGEDPATHRESOLVER_H_
-#define _CHILLISOURCE_CORE_FILE_TAGGEDPATHRESOLVER_H_
+#ifndef _CHILLISOURCE_CORE_FILE_TAGGEDFILEPATHRESOLVER_H_
+#define _CHILLISOURCE_CORE_FILE_TAGGEDFILEPATHRESOLVER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <json/json.h>
@@ -40,7 +39,7 @@ namespace ChilliSource
 	namespace Core
 	{
 		//-----------------------------------------------------------------
-		/// A system that resolves filenames based on the device configuration.
+		/// A system that resolves file paths based on the device configuration.
         ///
         /// Devices have the following configs:
         ///     * Language
@@ -65,10 +64,10 @@ namespace ChilliSource
         ///
         /// @author S Downie
 		//-----------------------------------------------------------------
-		class TaggedPathResolver : public AppSystem
+		class TaggedFilePathResolver : public AppSystem
 		{
 		public:
-            CS_DECLARE_NAMEDTYPE(TaggedPathResolver);
+            CS_DECLARE_NAMEDTYPE(TaggedFilePathResolver);
             
             //--------------------------------------------------------------
             /// The list of supported groups by which assets can be loaded
@@ -85,7 +84,7 @@ namespace ChilliSource
             };
             //--------------------------------------------------------------
             /// Holds the information for a range rule. A range rule
-            /// holds true for any value between greater than the minimum
+            /// holds true for any value greater than the minimum
             ///
             /// @author S Downie
             //--------------------------------------------------------------
@@ -168,7 +167,7 @@ namespace ChilliSource
             /// @return The best-fit filename based on the assets in the
             /// filesystem, the tags, the device and the priority (i.e. Textures/MyImage.high.png)
             //--------------------------------------------------------------
-            std::string ResolvePath(StorageLocation in_location, const std::string& in_basePath) const;
+            std::string ResolveFilePath(StorageLocation in_location, const std::string& in_basePath) const;
 
         private:
             
@@ -180,13 +179,13 @@ namespace ChilliSource
             ///
             /// @return New backend instance
             //--------------------------------------------------------------
-            static TaggedPathResolverUPtr Create();
+            static TaggedFilePathResolverUPtr Create();
             //--------------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             //--------------------------------------------------------------
-            TaggedPathResolver() = default;
+            TaggedFilePathResolver() = default;
             //--------------------------------------------------------------
             /// Called when the system is created
             ///
@@ -194,13 +193,13 @@ namespace ChilliSource
             //--------------------------------------------------------------
             void OnInit() override;
             //--------------------------------------------------------------
-            /// Called when the screen resizes
+            /// Assigns the correct tags based on the screen size
             ///
             /// @author S Downie
             ///
-            /// @param New screen size
+            /// @param Screen size
             //--------------------------------------------------------------
-            void OnScreenResized(const Vector2& in_size);
+            void DetermineScreenDependentTags(const Vector2& in_size);
             
         private:
             
@@ -214,8 +213,6 @@ namespace ChilliSource
             std::string m_activeTags[(u32)TagGroup::k_total];
             
             u32 m_priorityIndices[(u32)TagGroup::k_total];
-            
-            EventConnectionUPtr m_screenResizeConnection;
 		};
 	}
 		

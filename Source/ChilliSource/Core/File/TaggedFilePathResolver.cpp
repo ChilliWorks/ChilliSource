@@ -1,5 +1,5 @@
 //
-//  TaggedPathResolver.cpp
+//  TaggedFilePathResolver.cpp
 //  Chilli Source
 //  Created by Scott Downie on 19/06/2014.
 //
@@ -26,13 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/File/TaggedPathResolver.h>
+#include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Delegate/MakeDelegate.h>
-#include <ChilliSource/Core/Event/IConnectableEvent.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
@@ -122,71 +120,70 @@ namespace ChilliSource
             ///
             /// @return Tag group enum
             //--------------------------------------------------------------
-            TaggedPathResolver::TagGroup ParseGroup(const std::string& in_group)
+            TaggedFilePathResolver::TagGroup ParseGroup(const std::string& in_group)
             {
                 std::string lowercaseGroup = in_group;
                 StringUtils::ToLowerCase(lowercaseGroup);
                 
                 if(lowercaseGroup == "language")
                 {
-                    return TaggedPathResolver::TagGroup::k_language;
+                    return TaggedFilePathResolver::TagGroup::k_language;
                 }
                 
                 if(lowercaseGroup == "platform")
                 {
-                    return TaggedPathResolver::TagGroup::k_platform;
+                    return TaggedFilePathResolver::TagGroup::k_platform;
                 }
                 
                 if(lowercaseGroup == "resolution")
                 {
-                    return TaggedPathResolver::TagGroup::k_resolution;
+                    return TaggedFilePathResolver::TagGroup::k_resolution;
                 }
                 
                 if(lowercaseGroup == "aspectratio")
                 {
-                    return TaggedPathResolver::TagGroup::k_aspectRatio;
+                    return TaggedFilePathResolver::TagGroup::k_aspectRatio;
                 }
                 
-                CS_LOG_FATAL("TaggedPathResolver: No such group: " + in_group);
-                return TaggedPathResolver::TagGroup::k_platform;
+                CS_LOG_FATAL("TaggedFilePathResolver: No such group: " + in_group);
+                return TaggedFilePathResolver::TagGroup::k_platform;
             }
         }
         
-        CS_DEFINE_NAMEDTYPE(TaggedPathResolver);
+        CS_DEFINE_NAMEDTYPE(TaggedFilePathResolver);
         
         //-------------------------------------------------------
         //-------------------------------------------------------
-        TaggedPathResolverUPtr TaggedPathResolver::Create()
+        TaggedFilePathResolverUPtr TaggedFilePathResolver::Create()
         {
-            return TaggedPathResolverUPtr(new TaggedPathResolver());
+            return TaggedFilePathResolverUPtr(new TaggedFilePathResolver());
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        bool TaggedPathResolver::IsA(InterfaceIDType in_interfaceId) const
+        bool TaggedFilePathResolver::IsA(InterfaceIDType in_interfaceId) const
         {
             return in_interfaceId == InterfaceID;
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void TaggedPathResolver::OnInit()
+        void TaggedFilePathResolver::OnInit()
         {
             m_fileSystem = Application::Get()->GetFileSystem();
-            CS_ASSERT(m_fileSystem != nullptr, "TaggedPathResolver must have access to FileSystem");
+            CS_ASSERT(m_fileSystem != nullptr, "TaggedFilePathResolver must have access to FileSystem");
             m_screen = Application::Get()->GetSystem<Screen>();
-            CS_ASSERT(m_screen != nullptr, "TaggedPathResolver must have access to Screen system");
-            m_screenResizeConnection = m_screen->GetResolutionChangedEvent().OpenConnection(MakeDelegate(this, &TaggedPathResolver::OnScreenResized));
-            
+            CS_ASSERT(m_screen != nullptr, "TaggedFilePathResolver must have access to Screen system");
+
             //Initialise the priority to the default
             for(u32 i=0; i<(u32)TagGroup::k_total; ++i)
             {
                 m_priorityIndices[i] = i;
             }
             
-            OnScreenResized(m_screen->GetResolution());
+            DetermineScreenDependentTags(m_screen->GetResolution());
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void TaggedPathResolver::SetFromJson(const Json::Value& in_json)
+        void TaggedFilePathResolver::SetFromJson(const Json::Value& in_json)
         {
             std::vector<std::string> supportedLanguages;
             const Json::Value& languages = in_json["Languages"];
@@ -227,7 +224,7 @@ namespace ChilliSource
             const Json::Value& priorities = in_json["Priorities"];
             if(priorities.isNull() == false)
             {
-                CS_ASSERT(priorities.size() == (u32)TagGroup::k_total, "TaggedPathResolver: Need to specify all groups when setting priorities");
+                CS_ASSERT(priorities.size() == (u32)TagGroup::k_total, "TaggedFilePathResolver: Need to specify all groups when setting priorities");
                 for(u32 i=0; i<priorities.size(); ++i)
                 {
                     priorityIndices[i] = ParseGroup(priorities[i].asString());
@@ -238,13 +235,13 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void TaggedPathResolver::SetTags(const std::vector<std::string>& in_supportedLanguages,
+        void TaggedFilePathResolver::SetTags(const std::vector<std::string>& in_supportedLanguages,
                                          const std::vector<RangeRule>& in_supportedResolutions,
                                          const std::vector<RangeRule>& in_supportedAspectRatios)
         {
             //---Languages
             auto device = Application::Get()->GetSystem<Device>();
-            CS_ASSERT(device != nullptr, "TaggedPathResolver must have access to Device system");
+            CS_ASSERT(device != nullptr, "TaggedFilePathResolver must have access to Device system");
             for(const auto& language : in_supportedLanguages)
             {
                 m_groupTags[(u32)TagGroup::k_language].push_back("." + language);
@@ -287,12 +284,12 @@ namespace ChilliSource
             
             if(m_screen != nullptr)
             {
-                OnScreenResized(m_screen->GetResolution());
+                DetermineScreenDependentTags(m_screen->GetResolution());
             }
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void TaggedPathResolver::SetPriority(TagGroup in_high, TagGroup in_2, TagGroup in_3, TagGroup in_low)
+        void TaggedFilePathResolver::SetPriority(TagGroup in_high, TagGroup in_2, TagGroup in_3, TagGroup in_low)
         {
             m_priorityIndices[0] = (u32)in_high;
             m_priorityIndices[1] = (u32)in_2;
@@ -309,14 +306,14 @@ namespace ChilliSource
             {
                 if(priorityIndicesSorted[i] == priorityIndicesSorted[i+1])
                 {
-                    CS_LOG_FATAL("TaggedPathResolver::SetPriority: Has a priority conflict. Check for duplicate priorities");
+                    CS_LOG_FATAL("TaggedFilePathResolver::SetPriority: Has a priority conflict. Check for duplicate priorities");
                 }
             }
 #endif
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void TaggedPathResolver::OnScreenResized(const Vector2& in_size)
+        void TaggedFilePathResolver::DetermineScreenDependentTags(const Vector2& in_size)
         {
             //---Resolution
             f32 resolution = in_size.x * in_size.y;
@@ -342,7 +339,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        std::string TaggedPathResolver::ResolvePath(StorageLocation in_location, const std::string& in_basePath) const
+        std::string TaggedFilePathResolver::ResolveFilePath(StorageLocation in_location, const std::string& in_basePath) const
         {
             std::string filePath, fileName, fileExtension;
             StringUtils::SplitFullFilename(in_basePath, fileName, fileExtension, filePath);

@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/File/TaggedPathResolver.h>
+#include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 #include <ChilliSource/Core/Resource/IResourceOptions.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
@@ -361,7 +361,7 @@ namespace ChilliSource
             CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be loaded on the main thread - use LoadResourceAsync");
             CS_ASSERT(in_filePath.empty() == false, "Cannot load resource with no file path");
             
-            std::string deviceFilePath = Application::Get()->GetTaggedPathResolver()->ResolvePath(in_location, in_filePath);
+            std::string deviceFilePath = Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_location, in_filePath);
             
             std::unique_lock<std::mutex> lock(m_mutex);
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
@@ -436,7 +436,7 @@ namespace ChilliSource
             CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be refreshed on the main thread");
             CS_ASSERT(in_filePath.empty() == false, "Cannot refresh resource with no file path");
             
-            std::string deviceFilePath = Application::Get()->GetTaggedPathResolver()->ResolvePath(in_location, in_filePath);
+            std::string deviceFilePath = Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_location, in_filePath);
             
             std::unique_lock<std::mutex> lock(m_mutex);
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
@@ -544,7 +544,7 @@ namespace ChilliSource
             CS_ASSERT(in_filePath.empty() == false, "Cannot load resource async with no file path");
             CS_ASSERT(in_delegate != nullptr, "Cannot load resource async with null delegate");
             
-            std::string deviceFilePath = Application::Get()->GetTaggedPathResolver()->ResolvePath(in_location, in_filePath);
+            std::string deviceFilePath = Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_location, in_filePath);
             
             std::unique_lock<std::mutex> lock(m_mutex);
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);

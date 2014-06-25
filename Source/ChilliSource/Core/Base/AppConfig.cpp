@@ -31,7 +31,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/StorageLocation.h>
-#include <ChilliSource/Core/File/TaggedPathResolver.h>
+#include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
@@ -95,7 +95,7 @@ namespace ChilliSource
                 
                 if(fileTags.isNull() == false)
                 {
-                    Application::Get()->GetTaggedPathResolver()->SetFromJson(fileTags);
+                    Application::Get()->GetTaggedFilePathResolver()->SetFromJson(fileTags);
                 }
             }
         }

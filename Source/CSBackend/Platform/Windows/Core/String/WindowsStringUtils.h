@@ -69,7 +69,7 @@ namespace CSBackend
 			//------------------------------------------------------------
 			/// Converts the given file path to windows format.
 			///
-			/// @author I Copland
+			/// @author S Downie
 			///
 			/// @param The windows format wide string.
 			/// @return The same path standardised in a string.

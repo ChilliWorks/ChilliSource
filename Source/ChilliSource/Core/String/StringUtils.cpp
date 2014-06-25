@@ -432,6 +432,7 @@ namespace ChilliSource
                 std::string path = init;
                 
                 std::replace( path.begin(), path.end(), '\\', '/' );
+                path = ReplaceAll(path, "//", "/");
                 
                 ChopTrailingChars(path, '/');
                 
@@ -444,6 +445,7 @@ namespace ChilliSource
                 std::string path = init;
                 
                 std::replace( path.begin(), path.end(), '\\', '/' );
+                path = ReplaceAll(path, "//", "/");
                 
                 if(path.empty() == false && path.back() != '/')
                 {

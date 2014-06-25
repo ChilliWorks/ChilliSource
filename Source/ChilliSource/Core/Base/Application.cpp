@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
-#include <ChilliSource/Core/File/TaggedPathResolver.h>
+#include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 #include <ChilliSource/Core/Image/CSImageProvider.h>
 #include <ChilliSource/Core/Image/PNGImageProvider.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
@@ -359,7 +359,7 @@ namespace ChilliSource
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
             m_resourcePool = CreateSystem<ResourcePool>();
-            m_taggedPathResolver = CreateSystem<TaggedPathResolver>();
+            m_taggedPathResolver = CreateSystem<TaggedFilePathResolver>();
             CreateSystem<AppDataStore>();
             CreateSystem<CSImageProvider>();
             CreateSystem<PNGImageProvider>();
@@ -463,6 +463,62 @@ namespace ChilliSource
                 system->OnForeground();
             }
         }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        StateManager* Application::GetStateManager() const
+        {
+            return m_stateManager;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        Rendering::Renderer* Application::GetRenderer() const
+        {
+            return m_renderer;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        Rendering::RenderSystem* Application::GetRenderSystem() const
+        {
+            return m_renderSystem;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        FileSystem* Application::GetFileSystem() const
+        {
+            return m_fileSystem;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        TaggedFilePathResolver* Application::GetTaggedFilePathResolver() const
+        {
+            return m_taggedPathResolver;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        TaskScheduler* Application::GetTaskScheduler() const
+        {
+            return m_taskScheduler;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        ResourcePool* Application::GetResourcePool() const
+        {
+            return m_resourcePool;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        AppConfig* Application::GetAppConfig() const
+        {
+            return m_appConfig;
+        }
+#ifdef CS_ENABLE_DEBUGSTATS
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        Debugging::DebugStats* Application::GetDebugStats() const
+        {
+            return m_debugStats;
+        }
+#endif
         //----------------------------------------------------
         //----------------------------------------------------
 		Application::~Application()
