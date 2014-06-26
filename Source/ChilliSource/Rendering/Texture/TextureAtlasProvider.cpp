@@ -154,8 +154,8 @@ namespace ChilliSource
 				
 				frame.m_texCoordU = framePtr[0];
 				frame.m_texCoordV = framePtr[1];
-				frame.m_width = framePtr[2];
-				frame.m_height = framePtr[3];
+				frame.m_croppedWidth = framePtr[2];
+				frame.m_croppedWidth = framePtr[3];
 				frame.m_offsetX = framePtr[4];
 				frame.m_offsetY = framePtr[5];
                 frame.m_originalWidth = framePtr[6];

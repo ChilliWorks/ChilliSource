@@ -62,8 +62,8 @@ namespace ChilliSource
 			{
 				s16 m_texCoordU;
 				s16 m_texCoordV;
-				s16 m_width;
-				s16 m_height;
+				s16 m_croppedWidth;
+				s16 m_croppedHeight;
 				s16 m_offsetX;
 				s16 m_offsetY;
                 s16 m_originalWidth;
@@ -78,7 +78,7 @@ namespace ChilliSource
 			struct Frame
 			{
                 Rendering::UVs m_uvs;
-                Core::Vector2 m_size;
+                Core::Vector2 m_croppedSize;
                 Core::Vector2 m_originalSize;
                 Core::Vector2 m_offset;
 			};
@@ -146,7 +146,7 @@ namespace ChilliSource
             ///
 			/// @return Size of the given frame in pixels
 			//---------------------------------------------------------------------
-			Core::Vector2 GetFrameSize(const std::string& in_textureId) const;
+			Core::Vector2 GetCroppedFrameSize(const std::string& in_textureId) const;
             //---------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -195,7 +195,7 @@ namespace ChilliSource
             ///
 			/// @return Size of the given frame in pixels
 			//---------------------------------------------------------------------
-			Core::Vector2 GetFrameSize(u32 in_hashedTextureId) const;
+			Core::Vector2 GetCroppedFrameSize(u32 in_hashedTextureId) const;
             //---------------------------------------------------------------------
 			/// @author S Downie
 			///

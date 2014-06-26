@@ -71,11 +71,11 @@ namespace ChilliSource
                 f32 inverseHeight = 1.0f / m_textureAtlasHeight;
                 frame.m_uvs.m_u = (f32)(frameRaw.m_texCoordU + k_halfTexelOffset) * inverseWidth;
                 frame.m_uvs.m_v = (f32)(frameRaw.m_texCoordV + k_halfTexelOffset) * inverseHeight;
-                frame.m_uvs.m_s = (f32)(frameRaw.m_width - k_texelOffset) * inverseWidth;
-                frame.m_uvs.m_t = (f32)(frameRaw.m_height - k_texelOffset) * inverseHeight;
+                frame.m_uvs.m_s = (f32)(frameRaw.m_croppedWidth - k_texelOffset) * inverseWidth;
+                frame.m_uvs.m_t = (f32)(frameRaw.m_croppedHeight - k_texelOffset) * inverseHeight;
                 
                 frame.m_originalSize = Core::Vector2(frameRaw.m_originalWidth, frameRaw.m_originalHeight);
-                frame.m_size = Core::Vector2(frameRaw.m_width, frameRaw.m_height);
+                frame.m_croppedSize = Core::Vector2(frameRaw.m_croppedWidth, frameRaw.m_croppedHeight);
                 frame.m_offset = Core::Vector2(frameRaw.m_offsetX, frameRaw.m_offsetY);
                 
                 m_frames.insert(std::make_pair(in_desc.m_keys[i], frame));
@@ -110,10 +110,10 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
-		Core::Vector2 TextureAtlas::GetFrameSize(const std::string& in_textureId) const
+		Core::Vector2 TextureAtlas::GetCroppedFrameSize(const std::string& in_textureId) const
         {
             const Frame& frame = GetFrame(in_textureId);
-			return frame.m_size;
+			return frame.m_croppedSize;
 		}
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
@@ -155,10 +155,10 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
-        Core::Vector2 TextureAtlas::GetFrameSize(u32 in_hashedTextureId) const
+        Core::Vector2 TextureAtlas::GetCroppedFrameSize(u32 in_hashedTextureId) const
         {
             const Frame& frame = GetFrame(in_hashedTextureId);
-			return frame.m_size;
+			return frame.m_croppedSize;
         }
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
