@@ -42,6 +42,8 @@ import java.util.HashSet;
 
 import javax.imageio.ImageIO;
 
+import com.chillisource.toolutils.Logging;
+
 /**
  * Class that holds utility methos for packing images onto a single image to use the minimum
  * amount of space
@@ -114,7 +116,6 @@ public class TexturePacker
 	int innerPadding = 0;
 	int extrude = 0;
 	boolean cropImages = true;	// When true we crop transparencies in the image
-	boolean verboseOutput = false;
 	PlacementHeuristic eBestPlacement = PlacementHeuristic.BOTTOMRIGHT;
 	
 	public TexturePacker setOuterPadding(int in_padding)
@@ -197,12 +198,6 @@ public class TexturePacker
 		return this;
 	}
 	
-	public TexturePacker enableVerboseOutput(boolean in_enable)
-	{
-		verboseOutput = in_enable;
-		return this;
-	}
-	
 	/**
 	 * Packs the given images into a single image
 	 * 
@@ -239,7 +234,7 @@ public class TexturePacker
 		// find the width, height and offsets for each image
 		loadImageFileInformation();
 
-		System.out.println("Processing...");
+		Logging.logVerbose("Processing...");
 		int[] sortedOrder = new int[numSourceImages];
 		for (int i = 0; i < numSourceImages; i++)
 		{
@@ -295,7 +290,7 @@ public class TexturePacker
 			minAreaWidth = maxWidth;
 			minAreaHeight = maxHeight;
 
-			System.out.println("Minimum area required is "+minAreaWidth+"x"+minAreaHeight);
+			Logging.logVerbose("Minimum area required is "+minAreaWidth+"x"+minAreaHeight);
 		}
 		else
 		{
@@ -305,7 +300,7 @@ public class TexturePacker
 
 		if (!layoutSpritesForSheet(sortedOrder))
 		{
-			System.err.println("Images will not fit in any of the allowed output sizes.");
+			Logging.logFatal("Images will not fit in any of the allowed output sizes.");
 			return null;
 		}
 
@@ -365,8 +360,7 @@ public class TexturePacker
 			int iw = originalImageWidths[i];
 			int ih = originalImageHeights[i];
 
-			//			if (verboseOutput)
-			System.out.println("Writing pixels from:"+sourceImageFiles[namePointers[i]].getName()+" at x:"+ox+", y:"+oy+", width:"+width+", height:"+height);
+			Logging.logVerbose("Writing pixels from:"+sourceImageFiles[namePointers[i]].getName()+" at x:"+ox+", y:"+oy+", width:"+width+", height:"+height);
 
 			for (int y = 0; y < height; y++)
 			{
@@ -380,8 +374,7 @@ public class TexturePacker
 					}
 					else
 					{
-						if (verboseOutput)
-							System.out.println("input out of range:" + (ix + x) + "," + (iy + y));
+						Logging.logVerbose("input out of range:" + (ix + x) + "," + (iy + y));
 					}
 
 					if ((ox + x) < combinedImageWidth && (oy + y) < combinedImageHeight)
@@ -390,8 +383,7 @@ public class TexturePacker
 					}
 					else
 					{
-						if (verboseOutput)
-							System.out.println("Pixel out of range:" + (ox + x) + "," + (oy + y));
+						Logging.logVerbose("Pixel out of range:" + (ox + x) + "," + (oy + y));
 					}
 				}
 			}
@@ -411,7 +403,7 @@ public class TexturePacker
 			int oy = placedSpriteRects[outputOrder[i]].y;
 			int width = croppedImageWidths[i];
 			int height = croppedImageHeights[i];
-			System.out.println("Extruding pixels from:"+sourceImageFiles[namePointers[i]].getName()+" at x:"+ox+", y:"+oy+", width:"+width+", height:"+height);
+			Logging.logVerbose("Extruding pixels from:"+sourceImageFiles[namePointers[i]].getName()+" at x:"+ox+", y:"+oy+", width:"+width+", height:"+height);
 
 			//For each of the sides, iterate along it and add the extruded pixel colours. The existing padding should mean that the pixels are free to be coloured as we wish.
 			//top
@@ -529,7 +521,7 @@ public class TexturePacker
 
 		if(I1 == I2)
 		{
-			System.out.println("Hash match found:" + f1.getName() + " and " + f2.getName());
+			Logging.logVerbose("Hash match found:" + f1.getName() + " and " + f2.getName());
 			return true;
 		}
 
@@ -553,7 +545,7 @@ public class TexturePacker
 			y++;
 		}
 
-		System.out.println("Match found:" + f1.getName() + " and " + f2.getName());
+		Logging.logVerbose("Match found:" + f1.getName() + " and " + f2.getName());
 
 		return true;
 	}
@@ -761,7 +753,7 @@ public class TexturePacker
 		if(combinedImageHeight < newHeight)
 			combinedImageHeight = newHeight;
 
-		System.out.println("Trying next image size of "+combinedImageWidth+"x"+combinedImageHeight);
+		Logging.logVerbose("Trying next image size of "+combinedImageWidth+"x"+combinedImageHeight);
 
 		return true;
 	}
@@ -908,7 +900,7 @@ public class TexturePacker
 			if(TryToLayoutSprite(nSprite, sortedOrder) ==false)
 			{
 				int originalID = sortedOrder[nSprite];
-				System.err.println("Could not fit sprite:" + sourceImageFiles[originalID].getName() );
+				Logging.logFatal("Could not fit sprite:" + sourceImageFiles[originalID].getName() );
 				return false;
 			}
 			numPlacedImages++;
@@ -971,7 +963,7 @@ public class TexturePacker
 				File f = sourceImageFiles[i];
 				if (!f.exists())
 				{
-					System.out.println("<<<<<<<< does not exist in chosen directory");
+					Logging.logError(f.getPath() + "does not exist in chosen directory");
 					continue;
 				}
 
@@ -1090,8 +1082,7 @@ public class TexturePacker
 				imageOffsetXs[i] = minx;
 				imageOffsetYs[i] = miny;
 				croppedImageArea[i] = croppedImageWidths[i] * croppedImageHeights[i];
-				System.out.println(" clipped area:" + minx + "," + maxx + ":"
-						+ miny + "," + maxy);
+				Logging.logVerbose(" clipped area:" + minx + "," + maxx + ":" + miny + "," + maxy);
 			}
 		}
 	}
