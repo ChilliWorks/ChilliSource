@@ -18,7 +18,7 @@ PROJECT_NAME = PNGAlphaPremultiplier
 # A list of all the include paths used. This should be in the format
 # -I<relativepath>
 #-------------------------------------------------------------------
-PROJECT_INCLUDE_PATHS = -ISource/
+PROJECT_INCLUDE_PATHS = -ISource/ -ISource/LibPng/ -ISource/ZLib/
 #-------------------------------------------------------------------
 # PROJECT_C_SOURCE_FILES
 #
