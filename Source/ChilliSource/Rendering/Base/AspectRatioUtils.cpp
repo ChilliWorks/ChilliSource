@@ -38,50 +38,49 @@ namespace ChilliSource
         {
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
-            Core::Vector2 KeepOriginalWidthAdaptHeight(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            Core::Vector2 KeepOriginalWidthAdaptHeight(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio)
             {
-                f32 targetAspectRatio = in_preferredSize.y / in_preferredSize.x;
+                CS_ASSERT(in_preferredAspectRatio > 0.0f, "Aspect ratio must be greater than zero");
+                
+                f32 targetAspectRatio = 1.0f/in_preferredAspectRatio;
                 f32 originalHeight = (targetAspectRatio * in_originalSize.x);
                 return Core::Vector2(in_originalSize.x, originalHeight);
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
-            Core::Vector2 KeepOriginalHeightAdaptWidth(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            Core::Vector2 KeepOriginalHeightAdaptWidth(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio)
             {
-                f32 targetAspectRatio = in_preferredSize.x / in_preferredSize.y;
-                f32 originalWidth = (targetAspectRatio * in_originalSize.y);
+                f32 originalWidth = (in_preferredAspectRatio * in_originalSize.y);
                 return Core::Vector2(originalWidth, in_originalSize.y);
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
-            Core::Vector2 FillOriginal(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            Core::Vector2 FillOriginal(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio)
             {
                 f32 originalRatio = in_originalSize.x / in_originalSize.y;
-                f32 targetRatio = in_preferredSize.x / in_preferredSize.y;
                 
-                if(targetRatio <= originalRatio)
+                if(in_preferredAspectRatio <= originalRatio)
                 {
-                    return KeepOriginalWidthAdaptHeight(in_originalSize, in_preferredSize);
+                    return KeepOriginalWidthAdaptHeight(in_originalSize, in_preferredAspectRatio);
                 }
                 else
                 {
-                    return KeepOriginalHeightAdaptWidth(in_originalSize, in_preferredSize);
+                    return KeepOriginalHeightAdaptWidth(in_originalSize, in_preferredAspectRatio);
                 }
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
-            Core::Vector2 FitOriginal(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            Core::Vector2 FitOriginal(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio)
             {
                 f32 originalRatio = in_originalSize.x / in_originalSize.y;
-                f32 targetRatio = in_preferredSize.x / in_preferredSize.y;
                 
-                if(targetRatio > originalRatio)
+                if(in_preferredAspectRatio > originalRatio)
                 {
-                    return KeepOriginalWidthAdaptHeight(in_originalSize, in_preferredSize);
+                    return KeepOriginalWidthAdaptHeight(in_originalSize, in_preferredAspectRatio);
                 }
                 else
                 {
-                    return KeepOriginalHeightAdaptWidth(in_originalSize, in_preferredSize);
+                    return KeepOriginalHeightAdaptWidth(in_originalSize, in_preferredAspectRatio);
                 }
             }
         }

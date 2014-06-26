@@ -37,7 +37,7 @@ namespace ChilliSource
     {
         //--------------------------------------------------------------------
         /// Utility methods for calculating a size based on the given
-        /// size and preferred size.
+        /// size and preferred aspect ratio.
         ///
         /// @author S Downie
         //--------------------------------------------------------------------
@@ -50,11 +50,11 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Original size
-            /// @param Preferred size
+            /// @param Preferred aspect ratio
             ///
             /// @return Size with aspect maintained
             //----------------------------------------------------------------------------------------
-            Core::Vector2 KeepOriginalWidthAdaptHeight(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize);
+            Core::Vector2 KeepOriginalWidthAdaptHeight(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio);
             //----------------------------------------------------------------------------------------
             /// Aspect ratio maintaining function that keeps the original height but adapts
             /// the width to maintain the aspect ratio
@@ -62,11 +62,11 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Original size
-            /// @param Preferred size
+            /// @param Preferred aspect ratio
             ///
             /// @return Size with aspect maintained
             //----------------------------------------------------------------------------------------
-            Core::Vector2 KeepOriginalHeightAdaptWidth(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize);
+            Core::Vector2 KeepOriginalHeightAdaptWidth(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio);
             //----------------------------------------------------------------------------------------
             /// Aspect ratio maintaining function that maintains the given target aspect ratio
             /// while ensuring the size does not DROP BELOW the original size
@@ -74,11 +74,11 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Original size
-            /// @param Preferred size
+            /// @param Preferred aspect ratio
             ///
             /// @return Size with aspect maintained
             //----------------------------------------------------------------------------------------
-            Core::Vector2 FillOriginal(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize);
+            Core::Vector2 FillOriginal(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio);
             //----------------------------------------------------------------------------------------
             /// Aspect ratio maintaining function that maintains the given target aspect ratio
             /// while ensuring the size does not EXCEED the original size
@@ -86,11 +86,11 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Original size
-            /// @param Preferred size
+            /// @param Preferred aspect ratio
             ///
             /// @return Size with aspect maintained
             //----------------------------------------------------------------------------------------
-            Core::Vector2 FitOriginal(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize);
+            Core::Vector2 FitOriginal(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio);
         }
     }
 }
