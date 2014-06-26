@@ -91,7 +91,7 @@ namespace ChilliSource
             ///
             /// @param Sprite array
 			//------------------------------------------------------
-			void Build(std::vector<SpriteData>* inpSprites);
+			void Build(const std::vector<SpriteData>& in_sprites);
 			//------------------------------------------------------
 			/// Render
 			///

@@ -44,8 +44,6 @@ namespace ChilliSource
         {
             //CCW winding order (back face cull)
             const u16 k_localIndices[] = {0,1,2,1,3,2};
-            //CW winding order (front face cull)
-            //const u16 k_localIndices[] = {0,2,1,1,2,3};
         }
 		//------------------------------------------------------
 		/// Constructor
@@ -73,12 +71,9 @@ namespace ChilliSource
         ///
         /// @param Sprite array
 		//------------------------------------------------------
-		void SpriteBatch::Build(std::vector<SpriteData>* inpSprites)
+		void SpriteBatch::Build(const std::vector<SpriteData>& in_sprites)
 		{
-			//Sanity check
-			if(!mpSpriteBuffer) return;
-			
-			const u32 udwNumSprites = inpSprites->size();
+			const u32 udwNumSprites = in_sprites.size();
 			const u32 udwNumIndices = k_numSpriteIndices * udwNumSprites; 
 			
 			mpSpriteBuffer->Bind();
@@ -92,9 +87,9 @@ namespace ChilliSource
 			u32 VertIdx = 0;
 									
 			//The vertex data depends on the sprite vertex layout.
-			for(std::vector<SpriteData>::iterator pSpriteItr = inpSprites->begin(); pSpriteItr != inpSprites->end(); ++pSpriteItr)
+			for(const auto& sprite : in_sprites)
 			{
-				MapSpriteIntoBuffer(&pVBuffer[VertIdx], (*pSpriteItr));
+				MapSpriteIntoBuffer(&pVBuffer[VertIdx], sprite);
 				VertIdx+=4;
 			}
 			
@@ -156,7 +151,7 @@ namespace ChilliSource
 				u16* pIBuffer = nullptr;
 				mpSpriteBuffer->LockIndex(&pIBuffer, 0, 0);
 				
-				for	(u16 nSprite = 0; nSprite < mudwNumSpritesBuiltIndicesFor; nSprite++)
+				for	(u32 nSprite = 0; nSprite < mudwNumSpritesBuiltIndicesFor; nSprite++)
                 {
 					for(u32 i=0; i<k_numSpriteIndices; ++i)
 					{

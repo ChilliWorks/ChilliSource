@@ -185,7 +185,7 @@ namespace ChilliSource
             if(!maSpriteCache.empty())
             {
                 //Build the next buffer
-                mpBatch[mudwCurrentRenderSpriteBatch]->Build(&maSpriteCache);
+                mpBatch[mudwCurrentRenderSpriteBatch]->Build(maSpriteCache);
                 maSpriteCache.clear();
             }   
             
