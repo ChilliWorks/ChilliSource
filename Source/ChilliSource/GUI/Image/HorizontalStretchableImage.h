@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 namespace ChilliSource
 {
@@ -42,17 +43,6 @@ namespace ChilliSource
 		{	
 		public:
 
-            struct PanelDesc
-            {
-                Rendering::UVs m_leftUVs;
-                Rendering::UVs m_centreUVs;
-                Rendering::UVs m_rightUVs;
-                
-                Core::Vector2 m_leftSize;
-                Core::Vector2 m_centreSize;
-                Core::Vector2 m_rightSize;
-            };
-            
 			DECLARE_META_CLASS(HorizontalStretchableImage)
 
 			HorizontalStretchableImage();
@@ -114,25 +104,29 @@ namespace ChilliSource
             /// @param Sprite sheet id of right patch
             //---------------------------------------------------------
             void SetTextureAtlasIds(const std::string& in_left, const std::string& in_centre, const std::string& in_right);
-            //--------------------------------------------------------
-            /// Enable Height From Image
-            ///
-            /// When this is enabled the image view's height will be 
-            /// based on the size of the image
-            ///
-            /// @param Enable/disable
-            //--------------------------------------------------------
-            void EnableHeightFromImage(bool inbEnable);
 			//--------------------------------------------------------
-			/// Is Height From Image Enabled
-			///
-			/// When this is enabled the image view's height will be 
-			/// based on the size of the image
-			///
-			/// @return Whether the image view's height will be 
-			/// based on the size of the image
-			//--------------------------------------------------------
-			bool IsHeightFromImageEnabled() const;
+            /// Set Width Maintaining Aspect
+            ///
+            /// Change the current width of the image view and resize the height
+            /// to maintain the aspect ratio of the image
+            ///
+            /// @param Unified width
+            //--------------------------------------------------------
+            void SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth);
+            //--------------------------------------------------------
+            /// Enable Width Maintaining Aspect
+            ///
+            /// Enables auto scaling of the Width to maintain the aspect ratio
+            ///
+            /// @param boolean to disable or enable
+            //--------------------------------------------------------
+            void EnableWidthMaintainingAspect(bool inbEnabled);
+            //--------------------------------------------------------
+            /// Is Width Maintaining Aspect Enabled
+            ///
+            /// @return auto scaling of the Width to maintain the aspect ratio
+            //--------------------------------------------------------
+            bool IsWidthMaintainingAspectEnabled() const;
 			//--------------------------------------------------------
 			/// Get Combined Cap Width
 			///
@@ -140,9 +134,8 @@ namespace ChilliSource
 			//--------------------------------------------------------
 			f32 GetCombinedCapWidth() const;
 			//--------------------------------------------------------
-			/// Get Combined Cap Height
 			///
-			/// @param Sum of the heights of both end caps
+			/// @return Image height based on the max panel height
 			//--------------------------------------------------------
 			f32 GetCapHeight() const;
             //-----------------------------------------------------------
@@ -159,21 +152,6 @@ namespace ChilliSource
 			/// @param Whether the image view is acting as a container
 			//-----------------------------------------------------------
 			bool IsActAsSpacerEnabled() const;
-			//--------------------------------------------------------
-			/// Layout Content
-			///
-			/// Called when the view is able to retrieve an absolute
-			/// value.
-			//--------------------------------------------------------
-			void LayoutContent();
-			//--------------------------------------------------------
-            /// Set Size From Image
-            ///
-            /// Sets the of the image view to the size of the image
-            /// without requiring a draw to call. Useful for working
-            /// with relative sizes and aspect ratios.
-            //--------------------------------------------------------
-            void SetSizeFromImage();
 			//---------------------------------------------------------
 			/// Draw
 			/// 
@@ -182,18 +160,28 @@ namespace ChilliSource
 			/// @param Canvas renderer pointer
 			//---------------------------------------------------------
 			void Draw(Rendering::CanvasRenderer* inpCanvas);
-			
+            
+        private:
+            
+            enum class Patch
+            {
+                k_left,
+                k_centre,
+                k_right,
+                k_total
+            };
 			
 		private:
 
+            Rendering::TextureAtlas::Frame m_frames[(u32)Patch::k_total];
+            
             DECLARE_PROPERTY_A(Rendering::TextureCSPtr, Texture, SetTexture, GetTexture);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
 			
 			DECLARE_PROPERTY_A(std::string, BaseTextureAtlasID, SetBaseTextureAtlasID, GetBaseTextureAtlasID);
-            DECLARE_PROPERTY_A(bool, HeightFromImage, EnableHeightFromImage, IsHeightFromImageEnabled);
-            DECLARE_PROPERTY_A(bool, ActAsSpacer, EnableActAsSpacer, IsActAsSpacerEnabled);
             
-            PanelDesc m_panels;
+			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
+            DECLARE_PROPERTY_A(bool, ActAsSpacer, EnableActAsSpacer, IsActAsSpacerEnabled);
 		};
 
 		typedef std::shared_ptr<HorizontalStretchableImage> HorizontalStretchableImagePtr;

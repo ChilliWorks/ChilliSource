@@ -460,7 +460,7 @@ namespace ChilliSource
 				outPatchSize.vSizeTopLeft.y *= fScale;
 				outPatchSize.vSizeBottomLeft.y *= fScale;
 			}
-			fTotal = outPatchSize.vSizeTopRight.y + outPatchSize.vSizeBottomRight.y ;
+			fTotal = outPatchSize.vSizeTopRight.y + outPatchSize.vSizeBottomRight.y;
 			if(fTotal > vPanelSize.y)
 			{
 				//The corners are too tall let's
