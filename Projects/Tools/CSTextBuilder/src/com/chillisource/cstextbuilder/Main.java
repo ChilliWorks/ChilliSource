@@ -46,7 +46,7 @@ public class Main
 			if (arguments[i].equalsIgnoreCase(k_paramInput) == true || arguments[i].equalsIgnoreCase(k_paramInputShort) == true)
 			{
 				if (i+1 < arguments.length)
-					options.m_inputFilePath = StringUtils.standardiseFilepath(arguments[i+1]);
+					options.m_inputFilePath = StringUtils.standardiseFilePath(arguments[i+1]);
 				else
 					Logging.logFatal("No input file path provided!");
 				i++;
@@ -56,7 +56,7 @@ public class Main
 			else if (arguments[i].equalsIgnoreCase(k_paramOutput) == true || arguments[i].equalsIgnoreCase(k_paramOutputShort) == true)
 			{
 				if (i+1 < arguments.length)
-					options.m_outputFilePath = StringUtils.standardiseFilepath(arguments[i+1]);
+					options.m_outputFilePath = StringUtils.standardiseFilePath(arguments[i+1]);
 				else
 					Logging.logFatal("No output file path provided!");
 				i++;

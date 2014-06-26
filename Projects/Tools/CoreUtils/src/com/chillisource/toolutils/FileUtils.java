@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.CodeSource;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -181,13 +180,13 @@ public class FileUtils
 					File entry = new File(sourceDir, astrList[i]);
 					if (entry.isDirectory())
 					{
-						copyDirectory(StringUtils.standardiseFilepath(in_inputDirectoryPath) + StringUtils.standardiseFilepath(astrList[i]),
-								StringUtils.standardiseFilepath(in_outputDirectoryPath) + StringUtils.standardiseFilepath(astrList[i]), in_directoryPathsToIgnore);
+						copyDirectory(StringUtils.standardiseDirectoryPath(in_inputDirectoryPath) + StringUtils.standardiseDirectoryPath(astrList[i]),
+								StringUtils.standardiseDirectoryPath(in_outputDirectoryPath) + StringUtils.standardiseDirectoryPath(astrList[i]), in_directoryPathsToIgnore);
 					}
 					else
 					{
-						copyFile(StringUtils.standardiseFilepath(in_inputDirectoryPath) + StringUtils.standardiseFilepath(astrList[i]),
-								StringUtils.standardiseFilepath(in_outputDirectoryPath) + StringUtils.standardiseFilepath(astrList[i]));
+						copyFile(StringUtils.standardiseDirectoryPath(in_inputDirectoryPath) + StringUtils.standardiseFilePath(astrList[i]),
+								StringUtils.standardiseDirectoryPath(in_outputDirectoryPath) + StringUtils.standardiseFilePath(astrList[i]));
 					}
 				}
 			}
@@ -243,7 +242,7 @@ public class FileUtils
 	public static boolean createDirectory(String in_directoryPath)
 	{
 		//break the path onto sections.
-		String strDirectory = StringUtils.standardiseFilepath(in_directoryPath);
+		String strDirectory = StringUtils.standardiseDirectoryPath(in_directoryPath);
 		String[] strPathSections = strDirectory.split("/");
 		
 		String strPathSoFar = "";
@@ -312,7 +311,7 @@ public class FileUtils
 	 */
 	static public String[] getFilePaths(String in_directoryPath)
 	{
-		String strDirectory = StringUtils.standardiseFilepath(in_directoryPath);
+		String strDirectory = StringUtils.standardiseDirectoryPath(in_directoryPath);
 		String[] astrFilenames = getFullFilePaths(strDirectory);
 		
 		for (int i = 0; i < astrFilenames.length; ++i)
@@ -331,7 +330,7 @@ public class FileUtils
 	 */
 	static public String[] getDirectoriesInDirectory(String in_directoryPath)
 	{
-		String strDirectory = StringUtils.standardiseFilepath(in_directoryPath);
+		String strDirectory = StringUtils.standardiseDirectoryPath(in_directoryPath);
 		String[] astrDirectories = getFullDirectoryPaths(strDirectory);
 		
 		for (int i = 0; i < astrDirectories.length; ++i)
@@ -386,17 +385,23 @@ public class FileUtils
 	/**
 	 * @author Ian Copland
 	 * 
-	 * @return the full path to the jar files location.
+	 * @return the full path to the jar file's location. Note that this does not
+	 * work if the jar is exported as a Runnable Jar, or while compiling from
+	 * eclipse.
 	 */
 	static public String getPathToHere()
 	{
 		String strPathToHere = "";
 		try
 		{
-			CodeSource codeSource = FileUtils.class.getProtectionDomain().getCodeSource();
-			File jarFile = new File(codeSource.getLocation().toURI().getPath());
-			strPathToHere = jarFile.getParentFile().getPath();
-			strPathToHere = StringUtils.standardiseFilepath(strPathToHere);
+			final File file = new File(FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+			String jarPath = StringUtils.standardiseFilePath(file.getAbsolutePath());
+			
+			int slashIndex = jarPath.lastIndexOf('/');
+			if (slashIndex != -1)
+			{
+				strPathToHere = jarPath.substring(0, slashIndex + 1);
+			}
 		}
 		catch (Exception e)
 		{
@@ -416,7 +421,7 @@ public class FileUtils
 	 */
 	private static String[] getFullFilePaths(String in_directoryPath)
 	{
-		String strDirectory = StringUtils.standardiseFilepath(in_directoryPath);
+		String strDirectory = StringUtils.standardiseDirectoryPath(in_directoryPath);
 		ArrayList<String> astrFilenames = new ArrayList<String>();
 		
 		File directory = new File(strDirectory);
@@ -457,7 +462,7 @@ public class FileUtils
 	 */
 	private static String[] getFullDirectoryPaths(String in_directoryPath)
 	{
-		String strDirectory = StringUtils.standardiseFilepath(in_directoryPath);
+		String strDirectory = StringUtils.standardiseDirectoryPath(in_directoryPath);
 		ArrayList<String> astrDirectories = new ArrayList<String>();
 		
 		File directory = new File(strDirectory);

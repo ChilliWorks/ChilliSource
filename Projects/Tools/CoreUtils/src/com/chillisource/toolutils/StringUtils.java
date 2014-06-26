@@ -32,20 +32,43 @@ public class StringUtils
 	{
 		return new String(inabyUTF8, kUTF8Charset);
 	}
-	//-------------------------------------------------
-	/// Standardise Filepath
-	///
-	/// Converts a filepath string to a standard format.
-	///
-	/// @param the directory
-	/// @output the standardised path.
-	//-------------------------------------------------
-	public static String standardiseFilepath(String instrFilepath)
+	/**
+	 * Standardised the path to a file.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param The file path.
+	 * 
+	 * @return The standardised file path.
+	 */
+	public static String standardiseFilePath(String in_filePath)
 	{
-		String strStandardisedPath = new String(instrFilepath.replace("\\", "/"));
-		if (strStandardisedPath.endsWith("/") == false && strStandardisedPath.contains(".") == false)
-			strStandardisedPath += "/";
-		return strStandardisedPath;
+		String standardisedPath = in_filePath.replace("\\", "/");
+		standardisedPath = in_filePath.replace("//", "/");
+		if (standardisedPath.endsWith("/") == true)
+		{
+			standardisedPath = standardisedPath.substring(0, standardisedPath.length() - 1);
+		}
+		return standardisedPath;
+	}
+	/**
+	 * Standardised the path to a file.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param The file path.
+	 * 
+	 * @return The standardised file path.
+	 */
+	public static String standardiseDirectoryPath(String in_directoryPath)
+	{
+		String standardisedPath = in_directoryPath.replace("\\", "/");
+		standardisedPath = in_directoryPath.replace("//", "/");
+		if (standardisedPath.endsWith("/") == false)
+		{
+			standardisedPath += "/";
+		}
+		return standardisedPath;
 	}
 	//-------------------------------------------------
 	/// Get Extension
@@ -87,7 +110,7 @@ public class StringUtils
 	//-------------------------------------------------
 	public static String getDirectory(String instrFilepath)
 	{
-		String strStandardisedFilepath = StringUtils.standardiseFilepath(instrFilepath);
+		String strStandardisedFilepath = StringUtils.standardiseFilePath(instrFilepath);
 		int dwIndex = strStandardisedFilepath.lastIndexOf("/");
 		if (dwIndex != -1)
 			return strStandardisedFilepath.substring(0, dwIndex + 1);

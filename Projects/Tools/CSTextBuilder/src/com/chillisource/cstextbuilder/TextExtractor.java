@@ -176,7 +176,7 @@ public class TextExtractor
 	private static void WriteText(String instrLanguage, StringBuffer inStrings, ExtractTextOptions inOptions) throws Exception
 	{
 		Logging.logVerbose("Outputting UTF8...");
-		String strOutputPath = StringUtils.standardiseFilepath(inOptions.m_outputFilePath);
+		String strOutputPath = StringUtils.standardiseFilePath(inOptions.m_outputFilePath);
 		FileUtils.deleteFile(strOutputPath);
 
 		LittleEndianOutputStream stream = new LittleEndianOutputStream(strOutputPath);
@@ -226,7 +226,7 @@ public class TextExtractor
 	{
 		Logging.logVerbose("Writing text ids...");
 		
-		String strOutputPath = StringUtils.standardiseFilepath(inOptions.m_outputFilePath + "id");
+		String strOutputPath = StringUtils.standardiseFilePath(inOptions.m_outputFilePath + "id");
 		
 		FileUtils.deleteFile(strOutputPath);
 		FileUtils.writeFile(strOutputPath, StringUtils.stringToUTF8Bytes(inStringIds.toString()));

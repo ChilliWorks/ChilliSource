@@ -3,12 +3,11 @@ package com.chillisource.pngalphapremultiplier;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URLDecoder;
 import java.util.LinkedList;
 
+import com.chillisource.toolutils.FileUtils;
 import com.chillisource.toolutils.Logging;
 import com.chillisource.toolutils.StringUtils;
-import com.chillisource.toolutils.Logging.LoggingLevel;
 
 public class PngPremultiplier 
 {
@@ -24,8 +23,8 @@ public class PngPremultiplier
 	{
 		try
 		{	
-			String strInput = StringUtils.standardiseFilepath(insOptions.strInputFilename);
-			String strOutput = StringUtils.standardiseFilepath(insOptions.strOutputFilename);
+			String strInput = StringUtils.standardiseFilePath(insOptions.strInputFilename);
+			String strOutput = StringUtils.standardiseFilePath(insOptions.strOutputFilename);
 			
 			//build the command list
 			LinkedList<String> astrCommands = new LinkedList<String>();
@@ -56,26 +55,16 @@ public class PngPremultiplier
 				break;
 			case k_verbose:
 				astrCommands.add("--logginglevel");
-				astrCommands.add("verbose");
+				astrCommands.add("warning");
 				break;
 			}
-			
-			astrCommands.add("--errordisplay");
-			astrCommands.add("whenrecieved");
 			
 			Logging.logVerbose("Premultiplying " + strInput);
 			
 			//run the application
 			final Process process = new ProcessBuilder(astrCommands).start();
 	
-			//create runnables for polling the input and error streams.
-			Runnable inputRunnable = new Runnable()
-			{
-				@Override public void run() 
-				{
-					ReadInputStream(process);
-				}
-			};
+			//create runnables for polling the error streams.
 			Runnable errorRunnable = new Runnable()
 			{
 				@Override public void run() 
@@ -85,13 +74,10 @@ public class PngPremultiplier
 			};
 			
 			//start these runnables.
-			Thread inputThread = new Thread(inputRunnable);
 			Thread errorThread = new Thread(errorRunnable);
-			inputThread.start();
 			errorThread.start();
 			
 			//wait for the threads to finish
-			inputThread.join();
 			errorThread.join();
 			
 			//end the process
@@ -99,7 +85,7 @@ public class PngPremultiplier
 		}
 		catch (Exception e)
 		{
-			Logging.logFatal("Exception occurred in Premultiply(): \n" + e.getStackTrace());
+			Logging.logFatal("Exception occurred in Premultiply(): \n" + StringUtils.convertExceptionToString(e));
 		}
 	}
 	//------------------------------------------------------
@@ -115,60 +101,26 @@ public class PngPremultiplier
 		try
 		{
 			//get the path to the jar
-			String strUndecodedPathToHere = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-			String strPathToHere = URLDecoder.decode(strUndecodedPathToHere, "UTF-8");
-			strPathToHere = strPathToHere.substring(0, strPathToHere.lastIndexOf("/") + 1);
-			StringUtils.standardiseFilepath(strPathToHere);
+			String strPathToHere = FileUtils.getPathToHere();
 			
 			//get which version of the executable should be used.
 			String strOS = System.getProperty("os.name");
 			
 			if (strOS.startsWith("Windows") == true)
-				strExecutableName = strPathToHere + "PNGAlphaPremultiplier/PreMultipliedAlphaPNGToolWindows.exe";
+				strExecutableName = strPathToHere + "PNGAlphaPremultiplier/PNGAlphaPremultiplierWindows.exe";
 			else if (strOS.startsWith("Mac") == true)
-				strExecutableName = strPathToHere + "PNGAlphaPremultiplier/PreMultipliedAlphaPNGToolOSX";
+				strExecutableName = strPathToHere + "PNGAlphaPremultiplier/PNGAlphaPremultiplierOSX";
 			else if (strOS.startsWith("Linux") == true)
-				strExecutableName = strPathToHere + "PNGAlphaPremultiplier/PreMultipliedAlphaPNGToolLinux";
+				strExecutableName = strPathToHere + "PNGAlphaPremultiplier/PNGAlphaPremultiplierLinux";
 			else
 				Logging.logFatal("This platform is not supported!");
 		}
 		catch (Exception e)
 		{
-			Logging.logFatal("Exception occurred in GetExecutableName(): \n" + e.getStackTrace());
+			Logging.logFatal("Exception occurred in GetExecutableName(): \n" + StringUtils.convertExceptionToString(e));
 		}
 		
 		return strExecutableName;
-	}
-	//------------------------------------------------------
-	/// Read Input Stream
-	///
-	/// reads and outputs the processes input stream.
-	///
-	/// @param the process that owns the input stream.
-	//------------------------------------------------------
-	private static void ReadInputStream(Process inProcess)
-	{
-		try
-		{
-			InputStream inputStream = inProcess.getInputStream();
-			InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-			BufferedReader bufferedInputReader = new BufferedReader(inputStreamReader);
-			
-			String inputLine = null;
-			do
-			{
-				inputLine = bufferedInputReader.readLine();
-				if (inputLine != null)
-				{	
-					Logging.logVerbose("  " + inputLine);
-				}
-			}
-			while (inputLine != null);
-		}
-		catch (Exception e)
-		{
-			Logging.logFatal("Something has gone wrong while reading the error stream!\n" + e.getStackTrace().toString());
-		}
 	}
 	//------------------------------------------------------
 	/// Read Error Stream
@@ -191,15 +143,25 @@ public class PngPremultiplier
 				errorLine = bufferedErrorReader.readLine();
 				if (errorLine != null)
 				{
-					if (Logging.getLoggingLevel() == LoggingLevel.k_verbose)
-						Logging.logVerbose("  " + errorLine);
+					if (errorLine.startsWith("WARNING:") == true)
+					{
+						Logging.logWarning(errorLine.substring(8));
+					}
+					else if (errorLine.startsWith("ERROR:") == true)
+					{
+						Logging.logError(errorLine.substring(6));
+					}
+					else if (errorLine.startsWith("FATAL:") == true)
+					{
+						Logging.logFatal(errorLine.substring(6));
+					}
 				}
 			}
 			while (errorLine != null);
 		}
 		catch (Exception e)
 		{
-			Logging.logFatal("Something has gone wrong while reading the error stream!\n" + e.getStackTrace().toString());
+			Logging.logFatal("Something has gone wrong while reading the error stream!\n" + StringUtils.convertExceptionToString(e));
 		}
 	}
 }

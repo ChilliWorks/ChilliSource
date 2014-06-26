@@ -75,7 +75,7 @@ public final class Main
 			if (arguments[i].equalsIgnoreCase(k_paramInput) == true || arguments[i].equalsIgnoreCase(k_paramInputShort) == true)
 			{
 				if (i+1 < arguments.length)
-					input = StringUtils.standardiseFilepath(arguments[i+1]);
+					input = StringUtils.standardiseFilePath(arguments[i+1]);
 				else
 					Logging.logFatal("No input file path provided!");
 				i++;
@@ -85,7 +85,7 @@ public final class Main
 			else if (arguments[i].equalsIgnoreCase(k_paramTemplate) == true || arguments[i].equalsIgnoreCase(k_paramTemplateShort) == true)
 			{
 				if (i+1 < arguments.length)
-					template = StringUtils.standardiseFilepath(arguments[i+1]);
+					template = StringUtils.standardiseFilePath(arguments[i+1]);
 				else
 					Logging.logFatal("No template file path provided!");
 				i++;
@@ -95,7 +95,7 @@ public final class Main
 			else if (arguments[i].equalsIgnoreCase(k_paramOutput) == true || arguments[i].equalsIgnoreCase(k_paramOutputShort) == true)
 			{
 				if (i+1 < arguments.length)
-					output = StringUtils.standardiseFilepath(arguments[i+1]);
+					output = StringUtils.standardiseFilePath(arguments[i+1]);
 				else
 					Logging.logFatal("No output file path provided!");
 				i++;

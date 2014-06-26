@@ -65,9 +65,9 @@ public class Main
 		}
 		
 		//confirm that the params are valid.
-		if (options.strInputFilename == "")
+		if (options.strInputFilename.length() == 0)
 			Logging.logFatal("No input filename provided.");
-		if (options.strOutputFilename == "")
+		if (options.strOutputFilename.length() == 0)
 			Logging.logFatal("No output filename provided.");
 		
 		//now that the options have been gathered, perform the png pre-multiplying!

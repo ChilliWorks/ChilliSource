@@ -63,7 +63,7 @@ public class Main
 			if (arguments[i].equalsIgnoreCase(PARAM_NAME_INPUT) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_INPUT_SHORT) == true)
 			{
 				if (i+1 < arguments.length)
-					params.mstrInputFilepath = StringUtils.standardiseFilepath(arguments[i+1]);
+					params.mstrInputFilepath = StringUtils.standardiseFilePath(arguments[i+1]);
 				else
 					Logging.logFatal("No input file provided!");
 				i++;
@@ -73,7 +73,7 @@ public class Main
 			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_OUTPUT) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_OUTPUT_SHORT) == true)
 			{
 				if (i+1 < arguments.length)
-					params.mstrOutputFilepath = StringUtils.standardiseFilepath(arguments[i+1]);
+					params.mstrOutputFilepath = StringUtils.standardiseFilePath(arguments[i+1]);
 				else
 					Logging.logFatal("No output file provided!");
 				i++;
