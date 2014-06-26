@@ -524,12 +524,12 @@ namespace ChilliSource
                 const auto& frame = m_atlas->GetFrame(m_hashedAtlasId);
 
                 Core::Vector2 offsetTL2;
-                offsetTL2.x = (-frame.m_originalSize.x * 0.5f) + (frame.m_size.x * 0.5f) + frame.m_offset.x;
-                offsetTL2.y = (frame.m_originalSize.y * 0.5f) - (frame.m_size.y * 0.5f) - frame.m_offset.y;
+                offsetTL2.x = (-frame.m_originalSize.x * 0.5f) + (frame.m_croppedSize.x * 0.5f) + frame.m_offset.x;
+                offsetTL2.y = (frame.m_originalSize.y * 0.5f) - (frame.m_croppedSize.y * 0.5f) - frame.m_offset.y;
                 
                 //Convert offset from texel space to local sprite space
                 offsetTL2 = size/frame.m_originalSize * offsetTL2;
-                size = size/frame.m_originalSize * frame.m_size;
+                size = size/frame.m_originalSize * frame.m_croppedSize;
                 
                 offsetTL = Core::Vector3(offsetTL2.x, offsetTL2.y, 0.0f);
             }

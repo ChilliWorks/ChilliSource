@@ -79,15 +79,75 @@ namespace ChilliSource
             {
                 return in_preferredSize;
             }
+            //----------------------------------------------------------------------------------------
+            /// Aspect ratio maintaining function that keeps the original width but adapts
+            /// the height to maintain the aspect ratio
+            ///
+            /// @author S Downie
+            ///
+            /// @param Original size
+            /// @param Preferred size
+            ///
+            /// @return Size with aspect maintained
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 KeepOriginalWidthAdaptHeight(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            {
+                return AspectRatioUtils::KeepOriginalWidthAdaptHeight(in_originalSize, in_preferredSize.x/in_preferredSize.y);
+            }
+            //----------------------------------------------------------------------------------------
+            /// Aspect ratio maintaining function that keeps the original height but adapts
+            /// the width to maintain the aspect ratio
+            ///
+            /// @author S Downie
+            ///
+            /// @param Original size
+            /// @param Preferred size
+            ///
+            /// @return Size with aspect maintained
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 KeepOriginalHeightAdaptWidth(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            {
+                return AspectRatioUtils::KeepOriginalHeightAdaptWidth(in_originalSize, in_preferredSize.x/in_preferredSize.y);
+            }
+            //----------------------------------------------------------------------------------------
+            /// Aspect ratio maintaining function that maintains the given target aspect ratio
+            /// while ensuring the size does not DROP BELOW the original size
+            ///
+            /// @author S Downie
+            ///
+            /// @param Original size
+            /// @param Preferred size
+            ///
+            /// @return Size with aspect maintained
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 FillOriginal(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            {
+                return AspectRatioUtils::FillOriginal(in_originalSize, in_preferredSize.x/in_preferredSize.y);
+            }
+            //----------------------------------------------------------------------------------------
+            /// Aspect ratio maintaining function that maintains the given target aspect ratio
+            /// while ensuring the size does not EXCEED the original size
+            ///
+            /// @author S Downie
+            ///
+            /// @param Original size
+            /// @param Preferred size
+            ///
+            /// @return Size with aspect maintained
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 FitOriginal(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            {
+                return AspectRatioUtils::FitOriginal(in_originalSize, in_preferredSize.x/in_preferredSize.y);
+            }
             
             const SpriteComponent::SizePolicyDelegate k_sizeDelegates[(u32)SpriteComponent::SizePolicy::k_totalNum] =
             {
                 UseOriginalSize,
                 UsePreferredSize,
-                AspectRatioUtils::KeepOriginalWidthAdaptHeight,
-                AspectRatioUtils::KeepOriginalHeightAdaptWidth,
-                AspectRatioUtils::FitOriginal,
-                AspectRatioUtils::FillOriginal
+                KeepOriginalWidthAdaptHeight,
+                KeepOriginalHeightAdaptWidth,
+                FitOriginal,
+                FillOriginal
             };
         }
         
@@ -428,12 +488,12 @@ namespace ChilliSource
                 transformedSize = m_sizePolicyDelegate(m_originalSize, frame.m_originalSize);
                 
                 Core::Vector2 offsetTL2;
-                offsetTL2.x = (-frame.m_originalSize.x * 0.5f) + (frame.m_size.x * 0.5f) + frame.m_offset.x;
-                offsetTL2.y = (frame.m_originalSize.y * 0.5f) - (frame.m_size.y * 0.5f) - frame.m_offset.y;
+                offsetTL2.x = (-frame.m_originalSize.x * 0.5f) + (frame.m_croppedSize.x * 0.5f) + frame.m_offset.x;
+                offsetTL2.y = (frame.m_originalSize.y * 0.5f) - (frame.m_croppedSize.y * 0.5f) - frame.m_offset.y;
                 
                 //Convert offset from texel space to local sprite space
                 offsetTL2 = transformedSize/frame.m_originalSize * offsetTL2;
-                transformedSize = transformedSize/frame.m_originalSize * frame.m_size;
+                transformedSize = transformedSize/frame.m_originalSize * frame.m_croppedSize;
                 
                 offsetTL = Core::Vector4(offsetTL2.x, offsetTL2.y, 0.0f, 0.0f);
             }

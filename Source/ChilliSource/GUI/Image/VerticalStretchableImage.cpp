@@ -99,17 +99,17 @@ namespace ChilliSource
             //---Sprite sheet indices
             if(insParams.TryGetValue("TopID", strValue))
             {
-                m_panels.m_topSize = TextureAtlas->GetFrameSize(strValue);
+                m_panels.m_topSize = TextureAtlas->GetCroppedFrameSize(strValue);
                 m_panels.m_topUVs = TextureAtlas->GetFrameUVs(strValue);
             }
             if(insParams.TryGetValue("BottomID", strValue))
             {
-                m_panels.m_bottomSize = TextureAtlas->GetFrameSize(strValue);
+                m_panels.m_bottomSize = TextureAtlas->GetCroppedFrameSize(strValue);
                 m_panels.m_bottomUVs = TextureAtlas->GetFrameUVs(strValue);
             }
             if(insParams.TryGetValue("MiddleID", strValue))
             {
-                m_panels.m_middleSize = TextureAtlas->GetFrameSize(strValue);
+                m_panels.m_middleSize = TextureAtlas->GetCroppedFrameSize(strValue);
                 m_panels.m_middleUVs = TextureAtlas->GetFrameUVs(strValue);
             }
 			//---Maintain Width
@@ -172,21 +172,6 @@ namespace ChilliSource
 			return TextureAtlas;
 		}
 		//---------------------------------------------------------
-		/// Set Base Sprite Sheet Index ID
-		///
-		/// Set the "path" to the sprite sheet index IDs. 
-		/// e.g. For the following IDs: 
-		///			* "BLUE_PANEL_TOP_LEFT"
-		///			* "BLUE_PANEL_TOP_RIGHT"
-		///			* "BLUE_PANEL_BOTTOM_LEFT"
-		///			* "BLUE_PANEL_BOTTOM_RIGHT"
-		///			* "BLUE_PANEL_TOP_CENTRE"
-		///			* "BLUE_PANEL_BOTTOM_CENTRE"
-		///			* "BLUE_PANEL_MIDDLE_CENTRE"
-		///			* "BLUE_PANEL_MIDDLE_RIGHT"
-		///			* "BLUE_PANEL_MIDDLE_LEFT"
-		///
-		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
 		void VerticalStretchableImage::SetBaseTextureAtlasID(const std::string& instrID)
 		{
@@ -194,35 +179,20 @@ namespace ChilliSource
             
             BaseTextureAtlasID = instrID;
 
-            std::string topId(instrID + "TOP");
-			std::string bottomId(instrID + "BOTTOM");
-			std::string middleId(instrID + "MIDDLE");
+            std::string topId(instrID + "Top");
+			std::string bottomId(instrID + "Bottom");
+			std::string middleId(instrID + "Middle");
                 
-            m_panels.m_topSize = TextureAtlas->GetFrameSize(topId);
+            m_panels.m_topSize = TextureAtlas->GetCroppedFrameSize(topId);
             m_panels.m_topUVs = TextureAtlas->GetFrameUVs(topId);
 
-            m_panels.m_bottomSize = TextureAtlas->GetFrameSize(bottomId);
+            m_panels.m_bottomSize = TextureAtlas->GetCroppedFrameSize(bottomId);
             m_panels.m_bottomUVs = TextureAtlas->GetFrameUVs(bottomId);
 
-            m_panels.m_middleSize = TextureAtlas->GetFrameSize(middleId);
+            m_panels.m_middleSize = TextureAtlas->GetCroppedFrameSize(middleId);
             m_panels.m_middleUVs = TextureAtlas->GetFrameUVs(middleId);
 		}
 		//---------------------------------------------------------
-		/// Get Base Sprite Sheet Index ID
-		///
-		/// Get the "path" to the sprite sheet index IDs. 
-		/// e.g. For the following IDs: 
-		///			* "BLUE_PANEL_TOP_LEFT"
-		///			* "BLUE_PANEL_TOP_RIGHT"
-		///			* "BLUE_PANEL_BOTTOM_LEFT"
-		///			* "BLUE_PANEL_BOTTOM_RIGHT"
-		///			* "BLUE_PANEL_TOP_CENTRE"
-		///			* "BLUE_PANEL_BOTTOM_CENTRE"
-		///			* "BLUE_PANEL_MIDDLE_CENTRE"
-		///			* "BLUE_PANEL_MIDDLE_RIGHT"
-		///			* "BLUE_PANEL_MIDDLE_LEFT"
-		///
-		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
 		const std::string& VerticalStretchableImage::GetBaseTextureAtlasID() const
 		{
@@ -239,13 +209,13 @@ namespace ChilliSource
 		{
             CS_ASSERT(TextureAtlas != nullptr, "Must have texture atlas to set IDs");
             
-            m_panels.m_topSize = TextureAtlas->GetFrameSize(in_top);
+            m_panels.m_topSize = TextureAtlas->GetCroppedFrameSize(in_top);
             m_panels.m_topUVs = TextureAtlas->GetFrameUVs(in_top);
             
-            m_panels.m_bottomSize = TextureAtlas->GetFrameSize(in_bottom);
+            m_panels.m_bottomSize = TextureAtlas->GetCroppedFrameSize(in_bottom);
             m_panels.m_bottomUVs = TextureAtlas->GetFrameUVs(in_bottom);
             
-            m_panels.m_middleSize = TextureAtlas->GetFrameSize(in_middle);
+            m_panels.m_middleSize = TextureAtlas->GetCroppedFrameSize(in_middle);
             m_panels.m_middleUVs = TextureAtlas->GetFrameUVs(in_middle);
 		}
         //---------------------------------------------------------
@@ -324,7 +294,8 @@ namespace ChilliSource
 				Core::Matrix3 matPatchTransform = Core::Matrix3::CreateTranslation(vTopLeft);
 				Core::Matrix3 matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform,
-                                   vTPatchSize, 
+                                   vTPatchSize,
+                                   Core::Vector2::k_zero,
 								   Texture,
                                    m_panels.m_topUVs,
                                    AbsColour, 
@@ -334,7 +305,8 @@ namespace ChilliSource
 				matPatchTransform = Core::Matrix3::CreateTranslation(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft));
 				matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform, 
-                                   vBPatchSize, 
+                                   vBPatchSize,
+                                   Core::Vector2::k_zero,
 								   Texture,
                                    m_panels.m_bottomUVs,
                                    AbsColour, 
@@ -350,7 +322,8 @@ namespace ChilliSource
 				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
 				matTransform = matPatchTransform * matViewTransform;
                 inpCanvas->DrawBox(matTransform,
-                                   vMCPatchSize, 
+                                   vMCPatchSize,
+                                   Core::Vector2::k_zero,
 								   Texture,
                                    m_panels.m_middleUVs,
                                    AbsColour, 

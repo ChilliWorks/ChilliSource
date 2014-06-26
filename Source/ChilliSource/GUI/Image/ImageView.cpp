@@ -83,7 +83,7 @@ namespace ChilliSource
             Core::StorageLocation eTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("TextureLocation", strValue))
             {
-                eTextureLocation = CSCore::ParseStorageLocation(strValue);
+                eTextureLocation = Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("Texture", strValue))
             {
@@ -94,11 +94,11 @@ namespace ChilliSource
             Core::StorageLocation eTextureAtlasLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("TextureAtlasLocation", strValue))
             {
-                eTextureAtlasLocation = CSCore::ParseStorageLocation(strValue);
+                eTextureAtlasLocation = Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("TextureAtlas", strValue))
             {
-                SetTextureAtlas(strValue, eTextureAtlasLocation);
+                SetTextureAtlas(eTextureAtlasLocation, strValue);
             }
             //---Sprite Sheet Index ID
             if(insParams.TryGetValue("TextureAtlasID", strValue))
@@ -212,7 +212,21 @@ namespace ChilliSource
                     sNewUVs = Rendering::UVs::FlipVertically(UVs);
 				}
                 
-                inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), Texture, sNewUVs, GetAbsoluteColour(), Rendering::AlignmentAnchor::k_middleCentre);
+                Core::Vector2 offsetTL;
+                Core::Vector2 size(GetAbsoluteSize());
+                if(TextureAtlas != nullptr && m_hashedTextureAtlasId > 0)
+                {
+                    const auto& frame = TextureAtlas->GetFrame(m_hashedTextureAtlasId);
+
+                    offsetTL.x = (-frame.m_originalSize.x * 0.5f) + (frame.m_croppedSize.x * 0.5f) + frame.m_offset.x;
+                    offsetTL.y = (frame.m_originalSize.y * 0.5f) - (frame.m_croppedSize.y * 0.5f) - frame.m_offset.y;
+                    
+                    //Convert offset from texel space to local sprite space
+                    offsetTL = size/frame.m_originalSize * offsetTL;
+                    size = size/frame.m_originalSize * frame.m_croppedSize;
+                }
+                
+                inpCanvas->DrawBox(GetTransform(), size, offsetTL, Texture, sNewUVs, GetAbsoluteColour(), Rendering::AlignmentAnchor::k_middleCentre);
             }
             
             GUIView::Draw(inpCanvas);
@@ -222,7 +236,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet name
         //--------------------------------------------------------
-        void ImageView::SetTextureAtlas(const std::string& instrTextureAtlas, Core::StorageLocation ineLocation)
+        void ImageView::SetTextureAtlas(Core::StorageLocation ineLocation, const std::string& instrTextureAtlas)
         {
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
             TextureAtlas = resourcePool->LoadResource<Rendering::TextureAtlas>(ineLocation, instrTextureAtlas);
@@ -255,8 +269,10 @@ namespace ChilliSource
             CS_ASSERT(TextureAtlas, "Cannot set sprite sheet index without setting sprite sheet");
             TextureAtlasID = instrID;
             
-            UVs = TextureAtlas->GetFrameUVs(instrID);
-            m_imageSize = TextureAtlas->GetFrameSize(instrID);
+            m_hashedTextureAtlasId = Core::HashCRC32::GenerateHashCode(TextureAtlasID);
+            
+            UVs = TextureAtlas->GetFrameUVs(m_hashedTextureAtlasId);
+            m_imageSize = TextureAtlas->GetOriginalFrameSize(m_hashedTextureAtlasId);
             
             LayoutContent();
             LayoutChildrensContent();

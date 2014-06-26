@@ -91,11 +91,11 @@ namespace ChilliSource
 			///
 			/// Set the "path" to the sprite sheet index IDs. 
 			/// e.g. For the following IDs: 
-			///			* "BLUE_PANEL_TOP"
-			///			* "BLUE_PANEL_BOTTOM"
-			///			* "BLUE_PANEL_MIDDLE"
+			///			* "BluePanelTop"
+			///			* "BluePanelMiddle"
+			///			* "BluePanelBottom"
 			///
-			/// the base ID would be "BLUE_PANEL_"
+			/// the base ID would be "BluePanel"
 			//---------------------------------------------------------
 			void SetBaseTextureAtlasID(const std::string& instrID);
 			//---------------------------------------------------------
@@ -103,11 +103,11 @@ namespace ChilliSource
 			///
 			/// Get the "path" to the sprite sheet index IDs. 
 			/// e.g. For the following IDs: 
-			///			* "BLUE_PANEL_TOP"
-			///			* "BLUE_PANEL_BOTTOM"
-			///			* "BLUE_PANEL_MIDDLE"
+			///			* "BluePanelTop"
+			///			* "BluePanelMiddle"
+			///			* "BluePanelBottom"
 			///
-			/// the base ID would be "BLUE_PANEL_"
+			/// the base ID would be "BluePanel"
 			//---------------------------------------------------------
 			const std::string& GetBaseTextureAtlasID() const;
 			//---------------------------------------------------------

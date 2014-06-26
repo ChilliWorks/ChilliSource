@@ -97,17 +97,17 @@ namespace ChilliSource
             //---Sprite sheet indices
             if(insParams.TryGetValue("LeftID", strValue))
             {
-                m_panels.m_leftSize = TextureAtlas->GetFrameSize(strValue);
+                m_panels.m_leftSize = TextureAtlas->GetCroppedFrameSize(strValue);
                 m_panels.m_leftUVs = TextureAtlas->GetFrameUVs(strValue);
             }
             if(insParams.TryGetValue("RightID", strValue))
             {
-                m_panels.m_rightSize = TextureAtlas->GetFrameSize(strValue);
+                m_panels.m_rightSize = TextureAtlas->GetCroppedFrameSize(strValue);
                 m_panels.m_rightUVs = TextureAtlas->GetFrameUVs(strValue);
             }
             if(insParams.TryGetValue("CentreID", strValue))
             {
-                m_panels.m_centreSize = TextureAtlas->GetFrameSize(strValue);
+                m_panels.m_centreSize = TextureAtlas->GetCroppedFrameSize(strValue);
                 m_panels.m_centreUVs = TextureAtlas->GetFrameUVs(strValue);
             }
 			
@@ -159,15 +159,6 @@ namespace ChilliSource
 			return TextureAtlas;
 		}
 		//---------------------------------------------------------
-		/// Set Base Sprite Sheet Index ID
-		///
-		/// Set the "path" to the sprite sheet index IDs. 
-		/// e.g. For the following IDs: 
-		///			* "BLUE_PANEL_LEFT"
-		///			* "BLUE_PANEL_CENTRE"
-		///			* "BLUE_PANEL_RIGHT"
-		///
-		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
 		void HorizontalStretchableImage::SetBaseTextureAtlasID(const std::string& instrID)
 		{
@@ -175,29 +166,20 @@ namespace ChilliSource
             
             BaseTextureAtlasID = instrID;
             
-            std::string leftId(instrID + "LEFT");
-			std::string rightId(instrID + "RIGHT");
-			std::string centreId(instrID + "CENTRE");
+            std::string leftId(instrID + "Left");
+			std::string rightId(instrID + "Right");
+			std::string centreId(instrID + "Centre");
             
-            m_panels.m_leftSize = TextureAtlas->GetFrameSize(leftId);
+            m_panels.m_leftSize = TextureAtlas->GetCroppedFrameSize(leftId);
             m_panels.m_leftUVs = TextureAtlas->GetFrameUVs(leftId);
             
-            m_panels.m_rightSize = TextureAtlas->GetFrameSize(rightId);
+            m_panels.m_rightSize = TextureAtlas->GetCroppedFrameSize(rightId);
             m_panels.m_rightUVs = TextureAtlas->GetFrameUVs(rightId);
             
-            m_panels.m_centreSize = TextureAtlas->GetFrameSize(centreId);
+            m_panels.m_centreSize = TextureAtlas->GetCroppedFrameSize(centreId);
             m_panels.m_centreUVs = TextureAtlas->GetFrameUVs(centreId);
 		}
 		//---------------------------------------------------------
-		/// Get Base Sprite Sheet Index ID
-		///
-		/// Get the "path" to the sprite sheet index IDs. 
-		/// e.g. For the following IDs: 
-		///			* "BLUE_PANEL_LEFT"
-		///			* "BLUE_PANEL_CENTRE"
-		///			* "BLUE_PANEL_RIGHT"
-		///
-		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
 		const std::string& HorizontalStretchableImage::GetBaseTextureAtlasID() const
 		{
@@ -214,13 +196,13 @@ namespace ChilliSource
 		{
             CS_ASSERT(TextureAtlas != nullptr, "Must have texture atlas to set IDs");
             
-            m_panels.m_leftSize = TextureAtlas->GetFrameSize(in_left);
+            m_panels.m_leftSize = TextureAtlas->GetCroppedFrameSize(in_left);
             m_panels.m_leftUVs = TextureAtlas->GetFrameUVs(in_left);
             
-            m_panels.m_rightSize = TextureAtlas->GetFrameSize(in_right);
+            m_panels.m_rightSize = TextureAtlas->GetCroppedFrameSize(in_right);
             m_panels.m_rightUVs = TextureAtlas->GetFrameUVs(in_right);
             
-            m_panels.m_centreSize = TextureAtlas->GetFrameSize(in_centre);
+            m_panels.m_centreSize = TextureAtlas->GetCroppedFrameSize(in_centre);
             m_panels.m_centreUVs = TextureAtlas->GetFrameUVs(in_centre);
 		}
         //--------------------------------------------------------
@@ -336,6 +318,7 @@ namespace ChilliSource
 					Core::Matrix3 matTransform = matPatchTransform * matViewTransform;
                     inpCanvas->DrawBox(matTransform,
                                        Core::Vector2(m_panels.m_leftSize.x + fShrinkX,vPanelSize.y),
+                                       Core::Vector2::k_zero,
                                        Texture,
                                        m_panels.m_leftUVs,
                                        AbsColour, 
@@ -346,6 +329,7 @@ namespace ChilliSource
 					matTransform = matPatchTransform * matViewTransform;
                     inpCanvas->DrawBox(matTransform, 
                                        Core::Vector2(m_panels.m_rightSize.x + fShrinkX,vPanelSize.y),
+                                       Core::Vector2::k_zero,
                                        Texture,
                                        m_panels.m_rightUVs,
                                        AbsColour, 
@@ -355,6 +339,7 @@ namespace ChilliSource
 					matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
 					matTransform = matPatchTransform * matViewTransform;
                     inpCanvas->DrawBox(matTransform,
+                                       Core::Vector2::k_zero,
                                        vPatchSize,
                                        Texture,
                                        m_panels.m_centreUVs,

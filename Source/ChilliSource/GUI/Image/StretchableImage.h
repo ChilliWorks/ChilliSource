@@ -108,17 +108,17 @@ namespace ChilliSource
 			///
 			/// Set the "path" to the sprite sheet index IDs. 
 			/// e.g. For the following IDs: 
-			///			* "BLUE_PANEL_TOP_LEFT"
-			///			* "BLUE_PANEL_TOP_RIGHT"
-			///			* "BLUE_PANEL_BOTTOM_LEFT"
-			///			* "BLUE_PANEL_BOTTOM_RIGHT"
-			///			* "BLUE_PANEL_TOP_CENTRE"
-			///			* "BLUE_PANEL_BOTTOM_CENTRE"
-			///			* "BLUE_PANEL_MIDDLE_CENTRE"
-			///			* "BLUE_PANEL_MIDDLE_RIGHT"
-			///			* "BLUE_PANEL_MIDDLE_LEFT"
+			///			* "BluePanelTopLeft"
+			///			* "BluePanelTopRight"
+			///			* "BluePanelBottomLeft"
+			///			* "BluePanelBottomRigh"
+			///			* "BluePanelTopCentre"
+			///			* "BluePanelBottomCentre"
+			///			* "BluePanelMiddleCentre"
+			///			* "BluePanelMiddleRight"
+			///			* "BluePanelMiddleLeft"
 			///
-			/// the base ID would be "BLUE_PANEL_"
+			/// the base ID would be "BluePanel"
 			//---------------------------------------------------------
 			void SetBaseTextureAtlasID(const std::string& instrID);
 			//---------------------------------------------------------
@@ -126,17 +126,17 @@ namespace ChilliSource
 			///
 			/// Get the "path" to the sprite sheet index IDs.
 			/// e.g. For the following IDs:
-			///			* "BLUE_PANEL_TOP_LEFT"
-			///			* "BLUE_PANEL_TOP_RIGHT"
-			///			* "BLUE_PANEL_BOTTOM_LEFT"
-			///			* "BLUE_PANEL_BOTTOM_RIGHT"
-			///			* "BLUE_PANEL_TOP_CENTRE"
-			///			* "BLUE_PANEL_BOTTOM_CENTRE"
-			///			* "BLUE_PANEL_MIDDLE_CENTRE"
-			///			* "BLUE_PANEL_MIDDLE_RIGHT"
-			///			* "BLUE_PANEL_MIDDLE_LEFT"
+			///			* "BluePanelTopLeft"
+			///			* "BluePanelTopRight"
+			///			* "BluePanelBottomLeft"
+			///			* "BluePanelBottomRigh"
+			///			* "BluePanelTopCentre"
+			///			* "BluePanelBottomCentre"
+			///			* "BluePanelMiddleCentre"
+			///			* "BluePanelMiddleRight"
+			///			* "BluePanelMiddleLeft"
 			///
-			/// the base ID would be "BLUE_PANEL_"
+			/// the base ID would be "BluePanel"
 			//---------------------------------------------------------
 			const std::string& GetBaseTextureAtlasID() const;
             //---------------------------------------------------------
