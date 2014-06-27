@@ -118,29 +118,6 @@ namespace ChilliSource
             //---------------------------------------------------------
             void Draw(Rendering::CanvasRenderer* inpCanvas);
             //--------------------------------------------------------
-            /// Set Height Maintaining Aspect
-            ///
-            /// Change the current height of the image view and resize the width
-            /// to maintain the aspect ratio of the image
-            ///
-            /// @param Unified height
-            //--------------------------------------------------------
-            void SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight);
-            //--------------------------------------------------------
-            /// Enable Height Maintaining Aspect
-            ///
-            /// Enables auto scaling of the height to maintain the aspect ratio
-            ///
-            /// @param boolean to disable or enable
-            //--------------------------------------------------------
-            void EnableHeightMaintainingAspect(bool inbEnabled);
-            //--------------------------------------------------------
-            /// Is Height Maintaining Aspect Enabled
-            ///
-            /// @return auto scaling of the height to maintain the aspect ratio
-            //--------------------------------------------------------
-            bool IsHeightMaintainingAspectEnabled() const;
-            //--------------------------------------------------------
             /// Get Combined Cap Height
             ///
             /// @param Sum of the widths of both end caps
@@ -169,8 +146,6 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
 
 			DECLARE_PROPERTY_A(std::string, BaseTextureAtlasID, SetBaseTextureAtlasID, GetBaseTextureAtlasID);
-
-			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
             DECLARE_PROPERTY_A(bool, ActAsSpacer, EnableActAsSpacer, IsActAsSpacerEnabled);
 	
         };

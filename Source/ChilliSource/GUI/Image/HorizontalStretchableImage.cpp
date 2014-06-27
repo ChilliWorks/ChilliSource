@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 
 namespace ChilliSource
 {
@@ -42,7 +43,6 @@ namespace ChilliSource
 
 		DEFINE_PROPERTY(TextureAtlas);
 		DEFINE_PROPERTY(BaseTextureAtlasID);
-		DEFINE_PROPERTY(HeightFromImage);
         DEFINE_PROPERTY(ActAsSpacer);
         
 		//---------------------------------------------------------
@@ -51,7 +51,7 @@ namespace ChilliSource
 		/// Default
 		//---------------------------------------------------------
 		HorizontalStretchableImage::HorizontalStretchableImage()
-			: WidthMaintain(false), ActAsSpacer(false)
+			: ActAsSpacer(false)
 		{
 		}
 		//---------------------------------------------------------
@@ -60,7 +60,7 @@ namespace ChilliSource
 		/// @param Dictonary of values
 		//---------------------------------------------------------
 		HorizontalStretchableImage::HorizontalStretchableImage(const Core::ParamDictionary& insParams)
-			: GUIView(insParams), WidthMaintain(false), ActAsSpacer(false)
+			: GUIView(insParams), ActAsSpacer(false)
 		{
 			std::string strValue;
 
@@ -106,18 +106,6 @@ namespace ChilliSource
             {
                 m_frames[(u32)Patch::k_centre] = TextureAtlas->GetFrame(strValue);
             }
-            
-			//---Maintain Height
-			if(insParams.TryGetValue("WidthMaintain", strValue))
-			{
-				WidthMaintain = Core::ParseBool(strValue);
-			}
-            //---Set Maintain Height
-			if(insParams.TryGetValue("SetWidthMaintain", strValue))
-			{
-				Core::Vector2 vSize = Core::ParseVector2(strValue);
-				SetWidthMaintainingAspect(vSize.x, vSize.y);
-			}
             
             if(insParams.TryGetValue("ActAsSpacer", strValue))
             {
@@ -212,57 +200,6 @@ namespace ChilliSource
 		{
 			return m_frames[(u32)Patch::k_left].m_originalSize.y;
 		}
-        //--------------------------------------------------------
-		/// Set Width Maintaining Aspect
-		///
-		/// Change the width of the image and resize the height
-		/// to maintain the aspect ratio
-		///
-		/// @param Unified width
-		//--------------------------------------------------------
-		void HorizontalStretchableImage::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
-		{
-            WidthMaintain = true;
-            
-            Core::Vector2 vCurrentSize = GetAbsoluteSize();
-            
-            f32 fAspectRatio = 1.0f;
-            
-            if(vCurrentSize.x != 0.0f)
-            {
-                fAspectRatio = vCurrentSize.y / vCurrentSize.x;
-            }
-            
-			SetSize(infRelWidth, 0.0f, infAbsWidth, 0.0f);
-			
-			f32 fScaleY = GetAbsoluteScale().y;
-			if(fScaleY == 0.0f)
-				return;
-			
-			vCurrentSize = GetAbsoluteSize();
-            f32 fAbsHeight = (fAspectRatio * vCurrentSize.x) / fScaleY;
-			SetSize(infRelWidth, 0.0f, infAbsWidth, fAbsHeight);
-		}
-        //--------------------------------------------------------
-		/// Enable Width Maintaining Aspect
-		///
-		/// Enables auto scaling of the height to maintain the aspect ratio
-		///
-		/// @param boolean to disable or enable
-		//--------------------------------------------------------
-		void HorizontalStretchableImage::EnableWidthMaintainingAspect(bool inbEnabled)
-		{
-			WidthMaintain = inbEnabled;
-		}
-		//--------------------------------------------------------
-		/// Is Width Maintaining Aspect Enabled
-		///
-		/// @return auto scaling of the Width to maintain the aspect ratio
-		//--------------------------------------------------------
-		bool HorizontalStretchableImage::IsWidthMaintainingAspectEnabled() const
-		{
-			return WidthMaintain;
-		}
 		//---------------------------------------------------------
 		/// Draw
 		/// 
@@ -274,16 +211,9 @@ namespace ChilliSource
 		{
 			if(Visible && TextureAtlas && Texture)
 			{
-				Core::Vector2 vPanelSize = GetAbsoluteSize();
-				
-                if(WidthMaintain)
-                {
-                    Core::UnifiedVector2 uvSize = GetSize();
-                    SetWidthMaintainingAspect(uvSize.GetRelative().x, uvSize.GetAbsolute().x);
-                }
-				
                 if (ActAsSpacer == false)
                 {
+                    Core::Vector2 vPanelSize = GetAbsoluteSize();
                     Core::Colour AbsColour = GetAbsoluteColour();
                     
                     //We need to use a matrix so that we can rotate all the patches with respect
@@ -299,8 +229,12 @@ namespace ChilliSource
                     
                     // Calculate dimentions and position for centre based on the panel size and the size of the caps
                     Core::Vector2 leftPatchSize(m_frames[(u32)Patch::k_left].m_originalSize.x, vPanelSize.y);
+                    leftPatchSize = Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(leftPatchSize, m_frames[(u32)Patch::k_left].m_originalSize.x/m_frames[(u32)Patch::k_left].m_originalSize.y);
+                    
                     Core::Vector2 rightPatchSize(m_frames[(u32)Patch::k_right].m_originalSize.x, vPanelSize.y);
-                    Core::Vector2 centrePatchSize(vPanelSize.x - (leftPatchSize.x + rightPatchSize.x), vPanelSize.y);
+                    rightPatchSize = Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(rightPatchSize, m_frames[(u32)Patch::k_right].m_originalSize.x/m_frames[(u32)Patch::k_right].m_originalSize.y);
+                    
+                    Core::Vector2 centrePatchSize(vPanelSize.x - (leftPatchSize.x + rightPatchSize.x), leftPatchSize.y);
                     //If the size of the stretchable centre part is negative this means the caps are overlapping
                     //and need to be shrunk
                     f32 fShrinkX = (centrePatchSize.x < 0 ? centrePatchSize.x * 0.5f : 0);

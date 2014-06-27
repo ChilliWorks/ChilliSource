@@ -105,29 +105,6 @@ namespace ChilliSource
             //---------------------------------------------------------
             void SetTextureAtlasIds(const std::string& in_left, const std::string& in_centre, const std::string& in_right);
 			//--------------------------------------------------------
-            /// Set Width Maintaining Aspect
-            ///
-            /// Change the current width of the image view and resize the height
-            /// to maintain the aspect ratio of the image
-            ///
-            /// @param Unified width
-            //--------------------------------------------------------
-            void SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth);
-            //--------------------------------------------------------
-            /// Enable Width Maintaining Aspect
-            ///
-            /// Enables auto scaling of the Width to maintain the aspect ratio
-            ///
-            /// @param boolean to disable or enable
-            //--------------------------------------------------------
-            void EnableWidthMaintainingAspect(bool inbEnabled);
-            //--------------------------------------------------------
-            /// Is Width Maintaining Aspect Enabled
-            ///
-            /// @return auto scaling of the Width to maintain the aspect ratio
-            //--------------------------------------------------------
-            bool IsWidthMaintainingAspectEnabled() const;
-			//--------------------------------------------------------
 			/// Get Combined Cap Width
 			///
 			/// @param Sum of the widths of both end caps
@@ -179,8 +156,6 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
 			
 			DECLARE_PROPERTY_A(std::string, BaseTextureAtlasID, SetBaseTextureAtlasID, GetBaseTextureAtlasID);
-            
-			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
             DECLARE_PROPERTY_A(bool, ActAsSpacer, EnableActAsSpacer, IsActAsSpacerEnabled);
 		};
 

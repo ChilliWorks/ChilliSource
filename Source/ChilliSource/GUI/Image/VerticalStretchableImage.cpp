@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 
 namespace ChilliSource
 {
@@ -41,9 +42,7 @@ namespace ChilliSource
     {
 		DEFINE_META_CLASS(VerticalStretchableImage)
 
-		DEFINE_PROPERTY(TextureAtlas);
-		DEFINE_PROPERTY(HeightMaintain);
-		DEFINE_PROPERTY(WidthMaintain);
+		DEFINE_PROPERTY(TextureAtlas);;
 		DEFINE_PROPERTY(BaseTextureAtlasID);
 
 		//--------------------------------------------------------
@@ -52,7 +51,7 @@ namespace ChilliSource
         /// Empty
         //---------------------------------------------------------
         VerticalStretchableImage::VerticalStretchableImage()
-			: HeightMaintain(false), ActAsSpacer(false)
+			: ActAsSpacer(false)
         {
         }
         //---------------------------------------------------------
@@ -61,7 +60,7 @@ namespace ChilliSource
         /// From param dictionary
         //---------------------------------------------------------
         VerticalStretchableImage::VerticalStretchableImage(const Core::ParamDictionary& insParams) 
-			: GUIView(insParams), HeightMaintain(false), ActAsSpacer(false)
+			: GUIView(insParams), ActAsSpacer(false)
         {
             std::string strValue;
 
@@ -108,17 +107,6 @@ namespace ChilliSource
             {
                 m_frames[(u32)Patch::k_middle] = TextureAtlas->GetFrame(strValue);
             }
-			//---Maintain Width
-			if(insParams.TryGetValue("HeightMaintain", strValue))
-			{
-				HeightMaintain = Core::ParseBool(strValue);
-			}
-			//---Set Maintain Width
-			if(insParams.TryGetValue("SetHeightMaintain", strValue))
-			{
-				Core::Vector2 vSize = Core::ParseVector2(strValue);
-				SetHeightMaintainingAspect(vSize.x, vSize.y);
-			}
             if(insParams.TryGetValue("ActAsSpacer", strValue))
             {
                 ActAsSpacer = true;
@@ -208,16 +196,10 @@ namespace ChilliSource
         {
 			if(Visible && TextureAtlas && Texture)
 			{
-				Core::Vector2 vPanelSize = GetAbsoluteSize();
-				
-                if(HeightMaintain)
-                {
-                    Core::UnifiedVector2 uvSize = GetSize();
-                    SetHeightMaintainingAspect(uvSize.GetRelative().y, uvSize.GetAbsolute().y);
-                }
-				
                 if (ActAsSpacer == false)
                 {
+                    Core::Vector2 vPanelSize = GetAbsoluteSize();
+                    
                     Core::Colour AbsColour = GetAbsoluteColour();
                     
                     //We need to use a matrix so that we can rotate all the patches with respect
@@ -233,13 +215,19 @@ namespace ChilliSource
                     
                     // Calculate dimentions and position for centre based on the panel size and the size of the caps
                     Core::Vector2 topPatchSize(vPanelSize.x, m_frames[(u32)Patch::k_top].m_originalSize.y);
+                    topPatchSize = Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(topPatchSize, m_frames[(u32)Patch::k_top].m_originalSize.x/m_frames[(u32)Patch::k_top].m_originalSize.y);
+                    
                     Core::Vector2 bottomPatchSize(vPanelSize.x, m_frames[(u32)Patch::k_bottom].m_originalSize.y);
-                    Core::Vector2 centrePatchSize(vPanelSize.x, vPanelSize.y - (topPatchSize.y + bottomPatchSize.y));
+                    bottomPatchSize = Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(bottomPatchSize, m_frames[(u32)Patch::k_bottom].m_originalSize.x/m_frames[(u32)Patch::k_bottom].m_originalSize.y);
+                    
+                    Core::Vector2 centrePatchSize(topPatchSize.x, vPanelSize.y - (topPatchSize.y + bottomPatchSize.y));
+                    
                     //If the size of the stretchable centre part is negative this means the caps are overlapping
                     //and need to be shrunk
                     f32 fShrinkY = (centrePatchSize.y < 0 ? centrePatchSize.y * 0.5f : 0);
                     // Clamp the size of the centre
                     centrePatchSize.y = std::max(centrePatchSize.y, 0.0f);
+                    
                     
                     const Core::Vector2 sizes[(u32)Patch::k_total] =
                     {
@@ -282,49 +270,6 @@ namespace ChilliSource
 				//Render subviews
 				GUIView::Draw(inpCanvas);
 			}
-		}
-		//--------------------------------------------------------
-		/// Set Height Maintaining Aspect
-		///
-		/// Change the height of the image and resize the width
-		/// to maintain the aspect ratio
-		///
-		/// @param Unified height
-		//--------------------------------------------------------
-		void VerticalStretchableImage::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
-		{
-            HeightMaintain = true;
-            Core::Vector2 vCurrentSize = GetAbsoluteSize();
-			f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
-			SetSize(0.0f, infRelHeight, 0.0f, infAbsHeight);
-			
-			f32 fScaleX = GetAbsoluteScale().x;
-			if(fScaleX == 0.0f)
-				return;
-			
-			vCurrentSize = GetAbsoluteSize();
-            f32 fAbsWidth = (fAspectRatio * vCurrentSize.y) / fScaleX;
-			SetSize(0.0f, infRelHeight, fAbsWidth, infAbsHeight);
-		}
-		//--------------------------------------------------------
-		/// Enable Height Maintaining Aspect
-		///
-		/// Enables auto scaling of the height to maintain the aspect ratio
-		///
-		/// @param boolean to disable or enable
-		//--------------------------------------------------------
-		void VerticalStretchableImage::EnableHeightMaintainingAspect(bool inbEnabled)
-		{
-			HeightMaintain = inbEnabled;
-		}
-		//--------------------------------------------------------
-		/// Is Height Maintaining Aspect Enabled
-		///
-		/// @return auto scaling of the height to maintain the aspect ratio
-		//--------------------------------------------------------
-		bool VerticalStretchableImage::IsHeightMaintainingAspectEnabled() const
-		{
-			return HeightMaintain;
 		}
 		//--------------------------------------------------------
 		/// Get Combined Cap Height
