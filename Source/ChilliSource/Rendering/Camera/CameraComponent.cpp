@@ -27,74 +27,42 @@
 //
 
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
-#include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Entity/Entity.h>
+
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Entity/Entity.h>
+#include <ChilliSource/Core/Event/IConnectableEvent.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
 		CS_DEFINE_NAMEDTYPE(CameraComponent);
-		//------------------------------------------------------
-		/// Constructor
-		///
-		/// @param Camera description setting the FOV etc
-		//------------------------------------------------------
-		CameraComponent::CameraComponent(const CameraDescription &inCamDesc) 
-			: mDesc(inCamDesc), mbProjectionCacheValid(false)
-		{
-            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+        //----------------------------------------------------------
+		//----------------------------------------------------------
+        CameraComponent::CameraComponent(f32 in_nearClip, f32 in_farClip)
+        : m_nearClip(in_nearClip), m_farClip(in_farClip), m_screen(Core::Application::Get()->GetScreen())
+        {
             
-			EnableViewportResizeWithScreen(mDesc.bShouldResizeToScreen);
-            
-            switch(mDesc.m_type)
-            {
-                case CameraType::k_orthographic:
-                    CalculateOrthographicMatrix();
-                    break;
-                case CameraType::k_perspective:
-                    CalculatePerspectiveMatrix();
-                    break;
-            }
-		}
-		//----------------------------------------------------------
-		/// Is A
-		///
-		/// Returns if it is of the type given
-		/// @param Comparison Type
-		/// @return Whether the class matches the comparison type
-		//----------------------------------------------------------
-		bool CameraComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
+        }
+		//------------------------------------------------------
+		//------------------------------------------------------
+		void CameraComponent::SetNearClipping(f32 in_near)
 		{
-			return (inInterfaceID == CameraComponent::InterfaceID);
-		}
-		//----------------------------------------------------------
-		/// Set Look At
-		///
-		/// Set the camera orientation, target and position
-		/// @param Position
-		/// @param Look target
-		/// @param Up direction
-		//----------------------------------------------------------
-		void CameraComponent::SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp)
-		{
-            Core::Entity * pParent(GetEntity());
+            m_nearClip = in_near;
 
-            CS_ASSERT((pParent!=nullptr), "CameraComponent has no parent entity");
-            
-            pParent->GetTransform().SetLookAt(invPos, invTarget, invUp);
+			m_isProjCacheValid = false;
 		}
 		//------------------------------------------------------
-		/// Unproject
-		///
-		/// Project from a point in screen space to a ray in
-		/// world space
-		/// @param Point in screen space with orientation
-		/// @return Ray in world space with camera view direction
+		//------------------------------------------------------
+		void CameraComponent::SetFarClipping(f32 in_far)
+		{
+            m_farClip = in_far;
+            
+			m_isProjCacheValid = false;
+		}
+		//------------------------------------------------------
 		//------------------------------------------------------
 		Core::Ray CameraComponent::Unproject(const Core::Vector2 &invScreenPos)
 		{
@@ -124,10 +92,6 @@ namespace ChilliSource
             return cRay;
 		}
 		//------------------------------------------------------
-		/// Project
-		///
-		/// Convert from a point in world space to a point in
-		/// screen space
 		//------------------------------------------------------
 		Core::Vector2 CameraComponent::Project(const Core::Vector3 &invWorldPos)
 		{
@@ -148,345 +112,114 @@ namespace ChilliSource
 			//Return 2D screen space co-ordinates
 			return Core::Vector2(vScreenPos.x, vScreenPos.y);
 		}
-        //----------------------------------------------------------
-        //----------------------------------------------------------
-        void CameraComponent::SetType(CameraType in_type)
-        {
-            mDesc.m_type = in_type;
-            
-            mbProjectionCacheValid = false;
-        }
-        //----------------------------------------------------------
-        //----------------------------------------------------------
-        CameraType CameraComponent::GetType() const
-        {
-            return mDesc.m_type;
-        }
-		//----------------------------------------------------------
-		/// Set Viewport Size
-		///
-		/// @param Vector containing width and height
-		//----------------------------------------------------------
-		void CameraComponent::SetViewportSize(const Core::Vector2 &invSize)
-		{
-			mDesc.vViewSize = invSize;
-			mbProjectionCacheValid = false;
-		}
-		//----------------------------------------------------------
-		/// Set Viewport Size
-		///
-		/// @param Width 
-		/// @param Height
-		//----------------------------------------------------------
-		void CameraComponent::SetViewportSize(u32 inudwWidth, u32 inudwHeight)
-		{
-			mDesc.vViewSize.x = (f32)inudwWidth;
-			mDesc.vViewSize.y = (f32)inudwHeight;
-			mbProjectionCacheValid = false;
-		}
-		//----------------------------------------------------------
-		/// Get Viewport Size
-		///
-		/// @param Vector containing width and height
-		//----------------------------------------------------------
-		const Core::Vector2& CameraComponent::GetViewportSize()
-		{ 
-			return mDesc.vViewSize; 
-		}	
 		//------------------------------------------------------
-		/// Calculate Perspective Matrix (Normalized)
-		///
-		/// 
-		//------------------------------------------------------
-		void CameraComponent::CalculatePerspectiveMatrix()
-		{
-			mmatProj = Core::Matrix4::CreatePerspectiveProjectionLH(mDesc.fFOV, mDesc.fAspect, mDesc.fNearClipping, mDesc.fFarClipping);
-			mbProjectionCacheValid = true;
-		}
-		//------------------------------------------------------
-		/// Calculate Orthographic Matrix
-		///
-		/// 
-		//------------------------------------------------------
-		void CameraComponent::CalculateOrthographicMatrix()
-		{
-			mmatProj = Core::Matrix4::CreateOrthographicProjectionLH(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
-			mbProjectionCacheValid = true;
-		}
-		//------------------------------------------------------
-		/// Get Projection 
-		///
-		/// If the transform has changed we recalculate the
-		/// projection matrix 
-		/// 
-		/// @return Projection matrix
 		//------------------------------------------------------
 		const Core::Matrix4& CameraComponent::GetProjection() 
 		{
-			if(!mbProjectionCacheValid)
+			if(m_isProjCacheValid == false)
 			{
-				//Update our projection matrix
-                switch(mDesc.m_type)
-                {
-                    case CameraType::k_orthographic:
-                        CalculateOrthographicMatrix();
-                        break;
-                    case CameraType::k_perspective:
-                        CalculatePerspectiveMatrix();
-                        break;
-                }
+                m_projMat = CalculateProjectionMatrix();
+                m_isProjCacheValid = true;
 			}
 
-			return mmatProj;
+			return m_projMat;
 		}
 		//------------------------------------------------------
-		/// Get View 
-		///
-		/// @return View matrix
 		//------------------------------------------------------
 		const Core::Matrix4& CameraComponent::GetView()
 		{
 			if(GetEntity())
 			{
-				mmatView = Core::Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
+				m_viewMat = Core::Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
 			}
 
-			return mmatView;
+			return m_viewMat;
 		}
 		//------------------------------------------------------
-		/// Get Frustum Pointer
-		///
-		/// @return Pointer to camera frustum
 		//------------------------------------------------------
-		const Core::Frustum* CameraComponent::GetFrustumPtr() const
+		const Core::Frustum& CameraComponent::GetFrustum()
 		{
-			return &mFrustum;
-		}
-		//------------------------------------------------------
-		/// Update Frustum
-		///
-		/// Recalculate frustum planes
-		//------------------------------------------------------
-		void CameraComponent::UpdateFrustum()
-		{
-			mmatViewProj = GetView() * GetProjection();
-
-			//Re-calculate the clip planes
-			mFrustum.CalculateClippingPlanes(mmatViewProj);
-		}
-		//------------------------------------------------------
-		/// Billboard
-		///
-		/// Orientate the given matrix to face the cameras
-		/// view vector
-		//------------------------------------------------------
-		void CameraComponent::Billboard(const Core::Matrix4& inmatBillboarded, Core::Matrix4& outmatBillboarded)
-		{
-            const Core::Matrix4 matView = GetView();
-			outmatBillboarded = inmatBillboarded * matView;
+            if(m_isFrustumCacheValid == false)
+            {
+                UpdateFrustum();
+                m_isFrustumCacheValid = true;
+            }
             
-			outmatBillboarded.m[12] = inmatBillboarded.m[12];
-			outmatBillboarded.m[13] = inmatBillboarded.m[13];
-			outmatBillboarded.m[14] = inmatBillboarded.m[14];
+			return m_frustum;
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
-		void CameraComponent::SetFieldOfView(const f32 in_fov)
+		Core::Matrix4 CameraComponent::Billboard(const Core::Matrix4& in_toBillboard)
 		{
-			mDesc.fFOV = in_fov;
-
-			mbProjectionCacheValid = false;
+            const Core::Matrix4& viewMat = GetView();
+            Core::Matrix4 result = in_toBillboard * viewMat;
+            
+			result.m[12] = in_toBillboard.m[12];
+			result.m[13] = in_toBillboard.m[13];
+			result.m[14] = in_toBillboard.m[14];
+            
+            return result;
 		}
 		//------------------------------------------------------
-		/// Set Aspect Ratio
-		///
-		/// @param Aspect Ratio (Viewport width/viewport height)
 		//------------------------------------------------------
-		void CameraComponent::SetAspectRatio(const f32 infAspectRatio)
+		void CameraComponent::SetClearColour(const Core::Colour& in_colour)
 		{
-			mDesc.fAspect = infAspectRatio;
-
-			mbProjectionCacheValid = false;
+			m_clearCol = in_colour;
 		}
 		//------------------------------------------------------
-		/// Set Near Clipping
-		///
-		/// @param Near Z clipping distance in view space
-		//------------------------------------------------------
-		void CameraComponent::SetNearClipping(const f32 infNear)
-		{
-			mDesc.fNearClipping = infNear;
-
-			mbProjectionCacheValid = false;
-		}
-		//------------------------------------------------------
-		/// Set Far Clipping
-		///
-		/// @param Far Z clipping distance in view space
-		//------------------------------------------------------
-		void CameraComponent::SetFarClipping(const f32 infFar)
-		{
-			mDesc.fFarClipping = infFar;
-
-			mbProjectionCacheValid = false;
-		}
-		//------------------------------------------------------
-		//------------------------------------------------------
-		const f32 CameraComponent::GetFieldOfView() const
-		{
-			return mDesc.fFOV;
-		}
-		//------------------------------------------------------
-		/// Get Aspect Ratio
-		///
-		/// @return Aspect Ratio (Viewport width/viewport height)
-		//------------------------------------------------------
-		const f32 CameraComponent::GetAspectRatio() const
-		{
-			return mDesc.fAspect;
-		}
-		//------------------------------------------------------
-		/// Get Near Clipping
-		///
-		/// @return Near Z clipping distance in view space
-		//------------------------------------------------------
-		const f32 CameraComponent::GetNearClipping() const
-		{
-			return mDesc.fNearClipping;
-		}
-		//------------------------------------------------------
-		/// Get Far Clipping
-		///
-		/// @return Far Z clipping distance in view space
-		//------------------------------------------------------
-		const f32 CameraComponent::GetFarClipping() const
-		{
-			return mDesc.fFarClipping;
-		}
-		//------------------------------------------------------
-		/// Set Clear Colour
-		///
-		/// @param Render buffer clear colour
-		//------------------------------------------------------
-		void CameraComponent::SetClearColour(const Core::Colour &inCol)
-		{
-			mDesc.ClearCol = inCol;
-		}
-		//------------------------------------------------------
-		/// Get Clear Colour
-		///
-		/// @return Render buffer clear colour
 		//------------------------------------------------------
 		const Core::Colour& CameraComponent::GetClearColour() const
 		{
-			return mDesc.ClearCol;
+			return m_clearCol;
 		}
         //--------------------------------------------------------------------------------------------------
-        /// Get Opaque Sort Predicate
-        ///
-        /// @return Gets the currently set opaque sort predicate for this scene
         //--------------------------------------------------------------------------------------------------
-        RendererSortPredicateSPtr CameraComponent::GetOpaqueSortPredicate() const
+        const RendererSortPredicateSPtr& CameraComponent::GetOpaqueSortPredicate() const
         {
-            return mpOpaqueSortPredicate;
+            return m_opaqueSortPredicate;
         }
         //--------------------------------------------------------------------------------------------------
-        /// Get Transparent Sort Predicate
-        ///
-        /// @return Gets the currently set opaque sort predicate for this scene
         //--------------------------------------------------------------------------------------------------
-        RendererSortPredicateSPtr CameraComponent::GetTransparentSortPredicate() const
+        const RendererSortPredicateSPtr& CameraComponent::GetTransparentSortPredicate() const
         {
-            return mpTransparentSortPredicate;
+            return m_transparentSortPredicate;
         }
         //--------------------------------------------------------------------------------------------------
-        /// Set Opaque Sort Predicate
-        ///
-        /// @return Opaque sort predicate to use for this scene
         //--------------------------------------------------------------------------------------------------
-        void CameraComponent::SetOpaqueSortPredicate(const RendererSortPredicateSPtr & inpPredicate)
+        void CameraComponent::SetOpaqueSortPredicate(const RendererSortPredicateSPtr& in_predicate)
         {
-            mpOpaqueSortPredicate = inpPredicate;
+            m_opaqueSortPredicate = in_predicate;
         }
         //--------------------------------------------------------------------------------------------------
-        /// Set Transparent Sort Predicate
-        ///
-        /// @param Transparent sort predicate to use for this scene
         //--------------------------------------------------------------------------------------------------
-        void CameraComponent::SetTransparentSortPredicate(const RendererSortPredicateSPtr & inpPredicate)
+        void CameraComponent::SetTransparentSortPredicate(const RendererSortPredicateSPtr& in_predicate)
         {
-            mpTransparentSortPredicate = inpPredicate;
+            m_transparentSortPredicate = in_predicate;
         }
         //--------------------------------------------------------------------------------------------------
-        /// Get Culling Predicate
-        ///
-        /// @param Culling predicate to use for this camera
         //--------------------------------------------------------------------------------------------------
-        ICullingPredicateSPtr CameraComponent::GetCullingPredicate() const
+        const ICullingPredicateSPtr& CameraComponent::GetCullingPredicate() const
         {
-            switch(mDesc.m_type)
-            {
-                case CameraType::k_orthographic:
-                    return mpOrthographicCulling;
-                case CameraType::k_perspective:
-                    return mpPerspectiveCulling;
-            }
-            
-            return nullptr;
+            return m_cullPredicate;
         }
         //--------------------------------------------------------------------------------------------------
-        /// Get Perspective Culling Predicate
-        ///
-        /// @param Culling predicate to use for this camera in perpective mode
         //--------------------------------------------------------------------------------------------------
-        void CameraComponent::SetPerspectiveCullingPredicate(const ICullingPredicateSPtr & inpPredicate)
+        void CameraComponent::SetCullingPredicate(const ICullingPredicateSPtr& in_predicate)
         {
-            mpPerspectiveCulling = inpPredicate;
+            m_cullPredicate = in_predicate;
         }
         //--------------------------------------------------------------------------------------------------
-        /// Get orthographic Culling Predicate
-        ///
-        /// @param Culling predicate to use for this camera in orthographic mode
         //--------------------------------------------------------------------------------------------------
-        void CameraComponent::SetOrthographicCullingPredicate(const ICullingPredicateSPtr & inpPredicate)
+        void CameraComponent::OnAddedToEntity()
         {
-            mpOrthographicCulling = inpPredicate;
-        }        
-		//------------------------------------------------------
-		/// Enable Viewport Resize with Screen
-		///
-		/// @param Whether the viewport should resize when
-		/// the screen resizes
-		//-----------------------------------------------------
-		void CameraComponent::EnableViewportResizeWithScreen(bool inbEnable)
-		{
-            if (inbEnable == true && m_screenResizedConnection == nullptr)
-            {
-                m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate<CameraComponent, CameraComponent, void, const Core::Vector2&>(this, &CameraComponent::OnResolutionChanged));
-            }
-            else if (inbEnable == false && m_screenResizedConnection != nullptr)
-            {
-                m_screenResizedConnection = nullptr;
-            }
-		}
-        //------------------------------------------------------
-        //------------------------------------------------------
-        void CameraComponent::OnResolutionChanged(const Core::Vector2& in_resolution)
-        {
-            SetViewportSize(in_resolution);
-            SetAspectRatio(in_resolution.x / in_resolution.y);
+            m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &CameraComponent::OnTransformChanged));
         }
-		//-----------------------------------------------------
-		/// Destructor
-		///
-		//-----------------------------------------------------
-		CameraComponent::~CameraComponent()
-		{
-			if(mDesc.bShouldResizeToScreen)
-			{
-				EnableViewportResizeWithScreen(false);
-			}
-		}
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        void CameraComponent::OnTransformChanged()
+        {
+            m_isFrustumCacheValid = false;
+        }
 	}
 }
 

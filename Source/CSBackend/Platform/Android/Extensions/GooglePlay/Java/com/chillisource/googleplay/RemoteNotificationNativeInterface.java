@@ -3,13 +3,15 @@ package com.chillisource.googleplay;
 import com.chillisource.core.CSApplication;
 import com.chillisource.core.Logging;
 import com.chillisource.core.InterfaceIDType;
-import com.chillisource.core.ResourceHelper;
 import com.chillisource.core.INativeInterface;
 import com.chillisource.googleplay.GCMService;
 import com.chillisource.googleplay.GCMRegistrar;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 public class RemoteNotificationNativeInterface extends INativeInterface
 {
@@ -42,15 +44,24 @@ public class RemoteNotificationNativeInterface extends INativeInterface
 	//---------------------------------------------------------------------
 	public void Register()
 	{
-		String strProjectID = "";
-		int keyStringID = ResourceHelper.GetDynamicResourceIDForField(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "GoogleProjectID");
-		if(keyStringID > 0)
+		PackageManager manager = CSApplication.get().getActivityContext().getPackageManager();
+		ApplicationInfo info;
+		try 
 		{
-			strProjectID = CSApplication.get().getActivityContext().getString(keyStringID);
+			info = manager.getApplicationInfo(CSApplication.get().getActivityContext().getPackageName(), PackageManager.GET_META_DATA);
+		} 
+		catch (NameNotFoundException e) 
+		{
+			Logging.logError("RemoteNotificationNativeInterface: Failed to get 'GoogleProjectID' from the metadata");
+			e.printStackTrace();
+			return;
 		}
-		else
+		
+	    String strProjectID = info.metaData.getString("GoogleProjectID");
+	    
+		if(strProjectID == null || strProjectID.length() == 0)
 		{
-			Logging.logError("CRemoteNotificationNativeInterface: Failed to get 'GoogleProjectID' from the Values resource");
+			Logging.logError("RemoteNotificationNativeInterface: Failed to get 'GoogleProjectID' from the metadata");
 			return;
 		}
 		

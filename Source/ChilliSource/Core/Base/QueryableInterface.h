@@ -41,7 +41,7 @@
 
 #define CS_DEFINE_NAMEDTYPE(x) \
     const ::CSCore::InterfaceIDType x::InterfaceID = ::CSCore::QueryableInterface::InterfaceIDHash(#x); \
-    const ::std::string x::TypeName = ::CSCore::StringUtils::StandardiseClassName(#x); \
+    const ::std::string x::TypeName = #x; \
     ::CSCore::InterfaceIDType x::GetInterfaceID() const \
     { \
         return InterfaceID; \

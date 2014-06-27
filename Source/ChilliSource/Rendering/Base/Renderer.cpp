@@ -39,6 +39,7 @@
 #include <ChilliSource/Rendering/Base/RendererSortPredicates.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
+#include <ChilliSource/Rendering/Camera/OrthographicCameraComponent.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
@@ -300,7 +301,7 @@ namespace ChilliSource
                 return pCullPredicate;
             }
             
-            if(inpActiveCamera->GetType() == CameraType::k_orthographic)
+            if(inpActiveCamera->IsA(OrthographicCameraComponent::InterfaceID) == true)
             {
                 return mpOrthoCullPredicate;
             }
@@ -419,8 +420,6 @@ namespace ChilliSource
             }
             
             outaRenderCache.reserve(inaRenderCache.size());
-            
-            inpCamera->UpdateFrustum();
             
 			for(std::vector<RenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
 			{

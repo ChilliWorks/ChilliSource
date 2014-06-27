@@ -176,13 +176,13 @@ namespace ChilliSource
                         udwNum_particlesEmittedThisStep = 0;
                     }
                     Core::Quaternion qOrientation;
-                    Core::Vector3 vScale(Core::Vector3::k_one);
+                    Core::Vector2 vScale(Core::Vector2::k_one);
                     
                     if(mbIsGlobalSpace)
                     {
                         vPosition = vCurrentPos + vPosition;
                         qOrientation = mpOwningComponent->GetEntity()->GetTransform().GetWorldOrientation();
-                        vScale = mpOwningComponent->GetEntity()->GetTransform().GetWorldScale();
+                        vScale = mpOwningComponent->GetEntity()->GetTransform().GetWorldScale().XY();
                     }
                     
                     m_particles[i].m_energy = 1.0f;
@@ -283,7 +283,7 @@ namespace ChilliSource
         //-----------------------------------------------------
         void ParticleEmitter::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam)
         {
-            SpriteComponent::SpriteData sData;
+            SpriteBatch::SpriteData sData;
             // Get world matrix
             const Core::Matrix4 & matTrans = mpOwningComponent->GetEntity()->GetTransform().GetWorldTransform();
             
@@ -457,7 +457,8 @@ namespace ChilliSource
         {
             CS_ASSERT(m_atlas != nullptr, "Cannot set atlas Id without first setting atlas");
             
-            msParticleUVs = m_atlas->GetFrameUVs(in_atlasId);
+            m_hashedAtlasId = Core::HashCRC32::GenerateHashCode(in_atlasId);
+            msParticleUVs = m_atlas->GetFrameUVs(m_hashedAtlasId);
         }
         //-----------------------------------------------------
         /// Set Lifetime
@@ -495,41 +496,58 @@ namespace ChilliSource
 		///
 		/// Rebuild the sprite data
 		//-----------------------------------------------------
-		void ParticleEmitter::UpdateSpriteData(const Core::Vector3& invPos, const Core::Colour & insTintColour, SpriteComponent::SpriteData& outsData,
-                                                const Core::Vector3& invRight, const Core::Vector3& invUp, const Core::Vector3& invScale)
+		void ParticleEmitter::UpdateSpriteData(const Core::Vector3& invPos, const Core::Colour & insTintColour, SpriteBatch::SpriteData& outsData,
+                                                const Core::Vector3& invRight, const Core::Vector3& invUp, const Core::Vector2& invScale)
 		{
 			Core::ByteColour Col = Core::ColourUtils::ColourToByteColour(insTintColour);
 			
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].Col = Col;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].Col = Col;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].Col = Col;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].Col = Col;
+			outsData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].Col = Col;
+            outsData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].Col = Col;
+            outsData.sVerts[(u32)SpriteBatch::Verts::k_topRight].Col = Col;
+            outsData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].Col = Col;
 			
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex.x = msParticleUVs.m_u;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex.y = msParticleUVs.m_v;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex.x = msParticleUVs.m_u;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex.y = msParticleUVs.m_v + msParticleUVs.m_t;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex.x = msParticleUVs.m_u + msParticleUVs.m_s;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex.y = msParticleUVs.m_v;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex.x = msParticleUVs.m_u + msParticleUVs.m_s;
-            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex.y = msParticleUVs.m_v + msParticleUVs.m_t;
+            outsData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.x = msParticleUVs.m_u;
+            outsData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.y = msParticleUVs.m_v;
+            outsData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.x = msParticleUVs.m_u;
+            outsData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.y = msParticleUVs.m_v + msParticleUVs.m_t;
+            outsData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.x = msParticleUVs.m_u + msParticleUVs.m_s;
+            outsData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.y = msParticleUVs.m_v;
+            outsData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.x = msParticleUVs.m_u + msParticleUVs.m_s;
+            outsData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.y = msParticleUVs.m_v + msParticleUVs.m_t;
 			
 			outsData.pMaterial = mpMaterial;
+            
+            Core::Vector3 offsetTL;
+            Core::Vector2 size = mvInitialScale * invScale;
+            if(m_atlas != nullptr && m_hashedAtlasId > 0)
+            {
+                const auto& frame = m_atlas->GetFrame(m_hashedAtlasId);
+
+                Core::Vector2 offsetTL2;
+                offsetTL2.x = (-frame.m_originalSize.x * 0.5f) + (frame.m_croppedSize.x * 0.5f) + frame.m_offset.x;
+                offsetTL2.y = (frame.m_originalSize.y * 0.5f) - (frame.m_croppedSize.y * 0.5f) - frame.m_offset.y;
+                
+                //Convert offset from texel space to local sprite space
+                offsetTL2 = size/frame.m_originalSize * offsetTL2;
+                size = size/frame.m_originalSize * frame.m_croppedSize;
+                
+                offsetTL = Core::Vector3(offsetTL2.x, offsetTL2.y, 0.0f);
+            }
 			
-            Core::Vector3 vHalfRight = (0.5f * mvInitialScale.x * invScale.x) * invRight;
-            Core::Vector3 vHalfUp = (0.5f * mvInitialScale.y * invScale.y) * invUp;
+            Core::Vector3 vHalfRight = (0.5f * size.x) * invRight;
+            Core::Vector3 vHalfUp = (0.5f * size.y) * invUp;
             
             Core::Vector3 vTemp(vHalfUp.x - vHalfRight.x, vHalfUp.y - vHalfRight.y, vHalfUp.z - vHalfRight.z);
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = Core::Vector4(invPos + vTemp, 1.0f);
+			outsData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = Core::Vector4(invPos + vTemp + offsetTL, 1.0f);
             
             vTemp.x = vHalfUp.x + vHalfRight.x; vTemp.y = vHalfUp.y + vHalfRight.y; vTemp.z = vHalfUp.z + vHalfRight.z;
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos = Core::Vector4(invPos + vTemp, 1.0f);
+			outsData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos = Core::Vector4(invPos + vTemp + offsetTL, 1.0f);
             
             vTemp.x = -vHalfUp.x - vHalfRight.x; vTemp.y = -vHalfUp.y - vHalfRight.y; vTemp.z = -vHalfUp.z - vHalfRight.z;
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos = Core::Vector4(invPos + vTemp, 1.0f);
+			outsData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos = Core::Vector4(invPos + vTemp + offsetTL, 1.0f);
             
             vTemp.x = -vHalfUp.x + vHalfRight.x; vTemp.y = -vHalfUp.y + vHalfRight.y; vTemp.z = -vHalfUp.z + vHalfRight.z;
-			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos = Core::Vector4(invPos + vTemp, 1.0f);
+			outsData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos = Core::Vector4(invPos + vTemp + offsetTL, 1.0f);
 		}
         //-------------------------------------------------------
         /// Destructor

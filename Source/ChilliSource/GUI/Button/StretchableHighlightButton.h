@@ -56,7 +56,7 @@ namespace ChilliSource
             /// Constructor
             ///
             /// A constructor for creating the GUI Element from a param
-            /// dictionary. This is used mostly for loading from mogui
+            /// dictionary. This is used mostly for loading from csgui
             /// files.
             ///
             /// @param The param dictionary.
@@ -156,52 +156,6 @@ namespace ChilliSource
 			/// @param Canvas renderer
 			//-----------------------------------------------------------
 			void Draw(Rendering::CanvasRenderer* inpCanvas);
-            //--------------------------------------------------------
-            /// Set Width Maintaining Aspect
-            ///
-            /// Change the current width of the image view and resize the height
-            /// to maintain the aspect ratio of the image
-            ///
-            /// @param Unified width
-            //--------------------------------------------------------
-            void SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth);
-            //--------------------------------------------------------
-            /// Set Height Maintaining Aspect
-            ///
-            /// Change the current height of the image view and resize the width
-            /// to maintain the aspect ratio of the image
-            ///
-            /// @param Unified height
-            //--------------------------------------------------------
-            void SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight);
-            //--------------------------------------------------------
-            /// Enable Width Maintaining Aspect
-            ///
-            /// Enables auto scaling of the height to maintain the aspect ratio
-            ///
-            /// @param boolean to disable or enable
-            //--------------------------------------------------------
-            void EnableWidthMaintainingAspect(bool inbEnabled);
-			//--------------------------------------------------------
-			/// Is Width Maintaining Aspect Enabled
-			///
-			/// @return Whether auto scaling of the width to maintain the aspect ratio
-			//--------------------------------------------------------
-			bool IsWidthMaintainingAspectEnabled() const;
-            //--------------------------------------------------------
-            /// Enable Height Maintaining Aspect
-            ///
-            /// Enables auto scaling of the height to maintain the aspect ratio
-            ///
-            /// @param boolean to disable or enable
-            //--------------------------------------------------------
-            void EnableHeightMaintainingAspect(bool inbEnabled);
-			//--------------------------------------------------------
-			/// Is Height Maintaining Aspect Enabled
-			///
-			/// @return Whether auto scaling of the height to maintain the aspect ratio
-			//--------------------------------------------------------
-			bool IsHeightMaintainingAspectEnabled() const;
             //-----------------------------------------------------------
             /// Destructor
             //-----------------------------------------------------------
@@ -272,8 +226,6 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(std::string, BaseNormalTextureAtlasID, SetBaseNormalTextureAtlasID, GetBaseNormalTextureAtlasID);
 			DECLARE_PROPERTY_A(std::string, BaseHighlightTextureAtlasID, SetBaseHighlightTextureAtlasID, GetBaseHighlightTextureAtlasID);
 			DECLARE_PROPERTY_A(Core::Colour, HighlightColour, SetHighlightColour, GetHighlightColour);
-			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
-			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
 		};
     }
 }

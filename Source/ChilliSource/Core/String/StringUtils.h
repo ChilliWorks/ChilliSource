@@ -134,9 +134,13 @@ namespace ChilliSource
 			 */
 			bool EndsWith(const std::string& str, const std::string& pattern, bool lowerCase = true);
 
-			/** Method for standardising paths - use forward slashes only, end with slash.
+			/** Method for standardising file paths - use forward slashes only, removes trailing slashes
 			 */
-			std::string StandardisePath( const std::string &init);
+			std::string StandardiseFilePath( const std::string &init);
+            
+            /** Method for standardising directory paths - use forward slashes only, end with slash.
+			 */
+			std::string StandardiseDirectoryPath( const std::string &init);
 
 			/** Method for splitting a fully qualified filename into the base name
 			 and path.
@@ -179,13 +183,6 @@ namespace ChilliSource
 			 */
 			TimeIntervalSecs ToTimestamp(const std::string& instrSource, StringTimeFormat ineFormat);
 			
-			/**
-			 //Given a classname in the form CClass or IClass would return Class. Useful for datadriven shenanigans
-			 @param input name
-			 @returns standardised name
-			 */
-			const std::string StandardiseClassName(const std::string & insClassName);
-            
 			// Utility function for comparing two characters in a case insensitive way
             bool CaseInsensitiveCompare(const char & inA, const char & inB);
             

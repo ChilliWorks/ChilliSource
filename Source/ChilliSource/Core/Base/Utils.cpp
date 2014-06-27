@@ -139,39 +139,6 @@ namespace ChilliSource
                 outstrUncompress.clear();
                 return false;
             }
-
-            Vector2 ScaleMaintainingAspectRatio(const Vector2& invCurrentSize, const Vector2& invTargetSize, bool inbFitInside)
-            {
-                if(invCurrentSize == invTargetSize)
-                {
-                    return invCurrentSize;
-                }
-                
-                Vector2 vResult;
-                
-                Vector2 vDiff(invTargetSize.x - invCurrentSize.x, invTargetSize.y - invCurrentSize.y);
-                
-                // reverse the checks below so the smallest value is picked instead
-                if(inbFitInside)
-                {
-                    vDiff *= -1.0f;
-                }
-                
-                if(vDiff.x > vDiff.y)
-                {
-                    f32 fScaleFactor = invTargetSize.x / invCurrentSize.x;
-                    vResult.x = invTargetSize.x;
-                    vResult.y = invCurrentSize.y * fScaleFactor;
-                }
-                else
-                {
-                    f32 fScaleFactor = invTargetSize.y / invCurrentSize.y;
-                    vResult.y = invTargetSize.y;
-                    vResult.x = invCurrentSize.x * fScaleFactor;
-                }
-                
-                return vResult;
-            }
             //---------------------------------------------------------
             //---------------------------------------------------------
             u8 HexToDec(const u8* inpHex)

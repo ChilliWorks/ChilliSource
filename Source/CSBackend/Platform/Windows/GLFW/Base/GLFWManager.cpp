@@ -1,9 +1,29 @@
 //
 //  GLFWManager.cpp
 //  Chilli Source
-//
 //  Created by Scott Downie on 11/03/2014.
-//  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
@@ -43,9 +63,9 @@ namespace CSBackend
 				//get the path to here
 				wchar_t pathChars[MAX_PATH];
 				GetModuleFileName(nullptr, pathChars, MAX_PATH);
-				std::string path = WindowsStringUtils::ConvertWindowsPathToStandard(std::wstring(pathChars));
+				std::string path = WindowsStringUtils::ConvertWindowsFilePathToStandard(std::wstring(pathChars));
 				std::string::size_type pos = path.find_last_of("/");
-				std::string workingDir = CSCore::StringUtils::StandardisePath(path.substr(0, pos));
+				std::string workingDir = CSCore::StringUtils::StandardiseDirectoryPath(path.substr(0, pos));
 
 				//open the file
 				std::ifstream file(workingDir + "assets/AppResources/App.config");

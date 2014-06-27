@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 
 namespace ChilliSource
 {
@@ -45,17 +46,6 @@ namespace ChilliSource
 		class RenderComponentFactory final : public Core::AppSystem
 		{
 		public:
-            
-            //---------------------------------------------------------------------------
-            /// Policy for setting the intial size of a sprite component
-            ///
-            /// @author S Downie
-            //---------------------------------------------------------------------------
-            enum class SpriteSizePolicy
-            {
-                k_useImageSize,
-                k_normaliseMaintainingAspect
-            };
             
 			CS_DECLARE_NAMEDTYPE(RenderComponentFactory);
 
@@ -74,24 +64,28 @@ namespace ChilliSource
 			///
             /// @param Dimensions
             /// @param Material
+            /// @param Size policy for setting the size of the sprite based on the
+            /// texture size
             ///
             /// @return Ownership of new sprite component
 			//---------------------------------------------------------------------------
-			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2& in_size, const MaterialCSPtr& in_material);
+			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2& in_size, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy);
             //---------------------------------------------------------------------------
 			/// Creates a sprite component thats size and texture is based on the
             /// given material and texture atlas
 			///
             /// @author S Downie
 			///
+            /// @param Dimensions
             /// @param Texture atlas
             /// @param Atlas Id
             /// @param Material
-            /// @param Size policy for setting the initial size of the sprite
+            /// @param Size policy for setting the size of the sprite based on the
+            /// texture atlas frame size
             ///
             /// @return Ownership of new sprite component
 			//---------------------------------------------------------------------------
-			SpriteComponentUPtr CreateSpriteComponent(const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteSizePolicy in_sizePolicy);
+			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2& in_size, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy);
             //---------------------------------------------------------------------------
 			/// Creates a static mesh component with the given material
 			///
@@ -125,7 +119,7 @@ namespace ChilliSource
 			///
 			/// @return Ownership of new camera component
 			//---------------------------------------------------------------------------
-			CameraComponentUPtr CreatePerspectiveCameraComponent(f32 in_fov, f32 in_near, f32 in_far);
+			PerspectiveCameraComponentUPtr CreatePerspectiveCameraComponent(f32 in_fov, f32 in_near, f32 in_far);
             //---------------------------------------------------------------------------
 			/// Create a camera with an orthographic projection
             ///
@@ -137,7 +131,19 @@ namespace ChilliSource
 			///
 			/// @return Ownership of new camera component
 			//---------------------------------------------------------------------------
-            CameraComponentUPtr CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far);
+            OrthographicCameraComponentUPtr CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far);
+            //---------------------------------------------------------------------------
+			/// Create a camera with an orthographic projection. The viewport of
+            /// the camera is set to the screen resolution
+            ///
+            /// @author S Downie
+            ///
+            /// @param Distance of near clip plane from the camera
+            /// @param Distance of far clip plane from the camera
+			///
+			/// @return Ownership of new camera component
+			//---------------------------------------------------------------------------
+			OrthographicCameraComponentUPtr CreateOrthographicCameraComponent(f32 in_near, f32 in_far);
 			//---------------------------------------------------------------------------
 			/// Create a new light component that is applied in the ambient render pass.
             /// This light simulates global light scattering as a base colour

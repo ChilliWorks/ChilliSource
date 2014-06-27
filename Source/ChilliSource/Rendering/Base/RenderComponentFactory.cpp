@@ -37,6 +37,8 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
+#include <ChilliSource/Rendering/Camera/OrthographicCameraComponent.h>
+#include <ChilliSource/Rendering/Camera/PerspectiveCameraComponent.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
@@ -49,7 +51,6 @@
 #include <ChilliSource/Rendering/Particles/Affectors/ParticleAffectorFactory.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
-#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
@@ -127,31 +128,24 @@ namespace ChilliSource
 		}
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2& in_size, const MaterialCSPtr& in_material)
+        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2& in_size, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy)
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
-            pSprite->SetDimensions(in_size);
             pSprite->SetMaterial(in_material);
+            pSprite->SetSizePolicy(in_sizePolicy);
+            pSprite->SetSize(in_size);
             return pSprite;
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteSizePolicy in_sizePolicy)
+        SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2& in_size, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy)
         {
             SpriteComponentUPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(in_material);
-            pSprite->SetUVs(in_textureAtlas->GetFrameUVs(in_textureId));
-            
-            switch(in_sizePolicy)
-            {
-                case SpriteSizePolicy::k_useImageSize:
-                    pSprite->SetDimensions(in_textureAtlas->GetFrameSize(in_textureId));
-                    break;
-                case SpriteSizePolicy::k_normaliseMaintainingAspect:
-                    Core::Vector2 frameSize(in_textureAtlas->GetFrameSize(in_textureId));
-                    pSprite->SetDimensions(CalculateNormalisedSizeMaintainingAspect(frameSize));
-                    break;
-            }
+            pSprite->SetTextureAtlas(in_textureAtlas);
+            pSprite->SetTextureAtlasId(in_textureId);
+            pSprite->SetSizePolicy(in_sizePolicy);
+            pSprite->SetSize(in_size);
             
             return pSprite;
         }
@@ -173,37 +167,24 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
-		CameraComponentUPtr RenderComponentFactory::CreatePerspectiveCameraComponent(f32 in_fov, f32 in_near, f32 in_far)
+		PerspectiveCameraComponentUPtr RenderComponentFactory::CreatePerspectiveCameraComponent(f32 in_fov, f32 in_near, f32 in_far)
 		{
-			CameraDescription desc;
-			desc.vViewSize = m_screen->GetResolution();
-			desc.fAspect = (desc.vViewSize.x/desc.vViewSize.y);
-			desc.fFOV = in_fov;
-			desc.fNearClipping = in_near;
-			desc.fFarClipping = in_far;
-			desc.ClearCol = Core::Colour::k_white;
-			desc.m_type = CameraType::k_perspective;
-			desc.bShouldResizeToScreen = true;
-			
-			CameraComponentUPtr pCamera(new CameraComponent(desc));
+			auto screenSize = m_screen->GetResolution();
+			PerspectiveCameraComponentUPtr pCamera(new PerspectiveCameraComponent(screenSize.x / screenSize.y, in_fov, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
 			return pCamera;
 		}
         //---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
-		CameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far)
+		OrthographicCameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far)
 		{
-			CameraDescription desc;
-			desc.vViewSize = in_viewportSize;
-			desc.fAspect = (desc.vViewSize.x/desc.vViewSize.y);
-			desc.fFOV = 60.0f;
-			desc.fNearClipping = in_near;
-			desc.fFarClipping = in_far;
-			desc.ClearCol = Core::Colour::k_white;
-			desc.m_type = CameraType::k_orthographic;
-			desc.bShouldResizeToScreen = true;
-			
-			CameraComponentUPtr pCamera(new CameraComponent(desc));
+			OrthographicCameraComponentUPtr pCamera(new OrthographicCameraComponent(in_viewportSize, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
 			return pCamera;
+		}
+        //---------------------------------------------------------------------------
+		//---------------------------------------------------------------------------
+		OrthographicCameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(f32 in_near, f32 in_far)
+		{
+            return CreateOrthographicCameraComponent(m_screen->GetResolution(), in_near, in_far);
 		}
         //---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------

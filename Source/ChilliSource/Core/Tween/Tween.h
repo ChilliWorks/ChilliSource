@@ -183,7 +183,7 @@ namespace ChilliSource
 			///
 			/// @return Interpolated value at current T
 			//-----------------------------------------------------------------------
-			auto GetValue() const -> decltype(std::declval<TInterpFunc>()(0.0f))
+			auto GetValue() const -> decltype(std::declval<TInterpFunc>()(f32()))
 			{
 				return m_interpFunc(m_currentT);
 			}

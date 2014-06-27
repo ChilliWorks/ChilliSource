@@ -1,9 +1,29 @@
 //
 //  ImageView.h
-//  moFlo
+//  Chilli Source
+//  Created by Scott Downie on 22/04/2011
 //
-//  Created by Scott Downie on 22/04/2011.
-//  Copyright 2011 Tag Games. All rights reserved.
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifndef _CHILLISOURCE_GUI_IMAGEVIEW_H_
@@ -55,9 +75,10 @@ namespace ChilliSource
             //--------------------------------------------------------
             /// Set Sprite Sheet
             ///
+            /// @param Location
             /// @param Sprite sheet name
             //--------------------------------------------------------
-            void SetTextureAtlas(const std::string& instrTextureAtlas, Core::StorageLocation ineLocation = Core::StorageLocation::k_package);
+            void SetTextureAtlas(Core::StorageLocation ineLocation, const std::string& instrTextureAtlas);
             //--------------------------------------------------------
             /// Set Sprite Sheet
             ///
@@ -116,14 +137,6 @@ namespace ChilliSource
 			/// based on the size of the image
 			//--------------------------------------------------------
 			bool IsSizeFromImageEnabled() const;
-            //--------------------------------------------------------
-            /// Set Size From Image
-            ///
-            /// Sets the of the image view to the size of the image
-            /// without requiring a draw to call. Useful for working
-            /// with relative sizes and aspect ratios.
-            //--------------------------------------------------------
-            void SetSizeFromImage();
             //--------------------------------------------------------
             /// Enable Width From Image
             ///
@@ -301,6 +314,14 @@ namespace ChilliSource
 			void LayoutContent();
             
         private:
+            //--------------------------------------------------------
+            /// Set Size From Image
+            ///
+            /// Sets the of the image view to the size of the image
+            /// without requiring a draw to call. Useful for working
+            /// with relative sizes and aspect ratios.
+            //--------------------------------------------------------
+            void SetSizeFromImage();
 			//--------------------------------------------------------
 			/// Update Size From Image
 			///
@@ -333,7 +354,8 @@ namespace ChilliSource
             DECLARE_PROPERTY_A(Rendering::UVs, UVs, SetUVs, GetUVs);
             
 			DECLARE_PROPERTY_A(std::string, TextureAtlasID, SetTextureAtlasID, GetTextureAtlasID);
-
+            u32 m_hashedTextureAtlasId = 0;
+            
             DECLARE_PROPERTY_A(bool, ActAsSpacer, EnableActAsSpacer, IsActAsSpacerEnabled);
             DECLARE_PROPERTY_A(bool, SizeFromImage, EnableSizeFromImage, IsSizeFromImageEnabled);
             DECLARE_PROPERTY_A(bool, WidthFromImage, EnableSizeFromImage, IsSizeFromImageEnabled);

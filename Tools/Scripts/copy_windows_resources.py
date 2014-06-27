@@ -42,9 +42,35 @@ import os
 # @author S Downie
 #----------------------------------------------------------------------
 
+#----------------------------------------------------------------------
+# Copies the files from src directory to dst directory but excludes
+# those that are tagged ".ios" or ".android"
+#
+# @author S Downie
+#
+# @param Source path
+# @param Destination path
+#----------------------------------------------------------------------
+def copy_file_tree(src_path, dst_path):
+    excludes = [".ios", ".android", ".DS_Store"]
+    includes = [".windows"]
+
+    filter_func = lambda name: any(include in name for include in includes) or not any(exclude in name for exclude in excludes)
+
+    if os.path.exists(dst_path) == False:
+        os.makedirs(dst_path)
+
+    for item in os.listdir(src_path):
+        src = os.path.join(src_path, item)
+        dst = os.path.join(dst_path, item)
+        if os.path.isdir(src):
+            copy_file_tree(src, dst)
+        else:
+            if filter_func(item):
+                shutil.copy2(src, dst)
 
 #----------------------------------------------------------------------
-# Copies the resource from PlatformResources and AppResources
+# Copies the resource from CSResources and AppResources
 # into target directory.
 #
 # @author S Downie
@@ -53,7 +79,7 @@ import os
 # @param Target directory path
 #----------------------------------------------------------------------
 def copy_resources(project_dir, target_dir):
-    assetsDir = target_dir+"assets/"
+    assetsDir = os.path.join(target_dir, "assets")
 
     file_system_utils.delete_directory(assetsDir)
 
@@ -63,8 +89,8 @@ def copy_resources(project_dir, target_dir):
     app_dst_path = os.path.join(assetsDir, "AppResources")
     cs_dst_path = os.path.join(assetsDir, "CSResources")
 
-    file_system_utils.overwrite_directory(app_src_path, app_dst_path)
-    file_system_utils.overwrite_directory(cs_src_path, cs_dst_path)
+    copy_file_tree(app_src_path, app_dst_path)
+    copy_file_tree(cs_src_path, cs_dst_path)
 
 #----------------------------------------------------------------------
 # Copies the libs/dlls into target directory.

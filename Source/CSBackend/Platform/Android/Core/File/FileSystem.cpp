@@ -1,9 +1,29 @@
 //
 //  FileSystem.cpp
 //  Chilli Source
-//
 //  Created by Ian Copland on 25/03/2011.
-//  Copyright 2011 Tag Games Ltd. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2011 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #ifdef CS_TARGETPLATFORM_ANDROID
@@ -279,7 +299,7 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			bool DeleteDirectory(const std::string& in_directoryPath)
 			{
-				std::string directoryPath = CSCore::StringUtils::StandardisePath(in_directoryPath);
+				std::string directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
 
 				//this has the potential to have a path with a dot in it - make sure that it will always have a "/" on the end.
 				if (directoryPath[directoryPath.size() - 1] != '/')
@@ -359,7 +379,7 @@ namespace CSBackend
 			}
 
 			//create the base directories
-			externalStorage = CSCore::StringUtils::StandardisePath(externalStorage);
+			externalStorage = CSCore::StringUtils::StandardiseDirectoryPath(externalStorage);
 			m_storagePath = externalStorage + "Android/data/" + coreJI->GetPackageName() + "/";
 
 			CSBackend::Android::CreateDirectory(externalStorage + "Android/");
@@ -431,7 +451,7 @@ namespace CSBackend
 			std::string path = GetAbsolutePathToStorageLocation(in_storageLocation);
 
 			//get each level of the new directory seperately
-			std::string relativePath = CSCore::StringUtils::StandardisePath(in_directory);
+			std::string relativePath = CSCore::StringUtils::StandardiseDirectoryPath(in_directory);
 			std::vector<std::string> relativePathSections = CSCore::StringUtils::Split(relativePath, "/");
 
 			//iterate through each section of the path and try and create it.
@@ -525,8 +545,8 @@ namespace CSBackend
 			else
 			{
 				//copy each of these files individually
-				std::string sourcePath = CSCore::StringUtils::StandardisePath(in_sourceDirectoryPath);
-				std::string destPath = CSCore::StringUtils::StandardisePath(in_destinationDirectoryPath);
+				std::string sourcePath = CSCore::StringUtils::StandardiseDirectoryPath(in_sourceDirectoryPath);
+				std::string destPath = CSCore::StringUtils::StandardiseDirectoryPath(in_destinationDirectoryPath);
 				for (const std::string& filename : filenames)
 				{
 					if (CopyFile(in_sourceStorageLocation, sourcePath + filename, in_destinationStorageLocation, destPath + filename) == false)
@@ -621,7 +641,7 @@ namespace CSBackend
 				}
 				default:
 				{
-					return CSBackend::Android::DoesFileExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath));
+					return CSBackend::Android::DoesFileExist(CSCore::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath));
 				}
 			}
 		}
@@ -629,7 +649,7 @@ namespace CSBackend
 		//--------------------------------------------------------------
 		bool FileSystem::DoesFileExistInCachedDLC(const std::string& in_filePath) const
 		{
-			return CSBackend::Android::DoesFileExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath));
+			return CSBackend::Android::DoesFileExist(CSCore::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath));
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
@@ -647,7 +667,7 @@ namespace CSBackend
             }
             else if (in_storageLocation == CSCore::StorageLocation::k_DLC)
 			{
-				if (CSBackend::Android::DoesDirectoryExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath)) == true)
+				if (CSBackend::Android::DoesDirectoryExist(CSCore::StringUtils::StandardiseDirectoryPath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath)) == true)
 				{
 					return true;
 				}
@@ -656,7 +676,7 @@ namespace CSBackend
 			}
             else
             {
-            	return CSBackend::Android::DoesDirectoryExist(CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath));
+            	return CSBackend::Android::DoesDirectoryExist(CSCore::StringUtils::StandardiseDirectoryPath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath));
             }
 		}
 		//--------------------------------------------------------------
@@ -702,7 +722,7 @@ namespace CSBackend
 				{
 					case CSCore::StorageLocation::k_DLC:
 					{
-						std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
+						std::string filePath = CSCore::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
 						if(CSBackend::Android::DoesFileExist(filePath) == true)
 						{
 							return filePath;
@@ -730,7 +750,7 @@ namespace CSBackend
 				{
 					case CSCore::StorageLocation::k_DLC:
 					{
-						std::string directoryPath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
+						std::string directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
 						if(CSBackend::Android::DoesDirectoryExist(directoryPath) == true)
 						{
 							return directoryPath;
@@ -751,7 +771,7 @@ namespace CSBackend
 		//--------------------------------------------------------------
 		void FileSystem::AddItemToManifest(CSCore::StorageLocation in_location, const std::string& in_filePath, unz_file_pos in_zipPos, std::vector<APKManifestItem>& inout_items)
 		{
-			std::string directoryPath = CSCore::StringUtils::StandardisePath(in_filePath.substr(0, in_filePath.rfind("/") + 1));
+			std::string directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_filePath.substr(0, in_filePath.rfind("/") + 1));
 
 			//check to see if this directory has previously been seen. If it has not, add it.
 			if (directoryPath.size() != 0 && DoesDirectoryExistInAPK(in_location, directoryPath) == false)
@@ -796,7 +816,7 @@ namespace CSBackend
 				unzGetCurrentFileInfo(unzipper, &info, filePathBytes, k_filePathLength, nullptr, 0, nullptr, 0);
 
 				//get the path and filename
-				std::string filePath = CSCore::StringUtils::StandardisePath(filePathBytes);
+				std::string filePath = CSCore::StringUtils::StandardiseFilePath(filePathBytes);
 
 				//if this file is at the same path as requested, then add it to the output
 				if (CSCore::StringUtils::StartsWith(filePath, appAssetsPath, false) == true)
@@ -828,7 +848,7 @@ namespace CSBackend
         	CS_ASSERT(in_location == CSCore::StorageLocation::k_package || in_location == CSCore::StorageLocation::k_chilliSource, "APK only covers package and cs locations");
 
 			APKManifestItem searchItem;
-			searchItem.m_pathHash = CSCore::HashCRC32::GenerateHashCode(CSCore::StringUtils::StandardisePath(in_path));
+			searchItem.m_pathHash = CSCore::HashCRC32::GenerateHashCode(in_path);
 
 			if(in_location == CSCore::StorageLocation::k_package)
 			{
@@ -858,7 +878,7 @@ namespace CSBackend
 			CSCore::FileStreamUPtr fileStream = CSCore::FileStreamUPtr(new FileStreamAPK(&m_minizipMutex));
 
 			APKManifestItem manifestItem;
-			if (TryGetManifestItem(in_location, in_filePath, manifestItem) == true)
+			if (TryGetManifestItem(in_location, CSCore::StringUtils::StandardiseFilePath(in_filePath), manifestItem) == true)
 			{
 				if (manifestItem.m_isFile == true)
 				{
@@ -878,7 +898,7 @@ namespace CSBackend
 			bool isSuccess = false;
 
 			APKManifestItem manifestItem;
-			if (TryGetManifestItem(in_srcLocation, in_filePath, manifestItem) == true)
+			if (TryGetManifestItem(in_srcLocation, CSCore::StringUtils::StandardiseFilePath(in_filePath), manifestItem) == true)
 			{
 				if (manifestItem.m_isFile == true)
 				{
@@ -934,7 +954,7 @@ namespace CSBackend
 
 			std::vector<std::string> output;
 
-			std::string directoryPath = CSCore::StringUtils::StandardisePath(in_directoryPath);
+			std::string directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
 
 			if(in_location == CSCore::StorageLocation::k_package)
 			{
@@ -972,7 +992,7 @@ namespace CSBackend
 		bool FileSystem::DoesFileExistInAPK(CSCore::StorageLocation in_location, const std::string& in_filePath) const
 		{
 			APKManifestItem manifestItem;
-			if (TryGetManifestItem(in_location, in_filePath, manifestItem) == true)
+			if (TryGetManifestItem(in_location, CSCore::StringUtils::StandardiseFilePath(in_filePath), manifestItem) == true)
 			{
 				if (manifestItem.m_isFile == true)
 				{
@@ -987,7 +1007,7 @@ namespace CSBackend
 		bool FileSystem::DoesDirectoryExistInAPK(CSCore::StorageLocation in_location, const std::string& in_directoryPath) const
 		{
 			APKManifestItem manifestItem;
-			if (TryGetManifestItem(in_location, in_directoryPath, manifestItem) == true)
+			if (TryGetManifestItem(in_location, CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), manifestItem) == true)
 			{
 				if (manifestItem.m_isFile == false)
 				{
@@ -1004,8 +1024,8 @@ namespace CSBackend
 			std::vector<std::string> output;
 
 			//insure the path is in the correct format
-			std::string directoryPath = CSCore::StringUtils::StandardisePath(in_directoryPath);
-			std::string parentDirectoryPath = CSCore::StringUtils::StandardisePath(in_parentDirectoryPath);
+			std::string directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
+			std::string parentDirectoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_parentDirectoryPath);
 
 			//these have the potential to be paths with a dot in them so make sure that it will always have a "/" on the end regardless.
 			if (directoryPath.size() > 0 && directoryPath[directoryPath.size() - 1] != '/')
@@ -1036,24 +1056,28 @@ namespace CSBackend
 			struct dirent* directoryItem;
 			while ((directoryItem = readdir(directory)) != nullptr)
 			{
-				std::string itemName = CSCore::StringUtils::StandardisePath(directoryItem->d_name);
+				struct stat dirStats;
+				std::string itemName(directoryItem->d_name);
 
 				//filter out "." and ".."
 				if (itemName == "." || itemName == "..")
 					continue;
 
-				//add the item to our list
-				output.push_back(parentDirectoryPath + itemName);
-
-				//check if this item is a directory, if so, recurse!
-				struct stat itemStats;
-				std::string itemPath = directoryPath + itemName + "\0";
-				if (stat(itemPath.c_str(), &itemStats) == 0)
+				bool isDir = false;
+				std::string itemPath = directoryPath + itemName;
+				if (stat(itemPath.c_str(), &dirStats) == 0)
 				{
-					if (S_ISDIR(itemStats.st_mode) == true)
+					if (S_ISDIR(dirStats.st_mode) == true)
 					{
-						std::vector<std::string> subDirectoryPaths = GetAllPaths(itemPath, in_recursive, parentDirectoryPath + itemName);
-						output.insert(output.end(), subDirectoryPaths.begin(), subDirectoryPaths.end());
+						itemName = CSCore::StringUtils::StandardiseDirectoryPath(itemName);
+						itemPath = CSCore::StringUtils::StandardiseDirectoryPath(itemPath);
+						isDir = true;
+					}
+					else
+					{
+						itemName = CSCore::StringUtils::StandardiseFilePath(itemName);
+						itemPath = CSCore::StringUtils::StandardiseFilePath(itemPath);
+						isDir = false;
 					}
 				}
 				else
@@ -1061,6 +1085,15 @@ namespace CSBackend
 					CS_LOG_ERROR("Error: Failed to stat path '" + itemPath + "'");
 				}
 
+				//add the item to our list
+				output.push_back(parentDirectoryPath + itemName);
+
+				//check if this item is a directory, if so, recurse!
+				if (isDir == true)
+				{
+					std::vector<std::string> subDirectoryPaths = GetAllPaths(itemPath, in_recursive, parentDirectoryPath + itemName);
+					output.insert(output.end(), subDirectoryPaths.begin(), subDirectoryPaths.end());
+				}
 			}
 
 			closedir(directory);
@@ -1087,7 +1120,7 @@ namespace CSBackend
 				{
 					{
 						PathInfo info;
-						info.m_path = CSCore::StringUtils::StandardisePath(GetPackageDLCPath() + in_directoryPath);
+						info.m_path = CSCore::StringUtils::StandardiseDirectoryPath(GetPackageDLCPath() + in_directoryPath);
 						info.m_storageLocation = CSCore::StorageLocation::k_package;
 						output.push_back(info);
 					}
@@ -1117,7 +1150,7 @@ namespace CSBackend
 			std::vector<std::string> output;
             for(const PathInfo& directoryInfo : in_directoryInfos)
             {
-                std::string path = CSCore::StringUtils::StandardisePath(directoryInfo.m_path);
+                std::string path = CSCore::StringUtils::StandardiseDirectoryPath(directoryInfo.m_path);
 
                 if(directoryInfo.m_storageLocation == CSCore::StorageLocation::k_package || directoryInfo.m_storageLocation == CSCore::StorageLocation::k_chilliSource)
                 {

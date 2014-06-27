@@ -41,7 +41,7 @@ namespace ChilliSource
         
         bool FrustumCullPredicate::CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const
         {
-            return !inpCamera->GetFrustumPtr()->SphereCullTest(inpItem->GetBoundingSphere());
+            return !inpCamera->GetFrustum().SphereCullTest(inpItem->GetBoundingSphere());
         }
     }
 }

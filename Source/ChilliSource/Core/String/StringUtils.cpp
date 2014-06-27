@@ -447,25 +447,29 @@ namespace ChilliSource
             }
 
             //-----------------------------------------------------------------------
-            std::string StandardisePath(const std::string& init)
+            std::string StandardiseFilePath(const std::string& init)
             {
                 std::string path = init;
                 
                 std::replace( path.begin(), path.end(), '\\', '/' );
+                path = ReplaceAll(path, "//", "/");
                 
-                // Find last "/" and use it to determine if text
-                // between it and the end of the string is a filename
-                // has to be a rough guess as directories can be named like files
-                size_t lastSlash = path.find_last_of('/');
+                ChopTrailingChars(path, '/');
                 
-                // No slashes in path so just use start
-                if(lastSlash == std::string::npos)
-                    lastSlash = 0;
+                return path;
+            }
+            
+            //-----------------------------------------------------------------------
+            std::string StandardiseDirectoryPath(const std::string& init)
+            {
+                std::string path = init;
                 
-                if(path.find('.', lastSlash) == std::string::npos)
+                std::replace( path.begin(), path.end(), '\\', '/' );
+                path = ReplaceAll(path, "//", "/");
+                
+                if(path.empty() == false && path.back() != '/')
                 {
-                    if( path.length() != 0)
-                        TerminateStringWith(path, "/");
+                    TerminateStringWith(path, "/");
                 }
                 
                 return path;
@@ -637,14 +641,6 @@ namespace ChilliSource
                 }
                 
                 return 0;
-            }
-
-
-            const std::string StandardiseClassName(const std::string & insClassName){
-                    if (StartsWith(insClassName,"C",false) || StartsWith(insClassName,"I",false)) {
-                        return insClassName.substr(1,insClassName.length()-1);
-                    }
-                return insClassName;
             }
             
             bool CaseInsensitiveCompare(const char &inA, const char &inB)

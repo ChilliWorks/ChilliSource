@@ -67,7 +67,7 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// Returns the global application instance.
             ///
-            /// @author Ian Copland
+            /// @author I Copland
             ///
             /// @return The application instance pointer.
 			//----------------------------------------------------
@@ -82,7 +82,7 @@ namespace ChilliSource
             /// Creates a new instance of the given system and
             /// adds it to the application.
             ///
-            /// @author Ian Copland
+            /// @author I Copland
             ///
             /// @param The arguments to the system constructor.
             ///
@@ -93,7 +93,7 @@ namespace ChilliSource
 			/// Looks for a system that implements the queryable
             /// interface provided as a template parameter.
             ///
-            /// @author Ian Copland
+            /// @author I Copland
             ///
 			/// @return The first system found that implements
             /// the named interface.
@@ -103,7 +103,7 @@ namespace ChilliSource
 			/// Looks for a all systems that implement the given
             /// queryable interface provided as a template parameter.
 			///
-            /// @author Ian Copland
+            /// @author I Copland
             ///
 			/// @param [Out] The list of systems that implement the
             /// queryable interface.
@@ -174,7 +174,7 @@ namespace ChilliSource
 			/// Sets a multiplier for slowing or speeding up the
             /// delta time passed to each system and state.
             ///
-            /// @author Ian Copland
+            /// @author I Copland
             ///
 			/// @param Scaler to speed up or slow down update time.
 			//-----------------------------------------------------
@@ -192,10 +192,7 @@ namespace ChilliSource
 			///
 			/// @return Handle to application state manager
 			//-----------------------------------------------------
-			inline StateManager* GetStateManager() const
-            {
-                return m_stateManager;
-            }
+            StateManager* GetStateManager() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the renderer.
             ///
@@ -203,10 +200,7 @@ namespace ChilliSource
 			///
 			/// @return Handle application renderer
 			//-----------------------------------------------------
-			inline Rendering::Renderer* GetRenderer() const
-            {
-                return m_renderer;
-            }
+            Rendering::Renderer* GetRenderer() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the render system.
             ///
@@ -214,21 +208,24 @@ namespace ChilliSource
 			///
 			/// @return Handle to platfrom specific render system
 			//-----------------------------------------------------
-			inline Rendering::RenderSystem* GetRenderSystem() const
-            {
-                return m_renderSystem;
-            }
+            Rendering::RenderSystem* GetRenderSystem() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the file system.
             ///
-            /// @author Ian Copland
+            /// @author I Copland
 			///
 			/// @return Pointer to the file system
 			//-----------------------------------------------------
-			inline FileSystem* GetFileSystem() const
-            {
-                return m_fileSystem;
-            }
+            FileSystem* GetFileSystem() const;
+            //-----------------------------------------------------
+			/// Returns a pointer to the system that resolves path
+            /// based on the device config
+            ///
+            /// @author S Downie
+			///
+			/// @return Pointer to the path resolver
+			//-----------------------------------------------------
+            TaggedFilePathResolver* GetTaggedFilePathResolver() const;
 			//-----------------------------------------------------
 			/// Returns a pointer to the task scheduler.
 			///
@@ -236,10 +233,7 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the task scheduler
 			//-----------------------------------------------------
-			inline TaskScheduler* GetTaskScheduler() const
-			{
-				return m_taskScheduler;
-			}
+            TaskScheduler* GetTaskScheduler() const;
             //-----------------------------------------------------
 			/// Returns a pointer to the resource pool system.
             ///
@@ -247,48 +241,36 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the resource pool
 			//-----------------------------------------------------
-			inline ResourcePool* GetResourcePool() const
-            {
-                return m_resourcePool;
-            }
+            ResourcePool* GetResourcePool() const;
             //-----------------------------------------------------
-            /// @author Ian Copland
+            /// @author I Copland
 			///
 			/// @return A pointer to the App Config.
 			//-----------------------------------------------------
-			inline AppConfig* GetAppConfig() const
-            {
-                return m_appConfig;
-            }
+            AppConfig* GetAppConfig() const;
             //-----------------------------------------------------
-            /// @author Ian Copland
+            /// @author I Copland
 			///
-			/// @return A pointer to the screen.
+			/// @return A pointer to the screen system.
 			//-----------------------------------------------------
-			inline Screen* GetScreen() const
-            {
-                return m_screen;
-            }
+            Screen* GetScreen() const;
 #ifdef CS_ENABLE_DEBUGSTATS
             //-----------------------------------------------------
 			/// Returns a pointer to the debug stats system. This
             /// is only available when the debug stats proprocessor
             /// flag CS_ENABLE_DEBUGSTATS is defined.
             ///
-            /// @author Ian Copland
+            /// @author I Copland
 			///
 			/// @return Pointer to the debug stats system.
 			//-----------------------------------------------------
-			inline Debugging::DebugStats* GetDebugStats() const
-            {
-                return m_debugStats;
-            }
+            Debugging::DebugStats* GetDebugStats() const;
 #endif
             //----------------------------------------------------
 			/// Initialises the application and kicks off the update
             /// loop. This should not be called by a users application.
             ///
-            /// @author Ian Copland
+            /// @author I Copland
 			//----------------------------------------------------
 			void Init();
             //----------------------------------------------------
@@ -354,7 +336,7 @@ namespace ChilliSource
             /// application. This should not be called by a users
             /// application.
             ///
-            /// @author Ian Copland
+            /// @author I Copland
 			//----------------------------------------------------
 			void Destroy();
             //------------------------------------------------------
@@ -375,7 +357,7 @@ namespace ChilliSource
             /// been set up and before the first state is pushed.
             /// Application initialisation code should be in here.
             ///
-            /// @author Ian Copland
+            /// @author I Copland
 			//------------------------------------------------------
 			virtual void OnInit() = 0;
             //------------------------------------------------------
@@ -391,7 +373,7 @@ namespace ChilliSource
             /// and states are released. Application destruction
             /// code should be in here.
             ///
-            /// @author Ian Copland
+            /// @author I Copland
 			//------------------------------------------------------
 			virtual void OnDestroy() = 0;
         private:
@@ -442,13 +424,14 @@ namespace ChilliSource
             ResourcePool* m_resourcePool = nullptr;
 			StateManager* m_stateManager = nullptr;
 			TaskScheduler* m_taskScheduler = nullptr;
+            Screen* m_screen = nullptr;
 			Rendering::Renderer* m_renderer = nullptr;
             Rendering::RenderSystem* m_renderSystem = nullptr;
             PlatformSystem* m_platformSystem = nullptr;
             FileSystem* m_fileSystem = nullptr;
+            TaggedFilePathResolver* m_taggedPathResolver = nullptr;
             Input::PointerSystem* m_pointerSystem = nullptr;
             AppConfig* m_appConfig = nullptr;
-            Screen* m_screen = nullptr;
             
 #ifdef CS_ENABLE_DEBUGSTATS
             Debugging::DebugStats* m_debugStats = nullptr;

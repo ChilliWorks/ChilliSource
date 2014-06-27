@@ -109,7 +109,7 @@ namespace ChilliSource
             ///
             /// @param Result - Success, failure, etc.
             //-------------------------------------------------
-            using PostResultDelegate = Core::ConnectableDelegate<void(const PostResult&)>;
+            using PostResultDelegate = Core::ConnectableDelegate<void(PostResult)>;
             
             //---------------------------------------------------
             /// Creates a new instance of the facebook post system.
