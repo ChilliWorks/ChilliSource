@@ -38,6 +38,7 @@ namespace StringUtils
 	{
 		std::string strPath = in_path;
 		std::replace( strPath.begin(), strPath.end(), '\\', '/' );
+		strPath = ReplaceAll(strPath, "//", "/");
 
         if(strPath.find('.') == std::string::npos)
         {
@@ -91,6 +92,19 @@ namespace StringUtils
 
 		return (endOfThis == strPattern);
 	}
+	//--------------------------------------------------------
+	//--------------------------------------------------------
+    std::string ReplaceAll(const std::string& in_source, const std::string& in_replaceWhat, const std::string& in_replaceWithWhat)
+    {
+    	std::string result = in_source;
+        while(1)
+        {
+            std::string::size_type pos = result.find(in_replaceWhat);
+            if (pos == std::string::npos) break;
+            result.replace(pos,in_replaceWhat.size(),in_replaceWithWhat);
+        }
+        return result;
+    }
 	//--------------------------------------------------------
 	//--------------------------------------------------------
 	template<> std::string StringCast<>(bool in_value)

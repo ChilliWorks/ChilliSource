@@ -96,6 +96,19 @@ namespace StringUtils
 	//--------------------------------------------------------
 	bool EndsWith(const std::string& in_string, const std::string& in_pattern);
 	//--------------------------------------------------------
+	/// Replaces all instances of a string "replaceWhat" with
+	/// string "replaceWithWhat" in the source string.
+	///
+	/// @author Ian Copland
+	///
+	/// @param The source string.
+	/// @param The string to replace.
+	/// @param The string to replace with.
+	///
+	/// @return The output string.
+	//--------------------------------------------------------
+    std::string ReplaceAll(const std::string& in_source, const std::string& in_replaceWhat, const std::string& in_replaceWithWhat);
+	//--------------------------------------------------------
 	/// Converts a value to a string.
 	///
 	/// @author Ian Copland
