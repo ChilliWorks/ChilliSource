@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Drawing.Imaging;
 
-namespace FontTool
+namespace CSFontMaker
 {
     public class GlyphRenderer
     {

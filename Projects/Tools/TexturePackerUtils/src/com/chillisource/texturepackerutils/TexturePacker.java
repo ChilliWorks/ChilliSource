@@ -958,7 +958,7 @@ public class TexturePacker
 			useGraphics[i] = i;
 			matchFound[i] = false;
 			{
-				System.out.print("Scanning File:" + sourceImageFiles[i].getName());
+				Logging.logVerbose("Scanning File:" + sourceImageFiles[i].getName());
 
 				File f = sourceImageFiles[i];
 				if (!f.exists())
@@ -1000,7 +1000,7 @@ public class TexturePacker
 				BufferedImage I = ImageIO.read(f);
 				int width = I.getWidth();
 				int height = I.getHeight();
-				System.out.print(" width:" + width + " height:" + height);
+				Logging.logVerbose(" width:" + width + " height:" + height);
 				originalImageWidths[i] = width;
 				originalImageHeights[i] = height;
 

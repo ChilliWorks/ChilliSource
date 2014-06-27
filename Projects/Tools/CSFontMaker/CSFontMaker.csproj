@@ -8,8 +8,8 @@
     <ProjectGuid>{2E3C3C93-EB40-4860-B17D-EB200C221BE1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FontTool</RootNamespace>
-    <AssemblyName>FontMaker</AssemblyName>
+    <RootNamespace>CSFontMaker</RootNamespace>
+    <AssemblyName>CSFontMaker</AssemblyName>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>

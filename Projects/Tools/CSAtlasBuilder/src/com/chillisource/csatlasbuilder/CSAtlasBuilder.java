@@ -1,11 +1,11 @@
 /**
-*  FontTool.java
+*  CSAtlasBuilder.java
 *  Chilli Source
-*  Created by Robert Henning on 17/06/2014.
+*  Created by Robert Henning on 07/09/2006.
 *
 *  The MIT License (MIT)
 *
-*  Copyright (c) 2014 Tag Games Limited
+*  Copyright (c) 2006 Tag Games Limited
 *
 *  Permission is hereby granted, free of charge, to any person obtaining a copy
 *  of this software and associated documentation files (the "Software"), to deal
@@ -26,52 +26,113 @@
 *  THE SOFTWARE.
 */
 
-package com.chillisource.csfontbuilder;
+package com.chillisource.csatlasbuilder;
 
 import java.io.*;
 
 import javax.imageio.*;
 
-import java.util.*;
-
 import com.chillisource.texturepackerutils.PackedTexture;
 import com.chillisource.texturepackerutils.TexturePacker;
 import com.chillisource.toolutils.ExternalProcess;
-import com.chillisource.toolutils.FileUtils;
 import com.chillisource.toolutils.LittleEndianOutputStream;
+import com.chillisource.toolutils.FileUtils;
 import com.chillisource.toolutils.Logging;
 import com.chillisource.toolutils.StringUtils;
- 
+
+import java.util.*;
+
 /**
- * Converts a series of character images to a bitmap font.
+ * Packs images into a single "texture atlas".
  * 
- * @author Robert Henning
+ * @author R Henning
  */
-public class CSFontBuilder
+public class CSAtlasBuilder
 {
-	private static final short k_version = 1;
-	private static final int k_numPixelsPadding = 2;
-	private static final Character k_charLF = new Character((char)10);
-	
-	private StringBuffer m_fontAlphabet = null; // this will create the alphabet file in
-	private StringBuffer m_fontCSV = null; // debug csv file for comparing font output
-	private FontBuilderOptions m_options;
-	private File m_rootDirectory; // Root directory from which files are read,set from
-	
+	private static final String k_versionString = "2.13";
+	private static final short k_versionNum = 3;
+
+	AtlasBuilderOptions m_options = null;
+	File m_rootDirectory = null; // Root directory from which files are read,set from
+
 	/**
-	 * @author Robert Henning
+	 * @author R Henning
 	 * 
-	 * @param Directory file.
-	 * @param Whether or not to recurse.
-	 * @param The output list of files
+	 * @param The options for the tool.
+	 * 
+	 * @return Whether or not the run was successful.
 	 */
-	private void addImageFilesInDirectory(File in_dir, boolean in_recursiveDirectorySearch, ArrayList<File> out_files)
+	public boolean run(AtlasBuilderOptions in_options) throws Exception
 	{
-		String[] dirContents = in_dir.list();
+		Logging.logVerbose("TextureAtlasTool version "+k_versionString);
+		Logging.logVerbose("-----------------------");
+
+		m_options = in_options;
+
+		Logging.logVerbose("input dir name is:\"" + m_options.m_inputDirectoryPath + "\"");
+
+		ArrayList<File> filesToProcess = new ArrayList<File>();
+
+		m_rootDirectory = new File(m_options.m_inputDirectoryPath);
+		if (m_options.m_fileList.length() > 0)
+		{
+			loadFilesFromOrderingFile(filesToProcess);
+		}
+		else
+		{
+			addImageFilesInDirectory(m_rootDirectory, true, filesToProcess);
+		}
+		
+		TexturePacker packer = new TexturePacker();
+		packer
+		.setDivisibleBy(m_options.m_divisibleBy)
+		.setExtrusion(m_options.m_extrude)
+		.setFixedHeight(m_options.m_fixedHeight)
+		.setFixedWidth(m_options.m_fixedWidth)
+		.setMaxHeight(m_options.m_maxHeight)
+		.setMaxWidth(m_options.m_maxWidth)
+		.setValidHeights(m_options.m_validHeights)
+		.setValidWidths(m_options.m_validWidths)
+		.setHeuristic(m_options.m_packingHeuristic)
+		.setInnerPadding(m_options.m_innerPadding)
+		.setOuterPadding(m_options.m_padding)
+		.enableCropping(m_options.m_crop);
+		
+		PackedTexture result = packer.pack(filesToProcess);
+		if(result == null)
+		{
+			return false;
+		}
+		
+		///////////////////////////////////////////////////////
+		// It's output time!
+		///////////////////////////////////////////////////////
+		// Write our combined png file
+		File F = new File(StringUtils.removeExtension(m_options.m_outputFilePath) + ".png");
+		ImageIO.write(result.getPackedTexture(), "png", F);
+
+		writeBinaryFile(result);
+		writeStringIDs(result);
+		convertToCSImage();
+
+		Logging.logVerbose("Goodbye!\n");
+
+		return true;
+	}
+	/**
+	 * @author R Henning
+	 * 
+	 * @param The input directory.
+	 * @param Whether or not to recurse. Will only recurse one level deep.
+	 * @param [Out] The output list of files.
+	 */
+	private void addImageFilesInDirectory(File in_directory, boolean in_recursiveDirectorySearch, ArrayList<File> out_files)
+	{
+		String[] dirContents = in_directory.list();
 
 		for (int i = 0; i < dirContents.length; i++)
 		{
-			File contentFile = new File(in_dir, dirContents[i]);
+			File contentFile = new File(in_directory, dirContents[i]);
 
 			if (contentFile.isDirectory() && in_recursiveDirectorySearch)
 			{
@@ -86,65 +147,67 @@ public class CSFontBuilder
 		}
 	}
 	/**
-	 * @author Robert Henning
+	 * @author R Henning
 	 * 
-	 * @param The options for running the tool.
+	 * @param The input file.
+	 * 
+	 * @return The output sprite name.
 	 */
-	public boolean Run(FontBuilderOptions in_options) throws Exception
+	private String generateSpriteNameFromFile(File in_file) throws IOException
 	{
-		Logging.logVerbose("FontTool version " + new Short(k_version).toString());
-		Logging.logVerbose("-----------------------");
+		//choose the output format for the filenames.
+		String srcFilePath = in_file.getCanonicalPath();
+		String srcFilePathWithoutExtension = srcFilePath.substring(0, srcFilePath.lastIndexOf("."));
+		String rootDir = m_rootDirectory.getCanonicalPath();
+		int rootDirLength = rootDir.length();
+		String srcFilePathFromRoot = srcFilePathWithoutExtension.substring(rootDirLength, srcFilePathWithoutExtension.length());
 
-		m_options = in_options;
+		// replace slashes with underscores
+		String srcFilePathWithoutSlashes = srcFilePathFromRoot.replace('\\', '_').replace('/', '_'); 
 		
-		ArrayList<File> filesToProcess = new ArrayList<File>();
-
-		m_rootDirectory = new File(m_options.m_inputDirectoryPath);
-		addImageFilesInDirectory(m_rootDirectory, true, filesToProcess);
-
-		TexturePacker packer = new TexturePacker();
-		packer
-		.setDivisibleBy(m_options.m_divisibleBy)
-		.setExtrusion(0)
-		.setFixedHeight(m_options.m_fixedHeight)
-		.setFixedWidth(m_options.m_fixedWidth)
-		.setMaxHeight(m_options.m_maxHeight)
-		.setMaxWidth(m_options.m_maxWidth)
-		.setValidHeights(m_options.m_validHeights)
-		.setValidWidths(m_options.m_validWidths)
-		.setHeuristic(m_options.m_packingHeuristic)
-		.setInnerPadding(0)
-		.setOuterPadding(k_numPixelsPadding)
-		.enableCropping(true);
-		
-		PackedTexture result = packer.pack(filesToProcess);
-		if(result == null)
+		//if the first char is an underscore, remove it.
+		if (srcFilePathWithoutSlashes.length() > 0 && srcFilePathWithoutSlashes.getBytes()[0] == '_')
 		{
-			return false;
+			srcFilePathWithoutSlashes = srcFilePathWithoutSlashes.substring(1);
 		}
-
-		// Write our combined png file
-		File F = new File(StringUtils.removeExtension(m_options.m_outputFilePath) + ".png");
-		ImageIO.write(result.getPackedTexture(), "png", F);
-
-		buildAlphabet(result);
-		writeBinaryFile(result);
-		
-		convertToCSImage();
-
-		Logging.logVerbose("Goodbye!\n");
-
-		return true;
+		return srcFilePathWithoutSlashes;
 	}
 	/**
-	 * Converts the created PNG to a CSImage.
+	 * @author R Henning
+	 * 
+	 * @param [Out] The list of files.
+	 */
+	private void loadFilesFromOrderingFile(ArrayList<File> files) throws Exception
+	{
+		File f = new File(m_options.m_fileList);
+		FileInputStream in = new FileInputStream(f);
+
+		DataInputStream I = new DataInputStream(in);
+		int length = (int) f.length();
+		byte tmp[] = new byte[length];
+		I.readFully(tmp);
+		I.close();
+		
+		String fileAsString = new String(tmp);
+
+		String[] lines = fileAsString.replace('\r','\n').split("\n");
+
+		for(String line : lines)
+		{
+			if ((line != null) && (line.length()> 0))
+				files.add(new File(StringUtils.standardiseFilePath(m_options.m_inputDirectoryPath + "/" + line)));
+		}
+	}
+	/**
+	 * Converts the temporary png file to CSImage.
 	 * 
 	 * @author S Downie
 	 */
 	private void convertToCSImage()
 	{
+		Logging.logVerbose("Converting to CSImage");
+		
 		LinkedList<String> commands = new LinkedList<String>();
-		 
 		commands.add("java");
 		commands.add("-Djava.awt.headless=true");
 		commands.add("-jar");
@@ -156,24 +219,24 @@ public class CSFontBuilder
 		commands.add("--output");
 		commands.add(StringUtils.removeExtension(m_options.m_outputFilePath) + ".csimage");
 		
-		if(m_options.m_imageCompression.length() > 0)
+		if (m_options.m_imageCompression.length() > 0)
 		{
 			commands.add("--compression");
 			commands.add(m_options.m_imageCompression);
 		}
 		
-		if(m_options.m_imageFormat.length() > 0)
+		if (m_options.m_imageFormat.length() > 0)
 		{
 			commands.add("--convert");
 			commands.add(m_options.m_imageFormat);
 		}
 		
-		if(m_options.m_imageDither == true)
+		if (m_options.m_imageDither == true)
 		{
 			commands.add("--dither");
 		}
 		
-		if(m_options.m_imagePremultiplyAlpha == false)
+		if (m_options.m_imagePremultiplyAlpha == true)
 		{
 			commands.add("--disablepremultipliedalpha");
 		}
@@ -199,72 +262,20 @@ public class CSFontBuilder
 		FileUtils.deleteFile(StringUtils.removeExtension(m_options.m_outputFilePath) + ".png");
 	}
 	/**
-	 * @author Robert Henning
+	 * @author R Henning
 	 * 
-	 * @param The packaged texture.
-	 */
-	private void buildAlphabet(PackedTexture in_packedTexture)
-	{
-		int numSourceImages = in_packedTexture.getNumImages();
-		for (int character = 0; character < numSourceImages; character++)
-		{
-			// This is a font so check the filename for unicode
-			// value of character
-			// and write into alphabet file.
-
-			int index = character;
-
-			// check for valid unicode
-			String charFilename = in_packedTexture.getOriginalFile(index).getName();
-
-			if ((charFilename.length() == 8) && (charFilename.indexOf('.') == 4)) // eg 0123.png
-			{
-				String unicodeString = charFilename.substring(0, 4);
-				char unicode = (char) Integer.parseInt(unicodeString, 16);
-				
-				Logging.logVerbose("Unicode for file \"" + charFilename + "\" is \"" + unicode + "\"");
-
-				if (m_fontAlphabet != null)
-				{
-					m_fontAlphabet.append(unicode);
-
-					// check for special characters
-					if (unicode != '"')
-					{
-						m_fontCSV.append("\"" + unicodeString + "\",\"" + unicode + "\"," + k_charLF);
-					}
-				}
-				else
-				{
-					m_fontAlphabet = new StringBuffer(1);
-					m_fontAlphabet.append(unicode);
-
-					m_fontCSV = new StringBuffer(1);
-					m_fontCSV.append("\"Uncode\",\"Character\"," + k_charLF + "\"" + unicodeString + "\",\"" + unicode + "\"," + k_charLF);
-				}
-			}
-			else
-			{
-				Logging.logError("unicode filename \"" + charFilename + "\" is not valid!");
-			}
-		}
-	}
-	/**
-	 * @author Robert Henning
-	 * 
-	 * @param The packaged texture.
+	 * @param The packed texure.
 	 */
 	private void writeBinaryFile(PackedTexture in_packedTexture) throws FileNotFoundException, IOException, Exception
 	{
 		int numImages = in_packedTexture.getNumImages();
 		LittleEndianOutputStream dosBinary = new LittleEndianOutputStream(m_options.m_outputFilePath);
 		dosBinary.writeShort((short) numImages);
-		dosBinary.writeShort(k_version); // file format revision
+		dosBinary.writeShort(k_versionNum); // file format revision
 
 		//Write out spritesheet size
 		dosBinary.writeShort((short) in_packedTexture.getPackedWidth());
 		dosBinary.writeShort((short) in_packedTexture.getPackedHeight());
-		dosBinary.writeShort((short) m_options.m_lineHeight);
 		
 		Logging.logVerbose("Output Image size::" + in_packedTexture.getPackedWidth() + " x " + in_packedTexture.getPackedHeight());
 		
@@ -292,9 +303,28 @@ public class CSFontBuilder
 			dosBinary.writeShort((short) orig_width);
 			dosBinary.writeShort((short) orig_height);
 		}
-		
-		dosBinary.writeNullTerminatedUtf8String(m_fontAlphabet.toString());
 
 		dosBinary.close();
+	}
+	/**
+	 * @author R Henning
+	 * 
+	 * @param The packaged texture.
+	 */
+	private void writeStringIDs(PackedTexture in_packedTexture) throws IOException 
+	{
+		int numImages = in_packedTexture.getNumImages();
+		
+		FileOutputStream outC = new FileOutputStream(m_options.m_outputFilePath + "id");
+		DataOutputStream dosC = new DataOutputStream(outC);
+
+		for (int i = 0; i < numImages; i++)
+		{
+			String enumName = generateSpriteNameFromFile(in_packedTexture.getOriginalFile(i));
+			dosC.writeBytes(enumName);
+			dosC.writeByte('\n');
+		}
+
+		dosC.close();
 	}
 }

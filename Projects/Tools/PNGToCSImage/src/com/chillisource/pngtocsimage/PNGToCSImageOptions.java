@@ -39,7 +39,7 @@ public class PNGToCSImageOptions
 	public OUTPUT_FORMAT eConversionType = OUTPUT_FORMAT.NONE;
 	public OUTPUT_FORMAT eConversionAlphaType = OUTPUT_FORMAT.NONE;
 	public OUTPUT_FORMAT eConversionNoAlphaType = OUTPUT_FORMAT.NONE;
-	public COMPRESSION_FORMAT eCompressionType = COMPRESSION_FORMAT.NONE;
-	public boolean bPremultiply = false;
+	public COMPRESSION_FORMAT eCompressionType = COMPRESSION_FORMAT.DEFAULT_ZLIB;
+	public boolean bPremultiply = true;
 	public boolean bDither = false;
 }

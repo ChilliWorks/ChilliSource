@@ -1,4 +1,4 @@
-﻿namespace FontTool
+﻿namespace CSFontMaker
 {
     partial class Form1
     {

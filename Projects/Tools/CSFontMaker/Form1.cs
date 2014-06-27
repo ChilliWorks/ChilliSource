@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 
-namespace FontTool
+namespace CSFontMaker
 {
     public partial class Form1 : Form
     {
@@ -205,8 +205,8 @@ namespace FontTool
 		{
 			//Invoke Java font tool
 			string strJavaCommand = "java";
-			string strJarArgument = "-jar FontTool.jar ";
-            string strArgs = "--input " + m_tempPath + " --divisibleby 2 --maxwidth " + this.maxSizeTextBox.Text + " --maxheight " + this.maxSizeTextBox.Text + " --output " + outputName + " --lineHeight " + this.fontDialog1.Font.Height + " --premultiply 1";
+			string strJarArgument = "-jar CSFontBuilder.jar ";
+            string strArgs = "--input " + m_tempPath + " --output " + outputName + " --divisibleby 2 --maxwidth " + this.maxSizeTextBox.Text + " --maxheight " + this.maxSizeTextBox.Text + " --lineheight " + this.fontDialog1.Font.Height;
 
             Process p = new Process();
             p.StartInfo.FileName = strJavaCommand;

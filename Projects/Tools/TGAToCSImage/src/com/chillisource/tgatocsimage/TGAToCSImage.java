@@ -40,7 +40,6 @@ public class TGAToCSImage
 	private final static int kdwVersion = 3;
 	
 	private static long mTGAFileSize = 0;
-	private static boolean mbOutputStats = false;
 	
 	//------------------------------------------------------------------------
 	/// Run
@@ -54,8 +53,6 @@ public class TGAToCSImage
 		
 		long ddwCRC = 0;
 		int dwOriginalDataSize = 0;
-		
-		mbOutputStats = inOptions.bStats;
 		
 		//Open the tga
 		ImageContainer image = null;
@@ -771,15 +768,12 @@ public class TGAToCSImage
 		fileStream.write(inImageData);
 		fileStream.close();
 		
-		if(mbOutputStats)
-		{
-			File imageFile = new File(instrOutputFile);
-			System.out.println("MoImage: " + instrOutputFile);
-			System.out.println("TGA File Size: " + Math.ceil((float)mTGAFileSize / (float)1024) + " KB");
-			System.out.println("MoImage Uncompressed Size: " + Math.ceil((float)indwOriginalSize / (float)1024) + " KB");
-			System.out.println("MoImage File Size: " + Math.ceil((float)imageFile.length() / (float)1024) + " KB");
-			System.out.println("");
-		}
+		File imageFile = new File(instrOutputFile);
+		Logging.logVerbose("MoImage: " + instrOutputFile);
+		Logging.logVerbose("TGA File Size: " + Math.ceil((float)mTGAFileSize / (float)1024) + " KB");
+		Logging.logVerbose("MoImage Uncompressed Size: " + Math.ceil((float)indwOriginalSize / (float)1024) + " KB");
+		Logging.logVerbose("MoImage File Size: " + Math.ceil((float)imageFile.length() / (float)1024) + " KB");
+		Logging.logVerbose("");
 	}
 	//-------------------------------------------------------
 	/// Write Integer

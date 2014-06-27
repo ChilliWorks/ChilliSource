@@ -1,7 +1,7 @@
 /**
  * Main.java
  * Chilli Source
- * Created by Ian Copland on 26/06/2014.
+ * Created by Ian Copland on 27/06/2014.
  * 
  * The MIT License (MIT)
  * 
@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chillisource.csfontbuilder;
+package com.chillisource.csatlasbuilder;
 
 import com.chillisource.texturepackerutils.TexturePacker.PlacementHeuristic;
 import com.chillisource.toolutils.Logging;
@@ -45,6 +45,8 @@ public final class Main
 	private static final String k_paramInputShort = "-i";
 	private static final String k_paramOutput = "--output";
 	private static final String k_paramOutputShort = "-o";
+	private static final String k_paramFileList = "--filelist";
+	private static final String k_paramFileListShort = "-fl";
 	private static final String k_paramFixedWidth = "--fixedwidth";
 	private static final String k_paramFixedWidthShort = "-fw";
 	private static final String k_paramFixedHeight = "--fixedheight";
@@ -59,10 +61,16 @@ public final class Main
 	private static final String k_paramMaxHeightShort = "-mh";
 	private static final String k_paramDivisibleBy = "--divisibleby";
 	private static final String k_paramDivisibleByShort = "-db";
+	private static final String k_paramDisableCrop = "--disablecrop";
+	private static final String k_paramDisableCropShort = "-dc";
+	private static final String k_paramPadding = "--padding";
+	private static final String k_paramPaddingShort = "-p";
+	private static final String k_paramInnerPadding = "--disablecrop";
+	private static final String k_paramInnerPaddingShort = "-ip";
+	private static final String k_paramExtrude = "--extrude";
+	private static final String k_paramExtrudeShort = "-e";
 	private static final String k_paramPlacementHeuristic = "--placementheuristic";
 	private static final String k_paramPlacementHeuristicShort = "-ph";
-	private static final String k_paramLineHeight = "--lineheight";
-	private static final String k_paramLineHeightShort = "-lh";
 	private static final String k_paramImageCompression = "--imagecompression";
 	private static final String k_paramImageCompressionShort = "-ic";
 	private static final String k_paramImageFormat = "--imageformat";
@@ -93,7 +101,7 @@ public final class Main
 			return;
 		}
 		
-		FontBuilderOptions options = new FontBuilderOptions();
+		AtlasBuilderOptions options = new AtlasBuilderOptions();
 		for (int i = 0; i < arguments.length; ++i)
 		{
 			//input
@@ -113,6 +121,16 @@ public final class Main
 					options.m_outputFilePath = StringUtils.standardiseFilePath(arguments[i+1]);
 				else
 					Logging.logFatal("No output file path provided!");
+				i++;
+			}
+			
+			//file list
+			else if (arguments[i].equalsIgnoreCase(k_paramFileList) == true || arguments[i].equalsIgnoreCase(k_paramFileListShort) == true)
+			{
+				if (i+1 < arguments.length)
+					options.m_fileList = StringUtils.standardiseFilePath(arguments[i+1]);
+				else
+					Logging.logFatal("No file list provided!");
 				i++;
 			}
 			
@@ -186,6 +204,42 @@ public final class Main
 				i++;
 			}
 			
+			//disable cropping
+			else if (arguments[i].equalsIgnoreCase(k_paramDisableCrop) == true || arguments[i].equalsIgnoreCase(k_paramDisableCropShort) == true)
+			{
+				options.m_crop = false;
+			}
+			
+			//padding
+			else if (arguments[i].equalsIgnoreCase(k_paramPadding) == true || arguments[i].equalsIgnoreCase(k_paramPaddingShort) == true)
+			{
+				if (i+1 < arguments.length)
+					options.m_padding = Integer.parseInt(arguments[i+1]);
+				else
+					Logging.logFatal("No padding provided!");
+				i++;
+			}
+			
+			//inner padding
+			else if (arguments[i].equalsIgnoreCase(k_paramInnerPadding) == true || arguments[i].equalsIgnoreCase(k_paramInnerPaddingShort) == true)
+			{
+				if (i+1 < arguments.length)
+					options.m_innerPadding = Integer.parseInt(arguments[i+1]);
+				else
+					Logging.logFatal("No inner padding provided!");
+				i++;
+			}
+			
+			//extrude
+			else if (arguments[i].equalsIgnoreCase(k_paramExtrude) == true || arguments[i].equalsIgnoreCase(k_paramExtrudeShort) == true)
+			{
+				if (i+1 < arguments.length)
+					options.m_extrude = Integer.parseInt(arguments[i+1]);
+				else
+					Logging.logFatal("No extrude provided!");
+				i++;
+			}
+			
 			//packing heuristic
 			else if (arguments[i].equalsIgnoreCase(k_paramPlacementHeuristic) == true || arguments[i].equalsIgnoreCase(k_paramPlacementHeuristicShort) == true)
 			{
@@ -193,16 +247,6 @@ public final class Main
 					options.m_packingHeuristic = parsePackingHeuristic(arguments[i+1]);
 				else
 					Logging.logFatal("No placement heuristic provided!");
-				i++;
-			}
-			
-			//line height
-			else if (arguments[i].equalsIgnoreCase(k_paramLineHeight) == true || arguments[i].equalsIgnoreCase(k_paramLineHeightShort) == true)
-			{
-				if (i+1 < arguments.length)
-					options.m_lineHeight = Integer.parseInt(arguments[i+1]);
-				else
-					Logging.logFatal("No line height provided!");
 				i++;
 			}
 			
@@ -235,7 +279,7 @@ public final class Main
 			//image premultiply alpha
 			else if (arguments[i].equalsIgnoreCase(k_paramDisablePremultipliedAlpha) == true || arguments[i].equalsIgnoreCase(k_paramDisablePremultipliedAlphaShort) == true)
 			{
-				options.m_imagePremultiplyAlpha = false;
+				options.m_imagePremultiplyAlpha = true;
 			}
 			
 			//help
@@ -257,8 +301,8 @@ public final class Main
 			Logging.logFatal("Must provide input directory and output file paths.");
 		}
 		
-		CSFontBuilder tool = new CSFontBuilder();
-		tool.Run(options);
+		CSAtlasBuilder tool = new CSAtlasBuilder();
+		tool.run(options);
 		
 		Logging.finish();
 	}
@@ -326,14 +370,15 @@ public final class Main
 	private static void printHelpText()
 	{
 		Logging.setLoggingLevel(LoggingLevel.k_verbose);
-		Logging.logVerbose("Usage: java -jar CSFontBuilder.jar " + k_paramInput + " <directory path> " + k_paramOutput + " <file path> [" + k_paramFixedWidth + " <width>] " +
-				"[" + k_paramFixedHeight + " <height>] [" + k_paramValidWidths + " <w1,w2,w3...>] [" + k_paramValidHeights + " <h1,h2,h3...>] [" + k_paramMaxWidth + " <width>] " + 
-				"[" + k_paramMaxHeight + " <height>] [" + k_paramDivisibleBy + "<number>] [" + k_paramPlacementHeuristic + " <heuristic>] [" + k_paramLineHeight + " <height>] " + 
-				"[" + k_paramImageCompression + " <compression>] [" + k_paramImageCompression + " <compression>] [" + k_paramImageFormat + " <format>] [" + k_paramDitherImage + "] " +
-				"[" + k_paramDisablePremultipliedAlpha + "] [" + Logging.k_paramLoggingLevel + " <level>] [" + k_paramHelp + "]");
+		Logging.logVerbose("Usage: java -jar CSFontBuilder.jar " + k_paramInput + " <directory path> " + k_paramOutput + " <file path> [" + k_paramFileList + " <file path>] " +
+				"[" + k_paramFixedWidth + " <width>] [" + k_paramFixedHeight + " <height>] [" + k_paramValidWidths + " <w1,w2,w3...>] [" + k_paramValidHeights + " <h1,h2,h3...>] " +
+				"[" + k_paramMaxWidth + " <width>] [" + k_paramMaxHeight + " <height>] [" + k_paramDivisibleBy + "<number>] [" + k_paramDisableCrop + "] [" + k_paramPadding + " <padding>] " +
+				"[" + k_paramInnerPadding + " <padding>] [" + k_paramExtrude + " <extrude>] [" + k_paramPlacementHeuristic + " <heuristic>] [" + k_paramImageCompression + " <compression>] " +
+				"[" + k_paramImageFormat + " <format>] [" + k_paramDitherImage + "] [" + k_paramDisablePremultipliedAlpha + "] [" + Logging.k_paramLoggingLevel + " <level>] [" + k_paramHelp + "]");
 		Logging.logVerbose("Parameters:");
 		Logging.logVerbose(" " + k_paramInput + "(" + k_paramInputShort + "): The input directory path containing the character PNGs.");
 		Logging.logVerbose(" " + k_paramOutput + "(" + k_paramOutputShort + "): The output font file path.");
+		Logging.logVerbose(" " + k_paramFileList + "(" + k_paramFileListShort + "): [Optional] A file describing the order of of input files.");
 		Logging.logVerbose(" " + k_paramFixedWidth + "(" + k_paramFixedWidthShort + "): [Optional] Forces the output font image to have the given width.");
 		Logging.logVerbose(" " + k_paramFixedHeight + "(" + k_paramFixedHeightShort + "): [Optional] Forces the output font image to have the given height.");
 		Logging.logVerbose(" " + k_paramValidWidths + "(" + k_paramValidWidthsShort + "): [Optional] A comma separated list of valid output widths.");
@@ -341,12 +386,15 @@ public final class Main
 		Logging.logVerbose(" " + k_paramMaxWidth + "(" + k_paramMaxWidthShort + "): [Optional] The maximum possible width for the output font image.");
 		Logging.logVerbose(" " + k_paramMaxHeight + "(" + k_paramMaxHeightShort + "): [Optional] The maximum possible height for the output font image.");
 		Logging.logVerbose(" " + k_paramDivisibleBy + "(" + k_paramDivisibleByShort + "): [Optional] The output image will dimensions divisible by the given value.");
+		Logging.logVerbose(" " + k_paramDisableCrop + "(" + k_paramDisableCropShort + "): [Optional] If set sprite alpha cropping will be disabled.");
+		Logging.logVerbose(" " + k_paramPadding + "(" + k_paramPaddingShort + "): [Optional] The amount of padding between sprites in the atlas.");
+		Logging.logVerbose(" " + k_paramInnerPadding + "(" + k_paramInnerPaddingShort + "): [Optional] The amount of pixels to leave uncropped.");
+		Logging.logVerbose(" " + k_paramExtrude + "(" + k_paramExtrudeShort + "): [Optional] The amount to extrude the edge of a sprite into the padding. This is used to reduce alpha bleeding.");
 		Logging.logVerbose(" " + k_paramPlacementHeuristic + "(" + k_paramPlacementHeuristicShort + "): [Optional] The heuristic to use when packing characters.");
-		Logging.logVerbose(" " + k_paramLineHeight + "(" + k_paramLineHeightShort + "): [Optional] The height of a single line of text for the font.");
 		Logging.logVerbose(" " + k_paramImageCompression + "(" + k_paramImageCompressionShort + "): [Optional] The compression used for the output font image.");
 		Logging.logVerbose(" " + k_paramImageFormat + "(" + k_paramImageFormatShort + "): [Optional] The format of the output font image.");
 		Logging.logVerbose(" " + k_paramDitherImage + "(" + k_paramDitherImageShort + "): [Optional] If set the output font image will be dithered.");
-		Logging.logVerbose(" " + k_paramDisablePremultipliedAlpha + "(" + k_paramDisablePremultipliedAlphaShort + "): [Optional] If set the output font image will not have it's alpha premultiplied.");
+		Logging.logVerbose(" " + k_paramDisablePremultipliedAlpha + "(" + k_paramDisablePremultipliedAlphaShort + "): [Optional] It set the output image will not have it's alpha premultiplied.");
 		Logging.logVerbose(" " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): [Optional] The level of messages to log.");
 		Logging.logVerbose(" " + k_paramHelp + "(" + k_paramHelpShort + "): [Optional] Display this help message.");
 		Logging.logVerbose("Placement Heuristics:");
