@@ -92,7 +92,7 @@ def copy_libs(project_dir, target_dir):
 def premultiply_pngs(project_dir, target_dir):
     assetsDir = os.path.join(target_dir, "assets")
 
-    jarFile = os.path.join(project_dir, "ChilliSource", "Tools", "PreMultipliedAlphaPNGTool.jar")
+    jarFile = os.path.join(project_dir, "ChilliSource", "Tools", "PNGAlphaPremultiplier.jar")
     png_files = file_system_utils.get_file_paths_with_extensions(assetsDir, ["png"])
 
     for png_file in png_files:
