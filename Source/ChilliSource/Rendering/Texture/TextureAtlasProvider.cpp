@@ -150,12 +150,12 @@ namespace ChilliSource
             s16* framePtr = buffer;
 			for(u32 i=0; i<(u32)numFrames; ++i)
 			{
-				TextureAtlas::Frame frame;
+				TextureAtlas::FrameRaw frame;
 				
 				frame.m_texCoordU = framePtr[0];
 				frame.m_texCoordV = framePtr[1];
-				frame.m_width = framePtr[2];
-				frame.m_height = framePtr[3];
+				frame.m_croppedWidth = framePtr[2];
+				frame.m_croppedHeight = framePtr[3];
 				frame.m_offsetX = framePtr[4];
 				frame.m_offsetY = framePtr[5];
                 frame.m_originalWidth = framePtr[6];

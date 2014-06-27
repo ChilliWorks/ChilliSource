@@ -52,14 +52,12 @@ namespace ChilliSource
         DEFINE_PROPERTY(BaseNormalTextureAtlasID);
         DEFINE_PROPERTY(BaseHighlightTextureAtlasID);
         DEFINE_PROPERTY(HighlightColour);
-        DEFINE_PROPERTY(HeightMaintain);
-        DEFINE_PROPERTY(WidthMaintain);
         
 		//-----------------------------------------------------------
         /// Constructor
         //-----------------------------------------------------------
         StretchableHighlightButton::StretchableHighlightButton()
-        :   HighlightColour(0.7f, 0.7f, 0.7f, 1.0f), mbSelected(false), HeightMaintain(false), WidthMaintain(false), mCurrentColour(Core::Colour::k_white)
+        :   HighlightColour(0.7f, 0.7f, 0.7f, 1.0f), mbSelected(false), mCurrentColour(Core::Colour::k_white)
         {
             m_pressedInsideConnection = mInputEvents.GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonSelect));
             m_releasedInsideConnection = mInputEvents.GetReleasedInsideEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonActivated));
@@ -76,7 +74,7 @@ namespace ChilliSource
         /// Constructor
         //-----------------------------------------------------------
         StretchableHighlightButton::StretchableHighlightButton(const Core::ParamDictionary& insParams)
-        : Button(insParams), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f), mbSelected(false), HeightMaintain(false), WidthMaintain(false)
+        : Button(insParams), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f), mbSelected(false)
         {
             std::string strValue;
             
@@ -140,16 +138,6 @@ namespace ChilliSource
             {
                 SetHighlightColour(Core::ParseColour(strValue));
             }
-			//---Width maintain
-			if(insParams.TryGetValue("WidthMaintain", strValue))
-            {
-				EnableWidthMaintainingAspect(Core::ParseBool(strValue));
-			}
-			//---Height maintain
-			if(insParams.TryGetValue("HeightMaintain", strValue))
-            {
-				EnableHeightMaintainingAspect(Core::ParseBool(strValue));
-			}
             
             m_pressedInsideConnection = mInputEvents.GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonSelect));
             m_releasedInsideConnection = mInputEvents.GetReleasedInsideEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonActivated));
@@ -285,69 +273,6 @@ namespace ChilliSource
         void StretchableHighlightButton::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
             GUIView::Draw(inpCanvas);
-        }
-        //--------------------------------------------------------
-        /// Set Width Maintaining Aspect
-        //--------------------------------------------------------
-        void StretchableHighlightButton::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
-        {
-            Core::Vector2 vCurrentSize = GetAbsoluteSize();
-			f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
-			SetSize(infRelWidth, 0.0f, infAbsWidth, 0.0f);
-			
-			f32 fScaleY = GetAbsoluteScale().y;
-			if(fScaleY == 0.0f)
-				return;
-			
-			vCurrentSize = GetAbsoluteSize();
-            f32 fAbsHeight = (fAspectRatio * vCurrentSize.x) / fScaleY;
-			SetSize(infRelWidth, 0.0f, infAbsWidth, fAbsHeight);
-        }
-        //--------------------------------------------------------
-        /// Set Height Maintaining Aspect
-        //--------------------------------------------------------
-        void StretchableHighlightButton::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
-        {
-            Core::Vector2 vCurrentSize = GetAbsoluteSize();
-			f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
-			SetSize(0.0f, infRelHeight, 0.0f, infAbsHeight);
-			
-			f32 fScaleX = GetAbsoluteScale().x;
-			if(fScaleX == 0.0f)
-				return;
-			
-			vCurrentSize = GetAbsoluteSize();
-            f32 fAbsWidth = (fAspectRatio * vCurrentSize.y) / fScaleX;
-			SetSize(0.0f, infRelHeight, fAbsWidth, infAbsHeight);
-        }
-        //--------------------------------------------------------
-        /// Enable Width Maintaining Aspect
-        //--------------------------------------------------------
-        void StretchableHighlightButton::EnableWidthMaintainingAspect(bool inbEnabled)
-        {
-            WidthMaintain = inbEnabled;  
-        }
-        //--------------------------------------------------------
-        /// Is Width Maintaining Aspect Enabled
-        //--------------------------------------------------------
-        bool StretchableHighlightButton::IsWidthMaintainingAspectEnabled() const
-        {
-            return WidthMaintain;
-             
-        }
-        //--------------------------------------------------------
-        /// Enable Height Maintaining Aspect
-        //--------------------------------------------------------
-        void StretchableHighlightButton::EnableHeightMaintainingAspect(bool inbEnabled)
-        {
-            HeightMaintain = inbEnabled;
-        }
-        //--------------------------------------------------------
-        /// Is Height Maintaining Aspect Enabled
-        //--------------------------------------------------------
-        bool StretchableHighlightButton::IsHeightMaintainingAspectEnabled() const
-        {
-            return HeightMaintain;
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------

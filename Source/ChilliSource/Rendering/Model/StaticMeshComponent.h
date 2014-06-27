@@ -210,9 +210,9 @@ namespace ChilliSource
             
             Core::EventConnectionUPtr m_transformChangedConnection;
             
-            bool mbBoundingSphereValid;
-            bool mbAABBValid;
-            bool mbOOBBValid;
+            bool m_isBSValid;
+            bool m_isAABBValid;
+            bool m_isOOBBValid;
 		};
 	}
 }

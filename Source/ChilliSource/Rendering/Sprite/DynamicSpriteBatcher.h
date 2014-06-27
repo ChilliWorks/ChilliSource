@@ -75,7 +75,7 @@ namespace ChilliSource
             ///
             /// @param Sprite data to batch
 			//-------------------------------------------------------
-			void Render(const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4 * inpTransform = nullptr);
+			void Render(const SpriteBatch::SpriteData& inpSprite, const Core::Matrix4 * inpTransform = nullptr);
             //-------------------------------------------------------
 			/// Enable scissoring with the given region. Any
             /// subsequent renders to the batcher will be clipped
@@ -124,7 +124,7 @@ namespace ChilliSource
 		private:
         
 			SpriteBatch* mpBatch[kudwNumBuffers];
-			std::vector<SpriteComponent::SpriteData> maSpriteCache;
+			std::vector<SpriteBatch::SpriteData> maSpriteCache;
             std::vector<RenderCommand> maRenderCommands;
             
             MaterialCSPtr mpLastMaterial;

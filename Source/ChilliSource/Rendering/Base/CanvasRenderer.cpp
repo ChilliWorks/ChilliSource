@@ -336,31 +336,32 @@ namespace ChilliSource
             ///
             /// @param Transform
             /// @param Size
+            /// @param Offset from top left
             /// @param UVs
             /// @param Colour
             /// @param Alignment
             /// @param [Out] Sprite
             //-----------------------------------------------------
-            void UpdateSpriteData(const Core::Matrix4& in_transform, const Core::Vector2& in_size, const Rendering::UVs& in_UVs, const Core::Colour& in_colour, AlignmentAnchor in_alignment,
-                                  SpriteComponent::SpriteData& out_sprite)
+            void UpdateSpriteData(const Core::Matrix4& in_transform, const Core::Vector2& in_size, const Core::Vector2& in_offset, const Rendering::UVs& in_UVs, const Core::Colour& in_colour, AlignmentAnchor in_alignment,
+                                  SpriteBatch::SpriteData& out_sprite)
             {
                 const f32 k_nearClipDistance = 2.0f;
                 
                 Core::ByteColour Col = Core::ColourUtils::ColourToByteColour(in_colour);
                 
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].Col = Col;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].Col = Col;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].Col = Col;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].Col = Col;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].Col = Col;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].Col = Col;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topRight].Col = Col;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].Col = Col;
                 
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex.x = in_UVs.m_u;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex.y = in_UVs.m_v;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex.x = in_UVs.m_u;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex.y = in_UVs.m_v + in_UVs.m_t;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex.x = in_UVs.m_u + in_UVs.m_s;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex.y = in_UVs.m_v;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex.x = in_UVs.m_u + in_UVs.m_s;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex.y = in_UVs.m_v + in_UVs.m_t;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.x = in_UVs.m_u;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.y = in_UVs.m_v;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.x = in_UVs.m_u;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.y = in_UVs.m_v + in_UVs.m_t;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.x = in_UVs.m_u + in_UVs.m_s;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.y = in_UVs.m_v;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.x = in_UVs.m_u + in_UVs.m_s;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.y = in_UVs.m_v + in_UVs.m_t;
                 
                 Core::Vector2 vHalfSize(in_size.x * 0.5f, in_size.y * 0.5f);
                 Core::Vector2 vAlignedPos;
@@ -369,39 +370,41 @@ namespace ChilliSource
                 Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
                 Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
                 
+                Core::Vector4 offsetTL(in_offset.x, in_offset.y, 0.0f, 0.0f);
+                
                 const Core::Matrix4& matTransform(in_transform);
-                vTemp += vCentrePos;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = vTemp * matTransform;
+                vTemp += (vCentrePos + offsetTL);
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = vTemp * matTransform;
                 
                 vTemp.x = vHalfSize.x;
                 vTemp.y = vHalfSize.y;
                 
-                vTemp += vCentrePos;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos = vTemp * matTransform;
+                vTemp += (vCentrePos + offsetTL);
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos = vTemp * matTransform;
                 
                 vTemp.x = -vHalfSize.x;
                 vTemp.y = -vHalfSize.y;
                 
-                vTemp += vCentrePos;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos = vTemp * matTransform;
+                vTemp += (vCentrePos + offsetTL);
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos = vTemp * matTransform;
                 
                 vTemp.x = vHalfSize.x;
                 vTemp.y = -vHalfSize.y;
                 
-                vTemp += vCentrePos;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos = vTemp * matTransform;
+                vTemp += (vCentrePos + offsetTL);
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos = vTemp * matTransform;
                 
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.z = -k_nearClipDistance;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.w = 1.0f;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos.z = -k_nearClipDistance;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos.w = 1.0f;
                 
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos.z = -k_nearClipDistance;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos.w = 1.0f;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos.z = -k_nearClipDistance;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos.w = 1.0f;
                 
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos.z = -k_nearClipDistance;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos.w = 1.0f;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos.z = -k_nearClipDistance;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos.w = 1.0f;
                 
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos.z = -k_nearClipDistance;
-                out_sprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos.w = 1.0f;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos.z = -k_nearClipDistance;
+                out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos.w = 1.0f;
             }
         }
         
@@ -536,12 +539,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        void CanvasRenderer::DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Rendering::UVs& in_UVs,
+        void CanvasRenderer::DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const Core::Vector2& in_offset, const TextureCSPtr& in_texture, const Rendering::UVs& in_UVs,
                                      const Core::Colour& in_colour, AlignmentAnchor in_anchor)
         {
             m_canvasSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
             
-			UpdateSpriteData(Convert2DTransformTo3D(in_transform), in_size, in_UVs, in_colour, in_anchor, m_canvasSprite);
+			UpdateSpriteData(Convert2DTransformTo3D(in_transform), in_size, in_offset, in_UVs, in_colour, in_anchor, m_canvasSprite);
             
 			m_overlayBatcher->Render(m_canvasSprite);
             
@@ -637,7 +640,7 @@ namespace ChilliSource
 			for (const auto& character : in_characters)
             {
                 matTransformedLocal = Core::Matrix4::CreateTranslation(Core::Vector3(character.m_position, 0.0f)) * matTransform;
-                UpdateSpriteData(matTransformedLocal, character.m_size, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, m_canvasSprite);
+                UpdateSpriteData(matTransformedLocal, character.m_size, Core::Vector2::k_zero, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, m_canvasSprite);
                 m_overlayBatcher->Render(m_canvasSprite);
 			}
             

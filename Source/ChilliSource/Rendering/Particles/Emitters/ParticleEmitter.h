@@ -40,10 +40,10 @@ namespace ChilliSource
     {
         struct Particle
         {
-            Core::Vector3 m_scale;
             Core::Vector3 m_translation;
 			Core::Colour m_colour;				//The colour of the particle
             Core::Vector3 m_velocity;		//The speed of the particle in 3D space
+            Core::Vector2 m_scale;
             f32 m_energy;					//Measures the full lifetime of the particle from birth at 1 to death at 0
             f32 m_angularRotation;
         };
@@ -222,8 +222,8 @@ namespace ChilliSource
 			///
 			/// Rebuild the sprite data
 			//-----------------------------------------------------
-			void UpdateSpriteData(const Core::Vector3& invPos, const Core::Colour & insTintColour, SpriteComponent::SpriteData& outsData,
-                                  const Core::Vector3& invRight, const Core::Vector3& invUp, const Core::Vector3& invScale);
+			void UpdateSpriteData(const Core::Vector3& invPos, const Core::Colour & insTintColour, SpriteBatch::SpriteData& outsData,
+                                  const Core::Vector3& invRight, const Core::Vector3& invUp, const Core::Vector2& invScale);
             
         protected:
             
@@ -240,6 +240,7 @@ namespace ChilliSource
 			
             MaterialCSPtr mpMaterial;
             TextureAtlasCSPtr m_atlas;
+            u32 m_hashedAtlasId = 0;
             
             u32 mudwMaxNumParticles;
             u32 mudwMaxNumParticlesPerEmission;
