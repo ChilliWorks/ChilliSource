@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 //=============================================================
 /// GUI - Stretchable Image 
@@ -49,33 +50,6 @@ namespace ChilliSource
         public:
 
 			DECLARE_META_CLASS(StretchableImage)
-
-            struct PanelDesc
-            {
-                Rendering::UVs m_topLeftUVs;
-                Rendering::UVs m_topCentreUVs;
-                Rendering::UVs m_topRightUVs;
-                
-                Rendering::UVs m_bottomLeftUVs;
-                Rendering::UVs m_bottomCentreUVs;
-                Rendering::UVs m_bottomRightUVs;
-                
-                Rendering::UVs m_leftCentreUVs;
-                Rendering::UVs m_middleCentreUVs;
-                Rendering::UVs m_rightCentreUVs;
-                
-                Core::Vector2 m_topLeftSize;
-                Core::Vector2 m_topCentreSize;
-                Core::Vector2 m_topRightSize;
-                
-                Core::Vector2 m_bottomLeftSize;
-                Core::Vector2 m_bottomCentreSize;
-                Core::Vector2 m_bottomRightSize;
-                
-                Core::Vector2 m_leftCentreSize;
-                Core::Vector2 m_middleCentreSize;
-                Core::Vector2 m_rightCentreSize;
-            };
             
             StretchableImage();
             StretchableImage(const Core::ParamDictionary& insParams);
@@ -194,22 +168,22 @@ namespace ChilliSource
             //--------------------------------------------------------
             bool IsHeightMaintainingAspectEnabled() const;
 			
-			//---Touch Delegates
-            
-            struct PatchSize
+            enum class Patch
             {
-				CSCore::Vector2 vSizeTopLeft;
-				CSCore::Vector2 vSizeTopRight;
-				CSCore::Vector2 vSizeBottomLeft;
-				CSCore::Vector2 vSizeBottomRight;
-				CSCore::Vector2 vSizeTopCentre;
-				CSCore::Vector2 vSizeBottomCentre;
-				CSCore::Vector2 vSizeLeftCentre;
-				CSCore::Vector2 vSizeRightCentre;
-				CSCore::Vector2 vSizeMiddleCentre;
+                k_topLeft,
+                k_topCentre,
+                k_topRight,
+                k_middleLeft,
+                k_middleCentre,
+                k_middleRight,
+                k_bottomLeft,
+                k_bottomCentre,
+                k_bottomRight,
+                k_total
             };
-			
-			void CalculatePatchSize(PatchSize& outSizePatch);
+            
+			void CalculatePatchSizes();
+            void CalculatePatchPositions();
 			
 		private:
 
@@ -220,8 +194,10 @@ namespace ChilliSource
 
 			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
-			
-            PanelDesc m_panels;
+            
+            Rendering::TextureAtlas::Frame m_frames[(u32)Patch::k_total];
+            Core::Vector2 m_patchSizes[(u32)Patch::k_total];
+            Core::Vector2 m_patchPositions[(u32)Patch::k_total];
         };
     }
 }

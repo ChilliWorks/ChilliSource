@@ -29,7 +29,6 @@
 #include <ChilliSource/GUI/Image/StretchableImage.h>
 
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
@@ -164,40 +163,31 @@ namespace ChilliSource
             BaseTextureAtlasID = instrID;
             
             std::string atlasId = instrID + "TopLeft";
-            m_panels.m_topLeftSize = TextureAtlas->GetCroppedFrameSize(atlasId);
-            m_panels.m_topLeftUVs = TextureAtlas->GetFrameUVs(atlasId);
+            m_frames[(u32)Patch::k_topLeft] = TextureAtlas->GetFrame(atlasId);
             
             atlasId = instrID + "TopCentre";
-            m_panels.m_topCentreSize = TextureAtlas->GetCroppedFrameSize(atlasId);
-            m_panels.m_topCentreUVs = TextureAtlas->GetFrameUVs(atlasId);
+            m_frames[(u32)Patch::k_topCentre] = TextureAtlas->GetFrame(atlasId);
             
             atlasId = instrID + "TopRight";
-            m_panels.m_topRightSize = TextureAtlas->GetCroppedFrameSize(atlasId);
-            m_panels.m_topRightUVs = TextureAtlas->GetFrameUVs(atlasId);
+            m_frames[(u32)Patch::k_topRight] = TextureAtlas->GetFrame(atlasId);
             
             atlasId = instrID + "BottomLeft";
-            m_panels.m_bottomLeftSize = TextureAtlas->GetCroppedFrameSize(atlasId);
-            m_panels.m_bottomLeftUVs = TextureAtlas->GetFrameUVs(atlasId);
+            m_frames[(u32)Patch::k_bottomLeft] = TextureAtlas->GetFrame(atlasId);
             
             atlasId = instrID + "BottomCentre";
-            m_panels.m_bottomCentreSize = TextureAtlas->GetCroppedFrameSize(atlasId);
-            m_panels.m_bottomCentreUVs = TextureAtlas->GetFrameUVs(atlasId);
+            m_frames[(u32)Patch::k_bottomCentre] = TextureAtlas->GetFrame(atlasId);
             
             atlasId = instrID + "BottomRight";
-            m_panels.m_bottomRightSize = TextureAtlas->GetCroppedFrameSize(atlasId);
-            m_panels.m_bottomRightUVs = TextureAtlas->GetFrameUVs(atlasId);
+            m_frames[(u32)Patch::k_bottomRight] = TextureAtlas->GetFrame(atlasId);
             
             atlasId = instrID + "MiddleLeft";
-            m_panels.m_leftCentreSize = TextureAtlas->GetCroppedFrameSize(atlasId);
-            m_panels.m_leftCentreUVs = TextureAtlas->GetFrameUVs(atlasId);
+            m_frames[(u32)Patch::k_middleLeft] = TextureAtlas->GetFrame(atlasId);
             
             atlasId = instrID + "MiddleCentre";
-            m_panels.m_middleCentreSize = TextureAtlas->GetCroppedFrameSize(atlasId);
-            m_panels.m_middleCentreUVs = TextureAtlas->GetFrameUVs(atlasId);
+            m_frames[(u32)Patch::k_middleCentre] = TextureAtlas->GetFrame(atlasId);
             
             atlasId = instrID + "MiddleRight";
-            m_panels.m_rightCentreSize = TextureAtlas->GetCroppedFrameSize(atlasId);
-            m_panels.m_rightCentreUVs = TextureAtlas->GetFrameUVs(atlasId);
+            m_frames[(u32)Patch::k_middleRight] = TextureAtlas->GetFrame(atlasId);
 		}
 		//---------------------------------------------------------
 		//---------------------------------------------------------
@@ -206,11 +196,6 @@ namespace ChilliSource
 			return BaseTextureAtlasID;
 		}
         //---------------------------------------------------------
-        /// Draw
-        /// 
-        /// Draw the image constructed from the nine patches
-        ///
-        /// @param Canvas renderer pointer
         //---------------------------------------------------------
         void StretchableImage::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
@@ -226,130 +211,49 @@ namespace ChilliSource
 			
             if(Visible && TextureAtlas && Texture)
             {
-                Core::Vector2 vPanelPos = GetAbsoluteScreenSpacePosition();
-                Core::Vector2 vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
-                Core::Vector2 vPatchPos;
-                
                 Core::Colour AbsColour = GetAbsoluteColour();
                 
                 //We need to use a matrix so that we can rotate all the patches with respect
                 //to the view
-                Core::Matrix3 matViewTransform = Core::Matrix3::CreateTransform(vPanelPos, Core::Vector2(1, 1), GetAbsoluteRotation());
+                Core::Matrix3 matViewTransform = Core::Matrix3::CreateTransform(GetAbsoluteScreenSpacePosition(), Core::Vector2(1, 1), GetAbsoluteRotation());
 				
 				// Retrieve each bit's size
-				PatchSize sPatchSize;
-				CalculatePatchSize(sPatchSize);
+				CalculatePatchSizes();
+                CalculatePatchPositions();
                 
-                // Render ourself
-				
-                // Draw the top left corner
-				Core::Matrix3 matPatchTransform = Core::Matrix3::CreateTranslation(vTopLeft);
-				Core::Matrix3 matTransform = matPatchTransform * matViewTransform;
-                inpCanvas->DrawBox(matTransform,
-                                   sPatchSize.vSizeTopLeft,
-                                   Core::Vector2::k_zero,
-								   Texture,
-                                   m_panels.m_topLeftUVs,
-                                   AbsColour, 
-                                   Rendering::AlignmentAnchor::k_topLeft);
+                const Rendering::AlignmentAnchor alignments[(u32)Patch::k_total] =
+                {
+                    Rendering::AlignmentAnchor::k_topLeft,
+                    Rendering::AlignmentAnchor::k_topLeft,
+                    Rendering::AlignmentAnchor::k_topRight,
+                    Rendering::AlignmentAnchor::k_topLeft,
+                    Rendering::AlignmentAnchor::k_topLeft,
+                    Rendering::AlignmentAnchor::k_topRight,
+                    Rendering::AlignmentAnchor::k_bottomLeft,
+                    Rendering::AlignmentAnchor::k_bottomLeft,
+                    Rendering::AlignmentAnchor::k_bottomRight
+                };
                 
-                // Draw the top right corner
-				matPatchTransform = Core::Matrix3::CreateTranslation(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topRight));
-				matTransform = matPatchTransform * matViewTransform;
-                inpCanvas->DrawBox(matTransform, 
-                                   sPatchSize.vSizeTopRight,
-                                   Core::Vector2::k_zero,
-								   Texture,
-                                   m_panels.m_topRightUVs,
-                                   AbsColour, 
-                                   Rendering::AlignmentAnchor::k_topRight);
-                
-                // Draw the bottom left corner
-				matPatchTransform = Core::Matrix3::CreateTranslation(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft));
-				matTransform = matPatchTransform * matViewTransform;
-                inpCanvas->DrawBox(matTransform, 
-                                   sPatchSize.vSizeBottomLeft,
-                                   Core::Vector2::k_zero,
-								   Texture,
-                                   m_panels.m_bottomLeftUVs,
-                                   AbsColour, 
-                                   Rendering::AlignmentAnchor::k_bottomLeft);
-                
-                // Draw the bottom right corner
-				matPatchTransform = Core::Matrix3::CreateTranslation(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomRight));
-				matTransform = matPatchTransform * matViewTransform;
-                inpCanvas->DrawBox(matTransform, 
-                                   sPatchSize.vSizeBottomRight,
-                                   Core::Vector2::k_zero,
-								   Texture,
-                                   m_panels.m_bottomRightUVs,
-                                   AbsColour, 
-                                   Rendering::AlignmentAnchor::k_bottomRight);
-                
-                // Draw the top
-				vPatchPos.x = vTopLeft.x + sPatchSize.vSizeTopLeft.x;
-				vPatchPos.y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topCentre).y;
-				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
-				matTransform = matPatchTransform * matViewTransform;
-                inpCanvas->DrawBox(matTransform, 
-                                   sPatchSize.vSizeTopCentre,
-                                   Core::Vector2::k_zero,
-								   Texture,
-                                   m_panels.m_topCentreUVs,
-                                   AbsColour, 
-                                   Rendering::AlignmentAnchor::k_topLeft);
-				
-                // Draw the bottom
-				vPatchPos.x = vTopLeft.x + sPatchSize.vSizeBottomLeft.x;
-				vPatchPos.y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomCentre).y;
-				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
-				matTransform = matPatchTransform * matViewTransform;
-                inpCanvas->DrawBox(matTransform, 
-                                   sPatchSize.vSizeBottomCentre,
-                                   Core::Vector2::k_zero,
-								   Texture,
-                                   m_panels.m_bottomCentreUVs,
-                                   AbsColour, 
-                                   Rendering::AlignmentAnchor::k_bottomLeft);
-                
-                // Draw the left
-				vPatchPos.x = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_middleLeft).x;
-				vPatchPos.y = vTopLeft.y - sPatchSize.vSizeTopLeft.y;
-				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
-				matTransform = matPatchTransform * matViewTransform;
-                inpCanvas->DrawBox(matTransform, 
-                                   sPatchSize.vSizeLeftCentre,
-                                   Core::Vector2::k_zero,
-								   Texture,
-                                   m_panels.m_leftCentreUVs,
-                                   AbsColour, 
-                                   Rendering::AlignmentAnchor::k_topLeft);
-                
-                // Draw the right
-				vPatchPos.x = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_middleRight).x;
-				vPatchPos.y = vTopLeft.y - sPatchSize.vSizeTopRight.y;
-				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
-				matTransform = matPatchTransform * matViewTransform;
-                inpCanvas->DrawBox(matTransform, 
-                                   sPatchSize.vSizeRightCentre,
-                                   Core::Vector2::k_zero,
-								   Texture,
-                                   m_panels.m_rightCentreUVs,
-                                   AbsColour, 
-                                   Rendering::AlignmentAnchor::k_topRight);
-                
-                // Draw the centre
-				vPatchPos.x = vTopLeft.x + sPatchSize.vSizeTopLeft.x;
-				vPatchPos.y = vTopLeft.y - sPatchSize.vSizeTopLeft.y;
-				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
-				matTransform = matPatchTransform * matViewTransform;
-                inpCanvas->DrawBox(matTransform,
-                                   sPatchSize.vSizeMiddleCentre,
-                                   Core::Vector2::k_zero,
-								   Texture,
-                                   m_panels.m_middleCentreUVs,
-                                   AbsColour, 
-                                   Rendering::AlignmentAnchor::k_topLeft);
+                for(u32 i=0; i<(u32)Patch::k_total; ++i)
+                {
+                    Core::Vector2 offset;
+                    offset.x = (-m_frames[i].m_originalSize.x * 0.5f) + (m_frames[i].m_croppedSize.x * 0.5f) + m_frames[i].m_offset.x;
+                    offset.y = (m_frames[i].m_originalSize.y * 0.5f) - (m_frames[i].m_croppedSize.y * 0.5f) - m_frames[i].m_offset.y;
+                    
+                    //Convert from texel space to local sprite space
+                    offset = m_patchSizes[i]/m_frames[i].m_originalSize * offset;
+                    Core::Vector2 size = m_patchSizes[i]/m_frames[i].m_originalSize * m_frames[i].m_croppedSize;
+                    
+                    Core::Matrix3 matPatchTransform = Core::Matrix3::CreateTranslation(m_patchPositions[i]);
+                    Core::Matrix3 matTransform = matPatchTransform * matViewTransform;
+                    inpCanvas->DrawBox(matTransform,
+                                       size,
+                                       offset,
+                                       Texture,
+                                       m_frames[i].m_uvs,
+                                       AbsColour,
+                                       alignments[i]);
+                }
                 
                 // Render subviews
                 GUIView::Draw(inpCanvas);
@@ -439,74 +343,98 @@ namespace ChilliSource
 		{
 			return HeightMaintain;
 		}
+        
+        void StretchableImage::CalculatePatchPositions()
+		{
+            Core::Vector2 vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
+            
+            m_patchPositions[(u32)Patch::k_topLeft] = vTopLeft;
+            m_patchPositions[(u32)Patch::k_topRight] = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+            m_patchPositions[(u32)Patch::k_bottomLeft] = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
+            m_patchPositions[(u32)Patch::k_bottomRight] = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomRight);
+            
+            m_patchPositions[(u32)Patch::k_topCentre].x = vTopLeft.x + m_patchSizes[(u32)Patch::k_topLeft].x;
+            m_patchPositions[(u32)Patch::k_topCentre].y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topCentre).y;
+            
+            m_patchPositions[(u32)Patch::k_bottomCentre].x = vTopLeft.x + m_patchSizes[(u32)Patch::k_bottomLeft].x;
+            m_patchPositions[(u32)Patch::k_bottomCentre].y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomCentre).y;
+            
+            m_patchPositions[(u32)Patch::k_middleLeft].x = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_middleLeft).x;
+            m_patchPositions[(u32)Patch::k_middleLeft].y = vTopLeft.y - m_patchSizes[(u32)Patch::k_topLeft].y;
+            
+            m_patchPositions[(u32)Patch::k_middleRight].x = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_middleRight).x;
+            m_patchPositions[(u32)Patch::k_middleRight].y = vTopLeft.y - m_patchSizes[(u32)Patch::k_topRight].y;
+            
+            m_patchPositions[(u32)Patch::k_middleCentre].x = vTopLeft.x + m_patchSizes[(u32)Patch::k_topLeft].x;
+            m_patchPositions[(u32)Patch::k_middleCentre].y = vTopLeft.y - m_patchSizes[(u32)Patch::k_topLeft].y;
+        }
 		
-		void StretchableImage::CalculatePatchSize(PatchSize& outPatchSize)
+		void StretchableImage::CalculatePatchSizes()
 		{
 			Core::Vector2 vPanelSize = GetAbsoluteSize();
 
-			//Get the patch sizes
-			outPatchSize.vSizeTopLeft = m_panels.m_topLeftSize;
-			outPatchSize.vSizeTopRight = m_panels.m_topRightSize;
-			outPatchSize.vSizeBottomLeft = m_panels.m_bottomLeftSize;
-			outPatchSize.vSizeBottomRight = m_panels.m_bottomRightSize;
-			
+            m_patchSizes[(u32)Patch::k_topLeft] = m_frames[(u32)Patch::k_topLeft].m_originalSize;
+            m_patchSizes[(u32)Patch::k_topRight] = m_frames[(u32)Patch::k_topRight].m_originalSize;
+            m_patchSizes[(u32)Patch::k_bottomLeft] = m_frames[(u32)Patch::k_bottomLeft].m_originalSize;
+            m_patchSizes[(u32)Patch::k_bottomRight] = m_frames[(u32)Patch::k_bottomRight].m_originalSize;
+            
 			//Check to see if they are going to fit in the bounds of the view
-			f32 fTotal = outPatchSize.vSizeTopLeft.y + outPatchSize.vSizeBottomLeft.y;
+			f32 fTotal = m_patchSizes[(u32)Patch::k_topLeft].y + m_patchSizes[(u32)Patch::k_bottomLeft].y;
 			if(fTotal > vPanelSize.y)
 			{
 				//The corners are too tall let's
 				//squish them
 				f32 fScale = vPanelSize.y/fTotal;
-				outPatchSize.vSizeTopLeft.y *= fScale;
-				outPatchSize.vSizeBottomLeft.y *= fScale;
+				m_patchSizes[(u32)Patch::k_topLeft].y *= fScale;
+				m_patchSizes[(u32)Patch::k_bottomLeft].y *= fScale;
 			}
-			fTotal = outPatchSize.vSizeTopRight.y + outPatchSize.vSizeBottomRight.y;
+			fTotal = m_patchSizes[(u32)Patch::k_topRight].y + m_patchSizes[(u32)Patch::k_bottomRight].y;
 			if(fTotal > vPanelSize.y)
 			{
 				//The corners are too tall let's
 				//squish them
 				f32 fScale = vPanelSize.y/fTotal;
-				outPatchSize.vSizeTopRight.y *= fScale;
-				outPatchSize.vSizeBottomRight.y *= fScale;
+				m_patchSizes[(u32)Patch::k_topRight].y *= fScale;
+				m_patchSizes[(u32)Patch::k_bottomRight].y *= fScale;
 			}
-			fTotal = outPatchSize.vSizeTopLeft.x + outPatchSize.vSizeTopRight.x;
+			fTotal = m_patchSizes[(u32)Patch::k_topLeft].x + m_patchSizes[(u32)Patch::k_topRight].x;
 			if(fTotal > vPanelSize.x)
 			{
 				//The corners are too tall let's
 				//squish them
 				f32 fScale = vPanelSize.x/fTotal;
-				outPatchSize.vSizeTopLeft.x *= fScale;
-				outPatchSize.vSizeTopRight.x *= fScale;
+				m_patchSizes[(u32)Patch::k_topLeft].x *= fScale;
+				m_patchSizes[(u32)Patch::k_topRight].x *= fScale;
 			}
-			fTotal = outPatchSize.vSizeBottomLeft.x + outPatchSize.vSizeBottomRight.x;
+			fTotal = m_patchSizes[(u32)Patch::k_bottomLeft].x + m_patchSizes[(u32)Patch::k_bottomRight].x;
 			if(fTotal > vPanelSize.x)
 			{
 				//The corners are too tall let's
 				//squish them
 				f32 fScale = vPanelSize.x/fTotal;
-				outPatchSize.vSizeBottomLeft.x *= fScale;
-				outPatchSize.vSizeBottomRight.x *= fScale;
+				m_patchSizes[(u32)Patch::k_bottomLeft].x *= fScale;
+				m_patchSizes[(u32)Patch::k_bottomRight].x *= fScale;
 			}
 			
 			// Calculate the top
-			outPatchSize.vSizeTopCentre.x = vPanelSize.x - (outPatchSize.vSizeTopLeft.x + outPatchSize.vSizeTopRight.x);
-			outPatchSize.vSizeTopCentre.y = outPatchSize.vSizeTopLeft.y;
+			m_patchSizes[(u32)Patch::k_topCentre].x = vPanelSize.x - (m_patchSizes[(u32)Patch::k_topLeft].x + m_patchSizes[(u32)Patch::k_topRight].x);
+			m_patchSizes[(u32)Patch::k_topCentre].y = m_patchSizes[(u32)Patch::k_topLeft].y;
 			
             // Calculate the bottom
-			outPatchSize.vSizeBottomCentre.x = vPanelSize.x - (outPatchSize.vSizeBottomLeft.x + outPatchSize.vSizeBottomRight.x);
-			outPatchSize.vSizeBottomCentre.y = outPatchSize.vSizeBottomLeft.y;
+			m_patchSizes[(u32)Patch::k_bottomCentre].x = vPanelSize.x - (m_patchSizes[(u32)Patch::k_bottomLeft].x + m_patchSizes[(u32)Patch::k_bottomRight].x);
+			m_patchSizes[(u32)Patch::k_bottomCentre].y = m_patchSizes[(u32)Patch::k_bottomLeft].y;
 			
 			// Calculate the left
-			outPatchSize.vSizeLeftCentre.y = vPanelSize.y - (outPatchSize.vSizeTopLeft.y + outPatchSize.vSizeBottomLeft.y);
-			outPatchSize.vSizeLeftCentre.x = outPatchSize.vSizeTopLeft.x;
+			m_patchSizes[(u32)Patch::k_middleLeft].y = vPanelSize.y - (m_patchSizes[(u32)Patch::k_topLeft].y + m_patchSizes[(u32)Patch::k_bottomLeft].y);
+			m_patchSizes[(u32)Patch::k_middleLeft].x = m_patchSizes[(u32)Patch::k_topLeft].x;
 			
 			// Calculate the right
-			outPatchSize.vSizeRightCentre.y = vPanelSize.y - (outPatchSize.vSizeTopRight.y + outPatchSize.vSizeBottomRight.y);
-			outPatchSize.vSizeRightCentre.x = outPatchSize.vSizeTopRight.x;
+			m_patchSizes[(u32)Patch::k_middleRight].y = vPanelSize.y - (m_patchSizes[(u32)Patch::k_topRight].y + m_patchSizes[(u32)Patch::k_bottomRight].y);
+			m_patchSizes[(u32)Patch::k_middleRight].x = m_patchSizes[(u32)Patch::k_topRight].x;
 			
 			// Calculate the centre
-			outPatchSize.vSizeMiddleCentre.x = vPanelSize.x - (outPatchSize.vSizeLeftCentre.x + outPatchSize.vSizeRightCentre.x);
-			outPatchSize.vSizeMiddleCentre.y = vPanelSize.y - (outPatchSize.vSizeTopCentre.y + outPatchSize.vSizeBottomCentre.y);
+			m_patchSizes[(u32)Patch::k_middleCentre].x = vPanelSize.x - (m_patchSizes[(u32)Patch::k_middleLeft].x + m_patchSizes[(u32)Patch::k_middleRight].x);
+			m_patchSizes[(u32)Patch::k_middleCentre].y = vPanelSize.y - (m_patchSizes[(u32)Patch::k_topCentre].y + m_patchSizes[(u32)Patch::k_bottomCentre].y);
 		}
     }
 }
