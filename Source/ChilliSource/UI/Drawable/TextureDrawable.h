@@ -31,7 +31,7 @@
 #define _CHILLISOURCE_UI_DRAWABLE_TEXTUREDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 
 namespace ChilliSource
@@ -67,7 +67,7 @@ namespace ChilliSource
             ///
             /// @param Rectanlge containing U, V, S, T
             //----------------------------------------------------------------------------------------
-            void SetUVs(const Core::Rectangle& in_UVs);
+            void SetUVs(const Rendering::UVs& in_UVs);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -91,7 +91,7 @@ namespace ChilliSource
         private:
             
             Rendering::TextureCSPtr m_texture;
-            Core::Rectangle m_UVs;
+            Rendering::UVs m_UVs;
         };
     }
 }

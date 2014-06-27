@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 namespace ChilliSource
@@ -121,71 +122,67 @@ namespace ChilliSource
             
             namespace SizePolicyFuncs
             {
-                //----------------------------------------------------------------------------------------
-                /// Aspect ratio maintaining function that keeps the current width but adapts
-                /// the height to maintain the aspect ratio
+                //----------------------------------------------------------
+                /// Aspect ratio maintaing function that returns the original
+                /// size. This is used despite the fact it doesn't do much to
+                /// prevent multiple code paths when calculating size.
                 ///
                 /// @author S Downie
                 ///
-                /// @param Absolute size of widget based on current unified size settings
-                /// @param Target aspect ration size in absolute coordinates
+                /// @param Original size
+                /// @param Preferred size
                 ///
-                /// @return New absolute size with function applied
-                //----------------------------------------------------------------------------------------
-                Core::Vector2 KeepWidthAdaptHeight(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
+                /// @return Original size
+                //----------------------------------------------------------
+                Core::Vector2 UseOriginalSize(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
                 {
-                    f32 targetAspectRatio = in_preferredSize.y / in_preferredSize.x;
-                    f32 absHeight = (targetAspectRatio * in_absSize.x);
-                    return Core::Vector2(in_absSize.x, absHeight);
+                    return in_originalSize;
                 }
-                //----------------------------------------------------------------------------------------
-                /// Aspect ratio maintaining function that keeps the current height but adapts
-                /// the width to maintain the aspect ratio
+                //----------------------------------------------------------
+                /// Aspect ratio maintaing function that returns the preferred
+                /// size. This is used despite the fact it doesn't do much to
+                /// prevent multiple code paths when calculating size.
                 ///
                 /// @author S Downie
                 ///
-                /// @param Absolute size of widget based on current unified size settings
-                /// @param Target aspect ration size in absolute coordinates
+                /// @param Original size
+                /// @param Preferred size
                 ///
-                /// @return New absolute size with function applied
-                //----------------------------------------------------------------------------------------
-                Core::Vector2 KeepHeightAdaptWidth(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
-                {
-                    f32 targetAspectRatio = in_preferredSize.x / in_preferredSize.y;
-                    f32 absWidth = (targetAspectRatio * in_absSize.y);
-                    return Core::Vector2(absWidth, in_absSize.y);
-                }
-                //----------------------------------------------------------------------------------------
-                /// Size policy function that uses the preferred size and aspect
-                ///
-                /// NOTE: This doesn't do much but prevents multiple code paths for size policy
-                ///
-                /// @author S Downie
-                ///
-                /// @param Absolute size of widget based on current unified size settings
-                /// @param Target aspect ration size in absolute coordinates
-                ///
-                /// @return New absolute size with function applied
-                //----------------------------------------------------------------------------------------
-                Core::Vector2 UsePreferred(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
+                /// @return Preferred size
+                //----------------------------------------------------------
+                Core::Vector2 UsePreferredSize(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
                 {
                     return in_preferredSize;
                 }
                 //----------------------------------------------------------------------------------------
-                /// Size policy function that uses the widget size and aspect
-                ///
-                /// NOTE: This doesn't do much but prevents multiple code paths for size policy
+                /// Aspect ratio maintaining function that keeps the original width but adapts
+                /// the height to maintain the aspect ratio
                 ///
                 /// @author S Downie
                 ///
-                /// @param Absolute size of widget based on current unified size settings
-                /// @param Target aspect ration size in absolute coordinates
+                /// @param Original size
+                /// @param Preferred size
                 ///
-                /// @return New absolute size with function applied
+                /// @return Size with aspect maintained
                 //----------------------------------------------------------------------------------------
-                Core::Vector2 UseWidget(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
+                Core::Vector2 KeepOriginalWidthAdaptHeight(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
                 {
-                    return in_absSize;
+                    return Rendering::AspectRatioUtils::KeepOriginalWidthAdaptHeight(in_originalSize, in_preferredSize.x/in_preferredSize.y);
+                }
+                //----------------------------------------------------------------------------------------
+                /// Aspect ratio maintaining function that keeps the original height but adapts
+                /// the width to maintain the aspect ratio
+                ///
+                /// @author S Downie
+                ///
+                /// @param Original size
+                /// @param Preferred size
+                ///
+                /// @return Size with aspect maintained
+                //----------------------------------------------------------------------------------------
+                Core::Vector2 KeepOriginalHeightAdaptWidth(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+                {
+                    return Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(in_originalSize, in_preferredSize.x/in_preferredSize.y);
                 }
                 //----------------------------------------------------------------------------------------
                 /// Aspect ratio maintaining function that maintains the given target aspect ratio
@@ -193,24 +190,14 @@ namespace ChilliSource
                 ///
                 /// @author S Downie
                 ///
-                /// @param Absolute size of widget based on current unified size settings
-                /// @param Target aspect ration size in absolute coordinates
+                /// @param Original size
+                /// @param Preferred size
                 ///
-                /// @return New absolute size with function applied
+                /// @return Size with aspect maintained
                 //----------------------------------------------------------------------------------------
-                Core::Vector2 FillOriginal(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
+                Core::Vector2 FillOriginal(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
                 {
-                    f32 currentRatio = in_absSize.x / in_absSize.y;
-                    f32 targetRatio = in_preferredSize.x / in_preferredSize.y;
-                    
-                    if(targetRatio <= currentRatio)
-                    {
-                        return KeepWidthAdaptHeight(in_absSize, in_preferredSize);
-                    }
-                    else
-                    {
-                        return KeepHeightAdaptWidth(in_absSize, in_preferredSize);
-                    }
+                    return Rendering::AspectRatioUtils::FillOriginal(in_originalSize, in_preferredSize.x/in_preferredSize.y);
                 }
                 //----------------------------------------------------------------------------------------
                 /// Aspect ratio maintaining function that maintains the given target aspect ratio
@@ -218,36 +205,32 @@ namespace ChilliSource
                 ///
                 /// @author S Downie
                 ///
-                /// @param Absolute size of widget based on current unified size settings
-                /// @param Target aspect ration size in absolute coordinates
+                /// @param Original size
+                /// @param Preferred size
                 ///
-                /// @return New absolute size with function applied
+                /// @return Size with aspect maintained
                 //----------------------------------------------------------------------------------------
-                Core::Vector2 FitOriginal(const Core::Vector2& in_absSize, const Core::Vector2& in_preferredSize)
+                Core::Vector2 FitOriginal(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
                 {
-                    f32 currentRatio = in_absSize.x / in_absSize.y;
-                    f32 targetRatio = in_preferredSize.x / in_preferredSize.y;
-                    
-                    if(targetRatio > currentRatio)
-                    {
-                        return KeepWidthAdaptHeight(in_absSize, in_preferredSize);
-                    }
-                    else
-                    {
-                        return KeepHeightAdaptWidth(in_absSize, in_preferredSize);
-                    }
+                    return Rendering::AspectRatioUtils::FitOriginal(in_originalSize, in_preferredSize.x/in_preferredSize.y);
                 }
                 
                 const Widget::SizePolicyDelegate k_sizePolicyFuncs[(u32)Widget::SizePolicy::k_totalNum] =
                 {
-                    SizePolicyFuncs::UseWidget,
-                    SizePolicyFuncs::UsePreferred,
-                    SizePolicyFuncs::KeepWidthAdaptHeight,
-                    SizePolicyFuncs::KeepHeightAdaptWidth,
-                    SizePolicyFuncs::FillOriginal,
-                    SizePolicyFuncs::FitOriginal
+                    UseOriginalSize,
+                    UsePreferredSize,
+                    KeepOriginalWidthAdaptHeight,
+                    KeepOriginalHeightAdaptWidth,
+                    FitOriginal,
+                    FillOriginal
                 };
             }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Widget::Widget()
+        {
+            SetSizePolicy(SizePolicy::k_none);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -273,9 +256,7 @@ namespace ChilliSource
             {
                 m_propertyBlob = new u8[currentOffset];
             }
-            
-
-            
+        
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
         }
         //----------------------------------------------------------------------------------------

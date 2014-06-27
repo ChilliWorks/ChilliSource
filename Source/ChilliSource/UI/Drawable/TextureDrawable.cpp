@@ -39,7 +39,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         TextureDrawable::TextureDrawable()
-        : m_UVs(Core::Rectangle(Core::Vector2::k_zero, Core::Vector2::k_one))
+        : m_UVs(0.0f, 0.0f, 1.0f, 1.0f)
         {
             
         }
@@ -51,7 +51,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void TextureDrawable::SetUVs(const Core::Rectangle& in_UVs)
+        void TextureDrawable::SetUVs(const Rendering::UVs& in_UVs)
         {
             m_UVs = in_UVs;
         }
@@ -67,7 +67,7 @@ namespace ChilliSource
         void TextureDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
         {
             CS_ASSERT(m_texture != nullptr, "TextureDrawable cannot draw without texture");
-            in_renderer->DrawBox(in_transform, in_absSize, m_texture, m_UVs, in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
+            in_renderer->DrawBox(in_transform, in_absSize, Core::Vector2::k_zero, m_texture, m_UVs, in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
         }
     }
 }

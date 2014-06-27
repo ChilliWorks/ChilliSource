@@ -49,7 +49,7 @@ namespace ChilliSource
         CS_DEFINE_NAMEDTYPE(StaticMeshComponent);
         
         StaticMeshComponent::StaticMeshComponent()
-        : mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
+        : m_isBSValid(false), m_isAABBValid(false), m_isOOBBValid(false)
         {
             mMaterials.push_back(mpMaterial);
         }
@@ -67,9 +67,9 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::AABB& StaticMeshComponent::GetAABB()
 		{
-			if(GetEntity() && !mbAABBValid)
+			if(GetEntity() && !m_isAABBValid)
 			{
-                mbAABBValid = true;
+                m_isAABBValid = true;
                 
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
@@ -150,9 +150,9 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::OOBB& StaticMeshComponent::GetOOBB()
 		{
-			if(GetEntity() && !mbOOBBValid)
+			if(GetEntity() && !m_isOOBBValid)
 			{
-                mbOOBBValid = true;
+                m_isOOBBValid = true;
                 
 				mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
                 // Origin and Size updated in AttachMesh
@@ -164,9 +164,9 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::Sphere& StaticMeshComponent::GetBoundingSphere()
 		{
-			if(GetEntity() && !mbBoundingSphereValid)
+			if(GetEntity() && !m_isBSValid)
 			{
-                mbBoundingSphereValid = true;
+                m_isBSValid = true;
                 
                 const Core::AABB& sAABB = GetAABB();
 				mBoundingSphere.vOrigin = sAABB.GetOrigin();
@@ -329,9 +329,9 @@ namespace ChilliSource
         //----------------------------------------------------
         void StaticMeshComponent::OnEntityTransformChanged()
         {
-            mbBoundingSphereValid = false;
-            mbAABBValid = false;
-            mbOOBBValid = false;
+            m_isBSValid = false;
+            m_isAABBValid = false;
+            m_isOOBBValid = false;
         }
         //----------------------------------------------------
         //----------------------------------------------------

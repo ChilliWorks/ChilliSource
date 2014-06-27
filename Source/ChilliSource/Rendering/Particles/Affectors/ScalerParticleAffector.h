@@ -74,8 +74,8 @@ namespace ChilliSource
         private:
             
             bool mbInitialSet;
-            Core::Vector3 mvInitialScale;
-            Core::Vector3 mvTargetScale;
+            Core::Vector2 mvInitialScale;
+            Core::Vector2 mvTargetScale;
         };
     }
 }

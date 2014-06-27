@@ -63,9 +63,9 @@ namespace CSBackend
 				//get the path to here
 				wchar_t pathChars[MAX_PATH];
 				GetModuleFileName(nullptr, pathChars, MAX_PATH);
-				std::string path = WindowsStringUtils::ConvertWindowsPathToStandard(std::wstring(pathChars));
+				std::string path = WindowsStringUtils::ConvertWindowsFilePathToStandard(std::wstring(pathChars));
 				std::string::size_type pos = path.find_last_of("/");
-				std::string workingDir = CSCore::StringUtils::StandardisePath(path.substr(0, pos));
+				std::string workingDir = CSCore::StringUtils::StandardiseDirectoryPath(path.substr(0, pos));
 
 				//open the file
 				std::ifstream file(workingDir + "assets/AppResources/App.config");

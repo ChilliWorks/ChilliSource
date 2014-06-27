@@ -59,7 +59,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //--------------------------------------------
-			State();
+			State() = default;
             //--------------------------------------------
             /// Destructor
             ///
@@ -71,13 +71,13 @@ namespace ChilliSource
 			///
 			/// @return States scene
 			//------------------------------------------
-			Scene* GetScene();
+			Scene* GetScene() const;
             //------------------------------------------
 			/// @author S Downie
 			///
 			/// @return States UI canvas
 			//------------------------------------------
-            UI::Canvas* GetUICanvas();
+            UI::Canvas* GetUICanvas() const;
             //----------------------------------------------------
             /// Searches the state systems and returns the first
             /// one that implements the named interface
@@ -290,10 +290,9 @@ namespace ChilliSource
 			
             std::vector<StateSystemUPtr> m_systems;
             
-			Scene* m_scene;
-            UI::Canvas* m_canvas;
-			
-            bool m_canAddSystems;
+			Scene* m_scene = nullptr;
+            UI::Canvas* m_canvas = nullptr;
+            bool m_canAddSystems = false;
 			
 			friend class StateManager;
 		};

@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 //=============================================================
 /// GUI - Stretchable Image 
@@ -50,16 +51,6 @@ namespace ChilliSource
 
 			DECLARE_META_CLASS(VerticalStretchableImage)
 
-            struct PanelDesc
-            {
-                Rendering::UVs m_topUVs;
-                Rendering::UVs m_middleUVs;
-                Rendering::UVs m_bottomUVs;
-                
-                Core::Vector2 m_topSize;
-                Core::Vector2 m_middleSize;
-                Core::Vector2 m_bottomSize;
-            };
             VerticalStretchableImage();
             VerticalStretchableImage(const Core::ParamDictionary& insParams);
             //---------------------------------------------------------
@@ -91,11 +82,11 @@ namespace ChilliSource
 			///
 			/// Set the "path" to the sprite sheet index IDs. 
 			/// e.g. For the following IDs: 
-			///			* "BLUE_PANEL_TOP"
-			///			* "BLUE_PANEL_BOTTOM"
-			///			* "BLUE_PANEL_MIDDLE"
+			///			* "BluePanelTop"
+			///			* "BluePanelMiddle"
+			///			* "BluePanelBottom"
 			///
-			/// the base ID would be "BLUE_PANEL_"
+			/// the base ID would be "BluePanel"
 			//---------------------------------------------------------
 			void SetBaseTextureAtlasID(const std::string& instrID);
 			//---------------------------------------------------------
@@ -103,11 +94,11 @@ namespace ChilliSource
 			///
 			/// Get the "path" to the sprite sheet index IDs. 
 			/// e.g. For the following IDs: 
-			///			* "BLUE_PANEL_TOP"
-			///			* "BLUE_PANEL_BOTTOM"
-			///			* "BLUE_PANEL_MIDDLE"
+			///			* "BluePanelTop"
+			///			* "BluePanelMiddle"
+			///			* "BluePanelBottom"
 			///
-			/// the base ID would be "BLUE_PANEL_"
+			/// the base ID would be "BluePanel"
 			//---------------------------------------------------------
 			const std::string& GetBaseTextureAtlasID() const;
 			//---------------------------------------------------------
@@ -126,52 +117,6 @@ namespace ChilliSource
             /// @param Canvas renderer pointer
             //---------------------------------------------------------
             void Draw(Rendering::CanvasRenderer* inpCanvas);
-			//--------------------------------------------------------
-            /// Set Width Maintaining Aspect
-            ///
-            /// Change the current width of the image view and resize the height
-            /// to maintain the aspect ratio of the image
-            ///
-            /// @param Unified width
-            //--------------------------------------------------------
-            void SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth);
-            //--------------------------------------------------------
-            /// Set Height Maintaining Aspect
-            ///
-            /// Change the current height of the image view and resize the width
-            /// to maintain the aspect ratio of the image
-            ///
-            /// @param Unified height
-            //--------------------------------------------------------
-            void SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight);
-            //--------------------------------------------------------
-            /// Enable Width Maintaining Aspect
-            ///
-            /// Enables auto scaling of the Width to maintain the aspect ratio
-            ///
-            /// @param boolean to disable or enable
-            //--------------------------------------------------------
-            void EnableWidthMaintainingAspect(bool inbEnabled);
-            //--------------------------------------------------------
-            /// Enable Height Maintaining Aspect
-            ///
-            /// Enables auto scaling of the height to maintain the aspect ratio
-            ///
-            /// @param boolean to disable or enable
-            //--------------------------------------------------------
-            void EnableHeightMaintainingAspect(bool inbEnabled);
-			//--------------------------------------------------------
-            /// Is Width Maintaining Aspect Enabled
-            ///
-            /// @return auto scaling of the Width to maintain the aspect ratio
-            //--------------------------------------------------------
-            bool IsWidthMaintainingAspectEnabled() const;
-            //--------------------------------------------------------
-            /// Is Height Maintaining Aspect Enabled
-            ///
-            /// @return auto scaling of the height to maintain the aspect ratio
-            //--------------------------------------------------------
-            bool IsHeightMaintainingAspectEnabled() const;
             //--------------------------------------------------------
             /// Get Combined Cap Height
             ///
@@ -185,17 +130,24 @@ namespace ChilliSource
             //--------------------------------------------------------
             f32 GetCapWidth() const;
 			
-			private:
+        private:
+            
+            enum class Patch
+            {
+                k_top,
+                k_middle,
+                k_bottom,
+                k_total
+            };
+            
+            Rendering::TextureAtlas::Frame m_frames[(u32)Patch::k_total];
 
             DECLARE_PROPERTY_A(Rendering::TextureCSPtr, Texture, SetTexture, GetTexture);
 			DECLARE_PROPERTY_A(Rendering::TextureAtlasCSPtr, TextureAtlas, SetTextureAtlas, GetTextureAtlas);
 
 			DECLARE_PROPERTY_A(std::string, BaseTextureAtlasID, SetBaseTextureAtlasID, GetBaseTextureAtlasID);
-
-			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
-			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
-			
-            PanelDesc m_panels;
+            DECLARE_PROPERTY_A(bool, ActAsSpacer, EnableActAsSpacer, IsActAsSpacerEnabled);
+	
         };
     }
 }

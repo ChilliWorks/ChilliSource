@@ -124,7 +124,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //----------------------------------------------------------------------------------------
-            Widget() = default;
+            Widget();
             //----------------------------------------------------------------------------------------
             /// Build the widget from the given defintion. This includes creating the custom properties.
             /// Build should only be called once per instance.

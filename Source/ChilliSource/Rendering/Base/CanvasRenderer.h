@@ -118,12 +118,13 @@ namespace ChilliSource
             ///
             /// @param Transform
             /// @param Dimensions
+            /// @param Offset
             /// @param Texture
             /// @param UVs
             /// @param Colour
             /// @param Origin anchor
             //----------------------------------------------------------------------------
-			void DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const TextureCSPtr& in_texture, const Rendering::UVs& in_UVs,
+			void DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const Core::Vector2& in_offset, const TextureCSPtr& in_texture, const Rendering::UVs& in_UVs,
                          const Core::Colour& in_colour, AlignmentAnchor in_anchor);
             //----------------------------------------------------------------------------
             /// Build the descriptions for all characters. The descriptions can then be
@@ -196,8 +197,8 @@ namespace ChilliSource
             MaterialCSPtr GetGUIMaterialForTexture(const TextureCSPtr& in_texture);
 
 		private:
-
-			SpriteComponent::SpriteData m_canvasSprite;
+            
+			SpriteBatch::SpriteData m_canvasSprite;
 
             DynamicSpriteBatchUPtr m_overlayBatcher;
 

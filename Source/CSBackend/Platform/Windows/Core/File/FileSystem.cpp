@@ -131,7 +131,7 @@ namespace CSBackend
 						{
 							std::string directoryName = WindowsStringUtils::UTF16ToUTF8(fileData.cFileName);
 							
-							if (DeleteDirectory(CSCore::StringUtils::StandardisePath(in_directoryPath + directoryName)) == false)
+							if (DeleteDirectory(CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath + directoryName)) == false)
 							{
 								return false;
 							}
@@ -139,7 +139,7 @@ namespace CSBackend
 						else
 						{
 							std::string fileName = WindowsStringUtils::UTF16ToUTF8(fileData.cFileName);
-							std::string filePath = CSCore::StringUtils::StandardisePath(in_directoryPath + fileName);
+							std::string filePath = CSCore::StringUtils::StandardiseFilePath(in_directoryPath + fileName);
 							if (WindowsFileUtils::WindowsDeleteFile(WindowsStringUtils::ConvertStandardPathToWindows(filePath).c_str()) == FALSE)
 							{
 								return false;
@@ -196,12 +196,12 @@ namespace CSBackend
 						if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 						{
 							std::string directoryName = WindowsStringUtils::UTF16ToUTF8(fileData.cFileName);
-							std::string relativeDirectoryPath = CSCore::StringUtils::StandardisePath(in_relativeDirectoryPath + directoryName);
+							std::string relativeDirectoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_relativeDirectoryPath + directoryName);
 							out_directoryPaths.push_back(relativeDirectoryPath);
 
 							if (in_recursive == true)
 							{
-								std::string absoluteDirectoryPath = CSCore::StringUtils::StandardisePath(in_directoryPath + directoryName);
+								std::string absoluteDirectoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath + directoryName);
 								if (ListDirectoryContents(absoluteDirectoryPath, true, out_directoryPaths, out_filePaths, relativeDirectoryPath) == false)
 								{
 									return false;
@@ -211,7 +211,7 @@ namespace CSBackend
 						else
 						{
 							std::string fileName = WindowsStringUtils::UTF16ToUTF8(fileData.cFileName);
-							std::string relativeFilePath = CSCore::StringUtils::StandardisePath(in_relativeDirectoryPath + fileName);
+							std::string relativeFilePath = CSCore::StringUtils::StandardiseFilePath(in_relativeDirectoryPath + fileName);
 							out_filePaths.push_back(relativeFilePath);
 						}
 					}
@@ -231,9 +231,9 @@ namespace CSBackend
 		{
 			wchar_t pathChars[MAX_PATH];
 			GetModuleFileName(nullptr, pathChars, MAX_PATH);
-			std::string path = WindowsStringUtils::ConvertWindowsPathToStandard(std::wstring(pathChars));
+			std::string path = WindowsStringUtils::ConvertWindowsFilePathToStandard(std::wstring(pathChars));
 			std::string::size_type pos = path.find_last_of("/");
-			std::string strWorkingDir = CSCore::StringUtils::StandardisePath(path.substr(0, pos));
+			std::string strWorkingDir = CSCore::StringUtils::StandardiseDirectoryPath(path.substr(0, pos));
 
 			m_packagePath = strWorkingDir + "assets/";
 			m_documentsPath = strWorkingDir + "Documents/";
@@ -341,8 +341,8 @@ namespace CSBackend
 			}
 			else
 			{
-				std::string sourceDirectoryPath = CSCore::StringUtils::StandardisePath(in_sourceDirectoryPath);
-				std::string destinationDirectoryPath = CSCore::StringUtils::StandardisePath(in_destinationDirectoryPath);
+				std::string sourceDirectoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_sourceDirectoryPath);
+				std::string destinationDirectoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_destinationDirectoryPath);
 				for (const std::string& filePath : filePaths)
 				{
 					if (CopyFile(in_sourceStorageLocation, sourceDirectoryPath + filePath, in_destinationStorageLocation, destinationDirectoryPath + filePath) == false)
@@ -452,7 +452,7 @@ namespace CSBackend
 				}
 				default:
 				{
-					std::string path = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath);
+					std::string path = CSCore::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath);
 					return CSBackend::Windows::DoesFileExist(path);
 				}
 			}
@@ -474,7 +474,7 @@ namespace CSBackend
 				}
 				default:
 				{
-					std::string path = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath);
+					std::string path = CSCore::StringUtils::StandardiseDirectoryPath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath);
 					return CSBackend::Windows::DoesDirectoryExist(path);
 				}
 			}
@@ -525,7 +525,7 @@ namespace CSBackend
 				{
 					case CSCore::StorageLocation::k_DLC:
 					{
-						std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
+						std::string filePath = CSCore::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
 						if (CSBackend::Windows::DoesFileExist(filePath) == true)
 						{
 							return filePath;
@@ -552,7 +552,7 @@ namespace CSBackend
 				{
 					case CSCore::StorageLocation::k_DLC:
 					{
-						std::string filePath = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
+						std::string filePath = CSCore::StringUtils::StandardiseDirectoryPath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
 						if (CSBackend::Windows::DoesDirectoryExist(filePath) == true)
 						{
 							return filePath;
@@ -573,14 +573,14 @@ namespace CSBackend
 		//--------------------------------------------------------------
 		bool FileSystem::DoesItemExistInDLCCache(const std::string& in_path, bool in_isDirectory) const
 		{
-			std::string path = CSCore::StringUtils::StandardisePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path);
+			std::string path = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_path;
 			if (in_isDirectory == true)
 			{
-				return CSBackend::Windows::DoesDirectoryExist(path);
+				return CSBackend::Windows::DoesDirectoryExist(CSCore::StringUtils::StandardiseDirectoryPath(path));
 			}
 			else
 			{
-				return CSBackend::Windows::DoesFileExist(path);
+				return CSBackend::Windows::DoesFileExist(CSCore::StringUtils::StandardiseFilePath(path));
 			}
 		}
 		//------------------------------------------------------------

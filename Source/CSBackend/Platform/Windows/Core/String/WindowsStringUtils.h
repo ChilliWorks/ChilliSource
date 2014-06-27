@@ -51,7 +51,7 @@ namespace CSBackend
 			/// Converts from a UTF-8 encoded string to a UTF-16 encoded
 			/// wstring.
 			///
-			/// @author Ian Copland
+			/// @author I Copland
 			///
 			/// @param The UTF-8 string.
 			/// @return The UTF-16 wstring.
@@ -61,7 +61,7 @@ namespace CSBackend
 			/// Converts from a UTF-16 encoded wstring to a UTF-8 encoded
 			/// string.
 			///
-			/// @author Ian Copland
+			/// @author I Copland
 			///
 			/// @param The UTF-16 wstring.
 			/// @return The UTF-8 string.
@@ -71,21 +71,30 @@ namespace CSBackend
 			/// Converts the given standard string to a windows format
 			/// wide string.
 			///
-			/// @author Ian Copland
+			/// @author I Copland
 			///
 			/// @param The standard path string.
 			/// @return The same path in a windows format wide string.
 			//------------------------------------------------------------
 			std::wstring ConvertStandardPathToWindows(const std::string& in_standardPath);
 			//------------------------------------------------------------
-			/// Converts the given path to windows format.
+			/// Converts the given directory path to windows format.
 			///
-			/// @author Ian Copland
+			/// @author I Copland
 			///
 			/// @param The windows format wide string.
 			/// @return The same path standardised in a string.
 			//------------------------------------------------------------
-			std::string ConvertWindowsPathToStandard(const std::wstring& in_windowsPath);
+			std::string ConvertWindowsDirectoryPathToStandard(const std::wstring& in_windowsPath);
+			//------------------------------------------------------------
+			/// Converts the given file path to windows format.
+			///
+			/// @author S Downie
+			///
+			/// @param The windows format wide string.
+			/// @return The same path standardised in a string.
+			//------------------------------------------------------------
+			std::string ConvertWindowsFilePathToStandard(const std::wstring& in_windowsPath);
 		}
 	}
 }

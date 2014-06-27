@@ -75,9 +75,10 @@ namespace ChilliSource
             //--------------------------------------------------------
             /// Set Sprite Sheet
             ///
+            /// @param Location
             /// @param Sprite sheet name
             //--------------------------------------------------------
-            void SetTextureAtlas(const std::string& instrTextureAtlas, Core::StorageLocation ineLocation = Core::StorageLocation::k_package);
+            void SetTextureAtlas(Core::StorageLocation ineLocation, const std::string& instrTextureAtlas);
             //--------------------------------------------------------
             /// Set Sprite Sheet
             ///
@@ -136,14 +137,6 @@ namespace ChilliSource
 			/// based on the size of the image
 			//--------------------------------------------------------
 			bool IsSizeFromImageEnabled() const;
-            //--------------------------------------------------------
-            /// Set Size From Image
-            ///
-            /// Sets the of the image view to the size of the image
-            /// without requiring a draw to call. Useful for working
-            /// with relative sizes and aspect ratios.
-            //--------------------------------------------------------
-            void SetSizeFromImage();
             //--------------------------------------------------------
             /// Enable Width From Image
             ///
@@ -321,6 +314,14 @@ namespace ChilliSource
 			void LayoutContent();
             
         private:
+            //--------------------------------------------------------
+            /// Set Size From Image
+            ///
+            /// Sets the of the image view to the size of the image
+            /// without requiring a draw to call. Useful for working
+            /// with relative sizes and aspect ratios.
+            //--------------------------------------------------------
+            void SetSizeFromImage();
 			//--------------------------------------------------------
 			/// Update Size From Image
 			///
@@ -353,7 +354,8 @@ namespace ChilliSource
             DECLARE_PROPERTY_A(Rendering::UVs, UVs, SetUVs, GetUVs);
             
 			DECLARE_PROPERTY_A(std::string, TextureAtlasID, SetTextureAtlasID, GetTextureAtlasID);
-
+            u32 m_hashedTextureAtlasId = 0;
+            
             DECLARE_PROPERTY_A(bool, ActAsSpacer, EnableActAsSpacer, IsActAsSpacerEnabled);
             DECLARE_PROPERTY_A(bool, SizeFromImage, EnableSizeFromImage, IsSizeFromImageEnabled);
             DECLARE_PROPERTY_A(bool, WidthFromImage, EnableSizeFromImage, IsSizeFromImageEnabled);

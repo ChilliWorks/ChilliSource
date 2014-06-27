@@ -29,12 +29,12 @@
 #include <ChilliSource/GUI/Image/VerticalStretchableImage.h>
 
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 
 namespace ChilliSource
 {
@@ -42,9 +42,7 @@ namespace ChilliSource
     {
 		DEFINE_META_CLASS(VerticalStretchableImage)
 
-		DEFINE_PROPERTY(TextureAtlas);
-		DEFINE_PROPERTY(HeightMaintain);
-		DEFINE_PROPERTY(WidthMaintain);
+		DEFINE_PROPERTY(TextureAtlas);;
 		DEFINE_PROPERTY(BaseTextureAtlasID);
 
 		//--------------------------------------------------------
@@ -53,7 +51,7 @@ namespace ChilliSource
         /// Empty
         //---------------------------------------------------------
         VerticalStretchableImage::VerticalStretchableImage()
-			: HeightMaintain(false), WidthMaintain(false)
+			: ActAsSpacer(false)
         {
         }
         //---------------------------------------------------------
@@ -62,7 +60,7 @@ namespace ChilliSource
         /// From param dictionary
         //---------------------------------------------------------
         VerticalStretchableImage::VerticalStretchableImage(const Core::ParamDictionary& insParams) 
-			: GUIView(insParams), HeightMaintain(false), WidthMaintain(false)
+			: GUIView(insParams), ActAsSpacer(false)
         {
             std::string strValue;
 
@@ -99,41 +97,20 @@ namespace ChilliSource
             //---Sprite sheet indices
             if(insParams.TryGetValue("TopID", strValue))
             {
-                m_panels.m_topSize = TextureAtlas->GetFrameSize(strValue);
-                m_panels.m_topUVs = TextureAtlas->GetFrameUVs(strValue);
+                m_frames[(u32)Patch::k_top] = TextureAtlas->GetFrame(strValue);
             }
             if(insParams.TryGetValue("BottomID", strValue))
             {
-                m_panels.m_bottomSize = TextureAtlas->GetFrameSize(strValue);
-                m_panels.m_bottomUVs = TextureAtlas->GetFrameUVs(strValue);
+                m_frames[(u32)Patch::k_bottom] = TextureAtlas->GetFrame(strValue);
             }
             if(insParams.TryGetValue("MiddleID", strValue))
             {
-                m_panels.m_middleSize = TextureAtlas->GetFrameSize(strValue);
-                m_panels.m_middleUVs = TextureAtlas->GetFrameUVs(strValue);
+                m_frames[(u32)Patch::k_middle] = TextureAtlas->GetFrame(strValue);
             }
-			//---Maintain Width
-			if(insParams.TryGetValue("HeightMaintain", strValue))
-			{
-				HeightMaintain = Core::ParseBool(strValue);
-			}
-			//---Maintain Height
-			if(insParams.TryGetValue("WidthMaintain", strValue))
-			{
-				WidthMaintain = Core::ParseBool(strValue);
-			}
-			//---Set Maintain Width
-			if(insParams.TryGetValue("SetHeightMaintain", strValue))
-			{
-				Core::Vector2 vSize = Core::ParseVector2(strValue);
-				SetHeightMaintainingAspect(vSize.x, vSize.y);
-			}
-			//---Set Maintain Height
-			if(insParams.TryGetValue("SetWidthMaintain", strValue))
-			{
-				Core::Vector2 vSize = Core::ParseVector2(strValue);
-				SetWidthMaintainingAspect(vSize.x, vSize.y);
-			}
+            if(insParams.TryGetValue("ActAsSpacer", strValue))
+            {
+                ActAsSpacer = true;
+            }
         }
         //---------------------------------------------------------
         /// Set Texture
@@ -172,21 +149,6 @@ namespace ChilliSource
 			return TextureAtlas;
 		}
 		//---------------------------------------------------------
-		/// Set Base Sprite Sheet Index ID
-		///
-		/// Set the "path" to the sprite sheet index IDs. 
-		/// e.g. For the following IDs: 
-		///			* "BLUE_PANEL_TOP_LEFT"
-		///			* "BLUE_PANEL_TOP_RIGHT"
-		///			* "BLUE_PANEL_BOTTOM_LEFT"
-		///			* "BLUE_PANEL_BOTTOM_RIGHT"
-		///			* "BLUE_PANEL_TOP_CENTRE"
-		///			* "BLUE_PANEL_BOTTOM_CENTRE"
-		///			* "BLUE_PANEL_MIDDLE_CENTRE"
-		///			* "BLUE_PANEL_MIDDLE_RIGHT"
-		///			* "BLUE_PANEL_MIDDLE_LEFT"
-		///
-		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
 		void VerticalStretchableImage::SetBaseTextureAtlasID(const std::string& instrID)
 		{
@@ -194,35 +156,15 @@ namespace ChilliSource
             
             BaseTextureAtlasID = instrID;
 
-            std::string topId(instrID + "TOP");
-			std::string bottomId(instrID + "BOTTOM");
-			std::string middleId(instrID + "MIDDLE");
-                
-            m_panels.m_topSize = TextureAtlas->GetFrameSize(topId);
-            m_panels.m_topUVs = TextureAtlas->GetFrameUVs(topId);
-
-            m_panels.m_bottomSize = TextureAtlas->GetFrameSize(bottomId);
-            m_panels.m_bottomUVs = TextureAtlas->GetFrameUVs(bottomId);
-
-            m_panels.m_middleSize = TextureAtlas->GetFrameSize(middleId);
-            m_panels.m_middleUVs = TextureAtlas->GetFrameUVs(middleId);
+            std::string topId(instrID + "Top");
+			std::string bottomId(instrID + "Bottom");
+			std::string middleId(instrID + "Middle");
+            
+            m_frames[(u32)Patch::k_top] = TextureAtlas->GetFrame(topId);
+            m_frames[(u32)Patch::k_middle] = TextureAtlas->GetFrame(middleId);
+            m_frames[(u32)Patch::k_bottom] = TextureAtlas->GetFrame(bottomId);
 		}
 		//---------------------------------------------------------
-		/// Get Base Sprite Sheet Index ID
-		///
-		/// Get the "path" to the sprite sheet index IDs. 
-		/// e.g. For the following IDs: 
-		///			* "BLUE_PANEL_TOP_LEFT"
-		///			* "BLUE_PANEL_TOP_RIGHT"
-		///			* "BLUE_PANEL_BOTTOM_LEFT"
-		///			* "BLUE_PANEL_BOTTOM_RIGHT"
-		///			* "BLUE_PANEL_TOP_CENTRE"
-		///			* "BLUE_PANEL_BOTTOM_CENTRE"
-		///			* "BLUE_PANEL_MIDDLE_CENTRE"
-		///			* "BLUE_PANEL_MIDDLE_RIGHT"
-		///			* "BLUE_PANEL_MIDDLE_LEFT"
-		///
-		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
 		const std::string& VerticalStretchableImage::GetBaseTextureAtlasID() const
 		{
@@ -239,14 +181,9 @@ namespace ChilliSource
 		{
             CS_ASSERT(TextureAtlas != nullptr, "Must have texture atlas to set IDs");
             
-            m_panels.m_topSize = TextureAtlas->GetFrameSize(in_top);
-            m_panels.m_topUVs = TextureAtlas->GetFrameUVs(in_top);
-            
-            m_panels.m_bottomSize = TextureAtlas->GetFrameSize(in_bottom);
-            m_panels.m_bottomUVs = TextureAtlas->GetFrameUVs(in_bottom);
-            
-            m_panels.m_middleSize = TextureAtlas->GetFrameSize(in_middle);
-            m_panels.m_middleUVs = TextureAtlas->GetFrameUVs(in_middle);
+            m_frames[(u32)Patch::k_top] = TextureAtlas->GetFrame(in_top);
+            m_frames[(u32)Patch::k_middle] = TextureAtlas->GetFrame(in_middle);
+            m_frames[(u32)Patch::k_bottom] = TextureAtlas->GetFrame(in_bottom);
 		}
         //---------------------------------------------------------
         /// Draw
@@ -257,192 +194,82 @@ namespace ChilliSource
         //---------------------------------------------------------
         void VerticalStretchableImage::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
-			//Check if this is on screen
-			Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
-			Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
-			
-			if(vTopRight.y < 0 || vBottomLeft.y > GetScreen()->GetResolution().y || vTopRight.x < 0 || vBottomLeft.x > GetScreen()->GetResolution().x)
+			if(Visible && TextureAtlas && Texture)
 			{
-				//Offscreen
-				return;
+                if (ActAsSpacer == false)
+                {
+                    Core::Vector2 vPanelSize = GetAbsoluteSize();
+                    
+                    Core::Colour AbsColour = GetAbsoluteColour();
+                    
+                    //We need to use a matrix so that we can rotate all the patches with respect
+                    //to the view
+                    Core::Matrix3 matViewTransform = Core::Matrix3::CreateTransform(GetAbsoluteScreenSpacePosition(), Core::Vector2(1, 1), GetAbsoluteRotation());
+                    
+                    const Rendering::AlignmentAnchor alignments[(u32)Patch::k_total] =
+                    {
+                        Rendering::AlignmentAnchor::k_topCentre,
+                        Rendering::AlignmentAnchor::k_topCentre,
+                        Rendering::AlignmentAnchor::k_bottomCentre
+                    };
+                    
+                    // Calculate dimentions and position for centre based on the panel size and the size of the caps
+                    Core::Vector2 topPatchSize(vPanelSize.x, m_frames[(u32)Patch::k_top].m_originalSize.y);
+                    topPatchSize = Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(topPatchSize, m_frames[(u32)Patch::k_top].m_originalSize.x/m_frames[(u32)Patch::k_top].m_originalSize.y);
+                    
+                    Core::Vector2 bottomPatchSize(vPanelSize.x, m_frames[(u32)Patch::k_bottom].m_originalSize.y);
+                    bottomPatchSize = Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(bottomPatchSize, m_frames[(u32)Patch::k_bottom].m_originalSize.x/m_frames[(u32)Patch::k_bottom].m_originalSize.y);
+                    
+                    Core::Vector2 centrePatchSize(topPatchSize.x, vPanelSize.y - (topPatchSize.y + bottomPatchSize.y));
+                    
+                    //If the size of the stretchable centre part is negative this means the caps are overlapping
+                    //and need to be shrunk
+                    f32 fShrinkY = (centrePatchSize.y < 0 ? centrePatchSize.y * 0.5f : 0);
+                    // Clamp the size of the centre
+                    centrePatchSize.y = std::max(centrePatchSize.y, 0.0f);
+                    
+                    
+                    const Core::Vector2 sizes[(u32)Patch::k_total] =
+                    {
+                        Core::Vector2(topPatchSize.x, topPatchSize.y + fShrinkY),
+                        centrePatchSize,
+                        Core::Vector2(bottomPatchSize.x, bottomPatchSize.y + fShrinkY)
+                    };
+                    
+                    Core::Vector2 vPanelTopPos = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topCentre);
+                    Core::Vector2 vPanelBottomPos = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomCentre);
+                    const Core::Vector2 positions[(u32)Patch::k_total] =
+                    {
+                        vPanelTopPos,
+                        Core::Vector2(vPanelTopPos.x, vPanelTopPos.y - sizes[(u32)Patch::k_top].y),
+                        vPanelBottomPos
+                    };
+                    
+                    for(u32 i=0; i<(u32)Patch::k_total; ++i)
+                    {
+                        Core::Vector2 offset;
+                        offset.x = (-m_frames[i].m_originalSize.x * 0.5f) + (m_frames[i].m_croppedSize.x * 0.5f) + m_frames[i].m_offset.x;
+                        offset.y = (m_frames[i].m_originalSize.y * 0.5f) - (m_frames[i].m_croppedSize.y * 0.5f) - m_frames[i].m_offset.y;
+                        
+                        //Convert from texel space to local sprite space
+                        offset = sizes[i]/m_frames[i].m_originalSize * offset;
+                        Core::Vector2 size = sizes[i]/m_frames[i].m_originalSize * m_frames[i].m_croppedSize;
+                        
+                        Core::Matrix3 matPatchTransform = Core::Matrix3::CreateTranslation(positions[i] + offset);
+                        Core::Matrix3 matTransform = matPatchTransform * matViewTransform;
+                        inpCanvas->DrawBox(matTransform,
+                                           size,
+                                           offset,
+                                           Texture,
+                                           m_frames[i].m_uvs,
+                                           AbsColour,
+                                           alignments[i]);
+                    }
+				}
+                
+				//Render subviews
+				GUIView::Draw(inpCanvas);
 			}
-			
-            if(Visible && TextureAtlas && Texture)
-            {			
-                Core::Vector2 vPanelSize = GetAbsoluteSize();
-                Core::Vector2 vPanelPos = GetAbsoluteScreenSpacePosition();
-                Core::Vector2 vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
-                Core::Vector2 vPatchPos;
-                
-                Core::Colour AbsColour = GetAbsoluteColour();
-                
-                //We need to use a matrix so that we can rotate all the patches with respect
-                //to the view
-				Core::Matrix3 matViewTransform = Core::Matrix3::CreateTransform(vPanelPos, Core::Vector2(1, 1), GetRotation());
-                
-                //Get the patch sizes
-                Core::Vector2 vTPatchSize = m_panels.m_topSize;
-                Core::Vector2 vBPatchSize = m_panels.m_bottomSize;
-                
-                vTPatchSize.x = vPanelSize.x;
-                vBPatchSize.x = vPanelSize.x;
-
-                Core::Vector2 vTCPatchSize;
-                Core::Vector2 vBCPatchSize;
-                Core::Vector2 vMCPatchSize;
-                
-                //Check to see if they are going to fit in the bounds of the view
-                f32 fTotal = vTPatchSize.y + vBPatchSize.y;
-                if(fTotal > vPanelSize.y)
-                {
-                    //The corners are too tall let's
-                    //squish them
-                    f32 fScale = vPanelSize.y/fTotal;
-                    vTPatchSize.y *= fScale;
-                    vBPatchSize.y *= fScale;
-                }
-
-                fTotal = vTPatchSize.y;
-                if(fTotal > vPanelSize.y)
-                {
-                    //The corners are too tall let's
-                    //squish them
-                    f32 fScale = vPanelSize.y/fTotal;
-                    vTPatchSize.y *= fScale;
-                }
-                fTotal = vBPatchSize.y;
-                if(fTotal > vPanelSize.y)
-                {
-                    //The corners are too tall let's
-                    //squish them
-                    f32 fScale = vPanelSize.y/fTotal;
-                    vBPatchSize.y *= fScale;
-                }
-
-                //Render ourself
-                //Draw the corners first
-				Core::Matrix3 matPatchTransform = Core::Matrix3::CreateTranslation(vTopLeft);
-				Core::Matrix3 matTransform = matPatchTransform * matViewTransform;
-                inpCanvas->DrawBox(matTransform,
-                                   vTPatchSize, 
-								   Texture,
-                                   m_panels.m_topUVs,
-                                   AbsColour, 
-                                   Rendering::AlignmentAnchor::k_topLeft);
-                
-                
-				matPatchTransform = Core::Matrix3::CreateTranslation(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft));
-				matTransform = matPatchTransform * matViewTransform;
-                inpCanvas->DrawBox(matTransform, 
-                                   vBPatchSize, 
-								   Texture,
-                                   m_panels.m_bottomUVs,
-                                   AbsColour, 
-                                   Rendering::AlignmentAnchor::k_bottomLeft);
-
- 
-                //Draw the centre
-                vMCPatchSize.x = vTPatchSize.x;
-                vMCPatchSize.y = vPanelSize.y - (vTPatchSize.y + vBPatchSize.y);
-                vPatchPos.x = vTopLeft.x;
-                vPatchPos.y = vTopLeft.y - vTPatchSize.y;
-               
-				matPatchTransform = Core::Matrix3::CreateTranslation(vPatchPos);
-				matTransform = matPatchTransform * matViewTransform;
-                inpCanvas->DrawBox(matTransform,
-                                   vMCPatchSize, 
-								   Texture,
-                                   m_panels.m_middleUVs,
-                                   AbsColour, 
-                                   Rendering::AlignmentAnchor::k_topLeft);
-                
-                //Render subviews
-                GUIView::Draw(inpCanvas);
-            }
-		}
-		//--------------------------------------------------------
-		/// Set Width Maintaining Aspect
-		///
-		/// Change the width of the image and resize the height
-		/// to maintain the aspect ratio
-		///
-		/// @param Unified width
-		//--------------------------------------------------------
-		void VerticalStretchableImage::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
-		{
-            Core::Vector2 vCurrentSize = GetAbsoluteSize();
-			f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
-			SetSize(infRelWidth, 0.0f, infAbsWidth, 0.0f);
-			
-			f32 fScaleY = GetAbsoluteScale().y;
-			if(fScaleY == 0.0f)
-				return;
-			
-			vCurrentSize = GetAbsoluteSize();
-            f32 fAbsHeight = (fAspectRatio * vCurrentSize.x) / fScaleY;
-			SetSize(infRelWidth, 0.0f, infAbsWidth, fAbsHeight);
-		}
-		//--------------------------------------------------------
-		/// Set Height Maintaining Aspect
-		///
-		/// Change the height of the image and resize the width
-		/// to maintain the aspect ratio
-		///
-		/// @param Unified height
-		//--------------------------------------------------------
-		void VerticalStretchableImage::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
-		{
-            Core::Vector2 vCurrentSize = GetAbsoluteSize();
-			f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
-			SetSize(0.0f, infRelHeight, 0.0f, infAbsHeight);
-			
-			f32 fScaleX = GetAbsoluteScale().x;
-			if(fScaleX == 0.0f)
-				return;
-			
-			vCurrentSize = GetAbsoluteSize();
-            f32 fAbsWidth = (fAspectRatio * vCurrentSize.y) / fScaleX;
-			SetSize(0.0f, infRelHeight, fAbsWidth, infAbsHeight);
-		}
-		//--------------------------------------------------------
-		/// Enable Height Maintaining Aspect
-		///
-		/// Enables auto scaling of the height to maintain the aspect ratio
-		///
-		/// @param boolean to disable or enable
-		//--------------------------------------------------------
-		void VerticalStretchableImage::EnableHeightMaintainingAspect(bool inbEnabled)
-		{
-			HeightMaintain = inbEnabled;
-		}
-		//--------------------------------------------------------
-		/// Enable Width Maintaining Aspect
-		///
-		/// Enables auto scaling of the height to maintain the aspect ratio
-		///
-		/// @param boolean to disable or enable
-		//--------------------------------------------------------
-		void VerticalStretchableImage::EnableWidthMaintainingAspect(bool inbEnabled)
-		{
-			WidthMaintain = inbEnabled;            
-		}
-		//--------------------------------------------------------
-		/// Is Width Maintaining Aspect Enabled
-		///
-		/// @return auto scaling of the Width to maintain the aspect ratio
-		//--------------------------------------------------------
-		bool VerticalStretchableImage::IsWidthMaintainingAspectEnabled() const
-		{
-			return WidthMaintain;
-		}
-		//--------------------------------------------------------
-		/// Is Height Maintaining Aspect Enabled
-		///
-		/// @return auto scaling of the height to maintain the aspect ratio
-		//--------------------------------------------------------
-		bool VerticalStretchableImage::IsHeightMaintainingAspectEnabled() const
-		{
-			return HeightMaintain;
 		}
 		//--------------------------------------------------------
 		/// Get Combined Cap Height
@@ -451,7 +278,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		f32 VerticalStretchableImage::GetCombinedCapHeight() const
 		{
-			return m_panels.m_topSize.y + m_panels.m_bottomSize.y;
+            return m_frames[(u32)Patch::k_top].m_originalSize.y + m_frames[(u32)Patch::k_bottom].m_originalSize.y;
 		}
 		//--------------------------------------------------------
 		/// Get Combined Cap Width
@@ -460,7 +287,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		f32 VerticalStretchableImage::GetCapWidth() const
 		{
-			return m_panels.m_topSize.x;
+            return m_frames[(u32)Patch::k_top].m_originalSize.x;
 		}
     }
 }

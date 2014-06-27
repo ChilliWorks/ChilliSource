@@ -1,8 +1,8 @@
 #!/usr/bin/python
 #
-#  copy_windows_resources.py
+#  copy_ios_resources.py
 #  Chilli Source
-#  Created by Scott Downie on 12/06/2014.
+#  Created by Scott Downie on 23/06/2014.
 #
 #  The MIT License (MIT)
 #
@@ -29,22 +29,19 @@
 
 import sys
 import file_system_utils
-import subprocess
-import shutil
 import os
+import shutil
 
 #----------------------------------------------------------------------
-# Copies the resources from AppResources and CSResources
-# into windows target directories
-#
-# Premulitplies all the PNGs
+# Copies the resource from CSResources and AppResources
+# into a single directory linked to by XCode.
 #
 # @author S Downie
 #----------------------------------------------------------------------
 
 #----------------------------------------------------------------------
 # Copies the files from src directory to dst directory but excludes
-# those that are tagged ".ios" or ".android"
+# those that are tagged ".ios" or ".windows"
 #
 # @author S Downie
 #
@@ -52,8 +49,8 @@ import os
 # @param Destination path
 #----------------------------------------------------------------------
 def copy_file_tree(src_path, dst_path):
-    excludes = [".ios", ".android", ".DS_Store"]
-    includes = [".windows"]
+    excludes = [".android", ".windows", ".DS_Store"]
+    includes = [".ios"]
 
     filter_func = lambda name: any(include in name for include in includes) or not any(exclude in name for exclude in excludes)
 
@@ -71,58 +68,22 @@ def copy_file_tree(src_path, dst_path):
 
 #----------------------------------------------------------------------
 # Copies the resource from CSResources and AppResources
-# into target directory.
 #
 # @author S Downie
 #
 # @param Project directory path
-# @param Target directory path
 #----------------------------------------------------------------------
-def copy_resources(project_dir, target_dir):
-    assetsDir = os.path.join(target_dir, "assets")
-
-    file_system_utils.delete_directory(assetsDir)
+def copy_resources(project_dir):
+    file_system_utils.delete_directory(os.path.join(project_dir, "XcodeBuiltAssets"))
 
     app_src_path = os.path.join(project_dir, "AppResources")
     cs_src_path = os.path.join(project_dir, "ChilliSource", "CSResources")
 
-    app_dst_path = os.path.join(assetsDir, "AppResources")
-    cs_dst_path = os.path.join(assetsDir, "CSResources")
+    app_dst_path = os.path.join(project_dir, "XcodeBuiltAssets", "AppResources")
+    cs_dst_path = os.path.join(project_dir, "XcodeBuiltAssets", "CSResources")
 
     copy_file_tree(app_src_path, app_dst_path)
     copy_file_tree(cs_src_path, cs_dst_path)
-
-#----------------------------------------------------------------------
-# Copies the libs/dlls into target directory.
-#
-# @author S Downie
-#
-# @param Project directory path
-# @param Target directory path
-#----------------------------------------------------------------------
-def copy_libs(project_dir, target_dir):
-    libs_src_path = os.path.join(project_dir, "ChilliSource", "Libraries", "Core", "Windows", "Libs")
-    dll_files = file_system_utils.get_file_paths_with_extensions(libs_src_path, ["dll"])
-
-    for dll_file in dll_files:
-        shutil.copy(dll_file, target_dir)
-
-#----------------------------------------------------------------------
-# Premulitplies all the PNGs in assets
-#
-# @author S Downie
-#
-# @param Project directory path
-# @param Target directory path
-#----------------------------------------------------------------------
-def premultiply_pngs(project_dir, target_dir):
-    assetsDir = os.path.join(target_dir, "assets")
-
-    jarFile = os.path.join(project_dir, "ChilliSource", "Tools", "PreMultipliedAlphaPNGTool.jar")
-    png_files = file_system_utils.get_file_paths_with_extensions(assetsDir, ["png"])
-
-    for png_file in png_files:
-        subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", png_file, "--output", png_file]);
 
 #----------------------------------------------------------------------
 # The entry point into the script.
@@ -132,16 +93,12 @@ def premultiply_pngs(project_dir, target_dir):
 # @param The list of arguments.
 #----------------------------------------------------------------------
 def main(args):
-    if not len(args) is 3:
-        print("ERROR: Missing project path or target path")
+    if not len(args) is 2:
+        print("ERROR: Missing project path")
         return
 
     project_dir = args[1]
-    target_dir = args[2]
-
-    copy_resources(project_dir, target_dir)
-    copy_libs(project_dir, target_dir)
-    premultiply_pngs(project_dir, target_dir)
+    copy_resources(project_dir)
 
 if __name__ == "__main__":
     main(sys.argv)

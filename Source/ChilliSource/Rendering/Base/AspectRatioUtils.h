@@ -1,7 +1,7 @@
 //
-//  ILayout.h
+//  AspectRatioUtils.h
 //  Chilli Source
-//  Created by Scott Downie on 18/04/2014.
+//  Created by S Downie on 24/06/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,73 +26,72 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_UI_LAYOUT_ILAYOUT_H_
-#define _CHILLISOURCE_UI_LAYOUT_ILAYOUT_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_ASPECTRATIOUTILS_H_
+#define _CHILLISOURCE_RENDERING_BASE_ASPECTRATIOUTILS_H_
 
 #include <ChilliSource/ChilliSource.h>
 
-#include <vector>
-
 namespace ChilliSource
 {
-    namespace UI
+    namespace Rendering
     {
-        //----------------------------------------------------------------------------------------
-        /// Interface for laying out widgets. Each widget has its own layout
+        //--------------------------------------------------------------------
+        /// Utility methods for calculating a size based on the given
+        /// size and preferred aspect ratio.
         ///
         /// @author S Downie
-        //----------------------------------------------------------------------------------------
-        class ILayout
+        //--------------------------------------------------------------------
+        namespace AspectRatioUtils
         {
-        public:
-            CS_DECLARE_NOCOPY(ILayout);
             //----------------------------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            ILayout() = default;
-            //----------------------------------------------------------------------------------------
-            /// Create the layout sizes and positions based on the current layout properties and the
-            /// owning widget.
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            virtual void BuildLayout() = 0;
-            //----------------------------------------------------------------------------------------
-            /// Get the final size of the widget that occupies the space at the given index
+            /// Aspect ratio maintaining function that keeps the original width but adapts
+            /// the height to maintain the aspect ratio
             ///
             /// @author S Downie
             ///
-            /// @param Space index
+            /// @param Original size
+            /// @param Preferred aspect ratio
             ///
-            /// @return Final absolute screen size
+            /// @return Size with aspect maintained
             //----------------------------------------------------------------------------------------
-            virtual Core::Vector2 GetSizeForIndex(u32 in_index) const = 0;
+            Core::Vector2 KeepOriginalWidthAdaptHeight(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio);
             //----------------------------------------------------------------------------------------
-            /// Get the local position of the widget that occupies the space at the given index
+            /// Aspect ratio maintaining function that keeps the original height but adapts
+            /// the width to maintain the aspect ratio
+            ///
+            /// @author S Downie
+            ///
+            /// @param Original size
+            /// @param Preferred aspect ratio
+            ///
+            /// @return Size with aspect maintained
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 KeepOriginalHeightAdaptWidth(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio);
+            //----------------------------------------------------------------------------------------
+            /// Aspect ratio maintaining function that maintains the given target aspect ratio
+            /// while ensuring the size does not DROP BELOW the original size
             ///
             /// @author S Downie
             ///
-            /// @param Space index
+            /// @param Original size
+            /// @param Preferred aspect ratio
             ///
-            /// @return Local position (aligned middle centre of the cell)
+            /// @return Size with aspect maintained
             //----------------------------------------------------------------------------------------
-            virtual Core::Vector2 GetPositionForIndex(u32 in_index) const = 0;
+            Core::Vector2 FillOriginal(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio);
             //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param The widget that owns and uses this layout
-            //----------------------------------------------------------------------------------------
-            virtual void SetWidget(Widget* in_widget) = 0;
-            //----------------------------------------------------------------------------------------
-            /// Virtual destructor
+            /// Aspect ratio maintaining function that maintains the given target aspect ratio
+            /// while ensuring the size does not EXCEED the original size
             ///
             /// @author S Downie
+            ///
+            /// @param Original size
+            /// @param Preferred aspect ratio
+            ///
+            /// @return Size with aspect maintained
             //----------------------------------------------------------------------------------------
-            virtual ~ILayout(){}
-        };
+            Core::Vector2 FitOriginal(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio);
+        }
     }
 }
 

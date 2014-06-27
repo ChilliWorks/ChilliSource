@@ -162,7 +162,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         void FileSystem::SetPackageDLCPath(const std::string& in_directoryPath)
         {
-            m_packageDLCPath = StringUtils::StandardisePath(in_directoryPath);
+            m_packageDLCPath = StringUtils::StandardiseDirectoryPath(in_directoryPath);
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------

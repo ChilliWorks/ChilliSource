@@ -31,19 +31,12 @@
 #include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/UI/Base/Canvas.h>
 
 namespace ChilliSource
 {
 	namespace Core 
 	{
-		//-----------------------------------------
-		//-----------------------------------------
-		State::State()
-        : m_canAddSystems(false)
-        , m_scene(nullptr)
-		{
-
-		}
         //-----------------------------------------
         //-----------------------------------------
         void State::Init()
@@ -51,6 +44,7 @@ namespace ChilliSource
             m_canAddSystems = true;
             //States will always have a scene by default
             m_scene = CreateSystem<Scene>();
+            m_canvas = CreateSystem<UI::Canvas>();
             CreateSystems();
             m_canAddSystems = false;
             
@@ -160,10 +154,16 @@ namespace ChilliSource
         }
 		//------------------------------------------
 		//------------------------------------------
-		Scene* State::GetScene()
+		Scene* State::GetScene() const
 		{
 			return m_scene;
 		}
+        //------------------------------------------
+        //------------------------------------------
+        UI::Canvas* State::GetUICanvas() const
+        {
+            return m_canvas;
+        }
         //------------------------------------------
         //------------------------------------------
 		bool State::IsActiveState() const 

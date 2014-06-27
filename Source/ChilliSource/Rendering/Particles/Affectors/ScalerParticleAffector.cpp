@@ -52,7 +52,6 @@ namespace ChilliSource
                 float fScale = Core::ParseF32(strTemp);
                 mvTargetScale.x = fScale;
                 mvTargetScale.y = fScale;
-                mvTargetScale.z = fScale;
             }
             //Energy level
             if(insParams.TryGetValue("AtEnergyLevel", strTemp))
@@ -105,7 +104,7 @@ namespace ChilliSource
                 mvInitialScale = in_particle.m_scale;
             }
             
-            Core::Vector3 vDiff = (mvTargetScale - mvInitialScale) * (1.0f - fEnergy);
+            Core::Vector2 vDiff = (mvTargetScale - mvInitialScale) * (1.0f - fEnergy);
             in_particle.m_scale = mvInitialScale + vDiff;
         }
     }
