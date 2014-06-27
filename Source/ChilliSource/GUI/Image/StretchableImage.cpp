@@ -42,8 +42,6 @@ namespace ChilliSource
 		DEFINE_META_CLASS(StretchableImage)
 		
 		DEFINE_PROPERTY(TextureAtlas);
-		DEFINE_PROPERTY(HeightMaintain);
-		DEFINE_PROPERTY(WidthMaintain);
 		DEFINE_PROPERTY(BaseTextureAtlasID);
 		DEFINE_PROPERTY(CentreTouchConsumption);
 		
@@ -53,7 +51,6 @@ namespace ChilliSource
         /// Empty
         //---------------------------------------------------------
         StretchableImage::StretchableImage()
-		: HeightMaintain(false), WidthMaintain(false)
         {
             
         }
@@ -63,7 +60,7 @@ namespace ChilliSource
         /// From param dictionary
         //---------------------------------------------------------
         StretchableImage::StretchableImage(const Core::ParamDictionary& insParams) 
-		: GUIView(insParams), HeightMaintain(false), WidthMaintain(false)
+		: GUIView(insParams)
         {
             std::string strValue;
             
@@ -94,28 +91,6 @@ namespace ChilliSource
 			if(insParams.TryGetValue("BaseTextureAtlasID", strValue))
             {
 				SetBaseTextureAtlasID(strValue);
-			}
-			//---Maintain Width
-			if(insParams.TryGetValue("HeightMaintain", strValue))
-			{
-				HeightMaintain = Core::ParseBool(strValue);
-			}
-			//---Maintain Height
-			if(insParams.TryGetValue("WidthMaintain", strValue))
-			{
-				WidthMaintain = Core::ParseBool(strValue);
-			}
-			//---Set Maintain Width
-			if(insParams.TryGetValue("SetHeightMaintain", strValue))
-			{
-				Core::Vector2 vSize = Core::ParseVector2(strValue);
-				SetHeightMaintainingAspect(vSize.x, vSize.y);
-			}
-			//---Set Maintain Height
-			if(insParams.TryGetValue("SetWidthMaintain", strValue))
-			{
-				Core::Vector2 vSize = Core::ParseVector2(strValue);
-				SetWidthMaintainingAspect(vSize.x, vSize.y);
 			}
         }
         //---------------------------------------------------------
@@ -258,90 +233,6 @@ namespace ChilliSource
                 // Render subviews
                 GUIView::Draw(inpCanvas);
             }
-		}
-		//--------------------------------------------------------
-		/// Set Width Maintaining Aspect
-		///
-		/// Change the width of the image and resize the height
-		/// to maintain the aspect ratio
-		///
-		/// @param Unified width
-		//--------------------------------------------------------
-		void StretchableImage::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
-		{
-            Core::Vector2 vCurrentSize = GetAbsoluteSize();
-			f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
-			SetSize(infRelWidth, 0.0f, infAbsWidth, 0.0f);
-			
-			f32 fScaleY = GetAbsoluteScale().y;
-			if(fScaleY == 0.0f)
-				return;
-			
-			vCurrentSize = GetAbsoluteSize();
-            f32 fAbsHeight = (fAspectRatio * vCurrentSize.x) / fScaleY;
-			SetSize(infRelWidth, 0.0f, infAbsWidth, fAbsHeight);
-		}
-		//--------------------------------------------------------
-		/// Set Height Maintaining Aspect
-		///
-		/// Change the height of the image and resize the width
-		/// to maintain the aspect ratio
-		///
-		/// @param Unified height
-		//--------------------------------------------------------
-		void StretchableImage::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
-		{
-            Core::Vector2 vCurrentSize = GetAbsoluteSize();
-			f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
-			SetSize(0.0f, infRelHeight, 0.0f, infAbsHeight);
-			
-			f32 fScaleX = GetAbsoluteScale().x;
-			if(fScaleX == 0.0f)
-				return;
-			
-			vCurrentSize = GetAbsoluteSize();
-            f32 fAbsWidth = (fAspectRatio * vCurrentSize.y) / fScaleX;
-			SetSize(0.0f, infRelHeight, fAbsWidth, infAbsHeight);
-		}
-		//--------------------------------------------------------
-		/// Enable Height Maintaining Aspect
-		///
-		/// Enables auto scaling of the height to maintain the aspect ratio
-		///
-		/// @param boolean to disable or enable
-		//--------------------------------------------------------
-		void StretchableImage::EnableHeightMaintainingAspect(bool inbEnabled)
-		{
-			HeightMaintain = inbEnabled;
-		}
-		//--------------------------------------------------------
-		/// Enable Width Maintaining Aspect
-		///
-		/// Enables auto scaling of the height to maintain the aspect ratio
-		///
-		/// @param boolean to disable or enable
-		//--------------------------------------------------------
-		void StretchableImage::EnableWidthMaintainingAspect(bool inbEnabled)
-		{
-			WidthMaintain = inbEnabled;            
-		}
-		//--------------------------------------------------------
-		/// Is Width Maintaining Aspect Enabled
-		///
-		/// @return auto scaling of the Width to maintain the aspect ratio
-		//--------------------------------------------------------
-		bool StretchableImage::IsWidthMaintainingAspectEnabled() const
-		{
-			return WidthMaintain;
-		}
-		//--------------------------------------------------------
-		/// Is Height Maintaining Aspect Enabled
-		///
-		/// @return auto scaling of the height to maintain the aspect ratio
-		//--------------------------------------------------------
-		bool StretchableImage::IsHeightMaintainingAspectEnabled() const
-		{
-			return HeightMaintain;
 		}
         
         void StretchableImage::CalculatePatchPositions()
