@@ -201,6 +201,7 @@ public final class AndroidManifestBuilder
 		output = output.replace("[[FACEBOOKAPPID]]", in_userData.m_facebookAppId);
 		output = output.replace("[[DEBUGGABLE]]", in_userData.m_debuggable);
 		output = output.replace("[[MANIFESTEXTRA]]", in_userData.m_manifestExtra);
+		output = output.replace("[[APPLICATIONEXTRA]]", in_userData.m_applicationExtra);
 		
 		return output;
 	}
