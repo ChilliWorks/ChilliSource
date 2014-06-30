@@ -65,10 +65,10 @@ namespace ChilliSource
 			///
 			/// @author S Downie
 			///
-			/// @param Keys
-			/// @param Values - list of strings containing UTF8 codepoints
+			/// @param A map containing the localised text. The text is in UTF-8
+            /// format.
 			//---------------------------------------------------------------------
-			void Build(const std::vector<std::string>& in_keys, const std::vector<std::string>& in_values);
+			void Build(const std::unordered_map<std::string, std::string>& in_textMap);
             //---------------------------------------------------------------------
 			/// @author S Downie
 			///
