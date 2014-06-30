@@ -158,6 +158,7 @@ namespace ChilliSource
         : m_uvs(0.0f, 0.0f, 1.0f, 1.0f)
 		{
             m_sizePolicyDelegate = k_sizeDelegates[(u32)SizePolicy::k_none];
+			UpdateVertexUVs(m_uvs);
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
