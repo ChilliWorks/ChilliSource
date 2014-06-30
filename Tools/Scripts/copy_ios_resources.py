@@ -76,7 +76,7 @@ def copy_file_tree(src_path, dst_path):
 def copy_resources(project_dir):
     file_system_utils.delete_directory(os.path.join(project_dir, "XcodeBuiltAssets"))
 
-    app_src_path = os.path.join(project_dir, "AppResources")
+    app_src_path = os.path.join(project_dir, "Content", "AppResources")
     cs_src_path = os.path.join(project_dir, "ChilliSource", "CSResources")
 
     app_dst_path = os.path.join(project_dir, "XcodeBuiltAssets", "AppResources")

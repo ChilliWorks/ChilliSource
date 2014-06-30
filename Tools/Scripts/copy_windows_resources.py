@@ -83,7 +83,7 @@ def copy_resources(project_dir, target_dir):
 
     file_system_utils.delete_directory(assetsDir)
 
-    app_src_path = os.path.join(project_dir, "AppResources")
+    app_src_path = os.path.join(project_dir, "Content", "AppResources")
     cs_src_path = os.path.join(project_dir, "ChilliSource", "CSResources")
 
     app_dst_path = os.path.join(assetsDir, "AppResources")
