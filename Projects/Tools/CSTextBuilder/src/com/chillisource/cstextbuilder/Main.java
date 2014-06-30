@@ -106,7 +106,7 @@ public class Main
 			Logging.logFatal("Must provide input and output file paths and a language.");
 		}
 		
-		TextExtractor.Start(options);
+		CSTextBuilder.run(options);
 		
 		Logging.finish();
 	}

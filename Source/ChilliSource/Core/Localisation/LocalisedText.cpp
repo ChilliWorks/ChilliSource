@@ -50,15 +50,9 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------------------
 		//---------------------------------------------------------------------
-		void LocalisedText::Build(const std::vector<std::string>& in_keys, const std::vector<std::string>& in_values)
+		void LocalisedText::Build(const std::unordered_map<std::string, std::string>& in_textMap)
 		{
-			CS_ASSERT(in_keys.size() == in_values.size(), "Localised text must have equal numbers of keys and values");
-
-			u32 numTexts = in_keys.size();
-			for (u32 i = 0; i < numTexts; ++i)
-			{
-				m_text.insert(std::make_pair(in_keys[i], in_values[i]));
-			}
+			m_text = in_textMap;
 		}
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------

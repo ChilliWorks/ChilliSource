@@ -30,8 +30,11 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
+#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
+
+#include <json/json.h>
 
 namespace ChilliSource
 {
@@ -39,81 +42,9 @@ namespace ChilliSource
 	{
 		namespace
 		{
+            const u32 k_version = 1;
 			const std::string k_fileExtension("cstext");
-            const std::string k_idFileExtension("cstextid");
-
-            //----------------------------------------------------
-			/// Loads the localised text file and parses it into
-            /// individual text lines. Replaces any new-line characters
-            /// with a standardised '\n'
-			///
-			/// @author S Downie
-			///
-			/// @param Valid file stream
-			/// @param [Out] The text split into lines of UTF8 codepoints
-			//----------------------------------------------------
-            void LoadLocalisedText(FileStreamSPtr& in_fileStream, std::vector<std::string>& out_text)
-			{
-				// Read file
-				std::string fileBuffer;
-				in_fileStream->GetAll(fileBuffer);
-				in_fileStream->Close();
-                
-				std::string strTextLine;
-	
-				for (auto it = fileBuffer.begin(); it != fileBuffer.end(); ++it)
-				{
-					u8 byChar = *it;
-					bool bNewLine = false;
-                    
-					//insure that windows evil "\n\r" doesnt cause any problems
-					if (byChar == '\n')
-					{
-						auto itNext = it + 1;
-						if (itNext != fileBuffer.end())
-						{
-							if (*itNext == '\r')
-							{
-								it++;
-							}
-						}
-						bNewLine = true;
-					}
-					else if (byChar == '\r')
-					{
-						auto itNext = it + 1;
-						if (itNext != fileBuffer.end())
-						{
-							if (*itNext == '\n')
-							{
-								it++;
-							}
-						}
-						bNewLine = true;
-					}
-                    
-					if (!bNewLine)
-					{
-						//We concatenate any '\''n' into '\n' at this point
-						if (byChar == '\\')
-						{
-							//Peek ahead for an n
-							if ((it + 1) != fileBuffer.end() && *(it + 1) == 'n')
-							{
-								byChar = '\n';
-								//Skip the 'n' character
-								++it;
-							}
-						}
-						strTextLine += byChar;
-					}
-					else
-					{
-                        out_text.push_back(strTextLine);
-						strTextLine.clear();
-					}
-				}
-			}
+            
 			//----------------------------------------------------
 			/// Performs the heavy lifting for the 2 create methods
 			/// by loading the keys and text files into a single resource
@@ -129,52 +60,40 @@ namespace ChilliSource
 			{
                 LocalisedText* textResource((LocalisedText*)out_resource.get());
                 
-                //---Load the file that contains the keys from the same directory. (TODO: Turn this into a single resource i.e. a zip file containing the keys and texts)
-                std::string filePathNoExtension;
-                std::string fileExtension;
-                Core::StringUtils::SplitBaseFilename(in_filePath, filePathNoExtension, fileExtension);
-                std::string idFilePath = filePathNoExtension + "." + k_idFileExtension;
+                Json::Value jsonRoot;
+                CSCore::Utils::ReadJson(in_storageLocation, in_filePath, &jsonRoot);
+                auto jsonVersion = jsonRoot.get("Version", Json::nullValue);
+                auto jsonText = jsonRoot.get("Text", Json::nullValue);
                 
-				FileStreamSPtr keyFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, idFilePath, FileMode::k_read);
-                if (keyFile == nullptr || keyFile->IsBad())
-				{
-                    CS_LOG_ERROR("Failed to load localised text due to missing file: " + idFilePath);
-                    textResource->SetLoadState(Resource::LoadState::k_failed);
-                    if(in_delegate != nullptr)
-                    {
-                        Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
-                    }
-					return;
-				}
-                
-                std::vector<std::string> keys;
-                std::string key;
-                while(keyFile->EndOfFile() == false)
+                if (jsonVersion.isNull() || jsonText.isNull())
                 {
-                    keyFile->GetLine(key);
-                    if(key.empty() == false)
-                    {
-                        keys.push_back(std::move(key));
-                    }
-                }
-
-                //---Load the file that contains the text
-				FileStreamSPtr textFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_read);
-                if (textFile == nullptr || textFile->IsBad() == true)
-				{
-                    CS_LOG_ERROR("Failed to load localised text due to missing file: " + in_filePath);
+                    CS_LOG_ERROR("Cannot read cstext file: " + in_filePath);
                     textResource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
                         Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                     }
                     return;
-				}
+                }
                 
-                std::vector<std::string> values;
-				LoadLocalisedText(textFile, values);
+                if (jsonVersion.asInt() != k_version)
+                {
+                    CS_LOG_ERROR("Invalid cstext file version: " + in_filePath);
+                    textResource->SetLoadState(Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    }
+                    return;
+                }
                 
-                textResource->Build(keys, values);
+                std::unordered_map<std::string, std::string> map;
+                for (const auto& member : jsonText.getMemberNames())
+                {
+                    map.emplace(member, jsonText[member].asString());
+                }
+                
+                textResource->Build(map);
                 textResource->SetLoadState(Resource::LoadState::k_loaded);
                 
                 if(in_delegate != nullptr)
