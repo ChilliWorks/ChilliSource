@@ -136,6 +136,18 @@ public final class AndroidManifestBuilder
 				output.m_debuggable = debuggableNode.getNodeValue();
 			}
 			
+			Node facebookAppIdNode = root.getAttributes().getNamedItem("facebookAppId");
+			if (facebookAppIdNode != null)
+			{
+				output.m_facebookAppId = facebookAppIdNode.getNodeValue();
+			}
+			
+			Node googlePlayProjectIdNode = root.getAttributes().getNamedItem("googlePlayProjectId");
+			if (googlePlayProjectIdNode != null)
+			{
+				output.m_googlePlayProjectId = googlePlayProjectIdNode.getNodeValue();
+			}
+			
 			output.m_manifestExtra = getElementContentAsString(xmlString, "manifest-extra");
 			output.m_applicationExtra = getElementContentAsString(xmlString, "application-extra");
 		}
@@ -185,9 +197,10 @@ public final class AndroidManifestBuilder
 		output = output.replace("[[VERSIONNAME]]", in_userData.m_versionName);
 		output = output.replace("[[MINSDKVERSION]]", in_userData.m_minSdkVersion);
 		output = output.replace("[[TARGETSDKVERSION]]", in_userData.m_targetSdkVersion);
+		output = output.replace("[[GOOGLEPLAYPROJECTID]]", in_userData.m_googlePlayProjectId);
+		output = output.replace("[[FACEBOOKAPPID]]", in_userData.m_facebookAppId);
 		output = output.replace("[[DEBUGGABLE]]", in_userData.m_debuggable);
 		output = output.replace("[[MANIFESTEXTRA]]", in_userData.m_manifestExtra);
-		output = output.replace("[[APPLICATIONEXTRA]]", in_userData.m_applicationExtra);
 		
 		return output;
 	}

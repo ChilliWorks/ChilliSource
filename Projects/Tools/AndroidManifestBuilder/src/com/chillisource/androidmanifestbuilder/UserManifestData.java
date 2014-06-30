@@ -43,4 +43,6 @@ public final class UserManifestData
 	public String m_debuggable = "false";
 	public String m_manifestExtra = "";
 	public String m_applicationExtra = "";
+	public String m_facebookAppId = "";
+	public String m_googlePlayProjectId = "";
 }

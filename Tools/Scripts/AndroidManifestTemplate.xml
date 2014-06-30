@@ -97,7 +97,7 @@ THE SOFTWARE.
             	  android:configChanges="keyboard|keyboardHidden|orientation|mcc|mnc|locale|touchscreen|navigation|fontScale|screenSize" />
 
         <!-- Google Play remote notifications -->
-        <meta-data android:name="GoogleProjectID" android:value="[[GOOGLEPLATPROJECTID]]" />
+        <meta-data android:name="GoogleProjectID" android:value="[[GOOGLEPLAYPROJECTID]]" />
         <service android:name="com.chillisource.googleplay.CRemoteNotificationService" />
         <receiver android:name="com.chillisource.googleplay.GooglePlayAlarmReceiver" />
         <receiver android:name="com.chillisource.googleplay.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
