@@ -1270,7 +1270,7 @@ namespace ChilliSource
         void GUIView::RotateBy(f32 infAngleInRadians)
         {
 			OnTransformChanged((u32)TransformCache::k_transform);
-            Rotation += infAngleInRadians;
+            Rotation -= infAngleInRadians;
         }
         //------------------------------------------------------
         /// Set Size
@@ -1408,9 +1408,9 @@ namespace ChilliSource
 		//------------------------------------------------------
 		const f32 GUIView::GetAbsoluteRotation() const
 		{
-			if (mpParentView && !RotatedWithParent)
+			if (mpParentView && RotatedWithParent)
 			{
-				return Rotation - mpParentView->GetAbsoluteRotation();
+				return Rotation + mpParentView->GetAbsoluteRotation();
 			}
 			
 			return Rotation;
@@ -1548,6 +1548,17 @@ namespace ChilliSource
         {
             return m_screen;
         }
+		//-----------------------------------------------------
+		//------------------------------------------------------
+		const f32 GUIView::GetParentSpaceRotation() const
+		{
+			if (mpParentView && !RotatedWithParent)
+			{
+				return Rotation - mpParentView->GetParentSpaceRotation();
+			}
+			
+			return Rotation;
+		}
         //-----------------------------------------------------
         /// Get Transform
         ///
@@ -1560,7 +1571,7 @@ namespace ChilliSource
 				if(mpParentView)
 				{
 					//Create our transform without respect to our parent
-					Core::Matrix3 matTrans = Core::Matrix3::CreateTransform(GetAbsolutePosition(), Core::Vector2::k_one, GetAbsoluteRotation());
+					Core::Matrix3 matTrans = Core::Matrix3::CreateTransform(GetAbsolutePosition(), Core::Vector2::k_one, GetParentSpaceRotation());
 					
 					//Apply our parents transform
 					mmatTransform = matTrans * mpParentView->GetTransform();

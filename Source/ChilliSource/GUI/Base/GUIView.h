@@ -946,6 +946,15 @@ namespace ChilliSource
 			/// attached to root window.
 			//-----------------------------------------------------
 			void LayoutChildrensContent();
+            //-----------------------------------------------------
+            /// Get Absolute Rotation
+			///
+			/// Rotation in parent views space. This is the cumulated
+			/// rotation of the view hierarchy.
+			///
+			/// @return Cumulated rotation of the parent hierarchy
+            //------------------------------------------------------
+            const f32 GetParentSpaceRotation() const;
 		private:
 
 
