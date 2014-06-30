@@ -116,7 +116,7 @@ def copy_jars(project_dir):
 # @param Project directory path
 #----------------------------------------------------------------------
 def premultiply_pngs(project_dir):
-    jarFile = os.path.join(project_dir, "ChilliSource", "Tools", "PreMultipliedAlphaPNGTool.jar")
+    jarFile = os.path.join(project_dir, "ChilliSource", "Tools", "PNGAlphaPremultiplier.jar")
     png_files = file_system_utils.get_file_paths_with_extensions(os.path.join(project_dir, "assets"), ["png"])
 
     for png_file in png_files:
@@ -130,7 +130,7 @@ def premultiply_pngs(project_dir):
 # @param Project directory path
 #----------------------------------------------------------------------
 def build_manifest(project_dir):
-    jarFile = os.path.join(project_dir, "ChilliSource", "Tools", "AndroidManifestGenerator.jar")
+    jarFile = os.path.join(project_dir, "ChilliSource", "Tools", "AndroidManifestBuilder.jar")
     userManifest = os.path.join(project_dir, "CSAndroidManifest.xml")
     templateManifest = os.path.join(project_dir, "ChilliSource", "Tools", "Scripts", "AndroidManifestTemplate.xml")
     outputManifest = os.path.join(project_dir, "AndroidManifest.xml")

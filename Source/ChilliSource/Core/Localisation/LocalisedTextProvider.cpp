@@ -39,7 +39,8 @@ namespace ChilliSource
 	{
 		namespace
 		{
-			const std::string k_fileExtension("id");
+			const std::string k_fileExtension("cstext");
+            const std::string k_idFileExtension("cstextid");
 
             //----------------------------------------------------
 			/// Loads the localised text file and parses it into
@@ -129,10 +130,15 @@ namespace ChilliSource
                 LocalisedText* textResource((LocalisedText*)out_resource.get());
                 
                 //---Load the file that contains the keys from the same directory. (TODO: Turn this into a single resource i.e. a zip file containing the keys and texts)
-				FileStreamSPtr keyFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_read);
+                std::string filePathNoExtension;
+                std::string fileExtension;
+                Core::StringUtils::SplitBaseFilename(in_filePath, filePathNoExtension, fileExtension);
+                std::string idFilePath = filePathNoExtension + "." + k_idFileExtension;
+                
+				FileStreamSPtr keyFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, idFilePath, FileMode::k_read);
                 if (keyFile == nullptr || keyFile->IsBad())
 				{
-                    CS_LOG_ERROR("Failed to load localised text due to missing file: " + in_filePath);
+                    CS_LOG_ERROR("Failed to load localised text due to missing file: " + idFilePath);
                     textResource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
@@ -153,29 +159,16 @@ namespace ChilliSource
                 }
 
                 //---Load the file that contains the text
-                std::string fileName;
-                std::string fileExtension;
-                std::string basePath;
-                Core::StringUtils::SplitFullFilename(in_filePath, fileName, fileExtension, basePath);
-                
-                std::string localisedFilePath(basePath + Application::Get()->GetSystem<Core::Device>()->GetLanguage() + ".mofloloca");
-				FileStreamSPtr textFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, localisedFilePath, FileMode::k_read);
+				FileStreamSPtr textFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_read);
                 if (textFile == nullptr || textFile->IsBad() == true)
 				{
-                    //Default to english
-                    CS_LOG_ERROR("Failed to load localised text for language " + Application::Get()->GetSystem<Core::Device>()->GetLanguage() + ". Defaulting to English");
-                    
-                    textFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, basePath + "en.mofloloca", FileMode::k_read);
-                    if (textFile == nullptr || textFile->IsBad() == true)
+                    CS_LOG_ERROR("Failed to load localised text due to missing file: " + in_filePath);
+                    textResource->SetLoadState(Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
                     {
-                        CS_LOG_ERROR("Failed to load localised text due to missing file: " + basePath + "en.mofloloca");
-                        textResource->SetLoadState(Resource::LoadState::k_failed);
-                        if(in_delegate != nullptr)
-                        {
-                            Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
-                        }
-                        return;
+                        Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                     }
+                    return;
 				}
                 
                 std::vector<std::string> values;
