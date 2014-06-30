@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_CORE_SCENE_SCENE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/System/StateSystem.h>
@@ -106,6 +107,18 @@ namespace ChilliSource
 			/// @return the list of all the entities in the scene.
 			//-------------------------------------------------------
 			const SharedEntityList& GetEntities() const;
+            //------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @param Screen clear colour
+			//------------------------------------------------------
+			void SetClearColour(const Core::Colour& in_colour);
+			//------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return Screen clear colour
+			//------------------------------------------------------
+			const Core::Colour& GetClearColour() const;
 			//-------------------------------------------------------
             /// The scene is now at the forefront and the window
             /// should listen for input
@@ -216,6 +229,8 @@ namespace ChilliSource
 			GUI::WindowUPtr m_rootWindow;
 			
 			SharedEntityList m_entities;
+            
+            Colour m_clearColour;
 		};		
 	}
 }

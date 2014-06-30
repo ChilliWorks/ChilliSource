@@ -184,8 +184,9 @@ namespace ChilliSource
             /// Render the UI views to screen space
             ///
             /// @param Root window
+            /// @param Screen clear colour
 			//----------------------------------------------------------
-			void RenderUI(GUI::Window* inpWindow);
+			void RenderUI(GUI::Window* inpWindow, const Core::Colour& in_clearColour);
             //----------------------------------------------------------
             /// Render Scene To Target
             ///

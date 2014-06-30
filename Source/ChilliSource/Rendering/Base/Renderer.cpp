@@ -178,7 +178,7 @@ namespace ChilliSource
             if(mpActiveCamera)
             {
                 //Apply the world view projection matrix
-                mpRenderSystem->ApplyCamera(mpActiveCamera->GetEntity()->GetTransform().GetWorldPosition(), mpActiveCamera->GetView(), mpActiveCamera->GetProjection(), mpActiveCamera->GetClearColour());
+                mpRenderSystem->ApplyCamera(mpActiveCamera->GetEntity()->GetTransform().GetWorldPosition(), mpActiveCamera->GetView(), mpActiveCamera->GetProjection(), inpScene->GetClearColour());
                 //Calculate the view-projection matrix as we will need it for sorting
 				matViewProjCache = mpActiveCamera->GetView() * mpActiveCamera->GetProjection();
                 
@@ -235,7 +235,7 @@ namespace ChilliSource
                 Render(mpActiveCamera, ShaderPass::k_ambient, aCameraTransparentCache);
                 
                 mpRenderSystem->SetLight(nullptr);
-                RenderUI(inpScene->GetWindow());
+                RenderUI(inpScene->GetWindow(), inpScene->GetClearColour());
                 
                 //Present contents of buffer to screen
                 if (inpRenderTarget != nullptr)
@@ -251,7 +251,7 @@ namespace ChilliSource
                 mpRenderSystem->BeginFrame(inpRenderTarget);
                 
                 mpRenderSystem->SetLight(nullptr);
-                RenderUI(inpScene->GetWindow());
+                RenderUI(inpScene->GetWindow(), inpScene->GetClearColour());
                 
                 //Present contents of buffer to screen
                 if (inpRenderTarget != nullptr)
@@ -401,9 +401,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render UI
         //----------------------------------------------------------
-        void Renderer::RenderUI(GUI::Window* inpWindow)
+        void Renderer::RenderUI(GUI::Window* inpWindow, const Core::Colour& in_clearColour)
         {
-            mpRenderSystem->ApplyCamera(Core::Vector3::k_zero, Core::Matrix4::k_identity, CreateOverlayProjection(inpWindow), Core::Colour::k_cornflowerBlue);
+            mpRenderSystem->ApplyCamera(Core::Vector3::k_zero, Core::Matrix4::k_identity, CreateOverlayProjection(inpWindow), in_clearColour);
 			m_canvas->Render(inpWindow);
         }
         //----------------------------------------------------------

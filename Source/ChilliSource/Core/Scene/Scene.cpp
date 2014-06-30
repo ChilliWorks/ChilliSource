@@ -139,6 +139,18 @@ namespace ChilliSource
 		{
 			return m_entities;
 		}
+        //------------------------------------------------------
+		//------------------------------------------------------
+		void Scene::SetClearColour(const Core::Colour& in_colour)
+		{
+			m_clearColour = in_colour;
+		}
+		//------------------------------------------------------
+		//------------------------------------------------------
+		const Core::Colour& Scene::GetClearColour() const
+		{
+			return m_clearColour;
+		}
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
 		void Scene::QuerySceneForIntersection(const Ray &in_ray, std::vector<VolumeComponent*>& out_volumeComponents)
