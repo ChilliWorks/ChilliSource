@@ -40,7 +40,7 @@ namespace ChilliSource
 		//==================================================
 		/// Description:
 		///
-		/// Does a pre-pass on the scene to convert moFlo
+		/// Does a pre-pass on the scene to convert Chilli Source
 		/// components to plain data for the render system
 		//==================================================
 		class Renderer final : public Core::AppSystem

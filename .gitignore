@@ -22,3 +22,6 @@ Projects/Tools/FontTool/bin
 *xcuserdata
 Projects/Tools/AndroidManifestGenerator/bin
 *.class
+Projects/Tools/CSFontMaker/bin
+Projects/Tools/CSFontMaker/obj
+Thumbs.db
