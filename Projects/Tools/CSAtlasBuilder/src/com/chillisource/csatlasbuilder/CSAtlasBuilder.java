@@ -32,9 +32,10 @@ import java.io.*;
 
 import javax.imageio.*;
 
+import com.chillisource.pngtocsimage.PNGToCSImage;
+import com.chillisource.pngtocsimage.PNGToCSImageOptions;
 import com.chillisource.texturepackerutils.PackedTexture;
 import com.chillisource.texturepackerutils.TexturePacker;
-import com.chillisource.toolutils.ExternalProcess;
 import com.chillisource.toolutils.LittleEndianOutputStream;
 import com.chillisource.toolutils.FileUtils;
 import com.chillisource.toolutils.Logging;
@@ -207,56 +208,37 @@ public class CSAtlasBuilder
 	{
 		Logging.logVerbose("Converting to CSImage");
 		
-		LinkedList<String> commands = new LinkedList<String>();
-		commands.add("java");
-		commands.add("-Djava.awt.headless=true");
-		commands.add("-jar");
-		commands.add(FileUtils.getPathToHere() + "PNGToCSImage.jar");
-		
-		commands.add("--input");
-		commands.add(StringUtils.removeExtension(m_options.m_outputFilePath) + ".png");
-		
-		commands.add("--output");
-		commands.add(StringUtils.removeExtension(m_options.m_outputFilePath) + ".csimage");
+		PNGToCSImageOptions options = new PNGToCSImageOptions();
+		options.strInputFilename = StringUtils.removeExtension(m_options.m_outputFilePath) + ".png";
+		options.strOutputFilename = StringUtils.removeExtension(m_options.m_outputFilePath) + ".csimage";
 		
 		if (m_options.m_imageCompression.length() > 0)
 		{
-			commands.add("--compression");
-			commands.add(m_options.m_imageCompression);
+			options.eCompressionType = PNGToCSImage.convertStringToCompressionFormat(m_options.m_imageCompression);
 		}
 		
 		if (m_options.m_imageFormat.length() > 0)
 		{
-			commands.add("--convert");
-			commands.add(m_options.m_imageFormat);
+			options.eConversionType = PNGToCSImage.convertStringToConversionFormat(m_options.m_imageFormat);
 		}
 		
 		if (m_options.m_imageDither == true)
 		{
-			commands.add("--dither");
+			options.bDither = true;
 		}
 		
-		if (m_options.m_imagePremultiplyAlpha == true)
+		if (m_options.m_imagePremultiplyAlpha == false)
 		{
-			commands.add("--disablepremultipliedalpha");
+			options.bPremultiply = false;
 		}
 		
-		ExternalProcess csImageConversion = new ExternalProcess();
-		csImageConversion.run(commands);
-		
-		for (String message : csImageConversion.getMessages())
+		try
 		{
-			Logging.logVerbose(message);
+			PNGToCSImage.run(options);
 		}
-		
-		for (String message : csImageConversion.getWarnings())
+		catch (Exception e)
 		{
-			Logging.logWarning(message);
-		}
-		
-		for (String message : csImageConversion.getErrors())
-		{
-			Logging.logError(message);
+			Logging.logVerbose("An exception occurred while converting to CSImage:\n" + StringUtils.convertExceptionToString(e));
 		}
 		
 		FileUtils.deleteFile(StringUtils.removeExtension(m_options.m_outputFilePath) + ".png");

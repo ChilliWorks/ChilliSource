@@ -411,33 +411,6 @@ public class FileUtils
 		return strChecksum;
 	}
 	/**
-	 * @author Ian Copland
-	 * 
-	 * @return the full path to the jar file's location. Note that this does not
-	 * work if the jar is exported as a Runnable Jar, or while compiling from
-	 * eclipse.
-	 */
-	static public String getPathToHere()
-	{
-		String strPathToHere = "";
-		try
-		{
-			final File file = new File(FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-			String jarPath = StringUtils.standardiseFilePath(file.getAbsolutePath());
-			
-			int slashIndex = jarPath.lastIndexOf('/');
-			if (slashIndex != -1)
-			{
-				strPathToHere = jarPath.substring(0, slashIndex + 1);
-			}
-		}
-		catch (Exception e)
-		{
-			Logging.logError("Failed to get path to here.");
-		}
-		return strPathToHere;
-	}
-	/**
 	 * Returns all the filenames in the given directory. Files names include 
 	 * the input directory.
 	 * 

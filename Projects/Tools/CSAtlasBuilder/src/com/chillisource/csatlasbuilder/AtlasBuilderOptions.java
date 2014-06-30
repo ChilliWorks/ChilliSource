@@ -39,8 +39,8 @@ public class AtlasBuilderOptions
 	public int m_fixedHeight = -1;
 	public int[] m_validHeights = new int[0];
 	public int[] m_validWidths = new int[0];
-	public int m_maxWidth = -1;
-	public int m_maxHeight = -1;
+	public int m_maxWidth = 2048;
+	public int m_maxHeight = 2048;
 	public int m_divisibleBy = 1;
 	public boolean m_crop = true;
 	public int m_padding = 0;

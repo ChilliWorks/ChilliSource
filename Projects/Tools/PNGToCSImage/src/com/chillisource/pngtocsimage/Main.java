@@ -82,7 +82,7 @@ public class Main
 			else if(arguments[i].equalsIgnoreCase("-ct") == true || arguments[i].equalsIgnoreCase("--convert") == true)
 			{
 				if (i + 1 < arguments.length)
-					options.eConversionType = ConvertStringToConversionFormat(arguments[i + 1]);
+					options.eConversionType = PNGToCSImage.convertStringToConversionFormat(arguments[i + 1]);
 				else
 					Logging.logFatal("No conversion type provided!");
 				i++;
@@ -92,7 +92,7 @@ public class Main
 			else if(arguments[i].equalsIgnoreCase("-cta") == true || arguments[i].equalsIgnoreCase("--convertalpha") == true)
 			{
 				if (i + 1 < arguments.length)
-					options.eConversionAlphaType = ConvertStringToConversionFormat(arguments[i + 1]);
+					options.eConversionAlphaType = PNGToCSImage.convertStringToConversionFormat(arguments[i + 1]);
 				else
 					Logging.logFatal("No conversion type provided!");
 				i++;
@@ -102,7 +102,7 @@ public class Main
 			else if(arguments[i].equalsIgnoreCase("-ctna") == true || arguments[i].equalsIgnoreCase("--convertnoalpha") == true)
 			{
 				if (i + 1 < arguments.length)
-					options.eConversionNoAlphaType = ConvertStringToConversionFormat(arguments[i + 1]);
+					options.eConversionNoAlphaType = PNGToCSImage.convertStringToConversionFormat(arguments[i + 1]);
 				else
 					Logging.logFatal("No conversion type provided!");
 				i++;
@@ -112,7 +112,7 @@ public class Main
 			else if(arguments[i].equalsIgnoreCase("-cn") == true || arguments[i].equalsIgnoreCase("--compression") == true)
 			{
 				if (i + 1 < arguments.length)
-					options.eCompressionType = ConvertStringToCompressionFormat(arguments[i + 1]);
+					options.eCompressionType = PNGToCSImage.convertStringToCompressionFormat(arguments[i + 1]);
 				else
 					Logging.logFatal("No compression type provided!");
 				i++;
@@ -150,7 +150,7 @@ public class Main
 		if (options.strOutputFilename.equals(""))
 			Logging.logFatal("No output file provided.");
 		
-		PNGToCSImage.Run(options);
+		PNGToCSImage.run(options);
 
 		Logging.finish();
 	}
@@ -190,45 +190,5 @@ public class Main
 		Logging.logVerbose(" " + Logging.k_loggingLevelError + ": Only log errors.");
 		Logging.logVerbose(" " + Logging.k_loggingLevelWarning + ": Log errors and warnings.");
 		Logging.logVerbose(" " + Logging.k_loggingLevelVerbose + ": Log all messages.");
-	}
-	//------------------------------------------------------
-	/// Convert String To Conversion Format
-	///
-	/// @return the Conversion Format equivalent to the given
-	/// string.
-	//------------------------------------------------------
-	public static PNGToCSImageOptions.OUTPUT_FORMAT ConvertStringToConversionFormat(String instrString)
-	{
-		if (instrString.equalsIgnoreCase("L8") == true)
-			return PNGToCSImageOptions.OUTPUT_FORMAT.L8;
-		if (instrString.equalsIgnoreCase("LA88") == true)
-			return PNGToCSImageOptions.OUTPUT_FORMAT.LA88;
-		if (instrString.equalsIgnoreCase("RGB565") == true)
-			return PNGToCSImageOptions.OUTPUT_FORMAT.RGB565;
-		if (instrString.equalsIgnoreCase("RGBA4444") == true)
-			return PNGToCSImageOptions.OUTPUT_FORMAT.RGBA4444;
-		if (instrString.equalsIgnoreCase("RGB888") == true)
-			return PNGToCSImageOptions.OUTPUT_FORMAT.RGB888;
-		if (instrString.equalsIgnoreCase("RGBA8888") == true)
-			return PNGToCSImageOptions.OUTPUT_FORMAT.RGBA8888;
-		
-		Logging.logWarning("No valid conversion format found. Will default to the image's format.");
-		return PNGToCSImageOptions.OUTPUT_FORMAT.NONE;
-	}
-	//------------------------------------------------------
-	/// Convert String To Compression Format
-	///
-	/// @return the Conversion Format equivalent to the given
-	/// string.
-	//------------------------------------------------------
-	public static PNGToCSImageOptions.COMPRESSION_FORMAT ConvertStringToCompressionFormat(String instrString)
-	{
-		if (instrString.equalsIgnoreCase("Default"))
-			return PNGToCSImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB;
-		else if (instrString.equalsIgnoreCase("None"))
-			return PNGToCSImageOptions.COMPRESSION_FORMAT.NONE;
-		
-		Logging.logWarning("No valid compression format found. Image will not be compressed.");
-		return PNGToCSImageOptions.COMPRESSION_FORMAT.NONE;
 	}
 }

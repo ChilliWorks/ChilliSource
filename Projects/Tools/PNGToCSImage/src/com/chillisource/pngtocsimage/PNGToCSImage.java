@@ -58,12 +58,52 @@ public class PNGToCSImage
 	
 	private static long mPNGFileSize = 0;
 	
+	//------------------------------------------------------
+	/// Convert String To Conversion Format
+	///
+	/// @return the Conversion Format equivalent to the given
+	/// string.
+	//------------------------------------------------------
+	public static PNGToCSImageOptions.OUTPUT_FORMAT convertStringToConversionFormat(String instrString)
+	{
+		if (instrString.equalsIgnoreCase("L8") == true)
+			return PNGToCSImageOptions.OUTPUT_FORMAT.L8;
+		if (instrString.equalsIgnoreCase("LA88") == true)
+			return PNGToCSImageOptions.OUTPUT_FORMAT.LA88;
+		if (instrString.equalsIgnoreCase("RGB565") == true)
+			return PNGToCSImageOptions.OUTPUT_FORMAT.RGB565;
+		if (instrString.equalsIgnoreCase("RGBA4444") == true)
+			return PNGToCSImageOptions.OUTPUT_FORMAT.RGBA4444;
+		if (instrString.equalsIgnoreCase("RGB888") == true)
+			return PNGToCSImageOptions.OUTPUT_FORMAT.RGB888;
+		if (instrString.equalsIgnoreCase("RGBA8888") == true)
+			return PNGToCSImageOptions.OUTPUT_FORMAT.RGBA8888;
+		
+		Logging.logWarning("No valid conversion format found. Will default to the image's format.");
+		return PNGToCSImageOptions.OUTPUT_FORMAT.NONE;
+	}
+	//------------------------------------------------------
+	/// Convert String To Compression Format
+	///
+	/// @return the Conversion Format equivalent to the given
+	/// string.
+	//------------------------------------------------------
+	public static PNGToCSImageOptions.COMPRESSION_FORMAT convertStringToCompressionFormat(String instrString)
+	{
+		if (instrString.equalsIgnoreCase("Default"))
+			return PNGToCSImageOptions.COMPRESSION_FORMAT.DEFAULT_ZLIB;
+		else if (instrString.equalsIgnoreCase("None"))
+			return PNGToCSImageOptions.COMPRESSION_FORMAT.NONE;
+		
+		Logging.logWarning("No valid compression format found. Image will not be compressed.");
+		return PNGToCSImageOptions.COMPRESSION_FORMAT.NONE;
+	}
 	//------------------------------------------------------------------------
 	/// Run
 	///
 	/// Converts a PNG to MoImage format based upon the given options.
 	//------------------------------------------------------------------------
-	public static void Run(PNGToCSImageOptions inOptions) throws IOException
+	public static void run(PNGToCSImageOptions inOptions) throws IOException
 	{
 		long ddwCRC = 0;
 		int dwOriginalDataSize = 0;
