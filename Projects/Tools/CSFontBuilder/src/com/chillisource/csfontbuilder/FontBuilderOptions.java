@@ -38,8 +38,8 @@ public class FontBuilderOptions
 	public int m_fixedHeight = -1;
 	public int[] m_validHeights = new int[0];
 	public int[] m_validWidths = new int[0];
-	public int m_maxWidth = -1;
-	public int m_maxHeight = -1;
+	public int m_maxWidth = 2048;
+	public int m_maxHeight = 2048;
 	public int m_divisibleBy = 1;
 	public PlacementHeuristic m_packingHeuristic = PlacementHeuristic.BOTTOMRIGHT;
 	public int m_lineHeight = 0;

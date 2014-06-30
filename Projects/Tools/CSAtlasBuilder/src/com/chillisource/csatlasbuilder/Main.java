@@ -279,7 +279,7 @@ public final class Main
 			//image premultiply alpha
 			else if (arguments[i].equalsIgnoreCase(k_paramDisablePremultipliedAlpha) == true || arguments[i].equalsIgnoreCase(k_paramDisablePremultipliedAlphaShort) == true)
 			{
-				options.m_imagePremultiplyAlpha = true;
+				options.m_imagePremultiplyAlpha = false;
 			}
 			
 			//help
