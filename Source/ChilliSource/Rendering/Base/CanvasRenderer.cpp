@@ -254,7 +254,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    CS_LOG_ERROR("Unknown character not provided by font: " + in_font->GetFilePath());
+                    CS_LOG_ERROR("Unknown character not provided by font: " + in_font->GetName());
                 }
                 
                 return result;
