@@ -58,38 +58,6 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        namespace
-        {
-            //--------------------------------------------------------
-            /// Calculate the size with the maximum dimension of 1.0
-            /// such that the aspect ratio of the given size is maintained
-            ///
-            /// @author S Downie
-            ///
-            /// @param Original size
-            ///
-            /// @return Normalised size maintaining aspect
-            //--------------------------------------------------------
-            Core::Vector2 CalculateNormalisedSizeMaintainingAspect(const Core::Vector2& in_originalSize)
-            {
-                CS_ASSERT(in_originalSize.x != 0.0f && in_originalSize.y != 0.0f, "Cannot have ZERO original size");
-                Core::Vector2 normSize;
-                
-                if(in_originalSize.x >= in_originalSize.y)
-                {
-                    normSize.x = 1.0f;
-                    normSize.y = in_originalSize.y/in_originalSize.x;
-                }
-                else
-                {
-                    normSize.x = in_originalSize.x/in_originalSize.y;
-                    normSize.y = 1.0f;
-                }
-                
-                return normSize;
-            }
-        }
-        
 		CS_DEFINE_NAMEDTYPE(RenderComponentFactory);
         
         //--------------------------------------------------------

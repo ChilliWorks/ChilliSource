@@ -66,20 +66,6 @@ namespace CSBackend
             //--------------------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param Read stream
-            ///
-            /// @return Whether the read stream still open or has it errored or closed
-            //--------------------------------------------------------------------------------------------------
-            bool IsStreamOpen(CFReadStreamRef in_readStream)
-            {
-                CFStreamStatus status = CFReadStreamGetStatus(in_readStream);
-                return (status != kCFStreamStatusError &&
-                        status != kCFStreamStatusNotOpen &&
-                        status != kCFStreamStatusClosed);
-            }
-            //--------------------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
             /// @param Request description
             ///
             /// @return New CFNetwork request message initialised based on the description
