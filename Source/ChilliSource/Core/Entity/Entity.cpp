@@ -125,34 +125,6 @@ namespace ChilliSource
                 m_scene->Remove(this);
             }
 		}
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::OnAddedToScene()
-		{
-            for (u32 i = 0; i < m_components.size(); ++i)
-            {
-                m_components[i]->OnAddedToScene();
-            }
-            
-            for (u32 i = 0; i < m_children.size(); ++i)
-            {
-                m_scene->Add(m_children[i]);
-            }
-		}
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::OnRemovedFromScene()
-		{
-            for (s32 i = m_children.size() - 1; i >= 0; --i)
-            {
-                m_scene->Remove(m_children[i].get());
-            }
-            
-            for (s32 i = m_components.size() - 1; i >= 0; --i)
-            {
-                m_components[i]->OnRemovedFromScene();
-            }
-		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
 		Entity* Entity::GetParent() 
@@ -233,6 +205,14 @@ namespace ChilliSource
             if(GetScene() != nullptr)
             {
                 in_component->OnAddedToScene();
+                if (m_appActive == true)
+                {
+                    in_component->OnResume();
+                    if (m_appForegrounded == true)
+                    {
+                        in_component->OnForeground();
+                    }
+                }
             }
 		}
 		//-------------------------------------------------------------
@@ -248,6 +228,14 @@ namespace ChilliSource
                 {
                     if(GetScene() != nullptr)
                     {
+                        if (m_appActive == true)
+                        {
+                            if (m_appForegrounded == true)
+                            {
+                                in_component->OnBackground();
+                            }
+                            in_component->OnSuspend();
+                        }
                         in_component->OnRemovedFromScene();
                     }
                     
@@ -270,6 +258,14 @@ namespace ChilliSource
                 
                 if(GetScene() != nullptr)
                 {
+                    if (m_appActive == true)
+                    {
+                        if (m_appForegrounded == true)
+                        {
+                            component->OnBackground();
+                        }
+                        component->OnSuspend();
+                    }
                     component->OnRemovedFromScene();
                 }
                 
@@ -373,12 +369,59 @@ namespace ChilliSource
 			{
                 m_components[i]->OnUpdate(in_timeSinceLastUpdate);
 			}
-            
-            for(u32 i=0; i<m_children.size(); ++i)
+        }
+        //-------------------------------------------------------------
+		//-------------------------------------------------------------
+		void Entity::OnAddedToScene()
+		{
+            for (u32 i = 0; i < m_components.size(); ++i)
             {
-                m_children[i]->OnUpdate(in_timeSinceLastUpdate);
+                m_components[i]->OnAddedToScene();
+            }
+            
+            for (u32 i = 0; i < m_children.size(); ++i)
+            {
+                m_scene->Add(m_children[i]);
+            }
+		}
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        void Entity::OnResume()
+        {
+            CS_ASSERT(m_appActive == false, "Entity: Received resume while already active.");
+            
+            m_appActive = true;
+            for (u32 i = 0; i < m_components.size(); ++i)
+            {
+                m_components[i]->OnResume();
             }
         }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        void Entity::OnForeground()
+        {
+            CS_ASSERT(m_appForegrounded == false, "Entity: Received foreground while already foregrounded.");
+            
+            m_appForegrounded = true;
+            for (u32 i = 0; i < m_components.size(); ++i)
+            {
+                m_components[i]->OnResume();
+            }
+        }
+        //-------------------------------------------------------------
+		//-------------------------------------------------------------
+		void Entity::OnRemovedFromScene()
+		{
+            for (s32 i = m_children.size() - 1; i >= 0; --i)
+            {
+                m_scene->Remove(m_children[i].get());
+            }
+            
+            for (s32 i = m_components.size() - 1; i >= 0; --i)
+            {
+                m_components[i]->OnRemovedFromScene();
+            }
+		}
         //----------------------------------------------------
         //----------------------------------------------------
         void Entity::OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate)
@@ -387,10 +430,29 @@ namespace ChilliSource
 			{
                 m_components[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
 			}
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        void Entity::OnBackground()
+        {
+            CS_ASSERT(m_appForegrounded == true, "Entity: Received background while already backgrounded.");
             
-            for(u32 i=0; i<m_children.size(); ++i)
+            m_appForegrounded = false;
+            for (s32 i = m_components.size() - 1; i >= 0; --i)
             {
-                m_children[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+                m_components[i]->OnBackground();
+            }
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        void Entity::OnSuspend()
+        {
+            CS_ASSERT(m_appActive == true, "Entity: Received suspend while already suspended.");
+            
+            m_appActive = false;
+            for (s32 i = m_components.size() - 1; i >= 0; --i)
+            {
+                m_components[i]->OnSuspend();
             }
         }
         //------------------------------------------------------------------

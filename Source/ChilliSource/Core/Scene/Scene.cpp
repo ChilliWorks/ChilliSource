@@ -44,8 +44,8 @@ namespace ChilliSource
         {
             return SceneUPtr(new Scene());
         }
-		//--------------------------------------------------------------------------------------------------
-		//--------------------------------------------------------------------------------------------------
+		//-------------------------------------------------------
+		//-------------------------------------------------------
 		Scene::Scene()
         : m_rootWindow(new GUI::Window())
 		{
@@ -56,37 +56,89 @@ namespace ChilliSource
         {
             return Scene::InterfaceID == in_interfaceId;
         }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void Scene::ResumeEntities()
+        {
+            CS_ASSERT(m_entitiesActive == false, "Received resume entities event while entities are already active.")
+            m_entitiesActive = true;
+            
+            for(u32 i = 0; i < m_entities.size(); ++i)
+			{
+                m_entities[i]->OnResume();
+            }
+        }
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void Scene::OnForeground()
 		{
             m_rootWindow->StartListeningForPointerInput();
 		}
-        //--------------------------------------------------------------------------------------------------
-        //--------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------
+		//-------------------------------------------------------
+		void Scene::ForegroundEntities()
+		{
+            CS_ASSERT(m_entitiesForegrounded == false, "Received foreground entities event while entities are already foregrounded.")
+            m_entitiesForegrounded = true;
+            
+            for(u32 i = 0; i<m_entities.size(); ++i)
+			{
+                m_entities[i]->OnForeground();
+            }
+		}
+        //-------------------------------------------------------
+        //-------------------------------------------------------
 		void Scene::OnUpdate(f32 in_timeSinceLastUpdate)
 		{
 			m_rootWindow->Update(in_timeSinceLastUpdate);
-            
-            for(u32 i=0; i<m_entities.size(); ++i)
+		}
+        //-------------------------------------------------------
+		//-------------------------------------------------------
+		void Scene::UpdateEntities(f32 in_timeSinceLastUpdate)
+		{
+            for(u32 i = 0; i < m_entities.size(); ++i)
 			{
                 m_entities[i]->OnUpdate(in_timeSinceLastUpdate);
             }
 		}
-        //--------------------------------------------------------------------------------------------------
-        //--------------------------------------------------------------------------------------------------
-        void Scene::OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate)
-        {
+        //-------------------------------------------------------
+		//-------------------------------------------------------
+		void Scene::FixedUpdateEntities(f32 in_fixedTimeSinceLastUpdate)
+		{
             for(u32 i=0; i<m_entities.size(); ++i)
 			{
                 m_entities[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
             }
-        }
+		}
+        //-------------------------------------------------------
+		//-------------------------------------------------------
+		void Scene::BackgroundEntities()
+		{
+            CS_ASSERT(m_entitiesForegrounded == true, "Received background entities event while entities are already backgrounded.")
+            m_entitiesForegrounded = false;
+            
+            for (s32 i = m_entities.size() - 1; i >= 0; --i)
+            {
+                m_entities[i]->OnBackground();
+            }
+		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void Scene::OnBackground()
 		{
 			m_rootWindow->StopListeningForPointerInput();
+		}
+        //-------------------------------------------------------
+		//-------------------------------------------------------
+		void Scene::SuspendEntities()
+		{
+            CS_ASSERT(m_entitiesActive == true, "Received suspend entities event while entities are already suspended.")
+            m_entitiesActive = false;
+            
+            for (s32 i = m_entities.size() - 1; i >= 0; --i)
+            {
+                m_entities[i]->OnSuspend();
+            }
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -99,6 +151,15 @@ namespace ChilliSource
 
 			in_entity->SetScene(this);
             in_entity->OnAddedToScene();
+            
+            if (m_entitiesActive == true)
+            {
+                in_entity->OnResume();
+                if (m_entitiesForegrounded == true)
+                {
+                    in_entity->OnForeground();
+                }
+            }
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -114,6 +175,15 @@ namespace ChilliSource
             
 			if(it != m_entities.end())
 			{
+                if (m_entitiesActive == true)
+                {
+                    if (m_entitiesForegrounded == true)
+                    {
+                        in_entity->OnForeground();
+                    }
+                    in_entity->OnResume();
+                }
+                
                 in_entity->OnRemovedFromScene();
                 in_entity->SetScene(nullptr);
                 
@@ -127,8 +197,19 @@ namespace ChilliSource
 		{
 			for(u32 i=0; i<m_entities.size(); ++i)
 			{
-                m_entities[i]->OnRemovedFromScene();
-                m_entities[i]->SetScene(nullptr);
+                Entity* ent = m_entities[i].get();
+                
+                if (m_entitiesActive == true)
+                {
+                    if (m_entitiesForegrounded == true)
+                    {
+                        ent->OnForeground();
+                    }
+                    ent->OnResume();
+                }
+                
+                ent->OnRemovedFromScene();
+                ent->SetScene(nullptr);
 			}
             
             m_entities.clear();

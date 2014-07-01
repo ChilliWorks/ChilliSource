@@ -72,6 +72,8 @@ namespace ChilliSource
                 m_systems[i]->OnResume();
             }
             
+            m_scene->ResumeEntities();
+            
             OnResume();
         }
         //-----------------------------------------
@@ -83,6 +85,8 @@ namespace ChilliSource
             {
                 m_systems[i]->OnForeground();
             }
+            
+            m_scene->ForegroundEntities();
             
             OnForeground();
         }
@@ -96,6 +100,8 @@ namespace ChilliSource
                 m_systems[i]->OnUpdate(in_timeSinceLastUpdate);
             }
             
+            m_scene->UpdateEntities(in_timeSinceLastUpdate);
+            
             OnUpdate(in_timeSinceLastUpdate);
         }
         //-----------------------------------------
@@ -108,6 +114,8 @@ namespace ChilliSource
                 m_systems[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
             }
             
+            m_scene->FixedUpdateEntities(in_fixedTimeSinceLastUpdate);
+            
             OnFixedUpdate(in_fixedTimeSinceLastUpdate);
         }
         //-----------------------------------------
@@ -115,6 +123,8 @@ namespace ChilliSource
         void State::Background()
         {
             OnBackground();
+            
+            m_scene->BackgroundEntities();
             
             s32 numSystems = m_systems.size();
             for(s32 i=numSystems-1; i>=0; --i)
@@ -127,6 +137,8 @@ namespace ChilliSource
         void State::Suspend()
         {
             OnSuspend();
+            
+            m_scene->SuspendEntities();
             
             s32 numSystems = m_systems.size();
             for(s32 i=numSystems-1; i>=0; --i)
