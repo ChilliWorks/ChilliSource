@@ -28,4 +28,4 @@
 
 #call the android build with release target flags setup.
 CS_CXXFLAGS_TARGET := -O3 -DNDEBUG
-include ChilliSource/Tools/Scripts/android_build.mk
+include ../../ChilliSource/Tools/Scripts/android_build.mk

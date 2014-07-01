@@ -29,11 +29,13 @@
 package com.chillisource.pngalphapremultiplier;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.security.CodeSource;
 import java.util.LinkedList;
 
-import com.chillisource.toolutils.FileUtils;
 import com.chillisource.toolutils.Logging;
 import com.chillisource.toolutils.StringUtils;
 
@@ -116,6 +118,31 @@ public class PngPremultiplier
 			Logging.logFatal("Exception occurred in Premultiply(): \n" + StringUtils.convertExceptionToString(e));
 		}
 	}
+	/**
+	 * Get the directory path that contains this jar file
+	 * 
+	 * @author S Downie
+	 * 
+	 * @return Directory path to jar folder
+	 */
+	private static String getJarDirectoryPath()
+	{
+		String jarDir = "";
+		
+		CodeSource codeSource = PngPremultiplier.class.getProtectionDomain().getCodeSource();
+		File jarFile;
+		try 
+		{
+			jarFile = new File(codeSource.getLocation().toURI().getPath());
+			jarDir = jarFile.getParentFile().getPath() + File.separator;
+		} 
+		catch (URISyntaxException e) 
+		{
+			e.printStackTrace();
+		}
+		 
+		return jarDir;
+	}
 	//------------------------------------------------------
 	/// GetExecutableName
 	///
@@ -129,13 +156,13 @@ public class PngPremultiplier
 		try
 		{
 			//get the path to the jar
-			String strPathToHere = FileUtils.getPathToHere();
+			String strPathToHere = getJarDirectoryPath();
 			
 			//get which version of the executable should be used.
 			String strOS = System.getProperty("os.name");
 			
 			if (strOS.startsWith("Windows") == true)
-				strExecutableName = strPathToHere + "PNGAlphaPremultiplier/PNGAlphaPremultiplierWindows.exe";
+				strExecutableName = strPathToHere + "PNGAlphaPremultiplier\\PNGAlphaPremultiplierWindows.exe";
 			else if (strOS.startsWith("Mac") == true)
 				strExecutableName = strPathToHere + "PNGAlphaPremultiplier/PNGAlphaPremultiplierOSX";
 			else if (strOS.startsWith("Linux") == true)

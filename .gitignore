@@ -25,3 +25,5 @@ Projects/Tools/AndroidManifestGenerator/bin
 Projects/Tools/CSFontMaker/bin
 Projects/Tools/CSFontMaker/obj
 Thumbs.db
+*.user
+*.vcxproj.filters

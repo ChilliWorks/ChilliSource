@@ -34,7 +34,7 @@ THE SOFTWARE.
 	--> 
 	<target name="build_android_resources">
 		<exec executable="python">
-			<arg value="${basedir}/ChilliSource/Tools/Scripts/copy_android_resources.py"/>
+			<arg value="${basedir}/../../ChilliSource/Tools/Scripts/copy_android_resources.py"/>
 			<arg value="${basedir}"/>
 		</exec>
 	</target>

@@ -27,10 +27,10 @@
 #
 
 #set the local path to the root of the project.
-LOCAL_PATH := $(call my-dir)/../../..
+LOCAL_PATH := $(call my-dir)/../../../Projects/Android
 
 #get the path to the script file used to get all file path in directory
-CS_SCRIPT_GETFILESWITHEXTENSIONS := ChilliSource/Tools/Scripts/get_file_paths_with_extensions.py
+CS_SCRIPT_GETFILESWITHEXTENSIONS := ../../ChilliSource/Tools/Scripts/get_file_paths_with_extensions.py
 
 #setup the warnings that should be used when compiling
 CS_WARNINGS_USE := -Wfatal-errors -Wchar-subscripts -Wcomment -Wnonnull -Winit-self -Wmissing-braces -Wmissing-include-dirs -Wparentheses -Wsequence-point -Wreturn-type -Wswitch -Wunused-function -Wunused -Wuninitialized
@@ -45,17 +45,17 @@ CS_MODULENAME_OUTPUT := Application
 CS_CXXFLAGS := -fsigned-char -std=c++11 -pthread -fexceptions -frtti -DCS_TARGETPLATFORM_ANDROID $(CS_WARNINGS_USE) $(CS_WARNINGS_DONTUSE) $(CS_CXXFLAGS_TARGET) $(CS_CXXFLAGS_EXTRA)
 CS_WHOLE_STATIC_LIBRARIES := $(CS_MODULENAME_CSBASE) $(CS_MODULENAME_CHILLISOURCE)
 CS_LDLIBS := -fuse-ld=gold -lz -llog -lGLESv2
-CS_C_INCLUDES := ChilliSource/Source/ ChilliSource/Libraries/Core/Android/Headers/
+CS_C_INCLUDES := ../../ChilliSource/Source/ ../../ChilliSource/Libraries/Core/Android/Headers/
 
 #gather all files in the engine that should be built
-CS_SOURCEFILES_CHILLISOURCE := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' 'ChilliSource/Source/ChilliSource/' '--extensions' 'cpp,c,cc')
-CS_SOURCEFILES_PLATFORM := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' 'ChilliSource/Source/CSBackend/Platform/Android/' '--extensions' 'cpp,c,cc')
-CS_SOURCEFILES_RENDERING := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' 'ChilliSource/Source/CSBackend/Rendering/OpenGL/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_CHILLISOURCE := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '../../ChilliSource/Source/ChilliSource/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_PLATFORM := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '../../ChilliSource/Source/CSBackend/Platform/Android/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_RENDERING := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '../../ChilliSource/Source/CSBackend/Rendering/OpenGL/' '--extensions' 'cpp,c,cc')
 
 #copy pre-built static libraries
 include $(CLEAR_VARS)
 LOCAL_MODULE := $(CS_MODULENAME_CSBASE)
-LOCAL_SRC_FILES := ChilliSource/Libraries/Core/Android/Libs/$(TARGET_ARCH_ABI)/libCSBase.a
+LOCAL_SRC_FILES := ../../ChilliSource/Libraries/Core/Android/Libs/$(TARGET_ARCH_ABI)/libCSBase.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 #build the ChilliSource static library
