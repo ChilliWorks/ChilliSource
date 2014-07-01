@@ -29,25 +29,35 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Image/ImageCompression.h>
+#include <ChilliSource/Core/Image/ImageFormat.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
+        namespace
+        {
+            u32 g_nextShadowMapId = 0;
+        }
+        
 		CS_DEFINE_NAMEDTYPE(DirectionalLightComponent);
         
         //----------------------------------------------------------
         /// Constructor
         //----------------------------------------------------------
-        DirectionalLightComponent::DirectionalLightComponent(const TextureSPtr& inpShadowMapTarget, const TextureSPtr& inpShadowMapDebugTarget)
-        : mpShadowMap(inpShadowMapTarget)
-        , mpShadowMapDebug(inpShadowMapDebugTarget)
-        , mfShadowTolerance(0.0f)
-        , mbMatrixCacheValid(false)
+        DirectionalLightComponent::DirectionalLightComponent(u32 in_shadowMapRes)
+            : m_shadowMapRes(in_shadowMapRes), mfShadowTolerance(0.0f) , mbMatrixCacheValid(false)
 		{
+            m_shadowMapId = g_nextShadowMapId;
+            ++g_nextShadowMapId;
+            
+            m_renderCapabilities = Core::Application::Get()->GetSystem<RenderCapabilities>();
 		}
 		//----------------------------------------------------------
 		/// Is A
@@ -115,14 +125,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         const TextureSPtr& DirectionalLightComponent::GetShadowMapPtr() const
         {
-            return mpShadowMap;
+            return m_shadowMap;
         }
         //----------------------------------------------------------
         /// Get Shadow Map Debug Ptr
         //----------------------------------------------------------
         const TextureSPtr& DirectionalLightComponent::GetShadowMapDebugPtr() const
         {
-            return mpShadowMapDebug;
+            return m_shadowMapDebug;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -144,24 +154,49 @@ namespace ChilliSource
             mbMatrixCacheValid = false;
             mbCacheValid = false;
         }
-        //----------------------------------------------------------
-        /// Destructor
-        //----------------------------------------------------------
-        DirectionalLightComponent::~DirectionalLightComponent()
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void DirectionalLightComponent::OnResume()
+        {
+            if(m_renderCapabilities->IsShadowMappingSupported() == true && m_shadowMapRes > 0)
+            {
+                m_shadowMap = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_ShadowMap" + Core::ToString(m_shadowMapId));
+                Texture::Descriptor desc;
+                desc.m_width = m_shadowMapRes;
+                desc.m_height = m_shadowMapRes;
+                desc.m_format = Core::ImageFormat::k_Depth16;
+                desc.m_compression = Core::ImageCompression::k_none;
+                desc.m_dataSize = 0;
+                m_shadowMap->Build(desc, nullptr, false);
+                
+#ifdef CS_ENABLE_DEBUGSHADOW
+                m_shadowMapDebug = m_resourcePool->CreateResource<Rendering::Texture>("_ShadowMapDebug" + Core::ToString(m_shadowMapId));
+                desc.m_width = in_shadowMapRes;
+                desc.m_height = in_shadowMapRes;
+                desc.m_format = Core::ImageFormat::k_RGB888;
+                desc.m_compression = Core::ImageCompression::k_none;
+                desc.m_dataSize = 0;
+                m_shadowMapDebug->Build(desc, nullptr, false);
+#endif
+            }
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void DirectionalLightComponent::OnSuspend()
         {
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
             
-            if(mpShadowMap != nullptr)
+            if(m_shadowMap != nullptr)
             {
-                Texture* release = mpShadowMap.get();
-                mpShadowMap.reset();
+                Texture* release = m_shadowMap.get();
+                m_shadowMap.reset();
                 resourcePool->Release(release);
             }
-            
-            if(mpShadowMapDebug != nullptr)
+
+            if(m_shadowMapDebug != nullptr)
             {
-                Texture* release = mpShadowMapDebug.get();
-                mpShadowMapDebug.reset();
+                Texture* release = m_shadowMapDebug.get();
+                m_shadowMapDebug.reset();
                 resourcePool->Release(release);
             }
         }

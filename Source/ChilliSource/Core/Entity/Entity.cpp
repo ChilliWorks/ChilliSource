@@ -405,7 +405,7 @@ namespace ChilliSource
             m_appForegrounded = true;
             for (u32 i = 0; i < m_components.size(); ++i)
             {
-                m_components[i]->OnResume();
+                m_components[i]->OnForeground();
             }
         }
         //-------------------------------------------------------------
