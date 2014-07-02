@@ -185,7 +185,7 @@ namespace ChilliSource
                 
 				f32 fDenom = Vector3::DotProduct(outIntersection.vDirection, outIntersection.vDirection);
                 
-                if(fDenom < MathUtils::kApproxZero)
+                if(fDenom < MathUtils::k_approxZero)
                 {
                     return false;
                 }
@@ -222,16 +222,16 @@ namespace ChilliSource
                 
                 Vector3 vIntersection1, vIntersection2;
                 
-                if(fabsf(fA) <= MathUtils::kApproxZero && fabsf(fE) <= MathUtils::kApproxZero)
+                if(fabsf(fA) <= MathUtils::k_approxZero && fabsf(fE) <= MathUtils::k_approxZero)
                 {
                     vIntersection1 = inLineLHS.vStartPos;
                     vIntersection2 = inLineRHS.vStartPos;
                     
                     Vector3 vDir = vIntersection1 - vIntersection2;
-                    return (fabsf(Vector3::DotProduct(vDir, vDir)) <= MathUtils::kApproxZero);
+                    return (fabsf(Vector3::DotProduct(vDir, vDir)) <= MathUtils::k_approxZero);
                 }
                 
-                if(fA <= MathUtils::kApproxZero)
+                if(fA <= MathUtils::k_approxZero)
                 {
                     fS = 0.0f;
                     fT = MathUtils::Clamp(fF/fE, 0.0f, 1.0f);
@@ -239,7 +239,7 @@ namespace ChilliSource
                 else
                 {
                     f32 fC = Vector3::DotProduct(vAB, vAC);
-                    if(fabsf(fE) <= MathUtils::kApproxZero)
+                    if(fabsf(fE) <= MathUtils::k_approxZero)
                     {
                         fT = 0.0f;
                         fS = MathUtils::Clamp(-fC/fA, 0.0f, 1.0f);
@@ -279,7 +279,7 @@ namespace ChilliSource
                 outvIntersection = vIntersection1;
                 
                 Vector3 vDir = vIntersection1 - vIntersection2;
-                return (fabsf(Vector3::DotProduct(vDir, vDir)) <= MathUtils::kApproxZero);
+                return (fabsf(Vector3::DotProduct(vDir, vDir)) <= MathUtils::k_approxZero);
             }
             //----------------------------------------------------------------
             /// Ray vs Slab

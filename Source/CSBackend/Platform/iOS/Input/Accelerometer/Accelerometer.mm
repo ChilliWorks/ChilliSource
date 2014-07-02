@@ -94,13 +94,13 @@ namespace CSBackend
                     orientationTransform = CSCore::Matrix4::k_identity;
                     break;
                 case UIInterfaceOrientationLandscapeLeft:
-                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::kPI * 1.5f);
+                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::k_pi * 1.5f);
                     break;
                 case UIInterfaceOrientationLandscapeRight:
-                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::kPI * 0.5f);
+                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::k_pi * 0.5f);
                     break;
                 case UIInterfaceOrientationPortraitUpsideDown:
-                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::kPI);
+                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::k_pi);
                     break;
                 default:
                     CS_LOG_ERROR("Unknown orientation!");

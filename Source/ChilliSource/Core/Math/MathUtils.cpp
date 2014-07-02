@@ -61,7 +61,7 @@ namespace ChilliSource
             //---------------------------------------------------------
             f32 DegToRad(f32 infAngle)
             {
-                return infAngle * (kPI/180.0f);
+                return infAngle * (k_pi/180.0f);
             }
             //---------------------------------------------------------
             /// Radians To Degrees
@@ -71,7 +71,7 @@ namespace ChilliSource
             //---------------------------------------------------------
             f32 RadToDeg(f32 infAngle)
             {
-                return infAngle * (180.0f/kPI);
+                return infAngle * (180.0f/k_pi);
             }
             //---------------------------------------------------------
             /// fRand
@@ -124,7 +124,7 @@ namespace ChilliSource
             //----------------------------------------------------------
             bool IsApproxZero(f32 infValue)
             {
-                return (infValue > -kApproxZero) && (infValue < kApproxZero); 
+                return (infValue > -k_approxZero) && (infValue < k_approxZero); 
             }
             //----------------------------------------------------------
             /// Round
