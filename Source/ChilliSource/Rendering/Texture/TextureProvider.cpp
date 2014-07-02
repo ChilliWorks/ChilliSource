@@ -164,9 +164,9 @@ namespace ChilliSource
                 desc.m_dataSize = image->GetDataSize();
                 Texture* texture = (Texture*)out_resource.get();
                 const TextureResourceOptions* options = (const TextureResourceOptions*)in_options.get();
+                texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled());
                 texture->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
                 texture->SetFilterMode(options->GetFilterMode());
-                texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled());
                 out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
             }
             else
@@ -181,9 +181,9 @@ namespace ChilliSource
                     desc.m_dataSize = image->GetDataSize();
                     Texture* texture = (Texture*)out_resource.get();
                     const TextureResourceOptions* options = (const TextureResourceOptions*)in_options.get();
+                    texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled());
                     texture->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
                     texture->SetFilterMode(options->GetFilterMode());
-                    texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled());
                     out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
                     in_delegate(out_resource);
                 });
