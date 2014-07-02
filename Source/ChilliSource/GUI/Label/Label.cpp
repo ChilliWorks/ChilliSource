@@ -65,41 +65,6 @@ namespace ChilliSource
         
         f32 Label::mfGlobalTextScale = 1.0f;
         
-        namespace
-        {
-            //-------------------------------------------------------
-            /// Creates or returns a 2x2 white texture for use
-            /// with GUI.
-            ///
-            /// @author S Downie
-            ///
-            /// @return Texture
-            //-------------------------------------------------------
-            Rendering::TextureCSPtr CreateDefaultWhiteTexture()
-            {
-                Rendering::TextureCSPtr result = Core::Application::Get()->GetResourcePool()->GetResource<Rendering::Texture>("_GUIBackgroundTex");
-                if(result == nullptr)
-                {
-                    const u32 k_numPixels = 4;
-                    const u32 k_numBytesPerPixel = 4;
-                    Rendering::Texture::Descriptor desc;
-                    desc.m_width = 2;
-                    desc.m_height = 2;
-                    desc.m_format = Core::ImageFormat::k_RGBA8888;
-                    desc.m_compression = Core::ImageCompression::k_none;
-                    desc.m_dataSize = k_numPixels * k_numBytesPerPixel;
-                    u8* data = new u8[desc.m_dataSize];
-                    memset(data, 255, desc.m_dataSize);
-                    
-                    Rendering::TextureSPtr texture = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_GUIBackgroundTex");
-                    texture->Build(desc, Rendering::Texture::TextureDataUPtr(data), false);
-                    result = texture;
-                }
-                
-                return result;
-            }
-        }
-        
         //-------------------------------------------------------
         /// Constructor
         ///
@@ -110,7 +75,7 @@ namespace ChilliSource
         {
             SetColour(Core::Colour(0.18f, 0.3f, 0.4f, 0.6f));
 
-            mpWhiteTex = CreateDefaultWhiteTexture();
+            mpWhiteTex = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Texture>(Core::StorageLocation::k_chilliSource, "Textures/Blank.csimage");
             
             ConsumesTouches = false;
             
@@ -222,7 +187,7 @@ namespace ChilliSource
                 FlipVertical = true;
             }
             
-            mpWhiteTex = CreateDefaultWhiteTexture();
+            mpWhiteTex = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Texture>(Core::StorageLocation::k_chilliSource, "Textures/Blank.csimage");;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

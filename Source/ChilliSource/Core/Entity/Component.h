@@ -75,6 +75,45 @@ namespace ChilliSource
 			
 		protected:
 		
+			//----------------------------------------------------
+			/// Triggered when the component is attached to
+			/// an entity. Custom components should override this
+            /// as they see fit
+            ///
+            /// @author S McGaw
+			//----------------------------------------------------
+			virtual void OnAddedToEntity(){}
+            //----------------------------------------------------
+			/// Triggered when the component is attached to
+			/// an entity and that entity is on a scene.
+            /// Custom components should override this as they see
+            /// fit
+            ///
+            /// @author S Downie
+			//----------------------------------------------------
+			virtual void OnAddedToScene(){}
+            //----------------------------------------------------
+			/// Called when the application is resumed while the
+            /// component's owning entity is in a scene. This will
+            /// also be called when the owning entity is added to
+            /// the scene if the application is currently active,
+            /// or when the component is added to the entity if the
+            /// entity is already in the scene.
+            ///
+            /// @author Ian Copland
+			//----------------------------------------------------
+			virtual void OnResume(){}
+            //----------------------------------------------------
+			/// Called when the application is foregrounded while
+            /// the entity is in the scene. This will also be called
+            /// when the entity is added to the scene if the application
+            /// is currently foregrounded, or when the component is
+            /// added to the entity if the entity is already in
+            /// the scene.
+            ///
+            /// @author Ian Copland
+			//----------------------------------------------------
+			virtual void OnForeground(){}
             //----------------------------------------------------
             /// @author S Downie
             ///
@@ -89,31 +128,28 @@ namespace ChilliSource
             /// @param Time since last fixed update in seconds
             //----------------------------------------------------
             virtual void OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate){}
-			//----------------------------------------------------
-			/// Triggered when the component is attached to
-			/// an entity. Custom components should override this
-            /// as they see fit
-            ///
-            /// @author S McGaw
-			//----------------------------------------------------
-			virtual void OnAddedToEntity(){}
-			//----------------------------------------------------
-			/// Triggered when the component is removed from
-			/// an entity. Custom components should override this
-            /// as they see fit
-            ///
-            /// @author S McGaw
-			//----------------------------------------------------
-			virtual void OnRemovedFromEntity(){}
             //----------------------------------------------------
-			/// Triggered when the component is attached to
-			/// an entity and that entity is on a scene.
-            /// Custom components should override this as they see
-            /// fit
+			/// Called when the application is backgrounded while
+            /// the owning entity is in the scene. This will also
+            /// be called when the owning entity is removed from
+            /// the scene if the application is currently
+            /// foregrounded or when the component is removed while
+            /// the entity is in the scene.
             ///
-            /// @author S Downie
+            /// @author Ian Copland
 			//----------------------------------------------------
-			virtual void OnAddedToScene(){}
+			virtual void OnBackground(){}
+            //----------------------------------------------------
+			/// Called when the application is backgrounded while
+            /// the owning entity is in the scene. This will also be
+            /// called when the owning entity is removed from the
+            /// scene if the application is currently active or
+            /// when the component is removed while the entity is
+            /// in the scene.
+            ///
+            /// @author Ian Copland
+			//----------------------------------------------------
+			virtual void OnSuspend(){}
 			//----------------------------------------------------
 			/// Triggered when the component is removed from
 			/// an entity or when the entity is removed from the
@@ -123,7 +159,14 @@ namespace ChilliSource
             /// @author S Downie
 			//----------------------------------------------------
 			virtual void OnRemovedFromScene(){}
-            
+            //----------------------------------------------------
+			/// Triggered when the component is removed from
+			/// an entity. Custom components should override this
+            /// as they see fit
+            ///
+            /// @author S McGaw
+			//----------------------------------------------------
+			virtual void OnRemovedFromEntity(){}
         private:
             
             friend class Entity;

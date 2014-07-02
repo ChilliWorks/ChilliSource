@@ -226,8 +226,6 @@ namespace ChilliSource
 		private:
 			
             Core::Screen* m_screen = nullptr;
-			Core::ResourcePool* m_resourcePool = nullptr;
-			RenderCapabilities* m_renderCapabilities = nullptr;
             ParticleSystem* m_particleSystem = nullptr;
             ParticleAffectorFactory* m_affectorFactory = nullptr;
             ParticleEmitterFactory* m_emitterFactory = nullptr;

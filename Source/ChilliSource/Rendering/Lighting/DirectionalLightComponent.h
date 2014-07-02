@@ -44,10 +44,10 @@ namespace ChilliSource
             //----------------------------------------------------------
             /// Constructor
             ///
-            /// @param Shadow map target texture
-            /// @param Shadow map debug target texture
+            /// @param The resolution of the shadow map. No shadow map
+            /// will be used if 0 is passed in.
             //----------------------------------------------------------
-			DirectionalLightComponent(const TextureSPtr& inpShadowMapTarget, const TextureSPtr& inpShadowMapDebugTarget = TextureSPtr());
+			DirectionalLightComponent(u32 in_shadowMapRes);
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -123,23 +123,35 @@ namespace ChilliSource
 			/// @return Shadow map debug colour texture
 			//----------------------------------------------------------
 			const TextureSPtr& GetShadowMapDebugPtr() const;
-            //----------------------------------------------------------
-            /// Destructor
-            //----------------------------------------------------------
-            ~DirectionalLightComponent();
             
         private:
+            //----------------------------------------------------
+            /// Called when the application is resumed. This will
+            /// build the internal shadow map textures.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------
+            void OnResume() override;
+            //----------------------------------------------------
+            /// Called when the application is suspended. This will
+            /// cleanup the internal shadow map textures.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------
+            void OnSuspend() override;
+            
+            RenderCapabilities* m_renderCapabilities = nullptr;
             
             Core::Matrix4 mmatProj;
-            
-            TextureSPtr mpShadowMap;
-            TextureSPtr mpShadowMapDebug;
+            mutable bool mbMatrixCacheValid;
             
             Core::EventConnectionUPtr m_transformChangedConnection;
             
             f32 mfShadowTolerance;
-            
-            mutable bool mbMatrixCacheValid;
+            u32 m_shadowMapRes;
+            u32 m_shadowMapId;
+            TextureSPtr m_shadowMap;
+            TextureSPtr m_shadowMapDebug;
 		};
     }
 }

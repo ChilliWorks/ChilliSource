@@ -354,26 +354,12 @@ namespace ChilliSource
 		private:
             
             friend class Scene;
-            //----------------------------------------------------------------
+            //-------------------------------------------------------------
             /// Private to enforce the use of the factory method
             ///
             /// @author S Downie
-            //----------------------------------------------------------------
+            //-------------------------------------------------------------
 			Entity() = default;
-            //----------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Time since last update in seconds
-            //----------------------------------------------------
-            void OnUpdate(f32 in_timeSinceLastUpdate);
-            //----------------------------------------------------
-            /// Fixed update is triggered at fixed time periods
-            ///
-            /// @author S Downie
-            ///
-            /// @param Time since last fixed update in seconds
-            //----------------------------------------------------
-            void OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate);
             //-------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -414,6 +400,54 @@ namespace ChilliSource
             /// @author S Downie
 			//-------------------------------------------------------------
 			void OnAddedToScene();
+            //-------------------------------------------------------------
+			/// Called when the application is resumed while the entity is
+            /// in the scene. This will also be called when the entity is
+            /// added to the scene if the application is currently active.
+            ///
+            /// @author Ian Copland
+			//-------------------------------------------------------------
+			void OnResume();
+            //-------------------------------------------------------------
+			/// Called when the application is foregrounded while the entity
+            /// is in the scene. This will also be called when the entity
+            /// is added to the scene if the application is currently
+            /// foregrounded.
+            ///
+            /// @author Ian Copland
+			//-------------------------------------------------------------
+			void OnForeground();
+            //-------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Time since last update in seconds
+            //-------------------------------------------------------------
+            void OnUpdate(f32 in_timeSinceLastUpdate);
+            //-------------------------------------------------------------
+            /// Fixed update is triggered at fixed time periods
+            ///
+            /// @author S Downie
+            ///
+            /// @param Time since last fixed update in seconds
+            //-------------------------------------------------------------
+            void OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate);
+            //-------------------------------------------------------------
+			/// Called when the application is backgrounded while the entity
+            /// is in the scene. This will also be called when the entity is
+            /// removed from the scene if the application is currently
+            /// foregrounded.
+            ///
+            /// @author Ian Copland
+			//-------------------------------------------------------------
+			void OnBackground();
+            //-------------------------------------------------------------
+			/// Called when the application is backgrounded while the entity
+            /// is in the scene. This will also be called when the entity is
+            /// removed from the scene if the application is currently active.
+            ///
+            /// @author Ian Copland
+			//-------------------------------------------------------------
+			void OnSuspend();
 			//-------------------------------------------------------------
 			/// Called when the entity is removed from the scene
             ///
@@ -432,6 +466,9 @@ namespace ChilliSource
 			
 			Entity* m_parent = nullptr;
 			Scene* m_scene = nullptr;
+            
+            bool m_appActive = false;
+            bool m_appForegrounded = false;
 		};
         
         //-------------------------------------------------------------
