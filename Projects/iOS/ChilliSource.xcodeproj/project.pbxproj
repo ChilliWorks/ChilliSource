@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
 		81D8ACF91962CEDC0010DA84 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8ACF81962CEDC0010DA84 /* Foundation.framework */; };
 		81D8B1E61962D1B90010DA84 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1CF1962D1B90010DA84 /* Accounts.framework */; };
 		81D8B1E71962D1B90010DA84 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1D01962D1B90010DA84 /* AddressBook.framework */; };
@@ -251,7 +252,6 @@
 		81D8B6D61962E0F70010DA84 /* Cubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6221962E0F70010DA84 /* Cubemap.cpp */; };
 		81D8B6D71962E0F70010DA84 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6241962E0F70010DA84 /* Texture.cpp */; };
 		81D8B6D81962E0F70010DA84 /* TextureUnitSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6261962E0F70010DA84 /* TextureUnitSystem.cpp */; };
-		81D8B6DC1962E1110010DA84 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B6DA1962E1110010DA84 /* FacebookSDK.framework */; };
 		81D8B6DD1962E1110010DA84 /* libCSBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B6DB1962E1110010DA84 /* libCSBase.a */; };
 /* End PBXBuildFile section */
 
@@ -268,6 +268,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		81D8ACF51962CEDC0010DA84 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D8ACF81962CEDC0010DA84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		81D8AD061962CEDC0010DA84 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -790,7 +791,6 @@
 		81D8B6251962E0F70010DA84 /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		81D8B6261962E0F70010DA84 /* TextureUnitSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureUnitSystem.cpp; sourceTree = "<group>"; };
 		81D8B6271962E0F70010DA84 /* TextureUnitSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitSystem.h; sourceTree = "<group>"; };
-		81D8B6DA1962E1110010DA84 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		81D8B6DB1962E1110010DA84 /* libCSBase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCSBase.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -810,7 +810,6 @@
 				81D8B1ED1962D1B90010DA84 /* CoreGraphics.framework in Frameworks */,
 				81D8B1EE1962D1B90010DA84 /* CoreLocation.framework in Frameworks */,
 				81D8B1EF1962D1B90010DA84 /* CoreMotion.framework in Frameworks */,
-				81D8B6DC1962E1110010DA84 /* FacebookSDK.framework in Frameworks */,
 				81D8B1F01962D1B90010DA84 /* CoreTelephony.framework in Frameworks */,
 				81D8B1F11962D1B90010DA84 /* GLKit.framework in Frameworks */,
 				81D8B1F21962D1B90010DA84 /* MapKit.framework in Frameworks */,
@@ -821,6 +820,7 @@
 				81D8B1F71962D1B90010DA84 /* QuartzCore.framework in Frameworks */,
 				81D8B1F81962D1B90010DA84 /* Security.framework in Frameworks */,
 				81D8B1F91962D1B90010DA84 /* Social.framework in Frameworks */,
+				81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */,
 				81D8B1FA1962D1B90010DA84 /* StoreKit.framework in Frameworks */,
 				81D8B1FB1962D1B90010DA84 /* SystemConfiguration.framework in Frameworks */,
 				81D8B1FC1962D1B90010DA84 /* UIKit.framework in Frameworks */,
@@ -2173,7 +2173,7 @@
 		81D8B6D91962E1110010DA84 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
-				81D8B6DA1962E1110010DA84 /* FacebookSDK.framework */,
+				81852A63196402D300EC15DE /* FacebookSDK.framework */,
 				81D8B6DB1962E1110010DA84 /* libCSBase.a */,
 			);
 			name = Libs;
@@ -2546,10 +2546,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/ChilliSource.dst;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../../Source/Libraries/Core/iOS/Libs",
-					/Users/taggames/Work/CSPong/ChilliSource/Libraries/Core/iOS/Libs,
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../../Libraries/Core/iOS/Libs";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
@@ -2560,10 +2557,7 @@
 					"$(SRCROOT)/../../Source",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../../Libraries/Core/iOS/Libs",
-					/Users/taggames/Work/CSPong/ChilliSource/Libraries/Core/iOS/Libs,
-				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../../Libraries/Core/iOS/Libs";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2576,10 +2570,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/ChilliSource.dst;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../../Source/Libraries/Core/iOS/Libs",
-					/Users/taggames/Work/CSPong/ChilliSource/Libraries/Core/iOS/Libs,
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../../Libraries/Core/iOS/Libs";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
@@ -2589,10 +2580,7 @@
 					"$(SRCROOT)/../../Source",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../../Libraries/Core/iOS/Libs",
-					/Users/taggames/Work/CSPong/ChilliSource/Libraries/Core/iOS/Libs,
-				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../../Libraries/Core/iOS/Libs";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
