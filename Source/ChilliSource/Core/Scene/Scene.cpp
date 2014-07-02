@@ -179,9 +179,9 @@ namespace ChilliSource
                 {
                     if (m_entitiesForegrounded == true)
                     {
-                        in_entity->OnForeground();
+                        in_entity->OnBackground();
                     }
-                    in_entity->OnResume();
+                    in_entity->OnSuspend();
                 }
                 
                 in_entity->OnRemovedFromScene();
@@ -203,9 +203,9 @@ namespace ChilliSource
                 {
                     if (m_entitiesForegrounded == true)
                     {
-                        ent->OnForeground();
+                        ent->OnBackground();
                     }
-                    ent->OnResume();
+                    ent->OnSuspend();
                 }
                 
                 ent->OnRemovedFromScene();

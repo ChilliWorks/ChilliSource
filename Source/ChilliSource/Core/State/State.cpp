@@ -150,9 +150,9 @@ namespace ChilliSource
         //-----------------------------------------
         void State::Destroy()
         {
-            m_scene->RemoveAllEntities();
-            
             OnDestroy();
+            
+            m_scene->RemoveAllEntities();
             
             s32 numSystems = m_systems.size();
             for(s32 i=numSystems-1; i>=0; --i)
