@@ -130,6 +130,12 @@ public final class AndroidManifestBuilder
 				output.m_targetSdkVersion = targetSdkVersionNode.getNodeValue();
 			}
 			
+			Node orientationNode = root.getAttributes().getNamedItem("screenOrientation");
+			if (orientationNode != null)
+			{
+				output.m_orientation = orientationNode.getNodeValue();
+			}
+			
 			Node debuggableNode = root.getAttributes().getNamedItem("debuggable");
 			if (debuggableNode != null)
 			{
@@ -197,9 +203,10 @@ public final class AndroidManifestBuilder
 		output = output.replace("[[VERSIONNAME]]", in_userData.m_versionName);
 		output = output.replace("[[MINSDKVERSION]]", in_userData.m_minSdkVersion);
 		output = output.replace("[[TARGETSDKVERSION]]", in_userData.m_targetSdkVersion);
+		output = output.replace("[[ORIENTATION]]", in_userData.m_orientation);
+		output = output.replace("[[DEBUGGABLE]]", in_userData.m_debuggable);
 		output = output.replace("[[GOOGLEPLAYPROJECTID]]", in_userData.m_googlePlayProjectId);
 		output = output.replace("[[FACEBOOKAPPID]]", in_userData.m_facebookAppId);
-		output = output.replace("[[DEBUGGABLE]]", in_userData.m_debuggable);
 		output = output.replace("[[MANIFESTEXTRA]]", in_userData.m_manifestExtra);
 		output = output.replace("[[APPLICATIONEXTRA]]", in_userData.m_applicationExtra);
 		
