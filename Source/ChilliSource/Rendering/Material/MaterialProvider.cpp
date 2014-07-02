@@ -41,7 +41,6 @@
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/Texture/CubemapResourceOptions.h>
-#include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureResourceOptions.h>
 
 namespace ChilliSource
