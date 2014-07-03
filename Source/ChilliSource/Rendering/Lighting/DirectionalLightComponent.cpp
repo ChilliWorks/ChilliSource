@@ -58,6 +58,8 @@ namespace ChilliSource
             ++g_nextShadowMapId;
             
             m_renderCapabilities = Core::Application::Get()->GetSystem<RenderCapabilities>();
+            
+            CreateShadowMapTextures();
 		}
 		//----------------------------------------------------------
 		/// Is A
@@ -158,7 +160,13 @@ namespace ChilliSource
         //----------------------------------------------------
         void DirectionalLightComponent::OnResume()
         {
-            if(m_renderCapabilities->IsShadowMappingSupported() == true && m_shadowMapRes > 0)
+            CreateShadowMapTextures();
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void DirectionalLightComponent::CreateShadowMapTextures()
+        {
+            if(m_shadowMap == nullptr && m_renderCapabilities->IsShadowMappingSupported() == true && m_shadowMapRes > 0)
             {
                 m_shadowMap = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_ShadowMap" + Core::ToString(m_shadowMapId));
                 Texture::Descriptor desc;
@@ -170,9 +178,9 @@ namespace ChilliSource
                 m_shadowMap->Build(desc, nullptr, false);
                 
 #ifdef CS_ENABLE_DEBUGSHADOW
-                m_shadowMapDebug = m_resourcePool->CreateResource<Rendering::Texture>("_ShadowMapDebug" + Core::ToString(m_shadowMapId));
-                desc.m_width = in_shadowMapRes;
-                desc.m_height = in_shadowMapRes;
+                m_shadowMapDebug = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_ShadowMapDebug" + Core::ToString(m_shadowMapId));
+                desc.m_width = m_shadowMapRes;
+                desc.m_height = m_shadowMapRes;
                 desc.m_format = Core::ImageFormat::k_RGB888;
                 desc.m_compression = Core::ImageCompression::k_none;
                 desc.m_dataSize = 0;

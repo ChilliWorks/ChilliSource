@@ -200,7 +200,7 @@ namespace ChilliSource
                     if (in_renderCapabilities->IsShadowMappingSupported() == true)
                     {
                         out_shaders.push_back({"Shaders/StaticAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Shaders/StaticBlinnShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/StaticBlinnShadowedDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
                         out_shaders.push_back({"Shaders/StaticBlinnPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     }
                     else

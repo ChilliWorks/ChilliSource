@@ -139,6 +139,13 @@ namespace ChilliSource
             /// @author Ian Copland
             //----------------------------------------------------
             void OnSuspend() override;
+            //----------------------------------------------------
+            /// Create shadow map textures if they don't already
+            /// exist
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------
+            void CreateShadowMapTextures();
             
             RenderCapabilities* m_renderCapabilities = nullptr;
             
