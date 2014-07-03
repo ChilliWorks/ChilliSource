@@ -139,16 +139,17 @@ namespace ChilliSource
 		/// @param End value
 		/// @param Duration in seconds
 		/// @param Start delay in seconds
+        /// @param End delay in seconds
 		///
 		/// @return Tween with back ease-in function
 		//-----------------------------------------------------------------------
 		template <typename TValueType>
-		EaseInBackTween<TValueType> MakeEaseInBackTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_delay = 0.0f)
+		EaseInBackTween<TValueType> MakeEaseInBackTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_startDelay = 0.0f, f32 in_endDelay = 0.0f)
 		{
 			EaseBackTween::EaseInInterpolate<TValueType> func;
 			func.m_startValue = in_start;
 			func.m_endValue = in_end;
-			return EaseInBackTween<TValueType>(func, in_duration, in_delay);
+			return EaseInBackTween<TValueType>(func, in_duration, in_startDelay, in_endDelay);
 		}
         
         template <typename TValueType> using EaseOutBackTween = Tween<EaseBackTween::EaseOutInterpolate<TValueType>>;
@@ -162,16 +163,17 @@ namespace ChilliSource
 		/// @param End value
 		/// @param Duration in seconds
 		/// @param Start delay in seconds
+        /// @param End delay in seconds
 		///
 		/// @return Tween with back ease-in function
 		//-----------------------------------------------------------------------
 		template <typename TValueType>
-		EaseOutBackTween<TValueType> MakeEaseOutBackTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_delay = 0.0f)
+		EaseOutBackTween<TValueType> MakeEaseOutBackTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_startDelay = 0.0f, f32 in_endDelay = 0.0f)
 		{
 			EaseBackTween::EaseOutInterpolate<TValueType> func;
 			func.m_startValue = in_start;
 			func.m_endValue = in_end;
-			return EaseOutBackTween<TValueType>(func, in_duration, in_delay);
+			return EaseOutBackTween<TValueType>(func, in_duration, in_startDelay, in_endDelay);
 		}
         
         template <typename TValueType> using EaseInOutBackTween = Tween<EaseBackTween::EaseInOutInterpolate<TValueType>>;
@@ -185,18 +187,19 @@ namespace ChilliSource
 		/// @param End value
 		/// @param Duration in seconds
 		/// @param Start delay in seconds
+        /// @param End delay in seconds
 		///
 		/// @return Tween with back ease-in/out function
 		//-----------------------------------------------------------------------
 		template <typename TValueType>
-		EaseInOutBackTween<TValueType> MakeEaseInOutBackTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_delay = 0.0f)
+		EaseInOutBackTween<TValueType> MakeEaseInOutBackTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_startDelay = 0.0f, f32 in_endDelay = 0.0f)
 		{
 			EaseBackTween::EaseInOutInterpolate<TValueType> func;
 			func.m_easeIn.m_startValue = in_start;
             func.m_easeIn.m_endValue = (in_start + in_end)/2.0f;
             func.m_easeOut.m_startValue = func.m_easeIn.m_endValue;
             func.m_easeOut.m_endValue = in_end;
-			return EaseInOutBackTween<TValueType>(func, in_duration, in_delay);
+			return EaseInOutBackTween<TValueType>(func, in_duration, in_startDelay, in_endDelay);
 		}
 	}
 }

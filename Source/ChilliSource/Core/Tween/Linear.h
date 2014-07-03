@@ -74,16 +74,17 @@ namespace ChilliSource
 		/// @param End value
 		/// @param Duration in seconds
 		/// @param Start delay in seconds
+        /// @param End delay in seconds
 		///
 		/// @return Tween with linear interp function
 		//-----------------------------------------------------------------------
 		template <typename TValueType>
-		LinearTween<TValueType> MakeLinearTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_delay = 0.0f)
+		LinearTween<TValueType> MakeLinearTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_startDelay = 0.0f, f32 in_endDelay = 0.0f)
 		{
 			LinearInterpolate<TValueType> func;
 			func.m_startValue = in_start;
 			func.m_endValue = in_end;
-			return LinearTween<TValueType>(func, in_duration, in_delay);
+			return LinearTween<TValueType>(func, in_duration, in_startDelay, in_endDelay);
 		}
 	}
 }

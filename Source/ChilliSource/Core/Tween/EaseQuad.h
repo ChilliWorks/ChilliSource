@@ -136,16 +136,17 @@ namespace ChilliSource
 		/// @param End value
 		/// @param Duration in seconds
 		/// @param Start delay in seconds
+        /// @param End delay in seconds
 		///
 		/// @return Tween with quad ease-in function
 		//-----------------------------------------------------------------------
 		template <typename TValueType>
-		EaseInQuadTween<TValueType> MakeEaseInQuadTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_delay = 0.0f)
+		EaseInQuadTween<TValueType> MakeEaseInQuadTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_startDelay = 0.0f, f32 in_endDelay = 0.0f)
 		{
 			EaseQuadTween::EaseInInterpolate<TValueType> func;
 			func.m_startValue = in_start;
 			func.m_endValue = in_end;
-			return EaseInQuadTween<TValueType>(func, in_duration, in_delay);
+			return EaseInQuadTween<TValueType>(func, in_duration, in_startDelay, in_endDelay);
 		}
         
         template <typename TValueType> using EaseOutQuadTween = Tween<EaseQuadTween::EaseOutInterpolate<TValueType>>;
@@ -159,16 +160,17 @@ namespace ChilliSource
 		/// @param End value
 		/// @param Duration in seconds
 		/// @param Start delay in seconds
+        /// @param End delay in seconds
 		///
 		/// @return Tween with quad ease-in function
 		//-----------------------------------------------------------------------
 		template <typename TValueType>
-		EaseOutQuadTween<TValueType> MakeEaseOutQuadTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_delay = 0.0f)
+		EaseOutQuadTween<TValueType> MakeEaseOutQuadTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_startDelay = 0.0f, f32 in_endDelay = 0.0f)
 		{
 			EaseQuadTween::EaseOutInterpolate<TValueType> func;
 			func.m_startValue = in_start;
 			func.m_endValue = in_end;
-			return EaseOutQuadTween<TValueType>(func, in_duration, in_delay);
+			return EaseOutQuadTween<TValueType>(func, in_duration, in_startDelay, in_endDelay);
 		}
         
         template <typename TValueType> using EaseInOutQuadTween = Tween<EaseQuadTween::EaseInOutInterpolate<TValueType>>;
@@ -182,18 +184,19 @@ namespace ChilliSource
 		/// @param End value
 		/// @param Duration in seconds
 		/// @param Start delay in seconds
+        /// @param End delay in seconds
 		///
 		/// @return Tween with quad ease-in/out function
 		//-----------------------------------------------------------------------
 		template <typename TValueType>
-		EaseInOutQuadTween<TValueType> MakeEaseInOutQuadTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_delay = 0.0f)
+		EaseInOutQuadTween<TValueType> MakeEaseInOutQuadTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_startDelay = 0.0f, f32 in_endDelay = 0.0f)
 		{
 			EaseQuadTween::EaseInOutInterpolate<TValueType> func;
 			func.m_easeIn.m_startValue = in_start;
             func.m_easeIn.m_endValue = (in_start + in_end)/2.0f;
             func.m_easeOut.m_startValue = func.m_easeIn.m_endValue;
             func.m_easeOut.m_endValue = in_end;
-			return EaseInOutQuadTween<TValueType>(func, in_duration, in_delay);
+			return EaseInOutQuadTween<TValueType>(func, in_duration, in_startDelay, in_endDelay);
 		}
 	}
 }
