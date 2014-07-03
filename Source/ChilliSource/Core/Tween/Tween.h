@@ -396,7 +396,14 @@ namespace ChilliSource
 
 			m_currentTime = std::min(m_currentTime + in_timeSinceLastUpdate, m_stepDuration);
 
-			m_currentT = m_currentTime / m_stepDuration;
+            if (m_stepDuration != 0.0f)
+            {
+                m_currentT = m_currentTime / m_stepDuration;
+            }
+            else
+            {
+                m_currentT = 1.0f;
+            }
             
 			if (m_isReverse)
 				m_currentT = 1.0f - m_currentT;
