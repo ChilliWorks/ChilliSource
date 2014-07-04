@@ -1,7 +1,7 @@
 //
-//  Linear.h
+//  SmoothStep.h
 //  Chilli Source
-//  Created by Scott Downie on 12/05/2014.
+//  Created by Scott Downie on 04/07/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_TWEEN_LINEAR_H_
-#define _CHILLISOURCE_CORE_TWEEN_LINEAR_H_
+#ifndef _CHILLISOURCE_CORE_TWEEN_SMOOTHSTEP_H_
+#define _CHILLISOURCE_CORE_TWEEN_SMOOTHSTEP_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
@@ -38,34 +38,34 @@ namespace ChilliSource
 	namespace Core
 	{
 		//-----------------------------------------------------------------------
-		/// Functor that performs linear interpolation on the start and end
+		/// Functor that performs smoothstep interpolation on the start and end
 		/// values based on the given normalised T (0 - 1)
 		///
 		/// @author S Downie
 		//-----------------------------------------------------------------------
-		template <typename TValueType> struct LinearInterpolate
+		template <typename TValueType> struct SmoothStepInterpolate
 		{
 			TValueType m_startValue;
 			TValueType m_endValue;
             
 			//-----------------------------------------------------------------------
-			/// Linearly interpolate between the start and end
+			/// Smoothly interpolate between the start and end
 			/// values based on the given normalised T (0 - 1)
 			///
 			/// @author S Downie
 			///
 			/// @param Normalised T (0 - 1)
 			///
-			/// @return Linearly interpolated type
+			/// @return SmoothStep interpolated type
 			//-----------------------------------------------------------------------
 			TValueType operator()(f32 in_t) const
 			{
-				return MathUtils::Lerp(in_t, m_startValue, m_endValue);
+				return MathUtils::SmoothStep(in_t, m_startValue, m_endValue);
 			}
 		};
-		template <typename TValueType> using LinearTween = Tween<LinearInterpolate<TValueType>>;
+		template <typename TValueType> using SmoothStepTween = Tween<SmoothStepInterpolate<TValueType>>;
 		//-----------------------------------------------------------------------
-		/// Convenience method to create an tween that performs a linear
+		/// Convenience method to create an tween that performs a smoothstep
 		/// interpolation
         ///
         /// @author S Downie
@@ -76,15 +76,15 @@ namespace ChilliSource
 		/// @param Start delay in seconds
         /// @param End delay in seconds
 		///
-		/// @return Tween with linear interp function
+		/// @return Tween with smoothstep interp function
 		//-----------------------------------------------------------------------
 		template <typename TValueType>
-		LinearTween<TValueType> MakeLinearTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_startDelay = 0.0f, f32 in_endDelay = 0.0f)
+		SmoothStepTween<TValueType> MakeSmoothStepTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_startDelay = 0.0f, f32 in_endDelay = 0.0f)
 		{
-			LinearInterpolate<TValueType> func;
+			SmoothStepInterpolate<TValueType> func;
 			func.m_startValue = in_start;
 			func.m_endValue = in_end;
-			return LinearTween<TValueType>(func, in_duration, in_startDelay, in_endDelay);
+			return SmoothStepTween<TValueType>(func, in_duration, in_startDelay, in_endDelay);
 		}
 	}
 }

@@ -117,18 +117,6 @@ namespace ChilliSource
             /// pass in seed
             //---------------------------------------------------------
             f32 GetPseudoRandom(u32 inudwSeed);
-			//---------------------------------------------------------
-            /// Lerp
-            ///
-            /// @param Factor to interpolate by
-            /// @param Min value in range
-            /// @param Max value in range
-            /// @return Linearly interpolated value
-            //---------------------------------------------------------
-			template <typename T> inline T Lerp(f32 infFactor, T inV1, T inV2)
-			{
-				return inV1 * (1.0f-infFactor) + inV2 * infFactor;
-			}
             //---------------------------------------------------------
             /// Step
             ///
@@ -174,6 +162,18 @@ namespace ChilliSource
 				return std::max(inMin, std::min(inValue, inMax));
 			}
             //---------------------------------------------------------
+            /// Lerp
+            ///
+            /// @param Factor to interpolate by
+            /// @param Min value in range
+            /// @param Max value in range
+            /// @return Linearly interpolated value
+            //---------------------------------------------------------
+			template <typename T> inline T Lerp(f32 in_factor, T in_a, T in_b)
+			{
+				return in_a * (1.0f - in_factor) + in_b * in_factor;
+			}
+            //---------------------------------------------------------
             /// Smooth Step
             ///
             /// @param Factor to interpolate by
@@ -181,11 +181,23 @@ namespace ChilliSource
             /// @param Max value in range
             /// @return Cubicly interpolated value
             //---------------------------------------------------------
-            template <typename T> inline T SmoothStep(f32 infFactor, T inV1, T inV2)
+            template <typename T> inline T SmoothStep(f32 in_factor, T in_a, T in_b)
             {
-                T t = Clamp((inV1 * -1.0f + infFactor)/(inV2 - inV1), 0.0f, 1.0f);
-                
-                return t*t*( t * -2.0f  + 3.0f);
+                T t = Clamp((in_a * -1.0f + in_factor)/(in_b - in_a), 0.0f, 1.0f);
+                return t * t * ( t * -2.0f  + 3.0f);
+            }
+            //---------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Factor to interpolate by
+            /// @param Min value in range
+            /// @param Max value in range
+            /// @return Smoother step interpolated value (Ken Perlin)
+            //---------------------------------------------------------
+            template <typename T> inline T SmootherStep(f32 in_factor, T in_a, T in_b)
+            {
+                T t = Clamp((in_a * -1.0f + in_factor)/(in_b - in_a), 0.0f, 1.0f);
+                return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
             }
             //----------------------------------------------------------
             /// Is Approx Zero
