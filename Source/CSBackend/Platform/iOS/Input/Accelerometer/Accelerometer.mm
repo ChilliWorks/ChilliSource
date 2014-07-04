@@ -108,7 +108,8 @@ namespace CSBackend
                     break;
             }
             
-            CSCore::Vector3 deviceSpaceAcceleration(m_motionManager.accelerometerData.acceleration.x, m_motionManager.accelerometerData.acceleration.y, m_motionManager.accelerometerData.acceleration.z);
+            CMAcceleration acceleration(m_motionManager.accelerometerData.acceleration);
+            CSCore::Vector3 deviceSpaceAcceleration(acceleration.x, acceleration.y, acceleration.z);
             deviceSpaceAcceleration.Transform3x4(orientationTransform);
             return deviceSpaceAcceleration;
         }
