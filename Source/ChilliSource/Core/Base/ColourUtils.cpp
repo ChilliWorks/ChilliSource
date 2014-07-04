@@ -53,10 +53,10 @@ namespace ChilliSource
                 
                 ByteColour result;
                 
-                result.r = MathUtils::Round(in_red * 255.0f);
-                result.g = MathUtils::Round(in_green * 255.0f);
-                result.b = MathUtils::Round(in_blue * 255.0f);
-                result.a = MathUtils::Round(in_alpha * 255.0f);
+                result.r = (u8)MathUtils::Round(in_red * 255.0f);
+                result.g = (u8)MathUtils::Round(in_green * 255.0f);
+                result.b = (u8)MathUtils::Round(in_blue * 255.0f);
+                result.a = (u8)MathUtils::Round(in_alpha * 255.0f);
                 
                 return result;
             }
