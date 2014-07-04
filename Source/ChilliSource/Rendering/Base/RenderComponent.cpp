@@ -38,7 +38,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------
-		RenderComponent::RenderComponent() : mfSortValue(0), mbVisible(true), mbShouldCull(true), mbCastsShadows(false)
+		RenderComponent::RenderComponent() : mfSortValue(0), mbVisible(true), mbShouldCull(true), mbCastsShadows(true)
 		{
 		}
 		//----------------------------------------------------
