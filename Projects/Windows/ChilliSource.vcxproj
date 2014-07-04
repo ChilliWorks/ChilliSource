@@ -311,6 +311,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\EaseBack.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\EaseQuad.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\Linear.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\SmoothStep.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\Tween.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Volume\VolumeComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\XML\XML.h" />
