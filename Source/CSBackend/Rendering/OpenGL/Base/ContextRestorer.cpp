@@ -77,7 +77,7 @@ namespace CSBackend
                 auto allTextures = resourcePool->GetAllResources<CSRendering::Texture>();
                 for (const auto& texture : allTextures)
 				{
-					CS_ASSERT(texture->GetStorageLocation() != CSCore::StorageLocation::k_none, "Cannot restore Texture becuase restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
+					CS_ASSERT(texture->GetStorageLocation() != CSCore::StorageLocation::k_none, "Cannot restore Texture because restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
 				}
                 resourcePool->RefreshResources<CSRendering::Texture>();
                 
@@ -85,7 +85,7 @@ namespace CSBackend
                 auto allCubemaps = resourcePool->GetAllResources<CSRendering::Cubemap>();
                 for (const auto& cubemap : allCubemaps)
 				{
-					CS_ASSERT(cubemap->GetStorageLocation() != CSCore::StorageLocation::k_none, "Cannot restore Cube Map becuase restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
+					CS_ASSERT(cubemap->GetStorageLocation() != CSCore::StorageLocation::k_none, "Cannot restore Cube Map because restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
 				}
                 resourcePool->RefreshResources<CSRendering::Cubemap>();
                 
