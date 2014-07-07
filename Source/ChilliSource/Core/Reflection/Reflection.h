@@ -33,7 +33,6 @@
 #include <ChilliSource/Core/Reflection/Property.h>
 #include <ChilliSource/Core/Reflection/Instance.h>
 #include <ChilliSource/Core/Reflection/MetaClass.h>
-//#include <ChilliSource/Core/Reflection/Method.h>
 #include <ChilliSource/Core/Reflection/Registry.h>
 
 #ifdef CS_ENABLE_REFLECTION

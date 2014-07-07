@@ -269,6 +269,29 @@
 
 /* Begin PBXFileReference section */
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
+		8158E483196ACB25005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
+		8158E484196ACB32005FF0A8 /* Container.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Container.h; sourceTree = "<group>"; };
+		8158E485196ACB41005FF0A8 /* Cryptographic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cryptographic.h; sourceTree = "<group>"; };
+		8158E486196ACB4B005FF0A8 /* Delegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Delegate.h; sourceTree = "<group>"; };
+		8158E487196ACB58005FF0A8 /* DialogueBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DialogueBox.h; sourceTree = "<group>"; };
+		8158E488196ACB62005FF0A8 /* Entity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
+		8158E489196ACB6E005FF0A8 /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		8158E48A196ACB7A005FF0A8 /* File.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = File.h; sourceTree = "<group>"; };
+		8158E48B196ACB84005FF0A8 /* Image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
+		8158E48C196ACB91005FF0A8 /* Localisation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Localisation.h; sourceTree = "<group>"; };
+		8158E48D196ACB9B005FF0A8 /* Math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Math.h; sourceTree = "<group>"; };
+		8158E48E196ACBA5005FF0A8 /* Notification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Notification.h; sourceTree = "<group>"; };
+		8158E48F196ACBB0005FF0A8 /* Reflection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflection.h; sourceTree = "<group>"; };
+		8158E490196ACBBB005FF0A8 /* Resource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Resource.h; sourceTree = "<group>"; };
+		8158E491196ACBC5005FF0A8 /* Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
+		8158E492196ACBFC005FF0A8 /* State.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = State.h; sourceTree = "<group>"; };
+		8158E493196ACC0B005FF0A8 /* String.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = String.h; sourceTree = "<group>"; };
+		8158E494196ACC1A005FF0A8 /* System.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
+		8158E495196ACC26005FF0A8 /* Threading.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Threading.h; sourceTree = "<group>"; };
+		8158E496196ACC2F005FF0A8 /* Time.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Time.h; sourceTree = "<group>"; };
+		8158E497196ACC3C005FF0A8 /* Tween.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tween.h; sourceTree = "<group>"; };
+		8158E498196ACC4A005FF0A8 /* Volume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Volume.h; sourceTree = "<group>"; };
+		8158E499196ACC76005FF0A8 /* XML.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XML.h; sourceTree = "<group>"; };
 		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		81D8ACF51962CEDC0010DA84 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D8ACF81962CEDC0010DA84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -414,7 +437,6 @@
 		81D8B2AC1962E0EB0010DA84 /* Instance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Instance.h; sourceTree = "<group>"; };
 		81D8B2AD1962E0EB0010DA84 /* MetaClass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MetaClass.cpp; sourceTree = "<group>"; };
 		81D8B2AE1962E0EB0010DA84 /* MetaClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetaClass.h; sourceTree = "<group>"; };
-		81D8B2AF1962E0EB0010DA84 /* Method.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Method.hpp; sourceTree = "<group>"; };
 		81D8B2B01962E0EB0010DA84 /* PropAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropAccess.h; sourceTree = "<group>"; };
 		81D8B2B11962E0EB0010DA84 /* Property.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Property.cpp; sourceTree = "<group>"; };
 		81D8B2B21962E0EB0010DA84 /* Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Property.h; sourceTree = "<group>"; };
@@ -953,6 +975,29 @@
 				81D8B2DF1962E0EB0010DA84 /* Tween */,
 				81D8B2E41962E0EB0010DA84 /* Volume */,
 				81D8B2E71962E0EB0010DA84 /* XML */,
+				8158E483196ACB25005FF0A8 /* Base.h */,
+				8158E484196ACB32005FF0A8 /* Container.h */,
+				8158E485196ACB41005FF0A8 /* Cryptographic.h */,
+				8158E486196ACB4B005FF0A8 /* Delegate.h */,
+				8158E487196ACB58005FF0A8 /* DialogueBox.h */,
+				8158E488196ACB62005FF0A8 /* Entity.h */,
+				8158E489196ACB6E005FF0A8 /* Event.h */,
+				8158E48A196ACB7A005FF0A8 /* File.h */,
+				8158E48B196ACB84005FF0A8 /* Image.h */,
+				8158E48C196ACB91005FF0A8 /* Localisation.h */,
+				8158E48D196ACB9B005FF0A8 /* Math.h */,
+				8158E48E196ACBA5005FF0A8 /* Notification.h */,
+				8158E48F196ACBB0005FF0A8 /* Reflection.h */,
+				8158E490196ACBBB005FF0A8 /* Resource.h */,
+				8158E491196ACBC5005FF0A8 /* Scene.h */,
+				8158E492196ACBFC005FF0A8 /* State.h */,
+				8158E493196ACC0B005FF0A8 /* String.h */,
+				8158E494196ACC1A005FF0A8 /* System.h */,
+				8158E495196ACC26005FF0A8 /* Threading.h */,
+				8158E496196ACC2F005FF0A8 /* Time.h */,
+				8158E497196ACC3C005FF0A8 /* Tween.h */,
+				8158E498196ACC4A005FF0A8 /* Volume.h */,
+				8158E499196ACC76005FF0A8 /* XML.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1167,7 +1212,6 @@
 				81D8B2AC1962E0EB0010DA84 /* Instance.h */,
 				81D8B2AD1962E0EB0010DA84 /* MetaClass.cpp */,
 				81D8B2AE1962E0EB0010DA84 /* MetaClass.h */,
-				81D8B2AF1962E0EB0010DA84 /* Method.hpp */,
 				81D8B2B01962E0EB0010DA84 /* PropAccess.h */,
 				81D8B2B11962E0EB0010DA84 /* Property.cpp */,
 				81D8B2B21962E0EB0010DA84 /* Property.h */,

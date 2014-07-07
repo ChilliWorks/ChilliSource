@@ -1,7 +1,7 @@
 //
-//  Notification.h
+//  Reflection.h
 //  Chilli Source
-//  Created by Ian Copland on 10/03/2014.
+//  Created by Ian Copland on 07/07/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,41 +26,15 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_NOTIFICATION_NOTIFICATION_H_
-#define _CHILLISOURCE_CORE_NOTIFICATION_NOTIFICATION_H_
+#ifndef _CHILLISOURCE_CORE_REFLECTION_H_
+#define _CHILLISOURCE_CORE_REFLECTION_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Core/Container/ParamDictionary.h>
-
-namespace ChilliSource
-{
-    namespace Core
-    {
-        //------------------------------------------------------------
-        /// A notification that can be used by any of the notification
-        /// systems.
-        //------------------------------------------------------------
-        struct Notification
-        {
-            //----------------------------------------------------
-            /// An enum describing the priority of a notification.
-            //----------------------------------------------------
-            enum class Priority
-            {
-                k_standard,
-                k_high
-            };
-            //----------------------------------------------------
-            /// Typedefs
-            //----------------------------------------------------
-            typedef u32 ID;
-
-            ID m_id;
-            ParamDictionary m_params;
-            Priority m_priority;
-        };
-    }
-}
+#include <ChilliSource/Core/Reflection/Instance.h>
+#include <ChilliSource/Core/Reflection/MetaClass.h>
+#include <ChilliSource/Core/Reflection/PropAccess.h>
+#include <ChilliSource/Core/Reflection/Property.h>
+#include <ChilliSource/Core/Reflection/Reflection.h>
+#include <ChilliSource/Core/Reflection/Registry.h>
 
 #endif
