@@ -305,6 +305,13 @@
 		8158E4A5196ADB4D005FF0A8 /* Gestures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Gestures.h; sourceTree = "<group>"; };
 		8158E4A6196ADB56005FF0A8 /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
 		8158E4A7196ADB61005FF0A8 /* Pointer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
+		8158E4A8196ADD1E005FF0A8 /* ContentDownload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContentDownload.h; sourceTree = "<group>"; };
+		8158E4A9196ADD82005FF0A8 /* Http.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Http.h; sourceTree = "<group>"; };
+		8158E4AA196ADD8C005FF0A8 /* IAP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IAP.h; sourceTree = "<group>"; };
+		8158E4AB196ADE19005FF0A8 /* Communications.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Communications.h; sourceTree = "<group>"; };
+		8158E4AC196ADE49005FF0A8 /* Facebook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Facebook.h; sourceTree = "<group>"; };
+		8158E4AD196ADE95005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
+		8158E4AE196ADEE4005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		81D8ACF51962CEDC0010DA84 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D8ACF81962CEDC0010DA84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1566,6 +1573,9 @@
 				81D8B34A1962E0EC0010DA84 /* ForwardDeclarations.h */,
 				81D8B34B1962E0EC0010DA84 /* Http */,
 				81D8B34F1962E0EC0010DA84 /* IAP */,
+				8158E4A8196ADD1E005FF0A8 /* ContentDownload.h */,
+				8158E4A9196ADD82005FF0A8 /* Http.h */,
+				8158E4AA196ADD8C005FF0A8 /* IAP.h */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -1843,6 +1853,8 @@
 				81D8B3E51962E0EC0010DA84 /* Communications */,
 				81D8B3E81962E0EC0010DA84 /* Facebook */,
 				81D8B3ED1962E0EC0010DA84 /* ForwardDeclarations.h */,
+				8158E4AB196ADE19005FF0A8 /* Communications.h */,
+				8158E4AC196ADE49005FF0A8 /* Facebook.h */,
 			);
 			path = Social;
 			sourceTree = "<group>";
@@ -1872,6 +1884,7 @@
 			children = (
 				81D8B3EF1962E0EC0010DA84 /* Base */,
 				81D8B3F61962E0EC0010DA84 /* ForwardDeclarations.h */,
+				8158E4AD196ADE95005FF0A8 /* Base.h */,
 			);
 			path = Video;
 			sourceTree = "<group>";
@@ -1894,6 +1907,7 @@
 			children = (
 				81D8B3F81962E0EC0010DA84 /* Base */,
 				81D8B3FB1962E0EC0010DA84 /* ForwardDeclarations.h */,
+				8158E4AE196ADEE4005FF0A8 /* Base.h */,
 			);
 			path = Web;
 			sourceTree = "<group>";
