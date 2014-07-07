@@ -176,7 +176,7 @@ public class CSFontBuilder
 		}
 		catch (Exception e)
 		{
-			Logging.logVerbose("An exception occurred while converting to CSImage:\n" + StringUtils.convertExceptionToString(e));
+			Logging.logFatal("An exception occurred while converting to CSImage:\n" + StringUtils.convertExceptionToString(e));
 		}
 		
 		FileUtils.deleteFile(StringUtils.removeExtension(m_options.m_outputFilePath) + ".png");

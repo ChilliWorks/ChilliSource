@@ -368,7 +368,7 @@ public class TexturePacker
 					}
 					else
 					{
-						Logging.logVerbose("input out of range:" + (ix + x) + "," + (iy + y));
+						Logging.logFatal("input out of range:" + (ix + x) + "," + (iy + y));
 					}
 
 					if ((ox + x) < combinedImageWidth && (oy + y) < combinedImageHeight)
@@ -377,7 +377,7 @@ public class TexturePacker
 					}
 					else
 					{
-						Logging.logVerbose("Pixel out of range:" + (ox + x) + "," + (oy + y));
+						Logging.logFatal("Pixel out of range:" + (ox + x) + "," + (oy + y));
 					}
 				}
 			}
