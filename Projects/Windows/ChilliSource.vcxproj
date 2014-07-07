@@ -46,7 +46,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Image\PVRImageProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Localisation\LocalisedText.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Localisation\LocalisedTextProvider.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Geometry\Curves.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Geometry\ShapeIntersection.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Geometry\Shapes.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\MathUtils.cpp" />

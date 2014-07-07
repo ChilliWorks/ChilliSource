@@ -67,7 +67,6 @@
 		81D8B41C1962E0EC0010DA84 /* PVRImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B2871962E0EB0010DA84 /* PVRImageProvider.cpp */; };
 		81D8B41D1962E0EC0010DA84 /* LocalisedText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B28A1962E0EB0010DA84 /* LocalisedText.cpp */; };
 		81D8B41E1962E0EC0010DA84 /* LocalisedTextProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B28C1962E0EB0010DA84 /* LocalisedTextProvider.cpp */; };
-		81D8B41F1962E0EC0010DA84 /* Curves.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B2901962E0EB0010DA84 /* Curves.cpp */; };
 		81D8B4201962E0EC0010DA84 /* ShapeIntersection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B2921962E0EB0010DA84 /* ShapeIntersection.cpp */; };
 		81D8B4211962E0EC0010DA84 /* Shapes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B2941962E0EB0010DA84 /* Shapes.cpp */; };
 		81D8B4221962E0EC0010DA84 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B2961962E0EB0010DA84 /* MathUtils.cpp */; };
@@ -438,7 +437,6 @@
 		81D8B28B1962E0EB0010DA84 /* LocalisedText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalisedText.h; sourceTree = "<group>"; };
 		81D8B28C1962E0EB0010DA84 /* LocalisedTextProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocalisedTextProvider.cpp; sourceTree = "<group>"; };
 		81D8B28D1962E0EB0010DA84 /* LocalisedTextProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalisedTextProvider.h; sourceTree = "<group>"; };
-		81D8B2901962E0EB0010DA84 /* Curves.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Curves.cpp; sourceTree = "<group>"; };
 		81D8B2911962E0EB0010DA84 /* Curves.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Curves.h; sourceTree = "<group>"; };
 		81D8B2921962E0EB0010DA84 /* ShapeIntersection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShapeIntersection.cpp; sourceTree = "<group>"; };
 		81D8B2931962E0EB0010DA84 /* ShapeIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShapeIntersection.h; sourceTree = "<group>"; };
@@ -1209,7 +1207,6 @@
 		81D8B28F1962E0EB0010DA84 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
-				81D8B2901962E0EB0010DA84 /* Curves.cpp */,
 				81D8B2911962E0EB0010DA84 /* Curves.h */,
 				81D8B2921962E0EB0010DA84 /* ShapeIntersection.cpp */,
 				81D8B2931962E0EB0010DA84 /* ShapeIntersection.h */,
@@ -2412,7 +2409,6 @@
 				81D8B47B1962E0EC0010DA84 /* Material.cpp in Sources */,
 				81D8B4691962E0EC0010DA84 /* MeshBatch.cpp in Sources */,
 				81D8B6BB1962E0F70010DA84 /* VideoPlayer.mm in Sources */,
-				81D8B41F1962E0EC0010DA84 /* Curves.cpp in Sources */,
 				81D8B4311962E0EC0010DA84 /* StateManager.cpp in Sources */,
 				81D8B40E1962E0EC0010DA84 /* DialogueBoxSystem.cpp in Sources */,
 				81D8B4551962E0EC0010DA84 /* HorizontalEndcappedProgressBar.cpp in Sources */,

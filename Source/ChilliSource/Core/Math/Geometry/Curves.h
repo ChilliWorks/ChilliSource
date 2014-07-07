@@ -199,6 +199,8 @@ namespace ChilliSource
 			f32 mfDeltaT;
 			std::vector<T> mPoints;
 		};
+        template<typename T> const u16 CatmullRomSpline<T>::wLengthSamplesPerSegment = 259;
+		template<typename T> const float CatmullRomSpline<T>::mfSmallTDelta = 0.005f;
 		
 		template <typename T> class MultiLineSegment {
 		public:
