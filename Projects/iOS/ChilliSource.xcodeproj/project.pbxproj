@@ -312,6 +312,16 @@
 		8158E4AC196ADE49005FF0A8 /* Facebook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Facebook.h; sourceTree = "<group>"; };
 		8158E4AD196ADE95005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		8158E4AE196ADEE4005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
+		8158E4AF196AE019005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
+		8158E4B0196AE022005FF0A8 /* Camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		8158E4B1196AE02C005FF0A8 /* Font.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Font.h; sourceTree = "<group>"; };
+		8158E4B2196AE035005FF0A8 /* Lighting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lighting.h; sourceTree = "<group>"; };
+		8158E4B3196AE042005FF0A8 /* Material.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
+		8158E4B4196AE04B005FF0A8 /* Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		8158E4B5196AE055005FF0A8 /* Particles.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Particles.h; sourceTree = "<group>"; };
+		8158E4B6196AE05F005FF0A8 /* Shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
+		8158E4B7196AE06B005FF0A8 /* Sprite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
+		8158E4B8196AE074005FF0A8 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		81D8ACF51962CEDC0010DA84 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D8ACF81962CEDC0010DA84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1625,6 +1635,16 @@
 				81D8B3C71962E0EC0010DA84 /* Shader */,
 				81D8B3CA1962E0EC0010DA84 /* Sprite */,
 				81D8B3D11962E0EC0010DA84 /* Texture */,
+				8158E4AF196AE019005FF0A8 /* Base.h */,
+				8158E4B0196AE022005FF0A8 /* Camera.h */,
+				8158E4B1196AE02C005FF0A8 /* Font.h */,
+				8158E4B2196AE035005FF0A8 /* Lighting.h */,
+				8158E4B3196AE042005FF0A8 /* Material.h */,
+				8158E4B4196AE04B005FF0A8 /* Model.h */,
+				8158E4B5196AE055005FF0A8 /* Particles.h */,
+				8158E4B6196AE05F005FF0A8 /* Shader.h */,
+				8158E4B7196AE06B005FF0A8 /* Sprite.h */,
+				8158E4B8196AE074005FF0A8 /* Texture.h */,
 			);
 			path = Rendering;
 			sourceTree = "<group>";

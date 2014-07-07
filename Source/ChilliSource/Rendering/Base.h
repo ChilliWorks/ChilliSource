@@ -1,11 +1,11 @@
 //
-//  VertexLayouts.h
+//  Base.h
 //  Chilli Source
-//  Created by Scott Downie on 04/10/2010.
+//  Created by Ian Copland on 07/07/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,28 +26,30 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_VERTEXLAYOUTS_H_
-#define _CHILLISOURCE_RENDERING_BASE_VERTEXLAYOUTS_H_
+
+#ifndef _CHILLISOURCE_RENDERING_BASE_H_
+#define _CHILLISOURCE_RENDERING_BASE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
+#include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
+#include <ChilliSource/Rendering/Base/BlendMode.h>
+#include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Base/CullFace.h>
+#include <ChilliSource/Rendering/Base/CullingPredicates.h>
+#include <ChilliSource/Rendering/Base/DepthTestComparison.h>
+#include <ChilliSource/Rendering/Base/MeshBatch.h>
+#include <ChilliSource/Rendering/Base/MeshBuffer.h>
+#include <ChilliSource/Rendering/Base/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Base/RenderComponent.h>
+#include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
+#include <ChilliSource/Rendering/Base/Renderer.h>
+#include <ChilliSource/Rendering/Base/RendererSortPredicates.h>
+#include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Base/RenderTarget.h>
+#include <ChilliSource/Rendering/Base/ShaderPass.h>
+#include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
-
-namespace ChilliSource
-{
-	namespace Rendering
-	{
-		namespace VertexLayout
-		{
-            static const VertexElement kMeshElements[]	 = {{VertexDataType::k_float4, VertexDataSemantic::k_position}, {VertexDataType::k_float3, VertexDataSemantic::k_normal}, {VertexDataType::k_float2, VertexDataSemantic::k_uv}};
-			static const VertexElement kSpriteElements[] = {{VertexDataType::k_float4, VertexDataSemantic::k_position}, {VertexDataType::k_float2, VertexDataSemantic::k_uv},     {VertexDataType::k_byte4, VertexDataSemantic::k_colour}};
-			static const VertexElement kPosColElement[]	 = {{VertexDataType::k_float4, VertexDataSemantic::k_position}, {VertexDataType::k_byte4, VertexDataSemantic::k_colour}};
-			
-			//static const VertexDeclaration kMesh(4,kMeshElements);
-            static const VertexDeclaration kMesh(3,kMeshElements);
-			static const VertexDeclaration kSprite(3,kSpriteElements);
-			static const VertexDeclaration kPosCol(2,kPosColElement);
-		}
-	}
-}
+#include <ChilliSource/Rendering/Base/VertexLayouts.h>
 
 #endif
