@@ -300,6 +300,11 @@
 		8158E4A0196AD78D005FF0A8 /* Label.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Label.h; sourceTree = "<group>"; };
 		8158E4A1196AD79B005FF0A8 /* ProgressBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProgressBar.h; sourceTree = "<group>"; };
 		8158E4A2196AD7A4005FF0A8 /* SliderBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SliderBar.h; sourceTree = "<group>"; };
+		8158E4A3196ADB38005FF0A8 /* Accelerometer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Accelerometer.h; sourceTree = "<group>"; };
+		8158E4A4196ADB43005FF0A8 /* DeviceButtons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceButtons.h; sourceTree = "<group>"; };
+		8158E4A5196ADB4D005FF0A8 /* Gestures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Gestures.h; sourceTree = "<group>"; };
+		8158E4A6196ADB56005FF0A8 /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
+		8158E4A7196ADB61005FF0A8 /* Pointer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
 		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		81D8ACF51962CEDC0010DA84 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D8ACF81962CEDC0010DA84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1500,6 +1505,11 @@
 				81D8B33A1962E0EC0010DA84 /* Gestures */,
 				81D8B33D1962E0EC0010DA84 /* Keyboard */,
 				81D8B3401962E0EC0010DA84 /* Pointer */,
+				8158E4A3196ADB38005FF0A8 /* Accelerometer.h */,
+				8158E4A4196ADB43005FF0A8 /* DeviceButtons.h */,
+				8158E4A5196ADB4D005FF0A8 /* Gestures.h */,
+				8158E4A6196ADB56005FF0A8 /* Keyboard.h */,
+				8158E4A7196ADB61005FF0A8 /* Pointer.h */,
 			);
 			path = Input;
 			sourceTree = "<group>";
