@@ -213,7 +213,7 @@ namespace ChilliSource
             mpLastMaterial.reset();
                 
             //Swap the buffers
-            mudwCurrentRenderSpriteBatch = mudwCurrentRenderSpriteBatch % kudwNumBuffers;
+            mudwCurrentRenderSpriteBatch = ++mudwCurrentRenderSpriteBatch % kudwNumBuffers;
 		}
         //----------------------------------------------------------
         /// Destructor
