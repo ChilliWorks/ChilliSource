@@ -1,11 +1,11 @@
 //
-//  Slider.h
+//  Label.h
 //  Chilli Source
-//  Created by Scott Downie on 09/06/2011.
+//  Created by Ian Copland on 07/07/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,45 +26,13 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_GUI_SLIDERBAR_SLIDERBAR_H_
-#define _CHILLISOURCE_GUI_SLIDERBAR_SLIDERBAR_H_
+
+#ifndef _CHILLISOURCE_GUI_LABEL_H_
+#define _CHILLISOURCE_GUI_LABEL_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/GUI/Base/GUIView.h>
-
-namespace ChilliSource
-{
-	namespace GUI
-	{
-		class SliderBar : public GUIView
-		{
-		public:
-
-			DECLARE_META_CLASS(SliderBar)
-
-			SliderBar();
-			SliderBar(const Core::ParamDictionary& insParams);
-
-			virtual ~SliderBar(){}
-
-			//----------------------------------------------
-			/// Get Value
-			///
-			/// @return Normalised value of the slider pos
-			//----------------------------------------------
-			f32 GetValue() const;
-			//----------------------------------------------
-			/// Get Value
-			///
-			/// @param Normalised value of the slider pos
-			//----------------------------------------------			
-			void SetValue(f32 infValue);
-
-		protected:
-
-			f32 mfSliderValue;
-		};
-	}
-}
+#include <ChilliSource/GUI/Label/EditableLabel.h>
+#include <ChilliSource/GUI/Label/FormattedLabel.h>
+#include <ChilliSource/GUI/Label/Label.h>
 
 #endif

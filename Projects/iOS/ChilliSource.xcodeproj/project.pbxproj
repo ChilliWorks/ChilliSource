@@ -292,6 +292,14 @@
 		8158E497196ACC3C005FF0A8 /* Tween.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tween.h; sourceTree = "<group>"; };
 		8158E498196ACC4A005FF0A8 /* Volume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Volume.h; sourceTree = "<group>"; };
 		8158E499196ACC76005FF0A8 /* XML.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XML.h; sourceTree = "<group>"; };
+		8158E49B196AD6FC005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
+		8158E49C196AD769005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
+		8158E49D196AD774005FF0A8 /* Button.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Button.h; sourceTree = "<group>"; };
+		8158E49E196AD77C005FF0A8 /* Container.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Container.h; sourceTree = "<group>"; };
+		8158E49F196AD784005FF0A8 /* Image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
+		8158E4A0196AD78D005FF0A8 /* Label.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Label.h; sourceTree = "<group>"; };
+		8158E4A1196AD79B005FF0A8 /* ProgressBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProgressBar.h; sourceTree = "<group>"; };
+		8158E4A2196AD7A4005FF0A8 /* SliderBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SliderBar.h; sourceTree = "<group>"; };
 		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		81D8ACF51962CEDC0010DA84 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D8ACF81962CEDC0010DA84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1342,6 +1350,7 @@
 			children = (
 				81D8B2ED1962E0EB0010DA84 /* Base */,
 				81D8B2F21962E0EB0010DA84 /* ForwardDeclarations.h */,
+				8158E49B196AD6FC005FF0A8 /* Base.h */,
 			);
 			path = Debugging;
 			sourceTree = "<group>";
@@ -1368,6 +1377,13 @@
 				81D8B3191962E0EB0010DA84 /* Label */,
 				81D8B3201962E0EB0010DA84 /* ProgressBar */,
 				81D8B32B1962E0EB0010DA84 /* SliderBar */,
+				8158E49C196AD769005FF0A8 /* Base.h */,
+				8158E49D196AD774005FF0A8 /* Button.h */,
+				8158E49E196AD77C005FF0A8 /* Container.h */,
+				8158E49F196AD784005FF0A8 /* Image.h */,
+				8158E4A0196AD78D005FF0A8 /* Label.h */,
+				8158E4A1196AD79B005FF0A8 /* ProgressBar.h */,
+				8158E4A2196AD7A4005FF0A8 /* SliderBar.h */,
 			);
 			path = GUI;
 			sourceTree = "<group>";

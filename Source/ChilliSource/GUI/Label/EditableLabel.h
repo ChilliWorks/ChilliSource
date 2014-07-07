@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_GUI_GUI_EDITABLE_LABEL
-#define _CHILLISOURCE_GUI_GUI_EDITABLE_LABEL
+#ifndef _CHILLISOURCE_GUI_LABEL_EDITABLELABEL_H_
+#define _CHILLISOURCE_GUI_LABEL_EDITABLELABEL_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
