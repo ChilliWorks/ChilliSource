@@ -158,12 +158,6 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void DirectionalLightComponent::OnResume()
-        {
-            CreateShadowMapTextures();
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
         void DirectionalLightComponent::CreateShadowMapTextures()
         {
             if(m_shadowMap == nullptr && m_renderCapabilities->IsShadowMappingSupported() == true && m_shadowMapRes > 0)
@@ -175,7 +169,7 @@ namespace ChilliSource
                 desc.m_format = Core::ImageFormat::k_Depth16;
                 desc.m_compression = Core::ImageCompression::k_none;
                 desc.m_dataSize = 0;
-                m_shadowMap->Build(desc, nullptr, false);
+                m_shadowMap->Build(desc, nullptr, false, false);
                 
 #ifdef CS_ENABLE_DEBUGSHADOW
                 m_shadowMapDebug = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_ShadowMapDebug" + Core::ToString(m_shadowMapId));
@@ -184,13 +178,13 @@ namespace ChilliSource
                 desc.m_format = Core::ImageFormat::k_RGB888;
                 desc.m_compression = Core::ImageCompression::k_none;
                 desc.m_dataSize = 0;
-                m_shadowMapDebug->Build(desc, nullptr, false);
+                m_shadowMapDebug->Build(desc, nullptr, false, false);
 #endif
             }
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void DirectionalLightComponent::OnSuspend()
+        void DirectionalLightComponent::DestroyShadowMapTextures()
         {
             Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
             
@@ -207,6 +201,12 @@ namespace ChilliSource
                 m_shadowMapDebug.reset();
                 resourcePool->Release(release);
             }
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        DirectionalLightComponent::~DirectionalLightComponent()
+        {
+            DestroyShadowMapTextures();
         }
 	}
 }

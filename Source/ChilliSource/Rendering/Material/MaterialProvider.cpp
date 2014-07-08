@@ -611,7 +611,7 @@ namespace ChilliSource
                     }
                     case ResourceType::k_texture:
                     {
-                        auto options(std::make_shared<TextureResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV));
+                        auto options(std::make_shared<TextureResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV, true));
                         resourcePool->LoadResourceAsync<Texture>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [in_loadIndex, in_descs, in_delegate, out_material](const TextureCSPtr& in_texture)
                         {
                             if(in_texture->GetLoadState() == Core::Resource::LoadState::k_loaded)
@@ -744,7 +744,7 @@ namespace ChilliSource
             {
                 if(textureFiles[i].m_filePath.empty() == false)
                 {
-                    auto options(std::make_shared<TextureResourceOptions>(textureFiles[i].m_shouldMipMap, textureFiles[i].m_filterMode, textureFiles[i].m_wrapModeU, textureFiles[i].m_wrapModeV));
+                    auto options(std::make_shared<TextureResourceOptions>(textureFiles[i].m_shouldMipMap, textureFiles[i].m_filterMode, textureFiles[i].m_wrapModeU, textureFiles[i].m_wrapModeV, true));
                     TextureCSPtr texture = resourcePool->LoadResource<Texture>(textureFiles[i].m_location, textureFiles[i].m_filePath, options);
                     if(texture == nullptr)
                     {

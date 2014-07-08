@@ -92,17 +92,25 @@ namespace ChilliSource
                 k_clamp,
                 k_repeat
 			};
-            //--------------------------------------------------
-            /// Construct the texture from the given image data.
-            /// The texture will take ownership of the image data
+            //--------------------------------------------------------------
+            /// Construct the texture from the given image data. The texture
+            /// will take ownership of the image data.
             ///
             /// @author S Downie
             ///
             /// @param Texture descriptor
             /// @param Image data
             /// @param Whether the texture should have mip maps generated
-            //--------------------------------------------------
-            virtual void Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap) = 0;
+            /// @param Whether or not the texture data should be
+            /// restored after a context loss. This involves maintaining
+            /// a copy of the texture data in memory which is costly
+            /// so this should be disabled for any textures that can
+            /// easily be recreated, i.e any texture that is rendered
+            /// into every frame. This has no effect on textures that
+            /// are loaded from file as they are always restored from
+            /// disk.
+            //--------------------------------------------------------------
+            virtual void Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap, bool in_restoreTextureData) = 0;
 			//--------------------------------------------------------------
             /// Binds this texture to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it

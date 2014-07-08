@@ -156,15 +156,17 @@ namespace ChilliSource
             
             if(in_delegate == nullptr)
             {
+                Texture* texture = (Texture*)out_resource.get();
+                const TextureResourceOptions* options = (const TextureResourceOptions*)in_options.get();
+                
                 Texture::Descriptor desc;
                 desc.m_width = image->GetWidth();
                 desc.m_height = image->GetHeight();
                 desc.m_format = image->GetFormat();
                 desc.m_compression = image->GetCompression();
                 desc.m_dataSize = image->GetDataSize();
-                Texture* texture = (Texture*)out_resource.get();
-                const TextureResourceOptions* options = (const TextureResourceOptions*)in_options.get();
-                texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled());
+
+                texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled(), options->IsRestoreTextureDataEnabled());
                 texture->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
                 texture->SetFilterMode(options->GetFilterMode());
                 out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
@@ -173,15 +175,17 @@ namespace ChilliSource
             {
                 auto task([image, in_options, in_delegate, out_resource]()
                 {
+                    Texture* texture = (Texture*)out_resource.get();
+                    const TextureResourceOptions* options = (const TextureResourceOptions*)in_options.get();
+                    
                     Texture::Descriptor desc;
                     desc.m_width = image->GetWidth();
                     desc.m_height = image->GetHeight();
                     desc.m_format = image->GetFormat();
                     desc.m_compression = image->GetCompression();
                     desc.m_dataSize = image->GetDataSize();
-                    Texture* texture = (Texture*)out_resource.get();
-                    const TextureResourceOptions* options = (const TextureResourceOptions*)in_options.get();
-                    texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled());
+                    
+                    texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled(), options->IsRestoreTextureDataEnabled());
                     texture->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
                     texture->SetFilterMode(options->GetFilterMode());
                     out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);

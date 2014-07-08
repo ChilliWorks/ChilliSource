@@ -180,10 +180,13 @@ namespace CSBackend
             DeleteRenderBuffer(&mRenderBuffer);
             DeleteRenderBuffer(&mDepthBuffer);
             BindFrameBuffer(mFrameBuffer);
+            
+            m_colourTexture = inpColourTexture;
+            m_depthTexture = inpDepthTexture;
 			
-            if (inpColourTexture != nullptr)
+            if (m_colourTexture != nullptr)
             {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(inpColourTexture)->GetTextureHandle(), 0);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(m_colourTexture)->GetTextureHandle(), 0);
             }
 //Regular OpenGL must always have a colour buffer bound
 #ifdef CS_OPENGLVERSION_STANDARD
@@ -195,9 +198,9 @@ namespace CSBackend
 				}
 			}
 #endif
-            if (inpDepthTexture != nullptr)
+            if (m_depthTexture != nullptr)
             {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(inpDepthTexture)->GetTextureHandle(), 0);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(m_depthTexture)->GetTextureHandle(), 0);
             }
             else
             {
@@ -231,6 +234,18 @@ namespace CSBackend
 #endif
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting render target textures.");
+        }
+        //------------------------------------------------------
+        //------------------------------------------------------
+        const CSRendering::TextureSPtr& RenderTarget::GetColourTexture() const
+        {
+            return m_colourTexture;
+        }
+        //------------------------------------------------------
+        //------------------------------------------------------
+        const CSRendering::TextureSPtr& RenderTarget::GetDepthTexture() const
+        {
+            return m_depthTexture;
         }
         //------------------------------------------------------
 		/// Create and Attach Depth Buffer
@@ -333,6 +348,9 @@ namespace CSBackend
             }
             
             DeleteFrameBuffer(&mFrameBuffer);
+            
+            m_colourTexture.reset();
+            m_depthTexture.reset();
 		}
 		//------------------------------------------------------
 		/// Destructor

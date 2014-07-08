@@ -123,22 +123,13 @@ namespace ChilliSource
 			/// @return Shadow map debug colour texture
 			//----------------------------------------------------------
 			const TextureSPtr& GetShadowMapDebugPtr() const;
-            
+            //----------------------------------------------------------
+            /// Destructor
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------
+			~DirectionalLightComponent();
         private:
-            //----------------------------------------------------
-            /// Called when the application is resumed. This will
-            /// build the internal shadow map textures.
-            ///
-            /// @author Ian Copland
-            //----------------------------------------------------
-            void OnResume() override;
-            //----------------------------------------------------
-            /// Called when the application is suspended. This will
-            /// cleanup the internal shadow map textures.
-            ///
-            /// @author Ian Copland
-            //----------------------------------------------------
-            void OnSuspend() override;
             //----------------------------------------------------
             /// Create shadow map textures if they don't already
             /// exist
@@ -146,6 +137,13 @@ namespace ChilliSource
             /// @author Ian Copland
             //----------------------------------------------------
             void CreateShadowMapTextures();
+            //----------------------------------------------------
+            /// Destroys the shadow map textures if they currently
+            /// exist.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------
+            void DestroyShadowMapTextures();
             
             RenderCapabilities* m_renderCapabilities = nullptr;
             

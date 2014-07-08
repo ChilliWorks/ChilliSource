@@ -592,6 +592,23 @@ namespace CSBackend
 #ifdef CS_TARGETPLATFORM_WINDOWS
 			CSBackend::Windows::SFMLWindow::Get()->Display();
 #endif
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            if (inpActiveRenderTarget != nullptr)
+            {
+                Texture* colourTexture = static_cast<Texture*>(inpActiveRenderTarget->GetColourTexture().get());
+                if (colourTexture != nullptr)
+                {
+                    colourTexture->UpdateRestorationData();
+                }
+
+                Texture* depthTexture = static_cast<Texture*>(inpActiveRenderTarget->GetDepthTexture().get());
+                if (depthTexture != nullptr)
+                {
+                    depthTexture->UpdateRestorationData();
+                }
+            }
+#endif
 		}
         //----------------------------------------------------------
 		/// Lock Alpha Blending

@@ -58,7 +58,7 @@ namespace CSBackend
 			/// @return Whether the object is of this type
 			//--------------------------------------------------
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
-            //--------------------------------------------------
+            //--------------------------------------------------------------
             /// Construct the texture from the given image data.
             /// The texture will take ownership of the image data
             ///
@@ -67,8 +67,16 @@ namespace CSBackend
             /// @param Texture descriptor
             /// @param Image data
             /// @param Whether the texture should have mip maps generated
-            //--------------------------------------------------
-            void Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap) override;
+            /// @param Whether or not the texture data should be
+            /// restored after a context loss. This involves maintaining
+            /// a copy of the texture data in memory which is costly
+            /// so this should be disabled for any textures that can
+            /// easily be recreated, i.e any texture that is rendered
+            /// into every frame. This has no effect on textures that
+            /// are loaded from file as they are always restored from
+            /// disk.
+            //--------------------------------------------------------------
+            void Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap, bool in_restoreTextureData) override;
 			//--------------------------------------------------------------
             /// Binds this texture to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it
@@ -122,18 +130,40 @@ namespace CSBackend
             ///			the texture.
             //--------------------------------------------------
             CSCore::ImageFormat GetFormat() const;
-            //--------------------------------------------------------------
+            //--------------------------------------------------
             /// @author S Downie
             ///
             /// @return The width of the texture in texels
-            //--------------------------------------------------------------
+            //--------------------------------------------------
             u32 GetWidth() const;
-            //--------------------------------------------------------------
+            //--------------------------------------------------
             /// @author S Downie
             ///
             /// @return The height of the texture in texels
-            //--------------------------------------------------------------
+            //--------------------------------------------------
             u32 GetHeight() const;
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            //--------------------------------------------------
+            /// Updates the copy of the texture data used for
+            /// restoration. If the texture was created from file
+            /// or texture
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------
+            void UpdateRestorationData();
+            //--------------------------------------------------
+            /// Restores the texture after context loss if the
+            /// texture was not loaded from file. If the texture
+            /// has restoration data this will be used to
+            /// re-populate the texture. Otherwise it will be
+            /// re-created empty. This should not be called for
+            /// any image that was loaded from file.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------
+            void RestoreTexture();
+#endif
             //--------------------------------------------------
             /// Destroys the texture and resets it to the state
             /// prior to build being called.
@@ -174,10 +204,17 @@ namespace CSBackend
             WrapMode m_tWrapMode = WrapMode::k_clamp;
             
             CSCore::ImageFormat m_format;
+            CSCore::ImageCompression m_compression;
             
             bool m_hasFilterModeChanged = true;
             bool m_hasWrapModeChanged = true;
             bool m_hasMipMaps = false;
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            bool m_restoreTextureData = false;
+            u32 m_restorationDataSize = 0;
+            TextureDataUPtr m_restorationData;
+#endif
 		};
 	}
 }

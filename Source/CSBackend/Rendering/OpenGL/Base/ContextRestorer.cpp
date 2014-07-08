@@ -26,14 +26,16 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <CSBackend/Rendering/OpenGL/Base/ContextRestorer.h>
 
 #include <CSBackend/Rendering/OpenGL/Base/MeshBuffer.h>
+#include <CSBackend/rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
-#include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace CSBackend
 {
@@ -77,8 +79,12 @@ namespace CSBackend
                 auto allTextures = resourcePool->GetAllResources<CSRendering::Texture>();
                 for (const auto& texture : allTextures)
 				{
-					CS_ASSERT(texture->GetStorageLocation() != CSCore::StorageLocation::k_none, "Cannot restore Texture because restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
-				}
+                    if (texture->GetStorageLocation() == CSCore::StorageLocation::k_none)
+                    {
+                        Texture* glTexture = static_cast<Texture*>(const_cast<CSRendering::Texture*>(texture.get()));
+                        glTexture->RestoreTexture();
+                    }
+                }
                 resourcePool->RefreshResources<CSRendering::Texture>();
                 
                 //---Cubemaps
@@ -120,3 +126,5 @@ namespace CSBackend
         }
     }
 }
+
+#endif

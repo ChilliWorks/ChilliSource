@@ -302,13 +302,14 @@ namespace CSBackend
         /// GL makes a copy of the data so we can just
         /// let the incoming data delete itself
         //--------------------------------------------------
-        void Texture::Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap)
+        void Texture::Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap, bool in_restoreTextureData)
         {
             Destroy();
             
             m_width = in_desc.m_width;
             m_height = in_desc.m_height;
             m_format = in_desc.m_format;
+            m_compression = in_desc.m_compression;
             
             CS_ASSERT(m_width <= m_renderCapabilities->GetMaxTextureSize() && m_height <= m_renderCapabilities->GetMaxTextureSize(),
                       "OpenGL does not support textures of this size on this device (" + CSCore::ToString(m_width) + ", " + CSCore::ToString(m_height) + ")");
@@ -318,7 +319,7 @@ namespace CSBackend
             
             u8* data = in_data.get();
             
-			switch(in_desc.m_compression)
+			switch(m_compression)
 			{
 				case CSCore::ImageCompression::k_none:
                     UploadImageDataNoCompression(m_format, m_width, m_height, data);
@@ -340,6 +341,15 @@ namespace CSBackend
             }
             
             m_hasMipMaps = in_mipMap;
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            if (GetStorageLocation() == CSCore::StorageLocation::k_none && GetFilePath() == "" && in_restoreTextureData == true)
+            {
+            	m_restoreTextureData = true;
+                m_restorationDataSize = in_desc.m_dataSize;
+                m_restorationData = std::move(in_data);
+            }
+#endif
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while building texture.");
         }
@@ -396,6 +406,67 @@ namespace CSBackend
             
             m_hasWrapModeChanged = true;
 		}
+#ifdef CS_TARGETPLATFORM_ANDROID
+        //--------------------------------------------------
+        //--------------------------------------------------
+        void Texture::UpdateRestorationData()
+        {
+            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none && GetFilePath() == "", "Cannot update restoration data on texture that was load from file.");
+            
+            if (m_restoreTextureData == true)
+            {
+            	Unbind();
+
+            	//TODO:
+				/*glBindFramebuffer(GL_FRAMEBUFFER, udwFrameBufferID);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mGLTexID, 0);
+				GLuint udwCheck = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+				if(udwCheck != GL_FRAMEBUFFER_COMPLETE)
+				{
+					ERROR_LOG("Framebuffer Not Complete!");
+					return false;
+				}
+
+				u32 size = GetWidth() * GetHeight() * 4;
+				u8* data = new u32[size];
+				glReadPixels(0, 0, GetWidth(), GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+				outpImage = Core::ImagePtr(new Core::CImage());
+				outpImage->SetCompression(moFlo::Core::COMPRESSION_NONE);
+				outpImage->SetDataLength(udwSize);
+				outpImage->SetFormat(Core::CImage::RGBA_8888);
+				outpImage->SetWidth(GetWidth());
+				outpImage->SetHeight(GetHeight());
+				outpImage->SetData((u8*)pData);
+
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+				glDeleteFramebuffers(1, &udwFrameBufferID);
+				*/
+
+            }
+        }
+        //--------------------------------------------------
+        //--------------------------------------------------
+        void Texture::RestoreTexture()
+        {
+            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none && GetFilePath() == "", "Cannot restore texture that was loaded from file. This should be handled using RefreshResource().");
+            
+            Texture::Descriptor desc;
+            desc.m_width = m_width;
+            desc.m_height = m_height;
+            desc.m_format = m_format;
+            desc.m_compression = m_compression;
+            desc.m_dataSize = m_restorationDataSize;
+            
+            WrapMode sWrap = m_sWrapMode;
+            WrapMode tWrap = m_tWrapMode;
+            FilterMode filterMode = m_filterMode;
+            
+            Build(desc, std::move(m_restorationData), m_hasMipMaps, true);
+            SetWrapMode(sWrap, tWrap);
+            SetFilterMode(filterMode);
+        }
+#endif
         //--------------------------------------------------
         //--------------------------------------------------
         void Texture::Destroy()

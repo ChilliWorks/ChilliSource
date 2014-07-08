@@ -61,8 +61,16 @@ namespace ChilliSource
             /// @param Filter mode
             /// @param Wrap mode S
             /// @param Wrap mode T
+            /// @param Whether or not the texture data should be
+            /// restored after a context loss. This involves maintaining
+            /// a copy of the texture data in memory which is costly
+            /// so this should be disabled for any textures that can
+            /// easily be recreated, i.e any texture that is rendered
+            /// into every frame. This has no effect on textures that
+            /// are loaded from file as they are always restored from
+            /// disk.
             //-------------------------------------------------------
-            TextureResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT);
+            TextureResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT, bool in_restoreTextureData);
             //-------------------------------------------------------
             /// Generate a unique hash based on the
             /// currently set options
@@ -97,7 +105,19 @@ namespace ChilliSource
             /// @return Filter mode to create texture with
             //-------------------------------------------------------
             Texture::FilterMode GetFilterMode() const;
-            
+            //-------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return Whether or not the texture data should be
+            /// restored after a context loss. This involves maintaining
+            /// a copy of the texture data in memory which is costly
+            /// so this should be disabled for any textures that can
+            /// easily be recreated, i.e any texture that is rendered
+            /// into every frame. This has no effect on textures that
+            /// are loaded from file as they are always restored from
+            /// disk.
+            //-------------------------------------------------------
+            bool IsRestoreTextureDataEnabled() const;
         private:
             
             //-------------------------------------------------------
@@ -112,6 +132,7 @@ namespace ChilliSource
                 Texture::WrapMode m_wrapModeT = Texture::WrapMode::k_clamp;
                 Texture::FilterMode m_filterMode = Texture::FilterMode::k_bilinear;
                 bool m_hasMipMaps = false;
+                bool m_restoreTextureData = true;
             };
             
             Options m_options;
