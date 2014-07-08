@@ -1,5 +1,5 @@
 //
-//  VirtualKeyboardDelegate.mm
+//  VirtualTextEntryDelegate.mm
 //  Chilli Source
 //  Created by Scott Downie on 18/07/2011.
 //
@@ -28,25 +28,25 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <CSBackend/Platform/iOS/Input/Keyboard/VirtualKeyboardDelegate.h>
+#import <CSBackend/Platform/iOS/Input/TextEntry/TextEntryDelegate.h>
 
-#import <CSBackend/Platform/iOS/Input/Keyboard/Keyboard.h>
+#import <CSBackend/Platform/iOS/Input/TextEntry/TextEntry.h>
 
-@implementation VirtualKeyboardDelegate
+@implementation TextEntryDelegate
 
 //---------------------------------------------------------
 //---------------------------------------------------------
--(VirtualKeyboardDelegate*) initWithKeyboard:(CSBackend::iOS::Keyboard*) keyboardSystem
+-(TextEntryDelegate*) initWithTextEntry:(CSBackend::iOS::TextEntry*) in_textEntry
 {
     if(self = [super init])
     {
-        keyboard = keyboardSystem;
+        textEntry = in_textEntry;
         return self;
     }
     return nil;
 }
 //---------------------------------------------------------
-/// Called when the keyboard text changes.
+/// Called when the text buffer changes.
 ///
 /// @author S Downie
 ///
@@ -58,31 +58,20 @@
 //---------------------------------------------------------
 -(BOOL) textField:(UITextField*)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString*)string
 {
-    NSString* text = textField.text;
+    NSString* updateText = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
-    if(string.length > 0)
-    {
-        return keyboard->OnTextUpdated([text stringByAppendingString:string]);
-    }
-    else
-    {
-        if(text.length > 0)
-        {
-            text = [text substringToIndex:(text.length - 1)];
-        }
-
-        return keyboard->OnTextUpdated(text);
-    }
+    return textEntry->OnTextUpdated(updateText);
 }
 //---------------------------------------------------------
 /// @author S Downie
 ///
 /// @param The text field.
+///
 /// @return Whether or not text editing should end.
 //---------------------------------------------------------
 -(BOOL) textFieldShouldReturn:(UITextField*)textField
 {
-    keyboard->SetTextInputEnabled(false);
+    textEntry->SetTextInputEnabled(false);
     return NO;
 }
 

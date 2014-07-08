@@ -41,17 +41,21 @@ namespace ChilliSource
 
 		DEFINE_PROPERTY(SecureEntry);
 		DEFINE_PROPERTY(CharacterLimit);
-
-        EditableLabel* EditableLabel::pKeyboardListener = nullptr;
         
+        namespace
+        {
+            EditableLabel* g_activeEditableLabel = nullptr;
+        }
+
         //-------------------------------------------------
         /// Constructor
         ///
         /// Default
         //-------------------------------------------------
-        EditableLabel::EditableLabel() : mpKeyboard(nullptr), SecureEntry(false), CharacterLimit(0), mbShowKeyboard(false), mfTimeToShow(0.0f), mbSelected(false)
+        EditableLabel::EditableLabel() : SecureEntry(false), CharacterLimit(0), mbShowKeyboard(false), mfTimeToShow(0.0f), mbSelected(false)
         {
-            
+            m_textEntrySystem = CSInput::TextEntry::Create();
+            m_textEntrySystem->SetTextBufferChangedDelegate(CSCore::MakeDelegate(this, &EditableLabel::OnTextBufferChanged));
         }
         //-------------------------------------------------
         /// Constructor
@@ -59,8 +63,10 @@ namespace ChilliSource
         /// From param dictionary
         //-------------------------------------------------
         EditableLabel::EditableLabel(const Core::ParamDictionary& insParams) 
-        : Label(insParams), mpKeyboard(nullptr), CharacterLimit(0), SecureEntry(false), mbShowKeyboard(false), mfTimeToShow(0.0f)
+        : Label(insParams), CharacterLimit(0), SecureEntry(false), mbShowKeyboard(false), mfTimeToShow(0.0f)
         {
+            m_textEntrySystem = CSInput::TextEntry::Create();
+            
 			std::string strValue;
 
 			//---Texture
@@ -76,19 +82,19 @@ namespace ChilliSource
         }
         //-------------------------------------------------
         //-------------------------------------------------
-        Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& EditableLabel::GetTextInputEnabledEvent()
+        Core::IConnectableEvent<EditableLabel::TextEventDelegate>& EditableLabel::GetTextInputEnabledEvent()
         {
             return m_textInputEnabledEvent;
         }
         //-------------------------------------------------
         //-------------------------------------------------
-        Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& EditableLabel::GetTextInputDisabledEvent()
+        Core::IConnectableEvent<EditableLabel::TextEventDelegate>& EditableLabel::GetTextInputDisabledEvent()
         {
             return m_textInputDisabledEvent;
         }
         //-------------------------------------------------
         //-------------------------------------------------
-        Core::IConnectableEvent<EditableLabel::TextChangeEventDelegate>& EditableLabel::GetTextInputReceivedEvent()
+        Core::IConnectableEvent<EditableLabel::TextEventDelegate>& EditableLabel::GetTextInputReceivedEvent()
         {
             return m_textInputReceivedEvent;
         }
@@ -143,113 +149,69 @@ namespace ChilliSource
 		{
 			return CharacterLimit;
 		}
-		//-------------------------------------------------
-		/// Get Keyboard Ptr
-		///
-		/// @return Virtual keyboard
-		//-------------------------------------------------
-		Input::Keyboard* EditableLabel::GetKeyboardPtr()
-		{
-			return mpKeyboard;
-		}
         //-------------------------------------------------
-        /// Set Keyboard
-        ///
-        /// @param Virtual keyboard
         //-------------------------------------------------
-        void EditableLabel::SetKeyboard(Input::Keyboard* inpKeyboard)
+        void EditableLabel::EnableTextInput()
         {
-            if(mpKeyboard)
+            if(m_textEntrySystem)
             {
-                //Stop listening to old keyboard
-                m_keyboardShownConnection = nullptr;
-                m_keyboardHiddenConnection = nullptr;
-            }
-            
-            if(inpKeyboard)
-            {
-                mpKeyboard = inpKeyboard;
+                mbShowKeyboard = true;
                 
-                //Stop listening to old keyboard
-                m_keyboardShownConnection = mpKeyboard->GetTextInputEnabledEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextInputEnabled));
-                m_keyboardHiddenConnection = mpKeyboard->GetTextInputDisabledEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextInputDisabled));
-            }
-            else
-            {
-                HideKeyboard();
-            }
-        }
-        //-------------------------------------------------
-        /// Show Keyboard
-        //-------------------------------------------------
-        void EditableLabel::ShowKeyboard()
-        {
-            if(mpKeyboard)
-            {
-                pKeyboardListener = this;
-                mpKeyboard->SetTextInputEnabled(true);
+                if(g_activeEditableLabel != nullptr)
+                {
+                    g_activeEditableLabel->DisableTextInput();
+                }
             }
         }
         //-------------------------------------------------
         /// Hide Keyboard
         //-------------------------------------------------
-        void EditableLabel::HideKeyboard()
+        void EditableLabel::DisableTextInput()
         {
-            if(mpKeyboard)
+            if(g_activeEditableLabel != this)
+                return;
+            
+            if(m_textEntrySystem)
             {
-                mpKeyboard->SetTextInputEnabled(false);
+                m_textEntrySystem->SetTextInputEnabled(false);
                 mbShowKeyboard = false;
-                pKeyboardListener = this;
+                m_textInputDisabledEvent.NotifyConnections(this);
+                
+                g_activeEditableLabel = nullptr;
             }
         }
-        //-------------------------------------------------
-        //-------------------------------------------------
-        void EditableLabel::OnKeyboardTextInputEnabled()
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void EditableLabel::SetText(const std::string& instrText)
         {
-            if(pKeyboardListener == this)
-            {
-                mpKeyboard->SetText(Text);
-                m_keyboardTextChangedConnection = mpKeyboard->GetTextInputReceivedEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextInputReceived));
-                m_textInputEnabledEvent.NotifyConnections();
-            }
+            m_textEntrySystem->SetTextBuffer(instrText);
+            Label::SetText(instrText);
         }
-        
+        //-------------------------------------------------------
+        //-------------------------------------------------------
         void EditableLabel::ClearText()
         {
-            mpKeyboard->SetText("");
+            m_textEntrySystem->SetTextBuffer("");
             Label::SetText("");
         }
         //----------------------------------------------------
 		//----------------------------------------------------
-		void EditableLabel::OnKeyboardTextInputReceived(const std::string& instrText, bool* inbRejectInput)
+		bool EditableLabel::OnTextBufferChanged(const std::string& in_text)
 		{
             if(CharacterLimit > 0)
             {
                 //We can reject the text if it exceeds our input limit
-                auto length = Core::UTF8StringUtils::CalcLength(instrText.begin(), instrText.end());
+                auto length = Core::UTF8StringUtils::CalcLength(in_text.begin(), in_text.end());
                 if(length > CharacterLimit)
                 {
-                    *inbRejectInput = true;
-                    return;
+                    return false;
                 }
             }
 
-            Label::SetText(instrText);
-            *inbRejectInput = false;
-            
+            Label::SetText(in_text);
             m_textInputReceivedEvent.NotifyConnections(this);
+            return true;
 		}
-        //-------------------------------------------------
-        //-------------------------------------------------
-        void EditableLabel::OnKeyboardTextInputDisabled()
-        {
-            if(pKeyboardListener == this)
-            {
-                m_keyboardTextChangedConnection = nullptr;
-                pKeyboardListener = nullptr;
-                m_textInputDisabledEvent.NotifyConnections();
-            }
-        }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
         bool EditableLabel::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
@@ -265,18 +227,18 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void EditableLabel::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
         {
-            if(UserInteraction && Visible && mpKeyboard && mbSelected)
+            if(UserInteraction && Visible && m_textEntrySystem && mbSelected)
             {
                if(Contains(in_pointer.GetPosition()))
                {
                    //Flag the keyboard as hidden and wait a few seconds so we can slide it in again
-				   if(!mpKeyboard->IsTextInputEnabled())
+				   if(!m_textEntrySystem->IsTextInputEnabled())
 				   {
-                       ShowKeyboard();
+                       EnableTextInput();
 				   }
 				   else
 				   {
-                       HideKeyboard();
+                       DisableTextInput();
 				   }
                }
             }
@@ -294,11 +256,13 @@ namespace ChilliSource
         //-------------------------------------------------------
         void EditableLabel::Update(f32 infDt)
         {
-            if(mbShowKeyboard && (mfTimeToShow += infDt) > 1.0f)
+            if(mbShowKeyboard && (mfTimeToShow += infDt) > 0.5f)
             {
                 mfTimeToShow = 0.0f;
                 mbShowKeyboard = false;
-                mpKeyboard->SetTextInputEnabled(true);
+                m_textEntrySystem->SetTextInputEnabled(true);
+                m_textInputEnabledEvent.NotifyConnections(this);
+                g_activeEditableLabel = this;
             }
         }
         //-------------------------------------------------------
@@ -378,50 +342,31 @@ namespace ChilliSource
             }
         }
         //-------------------------------------------------
-        /// SetKeyboardInputTypeNumeric
-        ///
-        /// Changes the displayed keys to numberpad
         //-------------------------------------------------
-        void EditableLabel::SetKeyboardInputTypeNumeric()
+        void EditableLabel::SetInputTypeNumeric()
         {
-            if(mpKeyboard)
-                mpKeyboard->SetType(Input::Keyboard::Type::k_numeric);
+            if(m_textEntrySystem)
+                m_textEntrySystem->SetType(Input::TextEntry::Type::k_numeric);
         }
         //-------------------------------------------------
-        /// SetKeyboardInputTypeText
-        ///
-        /// Changes the displayed keys to Text entry
         //-------------------------------------------------
-        void EditableLabel::SetKeyboardInputTypeText()
+        void EditableLabel::SetInputTypeText()
         {
-            if(mpKeyboard)
-                mpKeyboard->SetType(Input::Keyboard::Type::k_text);
+            if(m_textEntrySystem)
+                m_textEntrySystem->SetType(Input::TextEntry::Type::k_text);
         }
         //------------------------
-        /// Set Keyboard Capitalisation Method
-        ///
-        /// @param Capitalisation Type
         //------------------------
-        void EditableLabel::SetKeyboardCapitalisationMethod(Input::Keyboard::Capitalisation ineCapitalisationType)
+        void EditableLabel::SetCapitalisationMethod(Input::TextEntry::Capitalisation ineCapitalisationType)
         {
-            if(mpKeyboard)
-                mpKeyboard->SetCapitalisation(ineCapitalisationType);
+            if(m_textEntrySystem)
+                m_textEntrySystem->SetCapitalisation(ineCapitalisationType);
         }
-        //-------------------------------------------------
-        /// Destructor
-        ///
-        //-------------------------------------------------
-        EditableLabel::~EditableLabel() 
+        //------------------------
+        //------------------------
+        EditableLabel::~EditableLabel()
         {
-            if(pKeyboardListener == this)
-            {
-                pKeyboardListener = nullptr;
-				
-				if(mpKeyboard)
-				{
-					mpKeyboard->SetTextInputEnabled(false);
-				}
-            }
+            DisableTextInput();
         }
     }
 }

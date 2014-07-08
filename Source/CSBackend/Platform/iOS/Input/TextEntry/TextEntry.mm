@@ -1,11 +1,11 @@
 //
-//  Keyboard.mm
+//  TextEntry.mm
 //  Chilli Source
-//  Created by Scott Downie on 26/11/2010
+//  Created by Scott Downie on 08/07/2014
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -28,11 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <CSBackend/Platform/iOS/Input/Keyboard/Keyboard.h>
+#import <CSBackend/Platform/iOS/Input/TextEntry/TextEntry.h>
 
 #import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
-#import <CSBackend/Platform/iOS/Input/Keyboard/VirtualKeyboardDelegate.h>
-
+#import <CSBackend/Platform/iOS/Input/TextEntry/TextEntryDelegate.h>
 #import <ChilliSource/Core/String/StringUtils.h>
 
 #import <UIKit/UIKit.h>
@@ -41,24 +40,11 @@ namespace CSBackend
 {
 	namespace iOS
 	{
-        CS_DEFINE_NAMEDTYPE(Keyboard);
         //-------------------------------------------------------
         //-------------------------------------------------------
-        Keyboard::Keyboard()
-        : m_enabled(false), m_textView(nil), m_delegate(nil)
+        TextEntry::TextEntry()
         {
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        bool Keyboard::IsA(CSCore::InterfaceIDType in_interfaceID) const
-        {
-            return (in_interfaceID == CSInput::Keyboard::InterfaceID || in_interfaceID == Keyboard::InterfaceID);
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void Keyboard::OnInit()
-        {
-            m_delegate = [[VirtualKeyboardDelegate alloc] initWithKeyboard:this];
+            m_delegate = [[TextEntryDelegate alloc] initWithTextEntry:this];
             
             //Just create it with garbage size as we will never see it
             m_textView = [[UITextField alloc] initWithFrame:CGRectMake(200, 10, 100, 200)];
@@ -67,50 +53,38 @@ namespace CSBackend
             m_textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
             m_textView.keyboardType = UIKeyboardTypeASCIICapable;
             m_textView.delegate = m_delegate;
+            m_textView.hidden = YES;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void Keyboard::SetTextInputEnabled(bool in_enabled)
+        void TextEntry::SetTextInputEnabled(bool in_enabled)
         {
-            if (in_enabled == true && m_enabled == false && [m_textView canBecomeFirstResponder])
+            if (in_enabled == true && IsTextInputEnabled() == false && [m_textView canBecomeFirstResponder])
             {
-                //Show the keyboard!
                 [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:m_textView];
-				m_textView.hidden = YES;
 				[m_textView becomeFirstResponder];
-				m_enabled = true;
-				
-				//Notify our listeners
-				m_textInputEnabledDelegate.NotifyConnections();
             }
-            else if (in_enabled == false && m_enabled == true)
+            else if (in_enabled == false && IsTextInputEnabled() == true)
             {
                 [m_textView resignFirstResponder];
 				[m_textView removeFromSuperview];
-				m_enabled = false;
-				
-				//Notify our listeners
-				m_textInputDisabledDelegate.NotifyConnections();
-				
-				m_text.clear();
-				m_textView.text = @"";
             }
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Keyboard::IsTextInputEnabled() const
+        bool TextEntry::IsTextInputEnabled() const
         {
-            return m_enabled;
+            return m_textView.isFirstResponder;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        const std::string& Keyboard::GetText() const
+        const std::string& TextEntry::GetTextBuffer() const
         {
             return m_text;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void Keyboard::SetText(const std::string& in_text)
+        void TextEntry::SetTextBuffer(const std::string& in_text)
         {
             m_text = in_text;
             NSString* text = [NSStringUtils newNSStringWithUTF8String:m_text];
@@ -119,16 +93,16 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void Keyboard::SetType(Type in_type)
+        void TextEntry::SetType(Type in_type)
         {
             if(m_textView != nullptr)
             {
                 switch (in_type)
                 {
-                    case CSInput::Keyboard::Type::k_text:
+                    case CSInput::TextEntry::Type::k_text:
                         m_textView.keyboardType = UIKeyboardTypeASCIICapable;
                         break;
-                    case CSInput::Keyboard::Type::k_numeric:
+                    case CSInput::TextEntry::Type::k_numeric:
                         m_textView.keyboardType = UIKeyboardTypeNumberPad;
                         break;
                     default:
@@ -140,22 +114,22 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void Keyboard::SetCapitalisation(Capitalisation in_capitalisation)
+        void TextEntry::SetCapitalisation(Capitalisation in_capitalisation)
         {
             if(m_textView != nullptr)
             {
                 switch (in_capitalisation)
                 {
-                    case CSInput::Keyboard::Capitalisation::k_none:
+                    case CSInput::TextEntry::Capitalisation::k_none:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
                         break;
-                    case CSInput::Keyboard::Capitalisation::k_words:
+                    case CSInput::TextEntry::Capitalisation::k_words:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeWords;
                         break;
-                    case CSInput::Keyboard::Capitalisation::k_sentences:
+                    case CSInput::TextEntry::Capitalisation::k_sentences:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
                         break;
-                    case CSInput::Keyboard::Capitalisation::k_all:
+                    case CSInput::TextEntry::Capitalisation::k_all:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
                         break;
                     default:
@@ -167,42 +141,32 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        CSCore::IConnectableEvent<Keyboard::KeyboardEventDelegate>& Keyboard::GetTextInputEnabledEvent()
+        void TextEntry::SetTextBufferChangedDelegate(const TextBufferChangedDelegate& in_delegate)
         {
-            return m_textInputEnabledDelegate;
+            m_textBufferChangedDelegate = in_delegate;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        CSCore::IConnectableEvent<Keyboard::TextInputEventDelegate>& Keyboard::GetTextInputReceivedEvent()
+        bool TextEntry::OnTextUpdated(NSString* in_text)
         {
-            return m_textInputReceivedDelegate;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        CSCore::IConnectableEvent<Keyboard::KeyboardEventDelegate>& Keyboard::GetTextInputDisabledEvent()
-        {
-            return m_textInputDisabledDelegate;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        bool Keyboard::OnTextUpdated(NSString* in_text)
-        {
-            //Inform subscripted to this event and receive if text was rejected lower down
-            bool rejectText = false;
-            
+            bool acceptText = true;
             auto text = [NSStringUtils newUTF8StringWithNSString:in_text];
-            m_textInputReceivedDelegate.NotifyConnections(text, &rejectText);
             
-            if(rejectText == false)
+            if(m_textBufferChangedDelegate != nullptr)
+            {
+                acceptText = m_textBufferChangedDelegate(text);
+            }
+            
+            if(acceptText == true)
             {
                 m_text = text;
             }
             
-            return !rejectText;
+            return acceptText;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void Keyboard::OnDestroy()
+        TextEntry::~TextEntry()
         {
             if(m_textView != nullptr)
 			{
@@ -215,12 +179,6 @@ namespace CSBackend
                 [m_delegate release];
                 m_delegate = nil;
             }
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        Keyboard::~Keyboard()
-        {
-            OnDestroy();
         }
 	}
 }

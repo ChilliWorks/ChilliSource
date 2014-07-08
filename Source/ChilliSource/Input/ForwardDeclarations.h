@@ -63,6 +63,10 @@ namespace ChilliSource
         //--------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Pointer);
         CS_FORWARDDECLARE_CLASS(PointerSystem);
+        //--------------------------------------------------
+        /// Text Entry
+        //--------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(TextEntry);
 	}
 }
 

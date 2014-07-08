@@ -1,11 +1,11 @@
 //
-//  VirtualKeyboardDelegate.h
+//  TextEntry.h
 //  Chilli Source
-//  Created by Scott Downie on 18/07/2011.
+//  Created by Scott Downie on 08/07/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,39 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_IOS
 
-#ifndef _CSBACKEND_PLATFORM_IOS_INPUT_KEYBOARD_H_
-#define _CSBACKEND_PLATFORM_IOS_INPUT_KEYBOARD_H_
+#ifndef _CHILLISOURCE_INPUT_TEXTENTRY_H_
+#define _CHILLISOURCE_INPUT_TEXTENTRY_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <CSBackend/Platform/iOS/ForwardDeclarations.h>
-
-#include <UIKit/UIKit.h>
-
-//---------------------------------------------------------
-/// A delegate class for listening for changes from the
-/// iOS virtual keyboard.
-///
-/// @author S Downie
-//---------------------------------------------------------
-@interface VirtualKeyboardDelegate : NSObject<UITextFieldDelegate>
-{
-    CSBackend::iOS::Keyboard* keyboard;
-}
-//---------------------------------------------------------
-/// Constructor.
-///
-/// @author S Downie
-///
-/// @param The keyboard system.
-///
-/// @return The new instance of the delegate.
-//---------------------------------------------------------
--(VirtualKeyboardDelegate*) initWithKeyboard:(CSBackend::iOS::Keyboard*) keyboardSystem;
-
-@end
-
-#endif
+#include <ChilliSource/Input/TextEntry/TextEntry.h>
 
 #endif

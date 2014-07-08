@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
 		81B1D2D1196C0167000F13DD /* Pointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2CF196C0167000F13DD /* Pointer.cpp */; };
+		81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D3196C2410000F13DD /* TextEntry.cpp */; };
+		81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D9196C2B31000F13DD /* TextEntry.mm */; };
+		81B1D2DD196C2B31000F13DD /* TextEntryDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2DB196C2B31000F13DD /* TextEntryDelegate.mm */; };
 		81D8ACF91962CEDC0010DA84 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8ACF81962CEDC0010DA84 /* Foundation.framework */; };
 		81D8B1E61962D1B90010DA84 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1CF1962D1B90010DA84 /* Accounts.framework */; };
 		81D8B1E71962D1B90010DA84 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1D01962D1B90010DA84 /* AddressBook.framework */; };
@@ -221,8 +224,6 @@
 		81D8B6A81962E0F70010DA84 /* NSStringUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5A21962E0F60010DA84 /* NSStringUtils.mm */; };
 		81D8B6A91962E0F70010DA84 /* Accelerometer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5A71962E0F60010DA84 /* Accelerometer.mm */; };
 		81D8B6AA1962E0F70010DA84 /* DeviceButtonSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5AA1962E0F60010DA84 /* DeviceButtonSystem.mm */; };
-		81D8B6AB1962E0F70010DA84 /* Keyboard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5AD1962E0F60010DA84 /* Keyboard.mm */; };
-		81D8B6AC1962E0F70010DA84 /* VirtualKeyboardDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5AF1962E0F60010DA84 /* VirtualKeyboardDelegate.mm */; };
 		81D8B6AD1962E0F70010DA84 /* PointerSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5B21962E0F60010DA84 /* PointerSystem.mm */; };
 		81D8B6AE1962E0F70010DA84 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5B31962E0F60010DA84 /* Main.cpp */; };
 		81D8B6AF1962E0F70010DA84 /* HttpRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5B61962E0F60010DA84 /* HttpRequest.cpp */; };
@@ -325,6 +326,13 @@
 		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		81B1D2CF196C0167000F13DD /* Pointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pointer.cpp; sourceTree = "<group>"; };
 		81B1D2D0196C0167000F13DD /* Pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
+		81B1D2D3196C2410000F13DD /* TextEntry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextEntry.cpp; sourceTree = "<group>"; };
+		81B1D2D4196C2410000F13DD /* TextEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEntry.h; sourceTree = "<group>"; };
+		81B1D2D5196C2410000F13DD /* TextEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEntry.h; sourceTree = "<group>"; };
+		81B1D2D8196C2B31000F13DD /* TextEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEntry.h; sourceTree = "<group>"; };
+		81B1D2D9196C2B31000F13DD /* TextEntry.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextEntry.mm; sourceTree = "<group>"; };
+		81B1D2DA196C2B31000F13DD /* TextEntryDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEntryDelegate.h; sourceTree = "<group>"; };
+		81B1D2DB196C2B31000F13DD /* TextEntryDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextEntryDelegate.mm; sourceTree = "<group>"; };
 		81D8ACF51962CEDC0010DA84 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D8ACF81962CEDC0010DA84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		81D8AD061962CEDC0010DA84 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -781,10 +789,6 @@
 		81D8B5A71962E0F60010DA84 /* Accelerometer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Accelerometer.mm; sourceTree = "<group>"; };
 		81D8B5A91962E0F60010DA84 /* DeviceButtonSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceButtonSystem.h; sourceTree = "<group>"; };
 		81D8B5AA1962E0F60010DA84 /* DeviceButtonSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeviceButtonSystem.mm; sourceTree = "<group>"; };
-		81D8B5AC1962E0F60010DA84 /* Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
-		81D8B5AD1962E0F60010DA84 /* Keyboard.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Keyboard.mm; sourceTree = "<group>"; };
-		81D8B5AE1962E0F60010DA84 /* VirtualKeyboardDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualKeyboardDelegate.h; sourceTree = "<group>"; };
-		81D8B5AF1962E0F60010DA84 /* VirtualKeyboardDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VirtualKeyboardDelegate.mm; sourceTree = "<group>"; };
 		81D8B5B11962E0F60010DA84 /* PointerSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointerSystem.h; sourceTree = "<group>"; };
 		81D8B5B21962E0F60010DA84 /* PointerSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PointerSystem.mm; sourceTree = "<group>"; };
 		81D8B5B31962E0F60010DA84 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Main.cpp; sourceTree = "<group>"; };
@@ -885,6 +889,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		81B1D2D2196C2410000F13DD /* TextEntry */ = {
+			isa = PBXGroup;
+			children = (
+				81B1D2D3196C2410000F13DD /* TextEntry.cpp */,
+				81B1D2D4196C2410000F13DD /* TextEntry.h */,
+			);
+			path = TextEntry;
+			sourceTree = "<group>";
+		};
+		81B1D2D7196C2B31000F13DD /* TextEntry */ = {
+			isa = PBXGroup;
+			children = (
+				81B1D2D8196C2B31000F13DD /* TextEntry.h */,
+				81B1D2D9196C2B31000F13DD /* TextEntry.mm */,
+				81B1D2DA196C2B31000F13DD /* TextEntryDelegate.h */,
+				81B1D2DB196C2B31000F13DD /* TextEntryDelegate.mm */,
+			);
+			path = TextEntry;
+			sourceTree = "<group>";
+		};
 		81D8ACEC1962CEDC0010DA84 = {
 			isa = PBXGroup;
 			children = (
@@ -1517,16 +1541,18 @@
 			isa = PBXGroup;
 			children = (
 				81D8B3331962E0EC0010DA84 /* Accelerometer */,
+				8158E4A3196ADB38005FF0A8 /* Accelerometer.h */,
 				81D8B3361962E0EC0010DA84 /* DeviceButtons */,
+				8158E4A4196ADB43005FF0A8 /* DeviceButtons.h */,
 				81D8B3391962E0EC0010DA84 /* ForwardDeclarations.h */,
 				81D8B33A1962E0EC0010DA84 /* Gestures */,
-				81D8B33D1962E0EC0010DA84 /* Keyboard */,
-				81D8B3401962E0EC0010DA84 /* Pointer */,
-				8158E4A3196ADB38005FF0A8 /* Accelerometer.h */,
-				8158E4A4196ADB43005FF0A8 /* DeviceButtons.h */,
 				8158E4A5196ADB4D005FF0A8 /* Gestures.h */,
+				81D8B33D1962E0EC0010DA84 /* Keyboard */,
 				8158E4A6196ADB56005FF0A8 /* Keyboard.h */,
+				81D8B3401962E0EC0010DA84 /* Pointer */,
 				8158E4A7196ADB61005FF0A8 /* Pointer.h */,
+				81B1D2D2196C2410000F13DD /* TextEntry */,
+				81B1D2D5196C2410000F13DD /* TextEntry.h */,
 			);
 			path = Input;
 			sourceTree = "<group>";
@@ -2062,8 +2088,8 @@
 			children = (
 				81D8B5A51962E0F60010DA84 /* Accelerometer */,
 				81D8B5A81962E0F60010DA84 /* DeviceButtons */,
-				81D8B5AB1962E0F60010DA84 /* Keyboard */,
 				81D8B5B01962E0F60010DA84 /* Pointer */,
+				81B1D2D7196C2B31000F13DD /* TextEntry */,
 			);
 			path = Input;
 			sourceTree = "<group>";
@@ -2084,17 +2110,6 @@
 				81D8B5AA1962E0F60010DA84 /* DeviceButtonSystem.mm */,
 			);
 			path = DeviceButtons;
-			sourceTree = "<group>";
-		};
-		81D8B5AB1962E0F60010DA84 /* Keyboard */ = {
-			isa = PBXGroup;
-			children = (
-				81D8B5AC1962E0F60010DA84 /* Keyboard.h */,
-				81D8B5AD1962E0F60010DA84 /* Keyboard.mm */,
-				81D8B5AE1962E0F60010DA84 /* VirtualKeyboardDelegate.h */,
-				81D8B5AF1962E0F60010DA84 /* VirtualKeyboardDelegate.mm */,
-			);
-			path = Keyboard;
 			sourceTree = "<group>";
 		};
 		81D8B5B01962E0F60010DA84 /* Pointer */ = {
@@ -2443,6 +2458,7 @@
 				81D8B43A1962E0EC0010DA84 /* PerformanceTimer.cpp in Sources */,
 				81D8B4081962E0EC0010DA84 /* AESEncrypt.cpp in Sources */,
 				81D8B41D1962E0EC0010DA84 /* LocalisedText.cpp in Sources */,
+				81B1D2DD196C2B31000F13DD /* TextEntryDelegate.mm in Sources */,
 				81D8B6B41962E0F70010DA84 /* EmailComposerDelegate.mm in Sources */,
 				81D8B4461962E0EC0010DA84 /* HighlightButton.cpp in Sources */,
 				81D8B49D1962E0EC0010DA84 /* Texture.cpp in Sources */,
@@ -2460,7 +2476,6 @@
 				81D8B6A31962E0F70010DA84 /* FileSystem.mm in Sources */,
 				81D8B6D01962E0F70010DA84 /* MeshBuffer.cpp in Sources */,
 				81D8B47E1962E0EC0010DA84 /* AnimatedMeshComponent.cpp in Sources */,
-				81D8B6AC1962E0F70010DA84 /* VirtualKeyboardDelegate.mm in Sources */,
 				81D8B46C1962E0EC0010DA84 /* RenderComponent.cpp in Sources */,
 				81D8B4261962E0EC0010DA84 /* NotificationManager.cpp in Sources */,
 				81D8B4801962E0EC0010DA84 /* CSModelProvider.cpp in Sources */,
@@ -2471,6 +2486,7 @@
 				81D8B43F1962E0EC0010DA84 /* DebugStats.cpp in Sources */,
 				81D8B42A1962E0EC0010DA84 /* Property.cpp in Sources */,
 				81D8B4851962E0EC0010DA84 /* SkinnedAnimationGroup.cpp in Sources */,
+				81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */,
 				81D8B4881962E0EC0010DA84 /* ColourChangerParticleAffector.cpp in Sources */,
 				81D8B4401962E0EC0010DA84 /* DebugStatsView.cpp in Sources */,
 				81D8B4871962E0EC0010DA84 /* SubMesh.cpp in Sources */,
@@ -2479,7 +2495,6 @@
 				81D8B6AF1962E0F70010DA84 /* HttpRequest.cpp in Sources */,
 				81D8B4141962E0EC0010DA84 /* FileStream.cpp in Sources */,
 				81D8B44E1962E0EC0010DA84 /* ImageView.cpp in Sources */,
-				81D8B6AB1962E0F70010DA84 /* Keyboard.mm in Sources */,
 				81D8B4611962E0EC0010DA84 /* ContentManagementSystem.cpp in Sources */,
 				81D8B4031962E0EC0010DA84 /* PlatformSystem.cpp in Sources */,
 				81D8B4521962E0EC0010DA84 /* FormattedLabel.cpp in Sources */,
@@ -2543,6 +2558,7 @@
 				81D8B6D61962E0F70010DA84 /* Cubemap.cpp in Sources */,
 				81D8B4371962E0EC0010DA84 /* TaskScheduler.cpp in Sources */,
 				81D8B48E1962E0EC0010DA84 /* ConeParticleEmitter.cpp in Sources */,
+				81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */,
 				81D8B43B1962E0EC0010DA84 /* Timer.cpp in Sources */,
 				81D8B4391962E0EC0010DA84 /* CoreTimer.cpp in Sources */,
 				81D8B4361962E0EC0010DA84 /* StateSystem.cpp in Sources */,
